@@ -156,7 +156,7 @@ export default function Ecosystem() {
 
                 {/* Standard Card - User App 3 */}
                 <AppStoreCard 
-                  name="FranchiseOS" 
+                  name="Paint Pros" 
                   category="Enterprise" 
                   users="Orbit Verified"
                   desc="Complete management suite for painting franchisees. Supply chain tracking, transparent royalties, and automated operations."
