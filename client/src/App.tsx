@@ -7,6 +7,7 @@ import Home from "@/pages/home";
 import Developers from "@/pages/developers";
 import Ecosystem from "@/pages/ecosystem";
 import Token from "@/pages/token";
+import Explorer from "@/pages/explorer";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/developers" component={Developers} />
       <Route path="/ecosystem" component={Ecosystem} />
       <Route path="/token" component={Token} />
+      <Route path="/explorer" component={Explorer} />
       <Route component={NotFound} />
     </Switch>
   );
