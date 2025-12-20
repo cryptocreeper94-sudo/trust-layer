@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
+import { insertDocumentSchema } from "@shared/schema";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -25,6 +26,74 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Error fetching blockchain stats:", error);
       res.status(500).json({ error: "Failed to fetch blockchain stats" });
+    }
+  });
+
+  app.get("/api/documents", async (req, res) => {
+    try {
+      const { category, appId } = req.query;
+      let docs;
+      if (category && typeof category === "string") {
+        docs = await storage.getDocumentsByCategory(category);
+      } else if (appId && typeof appId === "string") {
+        docs = await storage.getDocumentsByAppId(appId);
+      } else {
+        docs = await storage.getDocuments();
+      }
+      res.json(docs);
+    } catch (error) {
+      console.error("Error fetching documents:", error);
+      res.status(500).json({ error: "Failed to fetch documents" });
+    }
+  });
+
+  app.get("/api/documents/:id", async (req, res) => {
+    try {
+      const doc = await storage.getDocument(req.params.id);
+      if (!doc) {
+        return res.status(404).json({ error: "Document not found" });
+      }
+      res.json(doc);
+    } catch (error) {
+      console.error("Error fetching document:", error);
+      res.status(500).json({ error: "Failed to fetch document" });
+    }
+  });
+
+  app.post("/api/documents", async (req, res) => {
+    try {
+      const parsed = insertDocumentSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ error: "Invalid document data", details: parsed.error.errors });
+      }
+      const doc = await storage.createDocument(parsed.data);
+      res.status(201).json(doc);
+    } catch (error) {
+      console.error("Error creating document:", error);
+      res.status(500).json({ error: "Failed to create document" });
+    }
+  });
+
+  app.patch("/api/documents/:id", async (req, res) => {
+    try {
+      const doc = await storage.updateDocument(req.params.id, req.body);
+      if (!doc) {
+        return res.status(404).json({ error: "Document not found" });
+      }
+      res.json(doc);
+    } catch (error) {
+      console.error("Error updating document:", error);
+      res.status(500).json({ error: "Failed to update document" });
+    }
+  });
+
+  app.delete("/api/documents/:id", async (req, res) => {
+    try {
+      await storage.deleteDocument(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      res.status(500).json({ error: "Failed to delete document" });
     }
   });
 

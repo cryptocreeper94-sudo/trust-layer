@@ -8,6 +8,7 @@ import Developers from "@/pages/developers";
 import Ecosystem from "@/pages/ecosystem";
 import Token from "@/pages/token";
 import Explorer from "@/pages/explorer";
+import DocHub from "@/pages/doc-hub";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/ecosystem" component={Ecosystem} />
       <Route path="/token" component={Token} />
       <Route path="/explorer" component={Explorer} />
+      <Route path="/doc-hub" component={DocHub} />
       <Route component={NotFound} />
     </Switch>
   );
