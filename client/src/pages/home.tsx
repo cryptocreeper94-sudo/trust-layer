@@ -19,7 +19,7 @@ export default function Home() {
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
             <a href="#features" className="hover:text-primary transition-colors">Ecosystem</a>
-            <a href="#developers" className="hover:text-primary transition-colors">Developers</a>
+            <Link href="/developers" className="hover:text-primary transition-colors cursor-pointer">Developers</Link>
             <a href="#governance" className="hover:text-primary transition-colors">Governance</a>
             <a href="#community" className="hover:text-primary transition-colors">Community</a>
           </div>
