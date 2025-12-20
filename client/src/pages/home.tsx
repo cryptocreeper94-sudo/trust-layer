@@ -18,7 +18,7 @@ export default function Home() {
             <span className="font-display font-bold text-2xl tracking-tight">Orbit</span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
-            <a href="#features" className="hover:text-primary transition-colors">Ecosystem</a>
+            <Link href="/ecosystem" className="hover:text-primary transition-colors cursor-pointer">Ecosystem</Link>
             <Link href="/developers" className="hover:text-primary transition-colors cursor-pointer">Developers</Link>
             <a href="#governance" className="hover:text-primary transition-colors">Governance</a>
             <a href="#community" className="hover:text-primary transition-colors">Community</a>
