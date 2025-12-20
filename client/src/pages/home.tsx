@@ -213,7 +213,7 @@ export default function Home() {
               gradient="from-slate-500 to-slate-700" 
             />
             <AppCard 
-              name="Pulse" 
+              name="DarkWave Pulse" 
               category="Analytics" 
               desc="Real-time on-chain data streams." 
               gradient="from-pink-500 to-rose-500" 

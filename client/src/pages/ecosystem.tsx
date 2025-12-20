@@ -132,7 +132,7 @@ export default function Ecosystem() {
                 {/* Featured / Large Card - User App 1 */}
                 <div className="md:col-span-2 xl:col-span-2 row-span-1">
                    <AppStoreCard 
-                    name="Sentient AI Trader" 
+                    name="DarkWave Pulse" 
                     category="DeFi & AI" 
                     users="Orbit Verified"
                     desc="Predictive market intelligence powered by sentient AI learning systems. Auto-trades and snipes opportunities in real-time based on market conditions."
