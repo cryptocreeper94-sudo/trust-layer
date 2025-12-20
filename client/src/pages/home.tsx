@@ -147,14 +147,14 @@ export default function Home() {
                     <p>{`> Established connection to 152 peers.`}</p>
                     <p className="animate-pulse">{`> Awaiting transaction block #89210...`}</p>
                   </div>
-                  <div className="mt-8 pt-8 border-t border-white/10 grid grid-cols-2 gap-4">
+                  <div className="mt-8 pt-8 border-t border-white/10 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="p-4 rounded-lg bg-white/5">
                       <div className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Current Block</div>
-                      <div className="text-2xl font-bold font-display text-white">#8,921,042</div>
+                      <div className="text-xl md:text-2xl font-bold font-display text-white break-all">#8,921,042</div>
                     </div>
                     <div className="p-4 rounded-lg bg-white/5">
                       <div className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Network Hash</div>
-                      <div className="text-2xl font-bold font-display text-white">42.8 EH/s</div>
+                      <div className="text-xl md:text-2xl font-bold font-display text-white break-all">42.8 EH/s</div>
                     </div>
                   </div>
                 </Card>
