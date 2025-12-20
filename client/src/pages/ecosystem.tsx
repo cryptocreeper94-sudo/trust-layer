@@ -165,6 +165,46 @@ export default function Ecosystem() {
                   verified
                 />
 
+                <AppStoreCard 
+                  name="Orby" 
+                  category="AI Assistant" 
+                  users="Orbit Verified"
+                  desc="Your personal AI companion for the Orbit ecosystem. Ask questions, execute trades, and manage your portfolio with natural language."
+                  gradient="from-cyan-400 to-blue-500"
+                  tags={["AI", "Chatbot", "Assistant"]}
+                  verified
+                />
+
+                <AppStoreCard 
+                  name="GarageBot" 
+                  category="Automation" 
+                  users="Orbit Verified"
+                  desc="Smart automation for vehicle maintenance and garage management. Track repairs, inventory, and service schedules on-chain."
+                  gradient="from-slate-600 to-zinc-800"
+                  tags={["Auto", "IoT", "Maintenance"]}
+                  verified
+                />
+
+                <AppStoreCard 
+                  name="Brew & Board" 
+                  category="Social & Gaming" 
+                  users="Orbit Verified"
+                  desc="A decentralized community for board game enthusiasts and craft brew lovers. Organize events, track scores, and earn rewards."
+                  gradient="from-amber-600 to-yellow-800"
+                  tags={["Social", "Events", "Rewards"]}
+                  verified
+                />
+
+                <AppStoreCard 
+                  name="LotOps Pro" 
+                  category="Enterprise" 
+                  users="Orbit Verified"
+                  desc="Professional lot operations management for automotive dealerships. Streamline inventory, tracking, and sales workflows."
+                  gradient="from-indigo-600 to-violet-800"
+                  tags={["Auto", "B2B", "Inventory"]}
+                  verified
+                />
+
                  {/* Other Ecosystem Apps */}
                 <AppStoreCard 
                   name="Nova DEX" 
