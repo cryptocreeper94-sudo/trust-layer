@@ -171,54 +171,54 @@ export default function Home() {
       <section className="py-32 bg-secondary/5">
         <div className="container mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-20">
-            <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">Built on Orbit</h2>
+            <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">Dark Wave Ecosystem</h2>
             <p className="text-xl text-muted-foreground">
-              A thriving ecosystem of decentralized applications. From DeFi to Social, 
-              everything lives on the same ledger.
+              A thriving ecosystem of decentralized applications powered by Dark Wave Studios. 
+              Everything lives on the same universal ledger.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <AppCard 
-              name="Nova DEX" 
+              name="DarkWave Swap" 
               category="DeFi" 
-              desc="Instant swaps with zero slippage." 
+              desc="Chain-abstracted swaps. Trade assets from any chain instantly." 
               gradient="from-blue-500 to-cyan-500" 
             />
             <AppCard 
-              name="Orbit ID" 
+              name="UniIdentity" 
               category="Identity" 
-              desc="Your universal passport for the web." 
+              desc="One passport for the entire decentralized web." 
               gradient="from-purple-500 to-pink-500" 
             />
             <AppCard 
-              name="Flux Market" 
+              name="Nexus NFT" 
               category="NFTs" 
-              desc="Trade digital assets with ease." 
+              desc="Cross-chain marketplace. Buy ETH NFTs with SOL." 
               gradient="from-orange-500 to-red-500" 
             />
             <AppCard 
-              name="Nebula" 
+              name="DarkWave Social" 
               category="Social" 
-              desc="Decentralized social graph protocol." 
+              desc="Decentralized social graph protocol. Own your data." 
               gradient="from-green-400 to-emerald-600" 
             />
             <AppCard 
-              name="Aether" 
+              name="Void Walker" 
               category="Gaming" 
-              desc="Play-to-earn metaverse engine." 
+              desc="Play-to-earn metaverse engine running on Orbit." 
               gradient="from-indigo-500 to-violet-500" 
             />
             <AppCard 
-              name="Vault" 
+              name="Ironclad" 
               category="Security" 
-              desc="Multi-sig institutional custody." 
+              desc="Multi-sig institutional custody with native interop." 
               gradient="from-slate-500 to-slate-700" 
             />
             <AppCard 
               name="DarkWave Pulse" 
               category="Analytics" 
-              desc="Real-time on-chain data streams." 
+              desc="Real-time on-chain data streams and oracle services." 
               gradient="from-pink-500 to-rose-500" 
             />
             <div className="group relative rounded-xl border-2 border-dashed border-white/10 bg-transparent flex flex-col items-center justify-center p-8 hover:border-primary/50 transition-colors cursor-pointer">
