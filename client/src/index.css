@@ -107,4 +107,18 @@
   .font-tech {
     font-family: var(--font-tech);
   }
+  
+  /* Glassmorphism Utilities */
+  .glass-panel {
+    @apply bg-black/40 backdrop-blur-xl border border-white/10 shadow-xl;
+  }
+  
+  .glass-panel-hover {
+    @apply hover:bg-black/60 hover:border-primary/30 transition-all duration-300;
+  }
+
+  /* 3D Hover Effects */
+  .hover-3d {
+    @apply transition-transform duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02];
+  }
 }

@@ -7,9 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
+import { OnboardingTour } from "@/components/onboarding-tour";
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+      <OnboardingTour />
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md">
         <div className="container mx-auto px-6 h-20 flex items-center justify-between">
@@ -110,23 +113,23 @@ export default function Home() {
           <div className="flex flex-col md:flex-row gap-16 items-center">
             <div className="w-full md:w-1/2 space-y-8">
               <h2 className="text-4xl md:text-5xl font-display font-bold">
-                The Universal Ledger <br/>
-                <span className="text-primary">For Everything.</span>
+                Chain Abstraction <br/>
+                <span className="text-primary">Native Interop.</span>
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Most blockchains are isolated islands. Orbit is a connected continent. 
-                Built on the revolutionary AA Blockchain architecture, Orbit integrates seamless interoperability 
-                directly into the consensus layer.
+                We're building the holy grail of blockchain: <strong>Omnichain Interoperability</strong>.
+                Orbit doesn't just "bridge" assets; it abstracts the chain entirely.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Whether you're building financial tools, social graphs, or gaming economies, 
-                Orbit provides the shared state machine that powers it all.
+                Connect to Ethereum, Solana, and others natively. Use your Orbit Smart Account to execute trades 
+                on any chain without ever leaving the ecosystem. No fragile bridges. No wrapped tokens. 
+                Just pure, protocol-level messaging.
               </p>
               
               <ul className="space-y-4 pt-4">
                 <FeatureItem icon={Zap} title="Instant Consensus" desc="Using advanced DAG protocols for sub-second finality." />
-                <FeatureItem icon={Shield} title="Quantum Secure" desc="Future-proof cryptography built for the next 50 years." />
-                <FeatureItem icon={Layers} title="Native Interop" desc="Connect to Ethereum, Solana, and more without bridges." />
+                <FeatureItem icon={Shield} title="Chain Abstraction" desc="Control assets on any chain from your Orbit account." />
+                <FeatureItem icon={Layers} title="Bridge-Free" desc="Native messaging protocols replace vulnerable bridges." />
               </ul>
             </div>
             

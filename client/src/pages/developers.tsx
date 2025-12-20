@@ -133,16 +133,34 @@ export default function Developers() {
                   <div className="p-2 rounded-lg bg-accent/10 text-accent">
                     <Cpu className="w-6 h-6" />
                   </div>
-                  <h2 className="text-2xl font-bold font-display">The ORB-Standard</h2>
+                  <h2 className="text-2xl font-bold font-display">Dark Wave Studios Hub</h2>
                 </div>
                 <p className="text-muted-foreground leading-relaxed">
-                  <span className="text-white italic">"What makes it unique?"</span>
+                  <span className="text-white italic">"Like GitHub, but for the decentralized web."</span>
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  Ethereum has ERC-20. Solana has SPL. Orbit introduces the <strong>ORB-Standard</strong>. 
-                  Unlike others, ORB tokens have "Metadata extensions" built-in at the protocol level. 
-                  This means your NFTs and Tokens can carry complex data (like game stats or identity info) without needing extra smart contracts.
+                  The <strong className="text-secondary">Orbit Hub</strong> is your mission control. 
+                  Collaborate on smart contracts, fork existing dApps, and deploy instantly to the network.
+                  It connects directly to the Dark Wave Studios ecosystem, giving you access to shared identity, 
+                  storage, and compute resources.
                 </p>
+                <div className="mt-6 p-4 rounded-xl bg-white/5 border border-white/10">
+                  <div className="flex items-center justify-between mb-4">
+                     <span className="text-xs font-mono text-muted-foreground uppercase">Hub Status</span>
+                     <div className="flex items-center gap-2">
+                       <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                       <span className="text-xs font-bold text-green-500">Connected</span>
+                     </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button variant="outline" className="w-full justify-start border-white/10 hover:border-primary/50 hover:bg-primary/10 hover:text-primary transition-all group">
+                      <Box className="w-4 h-4 mr-2 group-hover:text-primary" /> My Projects
+                    </Button>
+                    <Button variant="outline" className="w-full justify-start border-white/10 hover:border-secondary/50 hover:bg-secondary/10 hover:text-secondary transition-all group">
+                       <Database className="w-4 h-4 mr-2 group-hover:text-secondary" /> Shared Data
+                    </Button>
+                  </div>
+                </div>
               </div>
 
             </div>
