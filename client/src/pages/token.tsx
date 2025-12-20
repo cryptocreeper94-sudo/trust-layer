@@ -21,7 +21,7 @@ export default function Token() {
           </Link>
           <div className="flex items-center gap-4">
              <Button className="bg-primary text-background hover:bg-primary/90 font-semibold shadow-[0_0_20px_rgba(0,255,255,0.3)]">
-              Buy $DEEP
+              Buy $DARK
             </Button>
           </div>
         </div>
@@ -36,11 +36,11 @@ export default function Token() {
                 Native Utility Token
               </Badge>
               <h1 className="text-5xl md:text-7xl font-display font-bold leading-tight">
-                Deep Wave <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-purple-400 to-primary text-glow">($DEEP)</span>
+                DarkWave <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-purple-400 to-primary text-glow">($DARK)</span>
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
-                The fuel of the Orbit Ecosystem. Deep Wave is not just a currency; it's the governance, security, and utility layer for the next generation of decentralized apps.
+                The fuel of the Orbit Ecosystem. DarkWave is not just a currency; it's the governance, security, and utility layer for the next generation of decentralized apps.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -97,7 +97,7 @@ export default function Token() {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-5xl font-display font-bold mb-6">Real Utility. No Fluff.</h2>
             <p className="text-lg text-muted-foreground">
-              Unlike meme coins, $DEEP is required to use every single app in the Orbit ecosystem. 
+              Unlike meme coins, $DARK is required to use every single app in the Orbit ecosystem. 
               From AI trading to enterprise staffing, value flows back to the token.
             </p>
           </div>
@@ -106,12 +106,12 @@ export default function Token() {
             <TokenUtilityCard 
               icon={Zap}
               title="Gas Fees"
-              desc="Pay for transactions on the Orbit Chain with $DEEP. Micro-fees ensure speed without breaking the bank."
+              desc="Pay for transactions on the Orbit Chain with $DARK. Micro-fees ensure speed without breaking the bank."
             />
             <TokenUtilityCard 
               icon={ShieldCheck}
               title="Validator Staking"
-              desc="Secure the network by staking $DEEP. Earn rewards for validating transactions and honest behavior."
+              desc="Secure the network by staking $DARK. Earn rewards for validating transactions and honest behavior."
             />
             <TokenUtilityCard 
               icon={Globe}
@@ -142,7 +142,7 @@ export default function Token() {
              <div className="order-1 lg:order-2 space-y-8">
                <h2 className="text-4xl font-display font-bold">Fair Launch Tokenomics</h2>
                <p className="text-lg text-muted-foreground leading-relaxed">
-                 We designed $DEEP to be fair, sustainable, and deflationary. 
+                 We designed $DARK to be fair, sustainable, and deflationary. 
                  A portion of all transaction fees are burned automatically, reducing supply over time 
                  as network usage grows.
                </p>
