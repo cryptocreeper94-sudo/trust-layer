@@ -165,10 +165,10 @@ export default function Developers() {
                 <div className="relative aspect-video">
                   <img src={dagViz} alt="DAG Visualization" className="w-full h-full object-cover opacity-80" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
-                    <div className="font-mono text-xs text-primary">
-                      {`> Block #89210 confirmed via PoH`} <br/>
-                      {`> 420 transactions finalized in 0.4s`} <br/>
-                      {`> Node propagation complete`}
+                    <div className="font-mono text-xs text-primary space-y-1">
+                      <div>{`> Block #89210 confirmed via PoH`}</div>
+                      <div>{`> 420 transactions finalized in 0.4s`}</div>
+                      <div>{`> Node propagation complete`}</div>
                     </div>
                   </div>
                 </div>

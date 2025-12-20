@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Box, Check, ChevronRight, Code, Cpu, Database, FileCode, Layers, Terminal, Zap, Search, LayoutGrid, Rocket, Globe } from "lucide-react";
+import { ArrowLeft, Box, Check, ChevronRight, Code, Cpu, Database, FileCode, Layers, Terminal, Zap, Search, LayoutGrid, Rocket, Globe, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -64,17 +64,17 @@ export default function Ecosystem() {
         <div className="container mx-auto px-6">
           <div className="flex flex-col lg:flex-row gap-8">
             
-            {/* Sidebar Filters */}
-            <div className="w-full lg:w-64 space-y-8">
+            {/* Sidebar Filters - Sticky on Desktop */}
+            <div className="w-full lg:w-64 space-y-8 lg:sticky lg:top-24 h-fit">
               <div>
                 <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-4">Categories</h3>
                 <div className="space-y-2">
                   <FilterButton active label="All Apps" count={24} />
                   <FilterButton label="DeFi" count={8} />
                   <FilterButton label="Gaming" count={5} />
+                  <FilterButton label="Enterprise" count={2} />
                   <FilterButton label="Social" count={3} />
                   <FilterButton label="NFTs" count={4} />
-                  <FilterButton label="Tools" count={4} />
                 </div>
               </div>
               
@@ -104,6 +104,17 @@ export default function Ecosystem() {
                   </div>
                 </div>
               </div>
+
+               <div className="p-6 rounded-xl bg-white/5 border border-white/10">
+                <div className="flex items-center gap-2 mb-2 text-primary">
+                   <ShieldCheck className="w-5 h-5" />
+                   <h3 className="font-bold text-white">Orbit Verified</h3>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Look for the <CheckCircle2 className="w-3 h-3 inline text-primary mx-1" /> badge. 
+                  These apps have passed rigorous security audits and are fully integrated with the Orbit Chain.
+                </p>
+              </div>
             </div>
 
             {/* Apps Grid */}
@@ -115,8 +126,46 @@ export default function Ecosystem() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {/* Apps */}
+              {/* BENTO GRID LAYOUT */}
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 auto-rows-[minmax(300px,auto)]">
+                
+                {/* Featured / Large Card - User App 1 */}
+                <div className="md:col-span-2 xl:col-span-2 row-span-1">
+                   <AppStoreCard 
+                    name="Sentient AI Trader" 
+                    category="DeFi & AI" 
+                    users="Orbit Verified"
+                    desc="Predictive market intelligence powered by sentient AI learning systems. Auto-trades and snipes opportunities in real-time based on market conditions."
+                    gradient="from-cyan-600 to-blue-700"
+                    tags={["AI", "Auto-Trading", "Predictive", "Sniping"]}
+                    verified
+                    featured
+                  />
+                </div>
+
+                {/* Standard Card - User App 2 */}
+                <AppStoreCard 
+                  name="StaffFlow" 
+                  category="Enterprise" 
+                  users="Orbit Verified"
+                  desc="Blockchain-based staffing and workforce management. Immutable records of employment, skills, and payments."
+                  gradient="from-emerald-600 to-teal-800"
+                  tags={["HR", "Payroll", "Enterprise"]}
+                  verified
+                />
+
+                {/* Standard Card - User App 3 */}
+                <AppStoreCard 
+                  name="FranchiseOS" 
+                  category="Enterprise" 
+                  users="Orbit Verified"
+                  desc="Complete management suite for painting franchisees. Supply chain tracking, transparent royalties, and automated operations."
+                  gradient="from-orange-500 to-amber-700"
+                  tags={["Franchise", "Supply Chain", "Ops"]}
+                  verified
+                />
+
+                 {/* Other Ecosystem Apps */}
                 <AppStoreCard 
                   name="Nova DEX" 
                   category="DeFi" 
@@ -125,6 +174,7 @@ export default function Ecosystem() {
                   gradient="from-blue-500 to-cyan-500"
                   tags={["AMM", "Liquidity", "Swap"]}
                 />
+                
                 <AppStoreCard 
                   name="Orbit ID" 
                   category="Identity" 
@@ -133,30 +183,7 @@ export default function Ecosystem() {
                   gradient="from-purple-500 to-pink-500"
                   tags={["DID", "Profile", "Auth"]}
                 />
-                <AppStoreCard 
-                  name="Flux Market" 
-                  category="NFTs" 
-                  users="45k Users"
-                  desc="Trade digital assets, game items, and intellectual property."
-                  gradient="from-orange-500 to-red-500"
-                  tags={["Marketplace", "IP", "Creators"]}
-                />
-                <AppStoreCard 
-                  name="Nebula" 
-                  category="Social" 
-                  users="200k Users"
-                  desc="A decentralized social graph. Own your data, followers, and content."
-                  gradient="from-green-400 to-emerald-600"
-                  tags={["Graph", "Content", "Web3"]}
-                />
-                <AppStoreCard 
-                  name="Aether" 
-                  category="Gaming" 
-                  users="15k Users"
-                  desc="Play-to-earn metaverse engine running at 120 FPS on-chain."
-                  gradient="from-indigo-500 to-violet-500"
-                  tags={["Metaverse", "Engine", "Unity"]}
-                />
+
                  <AppStoreCard 
                   name="Vault" 
                   category="Security" 
@@ -215,28 +242,41 @@ function FilterButton({ label, count, active }: { label: string, count: number, 
   );
 }
 
-function AppStoreCard({ name, category, users, desc, gradient, tags }: { name: string, category: string, users: string, desc: string, gradient: string, tags: string[] }) {
+function AppStoreCard({ name, category, users, desc, gradient, tags, verified, featured }: { name: string, category: string, users: string, desc: string, gradient: string, tags: string[], verified?: boolean, featured?: boolean }) {
   return (
-    <div className="group flex flex-col h-full bg-black/40 border border-white/10 rounded-xl overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,255,255,0.1)]">
-      <div className={`h-24 bg-gradient-to-br ${gradient} p-6 relative overflow-hidden`}>
+    <div className={`group flex flex-col h-full bg-black/40 border border-white/10 rounded-xl overflow-hidden hover:border-primary/50 transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,255,255,0.1)] ${featured ? 'md:flex-row' : ''}`}>
+      <div className={`${featured ? 'md:w-1/3 h-64 md:h-full' : 'h-32'} bg-gradient-to-br ${gradient} p-6 relative overflow-hidden flex flex-col justify-between`}>
         <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors"></div>
         <div className="relative z-10 w-12 h-12 bg-black/50 backdrop-blur-md rounded-xl flex items-center justify-center text-white font-bold text-xl border border-white/20 shadow-lg">
           {name.charAt(0)}
         </div>
+        {featured && (
+             <div className="relative z-10 mt-auto pt-4">
+                <Badge className="bg-white/20 hover:bg-white/30 text-white border-none backdrop-blur-md">Featured App</Badge>
+             </div>
+        )}
       </div>
       
       <div className="p-6 flex-1 flex flex-col">
         <div className="flex justify-between items-start mb-2">
           <div>
-            <h3 className="font-bold text-lg text-white group-hover:text-primary transition-colors">{name}</h3>
-            <div className="text-xs text-muted-foreground">{category} • {users}</div>
+            <div className="flex items-center gap-2">
+                <h3 className={`font-bold text-white group-hover:text-primary transition-colors ${featured ? 'text-2xl' : 'text-lg'}`}>{name}</h3>
+                {verified && (
+                    <CheckCircle2 className="w-4 h-4 text-primary" />
+                )}
+            </div>
+            <div className="text-xs text-muted-foreground flex items-center gap-1">
+                {category} • 
+                <span className={verified ? "text-primary font-bold" : ""}>{users}</span>
+            </div>
           </div>
           <Button size="sm" variant="secondary" className="h-8 bg-white/10 hover:bg-primary hover:text-black transition-colors">
             Open
           </Button>
         </div>
         
-        <p className="text-sm text-muted-foreground leading-relaxed mb-6 flex-1">
+        <p className={`text-sm text-muted-foreground leading-relaxed mb-6 flex-1 ${featured ? 'text-base' : ''}`}>
           {desc}
         </p>
         
