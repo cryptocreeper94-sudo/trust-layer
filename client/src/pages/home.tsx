@@ -180,52 +180,52 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <AppCard 
-              name="DarkWave Swap" 
-              category="DeFi" 
-              desc="Chain-abstracted swaps. Trade assets from any chain instantly." 
-              gradient="from-blue-500 to-cyan-500" 
-            />
-            <AppCard 
-              name="UniIdentity" 
-              category="Identity" 
-              desc="One passport for the entire decentralized web." 
-              gradient="from-purple-500 to-pink-500" 
-            />
-            <AppCard 
-              name="Nexus NFT" 
-              category="NFTs" 
-              desc="Cross-chain marketplace. Buy ETH NFTs with SOL." 
-              gradient="from-orange-500 to-red-500" 
-            />
-            <AppCard 
-              name="DarkWave Social" 
-              category="Social" 
-              desc="Decentralized social graph protocol. Own your data." 
-              gradient="from-green-400 to-emerald-600" 
-            />
-            <AppCard 
-              name="Void Walker" 
-              category="Gaming" 
-              desc="Play-to-earn metaverse engine running on Orbit." 
-              gradient="from-indigo-500 to-violet-500" 
-            />
-            <AppCard 
-              name="Ironclad" 
-              category="Security" 
-              desc="Multi-sig institutional custody with native interop." 
-              gradient="from-slate-500 to-slate-700" 
-            />
-            <AppCard 
               name="DarkWave Pulse" 
-              category="Analytics" 
-              desc="Real-time on-chain data streams and oracle services." 
-              gradient="from-pink-500 to-rose-500" 
+              category="DeFi & AI" 
+              desc="Predictive market intelligence powered by sentient AI learning systems." 
+              gradient="from-cyan-600 to-blue-700" 
+            />
+            <AppCard 
+              name="Orbit Staffing" 
+              category="Enterprise" 
+              desc="Blockchain-based staffing and workforce management. Immutable records." 
+              gradient="from-emerald-600 to-teal-800" 
+            />
+            <AppCard 
+              name="Paint Pros" 
+              category="Enterprise" 
+              desc="Complete management suite for painting franchisees and supply chains." 
+              gradient="from-orange-500 to-amber-700" 
+            />
+            <AppCard 
+              name="Orby" 
+              category="AI Assistant" 
+              desc="Your personal AI companion. Execute trades with natural language." 
+              gradient="from-cyan-400 to-blue-500" 
+            />
+            <AppCard 
+              name="GarageBot" 
+              category="Automation" 
+              desc="Smart automation for vehicle maintenance and garage management." 
+              gradient="from-slate-600 to-zinc-800" 
+            />
+            <AppCard 
+              name="Brew & Board" 
+              category="Social & Gaming" 
+              desc="Decentralized community for board game enthusiasts and craft brew lovers." 
+              gradient="from-amber-600 to-yellow-800" 
+            />
+            <AppCard 
+              name="LotOps Pro" 
+              category="Enterprise" 
+              desc="Professional lot operations management for automotive dealerships." 
+              gradient="from-indigo-600 to-violet-800" 
             />
             <div className="group relative rounded-xl border-2 border-dashed border-white/10 bg-transparent flex flex-col items-center justify-center p-8 hover:border-primary/50 transition-colors cursor-pointer">
               <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                 <Code className="w-6 h-6 text-muted-foreground group-hover:text-primary" />
               </div>
-              <h3 className="text-lg font-bold text-muted-foreground group-hover:text-primary">Build Your App</h3>
+              <h3 className="text-lg font-bold text-muted-foreground group-hover:text-primary">Submit Your App</h3>
               <p className="text-sm text-center text-muted-foreground/60 mt-2">Join the ecosystem</p>
             </div>
           </div>
