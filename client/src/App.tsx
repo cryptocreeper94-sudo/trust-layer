@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Home from "@/pages/home";
 import Developers from "@/pages/developers";
 import Ecosystem from "@/pages/ecosystem";
+import Token from "@/pages/token";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -14,6 +15,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/developers" component={Developers} />
       <Route path="/ecosystem" component={Ecosystem} />
+      <Route path="/token" component={Token} />
       <Route component={NotFound} />
     </Switch>
   );

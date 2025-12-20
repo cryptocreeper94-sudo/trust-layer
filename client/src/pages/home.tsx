@@ -19,9 +19,9 @@ export default function Home() {
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
             <Link href="/ecosystem" className="hover:text-primary transition-colors cursor-pointer">Ecosystem</Link>
+            <Link href="/token" className="hover:text-primary transition-colors cursor-pointer">Token</Link>
             <Link href="/developers" className="hover:text-primary transition-colors cursor-pointer">Developers</Link>
             <a href="#governance" className="hover:text-primary transition-colors">Governance</a>
-            <a href="#community" className="hover:text-primary transition-colors">Community</a>
           </div>
           <div className="flex items-center gap-4">
             <Button variant="ghost" className="hidden sm:flex hover:bg-white/5 hover:text-white">Log In</Button>

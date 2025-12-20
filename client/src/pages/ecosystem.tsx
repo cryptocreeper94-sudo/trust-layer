@@ -95,7 +95,7 @@ export default function Ecosystem() {
                   </div>
                   <div className="text-xs">
                     <div className="flex justify-between mb-1">
-                      <span className="text-white font-bold">Orbit Apps</span>
+                      <span className="text-white font-bold">Orbit Apps ($DEEP)</span>
                       <span className="text-primary">100% Utility</span>
                     </div>
                     <div className="h-1 bg-white/10 rounded-full overflow-hidden">
