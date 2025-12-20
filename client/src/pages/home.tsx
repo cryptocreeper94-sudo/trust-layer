@@ -6,10 +6,22 @@ import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_lo
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
 import { OnboardingTour } from "@/components/onboarding-tour";
+import { useQuery } from "@tanstack/react-query";
+import { fetchEcosystemApps, fetchBlockchainStats } from "@/lib/api";
 
 export default function Home() {
+  const { data: apps = [], isLoading: appsLoading } = useQuery({
+    queryKey: ["ecosystem-apps"],
+    queryFn: fetchEcosystemApps,
+  });
+
+  const { data: stats } = useQuery({
+    queryKey: ["blockchain-stats"],
+    queryFn: fetchBlockchainStats,
+    refetchInterval: 5000,
+  });
+
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
       <OnboardingTour />
@@ -99,10 +111,10 @@ export default function Home() {
       <section className="py-20 border-y border-white/5 bg-black/20 backdrop-blur-sm">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <StatCard value="200K+" label="TPS Throughput" />
-            <StatCard value="0.4s" label="Finality Time" />
-            <StatCard value="$0.0001" label="Avg Cost" />
-            <StatCard value="150+" label="Active Nodes" />
+            <StatCard value={stats?.tps || "200K+"} label="TPS Throughput" />
+            <StatCard value={stats?.finalityTime || "0.4s"} label="Finality Time" />
+            <StatCard value={stats?.avgCost || "$0.0001"} label="Avg Cost" />
+            <StatCard value={stats?.activeNodes || "150+"} label="Active Nodes" />
           </div>
         </div>
       </section>
@@ -153,11 +165,11 @@ export default function Home() {
                   <div className="mt-8 pt-8 border-t border-white/10 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="p-4 rounded-lg bg-white/5">
                       <div className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Current Block</div>
-                      <div className="text-xl md:text-2xl font-bold font-display text-white break-all">#8,921,042</div>
+                      <div className="text-xl md:text-2xl font-bold font-display text-white break-all">{stats?.currentBlock || "#8,921,042"}</div>
                     </div>
                     <div className="p-4 rounded-lg bg-white/5">
                       <div className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Network Hash</div>
-                      <div className="text-xl md:text-2xl font-bold font-display text-white break-all">42.8 EH/s</div>
+                      <div className="text-xl md:text-2xl font-bold font-display text-white break-all">{stats?.networkHash || "42.8 EH/s"}</div>
                     </div>
                   </div>
                 </Card>
@@ -179,55 +191,30 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <AppCard 
-              name="DarkWave Pulse" 
-              category="DeFi & AI" 
-              desc="Predictive market intelligence powered by sentient AI learning systems." 
-              gradient="from-cyan-600 to-blue-700" 
-            />
-            <AppCard 
-              name="Orbit Staffing" 
-              category="Enterprise" 
-              desc="Blockchain-based staffing and workforce management. Immutable records." 
-              gradient="from-emerald-600 to-teal-800" 
-            />
-            <AppCard 
-              name="Paint Pros" 
-              category="Enterprise" 
-              desc="Complete management suite for painting franchisees and supply chains." 
-              gradient="from-orange-500 to-amber-700" 
-            />
-            <AppCard 
-              name="Orby" 
-              category="AI Assistant" 
-              desc="Your personal AI companion. Execute trades with natural language." 
-              gradient="from-cyan-400 to-blue-500" 
-            />
-            <AppCard 
-              name="GarageBot" 
-              category="Automation" 
-              desc="Smart automation for vehicle maintenance and garage management." 
-              gradient="from-slate-600 to-zinc-800" 
-            />
-            <AppCard 
-              name="Brew & Board" 
-              category="Social & Gaming" 
-              desc="Decentralized community for board game enthusiasts and craft brew lovers." 
-              gradient="from-amber-600 to-yellow-800" 
-            />
-            <AppCard 
-              name="LotOps Pro" 
-              category="Enterprise" 
-              desc="Professional lot operations management for automotive dealerships." 
-              gradient="from-indigo-600 to-violet-800" 
-            />
-            <div className="group relative rounded-xl border-2 border-dashed border-white/10 bg-transparent flex flex-col items-center justify-center p-8 hover:border-primary/50 transition-colors cursor-pointer">
-              <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                <Code className="w-6 h-6 text-muted-foreground group-hover:text-primary" />
+            {appsLoading ? (
+              <div className="col-span-full text-center py-12 text-muted-foreground">
+                Loading ecosystem apps...
               </div>
-              <h3 className="text-lg font-bold text-muted-foreground group-hover:text-primary">Submit Your App</h3>
-              <p className="text-sm text-center text-muted-foreground/60 mt-2">Join the ecosystem</p>
-            </div>
+            ) : (
+              <>
+                {apps.map((app) => (
+                  <AppCard 
+                    key={app.id}
+                    name={app.name} 
+                    category={app.category} 
+                    desc={app.description} 
+                    gradient={app.gradient} 
+                  />
+                ))}
+                <div className="group relative rounded-xl border-2 border-dashed border-white/10 bg-transparent flex flex-col items-center justify-center p-8 hover:border-primary/50 transition-colors cursor-pointer">
+                  <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                    <Code className="w-6 h-6 text-muted-foreground group-hover:text-primary" />
+                  </div>
+                  <h3 className="text-lg font-bold text-muted-foreground group-hover:text-primary">Submit Your App</h3>
+                  <p className="text-sm text-center text-muted-foreground/60 mt-2">Join the ecosystem</p>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
