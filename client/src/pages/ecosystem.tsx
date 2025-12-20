@@ -145,7 +145,7 @@ export default function Ecosystem() {
 
                 {/* Standard Card - User App 2 */}
                 <AppStoreCard 
-                  name="StaffFlow" 
+                  name="Orbit Staffing" 
                   category="Enterprise" 
                   users="Orbit Verified"
                   desc="Blockchain-based staffing and workforce management. Immutable records of employment, skills, and payments."
