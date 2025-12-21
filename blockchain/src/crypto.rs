@@ -1,6 +1,8 @@
 use ed25519_dalek::{Signer, SigningKey, Verifier, VerifyingKey};
 use rand::RngCore;
 use sha2::{Digest, Sha256};
+use std::fs;
+use std::path::Path;
 use thiserror::Error;
 
 use crate::types::{Address, Hash, PublicKey, Signature};
@@ -13,6 +15,8 @@ pub enum CryptoError {
     InvalidPublicKey,
     #[error("Signing failed: {0}")]
     SigningError(String),
+    #[error("IO error: {0}")]
+    IoError(String),
 }
 
 #[derive(Clone)]
@@ -49,6 +53,40 @@ impl Keypair {
 
     pub fn to_bytes(&self) -> [u8; 32] {
         self.signing_key.to_bytes()
+    }
+
+    pub fn to_hex(&self) -> String {
+        hex::encode(self.signing_key.to_bytes())
+    }
+
+    pub fn from_hex(hex_str: &str) -> Result<Self, CryptoError> {
+        let bytes = hex::decode(hex_str).map_err(|e| CryptoError::IoError(e.to_string()))?;
+        if bytes.len() != 32 {
+            return Err(CryptoError::IoError("Invalid key length".to_string()));
+        }
+        let mut arr = [0u8; 32];
+        arr.copy_from_slice(&bytes);
+        Self::from_bytes(&arr)
+    }
+
+    pub fn save_to_file<P: AsRef<Path>>(&self, path: P) -> Result<(), CryptoError> {
+        let hex_key = self.to_hex();
+        fs::write(path, hex_key).map_err(|e| CryptoError::IoError(e.to_string()))
+    }
+
+    pub fn load_from_file<P: AsRef<Path>>(path: P) -> Result<Self, CryptoError> {
+        let hex_key = fs::read_to_string(path).map_err(|e| CryptoError::IoError(e.to_string()))?;
+        Self::from_hex(hex_key.trim())
+    }
+
+    pub fn load_or_generate<P: AsRef<Path>>(path: P) -> Result<Self, CryptoError> {
+        if path.as_ref().exists() {
+            Self::load_from_file(path)
+        } else {
+            let keypair = Self::generate();
+            keypair.save_to_file(path)?;
+            Ok(keypair)
+        }
     }
 }
 

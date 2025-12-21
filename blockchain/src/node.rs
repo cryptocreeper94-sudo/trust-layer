@@ -1,6 +1,8 @@
 use std::sync::Arc;
+use std::path::PathBuf;
+use std::env;
 use tokio::sync::RwLock;
-use tracing::{info, Level};
+use tracing::{info, warn, Level};
 use tracing_subscriber::FmtSubscriber;
 
 use crate::consensus::{start_block_producer, ProofOfAuthority};
@@ -8,6 +10,9 @@ use crate::crypto::Keypair;
 use crate::ledger::Ledger;
 use crate::rpc::{create_router, RpcState};
 use crate::types::{Block, ChainConfig};
+
+const TREASURY_KEY_ENV: &str = "TREASURY_PRIVATE_KEY";
+const TOTAL_SUPPLY: u128 = 100_000_000 * 1_000_000_000_000_000_000u128; // 100M DWT with 18 decimals
 
 pub struct Node {
     pub config: ChainConfig,
@@ -18,13 +23,24 @@ pub struct Node {
 
 impl Node {
     pub fn new(config: ChainConfig, data_dir: Option<&str>) -> Result<Self, Box<dyn std::error::Error>> {
-        let ledger = match data_dir {
-            Some(path) => Arc::new(Ledger::new(path)?),
-            None => Arc::new(Ledger::in_memory()?),
-        };
+        let data_path = data_dir.map(PathBuf::from).unwrap_or_else(|| PathBuf::from("data"));
+        
+        std::fs::create_dir_all(&data_path)?;
+        
+        let ledger = Arc::new(Ledger::new(&data_path)?);
 
-        let keypair = Keypair::generate();
+        let (keypair, is_new_key) = Self::load_treasury_keypair()?;
+        
         let validator_address = keypair.address();
+
+        if is_new_key {
+            info!("Generated NEW treasury wallet");
+            info!("IMPORTANT: Set {} environment variable with this key to persist:", TREASURY_KEY_ENV);
+            info!("Treasury Private Key: {}", keypair.to_hex());
+            warn!("Without setting this secret, a new wallet will be generated on restart!");
+        } else {
+            info!("Loaded treasury wallet from secure environment");
+        }
 
         let mut chain_config = config.clone();
         chain_config.genesis_validators.push(validator_address);
@@ -35,19 +51,27 @@ impl Node {
             Some(keypair.clone()),
         );
 
-        let genesis = Block::genesis();
-        if ledger.get_latest_height().unwrap_or(0) == 0 {
+        let is_genesis = ledger.get_latest_height().unwrap_or(0) == 0;
+        
+        if is_genesis {
+            let genesis = Block::genesis();
             ledger.init_genesis(&genesis)?;
             info!("Genesis block initialized");
+            
+            ledger.mint(&validator_address, TOTAL_SUPPLY)?;
+            info!(
+                "Minted 100,000,000 DWT to treasury: 0x{}",
+                hex::encode(validator_address)
+            );
+        } else {
+            let balance = ledger.get_balance(&validator_address).unwrap_or(0);
+            let display_balance = balance / 1_000_000_000_000_000_000u128;
+            info!(
+                "Treasury balance: {} DWT (0x{})",
+                display_balance,
+                hex::encode(validator_address)
+            );
         }
-
-        // 100 million DWT with 18 decimals = 100_000_000 * 10^18
-        let total_supply: u128 = 100_000_000 * 1_000_000_000_000_000_000u128; // 100M * 10^18
-        ledger.mint(&validator_address, total_supply)?;
-        info!(
-            "Minted 100,000,000 DWT to validator: 0x{}",
-            hex::encode(validator_address)
-        );
 
         Ok(Self {
             config: chain_config,
@@ -55,6 +79,25 @@ impl Node {
             consensus: Arc::new(RwLock::new(consensus)),
             keypair,
         })
+    }
+    
+    pub fn treasury_address(&self) -> String {
+        format!("0x{}", hex::encode(self.keypair.address()))
+    }
+    
+    pub fn treasury_private_key(&self) -> String {
+        self.keypair.to_hex()
+    }
+    
+    fn load_treasury_keypair() -> Result<(Keypair, bool), Box<dyn std::error::Error>> {
+        if let Ok(key_hex) = env::var(TREASURY_KEY_ENV) {
+            let keypair = Keypair::from_hex(&key_hex)
+                .map_err(|e| format!("Invalid {} format: {}", TREASURY_KEY_ENV, e))?;
+            Ok((keypair, false))
+        } else {
+            let keypair = Keypair::generate();
+            Ok((keypair, true))
+        }
     }
 
     pub async fn start(&self, rpc_port: u16) -> Result<(), Box<dyn std::error::Error>> {

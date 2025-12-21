@@ -65,6 +65,13 @@ impl ProofOfAuthority {
         self.validators.get(self.current_validator_index)
     }
 
+    pub fn validator_address(&self) -> Address {
+        self.keypair
+            .as_ref()
+            .map(|kp| kp.address())
+            .unwrap_or([0u8; 20])
+    }
+
     pub fn rotate_validator(&mut self) {
         if !self.validators.is_empty() {
             self.current_validator_index =

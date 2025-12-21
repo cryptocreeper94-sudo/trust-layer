@@ -10,7 +10,7 @@ use tokio::sync::RwLock;
 use tower_http::cors::{Any, CorsLayer};
 
 use crate::consensus::ProofOfAuthority;
-use crate::crypto::{address_to_hex, hash_to_hex, hex_to_address, hash_transaction};
+use crate::crypto::{address_to_hex, hash_to_hex, hex_to_address, hash_transaction, hash_bytes};
 use crate::ledger::Ledger;
 use crate::types::{ChainConfig, Transaction};
 
@@ -87,6 +87,30 @@ pub struct StatsResponse {
     pub total_transactions: u64,
     pub total_accounts: u64,
     pub mempool_size: usize,
+}
+
+#[derive(Serialize)]
+pub struct TreasuryInfoResponse {
+    pub address: String,
+    pub balance: String,
+    pub balance_raw: u128,
+    pub total_supply: String,
+}
+
+#[derive(Deserialize)]
+pub struct DistributeRequest {
+    pub to: String,
+    pub amount: String,
+}
+
+#[derive(Serialize)]
+pub struct DistributeResponse {
+    pub success: bool,
+    pub tx_hash: Option<String>,
+    pub from: String,
+    pub to: String,
+    pub amount: String,
+    pub new_treasury_balance: String,
 }
 
 #[derive(Serialize)]
@@ -274,6 +298,72 @@ async fn health() -> &'static str {
     "OK"
 }
 
+async fn get_treasury_info(State(state): State<RpcState>) -> Json<TreasuryInfoResponse> {
+    let consensus = state.consensus.read().await;
+    let treasury_address = consensus.validator_address();
+    let balance = state.ledger.get_balance(&treasury_address).unwrap_or(0);
+    let display_balance = balance / 1_000_000_000_000_000_000u128;
+    
+    Json(TreasuryInfoResponse {
+        address: address_to_hex(&treasury_address),
+        balance: format!("{} DWT", display_balance),
+        balance_raw: balance,
+        total_supply: "100,000,000 DWT".to_string(),
+    })
+}
+
+async fn distribute_tokens(
+    State(state): State<RpcState>,
+    Json(req): Json<DistributeRequest>,
+) -> Result<Json<DistributeResponse>, (StatusCode, Json<ErrorResponse>)> {
+    let to = match hex_to_address(&req.to) {
+        Ok(a) => a,
+        Err(_) => {
+            return Err((
+                StatusCode::BAD_REQUEST,
+                Json(ErrorResponse {
+                    error: "Invalid recipient address".to_string(),
+                }),
+            ))
+        }
+    };
+
+    let amount: u128 = req.amount.parse().map_err(|_| {
+        (
+            StatusCode::BAD_REQUEST,
+            Json(ErrorResponse {
+                error: "Invalid amount format. Use raw amount with decimals.".to_string(),
+            }),
+        )
+    })?;
+
+    let consensus = state.consensus.read().await;
+    let treasury_address = consensus.validator_address();
+    
+    match state.ledger.transfer(&treasury_address, &to, amount) {
+        Ok(_) => {
+            let new_balance = state.ledger.get_balance(&treasury_address).unwrap_or(0);
+            let display_balance = new_balance / 1_000_000_000_000_000_000u128;
+            let display_amount = amount / 1_000_000_000_000_000_000u128;
+            
+            Ok(Json(DistributeResponse {
+                success: true,
+                tx_hash: Some(format!("0x{}", hex::encode(hash_bytes(&amount.to_le_bytes())))),
+                from: address_to_hex(&treasury_address),
+                to: address_to_hex(&to),
+                amount: format!("{} DWT", display_amount),
+                new_treasury_balance: format!("{} DWT", display_balance),
+            }))
+        }
+        Err(e) => Err((
+            StatusCode::BAD_REQUEST,
+            Json(ErrorResponse {
+                error: format!("Distribution failed: {}", e),
+            }),
+        )),
+    }
+}
+
 pub fn create_router(state: RpcState) -> Router {
     let cors = CorsLayer::new()
         .allow_origin(Any)
@@ -289,6 +379,8 @@ pub fn create_router(state: RpcState) -> Router {
         .route("/account/:address", get(get_account))
         .route("/transaction", post(send_transaction))
         .route("/stats", get(get_stats))
+        .route("/treasury", get(get_treasury_info))
+        .route("/treasury/distribute", post(distribute_tokens))
         .layer(cors)
         .with_state(state)
 }
