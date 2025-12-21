@@ -9,6 +9,7 @@ import {
   Rocket, Cloud, Link2, Users, Info, Zap, Shield, Database,
   ExternalLink, Copy, CheckCircle, Loader2, Send
 } from "lucide-react";
+import { MonacoEditor } from "@/components/monaco-editor";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
@@ -992,13 +993,11 @@ export default function Studio() {
           {/* Code Editor */}
           <div className="flex-1 overflow-hidden">
             {activeFile ? (
-              <textarea
+              <MonacoEditor
                 value={editorContent}
-                onChange={(e) => setEditorContent(e.target.value)}
-                className="w-full h-full bg-[#0d0d12] text-gray-100 font-mono text-sm p-4 resize-none focus:outline-none leading-relaxed"
-                spellCheck={false}
-                placeholder="// Start coding..."
-                data-testid="editor-textarea"
+                onChange={setEditorContent}
+                language={getLanguage(activeFile.name)}
+                data-testid="editor-monaco"
               />
             ) : (
               <div className="flex items-center justify-center h-full text-muted-foreground">
