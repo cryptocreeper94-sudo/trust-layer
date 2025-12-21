@@ -18,7 +18,6 @@ import { MobileNav } from "@/components/mobile-nav";
 import { usePreferences } from "@/lib/store";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
-import { SystemHealthWidget } from "@/components/system-health";
 
 export default function Home() {
   const { preferences } = usePreferences();
@@ -250,15 +249,6 @@ export default function Home() {
           </div>
         </section>
       )}
-
-      {/* System Health Section */}
-      <section className="py-16 border-b border-white/5">
-        <div className="container mx-auto px-6">
-          <div className="max-w-2xl mx-auto">
-            <SystemHealthWidget />
-          </div>
-        </div>
-      </section>
 
       {/* Ecosystem Apps Grid */}
       <section className="py-32 bg-secondary/5">
