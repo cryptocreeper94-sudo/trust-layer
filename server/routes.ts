@@ -1524,6 +1524,81 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/billing/checkout/crypto", async (req, res) => {
+    try {
+      const apiKey = req.headers["x-api-key"] as string;
+      if (!apiKey) {
+        return res.status(401).json({ error: "API key required" });
+      }
+
+      const validKey = await storage.getApiKeyByKey(apiKey);
+      if (!validKey) {
+        return res.status(401).json({ error: "Invalid API key" });
+      }
+
+      const balance = await billingService.getOutstandingBalance(validKey.id);
+      if (balance <= 0) {
+        return res.json({ message: "No outstanding balance", balanceCents: 0 });
+      }
+
+      const host = req.get("host") || "darkwavechain.io";
+      const protocol = host.includes("localhost") ? "http" : "https";
+      const baseUrl = `${protocol}://${host}`;
+
+      const { createCoinbaseCharge } = await import("./coinbaseClient");
+      const charge = await createCoinbaseCharge({
+        name: "DarkWave API Usage",
+        description: `Outstanding balance: $${(balance / 100).toFixed(2)}`,
+        amountUsd: (balance / 100).toFixed(2),
+        successUrl: `${baseUrl}/billing/success?coinbase_charge={CHECKOUT_ID}`,
+        cancelUrl: `${baseUrl}/billing`,
+        metadata: {
+          apiKeyId: validKey.id,
+          amountCents: balance.toString(),
+        },
+      });
+
+      res.json({
+        checkoutUrl: charge.hostedUrl,
+        chargeId: charge.id,
+        amountCents: balance,
+        expiresAt: charge.expiresAt,
+      });
+    } catch (error) {
+      console.error("Coinbase checkout error:", error);
+      res.status(500).json({ error: "Failed to create crypto checkout" });
+    }
+  });
+
+  app.get("/api/billing/verify-crypto", async (req, res) => {
+    try {
+      const chargeId = req.query.charge_id as string;
+      if (!chargeId) {
+        return res.status(400).json({ error: "Charge ID required" });
+      }
+
+      const { getCoinbaseCharge } = await import("./coinbaseClient");
+      const charge = await getCoinbaseCharge(chargeId);
+
+      if (charge.status === "COMPLETED" || charge.status === "CONFIRMED") {
+        const amountCents = parseInt(charge.metadata?.amountCents || "0");
+        if (charge.metadata?.apiKeyId) {
+          await billingService.handlePaymentSuccess(charge.metadata.apiKeyId, amountCents);
+        }
+        res.json({
+          success: true,
+          message: "Crypto payment confirmed",
+          amountPaid: (amountCents / 100).toFixed(2),
+        });
+      } else {
+        res.json({ success: false, status: charge.status, message: "Payment pending" });
+      }
+    } catch (error) {
+      console.error("Crypto verification error:", error);
+      res.status(500).json({ error: "Failed to verify crypto payment" });
+    }
+  });
+
   return httpServer;
 }
 

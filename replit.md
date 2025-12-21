@@ -123,6 +123,14 @@ User wants: Full blockchain implementation, not just a web portal. No piggybacki
 - `GET /api/gas/estimate?dataSize=N` - Estimate gas for data
 - `GET /api/fees/schedule` - Current fee schedule
 
+### Billing API Endpoints
+- `GET /api/billing/usage` - Get usage stats (requires X-API-Key header)
+- `POST /api/billing/checkout` - Create Stripe checkout session
+- `POST /api/billing/checkout/crypto` - Create Coinbase Commerce checkout
+- `GET /api/billing/verify-payment?session_id=X` - Verify Stripe payment
+- `GET /api/billing/verify-crypto?charge_id=X` - Verify crypto payment
+- `GET /api/billing/admin/stats` - Admin billing analytics (requires X-Admin-Session)
+
 ### Dual-Chain Stamping Endpoints
 - `POST /api/stamp/dual` - Submit hash to DarkWave + Solana (requires X-API-Key)
 - `GET /api/stamp/:stampId` - Get stamp details with both chain statuses
@@ -222,7 +230,8 @@ The hallmark system provides unique, verifiable product identifiers for all Dark
 
 ### Third-Party Services
 - Replit Auth for social login (OAuth 2.0)
-- No payment processing currently integrated
+- Stripe for card payments (usage-based billing at $0.03/API call)
+- Coinbase Commerce for crypto payments (BTC, ETH, USDC)
 - OpenGraph image handling via custom Vite plugin for Replit deployments
 
 ### Key NPM Dependencies

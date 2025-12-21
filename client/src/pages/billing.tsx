@@ -27,7 +27,7 @@ export default function Billing() {
   const [stats, setStats] = useState<UsageStats | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState<"stripe" | "crypto" | null>(null);
   const [paymentSuccess, setPaymentSuccess] = useState<string | null>(null);
 
   useEffect(() => {
@@ -75,20 +75,16 @@ export default function Billing() {
     }
   };
 
-  const handlePayNow = async () => {
+  const handlePayWithStripe = async () => {
     if (!apiKey || !stats || stats.outstandingBalanceCents <= 0) return;
 
-    setCheckoutLoading(true);
+    setCheckoutLoading("stripe");
     try {
       const response = await fetch("/api/billing/checkout", {
         method: "POST",
-        headers: {
-          "X-API-Key": apiKey,
-          "Content-Type": "application/json",
-        },
+        headers: { "X-API-Key": apiKey, "Content-Type": "application/json" },
         body: JSON.stringify({}),
       });
-
       const data = await response.json();
       if (data.checkoutUrl) {
         window.location.href = data.checkoutUrl;
@@ -98,7 +94,30 @@ export default function Billing() {
     } catch (err: any) {
       setError("Failed to create checkout session");
     } finally {
-      setCheckoutLoading(false);
+      setCheckoutLoading(null);
+    }
+  };
+
+  const handlePayWithCrypto = async () => {
+    if (!apiKey || !stats || stats.outstandingBalanceCents <= 0) return;
+
+    setCheckoutLoading("crypto");
+    try {
+      const response = await fetch("/api/billing/checkout/crypto", {
+        method: "POST",
+        headers: { "X-API-Key": apiKey, "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
+      const data = await response.json();
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else if (data.message) {
+        setError(data.message);
+      }
+    } catch (err: any) {
+      setError("Failed to create crypto checkout");
+    } finally {
+      setCheckoutLoading(null);
     }
   };
 
@@ -199,15 +218,26 @@ export default function Billing() {
                     </div>
                     <p className="text-2xl font-bold" data-testid="text-balance">${stats.outstandingBalanceUSD}</p>
                     {stats.outstandingBalanceCents > 0 && (
-                      <Button
-                        onClick={handlePayNow}
-                        disabled={checkoutLoading}
-                        className="w-full mt-3 bg-amber-500 hover:bg-amber-600 text-black font-semibold"
-                        data-testid="button-pay-now"
-                      >
-                        {checkoutLoading ? "Redirecting..." : "Pay Now"}
-                        <ExternalLink className="w-4 h-4 ml-2" />
-                      </Button>
+                      <div className="flex gap-2 mt-3">
+                        <Button
+                          onClick={handlePayWithStripe}
+                          disabled={!!checkoutLoading}
+                          className="flex-1 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold text-xs"
+                          data-testid="button-pay-stripe"
+                        >
+                          {checkoutLoading === "stripe" ? "..." : "Card"}
+                          <CreditCard className="w-3 h-3 ml-1" />
+                        </Button>
+                        <Button
+                          onClick={handlePayWithCrypto}
+                          disabled={!!checkoutLoading}
+                          className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-semibold text-xs"
+                          data-testid="button-pay-crypto"
+                        >
+                          {checkoutLoading === "crypto" ? "..." : "Crypto"}
+                          <ExternalLink className="w-3 h-3 ml-1" />
+                        </Button>
+                      </div>
                     )}
                   </GlassCard>
                 </div>
@@ -238,7 +268,7 @@ export default function Billing() {
                 </GlassCard>
 
                 <div className="text-center text-sm text-muted-foreground">
-                  <p>Payments are processed securely via Stripe. Crypto payments via Coinbase coming soon.</p>
+                  <p>Pay with card (Stripe) or crypto (Coinbase Commerce - BTC, ETH, USDC)</p>
                 </div>
               </motion.div>
             )}
