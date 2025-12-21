@@ -109,11 +109,17 @@ export default function Home() {
                   Start Building <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
-              <Link href="/whitepaper">
-                <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-white/20 hover:bg-white/5 rounded-full transition-all hover:border-white/40" data-testid="button-whitepaper">
-                  Read Whitepaper
+              <Link href="/explorer">
+                <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-primary/50 text-primary hover:bg-primary/10 rounded-full transition-all hover:border-primary" data-testid="button-explore-chain">
+                  DarkWaveScan
                 </Button>
               </Link>
+            </div>
+
+            <div className="flex items-center justify-center gap-6 pt-4 text-sm text-muted-foreground">
+              <a href="https://darkwavechain.io" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">darkwavechain.io</a>
+              <span className="text-white/20">|</span>
+              <a href="https://darkwavechain.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">darkwavechain.com</a>
             </div>
           </motion.div>
         </div>

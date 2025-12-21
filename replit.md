@@ -14,6 +14,10 @@ The project goal is to build a blockchain that is faster, more stable, and featu
 Preferred communication style: Simple, everyday language.
 User wants: Full blockchain implementation, not just a web portal. No piggybacking on other chains.
 
+## Domains
+- darkwavechain.io
+- darkwavechain.com
+
 ## Blockchain Architecture (`blockchain/`)
 
 ### Core Components
