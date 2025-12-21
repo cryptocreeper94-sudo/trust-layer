@@ -1616,22 +1616,32 @@ export async function registerRoutes(
     try {
       const userId = req.user.claims.sub;
       const { name, description, language } = req.body;
+      const lang = language || "javascript";
       const project = await storage.createStudioProject({
         userId,
         name: name || "Untitled Project",
-        description,
-        language: language || "javascript",
+        description: description || null,
+        language: lang,
         isPublic: false,
       });
+      const starterFiles: Record<string, { name: string; content: string; ext: string }> = {
+        javascript: { name: "index.js", content: '// Welcome to DarkWave Studio\nconsole.log("Hello, DarkWave!");', ext: "js" },
+        typescript: { name: "index.ts", content: '// Welcome to DarkWave Studio\nconsole.log("Hello, DarkWave!");', ext: "ts" },
+        python: { name: "main.py", content: '# Welcome to DarkWave Studio\nprint("Hello, DarkWave!")', ext: "py" },
+        rust: { name: "main.rs", content: '// Welcome to DarkWave Studio\nfn main() {\n    println!("Hello, DarkWave!");\n}', ext: "rs" },
+        html: { name: "index.html", content: '<!DOCTYPE html>\n<html>\n<head>\n  <title>DarkWave Project</title>\n</head>\n<body>\n  <h1>Hello, DarkWave!</h1>\n</body>\n</html>', ext: "html" },
+      };
+      const starter = starterFiles[lang] || starterFiles.javascript;
       await storage.createStudioFile({
         projectId: project.id,
-        path: "/index.js",
-        name: "index.js",
-        content: '// Welcome to DarkWave Studio\nconsole.log("Hello, DarkWave!");',
-        language: "javascript",
+        path: `/${starter.name}`,
+        name: starter.name,
+        content: starter.content,
+        language: lang,
         isFolder: false,
       });
-      res.json(project);
+      const savedProject = await storage.getStudioProject(project.id);
+      res.json(savedProject);
     } catch (error) {
       console.error("Create project error:", error);
       res.status(500).json({ error: "Failed to create project" });
