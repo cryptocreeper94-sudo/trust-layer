@@ -1,14 +1,22 @@
 import crypto from 'crypto';
 
 export class OrbitEcosystemClient {
-  private apiKey: string;
-  private apiSecret: string;
+  private _apiKey?: string;
+  private _apiSecret?: string;
   private hubUrl: string;
 
   constructor(apiKey?: string, apiSecret?: string, hubUrl = 'https://orbitstaffing.io') {
-    this.apiKey = apiKey || process.env.DARKWAVE_API_KEY || '';
-    this.apiSecret = apiSecret || process.env.DARKWAVE_API_SECRET || '';
+    this._apiKey = apiKey;
+    this._apiSecret = apiSecret;
     this.hubUrl = hubUrl;
+  }
+
+  private get apiKey(): string {
+    return this._apiKey || process.env.DARKWAVE_API_KEY || '';
+  }
+
+  private get apiSecret(): string {
+    return this._apiSecret || process.env.DARKWAVE_API_SECRET || '';
   }
 
   private sign(method: string, path: string, timestamp: string, body = ''): string {
