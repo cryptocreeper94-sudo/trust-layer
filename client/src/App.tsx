@@ -3,12 +3,14 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { PreferencesProvider, NotificationsProvider } from "@/lib/store";
 import Home from "@/pages/home";
 import Developers from "@/pages/developers";
 import Ecosystem from "@/pages/ecosystem";
 import Token from "@/pages/token";
 import Explorer from "@/pages/explorer";
 import DocHub from "@/pages/doc-hub";
+import ApiPlayground from "@/pages/api-playground";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -20,6 +22,7 @@ function Router() {
       <Route path="/token" component={Token} />
       <Route path="/explorer" component={Explorer} />
       <Route path="/doc-hub" component={DocHub} />
+      <Route path="/api-playground" component={ApiPlayground} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -28,10 +31,14 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
+      <PreferencesProvider>
+        <NotificationsProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </NotificationsProvider>
+      </PreferencesProvider>
     </QueryClientProvider>
   );
 }

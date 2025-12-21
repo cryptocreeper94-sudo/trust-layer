@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database } from "lucide-react";
+import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart } from "lucide-react";
 import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.png";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { Button } from "@/components/ui/button";
@@ -9,18 +9,31 @@ import { Badge } from "@/components/ui/badge";
 import { OnboardingTour } from "@/components/onboarding-tour";
 import { useQuery } from "@tanstack/react-query";
 import { fetchEcosystemApps, fetchBlockchainStats } from "@/lib/api";
+import { GlobalSearch } from "@/components/global-search";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { NotificationsDropdown } from "@/components/notifications";
+import { FavoriteButton } from "@/components/favorite-button";
+import { SkeletonCard, SkeletonStatCard } from "@/components/ui/skeleton-card";
+import { MobileNav } from "@/components/mobile-nav";
+import { usePreferences } from "@/lib/store";
 
 export default function Home() {
+  const { preferences } = usePreferences();
+  
   const { data: apps = [], isLoading: appsLoading } = useQuery({
     queryKey: ["ecosystem-apps"],
     queryFn: fetchEcosystemApps,
+    staleTime: 30000,
   });
 
-  const { data: stats } = useQuery({
+  const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ["blockchain-stats"],
     queryFn: fetchBlockchainStats,
-    refetchInterval: 5000,
+    refetchInterval: 3000,
+    staleTime: 2000,
   });
+
+  const favoriteApps = apps.filter(app => preferences.favorites.includes(app.id));
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
@@ -38,13 +51,19 @@ export default function Home() {
             <Link href="/explorer" className="hover:text-primary transition-colors cursor-pointer">Explorer</Link>
             <Link href="/developers" className="hover:text-primary transition-colors cursor-pointer">Developers</Link>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
+              <GlobalSearch />
+              <ThemeToggle />
+              <NotificationsDropdown />
+            </div>
             <Button variant="ghost" className="hidden sm:flex hover:bg-white/5 hover:text-white" data-testid="button-login">Log In</Button>
             <Link href="/ecosystem">
-              <Button className="bg-primary text-background hover:bg-primary/90 font-semibold shadow-[0_0_20px_rgba(0,255,255,0.3)]" data-testid="button-launch-app">
+              <Button className="hidden sm:flex bg-primary text-background hover:bg-primary/90 font-semibold shadow-[0_0_20px_rgba(0,255,255,0.3)]" data-testid="button-launch-app">
                 Launch App
               </Button>
             </Link>
+            <MobileNav />
           </div>
         </div>
       </nav>
@@ -117,10 +136,21 @@ export default function Home() {
       <section className="py-20 border-y border-white/5 bg-black/20 backdrop-blur-sm">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <StatCard value={stats?.tps || "200K+"} label="TPS Throughput" />
-            <StatCard value={stats?.finalityTime || "0.4s"} label="Finality Time" />
-            <StatCard value={stats?.avgCost || "$0.0001"} label="Avg Cost" />
-            <StatCard value={stats?.activeNodes || "150+"} label="Active Nodes" />
+            {statsLoading ? (
+              <>
+                <SkeletonStatCard />
+                <SkeletonStatCard />
+                <SkeletonStatCard />
+                <SkeletonStatCard />
+              </>
+            ) : (
+              <>
+                <StatCard value={stats?.tps || "200K+"} label="TPS Throughput" live />
+                <StatCard value={stats?.finalityTime || "0.4s"} label="Finality Time" live />
+                <StatCard value={stats?.avgCost || "$0.0001"} label="Avg Cost" />
+                <StatCard value={stats?.activeNodes || "150+"} label="Active Nodes" live />
+              </>
+            )}
           </div>
         </div>
       </section>
@@ -185,6 +215,31 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Favorites Section */}
+      {favoriteApps.length > 0 && (
+        <section className="py-16 bg-primary/5 border-y border-primary/20">
+          <div className="container mx-auto px-6">
+            <div className="flex items-center gap-3 mb-8">
+              <Heart className="w-6 h-6 text-red-400 fill-current" />
+              <h2 className="text-2xl font-display font-bold">Your Favorites</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {favoriteApps.map((app) => (
+                <AppCard 
+                  key={app.id}
+                  id={app.id}
+                  name={app.name} 
+                  category={app.category} 
+                  desc={app.description} 
+                  gradient={app.gradient}
+                  showFavorite
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Ecosystem Apps Grid */}
       <section className="py-32 bg-secondary/5">
         <div className="container mx-auto px-6">
@@ -198,18 +253,23 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {appsLoading ? (
-              <div className="col-span-full text-center py-12 text-muted-foreground">
-                Loading ecosystem apps...
-              </div>
+              <>
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+              </>
             ) : (
               <>
                 {apps.map((app) => (
                   <AppCard 
                     key={app.id}
+                    id={app.id}
                     name={app.name} 
                     category={app.category} 
                     desc={app.description} 
-                    gradient={app.gradient} 
+                    gradient={app.gradient}
+                    showFavorite
                   />
                 ))}
                 <div className="group relative rounded-xl border-2 border-dashed border-white/10 bg-transparent flex flex-col items-center justify-center p-8 hover:border-primary/50 transition-colors cursor-pointer">
@@ -316,11 +376,14 @@ export default function Home() {
   );
 }
 
-function StatCard({ value, label }: { value: string, label: string }) {
+function StatCard({ value, label, live }: { value: string, label: string, live?: boolean }) {
   return (
     <div className="text-center group hover:-translate-y-1 transition-transform duration-300">
-      <div className="text-4xl md:text-5xl font-display font-bold text-white mb-2 group-hover:text-primary transition-colors">
+      <div className="text-4xl md:text-5xl font-display font-bold text-white mb-2 group-hover:text-primary transition-colors flex items-center justify-center gap-2">
         {value}
+        {live && (
+          <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" title="Live data" />
+        )}
       </div>
       <div className="text-sm text-muted-foreground uppercase tracking-wider font-medium">
         {label}
@@ -343,12 +406,15 @@ function FeatureItem({ icon: Icon, title, desc }: { icon: any, title: string, de
   );
 }
 
-function AppCard({ name, category, desc, gradient }: { name: string, category: string, desc: string, gradient: string }) {
+function AppCard({ id, name, category, desc, gradient, showFavorite }: { id?: string, name: string, category: string, desc: string, gradient: string, showFavorite?: boolean }) {
   return (
     <div className="group relative p-[1px] rounded-xl bg-gradient-to-b from-white/10 to-transparent hover:from-primary/50 hover:to-secondary/50 transition-all duration-300">
       <div className="relative h-full bg-black/40 backdrop-blur-xl rounded-xl p-6 hover:bg-black/60 transition-all">
-        <div className={`w-12 h-12 rounded-lg mb-6 bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-xl shadow-lg`}>
-          {name.charAt(0)}
+        <div className="flex justify-between items-start mb-4">
+          <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-xl shadow-lg`}>
+            {name.charAt(0)}
+          </div>
+          {showFavorite && id && <FavoriteButton appId={id} />}
         </div>
         <div className="flex justify-between items-start mb-2">
           <h3 className="font-bold text-xl text-white group-hover:text-primary transition-colors">{name}</h3>

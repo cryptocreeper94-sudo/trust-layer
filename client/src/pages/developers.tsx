@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Box, Check, ChevronRight, Code, Cpu, Database, FileCode, Layers, Terminal, Zap, BookOpen } from "lucide-react";
+import { ArrowLeft, Box, Check, ChevronRight, Code, Cpu, Database, FileCode, Layers, Terminal, Zap, BookOpen, Play } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -20,6 +20,11 @@ export default function Developers() {
             </div>
           </Link>
           <div className="flex items-center gap-4">
+            <Link href="/api-playground">
+              <Button variant="outline" className="border-green-500/30 hover:bg-green-500/10 hover:border-green-500/50 text-green-400 font-medium" data-testid="button-api-playground">
+                <Play className="w-4 h-4 mr-2" /> API Playground
+              </Button>
+            </Link>
             <Link href="/doc-hub">
               <Button variant="outline" className="border-primary/30 hover:bg-primary/10 hover:border-primary/50 text-primary font-medium" data-testid="button-doc-hub">
                 <BookOpen className="w-4 h-4 mr-2" /> Doc Hub
