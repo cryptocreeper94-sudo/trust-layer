@@ -155,6 +155,20 @@ export default function DevelopersRegister() {
                     </div>
                   </div>
 
+                  <div className="p-4 rounded-lg bg-black/40 border border-white/10">
+                    <p className="text-xs font-semibold text-white/70 mb-2">Quick Start</p>
+                    <pre className="text-[10px] text-cyan-400 overflow-x-auto">
+{`fetch('/api/hash/submit', {
+  method: 'POST',
+  headers: {
+    'X-API-Key': '${apiKey.slice(0, 12)}...',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ hash: 'your-data-hash' })
+})`}
+                    </pre>
+                  </div>
+
                   <div className="flex gap-3">
                     <Link href="/doc-hub" className="flex-1">
                       <Button variant="outline" className="w-full border-white/10" data-testid="link-docs">
