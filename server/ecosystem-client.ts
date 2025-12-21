@@ -12,11 +12,11 @@ export class OrbitEcosystemClient {
   }
 
   private get apiKey(): string {
-    return this._apiKey || process.env.DARKWAVE_API_KEY || '';
+    return this._apiKey || process.env.ORBIT_HUB_API_KEY || process.env.DARKWAVE_API_KEY || '';
   }
 
   private get apiSecret(): string {
-    return this._apiSecret || process.env.DARKWAVE_API_SECRET || '';
+    return this._apiSecret || process.env.ORBIT_HUB_API_SECRET || process.env.DARKWAVE_API_SECRET || '';
   }
 
   private sign(method: string, path: string, timestamp: string, body = ''): string {
