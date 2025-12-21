@@ -1789,6 +1789,274 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/studio/projects/:id/commits", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const commits = await storage.getStudioCommits(project.id);
+      res.json(commits);
+    } catch (error) {
+      console.error("Get commits error:", error);
+      res.status(500).json({ error: "Failed to get commits" });
+    }
+  });
+
+  app.post("/api/studio/projects/:id/commits", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const { message, branch } = req.body;
+      const files = await storage.getStudioFiles(project.id);
+      const filesSnapshot = JSON.stringify(files.map(f => ({ path: f.path, content: f.content })));
+      const existingCommits = await storage.getStudioCommits(project.id);
+      const parentHash = existingCommits[0]?.hash || null;
+      const hash = require("crypto").createHash("sha256")
+        .update(filesSnapshot + Date.now().toString())
+        .digest("hex")
+        .slice(0, 8);
+      const commit = await storage.createStudioCommit({
+        projectId: project.id,
+        hash,
+        parentHash,
+        message,
+        authorId: userId,
+        branch: branch || "main",
+        filesSnapshot,
+      });
+      res.json(commit);
+    } catch (error) {
+      console.error("Create commit error:", error);
+      res.status(500).json({ error: "Failed to create commit" });
+    }
+  });
+
+  app.get("/api/studio/commits/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const commit = await storage.getStudioCommit(req.params.id);
+      if (!commit) {
+        return res.status(404).json({ error: "Commit not found" });
+      }
+      res.json(commit);
+    } catch (error) {
+      console.error("Get commit error:", error);
+      res.status(500).json({ error: "Failed to get commit" });
+    }
+  });
+
+  app.post("/api/studio/commits/:id/checkout", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const commit = await storage.getStudioCommit(req.params.id);
+      if (!commit) {
+        return res.status(404).json({ error: "Commit not found" });
+      }
+      const project = await storage.getStudioProject(commit.projectId);
+      if (!project || project.userId !== userId) {
+        return res.status(403).json({ error: "Unauthorized" });
+      }
+      const filesSnapshot = JSON.parse(commit.filesSnapshot) as { path: string; content: string }[];
+      const currentFiles = await storage.getStudioFiles(project.id);
+      for (const file of currentFiles) {
+        await storage.deleteStudioFile(file.id);
+      }
+      for (const file of filesSnapshot) {
+        const name = file.path.split("/").pop() || file.path;
+        await storage.createStudioFile({
+          projectId: project.id,
+          path: file.path,
+          name,
+          content: file.content,
+          language: "plaintext",
+          isFolder: false,
+        });
+      }
+      res.json({ success: true, message: `Checked out commit ${commit.hash}` });
+    } catch (error) {
+      console.error("Checkout error:", error);
+      res.status(500).json({ error: "Failed to checkout commit" });
+    }
+  });
+
+  app.get("/api/studio/projects/:id/branches", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const branches = await storage.getStudioBranches(project.id);
+      res.json(branches);
+    } catch (error) {
+      console.error("Get branches error:", error);
+      res.status(500).json({ error: "Failed to get branches" });
+    }
+  });
+
+  app.post("/api/studio/projects/:id/branches", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const { name, headCommitId } = req.body;
+      const branch = await storage.createStudioBranch({
+        projectId: project.id,
+        name,
+        headCommitId,
+        isDefault: false,
+      });
+      res.json(branch);
+    } catch (error) {
+      console.error("Create branch error:", error);
+      res.status(500).json({ error: "Failed to create branch" });
+    }
+  });
+
+  app.get("/api/studio/projects/:id/runs", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const runs = await storage.getStudioRuns(project.id);
+      res.json(runs);
+    } catch (error) {
+      console.error("Get runs error:", error);
+      res.status(500).json({ error: "Failed to get runs" });
+    }
+  });
+
+  app.post("/api/studio/projects/:id/run", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const files = await storage.getStudioFiles(project.id);
+      const mainFile = files.find(f => f.name === "index.js" || f.name === "main.js" || f.name === "app.js");
+      const code = mainFile?.content || "";
+      let output = "";
+      let exitCode = "0";
+      try {
+        const logs: string[] = [];
+        const fakeConsole = {
+          log: (...args: any[]) => logs.push(args.map(a => String(a)).join(" ")),
+          error: (...args: any[]) => logs.push("[ERROR] " + args.map(a => String(a)).join(" ")),
+          warn: (...args: any[]) => logs.push("[WARN] " + args.map(a => String(a)).join(" ")),
+        };
+        const wrappedCode = `(function(console) { ${code} })(fakeConsole);`;
+        eval(wrappedCode.replace("fakeConsole", JSON.stringify(fakeConsole)));
+        const fn = new Function("console", code);
+        fn(fakeConsole);
+        output = logs.join("\n");
+      } catch (err: any) {
+        output = `Error: ${err.message}`;
+        exitCode = "1";
+      }
+      const run = await storage.createStudioRun({
+        projectId: project.id,
+        command: "node index.js",
+        status: "completed",
+        output,
+        exitCode,
+      });
+      await storage.updateStudioRun(run.id, { completedAt: new Date() });
+      res.json(run);
+    } catch (error) {
+      console.error("Run error:", error);
+      res.status(500).json({ error: "Failed to run project" });
+    }
+  });
+
+  app.get("/api/studio/runs/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const run = await storage.getStudioRun(req.params.id);
+      if (!run) {
+        return res.status(404).json({ error: "Run not found" });
+      }
+      res.json(run);
+    } catch (error) {
+      console.error("Get run error:", error);
+      res.status(500).json({ error: "Failed to get run" });
+    }
+  });
+
+  app.get("/api/studio/projects/:id/preview", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const preview = await storage.getStudioPreview(project.id);
+      res.json(preview || { status: "not_started" });
+    } catch (error) {
+      console.error("Get preview error:", error);
+      res.status(500).json({ error: "Failed to get preview" });
+    }
+  });
+
+  app.post("/api/studio/projects/:id/preview", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const files = await storage.getStudioFiles(project.id);
+      const htmlFile = files.find(f => f.name.endsWith(".html"));
+      if (!htmlFile) {
+        return res.status(400).json({ error: "No HTML file found for preview" });
+      }
+      const preview = await storage.createStudioPreview({
+        projectId: project.id,
+        status: "ready",
+        url: `/api/studio/projects/${project.id}/preview/serve`,
+      });
+      res.json(preview);
+    } catch (error) {
+      console.error("Create preview error:", error);
+      res.status(500).json({ error: "Failed to create preview" });
+    }
+  });
+
+  app.get("/api/studio/projects/:id/preview/serve", async (req: any, res) => {
+    try {
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project) {
+        return res.status(404).send("Project not found");
+      }
+      const files = await storage.getStudioFiles(project.id);
+      const htmlFile = files.find(f => f.name.endsWith(".html"));
+      if (!htmlFile) {
+        return res.status(404).send("No HTML file found");
+      }
+      let html = htmlFile.content;
+      const cssFile = files.find(f => f.name.endsWith(".css"));
+      const jsFile = files.find(f => f.name.endsWith(".js"));
+      if (cssFile) {
+        html = html.replace("</head>", `<style>${cssFile.content}</style></head>`);
+      }
+      if (jsFile) {
+        html = html.replace("</body>", `<script>${jsFile.content}</script></body>`);
+      }
+      res.setHeader("Content-Type", "text/html");
+      res.send(html);
+    } catch (error) {
+      console.error("Serve preview error:", error);
+      res.status(500).send("Error serving preview");
+    }
+  });
+
   return httpServer;
 }
 

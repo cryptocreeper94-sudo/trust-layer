@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
 import crypto from "crypto";
@@ -382,6 +382,84 @@ export class DatabaseStorage implements IStorage {
   async deleteStudioConfig(id: string): Promise<boolean> {
     await db.delete(studioConfigs).where(eq(studioConfigs.id, id));
     return true;
+  }
+
+  async createStudioCommit(data: InsertStudioCommit): Promise<StudioCommit> {
+    const [commit] = await db.insert(studioCommits).values(data).returning();
+    return commit;
+  }
+
+  async getStudioCommits(projectId: string, branch?: string): Promise<StudioCommit[]> {
+    if (branch) {
+      return db.select().from(studioCommits)
+        .where(eq(studioCommits.projectId, projectId))
+        .orderBy(desc(studioCommits.createdAt));
+    }
+    return db.select().from(studioCommits)
+      .where(eq(studioCommits.projectId, projectId))
+      .orderBy(desc(studioCommits.createdAt));
+  }
+
+  async getStudioCommit(id: string): Promise<StudioCommit | undefined> {
+    const [commit] = await db.select().from(studioCommits).where(eq(studioCommits.id, id));
+    return commit;
+  }
+
+  async createStudioBranch(data: InsertStudioBranch): Promise<StudioBranch> {
+    const [branch] = await db.insert(studioBranches).values(data).returning();
+    return branch;
+  }
+
+  async getStudioBranches(projectId: string): Promise<StudioBranch[]> {
+    return db.select().from(studioBranches).where(eq(studioBranches.projectId, projectId));
+  }
+
+  async updateStudioBranch(id: string, data: Partial<InsertStudioBranch>): Promise<StudioBranch | undefined> {
+    const [branch] = await db.update(studioBranches).set(data).where(eq(studioBranches.id, id)).returning();
+    return branch;
+  }
+
+  async deleteStudioBranch(id: string): Promise<boolean> {
+    await db.delete(studioBranches).where(eq(studioBranches.id, id));
+    return true;
+  }
+
+  async createStudioRun(data: InsertStudioRun): Promise<StudioRun> {
+    const [run] = await db.insert(studioRuns).values(data).returning();
+    return run;
+  }
+
+  async getStudioRuns(projectId: string): Promise<StudioRun[]> {
+    return db.select().from(studioRuns)
+      .where(eq(studioRuns.projectId, projectId))
+      .orderBy(desc(studioRuns.startedAt));
+  }
+
+  async getStudioRun(id: string): Promise<StudioRun | undefined> {
+    const [run] = await db.select().from(studioRuns).where(eq(studioRuns.id, id));
+    return run;
+  }
+
+  async updateStudioRun(id: string, data: Partial<InsertStudioRun>): Promise<StudioRun | undefined> {
+    const [run] = await db.update(studioRuns).set(data).where(eq(studioRuns.id, id)).returning();
+    return run;
+  }
+
+  async createStudioPreview(data: InsertStudioPreview): Promise<StudioPreview> {
+    const [preview] = await db.insert(studioPreviews).values(data).returning();
+    return preview;
+  }
+
+  async getStudioPreview(projectId: string): Promise<StudioPreview | undefined> {
+    const [preview] = await db.select().from(studioPreviews)
+      .where(eq(studioPreviews.projectId, projectId))
+      .orderBy(desc(studioPreviews.createdAt));
+    return preview;
+  }
+
+  async updateStudioPreview(id: string, data: Partial<InsertStudioPreview>): Promise<StudioPreview | undefined> {
+    const [preview] = await db.update(studioPreviews).set(data).where(eq(studioPreviews.id, id)).returning();
+    return preview;
   }
 }
 

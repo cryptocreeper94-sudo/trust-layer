@@ -398,4 +398,79 @@ export const insertStudioConfigSchema = createInsertSchema(studioConfigs).omit({
 export type InsertStudioConfig = z.infer<typeof insertStudioConfigSchema>;
 export type StudioConfig = typeof studioConfigs.$inferSelect;
 
+export const studioCommits = pgTable("studio_commits", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: text("project_id").notNull(),
+  hash: text("hash").notNull(),
+  parentHash: text("parent_hash"),
+  message: text("message").notNull(),
+  authorId: text("author_id").notNull(),
+  branch: text("branch").notNull().default("main"),
+  filesSnapshot: text("files_snapshot").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertStudioCommitSchema = createInsertSchema(studioCommits).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertStudioCommit = z.infer<typeof insertStudioCommitSchema>;
+export type StudioCommit = typeof studioCommits.$inferSelect;
+
+export const studioBranches = pgTable("studio_branches", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: text("project_id").notNull(),
+  name: text("name").notNull(),
+  headCommitId: text("head_commit_id"),
+  isDefault: boolean("is_default").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertStudioBranchSchema = createInsertSchema(studioBranches).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertStudioBranch = z.infer<typeof insertStudioBranchSchema>;
+export type StudioBranch = typeof studioBranches.$inferSelect;
+
+export const studioRuns = pgTable("studio_runs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: text("project_id").notNull(),
+  command: text("command").notNull(),
+  status: text("status").notNull().default("pending"),
+  output: text("output").notNull().default(""),
+  exitCode: text("exit_code"),
+  startedAt: timestamp("started_at").defaultNow().notNull(),
+  completedAt: timestamp("completed_at"),
+});
+
+export const insertStudioRunSchema = createInsertSchema(studioRuns).omit({
+  id: true,
+  startedAt: true,
+  completedAt: true,
+});
+
+export type InsertStudioRun = z.infer<typeof insertStudioRunSchema>;
+export type StudioRun = typeof studioRuns.$inferSelect;
+
+export const studioPreviews = pgTable("studio_previews", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: text("project_id").notNull(),
+  runId: text("run_id"),
+  url: text("url"),
+  status: text("status").notNull().default("pending"),
+  port: text("port"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertStudioPreviewSchema = createInsertSchema(studioPreviews).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertStudioPreview = z.infer<typeof insertStudioPreviewSchema>;
+export type StudioPreview = typeof studioPreviews.$inferSelect;
+
 export const APP_VERSION = "1.0.0-alpha";
