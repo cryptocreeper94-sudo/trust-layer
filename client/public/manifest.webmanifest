@@ -4,7 +4,7 @@
   "description": "The next generation Layer 1 blockchain by DarkWave Studios. Fast, stable, and scalable.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0a0f",
+  "background_color": "#0d0d1a",
   "theme_color": "#00ffff",
   "orientation": "any",
   "scope": "/",
