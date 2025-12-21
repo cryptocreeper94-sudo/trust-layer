@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Box, Clock, Globe, QrCode, AlertCircle, CheckCircle2, Search, Zap } from "lucide-react";
+import { ArrowLeft, Box, Clock, Globe, QrCode, AlertCircle, CheckCircle2, Search, Zap, Activity } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -18,6 +18,43 @@ import {
 } from "@/components/ui/table";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
+
+interface ChainInfo {
+  chainId: number;
+  chainName: string;
+  symbol: string;
+  decimals: number;
+  blockHeight: number;
+  latestBlockHash: string;
+}
+
+interface BlockInfo {
+  height: number;
+  hash: string;
+  prevHash: string;
+  timestamp: string;
+  validator: string;
+  txCount: number;
+  merkleRoot: string;
+}
+
+interface ChainStats {
+  tps: string;
+  finalityTime: string;
+  avgCost: string;
+  activeNodes: string;
+  currentBlock: string;
+  networkHash: string;
+}
+
+interface RecentTransaction {
+  txHash: string;
+  dataHash: string;
+  category: string;
+  status: string;
+  blockHeight: string;
+  createdAt: string;
+}
 
 interface HallmarkData {
   hallmarkId: string;
@@ -46,6 +83,73 @@ export default function Explorer() {
   const [hallmarkData, setHallmarkData] = useState<HallmarkData | null>(null);
   const [hallmarkLoading, setHallmarkLoading] = useState(false);
   const [hallmarkError, setHallmarkError] = useState<string | null>(null);
+  
+  const [chainInfo, setChainInfo] = useState<ChainInfo | null>(null);
+  const [chainStats, setChainStats] = useState<ChainStats | null>(null);
+  const [latestBlocks, setLatestBlocks] = useState<BlockInfo[]>([]);
+  const [recentTxs, setRecentTxs] = useState<RecentTransaction[]>([]);
+
+  useEffect(() => {
+    const fetchChainData = async () => {
+      try {
+        const [chainRes, statsRes] = await Promise.all([
+          fetch("/api/chain"),
+          fetch("/api/blockchain/stats")
+        ]);
+        
+        if (chainRes.ok) {
+          setChainInfo(await chainRes.json());
+        }
+        if (statsRes.ok) {
+          setChainStats(await statsRes.json());
+        }
+      } catch (error) {
+        console.error("Failed to fetch chain data:", error);
+      }
+    };
+
+    const fetchLatestBlocks = async () => {
+      try {
+        const res = await fetch("/api/block/latest");
+        if (res.ok) {
+          const latest = await res.json();
+          setLatestBlocks(prev => {
+            const exists = prev.some(b => b.height === latest.height);
+            if (exists) return prev;
+            const newBlocks = [latest, ...prev].slice(0, 6);
+            return newBlocks;
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch latest block:", error);
+      }
+    };
+
+    const fetchRecentTransactions = async () => {
+      try {
+        const res = await fetch("/api/transactions/recent?limit=6");
+        if (res.ok) {
+          setRecentTxs(await res.json());
+        }
+      } catch (error) {
+        console.error("Failed to fetch recent transactions:", error);
+      }
+    };
+
+    fetchChainData();
+    fetchLatestBlocks();
+    fetchRecentTransactions();
+
+    const chainInterval = setInterval(fetchChainData, 2000);
+    const blockInterval = setInterval(fetchLatestBlocks, 500);
+    const txInterval = setInterval(fetchRecentTransactions, 3000);
+
+    return () => {
+      clearInterval(chainInterval);
+      clearInterval(blockInterval);
+      clearInterval(txInterval);
+    };
+  }, []);
 
   const searchHallmark = async () => {
     if (!hallmarkSearch.trim()) return;
@@ -121,30 +225,41 @@ export default function Explorer() {
       {/* Network Stats */}
       <section className="py-8 bg-white/5 border-y border-white/5">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
              <div className="space-y-1">
                <div className="text-xs text-muted-foreground uppercase tracking-wider flex items-center gap-2">
-                 <Zap className="w-4 h-4 text-primary" /> TPS (Live)
+                 <Zap className="w-4 h-4 text-primary" /> TPS (Max)
                </div>
-               <div className="text-2xl font-bold text-white">4,892</div>
+               <div className="text-2xl font-bold text-white" data-testid="text-tps">{chainStats?.tps || "200K+"}</div>
              </div>
              <div className="space-y-1">
                <div className="text-xs text-muted-foreground uppercase tracking-wider flex items-center gap-2">
                  <Box className="w-4 h-4 text-secondary" /> Latest Block
                </div>
-               <div className="text-2xl font-bold text-white">#8,921,054</div>
+               <div className="text-2xl font-bold text-white font-mono" data-testid="text-block-height">
+                 <span className="inline-flex items-center gap-2">
+                   {chainStats?.currentBlock || "#0"}
+                   <Activity className="w-4 h-4 text-green-500 animate-pulse" />
+                 </span>
+               </div>
              </div>
              <div className="space-y-1">
                <div className="text-xs text-muted-foreground uppercase tracking-wider flex items-center gap-2">
                  <Globe className="w-4 h-4 text-blue-400" /> Active Nodes
                </div>
-               <div className="text-2xl font-bold text-white">1,240</div>
+               <div className="text-2xl font-bold text-white" data-testid="text-nodes">{chainStats?.activeNodes || "1"}</div>
              </div>
              <div className="space-y-1">
                <div className="text-xs text-muted-foreground uppercase tracking-wider flex items-center gap-2">
                  <Clock className="w-4 h-4 text-orange-400" /> Finality
                </div>
-               <div className="text-2xl font-bold text-white">0.4s</div>
+               <div className="text-2xl font-bold text-white" data-testid="text-finality">{chainStats?.finalityTime || "400ms"}</div>
+             </div>
+             <div className="space-y-1">
+               <div className="text-xs text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+                 <Search className="w-4 h-4 text-purple-400" /> Transactions
+               </div>
+               <div className="text-2xl font-bold text-white" data-testid="text-txs">{chainStats?.networkHash || "0 txs"}</div>
              </div>
           </div>
         </div>
@@ -159,7 +274,9 @@ export default function Explorer() {
             <Card className="bg-black/40 border-white/10 backdrop-blur-sm overflow-hidden">
               <div className="p-6 border-b border-white/10 flex justify-between items-center">
                 <h3 className="font-bold font-display text-lg">Latest Blocks</h3>
-                <Button variant="outline" size="sm" className="h-8 text-xs border-white/10 hover:bg-white/5">View All</Button>
+                <Badge variant="outline" className="border-green-500/50 text-green-400 text-xs">
+                  <Activity className="w-3 h-3 mr-1 animate-pulse" /> Live
+                </Badge>
               </div>
               <div className="p-0">
                 <Table>
@@ -167,24 +284,36 @@ export default function Explorer() {
                     <TableRow className="border-white/5 hover:bg-transparent">
                       <TableHead className="text-xs text-muted-foreground">Block</TableHead>
                       <TableHead className="text-xs text-muted-foreground">Validator</TableHead>
-                      <TableHead className="text-xs text-muted-foreground text-right">Reward</TableHead>
-                      <TableHead className="text-xs text-muted-foreground text-right">Age</TableHead>
+                      <TableHead className="text-xs text-muted-foreground text-right">Txns</TableHead>
+                      <TableHead className="text-xs text-muted-foreground text-right">Time</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {[...Array(6)].map((_, i) => (
-                      <TableRow key={i} className="border-white/5 hover:bg-white/5">
-                        <TableCell className="font-medium text-primary">#{8921054 - i}</TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <div className="w-5 h-5 rounded bg-gradient-to-br from-blue-500 to-purple-500"></div>
-                            <span className="text-xs text-white/80">Validator {i + 1}</span>
-                          </div>
+                    {latestBlocks.length === 0 ? (
+                      <TableRow className="border-white/5">
+                        <TableCell colSpan={4} className="text-center text-muted-foreground py-8">
+                          Loading blocks...
                         </TableCell>
-                        <TableCell className="text-right text-xs">32.5 DARK</TableCell>
-                        <TableCell className="text-right text-xs text-muted-foreground">{i * 2}s ago</TableCell>
                       </TableRow>
-                    ))}
+                    ) : (
+                      latestBlocks.map((block, i) => (
+                        <TableRow key={block.height} className="border-white/5 hover:bg-white/5">
+                          <TableCell className="font-medium text-primary font-mono" data-testid={`text-block-${block.height}`}>
+                            #{block.height.toLocaleString()}
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <div className="w-5 h-5 rounded bg-gradient-to-br from-cyan-500 to-blue-500"></div>
+                              <span className="text-xs text-white/80 font-mono">{block.validator.slice(0, 8)}...</span>
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-right text-xs">{block.txCount}</TableCell>
+                          <TableCell className="text-right text-xs text-muted-foreground">
+                            {new Date(block.timestamp).toLocaleTimeString()}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </div>
@@ -194,43 +323,48 @@ export default function Explorer() {
             <Card className="bg-black/40 border-white/10 backdrop-blur-sm overflow-hidden">
               <div className="p-6 border-b border-white/10 flex justify-between items-center">
                 <h3 className="font-bold font-display text-lg">Latest Transactions</h3>
-                <Button variant="outline" size="sm" className="h-8 text-xs border-white/10 hover:bg-white/5">View All</Button>
+                <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 text-xs">
+                  {recentTxs.length} txns
+                </Badge>
               </div>
               <div className="p-0">
                 <Table>
                   <TableHeader>
                     <TableRow className="border-white/5 hover:bg-transparent">
                       <TableHead className="text-xs text-muted-foreground">Txn Hash</TableHead>
-                      <TableHead className="text-xs text-muted-foreground">From / To</TableHead>
-                      <TableHead className="text-xs text-muted-foreground text-right">Value</TableHead>
+                      <TableHead className="text-xs text-muted-foreground">Category</TableHead>
+                      <TableHead className="text-xs text-muted-foreground text-right">Block</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {[...Array(6)].map((_, i) => (
-                      <TableRow key={i} className="border-white/5 hover:bg-white/5">
-                        <TableCell className="font-medium">
-                          <div className="flex items-center gap-2">
-                            <span className="bg-white/10 p-1 rounded text-[10px] text-muted-foreground">TX</span>
-                            <span className="text-primary text-xs font-mono">0x7a...8b{i}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                              From: <span className="text-white">0x12...34</span>
-                            </div>
-                             <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                              To: <span className="text-white">0x88...99</span>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <Badge variant="secondary" className="bg-secondary/10 text-secondary border-none text-[10px]">
-                            {100 * (i + 1)} DARK
-                          </Badge>
+                    {recentTxs.length === 0 ? (
+                      <TableRow className="border-white/5">
+                        <TableCell colSpan={3} className="text-center text-muted-foreground py-8">
+                          No transactions yet. Submit hashes via the Developer Portal.
                         </TableCell>
                       </TableRow>
-                    ))}
+                    ) : (
+                      recentTxs.map((tx) => (
+                        <TableRow key={tx.txHash} className="border-white/5 hover:bg-white/5">
+                          <TableCell className="font-medium">
+                            <div className="flex items-center gap-2">
+                              <span className="bg-green-500/20 text-green-400 p-1 rounded text-[10px]">✓</span>
+                              <span className="text-primary text-xs font-mono" title={tx.txHash}>
+                                {tx.txHash.slice(0, 8)}...{tx.txHash.slice(-6)}
+                              </span>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className="text-[10px] capitalize">
+                              {tx.category}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <span className="text-xs text-muted-foreground">#{tx.blockHeight}</span>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </div>

@@ -222,6 +222,17 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/transactions/recent", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 10;
+      const transactions = await storage.getRecentTransactions(limit);
+      res.json(transactions);
+    } catch (error) {
+      console.error("Error fetching recent transactions:", error);
+      res.status(500).json({ error: "Failed to fetch transactions" });
+    }
+  });
+
   app.get("/api/documents", async (req, res) => {
     try {
       const { category, appId } = req.query;

@@ -29,6 +29,7 @@ export interface IStorage {
   recordTransactionHash(data: InsertTransactionHash): Promise<TransactionHash>;
   getTransactionHashByTxHash(txHash: string): Promise<TransactionHash | undefined>;
   getTransactionHashesByApiKey(apiKeyId: string): Promise<TransactionHash[]>;
+  getRecentTransactions(limit: number): Promise<TransactionHash[]>;
   updateTransactionStatus(txHash: string, status: string, blockHeight?: string): Promise<TransactionHash | undefined>;
 
   recordDualChainStamp(data: InsertDualChainStamp): Promise<DualChainStamp>;
@@ -210,6 +211,10 @@ export class DatabaseStorage implements IStorage {
 
   async getTransactionHashesByApiKey(apiKeyId: string): Promise<TransactionHash[]> {
     return db.select().from(transactionHashes).where(eq(transactionHashes.apiKeyId, apiKeyId)).orderBy(desc(transactionHashes.createdAt));
+  }
+
+  async getRecentTransactions(limit: number): Promise<TransactionHash[]> {
+    return db.select().from(transactionHashes).orderBy(desc(transactionHashes.createdAt)).limit(limit);
   }
 
   async updateTransactionStatus(txHash: string, status: string, blockHeight?: string): Promise<TransactionHash | undefined> {
