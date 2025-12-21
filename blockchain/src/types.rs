@@ -192,10 +192,10 @@ pub struct ChainConfig {
 impl Default for ChainConfig {
     fn default() -> Self {
         Self {
-            chain_id: 1337,
+            chain_id: 8453,
             chain_name: "DarkWave Chain".to_string(),
-            symbol: "DWAV".to_string(),
-            decimals: 8,
+            symbol: "DWT".to_string(),
+            decimals: 18,
             block_time_ms: 400,
             max_block_size: 1_000_000,
             max_tx_per_block: 10_000,

@@ -28,10 +28,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
 
     let config = ChainConfig {
-        chain_id: args.chain_id,
+        chain_id: 8453, // Matching DarkWave Token contract
         chain_name: "DarkWave Chain".to_string(),
-        symbol: "DWAV".to_string(),
-        decimals: 8,
+        symbol: "DWT".to_string(),
+        decimals: 18,
         block_time_ms: args.block_time,
         max_block_size: 1_000_000,
         max_tx_per_block: 10_000,
