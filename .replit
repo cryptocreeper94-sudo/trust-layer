@@ -45,3 +45,8 @@ waitForPort = 5000
 
 [agent]
 mockupState = "FULLSTACK"
+
+[userenv]
+
+[userenv.shared]
+DARKWAVE_HUB_API_URL = "https://orbitstaffing.io/api"

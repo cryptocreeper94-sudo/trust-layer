@@ -67,3 +67,33 @@ export async function deleteDocument(id: string): Promise<void> {
     throw new Error("Failed to delete document");
   }
 }
+
+export interface AppRegistration {
+  appName: string;
+  appSlug: string;
+  appUrl?: string;
+  description?: string;
+  category?: string;
+  permissions?: string[];
+  metadata?: Record<string, unknown>;
+}
+
+export async function registerApp(app: AppRegistration): Promise<{ success: boolean; data: unknown }> {
+  const response = await fetch("/api/ecosystem/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(app),
+  });
+  if (!response.ok) {
+    throw new Error("Failed to register app");
+  }
+  return response.json();
+}
+
+export async function syncEcosystem(): Promise<{ success: boolean; apps: EcosystemApp[] }> {
+  const response = await fetch("/api/ecosystem/sync");
+  if (!response.ok) {
+    throw new Error("Failed to sync ecosystem");
+  }
+  return response.json();
+}

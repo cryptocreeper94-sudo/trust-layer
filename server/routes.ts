@@ -4,10 +4,63 @@ import { storage } from "./storage";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
 import { insertDocumentSchema } from "@shared/schema";
 
+const DARKWAVE_HUB_API_URL = process.env.DARKWAVE_HUB_API_URL || "https://orbitstaffing.io/api";
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+
+  app.post("/api/ecosystem/register", async (req, res) => {
+    try {
+      const { appName, appSlug, appUrl, description, permissions, category, metadata } = req.body;
+      
+      if (!appName || !appSlug) {
+        return res.status(400).json({ error: "appName and appSlug are required" });
+      }
+
+      const response = await fetch(`${DARKWAVE_HUB_API_URL}/admin/ecosystem/register-app`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          appName,
+          appSlug,
+          appUrl: appUrl || "",
+          description: description || "",
+          category: category || "general",
+          permissions: permissions || ["read:ecosystem", "write:ecosystem"],
+          metadata: metadata || {}
+        }),
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Hub registration failed:", errorText);
+        return res.status(response.status).json({ error: "Failed to register with DarkWave Hub", details: errorText });
+      }
+      
+      const data = await response.json();
+      res.json({ success: true, data });
+    } catch (error) {
+      console.error("Error registering with DarkWave Hub:", error);
+      res.status(500).json({ error: "Failed to connect to DarkWave Hub" });
+    }
+  });
+
+  app.get("/api/ecosystem/sync", async (req, res) => {
+    try {
+      const response = await fetch(`${DARKWAVE_HUB_API_URL}/ecosystem/apps`);
+      if (response.ok) {
+        const apps = await response.json();
+        res.json({ success: true, apps });
+      } else {
+        res.status(response.status).json({ error: "Failed to sync with DarkWave Hub" });
+      }
+    } catch (error) {
+      console.error("Error syncing with DarkWave Hub:", error);
+      res.status(500).json({ error: "Failed to connect to DarkWave Hub" });
+    }
+  });
   
   app.get("/api/ecosystem/apps", async (req, res) => {
     try {
