@@ -324,4 +324,78 @@ export const insertDeveloperBillingSchema = createInsertSchema(developerBilling)
 export type InsertDeveloperBilling = z.infer<typeof insertDeveloperBillingSchema>;
 export type DeveloperBilling = typeof developerBilling.$inferSelect;
 
+export const studioProjects = pgTable("studio_projects", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  name: text("name").notNull(),
+  description: text("description"),
+  language: text("language").notNull().default("javascript"),
+  isPublic: boolean("is_public").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertStudioProjectSchema = createInsertSchema(studioProjects).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertStudioProject = z.infer<typeof insertStudioProjectSchema>;
+export type StudioProject = typeof studioProjects.$inferSelect;
+
+export const studioFiles = pgTable("studio_files", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: text("project_id").notNull(),
+  path: text("path").notNull(),
+  name: text("name").notNull(),
+  content: text("content").notNull().default(""),
+  language: text("language").notNull().default("plaintext"),
+  isFolder: boolean("is_folder").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertStudioFileSchema = createInsertSchema(studioFiles).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertStudioFile = z.infer<typeof insertStudioFileSchema>;
+export type StudioFile = typeof studioFiles.$inferSelect;
+
+export const studioSecrets = pgTable("studio_secrets", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: text("project_id").notNull(),
+  key: text("key").notNull(),
+  value: text("value").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertStudioSecretSchema = createInsertSchema(studioSecrets).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertStudioSecret = z.infer<typeof insertStudioSecretSchema>;
+export type StudioSecret = typeof studioSecrets.$inferSelect;
+
+export const studioConfigs = pgTable("studio_configs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: text("project_id").notNull(),
+  key: text("key").notNull(),
+  value: text("value").notNull(),
+  environment: text("environment").notNull().default("shared"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertStudioConfigSchema = createInsertSchema(studioConfigs).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertStudioConfig = z.infer<typeof insertStudioConfigSchema>;
+export type StudioConfig = typeof studioConfigs.$inferSelect;
+
 export const APP_VERSION = "1.0.0-alpha";
