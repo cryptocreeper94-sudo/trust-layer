@@ -46,7 +46,7 @@ export function MobileNav() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="fixed top-0 right-0 bottom-0 w-72 bg-background border-l border-white/10 z-50 p-6"
+              className="fixed top-0 right-0 bottom-0 w-72 bg-[#0c1224] border-l border-white/10 z-50 p-6"
             >
               <div className="flex justify-between items-center mb-8">
                 <span className="font-display font-bold text-xl">Menu</span>
