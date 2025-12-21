@@ -390,4 +390,114 @@ export function createDarkWaveClient(config: DarkWaveConfig): DarkWaveClient {
   return new DarkWaveClient(config);
 }
 
+export interface DualChainConfig {
+  darkwave: DarkWaveConfig;
+  solana?: {
+    rpcUrl: string;
+    commitment?: string;
+    submitFn?: (dataHash: string, metadata?: Record<string, any>) => Promise<string>;
+  };
+}
+
+export interface DualChainSubmission {
+  dataHash: string;
+  metadata?: Record<string, any>;
+  category?: string;
+  chains?: ("darkwave" | "solana")[];
+}
+
+export interface DualChainResult {
+  darkwave?: TransactionResponse & { chain: "darkwave" };
+  solana?: { txHash: string; status: string; chain: "solana" };
+  errors: { chain: string; error: string }[];
+  allSuccessful: boolean;
+}
+
+export class DualChainClient {
+  private darkwaveClient: DarkWaveClient;
+  private solanaConfig: DualChainConfig["solana"];
+
+  constructor(config: DualChainConfig) {
+    this.darkwaveClient = new DarkWaveClient(config.darkwave);
+    this.solanaConfig = config.solana;
+  }
+
+  async submitHash(submission: DualChainSubmission): Promise<DualChainResult> {
+    const chains = submission.chains || ["darkwave"];
+    const result: DualChainResult = { errors: [], allSuccessful: true };
+
+    const promises: Promise<void>[] = [];
+
+    if (chains.includes("darkwave")) {
+      promises.push(
+        this.darkwaveClient
+          .submitHash({
+            dataHash: submission.dataHash,
+            metadata: submission.metadata,
+            category: submission.category,
+          })
+          .then((res) => {
+            result.darkwave = { ...res, chain: "darkwave" };
+          })
+          .catch((err) => {
+            result.errors.push({ chain: "darkwave", error: err.message });
+            result.allSuccessful = false;
+          })
+      );
+    }
+
+    if (chains.includes("solana")) {
+      if (!this.solanaConfig) {
+        result.errors.push({ chain: "solana", error: "Solana configuration required but not provided" });
+        result.allSuccessful = false;
+      } else {
+        promises.push(
+          this.submitToSolana(submission.dataHash, submission.metadata)
+            .then((res) => {
+              result.solana = res;
+            })
+            .catch((err) => {
+              result.errors.push({ chain: "solana", error: err.message });
+              result.allSuccessful = false;
+            })
+        );
+      }
+    }
+
+    await Promise.all(promises);
+    return result;
+  }
+
+  private async submitToSolana(
+    dataHash: string,
+    metadata?: Record<string, any>
+  ): Promise<{ txHash: string; status: string; chain: "solana" }> {
+    if (!this.solanaConfig) {
+      throw new Error("Solana configuration not provided");
+    }
+
+    if (!this.solanaConfig.submitFn) {
+      throw new Error(
+        "Solana submitFn is required. Provide a callback that signs and submits a Memo transaction with your wallet."
+      );
+    }
+
+    const signature = await this.solanaConfig.submitFn(dataHash, metadata);
+
+    return {
+      txHash: signature,
+      status: "confirmed",
+      chain: "solana",
+    };
+  }
+
+  getDarkWaveClient(): DarkWaveClient {
+    return this.darkwaveClient;
+  }
+}
+
+export function createDualChainClient(config: DualChainConfig): DualChainClient {
+  return new DualChainClient(config);
+}
+
 export default DarkWaveClient;

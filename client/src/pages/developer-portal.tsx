@@ -724,13 +724,41 @@ console.log({
                   Dual-Chain Hashing (Solana + DarkWave)
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
-                  <p className="mb-2">Hash your data to both Solana and DarkWave Chain for maximum reliability:</p>
-                  <ol className="list-decimal list-inside space-y-1">
-                    <li>Submit your hash to DarkWave Chain using the API</li>
-                    <li>Continue using your existing Solana integration</li>
-                    <li>Both chains store your hash independently</li>
-                    <li>Verify on either chain's block explorer</li>
-                  </ol>
+                  <p className="mb-2">Hash your data to both chains simultaneously for maximum reliability:</p>
+                  <pre className="bg-black/50 rounded-lg p-3 text-xs overflow-x-auto mb-3">
+{`import { DualChainClient } from 'darkwave-sdk';
+import { Connection, Keypair } from '@solana/web3.js';
+
+// Your Solana wallet keypair
+const solanaKeypair = Keypair.fromSecretKey(yourSecretKey);
+const connection = new Connection('https://api.mainnet-beta.solana.com');
+
+const client = new DualChainClient({
+  darkwave: {
+    rpcUrl: 'https://your-chain-url',
+    apiKey: process.env.DARKWAVE_API_KEY
+  },
+  solana: {
+    rpcUrl: 'https://api.mainnet-beta.solana.com',
+    // Provide your own Solana submission function
+    submitFn: async (hash, metadata) => {
+      // Create and send your Memo transaction
+      // Return the Solana signature
+      return signature;
+    }
+  }
+});
+
+const result = await client.submitHash({
+  dataHash: '0xabc123...',
+  chains: ['darkwave', 'solana']
+});
+
+console.log('DarkWave TX:', result.darkwave?.txHash);
+console.log('Solana TX:', result.solana?.txHash);
+console.log('All successful:', result.allSuccessful);`}
+                  </pre>
+                  <p className="text-xs">Both chains store your hash independently for redundancy.</p>
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="security" className="border-white/10">
