@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, DEVELOPER_PIN, APP_VERSION } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 
 export async function registerRoutes(
@@ -215,6 +215,53 @@ export async function registerRoutes(
       console.error("Error deleting document:", error);
       res.status(500).json({ error: "Failed to delete document" });
     }
+  });
+
+  app.post("/api/analytics/track", async (req, res) => {
+    try {
+      const parsed = insertPageViewSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ error: "Invalid tracking data" });
+      }
+      await storage.recordPageView(parsed.data);
+      res.status(201).json({ success: true });
+    } catch (error) {
+      console.error("Error tracking page view:", error);
+      res.status(500).json({ error: "Failed to track page view" });
+    }
+  });
+
+  app.post("/api/developer/auth", async (req, res) => {
+    try {
+      const { pin } = req.body;
+      if (pin === DEVELOPER_PIN) {
+        res.json({ success: true, version: APP_VERSION });
+      } else {
+        res.status(401).json({ error: "Invalid PIN" });
+      }
+    } catch (error) {
+      res.status(500).json({ error: "Authentication failed" });
+    }
+  });
+
+  app.get("/api/developer/analytics", async (req, res) => {
+    try {
+      const overview = await storage.getAnalyticsOverview();
+      res.json(overview);
+    } catch (error) {
+      console.error("Error fetching analytics:", error);
+      res.status(500).json({ error: "Failed to fetch analytics" });
+    }
+  });
+
+  app.get("/api/developer/info", async (req, res) => {
+    res.json({
+      version: APP_VERSION,
+      chainId: 8453,
+      chainName: "DarkWave Chain",
+      nativeToken: "DWT",
+      totalSupply: "100,000,000",
+    });
   });
 
   return httpServer;
