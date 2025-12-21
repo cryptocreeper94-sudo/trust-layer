@@ -104,6 +104,39 @@ User wants: Full blockchain implementation, not just a web portal. No piggybacki
 - `GET /api/stamps/app/:appId` - List all stamps for an app
 - `GET /api/darkwave/config` - Get chain configuration (chainId, symbol, decimals)
 
+### Master Hallmark System
+The hallmark system provides unique, verifiable product identifiers for all DarkWave ecosystem products.
+
+**Hallmark Format**: `XXXXXXXXX-YY` (9-digit master sequence + 2-digit sub-sequence)
+- First hallmark: `000000000-01` (master hallmark)
+- Sequential: `000000001-01`, `000000002-01`, etc.
+
+**Features**:
+- Auto-generated QR codes (SVG) stored in database
+- On-chain verification via DarkWave Chain
+- Verification status: pending → confirmed
+- Full audit trail with timestamps
+
+**Hallmark API Endpoints**:
+- `POST /api/hallmark/generate` - Generate new hallmark (requires X-API-Key)
+- `GET /api/hallmark/:hallmarkId` - Get hallmark details (works for pending and confirmed)
+- `GET /api/hallmark/:hallmarkId/qr` - Get QR code as SVG image
+- `GET /api/hallmark/:hallmarkId/verify` - Verify on-chain status
+- `GET /api/hallmarks` - List all hallmarks (optional: ?appId=X&limit=N)
+
+**Database Tables**:
+- `hallmarks` - Stores hallmark records with chain verification data
+- `hallmark_counter` - Atomic counter for master sequence generation
+
+**Service Module**: `server/hallmark.ts`
+- `generateHallmark()` - Creates hallmark, QR code, submits to DarkWave
+- `verifyHallmark()` - Checks validity and on-chain confirmation
+- `getHallmarkQRCode()` - Returns SVG for display
+
+**Explorer Integration**:
+- Hallmark verification section on `/explorer` page
+- Search by hallmark ID, displays verification status, QR code, and chain data
+
 ### Build System
 - **Client Build**: Vite bundles React app to `dist/public`
 - **Server Build**: esbuild compiles server to `dist/index.cjs`
