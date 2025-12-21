@@ -421,11 +421,11 @@ console.log({
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary">
-                Developer Dashboard
+                Team Dashboard
               </span>
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Complete overview of your DarkWave Chain ecosystem. Monitor analytics, manage resources, and access developer tools.
+              Internal team overview of DarkWave Chain ecosystem. Monitor analytics, manage resources, and access admin tools.
             </p>
           </div>
 

@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Code, Github, Twitter, ExternalLink } from "lucide-react";
+import { Users, Github, Twitter, ExternalLink } from "lucide-react";
 import { APP_VERSION } from "@shared/schema";
 
 export function Footer() {
@@ -30,10 +30,6 @@ export function Footer() {
               <li><Link href="/developers" className="hover:text-primary transition-colors">Getting Started</Link></li>
               <li><Link href="/doc-hub" className="hover:text-primary transition-colors">Documentation</Link></li>
               <li><Link href="/api-playground" className="hover:text-primary transition-colors">API Playground</Link></li>
-              <li><Link href="/developer-portal" className="hover:text-primary transition-colors flex items-center gap-1">
-                <Code className="w-3 h-3" />
-                Developer Portal
-              </Link></li>
             </ul>
           </div>
           
@@ -67,8 +63,8 @@ export function Footer() {
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <span className="px-2 py-1 rounded bg-white/5 font-mono text-xs">v{APP_VERSION}</span>
             <Link href="/developer-portal" className="hover:text-primary transition-colors flex items-center gap-1">
-              <Code className="w-4 h-4" />
-              Developer Portal
+              <Users className="w-4 h-4" />
+              Team
             </Link>
           </div>
         </div>
