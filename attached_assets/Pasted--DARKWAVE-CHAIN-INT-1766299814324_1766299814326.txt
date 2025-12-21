@@ -1,0 +1,58 @@
+================================================================================
+DARKWAVE CHAIN INTEGRATION REQUEST - HANDOFF
+================================================================================
+
+PROJECT: PaintPros.io / NPP by Orbit
+DATE: December 21, 2025
+STATUS: Awaiting Darkwave Chain connection details
+
+CURRENT STATE:
+- Solana integration: WORKING
+- NPP v1.1.10 Build 15 stamped to Solana (confirmed)
+- Hallmark: NPP-20251221-5F2B14
+- Need dual-chain support for Darkwave Chain
+
+--------------------------------------------------------------------------------
+INFORMATION NEEDED FROM DARKWAVE DEV TEAM:
+--------------------------------------------------------------------------------
+
+1. RPC_ENDPOINT_URL: _______________________________________________
+2. CHAIN_ID: _______________________________________________________
+3. PRIVATE_KEY_FORMAT: _____________________________________________
+4. BLOCK_EXPLORER_URL: _____________________________________________
+5. SDK/LIBRARY (EVM compatible? Custom?): __________________________
+6. GAS/FEE_TOKEN: __________________________________________________
+7. MAX_DATA_SIZE_PER_TX: ___________________________________________
+8. TESTNET_AVAILABLE: Yes / No
+9. API_KEY_REQUIRED: Yes / No
+
+--------------------------------------------------------------------------------
+IMPLEMENTATION PLAN:
+--------------------------------------------------------------------------------
+
+FILES TO CREATE:
+- server/darkwave.ts (blockchain client)
+
+FILES TO MODIFY:
+- shared/schema.ts (add darkwaveTxSignature, darkwaveTxStatus fields)
+- server/routes.ts (dual-chain stamping in /api/releases/stamp)
+- server/index.ts (update autoDeployVersionBump for dual-chain)
+
+ENV VARS TO ADD:
+- DARKWAVE_RPC_URL
+- DARKWAVE_PRIVATE_KEY
+- DARKWAVE_CHAIN_ID
+- DARKWAVE_EXPLORER_BASE_URL
+
+--------------------------------------------------------------------------------
+CONTEXT FOR AGENTS:
+--------------------------------------------------------------------------------
+
+PaintPros.io hashes release versions and document hallmarks to blockchain.
+Currently uses Solana mainnet with @solana/web3.js.
+Client wants to ALSO hash to their new L1 "Darkwave Chain".
+Solana stamping should continue - this is additive, not replacement.
+
+Reference existing implementation: server/solana.ts
+
+================================================================================
