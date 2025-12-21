@@ -1,13 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { ArrowLeft, User, Wallet, Code, Key, Activity, LogOut, Settings, Copy, Check } from "lucide-react";
+import { User, Wallet, Code, Key, Activity, LogOut, Settings, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { useAuth } from "@/hooks/use-auth";
-import { useState } from "react";
+import { PasskeyManager } from "@/components/passkey-manager";
 
 export default function Dashboard() {
   const { user, isLoading, isAuthenticated } = useAuth();
@@ -161,14 +161,16 @@ export default function Dashboard() {
               </div>
             </GlassCard>
 
-            <GlassCard>
+            <PasskeyManager />
+
+            <GlassCard className="lg:col-span-2">
               <div className="p-5">
                 <div className="flex items-center gap-2 mb-4">
                   <Settings className="w-5 h-5 text-white/50" />
                   <h3 className="font-bold">Account</h3>
                 </div>
-                <div className="space-y-3 text-sm">
-                  <div className="flex justify-between items-center">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                  <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
                     <span className="text-muted-foreground">User ID</span>
                     <button 
                       onClick={() => handleCopy(user?.id || '')}
@@ -178,11 +180,11 @@ export default function Dashboard() {
                       {user?.id?.slice(0, 8)}...
                     </button>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
                     <span className="text-muted-foreground">Email</span>
                     <span className="text-xs">{user?.email || 'Not set'}</span>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
                     <span className="text-muted-foreground">Role</span>
                     <Badge variant="outline" className="text-[10px]">Developer</Badge>
                   </div>

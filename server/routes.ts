@@ -10,7 +10,8 @@ import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark"
 import { blockchain } from "./blockchain-engine";
 import { sendEmail, sendApiKeyEmail, sendHallmarkEmail } from "./email";
 import { submitMemoToSolana, isHeliusConfigured, getSolanaTreasuryAddress, getSolanaBalance } from "./helius";
-import { setupAuth, registerAuthRoutes } from "./replit_integrations/auth";
+import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
+import { startRegistration, finishRegistration, startAuthentication, finishAuthentication, getUserPasskeys, deletePasskey } from "./webauthn";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -19,6 +20,91 @@ export async function registerRoutes(
   
   await setupAuth(app);
   registerAuthRoutes(app);
+
+  // WebAuthn passkey routes
+  app.post("/api/webauthn/register/start", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const email = req.user.claims.email || "user@darkwavechain.io";
+      const options = await startRegistration(userId, email);
+      res.json(options);
+    } catch (error) {
+      console.error("WebAuthn register start error:", error);
+      res.status(500).json({ error: "Failed to start registration" });
+    }
+  });
+
+  app.post("/api/webauthn/register/finish", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const result = await finishRegistration(userId, req.body);
+      if (result.success) {
+        res.json(result);
+      } else {
+        res.status(400).json(result);
+      }
+    } catch (error) {
+      console.error("WebAuthn register finish error:", error);
+      res.status(500).json({ error: "Failed to complete registration" });
+    }
+  });
+
+  app.post("/api/webauthn/authenticate/start", async (req, res) => {
+    try {
+      const options = await startAuthentication();
+      res.json(options);
+    } catch (error) {
+      console.error("WebAuthn auth start error:", error);
+      res.status(500).json({ error: "Failed to start authentication" });
+    }
+  });
+
+  app.post("/api/webauthn/authenticate/finish", async (req, res) => {
+    try {
+      const { requestId, ...credential } = req.body;
+      const result = await finishAuthentication(credential, requestId);
+      if (result.success && result.user) {
+        res.json({ success: true, user: result.user });
+      } else {
+        res.status(401).json(result);
+      }
+    } catch (error) {
+      console.error("WebAuthn auth finish error:", error);
+      res.status(500).json({ error: "Failed to complete authentication" });
+    }
+  });
+
+  app.get("/api/webauthn/passkeys", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const passkeys = await getUserPasskeys(userId);
+      res.json(passkeys.map(pk => ({
+        id: pk.id,
+        deviceType: pk.deviceType,
+        createdAt: pk.createdAt,
+        lastUsedAt: pk.lastUsedAt,
+      })));
+    } catch (error) {
+      console.error("WebAuthn get passkeys error:", error);
+      res.status(500).json({ error: "Failed to get passkeys" });
+    }
+  });
+
+  app.delete("/api/webauthn/passkeys/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const passkeyId = req.params.id;
+      const deleted = await deletePasskey(userId, passkeyId);
+      if (deleted) {
+        res.json({ success: true });
+      } else {
+        res.status(404).json({ error: "Passkey not found" });
+      }
+    } catch (error) {
+      console.error("WebAuthn delete passkey error:", error);
+      res.status(500).json({ error: "Failed to delete passkey" });
+    }
+  });
 
   app.get("/api/ecosystem/hub/status", async (req, res) => {
     try {

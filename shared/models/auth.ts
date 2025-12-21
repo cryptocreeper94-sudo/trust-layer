@@ -27,3 +27,19 @@ export const users = pgTable("users", {
 
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
+
+// WebAuthn passkeys storage table
+export const passkeys = pgTable("passkeys", {
+  id: varchar("id").primaryKey(),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  credentialId: varchar("credential_id").notNull().unique(),
+  publicKey: varchar("public_key").notNull(),
+  counter: varchar("counter").notNull().default("0"),
+  deviceType: varchar("device_type"),
+  transports: varchar("transports"),
+  createdAt: timestamp("created_at").defaultNow(),
+  lastUsedAt: timestamp("last_used_at"),
+});
+
+export type Passkey = typeof passkeys.$inferSelect;
+export type InsertPasskey = typeof passkeys.$inferInsert;
