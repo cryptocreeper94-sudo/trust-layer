@@ -235,3 +235,36 @@ The hallmark system provides unique, verifiable product identifiers for all Dark
 - [ ] Security hardening
 - [ ] Public testnet
 - [ ] Mainnet launch
+
+## Changelog
+
+### v1.0.0-alpha (December 21, 2025)
+**Pre-Publish Sweep Completed**
+
+#### Features
+- PWA support with holographic dark gradient icons and offline caching
+- Devnet Sandbox with wallet creation, faucet, and test transactions
+- Complete branding consistency (all "Orbit" references replaced with "DarkWave")
+- Mobile optimization with 44px touch targets and safe area insets
+- Hallmark system for product verification with QR codes
+- Dual-chain stamping (DarkWave + Solana)
+- Developer portal with PIN authentication (0424)
+- Real-time blockchain stats (200K+ TPS, 400ms blocks)
+
+#### Technical
+- All services operational: Database, Hash API, Hallmark System, DarkWave Hub, Email Service
+- Service worker registered for offline support
+- No TypeScript/LSP errors
+- No JavaScript console errors
+- All API endpoints verified and returning expected responses
+
+#### Documentation
+- Updated ROADMAP.md with launch timeline (February 14, 2026)
+- Updated master.md integration guide
+- Complete API documentation in docs/
+
+#### Known Milestones
+- Token launch: February 14, 2026
+- Developer PIN: 0424
+- Treasury: 100M DWT at genesis
+- Chain ID: 8453
