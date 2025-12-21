@@ -1,6 +1,40 @@
 import { build as esbuild } from "esbuild";
 import { build as viteBuild } from "vite";
-import { rm, readFile } from "fs/promises";
+import { rm, readFile, writeFile } from "fs/promises";
+import * as crypto from "crypto";
+import * as path from "path";
+
+// Release automation - runs before build on publish
+async function runRelease() {
+  console.log('\n========================================');
+  console.log('  DarkWave Chain Portal - Release');
+  console.log('========================================\n');
+
+  const schemaPath = path.join(process.cwd(), 'shared/schema.ts');
+  const content = await readFile(schemaPath, 'utf-8');
+  
+  const match = content.match(/APP_VERSION\s*=\s*"([^"]+)"/);
+  const currentVersion = match ? match[1] : '1.0.0';
+  console.log(`[Release] Current version: ${currentVersion}`);
+
+  const parts = currentVersion.replace(/-.*$/, '').split('.').map(Number);
+  parts[2] = (parts[2] || 0) + 1;
+  const newVersion = parts.join('.');
+
+  const updatedContent = content.replace(
+    /APP_VERSION\s*=\s*"[^"]+"/,
+    `APP_VERSION = "${newVersion}"`
+  );
+  await writeFile(schemaPath, updatedContent);
+  console.log(`[Release] Version bumped to ${newVersion}`);
+
+  const dataHash = crypto
+    .createHash('sha256')
+    .update(`darkwave-chain-portal-v${newVersion}-${Date.now()}`)
+    .digest('hex');
+  console.log(`[Release] Release hash: ${dataHash.slice(0, 16)}...`);
+  console.log(`[Release] Ready for chain stamping on first request\n`);
+}
 
 // server deps to bundle to reduce openat(2) syscalls
 // which helps cold start times
@@ -33,6 +67,8 @@ const allowlist = [
 ];
 
 async function buildAll() {
+  await runRelease();
+  
   await rm("dist", { recursive: true, force: true });
 
   console.log("building client...");
