@@ -5,6 +5,7 @@ import { storage } from "./storage";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
 import { insertDocumentSchema, insertPageViewSchema, APP_VERSION } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
+import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -491,6 +492,210 @@ export async function registerRoutes(
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch transactions" });
     }
+  });
+
+  app.post("/api/stamp/dual", async (req, res) => {
+    try {
+      const apiKey = req.headers["x-api-key"] as string;
+      
+      if (!apiKey) {
+        return res.status(401).json({ error: "API key required" });
+      }
+
+      const validKey = await storage.validateApiKey(apiKey);
+      if (!validKey) {
+        return res.status(401).json({ error: "Invalid or revoked API key" });
+      }
+
+      const { data, appId, appName, category, metadata, chains } = req.body;
+
+      if (!data) {
+        return res.status(400).json({ error: "Data to hash is required" });
+      }
+
+      const dataHash = typeof data === "string" && data.startsWith("0x") 
+        ? data 
+        : generateDataHash(data);
+
+      const requestedChains = chains || ["darkwave"];
+      const result: {
+        dataHash: string;
+        darkwave?: { success: boolean; txHash?: string; blockHeight?: number; error?: string };
+        solana?: { success: boolean; txSignature?: string; error?: string };
+        allSuccessful: boolean;
+        stampId?: string;
+      } = {
+        dataHash,
+        allSuccessful: true,
+      };
+
+      const stamp = await storage.recordDualChainStamp({
+        dataHash,
+        appId: appId || validKey.appName,
+        appName: appName || validKey.appName,
+        category: category || "release",
+        metadata: metadata ? JSON.stringify(metadata) : null,
+        darkwaveStatus: "pending",
+        solanaStatus: requestedChains.includes("solana") ? "pending" : "skipped",
+      });
+      result.stampId = stamp.id;
+
+      if (requestedChains.includes("darkwave")) {
+        const dwResult = await submitHashToDarkWave({
+          dataHash,
+          appId: appId || validKey.appName,
+          category: category || "release",
+          metadata: metadata || {},
+        });
+
+        result.darkwave = {
+          success: dwResult.success,
+          txHash: dwResult.txHash,
+          blockHeight: dwResult.blockHeight ? parseInt(dwResult.blockHeight.toString()) : undefined,
+          error: dwResult.error,
+        };
+
+        if (!dwResult.success) {
+          result.allSuccessful = false;
+        }
+
+        await storage.updateDualChainStamp(stamp.id, {
+          darkwaveTxHash: dwResult.txHash || null,
+          darkwaveStatus: dwResult.success ? "confirmed" : "failed",
+          darkwaveBlockHeight: dwResult.blockHeight?.toString() || null,
+        });
+      }
+
+      if (requestedChains.includes("solana")) {
+        result.solana = {
+          success: false,
+          error: `Solana requires client-side signing. After submitting to Solana, call PATCH /api/stamp/${stamp.id}/solana with your txSignature.`,
+        };
+        result.allSuccessful = false;
+      }
+
+      res.status(201).json(result);
+    } catch (error) {
+      console.error("Dual chain stamp error:", error);
+      res.status(500).json({ error: "Failed to submit dual-chain stamp" });
+    }
+  });
+
+  app.get("/api/stamp/:stampId", async (req, res) => {
+    try {
+      const { stampId } = req.params;
+      const stamp = await storage.getDualChainStamp(stampId);
+
+      if (!stamp) {
+        return res.status(404).json({ error: "Stamp not found" });
+      }
+
+      res.json({
+        id: stamp.id,
+        dataHash: stamp.dataHash,
+        appId: stamp.appId,
+        appName: stamp.appName,
+        category: stamp.category,
+        metadata: stamp.metadata ? JSON.parse(stamp.metadata) : null,
+        darkwave: {
+          txHash: stamp.darkwaveTxHash,
+          status: stamp.darkwaveStatus,
+          blockHeight: stamp.darkwaveBlockHeight,
+        },
+        solana: {
+          txSignature: stamp.solanaTxSignature,
+          status: stamp.solanaStatus,
+        },
+        createdAt: stamp.createdAt,
+        confirmedAt: stamp.confirmedAt,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch stamp" });
+    }
+  });
+
+  app.get("/api/stamps/app/:appId", async (req, res) => {
+    try {
+      const { appId } = req.params;
+      const stamps = await storage.getDualChainStampsByApp(appId);
+
+      res.json({
+        stamps: stamps.map(s => ({
+          id: s.id,
+          dataHash: s.dataHash,
+          category: s.category,
+          darkwaveStatus: s.darkwaveStatus,
+          solanaStatus: s.solanaStatus,
+          createdAt: s.createdAt,
+        })),
+        total: stamps.length,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch stamps" });
+    }
+  });
+
+  app.patch("/api/stamp/:stampId/solana", async (req, res) => {
+    try {
+      const apiKey = req.headers["x-api-key"] as string;
+      
+      if (!apiKey) {
+        return res.status(401).json({ error: "API key required" });
+      }
+
+      const validKey = await storage.validateApiKey(apiKey);
+      if (!validKey) {
+        return res.status(401).json({ error: "Invalid or revoked API key" });
+      }
+
+      const { stampId } = req.params;
+      const { txSignature, status } = req.body;
+
+      if (!txSignature) {
+        return res.status(400).json({ error: "Solana transaction signature is required" });
+      }
+
+      const stamp = await storage.getDualChainStamp(stampId);
+      if (!stamp) {
+        return res.status(404).json({ error: "Stamp not found" });
+      }
+
+      if (stamp.appId !== validKey.appName && stamp.appName !== validKey.appName) {
+        return res.status(403).json({ error: "Not authorized to update this stamp" });
+      }
+
+      const updated = await storage.updateDualChainStamp(stampId, {
+        solanaTxSignature: txSignature,
+        solanaStatus: status || "confirmed",
+      });
+
+      res.json({
+        success: true,
+        stamp: {
+          id: updated?.id,
+          solana: {
+            txSignature: updated?.solanaTxSignature,
+            status: updated?.solanaStatus,
+          },
+          darkwave: {
+            txHash: updated?.darkwaveTxHash,
+            status: updated?.darkwaveStatus,
+          },
+        },
+      });
+    } catch (error) {
+      console.error("Solana stamp update error:", error);
+      res.status(500).json({ error: "Failed to update Solana status" });
+    }
+  });
+
+  app.get("/api/darkwave/config", (req, res) => {
+    res.json({
+      chainId: darkwaveConfig.chainId,
+      symbol: darkwaveConfig.symbol,
+      decimals: darkwaveConfig.decimals,
+      explorerUrl: darkwaveConfig.explorerUrl,
+    });
   });
 
   return httpServer;

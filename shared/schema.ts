@@ -183,4 +183,47 @@ export const gasEstimateSchema = z.object({
 
 export type GasEstimate = z.infer<typeof gasEstimateSchema>;
 
+export const dualChainStamps = pgTable("dual_chain_stamps", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  dataHash: text("data_hash").notNull(),
+  appId: text("app_id").notNull(),
+  appName: text("app_name"),
+  category: text("category").notNull().default("release"),
+  metadata: text("metadata"),
+  darkwaveTxHash: text("darkwave_tx_hash"),
+  darkwaveStatus: text("darkwave_status").notNull().default("pending"),
+  darkwaveBlockHeight: text("darkwave_block_height"),
+  solanaTxSignature: text("solana_tx_signature"),
+  solanaStatus: text("solana_status").notNull().default("pending"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  confirmedAt: timestamp("confirmed_at"),
+});
+
+export const insertDualChainStampSchema = createInsertSchema(dualChainStamps).omit({
+  id: true,
+  createdAt: true,
+  confirmedAt: true,
+});
+
+export type InsertDualChainStamp = z.infer<typeof insertDualChainStampSchema>;
+export type DualChainStamp = typeof dualChainStamps.$inferSelect;
+
+export const dualChainResultSchema = z.object({
+  dataHash: z.string(),
+  darkwave: z.object({
+    success: z.boolean(),
+    txHash: z.string().optional(),
+    blockHeight: z.number().optional(),
+    error: z.string().optional(),
+  }).optional(),
+  solana: z.object({
+    success: z.boolean(),
+    txSignature: z.string().optional(),
+    error: z.string().optional(),
+  }).optional(),
+  allSuccessful: z.boolean(),
+});
+
+export type DualChainResult = z.infer<typeof dualChainResultSchema>;
+
 export const APP_VERSION = "1.0.0-alpha";

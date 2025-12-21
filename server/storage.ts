@@ -1,4 +1,4 @@
-import { type User, type InsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, users, documents, pageViews, apiKeys, transactionHashes } from "@shared/schema";
+import { type User, type InsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
 import crypto from "crypto";
@@ -30,6 +30,11 @@ export interface IStorage {
   getTransactionHashByTxHash(txHash: string): Promise<TransactionHash | undefined>;
   getTransactionHashesByApiKey(apiKeyId: string): Promise<TransactionHash[]>;
   updateTransactionStatus(txHash: string, status: string, blockHeight?: string): Promise<TransactionHash | undefined>;
+
+  recordDualChainStamp(data: InsertDualChainStamp): Promise<DualChainStamp>;
+  getDualChainStamp(id: string): Promise<DualChainStamp | undefined>;
+  getDualChainStampsByApp(appId: string): Promise<DualChainStamp[]>;
+  updateDualChainStamp(id: string, data: Partial<InsertDualChainStamp>): Promise<DualChainStamp | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -206,6 +211,25 @@ export class DatabaseStorage implements IStorage {
     
     const [tx] = await db.update(transactionHashes).set(updates).where(eq(transactionHashes.txHash, txHash)).returning();
     return tx;
+  }
+
+  async recordDualChainStamp(data: InsertDualChainStamp): Promise<DualChainStamp> {
+    const [stamp] = await db.insert(dualChainStamps).values(data).returning();
+    return stamp;
+  }
+
+  async getDualChainStamp(id: string): Promise<DualChainStamp | undefined> {
+    const [stamp] = await db.select().from(dualChainStamps).where(eq(dualChainStamps.id, id));
+    return stamp;
+  }
+
+  async getDualChainStampsByApp(appId: string): Promise<DualChainStamp[]> {
+    return db.select().from(dualChainStamps).where(eq(dualChainStamps.appId, appId)).orderBy(desc(dualChainStamps.createdAt));
+  }
+
+  async updateDualChainStamp(id: string, data: Partial<InsertDualChainStamp>): Promise<DualChainStamp | undefined> {
+    const [stamp] = await db.update(dualChainStamps).set(data).where(eq(dualChainStamps.id, id)).returning();
+    return stamp;
   }
 }
 
