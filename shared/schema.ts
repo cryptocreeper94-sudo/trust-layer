@@ -63,3 +63,59 @@ export const blockchainStatsSchema = z.object({
 });
 
 export type BlockchainStats = z.infer<typeof blockchainStatsSchema>;
+
+export const pageViews = pgTable("page_views", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  pageSlug: text("page_slug").notNull(),
+  visitorId: text("visitor_id").notNull(),
+  referrer: text("referrer"),
+  userAgent: text("user_agent"),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+});
+
+export const insertPageViewSchema = createInsertSchema(pageViews).omit({
+  id: true,
+  timestamp: true,
+});
+
+export type InsertPageView = z.infer<typeof insertPageViewSchema>;
+export type PageView = typeof pageViews.$inferSelect;
+
+export const dailyMetrics = pgTable("daily_metrics", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  date: text("date").notNull(),
+  pageSlug: text("page_slug").notNull(),
+  totalViews: text("total_views").notNull().default("0"),
+  uniqueVisitors: text("unique_visitors").notNull().default("0"),
+});
+
+export const insertDailyMetricsSchema = createInsertSchema(dailyMetrics).omit({
+  id: true,
+});
+
+export type InsertDailyMetrics = z.infer<typeof insertDailyMetricsSchema>;
+export type DailyMetrics = typeof dailyMetrics.$inferSelect;
+
+export const analyticsOverviewSchema = z.object({
+  totalViews: z.number(),
+  uniqueVisitors: z.number(),
+  todayViews: z.number(),
+  topPages: z.array(z.object({
+    page: z.string(),
+    views: z.number(),
+  })),
+  topReferrers: z.array(z.object({
+    referrer: z.string(),
+    count: z.number(),
+  })),
+  dailyTrend: z.array(z.object({
+    date: z.string(),
+    views: z.number(),
+    unique: z.number(),
+  })),
+});
+
+export type AnalyticsOverview = z.infer<typeof analyticsOverviewSchema>;
+
+export const APP_VERSION = "1.0.0-alpha";
+export const DEVELOPER_PIN = "0424";
