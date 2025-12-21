@@ -2,7 +2,7 @@ import { Connection, Keypair, Transaction, TransactionInstruction, PublicKey, se
 import bs58 from "bs58";
 
 const HELIUS_API_KEY = process.env.HELIUS_API_KEY;
-const TREASURY_PRIVATE_KEY = process.env.TREASURY_PRIVATE_KEY;
+const SOLANA_PRIVATE_KEY = process.env.PHANTOM_SECRET_KEY || process.env.SOLANA_PRIVATE_KEY;
 
 const HELIUS_RPC_URL = HELIUS_API_KEY 
   ? `https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`
@@ -21,18 +21,18 @@ function getConnection(): Connection {
 }
 
 function getTreasuryKeypair(): Keypair | null {
-  if (!treasuryKeypair && TREASURY_PRIVATE_KEY) {
+  if (!treasuryKeypair && SOLANA_PRIVATE_KEY) {
     try {
       let secretKey: Uint8Array;
       
-      if (TREASURY_PRIVATE_KEY.startsWith("0x") || /^[0-9a-fA-F]+$/.test(TREASURY_PRIVATE_KEY)) {
-        const hexKey = TREASURY_PRIVATE_KEY.replace("0x", "");
+      if (SOLANA_PRIVATE_KEY.startsWith("0x")) {
+        const hexKey = SOLANA_PRIVATE_KEY.replace("0x", "");
         secretKey = new Uint8Array(Buffer.from(hexKey, "hex"));
-      } else if (TREASURY_PRIVATE_KEY.startsWith("[")) {
-        const arr = JSON.parse(TREASURY_PRIVATE_KEY);
+      } else if (SOLANA_PRIVATE_KEY.startsWith("[")) {
+        const arr = JSON.parse(SOLANA_PRIVATE_KEY);
         secretKey = new Uint8Array(arr);
       } else {
-        secretKey = bs58.decode(TREASURY_PRIVATE_KEY);
+        secretKey = bs58.decode(SOLANA_PRIVATE_KEY);
       }
       
       if (secretKey.length === 32) {
@@ -41,9 +41,9 @@ function getTreasuryKeypair(): Keypair | null {
       }
       
       treasuryKeypair = Keypair.fromSecretKey(secretKey);
-      console.log(`[Helius] Treasury loaded: ${treasuryKeypair.publicKey.toBase58()}`);
+      console.log(`[Helius] Solana wallet loaded: ${treasuryKeypair.publicKey.toBase58()}`);
     } catch (error) {
-      console.error("[Helius] Failed to load treasury keypair:", error);
+      console.error("[Helius] Failed to load Solana keypair:", error);
       return null;
     }
   }
@@ -141,5 +141,5 @@ export function getSolanaTreasuryAddress(): string | null {
 }
 
 export function isHeliusConfigured(): boolean {
-  return !!HELIUS_API_KEY && !!TREASURY_PRIVATE_KEY;
+  return !!HELIUS_API_KEY && !!SOLANA_PRIVATE_KEY;
 }
