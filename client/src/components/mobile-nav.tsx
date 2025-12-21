@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles } from "lucide-react";
+import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,7 @@ const navItems = [
   { href: "/developers", label: "Developers", icon: Code },
   { href: "/doc-hub", label: "Doc Hub", icon: FileText },
   { href: "/token", label: "Token", icon: Coins },
+  { href: "https://darkwavepulse.com", label: "Staking", icon: TrendingUp, external: true },
   { href: "/explorer", label: "Explorer", icon: SearchIcon },
   { href: "/dev-studio", label: "Dev Studio", icon: Sparkles, comingSoon: true },
 ];
@@ -66,24 +67,41 @@ export function MobileNav() {
                   const Icon = item.icon;
                   const isActive = location === item.href;
                   const comingSoon = 'comingSoon' in item && item.comingSoon;
+                  const isExternal = 'external' in item && item.external;
+                  
+                  const buttonContent = (
+                    <button
+                      onClick={() => setIsOpen(false)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
+                        isActive
+                          ? "bg-primary/10 text-primary"
+                          : "text-muted-foreground hover:bg-white/5 hover:text-white"
+                      }`}
+                    >
+                      <Icon className="w-5 h-5" />
+                      <span className="font-medium flex-grow text-left">{item.label}</span>
+                      {comingSoon && (
+                        <Badge variant="outline" className="text-[10px] border-primary/50 text-primary px-1.5 py-0">
+                          Soon
+                        </Badge>
+                      )}
+                      {isExternal && (
+                        <ArrowUpRight className="w-4 h-4 text-white/40" />
+                      )}
+                    </button>
+                  );
+                  
+                  if (isExternal) {
+                    return (
+                      <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer">
+                        {buttonContent}
+                      </a>
+                    );
+                  }
+                  
                   return (
                     <Link key={item.href} href={item.href}>
-                      <button
-                        onClick={() => setIsOpen(false)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
-                          isActive
-                            ? "bg-primary/10 text-primary"
-                            : "text-muted-foreground hover:bg-white/5 hover:text-white"
-                        }`}
-                      >
-                        <Icon className="w-5 h-5" />
-                        <span className="font-medium flex-grow text-left">{item.label}</span>
-                        {comingSoon && (
-                          <Badge variant="outline" className="text-[10px] border-primary/50 text-primary px-1.5 py-0">
-                            Soon
-                          </Badge>
-                        )}
-                      </button>
+                      {buttonContent}
                     </Link>
                   );
                 })}

@@ -54,6 +54,10 @@ export default function Home() {
           <div className="hidden md:flex items-center gap-6 text-xs font-medium text-muted-foreground mr-6">
             <Link href="/ecosystem" className="hover:text-primary transition-colors">Ecosystem</Link>
             <Link href="/token" className="hover:text-primary transition-colors">Token</Link>
+            <a href="https://darkwavepulse.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors flex items-center gap-1">
+              Staking
+              <ArrowRight className="w-2.5 h-2.5 -rotate-45" />
+            </a>
             <Link href="/explorer" className="hover:text-primary transition-colors">Explorer</Link>
             <Link href="/developers" className="hover:text-primary transition-colors">Developers</Link>
             <Link href="/dev-studio" className="hover:text-primary transition-colors flex items-center gap-1">
