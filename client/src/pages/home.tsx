@@ -97,7 +97,7 @@ export default function Home() {
         </div>
       </nav>
 
-      <section className="relative min-h-[85vh] flex items-center justify-center pt-14 overflow-hidden">
+      <section className="relative min-h-[85vh] flex items-center justify-center pt-20 md:pt-14 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img src={heroBg} alt="" className="w-full h-full object-cover opacity-30" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/80 to-background" />
