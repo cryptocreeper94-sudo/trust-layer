@@ -14,9 +14,11 @@ import { useState } from "react";
 import { InfoTooltip } from "@/components/info-tooltip";
 
 import orbitStaffingImg from "@assets/ecosystem/orbit-staffing.jpg?url";
+import lotopsproImg from "@assets/ecosystem/lotopspro.jpg?url";
 
 const appImageMap: Record<string, string> = {
   "orbit-staffing": orbitStaffingImg,
+  "lotopspro": lotopsproImg,
 };
 
 const categories = ["All Apps", "DeFi", "Enterprise", "AI", "Social", "Gaming", "Automotive", "Services"];
