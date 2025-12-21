@@ -69,8 +69,30 @@ User wants: Full blockchain implementation, not just a web portal. No piggybacki
 - Notifications System
 - Favorites/Bookmarks with localStorage persistence
 - Mobile Navigation Drawer
-- API Playground for testing chain abstraction APIs
+- Devnet Sandbox for live blockchain testing
 - Real-time blockchain stats via WebSocket
+- PWA Support (installable, offline-capable)
+
+### PWA Implementation
+- **Manifest**: `client/public/manifest.webmanifest` with DarkWave shield icons
+- **Service Worker**: `client/public/sw.js` for offline caching
+- **Icons**: All sizes in `client/public/icons/` (72x72 to 512x512)
+- **App Shortcuts**: Explorer, Treasury, Developer Portal
+- **Theme Color**: Cyan (#00ffff)
+
+### Devnet Sandbox Endpoints
+- `POST /api/devnet/wallet/create` - Create funded test wallet (1000 DWT)
+- `POST /api/devnet/faucet` - Request test tokens (max 100 DWT)
+- `GET /api/devnet/balance/:address` - Check wallet balance
+- `POST /api/devnet/transaction` - Submit test transaction
+- `GET /api/devnet/status` - Network status and block height
+
+### Mobile Optimization
+- Safe area insets for notched devices
+- Touch targets minimum 44x44px
+- Responsive breakpoints across all pages
+- Scrollable tables on small screens
+- Mobile-specific CSS utilities in `client/src/index.css`
 
 ### Backend Architecture
 - **Runtime**: Node.js with Express.js server

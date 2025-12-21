@@ -263,6 +263,26 @@ export class DarkWaveBlockchain {
     return this.accounts.get(address);
   }
 
+  public creditAccount(address: string, amount: bigint): void {
+    if (amount <= BigInt(0)) return;
+    const account = this.accounts.get(address);
+    if (account) {
+      account.balance += amount;
+    } else {
+      this.accounts.set(address, { address, balance: amount, nonce: 0 });
+    }
+  }
+
+  public debitAccount(address: string, amount: bigint): boolean {
+    if (amount <= BigInt(0)) return false;
+    const account = this.accounts.get(address);
+    if (!account || account.balance < amount) {
+      return false;
+    }
+    account.balance -= amount;
+    return true;
+  }
+
   public getStats() {
     return {
       tps: "200K+",

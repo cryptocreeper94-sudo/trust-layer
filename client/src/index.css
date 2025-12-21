@@ -121,4 +121,41 @@
   .hover-3d {
     @apply transition-transform duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02];
   }
+
+  /* Mobile Optimizations */
+  .mobile-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 1rem);
+  }
+  
+  .mobile-safe-top {
+    padding-top: env(safe-area-inset-top, 0);
+  }
+  
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+  
+  /* Mobile-friendly scrolling tables */
+  .table-scroll-x {
+    @apply overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0;
+  }
+  
+  /* Hide scrollbar on mobile for clean look */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Mobile text sizes */
+  @media (max-width: 640px) {
+    .mobile-text-sm {
+      font-size: 0.875rem;
+    }
+    .mobile-text-xs {
+      font-size: 0.75rem;
+    }
+  }
 }

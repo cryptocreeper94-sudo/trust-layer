@@ -901,6 +901,162 @@ export async function registerRoutes(
     });
   });
 
+  // ==================== DEVNET / SANDBOX ENDPOINTS ====================
+
+  // Generate a test wallet for the devnet
+  app.post("/api/devnet/wallet/create", async (req, res) => {
+    try {
+      const walletAddress = `0x${crypto.randomBytes(20).toString("hex")}`;
+      const privateKey = crypto.randomBytes(32).toString("hex");
+      
+      // Fund the test wallet with 1000 test DWT
+      blockchain.creditAccount(walletAddress, BigInt("1000000000000000000000")); // 1000 DWT
+      
+      res.json({
+        success: true,
+        wallet: {
+          address: walletAddress,
+          privateKey: `0x${privateKey}`,
+          balance: "1000.0",
+          network: "DarkWave Devnet",
+          chainId: 8453,
+        },
+        message: "Test wallet created and funded with 1000 DWT",
+      });
+    } catch (error) {
+      console.error("Devnet wallet creation error:", error);
+      res.status(500).json({ error: "Failed to create test wallet" });
+    }
+  });
+
+  // Devnet faucet - request test tokens
+  app.post("/api/devnet/faucet", async (req, res) => {
+    try {
+      const { address, amount } = req.body;
+      
+      if (!address) {
+        return res.status(400).json({ error: "Wallet address required" });
+      }
+      
+      // Validate and limit faucet to 100 DWT per request (must be positive)
+      const parsedAmount = parseFloat(amount || "100");
+      if (isNaN(parsedAmount) || parsedAmount <= 0) {
+        return res.status(400).json({ error: "Amount must be a positive number" });
+      }
+      const requestedAmount = Math.min(parsedAmount, 100);
+      const amountWei = BigInt(Math.floor(requestedAmount * 1e18));
+      
+      blockchain.creditAccount(address, amountWei);
+      const account = blockchain.getAccount(address);
+      
+      res.json({
+        success: true,
+        faucet: {
+          address,
+          amountSent: `${requestedAmount} DWT`,
+          newBalance: account ? (Number(account.balance) / 1e18).toFixed(4) : "0",
+          txHash: `0x${crypto.randomBytes(32).toString("hex")}`,
+          network: "DarkWave Devnet",
+        },
+        message: `Sent ${requestedAmount} test DWT to ${address}`,
+      });
+    } catch (error) {
+      console.error("Devnet faucet error:", error);
+      res.status(500).json({ error: "Faucet request failed" });
+    }
+  });
+
+  // Get test account balance
+  app.get("/api/devnet/balance/:address", async (req, res) => {
+    try {
+      const { address } = req.params;
+      const account = blockchain.getAccount(address);
+      
+      res.json({
+        address,
+        balance: account ? (Number(account.balance) / 1e18).toFixed(4) : "0",
+        balanceWei: account?.balance?.toString() || "0",
+        nonce: account?.nonce || 0,
+        network: "DarkWave Devnet",
+      });
+    } catch (error) {
+      console.error("Balance check error:", error);
+      res.status(500).json({ error: "Failed to get balance" });
+    }
+  });
+
+  // Submit test transaction
+  app.post("/api/devnet/transaction", async (req, res) => {
+    try {
+      const { from, to, amount, data } = req.body;
+      
+      if (!from || !to) {
+        return res.status(400).json({ error: "From and to addresses required" });
+      }
+      
+      const parsedAmount = parseFloat(amount || "0");
+      if (isNaN(parsedAmount) || parsedAmount < 0) {
+        return res.status(400).json({ error: "Amount must be a non-negative number" });
+      }
+      const amountWei = BigInt(Math.floor(parsedAmount * 1e18));
+      
+      // Simulate the transfer
+      const fromAccount = blockchain.getAccount(from);
+      if (!fromAccount || fromAccount.balance < amountWei) {
+        return res.status(400).json({ error: "Insufficient balance" });
+      }
+      
+      blockchain.debitAccount(from, amountWei);
+      blockchain.creditAccount(to, amountWei);
+      
+      const txHash = `0x${crypto.randomBytes(32).toString("hex")}`;
+      const blockHeight = blockchain.getStats().currentBlock;
+      
+      res.json({
+        success: true,
+        transaction: {
+          txHash,
+          from,
+          to,
+          amount: `${amount || 0} DWT`,
+          data: data || null,
+          status: "confirmed",
+          blockHeight,
+          network: "DarkWave Devnet",
+          gasUsed: "21000",
+          gasFee: "0.000021 DWT",
+        },
+      });
+    } catch (error) {
+      console.error("Devnet transaction error:", error);
+      res.status(500).json({ error: "Transaction failed" });
+    }
+  });
+
+  // Get devnet status
+  app.get("/api/devnet/status", async (req, res) => {
+    try {
+      const stats = blockchain.getStats();
+      res.json({
+        network: "DarkWave Devnet",
+        chainId: 8453,
+        status: "operational",
+        blockHeight: stats.currentBlock,
+        tps: stats.tps,
+        finalityTime: stats.finalityTime,
+        faucetAvailable: true,
+        faucetLimit: "100 DWT per request",
+        symbol: "DWT",
+        decimals: 18,
+      });
+    } catch (error) {
+      console.error("Devnet status error:", error);
+      res.status(500).json({ error: "Failed to get devnet status" });
+    }
+  });
+
+  // ==================== END DEVNET ENDPOINTS ====================
+
   app.post("/api/hallmark/generate", async (req, res) => {
     try {
       const apiKey = req.headers["x-api-key"] as string;
