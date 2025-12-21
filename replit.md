@@ -97,6 +97,13 @@ User wants: Full blockchain implementation, not just a web portal. No piggybacki
 - `GET /api/gas/estimate?dataSize=N` - Estimate gas for data
 - `GET /api/fees/schedule` - Current fee schedule
 
+### Dual-Chain Stamping Endpoints
+- `POST /api/stamp/dual` - Submit hash to DarkWave + Solana (requires X-API-Key)
+- `GET /api/stamp/:stampId` - Get stamp details with both chain statuses
+- `PATCH /api/stamp/:stampId/solana` - Update Solana signature after client-side submission
+- `GET /api/stamps/app/:appId` - List all stamps for an app
+- `GET /api/darkwave/config` - Get chain configuration (chainId, symbol, decimals)
+
 ### Build System
 - **Client Build**: Vite bundles React app to `dist/public`
 - **Server Build**: esbuild compiles server to `dist/index.cjs`
