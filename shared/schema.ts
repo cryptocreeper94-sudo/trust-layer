@@ -287,4 +287,41 @@ export const insertWaitlistSchema = createInsertSchema(waitlist).omit({
 export type InsertWaitlist = z.infer<typeof insertWaitlistSchema>;
 export type Waitlist = typeof waitlist.$inferSelect;
 
+export const usageLogs = pgTable("usage_logs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  apiKeyId: text("api_key_id").notNull(),
+  endpoint: text("endpoint").notNull(),
+  tokensUsed: text("tokens_used").notNull().default("0"),
+  costCents: text("cost_cents").notNull().default("0"),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+});
+
+export const insertUsageLogSchema = createInsertSchema(usageLogs).omit({
+  id: true,
+  timestamp: true,
+});
+
+export type InsertUsageLog = z.infer<typeof insertUsageLogSchema>;
+export type UsageLog = typeof usageLogs.$inferSelect;
+
+export const developerBilling = pgTable("developer_billing", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  apiKeyId: text("api_key_id").notNull().unique(),
+  stripeCustomerId: text("stripe_customer_id"),
+  email: text("email").notNull(),
+  totalUsageCents: text("total_usage_cents").notNull().default("0"),
+  paidThroughCents: text("paid_through_cents").notNull().default("0"),
+  lastBilledAt: timestamp("last_billed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertDeveloperBillingSchema = createInsertSchema(developerBilling).omit({
+  id: true,
+  createdAt: true,
+  lastBilledAt: true,
+});
+
+export type InsertDeveloperBilling = z.infer<typeof insertDeveloperBillingSchema>;
+export type DeveloperBilling = typeof developerBilling.$inferSelect;
+
 export const APP_VERSION = "1.0.0-alpha";

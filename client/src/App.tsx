@@ -17,6 +17,7 @@ import ApiPlayground from "@/pages/api-playground";
 import Treasury from "@/pages/treasury";
 import DeveloperPortal from "@/pages/developer-portal";
 import DevStudio from "@/pages/dev-studio";
+import Billing from "@/pages/billing";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -45,6 +46,7 @@ function Router() {
         <Route path="/api-playground" component={ApiPlayground} />
         <Route path="/treasury" component={Treasury} />
         <Route path="/developer-portal" component={DeveloperPortal} />
+        <Route path="/billing" component={Billing} />
         <Route path="/dev-studio" component={DevStudio} />
         <Route component={NotFound} />
       </Switch>

@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import crypto from "crypto";
 import { storage } from "./storage";
+import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
 import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, APP_VERSION } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
@@ -544,7 +545,7 @@ export async function registerRoutes(
   });
 
   const pinAttempts = new Map<string, { count: number; lastAttempt: number }>();
-  const developerSessions = new Map<string, { createdAt: number }>();
+  const developerSessions = new Map<string, { createdAt: number; expiresAt: number }>();
   const DEVELOPER_PIN = process.env.DEVELOPER_PIN;
   const MAX_ATTEMPTS = 5;
   const LOCKOUT_DURATION = 5 * 60 * 1000;
@@ -588,7 +589,7 @@ export async function registerRoutes(
       if (pin === DEVELOPER_PIN) {
         pinAttempts.delete(clientIp);
         const sessionToken = generateSessionToken();
-        developerSessions.set(sessionToken, { createdAt: Date.now() });
+        developerSessions.set(sessionToken, { createdAt: Date.now(), expiresAt: Date.now() + SESSION_DURATION });
         res.json({ success: true, version: APP_VERSION, sessionToken });
       } else {
         const current = pinAttempts.get(clientIp) || { count: 0, lastAttempt: 0 };
@@ -695,6 +696,8 @@ export async function registerRoutes(
         rateLimit: "1000",
         isActive: true,
       }, rawKey);
+
+      await billingService.createOrGetBillingRecord(result.apiKey.id, registrantEmail);
 
       res.json({
         success: true,
@@ -1386,6 +1389,138 @@ export async function registerRoutes(
         });
       }
       res.status(500).json({ error: "Failed to add to waitlist" });
+    }
+  });
+
+  // === BILLING ROUTES ===
+  app.get("/api/billing/usage", async (req, res) => {
+    try {
+      const apiKey = req.headers["x-api-key"] as string;
+      if (!apiKey) {
+        return res.status(401).json({ error: "API key required" });
+      }
+
+      const validKey = await storage.validateApiKey(apiKey);
+      if (!validKey) {
+        return res.status(401).json({ error: "Invalid API key" });
+      }
+
+      const stats = await billingService.getUsageStats(validKey.id);
+      const balance = await billingService.getOutstandingBalance(validKey.id);
+
+      res.json({
+        totalCalls: stats.totalCalls,
+        outstandingBalanceCents: balance,
+        outstandingBalanceUSD: (balance / 100).toFixed(2),
+        recentLogs: stats.recentLogs.slice(0, 20),
+        costPerCallCents: 3,
+      });
+    } catch (error) {
+      console.error("Billing usage error:", error);
+      res.status(500).json({ error: "Failed to fetch usage" });
+    }
+  });
+
+  app.post("/api/billing/checkout", async (req, res) => {
+    try {
+      const apiKey = req.headers["x-api-key"] as string;
+      if (!apiKey) {
+        return res.status(401).json({ error: "API key required" });
+      }
+
+      const validKey = await storage.validateApiKey(apiKey);
+      if (!validKey) {
+        return res.status(401).json({ error: "Invalid API key" });
+      }
+
+      const balance = await billingService.getOutstandingBalance(validKey.id);
+      if (balance <= 0) {
+        return res.json({ message: "No outstanding balance", balanceCents: 0 });
+      }
+
+      const host = req.get("host") || "darkwavechain.io";
+      const protocol = host.includes("localhost") ? "http" : "https";
+      const baseUrl = `${protocol}://${host}`;
+
+      const session = await billingService.createStripeCheckout(
+        validKey.id,
+        balance,
+        `${baseUrl}/billing/success?session_id={CHECKOUT_SESSION_ID}`,
+        `${baseUrl}/billing/cancel`
+      );
+
+      res.json({ 
+        checkoutUrl: session.url,
+        amountCents: balance,
+        amountUSD: (balance / 100).toFixed(2),
+      });
+    } catch (error) {
+      console.error("Checkout error:", error);
+      res.status(500).json({ error: "Failed to create checkout" });
+    }
+  });
+
+  app.get("/api/billing/admin/stats", async (req, res) => {
+    try {
+      const sessionToken = req.headers["x-developer-session"] as string;
+      if (!sessionToken) {
+        return res.status(401).json({ error: "Admin session required" });
+      }
+
+      const session = developerSessions.get(sessionToken);
+      if (!session || Date.now() > session.expiresAt) {
+        return res.status(401).json({ error: "Invalid or expired session" });
+      }
+
+      const stats = await billingService.getAllBillingStats();
+      res.json({
+        totalDevelopers: stats.totalDevelopers,
+        totalApiCalls: stats.totalApiCalls,
+        totalRevenueUSD: (stats.totalRevenueCents / 100).toFixed(2),
+        outstandingUSD: (stats.outstandingCents / 100).toFixed(2),
+      });
+    } catch (error) {
+      console.error("Admin stats error:", error);
+      res.status(500).json({ error: "Failed to fetch stats" });
+    }
+  });
+
+  app.get("/api/stripe/publishable-key", async (req, res) => {
+    try {
+      const { getStripePublishableKey } = await import("./stripeClient");
+      const key = await getStripePublishableKey();
+      res.json({ publishableKey: key });
+    } catch (error) {
+      console.error("Failed to get Stripe key:", error);
+      res.status(500).json({ error: "Stripe not configured" });
+    }
+  });
+
+  app.get("/api/billing/verify-payment", async (req, res) => {
+    try {
+      const sessionId = req.query.session_id as string;
+      if (!sessionId) {
+        return res.status(400).json({ error: "Session ID required" });
+      }
+
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+      if (session.payment_status === "paid" && session.metadata?.apiKeyId) {
+        const amountCents = parseInt(session.metadata.amountCents || "0");
+        await billingService.handlePaymentSuccess(session.metadata.apiKeyId, amountCents);
+        res.json({ 
+          success: true, 
+          message: "Payment confirmed",
+          amountPaid: (amountCents / 100).toFixed(2),
+        });
+      } else {
+        res.json({ success: false, message: "Payment not completed" });
+      }
+    } catch (error) {
+      console.error("Payment verification error:", error);
+      res.status(500).json({ error: "Failed to verify payment" });
     }
   });
 
