@@ -189,8 +189,39 @@ The hallmark system provides unique, verifiable product identifiers for all Dark
 - Connection via `DATABASE_URL` environment variable
 - Session storage uses `connect-pg-simple`
 
+### Authentication System
+- **Replit Auth**: OAuth 2.0 integration for social login (Google, GitHub, Apple, email)
+- **Session Storage**: PostgreSQL-backed sessions via `connect-pg-simple`
+- **User Model**: Email-based accounts with profile data (firstName, lastName, profileImageUrl)
+- **Protected Routes**: `isAuthenticated` middleware for secured endpoints
+- **WebAuthn/Passkeys**: Biometric login support (Face ID, Touch ID, Windows Hello)
+
+**Auth Endpoints**:
+- `GET /api/login` - Initiates OAuth login flow
+- `GET /api/callback` - OAuth callback handler
+- `GET /api/logout` - Logout and session destruction
+- `GET /api/auth/user` - Get current authenticated user
+
+**WebAuthn Endpoints**:
+- `POST /api/webauthn/register/start` - Start passkey registration (authenticated)
+- `POST /api/webauthn/register/finish` - Complete passkey registration
+- `POST /api/webauthn/authenticate/start` - Start passkey login
+- `POST /api/webauthn/authenticate/finish` - Complete passkey login
+- `GET /api/webauthn/passkeys` - List user's registered passkeys
+- `DELETE /api/webauthn/passkeys/:id` - Remove a passkey
+
+**Database Tables**:
+- `users` - User profiles (id, email, firstName, lastName, profileImageUrl)
+- `sessions` - Session storage for Replit Auth
+- `passkeys` - WebAuthn credential storage
+
+**Components**:
+- `client/src/hooks/use-auth.ts` - React hook for auth state
+- `client/src/components/passkey-manager.tsx` - Passkey registration UI
+- `client/src/pages/dashboard.tsx` - Authenticated user dashboard
+
 ### Third-Party Services
-- No external auth providers configured (local user/password in database)
+- Replit Auth for social login (OAuth 2.0)
 - No payment processing currently integrated
 - OpenGraph image handling via custom Vite plugin for Replit deployments
 
