@@ -49,6 +49,14 @@ interface TerminalLine {
   content: string;
 }
 
+interface PresenceUser {
+  id: string;
+  name: string;
+  color: string;
+  cursor?: { line: number; column: number };
+  file?: string;
+}
+
 const PROTOCOL_DEFINITIONS: Record<string, string> = {
   "DWT": "DarkWave Token - The native cryptocurrency of DarkWave Chain, used for transactions and gas fees.",
   "PoA": "Proof-of-Authority - A consensus mechanism where trusted validators verify transactions.",
@@ -123,12 +131,20 @@ export default function Studio() {
   const [newConfigValue, setNewConfigValue] = useState("");
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [packages, setPackages] = useState<{name: string, version: string}[]>([]);
+  const [newPackageName, setNewPackageName] = useState("");
+  const [installingPackage, setInstallingPackage] = useState(false);
+  const [packageManager, setPackageManager] = useState<"npm" | "pip" | null>(null);
+  const [customDomainInput, setCustomDomainInput] = useState("");
+  const [savingDomain, setSavingDomain] = useState(false);
+  const [presence, setPresence] = useState<PresenceUser[]>([]);
+  const wsRef = useRef<WebSocket | null>(null);
   const [commits, setCommits] = useState<Commit[]>([]);
   const [consoleOutput, setConsoleOutput] = useState<string[]>(["> DarkWave Studio v1.0.0", "> Ready"]);
   const [running, setRunning] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [commitMessage, setCommitMessage] = useState("");
-  const [bottomTab, setBottomTab] = useState<"console" | "git" | "terminal" | "deploy">("console");
+  const [bottomTab, setBottomTab] = useState<"console" | "git" | "terminal" | "deploy" | "packages">("console");
   const [terminalHistory, setTerminalHistory] = useState<TerminalLine[]>([
     { type: "output", content: "DarkWave Terminal v1.0.0" },
     { type: "output", content: "Type 'help' for available commands" },
@@ -169,6 +185,30 @@ export default function Studio() {
               if (data.files.length > 0) {
                 setActiveFile(data.files[0]);
                 setEditorContent(data.files[0].content);
+              }
+              const hasPackageJson = data.files.some((f: any) => f.name === "package.json");
+              const hasRequirements = data.files.some((f: any) => f.name === "requirements.txt");
+              if (hasPackageJson) {
+                setPackageManager("npm");
+                const pkgFile = data.files.find((f: any) => f.name === "package.json");
+                if (pkgFile) {
+                  try {
+                    const pkg = JSON.parse(pkgFile.content);
+                    const deps = Object.entries(pkg.dependencies || {}).map(([name, version]) => ({ name, version: String(version) }));
+                    setPackages(deps);
+                  } catch {}
+                }
+              } else if (hasRequirements) {
+                setPackageManager("pip");
+                const reqFile = data.files.find((f: any) => f.name === "requirements.txt");
+                if (reqFile) {
+                  const lines = reqFile.content.split("\n").filter((l: string) => l.trim() && !l.startsWith("#"));
+                  const deps = lines.map((l: string) => {
+                    const [name, version] = l.split("==");
+                    return { name: name.trim(), version: version?.trim() || "latest" };
+                  });
+                  setPackages(deps);
+                }
               }
             }
           } else {
@@ -219,6 +259,15 @@ export default function Studio() {
       }
       setActiveFile(file);
       setEditorContent(file.content);
+      
+      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN && projectId) {
+        wsRef.current.send(JSON.stringify({
+          type: "cursor",
+          projectId,
+          file: file.name,
+          cursor: { line: 1, column: 1 },
+        }));
+      }
     }
   };
 
@@ -497,12 +546,131 @@ export default function Studio() {
     }
   };
 
+  const handleInstallPackage = async () => {
+    if (!projectId || !newPackageName.trim()) return;
+    setInstallingPackage(true);
+    setConsoleOutput(prev => [...prev, `> Installing ${newPackageName}...`]);
+    try {
+      const res = await fetch(`/api/studio/projects/${projectId}/packages`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          packageName: newPackageName.trim(),
+          packageManager: packageManager || "npm"
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setPackages(prev => [...prev, { name: data.name, version: data.version }]);
+        setConsoleOutput(prev => [...prev, `> Installed ${data.name}@${data.version}`]);
+        setNewPackageName("");
+      } else {
+        setConsoleOutput(prev => [...prev, `> Failed to install ${newPackageName}`]);
+      }
+    } catch (error) {
+      setConsoleOutput(prev => [...prev, `> Error installing package`]);
+    }
+    setInstallingPackage(false);
+  };
+
+  const handleRemovePackage = async (packageName: string) => {
+    if (!projectId) return;
+    setConsoleOutput(prev => [...prev, `> Removing ${packageName}...`]);
+    try {
+      const res = await fetch(`/api/studio/projects/${projectId}/packages/${encodeURIComponent(packageName)}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setPackages(prev => prev.filter(p => p.name !== packageName));
+        setConsoleOutput(prev => [...prev, `> Removed ${packageName}`]);
+      }
+    } catch (error) {
+      setConsoleOutput(prev => [...prev, `> Error removing package`]);
+    }
+  };
+
+  const handleSaveCustomDomain = async () => {
+    if (!currentDeployment || !customDomainInput.trim()) return;
+    setSavingDomain(true);
+    try {
+      const res = await fetch(`/api/studio/deployments/${currentDeployment.id}/domain`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ customDomain: customDomainInput.trim() }),
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        setCurrentDeployment(updated);
+        setConsoleOutput(prev => [...prev, `> Custom domain set: ${updated.customDomain}`]);
+        setCustomDomainInput("");
+      }
+    } catch (error) {
+      setConsoleOutput(prev => [...prev, `> Error setting custom domain`]);
+    }
+    setSavingDomain(false);
+  };
+
   useEffect(() => {
     if (projectId) {
       loadCommits();
       loadDeployments();
     }
   }, [projectId]);
+
+  const activeFileRef = useRef<FileNode | null>(null);
+  activeFileRef.current = activeFile;
+
+  useEffect(() => {
+    if (!projectId || !user) return;
+    
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const ws = new WebSocket(`${protocol}//${window.location.host}/ws/studio`);
+    wsRef.current = ws;
+    
+    ws.onopen = () => {
+      ws.send(JSON.stringify({
+        type: "join",
+        projectId,
+        userId: user.id,
+        userName: user.firstName || user.email || "User",
+      }));
+      setTimeout(() => {
+        if (ws.readyState === WebSocket.OPEN && activeFileRef.current) {
+          ws.send(JSON.stringify({
+            type: "cursor",
+            projectId,
+            file: activeFileRef.current.name,
+            cursor: { line: 1, column: 1 },
+          }));
+        }
+      }, 200);
+    };
+    
+    ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        if (data.type === "presence") {
+          setPresence(data.users.filter((u: PresenceUser) => u.id !== user.id));
+        }
+      } catch {}
+    };
+    
+    return () => {
+      ws.close();
+      wsRef.current = null;
+    };
+  }, [projectId, user]);
+
+  useEffect(() => {
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN && projectId && activeFile) {
+      wsRef.current.send(JSON.stringify({
+        type: "cursor",
+        projectId,
+        file: activeFile.name,
+        cursor: { line: 1, column: 1 },
+      }));
+    }
+  }, [activeFile, projectId]);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if ((e.metaKey || e.ctrlKey) && e.key === "s") {
@@ -556,6 +724,35 @@ export default function Studio() {
           </Link>
           <span className="text-white/30">/</span>
           <span className="font-mono text-sm">{projectName}</span>
+          
+          {presence.length > 0 && (
+            <div className="flex items-center gap-1 ml-3">
+              <Users className="w-3.5 h-3.5 text-muted-foreground" />
+              <div className="flex -space-x-1">
+                {presence.slice(0, 4).map((u) => (
+                  <Tooltip key={u.id}>
+                    <TooltipTrigger>
+                      <div
+                        className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white border-2 border-background cursor-pointer transition-transform hover:scale-110 hover:z-10"
+                        style={{ backgroundColor: u.color }}
+                        data-testid={`presence-user-${u.id}`}
+                      >
+                        {u.name.charAt(0).toUpperCase()}
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="text-xs">{u.name} is editing{u.file ? ` ${u.file}` : ""}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                ))}
+                {presence.length > 4 && (
+                  <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white bg-gray-600 border-2 border-background">
+                    +{presence.length - 4}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-2">
           <Button
@@ -853,6 +1050,15 @@ export default function Studio() {
               >
                 <Rocket className="w-3 h-3 mr-1" /> Deploy
               </Button>
+              <Button
+                size="sm"
+                variant={bottomTab === "packages" ? "secondary" : "ghost"}
+                onClick={() => setBottomTab("packages")}
+                className={`h-6 text-xs px-2 transition-all duration-200 ${bottomTab === "packages" ? "bg-amber-500/20 text-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.3)]" : "hover:bg-white/5"}`}
+                data-testid="button-packages-tab"
+              >
+                <Package className="w-3 h-3 mr-1" /> Packages
+              </Button>
             </div>
 
             <AnimatePresence mode="wait">
@@ -1002,6 +1208,41 @@ export default function Studio() {
                           </Button>
                         </div>
                       )}
+                      {currentDeployment.customDomain && (
+                        <div className="flex items-center gap-2 p-2 rounded bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/30">
+                          <Globe className="w-3 h-3 text-emerald-400" />
+                          <code className="text-xs text-emerald-400 flex-1 truncate">{currentDeployment.customDomain}</code>
+                          <span className="text-xs text-emerald-400/70">Custom Domain</span>
+                        </div>
+                      )}
+                      {currentDeployment.status === "live" && !currentDeployment.customDomain && (
+                        <div className="mt-2 p-2 rounded bg-black/30 border border-white/5">
+                          <p className="text-xs text-muted-foreground mb-2">Link a custom domain:</p>
+                          <div className="flex gap-2">
+                            <Input
+                              value={customDomainInput}
+                              onChange={(e) => setCustomDomainInput(e.target.value)}
+                              placeholder="yourdomain.com"
+                              className="h-7 text-xs bg-black/30 flex-1 border-white/10 focus:border-emerald-500/50 transition-colors"
+                              onKeyDown={(e) => e.key === "Enter" && handleSaveCustomDomain()}
+                              data-testid="input-custom-domain"
+                            />
+                            <Button 
+                              size="sm" 
+                              onClick={handleSaveCustomDomain}
+                              disabled={savingDomain || !customDomainInput.trim()}
+                              className="h-7 text-xs bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all disabled:opacity-50"
+                              data-testid="button-save-domain"
+                            >
+                              {savingDomain ? (
+                                <Loader2 className="w-3 h-3 animate-spin" />
+                              ) : (
+                                <Check className="w-3 h-3" />
+                              )}
+                            </Button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <div className="flex flex-col items-center justify-center h-full text-center">
@@ -1010,6 +1251,75 @@ export default function Studio() {
                       <p className="text-xs text-muted-foreground mt-1">Click "Deploy" to publish your project</p>
                     </div>
                   )}
+                </motion.div>
+              )}
+
+              {bottomTab === "packages" && (
+                <motion.div
+                  key="packages"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex-1 p-2 overflow-auto"
+                >
+                  <div className="flex gap-2 mb-3">
+                    <Input
+                      value={newPackageName}
+                      onChange={(e) => setNewPackageName(e.target.value)}
+                      placeholder={packageManager === "pip" ? "package-name" : "package-name@version"}
+                      className="h-7 text-xs bg-black/30 flex-1 border-white/10 focus:border-amber-500/50 transition-colors"
+                      onKeyDown={(e) => e.key === "Enter" && handleInstallPackage()}
+                      data-testid="input-package-name"
+                    />
+                    <Button 
+                      size="sm" 
+                      onClick={handleInstallPackage}
+                      disabled={installingPackage || !newPackageName.trim()}
+                      className="h-7 text-xs bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 hover:shadow-[0_0_15px_rgba(245,158,11,0.4)] transition-all disabled:opacity-50"
+                      data-testid="button-install-package"
+                    >
+                      {installingPackage ? (
+                        <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                      ) : (
+                        <Plus className="w-3 h-3 mr-1" />
+                      )}
+                      Install
+                    </Button>
+                  </div>
+                  {packageManager && (
+                    <div className="mb-2 flex items-center gap-2">
+                      <span className="text-xs text-muted-foreground">Manager:</span>
+                      <span className="text-xs text-amber-400 font-mono">{packageManager}</span>
+                    </div>
+                  )}
+                  <div className="space-y-1">
+                    {packages.length === 0 ? (
+                      <p className="text-xs text-muted-foreground text-center py-4">
+                        No packages installed. Add package.json or requirements.txt to manage dependencies.
+                      </p>
+                    ) : (
+                      packages.map((pkg) => (
+                        <div 
+                          key={pkg.name}
+                          className="flex items-center justify-between p-1.5 rounded bg-black/30 border border-white/5 hover:border-amber-500/30 hover:bg-amber-500/5 transition-all group"
+                        >
+                          <div className="flex items-center gap-2">
+                            <Package className="w-3 h-3 text-amber-400 shrink-0" />
+                            <span className="text-xs text-gray-200">{pkg.name}</span>
+                            <span className="text-xs text-muted-foreground font-mono">{pkg.version}</span>
+                          </div>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => handleRemovePackage(pkg.name)}
+                          >
+                            <X className="w-3 h-3 text-red-400" />
+                          </Button>
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>

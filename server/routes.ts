@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import crypto from "crypto";
+import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
@@ -14,6 +15,18 @@ import { submitMemoToSolana, isHeliusConfigured, getSolanaTreasuryAddress, getSo
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
 import { startRegistration, finishRegistration, startAuthentication, finishAuthentication, getUserPasskeys, deletePasskey } from "./webauthn";
 
+interface PresenceUser {
+  id: string;
+  name: string;
+  color: string;
+  cursor?: { line: number; column: number };
+  file?: string;
+}
+
+const PRESENCE_COLORS = ["#ef4444", "#f97316", "#eab308", "#22c55e", "#06b6d4", "#3b82f6", "#8b5cf6", "#ec4899"];
+const projectPresence: Map<string, Map<string, PresenceUser>> = new Map();
+const wsClients: Map<WebSocket, { projectId: string; userId: string }> = new Map();
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express
@@ -21,6 +34,72 @@ export async function registerRoutes(
   
   await setupAuth(app);
   registerAuthRoutes(app);
+
+  const wss = new WebSocketServer({ server: httpServer, path: "/ws/studio" });
+  
+  wss.on("connection", (ws: WebSocket) => {
+    ws.on("message", (data: string) => {
+      try {
+        const message = JSON.parse(data.toString());
+        
+        if (message.type === "join") {
+          const { projectId, userId, userName } = message;
+          wsClients.set(ws, { projectId, userId });
+          
+          if (!projectPresence.has(projectId)) {
+            projectPresence.set(projectId, new Map());
+          }
+          const projectUsers = projectPresence.get(projectId)!;
+          const colorIndex = projectUsers.size % PRESENCE_COLORS.length;
+          
+          projectUsers.set(userId, {
+            id: userId,
+            name: userName || "Anonymous",
+            color: PRESENCE_COLORS[colorIndex],
+          });
+          
+          broadcastPresence(projectId);
+        }
+        
+        if (message.type === "cursor") {
+          const { projectId, cursor, file } = message;
+          const client = wsClients.get(ws);
+          if (client && projectPresence.has(projectId)) {
+            const user = projectPresence.get(projectId)?.get(client.userId);
+            if (user) {
+              user.cursor = cursor;
+              user.file = file;
+              broadcastPresence(projectId);
+            }
+          }
+        }
+      } catch (e) {}
+    });
+    
+    ws.on("close", () => {
+      const client = wsClients.get(ws);
+      if (client) {
+        const { projectId, userId } = client;
+        projectPresence.get(projectId)?.delete(userId);
+        wsClients.delete(ws);
+        broadcastPresence(projectId);
+      }
+    });
+  });
+  
+  function broadcastPresence(projectId: string) {
+    const users = projectPresence.get(projectId);
+    if (!users) return;
+    
+    const presence = Array.from(users.values());
+    const message = JSON.stringify({ type: "presence", users: presence });
+    
+    wsClients.forEach((client, clientWs) => {
+      if (client.projectId === projectId && clientWs.readyState === WebSocket.OPEN) {
+        clientWs.send(message);
+      }
+    });
+  }
 
   // WebAuthn passkey routes
   app.post("/api/webauthn/register/start", isAuthenticated, async (req: any, res) => {
@@ -2171,6 +2250,88 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Add collaborator error:", error);
       res.status(500).json({ error: "Failed to add collaborator" });
+    }
+  });
+
+  app.post("/api/studio/projects/:id/packages", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const { packageName, packageManager } = req.body;
+      const [name, version] = packageName.includes("@") && !packageName.startsWith("@") 
+        ? packageName.split("@") 
+        : [packageName, "latest"];
+      const resolvedVersion = version === "latest" ? (packageManager === "npm" ? "^1.0.0" : "1.0.0") : version;
+      const files = await storage.getStudioFiles(req.params.id);
+      if (packageManager === "npm") {
+        const pkgFile = files.find(f => f.name === "package.json");
+        if (pkgFile) {
+          try {
+            const pkg = JSON.parse(pkgFile.content || "{}");
+            pkg.dependencies = pkg.dependencies || {};
+            pkg.dependencies[name] = resolvedVersion;
+            await storage.updateStudioFile(pkgFile.id, { content: JSON.stringify(pkg, null, 2) });
+          } catch {}
+        }
+      } else if (packageManager === "pip") {
+        const reqFile = files.find(f => f.name === "requirements.txt");
+        if (reqFile) {
+          const content = (reqFile.content || "") + `\n${name}==${resolvedVersion.replace("^", "")}`;
+          await storage.updateStudioFile(reqFile.id, { content: content.trim() });
+        }
+      }
+      res.json({ name, version: resolvedVersion });
+    } catch (error) {
+      console.error("Install package error:", error);
+      res.status(500).json({ error: "Failed to install package" });
+    }
+  });
+
+  app.delete("/api/studio/projects/:id/packages/:packageName", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const packageName = decodeURIComponent(req.params.packageName);
+      const files = await storage.getStudioFiles(req.params.id);
+      const pkgFile = files.find(f => f.name === "package.json");
+      if (pkgFile) {
+        try {
+          const pkg = JSON.parse(pkgFile.content || "{}");
+          if (pkg.dependencies && pkg.dependencies[packageName]) {
+            delete pkg.dependencies[packageName];
+            await storage.updateStudioFile(pkgFile.id, { content: JSON.stringify(pkg, null, 2) });
+          }
+        } catch {}
+      }
+      const reqFile = files.find(f => f.name === "requirements.txt");
+      if (reqFile) {
+        const lines = (reqFile.content || "").split("\n").filter(l => !l.startsWith(packageName + "=="));
+        await storage.updateStudioFile(reqFile.id, { content: lines.join("\n") });
+      }
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Remove package error:", error);
+      res.status(500).json({ error: "Failed to remove package" });
+    }
+  });
+
+  app.patch("/api/studio/deployments/:id/domain", isAuthenticated, async (req: any, res) => {
+    try {
+      const { customDomain } = req.body;
+      const deployment = await storage.updateStudioDeployment(req.params.id, { customDomain });
+      if (!deployment) {
+        return res.status(404).json({ error: "Deployment not found" });
+      }
+      res.json(deployment);
+    } catch (error) {
+      console.error("Update domain error:", error);
+      res.status(500).json({ error: "Failed to update custom domain" });
     }
   });
 
