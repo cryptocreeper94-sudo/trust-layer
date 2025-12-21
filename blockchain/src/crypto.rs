@@ -1,5 +1,5 @@
 use ed25519_dalek::{Signer, SigningKey, Verifier, VerifyingKey};
-use rand::rngs::OsRng;
+use rand::RngCore;
 use sha2::{Digest, Sha256};
 use thiserror::Error;
 
@@ -22,8 +22,9 @@ pub struct Keypair {
 
 impl Keypair {
     pub fn generate() -> Self {
-        let mut csprng = OsRng;
-        let signing_key = SigningKey::generate(&mut csprng);
+        let mut secret_bytes = [0u8; 32];
+        rand::thread_rng().fill_bytes(&mut secret_bytes);
+        let signing_key = SigningKey::from_bytes(&secret_bytes);
         Self { signing_key }
     }
 
@@ -43,7 +44,7 @@ impl Keypair {
 
     pub fn sign(&self, message: &[u8]) -> Signature {
         let signature = self.signing_key.sign(message);
-        signature.to_bytes()
+        Signature(signature.to_bytes())
     }
 
     pub fn to_bytes(&self) -> [u8; 32] {
@@ -99,7 +100,7 @@ pub fn verify_signature(
     let verifying_key =
         VerifyingKey::from_bytes(public_key).map_err(|_| CryptoError::InvalidPublicKey)?;
 
-    let sig = ed25519_dalek::Signature::from_bytes(signature);
+    let sig = ed25519_dalek::Signature::from_bytes(&signature.0);
 
     verifying_key
         .verify(message, &sig)

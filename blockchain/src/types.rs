@@ -1,10 +1,43 @@
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize, Deserializer, Serializer};
 use chrono::{DateTime, Utc};
 
 pub type Hash = [u8; 32];
 pub type PublicKey = [u8; 32];
-pub type Signature = [u8; 64];
 pub type Address = [u8; 20];
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Signature(pub [u8; 64]);
+
+impl Default for Signature {
+    fn default() -> Self {
+        Signature([0u8; 64])
+    }
+}
+
+impl Serialize for Signature {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_str(&hex::encode(&self.0))
+    }
+}
+
+impl<'de> Deserialize<'de> for Signature {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s: String = Deserialize::deserialize(deserializer)?;
+        let bytes = hex::decode(&s).map_err(serde::de::Error::custom)?;
+        if bytes.len() != 64 {
+            return Err(serde::de::Error::custom("Invalid signature length"));
+        }
+        let mut arr = [0u8; 64];
+        arr.copy_from_slice(&bytes);
+        Ok(Signature(arr))
+    }
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Transaction {
@@ -15,9 +48,29 @@ pub struct Transaction {
     pub nonce: u64,
     pub gas_limit: u64,
     pub gas_price: u64,
+    #[serde(with = "hex_bytes")]
     pub data: Vec<u8>,
     pub signature: Signature,
     pub timestamp: DateTime<Utc>,
+}
+
+mod hex_bytes {
+    use serde::{Deserialize, Deserializer, Serializer};
+
+    pub fn serialize<S>(bytes: &Vec<u8>, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_str(&hex::encode(bytes))
+    }
+
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<Vec<u8>, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s: String = Deserialize::deserialize(deserializer)?;
+        hex::decode(s.trim_start_matches("0x")).map_err(serde::de::Error::custom)
+    }
 }
 
 impl Transaction {
@@ -39,7 +92,7 @@ impl Transaction {
             gas_limit,
             gas_price,
             data,
-            signature: [0u8; 64],
+            signature: Signature::default(),
             timestamp: Utc::now(),
         }
     }
@@ -78,7 +131,7 @@ impl Block {
             merkle_root: [0u8; 32],
             state_root: [0u8; 32],
             validator: [0u8; 20],
-            signature: [0u8; 64],
+            signature: Signature::default(),
         };
 
         Self {

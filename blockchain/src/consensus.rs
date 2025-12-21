@@ -8,7 +8,7 @@ use crate::crypto::{
     compute_merkle_root, hash_block_header, hash_bytes, hash_transaction, Keypair,
 };
 use crate::ledger::{Ledger, LedgerError};
-use crate::types::{Account, Address, Block, BlockHeader, ChainConfig, Hash, Transaction};
+use crate::types::{Address, Block, BlockHeader, ChainConfig, Hash, Signature, Transaction};
 
 #[derive(Debug)]
 pub enum ConsensusError {
@@ -143,7 +143,7 @@ impl ProofOfAuthority {
             merkle_root,
             state_root,
             validator: validator_address,
-            signature: [0u8; 64],
+            signature: Signature::default(),
         };
 
         let header_hash = hash_block_header(&header);

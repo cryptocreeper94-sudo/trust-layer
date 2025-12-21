@@ -10,9 +10,9 @@ use tokio::sync::RwLock;
 use tower_http::cors::{Any, CorsLayer};
 
 use crate::consensus::ProofOfAuthority;
-use crate::crypto::{address_to_hex, hash_to_hex, hex_to_address, Keypair, hash_transaction};
+use crate::crypto::{address_to_hex, hash_to_hex, hex_to_address, hash_transaction};
 use crate::ledger::Ledger;
-use crate::types::{ChainConfig, NetworkStats, Transaction};
+use crate::types::{ChainConfig, Transaction};
 
 #[derive(Clone)]
 pub struct RpcState {

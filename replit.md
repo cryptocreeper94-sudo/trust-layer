@@ -2,13 +2,52 @@
 
 ## Overview
 
-Orbit Chain is a decentralized blockchain ecosystem web application built as a modern full-stack TypeScript project. It serves as a portal for the "Orbit Ecosystem" - featuring ecosystem app discovery, blockchain explorer, token information, developer documentation, and API playground functionality. The application integrates with an external "DarkWave Hub" ecosystem API for app registry and cross-platform connectivity.
+Orbit Chain is a complete blockchain ecosystem consisting of two main components:
+
+1. **Orbit Chain Blockchain** (`blockchain/`) - A real blockchain implementation in Rust with Proof-of-Authority consensus
+2. **Orbit Chain Portal** (`client/`, `server/`) - A React web application serving as the ecosystem interface, block explorer, and developer hub
+
+The project goal is to build a blockchain that is faster, more stable, and feature-rich than Solana and Ethereum.
 
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+User wants: Full blockchain implementation, not just a web portal. No piggybacking on other chains.
 
-## System Architecture
+## Blockchain Architecture (`blockchain/`)
+
+### Core Components
+- **Language**: Rust (using tokio, sled, ed25519-dalek, axum)
+- **Consensus**: Proof-of-Authority (PoA) with rotating validators
+- **Storage**: Sled embedded database for ledger, accounts, and transactions
+- **Cryptography**: Ed25519 signatures, SHA-256 hashing, Merkle trees
+- **RPC API**: Axum-based JSON-RPC server for external communication
+
+### Module Structure
+- `types.rs` - Core types (Block, Transaction, Account, ChainConfig)
+- `crypto.rs` - Cryptographic primitives (keypair, hashing, signatures)
+- `ledger.rs` - State storage and account management
+- `consensus.rs` - Proof-of-Authority consensus engine
+- `rpc.rs` - JSON-RPC API endpoints
+- `node.rs` - Node orchestration and startup
+- `main.rs` - CLI entry point
+
+### Chain Configuration
+- Chain ID: 1337
+- Symbol: ORB
+- Decimals: 18
+- Block Time: 400ms
+- Max TX per block: 10,000
+
+### RPC Endpoints
+- `GET /chain` - Chain info (ID, name, height)
+- `GET /block/:height` - Get block by height
+- `GET /block/latest` - Get latest block
+- `GET /account/:address` - Get account balance/nonce
+- `POST /transaction` - Submit transaction
+- `GET /stats` - Network statistics
+
+## Web Portal Architecture
 
 ### Frontend Architecture
 - **Framework**: React 18 with TypeScript, using Vite as the build tool
@@ -17,6 +56,15 @@ Preferred communication style: Simple, everyday language.
 - **UI Components**: shadcn/ui component library built on Radix UI primitives
 - **Styling**: Tailwind CSS v4 with custom theme configuration, Framer Motion for animations
 - **Typography**: Custom font stack (Space Grotesk, Rajdhani, Inter)
+
+### Key Features
+- Global Search (Cmd+K)
+- Theme Toggle (dark/light/system)
+- Notifications System
+- Favorites/Bookmarks with localStorage persistence
+- Mobile Navigation Drawer
+- API Playground for testing chain abstraction APIs
+- Real-time blockchain stats via WebSocket
 
 ### Backend Architecture
 - **Runtime**: Node.js with Express.js server
@@ -38,10 +86,11 @@ Preferred communication style: Simple, everyday language.
 - **Path Aliases**: `@/` maps to client source, `@shared/` maps to shared code
 
 ### Key Design Patterns
-- **Monorepo Structure**: Client (`client/`), server (`server/`), and shared code (`shared/`) in single repository
+- **Monorepo Structure**: Client (`client/`), server (`server/`), shared code (`shared/`), and blockchain (`blockchain/`)
 - **Type Safety**: Drizzle-zod generates Zod schemas from database tables for validation
 - **API Client**: Centralized fetch functions in `client/src/lib/api.ts`
 - **Component Architecture**: Feature components in `components/`, UI primitives in `components/ui/`
+- **User Preferences**: React Context (PreferencesProvider, NotificationsProvider) in `client/src/lib/store.tsx`
 
 ## External Dependencies
 
@@ -67,3 +116,38 @@ Preferred communication style: Simple, everyday language.
 - Framer Motion for animations
 - date-fns for date formatting
 - Zod for runtime validation
+
+### Rust Dependencies (blockchain/)
+- tokio - Async runtime
+- ed25519-dalek - Cryptographic signatures
+- sled - Embedded database
+- axum - HTTP server
+- serde/bincode - Serialization
+- chrono - Time handling
+- tracing - Logging
+
+## Development Roadmap
+
+### Phase 1: MVP Chain (Current)
+- [x] Core types (Block, Transaction, Account)
+- [x] Cryptographic primitives
+- [x] Ledger/state storage
+- [x] Proof-of-Authority consensus
+- [x] JSON-RPC API
+- [ ] Build and run blockchain node
+- [ ] Connect web portal to blockchain
+
+### Phase 2: Multi-Node Network
+- [ ] P2P networking (libp2p)
+- [ ] Block synchronization
+- [ ] Validator orchestration
+
+### Phase 3: Smart Contracts
+- [ ] WASM execution environment
+- [ ] Contract deployment
+- [ ] Contract interaction
+
+### Phase 4: Production Ready
+- [ ] Security hardening
+- [ ] Public testnet
+- [ ] Mainnet launch
