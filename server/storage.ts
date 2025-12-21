@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
 import crypto from "crypto";
@@ -460,6 +460,46 @@ export class DatabaseStorage implements IStorage {
   async updateStudioPreview(id: string, data: Partial<InsertStudioPreview>): Promise<StudioPreview | undefined> {
     const [preview] = await db.update(studioPreviews).set(data).where(eq(studioPreviews.id, id)).returning();
     return preview;
+  }
+
+  async createStudioDeployment(data: InsertStudioDeployment): Promise<StudioDeployment> {
+    const [deployment] = await db.insert(studioDeployments).values(data).returning();
+    return deployment;
+  }
+
+  async getStudioDeployments(projectId: string): Promise<StudioDeployment[]> {
+    return db.select().from(studioDeployments)
+      .where(eq(studioDeployments.projectId, projectId))
+      .orderBy(desc(studioDeployments.createdAt));
+  }
+
+  async getStudioDeployment(id: string): Promise<StudioDeployment | undefined> {
+    const [deployment] = await db.select().from(studioDeployments).where(eq(studioDeployments.id, id));
+    return deployment;
+  }
+
+  async updateStudioDeployment(id: string, data: Partial<InsertStudioDeployment>): Promise<StudioDeployment | undefined> {
+    const [deployment] = await db.update(studioDeployments).set({ ...data, updatedAt: new Date() }).where(eq(studioDeployments.id, id)).returning();
+    return deployment;
+  }
+
+  async createStudioCollaborator(data: InsertStudioCollaborator): Promise<StudioCollaborator> {
+    const [collab] = await db.insert(studioCollaborators).values(data).returning();
+    return collab;
+  }
+
+  async getStudioCollaborators(projectId: string): Promise<StudioCollaborator[]> {
+    return db.select().from(studioCollaborators).where(eq(studioCollaborators.projectId, projectId));
+  }
+
+  async updateStudioCollaborator(id: string, data: Partial<InsertStudioCollaborator>): Promise<StudioCollaborator | undefined> {
+    const [collab] = await db.update(studioCollaborators).set({ ...data, lastActiveAt: new Date() }).where(eq(studioCollaborators.id, id)).returning();
+    return collab;
+  }
+
+  async deleteStudioCollaborator(id: string): Promise<boolean> {
+    await db.delete(studioCollaborators).where(eq(studioCollaborators.id, id));
+    return true;
   }
 }
 

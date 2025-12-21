@@ -473,4 +473,45 @@ export const insertStudioPreviewSchema = createInsertSchema(studioPreviews).omit
 export type InsertStudioPreview = z.infer<typeof insertStudioPreviewSchema>;
 export type StudioPreview = typeof studioPreviews.$inferSelect;
 
+export const studioDeployments = pgTable("studio_deployments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: text("project_id").notNull(),
+  status: text("status").notNull().default("pending"),
+  url: text("url"),
+  customDomain: text("custom_domain"),
+  version: text("version").notNull().default("1"),
+  commitHash: text("commit_hash"),
+  buildLogs: text("build_logs").default(""),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertStudioDeploymentSchema = createInsertSchema(studioDeployments).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertStudioDeployment = z.infer<typeof insertStudioDeploymentSchema>;
+export type StudioDeployment = typeof studioDeployments.$inferSelect;
+
+export const studioCollaborators = pgTable("studio_collaborators", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: text("project_id").notNull(),
+  userId: text("user_id").notNull(),
+  role: text("role").notNull().default("editor"),
+  cursorPosition: text("cursor_position"),
+  lastActiveAt: timestamp("last_active_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertStudioCollaboratorSchema = createInsertSchema(studioCollaborators).omit({
+  id: true,
+  createdAt: true,
+  lastActiveAt: true,
+});
+
+export type InsertStudioCollaborator = z.infer<typeof insertStudioCollaboratorSchema>;
+export type StudioCollaborator = typeof studioCollaborators.$inferSelect;
+
 export const APP_VERSION = "1.0.0-alpha";

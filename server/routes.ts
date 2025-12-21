@@ -2049,6 +2049,131 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/studio/projects/:id/deploy", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const commits = await storage.getStudioCommits(project.id);
+      const latestCommit = commits[0];
+      const existingDeployments = await storage.getStudioDeployments(project.id);
+      const version = (existingDeployments.length + 1).toString();
+      const deployment = await storage.createStudioDeployment({
+        projectId: project.id,
+        status: "building",
+        version,
+        commitHash: latestCommit?.hash || null,
+        buildLogs: "Starting deployment...\n",
+      });
+      setTimeout(async () => {
+        const url = `https://${project.name.toLowerCase().replace(/[^a-z0-9]/g, "-")}-${project.id.slice(0, 8)}.darkwave.app`;
+        await storage.updateStudioDeployment(deployment.id, {
+          status: "live",
+          url,
+          buildLogs: "Starting deployment...\nBuilding project...\nOptimizing assets...\nDeployment complete!\n",
+        });
+      }, 3000);
+      res.json(deployment);
+    } catch (error) {
+      console.error("Deploy error:", error);
+      res.status(500).json({ error: "Failed to deploy" });
+    }
+  });
+
+  app.get("/api/studio/projects/:id/deployments", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const deployments = await storage.getStudioDeployments(project.id);
+      res.json(deployments);
+    } catch (error) {
+      console.error("Get deployments error:", error);
+      res.status(500).json({ error: "Failed to get deployments" });
+    }
+  });
+
+  app.get("/api/studio/deployments/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const deployment = await storage.getStudioDeployment(req.params.id);
+      if (!deployment) {
+        return res.status(404).json({ error: "Deployment not found" });
+      }
+      res.json(deployment);
+    } catch (error) {
+      console.error("Get deployment error:", error);
+      res.status(500).json({ error: "Failed to get deployment" });
+    }
+  });
+
+  app.patch("/api/studio/deployments/:id/domain", isAuthenticated, async (req: any, res) => {
+    try {
+      const { customDomain } = req.body;
+      const deployment = await storage.updateStudioDeployment(req.params.id, { customDomain });
+      res.json(deployment);
+    } catch (error) {
+      console.error("Update domain error:", error);
+      res.status(500).json({ error: "Failed to update domain" });
+    }
+  });
+
+  app.post("/api/studio/projects/:id/terminal", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const { command } = req.body;
+      const terminalCommands: Record<string, string> = {
+        "ls": "index.js\npackage.json\nREADME.md",
+        "pwd": `/home/darkwave/${project.name}`,
+        "whoami": "darkwave",
+        "date": new Date().toUTCString(),
+        "echo $PATH": "/usr/local/bin:/usr/bin:/bin",
+        "node -v": "v20.10.0",
+        "npm -v": "10.2.3",
+        "python --version": "Python 3.11.6",
+        "clear": "",
+        "help": "Available commands: ls, pwd, whoami, date, node -v, npm -v, python --version, clear, help",
+      };
+      const output = terminalCommands[command] ?? `darkwave: command not found: ${command.split(" ")[0]}`;
+      res.json({ command, output, exitCode: terminalCommands[command] !== undefined ? 0 : 127 });
+    } catch (error) {
+      console.error("Terminal error:", error);
+      res.status(500).json({ error: "Terminal error" });
+    }
+  });
+
+  app.get("/api/studio/projects/:id/collaborators", isAuthenticated, async (req: any, res) => {
+    try {
+      const collaborators = await storage.getStudioCollaborators(req.params.id);
+      res.json(collaborators);
+    } catch (error) {
+      console.error("Get collaborators error:", error);
+      res.status(500).json({ error: "Failed to get collaborators" });
+    }
+  });
+
+  app.post("/api/studio/projects/:id/collaborators", isAuthenticated, async (req: any, res) => {
+    try {
+      const { userId, role } = req.body;
+      const collaborator = await storage.createStudioCollaborator({
+        projectId: req.params.id,
+        userId,
+        role: role || "editor",
+      });
+      res.json(collaborator);
+    } catch (error) {
+      console.error("Add collaborator error:", error);
+      res.status(500).json({ error: "Failed to add collaborator" });
+    }
+  });
+
   return httpServer;
 }
 

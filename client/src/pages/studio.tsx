@@ -1,12 +1,16 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "wouter";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   FolderOpen, File, Plus, Save, Play, Settings, Lock, 
   ChevronRight, ChevronDown, Trash2, Edit2, X, Check,
   FileCode, FileJson, FileText, Folder, Package, Globe,
-  GitBranch, GitCommit, History, RotateCcw, Terminal
+  GitBranch, GitCommit, History, RotateCcw, Terminal,
+  Rocket, Cloud, Link2, Users, Info, Zap, Shield, Database,
+  ExternalLink, Copy, CheckCircle, Loader2, Send
 } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -29,6 +33,34 @@ interface Run {
   output: string;
   exitCode: string | null;
 }
+
+interface Deployment {
+  id: string;
+  status: string;
+  url: string | null;
+  customDomain: string | null;
+  version: string;
+  buildLogs: string | null;
+  createdAt: string;
+}
+
+interface TerminalLine {
+  type: "input" | "output" | "error";
+  content: string;
+}
+
+const PROTOCOL_DEFINITIONS: Record<string, string> = {
+  "DWT": "DarkWave Token - The native cryptocurrency of DarkWave Chain, used for transactions and gas fees.",
+  "PoA": "Proof-of-Authority - A consensus mechanism where trusted validators verify transactions.",
+  "Gas": "The computational cost required to execute operations on the blockchain.",
+  "Block": "A container of transactions that are cryptographically linked to form the chain.",
+  "Hash": "A unique cryptographic fingerprint that identifies data on the blockchain.",
+  "Commit": "A snapshot of your code at a specific point in time, with a message describing changes.",
+  "Branch": "A parallel version of your code for developing features independently.",
+  "Deploy": "Publishing your project to make it accessible via a public URL.",
+  "Secret": "An encrypted environment variable for sensitive data like API keys.",
+  "Config": "A configuration variable that customizes your project's behavior.",
+};
 
 interface FileNode {
   id: string;
@@ -96,7 +128,16 @@ export default function Studio() {
   const [running, setRunning] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [commitMessage, setCommitMessage] = useState("");
-  const [bottomTab, setBottomTab] = useState<"console" | "git">("console");
+  const [bottomTab, setBottomTab] = useState<"console" | "git" | "terminal" | "deploy">("console");
+  const [terminalHistory, setTerminalHistory] = useState<TerminalLine[]>([
+    { type: "output", content: "DarkWave Terminal v1.0.0" },
+    { type: "output", content: "Type 'help' for available commands" },
+  ]);
+  const [terminalInput, setTerminalInput] = useState("");
+  const [deploying, setDeploying] = useState(false);
+  const [deployments, setDeployments] = useState<Deployment[]>([]);
+  const [currentDeployment, setCurrentDeployment] = useState<Deployment | null>(null);
+  const terminalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!user) {
@@ -368,9 +409,98 @@ export default function Studio() {
     }
   };
 
+  const handleTerminalCommand = async (command: string) => {
+    if (!projectId || !command.trim()) return;
+    setTerminalHistory(prev => [...prev, { type: "input", content: `$ ${command}` }]);
+    setTerminalInput("");
+    if (command === "clear") {
+      setTerminalHistory([
+        { type: "output", content: "DarkWave Terminal v1.0.0" },
+        { type: "output", content: "Type 'help' for available commands" },
+      ]);
+      return;
+    }
+    try {
+      const res = await fetch(`/api/studio/projects/${projectId}/terminal`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ command }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const lines = data.output.split("\n").filter((l: string) => l);
+        lines.forEach((line: string) => {
+          setTerminalHistory(prev => [...prev, { 
+            type: data.exitCode === 0 ? "output" : "error", 
+            content: line 
+          }]);
+        });
+      }
+    } catch (error) {
+      setTerminalHistory(prev => [...prev, { type: "error", content: "Command failed" }]);
+    }
+    setTimeout(() => {
+      terminalRef.current?.scrollTo({ top: terminalRef.current.scrollHeight, behavior: "smooth" });
+    }, 100);
+  };
+
+  const handleDeploy = async () => {
+    if (!projectId) return;
+    setDeploying(true);
+    setConsoleOutput(prev => [...prev, "> Starting deployment..."]);
+    try {
+      const res = await fetch(`/api/studio/projects/${projectId}/deploy`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (res.ok) {
+        const deployment = await res.json();
+        setCurrentDeployment(deployment);
+        setDeployments(prev => [deployment, ...prev]);
+        setConsoleOutput(prev => [...prev, `> Deployment v${deployment.version} started`]);
+        const checkStatus = async () => {
+          const statusRes = await fetch(`/api/studio/deployments/${deployment.id}`);
+          if (statusRes.ok) {
+            const updated = await statusRes.json();
+            setCurrentDeployment(updated);
+            if (updated.status === "live") {
+              setConsoleOutput(prev => [...prev, `> Deployed: ${updated.url}`]);
+              setDeploying(false);
+            } else if (updated.status === "failed") {
+              setConsoleOutput(prev => [...prev, "> Deployment failed"]);
+              setDeploying(false);
+            } else {
+              setTimeout(checkStatus, 1000);
+            }
+          }
+        };
+        setTimeout(checkStatus, 1000);
+      }
+    } catch (error) {
+      console.error("Deploy error:", error);
+      setConsoleOutput(prev => [...prev, "> Deployment failed"]);
+      setDeploying(false);
+    }
+  };
+
+  const loadDeployments = async () => {
+    if (!projectId) return;
+    try {
+      const res = await fetch(`/api/studio/projects/${projectId}/deployments`);
+      if (res.ok) {
+        const data = await res.json();
+        setDeployments(data);
+        if (data.length > 0) setCurrentDeployment(data[0]);
+      }
+    } catch (error) {
+      console.error("Load deployments error:", error);
+    }
+  };
+
   useEffect(() => {
     if (projectId) {
       loadCommits();
+      loadDeployments();
     }
   }, [projectId]);
 
@@ -441,13 +571,23 @@ export default function Studio() {
           </Button>
           <Button
             size="sm"
-            className="gap-2 bg-green-600 hover:bg-green-700 text-xs"
+            className="gap-2 bg-green-600 hover:bg-green-700 text-xs transition-all duration-300 hover:shadow-[0_0_15px_rgba(34,197,94,0.5)] hover:scale-105"
             onClick={handleRun}
             disabled={running}
             data-testid="button-run"
           >
             <Play className="w-3.5 h-3.5" />
             {running ? "Running..." : "Run"}
+          </Button>
+          <Button
+            size="sm"
+            className="gap-2 bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-xs transition-all duration-300 hover:shadow-[0_0_20px_rgba(139,92,246,0.6)] hover:scale-105"
+            onClick={handleDeploy}
+            disabled={deploying}
+            data-testid="button-deploy"
+          >
+            <Rocket className="w-3.5 h-3.5" />
+            {deploying ? "Deploying..." : "Deploy"}
           </Button>
         </div>
       </header>
@@ -531,7 +671,17 @@ export default function Studio() {
 
             <TabsContent value="secrets" className="flex-1 overflow-auto p-2 m-0">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-muted-foreground uppercase">Secrets</span>
+                <span className="text-xs text-muted-foreground uppercase flex items-center gap-1">
+                  Secrets
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info className="w-3 h-3 text-muted-foreground hover:text-cyan-400 transition-colors cursor-help" />
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="max-w-xs bg-black/90 border-white/10">
+                      <p className="text-xs">{PROTOCOL_DEFINITIONS["Secret"]}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </span>
               </div>
               <p className="text-xs text-muted-foreground mb-3">
                 Encrypted environment variables for sensitive data.
@@ -576,7 +726,17 @@ export default function Studio() {
 
             <TabsContent value="config" className="flex-1 overflow-auto p-2 m-0">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-muted-foreground uppercase">Configurations</span>
+                <span className="text-xs text-muted-foreground uppercase flex items-center gap-1">
+                  Configurations
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info className="w-3 h-3 text-muted-foreground hover:text-cyan-400 transition-colors cursor-help" />
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="max-w-xs bg-black/90 border-white/10">
+                      <p className="text-xs">{PROTOCOL_DEFINITIONS["Config"]}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </span>
               </div>
               <p className="text-xs text-muted-foreground mb-3">
                 Non-sensitive configuration variables.
@@ -654,64 +814,205 @@ export default function Studio() {
             )}
           </div>
 
-          {/* Bottom Bar / Console & Git */}
-          <div className="h-40 border-t border-white/5 bg-black/40 flex flex-col shrink-0">
-            <div className="flex items-center px-1 py-1 border-b border-white/5 gap-1">
+          {/* Bottom Bar / Console, Git, Terminal & Deploy */}
+          <div className="h-48 border-t border-white/5 bg-gradient-to-b from-black/60 to-black/40 flex flex-col shrink-0 backdrop-blur-sm">
+            <div className="flex items-center px-1 py-1 border-b border-white/10 gap-1">
               <Button
                 size="sm"
                 variant={bottomTab === "console" ? "secondary" : "ghost"}
                 onClick={() => setBottomTab("console")}
-                className="h-6 text-xs px-2"
+                className={`h-6 text-xs px-2 transition-all duration-200 ${bottomTab === "console" ? "bg-green-500/20 text-green-400 shadow-[0_0_10px_rgba(34,197,94,0.3)]" : "hover:bg-white/5"}`}
                 data-testid="button-console-tab"
               >
-                <Terminal className="w-3 h-3 mr-1" /> Console
+                <Zap className="w-3 h-3 mr-1" /> Console
+              </Button>
+              <Button
+                size="sm"
+                variant={bottomTab === "terminal" ? "secondary" : "ghost"}
+                onClick={() => setBottomTab("terminal")}
+                className={`h-6 text-xs px-2 transition-all duration-200 ${bottomTab === "terminal" ? "bg-purple-500/20 text-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.3)]" : "hover:bg-white/5"}`}
+                data-testid="button-terminal-tab"
+              >
+                <Terminal className="w-3 h-3 mr-1" /> Terminal
               </Button>
               <Button
                 size="sm"
                 variant={bottomTab === "git" ? "secondary" : "ghost"}
                 onClick={() => setBottomTab("git")}
-                className="h-6 text-xs px-2"
+                className={`h-6 text-xs px-2 transition-all duration-200 ${bottomTab === "git" ? "bg-cyan-500/20 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.3)]" : "hover:bg-white/5"}`}
                 data-testid="button-git-tab"
               >
                 <GitBranch className="w-3 h-3 mr-1" /> Git
               </Button>
+              <Button
+                size="sm"
+                variant={bottomTab === "deploy" ? "secondary" : "ghost"}
+                onClick={() => setBottomTab("deploy")}
+                className={`h-6 text-xs px-2 transition-all duration-200 ${bottomTab === "deploy" ? "bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-cyan-400 shadow-[0_0_10px_rgba(139,92,246,0.3)]" : "hover:bg-white/5"}`}
+                data-testid="button-deploy-tab"
+              >
+                <Rocket className="w-3 h-3 mr-1" /> Deploy
+              </Button>
             </div>
-            {bottomTab === "console" ? (
-              <div className="flex-1 p-2 font-mono text-xs text-green-400 overflow-auto">
-                {consoleOutput.map((line, i) => (
-                  <p key={i} className={line.startsWith(">") ? "text-muted-foreground" : "text-green-400"}>{line}</p>
-                ))}
-              </div>
-            ) : (
-              <div className="flex-1 p-2 overflow-auto">
-                <div className="flex gap-2 mb-2">
-                  <Input
-                    value={commitMessage}
-                    onChange={(e) => setCommitMessage(e.target.value)}
-                    placeholder="Commit message..."
-                    className="h-7 text-xs bg-black/30 flex-1"
-                    onKeyDown={(e) => e.key === "Enter" && handleCommit()}
-                    data-testid="input-commit-message"
-                  />
-                  <Button size="sm" onClick={handleCommit} className="h-7 text-xs" data-testid="button-commit">
-                    <GitCommit className="w-3 h-3 mr-1" /> Commit
-                  </Button>
-                </div>
-                <div className="space-y-1 text-xs">
-                  {commits.length === 0 ? (
-                    <p className="text-muted-foreground">No commits yet. Make your first commit!</p>
-                  ) : (
-                    commits.slice(0, 5).map((commit) => (
-                      <div key={commit.id} className="flex items-center gap-2 p-1.5 rounded bg-black/30">
-                        <GitCommit className="w-3 h-3 text-cyan-400 shrink-0" />
-                        <span className="font-mono text-cyan-400">{commit.hash}</span>
-                        <span className="text-muted-foreground truncate">{commit.message}</span>
+
+            <AnimatePresence mode="wait">
+              {bottomTab === "console" && (
+                <motion.div
+                  key="console"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex-1 p-2 font-mono text-xs overflow-auto"
+                >
+                  {consoleOutput.map((line, i) => (
+                    <p key={i} className={`${line.startsWith(">") ? "text-muted-foreground" : line.includes("Error") ? "text-red-400" : "text-green-400"} transition-colors`}>{line}</p>
+                  ))}
+                </motion.div>
+              )}
+
+              {bottomTab === "terminal" && (
+                <motion.div
+                  key="terminal"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex-1 flex flex-col overflow-hidden"
+                >
+                  <div ref={terminalRef} className="flex-1 p-2 font-mono text-xs overflow-auto bg-black/30">
+                    {terminalHistory.map((line, i) => (
+                      <p key={i} className={`${line.type === "input" ? "text-cyan-400" : line.type === "error" ? "text-red-400" : "text-gray-300"}`}>
+                        {line.content}
+                      </p>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-2 p-2 border-t border-white/5">
+                    <span className="text-cyan-400 font-mono text-xs">$</span>
+                    <Input
+                      value={terminalInput}
+                      onChange={(e) => setTerminalInput(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handleTerminalCommand(terminalInput)}
+                      placeholder="Type a command..."
+                      className="flex-1 h-6 text-xs bg-transparent border-none focus:ring-0 font-mono text-gray-100"
+                      data-testid="input-terminal"
+                    />
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-6 w-6 p-0"
+                      onClick={() => handleTerminalCommand(terminalInput)}
+                    >
+                      <Send className="w-3 h-3 text-cyan-400" />
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+
+              {bottomTab === "git" && (
+                <motion.div
+                  key="git"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex-1 p-2 overflow-auto"
+                >
+                  <div className="flex gap-2 mb-2">
+                    <Input
+                      value={commitMessage}
+                      onChange={(e) => setCommitMessage(e.target.value)}
+                      placeholder="Commit message..."
+                      className="h-7 text-xs bg-black/30 flex-1 border-white/10 focus:border-cyan-500/50 transition-colors"
+                      onKeyDown={(e) => e.key === "Enter" && handleCommit()}
+                      data-testid="input-commit-message"
+                    />
+                    <Button 
+                      size="sm" 
+                      onClick={handleCommit} 
+                      className="h-7 text-xs bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-500/30 hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all"
+                      data-testid="button-commit"
+                    >
+                      <GitCommit className="w-3 h-3 mr-1" /> Commit
+                    </Button>
+                  </div>
+                  <div className="space-y-1 text-xs">
+                    {commits.length === 0 ? (
+                      <p className="text-muted-foreground">No commits yet. Make your first commit!</p>
+                    ) : (
+                      commits.slice(0, 5).map((commit) => (
+                        <div 
+                          key={commit.id} 
+                          className="flex items-center gap-2 p-1.5 rounded bg-black/30 border border-white/5 hover:border-cyan-500/30 hover:bg-cyan-500/5 transition-all cursor-pointer group"
+                        >
+                          <GitCommit className="w-3 h-3 text-cyan-400 shrink-0 group-hover:scale-110 transition-transform" />
+                          <span className="font-mono text-cyan-400">{commit.hash}</span>
+                          <span className="text-muted-foreground truncate">{commit.message}</span>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </motion.div>
+              )}
+
+              {bottomTab === "deploy" && (
+                <motion.div
+                  key="deploy"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex-1 p-2 overflow-auto"
+                >
+                  {currentDeployment ? (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-white/10">
+                        <div className="flex items-center gap-3">
+                          {currentDeployment.status === "live" ? (
+                            <CheckCircle className="w-5 h-5 text-green-400" />
+                          ) : currentDeployment.status === "building" ? (
+                            <Loader2 className="w-5 h-5 text-amber-400 animate-spin" />
+                          ) : (
+                            <Cloud className="w-5 h-5 text-muted-foreground" />
+                          )}
+                          <div>
+                            <p className="text-sm font-medium">v{currentDeployment.version}</p>
+                            <p className="text-xs text-muted-foreground capitalize">{currentDeployment.status}</p>
+                          </div>
+                        </div>
+                        {currentDeployment.url && currentDeployment.status === "live" && (
+                          <a
+                            href={currentDeployment.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1 text-xs text-cyan-400 hover:text-cyan-300 transition-colors"
+                          >
+                            <ExternalLink className="w-3 h-3" />
+                            Visit
+                          </a>
+                        )}
                       </div>
-                    ))
+                      {currentDeployment.url && (
+                        <div className="flex items-center gap-2 p-2 rounded bg-black/30 border border-white/5">
+                          <Link2 className="w-3 h-3 text-muted-foreground" />
+                          <code className="text-xs text-cyan-400 flex-1 truncate">{currentDeployment.url}</code>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-5 w-5 p-0"
+                            onClick={() => navigator.clipboard.writeText(currentDeployment.url || "")}
+                          >
+                            <Copy className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full text-center">
+                      <Rocket className="w-8 h-8 text-muted-foreground mb-2 opacity-50" />
+                      <p className="text-xs text-muted-foreground">No deployments yet</p>
+                      <p className="text-xs text-muted-foreground mt-1">Click "Deploy" to publish your project</p>
+                    </div>
                   )}
-                </div>
-              </div>
-            )}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </main>
 
