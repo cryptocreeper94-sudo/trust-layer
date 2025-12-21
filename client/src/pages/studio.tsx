@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GlassCard } from "@/components/glass-card";
-import orbitLogo from "@assets/orbit-logo-shield.png";
+import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { useAuth } from "@/hooks/use-auth";
 
 interface FileNode {
@@ -86,7 +86,7 @@ export default function Studio() {
         return next;
       });
     } else {
-      if (activeFile) {
+      if (activeFile && activeFile.id !== file.id) {
         setFiles(prev => prev.map(f => 
           f.id === activeFile.id ? { ...f, content: editorContent } : f
         ));
@@ -106,8 +106,17 @@ export default function Studio() {
     setSaving(false);
   };
 
+  const saveCurrentFile = useCallback(() => {
+    if (activeFile) {
+      setFiles(prev => prev.map(f => 
+        f.id === activeFile.id ? { ...f, content: editorContent } : f
+      ));
+    }
+  }, [activeFile, editorContent]);
+
   const handleCreateFile = () => {
     if (!newFileName.trim()) return;
+    saveCurrentFile();
     const newFile: FileNode = {
       id: Date.now().toString(),
       name: newFileName,
@@ -173,7 +182,7 @@ export default function Studio() {
       {/* Top Bar */}
       <header className="h-12 border-b border-white/5 bg-background/95 flex items-center justify-between px-4 shrink-0">
         <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2" data-testid="link-home">
             <img src={orbitLogo} alt="DarkWave" className="w-6 h-6" />
           </Link>
           <span className="text-white/30">/</span>
@@ -208,13 +217,13 @@ export default function Studio() {
         <aside className="w-64 border-r border-white/5 bg-black/40 flex flex-col shrink-0">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
             <TabsList className="w-full grid grid-cols-3 h-10 bg-transparent border-b border-white/5 rounded-none">
-              <TabsTrigger value="files" className="text-xs data-[state=active]:bg-white/5 rounded-none">
+              <TabsTrigger value="files" className="text-xs data-[state=active]:bg-white/5 rounded-none" data-testid="tab-files">
                 <FolderOpen className="w-3.5 h-3.5 mr-1" /> Files
               </TabsTrigger>
-              <TabsTrigger value="secrets" className="text-xs data-[state=active]:bg-white/5 rounded-none">
+              <TabsTrigger value="secrets" className="text-xs data-[state=active]:bg-white/5 rounded-none" data-testid="tab-secrets">
                 <Lock className="w-3.5 h-3.5 mr-1" /> Secrets
               </TabsTrigger>
-              <TabsTrigger value="config" className="text-xs data-[state=active]:bg-white/5 rounded-none">
+              <TabsTrigger value="config" className="text-xs data-[state=active]:bg-white/5 rounded-none" data-testid="tab-config">
                 <Settings className="w-3.5 h-3.5 mr-1" /> Config
               </TabsTrigger>
             </TabsList>
