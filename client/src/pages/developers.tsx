@@ -8,6 +8,7 @@ import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_lo
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
+import { InfoTooltip } from "@/components/info-tooltip";
 
 export default function Developers() {
   usePageAnalytics();
@@ -75,6 +76,7 @@ export default function Developers() {
                       <Layers className="w-4 h-4" />
                     </div>
                     <h2 className="text-sm font-bold">Hybrid Consensus Architecture</h2>
+                    <InfoTooltip content="DarkWave combines DAG (for speed) with Proof-of-History (for ordering) to achieve both high throughput and security." label="Hybrid consensus info" />
                   </div>
                   <p className="text-[11px] text-white/50 leading-relaxed mb-3">
                     Unlike traditional blockchains that process blocks sequentially, DarkWave uses a 
@@ -108,6 +110,7 @@ export default function Developers() {
                       <Code className="w-4 h-4" />
                     </div>
                     <h2 className="text-sm font-bold">Development Stack</h2>
+                    <InfoTooltip content="Choose your preferred language. Rust offers best performance, while TypeScript SDK makes web development easy." label="Development stack info" />
                   </div>
                   <p className="text-[11px] text-white/50 leading-relaxed mb-3">
                     <strong>Rust</strong> is the primary language for DarkWave smart contracts ("Starships"). 

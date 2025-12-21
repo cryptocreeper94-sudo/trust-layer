@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, LogOut, User } from "lucide-react";
+import { InfoTooltip } from "@/components/info-tooltip";
 import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.png";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { Button } from "@/components/ui/button";
@@ -163,6 +164,7 @@ export default function Home() {
                         <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                         <span className="text-[9px] text-green-400/80 uppercase">Live</span>
                       </div>
+                      <InfoTooltip content="Transactions Per Second - how many transactions the network can process each second. Higher is better!" label="TPS info" />
                     </div>
                     <div className="text-2xl font-bold text-white">{stats?.tps || "200K+"}</div>
                     <div className="text-[10px] text-white/50 uppercase tracking-wider">TPS Throughput</div>
@@ -176,6 +178,7 @@ export default function Home() {
                         <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                         <span className="text-[9px] text-green-400/80 uppercase">Live</span>
                       </div>
+                      <InfoTooltip content="Time for a transaction to be permanently confirmed on the blockchain. 400ms means near-instant confirmations!" label="Finality time info" />
                     </div>
                     <div className="text-2xl font-bold text-white">{stats?.finalityTime || "0.4s"}</div>
                     <div className="text-[10px] text-white/50 uppercase tracking-wider">Finality Time</div>
@@ -183,7 +186,10 @@ export default function Home() {
                 </GlassCard>
                 <GlassCard hover={false}>
                   <div className="p-4 h-full flex flex-col justify-center">
-                    <Cpu className="w-4 h-4 text-purple-400/60 mb-2" />
+                    <div className="flex items-center gap-2 mb-2">
+                      <Cpu className="w-4 h-4 text-purple-400/60" />
+                      <InfoTooltip content="Average cost per transaction. DarkWave Chain keeps fees extremely low compared to other blockchains." label="Transaction cost info" />
+                    </div>
                     <div className="text-2xl font-bold text-white">{stats?.avgCost || "$0.0001"}</div>
                     <div className="text-[10px] text-white/50 uppercase tracking-wider">Avg Cost</div>
                   </div>
@@ -196,6 +202,7 @@ export default function Home() {
                         <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                         <span className="text-[9px] text-green-400/80 uppercase">Live</span>
                       </div>
+                      <InfoTooltip content="Number of validator nodes running the network. More nodes means better security and decentralization." label="Active nodes info" />
                     </div>
                     <div className="text-2xl font-bold text-white">{stats?.activeNodes || "150+"}</div>
                     <div className="text-[10px] text-white/50 uppercase tracking-wider">Active Nodes</div>
@@ -226,8 +233,11 @@ export default function Home() {
                     <div className="p-2 rounded-lg bg-primary/20 text-primary shrink-0">
                       <Zap className="w-4 h-4" />
                     </div>
-                    <div>
-                      <h3 className="text-sm font-bold text-white mb-1">Instant Consensus</h3>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-sm font-bold text-white">Instant Consensus</h3>
+                        <InfoTooltip content="DAG (Directed Acyclic Graph) allows multiple blocks to be processed in parallel, achieving much faster confirmation times." label="Instant consensus info" />
+                      </div>
                       <p className="text-xs text-white/50">Advanced DAG protocols for sub-second finality</p>
                     </div>
                   </div>
@@ -237,8 +247,11 @@ export default function Home() {
                     <div className="p-2 rounded-lg bg-cyan-500/20 text-cyan-400 shrink-0">
                       <Shield className="w-4 h-4" />
                     </div>
-                    <div>
-                      <h3 className="text-sm font-bold text-white mb-1">Chain Abstraction</h3>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-sm font-bold text-white">Chain Abstraction</h3>
+                        <InfoTooltip content="Manage assets across Ethereum, Solana, Bitcoin, and more from a single DarkWave account. No need to juggle multiple wallets!" label="Chain abstraction info" />
+                      </div>
                       <p className="text-xs text-white/50">Control assets on any chain from your DarkWave account</p>
                     </div>
                   </div>
@@ -248,8 +261,11 @@ export default function Home() {
                     <div className="p-2 rounded-lg bg-purple-500/20 text-purple-400 shrink-0">
                       <Layers className="w-4 h-4" />
                     </div>
-                    <div>
-                      <h3 className="text-sm font-bold text-white mb-1">Bridge-Free</h3>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-sm font-bold text-white">Bridge-Free</h3>
+                        <InfoTooltip content="Traditional bridges are security risks. DarkWave uses native messaging to move assets safely between chains without vulnerable middlemen." label="Bridge-free info" />
+                      </div>
                       <p className="text-xs text-white/50">Native messaging protocols replace vulnerable bridges</p>
                     </div>
                   </div>

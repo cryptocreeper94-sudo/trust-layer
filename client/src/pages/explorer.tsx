@@ -9,6 +9,7 @@ import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_lo
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
+import { InfoTooltip } from "@/components/info-tooltip";
 
 interface ChainInfo {
   chainId: number;
@@ -209,6 +210,7 @@ export default function Explorer() {
                 <div className="flex items-center gap-1 mb-1">
                   <Zap className="w-3 h-3 text-primary/60" />
                   <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                  <InfoTooltip content="Transactions Per Second - network processing capacity" label="TPS info" />
                 </div>
                 <div className="text-xl font-bold text-white">{chainStats?.tps || "200K+"}</div>
                 <div className="text-[10px] text-white/50 uppercase">TPS</div>
@@ -216,21 +218,30 @@ export default function Explorer() {
             </GlassCard>
             <GlassCard hover={false}>
               <div className="p-4 h-full flex flex-col justify-center">
-                <Activity className="w-3 h-3 text-cyan-400/60 mb-1" />
+                <div className="flex items-center gap-1 mb-1">
+                  <Activity className="w-3 h-3 text-cyan-400/60" />
+                  <InfoTooltip content="Time between each block being produced on the chain" label="Block time info" />
+                </div>
                 <div className="text-xl font-bold text-white">{chainStats?.finalityTime || "400ms"}</div>
                 <div className="text-[10px] text-white/50 uppercase">Block Time</div>
               </div>
             </GlassCard>
             <GlassCard hover={false}>
               <div className="p-4 h-full flex flex-col justify-center">
-                <Server className="w-3 h-3 text-purple-400/60 mb-1" />
+                <div className="flex items-center gap-1 mb-1">
+                  <Server className="w-3 h-3 text-purple-400/60" />
+                  <InfoTooltip content="Nodes that validate and confirm transactions on the network" label="Validators info" />
+                </div>
                 <div className="text-xl font-bold text-white">{chainStats?.activeNodes || "128"}</div>
                 <div className="text-[10px] text-white/50 uppercase">Validators</div>
               </div>
             </GlassCard>
             <GlassCard hover={false}>
               <div className="p-4 h-full flex flex-col justify-center">
-                <Box className="w-3 h-3 text-green-400/60 mb-1" />
+                <div className="flex items-center gap-1 mb-1">
+                  <Box className="w-3 h-3 text-green-400/60" />
+                  <InfoTooltip content="Total number of blocks produced since the chain started" label="Block height info" />
+                </div>
                 <div className="text-xl font-bold text-white">{chainInfo?.blockHeight?.toLocaleString() || chainStats?.currentBlock || "8,921,042"}</div>
                 <div className="text-[10px] text-white/50 uppercase">Block Height</div>
               </div>
@@ -320,6 +331,7 @@ export default function Explorer() {
               <div className="flex items-center gap-2 mb-4">
                 <QrCode className="w-4 h-4 text-primary" />
                 <h3 className="text-sm font-bold text-white">Hallmark Verification</h3>
+                <InfoTooltip content="Hallmarks are unique product IDs stored on DarkWave Chain. Enter a hallmark ID to verify its authenticity and see its on-chain record." label="Hallmark verification info" />
               </div>
               
               <div className="flex flex-col sm:flex-row gap-2 mb-4">

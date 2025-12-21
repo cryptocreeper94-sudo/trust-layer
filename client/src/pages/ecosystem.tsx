@@ -11,6 +11,7 @@ import { GlassCard } from "@/components/glass-card";
 import { useQuery } from "@tanstack/react-query";
 import { fetchEcosystemApps } from "@/lib/api";
 import { useState } from "react";
+import { InfoTooltip } from "@/components/info-tooltip";
 
 const categories = ["All Apps", "DeFi", "Enterprise", "AI", "Social", "Gaming", "Automotive", "Services"];
 
@@ -107,6 +108,7 @@ export default function Ecosystem() {
                   <div className="flex items-center gap-2 mb-2">
                     <ShieldCheck className="w-4 h-4 text-primary" />
                     <span className="text-xs font-bold text-white">Verified Apps</span>
+                    <InfoTooltip content="Verified apps have passed DarkWave security audits and are safe to use with your wallet." label="Verified apps info" />
                   </div>
                   <p className="text-[10px] text-white/50 leading-relaxed">
                     Look for the <CheckCircle2 className="w-3 h-3 inline text-primary mx-0.5" /> badge. 
