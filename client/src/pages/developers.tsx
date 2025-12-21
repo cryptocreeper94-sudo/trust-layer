@@ -30,7 +30,13 @@ export default function Developers() {
                 <BookOpen className="w-3 h-3 mr-1.5" /> Doc Hub
               </Button>
             </Link>
-            <Badge variant="outline" className="border-primary/20 text-primary bg-primary/5 font-mono text-[10px]">v1.0.0-beta</Badge>
+            <Badge variant="outline" className="hidden sm:flex border-primary/20 text-primary bg-primary/5 font-mono text-[10px]">v1.0.0-beta</Badge>
+            <Link href="/">
+              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5">
+                <ArrowLeft className="w-3 h-3" />
+                Back
+              </Button>
+            </Link>
           </div>
         </div>
       </nav>
