@@ -1,254 +1,208 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Box, Check, ChevronRight, Code, Cpu, Database, FileCode, Layers, Terminal, Zap, BookOpen, Play } from "lucide-react";
+import { ArrowLeft, Box, Check, Code, Cpu, Database, FileCode, Layers, Terminal, BookOpen, Play } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import dagViz from "@assets/generated_images/abstract_visualization_of_directed_acyclic_graph_blockchain_consensus.png";
+import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
+import { GlassCard } from "@/components/glass-card";
 
 export default function Developers() {
   usePageAnalytics();
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md">
-        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/">
-            <div className="flex items-center gap-2 text-muted-foreground hover:text-white transition-colors cursor-pointer group">
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span className="font-display font-medium">Back to DarkWave</span>
-            </div>
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center">
+          <Link href="/" className="flex items-center gap-2 mr-auto">
+            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <Link href="/api-playground">
-              <Button variant="outline" className="border-green-500/30 hover:bg-green-500/10 hover:border-green-500/50 text-green-400 font-medium" data-testid="button-api-playground">
-                <Play className="w-4 h-4 mr-2" /> API Playground
+              <Button variant="outline" size="sm" className="h-8 text-xs border-green-500/30 hover:bg-green-500/10 text-green-400" data-testid="button-api-playground">
+                <Play className="w-3 h-3 mr-1.5" /> API Playground
               </Button>
             </Link>
             <Link href="/doc-hub">
-              <Button variant="outline" className="border-primary/30 hover:bg-primary/10 hover:border-primary/50 text-primary font-medium" data-testid="button-doc-hub">
-                <BookOpen className="w-4 h-4 mr-2" /> Doc Hub
+              <Button variant="outline" size="sm" className="h-8 text-xs border-primary/30 hover:bg-primary/10 text-primary" data-testid="button-doc-hub">
+                <BookOpen className="w-3 h-3 mr-1.5" /> Doc Hub
               </Button>
             </Link>
-            <Badge variant="outline" className="border-primary/20 text-primary bg-primary/5 font-mono">v1.0.0-beta</Badge>
+            <Badge variant="outline" className="border-primary/20 text-primary bg-primary/5 font-mono text-[10px]">v1.0.0-beta</Badge>
           </div>
         </div>
       </nav>
 
-      {/* Hero */}
-      <section className="pt-32 pb-20 relative overflow-hidden">
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-6xl font-display font-bold mb-6">
+      <section className="pt-20 pb-10 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="max-w-2xl">
+            <h1 className="text-3xl md:text-4xl font-display font-bold mb-4">
               Build the Future <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary text-glow">On DarkWave Chain</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary">On DarkWave Chain</span>
             </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed mb-8">
+            <p className="text-sm text-muted-foreground leading-relaxed mb-6">
               DarkWave combines the speed of a DAG with the security of Proof-of-History. 
               Write in Rust, deploy with one click, and scale to millions of users.
             </p>
-            <div className="flex gap-4">
-              <Button size="lg" className="bg-primary text-background hover:bg-primary/90 font-bold">
-                <Terminal className="w-5 h-5 mr-2" /> Get Started
+            <div className="flex gap-3">
+              <Button size="sm" className="h-10 bg-primary text-background hover:bg-primary/90 font-bold">
+                <Terminal className="w-4 h-4 mr-2" /> Get Started
               </Button>
-              <Button size="lg" variant="outline" className="border-white/20 hover:bg-white/5">
-                <FileCode className="w-5 h-5 mr-2" /> Read Docs
+              <Button size="sm" variant="outline" className="h-10 border-white/20 hover:bg-white/5">
+                <FileCode className="w-4 h-4 mr-2" /> Read Docs
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Main Content Grid */}
-      <section className="py-20 bg-secondary/5 border-t border-white/5">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            
-            {/* Left Column: Explanation */}
-            <div className="space-y-16">
-              
-              {/* Architecture Section */}
-              <div className="space-y-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                    <Layers className="w-6 h-6" />
+      <section className="py-10 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <GlassCard>
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="p-1.5 rounded-lg bg-primary/20 text-primary">
+                      <Layers className="w-4 h-4" />
+                    </div>
+                    <h2 className="text-sm font-bold">Hybrid Consensus Architecture</h2>
                   </div>
-                  <h2 className="text-2xl font-bold font-display">Hybrid Consensus Architecture</h2>
-                </div>
-                <p className="text-muted-foreground leading-relaxed">
-                  You asked: <span className="text-white italic">"Is it just using nodes throughout the internet?"</span>
-                </p>
-                <p className="text-muted-foreground leading-relaxed">
-                  Yes, but with a twist. Unlike traditional blockchains that process blocks one by one (like a single-lane highway), 
-                  DarkWave uses a <strong className="text-primary">Directed Acyclic Graph (DAG)</strong> structure. 
-                  This means nodes can process multiple transactions simultaneously without waiting for the previous block to finish.
-                </p>
-                <div className="p-4 rounded-xl border border-white/10 bg-black/20 backdrop-blur-sm">
-                  <h4 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Comparison</h4>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Traditional Chain (Ethereum)</span>
-                      <span className="text-red-400">Sequential (Slower)</span>
-                    </div>
-                    <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                      <div className="w-1/3 h-full bg-red-500/50"></div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between text-sm mt-4">
-                      <span className="text-muted-foreground">DarkWave Chain (DAG)</span>
-                      <span className="text-primary">Parallel (Instant)</span>
-                    </div>
-                    <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                      <div className="w-full h-full bg-primary shadow-[0_0_10px_var(--color-primary)]"></div>
+                  <p className="text-[11px] text-white/50 leading-relaxed mb-3">
+                    Unlike traditional blockchains that process blocks sequentially, DarkWave uses a 
+                    <strong className="text-primary"> Directed Acyclic Graph (DAG)</strong> structure for parallel transaction processing.
+                  </p>
+                  <div className="p-3 rounded-lg bg-black/30 border border-white/5">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-[10px]">
+                        <span className="text-white/50">Traditional Chain</span>
+                        <span className="text-red-400">Sequential</span>
+                      </div>
+                      <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div className="w-1/3 h-full bg-red-500/50" />
+                      </div>
+                      <div className="flex items-center justify-between text-[10px] mt-3">
+                        <span className="text-white/50">DarkWave (DAG)</span>
+                        <span className="text-primary">Parallel</span>
+                      </div>
+                      <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div className="w-full h-full bg-primary" />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </GlassCard>
 
-              {/* Language Section */}
-              <div className="space-y-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 rounded-lg bg-secondary/10 text-secondary">
-                    <Code className="w-6 h-6" />
+              <GlassCard>
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="p-1.5 rounded-lg bg-secondary/20 text-secondary">
+                      <Code className="w-4 h-4" />
+                    </div>
+                    <h2 className="text-sm font-bold">Development Stack</h2>
                   </div>
-                  <h2 className="text-2xl font-bold font-display">Development Stack</h2>
-                </div>
-                <p className="text-muted-foreground leading-relaxed">
-                  <span className="text-white italic">"Do they use Rust?"</span> — <strong>Yes.</strong>
-                </p>
-                <p className="text-muted-foreground leading-relaxed">
-                  We chose <strong>Rust</strong> as the primary language for DarkWave smart contracts (called "Starships"). 
-                  It offers memory safety and incredible performance. However, because we use WebAssembly (WASM), 
-                  developers can also write in C++, Go, or even TypeScript soon.
-                </p>
-                <ul className="grid grid-cols-2 gap-4">
-                  <li className="flex items-center gap-2 text-sm text-white">
-                    <Check className="w-4 h-4 text-green-500" /> Rust (Native Speed)
-                  </li>
-                  <li className="flex items-center gap-2 text-sm text-white">
-                    <Check className="w-4 h-4 text-green-500" /> WebAssembly Support
-                  </li>
-                  <li className="flex items-center gap-2 text-sm text-white">
-                    <Check className="w-4 h-4 text-green-500" /> TypeScript SDK
-                  </li>
-                  <li className="flex items-center gap-2 text-sm text-white">
-                    <Check className="w-4 h-4 text-green-500" /> EVM Compatibility Layer
-                  </li>
-                </ul>
-              </div>
-
-              {/* Token Standard */}
-              <div className="space-y-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 rounded-lg bg-accent/10 text-accent">
-                    <Cpu className="w-6 h-6" />
-                  </div>
-                  <h2 className="text-2xl font-bold font-display">Dark Wave Studios Hub</h2>
-                </div>
-                <p className="text-muted-foreground leading-relaxed">
-                  <span className="text-white italic">"Like GitHub, but for the decentralized web."</span>
-                </p>
-                <p className="text-muted-foreground leading-relaxed">
-                  The <strong className="text-secondary">DarkWave Hub</strong> is your mission control. 
-                  Collaborate on smart contracts, fork existing dApps, and deploy instantly to the network.
-                  It connects directly to the Dark Wave Studios ecosystem, giving you access to shared identity, 
-                  storage, and compute resources.
-                </p>
-                <div className="mt-6 p-4 rounded-xl bg-white/5 border border-white/10">
-                  <div className="flex items-center justify-between mb-4">
-                     <span className="text-xs font-mono text-muted-foreground uppercase">Hub Status</span>
-                     <div className="flex items-center gap-2">
-                       <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                       <span className="text-xs font-bold text-green-500">Connected</span>
-                     </div>
-                  </div>
+                  <p className="text-[11px] text-white/50 leading-relaxed mb-3">
+                    <strong>Rust</strong> is the primary language for DarkWave smart contracts ("Starships"). 
+                    WebAssembly (WASM) support enables C++, Go, or TypeScript development.
+                  </p>
                   <div className="grid grid-cols-2 gap-2">
-                    <Button variant="outline" className="w-full justify-start border-white/10 hover:border-primary/50 hover:bg-primary/10 hover:text-primary transition-all group">
-                      <Box className="w-4 h-4 mr-2 group-hover:text-primary" /> My Projects
-                    </Button>
-                    <Button variant="outline" className="w-full justify-start border-white/10 hover:border-secondary/50 hover:bg-secondary/10 hover:text-secondary transition-all group">
-                       <Database className="w-4 h-4 mr-2 group-hover:text-secondary" /> Shared Data
-                    </Button>
+                    {["Rust (Native)", "WebAssembly", "TypeScript SDK", "EVM Compatibility"].map((item, i) => (
+                      <div key={i} className="flex items-center gap-2 text-[10px] text-white">
+                        <Check className="w-3 h-3 text-green-500" /> {item}
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
+              </GlassCard>
 
-            </div>
-
-            {/* Right Column: Visuals & Code */}
-            <div className="space-y-8">
-              
-              {/* Visual Representation of Consensus */}
-              <Card className="bg-black/40 border-white/10 overflow-hidden backdrop-blur-xl border-glow">
-                <div className="p-4 border-b border-white/10 flex items-center justify-between">
-                  <div className="text-xs font-mono text-muted-foreground uppercase tracking-wider">
-                    Live Consensus Visualization
+              <GlassCard>
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="p-1.5 rounded-lg bg-purple-500/20 text-purple-400">
+                      <Cpu className="w-4 h-4" />
+                    </div>
+                    <h2 className="text-sm font-bold">DarkWave Studios Hub</h2>
                   </div>
-                  <div className="flex gap-2">
-                    <div className="w-2 h-2 rounded-full bg-red-500" />
-                    <div className="w-2 h-2 rounded-full bg-yellow-500" />
-                    <div className="w-2 h-2 rounded-full bg-green-500" />
-                  </div>
-                </div>
-                <div className="relative aspect-video">
-                  <img src={dagViz} alt="DAG Visualization" className="w-full h-full object-cover opacity-80" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
-                    <div className="font-mono text-xs text-primary space-y-1">
-                      <div>{`> Block #89210 confirmed via PoH`}</div>
-                      <div>{`> 420 transactions finalized in 0.4s`}</div>
-                      <div>{`> Node propagation complete`}</div>
+                  <p className="text-[11px] text-white/50 leading-relaxed mb-3">
+                    Your mission control. Collaborate on smart contracts, fork dApps, and deploy instantly.
+                  </p>
+                  <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-[10px] font-mono text-white/40 uppercase">Hub Status</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                        <span className="text-[10px] font-bold text-green-500">Connected</span>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button variant="outline" size="sm" className="h-8 text-[10px] border-white/10 hover:border-primary/50 justify-start">
+                        <Box className="w-3 h-3 mr-1.5" /> My Projects
+                      </Button>
+                      <Button variant="outline" size="sm" className="h-8 text-[10px] border-white/10 hover:border-secondary/50 justify-start">
+                        <Database className="w-3 h-3 mr-1.5" /> Shared Data
+                      </Button>
                     </div>
                   </div>
                 </div>
-              </Card>
+              </GlassCard>
+            </div>
 
-              {/* Code Editor Mockup */}
-              <Card className="bg-[#1e1e1e] border-white/10 overflow-hidden shadow-2xl">
-                <div className="flex items-center justify-between px-4 py-3 bg-[#252526] border-b border-white/5">
-                  <span className="text-sm text-white/60 font-mono">starship.rs</span>
-                  <Badge variant="secondary" className="bg-primary/20 text-primary text-[10px] hover:bg-primary/20">Rust</Badge>
+            <div className="space-y-4">
+              <GlassCard glow>
+                <div className="overflow-hidden rounded-xl">
+                  <div className="p-3 border-b border-white/5 flex items-center justify-between">
+                    <span className="text-[10px] font-mono text-white/40 uppercase">Live Consensus</span>
+                    <div className="flex gap-1">
+                      <div className="w-2 h-2 rounded-full bg-red-500" />
+                      <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                      <div className="w-2 h-2 rounded-full bg-green-500" />
+                    </div>
+                  </div>
+                  <div className="relative aspect-video">
+                    <img src={dagViz} alt="DAG" className="w-full h-full object-cover opacity-80" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
+                      <div className="font-mono text-[10px] text-primary space-y-0.5">
+                        <div>{`> Block #89210 confirmed via PoH`}</div>
+                        <div>{`> 420 txs finalized in 0.4s`}</div>
+                        <div>{`> Node propagation complete`}</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="p-4 overflow-x-auto">
-                  <pre className="font-mono text-sm leading-relaxed">
-                    <code className="language-rust">
-                      <span className="text-purple-400">use</span> darkwave_sdk::prelude::*;<br/><br/>
-                      <span className="text-gray-500">/// Define a new Token on DarkWave</span><br/>
-                      <span className="text-blue-400">pub struct</span> <span className="text-yellow-300">DarkWaveToken</span> {'{'}<br/>
-                      {'    '}<span className="text-red-400">pub</span> supply: <span className="text-blue-400">u64</span>,<br/>
-                      {'    '}<span className="text-red-400">pub</span> owner: <span className="text-blue-400">Address</span>,<br/>
-                      {'}'}<br/><br/>
-                      <span className="text-purple-400">impl</span> <span className="text-yellow-300">Starship</span> <span className="text-purple-400">for</span> <span className="text-yellow-300">DarkWaveToken</span> {'{'}<br/>
-                      {'    '}<span className="text-gray-500">// Instant transfer function</span><br/>
-                      {'    '}<span className="text-blue-400">fn</span> <span className="text-yellow-300">transfer</span>(&self, to: <span className="text-blue-400">Address</span>) {'{'}<br/>
-                      {'        '}ctx.send(to, self.amount);<br/>
-                      {'    '}{'}'}<br/>
-                      {'}'}
-                    </code>
-                  </pre>
+              </GlassCard>
+
+              <GlassCard>
+                <div className="overflow-hidden rounded-xl">
+                  <div className="flex items-center justify-between px-3 py-2 bg-[#252526] border-b border-white/5">
+                    <span className="text-[10px] text-white/60 font-mono">starship.rs</span>
+                    <Badge className="bg-primary/20 text-primary text-[9px] hover:bg-primary/20">Rust</Badge>
+                  </div>
+                  <div className="p-4 bg-[#1e1e1e] overflow-x-auto">
+                    <pre className="font-mono text-[10px] leading-relaxed">
+                      <code>
+                        <span className="text-purple-400">use</span> darkwave_sdk::prelude::*;{"\n\n"}
+                        <span className="text-gray-500">/// Define a new Token</span>{"\n"}
+                        <span className="text-blue-400">pub struct</span> <span className="text-yellow-300">DarkWaveToken</span> {"{"}{"\n"}
+                        {"    "}<span className="text-red-400">pub</span> supply: <span className="text-blue-400">u64</span>,{"\n"}
+                        {"    "}<span className="text-red-400">pub</span> owner: <span className="text-blue-400">Address</span>,{"\n"}
+                        {"}"}{"\n\n"}
+                        <span className="text-purple-400">impl</span> <span className="text-yellow-300">Starship</span> <span className="text-purple-400">for</span> <span className="text-yellow-300">DarkWaveToken</span> {"{"}{"\n"}
+                        {"    "}<span className="text-blue-400">fn</span> <span className="text-yellow-300">transfer</span>(&self, to: Address) {"{"}{"\n"}
+                        {"        "}self.emit(TransferEvent {"{"} to {"}"});{"\n"}
+                        {"    }"}{"\n"}
+                        {"}"}
+                      </code>
+                    </pre>
+                  </div>
                 </div>
-              </Card>
-
-              <div className="p-6 rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 border border-white/10">
-                <h3 className="text-lg font-bold text-white mb-2">Why is it faster than Ethereum?</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Ethereum 1.0 processes about 15-30 transactions per second (TPS). 
-                  DarkWave uses a "Gossip Protocol" where nodes talk to each other constantly, 
-                  allowing us to reach <strong>50,000+ TPS</strong>. It's like upgrading from dial-up to Fiber Optic.
-                </p>
-                <Link href="/">
-                  <Button variant="link" className="text-primary p-0 h-auto font-bold">
-                    Learn about Consensus <ChevronRight className="w-4 h-4 ml-1" />
-                  </Button>
-                </Link>
-              </div>
-
+              </GlassCard>
             </div>
           </div>
         </div>
       </section>
+
       <Footer />
     </div>
   );

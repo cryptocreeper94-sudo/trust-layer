@@ -66,23 +66,22 @@ function BentoCard({
   
   return (
     <motion.div
-      whileHover={{ 
-        scale: 1.02, 
-        rotateX: 2,
-        rotateY: 2,
-        z: 50 
-      }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      style={{ transformStyle: "preserve-3d", perspective: 1000 }}
-      className={`
-        ${spanClass}
-        bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6
-        hover:border-primary/50 transition-all duration-300
-        ${glow ? "shadow-[0_0_30px_rgba(0,255,255,0.15)] hover:shadow-[0_0_50px_rgba(0,255,255,0.25)]" : ""}
-        ${className}
-      `}
+      whileHover={{ scale: 1.02, y: -2 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      className={`relative group ${spanClass} ${className}`}
     >
-      {children}
+      <div className={`
+        relative h-full overflow-hidden rounded-xl p-5
+        bg-[rgba(12,18,36,0.65)] backdrop-blur-2xl
+        border border-white/[0.08]
+        ${glow ? 'shadow-[0_0_40px_rgba(0,255,255,0.15)]' : 'shadow-lg shadow-black/20'}
+        transition-all duration-300
+      `}>
+        {children}
+      </div>
+      {glow && (
+        <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-r from-primary/30 via-cyan-400/20 to-secondary/30 -z-10 blur-sm opacity-50" />
+      )}
     </motion.div>
   );
 }
@@ -386,32 +385,34 @@ console.log({
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md">
-        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/">
-            <div className="flex items-center gap-2 text-muted-foreground hover:text-white transition-colors cursor-pointer group">
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span className="font-display font-medium">Back</span>
-            </div>
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center">
+          <Link href="/" className="flex items-center gap-2 mr-auto">
+            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
           <div className="flex items-center gap-3">
-            <img src={orbitLogo} alt="Logo" className="w-8 h-8" />
-            <span className="font-display font-bold text-xl">Developer Portal</span>
-            <Badge variant="outline" className="text-primary border-primary/30">v{APP_VERSION}</Badge>
+            <Badge variant="outline" className="text-primary border-primary/30 text-[10px]">v{APP_VERSION}</Badge>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => refetch()}
+              disabled={isLoading}
+              className="h-7 w-7 p-0"
+              data-testid="button-refresh"
+            >
+              <RefreshCw className={`w-3 h-3 ${isLoading ? 'animate-spin' : ''}`} />
+            </Button>
+            <Link href="/">
+              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5">
+                <ArrowLeft className="w-3 h-3" /> Back
+              </Button>
+            </Link>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => refetch()}
-            disabled={isLoading}
-            data-testid="button-refresh"
-          >
-            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-          </Button>
         </div>
       </nav>
 
-      <main className="flex-1 pt-32 pb-20 container mx-auto px-6">
+      <main className="flex-1 pt-20 pb-12 container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

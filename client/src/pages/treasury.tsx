@@ -1,15 +1,14 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { ArrowLeft, Wallet, Send, RefreshCw, Copy, Check, AlertCircle } from "lucide-react";
+import { ArrowLeft, Wallet, Send, RefreshCw, Copy, Check, AlertCircle, Coins } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
+import { GlassCard } from "@/components/glass-card";
 
 interface TreasuryInfo {
   address: string;
@@ -29,9 +28,7 @@ interface DistributeResponse {
 
 async function fetchTreasuryInfo(): Promise<TreasuryInfo> {
   const response = await fetch("/api/blockchain/treasury");
-  if (!response.ok) {
-    throw new Error("Failed to fetch treasury info");
-  }
+  if (!response.ok) throw new Error("Failed to fetch treasury info");
   return response.json();
 }
 
@@ -84,200 +81,190 @@ export default function Treasury() {
   const handleDistribute = (e: React.FormEvent) => {
     e.preventDefault();
     if (!toAddress || !amount) return;
-    
     const amountInWei = BigInt(parseFloat(amount) * 1e18).toString();
     distributeMutation.mutate({ to: toAddress, amount: amountInWei });
   };
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md">
-        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/">
-            <div className="flex items-center gap-2 text-muted-foreground hover:text-white transition-colors cursor-pointer group">
-              <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span className="font-display font-medium">Back to DarkWave</span>
-            </div>
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center">
+          <Link href="/" className="flex items-center gap-2 mr-auto">
+            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
           <div className="flex items-center gap-3">
-            <img src={orbitLogo} alt="Logo" className="w-8 h-8" />
-            <span className="font-display font-bold text-xl">Treasury</span>
+            <Coins className="w-4 h-4 text-primary" />
+            <span className="text-sm font-display font-bold">Treasury</span>
+            <Link href="/">
+              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5 ml-2">
+                <ArrowLeft className="w-3 h-3" />
+                Back
+              </Button>
+            </Link>
           </div>
         </div>
       </nav>
 
-      <div className="pt-32 pb-20 container mx-auto px-6">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center space-y-4"
-          >
-            <h1 className="text-4xl md:text-5xl font-display font-bold">
-              DWT Treasury
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Manage the DarkWave Token distribution. The treasury holds 100 million DWT tokens
-              that can be distributed to team members, partners, and community members.
+      <div className="pt-20 pb-12 px-4">
+        <div className="container mx-auto max-w-4xl space-y-6">
+          <div className="text-center space-y-3">
+            <h1 className="text-3xl md:text-4xl font-display font-bold">DWT Treasury</h1>
+            <p className="text-sm text-muted-foreground max-w-lg mx-auto">
+              Manage DarkWave Token distribution. The treasury holds 100 million DWT tokens.
             </p>
-          </motion.div>
+          </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            <Card className="bg-black/40 border-white/10 p-6 backdrop-blur-xl">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold font-display flex items-center gap-2">
-                  <Wallet className="w-5 h-5 text-primary" />
-                  Treasury Wallet
-                </h2>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => refetch()}
-                  disabled={isLoading}
-                  data-testid="button-refresh-treasury"
-                >
-                  <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-                </Button>
+          <div className="grid gap-4 md:grid-cols-2">
+            <GlassCard glow>
+              <div className="p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-sm font-bold flex items-center gap-2">
+                    <Wallet className="w-4 h-4 text-primary" />
+                    Treasury Wallet
+                  </h2>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => refetch()}
+                    disabled={isLoading}
+                    className="h-7 w-7 p-0"
+                    data-testid="button-refresh-treasury"
+                  >
+                    <RefreshCw className={`w-3 h-3 ${isLoading ? 'animate-spin' : ''}`} />
+                  </Button>
+                </div>
+
+                {error ? (
+                  <div className="text-red-400 flex items-center gap-2 text-xs">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <span>Blockchain node offline</span>
+                  </div>
+                ) : isLoading ? (
+                  <div className="space-y-3 animate-pulse">
+                    <div className="h-5 bg-white/10 rounded w-3/4" />
+                    <div className="h-8 bg-white/10 rounded" />
+                  </div>
+                ) : treasury ? (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-white/40 text-[10px] uppercase tracking-wider">Address</Label>
+                      <div className="flex items-center gap-2 mt-1">
+                        <code className="flex-1 text-[11px] font-mono bg-black/30 px-3 py-2 rounded border border-white/10 truncate" data-testid="text-treasury-address">
+                          {treasury.address}
+                        </code>
+                        <Button variant="ghost" size="sm" onClick={copyAddress} className="h-8 w-8 p-0" data-testid="button-copy-address">
+                          {copied ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <Label className="text-white/40 text-[10px] uppercase tracking-wider">Balance</Label>
+                      <div className="text-2xl font-bold font-mono text-primary mt-1" data-testid="text-treasury-balance">
+                        {treasury.balance}
+                      </div>
+                    </div>
+
+                    <div className="pt-2 text-[11px] text-white/40">
+                      Total Supply: {treasury.total_supply}
+                    </div>
+                  </div>
+                ) : null}
               </div>
+            </GlassCard>
 
-              {error ? (
-                <div className="text-red-400 flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4" />
-                  <span>Blockchain node offline. Start the blockchain to view treasury.</span>
-                </div>
-              ) : isLoading ? (
-                <div className="space-y-4 animate-pulse">
-                  <div className="h-6 bg-white/10 rounded w-3/4"></div>
-                  <div className="h-10 bg-white/10 rounded"></div>
-                </div>
-              ) : treasury ? (
-                <div className="space-y-4">
+            <GlassCard>
+              <div className="p-5">
+                <h2 className="text-sm font-bold flex items-center gap-2 mb-4">
+                  <Send className="w-4 h-4 text-secondary" />
+                  Distribute Tokens
+                </h2>
+
+                <form onSubmit={handleDistribute} className="space-y-4">
                   <div>
-                    <Label className="text-muted-foreground text-xs uppercase tracking-wider">Address</Label>
-                    <div className="flex items-center gap-2 mt-1">
-                      <code className="flex-1 text-sm font-mono bg-white/5 px-3 py-2 rounded border border-white/10 truncate" data-testid="text-treasury-address">
-                        {treasury.address}
-                      </code>
-                      <Button variant="ghost" size="sm" onClick={copyAddress} data-testid="button-copy-address">
-                        {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
-                      </Button>
-                    </div>
+                    <Label htmlFor="toAddress" className="text-[11px] text-white/60">Recipient Address</Label>
+                    <Input
+                      id="toAddress"
+                      placeholder="0x..."
+                      value={toAddress}
+                      onChange={(e) => setToAddress(e.target.value)}
+                      className="mt-1 h-10 bg-black/30 border-white/10 text-xs font-mono"
+                      data-testid="input-recipient-address"
+                    />
                   </div>
-                  
+
                   <div>
-                    <Label className="text-muted-foreground text-xs uppercase tracking-wider">Balance</Label>
-                    <div className="text-3xl font-bold font-mono text-primary mt-1" data-testid="text-treasury-balance">
-                      {treasury.balance}
+                    <Label htmlFor="amount" className="text-[11px] text-white/60">Amount (DWT)</Label>
+                    <Input
+                      id="amount"
+                      type="number"
+                      placeholder="1000"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      className="mt-1 h-10 bg-black/30 border-white/10 text-xs"
+                      data-testid="input-amount"
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="w-full h-10 bg-secondary text-black hover:bg-secondary/90 font-bold text-xs"
+                    disabled={distributeMutation.isPending || !toAddress || !amount}
+                    data-testid="button-distribute"
+                  >
+                    {distributeMutation.isPending ? (
+                      <>
+                        <RefreshCw className="w-3 h-3 mr-2 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-3 h-3 mr-2" />
+                        Distribute Tokens
+                      </>
+                    )}
+                  </Button>
+
+                  {distributeMutation.isError && (
+                    <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-xs text-red-400 flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 shrink-0" />
+                      {distributeMutation.error.message}
                     </div>
-                  </div>
-
-                  <div className="pt-2 text-sm text-muted-foreground">
-                    Total Supply: {treasury.total_supply}
-                  </div>
-                </div>
-              ) : null}
-            </Card>
-
-            <Card className="bg-black/40 border-white/10 p-6 backdrop-blur-xl">
-              <h2 className="text-xl font-bold font-display flex items-center gap-2 mb-4">
-                <Send className="w-5 h-5 text-secondary" />
-                Distribute Tokens
-              </h2>
-
-              <form onSubmit={handleDistribute} className="space-y-4">
-                <div>
-                  <Label htmlFor="toAddress">Recipient Address</Label>
-                  <Input
-                    id="toAddress"
-                    placeholder="0x..."
-                    value={toAddress}
-                    onChange={(e) => setToAddress(e.target.value)}
-                    className="mt-1 bg-white/5 border-white/10"
-                    data-testid="input-recipient-address"
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="amount">Amount (DWT)</Label>
-                  <Input
-                    id="amount"
-                    type="number"
-                    placeholder="1000"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    className="mt-1 bg-white/5 border-white/10"
-                    data-testid="input-amount"
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full bg-secondary text-black hover:bg-secondary/90 font-bold"
-                  disabled={distributeMutation.isPending || !toAddress || !amount}
-                  data-testid="button-distribute"
-                >
-                  {distributeMutation.isPending ? (
-                    <>
-                      <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <Send className="w-4 h-4 mr-2" />
-                      Distribute Tokens
-                    </>
                   )}
-                </Button>
-
-                {distributeMutation.isError && (
-                  <div className="text-red-400 text-sm flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4" />
-                    {distributeMutation.error.message}
-                  </div>
-                )}
-              </form>
-            </Card>
+                </form>
+              </div>
+            </GlassCard>
           </div>
 
           {lastTx && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <Card className="bg-green-500/10 border-green-500/30 p-6">
-                <h3 className="text-lg font-bold text-green-400 mb-3">Distribution Successful!</h3>
-                <div className="grid gap-2 text-sm font-mono">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">TX Hash:</span>
-                    <span className="text-white truncate max-w-[200px]" data-testid="text-tx-hash">{lastTx.tx_hash}</span>
+            <GlassCard>
+              <div className="p-5">
+                <h3 className="text-sm font-bold text-green-400 mb-3 flex items-center gap-2">
+                  <Check className="w-4 h-4" />
+                  Transaction Successful
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                  <div>
+                    <div className="text-white/40 mb-0.5">To</div>
+                    <div className="text-white font-mono truncate">{lastTx.to.slice(0, 10)}...</div>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">To:</span>
-                    <span className="text-white truncate max-w-[200px]">{lastTx.to}</span>
+                  <div>
+                    <div className="text-white/40 mb-0.5">Amount</div>
+                    <div className="text-white">{(BigInt(lastTx.amount) / BigInt(1e18)).toString()} DWT</div>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Amount:</span>
-                    <span className="text-primary font-bold">{lastTx.amount}</span>
+                  <div>
+                    <div className="text-white/40 mb-0.5">Tx Hash</div>
+                    <div className="text-primary font-mono truncate">{lastTx.tx_hash?.slice(0, 12)}...</div>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">New Treasury Balance:</span>
-                    <span className="text-white">{lastTx.new_treasury_balance}</span>
+                  <div>
+                    <div className="text-white/40 mb-0.5">New Balance</div>
+                    <div className="text-white">{lastTx.new_treasury_balance}</div>
                   </div>
                 </div>
-              </Card>
-            </motion.div>
+              </div>
+            </GlassCard>
           )}
-
-          <Card className="bg-white/5 border-white/10 p-6">
-            <h3 className="text-lg font-bold mb-4">Token Distribution Guide</h3>
-            <div className="space-y-3 text-sm text-muted-foreground">
-              <p><strong className="text-white">Ecosystem (40%):</strong> 40,000,000 DWT for grants, partnerships, and ecosystem growth</p>
-              <p><strong className="text-white">Community (25%):</strong> 25,000,000 DWT for rewards, airdrops, and community incentives</p>
-              <p><strong className="text-white">Team (15%):</strong> 15,000,000 DWT for the DarkWave Studios team (4-year vesting)</p>
-              <p><strong className="text-white">Treasury (10%):</strong> 10,000,000 DWT reserved for DAO governance</p>
-              <p><strong className="text-white">Liquidity (10%):</strong> 10,000,000 DWT for DEX liquidity and market making</p>
-            </div>
-          </Card>
         </div>
       </div>
 
