@@ -8,39 +8,48 @@ import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_lo
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
+import { useQuery } from "@tanstack/react-query";
+import { fetchEcosystemApps } from "@/lib/api";
+import { useState } from "react";
 
-const apps = [
-  { name: "DarkWave Pulse", category: "DeFi & AI", desc: "Predictive market intelligence powered by AI. Auto-trades and snipes opportunities.", gradient: "from-cyan-600 to-blue-700", tags: ["AI", "Trading"], verified: true, featured: true },
-  { name: "DarkWave Staffing", category: "Enterprise", desc: "Blockchain-based staffing and workforce management with immutable records.", gradient: "from-emerald-600 to-teal-800", tags: ["HR", "Payroll"], verified: true },
-  { name: "Paint Pros", category: "Enterprise", desc: "Complete management suite for painting franchisees.", gradient: "from-orange-500 to-amber-700", tags: ["Franchise", "Ops"], verified: true },
-  { name: "Orby", category: "AI Assistant", desc: "Your personal AI companion for the DarkWave ecosystem.", gradient: "from-cyan-400 to-blue-500", tags: ["AI", "Chatbot"], verified: true },
-  { name: "GarageBot", category: "Automation", desc: "Smart automation for vehicle maintenance.", gradient: "from-slate-600 to-zinc-800", tags: ["Auto", "IoT"], verified: true },
-  { name: "Brew & Board", category: "Social", desc: "Community for board game enthusiasts and craft brew lovers.", gradient: "from-amber-600 to-yellow-800", tags: ["Social", "Events"], verified: true },
-  { name: "LotOps Pro", category: "Enterprise", desc: "Lot operations management for automotive dealerships.", gradient: "from-indigo-600 to-violet-800", tags: ["Auto", "B2B"], verified: true },
-  { name: "Nova DEX", category: "DeFi", desc: "The fastest decentralized exchange. Zero slippage.", gradient: "from-blue-500 to-cyan-500", tags: ["AMM", "Swap"], verified: false },
-  { name: "DarkWave ID", category: "Identity", desc: "Your universal passport across all apps.", gradient: "from-purple-600 to-indigo-700", tags: ["Identity", "SSO"], verified: true },
-];
-
-const categories = ["All Apps", "DeFi", "Enterprise", "AI", "Social", "Gaming"];
+const categories = ["All Apps", "DeFi", "Enterprise", "AI", "Social", "Gaming", "Automotive", "Services"];
 
 export default function Ecosystem() {
   usePageAnalytics();
+  const [selectedCategory, setSelectedCategory] = useState("All Apps");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const { data: apps = [], isLoading } = useQuery({
+    queryKey: ["ecosystem-apps"],
+    queryFn: fetchEcosystemApps,
+    staleTime: 30000,
+  });
+
+  const filteredApps = apps.filter(app => {
+    const matchesSearch = app.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      app.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === "All Apps" || 
+      app.category.toLowerCase().includes(selectedCategory.toLowerCase()) ||
+      (app.tags && app.tags.some(tag => tag.toLowerCase().includes(selectedCategory.toLowerCase())));
+    return matchesSearch && matchesCategory;
+  });
+
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2 mr-auto">
             <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
-            <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
-          <div className="flex items-center gap-3">
-            <Button size="sm" className="h-8 text-xs bg-primary text-background hover:bg-primary/90 font-semibold">
-              <Rocket className="w-3 h-3 mr-1.5" /> Submit App
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Button size="sm" className="h-8 text-[10px] sm:text-xs bg-primary text-background hover:bg-primary/90 font-semibold px-2 sm:px-3">
+              <Rocket className="w-3 h-3 sm:mr-1.5" /> <span className="hidden sm:inline">Submit App</span>
             </Button>
             <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5">
+              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5 px-2 sm:px-3">
                 <ArrowLeft className="w-3 h-3" />
-                Back
+                <span className="hidden sm:inline">Back</span>
               </Button>
             </Link>
           </div>
@@ -49,10 +58,10 @@ export default function Ecosystem() {
 
       <section className="pt-20 pb-8 px-4">
         <div className="container mx-auto max-w-6xl text-center">
-          <h1 className="text-3xl md:text-4xl font-display font-bold mb-3">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold mb-3">
             The DarkWave <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">App Store</span>
           </h1>
-          <p className="text-sm text-muted-foreground max-w-lg mx-auto mb-6">
+          <p className="text-xs sm:text-sm text-muted-foreground max-w-lg mx-auto mb-6">
             One wallet, one login, infinite possibilities.
           </p>
           
@@ -63,6 +72,8 @@ export default function Ecosystem() {
                 <Input 
                   placeholder="Search apps, protocols, and services..." 
                   className="border-0 bg-transparent h-10 text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
             </GlassCard>
@@ -76,13 +87,14 @@ export default function Ecosystem() {
             <div className="w-full lg:w-56 space-y-4 lg:sticky lg:top-20 h-fit">
               <div>
                 <h3 className="text-[10px] font-bold text-white/40 uppercase tracking-wider mb-3">Categories</h3>
-                <div className="flex flex-wrap lg:flex-col gap-2">
-                  {categories.map((cat, i) => (
+                <div className="flex flex-wrap gap-2">
+                  {categories.map((cat) => (
                     <Button
                       key={cat}
-                      variant={i === 0 ? "secondary" : "ghost"}
+                      variant={selectedCategory === cat ? "secondary" : "ghost"}
                       size="sm"
-                      className={`h-8 text-xs justify-start ${i === 0 ? 'bg-primary/20 text-primary' : 'text-white/60 hover:text-white'}`}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`h-8 text-[10px] sm:text-xs ${selectedCategory === cat ? 'bg-primary/20 text-primary' : 'text-white/60 hover:text-white'}`}
                     >
                       {cat}
                     </Button>
@@ -90,7 +102,7 @@ export default function Ecosystem() {
                 </div>
               </div>
               
-              <GlassCard hover={false}>
+              <GlassCard hover={false} className="hidden lg:block">
                 <div className="p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <ShieldCheck className="w-4 h-4 text-primary" />
@@ -106,45 +118,81 @@ export default function Ecosystem() {
 
             <div className="flex-1">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-display font-bold">Featured Applications</h2>
+                <h2 className="text-base sm:text-lg font-display font-bold">
+                  {selectedCategory === "All Apps" ? "All Applications" : selectedCategory}
+                  <span className="text-white/40 text-sm ml-2">({filteredApps.length})</span>
+                </h2>
                 <div className="flex items-center gap-1.5 text-[10px] text-white/40">
                   <LayoutGrid className="w-3 h-3" /> Grid View
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
-                {apps.map((app, i) => (
-                  <GlassCard key={i} className={app.featured ? "md:col-span-2" : ""}>
-                    <div className="p-4 h-full flex flex-col">
-                      <div className="flex items-start gap-3 mb-3">
-                        <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${app.gradient} flex items-center justify-center text-white font-bold text-sm shrink-0`}>
-                          {app.name.charAt(0)}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <h3 className="text-sm font-bold text-white truncate">{app.name}</h3>
-                            {app.verified && <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />}
+              {isLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                  {[1,2,3,4,5,6].map(i => (
+                    <GlassCard key={i}>
+                      <div className="p-4 animate-pulse">
+                        <div className="flex items-start gap-3 mb-3">
+                          <div className="w-10 h-10 rounded-lg bg-white/10" />
+                          <div className="flex-1">
+                            <div className="h-4 bg-white/10 rounded w-24 mb-2" />
+                            <div className="h-3 bg-white/10 rounded w-16" />
                           </div>
-                          <p className="text-[10px] text-white/40">{app.category}</p>
                         </div>
+                        <div className="h-3 bg-white/10 rounded w-full mb-2" />
+                        <div className="h-3 bg-white/10 rounded w-3/4" />
                       </div>
-                      <p className="text-[11px] text-white/50 leading-relaxed mb-3 flex-grow">{app.desc}</p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex gap-1">
-                          {app.tags.slice(0, 2).map((tag, j) => (
-                            <Badge key={j} variant="outline" className="text-[8px] px-1.5 py-0 border-white/10 text-white/40">
-                              {tag}
-                            </Badge>
-                          ))}
+                    </GlassCard>
+                  ))}
+                </div>
+              ) : filteredApps.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-white/40 text-sm">No apps found matching your criteria.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+                  {filteredApps.map((app, i) => (
+                    <a 
+                      key={app.id || i} 
+                      href={app.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="block group"
+                      data-testid={`app-card-${app.id}`}
+                    >
+                      <GlassCard className={app.featured ? "md:col-span-2" : ""}>
+                        <div className="p-4 h-full flex flex-col min-h-[140px]">
+                          <div className="flex items-start gap-3 mb-3">
+                            <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${app.gradient || 'from-cyan-600 to-blue-700'} flex items-center justify-center text-white font-bold text-sm shrink-0`}>
+                              {app.name.charAt(0)}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <h3 className="text-sm font-bold text-white truncate">{app.name}</h3>
+                                {app.verified && <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />}
+                              </div>
+                              <p className="text-[10px] text-white/40">{app.category}</p>
+                            </div>
+                          </div>
+                          <p className="text-[11px] text-white/50 leading-relaxed mb-3 flex-grow line-clamp-2">{app.description}</p>
+                          <div className="flex items-center justify-between">
+                            <div className="flex flex-wrap gap-1">
+                              {(app.tags || []).slice(0, 2).map((tag, j) => (
+                                <Badge key={j} variant="outline" className="text-[8px] px-1.5 py-0 border-white/10 text-white/40">
+                                  {tag}
+                                </Badge>
+                              ))}
+                            </div>
+                            <Button variant="ghost" size="sm" className="h-6 px-2 text-[10px] text-primary group-hover:bg-primary/10 transition-colors">
+                              Launch <ExternalLink className="w-2.5 h-2.5 ml-1" />
+                            </Button>
+                          </div>
                         </div>
-                        <Button variant="ghost" size="sm" className="h-6 px-2 text-[10px] text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                          Launch <ExternalLink className="w-2.5 h-2.5 ml-1" />
-                        </Button>
-                      </div>
-                    </div>
-                  </GlassCard>
-                ))}
-              </div>
+                      </GlassCard>
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
