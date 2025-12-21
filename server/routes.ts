@@ -1599,6 +1599,196 @@ export async function registerRoutes(
     }
   });
 
+  // ===== DarkWave Studio API Routes =====
+
+  app.get("/api/studio/projects", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const projects = await storage.getStudioProjectsByUser(userId);
+      res.json(projects);
+    } catch (error) {
+      console.error("Get projects error:", error);
+      res.status(500).json({ error: "Failed to fetch projects" });
+    }
+  });
+
+  app.post("/api/studio/projects", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { name, description, language } = req.body;
+      const project = await storage.createStudioProject({
+        userId,
+        name: name || "Untitled Project",
+        description,
+        language: language || "javascript",
+        isPublic: false,
+      });
+      await storage.createStudioFile({
+        projectId: project.id,
+        path: "/index.js",
+        name: "index.js",
+        content: '// Welcome to DarkWave Studio\nconsole.log("Hello, DarkWave!");',
+        language: "javascript",
+        isFolder: false,
+      });
+      res.json(project);
+    } catch (error) {
+      console.error("Create project error:", error);
+      res.status(500).json({ error: "Failed to create project" });
+    }
+  });
+
+  app.get("/api/studio/projects/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const files = await storage.getStudioFiles(project.id);
+      const secrets = await storage.getStudioSecrets(project.id);
+      const configs = await storage.getStudioConfigs(project.id);
+      res.json({ project, files, secrets: secrets.map(s => ({ ...s, value: "••••••" })), configs });
+    } catch (error) {
+      console.error("Get project error:", error);
+      res.status(500).json({ error: "Failed to fetch project" });
+    }
+  });
+
+  app.patch("/api/studio/projects/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const updated = await storage.updateStudioProject(project.id, req.body);
+      res.json(updated);
+    } catch (error) {
+      console.error("Update project error:", error);
+      res.status(500).json({ error: "Failed to update project" });
+    }
+  });
+
+  app.delete("/api/studio/projects/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      await storage.deleteStudioProject(project.id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Delete project error:", error);
+      res.status(500).json({ error: "Failed to delete project" });
+    }
+  });
+
+  app.post("/api/studio/projects/:id/files", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const { path, name, content, language, isFolder } = req.body;
+      const file = await storage.createStudioFile({
+        projectId: project.id,
+        path,
+        name,
+        content: content || "",
+        language: language || "plaintext",
+        isFolder: isFolder || false,
+      });
+      res.json(file);
+    } catch (error) {
+      console.error("Create file error:", error);
+      res.status(500).json({ error: "Failed to create file" });
+    }
+  });
+
+  app.patch("/api/studio/files/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const file = await storage.updateStudioFile(req.params.id, req.body);
+      res.json(file);
+    } catch (error) {
+      console.error("Update file error:", error);
+      res.status(500).json({ error: "Failed to update file" });
+    }
+  });
+
+  app.delete("/api/studio/files/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      await storage.deleteStudioFile(req.params.id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Delete file error:", error);
+      res.status(500).json({ error: "Failed to delete file" });
+    }
+  });
+
+  app.post("/api/studio/projects/:id/secrets", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const { key, value } = req.body;
+      const secret = await storage.createStudioSecret({
+        projectId: project.id,
+        key,
+        value,
+      });
+      res.json({ ...secret, value: "••••••" });
+    } catch (error) {
+      console.error("Create secret error:", error);
+      res.status(500).json({ error: "Failed to create secret" });
+    }
+  });
+
+  app.delete("/api/studio/secrets/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      await storage.deleteStudioSecret(req.params.id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Delete secret error:", error);
+      res.status(500).json({ error: "Failed to delete secret" });
+    }
+  });
+
+  app.post("/api/studio/projects/:id/configs", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const { key, value, environment } = req.body;
+      const config = await storage.createStudioConfig({
+        projectId: project.id,
+        key,
+        value,
+        environment: environment || "shared",
+      });
+      res.json(config);
+    } catch (error) {
+      console.error("Create config error:", error);
+      res.status(500).json({ error: "Failed to create config" });
+    }
+  });
+
+  app.delete("/api/studio/configs/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      await storage.deleteStudioConfig(req.params.id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Delete config error:", error);
+      res.status(500).json({ error: "Failed to delete config" });
+    }
+  });
+
   return httpServer;
 }
 

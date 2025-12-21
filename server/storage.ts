@@ -1,12 +1,13 @@
-import { type User, type InsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
 import crypto from "crypto";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  getUserByEmail(email: string): Promise<User | undefined>;
+  createUser(user: UpsertUser): Promise<User>;
+  getApiKeyByKey(rawKey: string): Promise<ApiKey | undefined>;
   
   getDocuments(): Promise<Document[]>;
   getDocument(id: string): Promise<Document | undefined>;
@@ -55,14 +56,18 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.username, username));
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
     return user;
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
+  async createUser(insertUser: UpsertUser): Promise<User> {
     const [user] = await db.insert(users).values(insertUser).returning();
     return user;
+  }
+
+  async getApiKeyByKey(rawKey: string): Promise<ApiKey | undefined> {
+    return this.validateApiKey(rawKey);
   }
 
   async getDocuments(): Promise<Document[]> {
@@ -303,6 +308,80 @@ export class DatabaseStorage implements IStorage {
   async getWaitlistByEmail(email: string): Promise<Waitlist | undefined> {
     const [entry] = await db.select().from(waitlist).where(eq(waitlist.email, email));
     return entry;
+  }
+
+  async createStudioProject(data: InsertStudioProject): Promise<StudioProject> {
+    const [project] = await db.insert(studioProjects).values(data).returning();
+    return project;
+  }
+
+  async getStudioProject(id: string): Promise<StudioProject | undefined> {
+    const [project] = await db.select().from(studioProjects).where(eq(studioProjects.id, id));
+    return project;
+  }
+
+  async getStudioProjectsByUser(userId: string): Promise<StudioProject[]> {
+    return db.select().from(studioProjects).where(eq(studioProjects.userId, userId)).orderBy(desc(studioProjects.updatedAt));
+  }
+
+  async updateStudioProject(id: string, data: Partial<InsertStudioProject>): Promise<StudioProject | undefined> {
+    const [project] = await db.update(studioProjects).set({ ...data, updatedAt: new Date() }).where(eq(studioProjects.id, id)).returning();
+    return project;
+  }
+
+  async deleteStudioProject(id: string): Promise<boolean> {
+    await db.delete(studioFiles).where(eq(studioFiles.projectId, id));
+    await db.delete(studioSecrets).where(eq(studioSecrets.projectId, id));
+    await db.delete(studioConfigs).where(eq(studioConfigs.projectId, id));
+    await db.delete(studioProjects).where(eq(studioProjects.id, id));
+    return true;
+  }
+
+  async createStudioFile(data: InsertStudioFile): Promise<StudioFile> {
+    const [file] = await db.insert(studioFiles).values(data).returning();
+    return file;
+  }
+
+  async getStudioFiles(projectId: string): Promise<StudioFile[]> {
+    return db.select().from(studioFiles).where(eq(studioFiles.projectId, projectId)).orderBy(studioFiles.path);
+  }
+
+  async updateStudioFile(id: string, data: Partial<InsertStudioFile>): Promise<StudioFile | undefined> {
+    const [file] = await db.update(studioFiles).set({ ...data, updatedAt: new Date() }).where(eq(studioFiles.id, id)).returning();
+    return file;
+  }
+
+  async deleteStudioFile(id: string): Promise<boolean> {
+    await db.delete(studioFiles).where(eq(studioFiles.id, id));
+    return true;
+  }
+
+  async createStudioSecret(data: InsertStudioSecret): Promise<StudioSecret> {
+    const [secret] = await db.insert(studioSecrets).values(data).returning();
+    return secret;
+  }
+
+  async getStudioSecrets(projectId: string): Promise<StudioSecret[]> {
+    return db.select().from(studioSecrets).where(eq(studioSecrets.projectId, projectId));
+  }
+
+  async deleteStudioSecret(id: string): Promise<boolean> {
+    await db.delete(studioSecrets).where(eq(studioSecrets.id, id));
+    return true;
+  }
+
+  async createStudioConfig(data: InsertStudioConfig): Promise<StudioConfig> {
+    const [config] = await db.insert(studioConfigs).values(data).returning();
+    return config;
+  }
+
+  async getStudioConfigs(projectId: string): Promise<StudioConfig[]> {
+    return db.select().from(studioConfigs).where(eq(studioConfigs.projectId, projectId));
+  }
+
+  async deleteStudioConfig(id: string): Promise<boolean> {
+    await db.delete(studioConfigs).where(eq(studioConfigs.id, id));
+    return true;
   }
 }
 

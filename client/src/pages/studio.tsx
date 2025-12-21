@@ -59,14 +59,11 @@ export default function Studio() {
   const { user } = useAuth();
   const [projectId, setProjectId] = useState<string | null>(null);
   const [projectName, setProjectName] = useState("Untitled Project");
-  const [files, setFiles] = useState<FileNode[]>([
-    { id: "1", name: "index.js", path: "/index.js", isFolder: false, content: '// Welcome to DarkWave Studio\nconsole.log("Hello, DarkWave!");', language: "javascript" },
-    { id: "2", name: "package.json", path: "/package.json", isFolder: false, content: '{\n  "name": "my-project",\n  "version": "1.0.0"\n}', language: "json" },
-  ]);
+  const [files, setFiles] = useState<FileNode[]>([]);
   const [secrets, setSecrets] = useState<Secret[]>([]);
   const [configs, setConfigs] = useState<Config[]>([]);
-  const [activeFile, setActiveFile] = useState<FileNode | null>(files[0]);
-  const [editorContent, setEditorContent] = useState(files[0]?.content || "");
+  const [activeFile, setActiveFile] = useState<FileNode | null>(null);
+  const [editorContent, setEditorContent] = useState("");
   const [activeTab, setActiveTab] = useState("files");
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
   const [newFileName, setNewFileName] = useState("");
@@ -76,6 +73,71 @@ export default function Studio() {
   const [newConfigKey, setNewConfigKey] = useState("");
   const [newConfigValue, setNewConfigValue] = useState("");
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+    
+    const initProject = async () => {
+      try {
+        const projectsRes = await fetch("/api/studio/projects");
+        if (projectsRes.ok) {
+          const projects = await projectsRes.json();
+          if (projects.length > 0) {
+            const projectRes = await fetch(`/api/studio/projects/${projects[0].id}`);
+            if (projectRes.ok) {
+              const data = await projectRes.json();
+              setProjectId(data.project.id);
+              setProjectName(data.project.name);
+              setFiles(data.files.map((f: any) => ({
+                id: f.id,
+                name: f.name,
+                path: f.path,
+                isFolder: f.isFolder,
+                content: f.content,
+                language: f.language,
+              })));
+              setSecrets(data.secrets);
+              setConfigs(data.configs);
+              if (data.files.length > 0) {
+                setActiveFile(data.files[0]);
+                setEditorContent(data.files[0].content);
+              }
+            }
+          } else {
+            const createRes = await fetch("/api/studio/projects", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ name: "My First Project" }),
+            });
+            if (createRes.ok) {
+              const project = await createRes.json();
+              setProjectId(project.id);
+              setProjectName(project.name);
+              const filesRes = await fetch(`/api/studio/projects/${project.id}`);
+              if (filesRes.ok) {
+                const data = await filesRes.json();
+                setFiles(data.files);
+                if (data.files.length > 0) {
+                  setActiveFile(data.files[0]);
+                  setEditorContent(data.files[0].content);
+                }
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Failed to load project:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    initProject();
+  }, [user]);
 
   const handleFileSelect = (file: FileNode) => {
     if (file.isFolder) {
@@ -99,10 +161,20 @@ export default function Studio() {
   const handleSave = async () => {
     if (!activeFile) return;
     setSaving(true);
-    setFiles(prev => prev.map(f => 
-      f.id === activeFile.id ? { ...f, content: editorContent } : f
-    ));
-    await new Promise(r => setTimeout(r, 300));
+    try {
+      setFiles(prev => prev.map(f => 
+        f.id === activeFile.id ? { ...f, content: editorContent } : f
+      ));
+      if (projectId) {
+        await fetch(`/api/studio/files/${activeFile.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: editorContent }),
+        });
+      }
+    } catch (error) {
+      console.error("Save error:", error);
+    }
     setSaving(false);
   };
 
@@ -114,55 +186,91 @@ export default function Studio() {
     }
   }, [activeFile, editorContent]);
 
-  const handleCreateFile = () => {
-    if (!newFileName.trim()) return;
+  const handleCreateFile = async () => {
+    if (!newFileName.trim() || !projectId) return;
     saveCurrentFile();
-    const newFile: FileNode = {
-      id: Date.now().toString(),
-      name: newFileName,
-      path: `/${newFileName}`,
-      isFolder: false,
-      content: "",
-      language: getLanguage(newFileName),
-    };
-    setFiles(prev => [...prev, newFile]);
-    setNewFileName("");
-    setShowNewFile(false);
-    setActiveFile(newFile);
-    setEditorContent("");
-  };
-
-  const handleDeleteFile = (id: string) => {
-    setFiles(prev => prev.filter(f => f.id !== id));
-    if (activeFile?.id === id) {
-      setActiveFile(null);
-      setEditorContent("");
+    try {
+      const res = await fetch(`/api/studio/projects/${projectId}/files`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newFileName,
+          path: `/${newFileName}`,
+          content: "",
+          language: getLanguage(newFileName),
+          isFolder: false,
+        }),
+      });
+      if (res.ok) {
+        const file = await res.json();
+        const newFile: FileNode = {
+          id: file.id,
+          name: file.name,
+          path: file.path,
+          isFolder: false,
+          content: file.content,
+          language: file.language,
+        };
+        setFiles(prev => [...prev, newFile]);
+        setNewFileName("");
+        setShowNewFile(false);
+        setActiveFile(newFile);
+        setEditorContent("");
+      }
+    } catch (error) {
+      console.error("Create file error:", error);
     }
   };
 
-  const handleAddSecret = () => {
-    if (!newSecretKey.trim()) return;
-    const secret: Secret = {
-      id: Date.now().toString(),
-      key: newSecretKey,
-      value: newSecretValue,
-    };
-    setSecrets(prev => [...prev, secret]);
-    setNewSecretKey("");
-    setNewSecretValue("");
+  const handleDeleteFile = async (id: string) => {
+    try {
+      await fetch(`/api/studio/files/${id}`, { method: "DELETE" });
+      setFiles(prev => prev.filter(f => f.id !== id));
+      if (activeFile?.id === id) {
+        setActiveFile(null);
+        setEditorContent("");
+      }
+    } catch (error) {
+      console.error("Delete file error:", error);
+    }
   };
 
-  const handleAddConfig = () => {
-    if (!newConfigKey.trim()) return;
-    const config: Config = {
-      id: Date.now().toString(),
-      key: newConfigKey,
-      value: newConfigValue,
-      environment: "shared",
-    };
-    setConfigs(prev => [...prev, config]);
-    setNewConfigKey("");
-    setNewConfigValue("");
+  const handleAddSecret = async () => {
+    if (!newSecretKey.trim() || !projectId) return;
+    try {
+      const res = await fetch(`/api/studio/projects/${projectId}/secrets`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: newSecretKey, value: newSecretValue }),
+      });
+      if (res.ok) {
+        const secret = await res.json();
+        setSecrets(prev => [...prev, secret]);
+        setNewSecretKey("");
+        setNewSecretValue("");
+      }
+    } catch (error) {
+      console.error("Add secret error:", error);
+    }
+  };
+
+  const handleAddConfig = async () => {
+    if (!newConfigKey.trim() || !projectId) return;
+    try {
+      const res = await fetch(`/api/studio/projects/${projectId}/configs`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key: newConfigKey, value: newConfigValue, environment: "shared" }),
+      });
+      if (res.ok) {
+        const config = await res.json();
+        setConfigs(prev => [...prev, config]);
+        setNewConfigKey("");
+        setNewConfigValue("");
+      }
+    } catch (error) {
+      console.error("Add config error:", error);
+    }
   };
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -176,6 +284,36 @@ export default function Studio() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
+
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-[#0a0a0f]">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading DarkWave Studio...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-[#0a0a0f]">
+        <GlassCard className="p-8 max-w-md text-center">
+          <img src={orbitLogo} alt="DarkWave" className="w-16 h-16 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold mb-2">DarkWave Studio</h1>
+          <p className="text-muted-foreground mb-6">Sign in to create and manage your projects</p>
+          <Button
+            onClick={() => window.location.href = "/api/login"}
+            className="bg-primary text-background hover:bg-primary/90"
+            data-testid="button-login"
+          >
+            Sign In to Continue
+          </Button>
+        </GlassCard>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen flex flex-col bg-[#0a0a0f] text-foreground overflow-hidden">
