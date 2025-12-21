@@ -117,4 +117,70 @@ export const analyticsOverviewSchema = z.object({
 
 export type AnalyticsOverview = z.infer<typeof analyticsOverviewSchema>;
 
+export const apiKeys = pgTable("api_keys", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  keyHash: text("key_hash").notNull().unique(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  appName: text("app_name").notNull(),
+  permissions: text("permissions").notNull().default("read,write"),
+  rateLimit: text("rate_limit").notNull().default("1000"),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  lastUsedAt: timestamp("last_used_at"),
+});
+
+export const insertApiKeySchema = createInsertSchema(apiKeys).omit({
+  id: true,
+  createdAt: true,
+  lastUsedAt: true,
+});
+
+export type InsertApiKey = z.infer<typeof insertApiKeySchema>;
+export type ApiKey = typeof apiKeys.$inferSelect;
+
+export const transactionHashes = pgTable("transaction_hashes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  txHash: text("tx_hash").notNull().unique(),
+  dataHash: text("data_hash").notNull(),
+  category: text("category").notNull().default("general"),
+  appId: text("app_id"),
+  apiKeyId: text("api_key_id"),
+  status: text("status").notNull().default("pending"),
+  blockHeight: text("block_height"),
+  gasUsed: text("gas_used"),
+  fee: text("fee"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  confirmedAt: timestamp("confirmed_at"),
+});
+
+export const insertTransactionHashSchema = createInsertSchema(transactionHashes).omit({
+  id: true,
+  createdAt: true,
+  confirmedAt: true,
+});
+
+export type InsertTransactionHash = z.infer<typeof insertTransactionHashSchema>;
+export type TransactionHash = typeof transactionHashes.$inferSelect;
+
+export const feeScheduleSchema = z.object({
+  baseFee: z.number(),
+  priorityFee: z.number(),
+  maxFee: z.number(),
+  feePerByte: z.number(),
+  hashSubmissionFee: z.number(),
+});
+
+export type FeeSchedule = z.infer<typeof feeScheduleSchema>;
+
+export const gasEstimateSchema = z.object({
+  gasLimit: z.number(),
+  gasPrice: z.number(),
+  estimatedCost: z.string(),
+  estimatedCostDWT: z.string(),
+  estimatedCostUSD: z.string(),
+});
+
+export type GasEstimate = z.infer<typeof gasEstimateSchema>;
+
 export const APP_VERSION = "1.0.0-alpha";

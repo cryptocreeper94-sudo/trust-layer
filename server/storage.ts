@@ -1,6 +1,7 @@
-import { type User, type InsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, users, documents, pageViews } from "@shared/schema";
+import { type User, type InsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, users, documents, pageViews, apiKeys, transactionHashes } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
+import crypto from "crypto";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
@@ -17,6 +18,18 @@ export interface IStorage {
 
   recordPageView(view: InsertPageView): Promise<PageView>;
   getAnalyticsOverview(): Promise<AnalyticsOverview>;
+
+  createApiKey(data: Omit<InsertApiKey, "keyHash">, rawKey: string): Promise<{ apiKey: ApiKey; rawKey: string }>;
+  getApiKeyByHash(keyHash: string): Promise<ApiKey | undefined>;
+  validateApiKey(rawKey: string): Promise<ApiKey | undefined>;
+  updateApiKeyLastUsed(id: string): Promise<void>;
+  getApiKeysByEmail(email: string): Promise<ApiKey[]>;
+  revokeApiKey(id: string): Promise<boolean>;
+
+  recordTransactionHash(data: InsertTransactionHash): Promise<TransactionHash>;
+  getTransactionHashByTxHash(txHash: string): Promise<TransactionHash | undefined>;
+  getTransactionHashesByApiKey(apiKeyId: string): Promise<TransactionHash[]>;
+  updateTransactionStatus(txHash: string, status: string, blockHeight?: string): Promise<TransactionHash | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -132,6 +145,67 @@ export class DatabaseStorage implements IStorage {
       topReferrers,
       dailyTrend,
     };
+  }
+
+  private hashApiKey(rawKey: string): string {
+    return crypto.createHash("sha256").update(rawKey).digest("hex");
+  }
+
+  async createApiKey(data: Omit<InsertApiKey, "keyHash">, rawKey: string): Promise<{ apiKey: ApiKey; rawKey: string }> {
+    const keyHash = this.hashApiKey(rawKey);
+    const [apiKey] = await db.insert(apiKeys).values({ ...data, keyHash }).returning();
+    return { apiKey, rawKey };
+  }
+
+  async getApiKeyByHash(keyHash: string): Promise<ApiKey | undefined> {
+    const [key] = await db.select().from(apiKeys).where(eq(apiKeys.keyHash, keyHash));
+    return key;
+  }
+
+  async validateApiKey(rawKey: string): Promise<ApiKey | undefined> {
+    const keyHash = this.hashApiKey(rawKey);
+    const [key] = await db.select().from(apiKeys).where(eq(apiKeys.keyHash, keyHash));
+    if (key && key.isActive) {
+      await this.updateApiKeyLastUsed(key.id);
+      return key;
+    }
+    return undefined;
+  }
+
+  async updateApiKeyLastUsed(id: string): Promise<void> {
+    await db.update(apiKeys).set({ lastUsedAt: new Date() }).where(eq(apiKeys.id, id));
+  }
+
+  async getApiKeysByEmail(email: string): Promise<ApiKey[]> {
+    return db.select().from(apiKeys).where(eq(apiKeys.email, email));
+  }
+
+  async revokeApiKey(id: string): Promise<boolean> {
+    await db.update(apiKeys).set({ isActive: false }).where(eq(apiKeys.id, id));
+    return true;
+  }
+
+  async recordTransactionHash(data: InsertTransactionHash): Promise<TransactionHash> {
+    const [txHash] = await db.insert(transactionHashes).values(data).returning();
+    return txHash;
+  }
+
+  async getTransactionHashByTxHash(txHash: string): Promise<TransactionHash | undefined> {
+    const [tx] = await db.select().from(transactionHashes).where(eq(transactionHashes.txHash, txHash));
+    return tx;
+  }
+
+  async getTransactionHashesByApiKey(apiKeyId: string): Promise<TransactionHash[]> {
+    return db.select().from(transactionHashes).where(eq(transactionHashes.apiKeyId, apiKeyId)).orderBy(desc(transactionHashes.createdAt));
+  }
+
+  async updateTransactionStatus(txHash: string, status: string, blockHeight?: string): Promise<TransactionHash | undefined> {
+    const updates: Partial<TransactionHash> = { status };
+    if (blockHeight) updates.blockHeight = blockHeight;
+    if (status === "confirmed") updates.confirmedAt = new Date();
+    
+    const [tx] = await db.update(transactionHashes).set(updates).where(eq(transactionHashes.txHash, txHash)).returning();
+    return tx;
   }
 }
 

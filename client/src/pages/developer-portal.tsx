@@ -5,7 +5,7 @@ import {
   ArrowLeft, Lock, Eye, Users, TrendingUp, Globe, Code, 
   ChevronDown, ChevronRight, BarChart3, Activity, Layers, 
   Zap, Database, Shield, Terminal, FileCode, BookOpen,
-  ExternalLink, Copy, Check, RefreshCw
+  ExternalLink, Copy, Check, RefreshCw, Key, AlertTriangle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -31,13 +31,18 @@ interface AnalyticsOverview {
   dailyTrend: { date: string; views: number; unique: number }[];
 }
 
-async function verifyPin(pin: string): Promise<boolean> {
+async function verifyPin(pin: string): Promise<{ success: boolean; sessionToken?: string }> {
   const response = await fetch("/api/developer/auth", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ pin }),
   });
-  return response.ok;
+  if (!response.ok) return { success: false };
+  const data = await response.json();
+  if (data.sessionToken) {
+    sessionStorage.setItem("dev-session-token", data.sessionToken);
+  }
+  return { success: true, sessionToken: data.sessionToken };
 }
 
 async function fetchAnalytics(): Promise<AnalyticsOverview> {
@@ -176,8 +181,8 @@ function PinModal({ onSuccess }: { onSuccess: () => void }) {
     setLoading(true);
     setError("");
     
-    const valid = await verifyPin(pin);
-    if (valid) {
+    const result = await verifyPin(pin);
+    if (result.success) {
       localStorage.setItem("dev-portal-auth", "true");
       onSuccess();
     } else {
@@ -240,9 +245,35 @@ function PinModal({ onSuccess }: { onSuccess: () => void }) {
   );
 }
 
+async function registerApiKey(name: string, email: string, appName: string): Promise<{ success: boolean; apiKey?: string; error?: string }> {
+  const sessionToken = sessionStorage.getItem("dev-session-token");
+  if (!sessionToken) {
+    return { success: false, error: "Session expired. Please refresh and re-enter your PIN." };
+  }
+  
+  const response = await fetch("/api/developer/register", {
+    method: "POST",
+    headers: { 
+      "Content-Type": "application/json",
+      "X-Developer-Session": sessionToken,
+    },
+    body: JSON.stringify({ name, email, appName }),
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    return { success: false, error: data.error || "Registration failed" };
+  }
+  return { success: true, apiKey: data.apiKey };
+}
+
 export default function DeveloperPortal() {
   const [authenticated, setAuthenticated] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
+  const [regName, setRegName] = useState("");
+  const [regEmail, setRegEmail] = useState("");
+  const [regAppName, setRegAppName] = useState("");
+  const [regLoading, setRegLoading] = useState(false);
+  const [regResult, setRegResult] = useState<{ apiKey?: string; error?: string } | null>(null);
 
   useEffect(() => {
     const auth = localStorage.getItem("dev-portal-auth");
@@ -250,6 +281,20 @@ export default function DeveloperPortal() {
       setAuthenticated(true);
     }
   }, []);
+
+  const handleRegister = async () => {
+    if (!regName || !regEmail || !regAppName) return;
+    setRegLoading(true);
+    setRegResult(null);
+    const result = await registerApiKey(regName, regEmail, regAppName);
+    setRegResult(result.success ? { apiKey: result.apiKey } : { error: result.error });
+    setRegLoading(false);
+    if (result.success) {
+      setRegName("");
+      setRegEmail("");
+      setRegAppName("");
+    }
+  };
 
   const { data: analytics, isLoading, refetch } = useQuery({
     queryKey: ["developer-analytics"],
@@ -275,27 +320,63 @@ export default function DeveloperPortal() {
 
   const codeSnippets = [
     {
-      title: "Connect to DarkWave Chain",
-      language: "typescript",
-      code: `import { DarkWaveProvider } from '@darkwave/sdk';
+      title: "1. Install SDK",
+      language: "bash",
+      code: `# Install DarkWave SDK
+npm install @darkwave/sdk
 
-const provider = new DarkWaveProvider({
-  chainId: 8453,
-  rpcUrl: 'https://rpc.darkwavechain.io'
-});
-
-await provider.connect();`,
+# Or use the built-in SDK from your server
+import { DarkWaveClient } from '@shared/darkwave-sdk';`,
     },
     {
-      title: "Send Transaction",
+      title: "2. Initialize Client with API Key",
       language: "typescript",
-      code: `const tx = await provider.sendTransaction({
-  to: '0x...',
-  value: '1000000000000000000', // 1 DWT
-  data: '0x'
+      code: `import { DarkWaveClient } from '@shared/darkwave-sdk';
+
+const client = new DarkWaveClient({
+  rpcUrl: 'https://your-darkwave-api.replit.app',
+  apiKey: 'dwc_your_api_key_here',
+  chainId: 8453
 });
 
-console.log('TX Hash:', tx.hash);`,
+// Get chain info
+const info = await client.getChainInfo();
+console.log('Block height:', info.blockHeight);`,
+    },
+    {
+      title: "3. Submit Hash to DarkWave Chain",
+      language: "typescript",
+      code: `// Hash your application data to DarkWave Chain
+const result = await fetch('/api/hash/submit', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-API-Key': 'dwc_your_api_key'
+  },
+  body: JSON.stringify({
+    dataHash: '0x1234...', // Your data hash
+    category: 'application',
+    appId: 'my-app'
+  })
+});
+
+const { txHash, status, fee } = await result.json();
+console.log('Transaction:', txHash, status, fee);`,
+    },
+    {
+      title: "4. Check Transaction Status",
+      language: "typescript",
+      code: `// Look up a transaction by hash
+const tx = await fetch('/api/hash/0x1234...');
+const data = await tx.json();
+
+console.log({
+  txHash: data.txHash,
+  dataHash: data.dataHash,
+  status: data.status,      // 'pending' | 'confirmed'
+  blockHeight: data.blockHeight,
+  fee: data.fee
+});`,
     },
   ];
 
@@ -416,6 +497,97 @@ console.log('TX Hash:', tx.hash);`,
             <HorizontalCarousel items={quickLinks} />
           </BentoCard>
 
+          <BentoCard span={3} glow>
+            <h3 className="font-display font-bold text-lg mb-4 flex items-center gap-2">
+              <Key className="w-5 h-5 text-primary" />
+              Register API Key
+            </h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Get an API key to start hashing your app data to DarkWave Chain. Each submission costs a small fee in DWT.
+            </p>
+            
+            {regResult?.apiKey ? (
+              <div className="space-y-4">
+                <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/30">
+                  <p className="text-green-400 font-medium mb-2 flex items-center gap-2">
+                    <Check className="w-4 h-4" />
+                    API Key Generated Successfully!
+                  </p>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    Save this key securely - it won't be shown again!
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <code className="flex-1 bg-black/40 px-3 py-2 rounded text-sm font-mono text-primary break-all">
+                      {regResult.apiKey}
+                    </code>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => copyToClipboard(regResult.apiKey!, "api-key")}
+                      data-testid="button-copy-api-key"
+                    >
+                      {copied === "api-key" ? (
+                        <Check className="w-4 h-4 text-green-400" />
+                      ) : (
+                        <Copy className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+                <Button variant="outline" onClick={() => setRegResult(null)} data-testid="button-register-another">
+                  Register Another Key
+                </Button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Input
+                  placeholder="Your Name"
+                  value={regName}
+                  onChange={(e) => setRegName(e.target.value)}
+                  className="bg-black/40 border-white/10"
+                  data-testid="input-reg-name"
+                />
+                <Input
+                  placeholder="Email Address"
+                  type="email"
+                  value={regEmail}
+                  onChange={(e) => setRegEmail(e.target.value)}
+                  className="bg-black/40 border-white/10"
+                  data-testid="input-reg-email"
+                />
+                <Input
+                  placeholder="App Name"
+                  value={regAppName}
+                  onChange={(e) => setRegAppName(e.target.value)}
+                  className="bg-black/40 border-white/10"
+                  data-testid="input-reg-app-name"
+                />
+                <Button
+                  onClick={handleRegister}
+                  disabled={regLoading || !regName || !regEmail || !regAppName}
+                  className="bg-primary hover:bg-primary/90"
+                  data-testid="button-register-api-key"
+                >
+                  {regLoading ? (
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <>
+                      <Key className="w-4 h-4 mr-2" />
+                      Get API Key
+                    </>
+                  )}
+                </Button>
+              </div>
+            )}
+            
+            {regResult?.error && (
+              <div className="mt-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-red-400" />
+                <span className="text-red-400 text-sm">{regResult.error}</span>
+              </div>
+            )}
+          </BentoCard>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <BentoCard glow>
               <h3 className="font-display font-bold text-lg mb-4 flex items-center gap-2">
@@ -493,28 +665,72 @@ console.log('TX Hash:', tx.hash);`,
                   Getting Started
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
-                  Welcome to DarkWave Chain! To get started, install our SDK using npm or yarn, 
-                  configure your connection to the network, and start building decentralized applications.
-                  Our comprehensive guides will walk you through every step.
+                  <ol className="list-decimal list-inside space-y-2">
+                    <li><strong>Register for an API Key</strong> - Use the form above to get your unique API key</li>
+                    <li><strong>Install the SDK</strong> - Run <code className="bg-black/40 px-1 rounded">npm install @darkwave/sdk</code></li>
+                    <li><strong>Initialize the client</strong> - Create a DarkWaveClient with your RPC URL and API key</li>
+                    <li><strong>Start hashing</strong> - Submit your application data hashes to the chain</li>
+                  </ol>
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="api-reference" className="border-white/10">
+              <AccordionItem value="api-endpoints" className="border-white/10">
                 <AccordionTrigger className="text-sm font-medium hover:text-primary">
-                  API Reference
+                  API Endpoints
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
-                  Our JSON-RPC API provides endpoints for querying chain state, submitting transactions,
-                  and interacting with smart contracts. All endpoints are documented with examples 
-                  in TypeScript, Python, and Go.
+                  <div className="space-y-2 font-mono text-xs">
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="text-green-400 border-green-400/30">POST</Badge>
+                      <span>/api/hash/submit</span> - Submit a hash (requires X-API-Key header)
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="text-blue-400 border-blue-400/30">GET</Badge>
+                      <span>/api/hash/:txHash</span> - Get transaction details
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="text-blue-400 border-blue-400/30">GET</Badge>
+                      <span>/api/gas/estimate</span> - Estimate gas for a transaction
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="text-blue-400 border-blue-400/30">GET</Badge>
+                      <span>/api/fees/schedule</span> - Get current fee schedule
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="text-blue-400 border-blue-400/30">GET</Badge>
+                      <span>/api/developer/transactions</span> - List your transactions
+                    </div>
+                  </div>
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="smart-contracts" className="border-white/10">
+              <AccordionItem value="fees" className="border-white/10">
                 <AccordionTrigger className="text-sm font-medium hover:text-primary">
-                  Smart Contracts
+                  Fee Structure
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
-                  DarkWave Chain supports WebAssembly-based smart contracts for maximum performance 
-                  and security. Deploy contracts in Rust, AssemblyScript, or any WASM-compatible language.
+                  <div className="space-y-2">
+                    <p>All transactions on DarkWave Chain require a small fee paid in DWT:</p>
+                    <ul className="list-disc list-inside space-y-1">
+                      <li><strong>Base Fee:</strong> 21,000 gas units</li>
+                      <li><strong>Hash Submission:</strong> 25,000 gas units</li>
+                      <li><strong>Per Byte:</strong> 16 gas units for each byte of data</li>
+                      <li><strong>Estimated Cost:</strong> ~$0.0001 per transaction</li>
+                    </ul>
+                    <p className="text-xs mt-2">Fees are automatically deducted from your DWT balance.</p>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="dual-chain" className="border-white/10">
+                <AccordionTrigger className="text-sm font-medium hover:text-primary">
+                  Dual-Chain Hashing (Solana + DarkWave)
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  <p className="mb-2">Hash your data to both Solana and DarkWave Chain for maximum reliability:</p>
+                  <ol className="list-decimal list-inside space-y-1">
+                    <li>Submit your hash to DarkWave Chain using the API</li>
+                    <li>Continue using your existing Solana integration</li>
+                    <li>Both chains store your hash independently</li>
+                    <li>Verify on either chain's block explorer</li>
+                  </ol>
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="security" className="border-white/10">
@@ -522,8 +738,13 @@ console.log('TX Hash:', tx.hash);`,
                   Security Best Practices
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
-                  Learn how to secure your dApps and smart contracts. We cover key management, 
-                  input validation, gas optimization, and common vulnerability patterns to avoid.
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>Never expose your API key in client-side code</li>
+                    <li>Store API keys in environment variables</li>
+                    <li>Use HTTPS for all API requests</li>
+                    <li>Implement rate limiting on your server</li>
+                    <li>Monitor your transaction history for anomalies</li>
+                  </ul>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>

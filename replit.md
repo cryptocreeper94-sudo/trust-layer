@@ -78,8 +78,24 @@ User wants: Full blockchain implementation, not just a web portal. No piggybacki
 ### Data Storage
 - **Database**: PostgreSQL accessed via Drizzle ORM
 - **Schema Location**: `shared/schema.ts` contains all table definitions
-- **Tables**: `users` (authentication), `documents` (documentation hub content)
+- **Tables**: `users` (authentication), `documents` (documentation hub content), `api_keys` (developer API keys), `transaction_hashes` (hash submissions), `page_views` (analytics)
 - **Migrations**: Drizzle Kit for schema migrations (`drizzle-kit push`)
+
+### Developer Integration System (NEW)
+- **SDK**: `shared/darkwave-sdk.ts` - TypeScript SDK for DarkWave Chain
+- **API Key Registration**: PIN-authenticated registration at `/api/developer/register`
+- **Hash Submission**: `/api/hash/submit` with X-API-Key header
+- **Fee System**: Gas estimation at `/api/gas/estimate`, fee schedule at `/api/fees/schedule`
+- **Session Tokens**: 1-hour developer sessions issued via PIN auth
+
+### Developer API Endpoints
+- `POST /api/developer/auth` - PIN authentication (returns sessionToken)
+- `POST /api/developer/register` - Register API key (requires X-Developer-Session header)
+- `POST /api/hash/submit` - Submit hash (requires X-API-Key header)
+- `GET /api/hash/:txHash` - Get transaction by hash
+- `GET /api/developer/transactions` - List developer's transactions
+- `GET /api/gas/estimate?dataSize=N` - Estimate gas for data
+- `GET /api/fees/schedule` - Current fee schedule
 
 ### Build System
 - **Client Build**: Vite bundles React app to `dist/public`

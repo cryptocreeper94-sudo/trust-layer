@@ -1,5 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import crypto from "crypto";
 import { storage } from "./storage";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
 import { insertDocumentSchema, insertPageViewSchema, APP_VERSION } from "@shared/schema";
@@ -232,9 +233,25 @@ export async function registerRoutes(
   });
 
   const pinAttempts = new Map<string, { count: number; lastAttempt: number }>();
+  const developerSessions = new Map<string, { createdAt: number }>();
   const DEVELOPER_PIN = process.env.DEVELOPER_PIN;
   const MAX_ATTEMPTS = 5;
   const LOCKOUT_DURATION = 5 * 60 * 1000;
+  const SESSION_DURATION = 60 * 60 * 1000;
+
+  function generateSessionToken(): string {
+    return `dws_${crypto.randomBytes(32).toString("hex")}`;
+  }
+
+  function validateDeveloperSession(token: string): boolean {
+    const session = developerSessions.get(token);
+    if (!session) return false;
+    if (Date.now() - session.createdAt > SESSION_DURATION) {
+      developerSessions.delete(token);
+      return false;
+    }
+    return true;
+  }
 
   app.post("/api/developer/auth", async (req, res) => {
     try {
@@ -259,7 +276,9 @@ export async function registerRoutes(
       
       if (pin === DEVELOPER_PIN) {
         pinAttempts.delete(clientIp);
-        res.json({ success: true, version: APP_VERSION });
+        const sessionToken = generateSessionToken();
+        developerSessions.set(sessionToken, { createdAt: Date.now() });
+        res.json({ success: true, version: APP_VERSION, sessionToken });
       } else {
         const current = pinAttempts.get(clientIp) || { count: 0, lastAttempt: 0 };
         pinAttempts.set(clientIp, { 
@@ -291,6 +310,187 @@ export async function registerRoutes(
       nativeToken: "DWT",
       totalSupply: "100,000,000",
     });
+  });
+
+  app.get("/api/gas/estimate", async (req, res) => {
+    try {
+      const dataSize = parseInt(req.query.dataSize as string) || 0;
+      const baseGas = 21000;
+      const dataGas = dataSize * 16;
+      const gasLimit = baseGas + dataGas;
+      const gasPrice = 1000000;
+      
+      const ONE_DWT = BigInt("1000000000000000000");
+      const totalGas = BigInt(gasLimit) * BigInt(gasPrice);
+      const costInDWT = Number(totalGas) / Number(ONE_DWT);
+      const costInUSD = costInDWT * 0.01;
+
+      res.json({
+        gasLimit,
+        gasPrice,
+        estimatedCost: `${totalGas}`,
+        estimatedCostDWT: `${costInDWT.toFixed(8)} DWT`,
+        estimatedCostUSD: `$${costInUSD.toFixed(6)}`,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to estimate gas" });
+    }
+  });
+
+  app.get("/api/fees/schedule", async (req, res) => {
+    res.json({
+      baseFee: 21000,
+      priorityFee: 1000,
+      maxFee: 100000,
+      feePerByte: 16,
+      hashSubmissionFee: 25000,
+      currency: "DWT",
+      estimatedUSDPerDWT: 0.01,
+    });
+  });
+
+  function generateApiKey(): string {
+    const bytes = crypto.randomBytes(32);
+    return `dwc_${bytes.toString("hex")}`;
+  }
+
+  app.post("/api/developer/register", async (req, res) => {
+    try {
+      const sessionToken = req.headers["x-developer-session"] as string;
+      
+      if (!sessionToken || !validateDeveloperSession(sessionToken)) {
+        return res.status(401).json({ error: "Developer session required. Please authenticate first." });
+      }
+
+      const { name, email, appName } = req.body;
+      
+      if (!name || !email || !appName) {
+        return res.status(400).json({ error: "Name, email, and app name are required" });
+      }
+
+      const rawKey = generateApiKey();
+      const result = await storage.createApiKey({
+        name,
+        email,
+        appName,
+        permissions: "read,write",
+        rateLimit: "1000",
+        isActive: true,
+      }, rawKey);
+
+      res.json({
+        success: true,
+        apiKey: rawKey,
+        appName: result.apiKey.appName,
+        message: "Save this API key securely - it won't be shown again!",
+      });
+    } catch (error) {
+      console.error("Error registering API key:", error);
+      res.status(500).json({ error: "Failed to register API key" });
+    }
+  });
+
+  app.post("/api/hash/submit", async (req, res) => {
+    try {
+      const apiKey = req.headers["x-api-key"] as string;
+      
+      if (!apiKey) {
+        return res.status(401).json({ error: "API key required" });
+      }
+
+      const validKey = await storage.validateApiKey(apiKey);
+      if (!validKey) {
+        return res.status(401).json({ error: "Invalid or revoked API key" });
+      }
+
+      const { dataHash, category, appId, metadata } = req.body;
+      
+      if (!dataHash) {
+        return res.status(400).json({ error: "dataHash is required" });
+      }
+
+      const txHash = `0x${crypto.randomBytes(32).toString("hex")}`;
+      const gasUsed = "25000";
+      const fee = "25000000000";
+
+      const tx = await storage.recordTransactionHash({
+        txHash,
+        dataHash,
+        category: category || "general",
+        appId: appId || null,
+        apiKeyId: validKey.id,
+        status: "confirmed",
+        blockHeight: "1",
+        gasUsed,
+        fee,
+      });
+
+      res.json({
+        success: true,
+        txHash: tx.txHash,
+        status: tx.status,
+        fee: `${Number(fee) / 1e18} DWT`,
+        blockHeight: tx.blockHeight,
+        timestamp: tx.createdAt,
+      });
+    } catch (error) {
+      console.error("Error submitting hash:", error);
+      res.status(500).json({ error: "Failed to submit hash" });
+    }
+  });
+
+  app.get("/api/hash/:txHash", async (req, res) => {
+    try {
+      const tx = await storage.getTransactionHashByTxHash(req.params.txHash);
+      
+      if (!tx) {
+        return res.status(404).json({ error: "Transaction not found" });
+      }
+
+      res.json({
+        txHash: tx.txHash,
+        dataHash: tx.dataHash,
+        category: tx.category,
+        status: tx.status,
+        blockHeight: tx.blockHeight,
+        fee: tx.fee ? `${Number(tx.fee) / 1e18} DWT` : null,
+        createdAt: tx.createdAt,
+        confirmedAt: tx.confirmedAt,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch transaction" });
+    }
+  });
+
+  app.get("/api/developer/transactions", async (req, res) => {
+    try {
+      const apiKey = req.headers["x-api-key"] as string;
+      
+      if (!apiKey) {
+        return res.status(401).json({ error: "API key required" });
+      }
+
+      const validKey = await storage.validateApiKey(apiKey);
+      if (!validKey) {
+        return res.status(401).json({ error: "Invalid or revoked API key" });
+      }
+
+      const transactions = await storage.getTransactionHashesByApiKey(validKey.id);
+      
+      res.json({
+        transactions: transactions.map(tx => ({
+          txHash: tx.txHash,
+          dataHash: tx.dataHash,
+          category: tx.category,
+          status: tx.status,
+          blockHeight: tx.blockHeight,
+          createdAt: tx.createdAt,
+        })),
+        total: transactions.length,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch transactions" });
+    }
   });
 
   return httpServer;
