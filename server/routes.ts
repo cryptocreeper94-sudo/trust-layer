@@ -299,6 +299,33 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
 }
 
 async function fetchBlockchainStats(): Promise<BlockchainStats> {
+  const BLOCKCHAIN_RPC_URL = process.env.BLOCKCHAIN_RPC_URL || "http://localhost:3030";
+  
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 2000);
+    
+    const response = await fetch(`${BLOCKCHAIN_RPC_URL}/stats`, {
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    
+    if (response.ok) {
+      const data = await response.json();
+      return {
+        tps: data.tps || "200K+",
+        finalityTime: data.finality_time || "0.4s",
+        avgCost: data.avg_cost || "$0.0001",
+        activeNodes: data.active_nodes || "1",
+        currentBlock: data.current_block || "#0",
+        networkHash: `${data.total_transactions || 0} txs`,
+      };
+    }
+  } catch (error) {
+    // Blockchain node not available, use fallback data
+  }
+  
+  // Fallback to mock data when blockchain is not running
   return {
     tps: "200K+",
     finalityTime: "0.4s",

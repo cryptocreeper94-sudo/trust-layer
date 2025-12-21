@@ -3,7 +3,7 @@ use std::path::Path;
 use std::sync::Arc;
 use thiserror::Error;
 
-use crate::crypto::{hash_block_header, hash_to_hex};
+use crate::crypto::hash_to_hex;
 use crate::types::{Account, Address, Block, Hash, Transaction};
 
 #[derive(Error, Debug)]

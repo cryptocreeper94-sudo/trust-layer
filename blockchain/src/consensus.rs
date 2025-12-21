@@ -5,7 +5,7 @@ use tokio::sync::RwLock;
 use tracing::{info, warn};
 
 use crate::crypto::{
-    compute_merkle_root, hash_block_header, hash_bytes, hash_transaction, Keypair,
+    compute_merkle_root, hash_block_header, hash_bytes, Keypair,
 };
 use crate::ledger::{Ledger, LedgerError};
 use crate::types::{Address, Block, BlockHeader, ChainConfig, Hash, Signature, Transaction};
