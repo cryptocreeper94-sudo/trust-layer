@@ -1251,6 +1251,8 @@ const APP_URL_MAP: Record<string, string> = {
 };
 
 async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
+  const localApps = getLocalEcosystemApps();
+  
   try {
     const response = await ecosystemClient.getApps() as { success?: boolean; apps?: any[] } | any[];
     
@@ -1262,27 +1264,40 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
     }
     
     if (apps.length > 0) {
-      return apps.map((app: any) => {
+      const hubApps = apps.map((app: any) => {
         const id = app.slug || app.id;
+        const localMatch = localApps.find(la => la.id === id || la.name.toLowerCase() === app.name?.toLowerCase());
         return {
           id,
           name: app.name,
-          category: app.category || "General",
-          description: app.description || "",
-          hook: app.hook || "",
-          tags: app.tags || [],
-          gradient: app.gradient || "from-gray-500 to-gray-700",
+          category: localMatch?.category || app.category || "General",
+          description: localMatch?.description || app.description || "",
+          hook: localMatch?.hook || app.hook || "",
+          tags: localMatch?.tags || app.tags || [],
+          gradient: localMatch?.gradient || app.gradient || "from-gray-500 to-gray-700",
           verified: true,
-          featured: app.featured || false,
+          featured: localMatch?.featured || app.featured || false,
           users: "DarkWave Verified",
-          url: APP_URL_MAP[id] || app.appUrl || undefined,
+          url: APP_URL_MAP[id] || app.appUrl || localMatch?.url || undefined,
         };
       });
+      
+      const hubIds = new Set(hubApps.map(a => a.id));
+      const hubNames = new Set(hubApps.map(a => a.name.toLowerCase()));
+      const additionalLocalApps = localApps.filter(la => 
+        !hubIds.has(la.id) && !hubNames.has(la.name.toLowerCase())
+      );
+      
+      return [...hubApps, ...additionalLocalApps];
     }
   } catch (error) {
     console.warn("DarkWave Hub API not available, using local data:", error);
   }
   
+  return localApps;
+}
+
+function getLocalEcosystemApps(): EcosystemApp[] {
   return [
     {
       id: "orbit-staffing",
@@ -1300,7 +1315,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       id: "garagebot",
       name: "GarageBot",
       category: "Automotive",
-      description: "Smart automation for vehicle maintenance and garage management with IoT integration.",
+      description: "Smart automation for vehicle maintenance and garage management.",
       hook: "IoT-powered garage automation",
       tags: ["Auto", "IoT", "Maintenance"],
       gradient: "from-slate-600 to-zinc-800",
@@ -1310,9 +1325,9 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
     },
     {
       id: "brew-board",
-      name: "Brew & Board Coffee",
+      name: "Brew & Board",
       category: "Hospitality",
-      description: "Decentralized community platform for coffee shops with loyalty rewards and event management.",
+      description: "Community platform for coffee shops with loyalty rewards.",
       hook: "Social gaming meets craft coffee",
       tags: ["Social", "Events", "Rewards", "Hospitality"],
       gradient: "from-amber-600 to-yellow-800",
@@ -1324,7 +1339,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       id: "lotops-pro",
       name: "Lot Ops Pro",
       category: "Real Estate",
-      description: "Professional lot operations management for automotive dealerships and real estate.",
+      description: "Professional lot operations for automotive dealerships.",
       hook: "Dealership operations streamlined",
       tags: ["Auto", "B2B", "Inventory", "Real Estate"],
       gradient: "from-indigo-600 to-violet-800",
@@ -1336,7 +1351,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       id: "darkwave-pulse",
       name: "DarkWave Pulse",
       category: "Analytics",
-      description: "Predictive market intelligence powered by sentient AI learning systems.",
+      description: "Predictive market intelligence powered by AI systems.",
       hook: "Auto-trade with AI precision",
       tags: ["AI", "Auto-Trading", "Predictive", "Analytics"],
       gradient: "from-cyan-600 to-blue-700",
@@ -1349,7 +1364,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       id: "orby",
       name: "Orby",
       category: "AI",
-      description: "Your personal AI companion. Execute trades and manage your portfolio with natural language.",
+      description: "Your personal AI companion for portfolio management.",
       hook: "Your AI blockchain companion",
       tags: ["AI", "Chatbot", "Assistant"],
       gradient: "from-cyan-400 to-blue-500",
@@ -1361,7 +1376,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       id: "paintpros",
       name: "PaintPros",
       category: "Services",
-      description: "Professional painting service management with scheduling, estimates, and customer tracking.",
+      description: "Professional painting service management platform.",
       hook: "Streamlined painting business",
       tags: ["Services", "Scheduling", "CRM"],
       gradient: "from-orange-500 to-red-600",
@@ -1373,7 +1388,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       id: "strike-agent",
       name: "Strike Agent",
       category: "Security",
-      description: "Automated security monitoring and threat detection for blockchain applications.",
+      description: "Automated security monitoring for blockchain apps.",
       hook: "AI-powered security agent",
       tags: ["Security", "AI", "Monitoring"],
       gradient: "from-red-600 to-rose-700",

@@ -357,11 +357,13 @@ function FeatureItem({ icon: Icon, title, desc }: { icon: any, title: string, de
 }
 
 function AppCard({ id, name, category, desc, gradient, showFavorite, url }: { id?: string, name: string, category: string, desc: string, gradient: string, showFavorite?: boolean, url?: string }) {
+  const truncatedDesc = desc.length > 80 ? desc.slice(0, 80) + "..." : desc;
+  
   const cardContent = (
-    <div className="group relative p-[1px] rounded-xl bg-gradient-to-b from-white/10 to-transparent hover:from-primary/50 hover:to-secondary/50 transition-all duration-300 cursor-pointer">
-      <div className="relative h-full bg-black/40 backdrop-blur-xl rounded-xl p-6 hover:bg-black/60 transition-all">
+    <div className="group relative p-[1px] rounded-xl bg-gradient-to-b from-white/10 to-transparent hover:from-primary/50 hover:to-secondary/50 transition-all duration-300 cursor-pointer h-full">
+      <div className="relative h-full bg-black/40 backdrop-blur-xl rounded-xl p-6 hover:bg-black/60 transition-all flex flex-col">
         <div className="flex justify-between items-start mb-4">
-          <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-xl shadow-lg`}>
+          <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-xl shadow-lg flex-shrink-0`}>
             {name.charAt(0)}
           </div>
           {showFavorite && id && (
@@ -370,16 +372,16 @@ function AppCard({ id, name, category, desc, gradient, showFavorite, url }: { id
             </div>
           )}
         </div>
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="font-bold text-xl text-white group-hover:text-primary transition-colors">{name}</h3>
-          <Badge variant="secondary" className="text-[10px] uppercase tracking-wider bg-white/10 text-white/70 hover:bg-white/20">
+        <div className="flex justify-between items-start mb-2 gap-2">
+          <h3 className="font-bold text-xl text-white group-hover:text-primary transition-colors line-clamp-1">{name}</h3>
+          <Badge variant="secondary" className="text-[10px] uppercase tracking-wider bg-white/10 text-white/70 hover:bg-white/20 flex-shrink-0">
             {category}
           </Badge>
         </div>
-        <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-          {desc}
+        <p className="text-sm text-muted-foreground leading-relaxed mb-4 flex-grow line-clamp-2">
+          {truncatedDesc}
         </p>
-        <div className="flex items-center text-primary text-xs font-bold uppercase tracking-wider md:opacity-0 md:group-hover:opacity-100 transition-opacity md:transform md:translate-y-2 md:group-hover:translate-y-0">
+        <div className="flex items-center text-primary text-xs font-bold uppercase tracking-wider md:opacity-0 md:group-hover:opacity-100 transition-opacity md:transform md:translate-y-2 md:group-hover:translate-y-0 mt-auto">
           LAUNCH APP <ArrowRight className="w-3 h-3 ml-1" />
         </div>
       </div>
