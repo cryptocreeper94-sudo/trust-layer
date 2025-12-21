@@ -3,10 +3,10 @@ use orbit_chain::node::{init_logging, Node};
 use orbit_chain::types::ChainConfig;
 
 #[derive(Parser, Debug)]
-#[command(name = "orbit-chain")]
-#[command(author = "Orbit Team")]
+#[command(name = "darkwave-chain")]
+#[command(author = "DarkWave Studios")]
 #[command(version = "0.1.0")]
-#[command(about = "Orbit Chain - Fast, secure blockchain with chain abstraction")]
+#[command(about = "DarkWave Chain - Fast, secure Layer 1 blockchain")]
 struct Args {
     #[arg(long, default_value = "3030")]
     rpc_port: u16,
@@ -29,9 +29,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let config = ChainConfig {
         chain_id: args.chain_id,
-        chain_name: "Orbit Chain".to_string(),
-        symbol: "ORB".to_string(),
-        decimals: 18,
+        chain_name: "DarkWave Chain".to_string(),
+        symbol: "DARK".to_string(),
+        decimals: 8,
         block_time_ms: args.block_time,
         max_block_size: 1_000_000,
         max_tx_per_block: 10_000,

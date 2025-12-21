@@ -193,9 +193,9 @@ impl Default for ChainConfig {
     fn default() -> Self {
         Self {
             chain_id: 1337,
-            chain_name: "Orbit Chain".to_string(),
-            symbol: "ORB".to_string(),
-            decimals: 18,
+            chain_name: "DarkWave Chain".to_string(),
+            symbol: "DARK".to_string(),
+            decimals: 8,
             block_time_ms: 400,
             max_block_size: 1_000_000,
             max_tx_per_block: 10_000,

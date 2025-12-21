@@ -1,11 +1,11 @@
-# Orbit Chain - Replit Agent Guide
+# DarkWave Chain - Replit Agent Guide
 
 ## Overview
 
-Orbit Chain is a complete blockchain ecosystem consisting of two main components:
+DarkWave Chain is a complete blockchain ecosystem by DarkWave Studios, consisting of two main components:
 
-1. **Orbit Chain Blockchain** (`blockchain/`) - A real blockchain implementation in Rust with Proof-of-Authority consensus
-2. **Orbit Chain Portal** (`client/`, `server/`) - A React web application serving as the ecosystem interface, block explorer, and developer hub
+1. **DarkWave Chain Blockchain** (`blockchain/`) - A real Layer 1 blockchain implementation in Rust with Proof-of-Authority consensus
+2. **DarkWave Portal** (`client/`, `server/`) - A React web application serving as the ecosystem interface, block explorer, and developer hub
 
 The project goal is to build a blockchain that is faster, more stable, and feature-rich than Solana and Ethereum.
 
@@ -34,8 +34,10 @@ User wants: Full blockchain implementation, not just a web portal. No piggybacki
 
 ### Chain Configuration
 - Chain ID: 1337
-- Symbol: ORB
-- Decimals: 18
+- Chain Name: DarkWave Chain
+- Native Token: DARK (DarkWave)
+- Initial Supply: 100,000,000 DARK
+- Decimals: 8
 - Block Time: 400ms
 - Max TX per block: 10,000
 

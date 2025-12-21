@@ -41,9 +41,10 @@ impl Node {
             info!("Genesis block initialized");
         }
 
-        ledger.mint(&validator_address, 1_000_000_000_000)?;
+        // 100 million DARK with 8 decimals = 100_000_000 * 10^8
+        ledger.mint(&validator_address, 10_000_000_000_000_000)?;
         info!(
-            "Minted 1,000,000 ORB to validator: 0x{}",
+            "Minted 100,000,000 DARK to validator: 0x{}",
             hex::encode(validator_address)
         );
 
@@ -57,7 +58,7 @@ impl Node {
 
     pub async fn start(&self, rpc_port: u16) -> Result<(), Box<dyn std::error::Error>> {
         info!("===========================================");
-        info!("       ORBIT CHAIN NODE STARTING");
+        info!("      DARKWAVE CHAIN NODE STARTING");
         info!("===========================================");
         info!("Chain ID: {}", self.config.chain_id);
         info!("Chain Name: {}", self.config.chain_name);
