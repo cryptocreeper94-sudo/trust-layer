@@ -36,10 +36,10 @@ The blockchain is built in Rust, utilizing a Proof-of-Authority (PoA) consensus 
 - **Project Templates** (COMPLETED): React, Node.js Express, and Python Flask starter templates that auto-generate complete project structures when project has no files
 - **Keyboard Shortcuts** (COMPLETED): Panel accessible via Ctrl+/ showing all shortcuts (Ctrl+S save, Ctrl+F search, Ctrl+B console, Esc close)
 - **File Rename** (COMPLETED): Inline file renaming with Edit2 button, Enter to confirm, Escape to cancel
-- File upload/download support (pending)
-- Environment variables UI with dev/prod toggle (pending)
-- Console log filtering and search (pending)
-- Project settings panel (pending)
+- **File Upload/Download** (COMPLETED): Upload button with multi-file support, download button on each file in file tree (guards against empty content and folders)
+- **Environment Variables UI** (COMPLETED): Dev/prod toggle buttons in Secrets tab, environment-scoped secrets/configs with environment field in database
+- **Console Log Filtering** (COMPLETED): Filter input with clear button in console tab, case-insensitive search across all log entries
+- **Project Settings Panel** (COMPLETED): Settings modal with project name editing, project ID display with copy button, and file/commit statistics
 
 #### Monaco Editor Technical Details
 - **CDN Loading**: Monaco v0.52.2 loaded from cdnjs.cloudflare.com

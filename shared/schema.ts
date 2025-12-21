@@ -370,6 +370,7 @@ export const studioSecrets = pgTable("studio_secrets", {
   projectId: text("project_id").notNull(),
   key: text("key").notNull(),
   value: text("value").notNull(),
+  environment: text("environment").notNull().default("shared"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

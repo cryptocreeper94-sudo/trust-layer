@@ -7,7 +7,8 @@ import {
   FileCode, FileJson, FileText, Folder, Package, Globe,
   GitBranch, GitCommit, History, RotateCcw, Terminal,
   Rocket, Cloud, Link2, Users, Info, Zap, Shield, Database,
-  ExternalLink, Copy, CheckCircle, Loader2, Send, Search, Replace, Keyboard
+  ExternalLink, Copy, CheckCircle, Loader2, Send, Search, Replace, Keyboard,
+  Upload, Download, Filter
 } from "lucide-react";
 import { MonacoEditor } from "@/components/monaco-editor";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -248,6 +249,11 @@ export default function Studio() {
   const [showNewFile, setShowNewFile] = useState(false);
   const [renamingFile, setRenamingFile] = useState<FileNode | null>(null);
   const [renameInput, setRenameInput] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [consoleFilter, setConsoleFilter] = useState("");
+  const [envMode, setEnvMode] = useState<"dev" | "prod">("dev");
+  const [showSettings, setShowSettings] = useState(false);
+  const [editingProjectName, setEditingProjectName] = useState("");
   const [newSecretKey, setNewSecretKey] = useState("");
   const [newSecretValue, setNewSecretValue] = useState("");
   const [newConfigKey, setNewConfigKey] = useState("");
@@ -718,19 +724,116 @@ export default function Studio() {
     }
   };
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!projectId || !e.target.files) return;
+    
+    const uploadedFiles: FileNode[] = [];
+    const failedUploads: string[] = [];
+    
+    for (const file of Array.from(e.target.files)) {
+      try {
+        const content = await file.text();
+        const res = await fetch(`/api/studio/projects/${projectId}/files`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: file.name,
+            content,
+            path: "/" + file.name,
+            isFolder: false,
+            language: getLanguage(file.name),
+          }),
+        });
+        if (res.ok) {
+          const newFile = await res.json();
+          uploadedFiles.push({
+            id: newFile.id,
+            name: newFile.name,
+            path: newFile.path,
+            isFolder: false,
+            content: newFile.content,
+            language: newFile.language,
+          });
+        } else {
+          failedUploads.push(file.name);
+        }
+      } catch (error) {
+        console.error("Upload error:", error);
+        failedUploads.push(file.name);
+      }
+    }
+    
+    setFiles(prev => [...prev, ...uploadedFiles]);
+    if (uploadedFiles.length > 0) {
+      handleFileSelect(uploadedFiles[0]);
+      setConsoleOutput(prev => [...prev, `> Uploaded ${uploadedFiles.length} file(s)`]);
+    }
+    if (failedUploads.length > 0) {
+      setConsoleOutput(prev => [...prev, `> Failed to upload: ${failedUploads.join(', ')}`]);
+    }
+    
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const handleUpdateProjectName = async () => {
+    if (!projectId || !editingProjectName.trim()) return;
+    try {
+      const res = await fetch(`/api/studio/projects/${projectId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: editingProjectName.trim() }),
+      });
+      if (res.ok) {
+        setProjectName(editingProjectName.trim());
+        setConsoleOutput(prev => [...prev, `> Project renamed to "${editingProjectName.trim()}"`]);
+        setShowSettings(false);
+      } else {
+        const error = await res.text();
+        setConsoleOutput(prev => [...prev, `> Error: Failed to update project - ${error || res.statusText}`]);
+      }
+    } catch (error) {
+      console.error("Update project error:", error);
+      setConsoleOutput(prev => [...prev, `> Error: Failed to update project settings`]);
+    }
+  };
+
+  const handleDownloadFile = (file: FileNode) => {
+    if (file.isFolder) {
+      setConsoleOutput(prev => [...prev, `> Cannot download folder: ${file.name}`]);
+      return;
+    }
+    const currentFile = files.find(f => f.id === file.id);
+    const content = currentFile?.content;
+    if (content === undefined || content === null) {
+      setConsoleOutput(prev => [...prev, `> Cannot download: ${file.name} has no content loaded`]);
+      return;
+    }
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = file.name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    setConsoleOutput(prev => [...prev, `> Downloaded ${file.name}`]);
+  };
+
   const handleAddSecret = async () => {
     if (!newSecretKey.trim() || !projectId) return;
     try {
       const res = await fetch(`/api/studio/projects/${projectId}/secrets`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key: newSecretKey, value: newSecretValue }),
+        body: JSON.stringify({ key: newSecretKey, value: newSecretValue, environment: envMode }),
       });
       if (res.ok) {
         const secret = await res.json();
         setSecrets(prev => [...prev, secret]);
         setNewSecretKey("");
         setNewSecretValue("");
+        setConsoleOutput(prev => [...prev, `> Added secret "${newSecretKey}" for ${envMode} environment`]);
       }
     } catch (error) {
       console.error("Add secret error:", error);
@@ -743,13 +846,14 @@ export default function Studio() {
       const res = await fetch(`/api/studio/projects/${projectId}/configs`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key: newConfigKey, value: newConfigValue, environment: "shared" }),
+        body: JSON.stringify({ key: newConfigKey, value: newConfigValue, environment: envMode }),
       });
       if (res.ok) {
         const config = await res.json();
         setConfigs(prev => [...prev, config]);
         setNewConfigKey("");
         setNewConfigValue("");
+        setConsoleOutput(prev => [...prev, `> Added config "${newConfigKey}" for ${envMode} environment`]);
       }
     } catch (error) {
       console.error("Add config error:", error);
@@ -1115,6 +1219,15 @@ export default function Studio() {
           </Link>
           <span className="text-white/30">/</span>
           <span className="font-mono text-sm">{projectName}</span>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => { setShowSettings(true); setEditingProjectName(projectName); }}
+            className="h-6 w-6 p-0"
+            data-testid="button-settings"
+          >
+            <Settings className="w-3.5 h-3.5" />
+          </Button>
           
           {presence.length > 0 && (
             <div className="flex items-center gap-1 ml-3">
@@ -1203,15 +1316,34 @@ export default function Studio() {
             <TabsContent value="files" className="flex-1 overflow-auto p-2 m-0">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs text-muted-foreground uppercase">Files</span>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="h-6 w-6 p-0"
-                  onClick={() => setShowNewFile(true)}
-                  data-testid="button-new-file"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                </Button>
+                <div className="flex items-center gap-0.5">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-6 w-6 p-0"
+                    onClick={() => setShowNewFile(true)}
+                    data-testid="button-new-file"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-6 w-6 p-0"
+                    onClick={() => fileInputRef.current?.click()}
+                    data-testid="button-upload-file"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                  </Button>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    multiple
+                    className="hidden"
+                    data-testid="input-file-upload"
+                  />
+                </div>
               </div>
 
               {files.length === 0 && (
@@ -1282,6 +1414,17 @@ export default function Studio() {
                       />
                     ) : (
                       <span className="flex-1 truncate">{file.name}</span>
+                    )}
+                    {!file.isFolder && (
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100"
+                        onClick={(e) => { e.stopPropagation(); handleDownloadFile(file); }}
+                        data-testid={`download-file-${file.id}`}
+                      >
+                        <Download className="w-3 h-3 text-emerald-400" />
+                      </Button>
                     )}
                     <Button
                       size="sm"
@@ -1385,7 +1528,7 @@ export default function Studio() {
             <TabsContent value="secrets" className="flex-1 overflow-auto p-2 m-0">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs text-muted-foreground uppercase flex items-center gap-1">
-                  Secrets
+                  Environment Variables
                   <Tooltip>
                     <TooltipTrigger>
                       <Info className="w-3 h-3 text-muted-foreground hover:text-cyan-400 transition-colors cursor-help" />
@@ -1396,18 +1539,49 @@ export default function Studio() {
                   </Tooltip>
                 </span>
               </div>
+              
+              <div className="flex items-center gap-1 mb-3 p-1 rounded bg-black/30 border border-white/5">
+                <Button
+                  size="sm"
+                  variant={envMode === "dev" ? "secondary" : "ghost"}
+                  onClick={() => setEnvMode("dev")}
+                  className={`flex-1 h-6 text-xs ${envMode === "dev" ? "bg-cyan-500/20 text-cyan-400" : ""}`}
+                  data-testid="button-env-dev"
+                >
+                  Development
+                </Button>
+                <Button
+                  size="sm"
+                  variant={envMode === "prod" ? "secondary" : "ghost"}
+                  onClick={() => setEnvMode("prod")}
+                  className={`flex-1 h-6 text-xs ${envMode === "prod" ? "bg-emerald-500/20 text-emerald-400" : ""}`}
+                  data-testid="button-env-prod"
+                >
+                  Production
+                </Button>
+              </div>
+              
               <p className="text-xs text-muted-foreground mb-3">
-                Encrypted environment variables for sensitive data.
+                {envMode === "dev" 
+                  ? "Development secrets - used during local development and testing." 
+                  : "Production secrets - used in deployed/published environments."}
               </p>
 
               <div className="space-y-2 mb-3">
-                {secrets.map((secret) => (
-                  <div key={secret.id} className="flex items-center gap-2 p-2 rounded bg-black/30 text-xs">
-                    <Lock className="w-3 h-3 text-amber-400 shrink-0" />
-                    <span className="font-mono">{secret.key}</span>
-                    <span className="text-muted-foreground">= ••••••</span>
-                  </div>
-                ))}
+                {secrets
+                  .filter((s: any) => !s.environment || s.environment === "shared" || s.environment === envMode)
+                  .map((secret) => (
+                    <div key={secret.id} className="flex items-center gap-2 p-2 rounded bg-black/30 text-xs">
+                      <Lock className="w-3 h-3 text-amber-400 shrink-0" />
+                      <span className="font-mono">{secret.key}</span>
+                      <span className="text-muted-foreground">= ••••••</span>
+                      {(secret as any).environment && (secret as any).environment !== "shared" && (
+                        <span className={`text-xs px-1 rounded ${(secret as any).environment === "dev" ? "bg-cyan-500/20 text-cyan-400" : "bg-emerald-500/20 text-emerald-400"}`}>
+                          {(secret as any).environment}
+                        </span>
+                      )}
+                    </div>
+                  ))}
               </div>
 
               <div className="space-y-2">
@@ -1452,17 +1626,26 @@ export default function Studio() {
                 </span>
               </div>
               <p className="text-xs text-muted-foreground mb-3">
-                Non-sensitive configuration variables.
+                {envMode === "dev" 
+                  ? "Development configs - non-sensitive variables for local development." 
+                  : "Production configs - non-sensitive variables for deployed environments."}
               </p>
 
               <div className="space-y-2 mb-3">
-                {configs.map((config) => (
-                  <div key={config.id} className="flex items-center gap-2 p-2 rounded bg-black/30 text-xs">
-                    <Settings className="w-3 h-3 text-blue-400 shrink-0" />
-                    <span className="font-mono">{config.key}</span>
-                    <span className="text-muted-foreground">= {config.value}</span>
-                  </div>
-                ))}
+                {configs
+                  .filter((c: any) => !c.environment || c.environment === "shared" || c.environment === envMode)
+                  .map((config) => (
+                    <div key={config.id} className="flex items-center gap-2 p-2 rounded bg-black/30 text-xs">
+                      <Settings className="w-3 h-3 text-blue-400 shrink-0" />
+                      <span className="font-mono">{config.key}</span>
+                      <span className="text-muted-foreground">= {config.value}</span>
+                      {(config as any).environment && (config as any).environment !== "shared" && (
+                        <span className={`text-xs px-1 rounded ${(config as any).environment === "dev" ? "bg-cyan-500/20 text-cyan-400" : "bg-emerald-500/20 text-emerald-400"}`}>
+                          {(config as any).environment}
+                        </span>
+                      )}
+                    </div>
+                  ))}
               </div>
 
               <div className="space-y-2">
@@ -1604,11 +1787,34 @@ export default function Studio() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="flex-1 p-2 font-mono text-xs overflow-auto"
+                  className="flex-1 flex flex-col overflow-hidden"
                 >
-                  {consoleOutput.map((line, i) => (
-                    <p key={i} className={`${line.startsWith(">") ? "text-muted-foreground" : line.includes("Error") ? "text-red-400" : "text-green-400"} transition-colors`}>{line}</p>
-                  ))}
+                  <div className="flex items-center gap-2 px-2 pt-2 pb-1 border-b border-white/5">
+                    <Filter className="w-3 h-3 text-muted-foreground" />
+                    <Input
+                      value={consoleFilter}
+                      onChange={(e) => setConsoleFilter(e.target.value)}
+                      placeholder="Filter logs..."
+                      className="flex-1 h-6 text-xs bg-black/20 border-white/10"
+                      data-testid="input-console-filter"
+                    />
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-6 w-6 p-0"
+                      onClick={() => setConsoleOutput(["> Console cleared"])}
+                      data-testid="button-clear-console"
+                    >
+                      <X className="w-3 h-3" />
+                    </Button>
+                  </div>
+                  <div className="flex-1 p-2 font-mono text-xs overflow-auto">
+                    {consoleOutput
+                      .filter(line => !consoleFilter || line.toLowerCase().includes(consoleFilter.toLowerCase()))
+                      .map((line, i) => (
+                        <p key={i} className={`${line.startsWith(">") ? "text-muted-foreground" : line.includes("Error") || line.includes("Warning") ? "text-red-400" : "text-green-400"} transition-colors`}>{line}</p>
+                      ))}
+                  </div>
                 </motion.div>
               )}
 
@@ -1898,6 +2104,95 @@ export default function Studio() {
           </div>
         </aside>
       </div>
+
+      {showSettings && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" onClick={() => setShowSettings(false)}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="bg-gray-900 border border-white/10 rounded-lg shadow-xl p-4 max-w-md w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-medium text-white flex items-center gap-2">
+                <Settings className="w-5 h-5 text-cyan-400" />
+                Project Settings
+              </h3>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setShowSettings(false)}
+                className="h-6 w-6 p-0"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs text-muted-foreground block mb-1">Project Name</label>
+                <Input
+                  value={editingProjectName}
+                  onChange={(e) => setEditingProjectName(e.target.value)}
+                  placeholder="Project name..."
+                  className="bg-black/30 border-white/10"
+                  data-testid="input-project-name"
+                />
+              </div>
+              
+              <div>
+                <label className="text-xs text-muted-foreground block mb-1">Project ID</label>
+                <div className="flex items-center gap-2">
+                  <code className="flex-1 text-xs font-mono bg-black/30 p-2 rounded border border-white/5 text-muted-foreground">
+                    {projectId}
+                  </code>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => { navigator.clipboard.writeText(projectId || ""); }}
+                    className="h-8 w-8 p-0"
+                  >
+                    <Copy className="w-3.5 h-3.5" />
+                  </Button>
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-xs text-muted-foreground block mb-1">Statistics</label>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="bg-black/30 p-2 rounded border border-white/5">
+                    <span className="text-muted-foreground">Files:</span>
+                    <span className="ml-2 text-white">{files.length}</span>
+                  </div>
+                  <div className="bg-black/30 p-2 rounded border border-white/5">
+                    <span className="text-muted-foreground">Commits:</span>
+                    <span className="ml-2 text-white">{commits.length}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex justify-end gap-2 mt-6">
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setShowSettings(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                size="sm"
+                className="bg-cyan-600 hover:bg-cyan-700"
+                onClick={handleUpdateProjectName}
+                data-testid="button-save-settings"
+              >
+                Save Changes
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+      )}
 
       {showShortcuts && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" onClick={() => setShowShortcuts(false)}>
