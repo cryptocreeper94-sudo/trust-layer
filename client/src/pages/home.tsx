@@ -114,10 +114,8 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="flex items-center justify-center gap-4 pt-2 text-xs text-muted-foreground">
+            <div className="flex items-center justify-center pt-2 text-xs text-muted-foreground">
               <a href="https://darkwavechain.io" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">darkwavechain.io</a>
-              <span className="text-white/20">|</span>
-              <a href="https://darkwavechain.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">darkwavechain.com</a>
             </div>
           </motion.div>
         </div>
