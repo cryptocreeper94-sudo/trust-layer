@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import { 
   FolderOpen, File, Plus, Save, Play, Settings, Lock, 
   ChevronRight, ChevronDown, Trash2, Edit2, X, Check,
-  FileCode, FileJson, FileText, Folder, Package, Globe
+  FileCode, FileJson, FileText, Folder, Package, Globe,
+  GitBranch, GitCommit, History, RotateCcw, Terminal
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +13,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GlassCard } from "@/components/glass-card";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { useAuth } from "@/hooks/use-auth";
+
+interface Commit {
+  id: string;
+  hash: string;
+  message: string;
+  branch: string;
+  createdAt: string;
+}
+
+interface Run {
+  id: string;
+  command: string;
+  status: string;
+  output: string;
+  exitCode: string | null;
+}
 
 interface FileNode {
   id: string;
@@ -74,6 +91,12 @@ export default function Studio() {
   const [newConfigValue, setNewConfigValue] = useState("");
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [commits, setCommits] = useState<Commit[]>([]);
+  const [consoleOutput, setConsoleOutput] = useState<string[]>(["> DarkWave Studio v1.0.0", "> Ready"]);
+  const [running, setRunning] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [commitMessage, setCommitMessage] = useState("");
+  const [bottomTab, setBottomTab] = useState<"console" | "git">("console");
 
   useEffect(() => {
     if (!user) {
@@ -273,6 +296,84 @@ export default function Studio() {
     }
   };
 
+  const handleRun = async () => {
+    if (!projectId) return;
+    setRunning(true);
+    setConsoleOutput(prev => [...prev, "> Running..."]);
+    try {
+      const res = await fetch(`/api/studio/projects/${projectId}/run`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (res.ok) {
+        const run = await res.json();
+        if (run.code) {
+          const logs: string[] = [];
+          try {
+            const fakeConsole = {
+              log: (...args: any[]) => logs.push(args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(" ")),
+              error: (...args: any[]) => logs.push("[ERROR] " + args.map(a => String(a)).join(" ")),
+              warn: (...args: any[]) => logs.push("[WARN] " + args.map(a => String(a)).join(" ")),
+              info: (...args: any[]) => logs.push("[INFO] " + args.map(a => String(a)).join(" ")),
+            };
+            const fn = new Function("console", run.code);
+            fn(fakeConsole);
+            setConsoleOutput(prev => [...prev, ...logs, "> Completed"]);
+          } catch (err: any) {
+            setConsoleOutput(prev => [...prev, `> Error: ${err.message}`]);
+          }
+        } else {
+          setConsoleOutput(prev => [...prev, run.output || "No output"]);
+        }
+        const hasHtml = files.some(f => f.name.endsWith(".html"));
+        if (hasHtml) {
+          setPreviewUrl(`/api/studio/projects/${projectId}/preview/serve`);
+        }
+      }
+    } catch (error) {
+      setConsoleOutput(prev => [...prev, "> Error: Failed to run project"]);
+    }
+    setRunning(false);
+  };
+
+  const handleCommit = async () => {
+    if (!projectId || !commitMessage.trim()) return;
+    try {
+      const res = await fetch(`/api/studio/projects/${projectId}/commits`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: commitMessage, branch: "main" }),
+      });
+      if (res.ok) {
+        const commit = await res.json();
+        setCommits(prev => [commit, ...prev]);
+        setCommitMessage("");
+        setConsoleOutput(prev => [...prev, `> Committed: ${commit.hash} - ${commit.message}`]);
+      }
+    } catch (error) {
+      console.error("Commit error:", error);
+    }
+  };
+
+  const loadCommits = async () => {
+    if (!projectId) return;
+    try {
+      const res = await fetch(`/api/studio/projects/${projectId}/commits`);
+      if (res.ok) {
+        const data = await res.json();
+        setCommits(data);
+      }
+    } catch (error) {
+      console.error("Load commits error:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (projectId) {
+      loadCommits();
+    }
+  }, [projectId]);
+
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if ((e.metaKey || e.ctrlKey) && e.key === "s") {
       e.preventDefault();
@@ -341,10 +442,12 @@ export default function Studio() {
           <Button
             size="sm"
             className="gap-2 bg-green-600 hover:bg-green-700 text-xs"
+            onClick={handleRun}
+            disabled={running}
             data-testid="button-run"
           >
             <Play className="w-3.5 h-3.5" />
-            Run
+            {running ? "Running..." : "Run"}
           </Button>
         </div>
       </header>
@@ -551,30 +654,100 @@ export default function Studio() {
             )}
           </div>
 
-          {/* Bottom Bar / Console */}
-          <div className="h-32 border-t border-white/5 bg-black/40 flex flex-col shrink-0">
-            <div className="flex items-center justify-between px-3 py-1.5 border-b border-white/5">
-              <span className="text-xs text-muted-foreground uppercase">Console</span>
+          {/* Bottom Bar / Console & Git */}
+          <div className="h-40 border-t border-white/5 bg-black/40 flex flex-col shrink-0">
+            <div className="flex items-center px-1 py-1 border-b border-white/5 gap-1">
+              <Button
+                size="sm"
+                variant={bottomTab === "console" ? "secondary" : "ghost"}
+                onClick={() => setBottomTab("console")}
+                className="h-6 text-xs px-2"
+                data-testid="button-console-tab"
+              >
+                <Terminal className="w-3 h-3 mr-1" /> Console
+              </Button>
+              <Button
+                size="sm"
+                variant={bottomTab === "git" ? "secondary" : "ghost"}
+                onClick={() => setBottomTab("git")}
+                className="h-6 text-xs px-2"
+                data-testid="button-git-tab"
+              >
+                <GitBranch className="w-3 h-3 mr-1" /> Git
+              </Button>
             </div>
-            <div className="flex-1 p-2 font-mono text-xs text-green-400 overflow-auto">
-              <p className="text-muted-foreground">{`> DarkWave Studio v1.0.0`}</p>
-              <p className="text-muted-foreground">{`> Ready`}</p>
-            </div>
+            {bottomTab === "console" ? (
+              <div className="flex-1 p-2 font-mono text-xs text-green-400 overflow-auto">
+                {consoleOutput.map((line, i) => (
+                  <p key={i} className={line.startsWith(">") ? "text-muted-foreground" : "text-green-400"}>{line}</p>
+                ))}
+              </div>
+            ) : (
+              <div className="flex-1 p-2 overflow-auto">
+                <div className="flex gap-2 mb-2">
+                  <Input
+                    value={commitMessage}
+                    onChange={(e) => setCommitMessage(e.target.value)}
+                    placeholder="Commit message..."
+                    className="h-7 text-xs bg-black/30 flex-1"
+                    onKeyDown={(e) => e.key === "Enter" && handleCommit()}
+                    data-testid="input-commit-message"
+                  />
+                  <Button size="sm" onClick={handleCommit} className="h-7 text-xs" data-testid="button-commit">
+                    <GitCommit className="w-3 h-3 mr-1" /> Commit
+                  </Button>
+                </div>
+                <div className="space-y-1 text-xs">
+                  {commits.length === 0 ? (
+                    <p className="text-muted-foreground">No commits yet. Make your first commit!</p>
+                  ) : (
+                    commits.slice(0, 5).map((commit) => (
+                      <div key={commit.id} className="flex items-center gap-2 p-1.5 rounded bg-black/30">
+                        <GitCommit className="w-3 h-3 text-cyan-400 shrink-0" />
+                        <span className="font-mono text-cyan-400">{commit.hash}</span>
+                        <span className="text-muted-foreground truncate">{commit.message}</span>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </main>
 
-        {/* Right Panel - Preview (optional) */}
+        {/* Right Panel - Preview */}
         <aside className="w-80 border-l border-white/5 bg-black/40 flex flex-col shrink-0 hidden lg:flex">
           <div className="flex items-center justify-between px-3 py-2 border-b border-white/5">
             <span className="text-xs text-muted-foreground uppercase flex items-center gap-2">
               <Globe className="w-3.5 h-3.5" /> Preview
             </span>
+            {previewUrl && (
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-5 text-xs px-1"
+                onClick={() => setPreviewUrl(null)}
+                data-testid="button-close-preview"
+              >
+                <X className="w-3 h-3" />
+              </Button>
+            )}
           </div>
-          <div className="flex-1 flex items-center justify-center text-muted-foreground">
-            <div className="text-center p-4">
-              <Globe className="w-10 h-10 mx-auto mb-3 opacity-30" />
-              <p className="text-xs">Click "Run" to preview</p>
-            </div>
+          <div className="flex-1 flex items-center justify-center text-muted-foreground overflow-hidden">
+            {previewUrl ? (
+              <iframe
+                src={previewUrl}
+                className="w-full h-full bg-white"
+                title="Preview"
+                data-testid="preview-iframe"
+              />
+            ) : (
+              <div className="text-center p-4">
+                <Globe className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                <p className="text-xs">Click "Run" to preview</p>
+                <p className="text-xs text-muted-foreground mt-1">Requires an HTML file</p>
+              </div>
+            )}
           </div>
         </aside>
       </div>

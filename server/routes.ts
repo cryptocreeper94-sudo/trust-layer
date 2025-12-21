@@ -1816,7 +1816,8 @@ export async function registerRoutes(
       const filesSnapshot = JSON.stringify(files.map(f => ({ path: f.path, content: f.content })));
       const existingCommits = await storage.getStudioCommits(project.id);
       const parentHash = existingCommits[0]?.hash || null;
-      const hash = require("crypto").createHash("sha256")
+      const crypto = await import("crypto");
+      const hash = crypto.createHash("sha256")
         .update(filesSnapshot + Date.now().toString())
         .digest("hex")
         .slice(0, 8);
@@ -1943,34 +1944,15 @@ export async function registerRoutes(
       }
       const files = await storage.getStudioFiles(project.id);
       const mainFile = files.find(f => f.name === "index.js" || f.name === "main.js" || f.name === "app.js");
-      const code = mainFile?.content || "";
-      let output = "";
-      let exitCode = "0";
-      try {
-        const logs: string[] = [];
-        const fakeConsole = {
-          log: (...args: any[]) => logs.push(args.map(a => String(a)).join(" ")),
-          error: (...args: any[]) => logs.push("[ERROR] " + args.map(a => String(a)).join(" ")),
-          warn: (...args: any[]) => logs.push("[WARN] " + args.map(a => String(a)).join(" ")),
-        };
-        const wrappedCode = `(function(console) { ${code} })(fakeConsole);`;
-        eval(wrappedCode.replace("fakeConsole", JSON.stringify(fakeConsole)));
-        const fn = new Function("console", code);
-        fn(fakeConsole);
-        output = logs.join("\n");
-      } catch (err: any) {
-        output = `Error: ${err.message}`;
-        exitCode = "1";
-      }
       const run = await storage.createStudioRun({
         projectId: project.id,
         command: "node index.js",
         status: "completed",
-        output,
-        exitCode,
+        output: mainFile ? "Code ready for client-side execution" : "No JavaScript file found",
+        exitCode: mainFile ? "0" : "1",
       });
       await storage.updateStudioRun(run.id, { completedAt: new Date() });
-      res.json(run);
+      res.json({ ...run, code: mainFile?.content || "" });
     } catch (error) {
       console.error("Run error:", error);
       res.status(500).json({ error: "Failed to run project" });
