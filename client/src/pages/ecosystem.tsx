@@ -13,6 +13,12 @@ import { fetchEcosystemApps } from "@/lib/api";
 import { useState } from "react";
 import { InfoTooltip } from "@/components/info-tooltip";
 
+import orbitStaffingImg from "@assets/ecosystem/orbit-staffing.jpg?url";
+
+const appImageMap: Record<string, string> = {
+  "orbit-staffing": orbitStaffingImg,
+};
+
 const categories = ["All Apps", "DeFi", "Enterprise", "AI", "Social", "Gaming", "Automotive", "Services"];
 
 export default function Ecosystem() {
@@ -152,47 +158,55 @@ export default function Ecosystem() {
                   <p className="text-white/40 text-sm">No apps found matching your criteria.</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
-                  {filteredApps.map((app, i) => (
-                    <a 
-                      key={app.id || i} 
-                      href={app.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="block group"
-                      data-testid={`app-card-${app.id}`}
-                    >
-                      <GlassCard className={app.featured ? "md:col-span-2" : ""}>
-                        <div className="p-4 h-full flex flex-col min-h-[140px]">
-                          <div className="flex items-start gap-3 mb-3">
-                            <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${app.gradient || 'from-cyan-600 to-blue-700'} flex items-center justify-center text-white font-bold text-sm shrink-0`}>
-                              {app.name.charAt(0)}
+                <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {filteredApps.map((app, i) => {
+                    const appImage = appImageMap[app.id];
+                    return (
+                      <a 
+                        key={app.id || i} 
+                        href={app.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="block group"
+                        data-testid={`app-card-${app.id}`}
+                      >
+                        <GlassCard className="overflow-hidden hover:border-primary/30 transition-all duration-300">
+                          {appImage ? (
+                            <div className="aspect-[3/4] overflow-hidden">
+                              <img 
+                                src={appImage} 
+                                alt={app.name}
+                                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                              />
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2">
-                                <h3 className="text-sm font-bold text-white truncate">{app.name}</h3>
-                                {app.verified && <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />}
+                          ) : (
+                            <div className={`aspect-[3/4] bg-gradient-to-br ${app.gradient || 'from-cyan-600 to-blue-700'} flex items-center justify-center`}>
+                              <span className="text-4xl font-bold text-white/80">{app.name.charAt(0)}</span>
+                            </div>
+                          )}
+                          <div className="p-3 bg-black/60 backdrop-blur-sm">
+                            <div className="flex items-center gap-2 mb-1">
+                              <h3 className="text-sm font-bold text-white truncate flex-1">{app.name}</h3>
+                              {app.verified && <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />}
+                            </div>
+                            <p className="text-[10px] text-white/50 mb-2">{app.category}</p>
+                            <div className="flex items-center justify-between">
+                              <div className="flex flex-wrap gap-1">
+                                {(app.tags || []).slice(0, 1).map((tag, j) => (
+                                  <Badge key={j} variant="outline" className="text-[8px] px-1.5 py-0 border-white/10 text-white/40">
+                                    {tag}
+                                  </Badge>
+                                ))}
                               </div>
-                              <p className="text-[10px] text-white/40">{app.category}</p>
+                              <Button variant="ghost" size="sm" className="h-5 px-2 text-[9px] text-primary group-hover:bg-primary/10 transition-colors">
+                                Launch <ExternalLink className="w-2 h-2 ml-1" />
+                              </Button>
                             </div>
                           </div>
-                          <p className="text-[11px] text-white/50 leading-relaxed mb-3 flex-grow line-clamp-2">{app.description}</p>
-                          <div className="flex items-center justify-between">
-                            <div className="flex flex-wrap gap-1">
-                              {(app.tags || []).slice(0, 2).map((tag, j) => (
-                                <Badge key={j} variant="outline" className="text-[8px] px-1.5 py-0 border-white/10 text-white/40">
-                                  {tag}
-                                </Badge>
-                              ))}
-                            </div>
-                            <Button variant="ghost" size="sm" className="h-6 px-2 text-[10px] text-primary group-hover:bg-primary/10 transition-colors">
-                              Launch <ExternalLink className="w-2.5 h-2.5 ml-1" />
-                            </Button>
-                          </div>
-                        </div>
-                      </GlassCard>
-                    </a>
-                  ))}
+                        </GlassCard>
+                      </a>
+                    );
+                  })}
                 </div>
               )}
             </div>
