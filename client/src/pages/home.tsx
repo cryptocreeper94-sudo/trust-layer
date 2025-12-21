@@ -16,9 +16,12 @@ import { FavoriteButton } from "@/components/favorite-button";
 import { SkeletonCard, SkeletonStatCard } from "@/components/ui/skeleton-card";
 import { MobileNav } from "@/components/mobile-nav";
 import { usePreferences } from "@/lib/store";
+import { Footer } from "@/components/footer";
+import { usePageAnalytics } from "@/hooks/use-analytics";
 
 export default function Home() {
   const { preferences } = usePreferences();
+  usePageAnalytics();
   
   const { data: apps = [], isLoading: appsLoading } = useQuery({
     queryKey: ["ecosystem-apps"],
@@ -310,70 +313,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-black py-20 border-t border-white/10">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-12 mb-16">
-            <div className="col-span-2 lg:col-span-2">
-              <div className="flex items-center gap-3 mb-6">
-                <img src={orbitLogo} alt="Orbit Logo" className="w-8 h-8 opacity-80" />
-                <span className="font-display font-bold text-xl tracking-tight">Orbit</span>
-              </div>
-              <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
-                The AA Blockchain Foundation. <br/>
-                Building the decentralized web, one block at a time.
-              </p>
-            </div>
-            
-            <div>
-              <h4 className="font-bold text-white mb-6">Ecosystem</h4>
-              <ul className="space-y-4 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-primary">Apps</a></li>
-                <li><a href="#" className="hover:text-primary">Wallets</a></li>
-                <li><a href="#" className="hover:text-primary">Explorers</a></li>
-                <li><a href="#" className="hover:text-primary">Exchanges</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="font-bold text-white mb-6">Developers</h4>
-              <ul className="space-y-4 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-primary">Documentation</a></li>
-                <li><a href="#" className="hover:text-primary">GitHub</a></li>
-                <li><a href="#" className="hover:text-primary">Whitepaper</a></li>
-                <li><a href="#" className="hover:text-primary">Grants</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold text-white mb-6">Community</h4>
-              <ul className="space-y-4 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-primary">Discord</a></li>
-                <li><a href="#" className="hover:text-primary">Twitter</a></li>
-                <li><a href="#" className="hover:text-primary">Blog</a></li>
-                <li><a href="#" className="hover:text-primary">Forum</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold text-white mb-6">Legal</h4>
-              <ul className="space-y-4 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-primary">Privacy</a></li>
-                <li><a href="#" className="hover:text-primary">Terms</a></li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-xs text-muted-foreground">© 2025 Orbit Foundation. All rights reserved.</p>
-            <div className="flex gap-6">
-              <Globe className="w-5 h-5 text-muted-foreground hover:text-white cursor-pointer" />
-              <div className="w-5 h-5 rounded-full bg-muted-foreground/20 hover:bg-white cursor-pointer" />
-              <div className="w-5 h-5 rounded-full bg-muted-foreground/20 hover:bg-white cursor-pointer" />
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
