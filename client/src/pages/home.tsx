@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, LogOut, User } from "lucide-react";
 import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.png";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { Button } from "@/components/ui/button";
@@ -18,9 +18,11 @@ import { usePreferences } from "@/lib/store";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function Home() {
   const { preferences } = usePreferences();
+  const { user, isLoading: authLoading, isAuthenticated } = useAuth();
   usePageAnalytics();
   
   const { data: apps = [], isLoading: appsLoading } = useQuery({
@@ -64,7 +66,27 @@ export default function Home() {
               <ThemeToggle />
               <NotificationsDropdown />
             </div>
-            <Button variant="ghost" size="sm" className="hidden sm:flex h-8 text-xs hover:bg-white/5" data-testid="button-login">Log In</Button>
+            {authLoading ? (
+              <div className="hidden sm:flex h-8 w-16 bg-white/5 animate-pulse rounded" />
+            ) : isAuthenticated ? (
+              <div className="hidden sm:flex items-center gap-2">
+                <Link href="/dashboard">
+                  <Button variant="ghost" size="sm" className="h-8 text-xs hover:bg-white/5 gap-1.5" data-testid="button-dashboard">
+                    <User className="w-3 h-3" />
+                    {user?.firstName || 'Dashboard'}
+                  </Button>
+                </Link>
+                <a href="/api/logout">
+                  <Button variant="ghost" size="sm" className="h-8 text-xs hover:bg-white/5" data-testid="button-logout">
+                    <LogOut className="w-3 h-3" />
+                  </Button>
+                </a>
+              </div>
+            ) : (
+              <a href="/api/login">
+                <Button variant="ghost" size="sm" className="hidden sm:flex h-8 text-xs hover:bg-white/5" data-testid="button-login">Log In</Button>
+              </a>
+            )}
             <Link href="/ecosystem">
               <Button size="sm" className="hidden sm:flex h-8 text-xs bg-primary text-background hover:bg-primary/90 font-semibold" data-testid="button-launch-app">
                 Launch App
