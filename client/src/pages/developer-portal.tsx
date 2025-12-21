@@ -798,6 +798,284 @@ console.log('All successful:', result.allSuccessful);`}
               )}
             </div>
           </BentoCard>
+
+          <BentoCard span={3} className="border-primary/20">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-display font-bold text-lg flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-primary" />
+                Launch Roadmap - February 14, 2026
+              </h3>
+              <Badge className="bg-primary/20 text-primary border-primary/30">INTERNAL</Badge>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">
+              Confidential launch timeline for DarkWave Chain mainnet and DWT token release.
+            </p>
+            <Accordion type="single" collapsible className="w-full">
+              <AccordionItem value="phase1" className="border-white/10">
+                <AccordionTrigger className="text-sm font-medium hover:text-primary">
+                  Phase 1: Foundation (December 2025)
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">Technical Milestones</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Finalize blockchain audit scope and engage third-party security auditor</li>
+                        <li>Implement block archival and state snapshotting</li>
+                        <li>Stress-test 400ms block producer under load</li>
+                        <li>Complete treasury policy documentation</li>
+                        <li>Add transaction finality monitoring</li>
+                        <li>Polish SDK and developer documentation</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">Marketing Foundation</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Craft brand positioning and narrative deck</li>
+                        <li>Create press kit with logos, screenshots, key messaging</li>
+                        <li>Brief brand ambassadors and partners</li>
+                        <li>Begin weekly developer blog posts</li>
+                        <li>Set up social media presence (Twitter/X, Discord, Telegram)</li>
+                        <li>Create teaser content for upcoming launch</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">Legal & Compliance</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Ratify token distribution policy</li>
+                        <li>Complete legal review of tokenomics</li>
+                        <li>Prepare terms of service and privacy policy</li>
+                        <li>Document regulatory considerations</li>
+                      </ul>
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="phase2" className="border-white/10">
+                <AccordionTrigger className="text-sm font-medium hover:text-primary">
+                  Phase 2: Testnet & Community (January 2026)
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">Technical Milestones</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Launch public testnet with monitored load</li>
+                        <li>Implement transaction finality dashboard</li>
+                        <li>Build automated regression test suite</li>
+                        <li>Complete security audit and remediation</li>
+                        <li>Deploy vesting smart contracts</li>
+                        <li>Finalize treasury distribution mechanisms</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">Developer Ecosystem</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Host virtual hackathon with DWT prizes</li>
+                        <li>Expand API rate limits for registered developers</li>
+                        <li>Launch developer office hours program</li>
+                        <li>Open Discord developer channels</li>
+                        <li>Publish comprehensive API documentation</li>
+                        <li>Release SDK v1.0</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">Marketing Push</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Execute content sprint (technical articles, explainer videos)</li>
+                        <li>Announce countdown to launch</li>
+                        <li>Schedule influencer AMAs</li>
+                        <li>Run partner webinars</li>
+                        <li>Open whitelist for early supporters</li>
+                        <li>Publish transparency dashboard</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">Community Building</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Launch ambassador program</li>
+                        <li>Create bounty program structure</li>
+                        <li>Begin weekly ecosystem spotlights</li>
+                        <li>Engage crypto media for coverage</li>
+                      </ul>
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="phase3" className="border-white/10">
+                <AccordionTrigger className="text-sm font-medium hover:text-primary">
+                  Phase 3: Pre-Launch (February 1-7, 2026)
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">Technical Readiness</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Code freeze - no new features</li>
+                        <li>Execute incident response drills</li>
+                        <li>Migrate launch configs to production</li>
+                        <li>Set up monitoring and alerting</li>
+                        <li>Prepare rollback plans</li>
+                        <li>Final security verification</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">Marketing Countdown</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Daily countdown content</li>
+                        <li>Finalize press embargo agreements</li>
+                        <li>Prepare launch day assets</li>
+                        <li>Brief all partners on launch timing</li>
+                        <li>Schedule social media posts</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">Operations</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Staff support team for launch week</li>
+                        <li>Prepare FAQ and troubleshooting guides</li>
+                        <li>Set up real-time metrics dashboard</li>
+                        <li>Coordinate with ecosystem apps</li>
+                      </ul>
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="phase4" className="border-white/10">
+                <AccordionTrigger className="text-sm font-medium hover:text-primary">
+                  Phase 4: Launch Week (February 8-14, 2026)
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">February 8-13: Final Preparations</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Go-live rehearsals</li>
+                        <li>Final testnet verification</li>
+                        <li>Liquidity seeding preparations</li>
+                        <li>Media activation scheduling</li>
+                        <li>Partner coordination calls</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-primary mb-2">February 14: LAUNCH DAY</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Lift press embargo (6:00 AM UTC)</li>
+                        <li>Execute genesis block ceremony</li>
+                        <li>Mint initial token distribution</li>
+                        <li>Livestream launch event</li>
+                        <li>Showcase ecosystem app demos</li>
+                        <li>Execute genesis airdrop</li>
+                        <li>Seed DEX liquidity pools</li>
+                        <li>Publish day-0 recap</li>
+                      </ul>
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="phase5" className="border-white/10">
+                <AccordionTrigger className="text-sm font-medium hover:text-primary">
+                  Phase 5: Post-Launch (February 15+)
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">Week 1 (Feb 15-21)</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Monitor network stability</li>
+                        <li>Publish performance statistics</li>
+                        <li>Address any critical issues</li>
+                        <li>Begin customer success stories</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">Ongoing</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Monthly distribution reports</li>
+                        <li>Weekly ecosystem spotlights</li>
+                        <li>Developer bounty programs</li>
+                        <li>Community AMAs</li>
+                        <li>Partnership announcements</li>
+                      </ul>
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="tokenomics" className="border-white/10">
+                <AccordionTrigger className="text-sm font-medium hover:text-primary">
+                  Token Distribution Plan (100M DWT)
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="text-2xl font-bold text-primary">40%</div>
+                        <div className="text-xs">Ecosystem Growth</div>
+                        <div className="text-xs text-muted-foreground">40M DWT - Grants, hackathons</div>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="text-2xl font-bold text-secondary">20%</div>
+                        <div className="text-xs">Community & Liquidity</div>
+                        <div className="text-xs text-muted-foreground">20M DWT - DEX, airdrops</div>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="text-2xl font-bold text-cyan-400">20%</div>
+                        <div className="text-xs">Core Team</div>
+                        <div className="text-xs text-muted-foreground">20M DWT - 4yr vest, 1yr cliff</div>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="text-2xl font-bold text-amber-400">10%</div>
+                        <div className="text-xs">Strategic Partners</div>
+                        <div className="text-xs text-muted-foreground">10M DWT - Advisors</div>
+                      </div>
+                    </div>
+                    <div className="p-3 bg-white/5 rounded-lg text-center">
+                      <div className="text-2xl font-bold text-emerald-400">10%</div>
+                      <div className="text-xs">Treasury Reserve - 10M DWT</div>
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="marketing" className="border-white/10">
+                <AccordionTrigger className="text-sm font-medium hover:text-primary">
+                  Marketing Strategy
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">Pre-Launch (Dec 2025 - Feb 7, 2026)</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Brand Awareness: Position as next-gen L1 solution</li>
+                        <li>Developer Focus: Technical content marketing</li>
+                        <li>Community Building: Grow to 10,000+ members</li>
+                        <li>Media Relations: Crypto publication coverage</li>
+                        <li>Influencer Partnerships: Crypto thought leaders</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">Launch Day (Feb 14, 2026)</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Coordinated press release at 6:00 AM UTC</li>
+                        <li>Live event on YouTube/Twitter Spaces</li>
+                        <li>Social blitz across all platforms</li>
+                        <li>Ecosystem app showcases</li>
+                        <li>Airdrops, giveaways, contests</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white mb-2">Post-Launch (Feb 15+)</h4>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Daily/weekly performance metrics</li>
+                        <li>Developer testimonials</li>
+                        <li>Weekly AMAs and content</li>
+                        <li>Ecosystem expansion announcements</li>
+                      </ul>
+                    </div>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </BentoCard>
         </motion.div>
       </main>
 
