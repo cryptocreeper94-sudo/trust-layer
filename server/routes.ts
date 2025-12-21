@@ -197,15 +197,34 @@ export async function registerRoutes(
 }
 
 async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
-  if (ecosystemClient.isConfigured()) {
-    try {
-      const apps = await ecosystemClient.getApps() as EcosystemApp[];
-      if (Array.isArray(apps) && apps.length > 0) {
-        return apps;
-      }
-    } catch (error) {
-      console.warn("DarkWave Hub API not available, using local data");
+  try {
+    const response = await ecosystemClient.getApps() as { success?: boolean; apps?: any[] } | any[];
+    
+    // Handle hub response format: {success: true, apps: [...]}
+    let apps: any[] = [];
+    if (response && typeof response === 'object' && 'apps' in response && Array.isArray(response.apps)) {
+      apps = response.apps;
+    } else if (Array.isArray(response)) {
+      apps = response;
     }
+    
+    if (apps.length > 0) {
+      // Map hub format to our frontend format
+      return apps.map((app: any) => ({
+        id: app.slug || app.id,
+        name: app.name,
+        category: app.category || "General",
+        description: app.description || "",
+        hook: app.hook || "",
+        tags: app.tags || [],
+        gradient: app.gradient || "from-gray-500 to-gray-700",
+        verified: true,
+        featured: app.featured || false,
+        users: "Orbit Verified",
+      }));
+    }
+  } catch (error) {
+    console.warn("DarkWave Hub API not available, using local data:", error);
   }
   
   return [

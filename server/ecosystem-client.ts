@@ -47,7 +47,9 @@ export class OrbitEcosystemClient {
   }
 
   async getApps() {
-    return this.request('GET', '/api/ecosystem/apps');
+    // Use public endpoint (no auth required)
+    const response = await fetch(`${this.hubUrl}/api/ecosystem/apps`);
+    return response.json();
   }
 
   async syncWorkers(workers: unknown[]) {
