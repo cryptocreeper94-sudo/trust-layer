@@ -668,21 +668,28 @@ export async function registerRoutes(
   app.post("/api/developer/register", async (req, res) => {
     try {
       const sessionToken = req.headers["x-developer-session"] as string;
+      const user = (req as any).user;
       
-      if (!sessionToken || !validateDeveloperSession(sessionToken)) {
-        return res.status(401).json({ error: "Developer session required. Please authenticate first." });
+      const hasDevSession = sessionToken && validateDeveloperSession(sessionToken);
+      const hasUserSession = req.isAuthenticated?.() && user;
+      
+      if (!hasDevSession && !hasUserSession) {
+        return res.status(401).json({ error: "Please log in with your account or authenticate with developer PIN." });
       }
 
       const { name, email, appName } = req.body;
       
-      if (!name || !email || !appName) {
+      const registrantName = name || (hasUserSession ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : null);
+      const registrantEmail = email || (hasUserSession ? user.email : null);
+      
+      if (!registrantName || !registrantEmail || !appName) {
         return res.status(400).json({ error: "Name, email, and app name are required" });
       }
 
       const rawKey = generateApiKey();
       const result = await storage.createApiKey({
-        name,
-        email,
+        name: registrantName,
+        email: registrantEmail,
         appName,
         permissions: "read,write",
         rateLimit: "1000",

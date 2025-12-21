@@ -8,6 +8,7 @@ import { PreferencesProvider, NotificationsProvider } from "@/lib/store";
 import Home from "@/pages/home";
 import Dashboard from "@/pages/dashboard";
 import Developers from "@/pages/developers";
+import DevelopersRegister from "@/pages/developers-register";
 import Ecosystem from "@/pages/ecosystem";
 import Token from "@/pages/token";
 import Explorer from "@/pages/explorer";
@@ -36,6 +37,7 @@ function Router() {
         <Route path="/" component={Home} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/developers" component={Developers} />
+        <Route path="/developers/register" component={DevelopersRegister} />
         <Route path="/ecosystem" component={Ecosystem} />
         <Route path="/token" component={Token} />
         <Route path="/explorer" component={Explorer} />

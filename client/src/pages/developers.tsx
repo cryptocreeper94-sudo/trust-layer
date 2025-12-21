@@ -54,12 +54,16 @@ export default function Developers() {
               Write in Rust, deploy with one click, and scale to millions of users.
             </p>
             <div className="flex gap-3">
-              <Button size="sm" className="h-10 bg-primary text-background hover:bg-primary/90 font-bold">
-                <Terminal className="w-4 h-4 mr-2" /> Get Started
-              </Button>
-              <Button size="sm" variant="outline" className="h-10 border-white/20 hover:bg-white/5">
-                <FileCode className="w-4 h-4 mr-2" /> Read Docs
-              </Button>
+              <Link href="/developers/register">
+                <Button size="sm" className="h-10 bg-primary text-background hover:bg-primary/90 font-bold" data-testid="button-get-started">
+                  <Terminal className="w-4 h-4 mr-2" /> Get API Key
+                </Button>
+              </Link>
+              <Link href="/doc-hub">
+                <Button size="sm" variant="outline" className="h-10 border-white/20 hover:bg-white/5" data-testid="button-read-docs">
+                  <FileCode className="w-4 h-4 mr-2" /> Read Docs
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
