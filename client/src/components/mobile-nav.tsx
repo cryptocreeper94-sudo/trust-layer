@@ -38,7 +38,7 @@ export function MobileNav() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50"
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[99]"
               onClick={() => setIsOpen(false)}
             />
             <motion.div
@@ -46,7 +46,8 @@ export function MobileNav() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="fixed top-0 right-0 bottom-0 w-72 bg-[#0c1224] border-l border-white/10 z-50 p-6"
+              style={{ backgroundColor: '#0c1224' }}
+              className="fixed top-0 right-0 bottom-0 w-72 border-l border-white/10 z-[100] p-6"
             >
               <div className="flex justify-between items-center mb-8">
                 <span className="font-display font-bold text-xl">Menu</span>
