@@ -23,10 +23,10 @@ export function MobileNav() {
         variant="ghost"
         size="icon"
         onClick={() => setIsOpen(true)}
-        className="hover:bg-white/5"
+        className="hover:bg-white/5 min-w-[44px] min-h-[44px]"
         data-testid="button-mobile-menu"
       >
-        <Menu className="w-5 h-5" />
+        <Menu className="w-6 h-6" />
       </Button>
 
       <AnimatePresence>

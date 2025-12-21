@@ -272,13 +272,15 @@ export default function Home() {
                     showFavorite
                   />
                 ))}
-                <div className="group relative rounded-xl border-2 border-dashed border-white/10 bg-transparent flex flex-col items-center justify-center p-8 hover:border-primary/50 transition-colors cursor-pointer">
-                  <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                    <Code className="w-6 h-6 text-muted-foreground group-hover:text-primary" />
+                <Link href="/developers">
+                  <div className="group relative rounded-xl border-2 border-dashed border-white/10 bg-transparent flex flex-col items-center justify-center p-8 hover:border-primary/50 transition-colors cursor-pointer h-full" data-testid="card-submit-app">
+                    <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                      <Code className="w-6 h-6 text-muted-foreground group-hover:text-primary" />
+                    </div>
+                    <h3 className="text-lg font-bold text-muted-foreground group-hover:text-primary">Submit Your App</h3>
+                    <p className="text-sm text-center text-muted-foreground/60 mt-2">Join the ecosystem</p>
                   </div>
-                  <h3 className="text-lg font-bold text-muted-foreground group-hover:text-primary">Submit Your App</h3>
-                  <p className="text-sm text-center text-muted-foreground/60 mt-2">Join the ecosystem</p>
-                </div>
+                </Link>
               </>
             )}
           </div>
@@ -406,15 +408,19 @@ function FeatureItem({ icon: Icon, title, desc }: { icon: any, title: string, de
   );
 }
 
-function AppCard({ id, name, category, desc, gradient, showFavorite }: { id?: string, name: string, category: string, desc: string, gradient: string, showFavorite?: boolean }) {
-  return (
-    <div className="group relative p-[1px] rounded-xl bg-gradient-to-b from-white/10 to-transparent hover:from-primary/50 hover:to-secondary/50 transition-all duration-300">
+function AppCard({ id, name, category, desc, gradient, showFavorite, url }: { id?: string, name: string, category: string, desc: string, gradient: string, showFavorite?: boolean, url?: string }) {
+  const cardContent = (
+    <div className="group relative p-[1px] rounded-xl bg-gradient-to-b from-white/10 to-transparent hover:from-primary/50 hover:to-secondary/50 transition-all duration-300 cursor-pointer">
       <div className="relative h-full bg-black/40 backdrop-blur-xl rounded-xl p-6 hover:bg-black/60 transition-all">
         <div className="flex justify-between items-start mb-4">
           <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-xl shadow-lg`}>
             {name.charAt(0)}
           </div>
-          {showFavorite && id && <FavoriteButton appId={id} />}
+          {showFavorite && id && (
+            <div onClick={(e) => e.stopPropagation()}>
+              <FavoriteButton appId={id} />
+            </div>
+          )}
         </div>
         <div className="flex justify-between items-start mb-2">
           <h3 className="font-bold text-xl text-white group-hover:text-primary transition-colors">{name}</h3>
@@ -425,10 +431,24 @@ function AppCard({ id, name, category, desc, gradient, showFavorite }: { id?: st
         <p className="text-sm text-muted-foreground leading-relaxed mb-4">
           {desc}
         </p>
-        <div className="flex items-center text-primary text-xs font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0">
-          Launch App <ArrowRight className="w-3 h-3 ml-1" />
+        <div className="flex items-center text-primary text-xs font-bold uppercase tracking-wider md:opacity-0 md:group-hover:opacity-100 transition-opacity md:transform md:translate-y-2 md:group-hover:translate-y-0">
+          LAUNCH APP <ArrowRight className="w-3 h-3 ml-1" />
         </div>
       </div>
     </div>
+  );
+
+  if (url) {
+    return (
+      <a href={url} target="_blank" rel="noopener noreferrer" data-testid={`card-app-${id}`}>
+        {cardContent}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={`/ecosystem/${id || name.toLowerCase().replace(/\s+/g, '-')}`}>
+      <div data-testid={`card-app-${id}`}>{cardContent}</div>
+    </Link>
   );
 }
