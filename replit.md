@@ -33,11 +33,11 @@ User wants: Full blockchain implementation, not just a web portal. No piggybacki
 - `main.rs` - CLI entry point
 
 ### Chain Configuration
-- Chain ID: 1337
+- Chain ID: 8453
 - Chain Name: DarkWave Chain
-- Native Token: DWAV (DarkWave)
-- Initial Supply: 100,000,000 DWAV
-- Decimals: 8
+- Native Token: DWT (DarkWave Token)
+- Total Supply: 100,000,000 DWT
+- Decimals: 18 (ERC-20 compatible)
 - Block Time: 400ms
 - Max TX per block: 10,000
 

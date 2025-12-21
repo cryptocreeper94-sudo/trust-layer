@@ -44,7 +44,7 @@ pub struct Transaction {
     pub hash: Hash,
     pub from: Address,
     pub to: Address,
-    pub amount: u64,
+    pub amount: u128,
     pub nonce: u64,
     pub gas_limit: u64,
     pub gas_price: u64,
@@ -77,7 +77,7 @@ impl Transaction {
     pub fn new(
         from: Address,
         to: Address,
-        amount: u64,
+        amount: u128,
         nonce: u64,
         gas_limit: u64,
         gas_price: u64,
@@ -97,8 +97,8 @@ impl Transaction {
         }
     }
 
-    pub fn total_cost(&self) -> u64 {
-        self.amount + (self.gas_limit * self.gas_price)
+    pub fn total_cost(&self) -> u128 {
+        self.amount + ((self.gas_limit * self.gas_price) as u128)
     }
 }
 
@@ -149,7 +149,7 @@ impl Block {
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Account {
     pub address: Address,
-    pub balance: u64,
+    pub balance: u128,
     pub nonce: u64,
     pub code_hash: Option<Hash>,
     pub storage_root: Option<Hash>,
@@ -166,7 +166,7 @@ impl Account {
         }
     }
 
-    pub fn with_balance(address: Address, balance: u64) -> Self {
+    pub fn with_balance(address: Address, balance: u128) -> Self {
         Self {
             address,
             balance,
@@ -211,5 +211,5 @@ pub struct NetworkStats {
     pub total_transactions: u64,
     pub active_validators: usize,
     pub total_accounts: u64,
-    pub total_supply: u64,
+    pub total_supply: u128,
 }

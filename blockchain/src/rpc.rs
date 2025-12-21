@@ -47,7 +47,7 @@ pub struct TransactionResponse {
     pub hash: String,
     pub from: String,
     pub to: String,
-    pub amount: u64,
+    pub amount: u128,
     pub nonce: u64,
     pub gas_limit: u64,
     pub gas_price: u64,
@@ -57,7 +57,7 @@ pub struct TransactionResponse {
 #[derive(Serialize)]
 pub struct AccountResponse {
     pub address: String,
-    pub balance: u64,
+    pub balance: u128,
     pub nonce: u64,
 }
 
@@ -65,7 +65,7 @@ pub struct AccountResponse {
 pub struct SendTransactionRequest {
     pub from: String,
     pub to: String,
-    pub amount: u64,
+    pub amount: u128,
     pub gas_limit: u64,
     pub gas_price: u64,
     pub data: Option<String>,

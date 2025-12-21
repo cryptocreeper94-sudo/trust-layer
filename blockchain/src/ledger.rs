@@ -174,7 +174,7 @@ impl Ledger {
         Ok(())
     }
 
-    pub fn get_balance(&self, address: &Address) -> Result<u64, LedgerError> {
+    pub fn get_balance(&self, address: &Address) -> Result<u128, LedgerError> {
         Ok(self.get_account(address)?.balance)
     }
 
@@ -182,7 +182,7 @@ impl Ledger {
         &self,
         from: &Address,
         to: &Address,
-        amount: u64,
+        amount: u128,
     ) -> Result<(), LedgerError> {
         let mut from_account = self.get_account(from)?;
         let mut to_account = self.get_account(to)?;
@@ -233,7 +233,7 @@ impl Ledger {
         Ok(self.txs_tree.len() as u64)
     }
 
-    pub fn mint(&self, address: &Address, amount: u64) -> Result<(), LedgerError> {
+    pub fn mint(&self, address: &Address, amount: u128) -> Result<(), LedgerError> {
         let mut account = self.get_account(address)?;
         account.balance += amount;
         self.update_account(&account)?;
