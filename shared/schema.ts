@@ -226,4 +226,59 @@ export const dualChainResultSchema = z.object({
 
 export type DualChainResult = z.infer<typeof dualChainResultSchema>;
 
+export const hallmarks = pgTable("hallmarks", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  hallmarkId: text("hallmark_id").notNull().unique(),
+  masterSequence: text("master_sequence").notNull(),
+  subSequence: text("sub_sequence").notNull().default("01"),
+  appId: text("app_id").notNull(),
+  appName: text("app_name").notNull(),
+  productName: text("product_name"),
+  version: text("version"),
+  releaseType: text("release_type").notNull().default("release"),
+  dataHash: text("data_hash").notNull(),
+  metadata: text("metadata"),
+  qrCodeSvg: text("qr_code_svg"),
+  verificationToken: text("verification_token"),
+  darkwaveTxHash: text("darkwave_tx_hash"),
+  darkwaveBlockHeight: text("darkwave_block_height"),
+  status: text("status").notNull().default("pending"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  confirmedAt: timestamp("confirmed_at"),
+});
+
+export const hallmarkCounter = pgTable("hallmark_counter", {
+  id: varchar("id").primaryKey().default("master"),
+  currentSequence: text("current_sequence").notNull().default("0"),
+});
+
+export const insertHallmarkSchema = createInsertSchema(hallmarks).omit({
+  id: true,
+  createdAt: true,
+  confirmedAt: true,
+});
+
+export type InsertHallmark = z.infer<typeof insertHallmarkSchema>;
+export type Hallmark = typeof hallmarks.$inferSelect;
+
+export const hallmarkResponseSchema = z.object({
+  hallmarkId: z.string(),
+  appId: z.string(),
+  appName: z.string(),
+  productName: z.string().optional(),
+  version: z.string().optional(),
+  releaseType: z.string(),
+  dataHash: z.string(),
+  darkwave: z.object({
+    txHash: z.string().optional(),
+    blockHeight: z.string().optional(),
+    status: z.string(),
+    explorerUrl: z.string().optional(),
+  }),
+  createdAt: z.string(),
+  verified: z.boolean(),
+});
+
+export type HallmarkResponse = z.infer<typeof hallmarkResponseSchema>;
+
 export const APP_VERSION = "1.0.0-alpha";

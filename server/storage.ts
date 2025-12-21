@@ -1,4 +1,4 @@
-import { type User, type InsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps } from "@shared/schema";
+import { type User, type InsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
 import crypto from "crypto";
@@ -35,6 +35,14 @@ export interface IStorage {
   getDualChainStamp(id: string): Promise<DualChainStamp | undefined>;
   getDualChainStampsByApp(appId: string): Promise<DualChainStamp[]>;
   updateDualChainStamp(id: string, data: Partial<InsertDualChainStamp>): Promise<DualChainStamp | undefined>;
+
+  createHallmark(data: InsertHallmark): Promise<Hallmark>;
+  getHallmark(hallmarkId: string): Promise<Hallmark | undefined>;
+  getHallmarksByApp(appId: string): Promise<Hallmark[]>;
+  getAllHallmarks(limit?: number): Promise<Hallmark[]>;
+  updateHallmark(hallmarkId: string, data: Partial<InsertHallmark>): Promise<Hallmark | undefined>;
+  verifyHallmark(hallmarkId: string): Promise<{ valid: boolean; hallmark?: Hallmark }>;
+  getNextMasterSequence(): Promise<string>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -230,6 +238,53 @@ export class DatabaseStorage implements IStorage {
   async updateDualChainStamp(id: string, data: Partial<InsertDualChainStamp>): Promise<DualChainStamp | undefined> {
     const [stamp] = await db.update(dualChainStamps).set(data).where(eq(dualChainStamps.id, id)).returning();
     return stamp;
+  }
+
+  async createHallmark(data: InsertHallmark): Promise<Hallmark> {
+    const [hallmark] = await db.insert(hallmarks).values(data).returning();
+    return hallmark;
+  }
+
+  async getHallmark(hallmarkId: string): Promise<Hallmark | undefined> {
+    const [hallmark] = await db.select().from(hallmarks).where(eq(hallmarks.hallmarkId, hallmarkId));
+    return hallmark;
+  }
+
+  async getHallmarksByApp(appId: string): Promise<Hallmark[]> {
+    return db.select().from(hallmarks).where(eq(hallmarks.appId, appId)).orderBy(desc(hallmarks.createdAt));
+  }
+
+  async getAllHallmarks(limit: number = 100): Promise<Hallmark[]> {
+    return db.select().from(hallmarks).orderBy(desc(hallmarks.createdAt)).limit(limit);
+  }
+
+  async updateHallmark(hallmarkId: string, data: Partial<InsertHallmark>): Promise<Hallmark | undefined> {
+    const [hallmark] = await db.update(hallmarks).set(data).where(eq(hallmarks.hallmarkId, hallmarkId)).returning();
+    return hallmark;
+  }
+
+  async verifyHallmark(hallmarkId: string): Promise<{ valid: boolean; hallmark?: Hallmark }> {
+    const hallmark = await this.getHallmark(hallmarkId);
+    if (!hallmark) {
+      return { valid: false };
+    }
+    return {
+      valid: hallmark.status === "confirmed" && !!hallmark.darkwaveTxHash,
+      hallmark,
+    };
+  }
+
+  async getNextMasterSequence(): Promise<string> {
+    const [existing] = await db.select().from(hallmarkCounter).where(eq(hallmarkCounter.id, "master"));
+    
+    if (!existing) {
+      await db.insert(hallmarkCounter).values({ id: "master", currentSequence: "0" });
+      return "000000000";
+    }
+
+    const nextSeq = parseInt(existing.currentSequence) + 1;
+    await db.update(hallmarkCounter).set({ currentSequence: nextSeq.toString() }).where(eq(hallmarkCounter.id, "master"));
+    return nextSeq.toString().padStart(9, "0");
   }
 }
 

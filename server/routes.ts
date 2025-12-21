@@ -6,6 +6,7 @@ import type { EcosystemApp, BlockchainStats } from "@shared/schema";
 import { insertDocumentSchema, insertPageViewSchema, APP_VERSION } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
+import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -696,6 +697,142 @@ export async function registerRoutes(
       decimals: darkwaveConfig.decimals,
       explorerUrl: darkwaveConfig.explorerUrl,
     });
+  });
+
+  app.post("/api/hallmark/generate", async (req, res) => {
+    try {
+      const apiKey = req.headers["x-api-key"] as string;
+      
+      if (!apiKey) {
+        return res.status(401).json({ error: "API key required" });
+      }
+
+      const validKey = await storage.validateApiKey(apiKey);
+      if (!validKey) {
+        return res.status(401).json({ error: "Invalid or revoked API key" });
+      }
+
+      const { appId, appName, productName, version, releaseType, metadata } = req.body;
+
+      const result = await generateHallmark({
+        appId: appId || validKey.appName,
+        appName: appName || validKey.appName,
+        productName,
+        version,
+        releaseType,
+        metadata,
+      });
+
+      if (!result.success) {
+        return res.status(500).json({ error: result.error });
+      }
+
+      res.status(201).json(result);
+    } catch (error) {
+      console.error("Hallmark generation error:", error);
+      res.status(500).json({ error: "Failed to generate hallmark" });
+    }
+  });
+
+  app.get("/api/hallmark/:hallmarkId", async (req, res) => {
+    try {
+      const { hallmarkId } = req.params;
+      const hallmark = await storage.getHallmark(hallmarkId);
+
+      if (!hallmark) {
+        return res.status(404).json({ error: "Hallmark not found" });
+      }
+
+      const verified = hallmark.status === "confirmed" && !!hallmark.darkwaveTxHash;
+      res.json({
+        hallmarkId: hallmark.hallmarkId,
+        masterSequence: hallmark.masterSequence,
+        subSequence: hallmark.subSequence,
+        appId: hallmark.appId,
+        appName: hallmark.appName,
+        productName: hallmark.productName,
+        version: hallmark.version,
+        releaseType: hallmark.releaseType,
+        dataHash: hallmark.dataHash,
+        metadata: hallmark.metadata ? JSON.parse(hallmark.metadata) : null,
+        darkwave: {
+          txHash: hallmark.darkwaveTxHash,
+          blockHeight: hallmark.darkwaveBlockHeight,
+          status: hallmark.status,
+        },
+        verified,
+        message: verified 
+          ? `Verified on DarkWave Chain (Block ${hallmark.darkwaveBlockHeight})`
+          : "Hallmark registered, pending chain confirmation",
+        createdAt: hallmark.createdAt,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch hallmark" });
+    }
+  });
+
+  app.get("/api/hallmark/:hallmarkId/qr", async (req, res) => {
+    try {
+      const { hallmarkId } = req.params;
+      const qrSvg = await getHallmarkQRCode(hallmarkId);
+
+      if (!qrSvg) {
+        return res.status(404).json({ error: "Hallmark not found" });
+      }
+
+      res.setHeader("Content-Type", "image/svg+xml");
+      res.send(qrSvg);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch QR code" });
+    }
+  });
+
+  app.get("/api/hallmarks", async (req, res) => {
+    try {
+      const { appId, limit } = req.query;
+      
+      let hallmarks;
+      if (appId) {
+        hallmarks = await storage.getHallmarksByApp(appId as string);
+      } else {
+        hallmarks = await storage.getAllHallmarks(parseInt(limit as string) || 100);
+      }
+
+      res.json({
+        hallmarks: hallmarks.map(h => ({
+          hallmarkId: h.hallmarkId,
+          appName: h.appName,
+          productName: h.productName,
+          version: h.version,
+          status: h.status,
+          verified: h.status === "confirmed" && !!h.darkwaveTxHash,
+          createdAt: h.createdAt,
+        })),
+        total: hallmarks.length,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch hallmarks" });
+    }
+  });
+
+  app.get("/api/hallmark/:hallmarkId/verify", async (req, res) => {
+    try {
+      const { hallmarkId } = req.params;
+      const result = await verifyHallmark(hallmarkId);
+
+      res.json({
+        valid: result.valid,
+        onChain: result.onChain,
+        message: result.message,
+        hallmarkId: result.hallmark?.hallmarkId,
+        appName: result.hallmark?.appName,
+        productName: result.hallmark?.productName,
+        version: result.hallmark?.version,
+        darkwaveTxHash: result.hallmark?.darkwaveTxHash,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to verify hallmark" });
+    }
   });
 
   return httpServer;
