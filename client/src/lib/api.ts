@@ -1,5 +1,28 @@
 import type { EcosystemApp, BlockchainStats, Document, InsertDocument } from "@shared/schema";
 
+export interface ServiceHealth {
+  name: string;
+  status: "operational" | "degraded" | "down";
+  latency?: number;
+  message?: string;
+}
+
+export interface SystemHealth {
+  status: "operational" | "degraded" | "down";
+  timestamp: string;
+  services: ServiceHealth[];
+  uptime: number;
+  version: string;
+}
+
+export async function fetchSystemHealth(): Promise<SystemHealth> {
+  const response = await fetch("/api/system/health");
+  if (!response.ok) {
+    throw new Error("Failed to fetch system health");
+  }
+  return response.json();
+}
+
 export async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
   const response = await fetch("/api/ecosystem/apps");
   if (!response.ok) {
