@@ -15,10 +15,12 @@ import { InfoTooltip } from "@/components/info-tooltip";
 
 import orbitStaffingImg from "@assets/ecosystem/orbit-staffing.jpg?url";
 import lotopsproImg from "@assets/ecosystem/lotopspro.jpg?url";
+import brewBoardImg from "@assets/ecosystem/brew-board.jpg?url";
 
 const appImageMap: Record<string, string> = {
   "orbit-staffing": orbitStaffingImg,
   "lotopspro": lotopsproImg,
+  "brew-board": brewBoardImg,
 };
 
 const categories = ["All Apps", "DeFi", "Enterprise", "AI", "Social", "Gaming", "Automotive", "Services"];
