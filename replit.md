@@ -31,15 +31,15 @@ The blockchain is built in Rust, utilizing a Proof-of-Authority (PoA) consensus 
 
 #### DarkWave Studio Phase 4 (In Progress)
 - **Monaco Editor Integration** (COMPLETED): Full-featured code editor loaded via CDN with syntax highlighting for 70+ languages, IntelliSense, minimap, code folding, and dark theme
-- Multi-file tabs with unsaved changes indicators
-- Search/replace across all project files
-- Project templates and boilerplate generators (React, Node, Python starters)
-- File upload/download support
-- Keyboard shortcuts panel (Ctrl+S, Ctrl+F, etc.)
-- Environment variables UI (dev/prod toggle)
-- Console log filtering and search
-- Project settings panel
-- File rename and move operations
+- **Multi-file Tabs** (COMPLETED): Tabbed interface showing all open files with amber pulsing unsaved changes indicators, close buttons, and active tab highlighting with cyan border
+- **Search/Replace** (COMPLETED): Global search across all project files with line-by-line results, file jumping, and replace-all functionality accessible via Search tab in sidebar
+- **Project Templates** (COMPLETED): React, Node.js Express, and Python Flask starter templates that auto-generate complete project structures when project has no files
+- **Keyboard Shortcuts** (COMPLETED): Panel accessible via Ctrl+/ showing all shortcuts (Ctrl+S save, Ctrl+F search, Ctrl+B console, Esc close)
+- **File Rename** (COMPLETED): Inline file renaming with Edit2 button, Enter to confirm, Escape to cancel
+- File upload/download support (pending)
+- Environment variables UI with dev/prod toggle (pending)
+- Console log filtering and search (pending)
+- Project settings panel (pending)
 
 #### Monaco Editor Technical Details
 - **CDN Loading**: Monaco v0.52.2 loaded from cdnjs.cloudflare.com

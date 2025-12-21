@@ -7,7 +7,7 @@ import {
   FileCode, FileJson, FileText, Folder, Package, Globe,
   GitBranch, GitCommit, History, RotateCcw, Terminal,
   Rocket, Cloud, Link2, Users, Info, Zap, Shield, Database,
-  ExternalLink, Copy, CheckCircle, Loader2, Send
+  ExternalLink, Copy, CheckCircle, Loader2, Send, Search, Replace, Keyboard
 } from "lucide-react";
 import { MonacoEditor } from "@/components/monaco-editor";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -57,6 +57,123 @@ interface PresenceUser {
   cursor?: { line: number; column: number };
   file?: string;
 }
+
+const PROJECT_TEMPLATES = {
+  react: {
+    name: "React App",
+    icon: "⚛️",
+    files: [
+      { name: "index.html", content: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>React App</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>` },
+      { name: "src/main.jsx", content: `import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);` },
+      { name: "src/App.jsx", content: `import { useState } from 'react';
+
+export default function App() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div style={{ padding: '2rem', fontFamily: 'system-ui' }}>
+      <h1>Hello DarkWave!</h1>
+      <button onClick={() => setCount(c => c + 1)}>
+        Count: {count}
+      </button>
+    </div>
+  );
+}` },
+      { name: "package.json", content: `{
+  "name": "react-app",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.0.0"
+  }
+}` },
+    ]
+  },
+  node: {
+    name: "Node.js API",
+    icon: "🟢",
+    files: [
+      { name: "index.js", content: `const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.json({ message: 'Welcome to DarkWave API!' });
+});
+
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+app.listen(PORT, () => {
+  console.log(\`Server running on port \${PORT}\`);
+});` },
+      { name: "package.json", content: `{
+  "name": "node-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}` },
+    ]
+  },
+  python: {
+    name: "Python Flask",
+    icon: "🐍",
+    files: [
+      { name: "app.py", content: `from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return jsonify(message='Welcome to DarkWave API!')
+
+@app.route('/api/health')
+def health():
+    return jsonify(status='ok')
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)` },
+      { name: "requirements.txt", content: `flask==3.0.0
+gunicorn==21.2.0` },
+    ]
+  },
+};
 
 const PROTOCOL_DEFINITIONS: Record<string, string> = {
   "DWT": "DarkWave Token - The native cryptocurrency of DarkWave Chain, used for transactions and gas fees.",
@@ -122,10 +239,15 @@ export default function Studio() {
   const [configs, setConfigs] = useState<Config[]>([]);
   const [activeFile, setActiveFile] = useState<FileNode | null>(null);
   const [editorContent, setEditorContent] = useState("");
+  const [openTabs, setOpenTabs] = useState<FileNode[]>([]);
+  const [unsavedFiles, setUnsavedFiles] = useState<Set<string>>(new Set());
+  const [originalContent, setOriginalContent] = useState<Map<string, string>>(new Map());
   const [activeTab, setActiveTab] = useState("files");
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
   const [newFileName, setNewFileName] = useState("");
   const [showNewFile, setShowNewFile] = useState(false);
+  const [renamingFile, setRenamingFile] = useState<FileNode | null>(null);
+  const [renameInput, setRenameInput] = useState("");
   const [newSecretKey, setNewSecretKey] = useState("");
   const [newSecretValue, setNewSecretValue] = useState("");
   const [newConfigKey, setNewConfigKey] = useState("");
@@ -138,6 +260,9 @@ export default function Studio() {
   const [packageManager, setPackageManager] = useState<"npm" | "pip" | null>(null);
   const [customDomainInput, setCustomDomainInput] = useState("");
   const [savingDomain, setSavingDomain] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [replaceQuery, setReplaceQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<{fileId: string, fileName: string, line: number, content: string, match: string}[]>([]);
   const [presence, setPresence] = useState<PresenceUser[]>([]);
   const wsRef = useRef<WebSocket | null>(null);
   const [commits, setCommits] = useState<Commit[]>([]);
@@ -261,6 +386,20 @@ export default function Studio() {
       setActiveFile(file);
       setEditorContent(file.content);
       
+      // Add to open tabs if not already open
+      setOpenTabs(prev => {
+        if (prev.some(t => t.id === file.id)) return prev;
+        return [...prev, file];
+      });
+      
+      // Track original content for unsaved detection
+      setOriginalContent(prev => {
+        if (prev.has(file.id)) return prev;
+        const next = new Map(prev);
+        next.set(file.id, file.content);
+        return next;
+      });
+      
       if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN && projectId) {
         wsRef.current.send(JSON.stringify({
           type: "cursor",
@@ -269,6 +408,184 @@ export default function Studio() {
           cursor: { line: 1, column: 1 },
         }));
       }
+    }
+  };
+
+  const handleCloseTab = (e: React.MouseEvent, fileId: string) => {
+    e.stopPropagation();
+    
+    // Remove from open tabs
+    setOpenTabs(prev => prev.filter(t => t.id !== fileId));
+    
+    // Clear unsaved status
+    setUnsavedFiles(prev => {
+      const next = new Set(prev);
+      next.delete(fileId);
+      return next;
+    });
+    
+    // Clear original content tracking
+    setOriginalContent(prev => {
+      const next = new Map(prev);
+      next.delete(fileId);
+      return next;
+    });
+    
+    // If closing active file, switch to another tab or clear
+    if (activeFile?.id === fileId) {
+      const remaining = openTabs.filter(t => t.id !== fileId);
+      if (remaining.length > 0) {
+        const newActive = remaining[remaining.length - 1];
+        setActiveFile(newActive);
+        setEditorContent(newActive.content);
+      } else {
+        setActiveFile(null);
+        setEditorContent("");
+      }
+    }
+  };
+
+  // Track unsaved changes
+  useEffect(() => {
+    if (!activeFile) return;
+    const original = originalContent.get(activeFile.id);
+    if (original !== undefined && editorContent !== original) {
+      setUnsavedFiles(prev => {
+        if (prev.has(activeFile.id)) return prev;
+        const next = new Set(prev);
+        next.add(activeFile.id);
+        return next;
+      });
+    } else if (original !== undefined && editorContent === original) {
+      setUnsavedFiles(prev => {
+        if (!prev.has(activeFile.id)) return prev;
+        const next = new Set(prev);
+        next.delete(activeFile.id);
+        return next;
+      });
+    }
+  }, [editorContent, activeFile, originalContent]);
+
+  const handleSearch = useCallback(() => {
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    const results: {fileId: string, fileName: string, line: number, content: string, match: string}[] = [];
+    const query = searchQuery.toLowerCase();
+    
+    const searchInFiles = (fileList: FileNode[]) => {
+      for (const file of fileList) {
+        if (file.isFolder && file.children) {
+          searchInFiles(file.children);
+        } else if (!file.isFolder && file.content) {
+          const lines = file.content.split('\n');
+          lines.forEach((line, idx) => {
+            if (line.toLowerCase().includes(query)) {
+              results.push({
+                fileId: file.id,
+                fileName: file.name,
+                line: idx + 1,
+                content: line.trim().substring(0, 100),
+                match: searchQuery
+              });
+            }
+          });
+        }
+      }
+    };
+    
+    searchInFiles(files);
+    setSearchResults(results);
+  }, [searchQuery, files]);
+
+  const handleReplaceAll = useCallback(() => {
+    if (!searchQuery.trim() || !replaceQuery) return;
+    
+    const replaceInFiles = (fileList: FileNode[]): FileNode[] => {
+      return fileList.map(file => {
+        if (file.isFolder && file.children) {
+          return { ...file, children: replaceInFiles(file.children) };
+        } else if (!file.isFolder && file.content) {
+          const regex = new RegExp(searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+          const newContent = file.content.replace(regex, replaceQuery);
+          if (newContent !== file.content) {
+            return { ...file, content: newContent };
+          }
+        }
+        return file;
+      });
+    };
+    
+    setFiles(replaceInFiles(files));
+    if (activeFile) {
+      const regex = new RegExp(searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+      setEditorContent(prev => prev.replace(regex, replaceQuery));
+    }
+    handleSearch();
+  }, [searchQuery, replaceQuery, files, activeFile, handleSearch]);
+
+  const jumpToSearchResult = (result: typeof searchResults[0]) => {
+    const file = files.find(f => f.id === result.fileId);
+    if (file) {
+      handleFileSelect(file);
+    }
+  };
+
+  const applyTemplate = async (templateKey: keyof typeof PROJECT_TEMPLATES) => {
+    if (!projectId) return;
+    
+    const template = PROJECT_TEMPLATES[templateKey];
+    const newFiles: FileNode[] = [];
+    const failedFiles: string[] = [];
+    
+    setConsoleOutput(prev => [...prev, `> Applying "${template.name}" template...`]);
+    
+    for (const templateFile of template.files) {
+      try {
+        const res = await fetch(`/api/studio/projects/${projectId}/files`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: templateFile.name,
+            content: templateFile.content,
+            path: "/" + templateFile.name,
+            isFolder: false,
+            language: getLanguage(templateFile.name),
+          }),
+        });
+        if (res.ok) {
+          const newFile = await res.json();
+          newFiles.push({
+            id: newFile.id,
+            name: newFile.name,
+            path: newFile.path,
+            isFolder: false,
+            content: newFile.content,
+            language: newFile.language,
+          });
+        } else {
+          failedFiles.push(templateFile.name);
+        }
+      } catch (error) {
+        console.error("Failed to create template file:", error);
+        failedFiles.push(templateFile.name);
+      }
+    }
+    
+    setFiles(prev => [...prev, ...newFiles]);
+    if (newFiles.length > 0) {
+      handleFileSelect(newFiles[0]);
+    }
+    
+    if (failedFiles.length > 0) {
+      setConsoleOutput(prev => [
+        ...prev, 
+        `> Warning: Failed to create ${failedFiles.length} file(s): ${failedFiles.join(', ')}`,
+        `> Created ${newFiles.length}/${template.files.length} files from "${template.name}" template`
+      ]);
+    } else {
+      setConsoleOutput(prev => [...prev, `> Successfully created ${newFiles.length} files from "${template.name}" template`]);
     }
   };
 
@@ -286,6 +603,18 @@ export default function Studio() {
           body: JSON.stringify({ content: editorContent }),
         });
       }
+      // Update original content to current (no longer unsaved)
+      setOriginalContent(prev => {
+        const next = new Map(prev);
+        next.set(activeFile.id, editorContent);
+        return next;
+      });
+      // Clear unsaved status
+      setUnsavedFiles(prev => {
+        const next = new Set(prev);
+        next.delete(activeFile.id);
+        return next;
+      });
     } catch (error) {
       console.error("Save error:", error);
     }
@@ -346,6 +675,46 @@ export default function Studio() {
       }
     } catch (error) {
       console.error("Delete file error:", error);
+    }
+  };
+
+  const startRename = (file: FileNode) => {
+    setRenamingFile(file);
+    setRenameInput(file.name);
+  };
+
+  const handleRename = async () => {
+    if (!renamingFile || !renameInput.trim()) return;
+    try {
+      const newName = renameInput.trim();
+      const lastSlashIndex = renamingFile.path.lastIndexOf('/');
+      const directory = lastSlashIndex >= 0 ? renamingFile.path.substring(0, lastSlashIndex + 1) : '/';
+      const newPath = directory + newName;
+      const res = await fetch(`/api/studio/files/${renamingFile.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newName, path: newPath }),
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        setFiles(prev => prev.map(f => 
+          f.id === renamingFile.id 
+            ? { ...f, name: updated.name, path: updated.path, language: getLanguage(updated.name) }
+            : f
+        ));
+        if (activeFile?.id === renamingFile.id) {
+          setActiveFile(prev => prev ? { ...prev, name: updated.name, path: updated.path } : null);
+        }
+        setOpenTabs(prev => prev.map(t => 
+          t.id === renamingFile.id ? { ...t, name: updated.name } : t
+        ));
+        setConsoleOutput(prev => [...prev, `> Renamed ${renamingFile.name} to ${newName}`]);
+      }
+    } catch (error) {
+      console.error("Rename file error:", error);
+    } finally {
+      setRenamingFile(null);
+      setRenameInput("");
     }
   };
 
@@ -673,10 +1042,31 @@ export default function Studio() {
     }
   }, [activeFile, projectId]);
 
+  const [showShortcuts, setShowShortcuts] = useState(false);
+
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === "s") {
+    const isCmd = e.metaKey || e.ctrlKey;
+    
+    if (isCmd && e.key === "s") {
       e.preventDefault();
+      e.stopPropagation();
       handleSave();
+    } else if (isCmd && e.key === "f") {
+      e.preventDefault();
+      e.stopPropagation();
+      setActiveTab("search");
+    } else if (isCmd && e.key === "b") {
+      e.preventDefault();
+      e.stopPropagation();
+      setBottomTab("console");
+    } else if (isCmd && e.key === "/") {
+      e.preventDefault();
+      e.stopPropagation();
+      setShowShortcuts(prev => !prev);
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      setShowShortcuts(false);
+      setRenamingFile(null);
     }
   }, [activeFile, editorContent]);
 
@@ -795,9 +1185,12 @@ export default function Studio() {
         {/* Sidebar */}
         <aside className="w-64 border-r border-white/5 bg-black/40 flex flex-col shrink-0">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
-            <TabsList className="w-full grid grid-cols-3 h-10 bg-transparent border-b border-white/5 rounded-none">
+            <TabsList className="w-full grid grid-cols-4 h-10 bg-transparent border-b border-white/5 rounded-none">
               <TabsTrigger value="files" className="text-xs data-[state=active]:bg-white/5 rounded-none" data-testid="tab-files">
                 <FolderOpen className="w-3.5 h-3.5 mr-1" /> Files
+              </TabsTrigger>
+              <TabsTrigger value="search" className="text-xs data-[state=active]:bg-white/5 rounded-none" data-testid="tab-search">
+                <Search className="w-3.5 h-3.5 mr-1" /> Search
               </TabsTrigger>
               <TabsTrigger value="secrets" className="text-xs data-[state=active]:bg-white/5 rounded-none" data-testid="tab-secrets">
                 <Lock className="w-3.5 h-3.5 mr-1" /> Secrets
@@ -820,6 +1213,27 @@ export default function Studio() {
                   <Plus className="w-3.5 h-3.5" />
                 </Button>
               </div>
+
+              {files.length === 0 && (
+                <div className="mb-4">
+                  <span className="text-xs text-muted-foreground block mb-2">Quick Start Templates</span>
+                  <div className="space-y-1.5">
+                    {Object.entries(PROJECT_TEMPLATES).map(([key, template]) => (
+                      <Button
+                        key={key}
+                        size="sm"
+                        variant="outline"
+                        className="w-full justify-start text-xs h-8 bg-black/20 border-white/10 hover:bg-white/5 hover:border-cyan-400/50"
+                        onClick={() => applyTemplate(key as keyof typeof PROJECT_TEMPLATES)}
+                        data-testid={`template-${key}`}
+                      >
+                        <span className="mr-2">{template.icon}</span>
+                        {template.name}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {showNewFile && (
                 <div className="flex items-center gap-1 mb-2">
@@ -848,11 +1262,36 @@ export default function Studio() {
                     className={`group flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer text-sm hover:bg-white/5 ${
                       activeFile?.id === file.id ? "bg-primary/20 text-primary" : ""
                     }`}
-                    onClick={() => handleFileSelect(file)}
+                    onClick={() => renamingFile?.id !== file.id && handleFileSelect(file)}
                     data-testid={`file-${file.id}`}
                   >
                     {getFileIcon(file.name, file.isFolder)}
-                    <span className="flex-1 truncate">{file.name}</span>
+                    {renamingFile?.id === file.id ? (
+                      <Input
+                        value={renameInput}
+                        onChange={(e) => setRenameInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") handleRename();
+                          if (e.key === "Escape") { setRenamingFile(null); setRenameInput(""); }
+                        }}
+                        onBlur={handleRename}
+                        className="flex-1 h-5 text-xs py-0 px-1 bg-black/30"
+                        autoFocus
+                        onClick={(e) => e.stopPropagation()}
+                        data-testid="input-rename-file"
+                      />
+                    ) : (
+                      <span className="flex-1 truncate">{file.name}</span>
+                    )}
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100"
+                      onClick={(e) => { e.stopPropagation(); startRename(file); }}
+                      data-testid={`rename-file-${file.id}`}
+                    >
+                      <Edit2 className="w-3 h-3 text-cyan-400" />
+                    </Button>
                     <Button
                       size="sm"
                       variant="ghost"
@@ -865,6 +1304,82 @@ export default function Studio() {
                   </div>
                 ))}
               </div>
+            </TabsContent>
+
+            <TabsContent value="search" className="flex-1 overflow-auto p-2 m-0">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs text-muted-foreground uppercase">Search & Replace</span>
+              </div>
+              <p className="text-xs text-muted-foreground mb-3">
+                Find and replace across all project files.
+              </p>
+
+              <div className="space-y-2 mb-3">
+                <div className="relative">
+                  <Search className="w-3 h-3 absolute left-2.5 top-2.5 text-muted-foreground" />
+                  <Input
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                    placeholder="Search..."
+                    className="h-8 text-xs bg-black/30 pl-8"
+                    data-testid="input-search"
+                  />
+                </div>
+                <div className="relative">
+                  <Replace className="w-3 h-3 absolute left-2.5 top-2.5 text-muted-foreground" />
+                  <Input
+                    value={replaceQuery}
+                    onChange={(e) => setReplaceQuery(e.target.value)}
+                    placeholder="Replace with..."
+                    className="h-8 text-xs bg-black/30 pl-8"
+                    data-testid="input-replace"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    size="sm"
+                    onClick={handleSearch}
+                    className="flex-1 text-xs"
+                    data-testid="button-search"
+                  >
+                    <Search className="w-3 h-3 mr-1" /> Find
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleReplaceAll}
+                    disabled={!searchQuery || !replaceQuery || searchResults.length === 0}
+                    className="flex-1 text-xs"
+                    data-testid="button-replace-all"
+                  >
+                    <Replace className="w-3 h-3 mr-1" /> Replace All
+                  </Button>
+                </div>
+              </div>
+
+              {searchResults.length > 0 && (
+                <div className="space-y-1">
+                  <span className="text-xs text-muted-foreground">{searchResults.length} result{searchResults.length !== 1 ? 's' : ''}</span>
+                  <div className="space-y-1 max-h-64 overflow-auto">
+                    {searchResults.map((result, idx) => (
+                      <div
+                        key={idx}
+                        onClick={() => jumpToSearchResult(result)}
+                        className="p-2 rounded bg-black/30 text-xs cursor-pointer hover:bg-white/5 transition-colors"
+                        data-testid={`search-result-${idx}`}
+                      >
+                        <div className="flex items-center gap-2 text-cyan-400 mb-1">
+                          <FileCode className="w-3 h-3" />
+                          <span className="font-medium">{result.fileName}</span>
+                          <span className="text-muted-foreground">:{result.line}</span>
+                        </div>
+                        <code className="text-gray-400 text-xs block truncate">{result.content}</code>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </TabsContent>
 
             <TabsContent value="secrets" className="flex-1 overflow-auto p-2 m-0">
@@ -981,12 +1496,34 @@ export default function Studio() {
         {/* Editor Area */}
         <main className="flex-1 flex flex-col overflow-hidden">
           {/* File Tabs */}
-          <div className="h-9 border-b border-white/5 bg-black/20 flex items-center px-2 shrink-0">
-            {activeFile && (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-t text-xs">
-                {getFileIcon(activeFile.name, false)}
-                <span>{activeFile.name}</span>
+          <div className="h-9 border-b border-white/5 bg-black/20 flex items-center px-1 shrink-0 overflow-x-auto">
+            {openTabs.map(tab => (
+              <div
+                key={tab.id}
+                onClick={() => handleFileSelect(tab)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs cursor-pointer border-r border-white/5 transition-all group hover:bg-white/5 ${
+                  activeFile?.id === tab.id 
+                    ? "bg-white/10 text-white border-t-2 border-t-cyan-400" 
+                    : "text-gray-400"
+                }`}
+                data-testid={`tab-file-${tab.id}`}
+              >
+                {getFileIcon(tab.name, false)}
+                <span className="max-w-24 truncate">{tab.name}</span>
+                {unsavedFiles.has(tab.id) && (
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" title="Unsaved changes" />
+                )}
+                <button
+                  onClick={(e) => handleCloseTab(e, tab.id)}
+                  className="ml-1 p-0.5 rounded hover:bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"
+                  data-testid={`button-close-tab-${tab.id}`}
+                >
+                  <X className="w-3 h-3" />
+                </button>
               </div>
+            ))}
+            {openTabs.length === 0 && (
+              <span className="text-xs text-gray-500 px-3">No files open</span>
             )}
           </div>
 
@@ -1361,6 +1898,52 @@ export default function Studio() {
           </div>
         </aside>
       </div>
+
+      {showShortcuts && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" onClick={() => setShowShortcuts(false)}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="bg-gray-900 border border-white/10 rounded-lg shadow-xl p-4 max-w-md w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-medium text-white flex items-center gap-2">
+                <Keyboard className="w-5 h-5 text-cyan-400" />
+                Keyboard Shortcuts
+              </h3>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setShowShortcuts(false)}
+                className="h-6 w-6 p-0"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+            <div className="space-y-2">
+              {[
+                { keys: "Ctrl + S", desc: "Save current file" },
+                { keys: "Ctrl + F", desc: "Open search" },
+                { keys: "Ctrl + B", desc: "Open console" },
+                { keys: "Ctrl + /", desc: "Toggle shortcuts panel" },
+                { keys: "Escape", desc: "Close panels/modals" },
+              ].map((shortcut) => (
+                <div key={shortcut.keys} className="flex items-center justify-between p-2 rounded bg-black/40 border border-white/5">
+                  <span className="text-sm text-gray-300">{shortcut.desc}</span>
+                  <kbd className="px-2 py-1 text-xs font-mono bg-gray-800 rounded border border-gray-600 text-cyan-400">
+                    {shortcut.keys}
+                  </kbd>
+                </div>
+              ))}
+            </div>
+            <p className="mt-4 text-xs text-muted-foreground text-center">
+              Press <kbd className="px-1 bg-gray-800 rounded border border-gray-600">Ctrl + /</kbd> or <kbd className="px-1 bg-gray-800 rounded border border-gray-600">Esc</kbd> to close
+            </p>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
