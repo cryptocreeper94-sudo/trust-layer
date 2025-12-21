@@ -125,6 +125,30 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/blockchain/treasury", async (req, res) => {
+    try {
+      const treasury = await fetchTreasuryInfo();
+      res.json(treasury);
+    } catch (error) {
+      console.error("Error fetching treasury info:", error);
+      res.status(500).json({ error: "Failed to fetch treasury info" });
+    }
+  });
+
+  app.post("/api/blockchain/treasury/distribute", async (req, res) => {
+    try {
+      const { to, amount } = req.body;
+      if (!to || !amount) {
+        return res.status(400).json({ error: "to and amount are required" });
+      }
+      const result = await distributeTokens(to, amount);
+      res.json(result);
+    } catch (error: any) {
+      console.error("Error distributing tokens:", error);
+      res.status(500).json({ error: error.message || "Failed to distribute tokens" });
+    }
+  });
+
   app.get("/api/documents", async (req, res) => {
     try {
       const { category, appId } = req.query;
@@ -334,4 +358,49 @@ async function fetchBlockchainStats(): Promise<BlockchainStats> {
     currentBlock: "#8,921,042",
     networkHash: "42.8 EH/s",
   };
+}
+
+interface TreasuryInfo {
+  address: string;
+  balance: string;
+  balance_raw: string;
+  total_supply: string;
+}
+
+async function fetchTreasuryInfo(): Promise<TreasuryInfo> {
+  const BLOCKCHAIN_RPC_URL = process.env.BLOCKCHAIN_RPC_URL || "http://localhost:3030";
+  
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 2000);
+    
+    const response = await fetch(`${BLOCKCHAIN_RPC_URL}/treasury`, {
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    
+    if (response.ok) {
+      return await response.json();
+    }
+    throw new Error("Failed to fetch treasury info");
+  } catch (error) {
+    throw new Error("Blockchain node not available");
+  }
+}
+
+async function distributeTokens(to: string, amount: string): Promise<any> {
+  const BLOCKCHAIN_RPC_URL = process.env.BLOCKCHAIN_RPC_URL || "http://localhost:3030";
+  
+  const response = await fetch(`${BLOCKCHAIN_RPC_URL}/treasury/distribute`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ to, amount }),
+  });
+  
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Distribution failed");
+  }
+  
+  return response.json();
 }

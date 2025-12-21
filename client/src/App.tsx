@@ -11,6 +11,7 @@ import Token from "@/pages/token";
 import Explorer from "@/pages/explorer";
 import DocHub from "@/pages/doc-hub";
 import ApiPlayground from "@/pages/api-playground";
+import Treasury from "@/pages/treasury";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -23,6 +24,7 @@ function Router() {
       <Route path="/explorer" component={Explorer} />
       <Route path="/doc-hub" component={DocHub} />
       <Route path="/api-playground" component={ApiPlayground} />
+      <Route path="/treasury" component={Treasury} />
       <Route component={NotFound} />
     </Switch>
   );
