@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+import { Footer } from "@/components/footer";
+import { usePageAnalytics } from "@/hooks/use-analytics";
 
 interface TreasuryInfo {
   address: string;
@@ -47,6 +49,7 @@ async function distributeTokens(data: { to: string; amount: string }): Promise<D
 }
 
 export default function Treasury() {
+  usePageAnalytics();
   const [toAddress, setToAddress] = useState("");
   const [amount, setAmount] = useState("");
   const [copied, setCopied] = useState(false);
@@ -278,11 +281,7 @@ export default function Treasury() {
         </div>
       </div>
 
-      <footer className="bg-black py-8 border-t border-white/10">
-        <div className="container mx-auto px-6 text-center text-sm text-muted-foreground">
-          © 2025 DarkWave Studios. All rights reserved.
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

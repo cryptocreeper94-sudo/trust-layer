@@ -11,6 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchDocuments, createDocument, updateDocument, deleteDocument } from "@/lib/api";
 import type { Document, InsertDocument } from "@shared/schema";
+import { Footer } from "@/components/footer";
+import { usePageAnalytics } from "@/hooks/use-analytics";
 
 const CATEGORIES = [
   { id: "api-specs", label: "API Specifications", icon: "🔌" },
@@ -21,6 +23,7 @@ const CATEGORIES = [
 ];
 
 export default function DocHub() {
+  usePageAnalytics();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isCreating, setIsCreating] = useState(false);
@@ -371,6 +374,7 @@ export default function DocHub() {
           </div>
         )}
       </AnimatePresence>
+      <Footer />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 
-const STORAGE_KEY = "orbit-chain-preferences";
+const STORAGE_KEY = "darkwave-chain-preferences";
 
 export interface UserPreferences {
   favorites: string[];
@@ -141,7 +141,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     {
       id: "welcome",
       type: "info",
-      title: "Welcome to Orbit Chain",
+      title: "Welcome to DarkWave Chain",
       message: "Explore the DarkWave ecosystem and start building decentralized apps.",
       timestamp: new Date(),
       read: false,

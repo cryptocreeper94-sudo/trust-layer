@@ -8,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { CodeBlock } from "@/components/code-block";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+import { Footer } from "@/components/footer";
+import { usePageAnalytics } from "@/hooks/use-analytics";
 
 const apiExamples = {
   crossChainTransfer: {
@@ -94,6 +96,7 @@ const apiExamples = {
 };
 
 export default function ApiPlayground() {
+  usePageAnalytics();
   const [activeExample, setActiveExample] = useState<keyof typeof apiExamples>("crossChainTransfer");
   const [isExecuting, setIsExecuting] = useState(false);
   const [response, setResponse] = useState<string | null>(null);
@@ -288,6 +291,7 @@ export default function ApiPlayground() {
           </div>
         </motion.div>
       </main>
+      <Footer />
     </div>
   );
 }

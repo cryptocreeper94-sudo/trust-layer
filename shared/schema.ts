@@ -118,4 +118,3 @@ export const analyticsOverviewSchema = z.object({
 export type AnalyticsOverview = z.infer<typeof analyticsOverviewSchema>;
 
 export const APP_VERSION = "1.0.0-alpha";
-export const DEVELOPER_PIN = "0424";

@@ -6,8 +6,11 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import tokenBg from "@assets/generated_images/holographic_deep_wave_crypto_token_symbol.png";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+import { Footer } from "@/components/footer";
+import { usePageAnalytics } from "@/hooks/use-analytics";
 
 export default function Token() {
+  usePageAnalytics();
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
       {/* Navigation */}
@@ -161,20 +164,7 @@ export default function Token() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-black py-12 border-t border-white/10 mt-20">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <img src={orbitLogo} alt="Logo" className="w-6 h-6 opacity-50" />
-            <span className="text-sm text-muted-foreground">© 2025 Orbit Foundation</span>
-          </div>
-          <div className="flex gap-6 text-sm text-muted-foreground">
-            <a href="#" className="hover:text-white">Terms</a>
-            <a href="#" className="hover:text-white">Privacy</a>
-            <a href="#" className="hover:text-white">Status</a>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

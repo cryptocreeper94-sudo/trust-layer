@@ -45,8 +45,8 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md">
         <div className="container mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src={orbitLogo} alt="Orbit Logo" className="w-10 h-10 animate-pulse-slow" />
-            <span className="font-display font-bold text-2xl tracking-tight">Orbit</span>
+            <img src={orbitLogo} alt="DarkWave Logo" className="w-10 h-10 animate-pulse-slow" />
+            <span className="font-display font-bold text-2xl tracking-tight">DarkWave</span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
             <Link href="/ecosystem" className="hover:text-primary transition-colors cursor-pointer">Ecosystem</Link>
@@ -96,7 +96,7 @@ export default function Home() {
             
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold leading-tight md:leading-tight bg-clip-text text-transparent bg-gradient-to-b from-white to-white/50">
               Welcome to the <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary text-glow">Orbit Ecosystem</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary text-glow">DarkWave Chain</span>
             </h1>
 
             <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
@@ -158,7 +158,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About / "Why Orbit" */}
+      {/* About / "Why DarkWave" */}
       <section id="features" className="py-32 relative">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row gap-16 items-center">
@@ -169,17 +169,17 @@ export default function Home() {
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 We're building the holy grail of blockchain: <strong>Omnichain Interoperability</strong>.
-                Orbit doesn't just "bridge" assets; it abstracts the chain entirely.
+                DarkWave Chain doesn't just "bridge" assets; it abstracts the chain entirely.
               </p>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                Connect to Ethereum, Solana, and others natively. Use your Orbit Smart Account to execute trades 
+                Connect to Ethereum, Solana, and others natively. Use your DarkWave Smart Account to execute trades 
                 on any chain without ever leaving the ecosystem. No fragile bridges. No wrapped tokens. 
                 Just pure, protocol-level messaging.
               </p>
               
               <ul className="space-y-4 pt-4">
                 <FeatureItem icon={Zap} title="Instant Consensus" desc="Using advanced DAG protocols for sub-second finality." />
-                <FeatureItem icon={Shield} title="Chain Abstraction" desc="Control assets on any chain from your Orbit account." />
+                <FeatureItem icon={Shield} title="Chain Abstraction" desc="Control assets on any chain from your DarkWave account." />
                 <FeatureItem icon={Layers} title="Bridge-Free" desc="Native messaging protocols replace vulnerable bridges." />
               </ul>
             </div>
@@ -195,7 +195,7 @@ export default function Home() {
                     <Database className="w-4 h-4" /> NODE_STATUS: ONLINE
                   </h3>
                   <div className="space-y-4 font-mono text-sm text-green-400/80">
-                    <p>{`> Connecting to Orbit Mainnet...`}</p>
+                    <p>{`> Connecting to DarkWave Mainnet...`}</p>
                     <p>{`> Synchronizing ledger state... OK`}</p>
                     <p>{`> Verifying Proof of History... OK`}</p>
                     <p>{`> Established connection to 152 peers.`}</p>
@@ -296,7 +296,7 @@ export default function Home() {
         <div className="container mx-auto px-6 relative z-10 text-center">
           <h2 className="text-5xl md:text-7xl font-display font-bold mb-8">Ready to Launch?</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-12">
-            Join thousands of developers building the future of finance, gaming, and social on Orbit.
+            Join thousands of developers building the future of finance, gaming, and social on DarkWave Chain.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
             <Link href="/developers">

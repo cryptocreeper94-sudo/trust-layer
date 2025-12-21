@@ -6,8 +6,11 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import dagViz from "@assets/generated_images/abstract_visualization_of_directed_acyclic_graph_blockchain_consensus.png";
+import { Footer } from "@/components/footer";
+import { usePageAnalytics } from "@/hooks/use-analytics";
 
 export default function Developers() {
+  usePageAnalytics();
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
       {/* Navigation */}
@@ -246,6 +249,7 @@ export default function Developers() {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

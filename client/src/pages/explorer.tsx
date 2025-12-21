@@ -15,8 +15,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Footer } from "@/components/footer";
+import { usePageAnalytics } from "@/hooks/use-analytics";
 
 export default function Explorer() {
+  usePageAnalytics();
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary font-mono">
       {/* Navigation */}
@@ -188,18 +191,7 @@ export default function Explorer() {
         </div>
       </section>
       
-      {/* Footer */}
-      <footer className="bg-black py-12 border-t border-white/10 mt-20 font-sans">
-        <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <img src={orbitLogo} alt="Logo" className="w-6 h-6 opacity-50" />
-            <span className="text-sm text-muted-foreground">© 2025 Orbit Foundation</span>
-          </div>
-          <div className="flex gap-6 text-sm text-muted-foreground">
-             <span className="flex items-center gap-1 text-green-500"><div className="w-1.5 h-1.5 rounded-full bg-green-500"></div> All Systems Operational</span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

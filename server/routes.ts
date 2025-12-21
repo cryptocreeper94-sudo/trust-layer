@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, DEVELOPER_PIN, APP_VERSION } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, APP_VERSION } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 
 export async function registerRoutes(
@@ -231,12 +231,41 @@ export async function registerRoutes(
     }
   });
 
+  const pinAttempts = new Map<string, { count: number; lastAttempt: number }>();
+  const DEVELOPER_PIN = process.env.DEVELOPER_PIN;
+  const MAX_ATTEMPTS = 5;
+  const LOCKOUT_DURATION = 5 * 60 * 1000;
+
   app.post("/api/developer/auth", async (req, res) => {
     try {
       const { pin } = req.body;
+      const clientIp = req.ip || req.socket.remoteAddress || "unknown";
+      
+      const attempt = pinAttempts.get(clientIp);
+      if (attempt && attempt.count >= MAX_ATTEMPTS) {
+        const timeSinceLockout = Date.now() - attempt.lastAttempt;
+        if (timeSinceLockout < LOCKOUT_DURATION) {
+          const remainingSeconds = Math.ceil((LOCKOUT_DURATION - timeSinceLockout) / 1000);
+          return res.status(429).json({ 
+            error: `Too many attempts. Try again in ${remainingSeconds} seconds.` 
+          });
+        }
+        pinAttempts.delete(clientIp);
+      }
+
+      if (!DEVELOPER_PIN) {
+        return res.status(503).json({ error: "Developer portal not configured" });
+      }
+      
       if (pin === DEVELOPER_PIN) {
+        pinAttempts.delete(clientIp);
         res.json({ success: true, version: APP_VERSION });
       } else {
+        const current = pinAttempts.get(clientIp) || { count: 0, lastAttempt: 0 };
+        pinAttempts.set(clientIp, { 
+          count: current.count + 1, 
+          lastAttempt: Date.now() 
+        });
         res.status(401).json({ error: "Invalid PIN" });
       }
     } catch (error) {
@@ -291,7 +320,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
         gradient: app.gradient || "from-gray-500 to-gray-700",
         verified: true,
         featured: app.featured || false,
-        users: "Orbit Verified",
+        users: "DarkWave Verified",
       }));
     }
   } catch (error) {
@@ -300,15 +329,15 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
   
   return [
     {
-      id: "orbit-staffing",
-      name: "ORBIT Staffing OS",
+      id: "darkwave-staffing",
+      name: "DarkWave Staffing OS",
       category: "Enterprise",
       description: "Complete workforce management platform with blockchain-verified employment records.",
       hook: "Blockchain-powered HR",
       tags: ["HR", "Payroll", "Enterprise", "Compliance"],
       gradient: "from-emerald-600 to-teal-800",
       verified: true,
-      users: "Orbit Verified",
+      users: "DarkWave Verified",
     },
     {
       id: "garagebot",
@@ -319,7 +348,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       tags: ["Auto", "IoT", "Maintenance"],
       gradient: "from-slate-600 to-zinc-800",
       verified: true,
-      users: "Orbit Verified",
+      users: "DarkWave Verified",
     },
     {
       id: "brew-board",
@@ -330,7 +359,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       tags: ["Social", "Events", "Rewards", "Hospitality"],
       gradient: "from-amber-600 to-yellow-800",
       verified: true,
-      users: "Orbit Verified",
+      users: "DarkWave Verified",
     },
     {
       id: "lotops-pro",
@@ -341,7 +370,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       tags: ["Auto", "B2B", "Inventory", "Real Estate"],
       gradient: "from-indigo-600 to-violet-800",
       verified: true,
-      users: "Orbit Verified",
+      users: "DarkWave Verified",
     },
     {
       id: "darkwave-pulse",
@@ -353,7 +382,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       gradient: "from-cyan-600 to-blue-700",
       verified: true,
       featured: true,
-      users: "Orbit Verified",
+      users: "DarkWave Verified",
     },
     {
       id: "orby",
@@ -364,7 +393,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       tags: ["AI", "Chatbot", "Assistant"],
       gradient: "from-cyan-400 to-blue-500",
       verified: true,
-      users: "Orbit Verified",
+      users: "DarkWave Verified",
     },
   ];
 }
