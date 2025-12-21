@@ -30,16 +30,16 @@ The blockchain is built in Rust, utilizing a Proof-of-Authority (PoA) consensus 
   - Real-time collaboration with WebSocket presence indicators showing active users and their current file
 
 #### DarkWave Studio Phase 4 (Planned)
-- Monaco editor integration for syntax highlighting and IntelliSense
 - Multi-file tabs with unsaved changes indicators
 - Search/replace across all project files
-- Debugging tools (breakpoints, step-through)
-- Build configurations (dev/prod/staging)
-- AI code assistant integration
-- Project templates and boilerplate generators
+- Syntax highlighting with Prism.js or Highlight.js (lightweight alternative to Monaco)
+- Project templates and boilerplate generators (React, Node, Python starters)
 - File upload/download support
-- Keyboard shortcuts panel
-- Split editor views
+- Keyboard shortcuts panel (Ctrl+S, Ctrl+F, etc.)
+- Environment variables UI (dev/prod toggle)
+- Console log filtering and search
+- Project settings panel
+- File rename and move operations
 
 #### Studio Technical Details
 - **WebSocket**: `/ws/studio` for real-time collaboration presence
