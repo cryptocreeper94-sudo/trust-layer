@@ -39,10 +39,12 @@ export default function Home() {
             <Link href="/developers" className="hover:text-primary transition-colors cursor-pointer">Developers</Link>
           </div>
           <div className="flex items-center gap-4">
-            <Button variant="ghost" className="hidden sm:flex hover:bg-white/5 hover:text-white">Log In</Button>
-            <Button className="bg-primary text-background hover:bg-primary/90 font-semibold shadow-[0_0_20px_rgba(0,255,255,0.3)]">
-              Launch App
-            </Button>
+            <Button variant="ghost" className="hidden sm:flex hover:bg-white/5 hover:text-white" data-testid="button-login">Log In</Button>
+            <Link href="/ecosystem">
+              <Button className="bg-primary text-background hover:bg-primary/90 font-semibold shadow-[0_0_20px_rgba(0,255,255,0.3)]" data-testid="button-launch-app">
+                Launch App
+              </Button>
+            </Link>
           </div>
         </div>
       </nav>
@@ -80,12 +82,16 @@ export default function Home() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
-              <Button size="lg" className="h-14 px-8 text-lg bg-primary text-background hover:bg-primary/90 font-bold rounded-full shadow-[0_0_30px_rgba(0,255,255,0.4)] transition-all hover:scale-105">
-                Start Building <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-              <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-white/20 hover:bg-white/5 rounded-full transition-all hover:border-white/40">
-                Read Whitepaper
-              </Button>
+              <Link href="/developers">
+                <Button size="lg" className="h-14 px-8 text-lg bg-primary text-background hover:bg-primary/90 font-bold rounded-full shadow-[0_0_30px_rgba(0,255,255,0.4)] transition-all hover:scale-105" data-testid="button-start-building">
+                  Start Building <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </Link>
+              <Link href="/whitepaper">
+                <Button size="lg" variant="outline" className="h-14 px-8 text-lg border-white/20 hover:bg-white/5 rounded-full transition-all hover:border-white/40" data-testid="button-whitepaper">
+                  Read Whitepaper
+                </Button>
+              </Link>
             </div>
           </motion.div>
         </div>
@@ -228,12 +234,16 @@ export default function Home() {
             Join thousands of developers building the future of finance, gaming, and social on Orbit.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <Button size="lg" className="h-16 px-12 text-xl bg-primary text-background hover:bg-primary/90 font-bold rounded-full shadow-lg hover:shadow-cyan-500/20 transition-all">
-              Start Building Now
-            </Button>
-            <Button size="lg" variant="ghost" className="h-16 px-12 text-xl hover:bg-white/5 rounded-full">
-              Explore Documentation
-            </Button>
+            <Link href="/developers">
+              <Button size="lg" className="h-16 px-12 text-xl bg-primary text-background hover:bg-primary/90 font-bold rounded-full shadow-lg hover:shadow-cyan-500/20 transition-all" data-testid="button-start-building-now">
+                Start Building Now
+              </Button>
+            </Link>
+            <Link href="/doc-hub">
+              <Button size="lg" variant="ghost" className="h-16 px-12 text-xl hover:bg-white/5 rounded-full" data-testid="button-explore-docs">
+                Explore Documentation
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
