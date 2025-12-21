@@ -3,13 +3,28 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
 import { insertDocumentSchema } from "@shared/schema";
-
-const DARKWAVE_HUB_API_URL = process.env.DARKWAVE_HUB_API_URL || "https://orbitstaffing.io/api";
+import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+
+  app.get("/api/ecosystem/hub/status", async (req, res) => {
+    try {
+      if (!ecosystemClient.isConfigured()) {
+        return res.json({ 
+          connected: false, 
+          message: "API credentials not configured. Set DARKWAVE_API_KEY and DARKWAVE_API_SECRET." 
+        });
+      }
+      const status = await ecosystemClient.checkStatus();
+      res.json({ connected: true, status });
+    } catch (error) {
+      console.error("Hub status check failed:", error);
+      res.json({ connected: false, error: "Failed to connect to DarkWave Hub" });
+    }
+  });
 
   app.post("/api/ecosystem/register", async (req, res) => {
     try {
@@ -19,28 +34,17 @@ export async function registerRoutes(
         return res.status(400).json({ error: "appName and appSlug are required" });
       }
 
-      const response = await fetch(`${DARKWAVE_HUB_API_URL}/admin/ecosystem/register-app`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          appName,
-          appSlug,
-          appUrl: appUrl || "",
-          description: description || "",
-          category: category || "general",
-          permissions: permissions || ["read:ecosystem", "write:ecosystem"],
-          metadata: metadata || {}
-        }),
+      const result = await ecosystemClient.registerApp({
+        appName,
+        appSlug,
+        appUrl: appUrl || "",
+        description: description || "",
+        category: category || "general",
+        permissions: permissions || ["read:ecosystem", "write:ecosystem"],
+        metadata: metadata || {}
       });
       
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Hub registration failed:", errorText);
-        return res.status(response.status).json({ error: "Failed to register with DarkWave Hub", details: errorText });
-      }
-      
-      const data = await response.json();
-      res.json({ success: true, data });
+      res.json({ success: true, data: result });
     } catch (error) {
       console.error("Error registering with DarkWave Hub:", error);
       res.status(500).json({ error: "Failed to connect to DarkWave Hub" });
@@ -49,16 +53,55 @@ export async function registerRoutes(
 
   app.get("/api/ecosystem/sync", async (req, res) => {
     try {
-      const response = await fetch(`${DARKWAVE_HUB_API_URL}/ecosystem/apps`);
-      if (response.ok) {
-        const apps = await response.json();
-        res.json({ success: true, apps });
-      } else {
-        res.status(response.status).json({ error: "Failed to sync with DarkWave Hub" });
-      }
+      const apps = await ecosystemClient.getApps();
+      res.json({ success: true, apps });
     } catch (error) {
       console.error("Error syncing with DarkWave Hub:", error);
       res.status(500).json({ error: "Failed to connect to DarkWave Hub" });
+    }
+  });
+
+  app.get("/api/ecosystem/snippets", async (req, res) => {
+    try {
+      const { category, language } = req.query;
+      const snippets = await ecosystemClient.getSnippets(
+        category as string | undefined, 
+        language as string | undefined
+      );
+      res.json(snippets);
+    } catch (error) {
+      console.error("Error fetching snippets:", error);
+      res.status(500).json({ error: "Failed to fetch snippets" });
+    }
+  });
+
+  app.post("/api/ecosystem/snippets", async (req, res) => {
+    try {
+      const result = await ecosystemClient.pushSnippet(req.body);
+      res.json({ success: true, data: result });
+    } catch (error) {
+      console.error("Error pushing snippet:", error);
+      res.status(500).json({ error: "Failed to push snippet" });
+    }
+  });
+
+  app.get("/api/ecosystem/logs", async (req, res) => {
+    try {
+      const logs = await ecosystemClient.getLogs();
+      res.json(logs);
+    } catch (error) {
+      console.error("Error fetching logs:", error);
+      res.status(500).json({ error: "Failed to fetch logs" });
+    }
+  });
+
+  app.post("/api/ecosystem/logs", async (req, res) => {
+    try {
+      const result = await ecosystemClient.log(req.body);
+      res.json({ success: true, data: result });
+    } catch (error) {
+      console.error("Error pushing log:", error);
+      res.status(500).json({ error: "Failed to push log" });
     }
   });
   
@@ -154,70 +197,34 @@ export async function registerRoutes(
 }
 
 async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
-  const DARKWAVE_HUB_URL = process.env.DARKWAVE_HUB_API_URL;
-  
-  if (DARKWAVE_HUB_URL) {
+  if (ecosystemClient.isConfigured()) {
     try {
-      const response = await fetch(`${DARKWAVE_HUB_URL}/apps`);
-      if (response.ok) {
-        return await response.json();
+      const apps = await ecosystemClient.getApps() as EcosystemApp[];
+      if (Array.isArray(apps) && apps.length > 0) {
+        return apps;
       }
     } catch (error) {
-      console.warn("Dark Wave Hub API not available, using mock data");
+      console.warn("DarkWave Hub API not available, using local data");
     }
   }
   
   return [
     {
-      id: "darkwave-pulse",
-      name: "DarkWave Pulse",
-      category: "DeFi & AI",
-      description: "Predictive market intelligence powered by sentient AI learning systems.",
-      hook: "Auto-trade with AI precision",
-      tags: ["AI", "Auto-Trading", "Predictive", "Sniping"],
-      gradient: "from-cyan-600 to-blue-700",
-      verified: true,
-      featured: true,
-      users: "Orbit Verified",
-    },
-    {
       id: "orbit-staffing",
-      name: "Orbit Staffing",
+      name: "ORBIT Staffing OS",
       category: "Enterprise",
-      description: "Blockchain-based staffing and workforce management. Immutable records.",
+      description: "Complete workforce management platform with blockchain-verified employment records.",
       hook: "Blockchain-powered HR",
-      tags: ["HR", "Payroll", "Enterprise"],
+      tags: ["HR", "Payroll", "Enterprise", "Compliance"],
       gradient: "from-emerald-600 to-teal-800",
-      verified: true,
-      users: "Orbit Verified",
-    },
-    {
-      id: "paint-pros",
-      name: "Paint Pros",
-      category: "Enterprise",
-      description: "Complete management suite for painting franchisees and supply chains.",
-      hook: "Franchise management reimagined",
-      tags: ["Franchise", "Supply Chain", "Ops"],
-      gradient: "from-orange-500 to-amber-700",
-      verified: true,
-      users: "Orbit Verified",
-    },
-    {
-      id: "orby",
-      name: "Orby",
-      category: "AI Assistant",
-      description: "Your personal AI companion. Execute trades with natural language.",
-      hook: "Your AI blockchain companion",
-      tags: ["AI", "Chatbot", "Assistant"],
-      gradient: "from-cyan-400 to-blue-500",
       verified: true,
       users: "Orbit Verified",
     },
     {
       id: "garagebot",
       name: "GarageBot",
-      category: "Automation",
-      description: "Smart automation for vehicle maintenance and garage management.",
+      category: "Automotive",
+      description: "Smart automation for vehicle maintenance and garage management with IoT integration.",
       hook: "IoT-powered garage automation",
       tags: ["Auto", "IoT", "Maintenance"],
       gradient: "from-slate-600 to-zinc-800",
@@ -226,23 +233,46 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
     },
     {
       id: "brew-board",
-      name: "Brew & Board",
-      category: "Social & Gaming",
-      description: "Decentralized community for board game enthusiasts and craft brew lovers.",
-      hook: "Social gaming meets craft beer",
-      tags: ["Social", "Events", "Rewards"],
+      name: "Brew & Board Coffee",
+      category: "Hospitality",
+      description: "Decentralized community platform for coffee shops with loyalty rewards and event management.",
+      hook: "Social gaming meets craft coffee",
+      tags: ["Social", "Events", "Rewards", "Hospitality"],
       gradient: "from-amber-600 to-yellow-800",
       verified: true,
       users: "Orbit Verified",
     },
     {
       id: "lotops-pro",
-      name: "LotOps Pro",
-      category: "Enterprise",
-      description: "Professional lot operations management for automotive dealerships.",
+      name: "Lot Ops Pro",
+      category: "Real Estate",
+      description: "Professional lot operations management for automotive dealerships and real estate.",
       hook: "Dealership operations streamlined",
-      tags: ["Auto", "B2B", "Inventory"],
+      tags: ["Auto", "B2B", "Inventory", "Real Estate"],
       gradient: "from-indigo-600 to-violet-800",
+      verified: true,
+      users: "Orbit Verified",
+    },
+    {
+      id: "darkwave-pulse",
+      name: "DarkWave Pulse",
+      category: "Analytics",
+      description: "Predictive market intelligence powered by sentient AI learning systems.",
+      hook: "Auto-trade with AI precision",
+      tags: ["AI", "Auto-Trading", "Predictive", "Analytics"],
+      gradient: "from-cyan-600 to-blue-700",
+      verified: true,
+      featured: true,
+      users: "Orbit Verified",
+    },
+    {
+      id: "orby",
+      name: "Orby",
+      category: "AI",
+      description: "Your personal AI companion. Execute trades and manage your portfolio with natural language.",
+      hook: "Your AI blockchain companion",
+      tags: ["AI", "Chatbot", "Assistant"],
+      gradient: "from-cyan-400 to-blue-500",
       verified: true,
       users: "Orbit Verified",
     },
@@ -250,19 +280,6 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
 }
 
 async function fetchBlockchainStats(): Promise<BlockchainStats> {
-  const BLOCKCHAIN_API_URL = process.env.BLOCKCHAIN_API_URL;
-  
-  if (BLOCKCHAIN_API_URL) {
-    try {
-      const response = await fetch(`${BLOCKCHAIN_API_URL}/stats`);
-      if (response.ok) {
-        return await response.json();
-      }
-    } catch (error) {
-      console.warn("Blockchain API not available, using mock data");
-    }
-  }
-  
   return {
     tps: "200K+",
     finalityTime: "0.4s",

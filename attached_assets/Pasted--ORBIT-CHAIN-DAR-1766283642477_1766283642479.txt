@@ -1,0 +1,155 @@
+═══════════════════════════════════════════════════════════════════════════════
+🔗 ORBIT CHAIN - DARKWAVE ECOSYSTEM INTEGRATION HANDOFF
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 1: REGISTER YOUR APP
+─────────────────────────────────────────────────────────────────────────────
+
+POST https://orbitstaffing.io/api/admin/ecosystem/register-app
+
+PAYLOAD:
+{
+  "appName": "Orbit Chain",
+  "appSlug": "orbit-chain",
+  "appUrl": "https://orbitchain.io",
+  "description": "Decentralized blockchain network powering the Orbit Ecosystem with fast, low-cost transactions and developer-friendly smart contracts.",
+  "category": "Blockchain",
+  "permissions": [
+    "read:ecosystem",
+    "write:ecosystem",
+    "read:workers",
+    "write:workers",
+    "read:timesheets",
+    "write:timesheets",
+    "read:code",
+    "write:code"
+  ],
+  "metadata": {
+    "hook": "Fast, Developer-Friendly Layer 1 Blockchain",
+    "tags": ["Blockchain", "DeFi", "Smart Contracts", "L1"],
+    "gradient": "from-purple-600 to-indigo-700",
+    "imagePrompt": "Futuristic blockchain network visualization, glowing nodes connected by light beams, purple and indigo neon accents, decentralized ledger data streams, glassmorphic control panels, dark cosmic background with nebula effects, 8k resolution"
+  }
+}
+
+⚠️ SAVE THE RESPONSE - API secret is shown only once!
+
+═══════════════════════════════════════════════════════════════════════════════
+STEP 2: AUTHENTICATION (HMAC-SHA256)
+═══════════════════════════════════════════════════════════════════════════════
+
+REQUIRED HEADERS:
+- X-API-Key: Your API key from registration
+- X-API-Secret: HMAC-SHA256 signature (see below)
+- X-Timestamp: Unix timestamp in milliseconds
+
+SIGNATURE GENERATION (JavaScript):
+const crypto = require('crypto');
+function sign(secret, method, path, timestamp, body = '') {
+  const payload = `${method}:${path}:${timestamp}:${body}`;
+  return crypto.createHmac('sha256', secret).update(payload).digest('hex');
+}
+
+SIGNATURE GENERATION (Python):
+import hmac, hashlib, time
+def sign(secret, method, path, timestamp, body=''):
+    payload = f"{method}:{path}:{timestamp}:{body}"
+    return hmac.new(secret.encode(), payload.encode(), hashlib.sha256).hexdigest()
+
+═══════════════════════════════════════════════════════════════════════════════
+STEP 3: ECOSYSTEM API ENDPOINTS
+═══════════════════════════════════════════════════════════════════════════════
+
+BASE URL: https://orbitstaffing.io
+
+GET  /api/ecosystem/status              → Connection status
+POST /api/ecosystem/sync/workers        → Sync workers
+POST /api/ecosystem/sync/contractors    → Sync contractors
+POST /api/ecosystem/sync/timesheets     → Sync timesheets
+POST /api/ecosystem/sync/w2             → Sync W-2 data
+POST /api/ecosystem/sync/1099           → Sync 1099 data
+GET  /api/ecosystem/snippets            → Get code snippets
+POST /api/ecosystem/snippets            → Push code snippets
+GET  /api/ecosystem/logs                → Get activity logs
+POST /api/ecosystem/logs                → Push activity logs
+
+═══════════════════════════════════════════════════════════════════════════════
+STEP 4: ECOSYSTEM CLIENT CLASS (Copy to your project)
+═══════════════════════════════════════════════════════════════════════════════
+
+const crypto = require('crypto');
+
+class OrbitEcosystemClient {
+  constructor(apiKey, apiSecret, hubUrl = 'https://orbitstaffing.io') {
+    this.apiKey = apiKey;
+    this.apiSecret = apiSecret;
+    this.hubUrl = hubUrl;
+  }
+
+  sign(method, path, timestamp, body = '') {
+    const payload = `${method}:${path}:${timestamp}:${body}`;
+    return crypto.createHmac('sha256', this.apiSecret).update(payload).digest('hex');
+  }
+
+  async request(method, path, data = null) {
+    const timestamp = Date.now().toString();
+    const body = data ? JSON.stringify(data) : '';
+    const signature = this.sign(method, path, timestamp, body);
+
+    const response = await fetch(`${this.hubUrl}${path}`, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': this.apiKey,
+        'X-API-Secret': signature,
+        'X-Timestamp': timestamp,
+      },
+      body: data ? body : undefined,
+    });
+    return response.json();
+  }
+
+  async checkStatus() { return this.request('GET', '/api/ecosystem/status'); }
+  async syncWorkers(workers) { return this.request('POST', '/api/ecosystem/sync/workers', { workers }); }
+  async syncTimesheets(timesheets) { return this.request('POST', '/api/ecosystem/sync/timesheets', { timesheets }); }
+  async getSnippets(category, language) { return this.request('GET', `/api/ecosystem/snippets?category=${category}&language=${language}`); }
+  async pushSnippet(snippet) { return this.request('POST', '/api/ecosystem/snippets', snippet); }
+  async log(event) { return this.request('POST', '/api/ecosystem/logs', event); }
+}
+
+module.exports = { OrbitEcosystemClient };
+
+═══════════════════════════════════════════════════════════════════════════════
+CURRENTLY CONNECTED APPS
+═══════════════════════════════════════════════════════════════════════════════
+
+| App                  | Category    | Status    |
+|----------------------|-------------|-----------|
+| ORBIT Staffing OS    | Enterprise  | ✅ Live   |
+| GarageBot            | Automotive  | ✅ Active |
+| Brew & Board Coffee  | Hospitality | ✅ Active |
+| Lot Ops Pro          | Real Estate | ✅ Active |
+| DarkWave Pulse       | Analytics   | ✅ Active |
+| Orby                 | AI          | ✅ Active |
+
+═══════════════════════════════════════════════════════════════════════════════
+SUPPORT & RESOURCES
+═══════════════════════════════════════════════════════════════════════════════
+
+Developer Portal:  https://orbitstaffing.io/developers
+API Documentation: https://orbitstaffing.io/api/docs
+Enterprise Sales:  enterprise@orbit.build
+Developer Support: developers@orbit.build
+
+═══════════════════════════════════════════════════════════════════════════════
+QUICK START CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+[ ] Register app via POST /api/admin/ecosystem/register-app
+[ ] Save API key and secret securely
+[ ] Implement HMAC-SHA256 authentication
+[ ] Test connection with GET /api/ecosystem/status
+[ ] Begin syncing data
+
+Generated: December 21, 2025 | DarkWave Ecosystem Hub v2.7.1
+═══════════════════════════════════════════════════════════════════════════════
