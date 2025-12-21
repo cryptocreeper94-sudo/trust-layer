@@ -241,6 +241,7 @@ export default function Home() {
                   category={app.category} 
                   desc={app.description} 
                   gradient={app.gradient}
+                  url={app.url}
                   showFavorite
                 />
               ))}
@@ -278,6 +279,7 @@ export default function Home() {
                     category={app.category} 
                     desc={app.description} 
                     gradient={app.gradient}
+                    url={app.url}
                     showFavorite
                   />
                 ))}

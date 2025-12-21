@@ -49,6 +49,7 @@ export const ecosystemAppSchema = z.object({
   featured: z.boolean().optional(),
   users: z.string().optional(),
   imagePrompt: z.string().optional(),
+  url: z.string().optional(),
 });
 
 export type EcosystemApp = z.infer<typeof ecosystemAppSchema>;

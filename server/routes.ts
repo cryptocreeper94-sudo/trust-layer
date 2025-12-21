@@ -920,11 +920,27 @@ export async function registerRoutes(
   return httpServer;
 }
 
+const APP_URL_MAP: Record<string, string> = {
+  "orbit-chain": "https://orbitstaffing.io",
+  "orbitstaffing": "https://orbitstaffing.io",
+  "darkwave-staffing": "https://orbitstaffing.io",
+  "lotopspro": "https://lotopspro.io",
+  "lotops-pro": "https://lotopspro.io",
+  "orby": "https://getorby.io",
+  "garagebot": "https://garagebot.io",
+  "garagebot-prod": "https://garagebot.io",
+  "brew-board": "https://brewandboard.coffee",
+  "brewandboard": "https://brewandboard.coffee",
+  "darkwave-pulse": "https://darkwavepulse.com",
+  "paintpros": "https://paintpros.io",
+  "strikeagent": "https://strikeagent.io",
+  "strike-agent": "https://strikeagent.io",
+};
+
 async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
   try {
     const response = await ecosystemClient.getApps() as { success?: boolean; apps?: any[] } | any[];
     
-    // Handle hub response format: {success: true, apps: [...]}
     let apps: any[] = [];
     if (response && typeof response === 'object' && 'apps' in response && Array.isArray(response.apps)) {
       apps = response.apps;
@@ -933,19 +949,22 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
     }
     
     if (apps.length > 0) {
-      // Map hub format to our frontend format
-      return apps.map((app: any) => ({
-        id: app.slug || app.id,
-        name: app.name,
-        category: app.category || "General",
-        description: app.description || "",
-        hook: app.hook || "",
-        tags: app.tags || [],
-        gradient: app.gradient || "from-gray-500 to-gray-700",
-        verified: true,
-        featured: app.featured || false,
-        users: "DarkWave Verified",
-      }));
+      return apps.map((app: any) => {
+        const id = app.slug || app.id;
+        return {
+          id,
+          name: app.name,
+          category: app.category || "General",
+          description: app.description || "",
+          hook: app.hook || "",
+          tags: app.tags || [],
+          gradient: app.gradient || "from-gray-500 to-gray-700",
+          verified: true,
+          featured: app.featured || false,
+          users: "DarkWave Verified",
+          url: APP_URL_MAP[id] || app.appUrl || undefined,
+        };
+      });
     }
   } catch (error) {
     console.warn("DarkWave Hub API not available, using local data:", error);
@@ -953,8 +972,8 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
   
   return [
     {
-      id: "darkwave-staffing",
-      name: "DarkWave Staffing OS",
+      id: "orbit-staffing",
+      name: "Orbit Staffing",
       category: "Enterprise",
       description: "Complete workforce management platform with blockchain-verified employment records.",
       hook: "Blockchain-powered HR",
@@ -962,6 +981,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       gradient: "from-emerald-600 to-teal-800",
       verified: true,
       users: "DarkWave Verified",
+      url: "https://orbitstaffing.io",
     },
     {
       id: "garagebot",
@@ -973,6 +993,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       gradient: "from-slate-600 to-zinc-800",
       verified: true,
       users: "DarkWave Verified",
+      url: "https://garagebot.io",
     },
     {
       id: "brew-board",
@@ -984,6 +1005,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       gradient: "from-amber-600 to-yellow-800",
       verified: true,
       users: "DarkWave Verified",
+      url: "https://brewandboard.coffee",
     },
     {
       id: "lotops-pro",
@@ -995,6 +1017,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       gradient: "from-indigo-600 to-violet-800",
       verified: true,
       users: "DarkWave Verified",
+      url: "https://lotopspro.io",
     },
     {
       id: "darkwave-pulse",
@@ -1007,6 +1030,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       verified: true,
       featured: true,
       users: "DarkWave Verified",
+      url: "https://darkwavepulse.com",
     },
     {
       id: "orby",
@@ -1018,6 +1042,31 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
       gradient: "from-cyan-400 to-blue-500",
       verified: true,
       users: "DarkWave Verified",
+      url: "https://getorby.io",
+    },
+    {
+      id: "paintpros",
+      name: "PaintPros",
+      category: "Services",
+      description: "Professional painting service management with scheduling, estimates, and customer tracking.",
+      hook: "Streamlined painting business",
+      tags: ["Services", "Scheduling", "CRM"],
+      gradient: "from-orange-500 to-red-600",
+      verified: true,
+      users: "DarkWave Verified",
+      url: "https://paintpros.io",
+    },
+    {
+      id: "strike-agent",
+      name: "Strike Agent",
+      category: "Security",
+      description: "Automated security monitoring and threat detection for blockchain applications.",
+      hook: "AI-powered security agent",
+      tags: ["Security", "AI", "Monitoring"],
+      gradient: "from-red-600 to-rose-700",
+      verified: true,
+      users: "DarkWave Verified",
+      url: "https://strikeagent.io",
     },
   ];
 }
