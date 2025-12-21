@@ -8,6 +8,7 @@ import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
 import { blockchain } from "./blockchain-engine";
+import { sendEmail, sendApiKeyEmail, sendHallmarkEmail } from "./email";
 
 export async function registerRoutes(
   httpServer: Server,
