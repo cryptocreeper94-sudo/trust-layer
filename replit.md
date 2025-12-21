@@ -17,7 +17,44 @@ The blockchain is built in Rust, utilizing a Proof-of-Authority (PoA) consensus 
 ### Web Portal Architecture
 **Frontend**: Developed with React 18 and TypeScript, using Vite, Wouter for routing, TanStack React Query for server state, and React Context for local state. UI components are built using shadcn/ui on Radix UI primitives, styled with Tailwind CSS v4 and animated with Framer Motion.
 **Key Features**: Global search, theme toggle, notification system, favorites, mobile navigation, a Devnet Sandbox for live testing, real-time blockchain stats via WebSocket, and PWA support.
-**DarkWave Studio**: A web-based IDE platform with a Monaco-style editor, file management, secrets, configurations, multi-language support, Git integration (commit, history, branching), client-side code execution, and live HTML preview.
+**DarkWave Studio**: A proprietary web-based IDE platform at `/studio`. 
+
+#### DarkWave Studio Features (Completed)
+- **Phase 1 - Core IDE**: Code editor (textarea), file tree, create/edit/delete files, secrets management, configuration variables, project CRUD
+- **Phase 2 - Version Control**: Git commits, branch management, checkout, commit history, console output, live preview iframe
+- **Phase 3 - Advanced Features**:
+  - Terminal emulator with simulated shell commands (ls, pwd, node -v, npm -v, python --version, help, clear)
+  - Deployment system with status tracking (building → live), auto-generated .darkwave.app URLs
+  - Package manager integration (auto-detects npm/pip from package.json or requirements.txt)
+  - Custom domain linking for deployed projects
+  - Real-time collaboration with WebSocket presence indicators showing active users and their current file
+
+#### DarkWave Studio Phase 4 (Planned)
+- Monaco editor integration for syntax highlighting and IntelliSense
+- Multi-file tabs with unsaved changes indicators
+- Search/replace across all project files
+- Debugging tools (breakpoints, step-through)
+- Build configurations (dev/prod/staging)
+- AI code assistant integration
+- Project templates and boilerplate generators
+- File upload/download support
+- Keyboard shortcuts panel
+- Split editor views
+
+#### Studio Technical Details
+- **WebSocket**: `/ws/studio` for real-time collaboration presence
+- **API Endpoints**:
+  - `GET/POST /api/studio/projects` - List/create projects
+  - `GET /api/studio/projects/:id` - Get project with files, secrets, configs
+  - `POST /api/studio/projects/:id/files` - Create file
+  - `PATCH/DELETE /api/studio/files/:id` - Update/delete file
+  - `POST /api/studio/projects/:id/terminal` - Execute terminal command
+  - `POST /api/studio/projects/:id/deploy` - Start deployment
+  - `GET /api/studio/deployments/:id` - Get deployment status
+  - `PATCH /api/studio/deployments/:id/domain` - Set custom domain
+  - `POST/DELETE /api/studio/projects/:id/packages` - Install/remove packages
+  - `POST /api/studio/projects/:id/commits` - Create git commit
+  - `GET /api/studio/projects/:id/commits` - List commits
 **PWA Implementation**: Includes a manifest, service worker for offline caching, and various icon sizes.
 **Mobile Optimization**: Ensures responsive design with safe area insets, appropriate touch targets, and mobile-specific CSS.
 **Backend**: Powered by Node.js with Express.js, TypeScript, and Drizzle ORM for PostgreSQL. API follows a RESTful pattern.
