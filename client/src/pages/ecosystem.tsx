@@ -17,12 +17,14 @@ import orbitStaffingImg from "@assets/ecosystem/orbit-staffing.jpg?url";
 import lotopsproImg from "@assets/ecosystem/lotopspro.jpg?url";
 import brewBoardImg from "@assets/ecosystem/brew-board.jpg?url";
 import orbitChainImg from "@assets/ecosystem/orbit-chain.jpg?url";
+import garagebotImg from "@assets/ecosystem/garagebot-prod.jpg?url";
 
 const appImageMap: Record<string, string> = {
   "orbit-staffing": orbitStaffingImg,
   "lotopspro": lotopsproImg,
   "brew-board": brewBoardImg,
   "orbit-chain": orbitChainImg,
+  "garagebot-prod": garagebotImg,
 };
 
 const categories = ["All Apps", "DeFi", "Enterprise", "AI", "Social", "Gaming", "Automotive", "Services"];
