@@ -9,6 +9,7 @@ import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwa
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
 import { blockchain } from "./blockchain-engine";
 import { sendEmail, sendApiKeyEmail, sendHallmarkEmail } from "./email";
+import { submitMemoToSolana, isHeliusConfigured, getSolanaTreasuryAddress, getSolanaBalance } from "./helius";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -209,6 +210,23 @@ export async function registerRoutes(
         }
       } catch {
         services.push({ name: "DarkWave Hub", status: "down", message: "Connection timeout" });
+      }
+
+      // Check Solana/Helius RPC
+      if (isHeliusConfigured()) {
+        const solanaStart = Date.now();
+        try {
+          const balance = await getSolanaBalance();
+          const solanaLatency = Date.now() - solanaStart;
+          services.push({
+            name: "Solana (Helius)",
+            status: balance !== null ? "operational" : "degraded",
+            latency: solanaLatency,
+            message: balance !== null ? `Treasury: ${balance.toFixed(4)} SOL` : "Connection issue"
+          });
+        } catch {
+          services.push({ name: "Solana (Helius)", status: "down", message: "RPC unavailable" });
+        }
       }
 
       // Check Email Service
@@ -770,11 +788,30 @@ export async function registerRoutes(
       }
 
       if (requestedChains.includes("solana")) {
-        result.solana = {
-          success: false,
-          error: `Solana requires client-side signing. After submitting to Solana, call PATCH /api/stamp/${stamp.id}/solana with your txSignature.`,
-        };
-        result.allSuccessful = false;
+        if (isHeliusConfigured()) {
+          const solResult = await submitMemoToSolana(dataHash, stamp.id, metadata);
+          
+          result.solana = {
+            success: solResult.success,
+            txSignature: solResult.txSignature,
+            error: solResult.error,
+          };
+
+          if (!solResult.success) {
+            result.allSuccessful = false;
+          }
+
+          await storage.updateDualChainStamp(stamp.id, {
+            solanaTxSignature: solResult.txSignature || null,
+            solanaStatus: solResult.success ? "confirmed" : "failed",
+          });
+        } else {
+          result.solana = {
+            success: false,
+            error: `Solana requires client-side signing. After submitting to Solana, call PATCH /api/stamp/${stamp.id}/solana with your txSignature.`,
+          };
+          result.allSuccessful = false;
+        }
       }
 
       res.status(201).json(result);
