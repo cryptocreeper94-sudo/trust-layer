@@ -73,9 +73,9 @@ export default function Dashboard() {
               )}
               <div>
                 <h1 className="text-2xl md:text-3xl font-display font-bold">
-                  Welcome, {user?.firstName || 'Developer'}
+                  Welcome, {user?.firstName || user?.email?.split('@')[0] || 'Developer'}
                 </h1>
-                <p className="text-sm text-muted-foreground">{user?.email}</p>
+                <p className="text-sm text-muted-foreground">{user?.email || 'No email on file'}</p>
               </div>
             </div>
           </div>
