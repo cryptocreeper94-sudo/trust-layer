@@ -35,8 +35,8 @@ User wants: Full blockchain implementation, not just a web portal. No piggybacki
 ### Chain Configuration
 - Chain ID: 1337
 - Chain Name: DarkWave Chain
-- Native Token: DARK (DarkWave)
-- Initial Supply: 100,000,000 DARK
+- Native Token: DWAV (DarkWave)
+- Initial Supply: 100,000,000 DWAV
 - Decimals: 8
 - Block Time: 400ms
 - Max TX per block: 10,000

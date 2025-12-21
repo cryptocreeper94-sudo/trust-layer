@@ -194,7 +194,7 @@ impl Default for ChainConfig {
         Self {
             chain_id: 1337,
             chain_name: "DarkWave Chain".to_string(),
-            symbol: "DARK".to_string(),
+            symbol: "DWAV".to_string(),
             decimals: 8,
             block_time_ms: 400,
             max_block_size: 1_000_000,

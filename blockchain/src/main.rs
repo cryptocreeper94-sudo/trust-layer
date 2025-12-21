@@ -30,7 +30,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config = ChainConfig {
         chain_id: args.chain_id,
         chain_name: "DarkWave Chain".to_string(),
-        symbol: "DARK".to_string(),
+        symbol: "DWAV".to_string(),
         decimals: 8,
         block_time_ms: args.block_time,
         max_block_size: 1_000_000,

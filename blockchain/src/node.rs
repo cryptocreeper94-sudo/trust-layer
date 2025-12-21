@@ -41,10 +41,10 @@ impl Node {
             info!("Genesis block initialized");
         }
 
-        // 100 million DARK with 8 decimals = 100_000_000 * 10^8
+        // 100 million DWAV with 8 decimals = 100_000_000 * 10^8
         ledger.mint(&validator_address, 10_000_000_000_000_000)?;
         info!(
-            "Minted 100,000,000 DARK to validator: 0x{}",
+            "Minted 100,000,000 DWAV to validator: 0x{}",
             hex::encode(validator_address)
         );
 
