@@ -3,7 +3,7 @@ import { createServer, type Server } from "http";
 import crypto from "crypto";
 import { storage } from "./storage";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, APP_VERSION } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, APP_VERSION } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -1227,6 +1227,68 @@ export async function registerRoutes(
       });
     } catch (error) {
       res.status(500).json({ error: "Failed to verify hallmark" });
+    }
+  });
+
+  // Waitlist signup for Dev Studio
+  app.post("/api/waitlist", async (req, res) => {
+    try {
+      const parseResult = insertWaitlistSchema.safeParse(req.body);
+      if (!parseResult.success) {
+        return res.status(400).json({ 
+          error: "Invalid email address", 
+          details: parseResult.error.flatten() 
+        });
+      }
+
+      const { email, feature } = parseResult.data;
+      
+      // Check if already on waitlist
+      const existing = await storage.getWaitlistByEmail(email);
+      if (existing) {
+        return res.json({ 
+          success: true, 
+          message: "You're already on the waitlist!", 
+          alreadyRegistered: true 
+        });
+      }
+
+      // Add to waitlist
+      await storage.addToWaitlist({ email, feature: feature || "dev-studio" });
+
+      // Send confirmation email if Resend is configured
+      try {
+        await sendEmail({
+          to: email,
+          subject: "You're on the DarkWave Dev Studio Waitlist!",
+          html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+              <h1 style="color: #00ffff;">Welcome to the Waitlist!</h1>
+              <p>Thank you for your interest in DarkWave Dev Studio, our upcoming AI-powered cloud IDE for blockchain development.</p>
+              <p>You'll be among the first to know when we launch in Q2 2026.</p>
+              <p style="color: #888;">— The DarkWave Team</p>
+            </div>
+          `
+        });
+      } catch (emailError) {
+        console.error("Failed to send waitlist confirmation email:", emailError);
+        // Continue even if email fails
+      }
+
+      res.json({ 
+        success: true, 
+        message: "You've been added to the waitlist!" 
+      });
+    } catch (error: any) {
+      console.error("Waitlist signup error:", error);
+      if (error.code === '23505') { // Unique violation
+        return res.json({ 
+          success: true, 
+          message: "You're already on the waitlist!", 
+          alreadyRegistered: true 
+        });
+      }
+      res.status(500).json({ error: "Failed to add to waitlist" });
     }
   });
 

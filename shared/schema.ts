@@ -282,4 +282,21 @@ export const hallmarkResponseSchema = z.object({
 
 export type HallmarkResponse = z.infer<typeof hallmarkResponseSchema>;
 
+export const waitlist = pgTable("waitlist", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: text("email").notNull().unique(),
+  feature: text("feature").notNull().default("dev-studio"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertWaitlistSchema = createInsertSchema(waitlist).omit({
+  id: true,
+  createdAt: true,
+}).extend({
+  email: z.string().email("Please enter a valid email address"),
+});
+
+export type InsertWaitlist = z.infer<typeof insertWaitlistSchema>;
+export type Waitlist = typeof waitlist.$inferSelect;
+
 export const APP_VERSION = "1.0.0-alpha";

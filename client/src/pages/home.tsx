@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart } from "lucide-react";
+import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles } from "lucide-react";
 import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.png";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { Button } from "@/components/ui/button";
@@ -53,6 +53,10 @@ export default function Home() {
             <Link href="/token" className="hover:text-primary transition-colors cursor-pointer">Token</Link>
             <Link href="/explorer" className="hover:text-primary transition-colors cursor-pointer">Explorer</Link>
             <Link href="/developers" className="hover:text-primary transition-colors cursor-pointer">Developers</Link>
+            <Link href="/dev-studio" className="hover:text-primary transition-colors cursor-pointer flex items-center gap-1">
+              Dev Studio
+              <Badge variant="outline" className="text-[10px] border-primary/50 text-primary px-1.5 py-0 ml-1">Soon</Badge>
+            </Link>
           </div>
           <div className="flex items-center gap-2">
             <div className="hidden md:flex items-center gap-2">
@@ -295,6 +299,36 @@ export default function Home() {
               </>
             )}
           </div>
+        </div>
+      </section>
+
+      {/* Dev Studio Promo Banner */}
+      <section className="py-16 relative overflow-hidden">
+        <div className="container mx-auto px-6">
+          <Link href="/dev-studio">
+            <motion.div 
+              whileHover={{ scale: 1.01 }}
+              className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 border border-primary/30 p-8 md:p-12 cursor-pointer group"
+            >
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center">
+                    <Sparkles className="w-8 h-8 text-primary" />
+                  </div>
+                  <div>
+                    <Badge variant="outline" className="border-primary/50 text-primary mb-2 animate-pulse">Coming Q2 2026</Badge>
+                    <h3 className="text-2xl md:text-3xl font-display font-bold text-white">DarkWave Dev Studio</h3>
+                    <p className="text-muted-foreground mt-1">AI-powered cloud IDE for blockchain development</p>
+                  </div>
+                </div>
+                <Button className="bg-primary text-background hover:bg-primary/90 font-semibold px-8 group-hover:shadow-[0_0_30px_rgba(0,255,255,0.3)] transition-all" data-testid="button-preview-dev-studio">
+                  Preview
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </div>
+            </motion.div>
+          </Link>
         </div>
       </section>
 

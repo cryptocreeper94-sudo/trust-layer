@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon } from "lucide-react";
+import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
@@ -11,6 +12,7 @@ const navItems = [
   { href: "/doc-hub", label: "Doc Hub", icon: FileText },
   { href: "/token", label: "Token", icon: Coins },
   { href: "/explorer", label: "Explorer", icon: SearchIcon },
+  { href: "/dev-studio", label: "Dev Studio", icon: Sparkles, comingSoon: true },
 ];
 
 export function MobileNav() {
@@ -62,6 +64,7 @@ export function MobileNav() {
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = location === item.href;
+                  const comingSoon = 'comingSoon' in item && item.comingSoon;
                   return (
                     <Link key={item.href} href={item.href}>
                       <button
@@ -73,7 +76,12 @@ export function MobileNav() {
                         }`}
                       >
                         <Icon className="w-5 h-5" />
-                        <span className="font-medium">{item.label}</span>
+                        <span className="font-medium flex-grow text-left">{item.label}</span>
+                        {comingSoon && (
+                          <Badge variant="outline" className="text-[10px] border-primary/50 text-primary px-1.5 py-0">
+                            Soon
+                          </Badge>
+                        )}
                       </button>
                     </Link>
                   );
