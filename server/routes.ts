@@ -7,6 +7,7 @@ import { insertDocumentSchema, insertPageViewSchema, APP_VERSION } from "@shared
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
+import { blockchain } from "./blockchain-engine";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -149,6 +150,75 @@ export async function registerRoutes(
     } catch (error: any) {
       console.error("Error distributing tokens:", error);
       res.status(500).json({ error: error.message || "Failed to distribute tokens" });
+    }
+  });
+
+  app.get("/api/chain", async (req, res) => {
+    try {
+      const chainInfo = blockchain.getChainInfo();
+      res.json(chainInfo);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch chain info" });
+    }
+  });
+
+  app.get("/api/block/latest", async (req, res) => {
+    try {
+      const block = blockchain.getLatestBlock();
+      if (!block) {
+        return res.status(404).json({ error: "No blocks found" });
+      }
+      res.json({
+        height: block.header.height,
+        hash: block.hash,
+        prevHash: block.header.prevHash,
+        timestamp: block.header.timestamp.toISOString(),
+        validator: block.header.validator,
+        txCount: block.transactions.length,
+        merkleRoot: block.header.merkleRoot,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch latest block" });
+    }
+  });
+
+  app.get("/api/block/:height", async (req, res) => {
+    try {
+      const height = parseInt(req.params.height);
+      if (isNaN(height)) {
+        return res.status(400).json({ error: "Invalid block height" });
+      }
+      const block = blockchain.getBlock(height);
+      if (!block) {
+        return res.status(404).json({ error: "Block not found" });
+      }
+      res.json({
+        height: block.header.height,
+        hash: block.hash,
+        prevHash: block.header.prevHash,
+        timestamp: block.header.timestamp.toISOString(),
+        validator: block.header.validator,
+        txCount: block.transactions.length,
+        merkleRoot: block.header.merkleRoot,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch block" });
+    }
+  });
+
+  app.get("/api/account/:address", async (req, res) => {
+    try {
+      const account = blockchain.getAccount(req.params.address);
+      if (!account) {
+        return res.status(404).json({ error: "Account not found" });
+      }
+      res.json({
+        address: account.address,
+        balance: account.balance.toString(),
+        nonce: account.nonce,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch account" });
     }
   });
 
@@ -411,29 +481,30 @@ export async function registerRoutes(
         return res.status(400).json({ error: "dataHash is required" });
       }
 
-      const txHash = `0x${crypto.randomBytes(32).toString("hex")}`;
-      const gasUsed = "25000";
-      const fee = "25000000000";
+      const blockchainTx = blockchain.submitDataHash(dataHash, validKey.id.toString());
+      const chainInfo = blockchain.getChainInfo();
+      const gasUsed = "21000";
+      const fee = "21000";
 
       const tx = await storage.recordTransactionHash({
-        txHash,
+        txHash: blockchainTx.hash,
         dataHash,
         category: category || "general",
         appId: appId || null,
         apiKeyId: validKey.id,
         status: "confirmed",
-        blockHeight: "1",
+        blockHeight: chainInfo.blockHeight.toString(),
         gasUsed,
         fee,
       });
 
       res.json({
         success: true,
-        txHash: tx.txHash,
-        status: tx.status,
+        txHash: blockchainTx.hash,
+        status: "confirmed",
         fee: `${Number(fee) / 1e18} DWT`,
-        blockHeight: tx.blockHeight,
-        timestamp: tx.createdAt,
+        blockHeight: chainInfo.blockHeight.toString(),
+        timestamp: blockchainTx.timestamp.toISOString(),
       });
     } catch (error) {
       console.error("Error submitting hash:", error);
@@ -941,40 +1012,14 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
 }
 
 async function fetchBlockchainStats(): Promise<BlockchainStats> {
-  const BLOCKCHAIN_RPC_URL = process.env.BLOCKCHAIN_RPC_URL || "http://localhost:3030";
-  
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 2000);
-    
-    const response = await fetch(`${BLOCKCHAIN_RPC_URL}/stats`, {
-      signal: controller.signal
-    });
-    clearTimeout(timeout);
-    
-    if (response.ok) {
-      const data = await response.json();
-      return {
-        tps: data.tps || "200K+",
-        finalityTime: data.finality_time || "0.4s",
-        avgCost: data.avg_cost || "$0.0001",
-        activeNodes: data.active_nodes || "1",
-        currentBlock: data.current_block || "#0",
-        networkHash: `${data.total_transactions || 0} txs`,
-      };
-    }
-  } catch (error) {
-    // Blockchain node not available, use fallback data
-  }
-  
-  // Fallback to mock data when blockchain is not running
+  const stats = blockchain.getStats();
   return {
-    tps: "200K+",
-    finalityTime: "0.4s",
-    avgCost: "$0.0001",
-    activeNodes: "150+",
-    currentBlock: "#8,921,042",
-    networkHash: "42.8 EH/s",
+    tps: stats.tps,
+    finalityTime: stats.finalityTime,
+    avgCost: stats.avgCost,
+    activeNodes: stats.activeNodes,
+    currentBlock: stats.currentBlock,
+    networkHash: `${stats.totalTransactions} txs`,
   };
 }
 
@@ -986,39 +1031,14 @@ interface TreasuryInfo {
 }
 
 async function fetchTreasuryInfo(): Promise<TreasuryInfo> {
-  const BLOCKCHAIN_RPC_URL = process.env.BLOCKCHAIN_RPC_URL || "http://localhost:3030";
-  
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 2000);
-    
-    const response = await fetch(`${BLOCKCHAIN_RPC_URL}/treasury`, {
-      signal: controller.signal
-    });
-    clearTimeout(timeout);
-    
-    if (response.ok) {
-      return await response.json();
-    }
-    throw new Error("Failed to fetch treasury info");
-  } catch (error) {
-    throw new Error("Blockchain node not available");
-  }
+  return blockchain.getTreasury();
 }
 
 async function distributeTokens(to: string, amount: string): Promise<any> {
-  const BLOCKCHAIN_RPC_URL = process.env.BLOCKCHAIN_RPC_URL || "http://localhost:3030";
-  
-  const response = await fetch(`${BLOCKCHAIN_RPC_URL}/treasury/distribute`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ to, amount }),
-  });
-  
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || "Distribution failed");
+  const amountBigInt = BigInt(amount);
+  const result = blockchain.distributeTokens(to, amountBigInt);
+  if (!result.success) {
+    throw new Error(result.error || "Distribution failed");
   }
-  
-  return response.json();
+  return result;
 }
