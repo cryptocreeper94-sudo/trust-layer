@@ -130,7 +130,7 @@ export default function ApiPlayground() {
               </Button>
             </Link>
             <div className="flex items-center gap-3">
-              <img src={orbitLogo} alt="Orbit Logo" className="w-8 h-8" />
+              <img src={orbitLogo} alt="DarkWave Logo" className="w-8 h-8" />
               <span className="font-display font-bold text-xl">API Playground</span>
             </div>
           </div>
@@ -151,7 +151,7 @@ export default function ApiPlayground() {
               Chain Abstraction <span className="text-primary">API</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Test and explore the Orbit Chain APIs. Execute cross-chain operations 
+              Test and explore the DarkWave Chain APIs. Execute cross-chain operations 
               without bridges using our protocol-level messaging.
             </p>
           </div>

@@ -181,7 +181,7 @@ export default function Explorer() {
           <Link href="/">
             <div className="flex items-center gap-2 text-muted-foreground hover:text-white transition-colors cursor-pointer group">
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span className="font-display font-medium">Back to Orbit</span>
+              <span className="font-display font-medium">Back to DarkWave</span>
             </div>
           </Link>
           <div className="flex items-center gap-2">

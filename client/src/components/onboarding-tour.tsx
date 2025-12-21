@@ -11,7 +11,7 @@ interface Step {
 
 const steps: Step[] = [
   {
-    title: "Welcome to Orbit",
+    title: "Welcome to DarkWave",
     description: "The universal ledger for the next web. This quick tour will guide you through the ecosystem.",
   },
   {

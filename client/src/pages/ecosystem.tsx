@@ -21,7 +21,7 @@ export default function Ecosystem() {
           <Link href="/">
             <div className="flex items-center gap-2 text-muted-foreground hover:text-white transition-colors cursor-pointer group">
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span className="font-display font-medium">Back to Orbit</span>
+              <span className="font-display font-medium">Back to DarkWave</span>
             </div>
           </Link>
           <div className="flex items-center gap-4">
@@ -45,7 +45,7 @@ export default function Ecosystem() {
 
         <div className="container mx-auto px-6 relative z-10 text-center">
           <h1 className="text-4xl md:text-6xl font-display font-bold mb-6">
-            The Orbit <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary text-glow">App Store</span>
+            The DarkWave <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary text-glow">App Store</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
             This isn't just a list of links. It's an Operating System. <br/>
@@ -98,7 +98,7 @@ export default function Ecosystem() {
                   </div>
                   <div className="text-xs">
                     <div className="flex justify-between mb-1">
-                      <span className="text-white font-bold">Orbit Apps ($DARK)</span>
+                      <span className="text-white font-bold">DarkWave Apps ($DARK)</span>
                       <span className="text-primary">100% Utility</span>
                     </div>
                     <div className="h-1 bg-white/10 rounded-full overflow-hidden">
@@ -111,11 +111,11 @@ export default function Ecosystem() {
                <div className="p-6 rounded-xl bg-white/5 border border-white/10">
                 <div className="flex items-center gap-2 mb-2 text-primary">
                    <ShieldCheck className="w-5 h-5" />
-                   <h3 className="font-bold text-white">Orbit Verified</h3>
+                   <h3 className="font-bold text-white">DarkWave Verified</h3>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   Look for the <CheckCircle2 className="w-3 h-3 inline text-primary mx-1" /> badge. 
-                  These apps have passed rigorous security audits and are fully integrated with the Orbit Chain.
+                  These apps have passed rigorous security audits and are fully integrated with DarkWave Chain.
                 </p>
               </div>
             </div>
@@ -137,7 +137,7 @@ export default function Ecosystem() {
                    <AppStoreCard 
                     name="DarkWave Pulse" 
                     category="DeFi & AI" 
-                    users="Orbit Verified"
+                    users="DarkWave Verified"
                     desc="Predictive market intelligence powered by sentient AI learning systems. Auto-trades and snipes opportunities in real-time based on market conditions."
                     gradient="from-cyan-600 to-blue-700"
                     tags={["AI", "Auto-Trading", "Predictive", "Sniping"]}
@@ -148,9 +148,9 @@ export default function Ecosystem() {
 
                 {/* Standard Card - User App 2 */}
                 <AppStoreCard 
-                  name="Orbit Staffing" 
+                  name="DarkWave Staffing" 
                   category="Enterprise" 
-                  users="Orbit Verified"
+                  users="DarkWave Verified"
                   desc="Blockchain-based staffing and workforce management. Immutable records of employment, skills, and payments."
                   gradient="from-emerald-600 to-teal-800"
                   tags={["HR", "Payroll", "Enterprise"]}
@@ -161,7 +161,7 @@ export default function Ecosystem() {
                 <AppStoreCard 
                   name="Paint Pros" 
                   category="Enterprise" 
-                  users="Orbit Verified"
+                  users="DarkWave Verified"
                   desc="Complete management suite for painting franchisees. Supply chain tracking, transparent royalties, and automated operations."
                   gradient="from-orange-500 to-amber-700"
                   tags={["Franchise", "Supply Chain", "Ops"]}
@@ -171,8 +171,8 @@ export default function Ecosystem() {
                 <AppStoreCard 
                   name="Orby" 
                   category="AI Assistant" 
-                  users="Orbit Verified"
-                  desc="Your personal AI companion for the Orbit ecosystem. Ask questions, execute trades, and manage your portfolio with natural language."
+                  users="DarkWave Verified"
+                  desc="Your personal AI companion for the DarkWave ecosystem. Ask questions, execute trades, and manage your portfolio with natural language."
                   gradient="from-cyan-400 to-blue-500"
                   tags={["AI", "Chatbot", "Assistant"]}
                   verified
@@ -181,7 +181,7 @@ export default function Ecosystem() {
                 <AppStoreCard 
                   name="GarageBot" 
                   category="Automation" 
-                  users="Orbit Verified"
+                  users="DarkWave Verified"
                   desc="Smart automation for vehicle maintenance and garage management. Track repairs, inventory, and service schedules on-chain."
                   gradient="from-slate-600 to-zinc-800"
                   tags={["Auto", "IoT", "Maintenance"]}
@@ -191,7 +191,7 @@ export default function Ecosystem() {
                 <AppStoreCard 
                   name="Brew & Board" 
                   category="Social & Gaming" 
-                  users="Orbit Verified"
+                  users="DarkWave Verified"
                   desc="A decentralized community for board game enthusiasts and craft brew lovers. Organize events, track scores, and earn rewards."
                   gradient="from-amber-600 to-yellow-800"
                   tags={["Social", "Events", "Rewards"]}
@@ -201,7 +201,7 @@ export default function Ecosystem() {
                 <AppStoreCard 
                   name="LotOps Pro" 
                   category="Enterprise" 
-                  users="Orbit Verified"
+                  users="DarkWave Verified"
                   desc="Professional lot operations management for automotive dealerships. Streamline inventory, tracking, and sales workflows."
                   gradient="from-indigo-600 to-violet-800"
                   tags={["Auto", "B2B", "Inventory"]}
@@ -219,7 +219,7 @@ export default function Ecosystem() {
                 />
                 
                 <AppStoreCard 
-                  name="Orbit ID" 
+                  name="DarkWave ID" 
                   category="Identity" 
                   users="850k Users"
                   desc="Your universal passport. One identity across all apps in the ecosystem."
@@ -244,7 +244,7 @@ export default function Ecosystem() {
                 <h3 className="text-2xl font-bold font-display mb-2">Build the Next Big Thing</h3>
                 <p className="text-muted-foreground max-w-md mx-auto mb-6">
                   "It seems like the person who builds the most utility wins." — You are right. 
-                  Start building on Orbit today and join the utility revolution.
+                  Start building on DarkWave today and join the utility revolution.
                 </p>
                 <Link href="/developers">
                   <Button className="bg-white text-black hover:bg-white/90 font-bold">

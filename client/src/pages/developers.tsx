@@ -19,7 +19,7 @@ export default function Developers() {
           <Link href="/">
             <div className="flex items-center gap-2 text-muted-foreground hover:text-white transition-colors cursor-pointer group">
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span className="font-display font-medium">Back to Orbit</span>
+              <span className="font-display font-medium">Back to DarkWave</span>
             </div>
           </Link>
           <div className="flex items-center gap-4">
@@ -44,10 +44,10 @@ export default function Developers() {
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-6xl font-display font-bold mb-6">
               Build the Future <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary text-glow">On the Orbit Chain</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary text-glow">On DarkWave Chain</span>
             </h1>
             <p className="text-xl text-muted-foreground leading-relaxed mb-8">
-              Orbit combines the speed of a DAG with the security of Proof-of-History. 
+              DarkWave combines the speed of a DAG with the security of Proof-of-History. 
               Write in Rust, deploy with one click, and scale to millions of users.
             </p>
             <div className="flex gap-4">
@@ -83,7 +83,7 @@ export default function Developers() {
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
                   Yes, but with a twist. Unlike traditional blockchains that process blocks one by one (like a single-lane highway), 
-                  Orbit uses a <strong className="text-primary">Directed Acyclic Graph (DAG)</strong> structure. 
+                  DarkWave uses a <strong className="text-primary">Directed Acyclic Graph (DAG)</strong> structure. 
                   This means nodes can process multiple transactions simultaneously without waiting for the previous block to finish.
                 </p>
                 <div className="p-4 rounded-xl border border-white/10 bg-black/20 backdrop-blur-sm">
@@ -98,7 +98,7 @@ export default function Developers() {
                     </div>
                     
                     <div className="flex items-center justify-between text-sm mt-4">
-                      <span className="text-muted-foreground">Orbit Chain (DAG)</span>
+                      <span className="text-muted-foreground">DarkWave Chain (DAG)</span>
                       <span className="text-primary">Parallel (Instant)</span>
                     </div>
                     <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
@@ -120,7 +120,7 @@ export default function Developers() {
                   <span className="text-white italic">"Do they use Rust?"</span> — <strong>Yes.</strong>
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  We chose <strong>Rust</strong> as the primary language for Orbit smart contracts (called "Starships"). 
+                  We chose <strong>Rust</strong> as the primary language for DarkWave smart contracts (called "Starships"). 
                   It offers memory safety and incredible performance. However, because we use WebAssembly (WASM), 
                   developers can also write in C++, Go, or even TypeScript soon.
                 </p>
@@ -152,7 +152,7 @@ export default function Developers() {
                   <span className="text-white italic">"Like GitHub, but for the decentralized web."</span>
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  The <strong className="text-secondary">Orbit Hub</strong> is your mission control. 
+                  The <strong className="text-secondary">DarkWave Hub</strong> is your mission control. 
                   Collaborate on smart contracts, fork existing dApps, and deploy instantly to the network.
                   It connects directly to the Dark Wave Studios ecosystem, giving you access to shared identity, 
                   storage, and compute resources.
@@ -214,13 +214,13 @@ export default function Developers() {
                 <div className="p-4 overflow-x-auto">
                   <pre className="font-mono text-sm leading-relaxed">
                     <code className="language-rust">
-                      <span className="text-purple-400">use</span> orbit_sdk::prelude::*;<br/><br/>
-                      <span className="text-gray-500">/// Define a new Token on Orbit</span><br/>
-                      <span className="text-blue-400">pub struct</span> <span className="text-yellow-300">OrbitToken</span> {'{'}<br/>
+                      <span className="text-purple-400">use</span> darkwave_sdk::prelude::*;<br/><br/>
+                      <span className="text-gray-500">/// Define a new Token on DarkWave</span><br/>
+                      <span className="text-blue-400">pub struct</span> <span className="text-yellow-300">DarkWaveToken</span> {'{'}<br/>
                       {'    '}<span className="text-red-400">pub</span> supply: <span className="text-blue-400">u64</span>,<br/>
                       {'    '}<span className="text-red-400">pub</span> owner: <span className="text-blue-400">Address</span>,<br/>
                       {'}'}<br/><br/>
-                      <span className="text-purple-400">impl</span> <span className="text-yellow-300">Starship</span> <span className="text-purple-400">for</span> <span className="text-yellow-300">OrbitToken</span> {'{'}<br/>
+                      <span className="text-purple-400">impl</span> <span className="text-yellow-300">Starship</span> <span className="text-purple-400">for</span> <span className="text-yellow-300">DarkWaveToken</span> {'{'}<br/>
                       {'    '}<span className="text-gray-500">// Instant transfer function</span><br/>
                       {'    '}<span className="text-blue-400">fn</span> <span className="text-yellow-300">transfer</span>(&self, to: <span className="text-blue-400">Address</span>) {'{'}<br/>
                       {'        '}ctx.send(to, self.amount);<br/>
@@ -235,7 +235,7 @@ export default function Developers() {
                 <h3 className="text-lg font-bold text-white mb-2">Why is it faster than Ethereum?</h3>
                 <p className="text-sm text-muted-foreground mb-4">
                   Ethereum 1.0 processes about 15-30 transactions per second (TPS). 
-                  Orbit uses a "Gossip Protocol" where nodes talk to each other constantly, 
+                  DarkWave uses a "Gossip Protocol" where nodes talk to each other constantly, 
                   allowing us to reach <strong>50,000+ TPS</strong>. It's like upgrading from dial-up to Fiber Optic.
                 </p>
                 <Link href="/">

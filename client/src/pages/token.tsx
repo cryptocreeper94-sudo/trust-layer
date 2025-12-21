@@ -19,7 +19,7 @@ export default function Token() {
           <Link href="/">
             <div className="flex items-center gap-2 text-muted-foreground hover:text-white transition-colors cursor-pointer group">
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span className="font-display font-medium">Back to Orbit</span>
+              <span className="font-display font-medium">Back to DarkWave</span>
             </div>
           </Link>
           <div className="flex items-center gap-4">
@@ -43,7 +43,7 @@ export default function Token() {
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-purple-400 to-primary text-glow">($DARK)</span>
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed max-w-xl">
-                The fuel of the Orbit Ecosystem. DarkWave is not just a currency; it's the governance, security, and utility layer for the next generation of decentralized apps.
+                The fuel of the DarkWave Ecosystem. DarkWave is not just a currency; it's the governance, security, and utility layer for the next generation of decentralized apps.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -100,7 +100,7 @@ export default function Token() {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-5xl font-display font-bold mb-6">Real Utility. No Fluff.</h2>
             <p className="text-lg text-muted-foreground">
-              Unlike meme coins, $DARK is required to use every single app in the Orbit ecosystem. 
+              Unlike meme coins, $DARK is required to use every single app in the DarkWave ecosystem. 
               From AI trading to enterprise staffing, value flows back to the token.
             </p>
           </div>
@@ -109,7 +109,7 @@ export default function Token() {
             <TokenUtilityCard 
               icon={Zap}
               title="Gas Fees"
-              desc="Pay for transactions on the Orbit Chain with $DARK. Micro-fees ensure speed without breaking the bank."
+              desc="Pay for transactions on DarkWave Chain with $DARK. Micro-fees ensure speed without breaking the bank."
             />
             <TokenUtilityCard 
               icon={ShieldCheck}
