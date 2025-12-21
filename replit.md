@@ -279,7 +279,7 @@ The hallmark system provides unique, verifiable product identifiers for all Dark
 - Mobile optimization with 44px touch targets and safe area insets
 - Hallmark system for product verification with QR codes
 - Dual-chain stamping (DarkWave + Solana)
-- Developer portal with PIN authentication (0424)
+- Developer portal with PIN authentication (set via DEVELOPER_PIN secret)
 - Real-time blockchain stats (200K+ TPS, 400ms blocks)
 
 #### Technical
@@ -296,6 +296,6 @@ The hallmark system provides unique, verifiable product identifiers for all Dark
 
 #### Known Milestones
 - Token launch: February 14, 2026
-- Developer PIN: 0424
+- Developer PIN: Set via DEVELOPER_PIN secret
 - Treasury: 100M DWT at genesis
 - Chain ID: 8453

@@ -41,7 +41,7 @@ POST /api/developer/auth
 Content-Type: application/json
 
 {
-  "pin": "0424"
+  "pin": "<YOUR_DEVELOPER_PIN>"
 }
 ```
 
