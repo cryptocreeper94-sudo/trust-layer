@@ -13,15 +13,15 @@ import { fetchEcosystemApps } from "@/lib/api";
 import { useState } from "react";
 import { InfoTooltip } from "@/components/info-tooltip";
 
-import orbitStaffingImg from "../assets/ecosystem/orbit-staffing.jpg";
-import lotopsproImg from "../assets/ecosystem/lotopspro.jpg";
-import brewBoardImg from "../assets/ecosystem/brew-board.jpg";
-import orbitChainImg from "../assets/ecosystem/orbit-chain.jpg";
-import garagebotImg from "../assets/ecosystem/garagebot-prod.jpg";
-import darkwavePulseImg from "../assets/ecosystem/darkwave-pulse.jpg";
-import paintprosImg from "../assets/ecosystem/paintpros.jpg";
-import orbyImg from "../assets/ecosystem/orby.jpg";
-import strikeAgentImg from "../assets/ecosystem/strike-agent.jpg";
+import orbitStaffingImg from "@/assets/ecosystem/orbit-staffing.jpg";
+import lotopsproImg from "@/assets/ecosystem/lotopspro.jpg";
+import brewBoardImg from "@/assets/ecosystem/brew-board.jpg";
+import orbitChainImg from "@/assets/ecosystem/orbit-chain.jpg";
+import garagebotImg from "@/assets/ecosystem/garagebot-prod.jpg";
+import darkwavePulseImg from "@/assets/ecosystem/darkwave-pulse.jpg";
+import paintprosImg from "@/assets/ecosystem/paintpros.jpg";
+import orbyImg from "@/assets/ecosystem/orby.jpg";
+import strikeAgentImg from "@/assets/ecosystem/strike-agent.jpg";
 
 const gradientColors: Record<string, { from: string; to: string }> = {
   "from-gray-500 to-gray-700": { from: "#6b7280", to: "#374151" },
