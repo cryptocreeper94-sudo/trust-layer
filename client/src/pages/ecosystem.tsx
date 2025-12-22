@@ -20,6 +20,7 @@ import orbitChainImg from "@assets/ecosystem/orbit-chain.jpg?url";
 import garagebotImg from "@assets/ecosystem/garagebot-prod.jpg?url";
 import darkwavePulseImg from "@assets/ecosystem/darkwave-pulse.jpg?url";
 import paintprosImg from "@assets/ecosystem/paintpros.jpg?url";
+import orbyImg from "@assets/ecosystem/orby.jpg?url";
 
 const appImageMap: Record<string, string> = {
   "orbit-staffing": orbitStaffingImg,
@@ -29,6 +30,7 @@ const appImageMap: Record<string, string> = {
   "garagebot-prod": garagebotImg,
   "darkwave-pulse": darkwavePulseImg,
   "paintpros": paintprosImg,
+  "orby": orbyImg,
 };
 
 const categories = ["All Apps", "DeFi", "Enterprise", "AI", "Social", "Gaming", "Automotive", "Services"];
