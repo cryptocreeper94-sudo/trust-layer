@@ -27,9 +27,11 @@ const gradientColors: Record<string, { from: string; to: string }> = {
 
 function AppImage({ src, alt, gradient, name }: { src: string; alt: string; gradient?: string; name: string }) {
   const [failed, setFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   
-  if (failed || !src) {
-    const colors = gradientColors[gradient || "from-cyan-600 to-blue-700"] || { from: "#0891b2", to: "#1d4ed8" };
+  const colors = gradientColors[gradient || "from-cyan-600 to-blue-700"] || { from: "#0891b2", to: "#1d4ed8" };
+  
+  if (!src) {
     return (
       <div 
         className="aspect-[3/4] flex items-center justify-center"
@@ -41,11 +43,20 @@ function AppImage({ src, alt, gradient, name }: { src: string; alt: string; grad
   }
   
   return (
-    <div className="aspect-[3/4] overflow-hidden">
+    <div className="aspect-[3/4] overflow-hidden relative">
+      {(!loaded || failed) && (
+        <div 
+          className="absolute inset-0 flex items-center justify-center"
+          style={{ background: `linear-gradient(to bottom right, ${colors.from}, ${colors.to})` }}
+        >
+          <span className="text-4xl font-bold text-white/80">{name.charAt(0)}</span>
+        </div>
+      )}
       <img 
         src={src} 
         alt={alt}
-        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+        className={`w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ${loaded && !failed ? 'opacity-100' : 'opacity-0'}`}
+        onLoad={() => setLoaded(true)}
         onError={() => setFailed(true)}
       />
     </div>

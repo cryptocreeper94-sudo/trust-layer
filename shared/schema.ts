@@ -515,4 +515,4 @@ export const insertStudioCollaboratorSchema = createInsertSchema(studioCollabora
 export type InsertStudioCollaborator = z.infer<typeof insertStudioCollaboratorSchema>;
 export type StudioCollaborator = typeof studioCollaborators.$inferSelect;
 
-export const APP_VERSION = "1.0.1";
+export const APP_VERSION = "1.0.3";
