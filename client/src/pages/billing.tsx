@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { Check } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { Link } from "wouter";
-import { motion } from "framer-motion";
-import { ArrowLeft, CreditCard, Activity, DollarSign, Clock, ExternalLink, AlertCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, CreditCard, Activity, DollarSign, Clock, ExternalLink, AlertCircle, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { GlassCard } from "@/components/glass-card";
 import { Footer } from "@/components/footer";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
@@ -29,6 +30,10 @@ export default function Billing() {
   const [error, setError] = useState<string | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState<"stripe" | "crypto" | null>(null);
   const [paymentSuccess, setPaymentSuccess] = useState<string | null>(null);
+  const [upgradeLoading, setUpgradeLoading] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [contactForm, setContactForm] = useState({ name: "", email: "", company: "", message: "" });
+  const [contactSubmitted, setContactSubmitted] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -121,6 +126,37 @@ export default function Billing() {
     }
   };
 
+  const handleUpgradeToBuilder = async () => {
+    setUpgradeLoading(true);
+    try {
+      const response = await fetch("/api/billing/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: "builder" }),
+      });
+      const data = await response.json();
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else if (data.error) {
+        setError(data.error);
+      }
+    } catch (err: any) {
+      setError("Failed to start checkout. Please try again.");
+    } finally {
+      setUpgradeLoading(false);
+    }
+  };
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setContactSubmitted(true);
+    setTimeout(() => {
+      setShowContactModal(false);
+      setContactSubmitted(false);
+      setContactForm({ name: "", email: "", company: "", message: "" });
+    }, 2000);
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
@@ -190,7 +226,7 @@ export default function Billing() {
                     <li className="flex items-center gap-2 text-white/70"><Check className="w-3 h-3 text-primary shrink-0" /> Priority support</li>
                     <li className="flex items-center gap-2 text-white/70"><Check className="w-3 h-3 text-primary shrink-0" /> Early token access</li>
                   </ul>
-                  <Button size="sm" className="w-full mt-4 bg-primary text-background hover:bg-primary/90 text-xs h-9 font-semibold" data-testid="button-plan-builder">Upgrade Now</Button>
+                  <Button size="sm" className="w-full mt-4 bg-primary text-background hover:bg-primary/90 text-xs h-9 font-semibold" data-testid="button-plan-builder" onClick={handleUpgradeToBuilder} disabled={upgradeLoading}>{upgradeLoading ? "Loading..." : "Upgrade Now"}</Button>
                 </div>
               </GlassCard>
 
@@ -213,7 +249,7 @@ export default function Billing() {
                     <li className="flex items-center gap-2 text-white/60"><Check className="w-3 h-3 text-secondary shrink-0" /> Custom integrations</li>
                     <li className="flex items-center gap-2 text-white/60"><Check className="w-3 h-3 text-secondary shrink-0" /> Validator node access</li>
                   </ul>
-                  <Button variant="outline" size="sm" className="w-full mt-4 border-secondary/30 text-secondary hover:bg-secondary/10 text-xs h-9" data-testid="button-plan-enterprise">Contact Sales</Button>
+                  <Button variant="outline" size="sm" className="w-full mt-4 border-secondary/30 text-secondary hover:bg-secondary/10 text-xs h-9" data-testid="button-plan-enterprise" onClick={() => setShowContactModal(true)}>Contact Sales</Button>
                 </div>
               </GlassCard>
             </div>
@@ -355,6 +391,94 @@ export default function Billing() {
       </main>
 
       <Footer />
+
+      <AnimatePresence>
+        {showContactModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            onClick={() => setShowContactModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-md bg-[rgba(12,18,36,0.95)] border border-white/10 rounded-xl p-6"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold flex items-center gap-2">
+                  <Mail className="w-5 h-5 text-secondary" /> Contact Sales
+                </h3>
+                <button onClick={() => setShowContactModal(false)} className="p-1 hover:bg-white/10 rounded">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {contactSubmitted ? (
+                <div className="text-center py-8">
+                  <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-3">
+                    <Check className="w-6 h-6 text-green-400" />
+                  </div>
+                  <p className="text-green-400 font-medium">Message sent! We'll be in touch soon.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleContactSubmit} className="space-y-4">
+                  <div>
+                    <Label htmlFor="contact-name" className="text-sm">Name</Label>
+                    <Input
+                      id="contact-name"
+                      value={contactForm.name}
+                      onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
+                      className="mt-1 bg-black/30 border-white/10"
+                      required
+                      data-testid="input-contact-name"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="contact-email" className="text-sm">Email</Label>
+                    <Input
+                      id="contact-email"
+                      type="email"
+                      value={contactForm.email}
+                      onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
+                      className="mt-1 bg-black/30 border-white/10"
+                      required
+                      data-testid="input-contact-email"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="contact-company" className="text-sm">Company</Label>
+                    <Input
+                      id="contact-company"
+                      value={contactForm.company}
+                      onChange={(e) => setContactForm({ ...contactForm, company: e.target.value })}
+                      className="mt-1 bg-black/30 border-white/10"
+                      data-testid="input-contact-company"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="contact-message" className="text-sm">Tell us about your needs</Label>
+                    <Textarea
+                      id="contact-message"
+                      value={contactForm.message}
+                      onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                      className="mt-1 bg-black/30 border-white/10 min-h-[100px]"
+                      required
+                      data-testid="input-contact-message"
+                    />
+                  </div>
+                  <Button type="submit" className="w-full bg-secondary text-background hover:bg-secondary/90" data-testid="button-contact-submit">
+                    Send Message
+                  </Button>
+                </form>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

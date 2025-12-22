@@ -1539,6 +1539,51 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/billing/subscribe", async (req, res) => {
+    try {
+      const { plan } = req.body;
+      
+      if (!plan || !["builder", "enterprise"].includes(plan)) {
+        return res.status(400).json({ error: "Invalid plan" });
+      }
+
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+
+      const host = req.get("host") || "darkwavechain.io";
+      const protocol = host.includes("localhost") ? "http" : "https";
+      const baseUrl = `${protocol}://${host}`;
+
+      const priceAmount = plan === "builder" ? 2900 : 19900;
+      const planName = plan === "builder" ? "Builder" : "Enterprise";
+
+      const session = await stripe.checkout.sessions.create({
+        mode: "subscription",
+        line_items: [{
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: `DarkWave ${planName} Membership`,
+              description: plan === "builder" 
+                ? "50,000 API calls/month, DarkWave Studio, Priority support, Early token access"
+                : "Unlimited API calls, Dedicated support, Custom integrations, Validator node access",
+            },
+            unit_amount: priceAmount,
+            recurring: { interval: "month" },
+          },
+          quantity: 1,
+        }],
+        success_url: `${baseUrl}/billing?success=true&plan=${plan}`,
+        cancel_url: `${baseUrl}/billing?canceled=true`,
+      });
+
+      res.json({ checkoutUrl: session.url });
+    } catch (error) {
+      console.error("Subscription checkout error:", error);
+      res.status(500).json({ error: "Failed to create subscription checkout" });
+    }
+  });
+
   app.get("/api/billing/admin/stats", async (req, res) => {
     try {
       const sessionToken = req.headers["x-developer-session"] as string;
@@ -2040,7 +2085,6 @@ export async function registerRoutes(
         output: mainFile ? "Code ready for client-side execution" : "No JavaScript file found",
         exitCode: mainFile ? "0" : "1",
       });
-      await storage.updateStudioRun(run.id, { completedAt: new Date() });
       res.json({ ...run, code: mainFile?.content || "" });
     } catch (error) {
       console.error("Run error:", error);
