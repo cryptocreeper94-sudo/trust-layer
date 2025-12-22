@@ -42,18 +42,28 @@ export function MobileNav() {
               className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[99]"
               onClick={() => setIsOpen(false)}
             />
-            <motion.div
+            <motion.aside
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="fixed top-0 right-0 bottom-0 w-72 border-l border-white/10 z-[100]"
-              style={{ backgroundColor: '#080c18' }}
+              style={{
+                position: 'fixed',
+                top: 0,
+                right: 0,
+                bottom: 0,
+                width: '288px',
+                backgroundColor: '#080c18',
+                background: '#080c18',
+                zIndex: 100,
+                borderLeft: '1px solid rgba(255,255,255,0.1)',
+                padding: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
             >
-              <div className="absolute inset-0" style={{ backgroundColor: '#080c18' }} />
-              <div className="relative h-full p-6 flex flex-col" style={{ backgroundColor: '#080c18' }}>
-              <div className="flex justify-between items-center mb-8">
-                <span className="font-display font-bold text-xl text-white">Menu</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+                <span style={{ fontWeight: 'bold', fontSize: '20px', color: 'white' }}>Menu</span>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -64,7 +74,7 @@ export function MobileNav() {
                 </Button>
               </div>
 
-              <nav className="space-y-2">
+              <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   const isActive = location === item.href;
@@ -74,21 +84,30 @@ export function MobileNav() {
                   const buttonContent = (
                     <button
                       onClick={() => setIsOpen(false)}
-                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
-                        isActive
-                          ? "bg-primary/10 text-primary"
-                          : "text-muted-foreground hover:bg-white/5 hover:text-white"
-                      }`}
+                      style={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '12px',
+                        padding: '12px 16px',
+                        borderRadius: '12px',
+                        border: 'none',
+                        background: isActive ? 'rgba(0, 255, 255, 0.1)' : 'transparent',
+                        color: isActive ? '#00ffff' : '#a1a1aa',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s',
+                        textAlign: 'left',
+                      }}
                     >
-                      <Icon className="w-5 h-5" />
-                      <span className="font-medium flex-grow text-left">{item.label}</span>
+                      <Icon style={{ width: '20px', height: '20px' }} />
+                      <span style={{ fontWeight: 500, flexGrow: 1, textAlign: 'left' }}>{item.label}</span>
                       {comingSoon && (
                         <Badge variant="outline" className="text-[10px] border-primary/50 text-primary px-1.5 py-0">
                           Soon
                         </Badge>
                       )}
                       {isExternal && (
-                        <ArrowUpRight className="w-4 h-4 text-white/40" />
+                        <ArrowUpRight style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.4)' }} />
                       )}
                     </button>
                   );
@@ -109,7 +128,7 @@ export function MobileNav() {
                 })}
               </nav>
 
-              <div className="absolute bottom-6 left-6 right-6">
+              <div style={{ position: 'absolute', bottom: '24px', left: '24px', right: '24px' }}>
                 <Link href="/ecosystem">
                   <Button
                     className="w-full bg-primary text-background hover:bg-primary/90 font-semibold"
@@ -119,8 +138,7 @@ export function MobileNav() {
                   </Button>
                 </Link>
               </div>
-              </div>
-            </motion.div>
+            </motion.aside>
           </>
         )}
       </AnimatePresence>
