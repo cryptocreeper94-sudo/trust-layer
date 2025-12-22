@@ -47,11 +47,12 @@ export function MobileNav() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="fixed top-0 right-0 bottom-0 w-72 border-l border-white/10 z-[100] p-6 bg-[#0a0f1c]"
-              style={{ backgroundColor: '#0a0f1c', opacity: 1 }}
+              className="fixed top-0 right-0 bottom-0 w-72 border-l border-white/10 z-[100]"
             >
+              <div className="absolute inset-0 bg-[#080c18]" />
+              <div className="relative h-full p-6 flex flex-col" style={{ backgroundColor: '#080c18' }}>
               <div className="flex justify-between items-center mb-8">
-                <span className="font-display font-bold text-xl">Menu</span>
+                <span className="font-display font-bold text-xl text-white">Menu</span>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -116,6 +117,7 @@ export function MobileNav() {
                     Launch App
                   </Button>
                 </Link>
+              </div>
               </div>
             </motion.div>
           </>
