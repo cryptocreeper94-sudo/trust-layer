@@ -145,7 +145,7 @@ export default function Billing() {
               <p className="text-muted-foreground">Choose your plan and unlock the DarkWave ecosystem</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-10 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-10 pt-6">
               <GlassCard className="flex flex-col h-full">
                 <div className="p-5 flex flex-col h-full">
                   <div className="mb-3">
