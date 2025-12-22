@@ -13,28 +13,18 @@ import { fetchEcosystemApps } from "@/lib/api";
 import { useState } from "react";
 import { InfoTooltip } from "@/components/info-tooltip";
 
-import orbitStaffingImg from "@/assets/ecosystem/orbit-staffing.jpg";
-import lotopsproImg from "@/assets/ecosystem/lotopspro.jpg";
-import brewBoardImg from "@/assets/ecosystem/brew-board.jpg";
-import orbitChainImg from "@/assets/ecosystem/orbit-chain.jpg";
-import garagebotImg from "@/assets/ecosystem/garagebot-prod.jpg";
-import darkwavePulseImg from "@/assets/ecosystem/darkwave-pulse.jpg";
-import paintprosImg from "@/assets/ecosystem/paintpros.jpg";
-import orbyImg from "@/assets/ecosystem/orby.jpg";
-import strikeAgentImg from "@/assets/ecosystem/strike-agent.jpg";
-
 const appImageMap: Record<string, string> = {
-  "orbit-staffing": orbitStaffingImg,
-  "lotopspro": lotopsproImg,
-  "lotops-pro": lotopsproImg,
-  "brew-board": brewBoardImg,
-  "orbit-chain": orbitChainImg,
-  "garagebot": garagebotImg,
-  "garagebot-prod": garagebotImg,
-  "darkwave-pulse": darkwavePulseImg,
-  "paintpros": paintprosImg,
-  "orby": orbyImg,
-  "strike-agent": strikeAgentImg,
+  "orbit-staffing": "/ecosystem/orbit-staffing.jpg",
+  "lotopspro": "/ecosystem/lotopspro.jpg",
+  "lotops-pro": "/ecosystem/lotopspro.jpg",
+  "brew-board": "/ecosystem/brew-board.jpg",
+  "orbit-chain": "/ecosystem/orbit-chain.jpg",
+  "garagebot": "/ecosystem/garagebot-prod.jpg",
+  "garagebot-prod": "/ecosystem/garagebot-prod.jpg",
+  "darkwave-pulse": "/ecosystem/darkwave-pulse.jpg",
+  "paintpros": "/ecosystem/paintpros.jpg",
+  "orby": "/ecosystem/orby.jpg",
+  "strike-agent": "/ecosystem/strike-agent.jpg",
 };
 
 const categories = ["All Apps", "DeFi", "Enterprise", "AI", "Social", "Gaming", "Automotive", "Services"];
