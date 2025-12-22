@@ -145,59 +145,74 @@ export default function Billing() {
               <p className="text-muted-foreground">Choose your plan and unlock the DarkWave ecosystem</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-              <GlassCard className="p-6 relative">
-                <div className="mb-4">
-                  <h3 className="text-lg font-bold text-white">Explorer</h3>
-                  <p className="text-xs text-muted-foreground">Get started for free</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-10">
+              <GlassCard className="flex flex-col h-full">
+                <div className="p-5 flex flex-col h-full">
+                  <div className="mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center mb-3">
+                      <Activity className="w-4 h-4 text-white/60" />
+                    </div>
+                    <h3 className="text-base font-bold text-white">Explorer</h3>
+                    <p className="text-[10px] text-white/40 uppercase tracking-wider">Free forever</p>
+                  </div>
+                  <div className="mb-4">
+                    <span className="text-2xl font-bold font-display text-white">$0</span>
+                    <span className="text-white/40 text-xs">/mo</span>
+                  </div>
+                  <ul className="space-y-2 mb-auto text-[11px]">
+                    <li className="flex items-center gap-2 text-white/60"><Check className="w-3 h-3 text-primary shrink-0" /> 1,000 API calls/month</li>
+                    <li className="flex items-center gap-2 text-white/60"><Check className="w-3 h-3 text-primary shrink-0" /> Block explorer access</li>
+                    <li className="flex items-center gap-2 text-white/60"><Check className="w-3 h-3 text-primary shrink-0" /> Community support</li>
+                  </ul>
+                  <Button variant="outline" size="sm" className="w-full mt-4 border-white/10 text-white/60 text-xs h-9" data-testid="button-plan-explorer">Current Plan</Button>
                 </div>
-                <div className="mb-4">
-                  <span className="text-3xl font-bold text-white">$0</span>
-                  <span className="text-muted-foreground text-sm">/month</span>
-                </div>
-                <ul className="space-y-2 mb-6 text-sm">
-                  <li className="flex items-center gap-2 text-muted-foreground"><Check className="w-4 h-4 text-primary" /> 1,000 API calls/month</li>
-                  <li className="flex items-center gap-2 text-muted-foreground"><Check className="w-4 h-4 text-primary" /> Basic block explorer</li>
-                  <li className="flex items-center gap-2 text-muted-foreground"><Check className="w-4 h-4 text-primary" /> Community support</li>
-                </ul>
-                <Button variant="outline" className="w-full border-white/20" data-testid="button-plan-explorer">Current Plan</Button>
               </GlassCard>
 
-              <GlassCard glow className="p-6 relative border-primary/50">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-primary text-background text-xs font-bold rounded-full">POPULAR</div>
-                <div className="mb-4">
-                  <h3 className="text-lg font-bold text-white">Builder</h3>
-                  <p className="text-xs text-muted-foreground">For serious developers</p>
+              <GlassCard glow className="flex flex-col h-full border-primary/40 relative">
+                <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-primary text-background text-[9px] font-bold rounded-full uppercase tracking-wider">Most Popular</div>
+                <div className="p-5 flex flex-col h-full">
+                  <div className="mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center mb-3">
+                      <CreditCard className="w-4 h-4 text-primary" />
+                    </div>
+                    <h3 className="text-base font-bold text-white">Builder</h3>
+                    <p className="text-[10px] text-primary uppercase tracking-wider">For developers</p>
+                  </div>
+                  <div className="mb-4">
+                    <span className="text-2xl font-bold font-display text-white">$29</span>
+                    <span className="text-white/40 text-xs">/mo</span>
+                  </div>
+                  <ul className="space-y-2 mb-auto text-[11px]">
+                    <li className="flex items-center gap-2 text-white/70"><Check className="w-3 h-3 text-primary shrink-0" /> 50,000 API calls/month</li>
+                    <li className="flex items-center gap-2 text-white/70"><Check className="w-3 h-3 text-primary shrink-0" /> DarkWave Studio</li>
+                    <li className="flex items-center gap-2 text-white/70"><Check className="w-3 h-3 text-primary shrink-0" /> Priority support</li>
+                    <li className="flex items-center gap-2 text-white/70"><Check className="w-3 h-3 text-primary shrink-0" /> Early token access</li>
+                  </ul>
+                  <Button size="sm" className="w-full mt-4 bg-primary text-background hover:bg-primary/90 text-xs h-9 font-semibold" data-testid="button-plan-builder">Upgrade Now</Button>
                 </div>
-                <div className="mb-4">
-                  <span className="text-3xl font-bold text-white">$29</span>
-                  <span className="text-muted-foreground text-sm">/month</span>
-                </div>
-                <ul className="space-y-2 mb-6 text-sm">
-                  <li className="flex items-center gap-2 text-muted-foreground"><Check className="w-4 h-4 text-primary" /> 50,000 API calls/month</li>
-                  <li className="flex items-center gap-2 text-muted-foreground"><Check className="w-4 h-4 text-primary" /> DarkWave Studio access</li>
-                  <li className="flex items-center gap-2 text-muted-foreground"><Check className="w-4 h-4 text-primary" /> Priority support</li>
-                  <li className="flex items-center gap-2 text-muted-foreground"><Check className="w-4 h-4 text-primary" /> Early token access</li>
-                </ul>
-                <Button className="w-full bg-primary text-background hover:bg-primary/90" data-testid="button-plan-builder">Upgrade Now</Button>
               </GlassCard>
 
-              <GlassCard className="p-6 relative">
-                <div className="mb-4">
-                  <h3 className="text-lg font-bold text-white">Enterprise</h3>
-                  <p className="text-xs text-muted-foreground">For teams & businesses</p>
+              <GlassCard className="flex flex-col h-full">
+                <div className="p-5 flex flex-col h-full">
+                  <div className="mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-secondary/20 flex items-center justify-center mb-3">
+                      <DollarSign className="w-4 h-4 text-secondary" />
+                    </div>
+                    <h3 className="text-base font-bold text-white">Enterprise</h3>
+                    <p className="text-[10px] text-secondary uppercase tracking-wider">For teams</p>
+                  </div>
+                  <div className="mb-4">
+                    <span className="text-2xl font-bold font-display text-white">$199</span>
+                    <span className="text-white/40 text-xs">/mo</span>
+                  </div>
+                  <ul className="space-y-2 mb-auto text-[11px]">
+                    <li className="flex items-center gap-2 text-white/60"><Check className="w-3 h-3 text-secondary shrink-0" /> Unlimited API calls</li>
+                    <li className="flex items-center gap-2 text-white/60"><Check className="w-3 h-3 text-secondary shrink-0" /> Dedicated support</li>
+                    <li className="flex items-center gap-2 text-white/60"><Check className="w-3 h-3 text-secondary shrink-0" /> Custom integrations</li>
+                    <li className="flex items-center gap-2 text-white/60"><Check className="w-3 h-3 text-secondary shrink-0" /> Validator node access</li>
+                  </ul>
+                  <Button variant="outline" size="sm" className="w-full mt-4 border-secondary/30 text-secondary hover:bg-secondary/10 text-xs h-9" data-testid="button-plan-enterprise">Contact Sales</Button>
                 </div>
-                <div className="mb-4">
-                  <span className="text-3xl font-bold text-white">$199</span>
-                  <span className="text-muted-foreground text-sm">/month</span>
-                </div>
-                <ul className="space-y-2 mb-6 text-sm">
-                  <li className="flex items-center gap-2 text-muted-foreground"><Check className="w-4 h-4 text-primary" /> Unlimited API calls</li>
-                  <li className="flex items-center gap-2 text-muted-foreground"><Check className="w-4 h-4 text-primary" /> Dedicated support</li>
-                  <li className="flex items-center gap-2 text-muted-foreground"><Check className="w-4 h-4 text-primary" /> Custom integrations</li>
-                  <li className="flex items-center gap-2 text-muted-foreground"><Check className="w-4 h-4 text-primary" /> Validator node access</li>
-                </ul>
-                <Button variant="outline" className="w-full border-white/20" data-testid="button-plan-enterprise">Contact Sales</Button>
               </GlassCard>
             </div>
 
