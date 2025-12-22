@@ -20,9 +20,9 @@ export default function Token() {
             <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
           <div className="flex items-center gap-3">
-            <Button size="sm" className="h-8 text-xs bg-primary text-background hover:bg-primary/90 font-semibold">
-              Buy $DWT
-            </Button>
+            <Badge variant="outline" className="border-amber-500/50 text-amber-400 bg-amber-500/10 text-xs">
+              <Lock className="w-3 h-3 mr-1" /> Launching Feb 14, 2026
+            </Badge>
             <Link href="/">
               <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5">
                 <ArrowLeft className="w-3 h-3" />
@@ -50,30 +50,30 @@ export default function Token() {
               
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button size="lg" className="h-11 px-6 bg-white text-black hover:bg-white/90 font-bold rounded-full text-sm">
-                  View Contract
+                  Read Whitepaper
                 </Button>
                 <Button size="lg" variant="outline" className="h-11 px-6 border-white/20 hover:bg-white/5 rounded-full text-sm">
-                  Read Whitepaper
+                  Join Waitlist
                 </Button>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
                 <GlassCard hover={false}>
                   <div className="p-3 text-center">
-                    <div className="text-lg font-bold text-white">$0.42</div>
-                    <div className="text-[10px] text-white/50">Current Price</div>
+                    <div className="text-lg font-bold text-amber-400">TBA</div>
+                    <div className="text-[10px] text-white/50">Initial Price</div>
                   </div>
                 </GlassCard>
                 <GlassCard hover={false}>
                   <div className="p-3 text-center">
-                    <div className="text-lg font-bold text-green-400">+12.5%</div>
-                    <div className="text-[10px] text-white/50">24h Change</div>
+                    <div className="text-lg font-bold text-white">100M</div>
+                    <div className="text-[10px] text-white/50">Total Supply</div>
                   </div>
                 </GlassCard>
                 <GlassCard hover={false}>
                   <div className="p-3 text-center">
-                    <div className="text-lg font-bold text-white">$840M</div>
-                    <div className="text-[10px] text-white/50">Market Cap</div>
+                    <div className="text-lg font-bold text-primary">Feb 2026</div>
+                    <div className="text-[10px] text-white/50">Launch Date</div>
                   </div>
                 </GlassCard>
               </div>
