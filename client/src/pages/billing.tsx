@@ -184,6 +184,7 @@ export default function Billing() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-10 pt-6">
               <GlassCard className="flex flex-col h-full">
                 <div className="p-5 flex flex-col h-full">
+                  <div className="h-[30px] mb-2"></div>
                   <div className="mb-3">
                     <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center mb-3">
                       <Activity className="w-4 h-4 text-white/60" />
@@ -232,6 +233,7 @@ export default function Billing() {
 
               <GlassCard className="flex flex-col h-full">
                 <div className="p-5 flex flex-col h-full">
+                  <div className="h-[30px] mb-2"></div>
                   <div className="mb-3">
                     <div className="w-8 h-8 rounded-lg bg-secondary/20 flex items-center justify-center mb-3">
                       <DollarSign className="w-4 h-4 text-secondary" />
