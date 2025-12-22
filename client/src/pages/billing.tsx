@@ -168,9 +168,11 @@ export default function Billing() {
                 </div>
               </GlassCard>
 
-              <GlassCard glow className="flex flex-col h-full border-primary/40 relative">
-                <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-primary text-background text-[9px] font-bold rounded-full uppercase tracking-wider">Most Popular</div>
+              <GlassCard glow className="flex flex-col h-full border-primary/40">
                 <div className="p-5 flex flex-col h-full">
+                  <div className="flex justify-center -mt-7 mb-2">
+                    <span className="px-3 py-1 bg-primary text-background text-[9px] font-bold rounded-full uppercase tracking-wider">Most Popular</span>
+                  </div>
                   <div className="mb-3">
                     <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center mb-3">
                       <CreditCard className="w-4 h-4 text-primary" />
