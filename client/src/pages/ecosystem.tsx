@@ -31,7 +31,10 @@ function AppImage({ src, alt, gradient, name }: { src: string; alt: string; grad
   
   const colors = gradientColors[gradient || "from-cyan-600 to-blue-700"] || { from: "#0891b2", to: "#1d4ed8" };
   
+  console.log(`[AppImage] name=${name}, src=${src}, loaded=${loaded}, failed=${failed}`);
+  
   if (!src) {
+    console.log(`[AppImage] No src for ${name}, showing fallback`);
     return (
       <div 
         className="aspect-[3/4] flex items-center justify-center"
@@ -56,8 +59,8 @@ function AppImage({ src, alt, gradient, name }: { src: string; alt: string; grad
         src={src} 
         alt={alt}
         className={`w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ${loaded && !failed ? 'opacity-100' : 'opacity-0'}`}
-        onLoad={() => setLoaded(true)}
-        onError={() => setFailed(true)}
+        onLoad={() => { console.log(`[AppImage] Loaded: ${name}`); setLoaded(true); }}
+        onError={(e) => { console.log(`[AppImage] Error loading ${name}:`, e); setFailed(true); }}
       />
     </div>
   );
