@@ -13,14 +13,14 @@ import { fetchEcosystemApps } from "@/lib/api";
 import { useState } from "react";
 import { InfoTooltip } from "@/components/info-tooltip";
 
-import orbitStaffingImg from "@assets/ecosystem/orbit-staffing.jpg?url";
-import lotopsproImg from "@assets/ecosystem/lotopspro.jpg?url";
-import brewBoardImg from "@assets/ecosystem/brew-board.jpg?url";
-import orbitChainImg from "@assets/ecosystem/orbit-chain.jpg?url";
-import garagebotImg from "@assets/ecosystem/garagebot-prod.jpg?url";
-import darkwavePulseImg from "@assets/ecosystem/darkwave-pulse.jpg?url";
-import paintprosImg from "@assets/ecosystem/paintpros.jpg?url";
-import orbyImg from "@assets/ecosystem/orby.jpg?url";
+import orbitStaffingImg from "@assets/ecosystem/orbit-staffing.jpg";
+import lotopsproImg from "@assets/ecosystem/lotopspro.jpg";
+import brewBoardImg from "@assets/ecosystem/brew-board.jpg";
+import orbitChainImg from "@assets/ecosystem/orbit-chain.jpg";
+import garagebotImg from "@assets/ecosystem/garagebot-prod.jpg";
+import darkwavePulseImg from "@assets/ecosystem/darkwave-pulse.jpg";
+import paintprosImg from "@assets/ecosystem/paintpros.jpg";
+import orbyImg from "@assets/ecosystem/orby.jpg";
 
 const appImageMap: Record<string, string> = {
   "orbit-staffing": orbitStaffingImg,
