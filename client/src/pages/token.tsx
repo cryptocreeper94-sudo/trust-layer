@@ -82,28 +82,7 @@ export default function Token() {
             <div className="flex justify-center relative">
               <div className="absolute inset-0 bg-gradient-to-r from-secondary/20 to-primary/20 blur-[80px] rounded-full" />
               <div className="relative z-10 w-full max-w-[350px]">
-                <motion.div 
-                  className="absolute inset-[15%] rounded-full overflow-hidden"
-                  style={{ zIndex: 1 }}
-                >
-                  <motion.div
-                    className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent,rgba(139,0,139,0.4),rgba(255,0,100,0.3),rgba(255,100,0,0.2),transparent)]"
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                  />
-                  <motion.div
-                    className="absolute inset-[10%] bg-[conic-gradient(from_180deg,transparent,rgba(100,0,150,0.5),rgba(200,0,80,0.4),transparent)]"
-                    animate={{ rotate: -360 }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-                  />
-                  <motion.div
-                    className="absolute inset-[25%] bg-[conic-gradient(from_90deg,transparent,rgba(80,0,120,0.6),transparent)]"
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                  />
-                  <div className="absolute inset-[40%] bg-[radial-gradient(circle,rgba(0,0,0,0.9),transparent)] rounded-full" />
-                </motion.div>
-                <div className="relative z-10 w-full rounded-full overflow-hidden">
+                <div className="relative w-full rounded-full overflow-hidden">
                   <motion.img 
                     src={tokenBg} 
                     alt="DarkWave Token" 
@@ -111,6 +90,27 @@ export default function Token() {
                     animate={{ y: [0, -10, 0], rotate: [0, 2, 0] }}
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                   />
+                  <motion.div 
+                    className="absolute inset-[12%] rounded-full overflow-hidden pointer-events-none"
+                    style={{ mixBlendMode: 'screen' }}
+                  >
+                    <motion.div
+                      className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent,rgba(139,0,139,0.5),rgba(255,0,100,0.4),rgba(255,100,0,0.3),transparent)]"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                    />
+                    <motion.div
+                      className="absolute inset-[15%] bg-[conic-gradient(from_180deg,transparent,rgba(100,0,150,0.6),rgba(200,0,80,0.5),transparent)]"
+                      animate={{ rotate: -360 }}
+                      transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                    />
+                    <motion.div
+                      className="absolute inset-[30%] bg-[conic-gradient(from_90deg,transparent,rgba(80,0,120,0.7),transparent)]"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                    />
+                    <div className="absolute inset-[45%] bg-[radial-gradient(circle,rgba(0,0,0,0.8),transparent)] rounded-full" />
+                  </motion.div>
                 </div>
               </div>
             </div>
