@@ -16,26 +16,26 @@ export default function Developers() {
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center">
-          <Link href="/" className="flex items-center gap-2 mr-auto">
+          <Link href="/" className="flex items-center gap-2 mr-auto shrink-0">
             <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
-            <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <Link href="/api-playground">
-              <Button variant="outline" size="sm" className="h-8 text-xs border-green-500/30 hover:bg-green-500/10 text-green-400" data-testid="button-api-playground">
-                <Play className="w-3 h-3 mr-1.5" /> API Playground
+              <Button variant="outline" size="sm" className="h-7 sm:h-8 text-[10px] sm:text-xs px-2 sm:px-3 border-green-500/30 hover:bg-green-500/10 text-green-400" data-testid="button-api-playground">
+                <Play className="w-3 h-3 sm:mr-1.5" /> <span className="hidden sm:inline">API Playground</span>
               </Button>
             </Link>
             <Link href="/doc-hub">
-              <Button variant="outline" size="sm" className="h-8 text-xs border-primary/30 hover:bg-primary/10 text-primary" data-testid="button-doc-hub">
-                <BookOpen className="w-3 h-3 mr-1.5" /> Doc Hub
+              <Button variant="outline" size="sm" className="h-7 sm:h-8 text-[10px] sm:text-xs px-2 sm:px-3 border-primary/30 hover:bg-primary/10 text-primary" data-testid="button-doc-hub">
+                <BookOpen className="w-3 h-3 sm:mr-1.5" /> <span className="hidden sm:inline">Doc Hub</span>
               </Button>
             </Link>
-            <Badge variant="outline" className="hidden sm:flex border-primary/20 text-primary bg-primary/5 font-mono text-[10px]">v1.0.0-beta</Badge>
+            <Badge variant="outline" className="hidden md:flex border-primary/20 text-primary bg-primary/5 font-mono text-[10px]">v1.0.0-beta</Badge>
             <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5">
+              <Button variant="ghost" size="sm" className="h-7 sm:h-8 text-[10px] sm:text-xs gap-1 sm:gap-1.5 hover:bg-white/5 px-2 sm:px-3">
                 <ArrowLeft className="w-3 h-3" />
-                Back
+                <span className="hidden sm:inline">Back</span>
               </Button>
             </Link>
           </div>
