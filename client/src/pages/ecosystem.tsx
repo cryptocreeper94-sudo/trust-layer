@@ -13,6 +13,16 @@ import { fetchEcosystemApps } from "@/lib/api";
 import { useState } from "react";
 import { InfoTooltip } from "@/components/info-tooltip";
 
+import orbitStaffingImg from "@assets/ecosystem/orbit-staffing.jpg";
+import lotopsproImg from "@assets/ecosystem/lotopspro.jpg";
+import brewBoardImg from "@assets/ecosystem/brew-board.jpg";
+import orbitChainImg from "@assets/ecosystem/orbit-chain.jpg";
+import garagebotImg from "@assets/ecosystem/garagebot-prod.jpg";
+import darkwavePulseImg from "@assets/ecosystem/darkwave-pulse.jpg";
+import paintprosImg from "@assets/ecosystem/paintpros.jpg";
+import orbyImg from "@assets/ecosystem/orby.jpg";
+import strikeAgentImg from "@assets/ecosystem/strike-agent.jpg";
+
 const gradientColors: Record<string, { from: string; to: string }> = {
   "from-gray-500 to-gray-700": { from: "#6b7280", to: "#374151" },
   "from-indigo-600 to-violet-800": { from: "#4f46e5", to: "#5b21b6" },
@@ -31,10 +41,7 @@ function AppImage({ src, alt, gradient, name }: { src: string; alt: string; grad
   
   const colors = gradientColors[gradient || "from-cyan-600 to-blue-700"] || { from: "#0891b2", to: "#1d4ed8" };
   
-  console.log(`[AppImage] name=${name}, src=${src}, loaded=${loaded}, failed=${failed}`);
-  
   if (!src) {
-    console.log(`[AppImage] No src for ${name}, showing fallback`);
     return (
       <div 
         className="aspect-[3/4] flex items-center justify-center"
@@ -59,25 +66,25 @@ function AppImage({ src, alt, gradient, name }: { src: string; alt: string; grad
         src={src} 
         alt={alt}
         className={`w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ${loaded && !failed ? 'opacity-100' : 'opacity-0'}`}
-        onLoad={() => { console.log(`[AppImage] Loaded: ${name}`); setLoaded(true); }}
-        onError={(e) => { console.log(`[AppImage] Error loading ${name}:`, e); setFailed(true); }}
+        onLoad={() => setLoaded(true)}
+        onError={() => setFailed(true)}
       />
     </div>
   );
 }
 
 const appImageMap: Record<string, string> = {
-  "orbit-staffing": "/ecosystem/orbit-staffing.jpg",
-  "lotopspro": "/ecosystem/lotopspro.jpg",
-  "lotops-pro": "/ecosystem/lotopspro.jpg",
-  "brew-board": "/ecosystem/brew-board.jpg",
-  "orbit-chain": "/ecosystem/orbit-chain.jpg",
-  "garagebot": "/ecosystem/garagebot-prod.jpg",
-  "garagebot-prod": "/ecosystem/garagebot-prod.jpg",
-  "darkwave-pulse": "/ecosystem/darkwave-pulse.jpg",
-  "paintpros": "/ecosystem/paintpros.jpg",
-  "orby": "/ecosystem/orby.jpg",
-  "strike-agent": "/ecosystem/strike-agent.jpg",
+  "orbit-staffing": orbitStaffingImg,
+  "lotopspro": lotopsproImg,
+  "lotops-pro": lotopsproImg,
+  "brew-board": brewBoardImg,
+  "orbit-chain": orbitChainImg,
+  "garagebot": garagebotImg,
+  "garagebot-prod": garagebotImg,
+  "darkwave-pulse": darkwavePulseImg,
+  "paintpros": paintprosImg,
+  "orby": orbyImg,
+  "strike-agent": strikeAgentImg,
 };
 
 const categories = ["All Apps", "DeFi", "Enterprise", "AI", "Social", "Gaming", "Automotive", "Services"];
