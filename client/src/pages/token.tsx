@@ -3,7 +3,7 @@ import { ArrowLeft, Coins, BarChart3, Lock, Globe, ShieldCheck, Zap, Sparkles } 
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import tokenBg from "@assets/generated_images/platinum_darkwave_token_holographic_fill.png";
+import tokenBg from "@assets/copilot_image_1762471524673_1766417058215.jpeg";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
@@ -81,13 +81,36 @@ export default function Token() {
 
             <div className="flex justify-center relative">
               <div className="absolute inset-0 bg-gradient-to-r from-secondary/20 to-primary/20 blur-[80px] rounded-full" />
-              <motion.img 
-                src={tokenBg} 
-                alt="DarkWave Token" 
-                className="relative z-10 w-full max-w-[350px] drop-shadow-2xl"
-                animate={{ y: [0, -15, 0], rotate: [0, 3, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              />
+              <div className="relative z-10 w-full max-w-[350px]">
+                <motion.div 
+                  className="absolute inset-[15%] rounded-full overflow-hidden"
+                  style={{ zIndex: 1 }}
+                >
+                  <motion.div
+                    className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent,rgba(139,0,139,0.4),rgba(255,0,100,0.3),rgba(255,100,0,0.2),transparent)]"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                  />
+                  <motion.div
+                    className="absolute inset-[10%] bg-[conic-gradient(from_180deg,transparent,rgba(100,0,150,0.5),rgba(200,0,80,0.4),transparent)]"
+                    animate={{ rotate: -360 }}
+                    transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                  />
+                  <motion.div
+                    className="absolute inset-[25%] bg-[conic-gradient(from_90deg,transparent,rgba(80,0,120,0.6),transparent)]"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  />
+                  <div className="absolute inset-[40%] bg-[radial-gradient(circle,rgba(0,0,0,0.9),transparent)] rounded-full" />
+                </motion.div>
+                <motion.img 
+                  src={tokenBg} 
+                  alt="DarkWave Token" 
+                  className="relative z-10 w-full drop-shadow-2xl"
+                  animate={{ y: [0, -15, 0], rotate: [0, 3, 0] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                />
+              </div>
             </div>
           </div>
         </div>
