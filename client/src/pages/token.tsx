@@ -52,9 +52,11 @@ export default function Token() {
                 <Button size="lg" className="h-11 px-6 bg-white text-black hover:bg-white/90 font-bold rounded-full text-sm">
                   Read Whitepaper
                 </Button>
-                <Button size="lg" variant="outline" className="h-11 px-6 border-white/20 hover:bg-white/5 rounded-full text-sm">
-                  Join Waitlist
-                </Button>
+                <Link href="/billing">
+                  <Button size="lg" variant="outline" className="h-11 px-6 border-white/20 hover:bg-white/5 rounded-full text-sm">
+                    View Memberships
+                  </Button>
+                </Link>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
