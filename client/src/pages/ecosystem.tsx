@@ -13,6 +13,29 @@ import { fetchEcosystemApps } from "@/lib/api";
 import { useState } from "react";
 import { InfoTooltip } from "@/components/info-tooltip";
 
+function AppImage({ src, alt, gradient, name }: { src: string; alt: string; gradient?: string; name: string }) {
+  const [failed, setFailed] = useState(false);
+  
+  if (failed || !src) {
+    return (
+      <div className={`aspect-[3/4] bg-gradient-to-br ${gradient || 'from-cyan-600 to-blue-700'} flex items-center justify-center`}>
+        <span className="text-4xl font-bold text-white/80">{name.charAt(0)}</span>
+      </div>
+    );
+  }
+  
+  return (
+    <div className="aspect-[3/4] overflow-hidden">
+      <img 
+        src={src} 
+        alt={alt}
+        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+        onError={() => setFailed(true)}
+      />
+    </div>
+  );
+}
+
 const appImageMap: Record<string, string> = {
   "orbit-staffing": "/ecosystem/orbit-staffing.jpg",
   "lotopspro": "/ecosystem/lotopspro.jpg",
@@ -179,19 +202,12 @@ export default function Ecosystem() {
                         data-testid={`app-card-${app.id}`}
                       >
                         <GlassCard className="overflow-hidden hover:border-primary/30 transition-all duration-300">
-                          {appImage ? (
-                            <div className="aspect-[3/4] overflow-hidden">
-                              <img 
-                                src={appImage} 
-                                alt={app.name}
-                                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-                              />
-                            </div>
-                          ) : (
-                            <div className={`aspect-[3/4] bg-gradient-to-br ${app.gradient || 'from-cyan-600 to-blue-700'} flex items-center justify-center`}>
-                              <span className="text-4xl font-bold text-white/80">{app.name.charAt(0)}</span>
-                            </div>
-                          )}
+                          <AppImage 
+                            src={appImage || ""} 
+                            alt={app.name} 
+                            gradient={app.gradient} 
+                            name={app.name} 
+                          />
                           <div className="p-3 bg-black/60 backdrop-blur-sm">
                             <div className="flex items-center gap-2 mb-1">
                               <h3 className="text-sm font-bold text-white truncate flex-1">{app.name}</h3>
