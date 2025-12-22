@@ -90,27 +90,53 @@ export default function Token() {
                     animate={{ y: [0, -10, 0], rotate: [0, 2, 0] }}
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                   />
-                  <motion.div 
-                    className="absolute inset-[12%] rounded-full overflow-hidden pointer-events-none"
-                    style={{ mixBlendMode: 'screen' }}
+                  <div 
+                    className="absolute inset-[10%] rounded-full overflow-hidden pointer-events-none"
+                    style={{ mixBlendMode: 'color-dodge' }}
                   >
                     <motion.div
-                      className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent,rgba(139,0,139,0.5),rgba(255,0,100,0.4),rgba(255,100,0,0.3),transparent)]"
-                      animate={{ rotate: 360 }}
+                      className="absolute -inset-[50%] rounded-full"
+                      style={{
+                        background: 'radial-gradient(ellipse 40% 60% at 30% 40%, rgba(200,0,100,0.6) 0%, transparent 70%)',
+                      }}
+                      animate={{ 
+                        rotate: [0, 360],
+                        scale: [1, 1.2, 1],
+                      }}
+                      transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                    />
+                    <motion.div
+                      className="absolute -inset-[50%] rounded-full"
+                      style={{
+                        background: 'radial-gradient(ellipse 50% 30% at 70% 60%, rgba(150,0,200,0.5) 0%, transparent 70%)',
+                      }}
+                      animate={{ 
+                        rotate: [360, 0],
+                        scale: [1.2, 1, 1.2],
+                      }}
                       transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                     />
                     <motion.div
-                      className="absolute inset-[15%] bg-[conic-gradient(from_180deg,transparent,rgba(100,0,150,0.6),rgba(200,0,80,0.5),transparent)]"
-                      animate={{ rotate: -360 }}
-                      transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                      className="absolute -inset-[30%] rounded-full"
+                      style={{
+                        background: 'radial-gradient(ellipse 35% 50% at 50% 30%, rgba(255,80,0,0.4) 0%, transparent 60%)',
+                      }}
+                      animate={{ 
+                        rotate: [0, -360],
+                      }}
+                      transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
                     />
                     <motion.div
-                      className="absolute inset-[30%] bg-[conic-gradient(from_90deg,transparent,rgba(80,0,120,0.7),transparent)]"
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                      className="absolute inset-[20%] rounded-full"
+                      style={{
+                        background: 'radial-gradient(circle, rgba(0,0,0,0.9) 30%, transparent 70%)',
+                      }}
+                      animate={{ 
+                        scale: [1, 1.1, 1],
+                      }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                     />
-                    <div className="absolute inset-[45%] bg-[radial-gradient(circle,rgba(0,0,0,0.8),transparent)] rounded-full" />
-                  </motion.div>
+                  </div>
                 </div>
               </div>
             </div>
