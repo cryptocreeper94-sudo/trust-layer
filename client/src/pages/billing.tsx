@@ -170,7 +170,7 @@ export default function Billing() {
 
               <GlassCard glow className="flex flex-col h-full border-primary/40">
                 <div className="p-5 flex flex-col h-full">
-                  <div className="flex justify-center -mt-7 mb-2">
+                  <div className="flex justify-center mb-2">
                     <span className="px-3 py-1 bg-primary text-background text-[9px] font-bold rounded-full uppercase tracking-wider">Most Popular</span>
                   </div>
                   <div className="mb-3">
