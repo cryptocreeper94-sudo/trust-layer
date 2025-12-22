@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -16,9 +16,139 @@ const navItems = [
   { href: "/dev-studio", label: "Dev Studio", icon: Sparkles, comingSoon: true },
 ];
 
+function MenuPanel({ onClose }: { onClose: () => void }) {
+  const [location] = useLocation();
+
+  return createPortal(
+    <>
+      {/* Backdrop */}
+      <div 
+        onClick={onClose}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.8)',
+          backdropFilter: 'blur(4px)',
+          zIndex: 9998,
+        }}
+      />
+      {/* Menu Panel */}
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: '288px',
+          backgroundColor: '#080c18',
+          background: '#080c18',
+          zIndex: 9999,
+          borderLeft: '1px solid rgba(255,255,255,0.1)',
+          padding: '24px',
+          display: 'flex',
+          flexDirection: 'column',
+          boxSizing: 'border-box',
+        }}
+      >
+        {/* Header */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+          <span style={{ fontWeight: 700, fontSize: '20px', color: '#ffffff', fontFamily: 'Space Grotesk, sans-serif' }}>Menu</span>
+          <button
+            onClick={onClose}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#ffffff',
+              cursor: 'pointer',
+              padding: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <X style={{ width: '20px', height: '20px' }} />
+          </button>
+        </div>
+
+        {/* Nav Items */}
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = location === item.href;
+            const comingSoon = 'comingSoon' in item && item.comingSoon;
+            const isExternal = 'external' in item && item.external;
+            
+            const content = (
+              <div
+                onClick={onClose}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '12px 16px',
+                  borderRadius: '12px',
+                  backgroundColor: isActive ? 'rgba(0, 255, 255, 0.1)' : 'transparent',
+                  color: isActive ? '#00ffff' : '#a1a1aa',
+                  cursor: 'pointer',
+                  textDecoration: 'none',
+                }}
+              >
+                <Icon style={{ width: '20px', height: '20px', flexShrink: 0 }} />
+                <span style={{ fontWeight: 500, flex: 1, fontFamily: 'Inter, sans-serif' }}>{item.label}</span>
+                {comingSoon && (
+                  <Badge variant="outline" className="text-[10px] border-primary/50 text-primary px-1.5 py-0">
+                    Soon
+                  </Badge>
+                )}
+                {isExternal && (
+                  <ArrowUpRight style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.4)' }} />
+                )}
+              </div>
+            );
+            
+            if (isExternal) {
+              return (
+                <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                  {content}
+                </a>
+              );
+            }
+            
+            return (
+              <Link key={item.href} href={item.href} style={{ textDecoration: 'none' }}>
+                {content}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Bottom Button */}
+        <div style={{ marginTop: 'auto' }}>
+          <Link href="/ecosystem" style={{ textDecoration: 'none' }}>
+            <Button
+              className="w-full bg-primary text-background hover:bg-primary/90 font-semibold"
+              onClick={onClose}
+            >
+              Launch App
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </>,
+    document.body
+  );
+}
+
 export function MobileNav() {
   const [isOpen, setIsOpen] = useState(false);
-  const [location] = useLocation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div className="md:hidden">
@@ -32,116 +162,7 @@ export function MobileNav() {
         <Menu className="w-6 h-6" />
       </Button>
 
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[99]"
-              onClick={() => setIsOpen(false)}
-            />
-            <motion.aside
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              style={{
-                position: 'fixed',
-                top: 0,
-                right: 0,
-                bottom: 0,
-                width: '288px',
-                backgroundColor: '#080c18',
-                background: '#080c18',
-                zIndex: 100,
-                borderLeft: '1px solid rgba(255,255,255,0.1)',
-                padding: '24px',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
-                <span style={{ fontWeight: 'bold', fontSize: '20px', color: 'white' }}>Menu</span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setIsOpen(false)}
-                  className="hover:bg-white/5"
-                >
-                  <X className="w-5 h-5" />
-                </Button>
-              </div>
-
-              <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = location === item.href;
-                  const comingSoon = 'comingSoon' in item && item.comingSoon;
-                  const isExternal = 'external' in item && item.external;
-                  
-                  const buttonContent = (
-                    <button
-                      onClick={() => setIsOpen(false)}
-                      style={{
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                        padding: '12px 16px',
-                        borderRadius: '12px',
-                        border: 'none',
-                        background: isActive ? 'rgba(0, 255, 255, 0.1)' : 'transparent',
-                        color: isActive ? '#00ffff' : '#a1a1aa',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        textAlign: 'left',
-                      }}
-                    >
-                      <Icon style={{ width: '20px', height: '20px' }} />
-                      <span style={{ fontWeight: 500, flexGrow: 1, textAlign: 'left' }}>{item.label}</span>
-                      {comingSoon && (
-                        <Badge variant="outline" className="text-[10px] border-primary/50 text-primary px-1.5 py-0">
-                          Soon
-                        </Badge>
-                      )}
-                      {isExternal && (
-                        <ArrowUpRight style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.4)' }} />
-                      )}
-                    </button>
-                  );
-                  
-                  if (isExternal) {
-                    return (
-                      <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer">
-                        {buttonContent}
-                      </a>
-                    );
-                  }
-                  
-                  return (
-                    <Link key={item.href} href={item.href}>
-                      {buttonContent}
-                    </Link>
-                  );
-                })}
-              </nav>
-
-              <div style={{ position: 'absolute', bottom: '24px', left: '24px', right: '24px' }}>
-                <Link href="/ecosystem">
-                  <Button
-                    className="w-full bg-primary text-background hover:bg-primary/90 font-semibold"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Launch App
-                  </Button>
-                </Link>
-              </div>
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
+      {mounted && isOpen && <MenuPanel onClose={() => setIsOpen(false)} />}
     </div>
   );
 }
