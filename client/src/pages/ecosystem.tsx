@@ -13,12 +13,28 @@ import { fetchEcosystemApps } from "@/lib/api";
 import { useState } from "react";
 import { InfoTooltip } from "@/components/info-tooltip";
 
+const gradientColors: Record<string, { from: string; to: string }> = {
+  "from-gray-500 to-gray-700": { from: "#6b7280", to: "#374151" },
+  "from-indigo-600 to-violet-800": { from: "#4f46e5", to: "#5b21b6" },
+  "from-cyan-400 to-blue-500": { from: "#22d3ee", to: "#3b82f6" },
+  "from-slate-600 to-zinc-800": { from: "#475569", to: "#27272a" },
+  "from-emerald-600 to-teal-800": { from: "#059669", to: "#115e59" },
+  "from-amber-600 to-yellow-800": { from: "#d97706", to: "#854d0e" },
+  "from-cyan-600 to-blue-700": { from: "#0891b2", to: "#1d4ed8" },
+  "from-orange-500 to-red-600": { from: "#f97316", to: "#dc2626" },
+  "from-red-600 to-rose-700": { from: "#dc2626", to: "#be123c" },
+};
+
 function AppImage({ src, alt, gradient, name }: { src: string; alt: string; gradient?: string; name: string }) {
   const [failed, setFailed] = useState(false);
   
   if (failed || !src) {
+    const colors = gradientColors[gradient || "from-cyan-600 to-blue-700"] || { from: "#0891b2", to: "#1d4ed8" };
     return (
-      <div className={`aspect-[3/4] bg-gradient-to-br ${gradient || 'from-cyan-600 to-blue-700'} flex items-center justify-center`}>
+      <div 
+        className="aspect-[3/4] flex items-center justify-center"
+        style={{ background: `linear-gradient(to bottom right, ${colors.from}, ${colors.to})` }}
+      >
         <span className="text-4xl font-bold text-white/80">{name.charAt(0)}</span>
       </div>
     );
