@@ -20,6 +20,7 @@ import DevStudio from "@/pages/dev-studio";
 import Billing from "@/pages/billing";
 import Studio from "@/pages/studio";
 import StudioProjects from "@/pages/studio-projects";
+import Team from "@/pages/team";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -52,6 +53,7 @@ function Router() {
         <Route path="/dev-studio" component={DevStudio} />
         <Route path="/studio" component={Studio} />
         <Route path="/studio/projects" component={StudioProjects} />
+        <Route path="/team" component={Team} />
         <Route component={NotFound} />
       </Switch>
     </>
