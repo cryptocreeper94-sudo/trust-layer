@@ -3,7 +3,7 @@ import { ArrowLeft, Coins, BarChart3, Lock, Globe, ShieldCheck, Zap, Sparkles } 
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import tokenBg from "@assets/generated_images/darkwave_crypto_token_coin_holographic.png";
+import tokenBg from "@assets/generated_images/platinum_darkwave_token_holographic_fill.png";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
