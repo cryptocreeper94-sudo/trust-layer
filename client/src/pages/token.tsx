@@ -3,7 +3,7 @@ import { ArrowLeft, Coins, BarChart3, Lock, Globe, ShieldCheck, Zap, Sparkles } 
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import tokenBg from "@assets/copilot_image_1762471524673_1766417058215.jpeg";
+import tokenBg from "@assets/generated_images/platinum_darkwave_token_holographic_fill.png";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
@@ -103,13 +103,15 @@ export default function Token() {
                   />
                   <div className="absolute inset-[40%] bg-[radial-gradient(circle,rgba(0,0,0,0.9),transparent)] rounded-full" />
                 </motion.div>
-                <motion.img 
-                  src={tokenBg} 
-                  alt="DarkWave Token" 
-                  className="relative z-10 w-full drop-shadow-2xl"
-                  animate={{ y: [0, -15, 0], rotate: [0, 3, 0] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                />
+                <div className="relative z-10 w-full rounded-full overflow-hidden">
+                  <motion.img 
+                    src={tokenBg} 
+                    alt="DarkWave Token" 
+                    className="w-full drop-shadow-2xl scale-110"
+                    animate={{ y: [0, -10, 0], rotate: [0, 2, 0] }}
+                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                </div>
               </div>
             </div>
           </div>
