@@ -16,11 +16,11 @@ import { GlassCard } from "@/components/glass-card";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 
 const CATEGORIES = [
+  { id: "general", label: "Getting Started", icon: "🚀" },
   { id: "api-specs", label: "API Specs", icon: "🔌" },
-  { id: "app-metadata", label: "App Metadata", icon: "📱" },
   { id: "integration", label: "Integration", icon: "🔗" },
+  { id: "app-metadata", label: "App Metadata", icon: "📱" },
   { id: "changelog", label: "Changelog", icon: "📋" },
-  { id: "general", label: "General", icon: "📄" },
 ];
 
 export default function DocHub() {
@@ -38,10 +38,18 @@ export default function DocHub() {
 
   const queryClient = useQueryClient();
 
-  const { data: documents = [], isLoading } = useQuery({
-    queryKey: ["documents", selectedCategory],
-    queryFn: () => fetchDocuments(selectedCategory || undefined),
+  const { data: allDocuments = [], isLoading } = useQuery({
+    queryKey: ["documents"],
+    queryFn: () => fetchDocuments(),
   });
+
+  const documents = selectedCategory 
+    ? allDocuments.filter(doc => doc.category === selectedCategory)
+    : allDocuments;
+
+  const getCategoryCount = (categoryId: string) => {
+    return allDocuments.filter(doc => doc.category === categoryId).length;
+  };
 
   const createMutation = useMutation({
     mutationFn: createDocument,
@@ -149,20 +157,23 @@ export default function DocHub() {
                     className={`w-full h-8 text-xs justify-start ${!selectedCategory ? 'bg-primary/20 text-primary' : 'text-white/60'}`}
                     data-testid="button-category-all"
                   >
-                    📚 All ({documents.length})
+                    📚 All ({allDocuments.length})
                   </Button>
-                  {CATEGORIES.map((cat) => (
-                    <Button
-                      key={cat.id}
-                      onClick={() => setSelectedCategory(cat.id)}
-                      variant={selectedCategory === cat.id ? "secondary" : "ghost"}
-                      size="sm"
-                      className={`w-full h-8 text-xs justify-start ${selectedCategory === cat.id ? 'bg-primary/20 text-primary' : 'text-white/60'}`}
-                      data-testid={`button-category-${cat.id}`}
-                    >
-                      {cat.icon} {cat.label}
-                    </Button>
-                  ))}
+                  {CATEGORIES.map((cat) => {
+                    const count = getCategoryCount(cat.id);
+                    return (
+                      <Button
+                        key={cat.id}
+                        onClick={() => setSelectedCategory(cat.id)}
+                        variant={selectedCategory === cat.id ? "secondary" : "ghost"}
+                        size="sm"
+                        className={`w-full h-8 text-xs justify-start ${selectedCategory === cat.id ? 'bg-primary/20 text-primary' : 'text-white/60'}`}
+                        data-testid={`button-category-${cat.id}`}
+                      >
+                        {cat.icon} {cat.label} ({count})
+                      </Button>
+                    );
+                  })}
                 </div>
               </div>
 
