@@ -25,8 +25,10 @@ import orbyImg from "@assets/ecosystem/orby.jpg";
 const appImageMap: Record<string, string> = {
   "orbit-staffing": orbitStaffingImg,
   "lotopspro": lotopsproImg,
+  "lotops-pro": lotopsproImg,
   "brew-board": brewBoardImg,
   "orbit-chain": orbitChainImg,
+  "garagebot": garagebotImg,
   "garagebot-prod": garagebotImg,
   "darkwave-pulse": darkwavePulseImg,
   "paintpros": paintprosImg,
