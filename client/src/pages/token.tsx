@@ -162,19 +162,19 @@ export default function Token() {
             <div className="order-1 lg:order-2 space-y-5">
               <h2 className="text-2xl md:text-3xl font-display font-bold">Fair Launch Tokenomics</h2>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                We designed $DWT to be fair, sustainable, and deflationary. A portion of all transaction fees are burned automatically, reducing supply over time.
+                We designed $DWT to be fair and sustainable. The token powers governance, staking, and all transactions across the DarkWave ecosystem.
               </p>
               <div className="grid grid-cols-2 gap-3">
                 <GlassCard hover={false}>
                   <div className="p-4">
                     <div className="text-[10px] text-white/40 uppercase tracking-wider mb-1">Total Supply</div>
-                    <div className="text-xl font-bold font-mono text-white">100,000,000</div>
+                    <div className="text-lg font-bold font-mono text-white">100M DWT</div>
                   </div>
                 </GlassCard>
                 <GlassCard hover={false}>
                   <div className="p-4">
-                    <div className="text-[10px] text-white/40 uppercase tracking-wider mb-1">Mechanism</div>
-                    <div className="text-xl font-bold font-mono text-white">Buy & Burn</div>
+                    <div className="text-[10px] text-white/40 uppercase tracking-wider mb-1">Network</div>
+                    <div className="text-lg font-bold font-mono text-white">DarkWave L1</div>
                   </div>
                 </GlassCard>
               </div>
