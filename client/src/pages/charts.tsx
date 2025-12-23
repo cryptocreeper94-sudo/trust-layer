@@ -1,0 +1,281 @@
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { Link } from "wouter";
+import {
+  LineChart, ArrowLeft, TrendingUp, TrendingDown, DollarSign,
+  BarChart3, Clock, ChevronDown, RefreshCw
+} from "lucide-react";
+import { Footer } from "@/components/footer";
+import { GlassCard } from "@/components/glass-card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
+import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+
+interface PriceData {
+  time: string;
+  price: number;
+  volume: number;
+}
+
+const generatePriceData = (days: number): PriceData[] => {
+  const data: PriceData[] = [];
+  let price = 0.0001;
+  const now = Date.now();
+  
+  for (let i = days; i >= 0; i--) {
+    const change = (Math.random() - 0.48) * 0.00002;
+    price = Math.max(0.00005, price + change);
+    data.push({
+      time: new Date(now - i * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      price: parseFloat(price.toFixed(6)),
+      volume: Math.floor(Math.random() * 1000000) + 500000,
+    });
+  }
+  return data;
+};
+
+const PRICE_DATA_7D = generatePriceData(7);
+const PRICE_DATA_30D = generatePriceData(30);
+const PRICE_DATA_90D = generatePriceData(90);
+
+export default function Charts() {
+  const [timeframe, setTimeframe] = useState("7d");
+  const [selectedToken, setSelectedToken] = useState("DWT");
+
+  const { data: statsData, isLoading } = useQuery<{ price: string; change24h: string; volume24h: string; marketCap: string; high24h: string; low24h: string }>({
+    queryKey: ["/api/charts/stats", selectedToken],
+    refetchInterval: 30000,
+  });
+
+  const stats = statsData || {
+    price: "0.000124",
+    change24h: "+12.4",
+    volume24h: "2,450,000",
+    marketCap: "12,400,000",
+    high24h: "0.000135",
+    low24h: "0.000108",
+  };
+
+  const getPriceData = () => {
+    switch (timeframe) {
+      case "7d": return PRICE_DATA_7D;
+      case "30d": return PRICE_DATA_30D;
+      case "90d": return PRICE_DATA_90D;
+      default: return PRICE_DATA_7D;
+    }
+  };
+
+  const isPositive = parseFloat(stats.change24h) >= 0;
+  const priceData = getPriceData();
+  const currentPrice = priceData[priceData.length - 1]?.price || 0;
+  const startPrice = priceData[0]?.price || 0;
+  const periodChange = startPrice > 0 ? ((currentPrice - startPrice) / startPrice * 100).toFixed(2) : "0";
+
+  return (
+    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="border-blue-500/50 text-blue-400 text-[10px]">Charts</Badge>
+            <Link href="/">
+              <Button variant="ghost" size="sm" className="h-8 text-xs px-2 hover:bg-white/5">
+                <ArrowLeft className="w-3 h-3" />
+                <span className="hidden sm:inline ml-1">Back</span>
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      <main className="flex-1 pt-16 pb-8 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center font-bold text-sm">
+                    DWT
+                  </div>
+                  <div>
+                    <h1 className="text-2xl font-display font-bold">DarkWave Token</h1>
+                    <p className="text-xs text-muted-foreground">DWT/USD</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <Select value={selectedToken} onValueChange={setSelectedToken}>
+                  <SelectTrigger className="w-[120px] bg-white/5 border-white/10">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="DWT">DWT</SelectItem>
+                    <SelectItem value="wETH">wETH</SelectItem>
+                    <SelectItem value="wSOL">wSOL</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button variant="outline" size="icon" className="border-white/10">
+                  <RefreshCw className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+            <GlassCard hover={false}>
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs text-muted-foreground">Price</span>
+                  <div className={`flex items-center gap-1 text-xs ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
+                    {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                    {stats.change24h}%
+                  </div>
+                </div>
+                <div className="text-xl font-bold">${stats.price}</div>
+              </div>
+            </GlassCard>
+            
+            <GlassCard hover={false}>
+              <div className="p-4">
+                <div className="flex items-center gap-1 mb-2">
+                  <BarChart3 className="w-3 h-3 text-muted-foreground" />
+                  <span className="text-xs text-muted-foreground">24h Volume</span>
+                </div>
+                <div className="text-xl font-bold">${stats.volume24h}</div>
+              </div>
+            </GlassCard>
+            
+            <GlassCard hover={false}>
+              <div className="p-4">
+                <div className="flex items-center gap-1 mb-2">
+                  <DollarSign className="w-3 h-3 text-muted-foreground" />
+                  <span className="text-xs text-muted-foreground">Market Cap</span>
+                </div>
+                <div className="text-xl font-bold">${stats.marketCap}</div>
+              </div>
+            </GlassCard>
+            
+            <GlassCard hover={false}>
+              <div className="p-4">
+                <div className="text-xs text-muted-foreground mb-2">24h Range</div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-red-400">${stats.low24h}</span>
+                  <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-red-400 via-yellow-400 to-green-400 w-[65%]" />
+                  </div>
+                  <span className="text-xs text-green-400">${stats.high24h}</span>
+                </div>
+              </div>
+            </GlassCard>
+          </div>
+
+          <GlassCard className="mb-6">
+            <div className="p-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                <div>
+                  <h2 className="font-bold text-lg">Price Chart</h2>
+                  <p className="text-xs text-muted-foreground">
+                    {timeframe} change: <span className={parseFloat(periodChange) >= 0 ? 'text-green-400' : 'text-red-400'}>{periodChange}%</span>
+                  </p>
+                </div>
+                
+                <div className="flex bg-white/5 rounded-lg p-1 border border-white/10">
+                  {["24h", "7d", "30d", "90d"].map(tf => (
+                    <Button
+                      key={tf}
+                      variant={timeframe === tf ? "secondary" : "ghost"}
+                      size="sm"
+                      className="h-7 px-3 text-xs"
+                      onClick={() => setTimeframe(tf)}
+                    >
+                      {tf}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="h-[300px] sm:h-[400px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={priceData}>
+                    <defs>
+                      <linearGradient id="priceGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#00ffff" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#00ffff" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                    <XAxis dataKey="time" stroke="rgba(255,255,255,0.3)" fontSize={10} tickLine={false} />
+                    <YAxis stroke="rgba(255,255,255,0.3)" fontSize={10} tickLine={false} tickFormatter={(v) => `$${v}`} domain={['auto', 'auto']} />
+                    <Tooltip
+                      contentStyle={{ background: 'rgba(12,18,36,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                      labelStyle={{ color: 'rgba(255,255,255,0.7)' }}
+                      formatter={(value: number) => [`$${value.toFixed(6)}`, 'Price']}
+                    />
+                    <Area type="monotone" dataKey="price" stroke="#00ffff" strokeWidth={2} fill="url(#priceGradient)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </GlassCard>
+
+          <GlassCard>
+            <div className="p-4">
+              <h2 className="font-bold text-lg mb-4">Volume Chart</h2>
+              <div className="h-[200px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={priceData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                    <XAxis dataKey="time" stroke="rgba(255,255,255,0.3)" fontSize={10} tickLine={false} />
+                    <YAxis stroke="rgba(255,255,255,0.3)" fontSize={10} tickLine={false} tickFormatter={(v) => `$${(v/1000000).toFixed(1)}M`} />
+                    <Tooltip
+                      contentStyle={{ background: 'rgba(12,18,36,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                      labelStyle={{ color: 'rgba(255,255,255,0.7)' }}
+                      formatter={(value: number) => [`$${value.toLocaleString()}`, 'Volume']}
+                    />
+                    <Bar dataKey="volume" fill="rgba(139,92,246,0.6)" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </GlassCard>
+
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <GlassCard>
+              <div className="p-4 text-center">
+                <Clock className="w-5 h-5 text-primary mx-auto mb-2" />
+                <div className="text-sm font-bold">All-Time High</div>
+                <div className="text-lg font-bold text-green-400">$0.000185</div>
+                <div className="text-[10px] text-muted-foreground">Dec 15, 2024</div>
+              </div>
+            </GlassCard>
+            <GlassCard>
+              <div className="p-4 text-center">
+                <Clock className="w-5 h-5 text-red-400 mx-auto mb-2" />
+                <div className="text-sm font-bold">All-Time Low</div>
+                <div className="text-lg font-bold text-red-400">$0.000045</div>
+                <div className="text-[10px] text-muted-foreground">Feb 14, 2025</div>
+              </div>
+            </GlassCard>
+            <GlassCard>
+              <div className="p-4 text-center">
+                <TrendingUp className="w-5 h-5 text-purple-400 mx-auto mb-2" />
+                <div className="text-sm font-bold">Total Supply</div>
+                <div className="text-lg font-bold">100M DWT</div>
+                <div className="text-[10px] text-muted-foreground">Fixed supply</div>
+              </div>
+            </GlassCard>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}

@@ -966,4 +966,154 @@ export const insertNftListingSchema = createInsertSchema(nftListings).omit({
 export type InsertNftListing = z.infer<typeof insertNftListingSchema>;
 export type NftListing = typeof nftListings.$inferSelect;
 
-export const APP_VERSION = "1.0.6";
+// ============================================
+// TOKEN LAUNCHPAD
+// ============================================
+
+export const launchedTokens = pgTable("launched_tokens", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  symbol: text("symbol").notNull(),
+  description: text("description"),
+  imageUrl: text("image_url"),
+  totalSupply: text("total_supply").notNull(),
+  decimals: integer("decimals").notNull().default(18),
+  creatorId: text("creator_id").notNull(),
+  creatorAddress: text("creator_address").notNull(),
+  contractAddress: text("contract_address"),
+  initialPrice: text("initial_price").notNull().default("0.001"),
+  currentPrice: text("current_price").notNull().default("0.001"),
+  marketCap: text("market_cap").notNull().default("0"),
+  holders: integer("holders").notNull().default(1),
+  website: text("website"),
+  twitter: text("twitter"),
+  telegram: text("telegram"),
+  status: text("status").notNull().default("pending"), // pending, live, paused, ended
+  launchType: text("launch_type").notNull().default("fair"), // fair, presale, auction
+  txHash: text("tx_hash"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  launchedAt: timestamp("launched_at"),
+});
+
+export const insertLaunchedTokenSchema = createInsertSchema(launchedTokens).omit({
+  id: true,
+  createdAt: true,
+  launchedAt: true,
+});
+
+export type InsertLaunchedToken = z.infer<typeof insertLaunchedTokenSchema>;
+export type LaunchedToken = typeof launchedTokens.$inferSelect;
+
+// ============================================
+// LIQUIDITY POOLS
+// ============================================
+
+export const liquidityPools = pgTable("liquidity_pools", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  tokenA: text("token_a").notNull(),
+  tokenB: text("token_b").notNull(),
+  reserveA: text("reserve_a").notNull().default("0"),
+  reserveB: text("reserve_b").notNull().default("0"),
+  totalLpTokens: text("total_lp_tokens").notNull().default("0"),
+  fee: text("fee").notNull().default("0.003"),
+  apr: text("apr").notNull().default("0"),
+  volume24h: text("volume_24h").notNull().default("0"),
+  tvl: text("tvl").notNull().default("0"),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertLiquidityPoolSchema = createInsertSchema(liquidityPools).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertLiquidityPool = z.infer<typeof insertLiquidityPoolSchema>;
+export type LiquidityPool = typeof liquidityPools.$inferSelect;
+
+export const liquidityPositions = pgTable("liquidity_positions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  poolId: text("pool_id").notNull(),
+  lpTokens: text("lp_tokens").notNull().default("0"),
+  tokenADeposited: text("token_a_deposited").notNull().default("0"),
+  tokenBDeposited: text("token_b_deposited").notNull().default("0"),
+  earnedFees: text("earned_fees").notNull().default("0"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertLiquidityPositionSchema = createInsertSchema(liquidityPositions).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertLiquidityPosition = z.infer<typeof insertLiquidityPositionSchema>;
+export type LiquidityPosition = typeof liquidityPositions.$inferSelect;
+
+// ============================================
+// PRICE HISTORY
+// ============================================
+
+export const priceHistory = pgTable("price_history", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  token: text("token").notNull(),
+  price: text("price").notNull(),
+  volume: text("volume").notNull().default("0"),
+  marketCap: text("market_cap").notNull().default("0"),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+});
+
+export const insertPriceHistorySchema = createInsertSchema(priceHistory).omit({
+  id: true,
+});
+
+export type InsertPriceHistory = z.infer<typeof insertPriceHistorySchema>;
+export type PriceHistory = typeof priceHistory.$inferSelect;
+
+// ============================================
+// WEBHOOKS / EVENTS API
+// ============================================
+
+export const webhooks = pgTable("webhooks", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  url: text("url").notNull(),
+  secret: text("secret").notNull(),
+  events: text("events").notNull(), // JSON array of event types
+  isActive: boolean("is_active").notNull().default(true),
+  failureCount: integer("failure_count").notNull().default(0),
+  lastTriggeredAt: timestamp("last_triggered_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertWebhookSchema = createInsertSchema(webhooks).omit({
+  id: true,
+  createdAt: true,
+  lastTriggeredAt: true,
+});
+
+export type InsertWebhook = z.infer<typeof insertWebhookSchema>;
+export type Webhook = typeof webhooks.$inferSelect;
+
+export const webhookLogs = pgTable("webhook_logs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  webhookId: text("webhook_id").notNull(),
+  event: text("event").notNull(),
+  payload: text("payload").notNull(),
+  responseStatus: integer("response_status"),
+  responseBody: text("response_body"),
+  success: boolean("success").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertWebhookLogSchema = createInsertSchema(webhookLogs).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertWebhookLog = z.infer<typeof insertWebhookLogSchema>;
+export type WebhookLog = typeof webhookLogs.$inferSelect;
+
+export const APP_VERSION = "1.0.7";

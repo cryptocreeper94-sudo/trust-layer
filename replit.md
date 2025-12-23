@@ -70,16 +70,13 @@ DarkWave Chain is a comprehensive blockchain ecosystem developed by DarkWave Stu
 
 ---
 
-### 🟡 PRIORITY 2 - POST-LAUNCH ENHANCEMENTS
-
-| # | Feature | Status | Description |
-|---|---------|--------|-------------|
-| 6 | Token Launchpad | TODO | Create & launch new tokens on DarkWave |
-| 7 | Liquidity Pools | TODO | Users provide liquidity, earn fees |
-| 8 | NFT Gallery | TODO | View NFT collections by address |
-| 9 | NFT Creator Tool | TODO | No-code NFT minting for artists |
-| 10 | Price Charts | TODO | DWT price visualization |
-| 11 | Webhook/Events API | TODO | Real-time notifications for devs |
+#### DeFi Features (Priority 2 - Complete)
+- [x] Token Launchpad - Create & launch new tokens on DarkWave (fair launch, presale, auction)
+- [x] Liquidity Pools - Users provide liquidity, earn fees (AMM-style with LP tokens)
+- [x] NFT Gallery - View NFT collections by wallet address
+- [x] NFT Creator Tool - No-code NFT minting wizard (4-step: upload, details, attributes, mint)
+- [x] Price Charts - DWT price visualization with Recharts (area/bar charts, multiple timeframes)
+- [x] Webhook/Events API - Real-time notifications for devs (9 event types, HMAC-SHA256 signatures)
 
 ---
 

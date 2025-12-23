@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History } from "lucide-react";
+import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,14 +10,20 @@ const navItems = [
   { href: "/ecosystem", label: "Ecosystem", icon: Box },
   { href: "/swap", label: "Swap", icon: ArrowUpDown, badge: "DeFi" },
   { href: "/faucet", label: "Faucet", icon: Droplets },
+  { href: "/launchpad", label: "Launchpad", icon: Rocket, badge: "New" },
+  { href: "/liquidity", label: "Liquidity", icon: Droplets },
   { href: "/nft", label: "NFT Market", icon: ImageIcon },
+  { href: "/nft-gallery", label: "NFT Gallery", icon: ImageIcon },
+  { href: "/nft-creator", label: "NFT Creator", icon: Palette },
   { href: "/portfolio", label: "Portfolio", icon: PieChart },
   { href: "/transactions", label: "History", icon: History },
+  { href: "/charts", label: "Charts", icon: LineChart },
   { href: "/staking", label: "Staking", icon: TrendingUp },
   { href: "/bridge", label: "Bridge", icon: ArrowLeftRight },
   { href: "/token", label: "Token", icon: Coins },
   { href: "/explorer", label: "Explorer", icon: SearchIcon },
   { href: "/developers", label: "Developers", icon: Code },
+  { href: "/webhooks", label: "Webhooks", icon: Webhook },
   { href: "/studio", label: "Dev Studio", icon: Sparkles },
 ];
 

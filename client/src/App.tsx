@@ -28,6 +28,12 @@ import Swap from "@/pages/swap";
 import NftMarketplace from "@/pages/nft-marketplace";
 import Portfolio from "@/pages/portfolio";
 import Transactions from "@/pages/transactions";
+import Launchpad from "@/pages/launchpad";
+import Liquidity from "@/pages/liquidity";
+import NftGallery from "@/pages/nft-gallery";
+import NftCreator from "@/pages/nft-creator";
+import Charts from "@/pages/charts";
+import Webhooks from "@/pages/webhooks";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -68,6 +74,12 @@ function Router() {
         <Route path="/nft" component={NftMarketplace} />
         <Route path="/portfolio" component={Portfolio} />
         <Route path="/transactions" component={Transactions} />
+        <Route path="/launchpad" component={Launchpad} />
+        <Route path="/liquidity" component={Liquidity} />
+        <Route path="/nft-gallery" component={NftGallery} />
+        <Route path="/nft-creator" component={NftCreator} />
+        <Route path="/charts" component={Charts} />
+        <Route path="/webhooks" component={Webhooks} />
         <Route component={NotFound} />
       </Switch>
     </>

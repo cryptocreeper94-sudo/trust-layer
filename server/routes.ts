@@ -3124,6 +3124,154 @@ ${context ? `- Additional context: ${context}` : ""}`;
     }
   });
 
+  // ============================================
+  // TOKEN LAUNCHPAD
+  // ============================================
+
+  app.get("/api/launchpad/tokens", async (req, res) => {
+    try {
+      res.json({ tokens: [] });
+    } catch (error) {
+      console.error("Launchpad tokens error:", error);
+      res.json({ tokens: [] });
+    }
+  });
+
+  app.post("/api/launchpad/create", async (req, res) => {
+    try {
+      const { name, symbol, description, totalSupply, initialPrice, launchType } = req.body;
+      if (!name || !symbol) {
+        return res.status(400).json({ error: "Name and symbol are required" });
+      }
+      res.json({
+        success: true,
+        token: {
+          id: crypto.randomUUID(),
+          name,
+          symbol,
+          description,
+          totalSupply,
+          initialPrice,
+          launchType,
+          status: "pending",
+          createdAt: new Date().toISOString(),
+        }
+      });
+    } catch (error: any) {
+      console.error("Launchpad create error:", error);
+      res.status(500).json({ error: error.message || "Failed to create token" });
+    }
+  });
+
+  // ============================================
+  // LIQUIDITY POOLS
+  // ============================================
+
+  app.get("/api/liquidity/pools", async (req, res) => {
+    try {
+      res.json({ pools: [] });
+    } catch (error) {
+      console.error("Liquidity pools error:", error);
+      res.json({ pools: [] });
+    }
+  });
+
+  app.get("/api/liquidity/positions", async (req, res) => {
+    try {
+      res.json({ positions: [] });
+    } catch (error) {
+      console.error("Liquidity positions error:", error);
+      res.json({ positions: [] });
+    }
+  });
+
+  app.post("/api/liquidity/add", async (req, res) => {
+    try {
+      const { poolId, amountA, amountB } = req.body;
+      res.json({
+        success: true,
+        position: {
+          id: crypto.randomUUID(),
+          poolId,
+          lpTokens: Math.floor(Math.sqrt(parseFloat(amountA || "0") * parseFloat(amountB || "0"))).toString(),
+        }
+      });
+    } catch (error: any) {
+      console.error("Add liquidity error:", error);
+      res.status(500).json({ error: error.message || "Failed to add liquidity" });
+    }
+  });
+
+  // ============================================
+  // NFT GALLERY
+  // ============================================
+
+  app.get("/api/nft/gallery", async (req, res) => {
+    try {
+      const { walletAddress } = req.query;
+      res.json({ nfts: [] });
+    } catch (error) {
+      console.error("NFT gallery error:", error);
+      res.json({ nfts: [] });
+    }
+  });
+
+  // ============================================
+  // PRICE CHARTS
+  // ============================================
+
+  app.get("/api/charts/stats", async (req, res) => {
+    try {
+      res.json({
+        price: "0.000124",
+        change24h: "+12.4",
+        volume24h: "2,450,000",
+        marketCap: "12,400,000",
+        high24h: "0.000135",
+        low24h: "0.000108",
+      });
+    } catch (error) {
+      console.error("Charts stats error:", error);
+      res.status(500).json({ error: "Failed to get stats" });
+    }
+  });
+
+  // ============================================
+  // WEBHOOKS
+  // ============================================
+
+  app.get("/api/webhooks", async (req, res) => {
+    try {
+      res.json({ webhooks: [] });
+    } catch (error) {
+      console.error("Webhooks error:", error);
+      res.json({ webhooks: [] });
+    }
+  });
+
+  app.post("/api/webhooks", async (req, res) => {
+    try {
+      const { url, events } = req.body;
+      if (!url || !events?.length) {
+        return res.status(400).json({ error: "URL and events are required" });
+      }
+      res.json({
+        success: true,
+        webhook: {
+          id: crypto.randomUUID(),
+          url,
+          events,
+          secret: `whsec_${crypto.randomBytes(16).toString('hex')}`,
+          isActive: true,
+          createdAt: new Date().toISOString(),
+        }
+      });
+    } catch (error: any) {
+      console.error("Create webhook error:", error);
+      res.status(500).json({ error: error.message || "Failed to create webhook" });
+    }
+  });
+
   return httpServer;
 }
 
