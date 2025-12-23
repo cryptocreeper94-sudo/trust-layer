@@ -1215,8 +1215,8 @@ export default function Studio() {
 
   return (
     <div className="h-screen flex flex-col bg-[#0a0a0f] text-foreground overflow-hidden">
-      {/* Top Bar */}
-      <header className="h-12 border-b border-white/5 bg-background/95 flex items-center justify-between px-4 shrink-0">
+      {/* Top Bar - Desktop */}
+      <header className="hidden md:flex h-12 border-b border-white/5 bg-background/95 items-center justify-between px-4 shrink-0">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2" data-testid="link-home">
             <img src={orbitLogo} alt="DarkWave" className="w-6 h-6" />
@@ -1297,26 +1297,70 @@ export default function Studio() {
         </div>
       </header>
 
-      {/* Mobile View Tabs */}
-      <div className="md:hidden flex border-b border-white/5 bg-black/40">
-        <button
-          className={`flex-1 py-2 text-xs font-medium flex items-center justify-center gap-1 ${mobileView === "files" ? "bg-primary/20 text-primary border-b-2 border-primary" : "text-muted-foreground"}`}
-          onClick={() => setMobileView("files")}
-        >
-          <FolderOpen className="w-3.5 h-3.5" /> Files
-        </button>
-        <button
-          className={`flex-1 py-2 text-xs font-medium flex items-center justify-center gap-1 ${mobileView === "editor" ? "bg-primary/20 text-primary border-b-2 border-primary" : "text-muted-foreground"}`}
-          onClick={() => setMobileView("editor")}
-        >
-          <FileCode className="w-3.5 h-3.5" /> Editor
-        </button>
-        <button
-          className={`flex-1 py-2 text-xs font-medium flex items-center justify-center gap-1 ${mobileView === "console" ? "bg-primary/20 text-primary border-b-2 border-primary" : "text-muted-foreground"}`}
-          onClick={() => setMobileView("console")}
-        >
-          <Terminal className="w-3.5 h-3.5" /> Console
-        </button>
+      {/* Mobile Header - Clean stacked layout */}
+      <div className="md:hidden border-b border-white/5 bg-background/95 shrink-0">
+        {/* Row 1: Project info */}
+        <div className="flex items-center justify-between px-3 py-2 border-b border-white/5">
+          <div className="flex items-center gap-2 min-w-0">
+            <Link href="/" className="shrink-0" data-testid="link-home-mobile">
+              <img src={orbitLogo} alt="DarkWave" className="w-5 h-5" />
+            </Link>
+            <span className="font-mono text-sm truncate">{projectName}</span>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => { setShowSettings(true); setEditingProjectName(projectName); }}
+              className="h-6 w-6 p-0 shrink-0"
+              data-testid="button-settings-mobile"
+            >
+              <Settings className="w-3.5 h-3.5" />
+            </Button>
+          </div>
+          <div className="flex items-center gap-1 shrink-0">
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={handleSave}
+              disabled={saving}
+              className="h-8 w-8 p-0"
+              data-testid="button-save-mobile"
+            >
+              <Save className="w-4 h-4" />
+            </Button>
+            <Button
+              size="sm"
+              className="h-8 px-3 bg-green-600 hover:bg-green-700 text-xs"
+              onClick={handleRun}
+              disabled={running}
+              data-testid="button-run-mobile"
+            >
+              <Play className="w-3.5 h-3.5 mr-1" />
+              Run
+            </Button>
+          </div>
+        </div>
+        
+        {/* Row 2: View tabs */}
+        <div className="flex bg-black/40">
+          <button
+            className={`flex-1 py-2.5 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors ${mobileView === "files" ? "bg-primary/20 text-primary border-b-2 border-primary" : "text-muted-foreground"}`}
+            onClick={() => setMobileView("files")}
+          >
+            <FolderOpen className="w-4 h-4" /> Files
+          </button>
+          <button
+            className={`flex-1 py-2.5 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors ${mobileView === "editor" ? "bg-primary/20 text-primary border-b-2 border-primary" : "text-muted-foreground"}`}
+            onClick={() => setMobileView("editor")}
+          >
+            <FileCode className="w-4 h-4" /> Editor
+          </button>
+          <button
+            className={`flex-1 py-2.5 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors ${mobileView === "console" ? "bg-primary/20 text-primary border-b-2 border-primary" : "text-muted-foreground"}`}
+            onClick={() => setMobileView("console")}
+          >
+            <Terminal className="w-4 h-4" /> Console
+          </button>
+        </div>
       </div>
 
       {/* Main Content */}
