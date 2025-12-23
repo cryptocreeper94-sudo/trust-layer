@@ -49,9 +49,11 @@ export default function Token() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-3">
-                <Button size="lg" className="h-11 px-6 bg-white text-black hover:bg-white/90 font-bold rounded-full text-sm">
-                  Read Whitepaper
-                </Button>
+                <Link href="/doc-hub">
+                  <Button size="lg" className="h-11 px-6 bg-white text-black hover:bg-white/90 font-bold rounded-full text-sm" data-testid="button-whitepaper">
+                    Read Whitepaper
+                  </Button>
+                </Link>
                 <Link href="/billing">
                   <Button size="lg" variant="outline" className="h-11 px-6 border-white/20 hover:bg-white/5 rounded-full text-sm">
                     View Memberships

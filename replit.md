@@ -152,3 +152,38 @@ DarkWave Studio is a fully functional web-based IDE with:
     - OpenGraph for image handling.
 - **Key NPM Dependencies**: Radix UI, TanStack React Query, Framer Motion, date-fns, Zod.
 - **Rust Dependencies (blockchain/)**: tokio, ed25519-dalek, sled, axum, serde/bincode, chrono, tracing.
+
+## Changelog
+
+### December 2024 - Pre-Publish Sweep
+
+#### Completed Checks
+- **LSP Diagnostics**: No TypeScript errors
+- **API Endpoints**: All critical endpoints tested and working (blockchain stats, bridge info, ecosystem apps)
+- **Database**: PostgreSQL connection healthy
+- **Authentication**: DEVELOPER_PIN secret configured for developer portal access
+- **Onboarding**: Tour content reviewed and up-to-date
+- **Mobile**: Touch targets (44px), safe area insets, and responsive CSS verified
+
+#### Bug Fixes
+- **Token Page**: Fixed "Read Whitepaper" button - now links to /doc-hub
+
+#### Bridge Development (Phase 1 - MVP)
+- Created wDWT ERC-20 contract for Ethereum Sepolia (`contracts/ethereum/WDWT.sol`)
+- Created wDWT SPL token setup for Solana Devnet (`scripts/deploy-wdwt-solana.ts`)
+- Bridge engine updated with mock mode until contracts deployed
+- Contract deployment status indicators in bridge UI
+
+#### Known Issues / Future Work
+- Team Hub credentials require hub admin to publish to production (orbitstaffing.io)
+- Deploy wDWT contracts when needed for real testnet transactions
+- Add link to darkwavepulse.com staking page when URL provided by user
+
+### November 2024 - DarkWave Studio Phase 4
+- Monaco Editor Integration
+- Multi-file Tabs with unsaved indicators
+- Global Search/Replace
+- Project Templates (React, Node.js, Python)
+- Keyboard Shortcuts
+- File Upload/Download/Rename
+- Environment Variables UI with dev/prod scoping
