@@ -21,6 +21,35 @@ User wants: Full blockchain implementation, not just a web portal. No piggybacki
 - **Persistence**: Atomic database transactions ensure chain state survives server restarts
 - **Genesis**: February 14, 2025 (February 14, 2026 public launch)
 
+### Cross-Chain Bridge Roadmap (ACTIVE DEVELOPMENT)
+
+#### Phase 1 - MVP Custodial Bridge (IN PROGRESS)
+**Target: 6-8 weeks | Status: Started December 2024**
+- Lock-and-mint architecture: Lock DWT on DarkWave → Mint wrapped wDWT on target chains
+- Founders Validator operates the relayer service
+- Initial target chains: Ethereum (Sepolia testnet), Solana (Devnet)
+- Database tables: bridge_locks, bridge_mints, bridge_burns, bridge_releases
+- Feature labeled as "Beta" until security audit
+- **Deliverable**: Users can bridge DWT to/from Ethereum and Solana testnets
+
+#### Phase 2 - Production Bridge (Q1 2026)
+**Target: 3-4 months after Phase 1**
+- Multi-signature validator committee (replace single relayer)
+- HSM/MPC key management for custody security
+- External security audits (smart contracts + off-chain services)
+- Deploy to Ethereum and Solana mainnets
+- Proof-of-reserve transparency dashboard
+- Partner with liquidity providers/market makers
+- **Deliverable**: Production-ready bridge with audited security
+
+#### Phase 3 - Chain Abstraction (Q2-Q3 2026)
+**Target: 6-9 months after Phase 2**
+- Partner with LayerZero or Axelar for standardized messaging
+- Wallet UX that abstracts chain selection from users
+- Generalized message passing for arbitrary cross-chain contract calls
+- Developer SDKs and APIs for partner integrations
+- **Deliverable**: Full omnichain interoperability
+
 ### Web Portal Architecture
 **Frontend**: Developed with React 18 and TypeScript, using Vite, Wouter for routing, TanStack React Query for server state, and React Context for local state. UI components are built using shadcn/ui on Radix UI primitives, styled with Tailwind CSS v4 and animated with Framer Motion.
 **Key Features**: Global search, theme toggle, notification system, favorites, mobile navigation, a Devnet Sandbox for live testing, real-time blockchain stats via WebSocket, and PWA support.

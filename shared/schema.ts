@@ -575,4 +575,89 @@ export const chainConfig = pgTable("chain_config", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+// Cross-Chain Bridge Tables (Phase 1 - MVP Custodial Bridge)
+
+export const bridgeLocks = pgTable("bridge_locks", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  fromAddress: text("from_address").notNull(),
+  amount: text("amount").notNull(),
+  targetChain: text("target_chain").notNull(),
+  targetAddress: text("target_address").notNull(),
+  txHash: text("tx_hash").notNull().unique(),
+  status: text("status").notNull().default("pending"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  confirmedAt: timestamp("confirmed_at"),
+});
+
+export const insertBridgeLockSchema = createInsertSchema(bridgeLocks).omit({
+  id: true,
+  createdAt: true,
+  confirmedAt: true,
+});
+
+export type InsertBridgeLock = z.infer<typeof insertBridgeLockSchema>;
+export type BridgeLock = typeof bridgeLocks.$inferSelect;
+
+export const bridgeMints = pgTable("bridge_mints", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  lockId: text("lock_id").notNull(),
+  targetChain: text("target_chain").notNull(),
+  targetAddress: text("target_address").notNull(),
+  amount: text("amount").notNull(),
+  targetTxHash: text("target_tx_hash"),
+  status: text("status").notNull().default("pending"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  completedAt: timestamp("completed_at"),
+});
+
+export const insertBridgeMintSchema = createInsertSchema(bridgeMints).omit({
+  id: true,
+  createdAt: true,
+  completedAt: true,
+});
+
+export type InsertBridgeMint = z.infer<typeof insertBridgeMintSchema>;
+export type BridgeMint = typeof bridgeMints.$inferSelect;
+
+export const bridgeBurns = pgTable("bridge_burns", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sourceChain: text("source_chain").notNull(),
+  sourceAddress: text("source_address").notNull(),
+  amount: text("amount").notNull(),
+  targetAddress: text("target_address").notNull(),
+  sourceTxHash: text("source_tx_hash").notNull(),
+  status: text("status").notNull().default("pending"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  confirmedAt: timestamp("confirmed_at"),
+});
+
+export const insertBridgeBurnSchema = createInsertSchema(bridgeBurns).omit({
+  id: true,
+  createdAt: true,
+  confirmedAt: true,
+});
+
+export type InsertBridgeBurn = z.infer<typeof insertBridgeBurnSchema>;
+export type BridgeBurn = typeof bridgeBurns.$inferSelect;
+
+export const bridgeReleases = pgTable("bridge_releases", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  burnId: text("burn_id").notNull(),
+  toAddress: text("to_address").notNull(),
+  amount: text("amount").notNull(),
+  txHash: text("tx_hash"),
+  status: text("status").notNull().default("pending"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  completedAt: timestamp("completed_at"),
+});
+
+export const insertBridgeReleaseSchema = createInsertSchema(bridgeReleases).omit({
+  id: true,
+  createdAt: true,
+  completedAt: true,
+});
+
+export type InsertBridgeRelease = z.infer<typeof insertBridgeReleaseSchema>;
+export type BridgeRelease = typeof bridgeReleases.$inferSelect;
+
 export const APP_VERSION = "1.0.3";
