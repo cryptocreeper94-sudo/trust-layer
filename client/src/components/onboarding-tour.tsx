@@ -15,8 +15,8 @@ const steps: Step[] = [
     description: "The universal ledger for the next web. This quick tour will guide you through the ecosystem.",
   },
   {
-    title: "Native Interoperability",
-    description: "Connect to Ethereum, Solana, and others without bridges. We use Chain Abstraction to make it seamless.",
+    title: "Cross-Chain Vision",
+    description: "We're building toward seamless interoperability with Ethereum, Solana, and other chains. Coming Q2 2026.",
   },
   {
     title: "Dark Wave Studios Hub",

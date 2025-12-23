@@ -275,9 +275,9 @@ export default function Home() {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="text-sm font-bold text-white">Chain Abstraction</h3>
-                        <InfoTooltip content="Manage assets across Ethereum, Solana, Bitcoin, and more from a single DarkWave account. No need to juggle multiple wallets!" label="Chain abstraction info" />
+                        <Badge variant="outline" className="text-[9px] border-amber-500/50 text-amber-400 px-1">Q2 2026</Badge>
                       </div>
-                      <p className="text-xs text-white/50">Control assets on any chain from your DarkWave account</p>
+                      <p className="text-xs text-white/50">Manage assets across Ethereum, Solana, and more from one account</p>
                     </div>
                   </div>
                 </GlassCard>
@@ -288,10 +288,10 @@ export default function Home() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-sm font-bold text-white">Bridge-Free</h3>
-                        <InfoTooltip content="Traditional bridges are security risks. DarkWave uses native messaging to move assets safely between chains without vulnerable middlemen." label="Bridge-free info" />
+                        <h3 className="text-sm font-bold text-white">Cross-Chain Messaging</h3>
+                        <Badge variant="outline" className="text-[9px] border-amber-500/50 text-amber-400 px-1">In Development</Badge>
                       </div>
-                      <p className="text-xs text-white/50">Native messaging protocols replace vulnerable bridges</p>
+                      <p className="text-xs text-white/50">Native protocols for secure asset transfers between networks</p>
                     </div>
                   </div>
                 </GlassCard>
