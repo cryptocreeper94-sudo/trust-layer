@@ -13,7 +13,13 @@ import { fetchEcosystemApps } from "@/lib/api";
 import { useState } from "react";
 import { InfoTooltip } from "@/components/info-tooltip";
 
-const ecosystemImages = import.meta.glob("@/assets/ecosystem/*.jpg", { eager: true, import: 'default' }) as Record<string, string>;
+const ecosystemModules = import.meta.glob("@/assets/ecosystem/*.jpg", { eager: true }) as Record<string, { default: string }>;
+const ecosystemImages: Record<string, string> = {};
+for (const [key, module] of Object.entries(ecosystemModules)) {
+  const filename = key.split('/').pop() || '';
+  ecosystemImages[filename] = module.default;
+}
+console.log("[Ecosystem] Loaded images:", ecosystemImages);
 
 function getAppImage(appId: string): string {
   const fileMap: Record<string, string> = {
@@ -31,8 +37,7 @@ function getAppImage(appId: string): string {
   };
   const filename = fileMap[appId];
   if (!filename) return "";
-  const key = Object.keys(ecosystemImages).find(k => k.endsWith(filename));
-  return key ? ecosystemImages[key] : "";
+  return ecosystemImages[filename] || "";
 }
 
 const gradientColors: Record<string, { from: string; to: string }> = {
