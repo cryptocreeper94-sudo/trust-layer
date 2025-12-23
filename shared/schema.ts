@@ -690,4 +690,143 @@ export const insertBridgeReleaseSchema = createInsertSchema(bridgeReleases).omit
 export type InsertBridgeRelease = z.infer<typeof insertBridgeReleaseSchema>;
 export type BridgeRelease = typeof bridgeReleases.$inferSelect;
 
+// ============================================
+// STAKING SYSTEM
+// ============================================
+
+export const stakingPools = pgTable("staking_pools", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  description: text("description").notNull(),
+  poolType: text("pool_type").notNull(), // 'liquid' | 'locked' | 'founders'
+  apyBase: text("apy_base").notNull(), // Base APY percentage as string (e.g., "12.5")
+  apyBoost: text("apy_boost").notNull().default("0"), // Bonus APY for streaks/badges
+  lockDays: integer("lock_days").notNull().default(0), // 0 = no lock (liquid)
+  minStake: text("min_stake").notNull().default("100"), // Minimum DWT to stake
+  maxStake: text("max_stake"), // Optional maximum per user
+  totalStaked: text("total_staked").notNull().default("0"),
+  totalStakers: integer("total_stakers").notNull().default(0),
+  isActive: boolean("is_active").notNull().default(true),
+  startsAt: timestamp("starts_at"),
+  endsAt: timestamp("ends_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertStakingPoolSchema = createInsertSchema(stakingPools).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertStakingPool = z.infer<typeof insertStakingPoolSchema>;
+export type StakingPool = typeof stakingPools.$inferSelect;
+
+export const userStakes = pgTable("user_stakes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  poolId: text("pool_id").notNull(),
+  amount: text("amount").notNull(),
+  pendingRewards: text("pending_rewards").notNull().default("0"),
+  claimedRewards: text("claimed_rewards").notNull().default("0"),
+  streakDays: integer("streak_days").notNull().default(0),
+  status: text("status").notNull().default("active"), // 'active' | 'unstaking' | 'completed'
+  lockedUntil: timestamp("locked_until"),
+  stakedAt: timestamp("staked_at").defaultNow().notNull(),
+  lastRewardAt: timestamp("last_reward_at").defaultNow().notNull(),
+  unstakedAt: timestamp("unstaked_at"),
+});
+
+export const insertUserStakeSchema = createInsertSchema(userStakes).omit({
+  id: true,
+  stakedAt: true,
+  lastRewardAt: true,
+  unstakedAt: true,
+});
+
+export type InsertUserStake = z.infer<typeof insertUserStakeSchema>;
+export type UserStake = typeof userStakes.$inferSelect;
+
+export const stakingRewards = pgTable("staking_rewards", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  stakeId: text("stake_id").notNull(),
+  amount: text("amount").notNull(),
+  rewardType: text("reward_type").notNull().default("staking"), // 'staking' | 'quest' | 'airdrop' | 'referral'
+  status: text("status").notNull().default("pending"), // 'pending' | 'claimed'
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  claimedAt: timestamp("claimed_at"),
+});
+
+export const insertStakingRewardSchema = createInsertSchema(stakingRewards).omit({
+  id: true,
+  createdAt: true,
+  claimedAt: true,
+});
+
+export type InsertStakingReward = z.infer<typeof insertStakingRewardSchema>;
+export type StakingReward = typeof stakingRewards.$inferSelect;
+
+export const stakingQuests = pgTable("staking_quests", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  questType: text("quest_type").notNull(), // 'stake_amount' | 'stake_duration' | 'referral' | 'bridge' | 'social'
+  requirement: text("requirement").notNull(), // JSON with quest requirements
+  rewardDwt: text("reward_dwt").notNull(),
+  rewardBadge: text("reward_badge"), // Optional NFT badge ID
+  apyBoost: text("apy_boost").notNull().default("0"), // Bonus APY on completion
+  isActive: boolean("is_active").notNull().default(true),
+  expiresAt: timestamp("expires_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertStakingQuestSchema = createInsertSchema(stakingQuests).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertStakingQuest = z.infer<typeof insertStakingQuestSchema>;
+export type StakingQuest = typeof stakingQuests.$inferSelect;
+
+export const userQuestProgress = pgTable("user_quest_progress", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  questId: text("quest_id").notNull(),
+  progress: text("progress").notNull().default("0"), // Current progress value
+  status: text("status").notNull().default("active"), // 'active' | 'completed' | 'claimed'
+  completedAt: timestamp("completed_at"),
+  claimedAt: timestamp("claimed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertUserQuestProgressSchema = createInsertSchema(userQuestProgress).omit({
+  id: true,
+  createdAt: true,
+  completedAt: true,
+  claimedAt: true,
+});
+
+export type InsertUserQuestProgress = z.infer<typeof insertUserQuestProgressSchema>;
+export type UserQuestProgress = typeof userQuestProgress.$inferSelect;
+
+export const stakingLeaderboard = pgTable("staking_leaderboard", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  totalStaked: text("total_staked").notNull().default("0"),
+  totalRewards: text("total_rewards").notNull().default("0"),
+  longestStreak: integer("longest_streak").notNull().default(0),
+  questsCompleted: integer("quests_completed").notNull().default(0),
+  referralCount: integer("referral_count").notNull().default(0),
+  rank: integer("rank"),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertStakingLeaderboardSchema = createInsertSchema(stakingLeaderboard).omit({
+  id: true,
+  updatedAt: true,
+});
+
+export type InsertStakingLeaderboard = z.infer<typeof insertStakingLeaderboardSchema>;
+export type StakingLeaderboard = typeof stakingLeaderboard.$inferSelect;
+
 export const APP_VERSION = "1.0.3";
