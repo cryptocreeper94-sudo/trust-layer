@@ -28,21 +28,31 @@ const steps: Step[] = [
   }
 ];
 
+const STORAGE_KEY = "darkwave_onboarding_completed";
+
 export function OnboardingTour() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
 
-  // Auto-open on first load (mock behavior)
+  // Only show on first visit - check localStorage
   useEffect(() => {
-    const timer = setTimeout(() => setIsOpen(true), 1500);
-    return () => clearTimeout(timer);
+    const hasCompleted = localStorage.getItem(STORAGE_KEY);
+    if (!hasCompleted) {
+      const timer = setTimeout(() => setIsOpen(true), 1500);
+      return () => clearTimeout(timer);
+    }
   }, []);
+
+  const handleClose = () => {
+    localStorage.setItem(STORAGE_KEY, "true");
+    setIsOpen(false);
+  };
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      setIsOpen(false);
+      handleClose();
     }
   };
 
@@ -56,7 +66,7 @@ export function OnboardingTour() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto"
-            onClick={() => setIsOpen(false)}
+            onClick={handleClose}
           />
 
           {/* Dialog */}
@@ -76,7 +86,7 @@ export function OnboardingTour() {
                   variant="ghost" 
                   size="icon" 
                   className="h-6 w-6 rounded-full hover:bg-white/10"
-                  onClick={() => setIsOpen(false)}
+                  onClick={handleClose}
                 >
                   <X className="w-4 h-4" />
                 </Button>
