@@ -5,7 +5,7 @@ import { Link } from "wouter";
 import {
   Rocket, ArrowLeft, Plus, TrendingUp, Users, DollarSign,
   Search, Filter, ChevronDown, Sparkles, Loader2, ExternalLink,
-  Twitter, Globe, Send, CheckCircle, Clock
+  Twitter, Globe, Send, CheckCircle, Clock, Lock, Droplets, Info
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -104,8 +104,12 @@ export default function Launchpad() {
   const [searchQuery, setSearchQuery] = useState("");
   const [formData, setFormData] = useState({
     name: "", symbol: "", description: "", totalSupply: "1000000000",
-    initialPrice: "0.001", launchType: "fair", website: "", twitter: "", telegram: ""
+    initialPrice: "0.001", launchType: "fair", website: "", twitter: "", telegram: "",
+    autoLiquidityPercent: 75, lpLockDays: 90, softCap: "1000", hardCap: "100000"
   });
+  
+  const PLATFORM_FEE = 2.5; // DarkWave platform fee %
+  const creatorReceives = 100 - PLATFORM_FEE - formData.autoLiquidityPercent;
 
   const { data: tokensData, isLoading } = useQuery<{ tokens: LaunchedToken[] }>({
     queryKey: ["/api/launchpad/tokens"],
@@ -123,10 +127,10 @@ export default function Launchpad() {
       return res.json();
     },
     onSuccess: () => {
-      toast({ title: "Token Created!", description: "Your token is now pending review" });
+      toast({ title: "Token Created!", description: "Your token is now pending review with auto-liquidity enabled" });
       queryClient.invalidateQueries({ queryKey: ["/api/launchpad/tokens"] });
       setCreateOpen(false);
-      setFormData({ name: "", symbol: "", description: "", totalSupply: "1000000000", initialPrice: "0.001", launchType: "fair", website: "", twitter: "", telegram: "" });
+      setFormData({ name: "", symbol: "", description: "", totalSupply: "1000000000", initialPrice: "0.001", launchType: "fair", website: "", twitter: "", telegram: "", autoLiquidityPercent: 75, lpLockDays: 90, softCap: "1000", hardCap: "100000" });
     },
     onError: (error: any) => {
       toast({ title: "Creation Failed", description: error.message, variant: "destructive" });
@@ -256,6 +260,85 @@ export default function Launchpad() {
                         <Input placeholder="t.me/..." value={formData.telegram} onChange={(e) => setFormData({...formData, telegram: e.target.value})} className="bg-white/5 border-white/10 text-xs" />
                       </div>
                     </div>
+                    
+                    <div className="p-3 rounded-lg bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/30">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Droplets className="w-4 h-4 text-blue-400" />
+                        <span className="font-semibold text-sm text-white">Auto-Liquidity Settings</span>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <div>
+                          <div className="flex items-center justify-between mb-1">
+                            <Label className="text-xs">Liquidity Allocation</Label>
+                            <span className="text-xs text-blue-400 font-medium">{formData.autoLiquidityPercent}%</span>
+                          </div>
+                          <input
+                            type="range"
+                            min="50"
+                            max="95"
+                            value={formData.autoLiquidityPercent}
+                            onChange={(e) => setFormData({...formData, autoLiquidityPercent: parseInt(e.target.value)})}
+                            className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                            data-testid="slider-auto-liquidity"
+                          />
+                          <div className="flex justify-between text-[9px] text-muted-foreground mt-1">
+                            <span>50% Min</span>
+                            <span>95% Max</span>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <Label className="text-xs flex items-center gap-1">
+                            <Lock className="w-3 h-3" /> LP Lock Duration
+                          </Label>
+                          <Select value={formData.lpLockDays.toString()} onValueChange={(v) => setFormData({...formData, lpLockDays: parseInt(v)})}>
+                            <SelectTrigger className="bg-white/5 border-white/10 mt-1">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="30">30 Days</SelectItem>
+                              <SelectItem value="90">90 Days (Recommended)</SelectItem>
+                              <SelectItem value="180">180 Days</SelectItem>
+                              <SelectItem value="365">1 Year</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <Label className="text-xs">Soft Cap (DWT)</Label>
+                            <Input type="number" value={formData.softCap} onChange={(e) => setFormData({...formData, softCap: e.target.value})} className="bg-white/5 border-white/10 text-xs" />
+                          </div>
+                          <div>
+                            <Label className="text-xs">Hard Cap (DWT)</Label>
+                            <Input type="number" value={formData.hardCap} onChange={(e) => setFormData({...formData, hardCap: e.target.value})} className="bg-white/5 border-white/10 text-xs" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                      <div className="flex items-center gap-1 mb-2">
+                        <Info className="w-3 h-3 text-muted-foreground" />
+                        <span className="text-xs text-muted-foreground">Fund Distribution</span>
+                      </div>
+                      <div className="space-y-1 text-xs">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Platform Fee</span>
+                          <span className="text-amber-400">{PLATFORM_FEE}%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Auto-Liquidity (Locked)</span>
+                          <span className="text-blue-400">{formData.autoLiquidityPercent}%</span>
+                        </div>
+                        <div className="flex justify-between border-t border-white/10 pt-1 mt-1">
+                          <span className="text-white font-medium">You Receive</span>
+                          <span className="text-green-400 font-medium">{creatorReceives.toFixed(1)}%</span>
+                        </div>
+                      </div>
+                    </div>
+                    
                     <Button className="w-full bg-pink-500 hover:bg-pink-600" onClick={() => createMutation.mutate()} disabled={createMutation.isPending || !formData.name || !formData.symbol} data-testid="button-submit-token">
                       {createMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Rocket className="w-4 h-4 mr-2" />}
                       Launch Token

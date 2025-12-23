@@ -991,6 +991,18 @@ export const launchedTokens = pgTable("launched_tokens", {
   status: text("status").notNull().default("pending"), // pending, live, paused, ended
   launchType: text("launch_type").notNull().default("fair"), // fair, presale, auction
   txHash: text("tx_hash"),
+  // Auto-liquidity settings
+  autoLiquidityPercent: integer("auto_liquidity_percent").notNull().default(75), // 50-100%
+  lpLockDays: integer("lp_lock_days").notNull().default(90), // LP token lock duration
+  platformFeePercent: text("platform_fee_percent").notNull().default("2.5"), // DarkWave fee
+  // Raised funds tracking
+  raisedAmount: text("raised_amount").notNull().default("0"),
+  softCap: text("soft_cap").notNull().default("1000"),
+  hardCap: text("hard_cap").notNull().default("100000"),
+  // Auto-created liquidity pool
+  liquidityPoolId: text("liquidity_pool_id"),
+  lpTokensLocked: text("lp_tokens_locked").notNull().default("0"),
+  lpUnlockDate: timestamp("lp_unlock_date"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   launchedAt: timestamp("launched_at"),
 });
@@ -999,6 +1011,14 @@ export const insertLaunchedTokenSchema = createInsertSchema(launchedTokens).omit
   id: true,
   createdAt: true,
   launchedAt: true,
+  liquidityPoolId: true,
+  lpTokensLocked: true,
+  lpUnlockDate: true,
+}).extend({
+  autoLiquidityPercent: z.number().min(50).max(95).default(75),
+  lpLockDays: z.number().min(30).max(365).default(90),
+  softCap: z.string().default("1000"),
+  hardCap: z.string().default("100000"),
 });
 
 export type InsertLaunchedToken = z.infer<typeof insertLaunchedTokenSchema>;

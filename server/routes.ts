@@ -3139,22 +3139,57 @@ ${context ? `- Additional context: ${context}` : ""}`;
 
   app.post("/api/launchpad/create", async (req, res) => {
     try {
-      const { name, symbol, description, totalSupply, initialPrice, launchType } = req.body;
+      const { 
+        name, symbol, description, totalSupply, initialPrice, launchType,
+        website, twitter, telegram,
+        autoLiquidityPercent = 75, lpLockDays = 90, softCap = "1000", hardCap = "100000"
+      } = req.body;
+      
       if (!name || !symbol) {
         return res.status(400).json({ error: "Name and symbol are required" });
       }
+      
+      // Validate auto-liquidity settings (server-side validation)
+      const liquidityPct = Math.min(95, Math.max(50, Number(autoLiquidityPercent)));
+      const lockDays = Math.min(365, Math.max(30, Number(lpLockDays)));
+      const platformFee = 2.5;
+      
+      // Ensure creator receives at least 2.5%
+      if (liquidityPct + platformFee > 97.5) {
+        return res.status(400).json({ error: "Auto-liquidity cannot exceed 95%" });
+      }
+      
+      const tokenId = crypto.randomUUID();
+      const creatorReceives = (100 - platformFee - liquidityPct).toFixed(1);
+      
       res.json({
         success: true,
         token: {
-          id: crypto.randomUUID(),
+          id: tokenId,
           name,
           symbol,
           description,
-          totalSupply,
-          initialPrice,
-          launchType,
+          totalSupply: totalSupply || "1000000000",
+          initialPrice: initialPrice || "0.001",
+          currentPrice: initialPrice || "0.001",
+          launchType: launchType || "fair",
           status: "pending",
+          autoLiquidityPercent: liquidityPct,
+          lpLockDays: lockDays,
+          platformFeePercent: platformFee.toString(),
+          softCap,
+          hardCap,
+          raisedAmount: "0",
+          website,
+          twitter,
+          telegram,
           createdAt: new Date().toISOString(),
+        },
+        feeBreakdown: {
+          platformFee: `${platformFee}%`,
+          autoLiquidity: `${liquidityPct}%`,
+          creatorReceives: `${creatorReceives}%`,
+          lpLockDays: lockDays
         }
       });
     } catch (error: any) {
