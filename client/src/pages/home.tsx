@@ -66,17 +66,21 @@ export default function Home() {
             <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
-          <div className="hidden md:flex items-center gap-6 text-xs font-medium text-muted-foreground mr-6">
-            <Link href="/ecosystem" className="hover:text-primary transition-colors">Ecosystem</Link>
-            <Link href="/token" className="hover:text-primary transition-colors">Token</Link>
-            <a href="https://darkwavepulse.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-4 text-xs font-medium text-muted-foreground mr-4">
+            <Link href="/ecosystem" className="hover:text-primary transition-colors whitespace-nowrap">Ecosystem</Link>
+            <Link href="/token" className="hover:text-primary transition-colors whitespace-nowrap">Token</Link>
+            <Link href="/bridge" className="hover:text-primary transition-colors whitespace-nowrap flex items-center gap-1">
+              Bridge
+              <Badge variant="outline" className="text-[9px] border-cyan-500/50 text-cyan-400 px-1 py-0">Beta</Badge>
+            </Link>
+            <a href="https://darkwavepulse.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
               Staking
               <ArrowRight className="w-2.5 h-2.5 -rotate-45" />
             </a>
-            <Link href="/explorer" className="hover:text-primary transition-colors">Explorer</Link>
-            <Link href="/developers" className="hover:text-primary transition-colors">Developers</Link>
-            <Link href="/studio" className="hover:text-primary transition-colors flex items-center gap-1">
-              Dev Studio
+            <Link href="/explorer" className="hover:text-primary transition-colors whitespace-nowrap">Explorer</Link>
+            <Link href="/developers" className="hover:text-primary transition-colors whitespace-nowrap">Developers</Link>
+            <Link href="/studio" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
+              Studio
               <Badge variant="outline" className="text-[9px] border-green-500/50 text-green-400 px-1 py-0">Live</Badge>
             </Link>
           </div>
