@@ -34,6 +34,8 @@ import NftGallery from "@/pages/nft-gallery";
 import NftCreator from "@/pages/nft-creator";
 import Charts from "@/pages/charts";
 import Webhooks from "@/pages/webhooks";
+import MultiSig from "@/pages/multisig";
+import ProofOfReserve from "@/pages/proof-of-reserve";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -80,6 +82,8 @@ function Router() {
         <Route path="/nft-creator" component={NftCreator} />
         <Route path="/charts" component={Charts} />
         <Route path="/webhooks" component={Webhooks} />
+        <Route path="/multisig" component={MultiSig} />
+        <Route path="/proof-of-reserve" component={ProofOfReserve} />
         <Route component={NotFound} />
       </Switch>
     </>
