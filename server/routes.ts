@@ -17,6 +17,7 @@ import { startRegistration, finishRegistration, startAuthentication, finishAuthe
 import { bridge } from "./bridge-engine";
 import { registerChatRoutes } from "./replit_integrations/chat";
 import { registerImageRoutes } from "./replit_integrations/image";
+import { stakingEngine } from "./staking-engine";
 
 interface PresenceUser {
   id: string;
@@ -1595,6 +1596,204 @@ export async function registerRoutes(
       res.json({ transfers });
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch transfers" });
+    }
+  });
+
+  // === STAKING ROUTES ===
+  
+  app.get("/api/staking/stats", async (req, res) => {
+    try {
+      const stats = await stakingEngine.getStakingStats();
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching staking stats:", error);
+      res.status(500).json({ error: "Failed to fetch staking stats" });
+    }
+  });
+
+  app.get("/api/staking/pools", async (req, res) => {
+    try {
+      const userId = req.query.userId as string | undefined;
+      const pools = await stakingEngine.getPoolsWithUserStakes(userId);
+      res.json({ pools });
+    } catch (error) {
+      console.error("Error fetching pools:", error);
+      res.status(500).json({ error: "Failed to fetch staking pools" });
+    }
+  });
+
+  app.get("/api/staking/pools/:slug", async (req, res) => {
+    try {
+      const { slug } = req.params;
+      const pool = await stakingEngine.getPoolBySlug(slug);
+      if (!pool) {
+        return res.status(404).json({ error: "Pool not found" });
+      }
+      res.json(pool);
+    } catch (error) {
+      console.error("Error fetching pool:", error);
+      res.status(500).json({ error: "Failed to fetch pool" });
+    }
+  });
+
+  app.get("/api/staking/user/stakes", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any)?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "User not authenticated" });
+      }
+      
+      const stakes = await stakingEngine.getUserStakes(userId);
+      
+      const stakesWithRewards = await Promise.all(
+        stakes.map(async (stake) => ({
+          ...stake,
+          pendingRewards: await stakingEngine.calculatePendingRewards(stake),
+        }))
+      );
+      
+      res.json({ stakes: stakesWithRewards });
+    } catch (error) {
+      console.error("Error fetching user stakes:", error);
+      res.status(500).json({ error: "Failed to fetch user stakes" });
+    }
+  });
+
+  app.post("/api/staking/stake", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any)?.claims?.sub;
+      const { poolId, amount } = req.body;
+      
+      if (!userId) {
+        return res.status(401).json({ error: "User not authenticated" });
+      }
+      
+      if (!poolId || !amount) {
+        return res.status(400).json({ error: "Missing required fields: poolId, amount" });
+      }
+      
+      if (typeof poolId !== 'string' || poolId.length < 10 || poolId.length > 50) {
+        return res.status(400).json({ error: "Invalid pool ID format" });
+      }
+      
+      const amountNum = parseFloat(amount);
+      if (isNaN(amountNum) || amountNum <= 0 || amountNum > 1000000000) {
+        return res.status(400).json({ error: "Amount must be a positive number up to 1 billion" });
+      }
+      
+      const stake = await stakingEngine.stake(userId, poolId, amount);
+      res.json({ success: true, stake });
+    } catch (error: any) {
+      console.error("Error staking:", error);
+      res.status(400).json({ error: error.message || "Failed to stake" });
+    }
+  });
+
+  app.post("/api/staking/unstake", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any)?.claims?.sub;
+      const { stakeId, amount } = req.body;
+      
+      if (!userId) {
+        return res.status(401).json({ error: "User not authenticated" });
+      }
+      
+      if (!stakeId) {
+        return res.status(400).json({ error: "Missing required field: stakeId" });
+      }
+      
+      if (typeof stakeId !== 'string' || stakeId.length < 10 || stakeId.length > 50) {
+        return res.status(400).json({ error: "Invalid stake ID format" });
+      }
+      
+      if (amount !== undefined) {
+        const amountNum = parseFloat(amount);
+        if (isNaN(amountNum) || amountNum <= 0 || amountNum > 1000000000) {
+          return res.status(400).json({ error: "Amount must be a positive number up to 1 billion" });
+        }
+      }
+      
+      const stake = await stakingEngine.unstake(userId, stakeId, amount);
+      res.json({ success: true, stake });
+    } catch (error: any) {
+      console.error("Error unstaking:", error);
+      res.status(400).json({ error: error.message || "Failed to unstake" });
+    }
+  });
+
+  app.post("/api/staking/claim", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any)?.claims?.sub;
+      const { stakeId } = req.body;
+      
+      if (!userId) {
+        return res.status(401).json({ error: "User not authenticated" });
+      }
+      
+      if (!stakeId) {
+        return res.status(400).json({ error: "Missing required field: stakeId" });
+      }
+      
+      if (typeof stakeId !== 'string' || stakeId.length < 10 || stakeId.length > 50) {
+        return res.status(400).json({ error: "Invalid stake ID format" });
+      }
+      
+      const reward = await stakingEngine.claimRewards(userId, stakeId);
+      res.json({ success: true, reward });
+    } catch (error: any) {
+      console.error("Error claiming rewards:", error);
+      res.status(400).json({ error: error.message || "Failed to claim rewards" });
+    }
+  });
+
+  app.get("/api/staking/quests", async (req, res) => {
+    try {
+      const quests = await stakingEngine.getQuests();
+      res.json({ quests });
+    } catch (error) {
+      console.error("Error fetching quests:", error);
+      res.status(500).json({ error: "Failed to fetch quests" });
+    }
+  });
+
+  app.get("/api/staking/user/quests", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any)?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "User not authenticated" });
+      }
+      
+      const progress = await stakingEngine.getUserQuestProgress(userId);
+      res.json({ progress });
+    } catch (error) {
+      console.error("Error fetching user quest progress:", error);
+      res.status(500).json({ error: "Failed to fetch quest progress" });
+    }
+  });
+
+  app.get("/api/staking/leaderboard", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 10;
+      const leaderboard = await stakingEngine.getLeaderboard(limit);
+      res.json({ leaderboard });
+    } catch (error) {
+      console.error("Error fetching leaderboard:", error);
+      res.status(500).json({ error: "Failed to fetch leaderboard" });
+    }
+  });
+
+  app.get("/api/staking/user/rank", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req.user as any)?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "User not authenticated" });
+      }
+      
+      const position = await stakingEngine.getUserLeaderboardPosition(userId);
+      res.json({ position });
+    } catch (error) {
+      console.error("Error fetching user rank:", error);
+      res.status(500).json({ error: "Failed to fetch user rank" });
     }
   });
 

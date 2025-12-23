@@ -11,8 +11,8 @@ const navItems = [
   { href: "/developers", label: "Developers", icon: Code },
   { href: "/doc-hub", label: "Doc Hub", icon: FileText },
   { href: "/token", label: "Token", icon: Coins },
+  { href: "/staking", label: "Staking", icon: TrendingUp },
   { href: "/bridge", label: "Bridge", icon: ArrowLeftRight },
-  { href: "https://darkwavepulse.com", label: "Staking", icon: TrendingUp, external: true },
   { href: "/explorer", label: "Explorer", icon: SearchIcon },
   { href: "/studio", label: "Dev Studio", icon: Sparkles },
 ];
