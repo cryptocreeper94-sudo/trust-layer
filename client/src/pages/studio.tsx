@@ -277,7 +277,7 @@ export default function Studio() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [commitMessage, setCommitMessage] = useState("");
   const [bottomTab, setBottomTab] = useState<"console" | "git" | "terminal" | "deploy" | "packages">("console");
-  const [mobileView, setMobileView] = useState<"editor" | "files" | "console">("editor");
+  const [mobileView, setMobileView] = useState<"editor" | "files" | "console" | "preview">("editor");
   const [terminalHistory, setTerminalHistory] = useState<TerminalLine[]>([
     { type: "output", content: "DarkWave Terminal v1.0.0" },
     { type: "output", content: "Type 'help' for available commands" },
@@ -299,6 +299,13 @@ export default function Studio() {
   const [aiResponse, setAiResponse] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
   const aiPanelRef = useRef<HTMLDivElement>(null);
+  
+  // Live Preview state
+  const [showPreview, setShowPreview] = useState(false);
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [previewError, setPreviewError] = useState<string | null>(null);
+  const [previewContent, setPreviewContent] = useState<string>("");
+  const previewIframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
     if (!user) {
@@ -604,6 +611,97 @@ export default function Studio() {
     };
     return langMap[ext] || ext;
   };
+
+  // Live Preview function - builds and renders project files
+  const refreshPreview = useCallback(async () => {
+    if (!projectId) return;
+    
+    setPreviewLoading(true);
+    setPreviewError(null);
+    
+    try {
+      // Find the HTML file or create a preview from current files
+      const htmlFile = files.find(f => f.name.endsWith('.html'));
+      const cssFiles = files.filter(f => f.name.endsWith('.css'));
+      const jsFiles = files.filter(f => f.name.endsWith('.js') || f.name.endsWith('.jsx') || f.name.endsWith('.ts'));
+      
+      let html = '';
+      
+      if (htmlFile) {
+        html = htmlFile.content || '';
+        
+        // Inject CSS files inline
+        const cssContent = cssFiles.map(f => `<style>/* ${f.name} */\n${f.content || ''}</style>`).join('\n');
+        if (cssContent && !html.includes('</head>')) {
+          html = `<head>${cssContent}</head>` + html;
+        } else if (cssContent) {
+          html = html.replace('</head>', `${cssContent}</head>`);
+        }
+        
+        // For simple JS files, inject them
+        const simpleJs = jsFiles.filter(f => !f.name.includes('.jsx') && !f.name.includes('.tsx'));
+        const jsContent = simpleJs.map(f => `<script>/* ${f.name} */\n${f.content || ''}</script>`).join('\n');
+        if (jsContent && !html.includes('</body>')) {
+          html += jsContent;
+        } else if (jsContent) {
+          html = html.replace('</body>', `${jsContent}</body>`);
+        }
+      } else {
+        // No HTML file - create a basic preview for current file
+        if (activeFile?.name.endsWith('.html')) {
+          html = editorContent;
+        } else if (activeFile?.name.endsWith('.css')) {
+          html = `<!DOCTYPE html>
+<html><head><style>${editorContent}</style></head>
+<body>
+<div style="padding: 2rem; font-family: system-ui;">
+  <h1>CSS Preview</h1>
+  <p>Your styles are applied to this page.</p>
+  <button class="btn">Button</button>
+  <div class="box" style="width: 100px; height: 100px; background: #333; margin: 1rem 0;"></div>
+</div>
+</body></html>`;
+        } else if (activeFile?.name.endsWith('.js')) {
+          html = `<!DOCTYPE html>
+<html><head></head><body>
+<div id="root" style="padding: 2rem; font-family: system-ui;">
+  <h1>JavaScript Preview</h1>
+  <p>Check console for output.</p>
+</div>
+<script>${editorContent}</script>
+</body></html>`;
+        } else {
+          html = `<!DOCTYPE html>
+<html><head></head><body>
+<div style="padding: 2rem; font-family: system-ui; color: #888;">
+  <h1>Preview</h1>
+  <p>Create an HTML file or select a previewable file (HTML, CSS, JS).</p>
+</div>
+</body></html>`;
+        }
+      }
+      
+      setPreviewContent(html);
+      
+      // Update iframe using srcdoc for sandboxed preview
+      if (previewIframeRef.current) {
+        previewIframeRef.current.srcdoc = html;
+      }
+      
+    } catch (error) {
+      console.error("Preview build error:", error);
+      setPreviewError("Failed to build preview. Check your code for errors.");
+    } finally {
+      setPreviewLoading(false);
+    }
+  }, [projectId, files, activeFile, editorContent]);
+
+  // Auto-refresh preview when showing and files change
+  useEffect(() => {
+    if (showPreview) {
+      refreshPreview();
+    }
+  }, [showPreview, refreshPreview]);
 
   const handleSearch = useCallback(() => {
     if (!searchQuery.trim()) {
@@ -1439,6 +1537,23 @@ export default function Studio() {
             <Save className="w-3.5 h-3.5" />
             {saving ? "Saving..." : "Save"}
           </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="sm"
+                variant={showPreview ? "default" : "ghost"}
+                onClick={() => setShowPreview(!showPreview)}
+                className={`gap-2 text-xs ${showPreview ? "bg-cyan-600 hover:bg-cyan-700" : ""}`}
+                data-testid="button-preview"
+              >
+                <Globe className="w-3.5 h-3.5" />
+                Preview
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Live Preview</p>
+            </TooltipContent>
+          </Tooltip>
           <Button
             size="sm"
             className="gap-2 bg-green-600 hover:bg-green-700 text-xs transition-all duration-300 hover:shadow-[0_0_15px_rgba(34,197,94,0.5)] hover:scale-105"
@@ -1540,6 +1655,12 @@ export default function Studio() {
             onClick={() => setMobileView("editor")}
           >
             <FileCode className="w-4 h-4" /> Editor
+          </button>
+          <button
+            className={`flex-1 py-2.5 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors ${mobileView === "preview" as any ? "bg-cyan-500/20 text-cyan-400 border-b-2 border-cyan-400" : "text-muted-foreground"}`}
+            onClick={() => { setMobileView("preview" as any); setShowPreview(true); }}
+          >
+            <Globe className="w-4 h-4" /> Preview
           </button>
           <button
             className={`flex-1 py-2.5 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors ${mobileView === "console" ? "bg-primary/20 text-primary border-b-2 border-primary" : "text-muted-foreground"}`}
@@ -1967,23 +2088,103 @@ export default function Studio() {
             )}
           </div>
 
-          {/* Code Editor - Hidden on mobile when viewing console */}
-          <div className={`flex-1 overflow-hidden ${mobileView === "console" ? "hidden" : ""} md:block`}>
-            {activeFile ? (
-              <MonacoEditor
-                value={editorContent}
-                onChange={setEditorContent}
-                language={getLanguage(activeFile.name)}
-                data-testid="editor-monaco"
-              />
-            ) : (
-              <div className="flex items-center justify-center h-full text-muted-foreground">
-                <div className="text-center">
-                  <FileCode className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                  <p className="text-sm">Select a file to edit</p>
-                  <p className="text-xs text-muted-foreground mt-1">or create a new file</p>
+          {/* Code Editor with Optional Preview Split */}
+          <div className={`flex-1 overflow-hidden ${mobileView === "console" ? "hidden" : ""} ${mobileView === "preview" ? "flex" : ""} md:flex flex-row`}>
+            {/* Editor Pane - Hidden on mobile when in preview mode */}
+            <div className={`${showPreview ? "hidden md:block md:w-1/2 border-r border-white/10" : "w-full"} h-full transition-all duration-300`}>
+              {activeFile ? (
+                <MonacoEditor
+                  value={editorContent}
+                  onChange={setEditorContent}
+                  language={getLanguage(activeFile.name)}
+                  data-testid="editor-monaco"
+                />
+              ) : (
+                <div className="flex items-center justify-center h-full text-muted-foreground">
+                  <div className="text-center">
+                    <FileCode className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                    <p className="text-sm">Select a file to edit</p>
+                    <p className="text-xs text-muted-foreground mt-1">or create a new file</p>
+                  </div>
                 </div>
-              </div>
+              )}
+            </div>
+            
+            {/* Live Preview Pane - Full width on mobile, half on desktop */}
+            {showPreview && (
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="w-full md:w-1/2 h-full flex flex-col bg-gray-900"
+              >
+                {/* Preview Header */}
+                <div className="flex items-center justify-between px-3 py-2 border-b border-white/10 bg-black/40 shrink-0">
+                  <div className="flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-cyan-400" />
+                    <span className="text-sm font-medium text-white">Live Preview</span>
+                    {previewLoading && (
+                      <Loader2 className="w-3 h-3 text-cyan-400 animate-spin" />
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={refreshPreview}
+                          disabled={previewLoading}
+                          className="h-7 w-7 p-0"
+                          data-testid="button-refresh-preview"
+                        >
+                          <RotateCcw className={`w-3.5 h-3.5 ${previewLoading ? "animate-spin" : ""}`} />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Refresh Preview</TooltipContent>
+                    </Tooltip>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setShowPreview(false)}
+                      className="h-7 w-7 p-0"
+                      data-testid="button-close-preview"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
+                </div>
+                
+                {/* Preview Content */}
+                <div className="flex-1 overflow-hidden bg-white">
+                  {previewError ? (
+                    <div className="flex items-center justify-center h-full bg-red-900/20 p-4">
+                      <div className="text-center">
+                        <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-red-500/20 flex items-center justify-center">
+                          <X className="w-6 h-6 text-red-400" />
+                        </div>
+                        <p className="text-red-400 text-sm">{previewError}</p>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={refreshPreview}
+                          className="mt-3"
+                        >
+                          Try Again
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <iframe
+                      ref={previewIframeRef}
+                      title="Live Preview"
+                      className="w-full h-full border-0"
+                      sandbox="allow-scripts allow-same-origin allow-forms allow-modals"
+                      data-testid="iframe-preview"
+                    />
+                  )}
+                </div>
+              </motion.div>
             )}
           </div>
 
