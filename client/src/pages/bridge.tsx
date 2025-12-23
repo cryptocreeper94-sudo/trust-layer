@@ -39,6 +39,14 @@ interface BridgeTransfer {
   createdAt: string;
 }
 
+interface ChainStatus {
+  chain: string;
+  connected: boolean;
+  blockHeight?: number;
+  latency?: number;
+  error?: string;
+}
+
 const chainIcons: Record<string, string> = {
   ethereum: "⟠",
   solana: "◎",
@@ -79,6 +87,15 @@ export default function Bridge() {
     queryKey: ["/api/bridge/transfers"],
     refetchInterval: 5000,
   });
+
+  const { data: chainStatusData } = useQuery<{ statuses: ChainStatus[]; timestamp: string }>({
+    queryKey: ["/api/bridge/chains/status"],
+    refetchInterval: 10000,
+  });
+
+  const getChainStatus = (chainId: string): ChainStatus | undefined => {
+    return chainStatusData?.statuses?.find(s => s.chain === chainId);
+  };
 
   const convertToSmallestUnit = (amt: string) => {
     if (!amt || amt.trim() === "" || parseFloat(amt) <= 0) {
@@ -318,35 +335,52 @@ export default function Bridge() {
               className="flex gap-3 overflow-x-auto pb-4 snap-x snap-mandatory -mx-4 px-4"
               style={{ scrollbarWidth: "none", msOverflowStyle: "none", WebkitOverflowScrolling: "touch" }}
             >
-              {bridgeInfo?.supportedChains?.map((chain, i) => (
-                <motion.div
-                  key={chain.id}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 * i }}
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="snap-start"
-                >
-                  <div className="relative group cursor-pointer" data-testid={`chain-card-${chain.id}`}>
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-cyan-500/30 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="relative w-32 sm:w-40 h-24 sm:h-28 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-3 sm:p-4 flex flex-col justify-between group-hover:border-primary/50 transition-all shrink-0">
-                      <div className="flex items-center justify-between">
-                        <span className="text-2xl">{chainIcons[chain.id] || "🔗"}</span>
-                        <Badge 
-                          variant="outline" 
-                          className={`text-[10px] ${chain.status === "active" ? "border-green-500/50 text-green-400" : "border-amber-500/50 text-amber-400"}`}
-                        >
-                          {chain.status}
-                        </Badge>
-                      </div>
-                      <div>
-                        <div className="font-bold text-sm">{chain.name}</div>
-                        <div className="text-xs text-muted-foreground">{chain.network}</div>
+              {bridgeInfo?.supportedChains?.map((chain, i) => {
+                const liveStatus = getChainStatus(chain.id);
+                return (
+                  <motion.div
+                    key={chain.id}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 * i }}
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    className="snap-start"
+                  >
+                    <div className="relative group cursor-pointer" data-testid={`chain-card-${chain.id}`}>
+                      <div className={`absolute inset-0 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity ${
+                        liveStatus?.connected ? "bg-gradient-to-br from-green-500/30 to-cyan-500/30" : "bg-gradient-to-br from-red-500/30 to-orange-500/30"
+                      }`} />
+                      <div className={`relative w-36 sm:w-44 h-28 sm:h-32 bg-white/5 backdrop-blur-xl border rounded-xl p-3 sm:p-4 flex flex-col justify-between transition-all shrink-0 ${
+                        liveStatus?.connected ? "border-green-500/30 group-hover:border-green-400/50" : "border-white/10 group-hover:border-primary/50"
+                      }`}>
+                        <div className="flex items-center justify-between">
+                          <span className="text-2xl">{chainIcons[chain.id] || "🔗"}</span>
+                          <div className="flex items-center gap-1">
+                            {liveStatus?.connected && (
+                              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" title="Connected" />
+                            )}
+                            <Badge 
+                              variant="outline" 
+                              className={`text-[10px] ${liveStatus?.connected ? "border-green-500/50 text-green-400" : "border-red-500/50 text-red-400"}`}
+                            >
+                              {liveStatus?.connected ? "LIVE" : "offline"}
+                            </Badge>
+                          </div>
+                        </div>
+                        <div>
+                          <div className="font-bold text-sm">{chain.name}</div>
+                          <div className="text-xs text-muted-foreground">{chain.network}</div>
+                          {liveStatus?.connected && liveStatus.blockHeight && (
+                            <div className="text-[10px] text-green-400/80 mt-1 font-mono">
+                              Block #{liveStatus.blockHeight.toLocaleString()} • {liveStatus.latency}ms
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}

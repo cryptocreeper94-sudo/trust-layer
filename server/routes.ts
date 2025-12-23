@@ -1439,6 +1439,40 @@ export async function registerRoutes(
     }
   });
 
+  // Live chain status from external networks
+  app.get("/api/bridge/chains/status", async (req, res) => {
+    try {
+      const statuses = await bridge.getChainStatuses();
+      res.json({ 
+        statuses,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch chain statuses" });
+    }
+  });
+
+  // Verify an external chain transaction
+  app.post("/api/bridge/verify-tx", async (req, res) => {
+    try {
+      const { chain, txHash, amount } = req.body;
+      
+      if (!chain || !txHash) {
+        return res.status(400).json({ error: "Missing chain or txHash" });
+      }
+
+      const verification = await bridge.verifyExternalTransaction(
+        chain,
+        txHash,
+        amount || "0"
+      );
+
+      res.json(verification);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to verify transaction" });
+    }
+  });
+
   app.post("/api/bridge/lock", async (req, res) => {
     try {
       const { fromAddress, amount, targetChain, targetAddress } = req.body;

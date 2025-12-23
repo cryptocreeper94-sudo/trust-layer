@@ -3,6 +3,7 @@ import { db } from "./db";
 import { bridgeLocks, bridgeMints, bridgeBurns, bridgeReleases } from "@shared/schema";
 import { eq, desc, and } from "drizzle-orm";
 import { blockchain } from "./blockchain-engine";
+import { externalChains, type ExternalTxVerification, type ChainStatus } from "./external-chains";
 
 export type SupportedChain = "ethereum" | "solana";
 
@@ -181,35 +182,58 @@ class DarkWaveBridge {
 
   private async confirmBurnAndRelease(burnId: string): Promise<void> {
     try {
-      await db.update(bridgeBurns)
-        .set({ status: "confirmed", confirmedAt: new Date() })
-        .where(eq(bridgeBurns.id, burnId));
-
       const [burn] = await db.select()
         .from(bridgeBurns)
         .where(eq(bridgeBurns.id, burnId));
 
-      if (burn) {
-        const tx = blockchain.submitTransaction(
-          BRIDGE_CUSTODY_ADDRESS,
-          burn.targetAddress,
-          BigInt(burn.amount),
-          `bridge:release:${burn.sourceChain}`
-        );
+      if (!burn) return;
 
-        await db.insert(bridgeReleases).values({
-          burnId: burn.id,
-          toAddress: burn.targetAddress,
-          amount: burn.amount,
-          txHash: tx.hash,
-          status: "completed",
-          completedAt: new Date(),
-        });
+      // Verify the burn transaction on the external chain
+      console.log(`[DarkWave Bridge] Verifying burn tx on ${burn.sourceChain}: ${burn.sourceTxHash}`);
+      
+      const verification = await externalChains.verifyBurn(
+        burn.sourceChain as "ethereum" | "solana",
+        burn.sourceTxHash,
+        burn.amount
+      );
 
-        console.log(`[DarkWave Bridge] Burn confirmed, release completed: ${burnId}`);
+      if (!verification.verified) {
+        console.log(`[DarkWave Bridge] Burn verification failed: ${verification.error}`);
+        await db.update(bridgeBurns)
+          .set({ status: "failed" })
+          .where(eq(bridgeBurns.id, burnId));
+        return;
       }
+
+      console.log(`[DarkWave Bridge] Burn verified on ${burn.sourceChain}, processing release...`);
+
+      await db.update(bridgeBurns)
+        .set({ status: "confirmed", confirmedAt: new Date() })
+        .where(eq(bridgeBurns.id, burnId));
+
+      // Release DWT on DarkWave Chain
+      const tx = blockchain.submitTransaction(
+        BRIDGE_CUSTODY_ADDRESS,
+        burn.targetAddress,
+        BigInt(burn.amount),
+        `bridge:release:${burn.sourceChain}`
+      );
+
+      await db.insert(bridgeReleases).values({
+        burnId: burn.id,
+        toAddress: burn.targetAddress,
+        amount: burn.amount,
+        txHash: tx.hash,
+        status: "completed",
+        completedAt: new Date(),
+      });
+
+      console.log(`[DarkWave Bridge] Burn confirmed, release completed: ${burnId} | DWT tx: ${tx.hash}`);
     } catch (error) {
       console.error(`[DarkWave Bridge] Failed to process burn:`, error);
+      await db.update(bridgeBurns)
+        .set({ status: "failed" })
+        .where(eq(bridgeBurns.id, burnId));
     }
   }
 
@@ -291,9 +315,21 @@ class DarkWaveBridge {
 
   getSupportedChains(): { id: SupportedChain; name: string; network: string; status: string }[] {
     return [
-      { id: "ethereum", name: "Ethereum", network: "Sepolia Testnet", status: "beta" },
-      { id: "solana", name: "Solana", network: "Devnet", status: "beta" },
+      { id: "ethereum", name: "Ethereum", network: "Sepolia Testnet", status: "active" },
+      { id: "solana", name: "Solana", network: "Devnet", status: "active" },
     ];
+  }
+
+  async getChainStatuses(): Promise<ChainStatus[]> {
+    return await externalChains.getAllChainStatuses();
+  }
+
+  async verifyExternalTransaction(
+    chain: "ethereum" | "solana",
+    txHash: string,
+    expectedAmount: string
+  ): Promise<ExternalTxVerification> {
+    return await externalChains.verifyBurn(chain, txHash, expectedAmount);
   }
 
   getBridgeStats() {
