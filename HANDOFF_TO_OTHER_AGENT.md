@@ -80,3 +80,90 @@ All DWT operations happen directly on DarkWave Chain.
 
 *Generated: December 2024*
 *Project: DarkWave Studios - DarkWave Chain*
+
+---
+
+## Firebase Authentication (All DarkWave Ecosystem Apps)
+
+All DarkWave ecosystem apps share the same Firebase project for unified user authentication.
+
+### Firebase Configuration
+
+```javascript
+const firebaseConfig = {
+  apiKey: "AIzaSyByHm_Zwo9NGZ3DyHtZ5_wCtHlLXcat23Q",
+  authDomain: "darkwave-auth.firebaseapp.com",
+  projectId: "darkwave-auth",
+  storageBucket: "darkwave-auth.firebasestorage.app",
+  messagingSenderId: "413074061912",
+  appId: "1:413074061912:web:b70884d2e91d9a922a55a5",
+  measurementId: "G-EL9LT61B28"
+};
+```
+
+### Installation
+
+```bash
+npm install firebase
+```
+
+### Quick Start (Google + GitHub Sign-In)
+
+```javascript
+import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider, GithubAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyByHm_Zwo9NGZ3DyHtZ5_wCtHlLXcat23Q",
+  authDomain: "darkwave-auth.firebaseapp.com",
+  projectId: "darkwave-auth",
+  storageBucket: "darkwave-auth.firebasestorage.app",
+  messagingSenderId: "413074061912",
+  appId: "1:413074061912:web:b70884d2e91d9a922a55a5",
+  measurementId: "G-EL9LT61B28"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider();
+
+// Google Sign-In
+async function signInWithGoogle() {
+  const result = await signInWithPopup(auth, googleProvider);
+  return result.user;
+}
+
+// GitHub Sign-In
+async function signInWithGitHub() {
+  const result = await signInWithPopup(auth, githubProvider);
+  return result.user;
+}
+
+// Listen for auth state changes
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("Signed in:", user.uid, user.email);
+  } else {
+    console.log("Signed out");
+  }
+});
+
+// Sign out
+async function handleSignOut() {
+  await signOut(auth);
+}
+```
+
+### React Native Installation
+
+```bash
+npm install @react-native-firebase/app @react-native-firebase/auth
+```
+
+### Important Notes
+
+- The Firebase client config is **safe to expose** in client-side code
+- All apps using this config share the same user accounts
+- Add your app's domain to Firebase Console → Authentication → Settings → Authorized domains
+- For backend sync, call your `/api/auth/firebase-sync` endpoint after sign-in
