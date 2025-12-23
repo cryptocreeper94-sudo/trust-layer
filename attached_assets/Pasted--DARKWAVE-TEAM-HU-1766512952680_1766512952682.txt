@@ -1,0 +1,173 @@
+═══════════════════════════════════════════════════════════════════════════════
+🌊 DARKWAVE TEAM HUB - AGENT CONNECTION GUIDE
+═══════════════════════════════════════════════════════════════════════════════
+
+The DarkWave Team Hub is the central API for all DarkWave Studios products
+to share data, sync workers, exchange code snippets, and log activity.
+
+═══════════════════════════════════════════════════════════════════════════════
+BASE URL
+═══════════════════════════════════════════════════════════════════════════════
+
+https://orbitstaffing.io
+
+═══════════════════════════════════════════════════════════════════════════════
+AUTHENTICATION
+═══════════════════════════════════════════════════════════════════════════════
+
+All authenticated endpoints require HMAC-SHA256 signature in headers:
+
+Headers:
+  X-DarkWave-App-ID: <your_app_id>
+  X-DarkWave-Signature: <hmac_sha256_signature>
+  X-DarkWave-Timestamp: <unix_timestamp>
+  Content-Type: application/json
+
+Signature Generation (Node.js):
+  const crypto = require('crypto');
+  const timestamp = Date.now().toString();
+  const payload = timestamp + JSON.stringify(body);
+  const signature = crypto
+    .createHmac('sha256', YOUR_API_SECRET)
+    .update(payload)
+    .digest('hex');
+
+═══════════════════════════════════════════════════════════════════════════════
+PUBLIC ENDPOINTS (No Auth Required)
+═══════════════════════════════════════════════════════════════════════════════
+
+GET /api/ecosystem/apps
+  → List all connected apps in the ecosystem
+
+GET /api/ecosystem/status
+  → Check hub connection status
+
+GET /api/ecosystem/contracts
+  → List all smart contracts
+
+GET /api/ecosystem/contracts/:name
+  → Get specific contract (e.g., /contracts/darkwave-token)
+
+GET /api/ecosystem/docs
+  → List all whitepapers and documentation
+
+GET /api/ecosystem/docs/:name
+  → Get specific document (e.g., /docs/darkwave-token-whitepaper)
+
+GET /api/ecosystem/app-metadata
+  → Get rich metadata for all apps (icons, gradients, descriptions)
+
+═══════════════════════════════════════════════════════════════════════════════
+AUTHENTICATED ENDPOINTS
+═══════════════════════════════════════════════════════════════════════════════
+
+POST /api/ecosystem/sync/workers
+  → Sync worker data between apps
+  Body: { workers: [...] }
+
+POST /api/ecosystem/sync/contractors
+  → Sync contractor/1099 data
+  Body: { contractors: [...] }
+
+POST /api/ecosystem/sync/timesheets
+  → Sync timesheet entries
+  Body: { timesheets: [...] }
+
+POST /api/ecosystem/sync/certifications
+  → Sync worker certifications
+  Body: { certifications: [...] }
+
+GET /api/ecosystem/shops/workers
+  → Query workers from connected shops
+
+GET /api/ecosystem/shops/payroll
+  → Query payroll data from connected shops
+
+POST /api/ecosystem/snippets
+  → Share code snippets across ecosystem
+  Body: { title, language, code, description }
+
+GET /api/ecosystem/snippets
+  → Retrieve shared code snippets
+
+POST /api/ecosystem/logs
+  → Log activity to central hub
+  Body: { action, details, level }
+
+GET /api/ecosystem/logs
+  → Retrieve activity logs
+
+═══════════════════════════════════════════════════════════════════════════════
+REGISTERING YOUR APP
+═══════════════════════════════════════════════════════════════════════════════
+
+Contact ORBIT admin or use:
+
+POST /api/admin/ecosystem/register-app
+Headers: Authorization: Bearer <ADMIN_TOKEN>
+Body: {
+  "name": "Your App Name",
+  "description": "What your app does",
+  "category": "productivity|staffing|finance|automotive|hospitality",
+  "webhookUrl": "https://yourapp.com/webhook",
+  "allowedScopes": ["workers:read", "workers:write", "timesheets:read"]
+}
+
+Response: {
+  "appId": "dw_app_xxxxxx",
+  "apiKey": "your_api_key",
+  "apiSecret": "your_api_secret"
+}
+
+═══════════════════════════════════════════════════════════════════════════════
+EXAMPLE: FETCH CONNECTED APPS
+═══════════════════════════════════════════════════════════════════════════════
+
+const response = await fetch('https://orbitstaffing.io/api/ecosystem/apps');
+const data = await response.json();
+console.log(data.apps); // Array of connected DarkWave products
+
+═══════════════════════════════════════════════════════════════════════════════
+EXAMPLE: SYNC WORKERS (AUTHENTICATED)
+═══════════════════════════════════════════════════════════════════════════════
+
+const crypto = require('crypto');
+
+const APP_ID = 'dw_app_yourappid';
+const API_SECRET = 'your_api_secret';
+
+const body = { workers: [{ name: 'John Doe', email: 'john@example.com' }] };
+const timestamp = Date.now().toString();
+const payload = timestamp + JSON.stringify(body);
+const signature = crypto.createHmac('sha256', API_SECRET).update(payload).digest('hex');
+
+const response = await fetch('https://orbitstaffing.io/api/ecosystem/sync/workers', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-DarkWave-App-ID': APP_ID,
+    'X-DarkWave-Signature': signature,
+    'X-DarkWave-Timestamp': timestamp
+  },
+  body: JSON.stringify(body)
+});
+
+═══════════════════════════════════════════════════════════════════════════════
+CONNECTED APPS
+═══════════════════════════════════════════════════════════════════════════════
+
+ORBIT Staffing OS    → dw_app_orbit (Hub Owner)
+Brew & Board Coffee  → dw_app_brewandboard
+GarageBot            → dw_app_3c88bda688e781b58b2b46144bf6006a49add5c28eed327e
+Orbit Chain          → dw_app_38b6237cc29877a7a113136d43104b328fabd730b4cba260
+
+═══════════════════════════════════════════════════════════════════════════════
+RESOURCES
+═══════════════════════════════════════════════════════════════════════════════
+
+Smart Contracts:  GET /api/ecosystem/contracts
+Whitepapers:      GET /api/ecosystem/docs
+DWT Token:        GET /api/ecosystem/contracts/darkwave-token
+DWT Whitepaper:   GET /api/ecosystem/docs/darkwave-token-whitepaper
+
+═══════════════════════════════════════════════════════════════════════════════
