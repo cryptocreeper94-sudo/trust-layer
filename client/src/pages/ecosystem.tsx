@@ -13,31 +13,33 @@ import { fetchEcosystemApps } from "@/lib/api";
 import { useState } from "react";
 import { InfoTooltip } from "@/components/info-tooltip";
 
-const ecosystemModules = import.meta.glob("@/assets/ecosystem/*.jpg", { eager: true }) as Record<string, { default: string }>;
-const ecosystemImages: Record<string, string> = {};
-for (const [key, module] of Object.entries(ecosystemModules)) {
-  const filename = key.split('/').pop() || '';
-  ecosystemImages[filename] = module.default;
-}
+import orbitStaffingImg from "@/assets/ecosystem/orbit-staffing.jpg";
+import lotopsproImg from "@/assets/ecosystem/lotopspro.jpg";
+import brewBoardImg from "@/assets/ecosystem/brew-board.jpg";
+import orbitChainImg from "@/assets/ecosystem/orbit-chain.jpg";
+import garagebotImg from "@/assets/ecosystem/garagebot-prod.jpg";
+import darkwavePulseImg from "@/assets/ecosystem/darkwave-pulse.jpg";
+import paintprosImg from "@/assets/ecosystem/paintpros.jpg";
+import orbyImg from "@/assets/ecosystem/orby.jpg";
+import strikeAgentImg from "@/assets/ecosystem/strike-agent.jpg";
+
+const ecosystemImages: Record<string, string> = {
+  "orbit-staffing": orbitStaffingImg,
+  "lotopspro": lotopsproImg,
+  "lotops-pro": lotopsproImg,
+  "brew-board": brewBoardImg,
+  "orbit-chain": orbitChainImg,
+  "garagebot": garagebotImg,
+  "garagebot-prod": garagebotImg,
+  "darkwave-pulse": darkwavePulseImg,
+  "paintpros": paintprosImg,
+  "orby": orbyImg,
+  "strike-agent": strikeAgentImg,
+};
 console.log("[Ecosystem] Loaded images:", ecosystemImages);
 
 function getAppImage(appId: string): string {
-  const fileMap: Record<string, string> = {
-    "orbit-staffing": "orbit-staffing.jpg",
-    "lotopspro": "lotopspro.jpg",
-    "lotops-pro": "lotopspro.jpg",
-    "brew-board": "brew-board.jpg",
-    "orbit-chain": "orbit-chain.jpg",
-    "garagebot": "garagebot-prod.jpg",
-    "garagebot-prod": "garagebot-prod.jpg",
-    "darkwave-pulse": "darkwave-pulse.jpg",
-    "paintpros": "paintpros.jpg",
-    "orby": "orby.jpg",
-    "strike-agent": "strike-agent.jpg",
-  };
-  const filename = fileMap[appId];
-  if (!filename) return "";
-  return ecosystemImages[filename] || "";
+  return ecosystemImages[appId] || "";
 }
 
 const gradientColors: Record<string, { from: string; to: string }> = {
