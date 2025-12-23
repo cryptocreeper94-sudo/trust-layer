@@ -13,7 +13,7 @@ const navItems = [
   { href: "/token", label: "Token", icon: Coins },
   { href: "https://darkwavepulse.com", label: "Staking", icon: TrendingUp, external: true },
   { href: "/explorer", label: "Explorer", icon: SearchIcon },
-  { href: "/dev-studio", label: "Dev Studio", icon: Sparkles, comingSoon: true },
+  { href: "/studio", label: "Dev Studio", icon: Sparkles },
 ];
 
 function MenuPanel({ onClose }: { onClose: () => void }) {

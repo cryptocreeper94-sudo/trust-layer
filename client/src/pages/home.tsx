@@ -75,9 +75,9 @@ export default function Home() {
             </a>
             <Link href="/explorer" className="hover:text-primary transition-colors">Explorer</Link>
             <Link href="/developers" className="hover:text-primary transition-colors">Developers</Link>
-            <Link href="/dev-studio" className="hover:text-primary transition-colors flex items-center gap-1">
+            <Link href="/studio" className="hover:text-primary transition-colors flex items-center gap-1">
               Dev Studio
-              <Badge variant="outline" className="text-[9px] border-primary/50 text-primary px-1 py-0">Soon</Badge>
+              <Badge variant="outline" className="text-[9px] border-green-500/50 text-green-400 px-1 py-0">Live</Badge>
             </Link>
           </div>
           <div className="flex items-center gap-2">
@@ -399,7 +399,7 @@ export default function Home() {
 
       <section className="py-12 px-4">
         <div className="container mx-auto max-w-6xl">
-          <Link href="/dev-studio">
+          <Link href="/studio">
             <GlassCard glow hover={false} className="w-full">
               <div className="p-6 md:p-8 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5" />
@@ -409,13 +409,13 @@ export default function Home() {
                       <Sparkles className="w-6 h-6 text-primary" />
                     </div>
                     <div>
-                      <Badge variant="outline" className="border-primary/50 text-primary text-[10px] mb-1">Coming Q2 2026</Badge>
+                      <Badge variant="outline" className="border-green-500/50 text-green-400 text-[10px] mb-1">Now Live</Badge>
                       <h3 className="text-xl md:text-2xl font-display font-bold text-white">DarkWave Dev Studio</h3>
-                      <p className="text-xs text-muted-foreground mt-0.5">AI-powered cloud IDE for blockchain development</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">Cloud IDE for blockchain development with Monaco editor</p>
                     </div>
                   </div>
-                  <Button className="bg-primary text-background hover:bg-primary/90 font-semibold px-6 shrink-0" data-testid="button-preview-dev-studio">
-                    Preview <ArrowRight className="w-4 h-4 ml-2" />
+                  <Button className="bg-primary text-background hover:bg-primary/90 font-semibold px-6 shrink-0" data-testid="button-open-dev-studio">
+                    Open Studio <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </div>
               </div>
