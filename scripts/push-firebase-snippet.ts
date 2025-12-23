@@ -1,5 +1,5 @@
 const HUB_URL = 'https://orbitstaffing.io';
-const APP_ID = process.env.DARKWAVE_CHAIN_HUB_API_KEY || '';
+const API_KEY = process.env.DARKWAVE_CHAIN_HUB_API_KEY || '';
 const API_SECRET = process.env.DARKWAVE_CHAIN_HUB_API_SECRET || '';
 
 const firebaseSnippet = {
@@ -64,7 +64,7 @@ export async function handleSignOut() {
 async function main() {
   console.log('Pushing Firebase snippet to DarkWave Team Hub...');
   
-  if (!APP_ID || !API_SECRET) {
+  if (!API_KEY || !API_SECRET) {
     console.log('Missing: DARKWAVE_CHAIN_HUB_API_KEY or DARKWAVE_CHAIN_HUB_API_SECRET');
     return;
   }
@@ -73,7 +73,7 @@ async function main() {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': APP_ID,
+      'x-api-key': API_KEY,
       'x-api-secret': API_SECRET
     },
     body: JSON.stringify(firebaseSnippet)

@@ -1,0 +1,99 @@
+═══════════════════════════════════════════════════════════════════════════════
+🔧 DARKWAVE CHAIN - AUTHENTICATION FIX
+═══════════════════════════════════════════════════════════════════════════════
+
+STATUS: Credentials are VALID and ACTIVE ✓
+
+═══════════════════════════════════════════════════════════════════════════════
+ISSUE #1: WRONG ENDPOINT URL
+═══════════════════════════════════════════════════════════════════════════════
+
+WRONG:   /api/darkwave/snippets     ❌ (does not exist)
+CORRECT: /api/ecosystem/snippets    ✓
+
+═══════════════════════════════════════════════════════════════════════════════
+ISSUE #2: WRONG PAYLOAD FORMAT
+═══════════════════════════════════════════════════════════════════════════════
+
+WRONG payload structure:
+{
+  "app_id": "...",
+  "snippet_type": "firebase_config",
+  "content": { ... }
+}
+
+CORRECT payload structure:
+{
+  "name": "Firebase Auth Configuration",
+  "description": "Shared Firebase config for DarkWave ecosystem",
+  "language": "json",
+  "category": "authentication",
+  "code": "{ \"apiKey\": \"...\", ... }",
+  "tags": ["firebase", "auth", "shared"],
+  "isPublic": true,
+  "version": "1.0.0"
+}
+
+═══════════════════════════════════════════════════════════════════════════════
+CORRECTED REQUEST
+═══════════════════════════════════════════════════════════════════════════════
+
+const firebaseConfig = {
+  apiKey: "AIzaSyByHm_Zwo9NGZ3DyHtZ5_wCtHlLXcat23Q",
+  authDomain: "darkwave-auth.firebaseapp.com",
+  projectId: "darkwave-auth",
+  storageBucket: "darkwave-auth.firebasestorage.app",
+  messagingSenderId: "413074061912",
+  appId: "1:413074061912:web:b70884d2e91d9a922a55a5",
+  measurementId: "G-EL9LT61B28"
+};
+
+const response = await fetch('https://orbitstaffing.io/api/ecosystem/snippets', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'x-api-key': 'dw_app_b102bc0881e5454d22e40e99e92b375bd2dde4542a82270d',
+    'x-api-secret': 'dw_secret_31562a52b1fd660a963ed4f547e65eddf484d40019bb326cb12ddf539b52869a'
+  },
+  body: JSON.stringify({
+    name: 'Firebase Auth Configuration',
+    description: 'Shared Firebase authentication config for all DarkWave ecosystem apps',
+    language: 'json',
+    category: 'authentication',
+    code: JSON.stringify(firebaseConfig, null, 2),
+    tags: ['firebase', 'auth', 'shared', 'config'],
+    isPublic: true,
+    version: '1.0.0'
+  })
+});
+
+═══════════════════════════════════════════════════════════════════════════════
+CURL TEST
+═══════════════════════════════════════════════════════════════════════════════
+
+curl -X POST https://orbitstaffing.io/api/ecosystem/snippets \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: dw_app_b102bc0881e5454d22e40e99e92b375bd2dde4542a82270d" \
+  -H "x-api-secret: dw_secret_31562a52b1fd660a963ed4f547e65eddf484d40019bb326cb12ddf539b52869a" \
+  -d '{
+    "name": "Firebase Auth Configuration",
+    "description": "Shared Firebase config for DarkWave ecosystem",
+    "language": "json",
+    "category": "authentication",
+    "code": "{\"apiKey\":\"AIzaSyByHm_Zwo9NGZ3DyHtZ5_wCtHlLXcat23Q\",\"authDomain\":\"darkwave-auth.firebaseapp.com\",\"projectId\":\"darkwave-auth\"}",
+    "tags": ["firebase", "auth"],
+    "isPublic": true,
+    "version": "1.0.0"
+  }'
+
+═══════════════════════════════════════════════════════════════════════════════
+SUMMARY
+═══════════════════════════════════════════════════════════════════════════════
+
+✓ API Key:    VALID
+✓ API Secret: VALID  
+✓ App Status: ACTIVE
+✗ Endpoint:   FIX → /api/ecosystem/snippets
+✗ Payload:    FIX → Use name/code/language/category format
+
+═══════════════════════════════════════════════════════════════════════════════
