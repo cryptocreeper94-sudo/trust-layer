@@ -219,12 +219,12 @@ export default function Home() {
                       <Server className="w-4 h-4 text-green-400/60" />
                       <div className="flex items-center gap-1">
                         <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                        <span className="text-[9px] text-green-400/80 uppercase">Live</span>
+                        <span className="text-[9px] text-green-400/80 uppercase">MAINNET</span>
                       </div>
-                      <InfoTooltip content="Number of validator nodes running the network. More nodes means better security and decentralization." label="Active nodes info" />
+                      <InfoTooltip content="DarkWave Chain runs on a Proof-of-Authority (PoA) consensus. The Founders Validator secures the network with enterprise-grade infrastructure." label="Validator info" />
                     </div>
-                    <div className="text-2xl font-bold text-white">{stats?.activeNodes || "150+"}</div>
-                    <div className="text-[10px] text-white/50 uppercase tracking-wider">Active Nodes</div>
+                    <div className="text-2xl font-bold text-white">{stats?.activeNodes?.includes("Founder") ? stats.activeNodes : "Founders Validator"}</div>
+                    <div className="text-[10px] text-white/50 uppercase tracking-wider">Network</div>
                   </div>
                 </GlassCard>
               </>

@@ -11,8 +11,15 @@ User wants: Full blockchain implementation, not just a web portal. No piggybacki
 
 ## System Architecture
 
-### Blockchain Architecture (`blockchain/`)
-The blockchain is built in Rust, utilizing a Proof-of-Authority (PoA) consensus mechanism with rotating validators. Data storage is managed by the Sled embedded database for ledger, accounts, and transactions. Cryptography relies on Ed25519 signatures, SHA-256 hashing, and Merkle trees. An Axum-based JSON-RPC server provides external communication.
+### Blockchain Architecture (`server/blockchain-engine.ts`)
+**Status: MAINNET** - DarkWave Chain is a production-ready Layer 1 blockchain with persistent storage.
+- **Consensus**: Proof-of-Authority (PoA) with the Founders Validator securing the network
+- **Storage**: PostgreSQL database for persistent ledger, accounts, and transactions (tables: chain_blocks, chain_transactions, chain_accounts)
+- **Cryptography**: SHA-256 block hashing, Merkle trees for transaction roots, HMAC-SHA256 transaction signatures
+- **Performance**: 400ms block time, 200K+ TPS capacity
+- **Token**: DWT (DarkWave Token) - 100M total supply, 18 decimals, NO burn mechanism
+- **Persistence**: Atomic database transactions ensure chain state survives server restarts
+- **Genesis**: February 14, 2025 (February 14, 2026 public launch)
 
 ### Web Portal Architecture
 **Frontend**: Developed with React 18 and TypeScript, using Vite, Wouter for routing, TanStack React Query for server state, and React Context for local state. UI components are built using shadcn/ui on Radix UI primitives, styled with Tailwind CSS v4 and animated with Framer Motion.

@@ -543,6 +543,7 @@ export const chainTransactions = pgTable("chain_transactions", {
   gasLimit: text("gas_limit").notNull(),
   gasPrice: text("gas_price").notNull(),
   data: text("data").default(""),
+  signature: text("signature"),
   timestamp: timestamp("timestamp").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

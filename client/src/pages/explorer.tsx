@@ -18,6 +18,8 @@ interface ChainInfo {
   decimals: number;
   blockHeight: number;
   latestBlockHash: string;
+  networkType?: string;
+  genesisTimestamp?: string;
 }
 
 interface BlockInfo {
@@ -165,9 +167,9 @@ export default function Explorer() {
             <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/10 border border-green-500/20">
               <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-              <span className="text-[10px] font-mono text-green-400">Mainnet Beta</span>
+              <span className="text-[10px] font-mono text-green-400 font-medium">MAINNET</span>
             </div>
             <Link href="/">
               <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5">
@@ -230,10 +232,11 @@ export default function Explorer() {
               <div className="p-4 h-full flex flex-col justify-center">
                 <div className="flex items-center gap-1 mb-1">
                   <Server className="w-3 h-3 text-purple-400/60" />
-                  <InfoTooltip content="Nodes that validate and confirm transactions on the network" label="Validators info" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                  <InfoTooltip content="DarkWave uses Proof-of-Authority consensus. The Founders Validator runs enterprise-grade infrastructure for maximum uptime." label="Network info" />
                 </div>
-                <div className="text-xl font-bold text-white">{chainStats?.activeNodes || "128"}</div>
-                <div className="text-[10px] text-white/50 uppercase">Validators</div>
+                <div className="text-xl font-bold text-white">{chainStats?.activeNodes?.includes("Founder") ? chainStats.activeNodes : "Founders Validator"}</div>
+                <div className="text-[10px] text-white/50 uppercase">Network</div>
               </div>
             </GlassCard>
             <GlassCard hover={false}>
