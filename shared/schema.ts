@@ -515,4 +515,63 @@ export const insertStudioCollaboratorSchema = createInsertSchema(studioCollabora
 export type InsertStudioCollaborator = z.infer<typeof insertStudioCollaboratorSchema>;
 export type StudioCollaborator = typeof studioCollaborators.$inferSelect;
 
+export const chainBlocks = pgTable("chain_blocks", {
+  height: text("height").primaryKey(),
+  hash: text("hash").notNull().unique(),
+  prevHash: text("prev_hash").notNull(),
+  timestamp: timestamp("timestamp").notNull(),
+  validator: text("validator").notNull(),
+  merkleRoot: text("merkle_root").notNull(),
+  txCount: text("tx_count").notNull().default("0"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChainBlockSchema = createInsertSchema(chainBlocks).omit({
+  createdAt: true,
+});
+
+export type InsertChainBlock = z.infer<typeof insertChainBlockSchema>;
+export type ChainBlock = typeof chainBlocks.$inferSelect;
+
+export const chainTransactions = pgTable("chain_transactions", {
+  hash: text("hash").primaryKey(),
+  blockHeight: text("block_height").notNull(),
+  fromAddress: text("from_address").notNull(),
+  toAddress: text("to_address").notNull(),
+  amount: text("amount").notNull(),
+  nonce: text("nonce").notNull(),
+  gasLimit: text("gas_limit").notNull(),
+  gasPrice: text("gas_price").notNull(),
+  data: text("data").default(""),
+  timestamp: timestamp("timestamp").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChainTransactionSchema = createInsertSchema(chainTransactions).omit({
+  createdAt: true,
+});
+
+export type InsertChainTransaction = z.infer<typeof insertChainTransactionSchema>;
+export type ChainTransaction = typeof chainTransactions.$inferSelect;
+
+export const chainAccounts = pgTable("chain_accounts", {
+  address: text("address").primaryKey(),
+  balance: text("balance").notNull().default("0"),
+  nonce: text("nonce").notNull().default("0"),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChainAccountSchema = createInsertSchema(chainAccounts).omit({
+  updatedAt: true,
+});
+
+export type InsertChainAccount = z.infer<typeof insertChainAccountSchema>;
+export type ChainAccount = typeof chainAccounts.$inferSelect;
+
+export const chainConfig = pgTable("chain_config", {
+  key: text("key").primaryKey(),
+  value: text("value").notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 export const APP_VERSION = "1.0.3";
