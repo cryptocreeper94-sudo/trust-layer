@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, LogOut, User } from "lucide-react";
+import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, LogOut, User, Droplets, ArrowUpDown, ImageIcon, PieChart, History } from "lucide-react";
 import { InfoTooltip } from "@/components/info-tooltip";
 import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.png";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
@@ -87,6 +87,10 @@ export default function Home() {
             <Link href="/studio" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
               Studio
               <Badge variant="outline" className="text-[9px] border-green-500/50 text-green-400 px-1 py-0">Live</Badge>
+            </Link>
+            <Link href="/swap" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
+              DeFi
+              <Badge variant="outline" className="text-[9px] border-pink-500/50 text-pink-400 px-1 py-0">New</Badge>
             </Link>
           </div>
           <div className="flex items-center gap-2">
@@ -250,6 +254,147 @@ export default function Home() {
                 </GlassCard>
               </>
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* DeFi Section - Premium Protocol Style */}
+      <section className="py-16 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-pink-500/5 via-purple-500/5 to-transparent" />
+        <div className="container mx-auto max-w-6xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <Badge variant="outline" className="border-pink-500/50 text-pink-400 text-[10px] mb-3">DeFi Suite</Badge>
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-400 to-primary">
+                Decentralized Finance
+              </span>
+            </h2>
+            <p className="text-sm text-muted-foreground max-w-lg mx-auto">
+              Trade, stake, and explore the DarkWave DeFi ecosystem. Built for speed, designed for you.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+            <Link href="/faucet">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0 }}
+              >
+                <GlassCard className="h-full group hover:border-cyan-500/50 transition-all duration-300">
+                  <div className="p-4 text-center">
+                    <motion.div 
+                      className="w-12 h-12 mx-auto rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center mb-3 group-hover:shadow-[0_0_30px_rgba(0,255,255,0.3)] transition-shadow"
+                      whileHover={{ scale: 1.1 }}
+                    >
+                      <Droplets className="w-6 h-6 text-cyan-400" />
+                    </motion.div>
+                    <h3 className="text-sm font-bold text-white mb-1">Faucet</h3>
+                    <p className="text-[10px] text-muted-foreground">Get free test DWT</p>
+                    <Badge className="mt-2 bg-cyan-500/20 text-cyan-400 text-[9px]">1000 DWT</Badge>
+                  </div>
+                </GlassCard>
+              </motion.div>
+            </Link>
+
+            <Link href="/swap">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+              >
+                <GlassCard className="h-full group hover:border-pink-500/50 transition-all duration-300">
+                  <div className="p-4 text-center">
+                    <motion.div 
+                      className="w-12 h-12 mx-auto rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center mb-3 group-hover:shadow-[0_0_30px_rgba(236,72,153,0.3)] transition-shadow"
+                      whileHover={{ scale: 1.1, rotate: 180 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <ArrowUpDown className="w-6 h-6 text-pink-400" />
+                    </motion.div>
+                    <h3 className="text-sm font-bold text-white mb-1">Swap</h3>
+                    <p className="text-[10px] text-muted-foreground">Trade tokens instantly</p>
+                    <Badge className="mt-2 bg-pink-500/20 text-pink-400 text-[9px]">0.3% fee</Badge>
+                  </div>
+                </GlassCard>
+              </motion.div>
+            </Link>
+
+            <Link href="/nft">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+              >
+                <GlassCard className="h-full group hover:border-purple-500/50 transition-all duration-300">
+                  <div className="p-4 text-center">
+                    <motion.div 
+                      className="w-12 h-12 mx-auto rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mb-3 group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-shadow"
+                      whileHover={{ scale: 1.1 }}
+                    >
+                      <ImageIcon className="w-6 h-6 text-purple-400" />
+                    </motion.div>
+                    <h3 className="text-sm font-bold text-white mb-1">NFTs</h3>
+                    <p className="text-[10px] text-muted-foreground">Collect digital art</p>
+                    <Badge className="mt-2 bg-purple-500/20 text-purple-400 text-[9px]">Mint & Trade</Badge>
+                  </div>
+                </GlassCard>
+              </motion.div>
+            </Link>
+
+            <Link href="/portfolio">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+              >
+                <GlassCard className="h-full group hover:border-green-500/50 transition-all duration-300">
+                  <div className="p-4 text-center">
+                    <motion.div 
+                      className="w-12 h-12 mx-auto rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center mb-3 group-hover:shadow-[0_0_30px_rgba(34,197,94,0.3)] transition-shadow"
+                      whileHover={{ scale: 1.1 }}
+                    >
+                      <PieChart className="w-6 h-6 text-green-400" />
+                    </motion.div>
+                    <h3 className="text-sm font-bold text-white mb-1">Portfolio</h3>
+                    <p className="text-[10px] text-muted-foreground">Track your assets</p>
+                    <Badge className="mt-2 bg-green-500/20 text-green-400 text-[9px]">Live</Badge>
+                  </div>
+                </GlassCard>
+              </motion.div>
+            </Link>
+
+            <Link href="/transactions">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+              >
+                <GlassCard className="h-full group hover:border-blue-500/50 transition-all duration-300">
+                  <div className="p-4 text-center">
+                    <motion.div 
+                      className="w-12 h-12 mx-auto rounded-xl bg-gradient-to-br from-blue-500/20 to-indigo-500/20 flex items-center justify-center mb-3 group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] transition-shadow"
+                      whileHover={{ scale: 1.1 }}
+                    >
+                      <History className="w-6 h-6 text-blue-400" />
+                    </motion.div>
+                    <h3 className="text-sm font-bold text-white mb-1">History</h3>
+                    <p className="text-[10px] text-muted-foreground">All transactions</p>
+                    <Badge className="mt-2 bg-blue-500/20 text-blue-400 text-[9px]">Filter</Badge>
+                  </div>
+                </GlassCard>
+              </motion.div>
+            </Link>
           </div>
         </div>
       </section>

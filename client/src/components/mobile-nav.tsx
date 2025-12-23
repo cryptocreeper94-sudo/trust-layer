@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight } from "lucide-react";
+import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,12 +8,16 @@ import { Badge } from "@/components/ui/badge";
 const navItems = [
   { href: "/", label: "Home", icon: Home },
   { href: "/ecosystem", label: "Ecosystem", icon: Box },
-  { href: "/developers", label: "Developers", icon: Code },
-  { href: "/doc-hub", label: "Doc Hub", icon: FileText },
-  { href: "/token", label: "Token", icon: Coins },
+  { href: "/swap", label: "Swap", icon: ArrowUpDown, badge: "DeFi" },
+  { href: "/faucet", label: "Faucet", icon: Droplets },
+  { href: "/nft", label: "NFT Market", icon: ImageIcon },
+  { href: "/portfolio", label: "Portfolio", icon: PieChart },
+  { href: "/transactions", label: "History", icon: History },
   { href: "/staking", label: "Staking", icon: TrendingUp },
   { href: "/bridge", label: "Bridge", icon: ArrowLeftRight },
+  { href: "/token", label: "Token", icon: Coins },
   { href: "/explorer", label: "Explorer", icon: SearchIcon },
+  { href: "/developers", label: "Developers", icon: Code },
   { href: "/studio", label: "Dev Studio", icon: Sparkles },
 ];
 
@@ -108,6 +112,11 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
               >
                 <Icon style={{ width: '20px', height: '20px', flexShrink: 0 }} />
                 <span style={{ fontWeight: 500, flex: 1, fontFamily: 'Inter, sans-serif' }}>{item.label}</span>
+                {'badge' in item && (item as any).badge && (
+                  <Badge className="text-[9px] bg-pink-500/20 text-pink-400 px-1.5 py-0">
+                    {(item as any).badge}
+                  </Badge>
+                )}
                 {comingSoon && (
                   <Badge variant="outline" className="text-[10px] border-primary/50 text-primary px-1.5 py-0">
                     Soon
