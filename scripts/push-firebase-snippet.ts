@@ -1,16 +1,18 @@
-import crypto from 'crypto';
-
 const HUB_URL = 'https://orbitstaffing.io';
 const APP_ID = process.env.DARKWAVE_CHAIN_HUB_API_KEY || '';
 const API_SECRET = process.env.DARKWAVE_CHAIN_HUB_API_SECRET || '';
 
 const firebaseSnippet = {
-  title: "firebase-auth-config",
-  language: "javascript",
+  name: "Firebase Auth Configuration",
+  description: "Shared Firebase authentication setup for all DarkWave ecosystem apps. Includes Google and GitHub sign-in with unified user accounts.",
+  language: "typescript",
   category: "authentication",
-  description: "Firebase Authentication configuration for all DarkWave ecosystem apps. Use this shared config for Google and GitHub sign-in.",
+  tags: ["firebase", "auth", "shared", "google", "github"],
+  isPublic: true,
+  version: "1.0.0",
   code: `// DarkWave Ecosystem - Firebase Authentication
 // All DarkWave apps share this Firebase project for unified user accounts
+// INSTALLATION: npm install firebase
 
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, GithubAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
@@ -30,94 +32,55 @@ export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 export const githubProvider = new GithubAuthProvider();
 
+// Google Sign-In
 export async function signInWithGoogle() {
   const result = await signInWithPopup(auth, googleProvider);
   return result.user;
 }
 
+// GitHub Sign-In
 export async function signInWithGitHub() {
   const result = await signInWithPopup(auth, githubProvider);
   return result.user;
 }
 
-export function onAuthChange(callback) {
+// Auth State Listener
+export function onAuthChange(callback: (user: any) => void) {
   return onAuthStateChanged(auth, callback);
 }
 
+// Sign Out
 export async function handleSignOut() {
   await signOut(auth);
 }
 
-// INSTALLATION: npm install firebase
-// Add your domain to Firebase Console > Authentication > Authorized domains
+// IMPORTANT:
+// - Add your app domain to Firebase Console > Authentication > Authorized domains
+// - This config is safe to expose in client code (Firebase security model)
+// - All apps using this config share the same user accounts
 `
 };
 
-async function tryAllAuthMethods() {
-  const bodyStr = JSON.stringify(firebaseSnippet);
-  const timestamp = Date.now().toString();
+async function main() {
+  console.log('Pushing Firebase snippet to DarkWave Team Hub...');
   
-  console.log('APP_ID:', APP_ID ? APP_ID.substring(0, 25) + '...' : 'MISSING');
-  console.log('API_SECRET:', API_SECRET ? 'SET' : 'MISSING');
-  
-  // Method 1: X-API-Key headers with method:path:timestamp:body signature
-  console.log('\n--- Method 1: ecosystem-client format ---');
-  const payload1 = `POST:/api/ecosystem/snippets:${timestamp}:${bodyStr}`;
-  const sig1 = crypto.createHmac('sha256', API_SECRET).update(payload1).digest('hex');
-  
-  let res = await fetch(`${HUB_URL}/api/ecosystem/snippets`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-API-Key': APP_ID,
-      'X-API-Secret': sig1,
-      'X-Timestamp': timestamp
-    },
-    body: bodyStr
-  });
-  console.log('Method 1:', res.status, await res.json());
+  if (!APP_ID || !API_SECRET) {
+    console.log('Missing: DARKWAVE_CHAIN_HUB_API_KEY or DARKWAVE_CHAIN_HUB_API_SECRET');
+    return;
+  }
 
-  // Method 2: X-DarkWave headers with timestamp+body signature
-  console.log('\n--- Method 2: hub documentation format ---');
-  const payload2 = timestamp + bodyStr;
-  const sig2 = crypto.createHmac('sha256', API_SECRET).update(payload2).digest('hex');
-  
-  res = await fetch(`${HUB_URL}/api/ecosystem/snippets`, {
+  const response = await fetch(`${HUB_URL}/api/ecosystem/snippets`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-DarkWave-App-ID': APP_ID,
-      'X-DarkWave-Signature': sig2,
-      'X-DarkWave-Timestamp': timestamp
+      'x-api-key': APP_ID,
+      'x-api-secret': API_SECRET
     },
-    body: bodyStr
+    body: JSON.stringify(firebaseSnippet)
   });
-  console.log('Method 2:', res.status, await res.json());
 
-  // Method 3: Authorization Bearer token
-  console.log('\n--- Method 3: Bearer token ---');
-  res = await fetch(`${HUB_URL}/api/ecosystem/snippets`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${API_SECRET}`
-    },
-    body: bodyStr
-  });
-  console.log('Method 3:', res.status, await res.json());
-
-  // Method 4: X-API-Key with raw secret (no HMAC)
-  console.log('\n--- Method 4: Raw secret ---');
-  res = await fetch(`${HUB_URL}/api/ecosystem/snippets`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-API-Key': APP_ID,
-      'X-API-Secret': API_SECRET
-    },
-    body: bodyStr
-  });
-  console.log('Method 4:', res.status, await res.json());
+  const result = await response.json();
+  console.log('Response:', response.status, JSON.stringify(result, null, 2));
 }
 
-tryAllAuthMethods().catch(console.error);
+main().catch(console.error);
