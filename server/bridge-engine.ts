@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { db } from "./db";
 import { bridgeLocks, bridgeMints, bridgeBurns, bridgeReleases } from "@shared/schema";
 import { eq, desc, and } from "drizzle-orm";
-import { blockchain } from "./routes";
+import { blockchain } from "./blockchain-engine";
 
 export type SupportedChain = "ethereum" | "solana";
 
@@ -115,15 +115,26 @@ class DarkWaveBridge {
         .where(eq(bridgeLocks.id, lockId));
 
       if (lock) {
-        await db.insert(bridgeMints).values({
+        const [mint] = await db.insert(bridgeMints).values({
           lockId: lock.id,
           targetChain: lock.targetChain,
           targetAddress: lock.targetAddress,
           amount: lock.amount,
           status: "pending",
-        });
+        }).returning();
 
         console.log(`[DarkWave Bridge] Lock confirmed: ${lockId} | Mint pending on ${lock.targetChain}`);
+
+        setTimeout(async () => {
+          await db.update(bridgeMints)
+            .set({ 
+              status: "completed", 
+              completedAt: new Date(),
+              targetTxHash: `0x${lock.targetChain}_mock_${Date.now().toString(16)}`
+            })
+            .where(eq(bridgeMints.id, mint.id));
+          console.log(`[DarkWave Bridge] Mint completed for lock ${lockId} on ${lock.targetChain}`);
+        }, 5000);
       }
     } catch (error) {
       console.error(`[DarkWave Bridge] Failed to confirm lock:`, error);

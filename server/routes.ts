@@ -14,6 +14,7 @@ import { sendEmail, sendApiKeyEmail, sendHallmarkEmail } from "./email";
 import { submitMemoToSolana, isHeliusConfigured, getSolanaTreasuryAddress, getSolanaBalance } from "./helius";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
 import { startRegistration, finishRegistration, startAuthentication, finishAuthentication, getUserPasskeys, deletePasskey } from "./webauthn";
+import { bridge } from "./bridge-engine";
 
 interface PresenceUser {
   id: string;
@@ -1406,6 +1407,131 @@ export async function registerRoutes(
       });
     } catch (error) {
       res.status(500).json({ error: "Failed to verify hallmark" });
+    }
+  });
+
+  // === CROSS-CHAIN BRIDGE ROUTES (Phase 1 - Beta) ===
+  
+  app.get("/api/bridge/info", async (req, res) => {
+    try {
+      const stats = bridge.getBridgeStats();
+      const custodyBalance = await bridge.getCustodyBalance();
+      res.json({
+        ...stats,
+        custodyBalance,
+        disclaimer: "This is a beta feature. Use at your own risk.",
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch bridge info" });
+    }
+  });
+
+  app.get("/api/bridge/chains", async (req, res) => {
+    try {
+      const chains = bridge.getSupportedChains();
+      res.json({ chains });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch supported chains" });
+    }
+  });
+
+  app.post("/api/bridge/lock", async (req, res) => {
+    try {
+      const { fromAddress, amount, targetChain, targetAddress } = req.body;
+      
+      if (!fromAddress || !amount || !targetChain || !targetAddress) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      const result = await bridge.lockTokens({
+        fromAddress,
+        amount,
+        targetChain,
+        targetAddress,
+      });
+
+      if (!result.success) {
+        return res.status(400).json({ error: result.error });
+      }
+
+      res.json({
+        success: true,
+        lockId: result.lockId,
+        txHash: result.txHash,
+        message: "DWT locked on DarkWave. Wrapped tokens will be minted on target chain.",
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to lock tokens" });
+    }
+  });
+
+  app.post("/api/bridge/burn", async (req, res) => {
+    try {
+      const { sourceChain, sourceAddress, amount, targetAddress, sourceTxHash } = req.body;
+      
+      if (!sourceChain || !sourceAddress || !amount || !targetAddress || !sourceTxHash) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      const result = await bridge.processBurn({
+        sourceChain,
+        sourceAddress,
+        amount,
+        targetAddress,
+        sourceTxHash,
+      });
+
+      if (!result.success) {
+        return res.status(400).json({ error: result.error });
+      }
+
+      res.json({
+        success: true,
+        burnId: result.burnId,
+        message: "Burn recorded. DWT will be released on DarkWave Chain.",
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to process burn" });
+    }
+  });
+
+  app.get("/api/bridge/lock/:lockId", async (req, res) => {
+    try {
+      const { lockId } = req.params;
+      const status = await bridge.getLockStatus(lockId);
+      
+      if (!status) {
+        return res.status(404).json({ error: "Lock not found" });
+      }
+
+      res.json(status);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch lock status" });
+    }
+  });
+
+  app.get("/api/bridge/burn/:burnId", async (req, res) => {
+    try {
+      const { burnId } = req.params;
+      const status = await bridge.getBurnStatus(burnId);
+      
+      if (!status) {
+        return res.status(404).json({ error: "Burn not found" });
+      }
+
+      res.json(status);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch burn status" });
+    }
+  });
+
+  app.get("/api/bridge/transfers", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 50;
+      const transfers = await bridge.getRecentTransfers(limit);
+      res.json({ transfers });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch transfers" });
     }
   });
 
