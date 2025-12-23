@@ -20,6 +20,21 @@ import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 import { useAuth } from "@/hooks/use-auth";
+import { useState } from "react";
+
+const ecosystemImages: Record<string, string> = {
+  "orbit-staffing": "/ecosystem/orbit-staffing.jpg",
+  "lotopspro": "/ecosystem/lotopspro.jpg",
+  "lotops-pro": "/ecosystem/lotopspro.jpg",
+  "brew-board": "/ecosystem/brew-board.jpg",
+  "orbit-chain": "/ecosystem/orbit-chain.jpg",
+  "garagebot": "/ecosystem/garagebot-prod.jpg",
+  "garagebot-prod": "/ecosystem/garagebot-prod.jpg",
+  "darkwave-pulse": "/ecosystem/darkwave-pulse.jpg",
+  "paintpros": "/ecosystem/paintpros.jpg",
+  "orby": "/ecosystem/orby.jpg",
+  "strike-agent": "/ecosystem/strike-agent.jpg",
+};
 
 export default function Home() {
   const { preferences } = usePreferences();
@@ -434,13 +449,29 @@ export default function Home() {
 
 function AppCard({ id, name, category, desc, gradient, showFavorite, url }: { id?: string, name: string, category: string, desc: string, gradient: string, showFavorite?: boolean, url?: string }) {
   const truncatedDesc = desc.length > 60 ? desc.slice(0, 60) + "..." : desc;
+  const [imgFailed, setImgFailed] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const imageSrc = id ? ecosystemImages[id] : "";
   
   const cardContent = (
     <GlassCard className="h-full min-h-[180px]">
       <div className="p-4 h-full flex flex-col">
         <div className="flex justify-between items-start mb-3">
-          <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-sm shadow-lg shrink-0`}>
-            {name.charAt(0)}
+          <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-sm shadow-lg shrink-0 overflow-hidden relative`}>
+            {imageSrc && !imgFailed ? (
+              <>
+                {!imgLoaded && <span className="absolute inset-0 flex items-center justify-center">{name.charAt(0)}</span>}
+                <img 
+                  src={imageSrc} 
+                  alt={name}
+                  className={`w-full h-full object-cover ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  onLoad={() => setImgLoaded(true)}
+                  onError={() => setImgFailed(true)}
+                />
+              </>
+            ) : (
+              name.charAt(0)
+            )}
           </div>
           {showFavorite && id && (
             <div onClick={(e) => e.stopPropagation()}>
