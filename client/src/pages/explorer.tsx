@@ -206,47 +206,50 @@ export default function Explorer() {
 
       <section className="py-6 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 auto-rows-[100px]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 auto-rows-[90px] md:auto-rows-[100px]">
             <GlassCard hover={false}>
-              <div className="p-4 h-full flex flex-col justify-center">
-                <div className="flex items-center gap-1 mb-1">
-                  <Zap className="w-3 h-3 text-primary/60" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
+                <div className="flex items-center gap-1 mb-1 flex-wrap">
+                  <Zap className="w-3 h-3 text-primary/60 shrink-0" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shrink-0" />
                   <InfoTooltip content="Transactions Per Second - network processing capacity" label="TPS info" />
                 </div>
-                <div className="text-xl font-bold text-white">{chainStats?.tps || "200K+"}</div>
-                <div className="text-[10px] text-white/50 uppercase">TPS</div>
+                <div className="text-lg md:text-xl font-bold text-white">{chainStats?.tps || "200K+"}</div>
+                <div className="text-[9px] md:text-[10px] text-white/50 uppercase">TPS</div>
               </div>
             </GlassCard>
             <GlassCard hover={false}>
-              <div className="p-4 h-full flex flex-col justify-center">
+              <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
                 <div className="flex items-center gap-1 mb-1">
-                  <Activity className="w-3 h-3 text-cyan-400/60" />
+                  <Activity className="w-3 h-3 text-cyan-400/60 shrink-0" />
                   <InfoTooltip content="Time between each block being produced on the chain" label="Block time info" />
                 </div>
-                <div className="text-xl font-bold text-white">{chainStats?.finalityTime || "400ms"}</div>
-                <div className="text-[10px] text-white/50 uppercase">Block Time</div>
+                <div className="text-lg md:text-xl font-bold text-white">{chainStats?.finalityTime || "400ms"}</div>
+                <div className="text-[9px] md:text-[10px] text-white/50 uppercase">Block Time</div>
               </div>
             </GlassCard>
             <GlassCard hover={false}>
-              <div className="p-4 h-full flex flex-col justify-center">
-                <div className="flex items-center gap-1 mb-1">
-                  <Server className="w-3 h-3 text-purple-400/60" />
-                  <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
+                <div className="flex items-center gap-1 mb-1 flex-wrap">
+                  <Server className="w-3 h-3 text-purple-400/60 shrink-0" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shrink-0" />
                   <InfoTooltip content="DarkWave uses Proof-of-Authority consensus. The Founders Validator runs enterprise-grade infrastructure for maximum uptime." label="Network info" />
                 </div>
-                <div className="text-xl font-bold text-white">{chainStats?.activeNodes?.includes("Founder") ? chainStats.activeNodes : "Founders Validator"}</div>
-                <div className="text-[10px] text-white/50 uppercase">Network</div>
+                <div className="text-sm md:text-xl font-bold text-white leading-tight">
+                  <span className="hidden md:inline">{chainStats?.activeNodes?.includes("Founder") ? chainStats.activeNodes : "Founders Validator"}</span>
+                  <span className="md:hidden">Founders</span>
+                </div>
+                <div className="text-[9px] md:text-[10px] text-white/50 uppercase">Network</div>
               </div>
             </GlassCard>
             <GlassCard hover={false}>
-              <div className="p-4 h-full flex flex-col justify-center">
+              <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
                 <div className="flex items-center gap-1 mb-1">
-                  <Box className="w-3 h-3 text-green-400/60" />
+                  <Box className="w-3 h-3 text-green-400/60 shrink-0" />
                   <InfoTooltip content="Total number of blocks produced since the chain started" label="Block height info" />
                 </div>
-                <div className="text-xl font-bold text-white">{chainInfo?.blockHeight?.toLocaleString() || chainStats?.currentBlock || "8,921,042"}</div>
-                <div className="text-[10px] text-white/50 uppercase">Block Height</div>
+                <div className="text-base md:text-xl font-bold text-white truncate">{chainInfo?.blockHeight?.toLocaleString() || chainStats?.currentBlock || "0"}</div>
+                <div className="text-[9px] md:text-[10px] text-white/50 uppercase">Block Height</div>
               </div>
             </GlassCard>
           </div>

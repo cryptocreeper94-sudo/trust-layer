@@ -176,54 +176,57 @@ export default function Home() {
             ) : (
               <>
                 <GlassCard hover={false}>
-                  <div className="p-4 h-full flex flex-col justify-center">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Zap className="w-4 h-4 text-primary/60" />
+                  <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
+                    <div className="flex items-center gap-1 md:gap-2 mb-2 flex-wrap">
+                      <Zap className="w-3 h-3 md:w-4 md:h-4 text-primary/60 shrink-0" />
                       <div className="flex items-center gap-1">
                         <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                        <span className="text-[9px] text-green-400/80 uppercase">Live</span>
+                        <span className="text-[8px] md:text-[9px] text-green-400/80 uppercase">Live</span>
                       </div>
                       <InfoTooltip content="Transactions Per Second - how many transactions the network can process each second. Higher is better!" label="TPS info" />
                     </div>
-                    <div className="text-2xl font-bold text-white">{stats?.tps || "200K+"}</div>
-                    <div className="text-[10px] text-white/50 uppercase tracking-wider">TPS Throughput</div>
+                    <div className="text-xl md:text-2xl font-bold text-white">{stats?.tps || "200K+"}</div>
+                    <div className="text-[9px] md:text-[10px] text-white/50 uppercase tracking-wider">TPS</div>
                   </div>
                 </GlassCard>
                 <GlassCard hover={false}>
-                  <div className="p-4 h-full flex flex-col justify-center">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Activity className="w-4 h-4 text-cyan-400/60" />
+                  <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
+                    <div className="flex items-center gap-1 md:gap-2 mb-2 flex-wrap">
+                      <Activity className="w-3 h-3 md:w-4 md:h-4 text-cyan-400/60 shrink-0" />
                       <div className="flex items-center gap-1">
                         <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                        <span className="text-[9px] text-green-400/80 uppercase">Live</span>
+                        <span className="text-[8px] md:text-[9px] text-green-400/80 uppercase">Live</span>
                       </div>
                       <InfoTooltip content="Time for a transaction to be permanently confirmed on the blockchain. 400ms means near-instant confirmations!" label="Finality time info" />
                     </div>
-                    <div className="text-2xl font-bold text-white">{stats?.finalityTime || "0.4s"}</div>
-                    <div className="text-[10px] text-white/50 uppercase tracking-wider">Finality Time</div>
+                    <div className="text-xl md:text-2xl font-bold text-white">{stats?.finalityTime || "0.4s"}</div>
+                    <div className="text-[9px] md:text-[10px] text-white/50 uppercase tracking-wider">Finality</div>
                   </div>
                 </GlassCard>
                 <GlassCard hover={false}>
-                  <div className="p-4 h-full flex flex-col justify-center">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Cpu className="w-4 h-4 text-purple-400/60" />
+                  <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
+                    <div className="flex items-center gap-1 md:gap-2 mb-2">
+                      <Cpu className="w-3 h-3 md:w-4 md:h-4 text-purple-400/60 shrink-0" />
                       <InfoTooltip content="Average cost per transaction. DarkWave Chain keeps fees extremely low compared to other blockchains." label="Transaction cost info" />
                     </div>
-                    <div className="text-2xl font-bold text-white">{stats?.avgCost || "$0.0001"}</div>
-                    <div className="text-[10px] text-white/50 uppercase tracking-wider">Avg Cost</div>
+                    <div className="text-xl md:text-2xl font-bold text-white">{stats?.avgCost || "$0.0001"}</div>
+                    <div className="text-[9px] md:text-[10px] text-white/50 uppercase tracking-wider">Avg Cost</div>
                   </div>
                 </GlassCard>
                 <GlassCard hover={false}>
-                  <div className="p-4 h-full flex flex-col justify-center">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Server className="w-4 h-4 text-green-400/60" />
+                  <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
+                    <div className="flex items-center gap-1 md:gap-2 mb-2 flex-wrap">
+                      <Server className="w-3 h-3 md:w-4 md:h-4 text-green-400/60 shrink-0" />
                       <div className="flex items-center gap-1">
                         <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                        <span className="text-[9px] text-green-400/80 uppercase">MAINNET</span>
+                        <span className="text-[8px] md:text-[9px] text-green-400/80 uppercase">MAINNET</span>
                       </div>
                       <InfoTooltip content="DarkWave Chain runs on a Proof-of-Authority (PoA) consensus. The Founders Validator secures the network with enterprise-grade infrastructure." label="Validator info" />
                     </div>
-                    <div className="text-2xl font-bold text-white">{stats?.activeNodes?.includes("Founder") ? stats.activeNodes : "Founders Validator"}</div>
+                    <div className="text-base md:text-2xl font-bold text-white leading-tight">
+                      <span className="hidden md:inline">{stats?.activeNodes?.includes("Founder") ? stats.activeNodes : "Founders Validator"}</span>
+                      <span className="md:hidden">Founders</span>
+                    </div>
                     <div className="text-[10px] text-white/50 uppercase tracking-wider">Network</div>
                   </div>
                 </GlassCard>
