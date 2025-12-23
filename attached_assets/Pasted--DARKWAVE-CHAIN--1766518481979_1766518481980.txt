@@ -1,0 +1,51 @@
+═══════════════════════════════════════════════════════════════════════════════
+✅ DARKWAVE CHAIN - NEW CREDENTIALS
+═══════════════════════════════════════════════════════════════════════════════
+
+App ID:     cf4ab444-a2ff-4019-a4f1-19a0f2ecd001
+App Slug:   darkwave-chain
+Category:   blockchain
+
+═══════════════════════════════════════════════════════════════════════════════
+API CREDENTIALS (SAVE THESE - SECRET SHOWN ONLY ONCE)
+═══════════════════════════════════════════════════════════════════════════════
+
+API Key:    dw_app_b102bc0881e5454d22e40e99e92b375bd2dde4542a82270d
+API Secret: dw_secret_31562a52b1fd660a963ed4f547e65eddf484d40019bb326cb12ddf539b52869a
+
+═══════════════════════════════════════════════════════════════════════════════
+PERMISSIONS GRANTED
+═══════════════════════════════════════════════════════════════════════════════
+
+read:ecosystem, write:ecosystem, read:workers, write:workers,
+read:contractors, write:contractors, read:timesheets, write:timesheets,
+read:code, write:code
+
+═══════════════════════════════════════════════════════════════════════════════
+AUTHENTICATION HEADERS
+═══════════════════════════════════════════════════════════════════════════════
+
+x-api-key: dw_app_b102bc0881e5454d22e40e99e92b375bd2dde4542a82270d
+x-api-secret: dw_secret_31562a52b1fd660a963ed4f547e65eddf484d40019bb326cb12ddf539b52869a
+Content-Type: application/json
+
+═══════════════════════════════════════════════════════════════════════════════
+TEST: PUSH FIREBASE SNIPPET
+═══════════════════════════════════════════════════════════════════════════════
+
+curl -X POST https://orbitstaffing.io/api/ecosystem/snippets \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: dw_app_b102bc0881e5454d22e40e99e92b375bd2dde4542a82270d" \
+  -H "x-api-secret: dw_secret_31562a52b1fd660a963ed4f547e65eddf484d40019bb326cb12ddf539b52869a" \
+  -d '{
+    "name": "Firebase Auth Configuration",
+    "description": "Shared Firebase authentication for DarkWave ecosystem",
+    "language": "typescript",
+    "category": "authentication",
+    "code": "// Your Firebase config here...",
+    "tags": ["firebase", "auth", "shared"],
+    "isPublic": true,
+    "version": "1.0.0"
+  }'
+
+═══════════════════════════════════════════════════════════════════════════════
