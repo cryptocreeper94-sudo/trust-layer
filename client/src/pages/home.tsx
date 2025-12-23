@@ -240,13 +240,16 @@ export default function Home() {
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="space-y-6">
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant="outline" className="border-amber-500/50 text-amber-400 text-[10px]">Roadmap</Badge>
+              </div>
               <h2 className="text-3xl md:text-4xl font-display font-bold">
                 Chain Abstraction <br/>
                 <span className="text-primary">Native Interop.</span>
               </h2>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                We're building the holy grail of blockchain: <strong>Omnichain Interoperability</strong>.
-                DarkWave Chain doesn't just "bridge" assets; it abstracts the chain entirely.
+                We're building toward <strong>Omnichain Interoperability</strong>.
+                Our vision is to abstract the chain entirely - no bridges, just seamless transfers.
               </p>
               
               <div className="grid grid-cols-1 gap-3">
