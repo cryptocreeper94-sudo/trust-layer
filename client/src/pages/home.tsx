@@ -18,7 +18,8 @@ import { usePreferences } from "@/lib/store";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
-import { useAuth } from "@/hooks/use-auth";
+import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
+import { FirebaseLoginModal } from "@/components/firebase-login";
 import { useState } from "react";
 
 const ecosystemImages: Record<string, string> = {
@@ -37,7 +38,8 @@ const ecosystemImages: Record<string, string> = {
 
 export default function Home() {
   const { preferences } = usePreferences();
-  const { user, isLoading: authLoading, isAuthenticated } = useAuth();
+  const { user, loading: authLoading, isAuthenticated, displayName, signOut } = useFirebaseAuth();
+  const [showLoginModal, setShowLoginModal] = useState(false);
   usePageAnalytics();
   
   const { data: apps = [], isLoading: appsLoading } = useQuery({
@@ -58,6 +60,10 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
       <OnboardingTour />
+      <FirebaseLoginModal 
+        isOpen={showLoginModal} 
+        onClose={() => setShowLoginModal(false)} 
+      />
       
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center">
@@ -95,19 +101,29 @@ export default function Home() {
                 <Link href="/dashboard">
                   <Button variant="ghost" size="sm" className="h-8 text-xs hover:bg-white/5 gap-1.5" data-testid="button-dashboard">
                     <User className="w-3 h-3" />
-                    {user?.firstName || 'Dashboard'}
+                    {displayName}
                   </Button>
                 </Link>
-                <a href="/api/logout">
-                  <Button variant="ghost" size="sm" className="h-8 text-xs hover:bg-white/5" data-testid="button-logout">
-                    <LogOut className="w-3 h-3" />
-                  </Button>
-                </a>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-8 text-xs hover:bg-white/5" 
+                  onClick={() => signOut()}
+                  data-testid="button-logout"
+                >
+                  <LogOut className="w-3 h-3" />
+                </Button>
               </div>
             ) : (
-              <a href="/api/login">
-                <Button variant="ghost" size="sm" className="hidden sm:flex h-8 text-xs hover:bg-white/5" data-testid="button-login">Log In</Button>
-              </a>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="hidden sm:flex h-8 text-xs hover:bg-white/5" 
+                onClick={() => setShowLoginModal(true)}
+                data-testid="button-login"
+              >
+                Log In
+              </Button>
             )}
             <Link href="/ecosystem">
               <Button size="sm" className="hidden sm:flex h-8 text-xs bg-primary text-background hover:bg-primary/90 font-semibold" data-testid="button-launch-app">

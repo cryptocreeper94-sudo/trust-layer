@@ -106,6 +106,31 @@ export async function registerRoutes(
     });
   }
 
+  // Firebase auth sync - syncs Firebase users to our database
+  app.post("/api/auth/firebase-sync", async (req, res) => {
+    try {
+      const { uid, email, displayName, photoURL } = req.body;
+      
+      if (!uid) {
+        return res.status(400).json({ error: "Missing user ID" });
+      }
+
+      // Upsert user in our database
+      await storage.upsertFirebaseUser({
+        id: uid,
+        email: email || null,
+        firstName: displayName?.split(' ')[0] || null,
+        lastName: displayName?.split(' ').slice(1).join(' ') || null,
+        profileImageUrl: photoURL || null,
+      });
+
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Firebase sync error:", error);
+      res.status(500).json({ error: "Failed to sync user" });
+    }
+  });
+
   // WebAuthn passkey routes
   app.post("/api/webauthn/register/start", isAuthenticated, async (req: any, res) => {
     try {

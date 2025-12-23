@@ -48,6 +48,8 @@ export interface IStorage {
 
   addToWaitlist(data: InsertWaitlist): Promise<Waitlist>;
   getWaitlistByEmail(email: string): Promise<Waitlist | undefined>;
+  
+  upsertFirebaseUser(data: { id: string; email: string | null; firstName: string | null; lastName: string | null; profileImageUrl: string | null }): Promise<User>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -500,6 +502,25 @@ export class DatabaseStorage implements IStorage {
   async deleteStudioCollaborator(id: string): Promise<boolean> {
     await db.delete(studioCollaborators).where(eq(studioCollaborators.id, id));
     return true;
+  }
+
+  async upsertFirebaseUser(data: { id: string; email: string | null; firstName: string | null; lastName: string | null; profileImageUrl: string | null }): Promise<User> {
+    const existing = await this.getUser(data.id);
+    if (existing) {
+      const [updated] = await db.update(users)
+        .set({
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          profileImageUrl: data.profileImageUrl,
+        })
+        .where(eq(users.id, data.id))
+        .returning();
+      return updated;
+    } else {
+      const [user] = await db.insert(users).values(data).returning();
+      return user;
+    }
   }
 }
 
