@@ -10,7 +10,6 @@ import { OnboardingTour } from "@/components/onboarding-tour";
 import { useQuery } from "@tanstack/react-query";
 import { fetchEcosystemApps, fetchBlockchainStats } from "@/lib/api";
 import { GlobalSearch } from "@/components/global-search";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { NotificationsDropdown } from "@/components/notifications";
 import { FavoriteButton } from "@/components/favorite-button";
 import { SkeletonCard } from "@/components/ui/skeleton-card";
@@ -87,7 +86,6 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <div className="hidden md:flex items-center gap-2">
               <GlobalSearch />
-              <ThemeToggle />
               <NotificationsDropdown />
             </div>
             {authLoading ? (

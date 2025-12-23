@@ -88,7 +88,7 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = location === item.href;
-            const comingSoon = 'comingSoon' in item && item.comingSoon;
+            const comingSoon = 'comingSoon' in item && (item as any).comingSoon;
             const isExternal = 'external' in item && item.external;
             
             const content = (
