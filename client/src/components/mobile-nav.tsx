@@ -58,6 +58,8 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
           display: 'flex',
           flexDirection: 'column',
           boxSizing: 'border-box',
+          overflowY: 'auto',
+          WebkitOverflowScrolling: 'touch',
         }}
       >
         {/* Header */}
