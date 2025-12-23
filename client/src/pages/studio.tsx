@@ -612,7 +612,7 @@ export default function Studio() {
     return langMap[ext] || ext;
   };
 
-  // Live Preview function - builds and renders project files
+  // Live Preview function - builds and renders project files with live (unsaved) content
   const refreshPreview = useCallback(async () => {
     if (!projectId) return;
     
@@ -620,6 +620,14 @@ export default function Studio() {
     setPreviewError(null);
     
     try {
+      // Helper to get content - use editor content for active file, otherwise use saved file content
+      const getFileContent = (file: FileNode): string => {
+        if (activeFile && file.id === activeFile.id) {
+          return editorContent; // Use live editor content for active file
+        }
+        return file.content || '';
+      };
+      
       // Find the HTML file or create a preview from current files
       const htmlFile = files.find(f => f.name.endsWith('.html'));
       const cssFiles = files.filter(f => f.name.endsWith('.css'));
@@ -628,26 +636,26 @@ export default function Studio() {
       let html = '';
       
       if (htmlFile) {
-        html = htmlFile.content || '';
+        html = getFileContent(htmlFile);
         
-        // Inject CSS files inline
-        const cssContent = cssFiles.map(f => `<style>/* ${f.name} */\n${f.content || ''}</style>`).join('\n');
+        // Inject CSS files inline with live content
+        const cssContent = cssFiles.map(f => `<style>/* ${f.name} */\n${getFileContent(f)}</style>`).join('\n');
         if (cssContent && !html.includes('</head>')) {
           html = `<head>${cssContent}</head>` + html;
         } else if (cssContent) {
           html = html.replace('</head>', `${cssContent}</head>`);
         }
         
-        // For simple JS files, inject them
+        // For simple JS files, inject them with live content
         const simpleJs = jsFiles.filter(f => !f.name.includes('.jsx') && !f.name.includes('.tsx'));
-        const jsContent = simpleJs.map(f => `<script>/* ${f.name} */\n${f.content || ''}</script>`).join('\n');
+        const jsContent = simpleJs.map(f => `<script>/* ${f.name} */\n${getFileContent(f)}</script>`).join('\n');
         if (jsContent && !html.includes('</body>')) {
           html += jsContent;
         } else if (jsContent) {
           html = html.replace('</body>', `${jsContent}</body>`);
         }
       } else {
-        // No HTML file - create a basic preview for current file
+        // No HTML file - create a basic preview for current file using live editor content
         if (activeFile?.name.endsWith('.html')) {
           html = editorContent;
         } else if (activeFile?.name.endsWith('.css')) {
