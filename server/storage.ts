@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
 import crypto from "crypto";
@@ -50,6 +50,16 @@ export interface IStorage {
   getWaitlistByEmail(email: string): Promise<Waitlist | undefined>;
   
   upsertFirebaseUser(data: { id: string; email: string | null; firstName: string | null; lastName: string | null; profileImageUrl: string | null }): Promise<User>;
+  
+  // Faucet
+  getFaucetClaims(): Promise<FaucetClaim[]>;
+  getRecentFaucetClaim(walletAddress: string): Promise<FaucetClaim | undefined>;
+  createFaucetClaim(data: { walletAddress: string; amount: string; status: string; ipAddress: string | null }): Promise<FaucetClaim>;
+  updateFaucetClaim(id: string, data: Partial<{ status: string; txHash: string }>): Promise<FaucetClaim | undefined>;
+  
+  // DEX Swaps
+  getRecentSwaps(): Promise<SwapTransaction[]>;
+  createSwap(data: { pairId: string; tokenIn: string; tokenOut: string; amountIn: string; amountOut: string; priceImpact: string; status: string; txHash: string }): Promise<SwapTransaction>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -521,6 +531,40 @@ export class DatabaseStorage implements IStorage {
       const [user] = await db.insert(users).values(data).returning();
       return user;
     }
+  }
+
+  // Faucet methods
+  async getFaucetClaims(): Promise<FaucetClaim[]> {
+    return db.select().from(faucetClaims).orderBy(desc(faucetClaims.claimedAt));
+  }
+
+  async getRecentFaucetClaim(walletAddress: string): Promise<FaucetClaim | undefined> {
+    const [claim] = await db.select()
+      .from(faucetClaims)
+      .where(eq(faucetClaims.walletAddress, walletAddress))
+      .orderBy(desc(faucetClaims.claimedAt))
+      .limit(1);
+    return claim;
+  }
+
+  async createFaucetClaim(data: { walletAddress: string; amount: string; status: string; ipAddress: string | null }): Promise<FaucetClaim> {
+    const [claim] = await db.insert(faucetClaims).values(data).returning();
+    return claim;
+  }
+
+  async updateFaucetClaim(id: string, data: Partial<{ status: string; txHash: string }>): Promise<FaucetClaim | undefined> {
+    const [claim] = await db.update(faucetClaims).set(data).where(eq(faucetClaims.id, id)).returning();
+    return claim;
+  }
+
+  // DEX Swap methods
+  async getRecentSwaps(): Promise<SwapTransaction[]> {
+    return db.select().from(swapTransactions).orderBy(desc(swapTransactions.createdAt)).limit(50);
+  }
+
+  async createSwap(data: { pairId: string; tokenIn: string; tokenOut: string; amountIn: string; amountOut: string; priceImpact: string; status: string; txHash: string }): Promise<SwapTransaction> {
+    const [swap] = await db.insert(swapTransactions).values(data).returning();
+    return swap;
   }
 }
 

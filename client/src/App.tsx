@@ -23,6 +23,8 @@ import StudioProjects from "@/pages/studio-projects";
 import Team from "@/pages/team";
 import Bridge from "@/pages/bridge";
 import Staking from "@/pages/staking";
+import Faucet from "@/pages/faucet";
+import Swap from "@/pages/swap";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -58,6 +60,8 @@ function Router() {
         <Route path="/team" component={Team} />
         <Route path="/bridge" component={Bridge} />
         <Route path="/staking" component={Staking} />
+        <Route path="/faucet" component={Faucet} />
+        <Route path="/swap" component={Swap} />
         <Route component={NotFound} />
       </Switch>
     </>

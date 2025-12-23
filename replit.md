@@ -2,188 +2,165 @@
 
 ## Overview
 
-DarkWave Chain is a comprehensive blockchain ecosystem developed by DarkWave Studios. It comprises a Layer 1 Proof-of-Authority blockchain implemented in Rust and a React web application called DarkWave Portal. The portal acts as the ecosystem's interface, a block explorer, and a developer hub. The project aims to deliver a blockchain solution that surpasses Solana and Ethereum in speed, stability, and feature richness.
+DarkWave Chain is a comprehensive blockchain ecosystem developed by DarkWave Studios. It comprises a Layer 1 Proof-of-Authority blockchain and a React web application called DarkWave Portal. The portal acts as the ecosystem's interface, a block explorer, and a developer hub. The project aims to deliver a blockchain solution that surpasses Solana and Ethereum in speed, stability, and feature richness.
+
+**Public Launch: February 14, 2026**
 
 ## User Preferences
 
-Preferred communication style: Simple, everyday language.
-User wants: Full blockchain implementation, not just a web portal. No piggybacking on other chains.
+- Preferred communication style: Simple, everyday language
+- User wants: Full blockchain implementation, not just a web portal. No piggybacking on other chains.
+- Design: Premium UI with extensive visual effects ("everything should sparkle and shine")
+- Mobile: Mobile-first design with self-contained carousels, accordions, dropdowns
+- Branding: White-labeled, no Replit branding, dark theme only
+
+---
+
+## MASTER ROADMAP - CONSOLIDATED
+
+### ✅ COMPLETED FEATURES
+
+#### Core Blockchain
+- [x] Layer 1 PoA blockchain (400ms blocks, 200K+ TPS)
+- [x] PostgreSQL persistent ledger (chain_blocks, chain_transactions, chain_accounts)
+- [x] SHA-256 block hashing, Merkle trees, HMAC-SHA256 signatures
+- [x] DWT Token (100M supply, 18 decimals, NO burn)
+- [x] Genesis block (February 14, 2025)
+
+#### DarkWave Portal
+- [x] Block explorer with real-time stats
+- [x] Wallet/address viewer
+- [x] Token page with tokenomics
+- [x] Staking system with rewards & leaderboards
+- [x] Developer portal with API key registration
+- [x] Ecosystem apps page
+- [x] Mobile-responsive design
+- [x] PWA support
+- [x] Authentication (Replit Auth + WebAuthn)
+
+#### Cross-Chain Bridge (Phase 1 MVP)
+- [x] Lock & mint UI for DWT → wDWT
+- [x] Burn & release UI for wDWT → DWT
+- [x] Ethereum Sepolia & Solana Devnet support
+- [x] Mock mode for testing (contracts not yet deployed)
+- [x] wDWT ERC-20 contract ready (`contracts/ethereum/WDWT.sol`)
+- [x] wDWT SPL token setup ready (`scripts/deploy-wdwt-solana.ts`)
+
+#### DarkWave Studio (Phases 1-4)
+- [x] Monaco code editor with 70+ language support
+- [x] File tree, create/edit/delete files
+- [x] Multi-file tabs with unsaved indicators
+- [x] Git commits, branches, history
+- [x] Simulated terminal (ls, pwd, node -v, etc.)
+- [x] Deployment UI with .darkwave.app URLs
+- [x] Custom domain support
+- [x] Package manager (npm/pip)
+- [x] Environment variables UI (dev/prod)
+- [x] Project templates (React, Node.js, Python)
+- [x] Global search/replace
+- [x] Keyboard shortcuts
+- [x] Real-time collaboration presence
+
+---
+
+### 🚧 PRIORITY 1 - LAUNCH BLOCKERS (Do Now)
+
+| # | Feature | Status | Description |
+|---|---------|--------|-------------|
+| 1 | **Testnet Faucet** | 🔴 TODO | Give developers free test DWT to build with |
+| 2 | **DEX / Token Swap** | 🔴 TODO | Swap DWT for other tokens (core DeFi) |
+| 3 | **NFT Marketplace** | 🔴 TODO | Buy/sell/mint NFTs on DarkWave |
+| 4 | **Portfolio Dashboard** | 🔴 TODO | Track holdings, staking, rewards in one place |
+| 5 | **Transaction History** | 🔴 TODO | Full tx history with filters per wallet |
+
+---
+
+### 🟡 PRIORITY 2 - POST-LAUNCH ENHANCEMENTS
+
+| # | Feature | Status | Description |
+|---|---------|--------|-------------|
+| 6 | Token Launchpad | TODO | Create & launch new tokens on DarkWave |
+| 7 | Liquidity Pools | TODO | Users provide liquidity, earn fees |
+| 8 | NFT Gallery | TODO | View NFT collections by address |
+| 9 | NFT Creator Tool | TODO | No-code NFT minting for artists |
+| 10 | Price Charts | TODO | DWT price visualization |
+| 11 | Webhook/Events API | TODO | Real-time notifications for devs |
+
+---
+
+### 🔵 PRIORITY 3 - BRIDGE PRODUCTION (Q1 2026)
+
+| # | Feature | Status | Description |
+|---|---------|--------|-------------|
+| 12 | Deploy wDWT to Sepolia | TODO | Real testnet ERC-20 contract |
+| 13 | Deploy wDWT to Solana Devnet | TODO | Real testnet SPL token |
+| 14 | Multi-sig validator committee | TODO | Replace single relayer |
+| 15 | Security audit | TODO | External audit of bridge contracts |
+| 16 | Proof-of-reserve dashboard | TODO | Transparency for custody |
+
+---
+
+### 🟣 PRIORITY 4 - STUDIO ADVANCED (Q2 2026)
+
+| # | Feature | Status | Description |
+|---|---------|--------|-------------|
+| 17 | More templates (Vue, Next.js, Django, Go, Rust) | TODO | Quick starts |
+| 18 | Live Preview iframe | TODO | Hot reload for apps |
+| 19 | Database Explorer | TODO | UI for project databases |
+| 20 | AI Code Assistant | TODO | OpenAI/Claude integration |
+| 21 | Billing & Quotas | TODO | Usage limits, subscriptions |
+| 22 | CI/CD Pipelines | TODO | Automated testing/deploy |
+
+---
+
+### ⚫ PRIORITY 5 - FUTURE VISION (Q3+ 2026)
+
+| # | Feature | Status | Description |
+|---|---------|--------|-------------|
+| 23 | Serverless code execution | TODO | Run user code in sandboxes |
+| 24 | Real-time collaboration (CRDTs) | TODO | Multi-user editing |
+| 25 | Chain abstraction (LayerZero/Axelar) | TODO | Omnichain interop |
+| 26 | Mobile wallet app | TODO | Native iOS/Android |
+| 27 | Governance/DAO | TODO | Community voting |
+
+---
 
 ## System Architecture
 
 ### Blockchain Architecture (`server/blockchain-engine.ts`)
-**Status: MAINNET** - DarkWave Chain is a production-ready Layer 1 blockchain with persistent storage.
-- **Consensus**: Proof-of-Authority (PoA) with the Founders Validator securing the network
-- **Storage**: PostgreSQL database for persistent ledger, accounts, and transactions (tables: chain_blocks, chain_transactions, chain_accounts)
-- **Cryptography**: SHA-256 block hashing, Merkle trees for transaction roots, HMAC-SHA256 transaction signatures
+**Status: MAINNET** - Production-ready Layer 1 blockchain with persistent storage.
+- **Consensus**: Proof-of-Authority (PoA) with the Founders Validator
+- **Storage**: PostgreSQL (chain_blocks, chain_transactions, chain_accounts)
+- **Cryptography**: SHA-256, Merkle trees, HMAC-SHA256
 - **Performance**: 400ms block time, 200K+ TPS capacity
-- **Token**: DWT (DarkWave Token) - 100M total supply, 18 decimals, NO burn mechanism
-- **Persistence**: Atomic database transactions ensure chain state survives server restarts
-- **Genesis**: February 14, 2025 (February 14, 2026 public launch)
-
-### Cross-Chain Bridge Roadmap (ACTIVE DEVELOPMENT)
-
-#### Phase 1 - MVP Custodial Bridge (IN PROGRESS)
-**Target: 6-8 weeks | Status: Started December 2024**
-- Lock-and-mint architecture: Lock DWT on DarkWave → Mint wrapped wDWT on target chains
-- Founders Validator operates the relayer service
-- Initial target chains: Ethereum (Sepolia testnet), Solana (Devnet)
-- Database tables: bridge_locks, bridge_mints, bridge_burns, bridge_releases
-- Feature labeled as "Beta" until security audit
-- **Deliverable**: Users can bridge DWT to/from Ethereum and Solana testnets
-
-#### Phase 2 - Production Bridge (Q1 2026)
-**Target: 3-4 months after Phase 1**
-- Multi-signature validator committee (replace single relayer)
-- HSM/MPC key management for custody security
-- External security audits (smart contracts + off-chain services)
-- Deploy to Ethereum and Solana mainnets
-- Proof-of-reserve transparency dashboard
-- Partner with liquidity providers/market makers
-- **Deliverable**: Production-ready bridge with audited security
-
-#### Phase 3 - Chain Abstraction (Q2-Q3 2026)
-**Target: 6-9 months after Phase 2**
-- Partner with LayerZero or Axelar for standardized messaging
-- Wallet UX that abstracts chain selection from users
-- Generalized message passing for arbitrary cross-chain contract calls
-- Developer SDKs and APIs for partner integrations
-- **Deliverable**: Full omnichain interoperability
+- **Token**: DWT - 100M total supply, 18 decimals, NO burn
 
 ### Web Portal Architecture
-**Frontend**: Developed with React 18 and TypeScript, using Vite, Wouter for routing, TanStack React Query for server state, and React Context for local state. UI components are built using shadcn/ui on Radix UI primitives, styled with Tailwind CSS v4 and animated with Framer Motion.
-**Key Features**: Global search, theme toggle, notification system, favorites, mobile navigation, a Devnet Sandbox for live testing, real-time blockchain stats via WebSocket, and PWA support.
-**DarkWave Studio**: A proprietary web-based IDE platform at `/studio`. 
+- **Frontend**: React 18, TypeScript, Vite, Wouter, TanStack Query, Tailwind CSS v4, Framer Motion
+- **Backend**: Node.js, Express.js, TypeScript, Drizzle ORM, PostgreSQL
+- **Auth**: Replit Auth (OAuth 2.0), WebAuthn/Passkeys
+- **Payments**: Stripe (cards), Coinbase Commerce (crypto)
 
-#### DarkWave Studio Features (Completed)
-- **Phase 1 - Core IDE**: Code editor (textarea), file tree, create/edit/delete files, secrets management, configuration variables, project CRUD
-- **Phase 2 - Version Control**: Git commits, branch management, checkout, commit history, console output, live preview iframe
-- **Phase 3 - Advanced Features**:
-  - Terminal emulator with simulated shell commands (ls, pwd, node -v, npm -v, python --version, help, clear)
-  - Deployment system with status tracking (building → live), auto-generated .darkwave.app URLs
-  - Package manager integration (auto-detects npm/pip from package.json or requirements.txt)
-  - Custom domain linking for deployed projects
-  - Real-time collaboration with WebSocket presence indicators showing active users and their current file
+### DarkWave Studio
+- **Editor**: Monaco v0.52.2 via CDN
+- **WebSocket**: `/ws/studio` for collaboration
+- **Deployments**: .darkwave.app URLs with custom domain support
 
-#### DarkWave Studio Phase 4 (COMPLETED - December 2024)
-- **Monaco Editor Integration**: Full-featured code editor via CDN with syntax highlighting for 70+ languages, IntelliSense, minimap, code folding, dark theme
-- **Multi-file Tabs**: Tabbed interface with amber pulsing unsaved indicators, close buttons, active tab highlighting
-- **Search/Replace**: Global search across all project files with line-by-line results, file jumping, replace-all
-- **Project Templates**: React (Vite), Node.js Express, Python Flask starters auto-generated for new projects
-- **Keyboard Shortcuts**: Ctrl+S (save), Ctrl+F (search), Ctrl+B (console), Ctrl+/ (help), Escape (close)
-- **File Operations**: Upload (multi-file), download, inline rename with path preservation
-- **Environment Variables UI**: Dev/prod toggle, scoped secrets/configs, environment badges
-- **Console Log Filtering**: Search filter with clear button, case-insensitive
-- **Project Settings Panel**: Name editing, project ID copy, file/commit statistics
-
-### DarkWave Studio - Future Roadmap
-
-#### Phase 5 - Quick Wins (1-2 weeks)
-- **More Templates**: Vue, Next.js, Django, Go, Rust starters
-- **Live Preview**: Real iframe preview with hot reload for running applications
-- **Database Explorer**: Built-in UI for viewing/editing project databases
-
-#### Phase 6 - Core Infrastructure (1-2 months)
-- **AI Code Assistant**: Code completion, suggestions, chat-based help (OpenAI/Claude integration)
-- **Billing & Quotas**: Usage limits, subscription tiers, compute time tracking
-- **CI/CD Pipelines**: Automated testing and deployment workflows
-
-#### Phase 7 - Advanced Platform (2-3 months)
-- **Serverless Execution**: Actually running user code in sandboxed containers (the "big one")
-- **Real-time Collaboration**: Multi-user editing with operational transforms/CRDTs
-- **Extensions/Plugins**: User-installable tools and integrations
-
-### Current MVP Status (Ready for Launch)
-DarkWave Studio is a fully functional web-based IDE with:
-- Professional Monaco code editor (same as VS Code)
-- Complete file management (create, edit, delete, upload, download, rename)
-- Git version control (commits, branches, history)
-- Simulated terminal with common commands
-- Deployment UI with custom domain support
-- Package manager integration (npm/pip)
-- Environment variables with dev/prod scoping
-- Real-time collaboration presence indicators
-- Project templates for quick starts
-- Responsive design for mobile/tablet
-
-#### Monaco Editor Technical Details
-- **CDN Loading**: Monaco v0.52.2 loaded from cdnjs.cloudflare.com
-- **Component**: `client/src/components/monaco-editor.tsx` - React wrapper with automatic language detection
-- **Features**: Syntax highlighting, line numbers, minimap, bracket matching, smooth scrolling
-- **Languages**: JavaScript, TypeScript, JSON, HTML, CSS, Python, Rust, Go, and more
-- **Theme**: vs-dark (matches Studio dark theme)
-
-#### Studio Technical Details
-- **WebSocket**: `/ws/studio` for real-time collaboration presence
-- **API Endpoints**:
-  - `GET/POST /api/studio/projects` - List/create projects
-  - `GET /api/studio/projects/:id` - Get project with files, secrets, configs
-  - `POST /api/studio/projects/:id/files` - Create file
-  - `PATCH/DELETE /api/studio/files/:id` - Update/delete file
-  - `POST /api/studio/projects/:id/terminal` - Execute terminal command
-  - `POST /api/studio/projects/:id/deploy` - Start deployment
-  - `GET /api/studio/deployments/:id` - Get deployment status
-  - `PATCH /api/studio/deployments/:id/domain` - Set custom domain
-  - `POST/DELETE /api/studio/projects/:id/packages` - Install/remove packages
-  - `POST /api/studio/projects/:id/commits` - Create git commit
-  - `GET /api/studio/projects/:id/commits` - List commits
-**PWA Implementation**: Includes a manifest, service worker for offline caching, and various icon sizes.
-**Mobile Optimization**: Ensures responsive design with safe area insets, appropriate touch targets, and mobile-specific CSS.
-**Backend**: Powered by Node.js with Express.js, TypeScript, and Drizzle ORM for PostgreSQL. API follows a RESTful pattern.
-**Data Storage**: PostgreSQL is used with Drizzle ORM for schema management, including tables for users, documents, API keys, transactions, and page views.
-**Developer Integration System**: Features a TypeScript SDK, PIN-authenticated API key registration, hash submission, gas estimation, fee schedules, and session tokens.
-**Master Hallmark System**: Provides unique, verifiable product identifiers with auto-generated QR codes and on-chain verification, supported by dedicated API endpoints and database tables.
-**Build System**: Vite for client, esbuild for server, shared code in `shared/`, and path aliases.
-**Design Patterns**: Monorepo structure, type safety with Drizzle-zod, centralized API client, and component-based UI architecture.
-
-### UI/UX Decisions
-- **Color Scheme**: Emphasizes a dark theme with vibrant accents, notably cyan (#00ffff) as the theme color for PWA.
-- **Typography**: Custom font stack including Space Grotesk, Rajdhani, and Inter.
-- **Design Elements**: Holographic dark gradient icons, emphasis on responsive design for various devices.
+---
 
 ## External Dependencies
 
-- **DarkWave Hub Integration**: External ecosystem API `https://orbitstaffing.io` using HMAC-SHA256 authentication.
-- **Database**: PostgreSQL, connected via `DATABASE_URL` environment variable.
-- **Authentication System**: Replit Auth (OAuth 2.0 for Google, GitHub, Apple, email), PostgreSQL-backed sessions, and WebAuthn/Passkeys for biometric login.
-- **Third-Party Services**:
-    - Stripe for card payments.
-    - Coinbase Commerce for crypto payments (BTC, ETH, USDC).
-    - OpenGraph for image handling.
-- **Key NPM Dependencies**: Radix UI, TanStack React Query, Framer Motion, date-fns, Zod.
-- **Rust Dependencies (blockchain/)**: tokio, ed25519-dalek, sled, axum, serde/bincode, chrono, tracing.
+- **Database**: PostgreSQL via DATABASE_URL
+- **Auth**: Replit Auth + WebAuthn
+- **Payments**: Stripe, Coinbase Commerce
+- **Hub API**: https://orbitstaffing.io (HMAC-SHA256)
+
+---
 
 ## Changelog
 
-### December 2024 - Pre-Publish Sweep
-
-#### Completed Checks
-- **LSP Diagnostics**: No TypeScript errors
-- **API Endpoints**: All critical endpoints tested and working (blockchain stats, bridge info, ecosystem apps)
-- **Database**: PostgreSQL connection healthy
-- **Authentication**: DEVELOPER_PIN secret configured for developer portal access
-- **Onboarding**: Tour content reviewed and up-to-date
-- **Mobile**: Touch targets (44px), safe area insets, and responsive CSS verified
-
-#### Bug Fixes
-- **Token Page**: Fixed "Read Whitepaper" button - now links to /doc-hub
-
-#### Bridge Development (Phase 1 - MVP)
-- Created wDWT ERC-20 contract for Ethereum Sepolia (`contracts/ethereum/WDWT.sol`)
-- Created wDWT SPL token setup for Solana Devnet (`scripts/deploy-wdwt-solana.ts`)
-- Bridge engine updated with mock mode until contracts deployed
-- Contract deployment status indicators in bridge UI
-
-#### Known Issues / Future Work
-- Team Hub credentials require hub admin to publish to production (orbitstaffing.io)
-- Deploy wDWT contracts when needed for real testnet transactions
-- Add link to darkwavepulse.com staking page when URL provided by user
-
-### November 2024 - DarkWave Studio Phase 4
-- Monaco Editor Integration
-- Multi-file Tabs with unsaved indicators
-- Global Search/Replace
-- Project Templates (React, Node.js, Python)
-- Keyboard Shortcuts
-- File Upload/Download/Rename
-- Environment Variables UI with dev/prod scoping
+### December 2024
+- Bridge page mobile responsiveness fixed (snap-scroll carousel, accordions)
+- Added 5 "Coming Soon" chains (Polygon, Arbitrum, Optimism, Base, Avalanche)
+- Staking security hardened (isAuthenticated middleware)
+- Consolidated all roadmaps into single master list

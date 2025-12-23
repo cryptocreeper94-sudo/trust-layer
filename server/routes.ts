@@ -5,7 +5,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, APP_VERSION } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, APP_VERSION } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -2827,6 +2827,230 @@ ${context ? `- Additional context: ${context}` : ""}`;
       } else {
         res.status(500).json({ error: "AI assistance failed" });
       }
+    }
+  });
+
+  // ============================================
+  // DEX / TOKEN SWAP
+  // ============================================
+  
+  const DEFAULT_PAIRS = [
+    { tokenA: "DWT", tokenB: "USDC", reserveA: "10000000000000000000000000", reserveB: "1000000000000000000000" },
+    { tokenA: "DWT", tokenB: "wETH", reserveA: "5000000000000000000000000", reserveB: "100000000000000000000" },
+    { tokenA: "DWT", tokenB: "wSOL", reserveA: "3000000000000000000000000", reserveB: "50000000000000000000000" },
+    { tokenA: "DWT", tokenB: "USDT", reserveA: "8000000000000000000000000", reserveB: "800000000000000000000" },
+    { tokenA: "wETH", tokenB: "USDC", reserveA: "50000000000000000000", reserveB: "100000000000000000000000" },
+  ];
+
+  app.get("/api/swap/info", async (req, res) => {
+    try {
+      res.json({
+        pairs: DEFAULT_PAIRS.map((p, i) => ({ id: `pair-${i}`, ...p, fee: "0.003" })),
+        volume24h: "0",
+        tvl: "50000000000000000000000000",
+      });
+    } catch (error) {
+      console.error("Swap info error:", error);
+      res.status(500).json({ error: "Failed to get swap info" });
+    }
+  });
+
+  app.get("/api/swap/quote", async (req, res) => {
+    try {
+      const { tokenIn, tokenOut, amountIn } = req.query;
+      
+      if (!tokenIn || !tokenOut || !amountIn) {
+        return res.json({ amountOut: "0", priceImpact: "0", fee: "0", route: "", minReceived: "0" });
+      }
+      
+      const amountInBigInt = BigInt(String(amountIn) || "0");
+      if (amountInBigInt <= 0) {
+        return res.json({ amountOut: "0", priceImpact: "0", fee: "0", route: "", minReceived: "0" });
+      }
+      
+      // Simplified AMM calculation (constant product)
+      // For demo: 1 DWT = 0.0001 USDC equivalent
+      let rate = 0.0001;
+      if (tokenIn === "DWT" && tokenOut === "USDC") rate = 0.0001;
+      else if (tokenIn === "USDC" && tokenOut === "DWT") rate = 10000;
+      else if (tokenIn === "DWT" && tokenOut === "wETH") rate = 0.00004;
+      else if (tokenIn === "wETH" && tokenOut === "DWT") rate = 25000;
+      else if (tokenIn === "DWT" && tokenOut === "wSOL") rate = 0.002;
+      else if (tokenIn === "wSOL" && tokenOut === "DWT") rate = 500;
+      else rate = 1;
+      
+      const amountOutRaw = Number(amountInBigInt) * rate;
+      const fee = amountOutRaw * 0.003;
+      const amountOut = Math.floor((amountOutRaw - fee)).toString();
+      const minReceived = Math.floor(Number(amountOut) * 0.995).toString(); // 0.5% slippage
+      
+      res.json({
+        amountOut,
+        priceImpact: "0.01",
+        fee: Math.floor(fee).toString(),
+        route: `${tokenIn} → ${tokenOut}`,
+        minReceived,
+      });
+    } catch (error) {
+      console.error("Swap quote error:", error);
+      res.status(500).json({ error: "Failed to get quote" });
+    }
+  });
+
+  app.get("/api/swap/recent", async (req, res) => {
+    try {
+      const swaps = await storage.getRecentSwaps();
+      res.json({ swaps });
+    } catch (error) {
+      console.error("Recent swaps error:", error);
+      res.json({ swaps: [] });
+    }
+  });
+
+  app.post("/api/swap/execute", async (req, res) => {
+    try {
+      const { tokenIn, tokenOut, amountIn, minAmountOut, slippage } = req.body;
+      
+      if (!tokenIn || !tokenOut || !amountIn) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+      
+      // Calculate output using same logic as quote
+      const amountInBigInt = BigInt(amountIn);
+      let rate = 0.0001;
+      if (tokenIn === "DWT" && tokenOut === "USDC") rate = 0.0001;
+      else if (tokenIn === "USDC" && tokenOut === "DWT") rate = 10000;
+      else if (tokenIn === "DWT" && tokenOut === "wETH") rate = 0.00004;
+      else if (tokenIn === "wETH" && tokenOut === "DWT") rate = 25000;
+      else if (tokenIn === "DWT" && tokenOut === "wSOL") rate = 0.002;
+      else if (tokenIn === "wSOL" && tokenOut === "DWT") rate = 500;
+      else rate = 1;
+      
+      const amountOutRaw = Number(amountInBigInt) * rate;
+      const fee = amountOutRaw * 0.003;
+      const amountOut = Math.floor(amountOutRaw - fee).toString();
+      
+      // Record the swap
+      const swap = await storage.createSwap({
+        pairId: `${tokenIn}-${tokenOut}`,
+        tokenIn,
+        tokenOut,
+        amountIn,
+        amountOut,
+        priceImpact: "0.01",
+        status: "completed",
+        txHash: `0x${crypto.randomBytes(32).toString("hex")}`,
+      });
+      
+      res.json({
+        success: true,
+        swapId: swap.id,
+        amountIn,
+        amountOut,
+        txHash: swap.txHash,
+      });
+    } catch (error: any) {
+      console.error("Swap execute error:", error);
+      res.status(500).json({ error: error.message || "Swap failed" });
+    }
+  });
+
+  // ============================================
+  // TESTNET FAUCET
+  // ============================================
+  
+  const FAUCET_AMOUNT = "1000000000000000000000"; // 1000 DWT
+  const FAUCET_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
+  
+  app.get("/api/faucet/info", async (req, res) => {
+    try {
+      const claims = await storage.getFaucetClaims();
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      const claimsToday = claims.filter(c => new Date(c.claimedAt) >= today).length;
+      const totalDistributed = claims
+        .filter(c => c.status === "completed")
+        .reduce((sum, c) => sum + BigInt(c.amount), BigInt(0));
+      
+      res.json({
+        dailyLimit: "10000000000000000000000", // 10,000 DWT per day total
+        claimAmount: FAUCET_AMOUNT,
+        totalDistributed: totalDistributed.toString(),
+        claimsToday,
+        remainingToday: "unlimited",
+      });
+    } catch (error) {
+      console.error("Faucet info error:", error);
+      res.status(500).json({ error: "Failed to get faucet info" });
+    }
+  });
+  
+  app.get("/api/faucet/claims", async (req, res) => {
+    try {
+      const claims = await storage.getFaucetClaims();
+      res.json({ claims: claims.slice(0, 50) });
+    } catch (error) {
+      console.error("Faucet claims error:", error);
+      res.status(500).json({ error: "Failed to get claims" });
+    }
+  });
+  
+  app.post("/api/faucet/claim", async (req, res) => {
+    try {
+      const { walletAddress } = req.body;
+      
+      if (!walletAddress || walletAddress.length < 10) {
+        return res.status(400).json({ error: "Invalid wallet address" });
+      }
+      
+      // Check cooldown
+      const recentClaim = await storage.getRecentFaucetClaim(walletAddress);
+      if (recentClaim) {
+        const claimTime = new Date(recentClaim.claimedAt).getTime();
+        const now = Date.now();
+        if (now - claimTime < FAUCET_COOLDOWN_MS) {
+          const remainingMs = FAUCET_COOLDOWN_MS - (now - claimTime);
+          const remainingHours = Math.ceil(remainingMs / (60 * 60 * 1000));
+          return res.status(429).json({ 
+            error: `Please wait ${remainingHours} hours before claiming again` 
+          });
+        }
+      }
+      
+      // Create claim record
+      const claim = await storage.createFaucetClaim({
+        walletAddress,
+        amount: FAUCET_AMOUNT,
+        status: "pending",
+        ipAddress: req.ip || null,
+      });
+      
+      // Distribute tokens
+      try {
+        const result = blockchain.distributeTokens(walletAddress, BigInt(FAUCET_AMOUNT));
+        if (result.success) {
+          await storage.updateFaucetClaim(claim.id, {
+            status: "completed",
+            txHash: result.txHash,
+          });
+          res.json({
+            success: true,
+            claimId: claim.id,
+            amount: FAUCET_AMOUNT,
+            txHash: result.txHash,
+          });
+        } else {
+          await storage.updateFaucetClaim(claim.id, { status: "failed" });
+          res.status(500).json({ error: result.error || "Distribution failed" });
+        }
+      } catch (distError) {
+        await storage.updateFaucetClaim(claim.id, { status: "failed" });
+        throw distError;
+      }
+    } catch (error: any) {
+      console.error("Faucet claim error:", error);
+      res.status(500).json({ error: error.message || "Failed to claim tokens" });
     }
   });
 

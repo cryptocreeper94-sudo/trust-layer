@@ -829,4 +829,72 @@ export const insertStakingLeaderboardSchema = createInsertSchema(stakingLeaderbo
 export type InsertStakingLeaderboard = z.infer<typeof insertStakingLeaderboardSchema>;
 export type StakingLeaderboard = typeof stakingLeaderboard.$inferSelect;
 
-export const APP_VERSION = "1.0.3";
+// ============================================
+// TESTNET FAUCET
+// ============================================
+
+export const faucetClaims = pgTable("faucet_claims", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  walletAddress: text("wallet_address").notNull(),
+  ipAddress: text("ip_address"),
+  amount: text("amount").notNull().default("1000000000000000000000"), // 1000 DWT default
+  txHash: text("tx_hash"),
+  status: text("status").notNull().default("pending"), // 'pending' | 'completed' | 'failed'
+  claimedAt: timestamp("claimed_at").defaultNow().notNull(),
+});
+
+export const insertFaucetClaimSchema = createInsertSchema(faucetClaims).omit({
+  id: true,
+  claimedAt: true,
+});
+
+export type InsertFaucetClaim = z.infer<typeof insertFaucetClaimSchema>;
+export type FaucetClaim = typeof faucetClaims.$inferSelect;
+
+// ============================================
+// DEX / TOKEN SWAP
+// ============================================
+
+export const tokenPairs = pgTable("token_pairs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  tokenA: text("token_a").notNull(), // e.g., "DWT"
+  tokenB: text("token_b").notNull(), // e.g., "USDC"
+  reserveA: text("reserve_a").notNull().default("0"),
+  reserveB: text("reserve_b").notNull().default("0"),
+  totalLiquidity: text("total_liquidity").notNull().default("0"),
+  fee: text("fee").notNull().default("0.003"), // 0.3% default
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertTokenPairSchema = createInsertSchema(tokenPairs).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertTokenPair = z.infer<typeof insertTokenPairSchema>;
+export type TokenPair = typeof tokenPairs.$inferSelect;
+
+export const swapTransactions = pgTable("swap_transactions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id"),
+  pairId: text("pair_id").notNull(),
+  tokenIn: text("token_in").notNull(),
+  tokenOut: text("token_out").notNull(),
+  amountIn: text("amount_in").notNull(),
+  amountOut: text("amount_out").notNull(),
+  priceImpact: text("price_impact").notNull().default("0"),
+  txHash: text("tx_hash"),
+  status: text("status").notNull().default("completed"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertSwapTransactionSchema = createInsertSchema(swapTransactions).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertSwapTransaction = z.infer<typeof insertSwapTransactionSchema>;
+export type SwapTransaction = typeof swapTransactions.$inferSelect;
+
+export const APP_VERSION = "1.0.5";
