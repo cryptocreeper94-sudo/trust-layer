@@ -25,6 +25,9 @@ import Bridge from "@/pages/bridge";
 import Staking from "@/pages/staking";
 import Faucet from "@/pages/faucet";
 import Swap from "@/pages/swap";
+import NftMarketplace from "@/pages/nft-marketplace";
+import Portfolio from "@/pages/portfolio";
+import Transactions from "@/pages/transactions";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -62,6 +65,9 @@ function Router() {
         <Route path="/staking" component={Staking} />
         <Route path="/faucet" component={Faucet} />
         <Route path="/swap" component={Swap} />
+        <Route path="/nft" component={NftMarketplace} />
+        <Route path="/portfolio" component={Portfolio} />
+        <Route path="/transactions" component={Transactions} />
         <Route component={NotFound} />
       </Switch>
     </>

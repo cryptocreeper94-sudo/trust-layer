@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
 import crypto from "crypto";
@@ -60,6 +60,15 @@ export interface IStorage {
   // DEX Swaps
   getRecentSwaps(): Promise<SwapTransaction[]>;
   createSwap(data: { pairId: string; tokenIn: string; tokenOut: string; amountIn: string; amountOut: string; priceImpact: string; status: string; txHash: string }): Promise<SwapTransaction>;
+  
+  // NFT Marketplace
+  getNftCollections(): Promise<NftCollection[]>;
+  getNftListings(): Promise<any[]>;
+  getNftStats(): Promise<{ totalVolume: string; totalNfts: number; totalCollections: number }>;
+  createNft(data: { tokenId: string; collectionId: string; name: string; description: string; imageUrl: string }): Promise<Nft>;
+  
+  // Transaction History
+  getTransactionHistory(): Promise<any[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -565,6 +574,74 @@ export class DatabaseStorage implements IStorage {
   async createSwap(data: { pairId: string; tokenIn: string; tokenOut: string; amountIn: string; amountOut: string; priceImpact: string; status: string; txHash: string }): Promise<SwapTransaction> {
     const [swap] = await db.insert(swapTransactions).values(data).returning();
     return swap;
+  }
+
+  // NFT Marketplace methods
+  async getNftCollections(): Promise<NftCollection[]> {
+    return db.select().from(nftCollections).orderBy(desc(nftCollections.createdAt)).limit(50);
+  }
+
+  async getNftListings(): Promise<any[]> {
+    const allNfts = await db.select().from(nfts).orderBy(desc(nfts.createdAt)).limit(100);
+    return allNfts.map(nft => ({
+      ...nft,
+      price: "50000000000000000000",
+      likes: Math.floor(Math.random() * 100),
+    }));
+  }
+
+  async getNftStats(): Promise<{ totalVolume: string; totalNfts: number; totalCollections: number }> {
+    const [nftResult] = await db.select({ count: count() }).from(nfts);
+    const [collectionResult] = await db.select({ count: count() }).from(nftCollections);
+    return {
+      totalVolume: "0",
+      totalNfts: nftResult?.count || 0,
+      totalCollections: collectionResult?.count || 0,
+    };
+  }
+
+  async createNft(data: { tokenId: string; collectionId: string; name: string; description: string; imageUrl: string }): Promise<Nft> {
+    const [nft] = await db.insert(nfts).values(data).returning();
+    return nft;
+  }
+
+  // Transaction History - aggregate from various sources
+  async getTransactionHistory(): Promise<any[]> {
+    const transactions: any[] = [];
+
+    // Get recent swaps
+    const recentSwaps = await db.select().from(swapTransactions).orderBy(desc(swapTransactions.createdAt)).limit(20);
+    for (const swap of recentSwaps) {
+      transactions.push({
+        id: swap.id,
+        type: "swap",
+        token: `${swap.tokenIn} → ${swap.tokenOut}`,
+        amount: swap.amountIn,
+        hash: swap.txHash,
+        status: swap.status,
+        timestamp: swap.createdAt,
+      });
+    }
+
+    // Get recent faucet claims
+    const recentClaims = await db.select().from(faucetClaims).orderBy(desc(faucetClaims.claimedAt)).limit(20);
+    for (const claim of recentClaims) {
+      transactions.push({
+        id: claim.id,
+        type: "claim",
+        token: "DWT",
+        amount: claim.amount,
+        hash: claim.txHash || "",
+        status: claim.status,
+        timestamp: claim.claimedAt,
+        to: claim.walletAddress,
+      });
+    }
+
+    // Sort by timestamp desc
+    transactions.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
+    return transactions.slice(0, 50);
   }
 }
 

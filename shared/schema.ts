@@ -897,4 +897,73 @@ export const insertSwapTransactionSchema = createInsertSchema(swapTransactions).
 export type InsertSwapTransaction = z.infer<typeof insertSwapTransactionSchema>;
 export type SwapTransaction = typeof swapTransactions.$inferSelect;
 
-export const APP_VERSION = "1.0.5";
+// ============================================
+// NFT MARKETPLACE
+// ============================================
+
+export const nftCollections = pgTable("nft_collections", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  symbol: text("symbol").notNull(),
+  description: text("description"),
+  imageUrl: text("image_url"),
+  bannerUrl: text("banner_url"),
+  creatorId: text("creator_id"),
+  floorPrice: text("floor_price").notNull().default("0"),
+  totalVolume: text("total_volume").notNull().default("0"),
+  itemCount: integer("item_count").notNull().default(0),
+  ownerCount: integer("owner_count").notNull().default(0),
+  isVerified: boolean("is_verified").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertNftCollectionSchema = createInsertSchema(nftCollections).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertNftCollection = z.infer<typeof insertNftCollectionSchema>;
+export type NftCollection = typeof nftCollections.$inferSelect;
+
+export const nfts = pgTable("nfts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  tokenId: text("token_id").notNull(),
+  collectionId: text("collection_id").notNull(),
+  name: text("name").notNull(),
+  description: text("description"),
+  imageUrl: text("image_url"),
+  attributes: text("attributes"), // JSON string of traits
+  ownerId: text("owner_id"),
+  creatorId: text("creator_id"),
+  mintTxHash: text("mint_tx_hash"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertNftSchema = createInsertSchema(nfts).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertNft = z.infer<typeof insertNftSchema>;
+export type Nft = typeof nfts.$inferSelect;
+
+export const nftListings = pgTable("nft_listings", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  nftId: text("nft_id").notNull(),
+  sellerId: text("seller_id").notNull(),
+  price: text("price").notNull(),
+  currency: text("currency").notNull().default("DWT"),
+  status: text("status").notNull().default("active"), // active, sold, cancelled
+  expiresAt: timestamp("expires_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertNftListingSchema = createInsertSchema(nftListings).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertNftListing = z.infer<typeof insertNftListingSchema>;
+export type NftListing = typeof nftListings.$inferSelect;
+
+export const APP_VERSION = "1.0.6";

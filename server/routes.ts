@@ -5,7 +5,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, APP_VERSION } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, APP_VERSION } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -2827,6 +2827,76 @@ ${context ? `- Additional context: ${context}` : ""}`;
       } else {
         res.status(500).json({ error: "AI assistance failed" });
       }
+    }
+  });
+
+  // ============================================
+  // TRANSACTION HISTORY
+  // ============================================
+
+  app.get("/api/transactions/history", async (req, res) => {
+    try {
+      const transactions = await storage.getTransactionHistory();
+      res.json({ transactions });
+    } catch (error) {
+      console.error("Transaction history error:", error);
+      res.json({ transactions: [] });
+    }
+  });
+
+  // ============================================
+  // NFT MARKETPLACE
+  // ============================================
+
+  app.get("/api/nft/collections", async (req, res) => {
+    try {
+      const collections = await storage.getNftCollections();
+      res.json({ collections });
+    } catch (error) {
+      console.error("NFT collections error:", error);
+      res.json({ collections: [] });
+    }
+  });
+
+  app.get("/api/nft/listings", async (req, res) => {
+    try {
+      const listings = await storage.getNftListings();
+      res.json({ listings });
+    } catch (error) {
+      console.error("NFT listings error:", error);
+      res.json({ listings: [] });
+    }
+  });
+
+  app.get("/api/nft/stats", async (req, res) => {
+    try {
+      const stats = await storage.getNftStats();
+      res.json(stats);
+    } catch (error) {
+      console.error("NFT stats error:", error);
+      res.json({ totalVolume: "0", totalNfts: 0, totalCollections: 0 });
+    }
+  });
+
+  app.post("/api/nft/mint", async (req, res) => {
+    try {
+      const { name, description, imageUrl } = req.body;
+      if (!name) {
+        return res.status(400).json({ error: "NFT name is required" });
+      }
+
+      const nft = await storage.createNft({
+        tokenId: `${Date.now()}`,
+        collectionId: "user-created",
+        name,
+        description: description || "",
+        imageUrl: imageUrl || "",
+      });
+
+      res.json({ success: true, nft });
+    } catch (error: any) {
+      console.error("NFT mint error:", error);
+      res.status(500).json({ error: error.message || "Failed to mint NFT" });
     }
   });
 

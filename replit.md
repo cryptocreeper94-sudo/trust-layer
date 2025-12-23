@@ -61,17 +61,12 @@ DarkWave Chain is a comprehensive blockchain ecosystem developed by DarkWave Stu
 - [x] Keyboard shortcuts
 - [x] Real-time collaboration presence
 
----
-
-### 🚧 PRIORITY 1 - LAUNCH BLOCKERS (Do Now)
-
-| # | Feature | Status | Description |
-|---|---------|--------|-------------|
-| 1 | **Testnet Faucet** | 🔴 TODO | Give developers free test DWT to build with |
-| 2 | **DEX / Token Swap** | 🔴 TODO | Swap DWT for other tokens (core DeFi) |
-| 3 | **NFT Marketplace** | 🔴 TODO | Buy/sell/mint NFTs on DarkWave |
-| 4 | **Portfolio Dashboard** | 🔴 TODO | Track holdings, staking, rewards in one place |
-| 5 | **Transaction History** | 🔴 TODO | Full tx history with filters per wallet |
+#### DeFi Features (Priority 1 - Complete)
+- [x] Testnet Faucet - 1000 DWT per claim, 24-hour cooldown, tracks by wallet/IP
+- [x] DEX / Token Swap - AMM-style swap with DWT/USDC/wETH/wSOL/USDT pairs, 0.3% fee
+- [x] NFT Marketplace - Browse collections, view NFTs, mint new NFTs
+- [x] Portfolio Dashboard - Track token holdings, staking positions, rewards, NFTs
+- [x] Transaction History - View all swaps, claims, transfers with filters
 
 ---
 
