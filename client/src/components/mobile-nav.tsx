@@ -19,6 +19,13 @@ const navItems = [
 function MenuPanel({ onClose }: { onClose: () => void }) {
   const [location] = useLocation();
 
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   return createPortal(
     <>
       {/* Backdrop */}
