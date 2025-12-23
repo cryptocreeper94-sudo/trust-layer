@@ -110,7 +110,7 @@ export default function Bridge() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black">
+    <div className="min-h-screen flex flex-col bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black overflow-x-hidden">
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2 mr-auto">
@@ -164,12 +164,13 @@ export default function Bridge() {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="flex gap-2 mb-4">
+                  <div className="flex flex-col sm:flex-row gap-2 mb-4">
                     <Button
                       variant={direction === "to" ? "default" : "outline"}
                       size="sm"
                       onClick={() => setDirection("to")}
                       data-testid="button-direction-to"
+                      className="flex-1 text-xs sm:text-sm"
                     >
                       DWT → Other Chain
                     </Button>
@@ -179,6 +180,7 @@ export default function Bridge() {
                       onClick={() => setDirection("from")}
                       data-testid="button-direction-from"
                       disabled
+                      className="flex-1 text-xs sm:text-sm"
                     >
                       Other Chain → DWT (Soon)
                     </Button>
