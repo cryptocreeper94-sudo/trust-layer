@@ -327,11 +327,36 @@ class DarkWaveBridge {
     return { burn, release: release || null };
   }
 
-  getSupportedChains(): { id: SupportedChain; name: string; network: string; status: string }[] {
+  getSupportedChains(): { id: SupportedChain; name: string; network: string; status: string; contractDeployed: boolean }[] {
     return [
-      { id: "ethereum", name: "Ethereum", network: "Sepolia Testnet", status: "active" },
-      { id: "solana", name: "Solana", network: "Devnet", status: "active" },
+      { 
+        id: "ethereum", 
+        name: "Ethereum", 
+        network: "Sepolia Testnet", 
+        status: "active",
+        contractDeployed: externalChains.isContractDeployed("ethereum")
+      },
+      { 
+        id: "solana", 
+        name: "Solana", 
+        network: "Devnet", 
+        status: "active",
+        contractDeployed: externalChains.isContractDeployed("solana")
+      },
     ];
+  }
+
+  getContractStatus(): { ethereum: { deployed: boolean; address: string }; solana: { deployed: boolean; address: string } } {
+    return {
+      ethereum: {
+        deployed: externalChains.isContractDeployed("ethereum"),
+        address: externalChains.getWDWTContractAddress("ethereum")
+      },
+      solana: {
+        deployed: externalChains.isContractDeployed("solana"),
+        address: externalChains.getWDWTContractAddress("solana")
+      }
+    };
   }
 
   async getChainStatuses(): Promise<ChainStatus[]> {
@@ -347,12 +372,17 @@ class DarkWaveBridge {
   }
 
   getBridgeStats() {
+    const contractStatus = this.getContractStatus();
+    const isTestnetMode = !contractStatus.ethereum.deployed && !contractStatus.solana.deployed;
+    
     return {
       custodyAddress: BRIDGE_CUSTODY_ADDRESS,
       supportedChains: this.getSupportedChains(),
       phase: "Phase 1 - MVP Custodial Bridge",
-      status: "Beta",
+      status: isTestnetMode ? "Testnet Development" : "Beta",
       operator: "Founders Validator",
+      contracts: contractStatus,
+      mode: isTestnetMode ? "mock" : "live",
     };
   }
 }

@@ -19,12 +19,17 @@ import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_lo
 
 interface BridgeInfo {
   custodyAddress: string;
-  supportedChains: { id: string; name: string; network: string; status: string }[];
+  supportedChains: { id: string; name: string; network: string; status: string; contractDeployed?: boolean }[];
   phase: string;
   status: string;
   operator: string;
   custodyBalance: string;
   disclaimer: string;
+  mode?: "mock" | "live";
+  contracts?: {
+    ethereum: { deployed: boolean; address: string };
+    solana: { deployed: boolean; address: string };
+  };
 }
 
 interface BridgeTransfer {
@@ -292,8 +297,11 @@ export default function Bridge() {
                 <AlertTriangle className="w-6 h-6 text-amber-400 shrink-0" />
               </motion.div>
               <div className="text-sm text-amber-200">
-                <strong className="text-amber-300">Beta Feature:</strong> This bridge is operated by the Founders Validator. 
-                Target chains are testnets only (Sepolia, Solana Devnet). Funds are secured by custodial escrow.
+                <strong className="text-amber-300">{bridgeInfo?.mode === "mock" ? "Testnet Development Mode:" : "Beta Feature:"}</strong>{" "}
+                {bridgeInfo?.mode === "mock" 
+                  ? "wDWT contracts not yet deployed. Transactions are simulated for testing. Deploy contracts to enable real bridging."
+                  : "This bridge is operated by the Founders Validator. Target chains are testnets only (Sepolia, Solana Devnet). Funds are secured by custodial escrow."
+                }
               </div>
             </div>
           </motion.div>
@@ -371,10 +379,13 @@ export default function Bridge() {
                           <div className="font-bold text-sm">{chain.name}</div>
                           <div className="text-xs text-muted-foreground">{chain.network}</div>
                           {liveStatus?.connected && liveStatus.blockHeight && (
-                            <div className="text-[10px] text-green-400/80 mt-1 font-mono">
+                            <div className="text-[10px] text-green-400/80 mt-0.5 font-mono">
                               Block #{liveStatus.blockHeight.toLocaleString()} • {liveStatus.latency}ms
                             </div>
                           )}
+                          <div className={`text-[10px] mt-0.5 ${chain.contractDeployed ? "text-cyan-400" : "text-amber-400"}`}>
+                            wDWT: {chain.contractDeployed ? "Deployed" : "Testnet Mode"}
+                          </div>
                         </div>
                       </div>
                     </div>

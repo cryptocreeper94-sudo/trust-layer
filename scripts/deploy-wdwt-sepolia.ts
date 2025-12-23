@@ -1,5 +1,9 @@
 /**
- * Deploy wDWT ERC-20 to Ethereum Sepolia
+ * wDWT ERC-20 Deployment Helper for Ethereum Sepolia
+ * 
+ * NOTE: This script provides guidance and contract details.
+ * Contract compilation requires Remix IDE or Hardhat.
+ * Full SDK automation planned for Phase 2.
  * 
  * Prerequisites:
  * 1. TREASURY_PRIVATE_KEY env var with funded Sepolia wallet
