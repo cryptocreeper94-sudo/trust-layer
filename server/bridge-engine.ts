@@ -127,14 +127,28 @@ class DarkWaveBridge {
         console.log(`[DarkWave Bridge] Lock confirmed: ${lockId} | Mint pending on ${lock.targetChain}`);
 
         setTimeout(async () => {
-          await db.update(bridgeMints)
-            .set({ 
-              status: "completed", 
-              completedAt: new Date(),
-              targetTxHash: `0x${lock.targetChain}_mock_${Date.now().toString(16)}`
-            })
-            .where(eq(bridgeMints.id, mint.id));
-          console.log(`[DarkWave Bridge] Mint completed for lock ${lockId} on ${lock.targetChain}`);
+          const mintResult = await externalChains.mintWrappedToken(
+            lock.targetChain as "ethereum" | "solana",
+            lock.targetAddress,
+            lock.amount,
+            lock.id
+          );
+
+          if (mintResult.success) {
+            await db.update(bridgeMints)
+              .set({ 
+                status: "completed", 
+                completedAt: new Date(),
+                targetTxHash: mintResult.txHash || `0x${lock.targetChain}_${Date.now().toString(16)}`
+              })
+              .where(eq(bridgeMints.id, mint.id));
+            console.log(`[DarkWave Bridge] Mint completed for lock ${lockId} on ${lock.targetChain} | tx: ${mintResult.txHash}`);
+          } else {
+            await db.update(bridgeMints)
+              .set({ status: "failed" })
+              .where(eq(bridgeMints.id, mint.id));
+            console.error(`[DarkWave Bridge] Mint failed for lock ${lockId}: ${mintResult.error}`);
+          }
         }, 5000);
       }
     } catch (error) {
