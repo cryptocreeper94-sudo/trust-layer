@@ -15,6 +15,8 @@ import { submitMemoToSolana, isHeliusConfigured, getSolanaTreasuryAddress, getSo
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
 import { startRegistration, finishRegistration, startAuthentication, finishAuthentication, getUserPasskeys, deletePasskey } from "./webauthn";
 import { bridge } from "./bridge-engine";
+import { registerChatRoutes } from "./replit_integrations/chat";
+import { registerImageRoutes } from "./replit_integrations/image";
 
 interface PresenceUser {
   id: string;
@@ -35,6 +37,8 @@ export async function registerRoutes(
   
   await setupAuth(app);
   registerAuthRoutes(app);
+  registerChatRoutes(app);
+  registerImageRoutes(app);
 
   const wss = new WebSocketServer({ server: httpServer, path: "/ws/studio" });
   
@@ -2502,6 +2506,69 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Update domain error:", error);
       res.status(500).json({ error: "Failed to update custom domain" });
+    }
+  });
+
+  // AI Code Assistant for Studio
+  app.post("/api/studio/ai/assist", isAuthenticated, async (req: any, res) => {
+    try {
+      const { prompt, code, language, context } = req.body;
+      
+      if (!prompt) {
+        return res.status(400).json({ error: "Prompt is required" });
+      }
+
+      const OpenAI = (await import("openai")).default;
+      const openai = new OpenAI({
+        apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
+        baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+      });
+
+      const systemPrompt = `You are an expert coding assistant in DarkWave Studio, a web-based IDE. 
+You help developers write, debug, and improve code. Be concise but thorough.
+When providing code, use markdown code blocks with the appropriate language.
+Current context:
+- Language: ${language || "unknown"}
+- User is working in a cloud IDE environment
+${context ? `- Additional context: ${context}` : ""}`;
+
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
+
+      const messages: any[] = [
+        { role: "system", content: systemPrompt },
+      ];
+      
+      if (code) {
+        messages.push({ role: "user", content: `Here's my current code:\n\`\`\`${language || ""}\n${code}\n\`\`\`` });
+      }
+      messages.push({ role: "user", content: prompt });
+
+      const stream = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages,
+        stream: true,
+        max_completion_tokens: 2048,
+      });
+
+      for await (const chunk of stream) {
+        const content = chunk.choices[0]?.delta?.content || "";
+        if (content) {
+          res.write(`data: ${JSON.stringify({ content })}\n\n`);
+        }
+      }
+
+      res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
+      res.end();
+    } catch (error) {
+      console.error("AI assist error:", error);
+      if (res.headersSent) {
+        res.write(`data: ${JSON.stringify({ error: "AI assistance failed" })}\n\n`);
+        res.end();
+      } else {
+        res.status(500).json({ error: "AI assistance failed" });
+      }
     }
   });
 

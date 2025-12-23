@@ -8,7 +8,7 @@ import {
   GitBranch, GitCommit, History, RotateCcw, Terminal,
   Rocket, Cloud, Link2, Users, Info, Zap, Shield, Database,
   ExternalLink, Copy, CheckCircle, Loader2, Send, Search, Replace, Keyboard,
-  Upload, Download, Filter
+  Upload, Download, Filter, Mic, MicOff, Bot, Sparkles, MessageSquare
 } from "lucide-react";
 import { MonacoEditor } from "@/components/monaco-editor";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -287,6 +287,18 @@ export default function Studio() {
   const [deployments, setDeployments] = useState<Deployment[]>([]);
   const [currentDeployment, setCurrentDeployment] = useState<Deployment | null>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
+  
+  // Voice input state
+  const [isListening, setIsListening] = useState(false);
+  const [voiceSupported, setVoiceSupported] = useState(false);
+  const recognitionRef = useRef<any>(null);
+  
+  // AI Assistant state
+  const [showAiPanel, setShowAiPanel] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [aiResponse, setAiResponse] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const aiPanelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!user) {
@@ -475,6 +487,123 @@ export default function Studio() {
       });
     }
   }, [editorContent, activeFile, originalContent]);
+
+  // Voice input setup
+  useEffect(() => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      setVoiceSupported(true);
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = false; // Only get final results to avoid duplicates
+      recognition.lang = 'en-US';
+      
+      recognition.onresult = (event: any) => {
+        // Only process the latest result that is final
+        const result = event.results[event.resultIndex];
+        if (result.isFinal) {
+          const transcript = result[0].transcript;
+          if (transcript && transcript.trim()) {
+            // Append finalized transcript with a space
+            setEditorContent(prev => prev + ' ' + transcript.trim());
+          }
+        }
+      };
+      
+      recognition.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        setIsListening(false);
+      };
+      
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+      
+      recognitionRef.current = recognition;
+    }
+    
+    // Cleanup on unmount
+    return () => {
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.stop();
+        } catch {}
+      }
+    };
+  }, []);
+
+  const toggleVoiceInput = () => {
+    if (!recognitionRef.current) return;
+    
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      recognitionRef.current.start();
+      setIsListening(true);
+    }
+  };
+
+  // AI Assistant function
+  const askAiAssistant = async () => {
+    if (!aiPrompt.trim() || aiLoading) return;
+    
+    setAiLoading(true);
+    setAiResponse("");
+    
+    try {
+      const response = await fetch("/api/studio/ai/assist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: aiPrompt,
+          code: editorContent,
+          language: activeFile?.language || getLanguageFromFileName(activeFile?.name || ""),
+          context: `File: ${activeFile?.name || "untitled"}`,
+        }),
+      });
+
+      if (!response.ok) throw new Error("AI request failed");
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      
+      while (reader) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        
+        const text = decoder.decode(value);
+        const lines = text.split("\n");
+        
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            try {
+              const data = JSON.parse(line.slice(6));
+              if (data.content) {
+                setAiResponse(prev => prev + data.content);
+              }
+              if (data.done) break;
+            } catch {}
+          }
+        }
+      }
+    } catch (error) {
+      console.error("AI assist error:", error);
+      setAiResponse("Sorry, I couldn't process your request. Please try again.");
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const getLanguageFromFileName = (name: string): string => {
+    const ext = name.split('.').pop()?.toLowerCase() || '';
+    const langMap: Record<string, string> = {
+      'js': 'javascript', 'jsx': 'javascript', 'ts': 'typescript', 'tsx': 'typescript',
+      'py': 'python', 'rb': 'ruby', 'go': 'go', 'rs': 'rust', 'java': 'java',
+      'html': 'html', 'css': 'css', 'json': 'json', 'md': 'markdown',
+    };
+    return langMap[ext] || ext;
+  };
 
   const handleSearch = useCallback(() => {
     if (!searchQuery.trim()) {
@@ -1263,6 +1392,42 @@ export default function Studio() {
           )}
         </div>
         <div className="flex items-center gap-2">
+          {/* Voice Input Button */}
+          {voiceSupported && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size="sm"
+                  variant={isListening ? "default" : "ghost"}
+                  onClick={toggleVoiceInput}
+                  className={`h-8 w-8 p-0 ${isListening ? "bg-red-500 hover:bg-red-600 animate-pulse" : ""}`}
+                  data-testid="button-voice"
+                >
+                  {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{isListening ? "Stop voice input" : "Voice to text"}</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+          {/* AI Assistant Button */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="sm"
+                variant={showAiPanel ? "default" : "ghost"}
+                onClick={() => setShowAiPanel(!showAiPanel)}
+                className={`h-8 w-8 p-0 ${showAiPanel ? "bg-gradient-to-r from-purple-500 to-cyan-500" : ""}`}
+                data-testid="button-ai-assistant"
+              >
+                <Sparkles className="w-4 h-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>AI Code Assistant</p>
+            </TooltipContent>
+          </Tooltip>
           <Button
             size="sm"
             variant="ghost"
@@ -1317,6 +1482,28 @@ export default function Studio() {
             </Button>
           </div>
           <div className="flex items-center gap-1 shrink-0">
+            {/* Voice Input - Mobile */}
+            {voiceSupported && (
+              <Button
+                size="sm"
+                variant={isListening ? "default" : "ghost"}
+                onClick={toggleVoiceInput}
+                className={`h-8 w-8 p-0 ${isListening ? "bg-red-500 hover:bg-red-600 animate-pulse" : ""}`}
+                data-testid="button-voice-mobile"
+              >
+                {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+              </Button>
+            )}
+            {/* AI Assistant - Mobile */}
+            <Button
+              size="sm"
+              variant={showAiPanel ? "default" : "ghost"}
+              onClick={() => setShowAiPanel(!showAiPanel)}
+              className={`h-8 w-8 p-0 ${showAiPanel ? "bg-gradient-to-r from-purple-500 to-cyan-500" : ""}`}
+              data-testid="button-ai-mobile"
+            >
+              <Sparkles className="w-4 h-4" />
+            </Button>
             <Button
               size="sm"
               variant="ghost"
@@ -2309,6 +2496,123 @@ export default function Studio() {
           </motion.div>
         </div>
       )}
+
+      {/* AI Assistant Panel */}
+      <AnimatePresence>
+        {showAiPanel && (
+          <motion.div
+            initial={{ opacity: 0, x: 300 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 300 }}
+            className="fixed right-0 top-0 h-full w-full md:w-96 z-50 bg-gray-900/95 border-l border-white/10 backdrop-blur-xl shadow-2xl flex flex-col"
+            ref={aiPanelRef}
+          >
+            {/* AI Panel Header */}
+            <div className="flex items-center justify-between p-4 border-b border-white/10 bg-gradient-to-r from-purple-500/10 to-cyan-500/10">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-white">AI Code Assistant</h3>
+                  <p className="text-xs text-muted-foreground">Powered by GPT-4o</p>
+                </div>
+              </div>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setShowAiPanel(false)}
+                className="h-8 w-8 p-0"
+                data-testid="button-close-ai"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+
+            {/* AI Response Area */}
+            <div className="flex-1 overflow-auto p-4">
+              {aiResponse ? (
+                <div className="prose prose-invert prose-sm max-w-none">
+                  <div className="whitespace-pre-wrap text-sm text-gray-300 font-mono bg-black/30 rounded-lg p-4 border border-white/10">
+                    {aiResponse}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500/20 to-cyan-500/20 flex items-center justify-center">
+                    <MessageSquare className="w-8 h-8 text-cyan-400" />
+                  </div>
+                  <h4 className="text-lg font-medium text-white mb-2">Ask me anything!</h4>
+                  <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                    I can help you write code, debug issues, explain concepts, or refactor your code.
+                  </p>
+                  <div className="mt-6 space-y-2">
+                    <p className="text-xs text-muted-foreground">Try asking:</p>
+                    {[
+                      "Explain this code",
+                      "Fix the bug in this function",
+                      "Add error handling",
+                      "Optimize performance",
+                    ].map((suggestion) => (
+                      <button
+                        key={suggestion}
+                        onClick={() => setAiPrompt(suggestion)}
+                        className="block w-full text-left px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-gray-300 transition-colors border border-white/5"
+                      >
+                        "{suggestion}"
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* AI Input Area */}
+            <div className="p-4 border-t border-white/10 bg-black/30">
+              <div className="flex gap-2">
+                <Input
+                  value={aiPrompt}
+                  onChange={(e) => setAiPrompt(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && askAiAssistant()}
+                  placeholder="Ask AI about your code..."
+                  className="flex-1 bg-white/5 border-white/10 focus:border-cyan-500/50"
+                  disabled={aiLoading}
+                  data-testid="input-ai-prompt"
+                />
+                {voiceSupported && (
+                  <Button
+                    size="sm"
+                    variant={isListening ? "default" : "ghost"}
+                    onClick={toggleVoiceInput}
+                    className={`h-10 w-10 p-0 ${isListening ? "bg-red-500 hover:bg-red-600 animate-pulse" : ""}`}
+                    data-testid="button-ai-voice"
+                  >
+                    {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                  </Button>
+                )}
+                <Button
+                  size="sm"
+                  onClick={askAiAssistant}
+                  disabled={aiLoading || !aiPrompt.trim()}
+                  className="h-10 px-4 bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400"
+                  data-testid="button-ask-ai"
+                >
+                  {aiLoading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
+                </Button>
+              </div>
+              {isListening && (
+                <p className="text-xs text-red-400 mt-2 animate-pulse flex items-center gap-1">
+                  <Mic className="w-3 h-3" /> Listening... Speak now
+                </p>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
