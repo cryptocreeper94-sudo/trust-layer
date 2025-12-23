@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight } from "lucide-react";
+import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,7 @@ const navItems = [
   { href: "/developers", label: "Developers", icon: Code },
   { href: "/doc-hub", label: "Doc Hub", icon: FileText },
   { href: "/token", label: "Token", icon: Coins },
+  { href: "/bridge", label: "Bridge", icon: ArrowLeftRight },
   { href: "https://darkwavepulse.com", label: "Staking", icon: TrendingUp, external: true },
   { href: "/explorer", label: "Explorer", icon: SearchIcon },
   { href: "/studio", label: "Dev Studio", icon: Sparkles },
