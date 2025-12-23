@@ -277,6 +277,7 @@ export default function Studio() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [commitMessage, setCommitMessage] = useState("");
   const [bottomTab, setBottomTab] = useState<"console" | "git" | "terminal" | "deploy" | "packages">("console");
+  const [mobileView, setMobileView] = useState<"editor" | "files" | "console">("editor");
   const [terminalHistory, setTerminalHistory] = useState<TerminalLine[]>([
     { type: "output", content: "DarkWave Terminal v1.0.0" },
     { type: "output", content: "Type 'help' for available commands" },
@@ -405,6 +406,9 @@ export default function Studio() {
         next.set(file.id, file.content);
         return next;
       });
+      
+      // On mobile, switch to editor view when file is selected
+      setMobileView("editor");
       
       if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN && projectId) {
         wsRef.current.send(JSON.stringify({
@@ -1293,10 +1297,32 @@ export default function Studio() {
         </div>
       </header>
 
+      {/* Mobile View Tabs */}
+      <div className="md:hidden flex border-b border-white/5 bg-black/40">
+        <button
+          className={`flex-1 py-2 text-xs font-medium flex items-center justify-center gap-1 ${mobileView === "files" ? "bg-primary/20 text-primary border-b-2 border-primary" : "text-muted-foreground"}`}
+          onClick={() => setMobileView("files")}
+        >
+          <FolderOpen className="w-3.5 h-3.5" /> Files
+        </button>
+        <button
+          className={`flex-1 py-2 text-xs font-medium flex items-center justify-center gap-1 ${mobileView === "editor" ? "bg-primary/20 text-primary border-b-2 border-primary" : "text-muted-foreground"}`}
+          onClick={() => setMobileView("editor")}
+        >
+          <FileCode className="w-3.5 h-3.5" /> Editor
+        </button>
+        <button
+          className={`flex-1 py-2 text-xs font-medium flex items-center justify-center gap-1 ${mobileView === "console" ? "bg-primary/20 text-primary border-b-2 border-primary" : "text-muted-foreground"}`}
+          onClick={() => setMobileView("console")}
+        >
+          <Terminal className="w-3.5 h-3.5" /> Console
+        </button>
+      </div>
+
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Sidebar */}
-        <aside className="w-64 border-r border-white/5 bg-black/40 flex flex-col shrink-0">
+        {/* Sidebar - Hidden on mobile, shown based on mobileView */}
+        <aside className={`w-full md:w-64 border-r border-white/5 bg-black/40 flex flex-col shrink-0 ${mobileView === "files" ? "flex" : "hidden"} md:flex`}>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
             <TabsList className="w-full grid grid-cols-4 h-10 bg-transparent border-b border-white/5 rounded-none">
               <TabsTrigger value="files" className="text-xs data-[state=active]:bg-white/5 rounded-none" data-testid="tab-files">
@@ -1676,10 +1702,10 @@ export default function Studio() {
           </Tabs>
         </aside>
 
-        {/* Editor Area */}
-        <main className="flex-1 flex flex-col overflow-hidden">
-          {/* File Tabs */}
-          <div className="h-9 border-b border-white/5 bg-black/20 flex items-center px-1 shrink-0 overflow-x-auto">
+        {/* Editor Area - Hidden on mobile unless mobileView is "editor" or "console" */}
+        <main className={`flex-1 flex flex-col overflow-hidden min-w-0 ${mobileView === "files" ? "hidden" : "flex"} md:flex`}>
+          {/* File Tabs - Hidden on mobile when viewing console */}
+          <div className={`h-9 border-b border-white/5 bg-black/20 flex items-center px-1 shrink-0 overflow-x-auto ${mobileView === "console" ? "hidden" : ""} md:flex`}>
             {openTabs.map(tab => (
               <div
                 key={tab.id}
@@ -1710,8 +1736,8 @@ export default function Studio() {
             )}
           </div>
 
-          {/* Code Editor */}
-          <div className="flex-1 overflow-hidden">
+          {/* Code Editor - Hidden on mobile when viewing console */}
+          <div className={`flex-1 overflow-hidden ${mobileView === "console" ? "hidden" : ""} md:block`}>
             {activeFile ? (
               <MonacoEditor
                 value={editorContent}
@@ -1730,8 +1756,8 @@ export default function Studio() {
             )}
           </div>
 
-          {/* Bottom Bar / Console, Git, Terminal & Deploy */}
-          <div className="h-48 border-t border-white/5 bg-gradient-to-b from-black/60 to-black/40 flex flex-col shrink-0 backdrop-blur-sm">
+          {/* Bottom Bar / Console, Git, Terminal & Deploy - Full height on mobile when viewing console */}
+          <div className={`border-t border-white/5 bg-gradient-to-b from-black/60 to-black/40 flex flex-col shrink-0 backdrop-blur-sm ${mobileView === "console" ? "flex-1" : "h-48 hidden md:flex"}`}>
             <div className="flex items-center px-1 py-1 border-b border-white/10 gap-1">
               <Button
                 size="sm"
