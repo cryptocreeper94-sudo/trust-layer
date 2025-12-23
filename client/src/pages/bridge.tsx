@@ -369,12 +369,38 @@ export default function Bridge() {
                   </motion.div>
                 );
               })}
-              <div className="snap-start shrink-0">
-                <div className="w-[100px] h-full min-h-[80px] bg-white/5 border border-dashed border-white/20 rounded-xl p-3 flex flex-col items-center justify-center">
-                  <span className="text-lg mb-0.5">+</span>
-                  <span className="text-[10px] text-muted-foreground">More</span>
-                </div>
-              </div>
+              {[
+                { id: "polygon", name: "Polygon", icon: "⬡" },
+                { id: "arbitrum", name: "Arbitrum", icon: "🔷" },
+                { id: "optimism", name: "Optimism", icon: "🔴" },
+                { id: "base", name: "Base", icon: "🔵" },
+                { id: "avalanche", name: "Avalanche", icon: "🔺" },
+              ].map((chain, i) => (
+                <motion.div
+                  key={chain.id}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.1 + 0.05 * i }}
+                  className="snap-start shrink-0"
+                >
+                  <div 
+                    className="w-[140px] p-3 bg-white/5 backdrop-blur border border-white/10 rounded-xl opacity-60"
+                    data-testid={`chain-card-${chain.id}`}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xl">{chain.icon}</span>
+                      <Badge 
+                        variant="outline" 
+                        className="text-[8px] px-1.5 py-0 border-purple-500/50 text-purple-400"
+                      >
+                        SOON
+                      </Badge>
+                    </div>
+                    <div className="font-bold text-xs truncate">{chain.name}</div>
+                    <div className="text-[10px] text-muted-foreground">Coming Soon</div>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
 
