@@ -333,7 +333,7 @@ import { DarkWaveClient } from '@shared/darkwave-sdk';`,
       code: `import { DarkWaveClient } from '@shared/darkwave-sdk';
 
 const client = new DarkWaveClient({
-  rpcUrl: 'https://your-darkwave-api.replit.app',
+  rpcUrl: 'https://api.darkwavechain.io',
   apiKey: 'dwc_your_api_key_here',
   chainId: 8453
 });
