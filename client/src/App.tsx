@@ -57,6 +57,22 @@ import TokenCompare from "@/pages/token-compare";
 import CodeSnippets from "@/pages/code-snippets";
 import ApiUsage from "@/pages/api-usage";
 import Referrals from "@/pages/referrals";
+import DashboardPro from "@/pages/dashboard-pro";
+import Trading from "@/pages/trading";
+import WhaleTracker from "@/pages/whale-tracker";
+import CopyTrading from "@/pages/copy-trading";
+import DCABot from "@/pages/dca-bot";
+import TokenAnalytics from "@/pages/token-analytics";
+import Leaderboard from "@/pages/leaderboard";
+import WalletProfiler from "@/pages/wallet-profiler";
+import GasEstimator from "@/pages/gas-estimator";
+import ActivityFeed from "@/pages/activity-feed";
+import AINFTGenerator from "@/pages/ai-nft-generator";
+import RarityAnalyzer from "@/pages/rarity-analyzer";
+import UserProfiles from "@/pages/user-profiles";
+import DAOGovernance from "@/pages/dao-governance";
+import TxSimulator from "@/pages/tx-simulator";
+import PortfolioRebalancer from "@/pages/portfolio-rebalancer";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
 
 function ScrollToTop() {
@@ -123,6 +139,22 @@ function Router() {
         <Route path="/code-snippets" component={CodeSnippets} />
         <Route path="/api-usage" component={ApiUsage} />
         <Route path="/referrals" component={Referrals} />
+        <Route path="/dashboard-pro" component={DashboardPro} />
+        <Route path="/trading" component={Trading} />
+        <Route path="/whale-tracker" component={WhaleTracker} />
+        <Route path="/copy-trading" component={CopyTrading} />
+        <Route path="/dca-bot" component={DCABot} />
+        <Route path="/token-analytics" component={TokenAnalytics} />
+        <Route path="/leaderboard" component={Leaderboard} />
+        <Route path="/wallet-profiler" component={WalletProfiler} />
+        <Route path="/gas-estimator" component={GasEstimator} />
+        <Route path="/activity" component={ActivityFeed} />
+        <Route path="/ai-nft" component={AINFTGenerator} />
+        <Route path="/rarity" component={RarityAnalyzer} />
+        <Route path="/profile" component={UserProfiles} />
+        <Route path="/governance" component={DAOGovernance} />
+        <Route path="/simulate" component={TxSimulator} />
+        <Route path="/rebalancer" component={PortfolioRebalancer} />
         <Route component={NotFound} />
       </Switch>
     </>
