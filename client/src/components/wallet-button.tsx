@@ -176,14 +176,12 @@ export function WalletButton() {
               className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm"
               onClick={() => setShowModal(false)}
             />
-            <div className="fixed inset-x-0 bottom-0 z-[101] sm:inset-0 sm:flex sm:items-center sm:justify-center sm:p-4">
-              <motion.div
-                initial={{ opacity: 0, y: 300 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 300 }}
-                transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                className="w-full max-w-sm mx-auto bg-background border border-white/10 rounded-t-2xl sm:rounded-2xl p-5 shadow-2xl"
-                style={{ maxHeight: "80vh", overflowY: "auto" }}
+            <div 
+              className="fixed inset-x-0 bottom-0 z-[101] p-4 pb-6 sm:inset-0 sm:flex sm:items-center sm:justify-center"
+            >
+              <div
+                className="w-full max-w-sm mx-auto bg-background border border-white/10 rounded-2xl p-5 shadow-2xl"
+                style={{ maxHeight: "75vh", overflowY: "auto" }}
               >
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-bold text-white">Connect Wallet</h2>
@@ -274,7 +272,7 @@ export function WalletButton() {
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
           </>
         )}
