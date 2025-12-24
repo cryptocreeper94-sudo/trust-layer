@@ -13,7 +13,6 @@ import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.pn
 import { useAuth } from "@/hooks/use-auth";
 
 const TICKET_PRICE = 100;
-const NEXT_DRAW = "2 days 14:32:08";
 
 const PRIZE_TIERS = [
   { match: "6 Numbers", prize: "Jackpot", odds: "1:13,983,816" },
@@ -22,6 +21,18 @@ const PRIZE_TIERS = [
   { match: "3 Numbers", prize: "100 DWC", odds: "1:57" },
   { match: "2 Numbers", prize: "10 DWC", odds: "1:8" },
 ];
+
+// Simulated global stats (would come from API)
+const GLOBAL_STATS = {
+  jackpot: 2847500,
+  ticketsSold: 28475,
+  nextDraw: { days: 2, hours: 14, minutes: 32 },
+  lastWinners: [
+    { address: "DWC...x7K2", prize: "1,250,000", numbers: [7, 14, 21, 28, 35, 42] },
+    { address: "DWC...m3P8", prize: "50,000", numbers: [3, 12, 24, 31, 39, 45] },
+    { address: "DWC...n9R5", prize: "1,000", numbers: [5, 18, 22, 33, 41, 48] },
+  ]
+};
 
 function LotteryBall({ number, delay = 0 }: { number: number; delay?: number }) {
   return (
@@ -43,7 +54,6 @@ export default function Lottery() {
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
 
   const quickPick = () => {
-    if (!isConnected) return;
     const nums = new Set<number>();
     while (nums.size < 6) {
       nums.add(Math.floor(Math.random() * 49) + 1);
@@ -52,7 +62,6 @@ export default function Lottery() {
   };
 
   const toggleNumber = (num: number) => {
-    if (!isConnected) return;
     if (selectedNumbers.includes(num)) {
       setSelectedNumbers(selectedNumbers.filter(n => n !== num));
     } else if (selectedNumbers.length < 6) {
@@ -104,6 +113,7 @@ export default function Lottery() {
             </p>
           </motion.div>
 
+          {/* Live Jackpot - Always visible */}
           <GlassCard glow className="p-6 mb-6 text-center relative overflow-hidden">
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 via-transparent to-amber-500/10"
@@ -121,43 +131,29 @@ export default function Lottery() {
                 animate={{ scale: [1, 1.02, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                -- DWC
+                {GLOBAL_STATS.jackpot.toLocaleString()} DWC
               </motion.p>
-              <p className="text-sm text-muted-foreground mt-2">Jackpot builds as tickets are sold</p>
+              <p className="text-sm text-muted-foreground mt-2">≈ ${(GLOBAL_STATS.jackpot * 0.152).toLocaleString()}</p>
               
               <div className="flex items-center justify-center gap-6 mt-4">
                 <div className="text-center">
-                  <Clock className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
-                  <p className="font-mono text-lg">{NEXT_DRAW}</p>
+                  <Clock className="w-5 h-5 mx-auto mb-1 text-purple-400" />
+                  <p className="font-mono text-lg">
+                    {GLOBAL_STATS.nextDraw.days}d {GLOBAL_STATS.nextDraw.hours}h {GLOBAL_STATS.nextDraw.minutes}m
+                  </p>
                   <p className="text-xs text-muted-foreground">Next Draw</p>
                 </div>
                 <div className="text-center">
-                  <Users className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
-                  <p className="font-mono text-lg">--</p>
+                  <Users className="w-5 h-5 mx-auto mb-1 text-blue-400" />
+                  <p className="font-mono text-lg">{GLOBAL_STATS.ticketsSold.toLocaleString()}</p>
                   <p className="text-xs text-muted-foreground">Tickets Sold</p>
                 </div>
               </div>
             </div>
           </GlassCard>
 
-          {!isConnected && (
-            <GlassCard glow className="p-6 mb-6 text-center">
-              <Lock className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="font-bold text-lg mb-2">Connect Wallet to Play</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Pick your lucky numbers and buy tickets for a chance to win the jackpot!
-              </p>
-              <Link href="/wallet">
-                <Button className="bg-gradient-to-r from-yellow-500 to-amber-500 text-black" data-testid="button-connect-lottery">
-                  <Wallet className="w-4 h-4 mr-2" />
-                  Connect Wallet
-                </Button>
-              </Link>
-            </GlassCard>
-          )}
-
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-            <GlassCard className={`p-4 ${!isConnected ? "opacity-60 pointer-events-none" : ""}`}>
+            <GlassCard className="p-4">
               <h3 className="font-bold mb-4 flex items-center gap-2">
                 <Ticket className="w-4 h-4 text-primary" />
                 Pick Your Numbers
@@ -171,7 +167,6 @@ export default function Lottery() {
                     size="sm"
                     className={`w-full h-8 p-0 text-xs ${selectedNumbers.includes(num) ? "bg-gradient-to-r from-purple-500 to-pink-500" : ""}`}
                     onClick={() => toggleNumber(num)}
-                    disabled={!isConnected}
                     data-testid={`button-number-${num}`}
                   >
                     {num}
@@ -194,11 +189,11 @@ export default function Lottery() {
               </div>
 
               <div className="flex gap-2 mb-4">
-                <Button variant="outline" className="flex-1" onClick={quickPick} disabled={!isConnected} data-testid="button-quick-pick">
+                <Button variant="outline" className="flex-1" onClick={quickPick} data-testid="button-quick-pick">
                   <Zap className="w-4 h-4 mr-2" />
                   Quick Pick
                 </Button>
-                <Button variant="outline" className="flex-1" onClick={() => setSelectedNumbers([])} disabled={!isConnected} data-testid="button-clear">
+                <Button variant="outline" className="flex-1" onClick={() => setSelectedNumbers([])} data-testid="button-clear">
                   Clear
                 </Button>
               </div>
@@ -206,21 +201,33 @@ export default function Lottery() {
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-sm">Tickets:</span>
                 <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm" onClick={() => setTickets(Math.max(1, tickets - 1))} disabled={!isConnected} data-testid="button-tickets-minus">-</Button>
+                  <Button variant="outline" size="sm" onClick={() => setTickets(Math.max(1, tickets - 1))} data-testid="button-tickets-minus">-</Button>
                   <span className="w-8 text-center font-mono">{tickets}</span>
-                  <Button variant="outline" size="sm" onClick={() => setTickets(tickets + 1)} disabled={!isConnected} data-testid="button-tickets-plus">+</Button>
+                  <Button variant="outline" size="sm" onClick={() => setTickets(tickets + 1)} data-testid="button-tickets-plus">+</Button>
                 </div>
                 <span className="text-muted-foreground">= {TICKET_PRICE * tickets} DWC</span>
               </div>
 
-              <Button 
-                className="w-full h-12 bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-bold"
-                disabled={selectedNumbers.length !== 6 || !isConnected}
-                data-testid="button-buy-tickets"
-              >
-                <Ticket className="w-5 h-5 mr-2" />
-                Buy {tickets} Ticket{tickets > 1 ? "s" : ""} for {TICKET_PRICE * tickets} DWC
-              </Button>
+              {isConnected ? (
+                <Button 
+                  className="w-full h-12 bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-bold"
+                  disabled={selectedNumbers.length !== 6}
+                  data-testid="button-buy-tickets"
+                >
+                  <Ticket className="w-5 h-5 mr-2" />
+                  Buy {tickets} Ticket{tickets > 1 ? "s" : ""} for {TICKET_PRICE * tickets} DWC
+                </Button>
+              ) : (
+                <Link href="/wallet" className="block">
+                  <Button 
+                    className="w-full h-12 bg-gradient-to-r from-purple-500 to-pink-500 font-bold"
+                    data-testid="button-connect-lottery"
+                  >
+                    <Wallet className="w-5 h-5 mr-2" />
+                    Connect Wallet to Buy Tickets
+                  </Button>
+                </Link>
+              )}
             </GlassCard>
 
             <div className="space-y-4">
@@ -247,16 +254,40 @@ export default function Lottery() {
               <GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <History className="w-4 h-4 text-primary" />
+                  Recent Winners
+                </h3>
+                <div className="space-y-2">
+                  {GLOBAL_STATS.lastWinners.map((winner, i) => (
+                    <div key={i} className="p-2 rounded-lg bg-white/5">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-sm font-mono">{winner.address}</span>
+                        <Badge className="bg-green-500/20 text-green-400">{winner.prize} DWC</Badge>
+                      </div>
+                      <div className="flex gap-1">
+                        {winner.numbers.map(n => (
+                          <span key={n} className="w-6 h-6 rounded-full bg-purple-500/30 flex items-center justify-center text-xs font-mono">
+                            {n}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </GlassCard>
+
+              <GlassCard className="p-4">
+                <h3 className="font-bold mb-3 flex items-center gap-2">
+                  <Ticket className="w-4 h-4 text-primary" />
                   Your Tickets
                 </h3>
                 {isConnected ? (
-                  <div className="text-center py-6 text-muted-foreground">
+                  <div className="text-center py-4 text-muted-foreground">
                     <Ticket className="w-8 h-8 mx-auto mb-2 opacity-50" />
                     <p className="text-sm">No tickets purchased yet</p>
                     <p className="text-xs">Buy tickets to enter the draw</p>
                   </div>
                 ) : (
-                  <div className="text-center py-6 text-muted-foreground">
+                  <div className="text-center py-4 text-muted-foreground">
                     <Lock className="w-8 h-8 mx-auto mb-2 opacity-50" />
                     <p className="text-sm">Connect wallet to view tickets</p>
                   </div>

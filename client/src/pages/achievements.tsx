@@ -23,6 +23,7 @@ interface Achievement {
   rarity: "common" | "rare" | "epic" | "legendary";
   requirement: string;
   reward: string;
+  totalUnlocked: number; // How many users have unlocked this globally
 }
 
 const ALL_ACHIEVEMENTS: Achievement[] = [
@@ -35,6 +36,7 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
     rarity: "common",
     requirement: "Stake any amount of DWC",
     reward: "100 DWC",
+    totalUnlocked: 8472,
   },
   {
     id: "diamond_hands",
@@ -45,6 +47,7 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
     rarity: "epic",
     requirement: "Hold DWC for 30 consecutive days",
     reward: "1,000 DWC + NFT Badge",
+    totalUnlocked: 1247,
   },
   {
     id: "whale_status",
@@ -55,6 +58,7 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
     rarity: "legendary",
     requirement: "Accumulate 100,000 DWC",
     reward: "5,000 DWC + Exclusive NFT",
+    totalUnlocked: 89,
   },
   {
     id: "first_trade",
@@ -65,6 +69,7 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
     rarity: "common",
     requirement: "Execute 1 swap",
     reward: "50 DWC",
+    totalUnlocked: 12847,
   },
   {
     id: "trading_pro",
@@ -75,6 +80,7 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
     rarity: "rare",
     requirement: "Execute 100 swaps",
     reward: "500 DWC",
+    totalUnlocked: 892,
   },
   {
     id: "social_butterfly",
@@ -85,6 +91,7 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
     rarity: "rare",
     requirement: "Receive 100 total likes",
     reward: "250 DWC",
+    totalUnlocked: 456,
   },
   {
     id: "arcade_master",
@@ -95,6 +102,7 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
     rarity: "epic",
     requirement: "Accumulate 10,000 DWC in winnings",
     reward: "1,000 DWC + VIP Access",
+    totalUnlocked: 234,
   },
   {
     id: "referral_king",
@@ -105,6 +113,7 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
     rarity: "legendary",
     requirement: "Successfully refer 50 users",
     reward: "10,000 DWC + Genesis NFT",
+    totalUnlocked: 12,
   },
 ];
 
@@ -115,14 +124,21 @@ const RARITY_COLORS = {
   legendary: { bg: "from-amber-500/20 to-orange-500/20", border: "border-amber-500/30", text: "text-amber-400" },
 };
 
-function AchievementCard({ achievement }: { achievement: Achievement }) {
+// Global stats
+const GLOBAL_STATS = {
+  totalAchievements: ALL_ACHIEVEMENTS.length,
+  totalUnlocked: ALL_ACHIEVEMENTS.reduce((sum, a) => sum + a.totalUnlocked, 0),
+  totalRewardsGiven: "2.4M",
+};
+
+function AchievementCard({ achievement, isUnlocked = false }: { achievement: Achievement; isUnlocked?: boolean }) {
   const rarity = RARITY_COLORS[achievement.rarity];
 
   return (
-    <GlassCard className={`p-4 opacity-70 border ${rarity.border}`}>
+    <GlassCard className={`p-4 ${!isUnlocked ? "opacity-80" : ""} border ${rarity.border}`}>
       <div className="flex gap-4">
-        <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${rarity.bg} flex items-center justify-center text-muted-foreground shrink-0`}>
-          <Lock className="w-6 h-6" />
+        <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${rarity.bg} flex items-center justify-center shrink-0 ${!isUnlocked ? "text-muted-foreground" : rarity.text}`}>
+          {isUnlocked ? achievement.icon : <Lock className="w-6 h-6" />}
         </div>
         
         <div className="flex-1 min-w-0">
@@ -131,6 +147,9 @@ function AchievementCard({ achievement }: { achievement: Achievement }) {
             <Badge className={`${rarity.bg} ${rarity.text} text-[9px]`}>
               {achievement.rarity.toUpperCase()}
             </Badge>
+            {isUnlocked && (
+              <CheckCircle2 className="w-4 h-4 text-green-400" />
+            )}
           </div>
           <p className="text-xs text-muted-foreground mb-2">{achievement.description}</p>
           
@@ -140,9 +159,14 @@ function AchievementCard({ achievement }: { achievement: Achievement }) {
             </p>
           </div>
           
-          <div className="flex items-center gap-1 text-xs">
-            <Gift className="w-3 h-3 text-amber-400" />
-            <span className="text-amber-400">{achievement.reward}</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1 text-xs">
+              <Gift className="w-3 h-3 text-amber-400" />
+              <span className="text-amber-400">{achievement.reward}</span>
+            </div>
+            <span className="text-[10px] text-muted-foreground">
+              {achievement.totalUnlocked.toLocaleString()} unlocked
+            </span>
           </div>
         </div>
       </div>
@@ -153,45 +177,6 @@ function AchievementCard({ achievement }: { achievement: Achievement }) {
 export default function Achievements() {
   const { user } = useAuth();
   const isConnected = !!user;
-
-  if (!isConnected) {
-    return (
-      <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
-        <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-          <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2 shrink-0">
-              <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
-              <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
-            </Link>
-            <Link href="/dashboard-pro">
-              <Button variant="ghost" size="sm" className="h-8 text-xs">
-                <ArrowLeft className="w-3 h-3 mr-1" />
-                Dashboard
-              </Button>
-            </Link>
-          </div>
-        </nav>
-
-        <main className="flex-1 pt-16 pb-8 px-4 flex items-center justify-center">
-          <GlassCard glow className="p-8 text-center max-w-md">
-            <Trophy className="w-16 h-16 mx-auto mb-4 text-amber-400" />
-            <h2 className="text-2xl font-bold mb-2">Achievements</h2>
-            <p className="text-muted-foreground mb-6">
-              Complete challenges, earn rewards, and collect exclusive NFT badges as you use DarkWave.
-            </p>
-            <Link href="/wallet">
-              <Button className="bg-gradient-to-r from-amber-500 to-orange-500" data-testid="button-connect-achievements">
-                <Wallet className="w-4 h-4 mr-2" />
-                Connect Wallet to Track Progress
-              </Button>
-            </Link>
-          </GlassCard>
-        </main>
-
-        <Footer />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
@@ -237,37 +222,46 @@ export default function Achievements() {
             </p>
           </motion.div>
 
+          {/* Global Stats - Always visible */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
             <GlassCard hover={false} className="p-3 text-center">
               <Trophy className="w-5 h-5 mx-auto mb-1 text-amber-400" />
-              <p className="text-xl font-bold">0/{ALL_ACHIEVEMENTS.length}</p>
-              <p className="text-[10px] text-muted-foreground">Unlocked</p>
+              <p className="text-xl font-bold">{isConnected ? "0" : "--"}/{GLOBAL_STATS.totalAchievements}</p>
+              <p className="text-[10px] text-muted-foreground">Your Progress</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
-              <Coins className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
-              <p className="text-xl font-bold">0</p>
-              <p className="text-[10px] text-muted-foreground">DWC Earned</p>
+              <Users className="w-5 h-5 mx-auto mb-1 text-blue-400" />
+              <p className="text-xl font-bold">{GLOBAL_STATS.totalUnlocked.toLocaleString()}</p>
+              <p className="text-[10px] text-muted-foreground">Total Unlocks</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
-              <Sparkles className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
-              <p className="text-xl font-bold">0</p>
+              <Coins className="w-5 h-5 mx-auto mb-1 text-green-400" />
+              <p className="text-xl font-bold">{GLOBAL_STATS.totalRewardsGiven}</p>
+              <p className="text-[10px] text-muted-foreground">DWC Rewarded</p>
+            </GlassCard>
+            <GlassCard hover={false} className="p-3 text-center">
+              <Sparkles className="w-5 h-5 mx-auto mb-1 text-purple-400" />
+              <p className="text-xl font-bold">{isConnected ? "0" : "--"}</p>
               <p className="text-[10px] text-muted-foreground">NFTs Earned</p>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3 text-center">
-              <Star className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
-              <p className="text-xl font-bold">Level 1</p>
-              <p className="text-[10px] text-muted-foreground">Rank</p>
             </GlassCard>
           </div>
 
-          <GlassCard className="p-4 mb-6 text-center bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/20">
-            <Sparkles className="w-8 h-8 mx-auto mb-2 text-purple-400" />
-            <h3 className="font-bold mb-1">Start Your Journey</h3>
-            <p className="text-sm text-muted-foreground">
-              Use DarkWave features to unlock achievements and earn rewards. 
-              Each achievement you unlock gives you DWC and exclusive NFT badges!
-            </p>
-          </GlassCard>
+          {/* Connect prompt */}
+          {!isConnected && (
+            <GlassCard glow className="p-4 mb-6 text-center bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/20">
+              <Sparkles className="w-8 h-8 mx-auto mb-2 text-purple-400" />
+              <h3 className="font-bold mb-1">Track Your Achievements</h3>
+              <p className="text-sm text-muted-foreground mb-3">
+                Connect your wallet to track progress and earn rewards as you use DarkWave.
+              </p>
+              <Link href="/wallet">
+                <Button className="bg-gradient-to-r from-amber-500 to-orange-500" data-testid="button-connect-achievements">
+                  <Wallet className="w-4 h-4 mr-2" />
+                  Connect Wallet
+                </Button>
+              </Link>
+            </GlassCard>
+          )}
 
           <Tabs defaultValue="all">
             <TabsList className="w-full grid grid-cols-5 mb-4">
@@ -286,7 +280,7 @@ export default function Achievements() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                 >
-                  <AchievementCard achievement={achievement} />
+                  <AchievementCard achievement={achievement} isUnlocked={false} />
                 </motion.div>
               ))}
             </TabsContent>
@@ -299,7 +293,7 @@ export default function Achievements() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                 >
-                  <AchievementCard achievement={achievement} />
+                  <AchievementCard achievement={achievement} isUnlocked={false} />
                 </motion.div>
               ))}
             </TabsContent>
@@ -312,7 +306,7 @@ export default function Achievements() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                 >
-                  <AchievementCard achievement={achievement} />
+                  <AchievementCard achievement={achievement} isUnlocked={false} />
                 </motion.div>
               ))}
             </TabsContent>
@@ -325,7 +319,7 @@ export default function Achievements() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                 >
-                  <AchievementCard achievement={achievement} />
+                  <AchievementCard achievement={achievement} isUnlocked={false} />
                 </motion.div>
               ))}
             </TabsContent>
@@ -338,7 +332,7 @@ export default function Achievements() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                 >
-                  <AchievementCard achievement={achievement} />
+                  <AchievementCard achievement={achievement} isUnlocked={false} />
                 </motion.div>
               ))}
             </TabsContent>

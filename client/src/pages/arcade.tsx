@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import {
   ArrowLeft, Gamepad2, Dice1, TrendingUp, Coins, Trophy,
-  Zap, RefreshCw, History, Users, Star, Flame, Target, Wallet, Lock
+  Zap, RefreshCw, History, Users, Star, Flame, Target, Wallet, Lock, Play
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -14,15 +14,18 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import { useAuth } from "@/hooks/use-auth";
 
-function CoinFlipGame({ isConnected }: { isConnected: boolean }) {
+function CoinFlipGame({ isConnected, isDemoMode }: { isConnected: boolean; isDemoMode: boolean }) {
   const [betAmount, setBetAmount] = useState("100");
   const [selectedSide, setSelectedSide] = useState<"heads" | "tails">("heads");
   const [isFlipping, setIsFlipping] = useState(false);
   const [result, setResult] = useState<"heads" | "tails" | null>(null);
   const [won, setWon] = useState<boolean | null>(null);
+  const [demoBalance, setDemoBalance] = useState(10000);
+
+  const canPlay = isConnected || isDemoMode;
 
   const handleFlip = () => {
-    if (!isConnected) return;
+    if (!canPlay) return;
     setIsFlipping(true);
     setResult(null);
     setWon(null);
@@ -30,31 +33,28 @@ function CoinFlipGame({ isConnected }: { isConnected: boolean }) {
     setTimeout(() => {
       const flipResult = Math.random() > 0.5 ? "heads" : "tails";
       setResult(flipResult);
-      setWon(flipResult === selectedSide);
+      const didWin = flipResult === selectedSide;
+      setWon(didWin);
       setIsFlipping(false);
+      
+      if (isDemoMode) {
+        if (didWin) {
+          setDemoBalance(prev => prev + parseFloat(betAmount));
+        } else {
+          setDemoBalance(prev => prev - parseFloat(betAmount));
+        }
+      }
     }, 2000);
   };
 
-  if (!isConnected) {
-    return (
-      <div className="text-center py-8">
-        <Lock className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-        <h3 className="font-bold text-lg mb-2">Connect Wallet to Play</h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          You need to connect your wallet and have DWC balance to play games.
-        </p>
-        <Link href="/wallet">
-          <Button className="bg-gradient-to-r from-purple-500 to-pink-500" data-testid="button-connect-wallet-coinflip">
-            <Wallet className="w-4 h-4 mr-2" />
-            Connect Wallet
-          </Button>
-        </Link>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-4">
+      {isDemoMode && (
+        <div className="p-2 rounded-lg bg-amber-500/20 border border-amber-500/30 text-center">
+          <p className="text-sm text-amber-400">Demo Mode - {demoBalance.toLocaleString()} Play Coins</p>
+        </div>
+      )}
+      
       <div className="flex justify-center">
         <motion.div
           className="w-32 h-32 rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 flex items-center justify-center text-4xl shadow-2xl"
@@ -71,7 +71,7 @@ function CoinFlipGame({ isConnected }: { isConnected: boolean }) {
           animate={{ scale: 1 }}
           className={`text-center p-4 rounded-lg ${won ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}
         >
-          <p className="text-2xl font-bold">{won ? `You Won ${parseFloat(betAmount) * 2} DWC!` : "You Lost!"}</p>
+          <p className="text-2xl font-bold">{won ? `You Won ${parseFloat(betAmount) * 2} ${isDemoMode ? "Play Coins" : "DWC"}!` : "You Lost!"}</p>
           <p className="text-sm">Result: {result?.toUpperCase()}</p>
         </motion.div>
       )}
@@ -113,13 +113,13 @@ function CoinFlipGame({ isConnected }: { isConnected: boolean }) {
       <Button
         className="w-full h-14 text-lg bg-gradient-to-r from-purple-500 to-pink-500"
         onClick={handleFlip}
-        disabled={isFlipping}
+        disabled={isFlipping || !canPlay}
         data-testid="button-flip-coin"
       >
         {isFlipping ? (
           <><RefreshCw className="w-5 h-5 mr-2 animate-spin" /> Flipping...</>
         ) : (
-          <><Coins className="w-5 h-5 mr-2" /> Flip for {betAmount} DWC</>
+          <><Coins className="w-5 h-5 mr-2" /> Flip for {betAmount} {isDemoMode ? "Play Coins" : "DWC"}</>
         )}
       </Button>
       
@@ -130,13 +130,15 @@ function CoinFlipGame({ isConnected }: { isConnected: boolean }) {
   );
 }
 
-function CrashGame({ isConnected }: { isConnected: boolean }) {
+function CrashGame({ isConnected, isDemoMode }: { isConnected: boolean; isDemoMode: boolean }) {
   const [betAmount, setBetAmount] = useState("100");
   const [autoCashout, setAutoCashout] = useState("2.0");
   const [isPlaying, setIsPlaying] = useState(false);
   const [multiplier, setMultiplier] = useState(1.0);
   const [crashed, setCrashed] = useState(false);
   const [cashedOut, setCashedOut] = useState(false);
+
+  const canPlay = isConnected || isDemoMode;
 
   useEffect(() => {
     if (isPlaying && !crashed && !cashedOut) {
@@ -160,7 +162,7 @@ function CrashGame({ isConnected }: { isConnected: boolean }) {
   }, [isPlaying, crashed, cashedOut, autoCashout]);
 
   const handlePlay = () => {
-    if (!isConnected) return;
+    if (!canPlay) return;
     setIsPlaying(true);
     setMultiplier(1.0);
     setCrashed(false);
@@ -172,26 +174,14 @@ function CrashGame({ isConnected }: { isConnected: boolean }) {
     setIsPlaying(false);
   };
 
-  if (!isConnected) {
-    return (
-      <div className="text-center py-8">
-        <Lock className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-        <h3 className="font-bold text-lg mb-2">Connect Wallet to Play</h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          You need to connect your wallet and have DWC balance to play games.
-        </p>
-        <Link href="/wallet">
-          <Button className="bg-gradient-to-r from-purple-500 to-pink-500" data-testid="button-connect-wallet-crash">
-            <Wallet className="w-4 h-4 mr-2" />
-            Connect Wallet
-          </Button>
-        </Link>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-4">
+      {isDemoMode && (
+        <div className="p-2 rounded-lg bg-amber-500/20 border border-amber-500/30 text-center">
+          <p className="text-sm text-amber-400">Demo Mode - Practice for Free!</p>
+        </div>
+      )}
+      
       <div className="relative h-48 rounded-xl bg-gradient-to-br from-black/50 to-purple-900/30 border border-white/10 overflow-hidden flex items-center justify-center">
         <motion.div
           className={`text-6xl font-bold font-mono ${crashed ? "text-red-500" : cashedOut ? "text-green-400" : "text-white"}`}
@@ -215,7 +205,7 @@ function CrashGame({ isConnected }: { isConnected: boolean }) {
             className="absolute bottom-2 left-0 right-0 text-center"
           >
             <Badge className="bg-green-500/20 text-green-400">
-              Won {(parseFloat(betAmount) * multiplier).toFixed(0)} DWC!
+              Won {(parseFloat(betAmount) * multiplier).toFixed(0)} {isDemoMode ? "Play Coins" : "DWC"}!
             </Badge>
           </motion.div>
         )}
@@ -259,23 +249,24 @@ function CrashGame({ isConnected }: { isConnected: boolean }) {
           data-testid="button-cashout"
         >
           <Zap className="w-5 h-5 mr-2" />
-          Cashout {(parseFloat(betAmount) * multiplier).toFixed(0)} DWC
+          Cashout {(parseFloat(betAmount) * multiplier).toFixed(0)} {isDemoMode ? "Play Coins" : "DWC"}
         </Button>
       ) : (
         <Button
           className="w-full h-14 text-lg bg-gradient-to-r from-purple-500 to-pink-500"
           onClick={handlePlay}
+          disabled={!canPlay}
           data-testid="button-play-crash"
         >
           <TrendingUp className="w-5 h-5 mr-2" />
-          Place Bet ({betAmount} DWC)
+          Place Bet ({betAmount} {isDemoMode ? "Play Coins" : "DWC"})
         </Button>
       )}
     </div>
   );
 }
 
-function DiceGame({ isConnected }: { isConnected: boolean }) {
+function DiceGame({ isConnected, isDemoMode }: { isConnected: boolean; isDemoMode: boolean }) {
   const [betAmount, setBetAmount] = useState("100");
   const [target, setTarget] = useState(50);
   const [isOver, setIsOver] = useState(true);
@@ -283,11 +274,12 @@ function DiceGame({ isConnected }: { isConnected: boolean }) {
   const [result, setResult] = useState<number | null>(null);
   const [won, setWon] = useState<boolean | null>(null);
 
+  const canPlay = isConnected || isDemoMode;
   const winChance = isOver ? (100 - target) : target;
   const multiplier = (99 / winChance).toFixed(2);
 
   const handleRoll = () => {
-    if (!isConnected) return;
+    if (!canPlay) return;
     setIsRolling(true);
     setResult(null);
     setWon(null);
@@ -301,26 +293,14 @@ function DiceGame({ isConnected }: { isConnected: boolean }) {
     }, 1500);
   };
 
-  if (!isConnected) {
-    return (
-      <div className="text-center py-8">
-        <Lock className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-        <h3 className="font-bold text-lg mb-2">Connect Wallet to Play</h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          You need to connect your wallet and have DWC balance to play games.
-        </p>
-        <Link href="/wallet">
-          <Button className="bg-gradient-to-r from-purple-500 to-pink-500" data-testid="button-connect-wallet-dice">
-            <Wallet className="w-4 h-4 mr-2" />
-            Connect Wallet
-          </Button>
-        </Link>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-4">
+      {isDemoMode && (
+        <div className="p-2 rounded-lg bg-amber-500/20 border border-amber-500/30 text-center">
+          <p className="text-sm text-amber-400">Demo Mode - Practice for Free!</p>
+        </div>
+      )}
+      
       <div className="relative h-32 rounded-xl bg-gradient-to-br from-black/50 to-blue-900/30 border border-white/10 flex items-center justify-center">
         <motion.div
           className={`text-5xl font-bold font-mono ${won === true ? "text-green-400" : won === false ? "text-red-400" : "text-white"}`}
@@ -381,13 +361,13 @@ function DiceGame({ isConnected }: { isConnected: boolean }) {
       <Button
         className="w-full h-14 text-lg bg-gradient-to-r from-blue-500 to-cyan-500"
         onClick={handleRoll}
-        disabled={isRolling}
+        disabled={isRolling || !canPlay}
         data-testid="button-roll-dice"
       >
         {isRolling ? (
           <><RefreshCw className="w-5 h-5 mr-2 animate-spin" /> Rolling...</>
         ) : (
-          <><Dice1 className="w-5 h-5 mr-2" /> Roll for {betAmount} DWC</>
+          <><Dice1 className="w-5 h-5 mr-2" /> Roll for {betAmount} {isDemoMode ? "Play Coins" : "DWC"}</>
         )}
       </Button>
     </div>
@@ -397,6 +377,14 @@ function DiceGame({ isConnected }: { isConnected: boolean }) {
 export default function Arcade() {
   const { user } = useAuth();
   const isConnected = !!user;
+  const [isDemoMode, setIsDemoMode] = useState(false);
+
+  // Simulated live stats (would come from API in production)
+  const liveStats = {
+    playersOnline: 847,
+    wageredToday: "1.2M",
+    paidOutToday: "1.18M",
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
@@ -442,21 +430,22 @@ export default function Arcade() {
             </p>
           </motion.div>
 
+          {/* Live Stats - Always visible */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
             <GlassCard hover={false} className="p-3 text-center">
               <Users className="w-5 h-5 mx-auto mb-1 text-blue-400" />
-              <p className="text-xl font-bold">--</p>
+              <p className="text-xl font-bold">{liveStats.playersOnline}</p>
               <p className="text-[10px] text-muted-foreground">Playing Now</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
               <Coins className="w-5 h-5 mx-auto mb-1 text-yellow-400" />
-              <p className="text-xl font-bold">--</p>
+              <p className="text-xl font-bold">{liveStats.wageredToday}</p>
               <p className="text-[10px] text-muted-foreground">DWC Wagered Today</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
               <Trophy className="w-5 h-5 mx-auto mb-1 text-amber-400" />
-              <p className="text-xl font-bold">--</p>
-              <p className="text-[10px] text-muted-foreground">Won Today</p>
+              <p className="text-xl font-bold">{liveStats.paidOutToday}</p>
+              <p className="text-[10px] text-muted-foreground">Paid Out Today</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
               <Target className="w-5 h-5 mx-auto mb-1 text-green-400" />
@@ -464,6 +453,39 @@ export default function Arcade() {
               <p className="text-[10px] text-muted-foreground">RTP</p>
             </GlassCard>
           </div>
+
+          {/* Demo/Real Mode Toggle */}
+          {!isConnected && (
+            <GlassCard glow className="p-4 mb-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold flex items-center gap-2">
+                    <Play className="w-4 h-4 text-amber-400" />
+                    Try Demo Mode
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Practice with play coins - no wallet needed!
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <Button 
+                    variant={isDemoMode ? "default" : "outline"}
+                    onClick={() => setIsDemoMode(true)}
+                    className={isDemoMode ? "bg-amber-500" : ""}
+                    data-testid="button-demo-mode"
+                  >
+                    Demo Mode
+                  </Button>
+                  <Link href="/wallet">
+                    <Button className="bg-gradient-to-r from-purple-500 to-pink-500" data-testid="button-play-real">
+                      <Wallet className="w-4 h-4 mr-2" />
+                      Play for Real
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </GlassCard>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="lg:col-span-2">
@@ -482,13 +504,13 @@ export default function Arcade() {
 
                 <GlassCard glow className="p-4">
                   <TabsContent value="coinflip" className="mt-0">
-                    <CoinFlipGame isConnected={isConnected} />
+                    <CoinFlipGame isConnected={isConnected} isDemoMode={isDemoMode} />
                   </TabsContent>
                   <TabsContent value="crash" className="mt-0">
-                    <CrashGame isConnected={isConnected} />
+                    <CrashGame isConnected={isConnected} isDemoMode={isDemoMode} />
                   </TabsContent>
                   <TabsContent value="dice" className="mt-0">
-                    <DiceGame isConnected={isConnected} />
+                    <DiceGame isConnected={isConnected} isDemoMode={isDemoMode} />
                   </TabsContent>
                 </GlassCard>
               </Tabs>
@@ -509,7 +531,8 @@ export default function Arcade() {
                 ) : (
                   <div className="text-center py-6 text-muted-foreground">
                     <Lock className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <p className="text-sm">Connect wallet to view history</p>
+                    <p className="text-sm">Connect wallet to track history</p>
+                    <p className="text-xs">Demo games are not saved</p>
                   </div>
                 )}
               </GlassCard>
@@ -517,12 +540,27 @@ export default function Arcade() {
               <GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <Trophy className="w-4 h-4 text-amber-400" />
-                  Leaderboard
+                  Top Winners Today
                 </h3>
-                <div className="text-center py-6 text-muted-foreground">
-                  <Trophy className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">Leaderboard coming soon</p>
-                  <p className="text-xs">Top players will be displayed here</p>
+                <div className="space-y-2">
+                  {[
+                    { name: "CryptoKing", amount: "12,450", game: "Crash" },
+                    { name: "LuckyDev", amount: "8,200", game: "Coin Flip" },
+                    { name: "DiceWhale", amount: "6,800", game: "Dice" },
+                  ].map((winner, i) => (
+                    <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-white/5">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-sm font-bold ${i === 0 ? "text-amber-400" : i === 1 ? "text-gray-400" : "text-orange-400"}`}>
+                          #{i + 1}
+                        </span>
+                        <span className="text-sm">{winner.name}</span>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-mono text-green-400">+{winner.amount}</p>
+                        <p className="text-[10px] text-muted-foreground">{winner.game}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </GlassCard>
             </div>

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
   ArrowLeft, TrendingUp, TrendingDown, Clock, Users, Trophy,
-  Zap, DollarSign, Target, BarChart3, CheckCircle2, XCircle, Lock, Wallet
+  Zap, DollarSign, Target, BarChart3, Wallet
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -20,10 +20,13 @@ interface Market {
   category: string;
   endsIn: string;
   yesOdds: number;
+  totalPool: number;
+  participants: number;
   status: "active" | "resolved";
   result?: "yes" | "no";
 }
 
+// Global markets visible to everyone
 const MARKETS: Market[] = [
   {
     id: "btc-100k",
@@ -31,6 +34,8 @@ const MARKETS: Market[] = [
     category: "Crypto",
     endsIn: "12 days",
     yesOdds: 73.5,
+    totalPool: 245000,
+    participants: 1847,
     status: "active",
   },
   {
@@ -39,6 +44,8 @@ const MARKETS: Market[] = [
     category: "Crypto",
     endsIn: "6 months",
     yesOdds: 26.9,
+    totalPool: 89000,
+    participants: 632,
     status: "active",
   },
   {
@@ -47,9 +54,28 @@ const MARKETS: Market[] = [
     category: "DarkWave",
     endsIn: "52 days",
     yesOdds: 75.8,
+    totalPool: 512000,
+    participants: 2341,
+    status: "active",
+  },
+  {
+    id: "sol-ath",
+    question: "Will SOL hit new ATH in Q1 2026?",
+    category: "Crypto",
+    endsIn: "3 months",
+    yesOdds: 62.4,
+    totalPool: 156000,
+    participants: 987,
     status: "active",
   },
 ];
+
+// Global stats
+const GLOBAL_STATS = {
+  activeMarkets: MARKETS.filter(m => m.status === "active").length,
+  totalVolume: "1.2M",
+  totalTraders: 5847,
+};
 
 function MarketCard({ market, isConnected }: { market: Market; isConnected: boolean }) {
   const [betAmount, setBetAmount] = useState("");
@@ -65,6 +91,10 @@ function MarketCard({ market, isConnected }: { market: Market; isConnected: bool
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
             <Badge variant="outline" className="text-[9px]">{market.category}</Badge>
+            <Badge className="bg-green-500/20 text-green-400 text-[9px]">
+              <Users className="w-2 h-2 mr-1" />
+              {market.participants.toLocaleString()}
+            </Badge>
           </div>
           <h3 className="font-bold text-sm mb-2">{market.question}</h3>
         </div>
@@ -91,8 +121,8 @@ function MarketCard({ market, isConnected }: { market: Market; isConnected: bool
           {market.endsIn}
         </span>
         <span className="flex items-center gap-1">
-          <Users className="w-3 h-3" />
-          -- participants
+          <DollarSign className="w-3 h-3" />
+          {market.totalPool.toLocaleString()} DWC Pool
         </span>
       </div>
 
@@ -124,7 +154,7 @@ function MarketCard({ market, isConnected }: { market: Market; isConnected: bool
           </div>
 
           {!isConnected && (
-            <p className="text-xs text-center text-muted-foreground">
+            <p className="text-xs text-center text-muted-foreground mb-2">
               Connect wallet to place bets
             </p>
           )}
@@ -214,47 +244,56 @@ export default function Predictions() {
             </p>
           </motion.div>
 
-          {!isConnected && (
-            <GlassCard glow className="p-4 mb-6 text-center">
-              <Lock className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
-              <p className="text-sm mb-3">Connect your wallet to participate in prediction markets</p>
-              <Link href="/wallet">
-                <Button className="bg-gradient-to-r from-amber-500 to-orange-500" data-testid="button-connect-predictions">
-                  <Wallet className="w-4 h-4 mr-2" />
-                  Connect Wallet
-                </Button>
-              </Link>
-            </GlassCard>
-          )}
-
+          {/* Global Stats - Always visible */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
             <GlassCard hover={false} className="p-3 text-center">
               <BarChart3 className="w-5 h-5 mx-auto mb-1 text-purple-400" />
-              <p className="text-xl font-bold">{MARKETS.filter(m => m.status === "active").length}</p>
+              <p className="text-xl font-bold">{GLOBAL_STATS.activeMarkets}</p>
               <p className="text-[10px] text-muted-foreground">Active Markets</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
-              <DollarSign className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
-              <p className="text-xl font-bold">--</p>
+              <DollarSign className="w-5 h-5 mx-auto mb-1 text-green-400" />
+              <p className="text-xl font-bold">{GLOBAL_STATS.totalVolume}</p>
               <p className="text-[10px] text-muted-foreground">Total Volume</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
-              <Users className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
-              <p className="text-xl font-bold">--</p>
+              <Users className="w-5 h-5 mx-auto mb-1 text-blue-400" />
+              <p className="text-xl font-bold">{GLOBAL_STATS.totalTraders.toLocaleString()}</p>
               <p className="text-[10px] text-muted-foreground">Traders</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
-              <Trophy className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
-              <p className="text-xl font-bold">--</p>
+              <Trophy className="w-5 h-5 mx-auto mb-1 text-amber-400" />
+              <p className="text-xl font-bold">{isConnected ? "0" : "--"}</p>
               <p className="text-[10px] text-muted-foreground">Your Bets</p>
             </GlassCard>
           </div>
 
+          {/* Connect prompt for non-connected users */}
+          {!isConnected && (
+            <GlassCard glow className="p-4 mb-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold">Ready to Predict?</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Connect your wallet to place bets and win DWC
+                  </p>
+                </div>
+                <Link href="/wallet">
+                  <Button className="bg-gradient-to-r from-amber-500 to-orange-500" data-testid="button-connect-predictions">
+                    <Wallet className="w-4 h-4 mr-2" />
+                    Connect Wallet
+                  </Button>
+                </Link>
+              </div>
+            </GlassCard>
+          )}
+
           <Tabs defaultValue="all">
-            <TabsList className="w-full grid grid-cols-3 mb-4">
-              <TabsTrigger value="all" data-testid="tab-all-markets">All Markets</TabsTrigger>
+            <TabsList className="w-full grid grid-cols-4 mb-4">
+              <TabsTrigger value="all" data-testid="tab-all-markets">All</TabsTrigger>
               <TabsTrigger value="crypto" data-testid="tab-crypto-markets">Crypto</TabsTrigger>
               <TabsTrigger value="darkwave" data-testid="tab-darkwave-markets">DarkWave</TabsTrigger>
+              <TabsTrigger value="mybets" data-testid="tab-my-bets">My Bets</TabsTrigger>
             </TabsList>
 
             <TabsContent value="all" className="space-y-4">
@@ -295,6 +334,33 @@ export default function Predictions() {
                 </motion.div>
               ))}
             </TabsContent>
+
+            <TabsContent value="mybets">
+              <GlassCard className="p-8 text-center">
+                {isConnected ? (
+                  <>
+                    <Target className="w-12 h-12 mx-auto mb-4 text-white/10" />
+                    <h3 className="font-bold mb-2">No Active Bets</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Place a bet on any market to track it here.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <Wallet className="w-12 h-12 mx-auto mb-4 text-white/10" />
+                    <h3 className="font-bold mb-2">Connect Wallet</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Connect your wallet to view and track your bets.
+                    </p>
+                    <Link href="/wallet">
+                      <Button className="bg-gradient-to-r from-amber-500 to-orange-500">
+                        Connect Wallet
+                      </Button>
+                    </Link>
+                  </>
+                )}
+              </GlassCard>
+            </TabsContent>
           </Tabs>
 
           <GlassCard className="mt-6 p-4 text-center">
@@ -302,14 +368,19 @@ export default function Predictions() {
             <p className="text-sm text-muted-foreground mb-4">
               Have a prediction? Create a market and earn fees when others bet.
             </p>
-            <Button 
-              className="bg-gradient-to-r from-amber-500 to-orange-500" 
-              disabled={!isConnected}
-              data-testid="button-create-market"
-            >
-              <Target className="w-4 h-4 mr-2" />
-              {isConnected ? "Create Market" : "Connect Wallet"}
-            </Button>
+            {isConnected ? (
+              <Button className="bg-gradient-to-r from-amber-500 to-orange-500" data-testid="button-create-market">
+                <Target className="w-4 h-4 mr-2" />
+                Create Market
+              </Button>
+            ) : (
+              <Link href="/wallet">
+                <Button className="bg-gradient-to-r from-purple-500 to-pink-500">
+                  <Wallet className="w-4 h-4 mr-2" />
+                  Connect to Create
+                </Button>
+              </Link>
+            )}
           </GlassCard>
         </div>
       </main>
