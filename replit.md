@@ -44,7 +44,7 @@ DarkWave Smart Chain (DSC) is a comprehensive blockchain ecosystem developed by 
 - [x] Ethereum Sepolia & Solana Devnet support
 - [x] Mock mode for testing (contracts not yet deployed)
 - [x] wDWC ERC-20 contract ready (`contracts/ethereum/WDWC.sol`)
-- [x] wDWC SPL token setup ready (`scripts/deploy-wdwt-solana.ts`)
+- [x] wDWC SPL token setup ready (`scripts/deploy-wdwc-solana.ts`)
 
 #### DarkWave Studio (Phases 1-4)
 - [x] Monaco code editor with 70+ language support
@@ -95,7 +95,7 @@ DarkWave Smart Chain (DSC) is a comprehensive blockchain ecosystem developed by 
 
 #### Completed (Ready for Deployment)
 - [x] wDWC ERC-20 contract (`contracts/ethereum/WDWC.sol`) with Hardhat setup
-- [x] wDWC Solana bridge program (`contracts/solana/programs/wdwt-bridge/`) with Anchor
+- [x] wDWC Solana bridge program (`contracts/solana/programs/wdwc-bridge/`) with Anchor
 - [x] Multi-sig validator committee UI (`/multisig` page)
 - [x] Proof-of-reserve dashboard (`/proof-of-reserve` page)
 - [x] Security audit documentation (`docs/security-audit-checklist.md`)

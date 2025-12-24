@@ -196,7 +196,7 @@ export const gasEstimateSchema = z.object({
   gasLimit: z.number(),
   gasPrice: z.number(),
   estimatedCost: z.string(),
-  estimatedCostDWT: z.string(),
+  estimatedCostDWC: z.string(),
   estimatedCostUSD: z.string(),
 });
 
@@ -971,7 +971,7 @@ export type FaucetClaim = typeof faucetClaims.$inferSelect;
 
 export const tokenPairs = pgTable("token_pairs", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  tokenA: text("token_a").notNull(), // e.g., "DWT"
+  tokenA: text("token_a").notNull(), // e.g., "DWC"
   tokenB: text("token_b").notNull(), // e.g., "USDC"
   reserveA: text("reserve_a").notNull().default("0"),
   reserveB: text("reserve_b").notNull().default("0"),
