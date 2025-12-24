@@ -1501,7 +1501,7 @@ export async function registerRoutes(
         chain: "DarkWave Chain",
         blockNumber: 0,
         payloadHash,
-        txHash: stats.networkHash || "genesis",
+        txHash: "genesis-block-0x" + payloadHash.slice(0, 16),
         createdAt: genesisTimestamp,
         verificationUrl,
         qrCodeSvg,
