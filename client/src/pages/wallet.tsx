@@ -23,8 +23,12 @@ import {
   QrCode,
   Settings,
   History,
-  TrendingUp
+  TrendingUp,
+  ArrowLeft,
+  Home
 } from "lucide-react";
+import { Link } from "wouter";
+import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -103,13 +107,30 @@ export default function WalletPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-purple-950/20 pb-20">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
+            <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <Link href="/">
+              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5" data-testid="button-home">
+                <Home className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Home</span>
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </nav>
+
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
         <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-500" />
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 py-8">
+      <div className="relative z-10 container mx-auto px-4 pt-20 pb-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
