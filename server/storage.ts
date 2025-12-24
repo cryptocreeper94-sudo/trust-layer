@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, liquidStakingState, liquidStakingPositions, liquidStakingEvents } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type WhitelistTier, type InsertWhitelistTier, type WhitelistEntry, type InsertWhitelistEntry, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, liquidStakingState, liquidStakingPositions, liquidStakingEvents, whitelistTiers, whitelistEntries, airdropAllocations, airdropClaims, tokenGifts } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
 import crypto from "crypto";
@@ -101,6 +101,35 @@ export interface IStorage {
   upsertLiquidStakingPosition(userId: string, data: Partial<InsertLiquidStakingPosition>): Promise<LiquidStakingPosition>;
   recordLiquidStakingEvent(data: InsertLiquidStakingEvent): Promise<LiquidStakingEvent>;
   getLiquidStakingEvents(userId: string): Promise<LiquidStakingEvent[]>;
+  
+  // Whitelist & Airdrop
+  getWhitelistTiers(): Promise<WhitelistTier[]>;
+  createWhitelistTier(data: InsertWhitelistTier): Promise<WhitelistTier>;
+  updateWhitelistTier(id: string, data: Partial<InsertWhitelistTier>): Promise<WhitelistTier | undefined>;
+  deleteWhitelistTier(id: string): Promise<boolean>;
+  
+  getWhitelistEntries(): Promise<WhitelistEntry[]>;
+  getWhitelistEntry(id: string): Promise<WhitelistEntry | undefined>;
+  getWhitelistEntryByEmail(email: string): Promise<WhitelistEntry | undefined>;
+  getWhitelistEntryByWallet(wallet: string): Promise<WhitelistEntry | undefined>;
+  createWhitelistEntry(data: InsertWhitelistEntry): Promise<WhitelistEntry>;
+  updateWhitelistEntry(id: string, data: Partial<InsertWhitelistEntry>): Promise<WhitelistEntry | undefined>;
+  deleteWhitelistEntry(id: string): Promise<boolean>;
+  
+  getAirdropAllocations(): Promise<AirdropAllocation[]>;
+  createAirdropAllocation(data: InsertAirdropAllocation): Promise<AirdropAllocation>;
+  updateAirdropAllocation(id: string, data: Partial<InsertAirdropAllocation>): Promise<AirdropAllocation | undefined>;
+  
+  getAirdropClaims(userId?: string): Promise<AirdropClaim[]>;
+  getAirdropClaimByUser(allocationId: string, userId: string): Promise<AirdropClaim | undefined>;
+  createAirdropClaim(data: InsertAirdropClaim): Promise<AirdropClaim>;
+  updateAirdropClaim(id: string, data: Partial<InsertAirdropClaim>): Promise<AirdropClaim | undefined>;
+  
+  getTokenGifts(): Promise<TokenGift[]>;
+  getTokenGiftsByRecipient(email?: string, wallet?: string): Promise<TokenGift[]>;
+  createTokenGift(data: InsertTokenGift): Promise<TokenGift>;
+  updateTokenGift(id: string, data: Partial<InsertTokenGift>): Promise<TokenGift | undefined>;
+  deleteTokenGift(id: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -812,6 +841,134 @@ export class DatabaseStorage implements IStorage {
       .where(eq(liquidStakingEvents.userId, userId))
       .orderBy(desc(liquidStakingEvents.createdAt))
       .limit(50);
+  }
+
+  // Whitelist Tiers
+  async getWhitelistTiers(): Promise<WhitelistTier[]> {
+    return db.select().from(whitelistTiers).orderBy(desc(whitelistTiers.createdAt));
+  }
+
+  async createWhitelistTier(data: InsertWhitelistTier): Promise<WhitelistTier> {
+    const [tier] = await db.insert(whitelistTiers).values(data).returning();
+    return tier;
+  }
+
+  async updateWhitelistTier(id: string, data: Partial<InsertWhitelistTier>): Promise<WhitelistTier | undefined> {
+    const [tier] = await db.update(whitelistTiers).set(data).where(eq(whitelistTiers.id, id)).returning();
+    return tier;
+  }
+
+  async deleteWhitelistTier(id: string): Promise<boolean> {
+    await db.delete(whitelistTiers).where(eq(whitelistTiers.id, id));
+    return true;
+  }
+
+  // Whitelist Entries
+  async getWhitelistEntries(): Promise<WhitelistEntry[]> {
+    return db.select().from(whitelistEntries).orderBy(desc(whitelistEntries.createdAt));
+  }
+
+  async getWhitelistEntry(id: string): Promise<WhitelistEntry | undefined> {
+    const [entry] = await db.select().from(whitelistEntries).where(eq(whitelistEntries.id, id));
+    return entry;
+  }
+
+  async getWhitelistEntryByEmail(email: string): Promise<WhitelistEntry | undefined> {
+    const [entry] = await db.select().from(whitelistEntries).where(eq(whitelistEntries.email, email));
+    return entry;
+  }
+
+  async getWhitelistEntryByWallet(wallet: string): Promise<WhitelistEntry | undefined> {
+    const [entry] = await db.select().from(whitelistEntries).where(eq(whitelistEntries.walletAddress, wallet));
+    return entry;
+  }
+
+  async createWhitelistEntry(data: InsertWhitelistEntry): Promise<WhitelistEntry> {
+    const [entry] = await db.insert(whitelistEntries).values(data).returning();
+    return entry;
+  }
+
+  async updateWhitelistEntry(id: string, data: Partial<InsertWhitelistEntry>): Promise<WhitelistEntry | undefined> {
+    const [entry] = await db.update(whitelistEntries)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(whitelistEntries.id, id))
+      .returning();
+    return entry;
+  }
+
+  async deleteWhitelistEntry(id: string): Promise<boolean> {
+    await db.delete(whitelistEntries).where(eq(whitelistEntries.id, id));
+    return true;
+  }
+
+  // Airdrop Allocations
+  async getAirdropAllocations(): Promise<AirdropAllocation[]> {
+    return db.select().from(airdropAllocations).orderBy(desc(airdropAllocations.createdAt));
+  }
+
+  async createAirdropAllocation(data: InsertAirdropAllocation): Promise<AirdropAllocation> {
+    const [allocation] = await db.insert(airdropAllocations).values(data).returning();
+    return allocation;
+  }
+
+  async updateAirdropAllocation(id: string, data: Partial<InsertAirdropAllocation>): Promise<AirdropAllocation | undefined> {
+    const [allocation] = await db.update(airdropAllocations).set(data).where(eq(airdropAllocations.id, id)).returning();
+    return allocation;
+  }
+
+  // Airdrop Claims
+  async getAirdropClaims(userId?: string): Promise<AirdropClaim[]> {
+    if (userId) {
+      return db.select().from(airdropClaims).where(eq(airdropClaims.userId, userId)).orderBy(desc(airdropClaims.createdAt));
+    }
+    return db.select().from(airdropClaims).orderBy(desc(airdropClaims.createdAt));
+  }
+
+  async getAirdropClaimByUser(allocationId: string, userId: string): Promise<AirdropClaim | undefined> {
+    const [claim] = await db.select().from(airdropClaims)
+      .where(eq(airdropClaims.allocationId, allocationId))
+      .where(eq(airdropClaims.userId, userId));
+    return claim;
+  }
+
+  async createAirdropClaim(data: InsertAirdropClaim): Promise<AirdropClaim> {
+    const [claim] = await db.insert(airdropClaims).values(data).returning();
+    return claim;
+  }
+
+  async updateAirdropClaim(id: string, data: Partial<InsertAirdropClaim>): Promise<AirdropClaim | undefined> {
+    const [claim] = await db.update(airdropClaims).set(data).where(eq(airdropClaims.id, id)).returning();
+    return claim;
+  }
+
+  // Token Gifts
+  async getTokenGifts(): Promise<TokenGift[]> {
+    return db.select().from(tokenGifts).orderBy(desc(tokenGifts.createdAt));
+  }
+
+  async getTokenGiftsByRecipient(email?: string, wallet?: string): Promise<TokenGift[]> {
+    if (email) {
+      return db.select().from(tokenGifts).where(eq(tokenGifts.recipientEmail, email)).orderBy(desc(tokenGifts.createdAt));
+    }
+    if (wallet) {
+      return db.select().from(tokenGifts).where(eq(tokenGifts.recipientWallet, wallet)).orderBy(desc(tokenGifts.createdAt));
+    }
+    return [];
+  }
+
+  async createTokenGift(data: InsertTokenGift): Promise<TokenGift> {
+    const [gift] = await db.insert(tokenGifts).values(data).returning();
+    return gift;
+  }
+
+  async updateTokenGift(id: string, data: Partial<InsertTokenGift>): Promise<TokenGift | undefined> {
+    const [gift] = await db.update(tokenGifts).set(data).where(eq(tokenGifts.id, id)).returning();
+    return gift;
+  }
+
+  async deleteTokenGift(id: string): Promise<boolean> {
+    await db.delete(tokenGifts).where(eq(tokenGifts.id, id));
+    return true;
   }
 }
 
