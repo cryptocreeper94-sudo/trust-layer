@@ -84,7 +84,7 @@ export function GenesisHallmarkCard() {
 
   return (
     <motion.div
-      className="w-full max-w-md mx-auto perspective-1000"
+      className="w-full max-w-md mx-auto"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
@@ -94,7 +94,7 @@ export function GenesisHallmarkCard() {
           className="relative cursor-pointer group"
           onHoverStart={() => setIsHovered(true)}
           onHoverEnd={() => setIsHovered(false)}
-          whileHover={{ scale: 1.02, rotateY: 5 }}
+          whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
           {/* Premium Refractor Card */}
@@ -175,11 +175,11 @@ export function GenesisHallmarkCard() {
                   <motion.img
                     src={darkwaveLogo}
                     alt="DarkWave Token"
-                    className="w-32 h-32 relative z-10 drop-shadow-2xl"
+                    className="w-32 h-32 relative z-10 drop-shadow-2xl object-contain"
                     animate={{
-                      rotateY: isHovered ? [0, 360] : 0,
+                      scale: isHovered ? 1.05 : 1,
                     }}
-                    transition={{ duration: 3, ease: "easeInOut" }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
                   />
                   
                   {/* Serial Number Overlay */}
