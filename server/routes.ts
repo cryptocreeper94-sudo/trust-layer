@@ -1855,6 +1855,173 @@ export async function registerRoutes(
     }
   });
 
+  // ============================================
+  // LIQUID STAKING (stDWT)
+  // ============================================
+  
+  app.get("/api/liquid-staking/state", async (req, res) => {
+    try {
+      const state = await storage.getLiquidStakingState();
+      const totalStaked = BigInt(state?.totalDwtStaked || "0");
+      const totalSupply = BigInt(state?.totalStDwtSupply || "0");
+      const exchangeRate = state?.exchangeRate || "1000000000000000000";
+      const apy = state?.targetApy || "12";
+      
+      res.json({
+        totalDwtStaked: state?.totalDwtStaked || "0",
+        totalStDwtSupply: state?.totalStDwtSupply || "0",
+        exchangeRate,
+        apy,
+        tvl: (Number(totalStaked) / 1e18 * 0.0001).toFixed(2),
+      });
+    } catch (error) {
+      console.error("Liquid staking state error:", error);
+      res.status(500).json({ error: "Failed to fetch liquid staking state" });
+    }
+  });
+
+  app.get("/api/liquid-staking/position", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Not authenticated" });
+      
+      const position = await storage.getLiquidStakingPosition(userId);
+      const state = await storage.getLiquidStakingState();
+      const exchangeRate = BigInt(state?.exchangeRate || "1000000000000000000");
+      const stDwtBalance = BigInt(position?.stDwtBalance || "0");
+      const withdrawableDwt = (stDwtBalance * exchangeRate) / BigInt("1000000000000000000");
+      
+      res.json({
+        stakedDwt: position?.stakedDwt || "0",
+        stDwtBalance: position?.stDwtBalance || "0",
+        withdrawableDwt: withdrawableDwt.toString(),
+        exchangeRate: state?.exchangeRate || "1000000000000000000",
+      });
+    } catch (error) {
+      console.error("Liquid staking position error:", error);
+      res.status(500).json({ error: "Failed to fetch position" });
+    }
+  });
+
+  app.post("/api/liquid-staking/stake", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Not authenticated" });
+      
+      const { amount } = req.body;
+      if (!amount || BigInt(amount) <= 0) {
+        return res.status(400).json({ error: "Invalid amount" });
+      }
+      
+      const dwtAmount = BigInt(amount);
+      const state = await storage.getLiquidStakingState();
+      const exchangeRate = BigInt(state?.exchangeRate || "1000000000000000000");
+      const stDwtToMint = (dwtAmount * BigInt("1000000000000000000")) / exchangeRate;
+      
+      const newTotalStaked = (BigInt(state?.totalDwtStaked || "0") + dwtAmount).toString();
+      const newTotalSupply = (BigInt(state?.totalStDwtSupply || "0") + stDwtToMint).toString();
+      await storage.updateLiquidStakingState({
+        totalDwtStaked: newTotalStaked,
+        totalStDwtSupply: newTotalSupply,
+      });
+      
+      const position = await storage.getLiquidStakingPosition(userId);
+      const newStakedDwt = (BigInt(position?.stakedDwt || "0") + dwtAmount).toString();
+      const newStDwtBalance = (BigInt(position?.stDwtBalance || "0") + stDwtToMint).toString();
+      await storage.upsertLiquidStakingPosition(userId, {
+        stakedDwt: newStakedDwt,
+        stDwtBalance: newStDwtBalance,
+      });
+      
+      const txHash = `0x${crypto.randomBytes(32).toString("hex")}`;
+      await storage.recordLiquidStakingEvent({
+        userId,
+        eventType: "stake",
+        dwtAmount: dwtAmount.toString(),
+        stDwtAmount: stDwtToMint.toString(),
+        exchangeRate: exchangeRate.toString(),
+        txHash,
+      });
+      
+      res.json({
+        success: true,
+        stDwtMinted: stDwtToMint.toString(),
+        txHash,
+      });
+    } catch (error) {
+      console.error("Liquid stake error:", error);
+      res.status(500).json({ error: "Failed to stake" });
+    }
+  });
+
+  app.post("/api/liquid-staking/unstake", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Not authenticated" });
+      
+      const { stDwtAmount } = req.body;
+      if (!stDwtAmount || BigInt(stDwtAmount) <= 0) {
+        return res.status(400).json({ error: "Invalid amount" });
+      }
+      
+      const stDwtToBurn = BigInt(stDwtAmount);
+      const position = await storage.getLiquidStakingPosition(userId);
+      if (!position || BigInt(position.stDwtBalance) < stDwtToBurn) {
+        return res.status(400).json({ error: "Insufficient stDWT balance" });
+      }
+      
+      const state = await storage.getLiquidStakingState();
+      const exchangeRate = BigInt(state?.exchangeRate || "1000000000000000000");
+      const dwtToReturn = (stDwtToBurn * exchangeRate) / BigInt("1000000000000000000");
+      
+      const newTotalStaked = (BigInt(state?.totalDwtStaked || "0") - dwtToReturn).toString();
+      const newTotalSupply = (BigInt(state?.totalStDwtSupply || "0") - stDwtToBurn).toString();
+      await storage.updateLiquidStakingState({
+        totalDwtStaked: newTotalStaked,
+        totalStDwtSupply: newTotalSupply,
+      });
+      
+      const newStakedDwt = (BigInt(position.stakedDwt) - dwtToReturn).toString();
+      const newStDwtBalance = (BigInt(position.stDwtBalance) - stDwtToBurn).toString();
+      await storage.upsertLiquidStakingPosition(userId, {
+        stakedDwt: newStakedDwt,
+        stDwtBalance: newStDwtBalance,
+      });
+      
+      const txHash = `0x${crypto.randomBytes(32).toString("hex")}`;
+      await storage.recordLiquidStakingEvent({
+        userId,
+        eventType: "unstake",
+        dwtAmount: dwtToReturn.toString(),
+        stDwtAmount: stDwtToBurn.toString(),
+        exchangeRate: exchangeRate.toString(),
+        txHash,
+      });
+      
+      res.json({
+        success: true,
+        dwtReturned: dwtToReturn.toString(),
+        txHash,
+      });
+    } catch (error) {
+      console.error("Liquid unstake error:", error);
+      res.status(500).json({ error: "Failed to unstake" });
+    }
+  });
+
+  app.get("/api/liquid-staking/history", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Not authenticated" });
+      
+      const events = await storage.getLiquidStakingEvents(userId);
+      res.json({ events });
+    } catch (error) {
+      console.error("Liquid staking history error:", error);
+      res.status(500).json({ error: "Failed to fetch history" });
+    }
+  });
+
   // Waitlist signup for Dev Studio
   app.post("/api/waitlist", async (req, res) => {
     try {
@@ -3289,9 +3456,9 @@ Current context:
           apy: 12.5,
           stakedValue,
           positions: stakingPositions.map(p => ({
-            pool: p.tier === "validator" ? "Validator Node" : p.tier === "delegator" ? "Delegator Pool" : "Staking Pool",
+            pool: p.poolId.includes("validator") ? "Validator Node" : p.poolId.includes("delegator") ? "Delegator Pool" : "Staking Pool",
             amount: p.amount,
-            apy: p.tier === "validator" ? 15.0 : p.tier === "delegator" ? 12.5 : 10.0,
+            apy: p.poolId.includes("validator") ? 15.0 : p.poolId.includes("delegator") ? 12.5 : 10.0,
             rewards: p.pendingRewards || "0",
           })),
         },
