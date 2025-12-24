@@ -73,6 +73,14 @@ import UserProfiles from "@/pages/user-profiles";
 import DAOGovernance from "@/pages/dao-governance";
 import TxSimulator from "@/pages/tx-simulator";
 import PortfolioRebalancer from "@/pages/portfolio-rebalancer";
+import Arcade from "@/pages/arcade";
+import Predictions from "@/pages/predictions";
+import SocialFeed from "@/pages/social-feed";
+import Lottery from "@/pages/lottery";
+import AIAdvisor from "@/pages/ai-advisor";
+import PriceAlerts from "@/pages/price-alerts";
+import PaperTrading from "@/pages/paper-trading";
+import Achievements from "@/pages/achievements";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
 
 function ScrollToTop() {
@@ -155,6 +163,14 @@ function Router() {
         <Route path="/governance" component={DAOGovernance} />
         <Route path="/simulate" component={TxSimulator} />
         <Route path="/rebalancer" component={PortfolioRebalancer} />
+        <Route path="/arcade" component={Arcade} />
+        <Route path="/predictions" component={Predictions} />
+        <Route path="/social" component={SocialFeed} />
+        <Route path="/lottery" component={Lottery} />
+        <Route path="/ai-advisor" component={AIAdvisor} />
+        <Route path="/alerts" component={PriceAlerts} />
+        <Route path="/paper-trading" component={PaperTrading} />
+        <Route path="/achievements" component={Achievements} />
         <Route component={NotFound} />
       </Switch>
     </>
