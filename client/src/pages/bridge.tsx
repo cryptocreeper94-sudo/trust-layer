@@ -18,6 +18,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+import { WalletButton } from "@/components/wallet-button";
 
 interface BridgeInfo {
   custodyAddress: string;
@@ -239,7 +240,8 @@ export default function Bridge() {
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="border-amber-500/50 text-amber-400 text-[10px] animate-pulse">Beta</Badge>
+            <Badge variant="outline" className="border-amber-500/50 text-amber-400 text-[10px] animate-pulse hidden sm:flex">Beta</Badge>
+            <WalletButton />
             <Link href="/">
               <Button variant="ghost" size="sm" className="h-8 text-xs px-2 hover:bg-white/5">
                 <ArrowLeft className="w-3 h-3" />

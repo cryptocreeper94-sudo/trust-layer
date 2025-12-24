@@ -15,6 +15,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+import { WalletButton } from "@/components/wallet-button";
 
 interface TokenInfo {
   symbol: string;
@@ -161,7 +162,8 @@ export default function Swap() {
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="border-primary/50 text-primary text-[10px]">DEX</Badge>
+            <Badge variant="outline" className="border-primary/50 text-primary text-[10px] hidden sm:flex">DEX</Badge>
+            <WalletButton />
             <Link href="/">
               <Button variant="ghost" size="sm" className="h-8 text-xs px-2 hover:bg-white/5">
                 <ArrowLeft className="w-3 h-3" />

@@ -13,6 +13,7 @@ import { GlassCard } from "@/components/glass-card";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+import { WalletButton } from "@/components/wallet-button";
 
 interface StakingPool {
   id: string;
