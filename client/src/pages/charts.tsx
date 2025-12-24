@@ -21,34 +21,23 @@ interface PriceData {
   volume: number;
 }
 
-const generatePriceData = (days: number): PriceData[] => {
-  const data: PriceData[] = [];
-  let price = 0.0001;
-  const now = Date.now();
-  
-  for (let i = days; i >= 0; i--) {
-    const change = (Math.random() - 0.48) * 0.00002;
-    price = Math.max(0.00005, price + change);
-    data.push({
-      time: new Date(now - i * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-      price: parseFloat(price.toFixed(6)),
-      volume: Math.floor(Math.random() * 1000000) + 500000,
-    });
-  }
-  return data;
-};
-
-const PRICE_DATA_7D = generatePriceData(7);
-const PRICE_DATA_30D = generatePriceData(30);
-const PRICE_DATA_90D = generatePriceData(90);
-
 export default function Charts() {
   const [timeframe, setTimeframe] = useState("7d");
   const [selectedToken, setSelectedToken] = useState("DWT");
 
-  const { data: statsData, isLoading } = useQuery<{ price: string; change24h: string; volume24h: string; marketCap: string; high24h: string; low24h: string }>({
+  const { data: statsData, isLoading: statsLoading } = useQuery<{ price: string; change24h: string; volume24h: string; marketCap: string; high24h: string; low24h: string }>({
     queryKey: ["/api/charts/stats", selectedToken],
     refetchInterval: 30000,
+  });
+
+  const { data: historyData, isLoading: historyLoading } = useQuery<{ data: PriceData[] }>({
+    queryKey: ["/api/charts/history", selectedToken, timeframe],
+    queryFn: async () => {
+      const res = await fetch(`/api/charts/history?token=${selectedToken}&timeframe=${timeframe}`);
+      if (!res.ok) throw new Error("Failed to fetch");
+      return res.json();
+    },
+    refetchInterval: 60000,
   });
 
   const stats = statsData || {
@@ -60,20 +49,12 @@ export default function Charts() {
     low24h: "0.000108",
   };
 
-  const getPriceData = () => {
-    switch (timeframe) {
-      case "7d": return PRICE_DATA_7D;
-      case "30d": return PRICE_DATA_30D;
-      case "90d": return PRICE_DATA_90D;
-      default: return PRICE_DATA_7D;
-    }
-  };
-
   const isPositive = parseFloat(stats.change24h) >= 0;
-  const priceData = getPriceData();
+  const priceData = historyData?.data || [];
   const currentPrice = priceData[priceData.length - 1]?.price || 0;
   const startPrice = priceData[0]?.price || 0;
   const periodChange = startPrice > 0 ? ((currentPrice - startPrice) / startPrice * 100).toFixed(2) : "0";
+  const isLoading = statsLoading || historyLoading;
 
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">

@@ -3219,35 +3219,55 @@ ${context ? `- Additional context: ${context}` : ""}`;
   app.get("/api/portfolio", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
+      const walletAddress = req.query.wallet as string | undefined;
       
-      // Get user's DWT balance from blockchain (or mock for now)
-      const dwtBalance = "1000000000000000000000"; // 1000 DWT placeholder
-      const dwtPrice = 0.0001;
-      const dwtValue = parseFloat(dwtBalance) / 1e18 * dwtPrice;
+      let dwtBalance = "0";
+      if (walletAddress) {
+        const account = await storage.getChainAccount(walletAddress);
+        dwtBalance = account?.balance || "0";
+      }
       
-      // Get staking positions
-      const positions = await storage.getLiquidityPositions(userId);
-      const stakingValue = positions.reduce((sum, p) => sum + parseFloat(p.lpTokens), 0) * 0.01;
+      const priceHistory = await storage.getPriceHistory("DWT", 2);
+      const currentPrice = parseFloat(priceHistory[0]?.price || "0.000124");
+      const oldPrice = parseFloat(priceHistory[1]?.price || String(currentPrice));
+      const priceChange = oldPrice > 0 ? ((currentPrice - oldPrice) / oldPrice * 100) : 0;
       
-      // Calculate total value
-      const totalValue = dwtValue + stakingValue;
+      const dwtValue = parseFloat(dwtBalance) / 1e18 * currentPrice;
+      
+      const stakingPositions = await storage.getStakingPositions(userId);
+      const totalStaked = stakingPositions.reduce((sum, p) => (BigInt(sum) + BigInt(p.amount)).toString(), "0");
+      const pendingRewards = stakingPositions.reduce((sum, p) => (BigInt(sum) + BigInt(p.pendingRewards || "0")).toString(), "0");
+      const stakedValue = parseFloat(totalStaked) / 1e18 * currentPrice;
+      
+      const lpPositions = await storage.getLiquidityPositions(userId);
+      const lpValue = lpPositions.reduce((sum, p) => sum + parseFloat(p.lpTokens) * 0.01, 0);
+      
+      const totalValue = dwtValue + stakedValue + lpValue;
       
       res.json({
         totalValue,
-        change24h: Math.random() * 10 - 5, // Random for demo
+        change24h: parseFloat(priceChange.toFixed(2)),
         tokens: [
-          { symbol: "DWT", name: "DarkWave Token", balance: dwtBalance, value: dwtValue, change: 5.2, icon: "🌊" },
+          { symbol: "DWT", name: "DarkWave Token", balance: dwtBalance, value: dwtValue, change: parseFloat(priceChange.toFixed(2)), icon: "🌊" },
         ],
         staking: {
-          totalStaked: positions.reduce((sum, p) => (BigInt(sum) + BigInt(p.lpTokens)).toString(), "0"),
-          pendingRewards: "0",
+          totalStaked,
+          pendingRewards,
           apy: 12.5,
-          stakedValue: stakingValue,
-          positions: positions.map(p => ({
-            pool: `Pool ${p.poolId}`,
-            amount: p.lpTokens,
-            apy: 15.0,
-            rewards: p.earnedFees,
+          stakedValue,
+          positions: stakingPositions.map(p => ({
+            pool: p.tier === "validator" ? "Validator Node" : p.tier === "delegator" ? "Delegator Pool" : "Staking Pool",
+            amount: p.amount,
+            apy: p.tier === "validator" ? 15.0 : p.tier === "delegator" ? 12.5 : 10.0,
+            rewards: p.pendingRewards || "0",
+          })),
+        },
+        liquidity: {
+          totalValue: lpValue,
+          positions: lpPositions.map(p => ({
+            poolId: p.poolId,
+            lpTokens: p.lpTokens,
+            earnedFees: p.earnedFees,
           })),
         },
         nfts: [],
@@ -3544,25 +3564,30 @@ ${context ? `- Additional context: ${context}` : ""}`;
   // PRICE CHARTS
   // ============================================
 
+  async function seedPriceHistory(token: string, days: number) {
+    const now = Date.now();
+    const hoursToSeed = days * 24;
+    let basePrice = 0.000124;
+    
+    for (let i = hoursToSeed; i >= 0; i--) {
+      const variation = (Math.random() - 0.48) * 0.00002;
+      basePrice = Math.max(0.00005, basePrice + variation);
+      await storage.recordPrice({
+        token,
+        price: basePrice.toFixed(8),
+        volume: Math.floor(Math.random() * 100000 + 50000).toString(),
+        marketCap: "12400000",
+        timestamp: new Date(now - i * 3600000),
+      });
+    }
+  }
+
   app.get("/api/charts/stats", async (req, res) => {
     try {
-      // Get recent price history
       const history = await storage.getPriceHistory("DWT", 24);
       
-      // If no history, seed some initial data
       if (history.length === 0) {
-        const now = Date.now();
-        for (let i = 24; i >= 0; i--) {
-          const basePrice = 0.000124;
-          const variation = (Math.random() - 0.5) * 0.00002;
-          await storage.recordPrice({
-            token: "DWT",
-            price: (basePrice + variation).toFixed(8),
-            volume: Math.floor(Math.random() * 100000 + 50000).toString(),
-            marketCap: "12400000",
-            timestamp: new Date(now - i * 3600000),
-          });
-        }
+        await seedPriceHistory("DWT", 90);
       }
       
       const latestHistory = await storage.getPriceHistory("DWT", 24);
@@ -3585,15 +3610,51 @@ ${context ? `- Additional context: ${context}` : ""}`;
         marketCap: "12,400,000",
         high24h: high,
         low24h: low,
-        history: latestHistory.map(h => ({
-          timestamp: h.timestamp,
-          price: h.price,
-          volume: h.volume,
-        })),
       });
     } catch (error) {
       console.error("Charts stats error:", error);
       res.status(500).json({ error: "Failed to get stats" });
+    }
+  });
+
+  app.get("/api/charts/history", async (req, res) => {
+    try {
+      const { token = "DWT", timeframe = "7d" } = req.query;
+      
+      let limit = 24 * 7;
+      switch (timeframe) {
+        case "24h": limit = 24; break;
+        case "7d": limit = 24 * 7; break;
+        case "30d": limit = 24 * 30; break;
+        case "90d": limit = 24 * 90; break;
+      }
+      
+      const history = await storage.getPriceHistory(token as string, limit);
+      
+      if (history.length === 0) {
+        await seedPriceHistory(token as string, 90);
+        const newHistory = await storage.getPriceHistory(token as string, limit);
+        return res.json({
+          data: newHistory.map(h => ({
+            time: new Date(h.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+            timestamp: h.timestamp,
+            price: parseFloat(h.price),
+            volume: parseInt(h.volume || "0"),
+          })).reverse(),
+        });
+      }
+      
+      res.json({
+        data: history.map(h => ({
+          time: new Date(h.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+          timestamp: h.timestamp,
+          price: parseFloat(h.price),
+          volume: parseInt(h.volume || "0"),
+        })).reverse(),
+      });
+    } catch (error) {
+      console.error("Charts history error:", error);
+      res.status(500).json({ error: "Failed to get history" });
     }
   });
 
