@@ -279,208 +279,146 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-            <Link href="/faucet">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0 }}
-              >
-                <GlassCard className="h-full group hover:border-cyan-500/50 transition-all duration-300">
-                  <div className="p-4 text-center">
-                    <motion.div 
-                      className="w-12 h-12 mx-auto rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center mb-3 group-hover:shadow-[0_0_30px_rgba(0,255,255,0.3)] transition-shadow"
-                      whileHover={{ scale: 1.1 }}
-                    >
-                      <Droplets className="w-6 h-6 text-cyan-400" />
-                    </motion.div>
-                    <h3 className="text-sm font-bold text-white mb-1">Faucet</h3>
-                    <p className="text-[10px] text-muted-foreground">Get free test DWT</p>
-                    <Badge className="mt-2 bg-cyan-500/20 text-cyan-400 text-[9px]">1000 DWT</Badge>
-                  </div>
-                </GlassCard>
-              </motion.div>
-            </Link>
-
-            <Link href="/swap">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-              >
-                <GlassCard className="h-full group hover:border-pink-500/50 transition-all duration-300">
-                  <div className="p-4 text-center">
-                    <motion.div 
-                      className="w-12 h-12 mx-auto rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center mb-3 group-hover:shadow-[0_0_30px_rgba(236,72,153,0.3)] transition-shadow"
-                      whileHover={{ scale: 1.1, rotate: 180 }}
-                      transition={{ duration: 0.3 }}
-                    >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Trading Hub Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0 }}
+            >
+              <GlassCard className="h-full group hover:border-pink-500/50 transition-all duration-300">
+                <div className="p-5">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center group-hover:shadow-[0_0_30px_rgba(236,72,153,0.3)] transition-shadow">
                       <ArrowUpDown className="w-6 h-6 text-pink-400" />
-                    </motion.div>
-                    <h3 className="text-sm font-bold text-white mb-1">Swap</h3>
-                    <p className="text-[10px] text-muted-foreground">Trade tokens instantly</p>
-                    <Badge className="mt-2 bg-pink-500/20 text-pink-400 text-[9px]">0.3% fee</Badge>
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-white">Trading</h3>
+                      <p className="text-[11px] text-muted-foreground">Swap, liquidity & charts</p>
+                    </div>
                   </div>
-                </GlassCard>
-              </motion.div>
-            </Link>
+                  <div className="grid grid-cols-3 gap-2">
+                    <Link href="/swap">
+                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-pink-500/40 hover:bg-pink-500/5 transition-all text-center group/item" data-testid="link-swap">
+                        <ArrowUpDown className="w-4 h-4 mx-auto mb-1 text-pink-400" />
+                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Swap</span>
+                      </div>
+                    </Link>
+                    <Link href="/liquidity">
+                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-emerald-500/40 hover:bg-emerald-500/5 transition-all text-center group/item" data-testid="link-liquidity">
+                        <Droplets className="w-4 h-4 mx-auto mb-1 text-emerald-400" />
+                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Pools</span>
+                      </div>
+                    </Link>
+                    <Link href="/charts">
+                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-sky-500/40 hover:bg-sky-500/5 transition-all text-center group/item" data-testid="link-charts">
+                        <LineChart className="w-4 h-4 mx-auto mb-1 text-sky-400" />
+                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Charts</span>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+              </GlassCard>
+            </motion.div>
 
-            <Link href="/nft">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-              >
-                <GlassCard className="h-full group hover:border-purple-500/50 transition-all duration-300">
-                  <div className="p-4 text-center">
-                    <motion.div 
-                      className="w-12 h-12 mx-auto rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mb-3 group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-shadow"
-                      whileHover={{ scale: 1.1 }}
-                    >
+            {/* NFT Hub Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+            >
+              <GlassCard className="h-full group hover:border-purple-500/50 transition-all duration-300">
+                <div className="p-5">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-violet-500/20 flex items-center justify-center group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-shadow">
                       <ImageIcon className="w-6 h-6 text-purple-400" />
-                    </motion.div>
-                    <h3 className="text-sm font-bold text-white mb-1">NFTs</h3>
-                    <p className="text-[10px] text-muted-foreground">Collect digital art</p>
-                    <Badge className="mt-2 bg-purple-500/20 text-purple-400 text-[9px]">Mint & Trade</Badge>
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-white">NFT</h3>
+                      <p className="text-[11px] text-muted-foreground">Collect, create & explore</p>
+                    </div>
                   </div>
-                </GlassCard>
-              </motion.div>
-            </Link>
+                  <div className="grid grid-cols-3 gap-2">
+                    <Link href="/nft">
+                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-purple-500/40 hover:bg-purple-500/5 transition-all text-center group/item" data-testid="link-nft-market">
+                        <ImageIcon className="w-4 h-4 mx-auto mb-1 text-purple-400" />
+                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Market</span>
+                      </div>
+                    </Link>
+                    <Link href="/nft-gallery">
+                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-violet-500/40 hover:bg-violet-500/5 transition-all text-center group/item" data-testid="link-nft-gallery">
+                        <ImageIcon className="w-4 h-4 mx-auto mb-1 text-violet-400" />
+                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Gallery</span>
+                      </div>
+                    </Link>
+                    <Link href="/nft-creator">
+                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-rose-500/40 hover:bg-rose-500/5 transition-all text-center group/item" data-testid="link-nft-creator">
+                        <Palette className="w-4 h-4 mx-auto mb-1 text-rose-400" />
+                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Create</span>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+              </GlassCard>
+            </motion.div>
 
-            <Link href="/portfolio">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-              >
-                <GlassCard className="h-full group hover:border-green-500/50 transition-all duration-300">
-                  <div className="p-4 text-center">
-                    <motion.div 
-                      className="w-12 h-12 mx-auto rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center mb-3 group-hover:shadow-[0_0_30px_rgba(34,197,94,0.3)] transition-shadow"
-                      whileHover={{ scale: 1.1 }}
-                    >
-                      <PieChart className="w-6 h-6 text-green-400" />
-                    </motion.div>
-                    <h3 className="text-sm font-bold text-white mb-1">Portfolio</h3>
-                    <p className="text-[10px] text-muted-foreground">Track your assets</p>
-                    <Badge className="mt-2 bg-green-500/20 text-green-400 text-[9px]">Live</Badge>
+            {/* Tools Hub Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              <GlassCard className="h-full group hover:border-cyan-500/50 transition-all duration-300">
+                <div className="p-5">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center group-hover:shadow-[0_0_30px_rgba(0,255,255,0.3)] transition-shadow">
+                      <Zap className="w-6 h-6 text-cyan-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-white">Tools</h3>
+                      <p className="text-[11px] text-muted-foreground">Faucet, portfolio & more</p>
+                    </div>
                   </div>
-                </GlassCard>
-              </motion.div>
-            </Link>
-
-            <Link href="/transactions">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4 }}
-              >
-                <GlassCard className="h-full group hover:border-blue-500/50 transition-all duration-300">
-                  <div className="p-4 text-center">
-                    <motion.div 
-                      className="w-12 h-12 mx-auto rounded-xl bg-gradient-to-br from-blue-500/20 to-indigo-500/20 flex items-center justify-center mb-3 group-hover:shadow-[0_0_30px_rgba(59,130,246,0.3)] transition-shadow"
-                      whileHover={{ scale: 1.1 }}
-                    >
-                      <History className="w-6 h-6 text-blue-400" />
-                    </motion.div>
-                    <h3 className="text-sm font-bold text-white mb-1">History</h3>
-                    <p className="text-[10px] text-muted-foreground">All transactions</p>
-                    <Badge className="mt-2 bg-blue-500/20 text-blue-400 text-[9px]">Filter</Badge>
+                  <div className="grid grid-cols-3 gap-2">
+                    <Link href="/faucet">
+                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-cyan-500/40 hover:bg-cyan-500/5 transition-all text-center group/item" data-testid="link-faucet">
+                        <Droplets className="w-4 h-4 mx-auto mb-1 text-cyan-400" />
+                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Faucet</span>
+                      </div>
+                    </Link>
+                    <Link href="/portfolio">
+                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-green-500/40 hover:bg-green-500/5 transition-all text-center group/item" data-testid="link-portfolio">
+                        <PieChart className="w-4 h-4 mx-auto mb-1 text-green-400" />
+                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Portfolio</span>
+                      </div>
+                    </Link>
+                    <Link href="/transactions">
+                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-blue-500/40 hover:bg-blue-500/5 transition-all text-center group/item" data-testid="link-history">
+                        <History className="w-4 h-4 mx-auto mb-1 text-blue-400" />
+                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">History</span>
+                      </div>
+                    </Link>
                   </div>
-                </GlassCard>
-              </motion.div>
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mt-4">
-            <Link href="/launchpad">
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.5 }}>
-                <GlassCard className="h-full group hover:border-orange-500/50 transition-all duration-300">
-                  <div className="p-3 text-center">
-                    <motion.div className="w-10 h-10 mx-auto rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20 flex items-center justify-center mb-2 group-hover:shadow-[0_0_20px_rgba(249,115,22,0.3)] transition-shadow" whileHover={{ scale: 1.1 }}>
-                      <Rocket className="w-5 h-5 text-orange-400" />
-                    </motion.div>
-                    <h3 className="text-xs font-bold text-white mb-0.5">Launchpad</h3>
-                    <Badge className="bg-orange-500/20 text-orange-400 text-[8px]">New</Badge>
+                  <div className="grid grid-cols-2 gap-2 mt-2">
+                    <Link href="/launchpad">
+                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-orange-500/40 hover:bg-orange-500/5 transition-all text-center group/item" data-testid="link-launchpad">
+                        <Rocket className="w-4 h-4 mx-auto mb-1 text-orange-400" />
+                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Launchpad</span>
+                      </div>
+                    </Link>
+                    <Link href="/webhooks">
+                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-amber-500/40 hover:bg-amber-500/5 transition-all text-center group/item" data-testid="link-webhooks">
+                        <Webhook className="w-4 h-4 mx-auto mb-1 text-amber-400" />
+                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Webhooks</span>
+                      </div>
+                    </Link>
                   </div>
-                </GlassCard>
-              </motion.div>
-            </Link>
-
-            <Link href="/liquidity">
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.55 }}>
-                <GlassCard className="h-full group hover:border-emerald-500/50 transition-all duration-300">
-                  <div className="p-3 text-center">
-                    <motion.div className="w-10 h-10 mx-auto rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center mb-2 group-hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-shadow" whileHover={{ scale: 1.1 }}>
-                      <Droplets className="w-5 h-5 text-emerald-400" />
-                    </motion.div>
-                    <h3 className="text-xs font-bold text-white mb-0.5">Liquidity</h3>
-                    <Badge className="bg-emerald-500/20 text-emerald-400 text-[8px]">Earn</Badge>
-                  </div>
-                </GlassCard>
-              </motion.div>
-            </Link>
-
-            <Link href="/nft-gallery">
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.6 }}>
-                <GlassCard className="h-full group hover:border-violet-500/50 transition-all duration-300">
-                  <div className="p-3 text-center">
-                    <motion.div className="w-10 h-10 mx-auto rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 flex items-center justify-center mb-2 group-hover:shadow-[0_0_20px_rgba(139,92,246,0.3)] transition-shadow" whileHover={{ scale: 1.1 }}>
-                      <ImageIcon className="w-5 h-5 text-violet-400" />
-                    </motion.div>
-                    <h3 className="text-xs font-bold text-white mb-0.5">Gallery</h3>
-                    <Badge className="bg-violet-500/20 text-violet-400 text-[8px]">View</Badge>
-                  </div>
-                </GlassCard>
-              </motion.div>
-            </Link>
-
-            <Link href="/nft-creator">
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.65 }}>
-                <GlassCard className="h-full group hover:border-rose-500/50 transition-all duration-300">
-                  <div className="p-3 text-center">
-                    <motion.div className="w-10 h-10 mx-auto rounded-xl bg-gradient-to-br from-rose-500/20 to-pink-500/20 flex items-center justify-center mb-2 group-hover:shadow-[0_0_20px_rgba(244,63,94,0.3)] transition-shadow" whileHover={{ scale: 1.1 }}>
-                      <Palette className="w-5 h-5 text-rose-400" />
-                    </motion.div>
-                    <h3 className="text-xs font-bold text-white mb-0.5">Creator</h3>
-                    <Badge className="bg-rose-500/20 text-rose-400 text-[8px]">Mint</Badge>
-                  </div>
-                </GlassCard>
-              </motion.div>
-            </Link>
-
-            <Link href="/charts">
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.7 }}>
-                <GlassCard className="h-full group hover:border-sky-500/50 transition-all duration-300">
-                  <div className="p-3 text-center">
-                    <motion.div className="w-10 h-10 mx-auto rounded-xl bg-gradient-to-br from-sky-500/20 to-blue-500/20 flex items-center justify-center mb-2 group-hover:shadow-[0_0_20px_rgba(14,165,233,0.3)] transition-shadow" whileHover={{ scale: 1.1 }}>
-                      <LineChart className="w-5 h-5 text-sky-400" />
-                    </motion.div>
-                    <h3 className="text-xs font-bold text-white mb-0.5">Charts</h3>
-                    <Badge className="bg-sky-500/20 text-sky-400 text-[8px]">Live</Badge>
-                  </div>
-                </GlassCard>
-              </motion.div>
-            </Link>
-
-            <Link href="/webhooks">
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.75 }}>
-                <GlassCard className="h-full group hover:border-amber-500/50 transition-all duration-300">
-                  <div className="p-3 text-center">
-                    <motion.div className="w-10 h-10 mx-auto rounded-xl bg-gradient-to-br from-amber-500/20 to-yellow-500/20 flex items-center justify-center mb-2 group-hover:shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-shadow" whileHover={{ scale: 1.1 }}>
-                      <Webhook className="w-5 h-5 text-amber-400" />
-                    </motion.div>
-                    <h3 className="text-xs font-bold text-white mb-0.5">Webhooks</h3>
-                    <Badge className="bg-amber-500/20 text-amber-400 text-[8px]">Dev</Badge>
-                  </div>
-                </GlassCard>
-              </motion.div>
-            </Link>
+                </div>
+              </GlassCard>
+            </motion.div>
           </div>
         </div>
       </section>
