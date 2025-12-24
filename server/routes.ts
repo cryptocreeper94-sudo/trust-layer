@@ -3528,12 +3528,44 @@ ${context ? `- Additional context: ${context}` : ""}`;
 
   // =====================================================
   // FREE AI ASSISTANT - Basic ecosystem guidance
-  // Just requires login (no credits needed)
+  // Free with rate limiting to prevent abuse
   // =====================================================
+  
+  // Simple in-memory rate limiter for AI assistant
+  const assistantRateLimits = new Map<string, { count: number; resetTime: number }>();
+  const ASSISTANT_RATE_LIMIT = 50; // 50 requests per hour
+  const ASSISTANT_RATE_WINDOW = 60 * 60 * 1000; // 1 hour in ms
 
-  // AI Assistant TTS - FREE with login (low cost, good UX)
+  function checkAssistantRateLimit(identifier: string): { allowed: boolean; remaining: number } {
+    const now = Date.now();
+    const record = assistantRateLimits.get(identifier);
+    
+    if (!record || now > record.resetTime) {
+      assistantRateLimits.set(identifier, { count: 1, resetTime: now + ASSISTANT_RATE_WINDOW });
+      return { allowed: true, remaining: ASSISTANT_RATE_LIMIT - 1 };
+    }
+    
+    if (record.count >= ASSISTANT_RATE_LIMIT) {
+      return { allowed: false, remaining: 0 };
+    }
+    
+    record.count++;
+    return { allowed: true, remaining: ASSISTANT_RATE_LIMIT - record.count };
+  }
+
+  // AI Assistant TTS - FREE with rate limiting
   app.post("/api/assistant/speak", async (req, res) => {
     try {
+      // Rate limit by IP
+      const ip = req.ip || req.socket.remoteAddress || "unknown";
+      const rateCheck = checkAssistantRateLimit(`tts:${ip}`);
+      if (!rateCheck.allowed) {
+        return res.status(429).json({ 
+          error: "Rate limit exceeded",
+          message: "You've used all your free AI voice requests this hour. Try again later!",
+        });
+      }
+
       const { text } = req.body;
       if (!text || typeof text !== "string") {
         return res.status(400).json({ error: "Text is required" });
@@ -3565,9 +3597,20 @@ ${context ? `- Additional context: ${context}` : ""}`;
     }
   });
 
-  // AI Assistant chat - FREE (basic ecosystem guidance)
+  // AI Assistant chat - FREE with rate limiting
   app.post("/api/assistant/chat", async (req, res) => {
     try {
+      // Rate limit by IP
+      const ip = req.ip || req.socket.remoteAddress || "unknown";
+      const rateCheck = checkAssistantRateLimit(`chat:${ip}`);
+      if (!rateCheck.allowed) {
+        return res.status(429).json({ 
+          error: "Rate limit exceeded",
+          message: "You've used all your free AI messages this hour. Try again later!",
+          response: "Whoa, you're chatting a lot! Come back in a bit and we can keep talking.",
+        });
+      }
+
       const { message } = req.body;
       if (!message || typeof message !== "string") {
         return res.status(400).json({ error: "Message is required" });
