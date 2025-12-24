@@ -53,6 +53,10 @@ import Terms from "@/pages/terms";
 import Privacy from "@/pages/privacy";
 import ErrorPage from "@/pages/error";
 import NotFound from "@/pages/not-found";
+import TokenCompare from "@/pages/token-compare";
+import CodeSnippets from "@/pages/code-snippets";
+import ApiUsage from "@/pages/api-usage";
+import { FavoritesProvider } from "@/components/favorites-watchlist";
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -114,6 +118,9 @@ function Router() {
         <Route path="/terms" component={Terms} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/error" component={ErrorPage} />
+        <Route path="/token-compare" component={TokenCompare} />
+        <Route path="/code-snippets" component={CodeSnippets} />
+        <Route path="/api-usage" component={ApiUsage} />
         <Route component={NotFound} />
       </Switch>
     </>
@@ -126,11 +133,13 @@ function App() {
       <WalletProvider>
         <PreferencesProvider>
           <NotificationsProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Router />
-              <AIAssistant />
-            </TooltipProvider>
+            <FavoritesProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Router />
+                <AIAssistant />
+              </TooltipProvider>
+            </FavoritesProvider>
           </NotificationsProvider>
         </PreferencesProvider>
       </WalletProvider>
