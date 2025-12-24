@@ -87,8 +87,8 @@ export class DarkWaveBlockchain {
   constructor() {
     this.config = {
       chainId: 8453,
-      chainName: "DarkWave Chain",
-      symbol: "DWT",
+      chainName: "DarkWave Smart Chain",
+      symbol: "DWC",
       decimals: 18,
       blockTimeMs: 400,
       totalSupply: TOTAL_SUPPLY,
@@ -243,7 +243,7 @@ export class DarkWaveBlockchain {
 
     console.log(`[DarkWave Mainnet] Genesis block created`);
     console.log(`[DarkWave Mainnet] Treasury: ${this.treasuryAddress}`);
-    console.log(`[DarkWave Mainnet] Total Supply: 100,000,000 DWT`);
+    console.log(`[DarkWave Mainnet] Total Supply: 100,000,000 DWC`);
     console.log(`[DarkWave Mainnet] Network: MAINNET`);
   }
 
@@ -833,9 +833,9 @@ export class DarkWaveBlockchain {
     const displayBalance = balance / ONE_TOKEN;
     return {
       address: this.treasuryAddress,
-      balance: `${displayBalance} DWT`,
+      balance: `${displayBalance} DWC`,
       balance_raw: balance.toString(),
-      total_supply: "100,000,000 DWT",
+      total_supply: "100,000,000 DWC",
     };
   }
 
@@ -901,7 +901,7 @@ export class DarkWaveBlockchain {
     const balance = lpAccount?.balance || BigInt(0);
     return {
       address: LP_POOL_ADDRESS,
-      balance: `${balance / ONE_TOKEN} DWT`,
+      balance: `${balance / ONE_TOKEN} DWC`,
       balance_raw: balance.toString(),
     };
   }

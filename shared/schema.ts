@@ -817,7 +817,7 @@ export const stakingPools = pgTable("staking_pools", {
   apyBase: text("apy_base").notNull(), // Base APY percentage as string (e.g., "12.5")
   apyBoost: text("apy_boost").notNull().default("0"), // Bonus APY for streaks/badges
   lockDays: integer("lock_days").notNull().default(0), // 0 = no lock (liquid)
-  minStake: text("min_stake").notNull().default("100"), // Minimum DWT to stake
+  minStake: text("min_stake").notNull().default("100"), // Minimum DWC to stake
   maxStake: text("max_stake"), // Optional maximum per user
   totalStaked: text("total_staked").notNull().default("0"),
   totalStakers: integer("total_stakers").notNull().default(0),
@@ -951,7 +951,7 @@ export const faucetClaims = pgTable("faucet_claims", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   walletAddress: text("wallet_address").notNull(),
   ipAddress: text("ip_address"),
-  amount: text("amount").notNull().default("1000000000000000000000"), // 1000 DWT default
+  amount: text("amount").notNull().default("1000000000000000000000"), // 1000 DWC default
   txHash: text("tx_hash"),
   status: text("status").notNull().default("pending"), // 'pending' | 'completed' | 'failed'
   claimedAt: timestamp("claimed_at").defaultNow().notNull(),
@@ -1066,7 +1066,7 @@ export const nftListings = pgTable("nft_listings", {
   nftId: text("nft_id").notNull(),
   sellerId: text("seller_id").notNull(),
   price: text("price").notNull(),
-  currency: text("currency").notNull().default("DWT"),
+  currency: text("currency").notNull().default("DWC"),
   status: text("status").notNull().default("active"), // active, sold, cancelled
   expiresAt: timestamp("expires_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -1251,7 +1251,7 @@ export type InsertWebhookLog = z.infer<typeof insertWebhookLogSchema>;
 export type WebhookLog = typeof webhookLogs.$inferSelect;
 
 // ============================================
-// LIQUID STAKING (stDWT)
+// LIQUID STAKING (stDWC)
 // ============================================
 
 export const liquidStakingState = pgTable("liquid_staking_state", {
@@ -1532,7 +1532,7 @@ export const insertSocialLeaderboardSchema = createInsertSchema(socialLeaderboar
 export type InsertSocialLeaderboard = z.infer<typeof insertSocialLeaderboardSchema>;
 export type SocialLeaderboard = typeof socialLeaderboard.$inferSelect;
 
-// Legacy Founder Program - DarkWave Chain Early Adopters
+// Legacy Founder Program - DarkWave Smart Chain Early Adopters
 export const legacyFounders = pgTable("legacy_founders", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull(),
@@ -1541,7 +1541,7 @@ export const legacyFounders = pgTable("legacy_founders", {
   paymentId: text("payment_id"), // Stripe session ID or Coinbase charge ID
   amountPaidCents: integer("amount_paid_cents").notNull().default(2400), // $24.00
   status: text("status").notNull().default("pending"), // pending, paid, airdrop_pending, completed
-  airdropAmount: text("airdrop_amount").notNull().default("35000000000000000000000"), // 35,000 DWT (18 decimals)
+  airdropAmount: text("airdrop_amount").notNull().default("35000000000000000000000"), // 35,000 DWC (18 decimals)
   airdropTxHash: text("airdrop_tx_hash"),
   founderNumber: serial("founder_number"),
   referralCode: text("referral_code"),
@@ -1583,9 +1583,9 @@ export const LEGACY_FOUNDER_CONFIG = {
     "Unlimited AI analysis (crypto & stocks)",
     "StrikeAgent sniper bot access",
     "Founding member badge",
-    "Priority access to DWT staking pools",
+    "Priority access to DWC staking pools",
     "Early access to all new features",
-    "35,000 DWT token airdrop on launch",
+    "35,000 DWC coin airdrop on launch",
     "No recurring billing after initial payment",
   ],
 } as const;
