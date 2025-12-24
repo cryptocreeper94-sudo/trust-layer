@@ -1,6 +1,7 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import crypto from "crypto";
+import QRCode from "qrcode";
 import { WebSocketServer, WebSocket } from "ws";
 import { z } from "zod";
 import { storage } from "./storage";
@@ -762,6 +763,25 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Error deleting document:", error);
       res.status(500).json({ error: "Failed to delete document" });
+    }
+  });
+
+  app.post("/api/generate-qr", async (req, res) => {
+    try {
+      const { data, size = 200 } = req.body;
+      if (!data || typeof data !== 'string') {
+        return res.status(400).json({ error: "Invalid data for QR code" });
+      }
+      const dataUrl = await QRCode.toDataURL(data, {
+        width: Math.min(Math.max(size, 100), 500),
+        margin: 2,
+        color: { dark: "#000000", light: "#ffffff" },
+        errorCorrectionLevel: 'M',
+      });
+      res.json({ dataUrl });
+    } catch (error) {
+      console.error("Error generating QR code:", error);
+      res.status(500).json({ error: "Failed to generate QR code" });
     }
   });
 

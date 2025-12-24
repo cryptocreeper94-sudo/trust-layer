@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { QrCode, X, Copy, Check, Download } from "lucide-react";
+import { QrCode, X, Copy, Check, Download, AlertCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
@@ -13,7 +13,41 @@ interface QRDisplayProps {
 export function QRDisplay({ address, chainName = "DarkWave", size = 200 }: QRDisplayProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (isOpen && address) {
+      generateQRCode();
+    }
+  }, [isOpen, address]);
+
+  const generateQRCode = async () => {
+    setLoading(true);
+    setError(null);
+    setQrDataUrl(null);
+    
+    try {
+      const response = await fetch('/api/generate-qr', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: address, size }),
+      });
+      
+      if (response.ok) {
+        const { dataUrl } = await response.json();
+        setQrDataUrl(dataUrl);
+      } else {
+        setError("Failed to generate QR code. Please copy the address manually.");
+      }
+    } catch {
+      setError("QR generation unavailable. Please copy the address manually.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const copyAddress = async () => {
     await navigator.clipboard.writeText(address);
@@ -22,63 +56,17 @@ export function QRDisplay({ address, chainName = "DarkWave", size = 200 }: QRDis
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const generateQRSvg = (text: string): string => {
-    const modules = generateQRMatrix(text);
-    const moduleSize = size / modules.length;
-    
-    let paths = "";
-    for (let y = 0; y < modules.length; y++) {
-      for (let x = 0; x < modules[y].length; x++) {
-        if (modules[y][x]) {
-          paths += `M${x * moduleSize},${y * moduleSize}h${moduleSize}v${moduleSize}h-${moduleSize}z`;
-        }
-      }
-    }
-    
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-      <rect width="${size}" height="${size}" fill="white"/>
-      <path d="${paths}" fill="black"/>
-    </svg>`;
-  };
-
-  const generateQRMatrix = (text: string): boolean[][] => {
-    const size = 25;
-    const matrix: boolean[][] = Array(size).fill(null).map(() => Array(size).fill(false));
-    
-    for (let i = 0; i < 7; i++) {
-      for (let j = 0; j < 7; j++) {
-        const isBlack = i === 0 || i === 6 || j === 0 || j === 6 || (i >= 2 && i <= 4 && j >= 2 && j <= 4);
-        matrix[i][j] = isBlack;
-        matrix[i][size - 1 - j] = isBlack;
-        matrix[size - 1 - i][j] = isBlack;
-      }
-    }
-    
-    let hash = 0;
-    for (let i = 0; i < text.length; i++) {
-      hash = ((hash << 5) - hash) + text.charCodeAt(i);
-      hash = hash & hash;
-    }
-    
-    for (let y = 8; y < size - 8; y++) {
-      for (let x = 8; x < size - 8; x++) {
-        matrix[y][x] = ((hash >> ((x + y * size) % 32)) & 1) === 1;
-      }
-    }
-    
-    return matrix;
-  };
-
   const downloadQR = () => {
-    const svg = generateQRSvg(address);
-    const blob = new Blob([svg], { type: "image/svg+xml" });
-    const url = URL.createObjectURL(blob);
+    if (!qrDataUrl) {
+      copyAddress();
+      return;
+    }
+    
     const a = document.createElement("a");
-    a.href = url;
-    a.download = `${chainName.toLowerCase()}-wallet-qr.svg`;
+    a.href = qrDataUrl;
+    a.download = `${chainName.toLowerCase()}-wallet-qr.png`;
     a.click();
-    URL.revokeObjectURL(url);
-    toast({ title: "QR Downloaded", description: "QR code saved as SVG" });
+    toast({ title: "QR Downloaded", description: "QR code saved as PNG" });
   };
 
   return (
@@ -123,15 +111,40 @@ export function QRDisplay({ address, chainName = "DarkWave", size = 200 }: QRDis
               </div>
 
               <div className="p-6 flex flex-col items-center">
-                <div 
-                  className="bg-white p-4 rounded-xl mb-4"
-                  dangerouslySetInnerHTML={{ __html: generateQRSvg(address) }}
-                  data-testid="qr-code"
-                />
-                
-                <p className="text-xs text-muted-foreground text-center mb-4">
-                  Scan this QR code to receive funds
-                </p>
+                {loading ? (
+                  <div className="w-[200px] h-[200px] flex items-center justify-center bg-white/5 rounded-xl mb-4">
+                    <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                  </div>
+                ) : error ? (
+                  <div className="flex flex-col items-center gap-3 py-6 mb-4">
+                    <AlertCircle className="w-12 h-12 text-amber-500" />
+                    <p className="text-sm text-center text-muted-foreground px-4">
+                      {error}
+                    </p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={generateQRCode}
+                      className="gap-2"
+                      data-testid="button-retry-qr"
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                      Retry
+                    </Button>
+                  </div>
+                ) : qrDataUrl ? (
+                  <>
+                    <div 
+                      className="bg-white p-4 rounded-xl mb-4"
+                      data-testid="qr-code"
+                    >
+                      <img src={qrDataUrl} alt="Wallet QR Code" width={size} height={size} />
+                    </div>
+                    <p className="text-xs text-muted-foreground text-center mb-4">
+                      Scan this QR code to receive funds
+                    </p>
+                  </>
+                ) : null}
 
                 <div className="w-full p-3 bg-black/30 rounded-lg">
                   <p className="text-xs text-muted-foreground mb-1">Address</p>
@@ -144,7 +157,13 @@ export function QRDisplay({ address, chainName = "DarkWave", size = 200 }: QRDis
                   {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
                   {copied ? "Copied!" : "Copy Address"}
                 </Button>
-                <Button variant="outline" className="flex-1 gap-2" onClick={downloadQR} data-testid="button-download-qr">
+                <Button 
+                  variant="outline" 
+                  className="flex-1 gap-2" 
+                  onClick={downloadQR} 
+                  disabled={!qrDataUrl}
+                  data-testid="button-download-qr"
+                >
                   <Download className="w-4 h-4" />
                   Download
                 </Button>
