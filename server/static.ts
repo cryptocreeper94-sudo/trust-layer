@@ -1,6 +1,50 @@
-import express, { type Express } from "express";
+import express, { type Express, Request, Response, NextFunction } from "express";
 import fs from "fs";
 import path from "path";
+
+type AppDomain = "dwsc" | "games" | "studios";
+
+function getAppFromHost(hostname: string): AppDomain {
+  const host = hostname.toLowerCase();
+  
+  if (host.includes("darkwavegames") || host.includes("games.")) {
+    return "games";
+  }
+  if (host.includes("darkwavestudios") || host.includes("studios.")) {
+    return "studios";
+  }
+  return "dwsc";
+}
+
+const APP_CONFIG: Record<AppDomain, {
+  manifest: string;
+  themeColor: string;
+  title: string;
+  description: string;
+  icon: string;
+}> = {
+  dwsc: {
+    manifest: "/manifest-dwsc.webmanifest",
+    themeColor: "#8b5cf6",
+    title: "DarkWave Smart Chain",
+    description: "The next-generation Layer 1 blockchain. DeFi, staking, NFTs, and developer tools.",
+    icon: "/icons/dwsc-512x512.png",
+  },
+  games: {
+    manifest: "/manifest-games.webmanifest",
+    themeColor: "#ec4899",
+    title: "DarkWave Games",
+    description: "Provably fair blockchain games. Win real DWC with instant payouts.",
+    icon: "/icons/games-512x512.png",
+  },
+  studios: {
+    manifest: "/manifest-studios.webmanifest",
+    themeColor: "#06b6d4",
+    title: "DarkWave Studios",
+    description: "Building the future of blockchain technology. DarkWave Studios, LLC.",
+    icon: "/icons/studios-512x512.png",
+  },
+};
 
 export function serveStatic(app: Express) {
   const distPath = path.resolve(__dirname, "public");
@@ -10,10 +54,45 @@ export function serveStatic(app: Express) {
     );
   }
 
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    const appType = getAppFromHost(req.hostname);
+    (req as any).appType = appType;
+    (req as any).appConfig = APP_CONFIG[appType];
+    next();
+  });
+
+  app.get("/manifest.webmanifest", (req: Request, res: Response) => {
+    const appConfig = (req as any).appConfig;
+    const manifestPath = path.join(distPath, appConfig.manifest.replace("/", ""));
+    
+    if (fs.existsSync(manifestPath)) {
+      res.setHeader("Content-Type", "application/manifest+json");
+      res.sendFile(manifestPath);
+    } else {
+      res.sendFile(path.join(distPath, "manifest.webmanifest"));
+    }
+  });
+
   app.use(express.static(distPath));
 
-  // fall through to index.html if the file doesn't exist
-  app.use("*", (_req, res) => {
-    res.sendFile(path.resolve(distPath, "index.html"));
+  app.use("*", (req: Request, res: Response) => {
+    const appConfig = (req as any).appConfig;
+    const indexPath = path.resolve(distPath, "index.html");
+    
+    fs.readFile(indexPath, "utf8", (err, html) => {
+      if (err) {
+        res.status(500).send("Error loading page");
+        return;
+      }
+      
+      let modifiedHtml = html
+        .replace(/<title>.*?<\/title>/, `<title>${appConfig.title}</title>`)
+        .replace(/content="DarkWave Chain[^"]*"/g, `content="${appConfig.title}"`)
+        .replace(/<meta name="theme-color" content="[^"]*"/, `<meta name="theme-color" content="${appConfig.themeColor}"`)
+        .replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${appConfig.description}"`)
+        .replace(/href="\/manifest\.webmanifest"/, `href="${appConfig.manifest}"`);
+      
+      res.send(modifiedHtml);
+    });
   });
 }

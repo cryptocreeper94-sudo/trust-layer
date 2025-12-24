@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -7,7 +7,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { PreferencesProvider, NotificationsProvider } from "@/lib/store";
 import { WalletProvider } from "@/hooks/use-wallet";
 import { AIAssistant } from "@/components/ai-assistant";
+import { getAppFromHost } from "@/lib/app-config";
 import Home from "@/pages/home";
+import GamesHome from "@/pages/games-home";
+import StudiosHome from "@/pages/studios-home";
 import Dashboard from "@/pages/dashboard";
 import Developers from "@/pages/developers";
 import DevelopersRegister from "@/pages/developers-register";
@@ -93,7 +96,39 @@ function ScrollToTop() {
   return null;
 }
 
-function Router() {
+function GamesRouter() {
+  return (
+    <>
+      <ScrollToTop />
+      <Switch>
+        <Route path="/" component={GamesHome} />
+        <Route path="/arcade" component={Arcade} />
+        <Route path="/predictions" component={Predictions} />
+        <Route path="/lottery" component={Lottery} />
+        <Route path="/wallet" component={Wallet} />
+        <Route path="/terms" component={Terms} />
+        <Route path="/privacy" component={Privacy} />
+        <Route component={NotFound} />
+      </Switch>
+    </>
+  );
+}
+
+function StudiosRouter() {
+  return (
+    <>
+      <ScrollToTop />
+      <Switch>
+        <Route path="/" component={StudiosHome} />
+        <Route path="/terms" component={Terms} />
+        <Route path="/privacy" component={Privacy} />
+        <Route component={NotFound} />
+      </Switch>
+    </>
+  );
+}
+
+function DWSCRouter() {
   return (
     <>
       <ScrollToTop />
@@ -177,7 +212,22 @@ function Router() {
   );
 }
 
+function Router() {
+  const appType = useMemo(() => getAppFromHost(), []);
+  
+  if (appType === "games") {
+    return <GamesRouter />;
+  }
+  if (appType === "studios") {
+    return <StudiosRouter />;
+  }
+  return <DWSCRouter />;
+}
+
 function App() {
+  const appType = useMemo(() => getAppFromHost(), []);
+  const showAIAssistant = appType === "dwsc";
+  
   return (
     <QueryClientProvider client={queryClient}>
       <WalletProvider>
@@ -187,7 +237,7 @@ function App() {
               <TooltipProvider>
                 <Toaster />
                 <Router />
-                <AIAssistant />
+                {showAIAssistant && <AIAssistant />}
               </TooltipProvider>
             </FavoritesProvider>
           </NotificationsProvider>

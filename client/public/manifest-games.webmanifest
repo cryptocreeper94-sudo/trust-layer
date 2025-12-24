@@ -1,0 +1,82 @@
+{
+  "name": "DarkWave Games",
+  "short_name": "DW Games",
+  "description": "Provably fair blockchain games. Win real DWC with instant payouts.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#ec4899",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    {
+      "src": "/icons/games-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/games-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/games-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/games-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/games-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/games-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/games-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/games-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Arcade",
+      "short_name": "Arcade",
+      "url": "/arcade",
+      "icons": [{ "src": "/icons/games-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Lottery",
+      "short_name": "Lottery",
+      "url": "/lottery",
+      "icons": [{ "src": "/icons/games-96x96.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Predictions",
+      "short_name": "Predict",
+      "url": "/predictions",
+      "icons": [{ "src": "/icons/games-96x96.png", "sizes": "96x96" }]
+    }
+  ]
+}
