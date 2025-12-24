@@ -2662,6 +2662,97 @@ export async function registerRoutes(
     }
   });
 
+  // Studio AI Code Assistant - PAID feature using credits
+  app.post("/api/studio/ai/assist", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Login required" });
+
+      const { prompt, code, language, context } = req.body;
+      if (!prompt) {
+        return res.status(400).json({ error: "Prompt is required" });
+      }
+
+      // Check credits FIRST (don't deduct yet)
+      const credits = await getUserCredits(userId);
+      if (credits.balanceCents < STUDIO_AI_COST_CENTS) {
+        // Return 402 Payment Required for insufficient credits
+        return res.status(402).json({ 
+          error: "insufficient_credits",
+          message: "You're out of AI credits! Each Studio AI request costs $0.05.",
+          required: STUDIO_AI_COST_CENTS,
+          balance: credits.balanceCents,
+        });
+      }
+
+      const OpenAI = (await import("openai")).default;
+      const openai = new OpenAI({
+        apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
+        baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+      });
+
+      const systemPrompt = `You are an expert coding assistant for DarkWave Studio, a web-based IDE. 
+You help developers write, debug, explain, and optimize code.
+
+Guidelines:
+- Be concise but thorough
+- When showing code changes, use code blocks with the language
+- Explain your reasoning briefly
+- If fixing bugs, explain what was wrong
+- If optimizing, explain the improvement
+
+Current context:
+- Language: ${language || "unknown"}
+- File: ${context || "untitled"}`;
+
+      // Set up SSE for streaming
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
+
+      const userMessage = code 
+        ? `${prompt}\n\nHere's the code:\n\`\`\`${language || ""}\n${code}\n\`\`\``
+        : prompt;
+
+      const stream = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userMessage }
+        ],
+        stream: true,
+        max_tokens: 1500,
+      });
+
+      let hasContent = false;
+      for await (const chunk of stream) {
+        const content = chunk.choices[0]?.delta?.content || "";
+        if (content) {
+          hasContent = true;
+          res.write(`data: ${JSON.stringify({ content })}\n\n`);
+        }
+      }
+
+      // Only deduct credits AFTER successful completion
+      if (hasContent) {
+        await deductCredits(userId, STUDIO_AI_COST_CENTS, "studio_ai");
+      }
+
+      res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
+      res.end();
+    } catch (error: any) {
+      console.error("Studio AI error:", error);
+      // Don't deduct credits on error - user gets a free retry
+      if (!res.headersSent) {
+        res.status(500).json({ error: "AI request failed" });
+      } else {
+        res.write(`data: ${JSON.stringify({ content: "\n\n❌ Error: Something went wrong. Please try again (no credits charged)." })}\n\n`);
+        res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
+        res.end();
+      }
+    }
+  });
+
   app.get("/api/studio/projects/:id/collaborators", isAuthenticated, async (req: any, res) => {
     try {
       const collaborators = await storage.getStudioCollaborators(req.params.id);

@@ -502,6 +502,37 @@ export default function Studio() {
   const [aiResponse, setAiResponse] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
   const aiPanelRef = useRef<HTMLDivElement>(null);
+  const [aiCredits, setAiCredits] = useState<{ balanceCents: number; balanceUSD: string } | null>(null);
+  const [buyingCredits, setBuyingCredits] = useState(false);
+
+  // Fetch AI credits on mount
+  useEffect(() => {
+    if (user) {
+      fetch("/api/assistant/credits")
+        .then(res => res.ok ? res.json() : null)
+        .then(data => data && setAiCredits(data))
+        .catch(() => {});
+    }
+  }, [user]);
+
+  const buyAiCredits = async (amountCents: number = 500) => {
+    setBuyingCredits(true);
+    try {
+      const res = await fetch("/api/assistant/buy-credits", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amountCents }),
+      });
+      if (res.ok) {
+        const { checkoutUrl } = await res.json();
+        window.location.href = checkoutUrl;
+      }
+    } catch (error) {
+      console.error("Buy credits error:", error);
+    } finally {
+      setBuyingCredits(false);
+    }
+  };
   
   // Database Explorer state
   const [dbTables, setDbTables] = useState<{name: string, rowCount: number}[]>([]);
@@ -783,6 +814,19 @@ export default function Studio() {
         }),
       });
 
+      // Handle insufficient credits (402)
+      if (response.status === 402) {
+        const errorData = await response.json();
+        setAiResponse(`⚠️ ${errorData.message}\n\nClick "Add $5" above to purchase more credits and continue using AI assistance.`);
+        // Refresh credits display
+        fetch("/api/assistant/credits")
+          .then(res => res.ok ? res.json() : null)
+          .then(data => data && setAiCredits(data))
+          .catch(() => {});
+        setAiLoading(false);
+        return;
+      }
+
       if (!response.ok) throw new Error("AI request failed");
 
       const reader = response.body?.getReader();
@@ -812,6 +856,11 @@ export default function Studio() {
       setAiResponse("Sorry, I couldn't process your request. Please try again.");
     } finally {
       setAiLoading(false);
+      // Refresh credits after AI call
+      fetch("/api/assistant/credits")
+        .then(res => res.ok ? res.json() : null)
+        .then(data => data && setAiCredits(data))
+        .catch(() => {});
     }
   };
 
@@ -3197,7 +3246,7 @@ export default function Studio() {
                 </div>
                 <div>
                   <h3 className="font-medium text-white">AI Code Assistant</h3>
-                  <p className="text-xs text-muted-foreground">Powered by GPT-4o</p>
+                  <p className="text-xs text-muted-foreground">$0.05/request • GPT-4o</p>
                 </div>
               </div>
               <Button
@@ -3208,6 +3257,27 @@ export default function Studio() {
                 data-testid="button-close-ai"
               >
                 <X className="w-4 h-4" />
+              </Button>
+            </div>
+
+            {/* Credits Display */}
+            <div className="px-4 py-2 bg-black/30 border-b border-white/5 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-muted-foreground">Credits:</span>
+                <span className={`text-sm font-medium ${aiCredits && aiCredits.balanceCents > 0 ? "text-green-400" : "text-red-400"}`}>
+                  {aiCredits ? `$${aiCredits.balanceUSD}` : "Loading..."}
+                </span>
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => buyAiCredits(500)}
+                disabled={buyingCredits}
+                className="h-7 text-xs bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border-purple-500/50 hover:border-cyan-400"
+                data-testid="button-buy-credits"
+              >
+                {buyingCredits ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : null}
+                + Add $5
               </Button>
             </div>
 

@@ -116,7 +116,7 @@ DarkWave Chain is a comprehensive blockchain ecosystem developed by DarkWave Stu
 | 17 | More templates (Vue, Next.js, Django, Go, Rust) | ✅ DONE | Quick starts |
 | 18 | Live Preview iframe | ✅ DONE | Hot reload for apps |
 | 19 | Database Explorer | ✅ DONE | UI for project databases |
-| 20 | AI Code Assistant | TODO | OpenAI/Claude integration (credit system ready) |
+| 20 | AI Code Assistant | ✅ DONE | GPT-4o integration with credit billing ($0.05/request) |
 | 21 | Billing & Quotas | ✅ DONE | Credit system for Studio AI features |
 | 22 | CI/CD Pipelines | ✅ DONE | Automated testing/deploy config UI |
 
