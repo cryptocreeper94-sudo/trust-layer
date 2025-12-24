@@ -258,7 +258,7 @@ export class DarkWaveBlockchain {
         name: v.name,
         status: v.status,
         stake: v.stake,
-        blocksProduced: parseInt(v.blocksProduced),
+        blocksProduced: parseInt(v.blocksProduced || "0"),
         isFounder: v.isFounder,
       }));
       
@@ -275,6 +275,9 @@ export class DarkWaveBlockchain {
         }];
       }
       
+      // Reset index to ensure valid rotation
+      this.currentValidatorIndex = 0;
+      
       console.log(`[DarkWave Mainnet] Loaded ${this.activeValidators.length} active validator(s)`);
     } catch (error) {
       console.error("[DarkWave] Failed to load validators:", error);
@@ -288,6 +291,7 @@ export class DarkWaveBlockchain {
         blocksProduced: 0,
         isFounder: true,
       }];
+      this.currentValidatorIndex = 0;
     }
   }
 
@@ -346,9 +350,11 @@ export class DarkWaveBlockchain {
         description: description || "",
         stake: stake || "0",
         status: "active",
+        blocksProduced: "0",
       }).returning();
       
       if (result.length > 0) {
+        const wasEmpty = this.activeValidators.length === 0;
         const newValidator: Validator = {
           id: result[0].id,
           address: result[0].address,
@@ -359,6 +365,12 @@ export class DarkWaveBlockchain {
           isFounder: false,
         };
         this.activeValidators.push(newValidator);
+        
+        // Reset index when transitioning from empty to non-empty
+        if (wasEmpty) {
+          this.currentValidatorIndex = 0;
+        }
+        
         console.log(`[DarkWave Mainnet] Added new validator: ${name} (${address})`);
         return newValidator;
       }
@@ -530,8 +542,8 @@ export class DarkWaveBlockchain {
 
     await this.persistBlockAtomic(block, affectedAddresses);
     
-    // Update validator's block count
-    this.updateValidatorBlockCount(currentValidator.id);
+    // Update validator's block count (awaited for persistence)
+    await this.updateValidatorBlockCount(currentValidator.id);
 
     if (header.height % 250 === 0) {
       console.log(`[DarkWave Mainnet] Block #${header.height} | ${pendingTxs.length} txs | Validator: ${currentValidator.name} | Hash: ${block.hash.slice(0, 18)}...`);
