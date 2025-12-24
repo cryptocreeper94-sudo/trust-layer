@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
   ArrowLeft, PlayCircle, TrendingUp, TrendingDown, BarChart3,
-  Wallet, RefreshCw, Award, History, Target
+  Wallet, RefreshCw, Award, History, Target, Lock, Sparkles
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 import { Footer } from "@/components/footer";
@@ -13,38 +13,126 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
+import { useAuth } from "@/hooks/use-auth";
 
-const PORTFOLIO_DATA = [
-  { time: "Day 1", value: 100000 },
-  { time: "Day 2", value: 102500 },
-  { time: "Day 3", value: 99800 },
-  { time: "Day 4", value: 105200 },
-  { time: "Day 5", value: 108400 },
-  { time: "Day 6", value: 107200 },
-  { time: "Day 7", value: 112500 },
-];
-
-const POSITIONS = [
-  { token: "DWC", amount: 50000, avgPrice: 0.14, currentPrice: 0.152, pnl: 4285.71, pnlPercent: 8.57 },
-  { token: "ETH", amount: 2.5, avgPrice: 3200, currentPrice: 3450, pnl: 625, pnlPercent: 7.81 },
-  { token: "BTC", amount: 0.15, avgPrice: 95000, currentPrice: 98500, pnl: 525, pnlPercent: 3.68 },
-];
-
-const TRADE_HISTORY = [
-  { type: "buy", token: "DWC", amount: 25000, price: 0.14, time: "2h ago", pnl: null },
-  { type: "sell", token: "SOL", amount: 50, price: 185, time: "5h ago", pnl: 420 },
-  { type: "buy", token: "ETH", amount: 1.5, price: 3200, time: "1d ago", pnl: null },
-  { type: "buy", token: "BTC", amount: 0.15, price: 95000, time: "2d ago", pnl: null },
-];
+const STARTING_BALANCE = 100000;
 
 export default function PaperTrading() {
-  const [balance] = useState(112500);
+  const { user } = useAuth();
+  const isConnected = !!user;
+  const [balance] = useState(STARTING_BALANCE);
   const [orderType, setOrderType] = useState<"buy" | "sell">("buy");
   const [amount, setAmount] = useState("");
   const [token, setToken] = useState("DWC");
+  const [hasStarted, setHasStarted] = useState(false);
 
-  const totalPnl = POSITIONS.reduce((sum, p) => sum + p.pnl, 0);
-  const totalPnlPercent = ((balance - 100000) / 100000 * 100).toFixed(2);
+  if (!isConnected) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+        <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+          <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2 shrink-0">
+              <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
+              <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
+            </Link>
+            <Link href="/dashboard-pro">
+              <Button variant="ghost" size="sm" className="h-8 text-xs">
+                <ArrowLeft className="w-3 h-3 mr-1" />
+                Dashboard
+              </Button>
+            </Link>
+          </div>
+        </nav>
+
+        <main className="flex-1 pt-16 pb-8 px-4 flex items-center justify-center">
+          <GlassCard glow className="p-8 text-center max-w-md">
+            <Lock className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
+            <h2 className="text-2xl font-bold mb-2">Paper Trading Simulator</h2>
+            <p className="text-muted-foreground mb-6">
+              Practice trading with $100,000 in virtual money. Perfect for learning without any risk.
+            </p>
+            <Link href="/wallet">
+              <Button className="bg-gradient-to-r from-violet-500 to-purple-500" data-testid="button-connect-paper">
+                <Wallet className="w-4 h-4 mr-2" />
+                Connect Wallet to Start
+              </Button>
+            </Link>
+          </GlassCard>
+        </main>
+
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!hasStarted) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+        <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+          <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2 shrink-0">
+              <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
+              <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
+            </Link>
+            <Link href="/dashboard-pro">
+              <Button variant="ghost" size="sm" className="h-8 text-xs">
+                <ArrowLeft className="w-3 h-3 mr-1" />
+                Dashboard
+              </Button>
+            </Link>
+          </div>
+        </nav>
+
+        <main className="flex-1 pt-16 pb-8 px-4 flex items-center justify-center">
+          <GlassCard glow className="p-8 text-center max-w-md">
+            <motion.div
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <PlayCircle className="w-20 h-20 mx-auto mb-4 text-violet-400" />
+            </motion.div>
+            <h2 className="text-2xl font-bold mb-2">Ready to Practice?</h2>
+            <p className="text-muted-foreground mb-4">
+              You'll start with <span className="text-green-400 font-bold">$100,000</span> in virtual money.
+              Trade freely without any real risk!
+            </p>
+            <div className="grid grid-cols-2 gap-3 mb-6 text-left">
+              <div className="p-3 rounded-lg bg-white/5">
+                <Sparkles className="w-5 h-5 text-amber-400 mb-1" />
+                <p className="text-xs font-medium">No Real Money</p>
+                <p className="text-[10px] text-muted-foreground">Practice risk-free</p>
+              </div>
+              <div className="p-3 rounded-lg bg-white/5">
+                <TrendingUp className="w-5 h-5 text-green-400 mb-1" />
+                <p className="text-xs font-medium">Real Prices</p>
+                <p className="text-[10px] text-muted-foreground">Live market data</p>
+              </div>
+              <div className="p-3 rounded-lg bg-white/5">
+                <Award className="w-5 h-5 text-purple-400 mb-1" />
+                <p className="text-xs font-medium">Leaderboard</p>
+                <p className="text-[10px] text-muted-foreground">Compete with others</p>
+              </div>
+              <div className="p-3 rounded-lg bg-white/5">
+                <History className="w-5 h-5 text-blue-400 mb-1" />
+                <p className="text-xs font-medium">Track Progress</p>
+                <p className="text-[10px] text-muted-foreground">Full trade history</p>
+              </div>
+            </div>
+            <Button 
+              className="w-full bg-gradient-to-r from-violet-500 to-purple-500"
+              onClick={() => setHasStarted(true)}
+              data-testid="button-start-paper-trading"
+            >
+              <PlayCircle className="w-4 h-4 mr-2" />
+              Start Paper Trading
+            </Button>
+          </GlassCard>
+        </main>
+
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
@@ -70,22 +158,12 @@ export default function PaperTrading() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-6"
           >
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <motion.div 
-                className="p-3 rounded-2xl bg-gradient-to-br from-violet-500/20 to-purple-500/20 border border-violet-500/30"
-                animate={{ 
-                  boxShadow: ["0 0 20px rgba(139,92,246,0.2)", "0 0 50px rgba(139,92,246,0.4)", "0 0 20px rgba(139,92,246,0.2)"]
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <PlayCircle className="w-7 h-7 text-violet-400" />
-              </motion.div>
-            </div>
+            <Badge className="mb-2 bg-violet-500/20 text-violet-400">Paper Trading Mode</Badge>
             <h1 className="text-2xl md:text-3xl font-display font-bold mb-2">
               Paper <span className="text-violet-400">Trading</span>
             </h1>
             <p className="text-sm text-muted-foreground">
-              Practice with $100K virtual money • No risk, real learning
+              Practice with virtual money • No risk
             </p>
           </motion.div>
 
@@ -96,18 +174,18 @@ export default function PaperTrading() {
               <p className="text-[10px] text-muted-foreground">Portfolio Value</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
-              <TrendingUp className="w-5 h-5 mx-auto mb-1 text-green-400" />
-              <p className="text-xl font-bold text-green-400">+${totalPnl.toFixed(0)}</p>
+              <TrendingUp className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
+              <p className="text-xl font-bold text-muted-foreground">$0</p>
               <p className="text-[10px] text-muted-foreground">Total P/L</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
-              <BarChart3 className="w-5 h-5 mx-auto mb-1 text-blue-400" />
-              <p className="text-xl font-bold text-green-400">+{totalPnlPercent}%</p>
+              <BarChart3 className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
+              <p className="text-xl font-bold text-muted-foreground">0%</p>
               <p className="text-[10px] text-muted-foreground">ROI</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
-              <Award className="w-5 h-5 mx-auto mb-1 text-amber-400" />
-              <p className="text-xl font-bold">#127</p>
+              <Award className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
+              <p className="text-xl font-bold text-muted-foreground">--</p>
               <p className="text-[10px] text-muted-foreground">Leaderboard</p>
             </GlassCard>
           </div>
@@ -118,24 +196,11 @@ export default function PaperTrading() {
                 <BarChart3 className="w-4 h-4 text-primary" />
                 Portfolio Performance
               </h3>
-              <div className="h-48">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={PORTFOLIO_DATA}>
-                    <defs>
-                      <linearGradient id="paperGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.3} />
-                        <stop offset="100%" stopColor="#8b5cf6" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <XAxis dataKey="time" axisLine={false} tickLine={false} tick={{ fill: '#666', fontSize: 10 }} />
-                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#666', fontSize: 10 }} domain={['auto', 'auto']} />
-                    <Tooltip
-                      contentStyle={{ background: 'rgba(0,0,0,0.8)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
-                      labelStyle={{ color: '#999' }}
-                    />
-                    <Area type="monotone" dataKey="value" stroke="#8b5cf6" strokeWidth={2} fill="url(#paperGradient)" />
-                  </AreaChart>
-                </ResponsiveContainer>
+              <div className="h-48 flex items-center justify-center text-muted-foreground">
+                <div className="text-center">
+                  <BarChart3 className="w-12 h-12 mx-auto mb-2 opacity-30" />
+                  <p className="text-sm">Make your first trade to see performance</p>
+                </div>
               </div>
             </GlassCard>
 
@@ -194,6 +259,7 @@ export default function PaperTrading() {
                 </div>
                 <Button 
                   className={`w-full ${orderType === "buy" ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"}`}
+                  disabled={!amount}
                   data-testid="button-execute-paper-trade"
                 >
                   {orderType === "buy" ? "Buy" : "Sell"} {token}
@@ -209,81 +275,22 @@ export default function PaperTrading() {
             </TabsList>
 
             <TabsContent value="positions">
-              <GlassCard className="p-4">
-                <div className="space-y-3">
-                  {POSITIONS.map((pos, i) => (
-                    <motion.div
-                      key={pos.token}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.1 }}
-                      className="flex items-center justify-between p-3 rounded-lg bg-white/5"
-                    >
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold">{pos.token}</span>
-                          <Badge variant="outline" className="text-[9px]">
-                            {pos.amount.toLocaleString()} units
-                          </Badge>
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                          Avg: ${pos.avgPrice} → ${pos.currentPrice}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className={`font-mono ${pos.pnl > 0 ? "text-green-400" : "text-red-400"}`}>
-                          {pos.pnl > 0 ? "+" : ""}${pos.pnl.toFixed(0)}
-                        </p>
-                        <p className={`text-xs ${pos.pnlPercent > 0 ? "text-green-400" : "text-red-400"}`}>
-                          {pos.pnlPercent > 0 ? "+" : ""}{pos.pnlPercent.toFixed(2)}%
-                        </p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
+              <GlassCard className="p-8 text-center">
+                <Target className="w-12 h-12 mx-auto mb-4 text-white/10" />
+                <h3 className="font-bold mb-2">No Open Positions</h3>
+                <p className="text-sm text-muted-foreground">
+                  Make your first trade to see your positions here.
+                </p>
               </GlassCard>
             </TabsContent>
 
             <TabsContent value="history">
-              <GlassCard className="p-4">
-                <div className="space-y-3">
-                  {TRADE_HISTORY.map((trade, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.1 }}
-                      className="flex items-center justify-between p-3 rounded-lg bg-white/5"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`p-2 rounded-lg ${trade.type === "buy" ? "bg-green-500/20" : "bg-red-500/20"}`}>
-                          {trade.type === "buy" ? (
-                            <TrendingUp className="w-4 h-4 text-green-400" />
-                          ) : (
-                            <TrendingDown className="w-4 h-4 text-red-400" />
-                          )}
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className={`text-xs font-medium ${trade.type === "buy" ? "text-green-400" : "text-red-400"}`}>
-                              {trade.type.toUpperCase()}
-                            </span>
-                            <span className="font-bold">{trade.token}</span>
-                          </div>
-                          <p className="text-xs text-muted-foreground">
-                            {trade.amount} @ ${trade.price}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xs text-muted-foreground">{trade.time}</p>
-                        {trade.pnl && (
-                          <p className="text-xs text-green-400">+${trade.pnl}</p>
-                        )}
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
+              <GlassCard className="p-8 text-center">
+                <History className="w-12 h-12 mx-auto mb-4 text-white/10" />
+                <h3 className="font-bold mb-2">No Trade History</h3>
+                <p className="text-sm text-muted-foreground">
+                  Your trades will appear here once you start trading.
+                </p>
               </GlassCard>
             </TabsContent>
           </Tabs>

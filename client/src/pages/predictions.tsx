@@ -3,26 +3,23 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
   ArrowLeft, TrendingUp, TrendingDown, Clock, Users, Trophy,
-  Zap, DollarSign, Target, BarChart3, CheckCircle2, XCircle
+  Zap, DollarSign, Target, BarChart3, CheckCircle2, XCircle, Lock, Wallet
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
+import { useAuth } from "@/hooks/use-auth";
 
 interface Market {
   id: string;
   question: string;
   category: string;
   endsIn: string;
-  yesPool: number;
-  noPool: number;
   yesOdds: number;
-  participants: number;
   status: "active" | "resolved";
   result?: "yes" | "no";
 }
@@ -33,32 +30,15 @@ const MARKETS: Market[] = [
     question: "Will BTC hit $100K by end of 2025?",
     category: "Crypto",
     endsIn: "12 days",
-    yesPool: 125000,
-    noPool: 45000,
     yesOdds: 73.5,
-    participants: 842,
     status: "active",
   },
   {
-    id: "eth-merge",
+    id: "eth-flip",
     question: "Will ETH flip BTC market cap in 2025?",
     category: "Crypto",
     endsIn: "6 months",
-    yesPool: 35000,
-    noPool: 95000,
     yesOdds: 26.9,
-    participants: 456,
-    status: "active",
-  },
-  {
-    id: "fed-rate",
-    question: "Will Fed cut rates in January 2025?",
-    category: "Finance",
-    endsIn: "3 weeks",
-    yesPool: 78000,
-    noPool: 52000,
-    yesOdds: 60.0,
-    participants: 621,
     status: "active",
   },
   {
@@ -66,27 +46,12 @@ const MARKETS: Market[] = [
     question: "Will DWC reach $1 by February launch?",
     category: "DarkWave",
     endsIn: "52 days",
-    yesPool: 250000,
-    noPool: 80000,
     yesOdds: 75.8,
-    participants: 1247,
     status: "active",
-  },
-  {
-    id: "sol-outage",
-    question: "Did Solana have an outage in December?",
-    category: "Crypto",
-    endsIn: "Ended",
-    yesPool: 15000,
-    noPool: 85000,
-    yesOdds: 15.0,
-    participants: 234,
-    status: "resolved",
-    result: "no",
   },
 ];
 
-function MarketCard({ market }: { market: Market }) {
+function MarketCard({ market, isConnected }: { market: Market; isConnected: boolean }) {
   const [betAmount, setBetAmount] = useState("");
   const [selectedSide, setSelectedSide] = useState<"yes" | "no" | null>(null);
 
@@ -100,12 +65,6 @@ function MarketCard({ market }: { market: Market }) {
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
             <Badge variant="outline" className="text-[9px]">{market.category}</Badge>
-            {market.status === "resolved" && (
-              <Badge className={market.result === "yes" ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}>
-                {market.result === "yes" ? <CheckCircle2 className="w-3 h-3 mr-1" /> : <XCircle className="w-3 h-3 mr-1" />}
-                Resolved: {market.result?.toUpperCase()}
-              </Badge>
-            )}
           </div>
           <h3 className="font-bold text-sm mb-2">{market.question}</h3>
         </div>
@@ -133,11 +92,7 @@ function MarketCard({ market }: { market: Market }) {
         </span>
         <span className="flex items-center gap-1">
           <Users className="w-3 h-3" />
-          {market.participants} participants
-        </span>
-        <span className="flex items-center gap-1">
-          <DollarSign className="w-3 h-3" />
-          {((market.yesPool + market.noPool) / 1000).toFixed(0)}K pool
+          -- participants
         </span>
       </div>
 
@@ -148,7 +103,8 @@ function MarketCard({ market }: { market: Market }) {
               variant={selectedSide === "yes" ? "default" : "outline"}
               size="sm"
               className={selectedSide === "yes" ? "bg-green-500 hover:bg-green-600" : ""}
-              onClick={() => setSelectedSide("yes")}
+              onClick={() => isConnected && setSelectedSide("yes")}
+              disabled={!isConnected}
               data-testid={`button-yes-${market.id}`}
             >
               <TrendingUp className="w-3 h-3 mr-1" />
@@ -158,7 +114,8 @@ function MarketCard({ market }: { market: Market }) {
               variant={selectedSide === "no" ? "default" : "outline"}
               size="sm"
               className={selectedSide === "no" ? "bg-red-500 hover:bg-red-600" : ""}
-              onClick={() => setSelectedSide("no")}
+              onClick={() => isConnected && setSelectedSide("no")}
+              disabled={!isConnected}
               data-testid={`button-no-${market.id}`}
             >
               <TrendingDown className="w-3 h-3 mr-1" />
@@ -166,7 +123,13 @@ function MarketCard({ market }: { market: Market }) {
             </Button>
           </div>
 
-          {selectedSide && (
+          {!isConnected && (
+            <p className="text-xs text-center text-muted-foreground">
+              Connect wallet to place bets
+            </p>
+          )}
+
+          {selectedSide && isConnected && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
@@ -205,6 +168,9 @@ function MarketCard({ market }: { market: Market }) {
 }
 
 export default function Predictions() {
+  const { user } = useAuth();
+  const isConnected = !!user;
+
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
@@ -248,6 +214,19 @@ export default function Predictions() {
             </p>
           </motion.div>
 
+          {!isConnected && (
+            <GlassCard glow className="p-4 mb-6 text-center">
+              <Lock className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+              <p className="text-sm mb-3">Connect your wallet to participate in prediction markets</p>
+              <Link href="/wallet">
+                <Button className="bg-gradient-to-r from-amber-500 to-orange-500" data-testid="button-connect-predictions">
+                  <Wallet className="w-4 h-4 mr-2" />
+                  Connect Wallet
+                </Button>
+              </Link>
+            </GlassCard>
+          )}
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
             <GlassCard hover={false} className="p-3 text-center">
               <BarChart3 className="w-5 h-5 mx-auto mb-1 text-purple-400" />
@@ -255,28 +234,27 @@ export default function Predictions() {
               <p className="text-[10px] text-muted-foreground">Active Markets</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
-              <DollarSign className="w-5 h-5 mx-auto mb-1 text-green-400" />
-              <p className="text-xl font-bold">1.2M</p>
+              <DollarSign className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
+              <p className="text-xl font-bold">--</p>
               <p className="text-[10px] text-muted-foreground">Total Volume</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
-              <Users className="w-5 h-5 mx-auto mb-1 text-blue-400" />
-              <p className="text-xl font-bold">3,421</p>
+              <Users className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
+              <p className="text-xl font-bold">--</p>
               <p className="text-[10px] text-muted-foreground">Traders</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
-              <Trophy className="w-5 h-5 mx-auto mb-1 text-amber-400" />
-              <p className="text-xl font-bold">89%</p>
-              <p className="text-[10px] text-muted-foreground">Correct Predictions</p>
+              <Trophy className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
+              <p className="text-xl font-bold">--</p>
+              <p className="text-[10px] text-muted-foreground">Your Bets</p>
             </GlassCard>
           </div>
 
           <Tabs defaultValue="all">
-            <TabsList className="w-full grid grid-cols-4 mb-4">
-              <TabsTrigger value="all" data-testid="tab-all-markets">All</TabsTrigger>
+            <TabsList className="w-full grid grid-cols-3 mb-4">
+              <TabsTrigger value="all" data-testid="tab-all-markets">All Markets</TabsTrigger>
               <TabsTrigger value="crypto" data-testid="tab-crypto-markets">Crypto</TabsTrigger>
               <TabsTrigger value="darkwave" data-testid="tab-darkwave-markets">DarkWave</TabsTrigger>
-              <TabsTrigger value="resolved" data-testid="tab-resolved-markets">Resolved</TabsTrigger>
             </TabsList>
 
             <TabsContent value="all" className="space-y-4">
@@ -287,7 +265,7 @@ export default function Predictions() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
                 >
-                  <MarketCard market={market} />
+                  <MarketCard market={market} isConnected={isConnected} />
                 </motion.div>
               ))}
             </TabsContent>
@@ -300,7 +278,7 @@ export default function Predictions() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
                 >
-                  <MarketCard market={market} />
+                  <MarketCard market={market} isConnected={isConnected} />
                 </motion.div>
               ))}
             </TabsContent>
@@ -313,20 +291,7 @@ export default function Predictions() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
                 >
-                  <MarketCard market={market} />
-                </motion.div>
-              ))}
-            </TabsContent>
-
-            <TabsContent value="resolved" className="space-y-4">
-              {MARKETS.filter(m => m.status === "resolved").map((market, i) => (
-                <motion.div
-                  key={market.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                >
-                  <MarketCard market={market} />
+                  <MarketCard market={market} isConnected={isConnected} />
                 </motion.div>
               ))}
             </TabsContent>
@@ -337,9 +302,13 @@ export default function Predictions() {
             <p className="text-sm text-muted-foreground mb-4">
               Have a prediction? Create a market and earn fees when others bet.
             </p>
-            <Button className="bg-gradient-to-r from-amber-500 to-orange-500" data-testid="button-create-market">
+            <Button 
+              className="bg-gradient-to-r from-amber-500 to-orange-500" 
+              disabled={!isConnected}
+              data-testid="button-create-market"
+            >
               <Target className="w-4 h-4 mr-2" />
-              Create Market
+              {isConnected ? "Create Market" : "Connect Wallet"}
             </Button>
           </GlassCard>
         </div>

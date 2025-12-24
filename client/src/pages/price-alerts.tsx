@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
   ArrowLeft, Bell, Plus, Trash2, TrendingUp, TrendingDown,
-  Volume2, Mail, MessageSquare, Smartphone, CheckCircle2, Clock
+  Volume2, Mail, MessageSquare, Smartphone, CheckCircle2, Clock, Lock, Wallet
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -14,6 +14,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
+import { useAuth } from "@/hooks/use-auth";
 
 interface Alert {
   id: string;
@@ -23,22 +24,14 @@ interface Alert {
   currentPrice: number;
   channels: string[];
   active: boolean;
-  triggered?: boolean;
-  triggeredAt?: string;
 }
-
-const ALERTS: Alert[] = [
-  { id: "1", token: "DWC", condition: "above", price: 0.20, currentPrice: 0.152, channels: ["push", "email"], active: true },
-  { id: "2", token: "DWC", condition: "below", price: 0.10, currentPrice: 0.152, channels: ["push"], active: true },
-  { id: "3", token: "BTC", condition: "above", price: 100000, currentPrice: 98500, channels: ["push", "telegram"], active: true },
-  { id: "4", token: "ETH", condition: "above", price: 4000, currentPrice: 3450, channels: ["email"], active: false },
-  { id: "5", token: "DWC", condition: "above", price: 0.15, currentPrice: 0.152, channels: ["push"], active: true, triggered: true, triggeredAt: "2 hours ago" },
-];
 
 const TOKENS = ["DWC", "BTC", "ETH", "SOL", "USDC"];
 
 export default function PriceAlerts() {
-  const [alerts, setAlerts] = useState(ALERTS);
+  const { user } = useAuth();
+  const isConnected = !!user;
+  const [alerts, setAlerts] = useState<Alert[]>([]);
   const [showCreate, setShowCreate] = useState(false);
   const [newAlert, setNewAlert] = useState({
     token: "DWC",
@@ -53,6 +46,61 @@ export default function PriceAlerts() {
   const deleteAlert = (id: string) => {
     setAlerts(alerts.filter(a => a.id !== id));
   };
+
+  const createAlert = () => {
+    if (!newAlert.price) return;
+    const alert: Alert = {
+      id: Date.now().toString(),
+      token: newAlert.token,
+      condition: newAlert.condition,
+      price: parseFloat(newAlert.price),
+      currentPrice: newAlert.token === "DWC" ? 0.152 : newAlert.token === "BTC" ? 98500 : 3450,
+      channels: ["push"],
+      active: true,
+    };
+    setAlerts([...alerts, alert]);
+    setShowCreate(false);
+    setNewAlert({ token: "DWC", condition: "above", price: "" });
+  };
+
+  if (!isConnected) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+        <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+          <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2 shrink-0">
+              <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
+              <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
+            </Link>
+            <Link href="/dashboard-pro">
+              <Button variant="ghost" size="sm" className="h-8 text-xs">
+                <ArrowLeft className="w-3 h-3 mr-1" />
+                Dashboard
+              </Button>
+            </Link>
+          </div>
+        </nav>
+
+        <main className="flex-1 pt-16 pb-8 px-4 flex items-center justify-center">
+          <GlassCard glow className="p-8 text-center max-w-md">
+            <Bell className="w-16 h-16 mx-auto mb-4 text-orange-400" />
+            <h2 className="text-2xl font-bold mb-2">Price Alerts</h2>
+            <p className="text-muted-foreground mb-6">
+              Never miss a price movement. Set custom alerts and get notified via push, email, or Telegram.
+            </p>
+            <Link href="/wallet">
+              <Button className="bg-gradient-to-r from-orange-500 to-red-500" data-testid="button-connect-alerts">
+                <Wallet className="w-4 h-4 mr-2" />
+                Connect Wallet to Set Alerts
+              </Button>
+            </Link>
+          </GlassCard>
+        </main>
+
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
@@ -104,8 +152,8 @@ export default function PriceAlerts() {
               <p className="text-[10px] text-muted-foreground">Active Alerts</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
-              <CheckCircle2 className="w-5 h-5 mx-auto mb-1 text-green-400" />
-              <p className="text-xl font-bold">{alerts.filter(a => a.triggered).length}</p>
+              <CheckCircle2 className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
+              <p className="text-xl font-bold">0</p>
               <p className="text-[10px] text-muted-foreground">Triggered Today</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
@@ -198,7 +246,12 @@ export default function PriceAlerts() {
                       </Button>
                     </div>
                   </div>
-                  <Button className="w-full bg-gradient-to-r from-orange-500 to-red-500" data-testid="button-save-alert">
+                  <Button 
+                    className="w-full bg-gradient-to-r from-orange-500 to-red-500" 
+                    onClick={createAlert}
+                    disabled={!newAlert.price}
+                    data-testid="button-save-alert"
+                  >
                     Create Alert
                   </Button>
                 </div>
@@ -206,74 +259,66 @@ export default function PriceAlerts() {
             </Dialog>
           </div>
 
-          <div className="space-y-3">
-            {alerts.map((alert, i) => (
-              <motion.div
-                key={alert.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-              >
-                <GlassCard className={`p-4 ${alert.triggered ? "border-green-500/30" : ""}`}>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${alert.condition === "above" ? "bg-green-500/20" : "bg-red-500/20"}`}>
-                        {alert.condition === "above" ? (
-                          <TrendingUp className="w-5 h-5 text-green-400" />
-                        ) : (
-                          <TrendingDown className="w-5 h-5 text-red-400" />
-                        )}
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold">{alert.token}</span>
-                          <span className="text-sm text-muted-foreground">
-                            {alert.condition === "above" ? "rises above" : "falls below"}
-                          </span>
-                          <span className="font-mono text-primary">${alert.price}</span>
-                          {alert.triggered && (
-                            <Badge className="bg-green-500/20 text-green-400 text-[9px]">
-                              <CheckCircle2 className="w-3 h-3 mr-1" />
-                              Triggered {alert.triggeredAt}
-                            </Badge>
+          {alerts.length > 0 ? (
+            <div className="space-y-3">
+              {alerts.map((alert, i) => (
+                <motion.div
+                  key={alert.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                >
+                  <GlassCard className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-lg ${alert.condition === "above" ? "bg-green-500/20" : "bg-red-500/20"}`}>
+                          {alert.condition === "above" ? (
+                            <TrendingUp className="w-5 h-5 text-green-400" />
+                          ) : (
+                            <TrendingDown className="w-5 h-5 text-red-400" />
                           )}
                         </div>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-xs text-muted-foreground">
-                            Current: ${alert.currentPrice}
-                          </span>
-                          <span className="text-xs text-muted-foreground">•</span>
-                          <div className="flex gap-1">
-                            {alert.channels.includes("push") && <Badge variant="outline" className="text-[8px] px-1">Push</Badge>}
-                            {alert.channels.includes("email") && <Badge variant="outline" className="text-[8px] px-1">Email</Badge>}
-                            {alert.channels.includes("telegram") && <Badge variant="outline" className="text-[8px] px-1">Telegram</Badge>}
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold">{alert.token}</span>
+                            <span className="text-sm text-muted-foreground">
+                              {alert.condition === "above" ? "rises above" : "falls below"}
+                            </span>
+                            <span className="font-mono text-primary">${alert.price}</span>
+                          </div>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-xs text-muted-foreground">
+                              Current: ${alert.currentPrice}
+                            </span>
+                            <span className="text-xs text-muted-foreground">•</span>
+                            <div className="flex gap-1">
+                              {alert.channels.includes("push") && <Badge variant="outline" className="text-[8px] px-1">Push</Badge>}
+                            </div>
                           </div>
                         </div>
                       </div>
+                      <div className="flex items-center gap-2">
+                        <Switch 
+                          checked={alert.active} 
+                          onCheckedChange={() => toggleAlert(alert.id)}
+                          data-testid={`switch-alert-${alert.id}`}
+                        />
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-8 w-8 text-red-400"
+                          onClick={() => deleteAlert(alert.id)}
+                          data-testid={`button-delete-${alert.id}`}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Switch 
-                        checked={alert.active} 
-                        onCheckedChange={() => toggleAlert(alert.id)}
-                        data-testid={`switch-alert-${alert.id}`}
-                      />
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-8 w-8 text-red-400"
-                        onClick={() => deleteAlert(alert.id)}
-                        data-testid={`button-delete-${alert.id}`}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </GlassCard>
-              </motion.div>
-            ))}
-          </div>
-
-          {alerts.length === 0 && (
+                  </GlassCard>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
             <GlassCard className="p-8 text-center">
               <Bell className="w-12 h-12 mx-auto mb-4 text-white/10" />
               <h3 className="font-bold mb-2">No Alerts Yet</h3>

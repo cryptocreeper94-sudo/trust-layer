@@ -3,17 +3,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import {
   ArrowLeft, Brain, Sparkles, TrendingUp, Shield, Zap,
-  PieChart, Target, AlertCircle, CheckCircle2, RefreshCw, Send
+  PieChart, Target, AlertCircle, CheckCircle2, RefreshCw, Send, Lock, Wallet
 } from "lucide-react";
 import { PieChart as RechartsPie, Pie, Cell, ResponsiveContainer } from "recharts";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
+import { useAuth } from "@/hooks/use-auth";
 
 const RISK_PROFILES = [
   { name: "Conservative", color: "#22c55e", allocation: { dwc: 20, staking: 40, stablecoins: 35, nft: 5 } },
@@ -22,31 +22,9 @@ const RISK_PROFILES = [
   { name: "Degen", color: "#ef4444", allocation: { dwc: 70, staking: 10, stablecoins: 5, nft: 15 } },
 ];
 
-const RECOMMENDATIONS = [
-  {
-    type: "opportunity",
-    title: "Increase DWC Staking",
-    description: "With current APY at 12.5%, staking more DWC could increase your passive income by 15%.",
-    impact: "+$45/month",
-    confidence: 92,
-  },
-  {
-    type: "warning",
-    title: "High Concentration Risk",
-    description: "42% of your portfolio is in a single asset. Consider diversifying to reduce risk.",
-    impact: "Medium Risk",
-    confidence: 88,
-  },
-  {
-    type: "opportunity",
-    title: "Liquidity Pool Opportunity",
-    description: "DWC/USDC pool is offering 18% APY. Adding liquidity could boost returns.",
-    impact: "+$120/month",
-    confidence: 85,
-  },
-];
-
 export default function AIAdvisor() {
+  const { user } = useAuth();
+  const isConnected = !!user;
   const [riskLevel, setRiskLevel] = useState([50]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analyzed, setAnalyzed] = useState(false);
@@ -60,12 +38,52 @@ export default function AIAdvisor() {
   }));
 
   const handleAnalyze = () => {
+    if (!isConnected) return;
     setIsAnalyzing(true);
     setTimeout(() => {
       setIsAnalyzing(false);
       setAnalyzed(true);
     }, 2000);
   };
+
+  if (!isConnected) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+        <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+          <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2 shrink-0">
+              <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
+              <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
+            </Link>
+            <Link href="/dashboard-pro">
+              <Button variant="ghost" size="sm" className="h-8 text-xs">
+                <ArrowLeft className="w-3 h-3 mr-1" />
+                Dashboard
+              </Button>
+            </Link>
+          </div>
+        </nav>
+
+        <main className="flex-1 pt-16 pb-8 px-4 flex items-center justify-center">
+          <GlassCard glow className="p-8 text-center max-w-md">
+            <Brain className="w-16 h-16 mx-auto mb-4 text-cyan-400" />
+            <h2 className="text-2xl font-bold mb-2">AI Portfolio Advisor</h2>
+            <p className="text-muted-foreground mb-6">
+              Get personalized investment recommendations based on your risk profile and portfolio analysis powered by AI.
+            </p>
+            <Link href="/wallet">
+              <Button className="bg-gradient-to-r from-cyan-500 to-blue-500" data-testid="button-connect-advisor">
+                <Wallet className="w-4 h-4 mr-2" />
+                Connect Wallet to Analyze
+              </Button>
+            </Link>
+          </GlassCard>
+        </main>
+
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
@@ -153,7 +171,8 @@ export default function AIAdvisor() {
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 mb-4">
+                <p className="text-xs text-muted-foreground text-center">Recommended Allocation</p>
                 {allocationData.map((item) => (
                   <div key={item.name} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -166,7 +185,7 @@ export default function AIAdvisor() {
               </div>
 
               <Button 
-                className="w-full mt-4 bg-gradient-to-r from-cyan-500 to-blue-500"
+                className="w-full bg-gradient-to-r from-cyan-500 to-blue-500"
                 onClick={handleAnalyze}
                 disabled={isAnalyzing}
                 data-testid="button-analyze"
@@ -193,42 +212,24 @@ export default function AIAdvisor() {
                     animate={{ opacity: 1 }}
                     className="space-y-3"
                   >
-                    {RECOMMENDATIONS.map((rec, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.1 }}
-                        className={`p-3 rounded-lg border ${
-                          rec.type === "opportunity" 
-                            ? "bg-green-500/10 border-green-500/20" 
-                            : "bg-yellow-500/10 border-yellow-500/20"
-                        }`}
-                      >
-                        <div className="flex items-start justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            {rec.type === "opportunity" ? (
-                              <TrendingUp className="w-4 h-4 text-green-400" />
-                            ) : (
-                              <AlertCircle className="w-4 h-4 text-yellow-400" />
-                            )}
-                            <span className="font-medium text-sm">{rec.title}</span>
-                          </div>
-                          <Badge variant="outline" className="text-[9px]">
-                            {rec.confidence}% confidence
-                          </Badge>
+                    <div className="p-4 rounded-lg bg-white/5 text-center">
+                      <CheckCircle2 className="w-8 h-8 mx-auto mb-2 text-green-400" />
+                      <p className="font-medium mb-1">Portfolio Analyzed!</p>
+                      <p className="text-xs text-muted-foreground">
+                        No holdings detected yet. Start by acquiring some DWC to receive personalized recommendations.
+                      </p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+                      <div className="flex items-start gap-2">
+                        <TrendingUp className="w-4 h-4 text-cyan-400 mt-0.5" />
+                        <div>
+                          <p className="text-sm font-medium">Get Started</p>
+                          <p className="text-xs text-muted-foreground">
+                            Use the faucet to claim free testnet DWC, then explore staking and trading to build your portfolio.
+                          </p>
                         </div>
-                        <p className="text-xs text-muted-foreground mb-2">{rec.description}</p>
-                        <div className="flex items-center justify-between">
-                          <span className={`text-xs font-medium ${rec.type === "opportunity" ? "text-green-400" : "text-yellow-400"}`}>
-                            {rec.impact}
-                          </span>
-                          <Button size="sm" variant="ghost" className="h-6 text-xs" data-testid={`button-apply-${i}`}>
-                            Apply
-                          </Button>
-                        </div>
-                      </motion.div>
-                    ))}
+                      </div>
+                    </div>
                   </motion.div>
                 ) : (
                   <motion.div

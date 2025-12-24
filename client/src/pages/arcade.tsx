@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import {
   ArrowLeft, Gamepad2, Dice1, TrendingUp, Coins, Trophy,
-  Zap, RefreshCw, History, Users, Star, Flame, Target
+  Zap, RefreshCw, History, Users, Star, Flame, Target, Wallet, Lock
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -11,26 +11,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
+import { useAuth } from "@/hooks/use-auth";
 
-const RECENT_WINS = [
-  { user: "whale.dwc", game: "Crash", amount: 5420, multiplier: 12.5 },
-  { user: "alpha_hunter", game: "Coin Flip", amount: 1200, multiplier: 2.0 },
-  { user: "defi_king", game: "Dice", amount: 3800, multiplier: 6.2 },
-  { user: "satoshi.eth", game: "Crash", amount: 890, multiplier: 3.4 },
-  { user: "crypto_queen", game: "Coin Flip", amount: 2500, multiplier: 2.0 },
-];
-
-const LEADERBOARD = [
-  { rank: 1, user: "whale.dwc", wagered: 125000, profit: 15420, avatar: "🐋" },
-  { rank: 2, user: "defi_king", wagered: 98000, profit: 12100, avatar: "👑" },
-  { rank: 3, user: "alpha_hunter", wagered: 87500, profit: 9800, avatar: "🎯" },
-  { rank: 4, user: "satoshi.eth", wagered: 65000, profit: 7200, avatar: "⚡" },
-  { rank: 5, user: "crypto_queen", wagered: 52000, profit: 5100, avatar: "💎" },
-];
-
-function CoinFlipGame() {
+function CoinFlipGame({ isConnected }: { isConnected: boolean }) {
   const [betAmount, setBetAmount] = useState("100");
   const [selectedSide, setSelectedSide] = useState<"heads" | "tails">("heads");
   const [isFlipping, setIsFlipping] = useState(false);
@@ -38,6 +22,7 @@ function CoinFlipGame() {
   const [won, setWon] = useState<boolean | null>(null);
 
   const handleFlip = () => {
+    if (!isConnected) return;
     setIsFlipping(true);
     setResult(null);
     setWon(null);
@@ -49,6 +34,24 @@ function CoinFlipGame() {
       setIsFlipping(false);
     }, 2000);
   };
+
+  if (!isConnected) {
+    return (
+      <div className="text-center py-8">
+        <Lock className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+        <h3 className="font-bold text-lg mb-2">Connect Wallet to Play</h3>
+        <p className="text-sm text-muted-foreground mb-4">
+          You need to connect your wallet and have DWC balance to play games.
+        </p>
+        <Link href="/wallet">
+          <Button className="bg-gradient-to-r from-purple-500 to-pink-500" data-testid="button-connect-wallet-coinflip">
+            <Wallet className="w-4 h-4 mr-2" />
+            Connect Wallet
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -127,7 +130,7 @@ function CoinFlipGame() {
   );
 }
 
-function CrashGame() {
+function CrashGame({ isConnected }: { isConnected: boolean }) {
   const [betAmount, setBetAmount] = useState("100");
   const [autoCashout, setAutoCashout] = useState("2.0");
   const [isPlaying, setIsPlaying] = useState(false);
@@ -157,6 +160,7 @@ function CrashGame() {
   }, [isPlaying, crashed, cashedOut, autoCashout]);
 
   const handlePlay = () => {
+    if (!isConnected) return;
     setIsPlaying(true);
     setMultiplier(1.0);
     setCrashed(false);
@@ -167,6 +171,24 @@ function CrashGame() {
     setCashedOut(true);
     setIsPlaying(false);
   };
+
+  if (!isConnected) {
+    return (
+      <div className="text-center py-8">
+        <Lock className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+        <h3 className="font-bold text-lg mb-2">Connect Wallet to Play</h3>
+        <p className="text-sm text-muted-foreground mb-4">
+          You need to connect your wallet and have DWC balance to play games.
+        </p>
+        <Link href="/wallet">
+          <Button className="bg-gradient-to-r from-purple-500 to-pink-500" data-testid="button-connect-wallet-crash">
+            <Wallet className="w-4 h-4 mr-2" />
+            Connect Wallet
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -253,7 +275,7 @@ function CrashGame() {
   );
 }
 
-function DiceGame() {
+function DiceGame({ isConnected }: { isConnected: boolean }) {
   const [betAmount, setBetAmount] = useState("100");
   const [target, setTarget] = useState(50);
   const [isOver, setIsOver] = useState(true);
@@ -265,6 +287,7 @@ function DiceGame() {
   const multiplier = (99 / winChance).toFixed(2);
 
   const handleRoll = () => {
+    if (!isConnected) return;
     setIsRolling(true);
     setResult(null);
     setWon(null);
@@ -277,6 +300,24 @@ function DiceGame() {
       setIsRolling(false);
     }, 1500);
   };
+
+  if (!isConnected) {
+    return (
+      <div className="text-center py-8">
+        <Lock className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+        <h3 className="font-bold text-lg mb-2">Connect Wallet to Play</h3>
+        <p className="text-sm text-muted-foreground mb-4">
+          You need to connect your wallet and have DWC balance to play games.
+        </p>
+        <Link href="/wallet">
+          <Button className="bg-gradient-to-r from-purple-500 to-pink-500" data-testid="button-connect-wallet-dice">
+            <Wallet className="w-4 h-4 mr-2" />
+            Connect Wallet
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -354,6 +395,9 @@ function DiceGame() {
 }
 
 export default function Arcade() {
+  const { user } = useAuth();
+  const isConnected = !!user;
+
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
@@ -401,17 +445,17 @@ export default function Arcade() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
             <GlassCard hover={false} className="p-3 text-center">
               <Users className="w-5 h-5 mx-auto mb-1 text-blue-400" />
-              <p className="text-xl font-bold">1,247</p>
+              <p className="text-xl font-bold">--</p>
               <p className="text-[10px] text-muted-foreground">Playing Now</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
               <Coins className="w-5 h-5 mx-auto mb-1 text-yellow-400" />
-              <p className="text-xl font-bold">2.5M</p>
+              <p className="text-xl font-bold">--</p>
               <p className="text-[10px] text-muted-foreground">DWC Wagered Today</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
               <Trophy className="w-5 h-5 mx-auto mb-1 text-amber-400" />
-              <p className="text-xl font-bold">125K</p>
+              <p className="text-xl font-bold">--</p>
               <p className="text-[10px] text-muted-foreground">Won Today</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
@@ -438,13 +482,13 @@ export default function Arcade() {
 
                 <GlassCard glow className="p-4">
                   <TabsContent value="coinflip" className="mt-0">
-                    <CoinFlipGame />
+                    <CoinFlipGame isConnected={isConnected} />
                   </TabsContent>
                   <TabsContent value="crash" className="mt-0">
-                    <CrashGame />
+                    <CrashGame isConnected={isConnected} />
                   </TabsContent>
                   <TabsContent value="dice" className="mt-0">
-                    <DiceGame />
+                    <DiceGame isConnected={isConnected} />
                   </TabsContent>
                 </GlassCard>
               </Tabs>
@@ -454,28 +498,20 @@ export default function Arcade() {
               <GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <History className="w-4 h-4 text-primary" />
-                  Recent Wins
+                  Your Recent Games
                 </h3>
-                <div className="space-y-2">
-                  {RECENT_WINS.map((win, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.1 }}
-                      className="flex items-center justify-between p-2 rounded-lg bg-white/5"
-                    >
-                      <div>
-                        <p className="text-xs font-medium">@{win.user}</p>
-                        <p className="text-[10px] text-muted-foreground">{win.game}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xs font-mono text-green-400">+{win.amount} DWC</p>
-                        <p className="text-[10px] text-muted-foreground">{win.multiplier}x</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
+                {isConnected ? (
+                  <div className="text-center py-6 text-muted-foreground">
+                    <History className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                    <p className="text-sm">No games played yet</p>
+                    <p className="text-xs">Your game history will appear here</p>
+                  </div>
+                ) : (
+                  <div className="text-center py-6 text-muted-foreground">
+                    <Lock className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                    <p className="text-sm">Connect wallet to view history</p>
+                  </div>
+                )}
               </GlassCard>
 
               <GlassCard className="p-4">
@@ -483,22 +519,10 @@ export default function Arcade() {
                   <Trophy className="w-4 h-4 text-amber-400" />
                   Leaderboard
                 </h3>
-                <div className="space-y-2">
-                  {LEADERBOARD.slice(0, 5).map((player, i) => (
-                    <div
-                      key={i}
-                      className={`flex items-center justify-between p-2 rounded-lg ${i < 3 ? "bg-gradient-to-r from-amber-500/10 to-transparent" : "bg-white/5"}`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">{player.avatar}</span>
-                        <div>
-                          <p className="text-xs font-medium">@{player.user}</p>
-                          <p className="text-[10px] text-muted-foreground">{(player.wagered/1000).toFixed(0)}K wagered</p>
-                        </div>
-                      </div>
-                      <p className="text-xs font-mono text-green-400">+{(player.profit/1000).toFixed(1)}K</p>
-                    </div>
-                  ))}
+                <div className="text-center py-6 text-muted-foreground">
+                  <Trophy className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                  <p className="text-sm">Leaderboard coming soon</p>
+                  <p className="text-xs">Top players will be displayed here</p>
                 </div>
               </GlassCard>
             </div>
