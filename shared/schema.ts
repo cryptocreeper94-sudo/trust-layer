@@ -300,6 +300,90 @@ export const hallmarkResponseSchema = z.object({
 
 export type HallmarkResponse = z.infer<typeof hallmarkResponseSchema>;
 
+// Hallmark Serial Ranges (12-digit system)
+export const HALLMARK_SERIAL_RANGES = {
+  GENESIS_FOUNDERS: { start: 1, end: 10000 },           // Ultra-rare first 10K
+  LEGACY_FOUNDERS: { start: 10001, end: 50000 },        // Early adopters
+  SPECIAL_RESERVE: { start: 50001, end: 300000 },       // Partnerships, events
+  GENERAL_PUBLIC: { start: 300001, end: 999999999999 }, // Everyone else
+} as const;
+
+// User Hallmark Profiles (tracks their serial counter)
+export const hallmarkProfiles = pgTable("hallmark_profiles", {
+  userId: varchar("user_id").primaryKey(),
+  avatarType: text("avatar_type").notNull().default("agent"),
+  avatarId: text("avatar_id"),
+  customAvatarUrl: text("custom_avatar_url"),
+  currentSerial: integer("current_serial").notNull().default(0),
+  preferredTemplate: text("preferred_template").default("classic"),
+  displayName: text("display_name"),
+  bio: text("bio"),
+  tier: text("tier").notNull().default("GENERAL_PUBLIC"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Individual Hallmark Mints
+export const hallmarkMints = pgTable("hallmark_mints", {
+  id: varchar("id").primaryKey(),
+  userId: varchar("user_id").notNull(),
+  serialNumber: varchar("serial_number").notNull().unique(),
+  globalSerial: text("global_serial").notNull().unique(),
+  avatarSnapshot: text("avatar_snapshot"),
+  templateUsed: text("template_used").notNull().default("classic"),
+  payloadHash: varchar("payload_hash", { length: 128 }).notNull(),
+  auditEventIds: text("audit_event_ids"),
+  memoSignature: varchar("memo_signature", { length: 128 }),
+  blockNumber: integer("block_number"),
+  artworkUrl: text("artwork_url"),
+  metadataUri: text("metadata_uri"),
+  priceUsd: varchar("price_usd", { length: 20 }).notNull().default("0"),
+  paymentProvider: text("payment_provider"),
+  paymentId: varchar("payment_id"),
+  status: text("status").notNull().default("draft"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  paidAt: timestamp("paid_at"),
+  mintedAt: timestamp("minted_at"),
+});
+
+// Global Hallmark Counter (12-digit)
+export const hallmarkGlobalCounter = pgTable("hallmark_global_counter", {
+  id: varchar("id").primaryKey().default("global"),
+  currentGlobalSerial: text("current_global_serial").notNull().default("0"),
+  lastUpdated: timestamp("last_updated").defaultNow(),
+});
+
+export const insertHallmarkProfileSchema = createInsertSchema(hallmarkProfiles).omit({
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertHallmarkMintSchema = createInsertSchema(hallmarkMints).omit({
+  createdAt: true,
+  paidAt: true,
+  mintedAt: true,
+});
+
+export type InsertHallmarkProfile = z.infer<typeof insertHallmarkProfileSchema>;
+export type HallmarkProfile = typeof hallmarkProfiles.$inferSelect;
+export type InsertHallmarkMint = z.infer<typeof insertHallmarkMintSchema>;
+export type HallmarkMint = typeof hallmarkMints.$inferSelect;
+
+// Genesis Hallmark (the flagship first hallmark)
+export const genesisHallmarkSchema = z.object({
+  id: z.string(),
+  globalSerial: z.string(),
+  serialNumber: z.string(),
+  payloadHash: z.string(),
+  blockNumber: z.number().optional(),
+  txHash: z.string().optional(),
+  createdAt: z.string(),
+  verificationUrl: z.string(),
+  qrCodeData: z.string(),
+});
+
+export type GenesisHallmark = z.infer<typeof genesisHallmarkSchema>;
+
 export const waitlist = pgTable("waitlist", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull().unique(),
