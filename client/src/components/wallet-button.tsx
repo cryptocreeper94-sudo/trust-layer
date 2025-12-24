@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Wallet, X, ExternalLink, Copy, Check, LogOut, ChevronDown, Sparkles } from "lucide-react";
+import { Wallet, X, ExternalLink, Copy, Check, LogOut, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useWallet, shortenAddress } from "@/hooks/use-wallet";
 import { Link } from "wouter";
+import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 
 export function WalletButton() {
   const { 
@@ -228,9 +229,7 @@ export function WalletButton() {
                     className="w-full h-12 bg-gradient-to-r from-primary/20 to-secondary/20 border-primary/30 hover:border-primary/50 justify-start gap-3 text-white"
                     data-testid="button-darkwave-wallet"
                   >
-                    <div className="w-7 h-7 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center flex-shrink-0">
-                      <Sparkles className="w-4 h-4 text-background" />
-                    </div>
+                    <img src={orbitLogo} alt="DarkWave" className="w-7 h-7 flex-shrink-0" />
                     <div className="text-left min-w-0">
                       <div className="font-medium text-sm">DarkWave Wallet</div>
                       <div className="text-[10px] text-muted-foreground truncate">Create or manage your wallet</div>
