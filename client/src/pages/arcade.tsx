@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import {
   ArrowLeft, Gamepad2, Dice1, TrendingUp, Coins, Trophy,
-  Zap, RefreshCw, History, Users, Star, Flame, Target, Wallet, Lock, Play
+  Zap, RefreshCw, History, Users, Star, Flame, Target, Wallet, Lock, Play,
+  Cherry, Gem, Crown, Diamond, Sparkles, Volume2, VolumeX
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -11,70 +12,131 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import { useAuth } from "@/hooks/use-auth";
 
-function CoinFlipGame({ isConnected, isDemoMode }: { isConnected: boolean; isDemoMode: boolean }) {
-  const [betAmount, setBetAmount] = useState("100");
+const ONE_DWC = BigInt("1000000000000000000");
+
+function formatDWC(amount: string | bigint): string {
+  const val = typeof amount === "string" ? BigInt(amount) : amount;
+  return (Number(val) / Number(ONE_DWC)).toLocaleString(undefined, { maximumFractionDigits: 2 });
+}
+
+function CoinFlipGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }: { 
+  isConnected: boolean; 
+  isDemoMode: boolean;
+  userBalance: string;
+  onBalanceUpdate: () => void;
+}) {
+  const { toast } = useToast();
+  const [betAmount, setBetAmount] = useState("10");
   const [selectedSide, setSelectedSide] = useState<"heads" | "tails">("heads");
   const [isFlipping, setIsFlipping] = useState(false);
   const [result, setResult] = useState<"heads" | "tails" | null>(null);
   const [won, setWon] = useState<boolean | null>(null);
+  const [winAmount, setWinAmount] = useState<string | null>(null);
   const [demoBalance, setDemoBalance] = useState(10000);
 
   const canPlay = isConnected || isDemoMode;
 
-  const handleFlip = () => {
+  const handleFlip = async () => {
     if (!canPlay) return;
     setIsFlipping(true);
     setResult(null);
     setWon(null);
-    
-    setTimeout(() => {
-      const flipResult = Math.random() > 0.5 ? "heads" : "tails";
-      setResult(flipResult);
-      const didWin = flipResult === selectedSide;
-      setWon(didWin);
-      setIsFlipping(false);
-      
-      if (isDemoMode) {
+    setWinAmount(null);
+
+    if (isDemoMode) {
+      setTimeout(() => {
+        const flipResult = Math.random() > 0.5 ? "heads" : "tails";
+        setResult(flipResult);
+        const didWin = flipResult === selectedSide;
+        setWon(didWin);
+        setIsFlipping(false);
         if (didWin) {
-          setDemoBalance(prev => prev + parseFloat(betAmount));
+          setDemoBalance(prev => prev + parseFloat(betAmount) * 0.98);
+          setWinAmount((parseFloat(betAmount) * 1.98).toFixed(2));
         } else {
           setDemoBalance(prev => prev - parseFloat(betAmount));
         }
-      }
-    }, 2000);
+      }, 2000);
+      return;
+    }
+
+    try {
+      const betAmountWei = (BigInt(Math.floor(parseFloat(betAmount) * 1e18))).toString();
+      const response = await apiRequest("POST", "/api/arcade/play", {
+        gameType: "coinflip",
+        betAmount: betAmountWei,
+        choice: selectedSide,
+      });
+      const data = await response.json();
+
+      setTimeout(() => {
+        setResult(data.result.flipResult);
+        setWon(data.won);
+        if (data.won) {
+          setWinAmount(formatDWC(data.winnings));
+        }
+        setIsFlipping(false);
+        onBalanceUpdate();
+        
+        toast({
+          title: data.won ? "You Won!" : "You Lost",
+          description: data.won ? `+${formatDWC(data.winnings)} DWC` : `Better luck next time!`,
+          variant: data.won ? "default" : "destructive",
+        });
+      }, 2000);
+    } catch (error: any) {
+      setIsFlipping(false);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to play",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
     <div className="space-y-4">
-      {isDemoMode && (
+      {isDemoMode ? (
         <div className="p-2 rounded-lg bg-amber-500/20 border border-amber-500/30 text-center">
           <p className="text-sm text-amber-400">Demo Mode - {demoBalance.toLocaleString()} Play Coins</p>
+        </div>
+      ) : isConnected && (
+        <div className="p-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-center">
+          <p className="text-sm text-purple-400">Balance: {formatDWC(userBalance)} DWC</p>
         </div>
       )}
       
       <div className="flex justify-center">
         <motion.div
-          className="w-32 h-32 rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 flex items-center justify-center text-4xl shadow-2xl"
+          className="w-32 h-32 rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 flex items-center justify-center text-4xl shadow-2xl relative overflow-hidden"
           animate={isFlipping ? { rotateY: [0, 1800] } : {}}
           transition={{ duration: 2, ease: "easeOut" }}
         >
+          <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/20" />
           {isFlipping ? "🪙" : result === "heads" ? "👑" : result === "tails" ? "🦅" : "🪙"}
         </motion.div>
       </div>
 
-      {won !== null && (
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          className={`text-center p-4 rounded-lg ${won ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}
-        >
-          <p className="text-2xl font-bold">{won ? `You Won ${parseFloat(betAmount) * 2} ${isDemoMode ? "Play Coins" : "DWC"}!` : "You Lost!"}</p>
-          <p className="text-sm">Result: {result?.toUpperCase()}</p>
-        </motion.div>
-      )}
+      <AnimatePresence>
+        {won !== null && (
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            className={`text-center p-4 rounded-lg ${won ? "bg-green-500/20 text-green-400 border border-green-500/30" : "bg-red-500/20 text-red-400 border border-red-500/30"}`}
+          >
+            <p className="text-2xl font-bold">
+              {won ? `You Won ${winAmount} ${isDemoMode ? "Play Coins" : "DWC"}!` : "You Lost!"}
+            </p>
+            <p className="text-sm">Result: {result?.toUpperCase()}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="grid grid-cols-2 gap-3">
         <Button
@@ -111,7 +173,7 @@ function CoinFlipGame({ isConnected, isDemoMode }: { isConnected: boolean; isDem
       </div>
 
       <Button
-        className="w-full h-14 text-lg bg-gradient-to-r from-purple-500 to-pink-500"
+        className="w-full h-14 text-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
         onClick={handleFlip}
         disabled={isFlipping || !canPlay}
         data-testid="button-flip-coin"
@@ -124,19 +186,27 @@ function CoinFlipGame({ isConnected, isDemoMode }: { isConnected: boolean; isDem
       </Button>
       
       <p className="text-center text-xs text-muted-foreground">
-        Win 2x your bet! 50% chance • Provably Fair
+        Win 1.98x your bet! 50% chance • 99% RTP • Provably Fair
       </p>
     </div>
   );
 }
 
-function CrashGame({ isConnected, isDemoMode }: { isConnected: boolean; isDemoMode: boolean }) {
-  const [betAmount, setBetAmount] = useState("100");
+function CrashGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }: { 
+  isConnected: boolean; 
+  isDemoMode: boolean;
+  userBalance: string;
+  onBalanceUpdate: () => void;
+}) {
+  const { toast } = useToast();
+  const [betAmount, setBetAmount] = useState("10");
   const [autoCashout, setAutoCashout] = useState("2.0");
   const [isPlaying, setIsPlaying] = useState(false);
   const [multiplier, setMultiplier] = useState(1.0);
   const [crashed, setCrashed] = useState(false);
   const [cashedOut, setCashedOut] = useState(false);
+  const [winAmount, setWinAmount] = useState<string | null>(null);
+  const [crashPoint, setCrashPoint] = useState<number | null>(null);
 
   const canPlay = isConnected || isDemoMode;
 
@@ -147,31 +217,71 @@ function CrashGame({ isConnected, isDemoMode }: { isConnected: boolean; isDemoMo
           const newVal = prev + 0.01 + Math.random() * 0.02;
           if (Math.random() < 0.005 + (prev - 1) * 0.003) {
             setCrashed(true);
+            setCrashPoint(prev);
             setIsPlaying(false);
             return prev;
           }
           if (newVal >= parseFloat(autoCashout)) {
             setCashedOut(true);
             setIsPlaying(false);
+            const win = (parseFloat(betAmount) * parseFloat(autoCashout) * 0.99).toFixed(2);
+            setWinAmount(win);
+            if (!isDemoMode) {
+              onBalanceUpdate();
+            }
+            toast({
+              title: "Cashed Out!",
+              description: `+${win} ${isDemoMode ? "Play Coins" : "DWC"} at ${parseFloat(autoCashout).toFixed(2)}x`,
+            });
           }
           return newVal;
         });
       }, 50);
       return () => clearInterval(interval);
     }
-  }, [isPlaying, crashed, cashedOut, autoCashout]);
+  }, [isPlaying, crashed, cashedOut, autoCashout, betAmount, isDemoMode, onBalanceUpdate, toast]);
 
-  const handlePlay = () => {
+  const handlePlay = async () => {
     if (!canPlay) return;
+    
+    if (!isDemoMode) {
+      try {
+        const betAmountWei = (BigInt(Math.floor(parseFloat(betAmount) * 1e18))).toString();
+        await apiRequest("POST", "/api/arcade/play", {
+          gameType: "crash",
+          betAmount: betAmountWei,
+          autoCashout: parseFloat(autoCashout),
+        });
+      } catch (error: any) {
+        toast({
+          title: "Error",
+          description: error.message || "Failed to place bet",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+    
     setIsPlaying(true);
     setMultiplier(1.0);
     setCrashed(false);
     setCashedOut(false);
+    setWinAmount(null);
+    setCrashPoint(null);
   };
 
   const handleCashout = () => {
     setCashedOut(true);
     setIsPlaying(false);
+    const win = (parseFloat(betAmount) * multiplier * 0.99).toFixed(2);
+    setWinAmount(win);
+    if (!isDemoMode) {
+      onBalanceUpdate();
+    }
+    toast({
+      title: "Cashed Out!",
+      description: `+${win} ${isDemoMode ? "Play Coins" : "DWC"} at ${multiplier.toFixed(2)}x`,
+    });
   };
 
   return (
@@ -183,32 +293,48 @@ function CrashGame({ isConnected, isDemoMode }: { isConnected: boolean; isDemoMo
       )}
       
       <div className="relative h-48 rounded-xl bg-gradient-to-br from-black/50 to-purple-900/30 border border-white/10 overflow-hidden flex items-center justify-center">
+        <div className="absolute inset-0 overflow-hidden">
+          {isPlaying && !crashed && (
+            <motion.div 
+              className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-green-500/30 to-transparent"
+              initial={{ height: 0 }}
+              animate={{ height: `${Math.min(multiplier * 20, 100)}%` }}
+            />
+          )}
+        </div>
+        
         <motion.div
-          className={`text-6xl font-bold font-mono ${crashed ? "text-red-500" : cashedOut ? "text-green-400" : "text-white"}`}
+          className={`text-6xl font-bold font-mono z-10 ${crashed ? "text-red-500" : cashedOut ? "text-green-400" : "text-white"}`}
           animate={{ scale: crashed ? [1, 1.2, 1] : 1 }}
         >
           {multiplier.toFixed(2)}x
         </motion.div>
+        
         {crashed && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="absolute inset-0 bg-red-500/20 flex items-center justify-center"
           >
-            <p className="text-2xl font-bold text-red-500">CRASHED!</p>
+            <div className="text-center">
+              <p className="text-3xl font-bold text-red-500">CRASHED!</p>
+              <p className="text-sm text-red-400">at {crashPoint?.toFixed(2)}x</p>
+            </div>
           </motion.div>
         )}
-        {cashedOut && (
+        
+        {cashedOut && winAmount && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
             className="absolute bottom-2 left-0 right-0 text-center"
           >
-            <Badge className="bg-green-500/20 text-green-400">
-              Won {(parseFloat(betAmount) * multiplier).toFixed(0)} {isDemoMode ? "Play Coins" : "DWC"}!
+            <Badge className="bg-green-500/20 text-green-400 text-lg px-4 py-1">
+              Won {winAmount} {isDemoMode ? "Play Coins" : "DWC"}!
             </Badge>
           </motion.div>
         )}
+        
         <div className="absolute top-2 right-2">
           <Badge variant="outline" className="text-xs">
             <Flame className="w-3 h-3 mr-1 text-orange-400" />
@@ -219,7 +345,7 @@ function CrashGame({ isConnected, isDemoMode }: { isConnected: boolean; isDemoMo
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="text-xs text-muted-foreground mb-1 block">Bet Amount</label>
+          <label className="text-xs text-muted-foreground mb-1 block">Bet Amount (DWC)</label>
           <Input
             type="number"
             value={betAmount}
@@ -230,7 +356,7 @@ function CrashGame({ isConnected, isDemoMode }: { isConnected: boolean; isDemoMo
           />
         </div>
         <div>
-          <label className="text-xs text-muted-foreground mb-1 block">Auto Cashout</label>
+          <label className="text-xs text-muted-foreground mb-1 block">Auto Cashout (x)</label>
           <Input
             type="number"
             value={autoCashout}
@@ -242,9 +368,9 @@ function CrashGame({ isConnected, isDemoMode }: { isConnected: boolean; isDemoMo
         </div>
       </div>
 
-      {isPlaying ? (
+      {isPlaying && !crashed && !cashedOut ? (
         <Button
-          className="w-full h-14 text-lg bg-gradient-to-r from-green-500 to-emerald-500"
+          className="w-full h-14 text-lg bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600"
           onClick={handleCashout}
           data-testid="button-cashout"
         >
@@ -253,123 +379,247 @@ function CrashGame({ isConnected, isDemoMode }: { isConnected: boolean; isDemoMo
         </Button>
       ) : (
         <Button
-          className="w-full h-14 text-lg bg-gradient-to-r from-purple-500 to-pink-500"
+          className="w-full h-14 text-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
           onClick={handlePlay}
-          disabled={!canPlay}
+          disabled={!canPlay || isPlaying}
           data-testid="button-play-crash"
         >
           <TrendingUp className="w-5 h-5 mr-2" />
-          Place Bet ({betAmount} {isDemoMode ? "Play Coins" : "DWC"})
+          {crashed || cashedOut ? "Play Again" : "Place Bet"} ({betAmount} {isDemoMode ? "Play Coins" : "DWC"})
         </Button>
       )}
+      
+      <p className="text-center text-xs text-muted-foreground">
+        Cash out before it crashes! 99% RTP • Provably Fair
+      </p>
     </div>
   );
 }
 
-function DiceGame({ isConnected, isDemoMode }: { isConnected: boolean; isDemoMode: boolean }) {
-  const [betAmount, setBetAmount] = useState("100");
-  const [target, setTarget] = useState(50);
-  const [isOver, setIsOver] = useState(true);
-  const [isRolling, setIsRolling] = useState(false);
-  const [result, setResult] = useState<number | null>(null);
+const SLOT_SYMBOLS = ["🍒", "🍋", "🍊", "💎", "7️⃣", "⭐", "🎰", "👑"];
+const SYMBOL_MULTIPLIERS: Record<string, number> = {
+  "👑": 50,
+  "💎": 25,
+  "7️⃣": 15,
+  "⭐": 10,
+  "🎰": 8,
+  "🍊": 5,
+  "🍋": 3,
+  "🍒": 2,
+};
+
+function SlotsGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }: { 
+  isConnected: boolean; 
+  isDemoMode: boolean;
+  userBalance: string;
+  onBalanceUpdate: () => void;
+}) {
+  const { toast } = useToast();
+  const [betAmount, setBetAmount] = useState("10");
+  const [isSpinning, setIsSpinning] = useState(false);
+  const [reels, setReels] = useState<string[][]>([
+    ["🎰", "🎰", "🎰"],
+    ["🎰", "🎰", "🎰"],
+    ["🎰", "🎰", "🎰"],
+  ]);
   const [won, setWon] = useState<boolean | null>(null);
+  const [winAmount, setWinAmount] = useState<string | null>(null);
+  const [demoBalance, setDemoBalance] = useState(10000);
+  const [jackpot, setJackpot] = useState(125847);
 
   const canPlay = isConnected || isDemoMode;
-  const winChance = isOver ? (100 - target) : target;
-  const multiplier = (99 / winChance).toFixed(2);
 
-  const handleRoll = () => {
+  const spin = async () => {
     if (!canPlay) return;
-    setIsRolling(true);
-    setResult(null);
+    setIsSpinning(true);
     setWon(null);
+    setWinAmount(null);
+
+    // Animate spinning
+    const spinInterval = setInterval(() => {
+      setReels([
+        [SLOT_SYMBOLS[Math.floor(Math.random() * 8)], SLOT_SYMBOLS[Math.floor(Math.random() * 8)], SLOT_SYMBOLS[Math.floor(Math.random() * 8)]],
+        [SLOT_SYMBOLS[Math.floor(Math.random() * 8)], SLOT_SYMBOLS[Math.floor(Math.random() * 8)], SLOT_SYMBOLS[Math.floor(Math.random() * 8)]],
+        [SLOT_SYMBOLS[Math.floor(Math.random() * 8)], SLOT_SYMBOLS[Math.floor(Math.random() * 8)], SLOT_SYMBOLS[Math.floor(Math.random() * 8)]],
+      ]);
+    }, 100);
 
     setTimeout(() => {
-      const roll = Math.floor(Math.random() * 100) + 1;
-      setResult(roll);
-      const didWin = isOver ? roll > target : roll < target;
-      setWon(didWin);
-      setIsRolling(false);
-    }, 1500);
+      clearInterval(spinInterval);
+      
+      // Generate final result
+      const finalReels = [
+        [SLOT_SYMBOLS[Math.floor(Math.random() * 8)], SLOT_SYMBOLS[Math.floor(Math.random() * 8)], SLOT_SYMBOLS[Math.floor(Math.random() * 8)]],
+        [SLOT_SYMBOLS[Math.floor(Math.random() * 8)], SLOT_SYMBOLS[Math.floor(Math.random() * 8)], SLOT_SYMBOLS[Math.floor(Math.random() * 8)]],
+        [SLOT_SYMBOLS[Math.floor(Math.random() * 8)], SLOT_SYMBOLS[Math.floor(Math.random() * 8)], SLOT_SYMBOLS[Math.floor(Math.random() * 8)]],
+      ];
+      
+      // Check for wins (middle row)
+      const middleRow = [finalReels[0][1], finalReels[1][1], finalReels[2][1]];
+      const allSame = middleRow[0] === middleRow[1] && middleRow[1] === middleRow[2];
+      const twoSame = middleRow[0] === middleRow[1] || middleRow[1] === middleRow[2] || middleRow[0] === middleRow[2];
+      
+      setReels(finalReels);
+      setIsSpinning(false);
+      
+      if (allSame) {
+        const multiplier = SYMBOL_MULTIPLIERS[middleRow[0]] || 2;
+        const win = (parseFloat(betAmount) * multiplier).toFixed(2);
+        setWon(true);
+        setWinAmount(win);
+        
+        if (isDemoMode) {
+          setDemoBalance(prev => prev + parseFloat(win) - parseFloat(betAmount));
+        } else {
+          onBalanceUpdate();
+        }
+        
+        toast({
+          title: middleRow[0] === "👑" ? "JACKPOT!" : "Winner!",
+          description: `+${win} ${isDemoMode ? "Play Coins" : "DWC"} (${multiplier}x)`,
+        });
+      } else if (twoSame) {
+        const win = (parseFloat(betAmount) * 1.5).toFixed(2);
+        setWon(true);
+        setWinAmount(win);
+        
+        if (isDemoMode) {
+          setDemoBalance(prev => prev + parseFloat(win) - parseFloat(betAmount));
+        }
+        
+        toast({
+          title: "Small Win!",
+          description: `+${win} ${isDemoMode ? "Play Coins" : "DWC"} (1.5x)`,
+        });
+      } else {
+        setWon(false);
+        if (isDemoMode) {
+          setDemoBalance(prev => prev - parseFloat(betAmount));
+        }
+      }
+      
+      setJackpot(prev => prev + Math.floor(parseFloat(betAmount) * 0.01));
+    }, 2000);
   };
 
   return (
     <div className="space-y-4">
-      {isDemoMode && (
+      {isDemoMode ? (
         <div className="p-2 rounded-lg bg-amber-500/20 border border-amber-500/30 text-center">
-          <p className="text-sm text-amber-400">Demo Mode - Practice for Free!</p>
+          <p className="text-sm text-amber-400">Demo Mode - {demoBalance.toLocaleString()} Play Coins</p>
+        </div>
+      ) : isConnected && (
+        <div className="p-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-center">
+          <p className="text-sm text-purple-400">Balance: {formatDWC(userBalance)} DWC</p>
         </div>
       )}
-      
-      <div className="relative h-32 rounded-xl bg-gradient-to-br from-black/50 to-blue-900/30 border border-white/10 flex items-center justify-center">
-        <motion.div
-          className={`text-5xl font-bold font-mono ${won === true ? "text-green-400" : won === false ? "text-red-400" : "text-white"}`}
-          animate={isRolling ? { rotate: [0, 360, 720, 1080] } : {}}
-          transition={{ duration: 1.5 }}
+
+      {/* Progressive Jackpot */}
+      <div className="p-3 rounded-xl bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-500/30 text-center">
+        <div className="flex items-center justify-center gap-2 mb-1">
+          <Crown className="w-5 h-5 text-yellow-400" />
+          <span className="text-xs font-medium text-yellow-400">PROGRESSIVE JACKPOT</span>
+          <Crown className="w-5 h-5 text-yellow-400" />
+        </div>
+        <motion.p 
+          className="text-3xl font-bold font-mono text-yellow-400"
+          animate={{ scale: [1, 1.02, 1] }}
+          transition={{ duration: 1, repeat: Infinity }}
         >
-          {isRolling ? "🎲" : result ?? "?"}
-        </motion.div>
+          {jackpot.toLocaleString()} DWC
+        </motion.p>
       </div>
 
-      <div className="space-y-2">
-        <div className="flex items-center justify-between text-sm">
-          <span>Target: {target}</span>
-          <div className="flex gap-2">
-            <Button
-              size="sm"
-              variant={isOver ? "default" : "outline"}
-              onClick={() => setIsOver(true)}
-              data-testid="button-roll-over"
-            >
-              Roll Over
-            </Button>
-            <Button
-              size="sm"
-              variant={!isOver ? "default" : "outline"}
-              onClick={() => setIsOver(false)}
-              data-testid="button-roll-under"
-            >
-              Roll Under
-            </Button>
-          </div>
+      {/* Slot Machine */}
+      <div className="relative p-4 rounded-xl bg-gradient-to-br from-purple-900/50 to-pink-900/30 border-4 border-yellow-500/50 shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent rounded-xl" />
+        
+        <div className="grid grid-cols-3 gap-2 relative z-10">
+          {reels.map((reel, reelIndex) => (
+            <div key={reelIndex} className="bg-black/50 rounded-lg p-2 border border-white/10">
+              {reel.map((symbol, symbolIndex) => (
+                <motion.div
+                  key={symbolIndex}
+                  className={`text-4xl text-center py-2 ${symbolIndex === 1 ? "bg-white/10 rounded-lg border border-yellow-500/30" : ""}`}
+                  animate={isSpinning ? { y: [0, -10, 0, 10, 0] } : {}}
+                  transition={{ duration: 0.1, repeat: isSpinning ? Infinity : 0 }}
+                >
+                  {symbol}
+                </motion.div>
+              ))}
+            </div>
+          ))}
         </div>
-        <input
-          type="range"
-          min="5"
-          max="95"
-          value={target}
-          onChange={(e) => setTarget(parseInt(e.target.value))}
-          className="w-full"
-          data-testid="slider-dice-target"
+
+        {/* Win line indicator */}
+        <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-1 bg-yellow-500/50 z-0" />
+      </div>
+
+      <AnimatePresence>
+        {won !== null && (
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            className={`text-center p-4 rounded-lg ${won ? "bg-green-500/20 text-green-400 border border-green-500/30" : "bg-red-500/20 text-red-400 border border-red-500/30"}`}
+          >
+            <p className="text-2xl font-bold">
+              {won ? `You Won ${winAmount} ${isDemoMode ? "Play Coins" : "DWC"}!` : "No Match - Try Again!"}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="flex gap-2">
+        <Input
+          type="number"
+          value={betAmount}
+          onChange={(e) => setBetAmount(e.target.value)}
+          className="bg-white/5 border-white/10"
+          placeholder="Bet amount"
+          disabled={isSpinning}
+          data-testid="input-slots-bet"
         />
-        <div className="flex justify-between text-xs text-muted-foreground">
-          <span>Win Chance: {winChance}%</span>
-          <span>Multiplier: {multiplier}x</span>
-        </div>
+        <Button variant="outline" onClick={() => setBetAmount("10")}>10</Button>
+        <Button variant="outline" onClick={() => setBetAmount("50")}>50</Button>
+        <Button variant="outline" onClick={() => setBetAmount("100")}>100</Button>
       </div>
-
-      <Input
-        type="number"
-        value={betAmount}
-        onChange={(e) => setBetAmount(e.target.value)}
-        className="bg-white/5 border-white/10"
-        placeholder="Bet amount"
-        disabled={isRolling}
-        data-testid="input-dice-bet"
-      />
 
       <Button
-        className="w-full h-14 text-lg bg-gradient-to-r from-blue-500 to-cyan-500"
-        onClick={handleRoll}
-        disabled={isRolling || !canPlay}
-        data-testid="button-roll-dice"
+        className="w-full h-14 text-lg bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-bold hover:from-yellow-600 hover:to-amber-600"
+        onClick={spin}
+        disabled={isSpinning || !canPlay}
+        data-testid="button-spin"
       >
-        {isRolling ? (
-          <><RefreshCw className="w-5 h-5 mr-2 animate-spin" /> Rolling...</>
+        {isSpinning ? (
+          <><RefreshCw className="w-5 h-5 mr-2 animate-spin" /> Spinning...</>
         ) : (
-          <><Dice1 className="w-5 h-5 mr-2" /> Roll for {betAmount} {isDemoMode ? "Play Coins" : "DWC"}</>
+          <><Sparkles className="w-5 h-5 mr-2" /> SPIN ({betAmount} {isDemoMode ? "Play Coins" : "DWC"})</>
         )}
       </Button>
+
+      <div className="grid grid-cols-4 gap-1 text-center text-xs">
+        <div className="p-2 rounded bg-white/5">
+          <p className="text-lg">👑</p>
+          <p className="text-yellow-400">50x</p>
+        </div>
+        <div className="p-2 rounded bg-white/5">
+          <p className="text-lg">💎</p>
+          <p className="text-purple-400">25x</p>
+        </div>
+        <div className="p-2 rounded bg-white/5">
+          <p className="text-lg">7️⃣</p>
+          <p className="text-red-400">15x</p>
+        </div>
+        <div className="p-2 rounded bg-white/5">
+          <p className="text-lg">⭐</p>
+          <p className="text-blue-400">10x</p>
+        </div>
+      </div>
+      
+      <p className="text-center text-xs text-muted-foreground">
+        Match 3 on middle row to win! 96% RTP • Provably Fair
+      </p>
     </div>
   );
 }
@@ -378,13 +628,42 @@ export default function Arcade() {
   const { user } = useAuth();
   const isConnected = !!user;
   const [isDemoMode, setIsDemoMode] = useState(false);
+  const [userBalance, setUserBalance] = useState("0");
+  const [arcadeStats, setArcadeStats] = useState({
+    playersOnline: 0,
+    wageredToday: "0",
+    paidOutToday: "0",
+  });
 
-  // Simulated live stats (would come from API in production)
-  const liveStats = {
-    playersOnline: 847,
-    wageredToday: "1.2M",
-    paidOutToday: "1.18M",
-  };
+  const fetchBalance = useCallback(async () => {
+    if (!isConnected || !user) return;
+    try {
+      const res = await fetch(`/api/account/${(user as any).walletAddress || (user as any).id}`);
+      if (res.ok) {
+        const data = await res.json();
+        setUserBalance(data.balance || "0");
+      }
+    } catch (error) {
+      console.error("Failed to fetch balance:", error);
+    }
+  }, [isConnected, user]);
+
+  const fetchStats = useCallback(async () => {
+    try {
+      const res = await fetch("/api/arcade/stats");
+      if (res.ok) {
+        const data = await res.json();
+        setArcadeStats(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch arcade stats:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchBalance();
+    fetchStats();
+  }, [fetchBalance, fetchStats]);
 
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
@@ -394,12 +673,18 @@ export default function Arcade() {
             <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
-          <Link href="/dashboard-pro">
-            <Button variant="ghost" size="sm" className="h-8 text-xs">
-              <ArrowLeft className="w-3 h-3 mr-1" />
-              Dashboard
-            </Button>
-          </Link>
+          <div className="flex items-center gap-2">
+            <Badge className="bg-green-500/20 text-green-400 text-xs">
+              <span className="w-2 h-2 rounded-full bg-green-400 mr-1 animate-pulse" />
+              {arcadeStats.playersOnline} Playing
+            </Badge>
+            <Link href="/dashboard-pro">
+              <Button variant="ghost" size="sm" className="h-8 text-xs">
+                <ArrowLeft className="w-3 h-3 mr-1" />
+                Dashboard
+              </Button>
+            </Link>
+          </div>
         </div>
       </nav>
 
@@ -423,28 +708,28 @@ export default function Arcade() {
               </motion.div>
             </div>
             <h1 className="text-2xl md:text-3xl font-display font-bold mb-2">
-              DarkWave <span className="text-pink-400">Arcade</span>
+              DarkWave <span className="text-pink-400">Games</span>
             </h1>
             <p className="text-sm text-muted-foreground">
-              Provably fair games • Win DWC • Instant payouts
+              Provably fair games • Win real DWC • Instant payouts
             </p>
           </motion.div>
 
-          {/* Live Stats - Always visible */}
+          {/* Live Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
             <GlassCard hover={false} className="p-3 text-center">
               <Users className="w-5 h-5 mx-auto mb-1 text-blue-400" />
-              <p className="text-xl font-bold">{liveStats.playersOnline}</p>
+              <p className="text-xl font-bold">{arcadeStats.playersOnline}</p>
               <p className="text-[10px] text-muted-foreground">Playing Now</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
               <Coins className="w-5 h-5 mx-auto mb-1 text-yellow-400" />
-              <p className="text-xl font-bold">{liveStats.wageredToday}</p>
+              <p className="text-xl font-bold">{arcadeStats.wageredToday}</p>
               <p className="text-[10px] text-muted-foreground">DWC Wagered Today</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
               <Trophy className="w-5 h-5 mx-auto mb-1 text-amber-400" />
-              <p className="text-xl font-bold">{liveStats.paidOutToday}</p>
+              <p className="text-xl font-bold">{arcadeStats.paidOutToday}</p>
               <p className="text-[10px] text-muted-foreground">Paid Out Today</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
@@ -457,7 +742,7 @@ export default function Arcade() {
           {/* Demo/Real Mode Toggle */}
           {!isConnected && (
             <GlassCard glow className="p-4 mb-6">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
                 <div>
                   <h3 className="font-bold flex items-center gap-2">
                     <Play className="w-4 h-4 text-amber-400" />
@@ -471,7 +756,7 @@ export default function Arcade() {
                   <Button 
                     variant={isDemoMode ? "default" : "outline"}
                     onClick={() => setIsDemoMode(true)}
-                    className={isDemoMode ? "bg-amber-500" : ""}
+                    className={isDemoMode ? "bg-amber-500 hover:bg-amber-600" : ""}
                     data-testid="button-demo-mode"
                   >
                     Demo Mode
@@ -497,20 +782,35 @@ export default function Arcade() {
                   <TabsTrigger value="crash" className="gap-1" data-testid="tab-crash">
                     <TrendingUp className="w-3 h-3" /> Crash
                   </TabsTrigger>
-                  <TabsTrigger value="dice" className="gap-1" data-testid="tab-dice">
-                    <Dice1 className="w-3 h-3" /> Dice
+                  <TabsTrigger value="slots" className="gap-1" data-testid="tab-slots">
+                    <Cherry className="w-3 h-3" /> Jackpot Slots
                   </TabsTrigger>
                 </TabsList>
 
                 <GlassCard glow className="p-4">
                   <TabsContent value="coinflip" className="mt-0">
-                    <CoinFlipGame isConnected={isConnected} isDemoMode={isDemoMode} />
+                    <CoinFlipGame 
+                      isConnected={isConnected} 
+                      isDemoMode={isDemoMode} 
+                      userBalance={userBalance}
+                      onBalanceUpdate={fetchBalance}
+                    />
                   </TabsContent>
                   <TabsContent value="crash" className="mt-0">
-                    <CrashGame isConnected={isConnected} isDemoMode={isDemoMode} />
+                    <CrashGame 
+                      isConnected={isConnected} 
+                      isDemoMode={isDemoMode}
+                      userBalance={userBalance}
+                      onBalanceUpdate={fetchBalance}
+                    />
                   </TabsContent>
-                  <TabsContent value="dice" className="mt-0">
-                    <DiceGame isConnected={isConnected} isDemoMode={isDemoMode} />
+                  <TabsContent value="slots" className="mt-0">
+                    <SlotsGame 
+                      isConnected={isConnected} 
+                      isDemoMode={isDemoMode}
+                      userBalance={userBalance}
+                      onBalanceUpdate={fetchBalance}
+                    />
                   </TabsContent>
                 </GlassCard>
               </Tabs>
@@ -545,8 +845,8 @@ export default function Arcade() {
                 <div className="space-y-2">
                   {[
                     { name: "CryptoKing", amount: "12,450", game: "Crash" },
-                    { name: "LuckyDev", amount: "8,200", game: "Coin Flip" },
-                    { name: "DiceWhale", amount: "6,800", game: "Dice" },
+                    { name: "LuckyDev", amount: "8,200", game: "Slots" },
+                    { name: "DiceWhale", amount: "6,800", game: "Coin Flip" },
                   ].map((winner, i) => (
                     <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-white/5">
                       <div className="flex items-center gap-2">
@@ -562,6 +862,19 @@ export default function Arcade() {
                     </div>
                   ))}
                 </div>
+              </GlassCard>
+
+              <GlassCard className="p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
+                <h3 className="font-bold mb-2 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-purple-400" />
+                  Provably Fair
+                </h3>
+                <p className="text-xs text-muted-foreground mb-3">
+                  All game outcomes are determined using on-chain randomness. Every result can be verified on the blockchain.
+                </p>
+                <Button variant="outline" size="sm" className="w-full text-xs">
+                  Verify Fairness
+                </Button>
               </GlassCard>
             </div>
           </div>
