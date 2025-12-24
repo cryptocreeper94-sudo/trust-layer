@@ -6,29 +6,29 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
- * @title Wrapped DarkWave Token (wDWT)
- * @notice ERC-20 representation of DWT bridged from DarkWave Chain
+ * @title Wrapped DarkWave Coin (wDWC)
+ * @notice ERC-20 representation of DWC bridged from DarkWave Smart Chain (DSC)
  * @dev Minting is controlled by the bridge operator (Founders Validator)
  * 
  * Bridge Flow:
- * 1. User locks DWT on DarkWave Chain
- * 2. Bridge operator calls mint() to create wDWT on Ethereum
- * 3. User can transfer wDWT freely on Ethereum
- * 4. To bridge back: user calls burn(), operator releases DWT on DarkWave Chain
+ * 1. User locks DWC on DarkWave Smart Chain
+ * 2. Bridge operator calls mint() to create wDWC on Ethereum
+ * 3. User can transfer wDWC freely on Ethereum
+ * 4. To bridge back: user calls burn(), operator releases DWC on DSC
  */
-contract WDWT is ERC20, ERC20Burnable, Ownable {
+contract WDWC is ERC20, ERC20Burnable, Ownable {
     event BridgeMint(address indexed to, uint256 amount, bytes32 indexed lockId);
-    event BridgeBurn(address indexed from, uint256 amount, string darkwaveAddress);
+    event BridgeBurn(address indexed from, uint256 amount, string dscAddress);
     
     mapping(bytes32 => bool) public processedLocks;
     
-    constructor(address bridgeOperator) ERC20("Wrapped DarkWave Token", "wDWT") Ownable(bridgeOperator) {}
+    constructor(address bridgeOperator) ERC20("Wrapped DarkWave Coin", "wDWC") Ownable(bridgeOperator) {}
     
     /**
-     * @notice Mint wDWT after DWT is locked on DarkWave Chain
+     * @notice Mint wDWC after DWC is locked on DarkWave Smart Chain
      * @param to Recipient address on Ethereum
-     * @param amount Amount to mint (18 decimals, matches DWT)
-     * @param lockId Unique lock ID from DarkWave Chain to prevent double-minting
+     * @param amount Amount to mint (18 decimals, matches DWC)
+     * @param lockId Unique lock ID from DSC to prevent double-minting
      */
     function mint(address to, uint256 amount, bytes32 lockId) external onlyOwner {
         require(!processedLocks[lockId], "Lock already processed");
@@ -38,14 +38,14 @@ contract WDWT is ERC20, ERC20Burnable, Ownable {
     }
     
     /**
-     * @notice Burn wDWT to release DWT on DarkWave Chain
+     * @notice Burn wDWC to release DWC on DarkWave Smart Chain
      * @param amount Amount to burn
-     * @param darkwaveAddress Recipient address on DarkWave Chain
+     * @param dscAddress Recipient address on DSC
      */
-    function bridgeBurn(uint256 amount, string calldata darkwaveAddress) external {
-        require(bytes(darkwaveAddress).length > 0, "Invalid DarkWave address");
+    function bridgeBurn(uint256 amount, string calldata dscAddress) external {
+        require(bytes(dscAddress).length > 0, "Invalid DSC address");
         _burn(msg.sender, amount);
-        emit BridgeBurn(msg.sender, amount, darkwaveAddress);
+        emit BridgeBurn(msg.sender, amount, dscAddress);
     }
     
     /**

@@ -1,12 +1,12 @@
 [package]
-name = "wdwt-bridge"
+name = "wdwc-bridge"
 version = "1.0.0"
-description = "Wrapped DarkWave Token Bridge Program for Solana"
+description = "Wrapped DarkWave Coin Bridge Program for Solana - DSC Bridge"
 edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "wdwt_bridge"
+name = "wdwc_bridge"
 
 [features]
 no-entrypoint = []

@@ -2,7 +2,7 @@ const hre = require("hardhat");
 
 async function main() {
   console.log("═══════════════════════════════════════════════════════════════");
-  console.log("  Deploying wDWT to", hre.network.name);
+  console.log("  Deploying wDWC to", hre.network.name);
   console.log("═══════════════════════════════════════════════════════════════\n");
 
   const [deployer] = await hre.ethers.getSigners();
@@ -11,11 +11,11 @@ async function main() {
   const balance = await hre.ethers.provider.getBalance(deployer.address);
   console.log("Balance:", hre.ethers.formatEther(balance), "ETH\n");
 
-  const WDWT = await hre.ethers.getContractFactory("WDWT");
-  const wdwt = await WDWT.deploy(deployer.address);
-  await wdwt.waitForDeployment();
+  const WDWC = await hre.ethers.getContractFactory("WDWC");
+  const wdwc = await WDWC.deploy(deployer.address);
+  await wdwc.waitForDeployment();
 
-  const address = await wdwt.getAddress();
+  const address = await wdwc.getAddress();
   
   console.log("═══════════════════════════════════════════════════════════════");
   console.log("  Deployment Complete");
@@ -23,7 +23,7 @@ async function main() {
   console.log("Contract Address:", address);
   console.log("Bridge Operator:", deployer.address);
   console.log("\nSet this in Replit Secrets:");
-  console.log(`  WDWT_ETHEREUM_ADDRESS=${address}`);
+  console.log(`  WDWC_ETHEREUM_ADDRESS=${address}`);
   console.log("\nVerify on Etherscan:");
   console.log(`  https://sepolia.etherscan.io/address/${address}`);
 }
