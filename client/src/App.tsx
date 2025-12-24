@@ -46,6 +46,9 @@ import NetworkStats from "@/pages/network-stats";
 import FounderProgram from "@/pages/founder-program";
 import Validators from "@/pages/validators";
 import Wallet from "@/pages/wallet";
+import Status from "@/pages/status";
+import ApiDocs from "@/pages/api-docs";
+import AdminAnalytics from "@/pages/admin-analytics";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -102,6 +105,9 @@ function Router() {
         <Route path="/founder-program" component={FounderProgram} />
         <Route path="/validators" component={Validators} />
         <Route path="/wallet" component={Wallet} />
+        <Route path="/status" component={Status} />
+        <Route path="/api-docs" component={ApiDocs} />
+        <Route path="/admin/analytics" component={AdminAnalytics} />
         <Route component={NotFound} />
       </Switch>
     </>

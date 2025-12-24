@@ -211,6 +211,78 @@ Improvements follow the **DSC Improvement Proposal** process:
 
 ---
 
+## Backup & Recovery Procedures
+
+### Database Backups
+
+**Automatic Backups (Replit Managed)**
+- Replit PostgreSQL databases include automatic point-in-time recovery
+- Checkpoints are created at regular intervals during development
+- Production databases use Neon's continuous backup system
+
+**Manual Backup Commands**
+```bash
+# Export full database
+pg_dump $DATABASE_URL > backup_$(date +%Y%m%d_%H%M%S).sql
+
+# Export specific tables
+pg_dump $DATABASE_URL -t chain_blocks -t chain_transactions > chain_backup.sql
+
+# Export schema only (for documentation)
+pg_dump $DATABASE_URL --schema-only > schema.sql
+```
+
+**Restore Procedures**
+```bash
+# Full restore (CAUTION: overwrites existing data)
+psql $DATABASE_URL < backup_file.sql
+
+# Restore specific tables
+psql $DATABASE_URL -c "DROP TABLE IF EXISTS table_name CASCADE;"
+pg_dump $DATABASE_URL -t table_name < table_backup.sql
+```
+
+### Code Rollback
+
+**Using Replit Checkpoints**
+1. Click the clock icon in the Replit sidebar
+2. Select a checkpoint from the timeline
+3. Review changes before restoring
+4. Click "Restore" to rollback code
+
+**Manual Git Rollback**
+```bash
+# View recent commits
+git log --oneline -10
+
+# Rollback to specific commit (soft - keeps changes staged)
+git reset --soft <commit_hash>
+
+# View changes before rollback
+git diff <commit_hash>
+```
+
+### Emergency Recovery
+
+**If Database is Corrupted**
+1. Stop all workflows immediately
+2. Contact Replit support for database snapshot
+3. Use most recent manual backup if available
+4. Verify data integrity after restore
+
+**If Smart Contracts are Compromised**
+1. Trigger emergency pause: `pause()` on Ethereum, `set_paused()` on Solana
+2. Notify users via Status page
+3. Initiate governance review via Timelock
+4. Deploy patched contract after 48hr delay
+
+**Contact Points**
+- Replit Support: support@replit.com
+- Database Issues: Use Replit's database pane for production
+- Security Incidents: cryptocreeper94@gmail.com
+
+---
+
 ## Changelog
 
 ### December 2024

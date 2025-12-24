@@ -1591,3 +1591,53 @@ export const LEGACY_FOUNDER_CONFIG = {
 } as const;
 
 export const APP_VERSION = "1.2.0";
+
+export const referralTracking = pgTable("referral_tracking", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  referrerId: text("referrer_id").notNull(),
+  referrerEmail: text("referrer_email"),
+  referralCode: text("referral_code").notNull(),
+  referredUserId: text("referred_user_id"),
+  referredEmail: text("referred_email").notNull(),
+  referralType: text("referral_type").notNull().default("founder"),
+  status: text("status").notNull().default("pending"),
+  bonusAmount: text("bonus_amount").notNull().default("0"),
+  bonusPaid: boolean("bonus_paid").notNull().default(false),
+  bonusTxHash: text("bonus_tx_hash"),
+  convertedAt: timestamp("converted_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertReferralTrackingSchema = createInsertSchema(referralTracking).omit({
+  id: true,
+  createdAt: true,
+  convertedAt: true,
+});
+
+export type InsertReferralTracking = z.infer<typeof insertReferralTrackingSchema>;
+export type ReferralTracking = typeof referralTracking.$inferSelect;
+
+export const emailPreferences = pgTable("email_preferences", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  email: text("email").notNull(),
+  stakingRewards: boolean("staking_rewards").notNull().default(true),
+  largeTransfers: boolean("large_transfers").notNull().default(true),
+  bridgeNotifications: boolean("bridge_notifications").notNull().default(true),
+  referralBonuses: boolean("referral_bonuses").notNull().default(true),
+  securityAlerts: boolean("security_alerts").notNull().default(true),
+  marketingUpdates: boolean("marketing_updates").notNull().default(false),
+  weeklyDigest: boolean("weekly_digest").notNull().default(true),
+  largeTransferThreshold: text("large_transfer_threshold").notNull().default("10000"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertEmailPreferencesSchema = createInsertSchema(emailPreferences).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertEmailPreferences = z.infer<typeof insertEmailPreferencesSchema>;
+export type EmailPreferences = typeof emailPreferences.$inferSelect;
