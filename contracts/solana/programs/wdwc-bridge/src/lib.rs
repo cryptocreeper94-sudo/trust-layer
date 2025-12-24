@@ -3,11 +3,15 @@ use anchor_spl::token::{self, Mint, Token, TokenAccount, MintTo, Burn};
 
 declare_id!("DSCBridge111111111111111111111111111111111");
 
+/// Protocol version for upgrade tracking
+pub const PROTOCOL_VERSION: u8 = 1;
+
 #[program]
 pub mod wdwc_bridge {
     use super::*;
 
     /// Initialize the bridge with multi-sig validators
+    /// The program is deployed with BPF upgradeable loader, allowing future upgrades
     pub fn initialize(
         ctx: Context<Initialize>,
         required_signatures: u8,
@@ -20,9 +24,49 @@ pub mod wdwc_bridge {
         bridge.total_minted = 0;
         bridge.nonce = 0;
         bridge.bump = ctx.bumps.bridge_state;
+        bridge.protocol_version = PROTOCOL_VERSION;
+        bridge.upgrade_authority = ctx.accounts.authority.key();
+        bridge.is_paused = false;
         
-        msg!("wDWC Bridge initialized for DarkWave Smart Chain");
+        msg!("wDWC Bridge initialized for DarkWave Smart Chain (DSC)");
+        msg!("Protocol Version: {}", PROTOCOL_VERSION);
         msg!("Required signatures: {}", required_signatures);
+        msg!("Upgrade Authority: {}", bridge.upgrade_authority);
+        Ok(())
+    }
+
+    /// Update the upgrade authority (for multi-sig governance transition)
+    pub fn set_upgrade_authority(
+        ctx: Context<SetUpgradeAuthority>,
+        new_authority: Pubkey,
+    ) -> Result<()> {
+        let bridge = &mut ctx.accounts.bridge_state;
+        
+        emit!(UpgradeAuthorityChanged {
+            old_authority: bridge.upgrade_authority,
+            new_authority,
+        });
+        
+        bridge.upgrade_authority = new_authority;
+        
+        msg!("Upgrade authority changed to: {}", new_authority);
+        Ok(())
+    }
+
+    /// Pause/unpause the bridge (emergency control)
+    pub fn set_paused(
+        ctx: Context<SetPaused>,
+        paused: bool,
+    ) -> Result<()> {
+        let bridge = &mut ctx.accounts.bridge_state;
+        bridge.is_paused = paused;
+        
+        emit!(BridgePaused {
+            paused,
+            by: ctx.accounts.authority.key(),
+        });
+        
+        msg!("Bridge paused status: {}", paused);
         Ok(())
     }
 
@@ -83,6 +127,9 @@ pub mod wdwc_bridge {
         let bridge = &mut ctx.accounts.bridge_state;
         let lock_record = &mut ctx.accounts.lock_record;
         
+        // Check bridge is not paused
+        require!(!bridge.is_paused, BridgeError::BridgePaused);
+        
         // Verify lock hasn't been processed
         require!(
             !lock_record.processed,
@@ -96,6 +143,7 @@ pub mod wdwc_bridge {
         lock_record.recipient = ctx.accounts.recipient.key();
         lock_record.dsc_tx_hash = dsc_tx_hash.clone();
         lock_record.timestamp = Clock::get()?.unix_timestamp;
+        lock_record.protocol_version = bridge.protocol_version;
         
         // Mint wDWC using PDA authority
         let seeds = &[
@@ -123,6 +171,7 @@ pub mod wdwc_bridge {
             lock_id,
             dsc_tx_hash,
             nonce: bridge.nonce,
+            protocol_version: bridge.protocol_version,
         });
         
         Ok(())
@@ -135,6 +184,9 @@ pub mod wdwc_bridge {
         dsc_address: String,
     ) -> Result<()> {
         let bridge = &mut ctx.accounts.bridge_state;
+        
+        // Check bridge is not paused
+        require!(!bridge.is_paused, BridgeError::BridgePaused);
         
         require!(
             dsc_address.len() > 0,
@@ -160,6 +212,7 @@ pub mod wdwc_bridge {
             amount,
             dsc_address,
             nonce: bridge.nonce,
+            protocol_version: bridge.protocol_version,
         });
         
         Ok(())
@@ -175,7 +228,14 @@ pub mod wdwc_bridge {
             validators_count: bridge.validators.len() as u8,
             required_signatures: bridge.required_signatures,
             nonce: bridge.nonce,
+            protocol_version: bridge.protocol_version,
+            is_paused: bridge.is_paused,
         })
+    }
+
+    /// Get protocol version (for clients to check compatibility)
+    pub fn get_version(_ctx: Context<GetVersion>) -> Result<u8> {
+        Ok(PROTOCOL_VERSION)
     }
 }
 
@@ -198,6 +258,32 @@ pub struct Initialize<'info> {
     
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token>,
+}
+
+#[derive(Accounts)]
+pub struct SetUpgradeAuthority<'info> {
+    #[account(
+        mut,
+        seeds = [b"bridge"],
+        bump = bridge_state.bump,
+        constraint = bridge_state.upgrade_authority == authority.key() @ BridgeError::UnauthorizedUpgrade
+    )]
+    pub bridge_state: Account<'info, BridgeState>,
+    
+    pub authority: Signer<'info>,
+}
+
+#[derive(Accounts)]
+pub struct SetPaused<'info> {
+    #[account(
+        mut,
+        seeds = [b"bridge"],
+        bump = bridge_state.bump,
+        has_one = authority
+    )]
+    pub bridge_state: Account<'info, BridgeState>,
+    
+    pub authority: Signer<'info>,
 }
 
 #[derive(Accounts)]
@@ -297,6 +383,12 @@ pub struct GetStats<'info> {
     pub bridge_state: Account<'info, BridgeState>,
 }
 
+#[derive(Accounts)]
+pub struct GetVersion<'info> {
+    #[account(seeds = [b"bridge"], bump = bridge_state.bump)]
+    pub bridge_state: Account<'info, BridgeState>,
+}
+
 #[account]
 #[derive(InitSpace)]
 pub struct BridgeState {
@@ -307,6 +399,9 @@ pub struct BridgeState {
     pub total_minted: u64,
     pub nonce: u64,
     pub bump: u8,
+    pub protocol_version: u8,
+    pub upgrade_authority: Pubkey,
+    pub is_paused: bool,
     #[max_len(10)]
     pub validators: Vec<Pubkey>,
 }
@@ -321,6 +416,7 @@ pub struct LockRecord {
     #[max_len(100)]
     pub dsc_tx_hash: String,
     pub timestamp: i64,
+    pub protocol_version: u8,
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
@@ -330,6 +426,8 @@ pub struct BridgeStats {
     pub validators_count: u8,
     pub required_signatures: u8,
     pub nonce: u64,
+    pub protocol_version: u8,
+    pub is_paused: bool,
 }
 
 #[event]
@@ -339,6 +437,7 @@ pub struct BridgeMint {
     pub lock_id: [u8; 32],
     pub dsc_tx_hash: String,
     pub nonce: u64,
+    pub protocol_version: u8,
 }
 
 #[event]
@@ -347,6 +446,7 @@ pub struct BridgeBurn {
     pub amount: u64,
     pub dsc_address: String,
     pub nonce: u64,
+    pub protocol_version: u8,
 }
 
 #[event]
@@ -359,6 +459,18 @@ pub struct ValidatorAdded {
 pub struct ValidatorRemoved {
     pub validator: Pubkey,
     pub total_validators: u8,
+}
+
+#[event]
+pub struct UpgradeAuthorityChanged {
+    pub old_authority: Pubkey,
+    pub new_authority: Pubkey,
+}
+
+#[event]
+pub struct BridgePaused {
+    pub paused: bool,
+    pub by: Pubkey,
 }
 
 #[error_code]
@@ -375,4 +487,8 @@ pub enum BridgeError {
     MaxValidatorsReached,
     #[msg("Insufficient signatures")]
     InsufficientSignatures,
+    #[msg("Bridge is paused")]
+    BridgePaused,
+    #[msg("Unauthorized upgrade authority")]
+    UnauthorizedUpgrade,
 }

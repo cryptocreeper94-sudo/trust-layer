@@ -158,6 +158,46 @@ DarkWave Smart Chain (DSC) is a comprehensive blockchain ecosystem developed by 
 
 ---
 
+## Upgradeability & Governance
+
+### Smart Contract Upgradeability
+
+**Ethereum (wDWC.sol)** - UUPS Proxy Pattern
+- Proxy address stays constant forever
+- Implementation can be swapped without affecting balances
+- Protected by owner (transfer to multi-sig for production)
+- `VERSION` constant tracks implementation versions
+- Deploy: `npm run deploy:sepolia` | Upgrade: `npm run upgrade:sepolia`
+
+**Solana (wdwc-bridge)** - BPF Upgradeable Loader
+- Program ID stays constant
+- All state accounts preserved during upgrades
+- `upgrade_authority` field controls who can upgrade
+- `protocol_version` embedded in all transactions
+- `is_paused` for emergency stops
+- Deploy: `anchor deploy` | Upgrade: `anchor upgrade`
+
+### Governance Process (DSCIP)
+
+Future upgrades follow the **DSC Improvement Proposal** process:
+1. **Propose** - Document changes in DSCIP format
+2. **Testnet** - Deploy to testnet, community testing
+3. **Canary** - Limited mainnet deployment (opt-in validators)
+4. **Mainnet** - Full activation at specified block height
+5. **Rollback Plan** - Documented revert procedure
+
+### Security Controls
+
+| Control | Ethereum | Solana |
+|---------|----------|--------|
+| Upgrade Authority | Contract Owner | Program Authority |
+| Pause Mechanism | Not yet | `set_paused()` |
+| Multi-sig Ready | Transfer ownership | Transfer authority |
+| Version Tracking | `VERSION` constant | `protocol_version` field |
+| Timelock | Add via governance | Add via governance |
+
+---
+
 ## External Dependencies
 
 - **Database**: PostgreSQL via DATABASE_URL
@@ -170,6 +210,9 @@ DarkWave Smart Chain (DSC) is a comprehensive blockchain ecosystem developed by 
 ## Changelog
 
 ### December 2024
+- **Upgradeable smart contracts** - UUPS proxy for Ethereum, BPF loader for Solana
+- **Protocol versioning** - All transactions embed version for compatibility tracking
+- **DSC/DWC rebrand complete** - Contracts, docs, and UI updated
 - Voice-enabled AI assistant with human-like speech (OpenAI TTS)
 - AI credit system for future Studio AI features
 - Studio: Live Preview, Database Explorer, CI/CD Pipelines

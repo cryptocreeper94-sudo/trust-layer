@@ -1,28 +1,66 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20BurnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /**
- * @title Wrapped DarkWave Coin (wDWC)
+ * @title Wrapped DarkWave Coin (wDWC) - Upgradeable
  * @notice ERC-20 representation of DWC bridged from DarkWave Smart Chain (DSC)
- * @dev Minting is controlled by the bridge operator (Founders Validator)
+ * @dev Uses UUPS proxy pattern for upgradeability
+ * 
+ * Upgrade Flow:
+ * 1. Deploy new implementation contract
+ * 2. Multi-sig proposes upgrade via TimelockController
+ * 3. 48-hour delay for community review
+ * 4. Multi-sig executes upgrade
  * 
  * Bridge Flow:
  * 1. User locks DWC on DarkWave Smart Chain
  * 2. Bridge operator calls mint() to create wDWC on Ethereum
  * 3. User can transfer wDWC freely on Ethereum
- * 4. To bridge back: user calls burn(), operator releases DWC on DSC
+ * 4. To bridge back: user calls bridgeBurn(), operator releases DWC on DSC
  */
-contract WDWC is ERC20, ERC20Burnable, Ownable {
+contract WDWC is 
+    Initializable, 
+    ERC20Upgradeable, 
+    ERC20BurnableUpgradeable, 
+    OwnableUpgradeable, 
+    UUPSUpgradeable 
+{
+    /// @notice Contract version for upgrade tracking
+    uint256 public constant VERSION = 1;
+    
+    /// @notice Emitted when wDWC is minted after DWC lock on DSC
     event BridgeMint(address indexed to, uint256 amount, bytes32 indexed lockId);
+    
+    /// @notice Emitted when wDWC is burned to release DWC on DSC
     event BridgeBurn(address indexed from, uint256 amount, string dscAddress);
     
+    /// @notice Emitted when contract is upgraded
+    event ContractUpgraded(address indexed newImplementation, uint256 newVersion);
+    
+    /// @notice Tracks processed lock IDs to prevent double-minting
     mapping(bytes32 => bool) public processedLocks;
     
-    constructor(address bridgeOperator) ERC20("Wrapped DarkWave Coin", "wDWC") Ownable(bridgeOperator) {}
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() {
+        _disableInitializers();
+    }
+    
+    /**
+     * @notice Initialize the contract (replaces constructor for proxy)
+     * @param bridgeOperator Address of the bridge operator (multi-sig recommended)
+     */
+    function initialize(address bridgeOperator) public initializer {
+        __ERC20_init("Wrapped DarkWave Coin", "wDWC");
+        __ERC20Burnable_init();
+        __Ownable_init(bridgeOperator);
+        __UUPSUpgradeable_init();
+    }
     
     /**
      * @notice Mint wDWC after DWC is locked on DarkWave Smart Chain
@@ -62,5 +100,20 @@ contract WDWC is ERC20, ERC20Burnable, Ownable {
      */
     function transferBridgeOperator(address newOperator) external onlyOwner {
         transferOwnership(newOperator);
+    }
+    
+    /**
+     * @notice Required by UUPS - only owner can authorize upgrades
+     * @param newImplementation Address of new implementation contract
+     */
+    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {
+        emit ContractUpgraded(newImplementation, VERSION + 1);
+    }
+    
+    /**
+     * @notice Get the current implementation version
+     */
+    function getVersion() external pure returns (uint256) {
+        return VERSION;
     }
 }

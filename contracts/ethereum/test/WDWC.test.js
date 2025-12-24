@@ -1,7 +1,7 @@
 const { expect } = require("chai");
-const { ethers } = require("hardhat");
+const { ethers, upgrades } = require("hardhat");
 
-describe("WDWC", function () {
+describe("WDWC Upgradeable", function () {
   let wdwc;
   let owner;
   let user1;
@@ -10,7 +10,10 @@ describe("WDWC", function () {
   beforeEach(async function () {
     [owner, user1, user2] = await ethers.getSigners();
     const WDWC = await ethers.getContractFactory("WDWC");
-    wdwc = await WDWC.deploy(owner.address);
+    wdwc = await upgrades.deployProxy(WDWC, [owner.address], {
+      initializer: "initialize",
+      kind: "uups"
+    });
     await wdwc.waitForDeployment();
   });
 
@@ -30,6 +33,10 @@ describe("WDWC", function () {
 
     it("Should start with zero total supply", async function () {
       expect(await wdwc.totalSupply()).to.equal(0);
+    });
+
+    it("Should report version 1", async function () {
+      expect(await wdwc.getVersion()).to.equal(1);
     });
   });
 
@@ -109,6 +116,37 @@ describe("WDWC", function () {
     it("Should reject transfer from non-owner", async function () {
       await expect(wdwc.connect(user1).transferBridgeOperator(user2.address))
         .to.be.revertedWithCustomError(wdwc, "OwnableUnauthorizedAccount");
+    });
+  });
+
+  describe("Upgradeability", function () {
+    it("Should be upgradeable by owner", async function () {
+      const WDWCV2 = await ethers.getContractFactory("WDWC");
+      const upgraded = await upgrades.upgradeProxy(await wdwc.getAddress(), WDWCV2, {
+        kind: "uups"
+      });
+      expect(await upgraded.getVersion()).to.equal(1);
+    });
+
+    it("Should reject upgrade from non-owner", async function () {
+      const WDWCV2 = await ethers.getContractFactory("WDWC", user1);
+      await expect(
+        upgrades.upgradeProxy(await wdwc.getAddress(), WDWCV2, { kind: "uups" })
+      ).to.be.reverted;
+    });
+
+    it("Should preserve state after upgrade", async function () {
+      const lockId = ethers.keccak256(ethers.toUtf8Bytes("lock1"));
+      const amount = ethers.parseEther("100");
+      await wdwc.mint(user1.address, amount, lockId);
+
+      const WDWCV2 = await ethers.getContractFactory("WDWC");
+      const upgraded = await upgrades.upgradeProxy(await wdwc.getAddress(), WDWCV2, {
+        kind: "uups"
+      });
+
+      expect(await upgraded.balanceOf(user1.address)).to.equal(amount);
+      expect(await upgraded.isLockProcessed(lockId)).to.equal(true);
     });
   });
 });
