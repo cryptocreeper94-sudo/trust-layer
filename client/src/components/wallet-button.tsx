@@ -158,12 +158,14 @@ export function WalletButton() {
       <Button
         size="sm"
         onClick={() => setShowModal(true)}
-        className="gap-2 bg-primary text-background hover:bg-primary/90"
+        className="gap-2 bg-primary text-background hover:bg-primary/90 px-2 sm:px-3"
         disabled={isConnecting}
         data-testid="button-connect-wallet"
       >
-        <Wallet className="w-4 h-4" />
-        {isConnecting ? "Connecting..." : "Connect Wallet"}
+        <Wallet className="w-4 h-4 flex-shrink-0" />
+        <span className="hidden sm:inline">
+          {isConnecting ? "Connecting..." : "Connect Wallet"}
+        </span>
       </Button>
 
       <AnimatePresence>
