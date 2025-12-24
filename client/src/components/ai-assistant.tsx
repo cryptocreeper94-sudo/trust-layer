@@ -130,28 +130,57 @@ export function AIAssistant() {
     }
   };
 
-  const speakText = (text: string) => {
-    if (!voiceEnabled || !("speechSynthesis" in window)) return;
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0;
-    utterance.volume = 1.0;
-    
-    const voices = window.speechSynthesis.getVoices();
-    const preferredVoice = voices.find(
-      (v) => v.name.includes("Google") || v.name.includes("Samantha") || v.name.includes("Alex")
-    );
-    if (preferredVoice) {
-      utterance.voice = preferredVoice;
+  const speakText = async (text: string) => {
+    if (!voiceEnabled) return;
+
+    // Stop any currently playing audio
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
     }
 
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
+    setIsSpeaking(true);
 
-    window.speechSynthesis.speak(utterance);
+    try {
+      const response = await fetch("/api/assistant/speak", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+
+      if (!response.ok) throw new Error("TTS failed");
+
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
+      
+      audio.onended = () => {
+        setIsSpeaking(false);
+        URL.revokeObjectURL(audioUrl);
+        audioRef.current = null;
+      };
+      
+      audio.onerror = () => {
+        setIsSpeaking(false);
+        URL.revokeObjectURL(audioUrl);
+        audioRef.current = null;
+      };
+
+      await audio.play();
+    } catch {
+      setIsSpeaking(false);
+      // Fallback to browser TTS if OpenAI fails
+      if ("speechSynthesis" in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1.0;
+        utterance.onend = () => setIsSpeaking(false);
+        window.speechSynthesis.speak(utterance);
+      }
+    }
   };
 
   const handleSend = async (overrideMessage?: string) => {

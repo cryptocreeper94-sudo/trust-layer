@@ -3403,6 +3403,41 @@ ${context ? `- Additional context: ${context}` : ""}`;
     }
   });
 
+  // AI Assistant TTS - generate human-like speech using OpenAI
+  app.post("/api/assistant/speak", async (req, res) => {
+    try {
+      const { text } = req.body;
+      
+      if (!text || typeof text !== "string") {
+        return res.status(400).json({ error: "Text is required" });
+      }
+
+      const OpenAI = (await import("openai")).default;
+      const openai = new OpenAI({
+        apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
+        baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+      });
+
+      const mp3 = await openai.audio.speech.create({
+        model: "tts-1",
+        voice: "nova", // Natural female voice
+        input: text,
+        speed: 1.0,
+      });
+
+      const buffer = Buffer.from(await mp3.arrayBuffer());
+      
+      res.set({
+        "Content-Type": "audio/mpeg",
+        "Content-Length": buffer.length,
+      });
+      res.send(buffer);
+    } catch (error: any) {
+      console.error("TTS error:", error);
+      res.status(500).json({ error: "Failed to generate speech" });
+    }
+  });
+
   // AI Assistant endpoint - simple chat without conversation storage
   app.post("/api/assistant/chat", async (req, res) => {
     try {
