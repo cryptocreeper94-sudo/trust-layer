@@ -55,14 +55,14 @@ export default function ErrorPage() {
         <div className="pt-8 space-y-2">
           <p className="text-sm text-muted-foreground" data-testid="text-status-link">
             Check our{" "}
-            <Link href="/status" className="text-primary hover:underline">
+            <Link href="/status" className="text-primary hover:underline" data-testid="link-status-page">
               Status Page
             </Link>{" "}
             for system updates
           </p>
           <p className="text-xs text-muted-foreground" data-testid="text-support-email">
             Need help? Contact{" "}
-            <a href="mailto:support@darkwavestudios.io" className="text-primary hover:underline">
+            <a href="mailto:support@darkwavestudios.io" className="text-primary hover:underline" data-testid="link-support-email">
               support@darkwavestudios.io
             </a>
           </p>

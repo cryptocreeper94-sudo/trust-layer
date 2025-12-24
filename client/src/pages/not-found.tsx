@@ -61,7 +61,7 @@ export default function NotFound() {
         
         <p className="text-xs text-muted-foreground pt-8" data-testid="text-support-link">
           Need help? Contact{" "}
-          <a href="mailto:support@darkwavestudios.io" className="text-primary hover:underline">
+          <a href="mailto:support@darkwavestudios.io" className="text-primary hover:underline" data-testid="link-support-email">
             support@darkwavestudios.io
           </a>
         </p>
