@@ -8,9 +8,12 @@ import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { useAuth } from "@/hooks/use-auth";
 import { PasskeyManager } from "@/components/passkey-manager";
+import { WalletButton } from "@/components/wallet-button";
+import { useWallet, shortenAddress } from "@/hooks/use-wallet";
 
 export default function Dashboard() {
   const { user, isLoading, isAuthenticated } = useAuth();
+  const { evmAddress, solanaAddress, isConnected: walletConnected } = useWallet();
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -45,11 +48,8 @@ export default function Dashboard() {
             <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
-          <div className="flex items-center gap-3">
-            <Badge variant="outline" className="border-green-500/50 text-green-400 text-[10px]">
-              <span className="w-1.5 h-1.5 bg-green-400 rounded-full mr-1.5 animate-pulse" />
-              Connected
-            </Badge>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <WalletButton />
             <a href="/api/logout">
               <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5">
                 <LogOut className="w-3 h-3" />
@@ -87,11 +87,28 @@ export default function Dashboard() {
                   <Wallet className="w-5 h-5 text-primary shrink-0" />
                   <h3 className="font-bold text-sm sm:text-base">Token Balance</h3>
                 </div>
-                <div className="text-2xl sm:text-3xl font-bold text-white mb-2 tracking-tight">0 DWT</div>
-                <p className="text-xs text-muted-foreground mb-4">Connect wallet to view balance</p>
-                <Button size="sm" className="w-full bg-primary text-background hover:bg-primary/90">
-                  Connect Wallet
-                </Button>
+                {walletConnected ? (
+                  <>
+                    <div className="text-2xl sm:text-3xl font-bold text-white mb-2 tracking-tight">0 DWT</div>
+                    <p className="text-xs text-muted-foreground mb-4">
+                      {evmAddress && <span className="block">EVM: {shortenAddress(evmAddress)}</span>}
+                      {solanaAddress && <span className="block">SOL: {shortenAddress(solanaAddress)}</span>}
+                    </p>
+                    <Link href="/faucet">
+                      <Button size="sm" variant="outline" className="w-full border-primary/30 text-primary hover:bg-primary/10">
+                        Get Testnet DWT
+                      </Button>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <div className="text-2xl sm:text-3xl font-bold text-white/30 mb-2 tracking-tight">-- DWT</div>
+                    <p className="text-xs text-muted-foreground mb-4">Connect wallet to view balance</p>
+                    <div className="[&>button]:w-full">
+                      <WalletButton />
+                    </div>
+                  </>
+                )}
               </div>
             </GlassCard>
 

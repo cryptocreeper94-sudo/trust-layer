@@ -21,6 +21,7 @@ import { GlassCard } from "@/components/glass-card";
 import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
 import { FirebaseLoginModal } from "@/components/firebase-login";
 import { useState } from "react";
+import { WalletButton } from "@/components/wallet-button";
 
 const ecosystemImages: Record<string, string> = {
   "orbit-staffing": "/ecosystem/orbit-staffing.jpg",
@@ -129,11 +130,7 @@ export default function Home() {
                 Log In
               </Button>
             )}
-            <Link href="/ecosystem">
-              <Button size="sm" className="hidden sm:flex h-8 text-xs bg-primary text-background hover:bg-primary/90 font-semibold" data-testid="button-launch-app">
-                Launch App
-              </Button>
-            </Link>
+            <WalletButton />
             <MobileNav />
           </div>
         </div>
