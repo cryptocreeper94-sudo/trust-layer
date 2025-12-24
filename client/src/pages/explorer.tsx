@@ -337,7 +337,7 @@ export default function Explorer() {
               <div className="flex items-center gap-2 mb-4">
                 <QrCode className="w-4 h-4 text-primary" />
                 <h3 className="text-sm font-bold text-white">Hallmark Verification</h3>
-                <InfoTooltip content="Hallmarks are unique product IDs stored on DarkWave Chain. Enter a hallmark ID to verify its authenticity and see its on-chain record." label="Hallmark verification info" />
+                <InfoTooltip content="Hallmarks are unique product IDs stored on DarkWave Smart Chain. Enter a hallmark ID to verify its authenticity and see its on-chain record." label="Hallmark verification info" />
               </div>
               
               <div className="flex flex-col sm:flex-row gap-2 mb-4">

@@ -343,9 +343,9 @@ const info = await client.getChainInfo();
 console.log('Block height:', info.blockHeight);`,
     },
     {
-      title: "3. Submit Hash to DarkWave Chain",
+      title: "3. Submit Hash to DarkWave Smart Chain",
       language: "typescript",
-      code: `// Hash your application data to DarkWave Chain
+      code: `// Hash your application data to DarkWave Smart Chain
 const result = await fetch('/api/hash/submit', {
   method: 'POST',
   headers: {
@@ -425,7 +425,7 @@ console.log({
               </span>
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Internal team overview of DarkWave Chain ecosystem. Monitor analytics, manage resources, and access admin tools.
+              Internal team overview of DarkWave Smart Chain ecosystem. Monitor analytics, manage resources, and access admin tools.
             </p>
           </div>
 
@@ -504,7 +504,7 @@ console.log({
               Register API Key
             </h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Get an API key to start hashing your app data to DarkWave Chain. Each submission costs a small fee in DWT.
+              Get an API key to start hashing your app data to DarkWave Smart Chain. Each submission costs a small fee in DWC.
             </p>
             
             {regResult?.apiKey ? (
@@ -637,7 +637,7 @@ console.log({
                 </div>
                 <div className="flex justify-between items-center p-3 rounded-lg bg-white/5">
                   <span className="text-muted-foreground">Native Token</span>
-                  <span className="font-mono font-bold">DWT</span>
+                  <span className="font-mono font-bold">DWC</span>
                 </div>
                 <div className="flex justify-between items-center p-3 rounded-lg bg-white/5">
                   <span className="text-muted-foreground">Total Supply</span>
@@ -709,14 +709,14 @@ console.log({
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
                   <div className="space-y-2">
-                    <p>All transactions on DarkWave Chain require a small fee paid in DWT:</p>
+                    <p>All transactions on DarkWave Smart Chain require a small fee paid in DWC:</p>
                     <ul className="list-disc list-inside space-y-1">
                       <li><strong>Base Fee:</strong> 21,000 gas units</li>
                       <li><strong>Hash Submission:</strong> 25,000 gas units</li>
                       <li><strong>Per Byte:</strong> 16 gas units for each byte of data</li>
                       <li><strong>Estimated Cost:</strong> ~$0.0001 per transaction</li>
                     </ul>
-                    <p className="text-xs mt-2">Fees are automatically deducted from your DWT balance.</p>
+                    <p className="text-xs mt-2">Fees are automatically deducted from your DWC balance.</p>
                   </div>
                 </AccordionContent>
               </AccordionItem>
@@ -809,7 +809,7 @@ console.log('All successful:', result.allSuccessful);`}
               <Badge className="bg-primary/20 text-primary border-primary/30">INTERNAL</Badge>
             </div>
             <p className="text-sm text-muted-foreground mb-4">
-              Confidential launch timeline for DarkWave Chain mainnet and DWT token release.
+              Confidential launch timeline for DarkWave Smart Chain mainnet and DWC token release.
             </p>
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="phase1" className="border-white/10">
@@ -872,7 +872,7 @@ console.log('All successful:', result.allSuccessful);`}
                     <div>
                       <h4 className="font-semibold text-white mb-2">Developer Ecosystem</h4>
                       <ul className="list-disc list-inside space-y-1 text-sm">
-                        <li>Host virtual hackathon with DWT prizes</li>
+                        <li>Host virtual hackathon with DWC prizes</li>
                         <li>Expand API rate limits for registered developers</li>
                         <li>Launch developer office hours program</li>
                         <li>Open Discord developer channels</li>
@@ -1004,7 +1004,7 @@ console.log('All successful:', result.allSuccessful);`}
               </AccordionItem>
               <AccordionItem value="tokenomics" className="border-white/10">
                 <AccordionTrigger className="text-sm font-medium hover:text-primary">
-                  Token Distribution Plan (100M DWT)
+                  Token Distribution Plan (100M DWC)
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
                   <div className="space-y-3">
@@ -1012,27 +1012,27 @@ console.log('All successful:', result.allSuccessful);`}
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="text-2xl font-bold text-primary">40%</div>
                         <div className="text-xs">Ecosystem Growth</div>
-                        <div className="text-xs text-muted-foreground">40M DWT - Grants, hackathons</div>
+                        <div className="text-xs text-muted-foreground">40M DWC - Grants, hackathons</div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="text-2xl font-bold text-secondary">20%</div>
                         <div className="text-xs">Community & Liquidity</div>
-                        <div className="text-xs text-muted-foreground">20M DWT - DEX, airdrops</div>
+                        <div className="text-xs text-muted-foreground">20M DWC - DEX, airdrops</div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="text-2xl font-bold text-cyan-400">20%</div>
                         <div className="text-xs">Core Team</div>
-                        <div className="text-xs text-muted-foreground">20M DWT - 4yr vest, 1yr cliff</div>
+                        <div className="text-xs text-muted-foreground">20M DWC - 4yr vest, 1yr cliff</div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="text-2xl font-bold text-amber-400">10%</div>
                         <div className="text-xs">Strategic Partners</div>
-                        <div className="text-xs text-muted-foreground">10M DWT - Advisors</div>
+                        <div className="text-xs text-muted-foreground">10M DWC - Advisors</div>
                       </div>
                     </div>
                     <div className="p-3 bg-white/5 rounded-lg text-center">
                       <div className="text-2xl font-bold text-emerald-400">10%</div>
-                      <div className="text-xs">Treasury Reserve - 10M DWT</div>
+                      <div className="text-xs">Treasury Reserve - 10M DWC</div>
                     </div>
                   </div>
                 </AccordionContent>

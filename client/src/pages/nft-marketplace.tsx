@@ -129,7 +129,7 @@ export default function NftMarketplace() {
               </h1>
             </div>
             <p className="text-xs text-muted-foreground">
-              Buy, sell, and mint unique digital assets on DarkWave Chain
+              Buy, sell, and mint unique digital assets on DarkWave Smart Chain
             </p>
           </motion.div>
 
@@ -143,7 +143,7 @@ export default function NftMarketplace() {
               <div className="text-lg font-bold text-pink-400">
                 {stats?.totalVolume ? formatPrice(stats.totalVolume) : "0"}
               </div>
-              <div className="text-[10px] text-muted-foreground">Volume (DWT)</div>
+              <div className="text-[10px] text-muted-foreground">Volume (DWC)</div>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
               <div className="text-lg font-bold text-primary">
@@ -283,7 +283,7 @@ export default function NftMarketplace() {
                         <div className="flex items-center justify-between mt-1">
                           <span className="text-[10px] text-muted-foreground">Price</span>
                           <span className="text-xs font-bold text-pink-400">
-                            {formatPrice(nft.price)} DWT
+                            {formatPrice(nft.price)} DWC
                           </span>
                         </div>
                       </div>
@@ -322,7 +322,7 @@ export default function NftMarketplace() {
                         </div>
                         <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
                           <span>Items: {collection.itemCount}</span>
-                          <span>Floor: {formatPrice(collection.floorPrice)} DWT</span>
+                          <span>Floor: {formatPrice(collection.floorPrice)} DWC</span>
                         </div>
                       </div>
                     </GlassCard>

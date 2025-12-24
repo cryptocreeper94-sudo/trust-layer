@@ -156,7 +156,7 @@ export default function Home() {
             
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-b from-white to-white/50">
               Welcome to <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary">DarkWave Chain</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary">DarkWave Smart Chain</span>
             </h1>
 
             <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
@@ -227,7 +227,7 @@ export default function Home() {
                   <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
                     <div className="flex items-center gap-1 md:gap-2 mb-2">
                       <Cpu className="w-3 h-3 md:w-4 md:h-4 text-purple-400/60 shrink-0" />
-                      <InfoTooltip content="Average cost per transaction. DarkWave Chain keeps fees extremely low compared to other blockchains." label="Transaction cost info" />
+                      <InfoTooltip content="Average cost per transaction. DarkWave Smart Chain keeps fees extremely low compared to other blockchains." label="Transaction cost info" />
                     </div>
                     <div className="text-xl md:text-2xl font-bold text-white">{stats?.avgCost || "$0.0001"}</div>
                     <div className="text-[9px] md:text-[10px] text-white/50 uppercase tracking-wider">Avg Cost</div>
@@ -241,7 +241,7 @@ export default function Home() {
                         <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                         <span className="text-[8px] md:text-[9px] text-green-400/80 uppercase">MAINNET</span>
                       </div>
-                      <InfoTooltip content="DarkWave Chain runs on a Proof-of-Authority (PoA) consensus. The Founders Validator secures the network with enterprise-grade infrastructure." label="Validator info" />
+                      <InfoTooltip content="DarkWave Smart Chain runs on a Proof-of-Authority (PoA) consensus. The Founders Validator secures the network with enterprise-grade infrastructure." label="Validator info" />
                     </div>
                     <div className="text-base md:text-2xl font-bold text-white leading-tight">
                       <span className="hidden md:inline">{stats?.activeNodes?.includes("Founder") ? stats.activeNodes : "Founders Validator"}</span>
@@ -655,7 +655,7 @@ export default function Home() {
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">Ready to Launch?</h2>
           <p className="text-sm text-muted-foreground max-w-lg mx-auto mb-8">
-            Join thousands of developers building the future of finance, gaming, and social on DarkWave Chain.
+            Join thousands of developers building the future of finance, gaming, and social on DarkWave Smart Chain.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link href="/developers">

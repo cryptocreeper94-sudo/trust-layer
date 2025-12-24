@@ -126,7 +126,7 @@ export default function NftCreator() {
               NFT <span className="text-orange-400">Creator</span>
             </h1>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              Create and mint your own NFTs on DarkWave Chain. No code required.
+              Create and mint your own NFTs on DarkWave Smart Chain. No code required.
             </p>
           </motion.div>
 

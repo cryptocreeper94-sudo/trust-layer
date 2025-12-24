@@ -32,7 +32,7 @@ export async function submitHashToDarkWave(payload: HashPayload): Promise<DarkWa
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Failed to submit to DarkWave Chain",
+      error: error instanceof Error ? error.message : "Failed to submit to DarkWave Smart Chain",
     };
   }
 }
@@ -74,6 +74,6 @@ export const darkwaveConfig = {
   rpcUrl: "embedded",
   chainId: DARKWAVE_CHAIN_ID,
   explorerUrl: process.env.DARKWAVE_EXPLORER_URL || "/explorer",
-  symbol: "DWT",
+  symbol: "DWC",
   decimals: 18,
 };

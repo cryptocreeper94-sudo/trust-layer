@@ -372,7 +372,7 @@ tokio = { version = "1", features = ["full"] }` },
 };
 
 const PROTOCOL_DEFINITIONS: Record<string, string> = {
-  "DWT": "DarkWave Token - The native cryptocurrency of DarkWave Chain, used for transactions and gas fees.",
+  "DWC": "DarkWave Coin - The native cryptocurrency of DarkWave Smart Chain, used for transactions and gas fees.",
   "PoA": "Proof-of-Authority - A consensus mechanism where trusted validators verify transactions.",
   "Gas": "The computational cost required to execute operations on the blockchain.",
   "Block": "A container of transactions that are cryptographically linked to form the chain.",

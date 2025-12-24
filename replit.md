@@ -1,8 +1,8 @@
-# DarkWave Chain - Replit Agent Guide
+# DarkWave Smart Chain - Replit Agent Guide
 
 ## Overview
 
-DarkWave Chain is a comprehensive blockchain ecosystem developed by DarkWave Studios. It comprises a Layer 1 Proof-of-Authority blockchain and a React web application called DarkWave Portal. The portal acts as the ecosystem's interface, a block explorer, and a developer hub. The project aims to deliver a blockchain solution that surpasses Solana and Ethereum in speed, stability, and feature richness.
+DarkWave Smart Chain (DSC) is a comprehensive blockchain ecosystem developed by DarkWave Studios. It comprises a Layer 1 Proof-of-Authority blockchain and a React web application called DarkWave Portal. The portal acts as the ecosystem's interface, a block explorer, and a developer hub. The project aims to deliver a blockchain solution that surpasses Solana and Ethereum in speed, stability, and feature richness.
 
 **Public Launch: February 14, 2026**
 
@@ -24,7 +24,7 @@ DarkWave Chain is a comprehensive blockchain ecosystem developed by DarkWave Stu
 - [x] Layer 1 PoA blockchain (400ms blocks, 200K+ TPS)
 - [x] PostgreSQL persistent ledger (chain_blocks, chain_transactions, chain_accounts)
 - [x] SHA-256 block hashing, Merkle trees, HMAC-SHA256 signatures
-- [x] DWT Token (100M supply, 18 decimals, NO burn)
+- [x] DWC Coin (100M supply, 18 decimals, NO burn)
 - [x] Genesis block (February 14, 2025)
 
 #### DarkWave Portal
@@ -39,12 +39,12 @@ DarkWave Chain is a comprehensive blockchain ecosystem developed by DarkWave Stu
 - [x] Authentication (Replit Auth + WebAuthn)
 
 #### Cross-Chain Bridge (Phase 1 MVP)
-- [x] Lock & mint UI for DWT → wDWT
-- [x] Burn & release UI for wDWT → DWT
+- [x] Lock & mint UI for DWC → wDWC
+- [x] Burn & release UI for wDWC → DWC
 - [x] Ethereum Sepolia & Solana Devnet support
 - [x] Mock mode for testing (contracts not yet deployed)
-- [x] wDWT ERC-20 contract ready (`contracts/ethereum/WDWT.sol`)
-- [x] wDWT SPL token setup ready (`scripts/deploy-wdwt-solana.ts`)
+- [x] wDWC ERC-20 contract ready (`contracts/ethereum/WDWC.sol`)
+- [x] wDWC SPL token setup ready (`scripts/deploy-wdwt-solana.ts`)
 
 #### DarkWave Studio (Phases 1-4)
 - [x] Monaco code editor with 70+ language support
@@ -72,8 +72,8 @@ DarkWave Chain is a comprehensive blockchain ecosystem developed by DarkWave Stu
 - [x] Credit system ready for Studio AI features
 
 #### DeFi Features (Priority 1 - Complete)
-- [x] Testnet Faucet - 1000 DWT per claim, 24-hour cooldown, tracks by wallet/IP
-- [x] DEX / Token Swap - AMM-style swap with DWT/USDC/wETH/wSOL/USDT pairs, 0.3% fee
+- [x] Testnet Faucet - 1000 DWC per claim, 24-hour cooldown, tracks by wallet/IP
+- [x] DEX / Token Swap - AMM-style swap with DWC/USDC/wETH/wSOL/USDT pairs, 0.3% fee
 - [x] NFT Marketplace - Browse collections, view NFTs, mint new NFTs
 - [x] Portfolio Dashboard - Track token holdings, staking positions, rewards, NFTs
 - [x] Transaction History - View all swaps, claims, transfers with filters
@@ -85,17 +85,17 @@ DarkWave Chain is a comprehensive blockchain ecosystem developed by DarkWave Stu
 - [x] Liquidity Pools - Users provide liquidity, earn fees (AMM-style with LP tokens)
 - [x] NFT Gallery - View NFT collections by wallet address
 - [x] NFT Creator Tool - No-code NFT minting wizard (4-step: upload, details, attributes, mint)
-- [x] Price Charts - DWT price visualization with Recharts (area/bar charts, multiple timeframes)
+- [x] Price Charts - DWC price visualization with Recharts (area/bar charts, multiple timeframes)
 - [x] Webhook/Events API - Real-time notifications for devs (9 event types, HMAC-SHA256 signatures)
-- [x] Liquid Staking (stDWT) - Stake DWT, receive stDWT tokens, earn 12% APY while maintaining liquidity
+- [x] Liquid Staking (stDWC) - Stake DWC, receive stDWC tokens, earn 12% APY while maintaining liquidity
 
 ---
 
 ### 🔵 PRIORITY 3 - BRIDGE PRODUCTION (Q1 2026)
 
 #### Completed (Ready for Deployment)
-- [x] wDWT ERC-20 contract (`contracts/ethereum/WDWT.sol`) with Hardhat setup
-- [x] wDWT Solana bridge program (`contracts/solana/programs/wdwt-bridge/`) with Anchor
+- [x] wDWC ERC-20 contract (`contracts/ethereum/WDWC.sol`) with Hardhat setup
+- [x] wDWC Solana bridge program (`contracts/solana/programs/wdwt-bridge/`) with Anchor
 - [x] Multi-sig validator committee UI (`/multisig` page)
 - [x] Proof-of-reserve dashboard (`/proof-of-reserve` page)
 - [x] Security audit documentation (`docs/security-audit-checklist.md`)
@@ -103,8 +103,8 @@ DarkWave Chain is a comprehensive blockchain ecosystem developed by DarkWave Stu
 #### Pending (Requires External Setup)
 | # | Feature | Status | Description |
 |---|---------|--------|-------------|
-| 12 | Deploy wDWT to Sepolia | READY | Run `cd contracts/ethereum && npm install && npm run deploy:sepolia` |
-| 13 | Deploy wDWT to Solana Devnet | READY | Run `cd contracts/solana && anchor build && anchor deploy` |
+| 12 | Deploy wDWC to Sepolia | READY | Run `cd contracts/ethereum && npm install && npm run deploy:sepolia` |
+| 13 | Deploy wDWC to Solana Devnet | READY | Run `cd contracts/solana && anchor build && anchor deploy` |
 | 14 | Contract verification | TODO | Verify on Etherscan/Solscan |
 | 15 | External security audit | TODO | Submit to Trail of Bits / OpenZeppelin |
 
@@ -143,7 +143,7 @@ DarkWave Chain is a comprehensive blockchain ecosystem developed by DarkWave Stu
 - **Storage**: PostgreSQL (chain_blocks, chain_transactions, chain_accounts)
 - **Cryptography**: SHA-256, Merkle trees, HMAC-SHA256
 - **Performance**: 400ms block time, 200K+ TPS capacity
-- **Token**: DWT - 100M total supply, 18 decimals, NO burn
+- **Token**: DWC - 100M total supply, 18 decimals, NO burn
 
 ### Web Portal Architecture
 - **Frontend**: React 18, TypeScript, Vite, Wouter, TanStack Query, Tailwind CSS v4, Framer Motion

@@ -21,7 +21,7 @@ const TIERS = [
 ];
 
 const SAMPLE_QUESTS = [
-  { id: "1", name: "First Stake", description: "Stake any amount of DWT", xpReward: 50, tokenReward: "10", difficulty: "easy", category: "staking", progress: 0, target: 1, icon: "zap", completed: false },
+  { id: "1", name: "First Stake", description: "Stake any amount of DWC", xpReward: 50, tokenReward: "10", difficulty: "easy", category: "staking", progress: 0, target: 1, icon: "zap", completed: false },
   { id: "2", name: "Bridge Pioneer", description: "Complete your first cross-chain bridge", xpReward: 100, tokenReward: "25", difficulty: "medium", category: "bridge", progress: 0, target: 1, icon: "link", completed: false },
   { id: "3", name: "Swap Master", description: "Complete 10 token swaps", xpReward: 150, tokenReward: "50", difficulty: "medium", category: "defi", progress: 3, target: 10, icon: "repeat", completed: false },
   { id: "4", name: "NFT Collector", description: "Own 5 DarkWave NFTs", xpReward: 200, tokenReward: "100", difficulty: "hard", category: "nft", progress: 1, target: 5, icon: "image", completed: false },
@@ -217,7 +217,7 @@ export default function Quests() {
                         </div>
                         <div className="flex items-center gap-1">
                           <Gift className="w-3.5 h-3.5 text-amber-400" />
-                          <span className="text-xs font-medium">{quest.tokenReward} DWT</span>
+                          <span className="text-xs font-medium">{quest.tokenReward} DWC</span>
                         </div>
                       </div>
 
@@ -265,7 +265,7 @@ export default function Quests() {
                         <div className="text-right">
                           <div className="flex items-center gap-1 text-amber-400 mb-1">
                             <Gift className="w-4 h-4" />
-                            <span className="font-bold">{parseInt(mission.rewardPool).toLocaleString()} DWT</span>
+                            <span className="font-bold">{parseInt(mission.rewardPool).toLocaleString()} DWC</span>
                           </div>
                           <div className="flex items-center gap-1 text-xs text-muted-foreground">
                             <Clock className="w-3 h-3" />

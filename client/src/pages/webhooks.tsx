@@ -43,7 +43,7 @@ const EVENT_TYPES = [
   { id: "transaction.created", label: "Transaction Created", desc: "When a new transaction is submitted" },
   { id: "transaction.confirmed", label: "Transaction Confirmed", desc: "When a transaction is confirmed on-chain" },
   { id: "block.created", label: "Block Created", desc: "When a new block is mined" },
-  { id: "token.transfer", label: "Token Transfer", desc: "When DWT tokens are transferred" },
+  { id: "token.transfer", label: "Token Transfer", desc: "When DWC tokens are transferred" },
   { id: "nft.minted", label: "NFT Minted", desc: "When a new NFT is created" },
   { id: "nft.transferred", label: "NFT Transferred", desc: "When an NFT changes ownership" },
   { id: "swap.executed", label: "Swap Executed", desc: "When a DEX swap completes" },

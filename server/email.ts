@@ -75,10 +75,10 @@ export async function sendEmail(options: EmailOptions) {
 export async function sendWelcomeEmail(to: string, name: string) {
   return sendEmail({
     to,
-    subject: "Welcome to DarkWave Chain",
+    subject: "Welcome to DarkWave Smart Chain",
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h1 style="color: #00FFFF;">Welcome to DarkWave Chain!</h1>
+        <h1 style="color: #00FFFF;">Welcome to DarkWave Smart Chain!</h1>
         <p>Hi ${name},</p>
         <p>Thank you for joining the DarkWave ecosystem. You're now part of the next generation of blockchain technology.</p>
         <p>Here's what you can do:</p>
@@ -109,7 +109,7 @@ export async function sendApiKeyEmail(to: string, name: string, apiKey: string, 
         <p style="color: #ff6b6b; margin-top: 15px;"><strong>Important:</strong> Keep this key secure and never share it publicly.</p>
         <p>You can now use this key to:</p>
         <ul>
-          <li>Submit hashes to the DarkWave Chain</li>
+          <li>Submit hashes to the DarkWave Smart Chain</li>
           <li>Generate hallmarks for your products</li>
           <li>Access the DarkWave API</li>
         </ul>
@@ -131,7 +131,7 @@ export async function sendHallmarkEmail(to: string, hallmarkId: string, productN
         <div style="background: #1a1a2e; color: #00FFFF; padding: 20px; border-radius: 8px; text-align: center;">
           <span style="font-size: 24px; font-weight: bold;">${hallmarkId}</span>
         </div>
-        <p style="margin-top: 15px;">This hallmark is now recorded on the DarkWave Chain and can be verified at:</p>
+        <p style="margin-top: 15px;">This hallmark is now recorded on the DarkWave Smart Chain and can be verified at:</p>
         <p><a href="https://darkwavechain.io/explorer" style="color: #00FFFF;">https://darkwavechain.io/explorer</a></p>
         <p>— The DarkWave Team</p>
       </div>

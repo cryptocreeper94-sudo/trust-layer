@@ -389,19 +389,19 @@ export async function registerRoutes(
         message?: string;
       }> = [];
 
-      // Check DarkWave Chain (Blockchain Engine)
+      // Check DarkWave Smart Chain (Blockchain Engine)
       const chainStart = Date.now();
       try {
         const chainInfo = blockchain.getChainInfo();
         const chainLatency = Date.now() - chainStart;
         services.push({
-          name: "DarkWave Chain",
+          name: "DarkWave Smart Chain",
           status: chainInfo.blockHeight > 0 ? "operational" : "degraded",
           latency: chainLatency,
           message: `Block #${chainInfo.blockHeight}`
         });
       } catch {
-        services.push({ name: "DarkWave Chain", status: "down", message: "Chain unavailable" });
+        services.push({ name: "DarkWave Smart Chain", status: "down", message: "Chain unavailable" });
       }
 
       // Check Database
@@ -853,8 +853,8 @@ export async function registerRoutes(
     res.json({
       version: APP_VERSION,
       chainId: 8453,
-      chainName: "DarkWave Chain",
-      nativeToken: "DWT",
+      chainName: "DarkWave Smart Chain",
+      nativeToken: "DWC",
       totalSupply: "100,000,000",
     });
   });
@@ -867,16 +867,16 @@ export async function registerRoutes(
       const gasLimit = baseGas + dataGas;
       const gasPrice = 1000000;
       
-      const ONE_DWT = BigInt("1000000000000000000");
+      const ONE_DWC = BigInt("1000000000000000000");
       const totalGas = BigInt(gasLimit) * BigInt(gasPrice);
-      const costInDWT = Number(totalGas) / Number(ONE_DWT);
-      const costInUSD = costInDWT * 0.01;
+      const costInDWC = Number(totalGas) / Number(ONE_DWC);
+      const costInUSD = costInDWC * 0.01;
 
       res.json({
         gasLimit,
         gasPrice,
         estimatedCost: `${totalGas}`,
-        estimatedCostDWT: `${costInDWT.toFixed(8)} DWT`,
+        estimatedCostDWC: `${costInDWC.toFixed(8)} DWC`,
         estimatedCostUSD: `$${costInUSD.toFixed(6)}`,
       });
     } catch (error) {
@@ -891,8 +891,8 @@ export async function registerRoutes(
       maxFee: 100000,
       feePerByte: 16,
       hashSubmissionFee: 25000,
-      currency: "DWT",
-      estimatedUSDPerDWT: 0.01,
+      currency: "DWC",
+      estimatedUSDPerDWC: 0.01,
     });
   });
 
@@ -986,7 +986,7 @@ export async function registerRoutes(
         success: true,
         txHash: blockchainTx.hash,
         status: "confirmed",
-        fee: `${Number(fee) / 1e18} DWT`,
+        fee: `${Number(fee) / 1e18} DWC`,
         blockHeight: chainInfo.blockHeight.toString(),
         timestamp: blockchainTx.timestamp.toISOString(),
       });
@@ -1010,7 +1010,7 @@ export async function registerRoutes(
         category: tx.category,
         status: tx.status,
         blockHeight: tx.blockHeight,
-        fee: tx.fee ? `${Number(tx.fee) / 1e18} DWT` : null,
+        fee: tx.fee ? `${Number(tx.fee) / 1e18} DWC` : null,
         createdAt: tx.createdAt,
         confirmedAt: tx.confirmedAt,
       });
@@ -1281,8 +1281,8 @@ export async function registerRoutes(
       const walletAddress = `0x${crypto.randomBytes(20).toString("hex")}`;
       const privateKey = crypto.randomBytes(32).toString("hex");
       
-      // Fund the test wallet with 1000 test DWT
-      blockchain.creditAccount(walletAddress, BigInt("1000000000000000000000")); // 1000 DWT
+      // Fund the test wallet with 1000 test DWC
+      blockchain.creditAccount(walletAddress, BigInt("1000000000000000000000")); // 1000 DWC
       
       res.json({
         success: true,
@@ -1293,7 +1293,7 @@ export async function registerRoutes(
           network: "DarkWave Devnet",
           chainId: 8453,
         },
-        message: "Test wallet created and funded with 1000 DWT",
+        message: "Test wallet created and funded with 1000 DWC",
       });
     } catch (error) {
       console.error("Devnet wallet creation error:", error);
@@ -1310,7 +1310,7 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Wallet address required" });
       }
       
-      // Validate and limit faucet to 100 DWT per request (must be positive)
+      // Validate and limit faucet to 100 DWC per request (must be positive)
       const parsedAmount = parseFloat(amount || "100");
       if (isNaN(parsedAmount) || parsedAmount <= 0) {
         return res.status(400).json({ error: "Amount must be a positive number" });
@@ -1325,12 +1325,12 @@ export async function registerRoutes(
         success: true,
         faucet: {
           address,
-          amountSent: `${requestedAmount} DWT`,
+          amountSent: `${requestedAmount} DWC`,
           newBalance: account ? (Number(account.balance) / 1e18).toFixed(4) : "0",
           txHash: `0x${crypto.randomBytes(32).toString("hex")}`,
           network: "DarkWave Devnet",
         },
-        message: `Sent ${requestedAmount} test DWT to ${address}`,
+        message: `Sent ${requestedAmount} test DWC to ${address}`,
       });
     } catch (error) {
       console.error("Devnet faucet error:", error);
@@ -1390,13 +1390,13 @@ export async function registerRoutes(
           txHash,
           from,
           to,
-          amount: `${amount || 0} DWT`,
+          amount: `${amount || 0} DWC`,
           data: data || null,
           status: "confirmed",
           blockHeight,
           network: "DarkWave Devnet",
           gasUsed: "21000",
-          gasFee: "0.000021 DWT",
+          gasFee: "0.000021 DWC",
         },
       });
     } catch (error) {
@@ -1417,8 +1417,8 @@ export async function registerRoutes(
         tps: stats.tps,
         finalityTime: stats.finalityTime,
         faucetAvailable: true,
-        faucetLimit: "100 DWT per request",
-        symbol: "DWT",
+        faucetLimit: "100 DWC per request",
+        symbol: "DWC",
         decimals: 18,
       });
     } catch (error) {
@@ -1464,7 +1464,7 @@ export async function registerRoutes(
     }
   });
 
-  // Genesis Hallmark - The first ever DarkWave Chain hallmark (MUST be before :hallmarkId route)
+  // Genesis Hallmark - The first ever DarkWave Smart Chain hallmark (MUST be before :hallmarkId route)
   app.get("/api/hallmark/genesis", async (req, res) => {
     try {
       const stats = blockchain.getStats();
@@ -1476,7 +1476,7 @@ export async function registerRoutes(
         id: "DWH-000000000001",
         type: "genesis",
         url: verificationUrl,
-        chain: "DarkWave Chain",
+        chain: "DarkWave Smart Chain",
       });
       const qrCodeSvg = await QRCode.toString(qrData, { type: "svg", width: 200 });
       
@@ -1484,7 +1484,7 @@ export async function registerRoutes(
       const genesisPayload = {
         id: "DWH-000000000001",
         type: "genesis",
-        chain: "DarkWave Chain",
+        chain: "DarkWave Smart Chain",
         blockHeight: 0,
         timestamp: genesisTimestamp,
         validator: "Founders Validator",
@@ -1498,7 +1498,7 @@ export async function registerRoutes(
         globalSerial: "DWH-000000000001",
         serialNumber: "DWH-GENESIS-0001",
         type: "Genesis Hallmark",
-        chain: "DarkWave Chain",
+        chain: "DarkWave Smart Chain",
         blockNumber: 0,
         payloadHash,
         txHash: "genesis-block-0x" + payloadHash.slice(0, 16),
@@ -1506,7 +1506,7 @@ export async function registerRoutes(
         verificationUrl,
         qrCodeSvg,
         metadata: {
-          totalSupply: "100,000,000 DWT",
+          totalSupply: "100,000,000 DWC",
           decimals: 18,
           consensusType: "Proof-of-Authority",
           blockTime: "400ms",
@@ -1515,7 +1515,7 @@ export async function registerRoutes(
           launchDate: "February 14, 2026",
         },
         verified: true,
-        message: "Genesis Block - DarkWave Chain Origin",
+        message: "Genesis Block - DarkWave Smart Chain Origin",
       });
     } catch (error) {
       console.error("Genesis hallmark error:", error);
@@ -1551,7 +1551,7 @@ export async function registerRoutes(
         },
         verified,
         message: verified 
-          ? `Verified on DarkWave Chain (Block ${hallmark.darkwaveBlockHeight})`
+          ? `Verified on DarkWave Smart Chain (Block ${hallmark.darkwaveBlockHeight})`
           : "Hallmark registered, pending chain confirmation",
         createdAt: hallmark.createdAt,
       });
@@ -1706,7 +1706,7 @@ export async function registerRoutes(
         success: true,
         lockId: result.lockId,
         txHash: result.txHash,
-        message: "DWT locked on DarkWave. Wrapped tokens will be minted on target chain.",
+        message: "DWC locked on DarkWave. Wrapped tokens will be minted on target chain.",
       });
     } catch (error) {
       res.status(500).json({ error: "Failed to lock tokens" });
@@ -1736,7 +1736,7 @@ export async function registerRoutes(
       res.json({
         success: true,
         burnId: result.burnId,
-        message: "Burn recorded. DWT will be released on DarkWave Chain.",
+        message: "Burn recorded. DWC will be released on DarkWave Smart Chain.",
       });
     } catch (error) {
       res.status(500).json({ error: "Failed to process burn" });
@@ -1982,7 +1982,7 @@ export async function registerRoutes(
   });
 
   // ============================================
-  // LIQUID STAKING (stDWT)
+  // LIQUID STAKING (stDWC)
   // ============================================
   
   app.get("/api/liquid-staking/state", async (req, res) => {
@@ -2093,7 +2093,7 @@ export async function registerRoutes(
       const stDwtToBurn = BigInt(stDwtAmount);
       const position = await storage.getLiquidStakingPosition(userId);
       if (!position || BigInt(position.stDwtBalance) < stDwtToBurn) {
-        return res.status(400).json({ error: "Insufficient stDWT balance" });
+        return res.status(400).json({ error: "Insufficient stDWC balance" });
       }
       
       const state = await storage.getLiquidStakingState();
@@ -2511,7 +2511,7 @@ export async function registerRoutes(
             currency: "usd",
             product_data: {
               name: "DarkWave Legacy Founder",
-              description: "Lifetime access + 35,000 DWT token airdrop",
+              description: "Lifetime access + 35,000 DWC token airdrop",
             },
             unit_amount: 2400,
           },
@@ -2567,7 +2567,7 @@ export async function registerRoutes(
       const { createCoinbaseCharge } = await import("./coinbaseClient");
       const charge = await createCoinbaseCharge({
         name: "DarkWave Legacy Founder",
-        description: "Lifetime access + 35,000 DWT token airdrop",
+        description: "Lifetime access + 35,000 DWC token airdrop",
         amountUsd: "24.00",
         successUrl: `${baseUrl}/founder-program?success=true&coinbase_charge={CHECKOUT_ID}`,
         cancelUrl: `${baseUrl}/founder-program?canceled=true`,
@@ -3590,10 +3590,10 @@ Current context:
   // ============================================
   
   const DEFAULT_PAIRS = [
-    { tokenA: "DWT", tokenB: "USDC", reserveA: "10000000000000000000000000", reserveB: "1000000000000000000000" },
-    { tokenA: "DWT", tokenB: "wETH", reserveA: "5000000000000000000000000", reserveB: "100000000000000000000" },
-    { tokenA: "DWT", tokenB: "wSOL", reserveA: "3000000000000000000000000", reserveB: "50000000000000000000000" },
-    { tokenA: "DWT", tokenB: "USDT", reserveA: "8000000000000000000000000", reserveB: "800000000000000000000" },
+    { tokenA: "DWC", tokenB: "USDC", reserveA: "10000000000000000000000000", reserveB: "1000000000000000000000" },
+    { tokenA: "DWC", tokenB: "wETH", reserveA: "5000000000000000000000000", reserveB: "100000000000000000000" },
+    { tokenA: "DWC", tokenB: "wSOL", reserveA: "3000000000000000000000000", reserveB: "50000000000000000000000" },
+    { tokenA: "DWC", tokenB: "USDT", reserveA: "8000000000000000000000000", reserveB: "800000000000000000000" },
     { tokenA: "wETH", tokenB: "USDC", reserveA: "50000000000000000000", reserveB: "100000000000000000000000" },
   ];
 
@@ -3624,14 +3624,14 @@ Current context:
       }
       
       // Simplified AMM calculation (constant product)
-      // For demo: 1 DWT = 0.0001 USDC equivalent
+      // For demo: 1 DWC = 0.0001 USDC equivalent
       let rate = 0.0001;
-      if (tokenIn === "DWT" && tokenOut === "USDC") rate = 0.0001;
-      else if (tokenIn === "USDC" && tokenOut === "DWT") rate = 10000;
-      else if (tokenIn === "DWT" && tokenOut === "wETH") rate = 0.00004;
-      else if (tokenIn === "wETH" && tokenOut === "DWT") rate = 25000;
-      else if (tokenIn === "DWT" && tokenOut === "wSOL") rate = 0.002;
-      else if (tokenIn === "wSOL" && tokenOut === "DWT") rate = 500;
+      if (tokenIn === "DWC" && tokenOut === "USDC") rate = 0.0001;
+      else if (tokenIn === "USDC" && tokenOut === "DWC") rate = 10000;
+      else if (tokenIn === "DWC" && tokenOut === "wETH") rate = 0.00004;
+      else if (tokenIn === "wETH" && tokenOut === "DWC") rate = 25000;
+      else if (tokenIn === "DWC" && tokenOut === "wSOL") rate = 0.002;
+      else if (tokenIn === "wSOL" && tokenOut === "DWC") rate = 500;
       else rate = 1;
       
       const amountOutRaw = Number(amountInBigInt) * rate;
@@ -3673,12 +3673,12 @@ Current context:
       // Calculate output using same logic as quote
       const amountInBigInt = BigInt(amountIn);
       let rate = 0.0001;
-      if (tokenIn === "DWT" && tokenOut === "USDC") rate = 0.0001;
-      else if (tokenIn === "USDC" && tokenOut === "DWT") rate = 10000;
-      else if (tokenIn === "DWT" && tokenOut === "wETH") rate = 0.00004;
-      else if (tokenIn === "wETH" && tokenOut === "DWT") rate = 25000;
-      else if (tokenIn === "DWT" && tokenOut === "wSOL") rate = 0.002;
-      else if (tokenIn === "wSOL" && tokenOut === "DWT") rate = 500;
+      if (tokenIn === "DWC" && tokenOut === "USDC") rate = 0.0001;
+      else if (tokenIn === "USDC" && tokenOut === "DWC") rate = 10000;
+      else if (tokenIn === "DWC" && tokenOut === "wETH") rate = 0.00004;
+      else if (tokenIn === "wETH" && tokenOut === "DWC") rate = 25000;
+      else if (tokenIn === "DWC" && tokenOut === "wSOL") rate = 0.002;
+      else if (tokenIn === "wSOL" && tokenOut === "DWC") rate = 500;
       else rate = 1;
       
       const amountOutRaw = Number(amountInBigInt) * rate;
@@ -3725,7 +3725,7 @@ Current context:
         dwtBalance = account?.balance || "0";
       }
       
-      const priceHistory = await storage.getPriceHistory("DWT", 2);
+      const priceHistory = await storage.getPriceHistory("DWC", 2);
       const currentPrice = parseFloat(priceHistory[0]?.price || "0.000124");
       const oldPrice = parseFloat(priceHistory[1]?.price || String(currentPrice));
       const priceChange = oldPrice > 0 ? ((currentPrice - oldPrice) / oldPrice * 100) : 0;
@@ -3756,10 +3756,10 @@ Current context:
       // Build tokens array
       const tokens: any[] = [];
       
-      // Always show DWT
+      // Always show DWC
       tokens.push({ 
-        symbol: "DWT", 
-        name: "DarkWave Token", 
+        symbol: "DWC", 
+        name: "DarkWave Coin", 
         balance: dwtBalance, 
         displayBalance: dwtBalanceNum.toFixed(2),
         value: dwtValue, 
@@ -3767,11 +3767,11 @@ Current context:
         icon: "🌊" 
       });
       
-      // Show stDWT if user has any
+      // Show stDWC if user has any
       if (stDwtBalanceNum > 0) {
         tokens.push({
-          symbol: "stDWT",
-          name: "Staked DarkWave Token",
+          symbol: "stDWC",
+          name: "Staked DarkWave Coin",
           balance: stDwtBalance,
           displayBalance: stDwtBalanceNum.toFixed(2),
           value: stDwtValue,
@@ -3822,7 +3822,7 @@ Current context:
   // TESTNET FAUCET
   // ============================================
   
-  const FAUCET_AMOUNT = "1000000000000000000000"; // 1000 DWT
+  const FAUCET_AMOUNT = "1000000000000000000000"; // 1000 DWC
   const FAUCET_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
   
   app.get("/api/faucet/info", async (req, res) => {
@@ -3837,7 +3837,7 @@ Current context:
         .reduce((sum, c) => sum + BigInt(c.amount), BigInt(0));
       
       res.json({
-        dailyLimit: "10000000000000000000000", // 10,000 DWT per day total
+        dailyLimit: "10000000000000000000000", // 10,000 DWC per day total
         claimAmount: FAUCET_AMOUNT,
         totalDistributed: totalDistributed.toString(),
         claimsToday,
@@ -4002,9 +4002,9 @@ Current context:
       // Seed default pools if none exist
       if (pools.length === 0) {
         const defaultPools = [
-          { tokenA: "DWT", tokenB: "USDC", reserveA: "10000000", reserveB: "1000000", tvl: "2000000", apr: "45.2", volume24h: "520000", fee: "0.3" },
-          { tokenA: "DWT", tokenB: "wETH", reserveA: "5000000", reserveB: "200", tvl: "1500000", apr: "38.7", volume24h: "340000", fee: "0.3" },
-          { tokenA: "DWT", tokenB: "wSOL", reserveA: "3000000", reserveB: "15000", tvl: "900000", apr: "52.1", volume24h: "180000", fee: "0.3" },
+          { tokenA: "DWC", tokenB: "USDC", reserveA: "10000000", reserveB: "1000000", tvl: "2000000", apr: "45.2", volume24h: "520000", fee: "0.3" },
+          { tokenA: "DWC", tokenB: "wETH", reserveA: "5000000", reserveB: "200", tvl: "1500000", apr: "38.7", volume24h: "340000", fee: "0.3" },
+          { tokenA: "DWC", tokenB: "wSOL", reserveA: "3000000", reserveB: "15000", tvl: "900000", apr: "52.1", volume24h: "180000", fee: "0.3" },
           { tokenA: "wETH", tokenB: "USDC", reserveA: "100", reserveB: "350000", tvl: "700000", apr: "22.4", volume24h: "95000", fee: "0.3" },
         ];
         for (const pool of defaultPools) {
@@ -4129,13 +4129,13 @@ Current context:
 
   app.get("/api/charts/stats", async (req, res) => {
     try {
-      const history = await storage.getPriceHistory("DWT", 24);
+      const history = await storage.getPriceHistory("DWC", 24);
       
       if (history.length === 0) {
-        await seedPriceHistory("DWT", 90);
+        await seedPriceHistory("DWC", 90);
       }
       
-      const latestHistory = await storage.getPriceHistory("DWT", 24);
+      const latestHistory = await storage.getPriceHistory("DWC", 24);
       const current = latestHistory[0];
       const oldest = latestHistory[latestHistory.length - 1];
       
@@ -4164,7 +4164,7 @@ Current context:
 
   app.get("/api/charts/history", async (req, res) => {
     try {
-      const { token = "DWT", timeframe = "7d" } = req.query;
+      const { token = "DWC", timeframe = "7d" } = req.query;
       
       let limit = 24 * 7;
       switch (timeframe) {
@@ -4481,25 +4481,25 @@ Current context:
         baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
       });
 
-      const systemPrompt = `You are DarkWave AI, a friendly and knowledgeable assistant for the DarkWave Chain ecosystem. 
+      const systemPrompt = `You are DarkWave AI, a friendly and knowledgeable assistant for the DarkWave Smart Chain ecosystem. 
 
-DarkWave Chain is a Layer 1 blockchain with:
+DarkWave Smart Chain is a Layer 1 blockchain with:
 - 400ms block times
 - 200,000+ TPS capacity  
 - Proof-of-Authority consensus with the Founders Validator
-- Native DWT token (100 million total supply, 18 decimals)
+- Native DWC token (100 million total supply, 18 decimals)
 - Genesis block: February 14, 2025
 - Public launch: February 14, 2026
 
 Key features available:
-- Faucet: Get 1000 free test DWT (24-hour cooldown)
+- Faucet: Get 1000 free test DWC (24-hour cooldown)
 - Swap/DEX: Trade tokens with 0.3% fee
 - NFT Marketplace: Buy, sell, and mint NFTs
-- Staking: Stake DWT to earn rewards
+- Staking: Stake DWC to earn rewards
 - Portfolio: Track holdings and transactions
 - Liquidity Pools: Provide liquidity and earn fees
 - Launchpad: Launch new tokens
-- Bridge: Transfer DWT to Ethereum (wDWT) or Solana
+- Bridge: Transfer DWC to Ethereum (wDWC) or Solana
 - DarkWave Studio: Full-featured web IDE
 
 Keep responses concise (2-3 sentences max), friendly, and helpful. If asked about prices, balances, or specific data, explain that you can guide them to the relevant page. Use casual, warm language like you're a helpful friend.`;

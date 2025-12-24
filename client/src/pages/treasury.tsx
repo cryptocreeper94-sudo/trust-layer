@@ -109,9 +109,9 @@ export default function Treasury() {
       <div className="pt-20 pb-12 px-4">
         <div className="container mx-auto max-w-4xl space-y-6">
           <div className="text-center space-y-3">
-            <h1 className="text-3xl md:text-4xl font-display font-bold">DWT Treasury</h1>
+            <h1 className="text-3xl md:text-4xl font-display font-bold">DWC Treasury</h1>
             <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-              Manage DarkWave Token distribution. The treasury holds 100 million DWT tokens.
+              Manage DarkWave Coin distribution. The treasury holds 100 million DWC tokens.
             </p>
           </div>
 
@@ -195,7 +195,7 @@ export default function Treasury() {
                   </div>
 
                   <div>
-                    <Label htmlFor="amount" className="text-[11px] text-white/60">Amount (DWT)</Label>
+                    <Label htmlFor="amount" className="text-[11px] text-white/60">Amount (DWC)</Label>
                     <Input
                       id="amount"
                       type="number"
@@ -251,7 +251,7 @@ export default function Treasury() {
                   </div>
                   <div>
                     <div className="text-white/40 mb-0.5">Amount</div>
-                    <div className="text-white">{(BigInt(lastTx.amount) / BigInt(1e18)).toString()} DWT</div>
+                    <div className="text-white">{(BigInt(lastTx.amount) / BigInt(1e18)).toString()} DWC</div>
                   </div>
                   <div>
                     <div className="text-white/40 mb-0.5">Tx Hash</div>

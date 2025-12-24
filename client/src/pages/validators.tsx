@@ -247,7 +247,7 @@ export default function Validators() {
                           <div className="text-[10px] text-muted-foreground">Blocks</div>
                         </div>
                         <div className="text-center">
-                          <div className="font-bold">{formatStake(validator.stake)} DWT</div>
+                          <div className="font-bold">{formatStake(validator.stake)} DWC</div>
                           <div className="text-[10px] text-muted-foreground">Staked</div>
                         </div>
                         <div className="text-center">
@@ -279,7 +279,7 @@ export default function Validators() {
                 </div>
                 <div>
                   <h4 className="font-semibold text-white mb-2">Becoming a Validator</h4>
-                  <p>Apply to become a trusted validator by submitting your wallet address. Approved validators must stake DWT as collateral.</p>
+                  <p>Apply to become a trusted validator by submitting your wallet address. Approved validators must stake DWC as collateral.</p>
                 </div>
               </div>
             </GlassCard>

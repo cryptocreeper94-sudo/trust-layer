@@ -165,7 +165,7 @@ export default function ApiPlayground() {
         <div className="container mx-auto max-w-6xl">
           <section className="mb-8">
             <h1 className="text-2xl md:text-3xl font-display font-bold mb-2">Devnet Sandbox</h1>
-            <p className="text-sm text-muted-foreground">Test DarkWave Chain features in a safe environment</p>
+            <p className="text-sm text-muted-foreground">Test DarkWave Smart Chain features in a safe environment</p>
           </section>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
@@ -225,7 +225,7 @@ export default function ApiPlayground() {
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] text-white/40">Balance</span>
-                        <span className="text-lg font-bold text-primary">{walletBalance || testWallet.balance} DWT</span>
+                        <span className="text-lg font-bold text-primary">{walletBalance || testWallet.balance} DWC</span>
                       </div>
                       <Button onClick={checkBalance} disabled={isExecuting} variant="outline" className="w-full h-8 text-[10px] border-white/10">
                         <RefreshCw className={`w-3 h-3 mr-1.5 ${isExecuting ? 'animate-spin' : ''}`} /> Refresh Balance

@@ -37,7 +37,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 
 const SUPPORTED_CHAINS = [
-  { id: 'darkwave', name: 'DarkWave Chain', symbol: 'DWT', icon: '⚡', color: 'from-purple-500 to-pink-500', explorer: '/explorer' },
+  { id: 'darkwave', name: 'DarkWave Smart Chain', symbol: 'DWC', icon: '⚡', color: 'from-purple-500 to-pink-500', explorer: '/explorer' },
   { id: 'solana', name: 'Solana', symbol: 'SOL', icon: '◎', color: 'from-green-400 to-teal-500', explorer: 'https://solscan.io' },
   { id: 'ethereum', name: 'Ethereum', symbol: 'ETH', icon: 'Ξ', color: 'from-blue-400 to-indigo-500', explorer: 'https://etherscan.io' },
   { id: 'base', name: 'Base', symbol: 'ETH', icon: '🔵', color: 'from-blue-500 to-blue-600', explorer: 'https://basescan.org' },

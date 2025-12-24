@@ -63,7 +63,7 @@ export default function Faucet() {
     onSuccess: (data: any) => {
       toast({
         title: "Tokens Sent!",
-        description: `${formatAmount(data.amount)} DWT sent to your wallet`,
+        description: `${formatAmount(data.amount)} DWC sent to your wallet`,
       });
       queryClient.invalidateQueries({ queryKey: ["/api/faucet/info"] });
       queryClient.invalidateQueries({ queryKey: ["/api/faucet/claims"] });
@@ -135,7 +135,7 @@ export default function Faucet() {
               </h1>
             </div>
             <p className="text-xs text-muted-foreground">
-              Get free test DWT to build and experiment on DarkWave Chain
+              Get free test DWC to build and experiment on DarkWave Smart Chain
             </p>
           </motion.div>
 
@@ -149,7 +149,7 @@ export default function Faucet() {
               <div className="text-lg font-bold text-primary">
                 {infoLoading ? "..." : formatAmount(faucetInfo?.claimAmount || "0")}
               </div>
-              <div className="text-[10px] text-muted-foreground">DWT per claim</div>
+              <div className="text-[10px] text-muted-foreground">DWC per claim</div>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
               <div className="text-lg font-bold text-green-400">
@@ -201,7 +201,7 @@ export default function Faucet() {
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-muted-foreground">You will receive:</span>
                       <span className="font-bold text-cyan-400">
-                        {formatAmount(faucetInfo?.claimAmount || "1000000000000000000000")} DWT
+                        {formatAmount(faucetInfo?.claimAmount || "1000000000000000000000")} DWC
                       </span>
                     </div>
                   </div>
@@ -220,7 +220,7 @@ export default function Faucet() {
                     ) : (
                       <span className="flex items-center gap-2">
                         <Droplets className="w-4 h-4" />
-                        Get Free DWT
+                        Get Free DWC
                         <Sparkles className="w-4 h-4" />
                       </span>
                     )}
@@ -278,7 +278,7 @@ export default function Faucet() {
                                   {claim.walletAddress.slice(0, 10)}...
                                 </div>
                                 <div className="text-[10px] text-muted-foreground">
-                                  {formatAmount(claim.amount)} DWT
+                                  {formatAmount(claim.amount)} DWC
                                 </div>
                               </div>
                             </div>
@@ -322,7 +322,7 @@ export default function Faucet() {
               </h3>
               <ul className="text-[10px] text-muted-foreground space-y-1">
                 <li>1. Enter your DarkWave wallet address above</li>
-                <li>2. Click "Get Free DWT" to receive test tokens</li>
+                <li>2. Click "Get Free DWC" to receive test tokens</li>
                 <li>3. Use tokens to test staking, bridging, or dApps</li>
                 <li>4. Come back in 24 hours for more</li>
               </ul>

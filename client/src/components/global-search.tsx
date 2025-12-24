@@ -16,7 +16,7 @@ interface SearchResult {
 }
 
 const staticPages: SearchResult[] = [
-  { type: "page", id: "home", title: "Home", description: "DarkWave Chain homepage", href: "/", icon: Box },
+  { type: "page", id: "home", title: "Home", description: "DarkWave Smart Chain homepage", href: "/", icon: Box },
   { type: "page", id: "ecosystem", title: "Ecosystem", description: "Browse DarkWave ecosystem apps", href: "/ecosystem", icon: Box },
   { type: "page", id: "developers", title: "Developers", description: "Developer resources and tools", href: "/developers", icon: FileText },
   { type: "page", id: "whitepaper", title: "Whitepaper", description: "Read the technical whitepaper", href: "/whitepaper", icon: FileText },

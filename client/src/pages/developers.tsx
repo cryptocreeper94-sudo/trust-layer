@@ -47,7 +47,7 @@ export default function Developers() {
           <div className="max-w-2xl">
             <h1 className="text-3xl md:text-4xl font-display font-bold mb-4">
               Build the Future <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary">On DarkWave Chain</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary">On DarkWave Smart Chain</span>
             </h1>
             <p className="text-sm text-muted-foreground leading-relaxed mb-6">
               DarkWave combines the speed of a DAG with the security of Proof-of-History. 

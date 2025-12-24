@@ -320,9 +320,9 @@ export default function DevStudio() {
                     <span className="text-[10px] text-white/30 ml-2">token.dwv</span>
                   </div>
                   <div className="p-3 font-mono text-[11px] leading-relaxed">
-                    <div><span className="text-purple-400">contract</span> <span className="text-cyan-400">DWToken</span> {"{"}</div>
+                    <div><span className="text-purple-400">contract</span> <span className="text-cyan-400">DWCoken</span> {"{"}</div>
                     <div className="pl-3"><span className="text-white/50">name:</span> <span className="text-green-400">"DarkWave"</span></div>
-                    <div className="pl-3"><span className="text-white/50">symbol:</span> <span className="text-green-400">"DWT"</span></div>
+                    <div className="pl-3"><span className="text-white/50">symbol:</span> <span className="text-green-400">"DWC"</span></div>
                     <div className="pl-3"><span className="text-white/50">supply:</span> <span className="text-yellow-400">100_000_000</span></div>
                     <div className="text-purple-400">{"}"}</div>
                   </div>
@@ -423,7 +423,7 @@ export default function DevStudio() {
                       Early Access
                     </Badge>
                     <Badge className="bg-white/10 text-white border-white/20 text-xs">
-                      Free for DWT Holders
+                      Free for DWC Holders
                     </Badge>
                     <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">
                       SOC2 Compliant

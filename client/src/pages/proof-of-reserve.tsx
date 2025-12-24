@@ -32,7 +32,7 @@ interface AuditRecord {
 const mockReserves: ReserveAsset[] = [
   {
     chain: "Ethereum Sepolia",
-    symbol: "wDWT",
+    symbol: "wDWC",
     locked: "5,000,000",
     minted: "5,000,000",
     ratio: 100,
@@ -43,7 +43,7 @@ const mockReserves: ReserveAsset[] = [
   },
   {
     chain: "Solana Devnet",
-    symbol: "wDWT",
+    symbol: "wDWC",
     locked: "2,500,000",
     minted: "2,500,000",
     ratio: 100,
@@ -151,10 +151,10 @@ export default function ProofOfReservePage() {
           >
             <div className="flex items-center gap-2 text-slate-400 text-sm mb-1">
               <Lock className="h-4 w-4" />
-              Total Locked (DWT)
+              Total Locked (DWC)
             </div>
             <div className="text-2xl font-bold text-white">{totalLocked.toLocaleString()}</div>
-            <div className="text-xs text-emerald-400 mt-1">On DarkWave Chain</div>
+            <div className="text-xs text-emerald-400 mt-1">On DarkWave Smart Chain</div>
           </motion.div>
 
           <motion.div
@@ -165,7 +165,7 @@ export default function ProofOfReservePage() {
           >
             <div className="flex items-center gap-2 text-slate-400 text-sm mb-1">
               <Coins className="h-4 w-4" />
-              Total Minted (wDWT)
+              Total Minted (wDWC)
             </div>
             <div className="text-2xl font-bold text-white">{totalMinted.toLocaleString()}</div>
             <div className="text-xs text-blue-400 mt-1">Across all chains</div>
@@ -332,8 +332,8 @@ export default function ProofOfReservePage() {
                         labelStyle={{ color: '#fff' }}
                         formatter={(value: number) => [value.toLocaleString(), '']}
                       />
-                      <Area type="monotone" dataKey="locked" stroke="#10b981" fill="#10b981" fillOpacity={0.2} name="Locked DWT" />
-                      <Area type="monotone" dataKey="minted" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.2} name="Minted wDWT" />
+                      <Area type="monotone" dataKey="locked" stroke="#10b981" fill="#10b981" fillOpacity={0.2} name="Locked DWC" />
+                      <Area type="monotone" dataKey="minted" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.2} name="Minted wDWC" />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
@@ -359,7 +359,7 @@ export default function ProofOfReservePage() {
                       </Pie>
                       <Tooltip 
                         contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px' }}
-                        formatter={(value: number) => [value.toLocaleString() + ' wDWT', '']}
+                        formatter={(value: number) => [value.toLocaleString() + ' wDWC', '']}
                       />
                     </PieChart>
                   </ResponsiveContainer>

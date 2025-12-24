@@ -89,20 +89,20 @@ export default function Dashboard() {
                 </div>
                 {walletConnected ? (
                   <>
-                    <div className="text-2xl sm:text-3xl font-bold text-white mb-2 tracking-tight">0 DWT</div>
+                    <div className="text-2xl sm:text-3xl font-bold text-white mb-2 tracking-tight">0 DWC</div>
                     <p className="text-xs text-muted-foreground mb-4">
                       {evmAddress && <span className="block">EVM: {shortenAddress(evmAddress)}</span>}
                       {solanaAddress && <span className="block">SOL: {shortenAddress(solanaAddress)}</span>}
                     </p>
                     <Link href="/faucet">
                       <Button size="sm" variant="outline" className="w-full border-primary/30 text-primary hover:bg-primary/10">
-                        Get Testnet DWT
+                        Get Testnet DWC
                       </Button>
                     </Link>
                   </>
                 ) : (
                   <>
-                    <div className="text-2xl sm:text-3xl font-bold text-white/30 mb-2 tracking-tight">-- DWT</div>
+                    <div className="text-2xl sm:text-3xl font-bold text-white/30 mb-2 tracking-tight">-- DWC</div>
                     <p className="text-xs text-muted-foreground mb-4">Connect wallet to view balance</p>
                     <div className="[&>button]:w-full">
                       <WalletButton />
@@ -119,7 +119,7 @@ export default function Dashboard() {
                   <h3 className="font-bold text-sm sm:text-base">API Access</h3>
                 </div>
                 <p className="text-xs text-muted-foreground mb-4">
-                  Generate API keys to integrate with DarkWave Chain
+                  Generate API keys to integrate with DarkWave Smart Chain
                 </p>
                 <Link href="/developers">
                   <Button size="sm" variant="outline" className="w-full border-primary/30 text-primary hover:bg-primary/10">

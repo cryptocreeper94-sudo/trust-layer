@@ -716,7 +716,7 @@ export class DatabaseStorage implements IStorage {
       transactions.push({
         id: claim.id,
         type: "claim",
-        token: "DWT",
+        token: "DWC",
         amount: claim.amount,
         hash: claim.txHash || "",
         status: claim.status,

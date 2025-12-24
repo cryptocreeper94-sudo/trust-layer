@@ -9,7 +9,7 @@ const SOLANA_RPC = HELIUS_API_KEY
   : 'https://api.mainnet-beta.solana.com';
 
 const SUPPORTED_CHAINS: Record<string, ChainConfig> = {
-  darkwave: { id: 'darkwave', name: 'DarkWave Chain', symbol: 'DWT', coinType: 60, rpcUrl: 'native', chainId: 7777, explorer: '/explorer', isNative: true },
+  darkwave: { id: 'darkwave', name: 'DarkWave Smart Chain', symbol: 'DWC', coinType: 60, rpcUrl: 'native', chainId: 7777, explorer: '/explorer', isNative: true },
   solana: { id: 'solana', name: 'Solana', symbol: 'SOL', coinType: 501, rpcUrl: SOLANA_RPC, explorer: 'https://solscan.io' },
   ethereum: { id: 'ethereum', name: 'Ethereum', symbol: 'ETH', coinType: 60, rpcUrl: 'https://eth.llamarpc.com', chainId: 1, explorer: 'https://etherscan.io' },
   base: { id: 'base', name: 'Base', symbol: 'ETH', coinType: 60, rpcUrl: 'https://mainnet.base.org', chainId: 8453, explorer: 'https://basescan.org' },
@@ -146,7 +146,7 @@ class MultiChainWalletService {
     const config = SUPPORTED_CHAINS[chain];
     
     if (chain === 'darkwave') {
-      return { balance: '0', usd: 0, symbol: 'DWT' };
+      return { balance: '0', usd: 0, symbol: 'DWC' };
     }
     
     if (chain === 'solana') {
@@ -192,7 +192,7 @@ class MultiChainWalletService {
 
   async sendTransaction(chain: string, mnemonic: string, to: string, amount: string): Promise<TransactionResult> {
     if (chain === 'darkwave') {
-      throw new Error('Use DarkWave Chain native transaction API');
+      throw new Error('Use DarkWave Smart Chain native transaction API');
     }
     
     if (chain === 'solana') {

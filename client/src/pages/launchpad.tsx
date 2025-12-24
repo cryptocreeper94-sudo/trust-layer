@@ -169,7 +169,7 @@ export default function Launchpad() {
               Token <span className="text-pink-400">Launchpad</span>
             </h1>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              Launch your own token on DarkWave Chain. Fair launches, presales, and more.
+              Launch your own token on DarkWave Smart Chain. Fair launches, presales, and more.
             </p>
           </motion.div>
 
@@ -307,11 +307,11 @@ export default function Launchpad() {
                         
                         <div className="grid grid-cols-2 gap-2">
                           <div>
-                            <Label className="text-xs">Soft Cap (DWT)</Label>
+                            <Label className="text-xs">Soft Cap (DWC)</Label>
                             <Input type="number" value={formData.softCap} onChange={(e) => setFormData({...formData, softCap: e.target.value})} className="bg-white/5 border-white/10 text-xs" />
                           </div>
                           <div>
-                            <Label className="text-xs">Hard Cap (DWT)</Label>
+                            <Label className="text-xs">Hard Cap (DWC)</Label>
                             <Input type="number" value={formData.hardCap} onChange={(e) => setFormData({...formData, hardCap: e.target.value})} className="bg-white/5 border-white/10 text-xs" />
                           </div>
                         </div>
@@ -392,7 +392,7 @@ export default function Launchpad() {
           <GlassCard className="mt-8" glow>
             <div className="p-6 text-center">
               <Sparkles className="w-8 h-8 text-pink-400 mx-auto mb-3" />
-              <h3 className="text-lg font-bold mb-2">Launch Fee: 0 DWT</h3>
+              <h3 className="text-lg font-bold mb-2">Launch Fee: 0 DWC</h3>
               <p className="text-sm text-muted-foreground mb-4">Free launches during beta. Standard 1% trading fee applies after launch.</p>
               <div className="flex flex-wrap justify-center gap-4 text-xs text-muted-foreground">
                 <div className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-green-400" /> Instant deployment</div>

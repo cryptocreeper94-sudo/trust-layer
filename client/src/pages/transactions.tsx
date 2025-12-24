@@ -36,13 +36,13 @@ const truncateHash = (hash: string) => {
 };
 
 const SAMPLE_TRANSACTIONS = [
-  { id: "1", type: "send", token: "DWT", amount: "1000000000000000000000", to: "0x1234...5678", from: "", hash: "0xabc123def456789012345678901234567890abcdef1234567890abcdef123456", status: "confirmed", timestamp: new Date(Date.now() - 3600000).toISOString() },
-  { id: "2", type: "receive", token: "DWT", amount: "500000000000000000000", to: "", from: "0xabcd...efgh", hash: "0xdef456abc789012345678901234567890abcdef1234567890abcdef123456789", status: "confirmed", timestamp: new Date(Date.now() - 7200000).toISOString() },
-  { id: "3", type: "swap", token: "DWT → USDC", amount: "2000000000000000000000", to: "", from: "", hash: "0x789abc123def456789012345678901234567890abcdef1234567890abcdef12", status: "confirmed", timestamp: new Date(Date.now() - 14400000).toISOString() },
-  { id: "4", type: "stake", token: "DWT", amount: "5000000000000000000000", to: "", from: "", hash: "0x456def789abc123456789012345678901234567890abcdef1234567890abcdef", status: "confirmed", timestamp: new Date(Date.now() - 28800000).toISOString() },
-  { id: "5", type: "claim", token: "DWT", amount: "125000000000000000000", to: "", from: "", hash: "0x123abc456def789012345678901234567890abcdef1234567890abcdef123456", status: "confirmed", timestamp: new Date(Date.now() - 86400000).toISOString() },
+  { id: "1", type: "send", token: "DWC", amount: "1000000000000000000000", to: "0x1234...5678", from: "", hash: "0xabc123def456789012345678901234567890abcdef1234567890abcdef123456", status: "confirmed", timestamp: new Date(Date.now() - 3600000).toISOString() },
+  { id: "2", type: "receive", token: "DWC", amount: "500000000000000000000", to: "", from: "0xabcd...efgh", hash: "0xdef456abc789012345678901234567890abcdef1234567890abcdef123456789", status: "confirmed", timestamp: new Date(Date.now() - 7200000).toISOString() },
+  { id: "3", type: "swap", token: "DWC → USDC", amount: "2000000000000000000000", to: "", from: "", hash: "0x789abc123def456789012345678901234567890abcdef1234567890abcdef12", status: "confirmed", timestamp: new Date(Date.now() - 14400000).toISOString() },
+  { id: "4", type: "stake", token: "DWC", amount: "5000000000000000000000", to: "", from: "", hash: "0x456def789abc123456789012345678901234567890abcdef1234567890abcdef", status: "confirmed", timestamp: new Date(Date.now() - 28800000).toISOString() },
+  { id: "5", type: "claim", token: "DWC", amount: "125000000000000000000", to: "", from: "", hash: "0x123abc456def789012345678901234567890abcdef1234567890abcdef123456", status: "confirmed", timestamp: new Date(Date.now() - 86400000).toISOString() },
   { id: "6", type: "send", token: "wETH", amount: "100000000000000000", to: "0x9876...5432", from: "", hash: "0xfed987654321abcdef1234567890abcdef1234567890abcdef1234567890abcd", status: "pending", timestamp: new Date(Date.now() - 300000).toISOString() },
-  { id: "7", type: "bridge", token: "DWT → wDWT", amount: "1000000000000000000000", to: "", from: "", hash: "0x321fed654987cba321098765432109876543210fedcba9876543210fedcba98", status: "confirmed", timestamp: new Date(Date.now() - 172800000).toISOString() },
+  { id: "7", type: "bridge", token: "DWC → wDWC", amount: "1000000000000000000000", to: "", from: "", hash: "0x321fed654987cba321098765432109876543210fedcba9876543210fedcba98", status: "confirmed", timestamp: new Date(Date.now() - 172800000).toISOString() },
 ];
 
 const TX_TYPE_CONFIG: Record<string, { icon: any; color: string; label: string }> = {

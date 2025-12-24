@@ -156,7 +156,7 @@ export default function FounderProgram() {
             transition={{ delay: 0.2 }}
             className="text-muted-foreground text-lg max-w-2xl mx-auto"
           >
-            Pay once. Get lifetime access. Receive 35,000 DWT tokens on launch day.
+            Pay once. Get lifetime access. Receive 35,000 DWC tokens on launch day.
           </motion.p>
         </div>
 
@@ -205,7 +205,7 @@ export default function FounderProgram() {
               <div className="flex items-center gap-3">
                 <Gift className="w-6 h-6 text-primary" />
                 <div>
-                  <div className="font-semibold text-white">35,000 DWT Airdrop</div>
+                  <div className="font-semibold text-white">35,000 DWC Airdrop</div>
                   <div className="text-xs text-muted-foreground">Delivered to your wallet on Feb 14, 2026</div>
                 </div>
               </div>
@@ -224,7 +224,7 @@ export default function FounderProgram() {
                 Connect Your Wallet
               </h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Connect your wallet to receive your 35,000 DWT airdrop on launch day.
+                Connect your wallet to receive your 35,000 DWC airdrop on launch day.
               </p>
               <WalletButton />
               {isConnected && address && (
@@ -305,7 +305,7 @@ export default function FounderProgram() {
           <h3 className="text-xl font-semibold text-white mb-2">Program Closes February 14, 2026</h3>
           <p className="text-muted-foreground">
             After this date, the Legacy Founder program ends. Regular pricing of $20/month begins.
-            Don't miss your chance to lock in lifetime access and receive 35,000 DWT tokens.
+            Don't miss your chance to lock in lifetime access and receive 35,000 DWC tokens.
           </p>
         </GlassCard>
       </main>

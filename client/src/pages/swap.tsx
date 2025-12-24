@@ -34,7 +34,7 @@ interface SwapQuote {
 }
 
 const TOKENS: TokenInfo[] = [
-  { symbol: "DWT", name: "DarkWave Token", icon: "🌊" },
+  { symbol: "DWC", name: "DarkWave Coin", icon: "🌊" },
   { symbol: "wETH", name: "Wrapped Ethereum", icon: "⟠" },
   { symbol: "wSOL", name: "Wrapped Solana", icon: "◎" },
   { symbol: "USDC", name: "USD Coin", icon: "💵" },
@@ -196,7 +196,7 @@ export default function Swap() {
               </h1>
             </div>
             <p className="text-xs text-muted-foreground">
-              Swap tokens instantly on DarkWave Chain
+              Swap tokens instantly on DarkWave Smart Chain
             </p>
           </motion.div>
 

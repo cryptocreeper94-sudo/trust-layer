@@ -269,7 +269,7 @@ export default function Bridge() {
               </h1>
             </div>
             <p className="text-xs text-muted-foreground">
-              Transfer DWT between DarkWave and other networks
+              Transfer DWC between DarkWave and other networks
             </p>
           </motion.div>
 
@@ -470,7 +470,7 @@ export default function Bridge() {
                         </div>
                         <div>
                           <h2 className="font-bold text-sm">Lock & Mint</h2>
-                          <p className="text-[10px] text-muted-foreground">Lock DWT → Receive wDWT</p>
+                          <p className="text-[10px] text-muted-foreground">Lock DWC → Receive wDWC</p>
                         </div>
                       </div>
 
@@ -520,7 +520,7 @@ export default function Bridge() {
                         </div>
 
                         <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 block">Amount (DWT)</Label>
+                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 block">Amount (DWC)</Label>
                           <div className="relative">
                             <Input
                               type="number"
@@ -531,7 +531,7 @@ export default function Bridge() {
                               data-testid="input-amount"
                               className="bg-white/5 border-white/10 h-12 text-xl font-bold pr-16"
                             />
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-primary font-bold">DWT</span>
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-primary font-bold">DWC</span>
                           </div>
                         </div>
 
@@ -570,7 +570,7 @@ export default function Bridge() {
                         </div>
                         <div>
                           <h2 className="font-bold text-sm">Burn & Release</h2>
-                          <p className="text-[10px] text-muted-foreground">Burn wDWT → Release DWT</p>
+                          <p className="text-[10px] text-muted-foreground">Burn wDWC → Release DWC</p>
                         </div>
                       </div>
 
@@ -617,7 +617,7 @@ export default function Bridge() {
                         </div>
 
                         <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 block">Amount (wDWT)</Label>
+                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 block">Amount (wDWC)</Label>
                           <div className="relative">
                             <Input
                               type="number"
@@ -628,7 +628,7 @@ export default function Bridge() {
                               data-testid="input-burn-amount"
                               className="bg-white/5 border-white/10 h-12 text-xl font-bold pr-20"
                             />
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-orange-400 font-bold">wDWT</span>
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-orange-400 font-bold">wDWC</span>
                           </div>
                         </div>
 
@@ -686,7 +686,7 @@ export default function Bridge() {
                     </div>
                     <div className="flex justify-between items-center p-2 rounded-lg bg-white/5">
                       <span className="text-muted-foreground">Custody Balance</span>
-                      <span className="font-bold text-primary">{formatAmount(bridgeInfo?.custodyBalance || "0")} DWT</span>
+                      <span className="font-bold text-primary">{formatAmount(bridgeInfo?.custodyBalance || "0")} DWC</span>
                     </div>
                     <div className="flex justify-between items-center p-2 rounded-lg bg-white/5">
                       <span className="text-muted-foreground">Phase</span>
@@ -742,7 +742,7 @@ export default function Bridge() {
                               <div>
                                 <div className="font-medium capitalize">{transfer.type}</div>
                                 <div className="text-[10px] text-muted-foreground">
-                                  {formatAmount(transfer.amount)} DWT
+                                  {formatAmount(transfer.amount)} DWC
                                 </div>
                               </div>
                             </div>

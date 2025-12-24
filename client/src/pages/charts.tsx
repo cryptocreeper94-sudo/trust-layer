@@ -23,7 +23,7 @@ interface PriceData {
 
 export default function Charts() {
   const [timeframe, setTimeframe] = useState("7d");
-  const [selectedToken, setSelectedToken] = useState("DWT");
+  const [selectedToken, setSelectedToken] = useState("DWC");
 
   const { data: statsData, isLoading: statsLoading } = useQuery<{ price: string; change24h: string; volume24h: string; marketCap: string; high24h: string; low24h: string }>({
     queryKey: ["/api/charts/stats", selectedToken],
@@ -83,11 +83,11 @@ export default function Charts() {
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center font-bold text-sm">
-                    DWT
+                    DWC
                   </div>
                   <div>
-                    <h1 className="text-2xl font-display font-bold">DarkWave Token</h1>
-                    <p className="text-xs text-muted-foreground">DWT/USD</p>
+                    <h1 className="text-2xl font-display font-bold">DarkWave Coin</h1>
+                    <p className="text-xs text-muted-foreground">DWC/USD</p>
                   </div>
                 </div>
               </div>
@@ -98,7 +98,7 @@ export default function Charts() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="DWT">DWT</SelectItem>
+                    <SelectItem value="DWC">DWC</SelectItem>
                     <SelectItem value="wETH">wETH</SelectItem>
                     <SelectItem value="wSOL">wSOL</SelectItem>
                   </SelectContent>
@@ -249,7 +249,7 @@ export default function Charts() {
               <div className="p-4 text-center">
                 <TrendingUp className="w-5 h-5 text-purple-400 mx-auto mb-2" />
                 <div className="text-sm font-bold">Total Supply</div>
-                <div className="text-lg font-bold">100M DWT</div>
+                <div className="text-lg font-bold">100M DWC</div>
                 <div className="text-[10px] text-muted-foreground">Fixed supply</div>
               </div>
             </GlassCard>

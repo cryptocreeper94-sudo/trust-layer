@@ -214,7 +214,7 @@ export function WalletButton() {
                   </button>
                 </div>
 
-                <p className="text-muted-foreground text-xs mb-4">Choose your wallet to connect to DarkWave Chain</p>
+                <p className="text-muted-foreground text-xs mb-4">Choose your wallet to connect to DarkWave Smart Chain</p>
 
               {error && (
                 <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-xs">

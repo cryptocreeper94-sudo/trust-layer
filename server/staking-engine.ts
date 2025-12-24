@@ -38,7 +38,7 @@ class StakingEngine {
       {
         name: "Liquid Flex",
         slug: "liquid-flex",
-        description: "Maximum flexibility with no lock period. Withdraw your DWT anytime while earning competitive yields.",
+        description: "Maximum flexibility with no lock period. Withdraw your DWC anytime while earning competitive yields.",
         poolType: "liquid",
         apyBase: "10",
         apyBoost: "2",
@@ -51,7 +51,7 @@ class StakingEngine {
       {
         name: "Core Guard 45",
         slug: "core-guard-45",
-        description: "Lock your DWT for 45 days to earn enhanced rewards. Perfect for medium-term holders.",
+        description: "Lock your DWC for 45 days to earn enhanced rewards. Perfect for medium-term holders.",
         poolType: "locked",
         apyBase: "14",
         apyBoost: "3",
@@ -114,7 +114,7 @@ class StakingEngine {
     const defaultQuests = [
       {
         title: "First Steps",
-        description: "Stake at least 100 DWT in any pool",
+        description: "Stake at least 100 DWC in any pool",
         questType: "stake_amount",
         requirement: JSON.stringify({ minAmount: "100" }),
         rewardDwt: "50",
@@ -133,7 +133,7 @@ class StakingEngine {
       },
       {
         title: "Whale Watcher",
-        description: "Stake 10,000 DWT or more",
+        description: "Stake 10,000 DWC or more",
         questType: "stake_amount",
         requirement: JSON.stringify({ minAmount: "10000" }),
         rewardDwt: "500",
@@ -230,7 +230,7 @@ class StakingEngine {
     const amountNum = parseFloat(amount);
     const minStake = parseFloat(pool.minStake || "0");
     if (amountNum < minStake) {
-      throw new Error(`Minimum stake is ${minStake} DWT`);
+      throw new Error(`Minimum stake is ${minStake} DWC`);
     }
 
     if (pool.maxStake) {
@@ -238,7 +238,7 @@ class StakingEngine {
       const existingStake = await this.getUserStake(userId, poolId);
       const existingAmount = existingStake ? parseFloat(existingStake.amount) : 0;
       if (existingAmount + amountNum > maxStake) {
-        throw new Error(`Maximum stake is ${maxStake} DWT`);
+        throw new Error(`Maximum stake is ${maxStake} DWC`);
       }
     }
 

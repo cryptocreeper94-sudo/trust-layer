@@ -291,11 +291,11 @@ export default function Staking() {
               </span>
             </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto text-sm md:text-base mb-4">
-              Lock your DWT tokens to earn premium rewards, unlock exclusive perks, complete quests, and climb the global leaderboard.
+              Lock your DWC tokens to earn premium rewards, unlock exclusive perks, complete quests, and climb the global leaderboard.
             </p>
             <Link href="/liquid-staking">
               <Button variant="outline" size="sm" className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10" data-testid="button-liquid-staking">
-                💧 Try Liquid Staking (stDWT)
+                💧 Try Liquid Staking (stDWC)
                 <ArrowUpRight className="w-3 h-3 ml-1" />
               </Button>
             </Link>
@@ -351,7 +351,7 @@ export default function Staking() {
                 </h2>
                 {totalPendingRewards > 0 && (
                   <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/50 animate-pulse">
-                    +{totalPendingRewards.toFixed(4)} DWT Pending
+                    +{totalPendingRewards.toFixed(4)} DWC Pending
                   </Badge>
                 )}
               </div>
@@ -386,12 +386,12 @@ export default function Staking() {
                           <div className="p-3 rounded-lg bg-white/5">
                             <div className="text-[10px] text-white/50 uppercase mb-1">Staked</div>
                             <div className="font-bold text-white text-lg">{formatNumber(stake.amount)}</div>
-                            <div className="text-[10px] text-white/40">DWT</div>
+                            <div className="text-[10px] text-white/40">DWC</div>
                           </div>
                           <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
                             <div className="text-[10px] text-emerald-400/70 uppercase mb-1">Rewards</div>
                             <div className="font-bold text-emerald-400 text-lg">+{parseFloat(stake.pendingRewards).toFixed(4)}</div>
-                            <div className="text-[10px] text-emerald-400/40">DWT</div>
+                            <div className="text-[10px] text-emerald-400/40">DWC</div>
                           </div>
                         </div>
 
@@ -423,7 +423,7 @@ export default function Staking() {
                           ) : (
                             <>
                               <Gift className="w-4 h-4 mr-1" />
-                              Claim {parseFloat(stake.pendingRewards).toFixed(4)} DWT
+                              Claim {parseFloat(stake.pendingRewards).toFixed(4)} DWC
                             </>
                           )}
                         </Button>
@@ -504,7 +504,7 @@ export default function Staking() {
                         </div>
                         <div className="p-2.5 rounded-lg bg-white/5 border border-white/5">
                           <div className="text-[10px] text-white/40 uppercase">Min Stake</div>
-                          <div className="font-semibold text-white text-sm">{formatNumber(pool.minStake)} DWT</div>
+                          <div className="font-semibold text-white text-sm">{formatNumber(pool.minStake)} DWC</div>
                         </div>
                       </div>
 
@@ -524,11 +524,11 @@ export default function Staking() {
                         >
                           <div className="flex items-center justify-between text-xs mb-1">
                             <span className="text-white/70">Your stake</span>
-                            <span className="font-bold text-primary">{formatNumber(pool.userStake.amount)} DWT</span>
+                            <span className="font-bold text-primary">{formatNumber(pool.userStake.amount)} DWC</span>
                           </div>
                           <div className="flex items-center justify-between text-xs">
                             <span className="text-white/70">Pending rewards</span>
-                            <span className="font-bold text-emerald-400">+{parseFloat(pool.userStake.pendingRewards).toFixed(4)} DWT</span>
+                            <span className="font-bold text-emerald-400">+{parseFloat(pool.userStake.pendingRewards).toFixed(4)} DWC</span>
                           </div>
                         </motion.div>
                       )}
@@ -607,7 +607,7 @@ export default function Staking() {
                             {entry.userId.slice(0, 8)}...{entry.userId.slice(-4)}
                           </div>
                           <div className="text-[10px] text-white/50 flex items-center gap-2">
-                            <span>{formatNumber(entry.totalStaked)} DWT</span>
+                            <span>{formatNumber(entry.totalStaked)} DWC</span>
                             {entry.streakDays > 0 && (
                               <span className="flex items-center gap-0.5 text-amber-400">
                                 <Flame className="w-3 h-3" />
@@ -656,7 +656,7 @@ export default function Staking() {
                           <p className="text-xs text-muted-foreground line-clamp-1">{quest.description}</p>
                           <div className="flex flex-wrap items-center gap-2 mt-2">
                             <Badge variant="outline" className="text-[10px] border-emerald-500/50 text-emerald-400 bg-emerald-500/5">
-                              +{quest.rewardDwt} DWT
+                              +{quest.rewardDwt} DWC
                             </Badge>
                             {quest.rewardBadge && (
                               <Badge variant="outline" className="text-[10px] border-purple-500/50 text-purple-400 bg-purple-500/5">
@@ -735,7 +735,7 @@ export default function Staking() {
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-white/70">Minimum stake</span>
-                <span className="text-white font-medium">{selectedPool?.minStake} DWT</span>
+                <span className="text-white font-medium">{selectedPool?.minStake} DWC</span>
               </div>
             </div>
 
@@ -750,7 +750,7 @@ export default function Staking() {
                   className="pr-16 bg-white/5 border-white/10 h-12 text-lg"
                   data-testid="input-stake-amount"
                 />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-white/50 font-medium">DWT</span>
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-white/50 font-medium">DWC</span>
               </div>
             </div>
 

@@ -174,7 +174,7 @@ export function GenesisHallmarkCard() {
                   {/* DarkWave Logo */}
                   <motion.img
                     src={darkwaveLogo}
-                    alt="DarkWave Token"
+                    alt="DarkWave Coin"
                     className="w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 relative z-10 drop-shadow-2xl object-contain"
                     animate={{
                       scale: isHovered ? 1.05 : 1,
@@ -205,7 +205,7 @@ export function GenesisHallmarkCard() {
               {/* Title & Info */}
               <div className="text-center mb-6">
                 <h3 className="text-xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent mb-1">
-                  DarkWave Chain
+                  DarkWave Smart Chain
                 </h3>
                 <p className="text-sm text-white/60">{genesis.message}</p>
               </div>
@@ -337,7 +337,7 @@ export function GenesisHallmarkSection() {
             transition={{ delay: 0.2 }}
             className="text-muted-foreground max-w-2xl mx-auto"
           >
-            The first-ever DarkWave Chain hallmark. Every transaction, asset, and product 
+            The first-ever DarkWave Smart Chain hallmark. Every transaction, asset, and product 
             in the ecosystem is stamped with a unique 12-digit serial number for permanent 
             blockchain verification.
           </motion.p>

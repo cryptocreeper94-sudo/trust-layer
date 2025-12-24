@@ -11,7 +11,7 @@ import { passkeys, users } from "@shared/models/auth";
 import { eq, and } from "drizzle-orm";
 import crypto from "crypto";
 
-const rpName = "DarkWave Chain";
+const rpName = "DarkWave Smart Chain";
 const rpID = process.env.REPLIT_DEV_DOMAIN?.replace(/^https?:\/\//, "") || "localhost";
 const origin = process.env.REPLIT_DEV_DOMAIN || `http://localhost:5000`;
 

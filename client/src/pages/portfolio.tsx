@@ -221,11 +221,11 @@ export default function Portfolio() {
                   <div className="grid grid-cols-2 gap-3">
                     <div className="p-2 rounded-lg bg-white/5">
                       <div className="text-[10px] text-muted-foreground">Total Staked</div>
-                      <div className="font-bold text-sm">{parseFloat(portfolio.staking.totalStaked).toLocaleString()} DWT</div>
+                      <div className="font-bold text-sm">{parseFloat(portfolio.staking.totalStaked).toLocaleString()} DWC</div>
                     </div>
                     <div className="p-2 rounded-lg bg-white/5">
                       <div className="text-[10px] text-muted-foreground">Pending Rewards</div>
-                      <div className="font-bold text-sm text-green-400">{parseFloat(portfolio.staking.pendingRewards || "0").toFixed(4)} DWT</div>
+                      <div className="font-bold text-sm text-green-400">{parseFloat(portfolio.staking.pendingRewards || "0").toFixed(4)} DWC</div>
                     </div>
                   </div>
                 </GlassCard>
@@ -237,8 +237,8 @@ export default function Portfolio() {
                       <Badge variant="outline" className="text-[10px]">{position.apy}% APY</Badge>
                     </div>
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground">Staked: {formatAmount(position.amount)} DWT</span>
-                      <span className="text-green-400">+{formatAmount(position.rewards)} DWT</span>
+                      <span className="text-muted-foreground">Staked: {formatAmount(position.amount)} DWC</span>
+                      <span className="text-green-400">+{formatAmount(position.rewards)} DWC</span>
                     </div>
                   </GlassCard>
                 ))}
