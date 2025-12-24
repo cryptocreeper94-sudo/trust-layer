@@ -1565,6 +1565,68 @@ export async function registerRoutes(
     }
   });
 
+  // Genesis Hallmark - The first ever DarkWave Chain hallmark
+  app.get("/api/hallmark/genesis", async (req, res) => {
+    try {
+      // Get genesis block info from blockchain
+      const stats = blockchain.getStats();
+      const genesisTimestamp = "2025-02-14T00:00:00.000Z"; // Launch date
+      
+      // Generate QR code for genesis hallmark
+      const QRCode = await import("qrcode");
+      const verificationUrl = `${process.env.BASE_URL || 'https://darkwave.chain'}/explorer`;
+      const qrData = JSON.stringify({
+        id: "DWH-000000000001",
+        type: "genesis",
+        url: verificationUrl,
+        chain: "DarkWave Chain",
+      });
+      const qrCodeSvg = await QRCode.toString(qrData, { type: "svg", width: 200 });
+      
+      // Generate payload hash for genesis
+      const crypto = await import("crypto");
+      const genesisPayload = {
+        id: "DWH-000000000001",
+        type: "genesis",
+        chain: "DarkWave Chain",
+        blockHeight: 0,
+        timestamp: genesisTimestamp,
+        validator: "Founders Validator",
+      };
+      const payloadHash = crypto.createHash("sha256")
+        .update(JSON.stringify(genesisPayload))
+        .digest("hex");
+      
+      res.json({
+        id: "genesis-hallmark-001",
+        globalSerial: "DWH-000000000001",
+        serialNumber: "DWH-GENESIS-0001",
+        type: "Genesis Hallmark",
+        chain: "DarkWave Chain",
+        blockNumber: 0,
+        payloadHash,
+        txHash: stats.networkHash || "genesis",
+        createdAt: genesisTimestamp,
+        verificationUrl,
+        qrCodeSvg,
+        metadata: {
+          totalSupply: "100,000,000 DWT",
+          decimals: 18,
+          consensusType: "Proof-of-Authority",
+          blockTime: "400ms",
+          tps: "200,000+",
+          validator: "Founders Validator",
+          launchDate: "February 14, 2026",
+        },
+        verified: true,
+        message: "Genesis Block - DarkWave Chain Origin",
+      });
+    } catch (error) {
+      console.error("Genesis hallmark error:", error);
+      res.status(500).json({ error: "Failed to fetch genesis hallmark" });
+    }
+  });
+
   // === CROSS-CHAIN BRIDGE ROUTES (Phase 1 - Beta) ===
   
   app.get("/api/bridge/info", async (req, res) => {
