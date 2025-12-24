@@ -87,6 +87,7 @@ DarkWave Chain is a comprehensive blockchain ecosystem developed by DarkWave Stu
 - [x] NFT Creator Tool - No-code NFT minting wizard (4-step: upload, details, attributes, mint)
 - [x] Price Charts - DWT price visualization with Recharts (area/bar charts, multiple timeframes)
 - [x] Webhook/Events API - Real-time notifications for devs (9 event types, HMAC-SHA256 signatures)
+- [x] Liquid Staking (stDWT) - Stake DWT, receive stDWT tokens, earn 12% APY while maintaining liquidity
 
 ---
 
