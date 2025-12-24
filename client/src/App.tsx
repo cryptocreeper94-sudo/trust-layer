@@ -40,6 +40,8 @@ import ProofOfReserve from "@/pages/proof-of-reserve";
 import LiquidStaking from "@/pages/liquid-staking";
 import AdminRewards from "@/pages/admin-rewards";
 import AirdropClaim from "@/pages/airdrop-claim";
+import Quests from "@/pages/quests";
+import NetworkStats from "@/pages/network-stats";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -91,6 +93,8 @@ function Router() {
         <Route path="/liquid-staking" component={LiquidStaking} />
         <Route path="/admin/rewards" component={AdminRewards} />
         <Route path="/airdrop" component={AirdropClaim} />
+        <Route path="/quests" component={Quests} />
+        <Route path="/network" component={NetworkStats} />
         <Route component={NotFound} />
       </Switch>
     </>

@@ -1313,4 +1313,109 @@ export const insertTokenGiftSchema = createInsertSchema(tokenGifts).omit({
 export type InsertTokenGift = z.infer<typeof insertTokenGiftSchema>;
 export type TokenGift = typeof tokenGifts.$inferSelect;
 
-export const APP_VERSION = "1.0.9";
+export const userXp = pgTable("user_xp", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  walletAddress: text("wallet_address"),
+  totalXp: integer("total_xp").notNull().default(0),
+  level: integer("level").notNull().default(1),
+  currentLevelXp: integer("current_level_xp").notNull().default(0),
+  nextLevelXp: integer("next_level_xp").notNull().default(100),
+  tier: text("tier").notNull().default("bronze"),
+  streakDays: integer("streak_days").notNull().default(0),
+  lastActivityAt: timestamp("last_activity_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertUserXpSchema = createInsertSchema(userXp).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertUserXp = z.infer<typeof insertUserXpSchema>;
+export type UserXp = typeof userXp.$inferSelect;
+
+export const quests = pgTable("quests", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  category: text("category").notNull().default("general"),
+  xpReward: integer("xp_reward").notNull().default(10),
+  tokenReward: text("token_reward").default("0"),
+  icon: text("icon").default("star"),
+  difficulty: text("difficulty").notNull().default("easy"),
+  actionType: text("action_type").notNull(),
+  actionTarget: text("action_target"),
+  requiredCount: integer("required_count").notNull().default(1),
+  isRepeatable: boolean("is_repeatable").notNull().default(false),
+  cooldownHours: integer("cooldown_hours"),
+  isActive: boolean("is_active").notNull().default(true),
+  startsAt: timestamp("starts_at"),
+  endsAt: timestamp("ends_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertQuestSchema = createInsertSchema(quests).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertQuest = z.infer<typeof insertQuestSchema>;
+export type Quest = typeof quests.$inferSelect;
+
+export const protocolMissions = pgTable("protocol_missions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  goal: text("goal").notNull(),
+  currentProgress: text("current_progress").notNull().default("0"),
+  targetProgress: text("target_progress").notNull(),
+  rewardPool: text("reward_pool").notNull().default("0"),
+  participantCount: integer("participant_count").notNull().default(0),
+  status: text("status").notNull().default("active"),
+  startsAt: timestamp("starts_at").notNull(),
+  endsAt: timestamp("ends_at").notNull(),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertProtocolMissionSchema = createInsertSchema(protocolMissions).omit({
+  id: true,
+  createdAt: true,
+  completedAt: true,
+});
+
+export type InsertProtocolMission = z.infer<typeof insertProtocolMissionSchema>;
+export type ProtocolMission = typeof protocolMissions.$inferSelect;
+
+export const socialLeaderboard = pgTable("social_leaderboard", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  displayName: text("display_name"),
+  avatarUrl: text("avatar_url"),
+  totalVolume: text("total_volume").notNull().default("0"),
+  totalTrades: integer("total_trades").notNull().default(0),
+  profitLoss: text("profit_loss").notNull().default("0"),
+  winRate: text("win_rate").notNull().default("0"),
+  totalXp: integer("total_xp").notNull().default(0),
+  rank: integer("rank"),
+  tier: text("tier").notNull().default("bronze"),
+  isPublic: boolean("is_public").notNull().default(true),
+  referralCode: text("referral_code"),
+  referralCount: integer("referral_count").notNull().default(0),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertSocialLeaderboardSchema = createInsertSchema(socialLeaderboard).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertSocialLeaderboard = z.infer<typeof insertSocialLeaderboardSchema>;
+export type SocialLeaderboard = typeof socialLeaderboard.$inferSelect;
+
+export const APP_VERSION = "1.1.0";
