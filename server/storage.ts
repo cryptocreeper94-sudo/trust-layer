@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
 import crypto from "crypto";
@@ -130,6 +130,17 @@ export interface IStorage {
   createTokenGift(data: InsertTokenGift): Promise<TokenGift>;
   updateTokenGift(id: string, data: Partial<InsertTokenGift>): Promise<TokenGift | undefined>;
   deleteTokenGift(id: string): Promise<boolean>;
+  
+  // Hallmark Profiles & Mints (12-digit system)
+  getHallmarkProfile(userId: string): Promise<HallmarkProfile | undefined>;
+  upsertHallmarkProfile(userId: string, data: Partial<InsertHallmarkProfile>): Promise<HallmarkProfile>;
+  getHallmarkMint(id: string): Promise<HallmarkMint | undefined>;
+  getHallmarkMintBySerial(serialNumber: string): Promise<HallmarkMint | undefined>;
+  getHallmarkMintsByUser(userId: string): Promise<HallmarkMint[]>;
+  createHallmarkMint(data: InsertHallmarkMint): Promise<HallmarkMint>;
+  updateHallmarkMint(id: string, data: Partial<InsertHallmarkMint>): Promise<HallmarkMint | undefined>;
+  getNextGlobalSerial(tier?: string): Promise<string>;
+  getGenesisHallmark(): Promise<HallmarkMint | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -968,6 +979,90 @@ export class DatabaseStorage implements IStorage {
   async deleteTokenGift(id: string): Promise<boolean> {
     await db.delete(tokenGifts).where(eq(tokenGifts.id, id));
     return true;
+  }
+
+  // Hallmark Profiles & Mints (12-digit system)
+  async getHallmarkProfile(userId: string): Promise<HallmarkProfile | undefined> {
+    const [profile] = await db.select().from(hallmarkProfiles).where(eq(hallmarkProfiles.userId, userId));
+    return profile;
+  }
+
+  async upsertHallmarkProfile(userId: string, data: Partial<InsertHallmarkProfile>): Promise<HallmarkProfile> {
+    const existing = await this.getHallmarkProfile(userId);
+    if (existing) {
+      const [updated] = await db.update(hallmarkProfiles)
+        .set({ ...data, updatedAt: new Date() })
+        .where(eq(hallmarkProfiles.userId, userId))
+        .returning();
+      return updated;
+    }
+    const [profile] = await db.insert(hallmarkProfiles)
+      .values({ userId, ...data })
+      .returning();
+    return profile;
+  }
+
+  async getHallmarkMint(id: string): Promise<HallmarkMint | undefined> {
+    const [mint] = await db.select().from(hallmarkMints).where(eq(hallmarkMints.id, id));
+    return mint;
+  }
+
+  async getHallmarkMintBySerial(serialNumber: string): Promise<HallmarkMint | undefined> {
+    const [mint] = await db.select().from(hallmarkMints).where(eq(hallmarkMints.serialNumber, serialNumber));
+    return mint;
+  }
+
+  async getHallmarkMintsByUser(userId: string): Promise<HallmarkMint[]> {
+    return db.select().from(hallmarkMints)
+      .where(eq(hallmarkMints.userId, userId))
+      .orderBy(desc(hallmarkMints.createdAt));
+  }
+
+  async createHallmarkMint(data: InsertHallmarkMint): Promise<HallmarkMint> {
+    const [mint] = await db.insert(hallmarkMints).values(data).returning();
+    return mint;
+  }
+
+  async updateHallmarkMint(id: string, data: Partial<InsertHallmarkMint>): Promise<HallmarkMint | undefined> {
+    const [mint] = await db.update(hallmarkMints)
+      .set(data)
+      .where(eq(hallmarkMints.id, id))
+      .returning();
+    return mint;
+  }
+
+  async getNextGlobalSerial(tier: string = 'GENERAL_PUBLIC'): Promise<string> {
+    const range = HALLMARK_SERIAL_RANGES[tier as keyof typeof HALLMARK_SERIAL_RANGES] || HALLMARK_SERIAL_RANGES.GENERAL_PUBLIC;
+    
+    // Get the current global counter
+    const [counter] = await db.select().from(hallmarkGlobalCounter).where(eq(hallmarkGlobalCounter.id, 'global'));
+    
+    if (!counter) {
+      await db.insert(hallmarkGlobalCounter).values({ id: 'global', currentGlobalSerial: '0' });
+    }
+    
+    const currentSerial = parseInt(counter?.currentGlobalSerial || '0', 10);
+    let nextSerial = currentSerial + 1;
+    
+    // Ensure we're in the correct range for the tier
+    if (nextSerial < range.start) {
+      nextSerial = range.start;
+    }
+    
+    // Update counter
+    await db.update(hallmarkGlobalCounter)
+      .set({ currentGlobalSerial: nextSerial.toString(), lastUpdated: new Date() })
+      .where(eq(hallmarkGlobalCounter.id, 'global'));
+    
+    // Format as 12-digit string: DWH-000000000001
+    return `DWH-${nextSerial.toString().padStart(12, '0')}`;
+  }
+
+  async getGenesisHallmark(): Promise<HallmarkMint | undefined> {
+    // Get the first ever hallmark (global serial 1)
+    const [genesis] = await db.select().from(hallmarkMints)
+      .where(eq(hallmarkMints.globalSerial, 'DWH-000000000001'));
+    return genesis;
   }
 }
 
