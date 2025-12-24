@@ -41,15 +41,20 @@ const StakeRequestSchema = z.object({
 const NftMintRequestSchema = z.object({
   name: z.string().min(1, "Name is required").max(100),
   description: z.string().max(1000).optional(),
-  imageUrl: z.string().url().optional().or(z.literal("")),
+  imageUrl: z.string().optional().or(z.literal("")),
+  collection: z.string().optional(),
   collectionId: z.string().optional(),
+  attributes: z.string().optional(),
+  royalties: z.string().optional(),
+  supply: z.string().optional(),
 });
 
 const rateLimitStore: Map<string, { count: number; resetTime: number }> = new Map();
 
-function rateLimit(maxRequests: number, windowMs: number) {
+function rateLimit(routeId: string, maxRequests: number, windowMs: number) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const key = req.ip || "unknown";
+    const ip = req.ip || "unknown";
+    const key = `${routeId}:${ip}`;
     const now = Date.now();
     const record = rateLimitStore.get(key);
     
@@ -67,10 +72,10 @@ function rateLimit(maxRequests: number, windowMs: number) {
   };
 }
 
-const faucetRateLimit = rateLimit(5, 60 * 1000);
-const swapRateLimit = rateLimit(30, 60 * 1000);
-const nftMintRateLimit = rateLimit(10, 60 * 1000);
-const studioAiRateLimit = rateLimit(20, 60 * 1000);
+const faucetRateLimit = rateLimit("faucet", 5, 60 * 1000);
+const swapRateLimit = rateLimit("swap", 30, 60 * 1000);
+const nftMintRateLimit = rateLimit("nft-mint", 10, 60 * 1000);
+const studioAiRateLimit = rateLimit("studio-ai", 20, 60 * 1000);
 
 interface PresenceUser {
   id: string;
@@ -3096,11 +3101,12 @@ Current context:
       if (!parseResult.success) {
         return res.status(400).json({ error: parseResult.error.errors[0]?.message || "Invalid request" });
       }
-      const { name, description, imageUrl, collectionId } = parseResult.data;
+      const { name, description, imageUrl, collection, collectionId } = parseResult.data;
+      const finalCollectionId = collectionId || collection || "user-created";
 
       const nft = await storage.createNft({
         tokenId: `${Date.now()}`,
-        collectionId: collectionId || "user-created",
+        collectionId: finalCollectionId,
         name,
         description: description || "",
         imageUrl: imageUrl || "",
