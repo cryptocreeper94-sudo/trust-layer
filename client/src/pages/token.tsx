@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Coins, BarChart3, Lock, Globe, ShieldCheck, Zap, Sparkles } from "lucide-react";
+import { ArrowLeft, Coins, BarChart3, Lock, Globe, ShieldCheck, Zap, Sparkles, Crown, Star, Gift, Users, TrendingUp, Percent } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -205,11 +205,11 @@ export default function Token() {
                   Distribution
                 </h3>
                 <div className="space-y-4">
-                  <DistributionItem label="Ecosystem Growth" percent="40%" color="bg-primary" />
-                  <DistributionItem label="Public Sale" percent="20%" color="bg-secondary" />
-                  <DistributionItem label="Team & Founders" percent="15%" color="bg-purple-500" />
-                  <DistributionItem label="Foundation Reserve" percent="15%" color="bg-blue-500" />
-                  <DistributionItem label="Airdrops" percent="10%" color="bg-green-500" />
+                  <DistributionItem label="Community Rewards" percent="40%" color="bg-primary" desc="Staking, airdrops, early adopters" />
+                  <DistributionItem label="Ecosystem Treasury" percent="25%" color="bg-secondary" desc="Grants, partnerships, development" />
+                  <DistributionItem label="Team & Advisors" percent="15%" color="bg-purple-500" desc="6-month cliff, 18-month unlock" />
+                  <DistributionItem label="Validators" percent="10%" color="bg-blue-500" desc="Network security incentives" />
+                  <DistributionItem label="Strategic Reserve" percent="10%" color="bg-amber-500" desc="Market operations, listings" />
                 </div>
               </div>
             </GlassCard>
@@ -244,16 +244,163 @@ export default function Token() {
         </div>
       </section>
 
+      <section className="py-12 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-10">
+            <Badge variant="outline" className="mb-4 px-3 py-1 border-amber-500/50 text-amber-400 bg-amber-500/10 rounded-full text-xs">
+              <Crown className="w-3 h-3 mr-1" /> Early Adopter Program
+            </Badge>
+            <h2 className="text-2xl md:text-3xl font-display font-bold mb-3">Join the Genesis Community</h2>
+            <p className="text-sm text-muted-foreground max-w-lg mx-auto">
+              Early supporters receive exclusive rewards, bonus allocations, and lifetime benefits.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <GlassCard className="relative overflow-hidden" data-testid="card-tier-founder">
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent" />
+              <div className="p-6 relative">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+                    <Crown className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg">Founder Tier</h3>
+                    <Badge className="bg-amber-500/20 text-amber-400 text-[10px]">Limited to 100</Badge>
+                  </div>
+                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2"><Sparkles className="w-3 h-3 text-amber-400" /> 10,000 DWT allocation</li>
+                  <li className="flex items-center gap-2"><TrendingUp className="w-3 h-3 text-amber-400" /> 2x staking multiplier</li>
+                  <li className="flex items-center gap-2"><Star className="w-3 h-3 text-amber-400" /> Exclusive NFT badge</li>
+                  <li className="flex items-center gap-2"><Users className="w-3 h-3 text-amber-400" /> Private Discord access</li>
+                </ul>
+              </div>
+            </GlassCard>
+
+            <GlassCard className="relative overflow-hidden" data-testid="card-tier-genesis">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent" />
+              <div className="p-6 relative">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+                    <Star className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg">Genesis Tier</h3>
+                    <Badge className="bg-purple-500/20 text-purple-400 text-[10px]">Limited to 500</Badge>
+                  </div>
+                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2"><Sparkles className="w-3 h-3 text-purple-400" /> 5,000 DWT allocation</li>
+                  <li className="flex items-center gap-2"><TrendingUp className="w-3 h-3 text-purple-400" /> 1.5x staking multiplier</li>
+                  <li className="flex items-center gap-2"><Star className="w-3 h-3 text-purple-400" /> Early access to features</li>
+                  <li className="flex items-center gap-2"><Gift className="w-3 h-3 text-purple-400" /> Priority airdrop eligibility</li>
+                </ul>
+              </div>
+            </GlassCard>
+
+            <GlassCard className="relative overflow-hidden" data-testid="card-tier-beta">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent" />
+              <div className="p-6 relative">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center">
+                    <Users className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg">Beta Tester</h3>
+                    <Badge className="bg-blue-500/20 text-blue-400 text-[10px]">Open Enrollment</Badge>
+                  </div>
+                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2"><Sparkles className="w-3 h-3 text-blue-400" /> 1,000 DWT allocation</li>
+                  <li className="flex items-center gap-2"><TrendingUp className="w-3 h-3 text-blue-400" /> 1.25x staking multiplier</li>
+                  <li className="flex items-center gap-2"><Star className="w-3 h-3 text-blue-400" /> Bug bounty rewards</li>
+                  <li className="flex items-center gap-2"><Gift className="w-3 h-3 text-blue-400" /> Contribution-based bonuses</li>
+                </ul>
+              </div>
+            </GlassCard>
+          </div>
+
+          <div className="text-center mt-8">
+            <Link href="/staking">
+              <Button size="lg" className="rounded-full gap-2" data-testid="button-early-access">
+                <Gift className="w-4 h-4" /> Apply for Early Access
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 px-4 bg-white/[0.02]">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-display font-bold mb-3">Sustainable Revenue Model</h2>
+            <p className="text-sm text-muted-foreground max-w-lg mx-auto">
+              DarkWave generates real revenue through ecosystem fees, ensuring long-term sustainability.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <GlassCard hover={false}>
+              <div className="p-4 text-center">
+                <div className="text-2xl font-bold text-primary mb-1">0.25%</div>
+                <div className="text-xs text-muted-foreground">DEX Swap Fees</div>
+              </div>
+            </GlassCard>
+            <GlassCard hover={false}>
+              <div className="p-4 text-center">
+                <div className="text-2xl font-bold text-secondary mb-1">0.1%</div>
+                <div className="text-xs text-muted-foreground">Bridge Fees</div>
+              </div>
+            </GlassCard>
+            <GlassCard hover={false}>
+              <div className="p-4 text-center">
+                <div className="text-2xl font-bold text-purple-400 mb-1">2.5%</div>
+                <div className="text-xs text-muted-foreground">NFT Marketplace</div>
+              </div>
+            </GlassCard>
+            <GlassCard hover={false}>
+              <div className="p-4 text-center">
+                <div className="text-2xl font-bold text-amber-400 mb-1">5%</div>
+                <div className="text-xs text-muted-foreground">Staking Protocol</div>
+              </div>
+            </GlassCard>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+            <GlassCard className="p-5">
+              <h4 className="font-bold mb-3 flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-green-400" /> No Token Burns
+              </h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Unlike deflationary tokens, DWT maintains a fixed 100M supply. Protocol fees are redistributed to stakers and the ecosystem treasury, ensuring sustainable growth without artificial scarcity.
+              </p>
+            </GlassCard>
+            <GlassCard className="p-5">
+              <h4 className="font-bold mb-3 flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-blue-400" /> Vesting & Lockups
+              </h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Team tokens are locked with a 6-month cliff and 18-month linear vesting. This ensures long-term alignment and prevents early dumping by insiders.
+              </p>
+            </GlassCard>
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );
 }
 
-function DistributionItem({ label, percent, color }: { label: string, percent: string, color: string }) {
+function DistributionItem({ label, percent, color, desc }: { label: string, percent: string, color: string, desc?: string }) {
   return (
     <div>
-      <div className="flex justify-between mb-1.5 text-xs font-medium">
-        <span className="text-white/80">{label}</span>
+      <div className="flex justify-between mb-1 text-xs font-medium">
+        <div>
+          <span className="text-white/80">{label}</span>
+          {desc && <span className="text-white/40 text-[10px] ml-2">({desc})</span>}
+        </div>
         <span className="text-white">{percent}</span>
       </div>
       <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">

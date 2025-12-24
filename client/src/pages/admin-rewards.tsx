@@ -132,7 +132,7 @@ export default function AdminRewards() {
               <Crown className="w-3 h-3 mr-1" /> Admin
             </Badge>
             <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2">
+              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2" data-testid="button-back">
                 <ArrowLeft className="w-3 h-3" />
                 <span className="hidden sm:inline">Back</span>
               </Button>
@@ -182,17 +182,17 @@ export default function AdminRewards() {
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="bg-white/5 border border-white/10">
-              <TabsTrigger value="testers" className="data-[state=active]:bg-white/10">
+            <TabsList className="bg-white/5 border border-white/10" data-testid="tabs-rewards">
+              <TabsTrigger value="testers" className="data-[state=active]:bg-white/10" data-testid="tab-testers">
                 <Users className="w-4 h-4 mr-2" /> Beta Testers
               </TabsTrigger>
-              <TabsTrigger value="tiers" className="data-[state=active]:bg-white/10">
+              <TabsTrigger value="tiers" className="data-[state=active]:bg-white/10" data-testid="tab-tiers">
                 <Star className="w-4 h-4 mr-2" /> Tiers
               </TabsTrigger>
-              <TabsTrigger value="gifts" className="data-[state=active]:bg-white/10">
+              <TabsTrigger value="gifts" className="data-[state=active]:bg-white/10" data-testid="tab-gifts">
                 <Gift className="w-4 h-4 mr-2" /> Token Gifts
               </TabsTrigger>
-              <TabsTrigger value="airdrops" className="data-[state=active]:bg-white/10">
+              <TabsTrigger value="airdrops" className="data-[state=active]:bg-white/10" data-testid="tab-airdrops">
                 <Sparkles className="w-4 h-4 mr-2" /> Airdrops
               </TabsTrigger>
             </TabsList>
