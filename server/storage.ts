@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, liquidStakingState, liquidStakingPositions, liquidStakingEvents } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
 import crypto from "crypto";
@@ -93,6 +93,14 @@ export interface IStorage {
   // Chain Accounts & Staking
   getChainAccount(address: string): Promise<ChainAccount | undefined>;
   getStakingPositions(userId: string): Promise<UserStake[]>;
+  
+  // Liquid Staking
+  getLiquidStakingState(): Promise<LiquidStakingState | undefined>;
+  updateLiquidStakingState(data: Partial<LiquidStakingState>): Promise<LiquidStakingState>;
+  getLiquidStakingPosition(userId: string): Promise<LiquidStakingPosition | undefined>;
+  upsertLiquidStakingPosition(userId: string, data: Partial<InsertLiquidStakingPosition>): Promise<LiquidStakingPosition>;
+  recordLiquidStakingEvent(data: InsertLiquidStakingEvent): Promise<LiquidStakingEvent>;
+  getLiquidStakingEvents(userId: string): Promise<LiquidStakingEvent[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -749,6 +757,61 @@ export class DatabaseStorage implements IStorage {
 
   async getStakingPositions(userId: string): Promise<UserStake[]> {
     return db.select().from(userStakes).where(eq(userStakes.userId, userId));
+  }
+
+  async getLiquidStakingState(): Promise<LiquidStakingState | undefined> {
+    const [state] = await db.select().from(liquidStakingState).where(eq(liquidStakingState.id, "main"));
+    if (!state) {
+      const [newState] = await db.insert(liquidStakingState).values({
+        id: "main",
+        totalDwtStaked: "0",
+        totalStDwtSupply: "0",
+        exchangeRate: "1000000000000000000",
+        targetApy: "12",
+      }).returning();
+      return newState;
+    }
+    return state;
+  }
+
+  async updateLiquidStakingState(data: Partial<LiquidStakingState>): Promise<LiquidStakingState> {
+    const [state] = await db.update(liquidStakingState)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(liquidStakingState.id, "main"))
+      .returning();
+    return state;
+  }
+
+  async getLiquidStakingPosition(userId: string): Promise<LiquidStakingPosition | undefined> {
+    const [position] = await db.select().from(liquidStakingPositions).where(eq(liquidStakingPositions.userId, userId));
+    return position;
+  }
+
+  async upsertLiquidStakingPosition(userId: string, data: Partial<InsertLiquidStakingPosition>): Promise<LiquidStakingPosition> {
+    const existing = await this.getLiquidStakingPosition(userId);
+    if (existing) {
+      const [updated] = await db.update(liquidStakingPositions)
+        .set({ ...data, updatedAt: new Date() })
+        .where(eq(liquidStakingPositions.userId, userId))
+        .returning();
+      return updated;
+    }
+    const [position] = await db.insert(liquidStakingPositions)
+      .values({ userId, stakedDwt: "0", stDwtBalance: "0", ...data })
+      .returning();
+    return position;
+  }
+
+  async recordLiquidStakingEvent(data: InsertLiquidStakingEvent): Promise<LiquidStakingEvent> {
+    const [event] = await db.insert(liquidStakingEvents).values(data).returning();
+    return event;
+  }
+
+  async getLiquidStakingEvents(userId: string): Promise<LiquidStakingEvent[]> {
+    return db.select().from(liquidStakingEvents)
+      .where(eq(liquidStakingEvents.userId, userId))
+      .orderBy(desc(liquidStakingEvents.createdAt))
+      .limit(50);
   }
 }
 

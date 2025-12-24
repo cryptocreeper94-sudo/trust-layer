@@ -1136,4 +1136,62 @@ export const insertWebhookLogSchema = createInsertSchema(webhookLogs).omit({
 export type InsertWebhookLog = z.infer<typeof insertWebhookLogSchema>;
 export type WebhookLog = typeof webhookLogs.$inferSelect;
 
-export const APP_VERSION = "1.0.7";
+// ============================================
+// LIQUID STAKING (stDWT)
+// ============================================
+
+export const liquidStakingState = pgTable("liquid_staking_state", {
+  id: varchar("id").primaryKey().default("main"),
+  totalDwtStaked: text("total_dwt_staked").notNull().default("0"),
+  totalStDwtSupply: text("total_st_dwt_supply").notNull().default("0"),
+  exchangeRate: text("exchange_rate").notNull().default("1000000000000000000"),
+  targetApy: text("target_apy").notNull().default("12"),
+  lastAccruedAt: timestamp("last_accrued_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertLiquidStakingStateSchema = createInsertSchema(liquidStakingState).omit({
+  updatedAt: true,
+});
+
+export type InsertLiquidStakingState = z.infer<typeof insertLiquidStakingStateSchema>;
+export type LiquidStakingState = typeof liquidStakingState.$inferSelect;
+
+export const liquidStakingPositions = pgTable("liquid_staking_positions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  stakedDwt: text("staked_dwt").notNull().default("0"),
+  stDwtBalance: text("st_dwt_balance").notNull().default("0"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertLiquidStakingPositionSchema = createInsertSchema(liquidStakingPositions).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertLiquidStakingPosition = z.infer<typeof insertLiquidStakingPositionSchema>;
+export type LiquidStakingPosition = typeof liquidStakingPositions.$inferSelect;
+
+export const liquidStakingEvents = pgTable("liquid_staking_events", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  eventType: text("event_type").notNull(),
+  dwtAmount: text("dwt_amount").notNull(),
+  stDwtAmount: text("st_dwt_amount").notNull(),
+  exchangeRate: text("exchange_rate").notNull(),
+  txHash: text("tx_hash"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertLiquidStakingEventSchema = createInsertSchema(liquidStakingEvents).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertLiquidStakingEvent = z.infer<typeof insertLiquidStakingEventSchema>;
+export type LiquidStakingEvent = typeof liquidStakingEvents.$inferSelect;
+
+export const APP_VERSION = "1.0.8";
