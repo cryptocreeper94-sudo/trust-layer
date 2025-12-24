@@ -4217,6 +4217,224 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // ============================================
+  // BETA TESTERS & AIRDROP ADMIN
+  // ============================================
+
+  app.get("/api/admin/beta-testers/tiers", isAuthenticated, async (req: any, res) => {
+    try {
+      const tiers = await storage.getBetaTesterTiers();
+      res.json({ tiers });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get tiers" });
+    }
+  });
+
+  app.post("/api/admin/beta-testers/tiers", isAuthenticated, async (req: any, res) => {
+    try {
+      const tier = await storage.createBetaTesterTier(req.body);
+      res.json({ tier });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to create tier" });
+    }
+  });
+
+  app.put("/api/admin/beta-testers/tiers/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const tier = await storage.updateBetaTesterTier(req.params.id, req.body);
+      res.json({ tier });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to update tier" });
+    }
+  });
+
+  app.delete("/api/admin/beta-testers/tiers/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      await storage.deleteBetaTesterTier(req.params.id);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to delete tier" });
+    }
+  });
+
+  app.get("/api/admin/beta-testers", isAuthenticated, async (req: any, res) => {
+    try {
+      const testers = await storage.getBetaTesters();
+      res.json({ testers });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get testers" });
+    }
+  });
+
+  app.post("/api/admin/beta-testers", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const tester = await storage.createBetaTester({
+        ...req.body,
+        addedBy: userId,
+      });
+      res.json({ tester });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to add tester" });
+    }
+  });
+
+  app.put("/api/admin/beta-testers/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const tester = await storage.updateBetaTester(req.params.id, req.body);
+      res.json({ tester });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to update tester" });
+    }
+  });
+
+  app.delete("/api/admin/beta-testers/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      await storage.deleteBetaTester(req.params.id);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to delete tester" });
+    }
+  });
+
+  // Airdrop Allocations
+  app.get("/api/admin/airdrops", isAuthenticated, async (req: any, res) => {
+    try {
+      const allocations = await storage.getAirdropAllocations();
+      res.json({ allocations });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get allocations" });
+    }
+  });
+
+  app.post("/api/admin/airdrops", isAuthenticated, async (req: any, res) => {
+    try {
+      const allocation = await storage.createAirdropAllocation(req.body);
+      res.json({ allocation });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to create allocation" });
+    }
+  });
+
+  app.put("/api/admin/airdrops/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const allocation = await storage.updateAirdropAllocation(req.params.id, req.body);
+      res.json({ allocation });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to update allocation" });
+    }
+  });
+
+  // Token Gifts
+  app.get("/api/admin/gifts", isAuthenticated, async (req: any, res) => {
+    try {
+      const gifts = await storage.getTokenGifts();
+      res.json({ gifts });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get gifts" });
+    }
+  });
+
+  app.post("/api/admin/gifts", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const gift = await storage.createTokenGift({
+        ...req.body,
+        grantedBy: userId,
+      });
+      res.json({ gift });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to create gift" });
+    }
+  });
+
+  app.put("/api/admin/gifts/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const gift = await storage.updateTokenGift(req.params.id, req.body);
+      res.json({ gift });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to update gift" });
+    }
+  });
+
+  app.delete("/api/admin/gifts/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      await storage.deleteTokenGift(req.params.id);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to delete gift" });
+    }
+  });
+
+  // Public airdrop claim check
+  app.get("/api/airdrop/check", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const userEmail = req.user?.email || req.user?.claims?.email;
+      
+      // Check if user is a beta tester
+      let tester = null;
+      if (userEmail) {
+        tester = await storage.getBetaTesterByEmail(userEmail);
+      }
+      
+      // Get active airdrop allocations
+      const allocations = await storage.getAirdropAllocations();
+      const activeAllocations = allocations.filter(a => a.isActive);
+      
+      // Check existing claims
+      const claims = await storage.getAirdropClaims(userId);
+      
+      // Get gifts for this user
+      const gifts = userEmail ? await storage.getTokenGiftsByRecipient(userEmail) : [];
+      const pendingGifts = gifts.filter(g => g.status === "pending");
+      
+      res.json({
+        isBetaTester: !!tester,
+        tester,
+        activeAllocations,
+        claims,
+        pendingGifts,
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to check eligibility" });
+    }
+  });
+
+  // Claim airdrop
+  app.post("/api/airdrop/claim", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const { allocationId, walletAddress } = req.body;
+      
+      // Check if already claimed
+      const existing = await storage.getAirdropClaimByUser(allocationId, userId);
+      if (existing) {
+        return res.status(400).json({ error: "Already claimed this airdrop" });
+      }
+      
+      // Get allocation
+      const allocations = await storage.getAirdropAllocations();
+      const allocation = allocations.find(a => a.id === allocationId);
+      if (!allocation || !allocation.isActive) {
+        return res.status(400).json({ error: "Airdrop not available" });
+      }
+      
+      // Create claim (amount would be calculated based on tier/eligibility)
+      const claim = await storage.createAirdropClaim({
+        allocationId,
+        userId,
+        walletAddress,
+        amount: "1000",
+        status: "pending",
+      });
+      
+      res.json({ claim });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to claim" });
+    }
+  });
+
   return httpServer;
 }
 

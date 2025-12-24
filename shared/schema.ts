@@ -1195,10 +1195,10 @@ export type InsertLiquidStakingEvent = z.infer<typeof insertLiquidStakingEventSc
 export type LiquidStakingEvent = typeof liquidStakingEvents.$inferSelect;
 
 // ============================================
-// WHITELIST & AIRDROP SYSTEM
+// BETA TESTERS & AIRDROP SYSTEM
 // ============================================
 
-export const whitelistTiers = pgTable("whitelist_tiers", {
+export const betaTesterTiers = pgTable("beta_tester_tiers", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   name: text("name").notNull().unique(),
   description: text("description"),
@@ -1209,20 +1209,20 @@ export const whitelistTiers = pgTable("whitelist_tiers", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const insertWhitelistTierSchema = createInsertSchema(whitelistTiers).omit({
+export const insertBetaTesterTierSchema = createInsertSchema(betaTesterTiers).omit({
   id: true,
   createdAt: true,
 });
 
-export type InsertWhitelistTier = z.infer<typeof insertWhitelistTierSchema>;
-export type WhitelistTier = typeof whitelistTiers.$inferSelect;
+export type InsertBetaTesterTier = z.infer<typeof insertBetaTesterTierSchema>;
+export type BetaTesterTier = typeof betaTesterTiers.$inferSelect;
 
-export const whitelistEntries = pgTable("whitelist_entries", {
+export const betaTesters = pgTable("beta_testers", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: text("user_id"),
   email: text("email"),
   walletAddress: text("wallet_address"),
-  tierId: varchar("tier_id").references(() => whitelistTiers.id),
+  tierId: varchar("tier_id").references(() => betaTesterTiers.id),
   status: text("status").notNull().default("pending"),
   contributionScore: integer("contribution_score").notNull().default(0),
   contributionNotes: text("contribution_notes"),
@@ -1234,15 +1234,15 @@ export const whitelistEntries = pgTable("whitelist_entries", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-export const insertWhitelistEntrySchema = createInsertSchema(whitelistEntries).omit({
+export const insertBetaTesterSchema = createInsertSchema(betaTesters).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
   approvedAt: true,
 });
 
-export type InsertWhitelistEntry = z.infer<typeof insertWhitelistEntrySchema>;
-export type WhitelistEntry = typeof whitelistEntries.$inferSelect;
+export type InsertBetaTester = z.infer<typeof insertBetaTesterSchema>;
+export type BetaTester = typeof betaTesters.$inferSelect;
 
 export const airdropAllocations = pgTable("airdrop_allocations", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
