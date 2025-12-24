@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
 import crypto from "crypto";
@@ -69,6 +69,24 @@ export interface IStorage {
   
   // Transaction History
   getTransactionHistory(): Promise<any[]>;
+  
+  // Liquidity Pools
+  getLiquidityPools(): Promise<LiquidityPool[]>;
+  getLiquidityPool(id: string): Promise<LiquidityPool | undefined>;
+  createLiquidityPool(data: InsertLiquidityPool): Promise<LiquidityPool>;
+  updateLiquidityPool(id: string, data: Partial<InsertLiquidityPool>): Promise<LiquidityPool | undefined>;
+  getLiquidityPositions(userId: string): Promise<LiquidityPosition[]>;
+  createLiquidityPosition(data: InsertLiquidityPosition): Promise<LiquidityPosition>;
+  
+  // Webhooks
+  getWebhooks(userId: string): Promise<Webhook[]>;
+  createWebhook(data: InsertWebhook): Promise<Webhook>;
+  updateWebhook(id: string, data: Partial<InsertWebhook>): Promise<Webhook | undefined>;
+  deleteWebhook(id: string): Promise<boolean>;
+  
+  // Price History
+  getPriceHistory(token: string, limit?: number): Promise<PriceHistory[]>;
+  recordPrice(data: InsertPriceHistory): Promise<PriceHistory>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -642,6 +660,65 @@ export class DatabaseStorage implements IStorage {
     transactions.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
     return transactions.slice(0, 50);
+  }
+
+  // Liquidity Pools
+  async getLiquidityPools(): Promise<LiquidityPool[]> {
+    return db.select().from(liquidityPools).where(eq(liquidityPools.isActive, true)).orderBy(desc(liquidityPools.tvl));
+  }
+
+  async getLiquidityPool(id: string): Promise<LiquidityPool | undefined> {
+    const [pool] = await db.select().from(liquidityPools).where(eq(liquidityPools.id, id));
+    return pool;
+  }
+
+  async createLiquidityPool(data: InsertLiquidityPool): Promise<LiquidityPool> {
+    const [pool] = await db.insert(liquidityPools).values(data).returning();
+    return pool;
+  }
+
+  async updateLiquidityPool(id: string, data: Partial<InsertLiquidityPool>): Promise<LiquidityPool | undefined> {
+    const [pool] = await db.update(liquidityPools).set(data).where(eq(liquidityPools.id, id)).returning();
+    return pool;
+  }
+
+  async getLiquidityPositions(userId: string): Promise<LiquidityPosition[]> {
+    return db.select().from(liquidityPositions).where(eq(liquidityPositions.userId, userId));
+  }
+
+  async createLiquidityPosition(data: InsertLiquidityPosition): Promise<LiquidityPosition> {
+    const [position] = await db.insert(liquidityPositions).values(data).returning();
+    return position;
+  }
+
+  // Webhooks
+  async getWebhooks(userId: string): Promise<Webhook[]> {
+    return db.select().from(webhooks).where(eq(webhooks.userId, userId)).orderBy(desc(webhooks.createdAt));
+  }
+
+  async createWebhook(data: InsertWebhook): Promise<Webhook> {
+    const [webhook] = await db.insert(webhooks).values(data).returning();
+    return webhook;
+  }
+
+  async updateWebhook(id: string, data: Partial<InsertWebhook>): Promise<Webhook | undefined> {
+    const [webhook] = await db.update(webhooks).set(data).where(eq(webhooks.id, id)).returning();
+    return webhook;
+  }
+
+  async deleteWebhook(id: string): Promise<boolean> {
+    const result = await db.delete(webhooks).where(eq(webhooks.id, id));
+    return true;
+  }
+
+  // Price History
+  async getPriceHistory(token: string, limit: number = 100): Promise<PriceHistory[]> {
+    return db.select().from(priceHistory).where(eq(priceHistory.token, token)).orderBy(desc(priceHistory.timestamp)).limit(limit);
+  }
+
+  async recordPrice(data: InsertPriceHistory): Promise<PriceHistory> {
+    const [record] = await db.insert(priceHistory).values(data).returning();
+    return record;
   }
 }
 

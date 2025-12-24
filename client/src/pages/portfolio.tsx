@@ -28,44 +28,46 @@ const formatUsd = (amount: number) => {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
 };
 
-const SAMPLE_PORTFOLIO = {
-  totalValue: 15420.50,
-  change24h: 3.2,
-  tokens: [
-    { symbol: "DWT", name: "DarkWave Token", balance: "10000000000000000000000", value: 1000, change: 5.2, icon: "🌊" },
-    { symbol: "wETH", name: "Wrapped Ethereum", balance: "500000000000000000", value: 1200, change: 2.1, icon: "⟠" },
-    { symbol: "wSOL", name: "Wrapped Solana", balance: "25000000000000000000", value: 500, change: -1.5, icon: "◎" },
-    { symbol: "USDC", name: "USD Coin", balance: "5000000000000000000000", value: 5000, change: 0, icon: "💵" },
-  ],
+interface PortfolioData {
+  totalValue: number;
+  change24h: number;
+  tokens: { symbol: string; name: string; balance: string; value: number; change: number; icon: string }[];
   staking: {
-    totalStaked: "5000000000000000000000",
-    pendingRewards: "125000000000000000000",
-    apy: 12.5,
-    stakedValue: 500,
-    positions: [
-      { pool: "DWT Staking Pool", amount: "3000000000000000000000", apy: 15.0, rewards: "75000000000000000000" },
-      { pool: "LP Staking", amount: "2000000000000000000000", apy: 8.5, rewards: "50000000000000000000" },
-    ],
-  },
-  nfts: [
-    { id: "1", name: "Genesis #42", collection: "DarkWave Genesis", value: 150 },
-    { id: "2", name: "Punk #007", collection: "Cyber Punks", value: 80 },
-  ],
-};
+    totalStaked: string;
+    pendingRewards: string;
+    apy: number;
+    stakedValue: number;
+    positions: { pool: string; amount: string; apy: number; rewards: string }[];
+  };
+  nfts: { id: string; name: string; collection: string; value: number }[];
+}
 
 export default function Portfolio() {
   const [stakingOpen, setStakingOpen] = useState(true);
   const [nftsOpen, setNftsOpen] = useState(false);
 
-  const { data: walletInfo } = useQuery<{ balance: string; address: string }>({
-    queryKey: ["/api/wallet/info"],
+  const { data: portfolioData } = useQuery<PortfolioData>({
+    queryKey: ["/api/portfolio"],
   });
 
-  const { data: stakingInfo } = useQuery<{ totalStaked: string; pendingRewards: string }>({
+  const { data: stakingInfo } = useQuery<{ totalStaked: string; pendingRewards: string; positions: any[] }>({
     queryKey: ["/api/staking/info"],
   });
 
-  const portfolio = SAMPLE_PORTFOLIO;
+  const portfolio = portfolioData || {
+    totalValue: 0,
+    change24h: 0,
+    tokens: [],
+    staking: { totalStaked: "0", pendingRewards: "0", apy: 0, stakedValue: 0, positions: [] },
+    nfts: [],
+  };
+  
+  // Use real staking data if available
+  if (stakingInfo) {
+    portfolio.staking.totalStaked = stakingInfo.totalStaked;
+    portfolio.staking.pendingRewards = stakingInfo.pendingRewards;
+    portfolio.staking.positions = stakingInfo.positions || [];
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">

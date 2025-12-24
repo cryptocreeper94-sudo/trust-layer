@@ -42,16 +42,6 @@ interface Position {
   earnedFees: string;
 }
 
-const SAMPLE_POOLS: LiquidityPool[] = [
-  { id: "1", tokenA: "DWT", tokenB: "USDC", reserveA: "10000000", reserveB: "1000000", tvl: "2000000", apr: "45.2", volume24h: "520000", fee: "0.3" },
-  { id: "2", tokenA: "DWT", tokenB: "wETH", reserveA: "5000000", reserveB: "200", tvl: "1500000", apr: "38.7", volume24h: "340000", fee: "0.3" },
-  { id: "3", tokenA: "DWT", tokenB: "wSOL", reserveA: "3000000", reserveB: "15000", tvl: "900000", apr: "52.1", volume24h: "180000", fee: "0.3" },
-  { id: "4", tokenA: "wETH", tokenB: "USDC", reserveA: "100", reserveB: "350000", tvl: "700000", apr: "22.4", volume24h: "95000", fee: "0.3" },
-];
-
-const SAMPLE_POSITIONS: Position[] = [
-  { id: "1", poolId: "1", tokenA: "DWT", tokenB: "USDC", lpTokens: "1500", sharePercent: "0.15", earnedFees: "45.20" },
-];
 
 function PoolCard({ pool, onAddLiquidity }: { pool: LiquidityPool; onAddLiquidity: () => void }) {
   const [expanded, setExpanded] = useState(false);
@@ -180,8 +170,8 @@ export default function Liquidity() {
     queryKey: ["/api/liquidity/positions"],
   });
 
-  const pools = poolsData?.pools?.length ? poolsData.pools : SAMPLE_POOLS;
-  const positions = positionsData?.positions?.length ? positionsData.positions : SAMPLE_POSITIONS;
+  const pools = poolsData?.pools || [];
+  const positions = positionsData?.positions || [];
 
   const addLiquidityMutation = useMutation({
     mutationFn: async () => {

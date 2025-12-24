@@ -4,7 +4,7 @@ import crypto from "crypto";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { db } from "./db";
-import { sql } from "drizzle-orm";
+import { sql, eq } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
 import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, APP_VERSION } from "@shared/schema";
@@ -3213,6 +3213,52 @@ ${context ? `- Additional context: ${context}` : ""}`;
   });
 
   // ============================================
+  // PORTFOLIO
+  // ============================================
+
+  app.get("/api/portfolio", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      
+      // Get user's DWT balance from blockchain (or mock for now)
+      const dwtBalance = "1000000000000000000000"; // 1000 DWT placeholder
+      const dwtPrice = 0.0001;
+      const dwtValue = parseFloat(dwtBalance) / 1e18 * dwtPrice;
+      
+      // Get staking positions
+      const positions = await storage.getLiquidityPositions(userId);
+      const stakingValue = positions.reduce((sum, p) => sum + parseFloat(p.lpTokens), 0) * 0.01;
+      
+      // Calculate total value
+      const totalValue = dwtValue + stakingValue;
+      
+      res.json({
+        totalValue,
+        change24h: Math.random() * 10 - 5, // Random for demo
+        tokens: [
+          { symbol: "DWT", name: "DarkWave Token", balance: dwtBalance, value: dwtValue, change: 5.2, icon: "🌊" },
+        ],
+        staking: {
+          totalStaked: positions.reduce((sum, p) => (BigInt(sum) + BigInt(p.lpTokens)).toString(), "0"),
+          pendingRewards: "0",
+          apy: 12.5,
+          stakedValue: stakingValue,
+          positions: positions.map(p => ({
+            pool: `Pool ${p.poolId}`,
+            amount: p.lpTokens,
+            apy: 15.0,
+            rewards: p.earnedFees,
+          })),
+        },
+        nfts: [],
+      });
+    } catch (error) {
+      console.error("Portfolio error:", error);
+      res.status(500).json({ error: "Failed to get portfolio" });
+    }
+  });
+
+  // ============================================
   // TESTNET FAUCET
   // ============================================
   
@@ -3391,33 +3437,89 @@ ${context ? `- Additional context: ${context}` : ""}`;
 
   app.get("/api/liquidity/pools", async (req, res) => {
     try {
-      res.json({ pools: [] });
+      let pools = await storage.getLiquidityPools();
+      
+      // Seed default pools if none exist
+      if (pools.length === 0) {
+        const defaultPools = [
+          { tokenA: "DWT", tokenB: "USDC", reserveA: "10000000", reserveB: "1000000", tvl: "2000000", apr: "45.2", volume24h: "520000", fee: "0.3" },
+          { tokenA: "DWT", tokenB: "wETH", reserveA: "5000000", reserveB: "200", tvl: "1500000", apr: "38.7", volume24h: "340000", fee: "0.3" },
+          { tokenA: "DWT", tokenB: "wSOL", reserveA: "3000000", reserveB: "15000", tvl: "900000", apr: "52.1", volume24h: "180000", fee: "0.3" },
+          { tokenA: "wETH", tokenB: "USDC", reserveA: "100", reserveB: "350000", tvl: "700000", apr: "22.4", volume24h: "95000", fee: "0.3" },
+        ];
+        for (const pool of defaultPools) {
+          await storage.createLiquidityPool(pool);
+        }
+        pools = await storage.getLiquidityPools();
+      }
+      
+      res.json({ pools });
     } catch (error) {
       console.error("Liquidity pools error:", error);
       res.json({ pools: [] });
     }
   });
 
-  app.get("/api/liquidity/positions", async (req, res) => {
+  app.get("/api/liquidity/positions", isAuthenticated, async (req: any, res) => {
     try {
-      res.json({ positions: [] });
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const positions = await storage.getLiquidityPositions(userId);
+      
+      // Enrich with pool info
+      const enrichedPositions = await Promise.all(positions.map(async (pos) => {
+        const pool = await storage.getLiquidityPool(pos.poolId);
+        return {
+          ...pos,
+          tokenA: pool?.tokenA || "?",
+          tokenB: pool?.tokenB || "?",
+          sharePercent: pool?.totalLpTokens && BigInt(pool.totalLpTokens) > BigInt(0)
+            ? ((BigInt(pos.lpTokens) * BigInt(10000)) / BigInt(pool.totalLpTokens)).toString()
+            : "0",
+        };
+      }));
+      
+      res.json({ positions: enrichedPositions });
     } catch (error) {
       console.error("Liquidity positions error:", error);
       res.json({ positions: [] });
     }
   });
 
-  app.post("/api/liquidity/add", async (req, res) => {
+  app.post("/api/liquidity/add", isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user?.id || req.user?.claims?.sub;
       const { poolId, amountA, amountB } = req.body;
-      res.json({
-        success: true,
-        position: {
-          id: crypto.randomUUID(),
-          poolId,
-          lpTokens: Math.floor(Math.sqrt(parseFloat(amountA || "0") * parseFloat(amountB || "0"))).toString(),
-        }
+      
+      if (!poolId || !amountA || !amountB) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+      
+      const pool = await storage.getLiquidityPool(poolId);
+      if (!pool) {
+        return res.status(404).json({ error: "Pool not found" });
+      }
+      
+      // Calculate LP tokens (simplified sqrt formula)
+      const lpTokens = Math.floor(Math.sqrt(parseFloat(amountA) * parseFloat(amountB))).toString();
+      
+      // Create position
+      const position = await storage.createLiquidityPosition({
+        userId,
+        poolId,
+        lpTokens,
+        tokenADeposited: amountA,
+        tokenBDeposited: amountB,
+        earnedFees: "0",
       });
+      
+      // Update pool reserves
+      await storage.updateLiquidityPool(poolId, {
+        reserveA: (BigInt(pool.reserveA) + BigInt(amountA)).toString(),
+        reserveB: (BigInt(pool.reserveB) + BigInt(amountB)).toString(),
+        totalLpTokens: (BigInt(pool.totalLpTokens) + BigInt(lpTokens)).toString(),
+      });
+      
+      res.json({ success: true, position });
     } catch (error: any) {
       console.error("Add liquidity error:", error);
       res.status(500).json({ error: error.message || "Failed to add liquidity" });
@@ -3444,13 +3546,50 @@ ${context ? `- Additional context: ${context}` : ""}`;
 
   app.get("/api/charts/stats", async (req, res) => {
     try {
+      // Get recent price history
+      const history = await storage.getPriceHistory("DWT", 24);
+      
+      // If no history, seed some initial data
+      if (history.length === 0) {
+        const now = Date.now();
+        for (let i = 24; i >= 0; i--) {
+          const basePrice = 0.000124;
+          const variation = (Math.random() - 0.5) * 0.00002;
+          await storage.recordPrice({
+            token: "DWT",
+            price: (basePrice + variation).toFixed(8),
+            volume: Math.floor(Math.random() * 100000 + 50000).toString(),
+            marketCap: "12400000",
+            timestamp: new Date(now - i * 3600000),
+          });
+        }
+      }
+      
+      const latestHistory = await storage.getPriceHistory("DWT", 24);
+      const current = latestHistory[0];
+      const oldest = latestHistory[latestHistory.length - 1];
+      
+      const currentPrice = parseFloat(current?.price || "0.000124");
+      const oldPrice = parseFloat(oldest?.price || String(currentPrice));
+      const change = oldPrice > 0 ? ((currentPrice - oldPrice) / oldPrice * 100).toFixed(1) : "0";
+      
+      const prices = latestHistory.map(h => parseFloat(h.price));
+      const high = Math.max(...prices).toFixed(6);
+      const low = Math.min(...prices).toFixed(6);
+      const totalVolume = latestHistory.reduce((sum, h) => sum + parseInt(h.volume || "0"), 0);
+      
       res.json({
-        price: "0.000124",
-        change24h: "+12.4",
-        volume24h: "2,450,000",
+        price: currentPrice.toFixed(6),
+        change24h: change,
+        volume24h: totalVolume.toLocaleString(),
         marketCap: "12,400,000",
-        high24h: "0.000135",
-        low24h: "0.000108",
+        high24h: high,
+        low24h: low,
+        history: latestHistory.map(h => ({
+          timestamp: h.timestamp,
+          price: h.price,
+          volume: h.volume,
+        })),
       });
     } catch (error) {
       console.error("Charts stats error:", error);
@@ -3462,35 +3601,48 @@ ${context ? `- Additional context: ${context}` : ""}`;
   // WEBHOOKS
   // ============================================
 
-  app.get("/api/webhooks", async (req, res) => {
+  app.get("/api/webhooks", isAuthenticated, async (req: any, res) => {
     try {
-      res.json({ webhooks: [] });
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const webhooks = await storage.getWebhooks(userId);
+      res.json({ webhooks });
     } catch (error) {
       console.error("Webhooks error:", error);
       res.json({ webhooks: [] });
     }
   });
 
-  app.post("/api/webhooks", async (req, res) => {
+  app.post("/api/webhooks", isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user?.id || req.user?.claims?.sub;
       const { url, events } = req.body;
       if (!url || !events?.length) {
         return res.status(400).json({ error: "URL and events are required" });
       }
-      res.json({
-        success: true,
-        webhook: {
-          id: crypto.randomUUID(),
-          url,
-          events,
-          secret: `whsec_${crypto.randomBytes(16).toString('hex')}`,
-          isActive: true,
-          createdAt: new Date().toISOString(),
-        }
+      
+      const webhook = await storage.createWebhook({
+        userId,
+        url,
+        events: JSON.stringify(events),
+        secret: `whsec_${crypto.randomBytes(16).toString('hex')}`,
+        isActive: true,
+        failureCount: 0,
       });
+      
+      res.json({ success: true, webhook });
     } catch (error: any) {
       console.error("Create webhook error:", error);
       res.status(500).json({ error: error.message || "Failed to create webhook" });
+    }
+  });
+  
+  app.delete("/api/webhooks/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      await storage.deleteWebhook(req.params.id);
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error("Delete webhook error:", error);
+      res.status(500).json({ error: error.message || "Failed to delete webhook" });
     }
   });
 
