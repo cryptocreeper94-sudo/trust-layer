@@ -158,28 +158,32 @@ DarkWave Smart Chain (DSC) is a comprehensive blockchain ecosystem developed by 
 
 ---
 
-## Upgradeability & Governance
+## Governance & Maintenance (INTERNAL DEV DOCS)
 
-### Smart Contract Upgradeability
+> **USER-FACING MESSAGING**: Use terms like "governance-supervised", "continuously maintained", 
+> "security-first operations". NEVER use "upgradeable", "mutable", "can be changed" in user materials.
+> The on-chain token name is neutral: "Wrapped DarkWave Coin" / "wDWC"
+
+### Contract Architecture (Developer Reference Only)
 
 **Ethereum (wDWC.sol)** - UUPS Proxy Pattern
-- Proxy address stays constant forever
-- Implementation can be swapped without affecting balances
+- Contract address stays constant forever - users never need to update wallets
+- Internal improvements can be applied without affecting balances
 - Protected by owner (transfer to multi-sig for production)
-- `VERSION` constant tracks implementation versions
-- Deploy: `npm run deploy:sepolia` | Upgrade: `npm run upgrade:sepolia`
+- `VERSION` constant tracks versions internally
+- Deploy: `npm run deploy:sepolia` | Maintain: `npm run upgrade:sepolia`
 
-**Solana (wdwc-bridge)** - BPF Upgradeable Loader
+**Solana (wdwc-bridge)** - BPF Loader
 - Program ID stays constant
-- All state accounts preserved during upgrades
-- `upgrade_authority` field controls who can upgrade
+- All state accounts preserved during maintenance
+- `upgrade_authority` field controls governance
 - `protocol_version` embedded in all transactions
-- `is_paused` for emergency stops
-- Deploy: `anchor deploy` | Upgrade: `anchor upgrade`
+- `is_paused` for emergency protection
+- Deploy: `anchor deploy` | Maintain: `anchor upgrade`
 
 ### Governance Process (DSCIP)
 
-Future upgrades follow the **DSC Improvement Proposal** process:
+Improvements follow the **DSC Improvement Proposal** process:
 1. **Propose** - Document changes in DSCIP format
 2. **Testnet** - Deploy to testnet, community testing
 3. **Canary** - Limited mainnet deployment (opt-in validators)
@@ -190,8 +194,8 @@ Future upgrades follow the **DSC Improvement Proposal** process:
 
 | Control | Ethereum | Solana |
 |---------|----------|--------|
-| Upgrade Authority | Contract Owner | Program Authority |
-| Pause Mechanism | Not yet | `set_paused()` |
+| Governance Authority | Contract Owner | Program Authority |
+| Emergency Stop | Planned | `set_paused()` |
 | Multi-sig Ready | Transfer ownership | Transfer authority |
 | Version Tracking | `VERSION` constant | `protocol_version` field |
 | Timelock | Add via governance | Add via governance |
@@ -210,7 +214,7 @@ Future upgrades follow the **DSC Improvement Proposal** process:
 ## Changelog
 
 ### December 2024
-- **Upgradeable smart contracts** - UUPS proxy for Ethereum, BPF loader for Solana
+- **Governance-ready smart contracts** - Future-proof architecture for Ethereum and Solana
 - **Protocol versioning** - All transactions embed version for compatibility tracking
 - **DSC/DWC rebrand complete** - Contracts, docs, and UI updated
 - Voice-enabled AI assistant with human-like speech (OpenAI TTS)
