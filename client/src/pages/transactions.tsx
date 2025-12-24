@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { 
   ArrowLeft, History, ArrowUpRight, ArrowDownLeft, RefreshCw,
-  Filter, Search, ChevronDown, ExternalLink, Clock, CheckCircle2
+  Filter, Search, ChevronDown, ExternalLink, Clock, CheckCircle2, Download
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -161,7 +161,7 @@ export default function Transactions() {
               />
             </div>
             <Select value={typeFilter} onValueChange={setTypeFilter}>
-              <SelectTrigger className="w-full sm:w-32 h-10">
+              <SelectTrigger className="w-full sm:w-32 h-10" data-testid="select-filter">
                 <Filter className="w-4 h-4 mr-1" />
                 <SelectValue placeholder="Filter" />
               </SelectTrigger>
@@ -175,6 +175,16 @@ export default function Transactions() {
                 <SelectItem value="bridge">Bridge</SelectItem>
               </SelectContent>
             </Select>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-10 w-10 shrink-0"
+              onClick={() => window.open("/api/transactions/export", "_blank")}
+              title="Export to CSV"
+              data-testid="button-export-csv"
+            >
+              <Download className="w-4 h-4" />
+            </Button>
           </motion.div>
 
           <motion.div

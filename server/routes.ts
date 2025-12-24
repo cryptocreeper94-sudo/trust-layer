@@ -3489,6 +3489,40 @@ Current context:
     }
   });
 
+  // CSV Export for Transaction History
+  app.get("/api/transactions/export", async (req, res) => {
+    try {
+      const transactions = await storage.getTransactionHistory();
+      
+      // Build CSV content
+      const headers = ["Hash", "Type", "From", "To", "Amount", "Token", "Status", "Timestamp"];
+      const csvRows = [headers.join(",")];
+      
+      for (const tx of transactions) {
+        const row = [
+          tx.hash || "",
+          tx.type || "",
+          tx.from || "",
+          tx.to || "",
+          tx.amount || "",
+          tx.token || "DWC",
+          tx.status || "",
+          tx.timestamp ? new Date(tx.timestamp).toISOString() : "",
+        ].map(field => `"${String(field).replace(/"/g, '""')}"`);
+        csvRows.push(row.join(","));
+      }
+      
+      const csv = csvRows.join("\n");
+      
+      res.setHeader("Content-Type", "text/csv");
+      res.setHeader("Content-Disposition", `attachment; filename="darkwave-transactions-${Date.now()}.csv"`);
+      res.send(csv);
+    } catch (error) {
+      console.error("Transaction export error:", error);
+      res.status(500).json({ error: "Failed to export transactions" });
+    }
+  });
+
   // ============================================
   // NFT MARKETPLACE
   // ============================================
