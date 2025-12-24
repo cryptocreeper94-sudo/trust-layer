@@ -171,33 +171,32 @@ export function WalletButton() {
 
       <AnimatePresence>
         {showModal && (
-          <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+          <>
+            <div 
+              className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm"
               onClick={() => setShowModal(false)}
             />
+            <div className="fixed inset-x-0 bottom-0 z-[101] sm:inset-0 sm:flex sm:items-center sm:justify-center sm:p-4">
+              <motion.div
+                initial={{ opacity: 0, y: 300 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 300 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                className="w-full max-w-sm mx-auto bg-background border border-white/10 rounded-t-2xl sm:rounded-2xl p-5 shadow-2xl"
+                style={{ maxHeight: "80vh", overflowY: "auto" }}
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-bold text-white">Connect Wallet</h2>
+                  <button
+                    onClick={() => setShowModal(false)}
+                    className="p-2 -mr-2 text-muted-foreground hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                    data-testid="button-close-wallet-modal"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 100 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 100 }}
-              className="relative w-full max-w-sm bg-background border border-white/10 rounded-t-2xl sm:rounded-2xl p-5 shadow-2xl max-h-[85vh] overflow-y-auto"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-bold text-white">Connect Wallet</h2>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="p-2 -mr-2 text-muted-foreground hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-                  data-testid="button-close-wallet-modal"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              <p className="text-muted-foreground text-xs mb-4">Choose your wallet to connect to DarkWave Chain</p>
+                <p className="text-muted-foreground text-xs mb-4">Choose your wallet to connect to DarkWave Chain</p>
 
               {error && (
                 <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-xs">
@@ -277,6 +276,7 @@ export function WalletButton() {
               </div>
             </motion.div>
           </div>
+          </>
         )}
       </AnimatePresence>
     </>
