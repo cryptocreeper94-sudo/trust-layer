@@ -188,7 +188,7 @@ export function WalletButton() {
               style={{
                 position: 'fixed',
                 left: '50%',
-                top: 'calc(50% + 140px)',
+                top: 'calc(50% + 220px)',
                 transform: 'translate(-50%, -50%)',
                 width: 'calc(100% - 32px)',
                 maxWidth: '380px',
