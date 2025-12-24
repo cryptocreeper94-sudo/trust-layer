@@ -82,7 +82,7 @@ export default function NetworkStats() {
             />
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
             <GlassCard glow data-testid="stat-tps">
               <div className="p-4">
                 <div className="flex items-center justify-between mb-2">
@@ -99,7 +99,7 @@ export default function NetworkStats() {
                   key={tps.value}
                   initial={{ scale: 1.1, opacity: 0.5 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="text-3xl font-bold font-mono text-primary"
+                  className="text-2xl sm:text-3xl font-bold font-mono text-primary tracking-tight truncate"
                 >
                   {tps.value.toLocaleString()}
                 </motion.div>
@@ -107,39 +107,39 @@ export default function NetworkStats() {
               </div>
             </GlassCard>
 
-            <GlassCard data-testid="stat-block-time">
+            <GlassCard glow data-testid="stat-block-time">
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Clock className="w-4 h-4 text-secondary" />
                   <span className="text-xs text-muted-foreground">Block Time</span>
                 </div>
-                <div className="text-3xl font-bold font-mono text-secondary">
+                <div className="text-2xl sm:text-3xl font-bold font-mono text-secondary tracking-tight">
                   {blockTime.toFixed(0)}
                 </div>
                 <div className="text-[10px] text-muted-foreground">milliseconds</div>
               </div>
             </GlassCard>
 
-            <GlassCard data-testid="stat-validators">
+            <GlassCard glow data-testid="stat-validators">
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Server className="w-4 h-4 text-purple-400" />
                   <span className="text-xs text-muted-foreground">Validators</span>
                 </div>
-                <div className="text-3xl font-bold font-mono text-purple-400">
+                <div className="text-2xl sm:text-3xl font-bold font-mono text-purple-400 tracking-tight">
                   {activeValidators}
                 </div>
                 <div className="text-[10px] text-muted-foreground">active nodes</div>
               </div>
             </GlassCard>
 
-            <GlassCard data-testid="stat-network-load">
+            <GlassCard glow data-testid="stat-network-load">
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Cpu className="w-4 h-4 text-amber-400" />
                   <span className="text-xs text-muted-foreground">Network Load</span>
                 </div>
-                <div className="text-3xl font-bold font-mono text-amber-400">
+                <div className="text-2xl sm:text-3xl font-bold font-mono text-amber-400 tracking-tight">
                   {networkLoad}%
                 </div>
                 <div className="text-[10px] text-muted-foreground">capacity used</div>
@@ -148,11 +148,11 @@ export default function NetworkStats() {
           </div>
 
           <GlassCard glow className="mb-6" data-testid="chart-tps">
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-4">
+            <div className="p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                 <div className="flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5 text-primary" />
-                  <h3 className="font-bold">TPS Heatmap (Last 60 Samples)</h3>
+                  <BarChart3 className="w-5 h-5 text-primary shrink-0" />
+                  <h3 className="font-bold text-sm sm:text-base">TPS Heatmap (Last 60 Samples)</h3>
                 </div>
                 <div className="flex items-center gap-4 text-xs">
                   <div className="flex items-center gap-1">

@@ -111,23 +111,23 @@ export default function Quests() {
                   })()}
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-                  <div className="bg-white/5 rounded-xl p-3 text-center">
-                    <div className="text-2xl font-bold text-primary">{currentLevel}</div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 mb-4">
+                  <div className="bg-[rgba(12,18,36,0.65)] backdrop-blur-xl border border-white/[0.08] rounded-xl p-3 text-center shadow-[0_0_20px_rgba(0,255,255,0.1)]">
+                    <div className="text-xl sm:text-2xl font-bold text-primary tracking-tight">{currentLevel}</div>
                     <div className="text-[10px] text-muted-foreground uppercase">Level</div>
                   </div>
-                  <div className="bg-white/5 rounded-xl p-3 text-center">
-                    <div className="text-2xl font-bold text-amber-400">{userXp.toLocaleString()}</div>
+                  <div className="bg-[rgba(12,18,36,0.65)] backdrop-blur-xl border border-white/[0.08] rounded-xl p-3 text-center shadow-[0_0_20px_rgba(251,191,36,0.1)]">
+                    <div className="text-xl sm:text-2xl font-bold text-amber-400 tracking-tight">{userXp.toLocaleString()}</div>
                     <div className="text-[10px] text-muted-foreground uppercase">Total XP</div>
                   </div>
-                  <div className="bg-white/5 rounded-xl p-3 text-center">
-                    <div className="text-2xl font-bold text-purple-400">{currentTier.name}</div>
+                  <div className="bg-[rgba(12,18,36,0.65)] backdrop-blur-xl border border-white/[0.08] rounded-xl p-3 text-center shadow-[0_0_20px_rgba(168,85,247,0.1)]">
+                    <div className="text-xl sm:text-2xl font-bold text-purple-400 tracking-tight truncate">{currentTier.name}</div>
                     <div className="text-[10px] text-muted-foreground uppercase">Tier</div>
                   </div>
-                  <div className="bg-white/5 rounded-xl p-3 text-center">
+                  <div className="bg-[rgba(12,18,36,0.65)] backdrop-blur-xl border border-white/[0.08] rounded-xl p-3 text-center shadow-[0_0_20px_rgba(251,146,60,0.1)]">
                     <div className="flex items-center justify-center gap-1">
-                      <Flame className="w-5 h-5 text-orange-400" />
-                      <span className="text-2xl font-bold text-orange-400">{streakDays}</span>
+                      <Flame className="w-4 sm:w-5 h-4 sm:h-5 text-orange-400" />
+                      <span className="text-xl sm:text-2xl font-bold text-orange-400 tracking-tight">{streakDays}</span>
                     </div>
                     <div className="text-[10px] text-muted-foreground uppercase">Day Streak</div>
                   </div>
@@ -143,10 +143,10 @@ export default function Quests() {
               </div>
             </GlassCard>
 
-            <GlassCard>
-              <div className="p-6">
-                <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                  <Trophy className="w-5 h-5 text-amber-400" /> Tier Benefits
+            <GlassCard glow>
+              <div className="p-4 sm:p-6">
+                <h3 className="text-base sm:text-lg font-bold mb-4 flex items-center gap-2">
+                  <Trophy className="w-5 h-5 text-amber-400 shrink-0" /> Tier Benefits
                 </h3>
                 <div className="space-y-3">
                   {TIERS.map((tier, i) => {
@@ -174,16 +174,16 @@ export default function Quests() {
             </GlassCard>
           </div>
 
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="bg-white/5 border border-white/10" data-testid="tabs-quests">
-              <TabsTrigger value="quests" className="data-[state=active]:bg-white/10" data-testid="tab-quests">
-                <Target className="w-4 h-4 mr-2" /> Quests
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
+            <TabsList className="bg-white/5 border border-white/10 w-full sm:w-auto flex-wrap" data-testid="tabs-quests">
+              <TabsTrigger value="quests" className="data-[state=active]:bg-white/10 text-xs sm:text-sm flex-1 sm:flex-initial" data-testid="tab-quests">
+                <Target className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-2" /> Quests
               </TabsTrigger>
-              <TabsTrigger value="missions" className="data-[state=active]:bg-white/10" data-testid="tab-missions">
-                <Sparkles className="w-4 h-4 mr-2" /> Protocol Missions
+              <TabsTrigger value="missions" className="data-[state=active]:bg-white/10 text-xs sm:text-sm flex-1 sm:flex-initial" data-testid="tab-missions">
+                <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-2" /> Missions
               </TabsTrigger>
-              <TabsTrigger value="leaderboard" className="data-[state=active]:bg-white/10" data-testid="tab-leaderboard">
-                <Trophy className="w-4 h-4 mr-2" /> Leaderboard
+              <TabsTrigger value="leaderboard" className="data-[state=active]:bg-white/10 text-xs sm:text-sm flex-1 sm:flex-initial" data-testid="tab-leaderboard">
+                <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-2" /> Ranks
               </TabsTrigger>
             </TabsList>
 
