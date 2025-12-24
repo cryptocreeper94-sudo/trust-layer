@@ -175,7 +175,7 @@ export function GenesisHallmarkCard() {
                   <motion.img
                     src={darkwaveLogo}
                     alt="DarkWave Token"
-                    className="w-32 h-32 relative z-10 drop-shadow-2xl object-contain"
+                    className="w-48 h-48 relative z-10 drop-shadow-2xl object-contain"
                     animate={{
                       scale: isHovered ? 1.05 : 1,
                     }}
