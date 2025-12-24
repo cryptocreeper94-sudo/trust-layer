@@ -605,6 +605,36 @@ export const chainConfig = pgTable("chain_config", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+// Validators for Proof-of-Authority consensus
+export const chainValidators = pgTable("chain_validators", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  address: text("address").notNull().unique(),
+  name: text("name").notNull(),
+  description: text("description"),
+  status: text("status").notNull().default("active"), // active, inactive, suspended
+  stake: text("stake").notNull().default("0"),
+  blocksProduced: text("blocks_produced").notNull().default("0"),
+  lastBlockAt: timestamp("last_block_at"),
+  commission: text("commission").notNull().default("5"), // percentage
+  uptime: text("uptime").notNull().default("100"),
+  isFounder: boolean("is_founder").notNull().default(false),
+  addedBy: text("added_by"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChainValidatorSchema = createInsertSchema(chainValidators).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  blocksProduced: true,
+  lastBlockAt: true,
+  uptime: true,
+});
+
+export type InsertChainValidator = z.infer<typeof insertChainValidatorSchema>;
+export type ChainValidator = typeof chainValidators.$inferSelect;
+
 // Cross-Chain Bridge Tables (Phase 1 - MVP Custodial Bridge)
 
 export const bridgeLocks = pgTable("bridge_locks", {

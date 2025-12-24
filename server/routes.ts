@@ -559,6 +559,73 @@ export async function registerRoutes(
     }
   });
 
+  // Validator management endpoints
+  app.get("/api/validators", async (req, res) => {
+    try {
+      const validators = blockchain.getValidators();
+      res.json({
+        validators,
+        totalValidators: validators.length,
+        activeValidators: validators.filter(v => v.status === "active").length,
+      });
+    } catch (error) {
+      console.error("Error fetching validators:", error);
+      res.status(500).json({ error: "Failed to fetch validators" });
+    }
+  });
+
+  app.post("/api/validators", isAuthenticated, async (req, res) => {
+    try {
+      const { address, name, description, stake } = req.body;
+      
+      if (!address || !name) {
+        return res.status(400).json({ error: "address and name are required" });
+      }
+
+      // Validate address format
+      if (!address.startsWith("0x") || address.length !== 42) {
+        return res.status(400).json({ error: "Invalid wallet address format" });
+      }
+
+      const validator = await blockchain.addValidator(address, name, description, stake);
+      
+      if (!validator) {
+        return res.status(500).json({ error: "Failed to add validator" });
+      }
+
+      res.status(201).json({
+        success: true,
+        message: `Validator "${name}" added successfully`,
+        validator,
+      });
+    } catch (error: any) {
+      console.error("Error adding validator:", error);
+      if (error.message?.includes("duplicate")) {
+        return res.status(409).json({ error: "Validator with this address already exists" });
+      }
+      res.status(500).json({ error: "Failed to add validator" });
+    }
+  });
+
+  app.delete("/api/validators/:id", isAuthenticated, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const success = await blockchain.removeValidator(id);
+      
+      if (!success) {
+        return res.status(404).json({ error: "Validator not found" });
+      }
+
+      res.json({
+        success: true,
+        message: "Validator deactivated successfully",
+      });
+    } catch (error) {
+      console.error("Error removing validator:", error);
+      res.status(500).json({ error: "Failed to remove validator" });
+    }
+  });
+
   app.get("/api/block/latest", async (req, res) => {
     try {
       const block = blockchain.getLatestBlock();

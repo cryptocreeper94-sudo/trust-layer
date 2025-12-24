@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { db } from "./db";
-import { chainBlocks, chainTransactions, chainAccounts, chainConfig } from "@shared/schema";
-import { eq, desc, sql } from "drizzle-orm";
+import { chainBlocks, chainTransactions, chainAccounts, chainConfig, chainValidators } from "@shared/schema";
+import { eq, desc, sql, and } from "drizzle-orm";
 
 export interface BlockHeader {
   height: number;
@@ -59,6 +59,16 @@ const LP_TAX_SHARE = BigInt(2); // 2% of 5%
 const TAX_DENOMINATOR = BigInt(100);
 const LP_POOL_ADDRESS = "0x" + "1".repeat(40); // Liquidity pool address
 
+export interface Validator {
+  id: string;
+  address: string;
+  name: string;
+  status: string;
+  stake: string;
+  blocksProduced: number;
+  isFounder: boolean;
+}
+
 export class DarkWaveBlockchain {
   private config: ChainConfig;
   private blocks: Map<number, Block> = new Map();
@@ -70,6 +80,8 @@ export class DarkWaveBlockchain {
   private totalTransactions: number = 0;
   private isInitialized: boolean = false;
   private initPromise: Promise<void> | null = null;
+  private activeValidators: Validator[] = [];
+  private currentValidatorIndex: number = 0;
 
   constructor() {
     this.config = {
@@ -187,13 +199,17 @@ export class DarkWaveBlockchain {
         console.log(`[DarkWave Mainnet] Loaded ${this.blocks.size} blocks, ${this.accounts.size} accounts`);
         console.log(`[DarkWave Mainnet] Chain height: ${this.latestHeight}`);
         console.log(`[DarkWave Mainnet] Total transactions: ${this.totalTransactions}`);
+        
+        await this.loadValidators();
       } else {
         console.log(`[DarkWave Mainnet] No existing state found, creating genesis...`);
         await this.initGenesis();
+        await this.loadValidators();
       }
     } catch (error) {
       console.error("[DarkWave Mainnet] Failed to load state:", error);
       await this.initGenesis();
+      await this.loadValidators();
     }
   }
 
@@ -228,6 +244,151 @@ export class DarkWaveBlockchain {
     console.log(`[DarkWave Mainnet] Treasury: ${this.treasuryAddress}`);
     console.log(`[DarkWave Mainnet] Total Supply: 100,000,000 DWT`);
     console.log(`[DarkWave Mainnet] Network: MAINNET`);
+  }
+
+  private async loadValidators(): Promise<void> {
+    try {
+      const validators = await db.select()
+        .from(chainValidators)
+        .where(eq(chainValidators.status, "active"));
+      
+      this.activeValidators = validators.map(v => ({
+        id: v.id,
+        address: v.address,
+        name: v.name,
+        status: v.status,
+        stake: v.stake,
+        blocksProduced: parseInt(v.blocksProduced),
+        isFounder: v.isFounder,
+      }));
+      
+      // If no validators, add the treasury as a default validator
+      if (this.activeValidators.length === 0) {
+        this.activeValidators = [{
+          id: "founder",
+          address: this.treasuryAddress,
+          name: "Founders Validator",
+          status: "active",
+          stake: "10000000000000000000000000",
+          blocksProduced: 0,
+          isFounder: true,
+        }];
+      }
+      
+      console.log(`[DarkWave Mainnet] Loaded ${this.activeValidators.length} active validator(s)`);
+    } catch (error) {
+      console.error("[DarkWave] Failed to load validators:", error);
+      // Default to treasury as validator
+      this.activeValidators = [{
+        id: "founder",
+        address: this.treasuryAddress,
+        name: "Founders Validator",
+        status: "active",
+        stake: "10000000000000000000000000",
+        blocksProduced: 0,
+        isFounder: true,
+      }];
+    }
+  }
+
+  private getNextValidator(): Validator {
+    if (this.activeValidators.length === 0) {
+      return {
+        id: "founder",
+        address: this.treasuryAddress,
+        name: "Founders Validator",
+        status: "active",
+        stake: "10000000000000000000000000",
+        blocksProduced: 0,
+        isFounder: true,
+      };
+    }
+    
+    // Round-robin selection
+    const validator = this.activeValidators[this.currentValidatorIndex];
+    this.currentValidatorIndex = (this.currentValidatorIndex + 1) % this.activeValidators.length;
+    return validator;
+  }
+
+  private async updateValidatorBlockCount(validatorId: string): Promise<void> {
+    // Skip if it's the fallback founder ID (not a real DB record)
+    if (validatorId === "founder") return;
+    
+    try {
+      // blocksProduced is a TEXT column, so cast back to TEXT
+      await db.update(chainValidators)
+        .set({
+          blocksProduced: sql`CAST(CAST(${chainValidators.blocksProduced} AS INTEGER) + 1 AS TEXT)`,
+          lastBlockAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .where(eq(chainValidators.id, validatorId));
+      
+      // Update in-memory count too
+      const validator = this.activeValidators.find(v => v.id === validatorId);
+      if (validator) {
+        validator.blocksProduced++;
+      }
+    } catch (error) {
+      console.error("[DarkWave] Failed to update validator block count:", error);
+    }
+  }
+
+  public getValidators(): Validator[] {
+    return this.activeValidators;
+  }
+
+  public async addValidator(address: string, name: string, description?: string, stake?: string): Promise<Validator | null> {
+    try {
+      const result = await db.insert(chainValidators).values({
+        address,
+        name,
+        description: description || "",
+        stake: stake || "0",
+        status: "active",
+      }).returning();
+      
+      if (result.length > 0) {
+        const newValidator: Validator = {
+          id: result[0].id,
+          address: result[0].address,
+          name: result[0].name,
+          status: result[0].status,
+          stake: result[0].stake,
+          blocksProduced: 0,
+          isFounder: false,
+        };
+        this.activeValidators.push(newValidator);
+        console.log(`[DarkWave Mainnet] Added new validator: ${name} (${address})`);
+        return newValidator;
+      }
+      return null;
+    } catch (error) {
+      console.error("[DarkWave] Failed to add validator:", error);
+      return null;
+    }
+  }
+
+  public async removeValidator(validatorId: string): Promise<boolean> {
+    try {
+      await db.update(chainValidators)
+        .set({ status: "inactive", updatedAt: new Date() })
+        .where(eq(chainValidators.id, validatorId));
+      
+      this.activeValidators = this.activeValidators.filter(v => v.id !== validatorId);
+      
+      // Clamp currentValidatorIndex to prevent out-of-bounds access
+      if (this.activeValidators.length > 0) {
+        this.currentValidatorIndex = this.currentValidatorIndex % this.activeValidators.length;
+      } else {
+        this.currentValidatorIndex = 0;
+      }
+      
+      return true;
+    } catch (error) {
+      console.error("[DarkWave] Failed to remove validator:", error);
+      return false;
+    }
   }
 
   private async persistBlockAtomic(block: Block, affectedAddresses: Set<string>): Promise<void> {
@@ -339,11 +500,14 @@ export class DarkWaveBlockchain {
     const pendingTxs = this.mempool.splice(0, 10000);
     const txHashes = pendingTxs.map(tx => tx.hash);
 
+    // Round-robin validator selection
+    const currentValidator = this.getNextValidator();
+
     const header: BlockHeader = {
       height: this.latestHeight + 1,
       prevHash: prevBlock.hash,
       timestamp: new Date(),
-      validator: this.treasuryAddress,
+      validator: currentValidator.address,
       merkleRoot: this.merkleRoot(txHashes),
     };
 
@@ -365,9 +529,12 @@ export class DarkWaveBlockchain {
     this.totalTransactions += pendingTxs.length;
 
     await this.persistBlockAtomic(block, affectedAddresses);
+    
+    // Update validator's block count
+    this.updateValidatorBlockCount(currentValidator.id);
 
     if (header.height % 250 === 0) {
-      console.log(`[DarkWave Mainnet] Block #${header.height} | ${pendingTxs.length} txs | Hash: ${block.hash.slice(0, 18)}...`);
+      console.log(`[DarkWave Mainnet] Block #${header.height} | ${pendingTxs.length} txs | Validator: ${currentValidator.name} | Hash: ${block.hash.slice(0, 18)}...`);
     }
   }
 
