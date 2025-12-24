@@ -43,3 +43,27 @@ export const passkeys = pgTable("passkeys", {
 
 export type Passkey = typeof passkeys.$inferSelect;
 export type InsertPasskey = typeof passkeys.$inferInsert;
+
+// AI Credits for users - tracks balance for AI assistant usage
+export const userAiCredits = pgTable("user_ai_credits", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id).unique(),
+  balanceCents: varchar("balance_cents").notNull().default("0"), // Credits in cents (100 = $1)
+  totalPurchasedCents: varchar("total_purchased_cents").notNull().default("0"),
+  totalUsedCents: varchar("total_used_cents").notNull().default("0"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export type UserAiCredits = typeof userAiCredits.$inferSelect;
+
+// AI Usage logs for transparency
+export const aiUsageLogs = pgTable("ai_usage_logs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  action: varchar("action").notNull(), // 'chat' or 'tts'
+  costCents: varchar("cost_cents").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export type AiUsageLog = typeof aiUsageLogs.$inferSelect;

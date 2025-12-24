@@ -3403,11 +3403,138 @@ ${context ? `- Additional context: ${context}` : ""}`;
     }
   });
 
-  // AI Assistant TTS - generate human-like speech using OpenAI
+  // =====================================================
+  // STUDIO AI CREDITS - For expensive AI coding features
+  // Basic AI Assistant is FREE (just requires login)
+  // =====================================================
+  
+  const STUDIO_AI_COST_CENTS = 5; // $0.05 per Studio AI call (code completion, AI fixes)
+
+  // Helper: Get or create user AI credits (for Studio AI features)
+  async function getUserCredits(userId: string): Promise<{ balanceCents: number }> {
+    const { userAiCredits } = await import("@shared/schema");
+    const existing = await db.select().from(userAiCredits).where(eq(userAiCredits.userId, userId)).limit(1);
+    if (existing[0]) {
+      return { balanceCents: parseInt(existing[0].balanceCents || "0") };
+    }
+    // Create with 100 cents ($1) free trial for Studio AI
+    await db.insert(userAiCredits).values({ userId, balanceCents: "100" });
+    return { balanceCents: 100 };
+  }
+
+  // Helper: Deduct credits (for Studio AI only)
+  async function deductCredits(userId: string, amount: number, action: string): Promise<boolean> {
+    const { userAiCredits, aiUsageLogs } = await import("@shared/schema");
+    const credits = await getUserCredits(userId);
+    if (credits.balanceCents < amount) return false;
+    
+    await db.update(userAiCredits)
+      .set({ 
+        balanceCents: (credits.balanceCents - amount).toString(),
+        totalUsedCents: sql`(CAST(total_used_cents AS INTEGER) + ${amount})::TEXT`,
+        updatedAt: new Date(),
+      })
+      .where(eq(userAiCredits.userId, userId));
+    
+    await db.insert(aiUsageLogs).values({ userId, action, costCents: amount.toString() });
+    return true;
+  }
+
+  // Get user AI credits balance (for Studio AI features)
+  app.get("/api/assistant/credits", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Login required" });
+      
+      const credits = await getUserCredits(userId);
+      res.json({ 
+        balanceCents: credits.balanceCents,
+        balanceUSD: (credits.balanceCents / 100).toFixed(2),
+        studioAiCost: STUDIO_AI_COST_CENTS,
+        note: "Basic AI Assistant is free! Credits are for Studio AI features.",
+      });
+    } catch (error) {
+      console.error("Get credits error:", error);
+      res.status(500).json({ error: "Failed to get credits" });
+    }
+  });
+
+  // Buy AI credits via Stripe (for Studio AI features)
+  app.post("/api/assistant/buy-credits", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Login required" });
+
+      const { amountCents } = req.body;
+      const amount = parseInt(amountCents) || 500; // Default $5
+
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      
+      const host = req.get("host") || "darkwavechain.io";
+      const protocol = host.includes("localhost") ? "http" : "https";
+      const baseUrl = `${protocol}://${host}`;
+
+      const session = await stripe.checkout.sessions.create({
+        mode: "payment",
+        line_items: [{
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: "DarkWave Studio AI Credits",
+              description: `${amount} credits for Studio AI coding features`,
+            },
+            unit_amount: amount,
+          },
+          quantity: 1,
+        }],
+        success_url: `${baseUrl}/studio?ai_credits_added=${amount}`,
+        cancel_url: `${baseUrl}/studio`,
+        metadata: { userId, amountCents: amount.toString(), type: "studio_ai_credits" },
+      });
+
+      res.json({ checkoutUrl: session.url });
+    } catch (error) {
+      console.error("Buy credits error:", error);
+      res.status(500).json({ error: "Failed to create checkout" });
+    }
+  });
+
+  // Webhook to add credits after payment
+  app.post("/api/assistant/add-credits", async (req, res) => {
+    try {
+      const { userId, amountCents } = req.body;
+      if (!userId || !amountCents) {
+        return res.status(400).json({ error: "userId and amountCents required" });
+      }
+      
+      const { userAiCredits } = await import("@shared/schema");
+      const amount = parseInt(amountCents);
+      
+      await db.update(userAiCredits)
+        .set({ 
+          balanceCents: sql`(CAST(balance_cents AS INTEGER) + ${amount})::TEXT`,
+          totalPurchasedCents: sql`(CAST(total_purchased_cents AS INTEGER) + ${amount})::TEXT`,
+          updatedAt: new Date(),
+        })
+        .where(eq(userAiCredits.userId, userId));
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Add credits error:", error);
+      res.status(500).json({ error: "Failed to add credits" });
+    }
+  });
+
+  // =====================================================
+  // FREE AI ASSISTANT - Basic ecosystem guidance
+  // Just requires login (no credits needed)
+  // =====================================================
+
+  // AI Assistant TTS - FREE with login (low cost, good UX)
   app.post("/api/assistant/speak", async (req, res) => {
     try {
       const { text } = req.body;
-      
       if (!text || typeof text !== "string") {
         return res.status(400).json({ error: "Text is required" });
       }
@@ -3420,7 +3547,7 @@ ${context ? `- Additional context: ${context}` : ""}`;
 
       const mp3 = await openai.audio.speech.create({
         model: "tts-1",
-        voice: "nova", // Natural female voice
+        voice: "nova",
         input: text,
         speed: 1.0,
       });
@@ -3438,11 +3565,10 @@ ${context ? `- Additional context: ${context}` : ""}`;
     }
   });
 
-  // AI Assistant endpoint - simple chat without conversation storage
+  // AI Assistant chat - FREE (basic ecosystem guidance)
   app.post("/api/assistant/chat", async (req, res) => {
     try {
       const { message } = req.body;
-      
       if (!message || typeof message !== "string") {
         return res.status(400).json({ error: "Message is required" });
       }
