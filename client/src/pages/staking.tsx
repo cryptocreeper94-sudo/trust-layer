@@ -289,9 +289,15 @@ export default function Staking() {
                 />
               </span>
             </h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto text-sm md:text-base">
+            <p className="text-muted-foreground max-w-2xl mx-auto text-sm md:text-base mb-4">
               Lock your DWT tokens to earn premium rewards, unlock exclusive perks, complete quests, and climb the global leaderboard.
             </p>
+            <Link href="/liquid-staking">
+              <Button variant="outline" size="sm" className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10" data-testid="button-liquid-staking">
+                💧 Try Liquid Staking (stDWT)
+                <ArrowUpRight className="w-3 h-3 ml-1" />
+              </Button>
+            </Link>
           </motion.div>
 
           {/* Premium Stats Cards */}

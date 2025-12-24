@@ -54,7 +54,11 @@ export default function Portfolio() {
     queryKey: ["/api/staking/info"],
   });
 
-  const portfolio = portfolioData || {
+  const { data: liquidPosition } = useQuery<{ stDwtBalance: string; withdrawableDwt: string; exchangeRate: string }>({
+    queryKey: ["/api/liquid-staking/position"],
+  });
+
+  const basePortfolio = portfolioData || {
     totalValue: 0,
     change24h: 0,
     tokens: [],
@@ -62,12 +66,39 @@ export default function Portfolio() {
     nfts: [],
   };
   
-  // Use real staking data if available
-  if (stakingInfo) {
-    portfolio.staking.totalStaked = stakingInfo.totalStaked;
-    portfolio.staking.pendingRewards = stakingInfo.pendingRewards;
-    portfolio.staking.positions = stakingInfo.positions || [];
+  // Build derived tokens array immutably (don't mutate react-query cache)
+  let derivedTokens = [...basePortfolio.tokens];
+  
+  // Add stDWT to tokens if user has liquid staking position (only if not already present)
+  if (liquidPosition && BigInt(liquidPosition.stDwtBalance || "0") > BigInt(0)) {
+    const hasStDwt = derivedTokens.some(t => t.symbol === "stDWT");
+    if (!hasStDwt) {
+      const dwtEquivalent = Number(BigInt(liquidPosition.withdrawableDwt)) / 1e18;
+      const pricePerDwt = 0.000124;
+      const stDwtValue = dwtEquivalent * pricePerDwt;
+      
+      derivedTokens = [...derivedTokens, {
+        symbol: "stDWT",
+        name: "Staked DarkWave Token",
+        balance: liquidPosition.stDwtBalance,
+        value: stDwtValue,
+        change: basePortfolio.tokens[0]?.change || 0,
+        icon: "💧"
+      }];
+    }
   }
+  
+  // Build immutable portfolio object
+  const portfolio = {
+    ...basePortfolio,
+    tokens: derivedTokens,
+    staking: stakingInfo ? {
+      ...basePortfolio.staking,
+      totalStaked: stakingInfo.totalStaked,
+      pendingRewards: stakingInfo.pendingRewards,
+      positions: stakingInfo.positions || [],
+    } : basePortfolio.staking,
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
