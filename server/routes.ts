@@ -8,7 +8,7 @@ import { db } from "./db";
 import { sql, eq } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, APP_VERSION } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -2333,6 +2333,178 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Crypto verification error:", error);
       res.status(500).json({ error: "Failed to verify crypto payment" });
+    }
+  });
+
+  // ===== Legacy Founder Program Routes =====
+
+  app.get("/api/founder/stats", async (req, res) => {
+    try {
+      const result = await db.execute(sql`
+        SELECT COUNT(*) as total FROM legacy_founders WHERE status IN ('paid', 'airdrop_pending', 'completed')
+      `);
+      const total = Number(result.rows[0]?.total || 0);
+      const maxSpots = 10000;
+      res.json({
+        totalFounders: total,
+        spotsRemaining: Math.max(0, maxSpots - total),
+        maxSpots,
+      });
+    } catch (error) {
+      console.error("Founder stats error:", error);
+      res.json({ totalFounders: 0, spotsRemaining: 10000, maxSpots: 10000 });
+    }
+  });
+
+  app.post("/api/founder/checkout/stripe", async (req, res) => {
+    try {
+      const { email, walletAddress } = req.body;
+      if (!email) {
+        return res.status(400).json({ error: "Email is required" });
+      }
+
+      const existing = await db.select().from(legacyFounders)
+        .where(eq(legacyFounders.email, email))
+        .limit(1);
+      
+      if (existing[0] && existing[0].status !== 'pending') {
+        return res.status(400).json({ error: "You have already joined the Legacy Founder program" });
+      }
+
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+
+      const host = req.get("host") || "darkwavechain.io";
+      const protocol = host.includes("localhost") ? "http" : "https";
+      const baseUrl = `${protocol}://${host}`;
+
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [{
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: "DarkWave Legacy Founder",
+              description: "Lifetime access + 35,000 DWT token airdrop",
+            },
+            unit_amount: 2400,
+          },
+          quantity: 1,
+        }],
+        mode: "payment",
+        success_url: `${baseUrl}/founder-program?success=true&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${baseUrl}/founder-program?canceled=true`,
+        customer_email: email,
+        metadata: { email, walletAddress: walletAddress || "", type: "legacy_founder" },
+      });
+
+      if (!existing[0]) {
+        await db.insert(legacyFounders).values({
+          email,
+          walletAddress: walletAddress || null,
+          paymentMethod: "stripe",
+          paymentId: session.id,
+          status: "pending",
+        });
+      } else {
+        await db.update(legacyFounders)
+          .set({ paymentId: session.id, walletAddress: walletAddress || null })
+          .where(eq(legacyFounders.email, email));
+      }
+
+      res.json({ checkoutUrl: session.url });
+    } catch (error) {
+      console.error("Founder Stripe checkout error:", error);
+      res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  app.post("/api/founder/checkout/crypto", async (req, res) => {
+    try {
+      const { email, walletAddress } = req.body;
+      if (!email) {
+        return res.status(400).json({ error: "Email is required" });
+      }
+
+      const existing = await db.select().from(legacyFounders)
+        .where(eq(legacyFounders.email, email))
+        .limit(1);
+      
+      if (existing[0] && existing[0].status !== 'pending') {
+        return res.status(400).json({ error: "You have already joined the Legacy Founder program" });
+      }
+
+      const host = req.get("host") || "darkwavechain.io";
+      const protocol = host.includes("localhost") ? "http" : "https";
+      const baseUrl = `${protocol}://${host}`;
+
+      const { createCoinbaseCharge } = await import("./coinbaseClient");
+      const charge = await createCoinbaseCharge({
+        name: "DarkWave Legacy Founder",
+        description: "Lifetime access + 35,000 DWT token airdrop",
+        amountUsd: "24.00",
+        successUrl: `${baseUrl}/founder-program?success=true&coinbase_charge={CHECKOUT_ID}`,
+        cancelUrl: `${baseUrl}/founder-program?canceled=true`,
+        metadata: { email, walletAddress: walletAddress || "", type: "legacy_founder" },
+      });
+
+      if (!existing[0]) {
+        await db.insert(legacyFounders).values({
+          email,
+          walletAddress: walletAddress || null,
+          paymentMethod: "coinbase",
+          paymentId: charge.id,
+          status: "pending",
+        });
+      } else {
+        await db.update(legacyFounders)
+          .set({ paymentId: charge.id, paymentMethod: "coinbase", walletAddress: walletAddress || null })
+          .where(eq(legacyFounders.email, email));
+      }
+
+      res.json({ checkoutUrl: charge.hostedUrl });
+    } catch (error) {
+      console.error("Founder Coinbase checkout error:", error);
+      res.status(500).json({ error: "Failed to create crypto checkout" });
+    }
+  });
+
+  app.get("/api/founder/verify", async (req, res) => {
+    try {
+      const sessionId = req.query.session_id as string;
+      const chargeId = req.query.charge_id as string;
+
+      if (sessionId) {
+        const { getUncachableStripeClient } = await import("./stripeClient");
+        const stripe = await getUncachableStripeClient();
+        const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+        if (session.payment_status === "paid" && session.metadata?.email) {
+          await db.update(legacyFounders)
+            .set({ status: "paid", paidAt: new Date() })
+            .where(eq(legacyFounders.email, session.metadata.email));
+          
+          return res.json({ success: true, message: "Welcome to the Legacy Founder program!" });
+        }
+      }
+
+      if (chargeId) {
+        const { getCoinbaseCharge } = await import("./coinbaseClient");
+        const charge = await getCoinbaseCharge(chargeId);
+
+        if ((charge.status === "COMPLETED" || charge.status === "CONFIRMED") && charge.metadata?.email) {
+          await db.update(legacyFounders)
+            .set({ status: "paid", paidAt: new Date() })
+            .where(eq(legacyFounders.email, charge.metadata.email));
+          
+          return res.json({ success: true, message: "Welcome to the Legacy Founder program!" });
+        }
+      }
+
+      res.json({ success: false, message: "Payment verification pending" });
+    } catch (error) {
+      console.error("Founder verification error:", error);
+      res.status(500).json({ error: "Failed to verify payment" });
     }
   });
 

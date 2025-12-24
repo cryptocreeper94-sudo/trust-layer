@@ -205,11 +205,12 @@ export default function Token() {
                   Distribution
                 </h3>
                 <div className="space-y-4">
-                  <DistributionItem label="Community Rewards" percent="40%" color="bg-primary" desc="Staking, airdrops, early adopters" />
-                  <DistributionItem label="Ecosystem Treasury" percent="25%" color="bg-secondary" desc="Grants, partnerships, development" />
-                  <DistributionItem label="Team & Advisors" percent="15%" color="bg-purple-500" desc="6-month cliff, 18-month unlock" />
-                  <DistributionItem label="Validators" percent="10%" color="bg-blue-500" desc="Network security incentives" />
-                  <DistributionItem label="Strategic Reserve" percent="10%" color="bg-amber-500" desc="Market operations, listings" />
+                  <DistributionItem label="Public Sale" percent="40%" color="bg-primary" desc="Fair launch, no vesting" />
+                  <DistributionItem label="Development" percent="20%" color="bg-secondary" desc="Unlocked as needed for ecosystem growth" />
+                  <DistributionItem label="Team & Advisors" percent="15%" color="bg-purple-500" desc="6-month cliff, 12-month vesting" />
+                  <DistributionItem label="Marketing" percent="10%" color="bg-amber-500" desc="Partnerships, community airdrops" />
+                  <DistributionItem label="Liquidity Pool" percent="10%" color="bg-blue-500" desc="Locked in DEX for price stability" />
+                  <DistributionItem label="Reserve" percent="5%" color="bg-emerald-500" desc="12-month lock for emergencies" />
                 </div>
               </div>
             </GlassCard>
@@ -343,26 +344,26 @@ export default function Token() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <GlassCard hover={false}>
               <div className="p-4 text-center">
-                <div className="text-2xl font-bold text-primary mb-1">0.25%</div>
-                <div className="text-xs text-muted-foreground">DEX Swap Fees</div>
+                <div className="text-2xl font-bold text-green-400 mb-1">0%</div>
+                <div className="text-xs text-muted-foreground">Buy Tax</div>
               </div>
             </GlassCard>
             <GlassCard hover={false}>
               <div className="p-4 text-center">
-                <div className="text-2xl font-bold text-secondary mb-1">0.1%</div>
-                <div className="text-xs text-muted-foreground">Bridge Fees</div>
+                <div className="text-2xl font-bold text-primary mb-1">5%</div>
+                <div className="text-xs text-muted-foreground">Sell/Transfer Tax</div>
               </div>
             </GlassCard>
             <GlassCard hover={false}>
               <div className="p-4 text-center">
-                <div className="text-2xl font-bold text-purple-400 mb-1">2.5%</div>
-                <div className="text-xs text-muted-foreground">NFT Marketplace</div>
+                <div className="text-2xl font-bold text-secondary mb-1">3%</div>
+                <div className="text-xs text-muted-foreground">→ Treasury</div>
               </div>
             </GlassCard>
             <GlassCard hover={false}>
               <div className="p-4 text-center">
-                <div className="text-2xl font-bold text-amber-400 mb-1">5%</div>
-                <div className="text-xs text-muted-foreground">Staking Protocol</div>
+                <div className="text-2xl font-bold text-blue-400 mb-1">2%</div>
+                <div className="text-xs text-muted-foreground">→ Liquidity Pool</div>
               </div>
             </GlassCard>
           </div>
@@ -381,10 +382,35 @@ export default function Token() {
                 <ShieldCheck className="w-4 h-4 text-blue-400" /> Vesting & Lockups
               </h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Team tokens are locked with a 6-month cliff and 18-month linear vesting. This ensures long-term alignment and prevents early dumping by insiders.
+                Team tokens are locked with a 6-month cliff and 12-month linear vesting. This ensures long-term alignment and prevents early dumping by insiders.
               </p>
             </GlassCard>
           </div>
+        </div>
+      </section>
+
+      <section className="py-12 px-4">
+        <div className="container mx-auto max-w-4xl">
+          <GlassCard glow className="relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-yellow-500/5 to-orange-500/10" />
+            <div className="p-8 relative text-center">
+              <Badge className="mb-4 bg-amber-500/20 text-amber-400 border-amber-500/30">
+                <Crown className="w-3 h-3 mr-1" /> Limited Time Offer
+              </Badge>
+              <h2 className="text-2xl md:text-3xl font-display font-bold mb-3">
+                Become a Legacy Founder
+              </h2>
+              <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
+                Pay $24 once. Get lifetime access. Receive 35,000 DWT tokens on launch day.
+                Only 10,000 spots available - program closes February 14, 2026.
+              </p>
+              <Link href="/founder-program">
+                <Button size="lg" className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-full gap-2" data-testid="button-founder-program">
+                  <Crown className="w-5 h-5" /> Join Legacy Founder Program
+                </Button>
+              </Link>
+            </div>
+          </GlassCard>
         </div>
       </section>
 

@@ -43,6 +43,7 @@ import AdminRewards from "@/pages/admin-rewards";
 import AirdropClaim from "@/pages/airdrop-claim";
 import Quests from "@/pages/quests";
 import NetworkStats from "@/pages/network-stats";
+import FounderProgram from "@/pages/founder-program";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -96,6 +97,7 @@ function Router() {
         <Route path="/airdrop" component={AirdropClaim} />
         <Route path="/quests" component={Quests} />
         <Route path="/network" component={NetworkStats} />
+        <Route path="/founder-program" component={FounderProgram} />
         <Route component={NotFound} />
       </Switch>
     </>

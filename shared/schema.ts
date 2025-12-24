@@ -1418,4 +1418,62 @@ export const insertSocialLeaderboardSchema = createInsertSchema(socialLeaderboar
 export type InsertSocialLeaderboard = z.infer<typeof insertSocialLeaderboardSchema>;
 export type SocialLeaderboard = typeof socialLeaderboard.$inferSelect;
 
-export const APP_VERSION = "1.1.0";
+// Legacy Founder Program - DarkWave Chain Early Adopters
+export const legacyFounders = pgTable("legacy_founders", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: text("email").notNull(),
+  walletAddress: text("wallet_address"),
+  paymentMethod: text("payment_method").notNull(), // 'stripe' or 'coinbase'
+  paymentId: text("payment_id"), // Stripe session ID or Coinbase charge ID
+  amountPaidCents: integer("amount_paid_cents").notNull().default(2400), // $24.00
+  status: text("status").notNull().default("pending"), // pending, paid, airdrop_pending, completed
+  airdropAmount: text("airdrop_amount").notNull().default("35000000000000000000000"), // 35,000 DWT (18 decimals)
+  airdropTxHash: text("airdrop_tx_hash"),
+  founderNumber: serial("founder_number"),
+  referralCode: text("referral_code"),
+  referredBy: text("referred_by"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  paidAt: timestamp("paid_at"),
+  airdropDeliveredAt: timestamp("airdrop_delivered_at"),
+});
+
+export const insertLegacyFounderSchema = createInsertSchema(legacyFounders).omit({
+  id: true,
+  founderNumber: true,
+  createdAt: true,
+  paidAt: true,
+  airdropDeliveredAt: true,
+});
+
+export type InsertLegacyFounder = z.infer<typeof insertLegacyFounderSchema>;
+export type LegacyFounder = typeof legacyFounders.$inferSelect;
+
+// Token allocation for transparency page
+export const TOKEN_ALLOCATION = {
+  publicSale: { amount: 40_000_000, percentage: 40, vesting: "None" },
+  team: { amount: 15_000_000, percentage: 15, vesting: "6-month cliff, 12-month vest" },
+  development: { amount: 20_000_000, percentage: 20, vesting: "Unlocked as needed" },
+  marketing: { amount: 10_000_000, percentage: 10, vesting: "Unlocked" },
+  liquidity: { amount: 10_000_000, percentage: 10, vesting: "Locked in DEX" },
+  reserve: { amount: 5_000_000, percentage: 5, vesting: "12-month lock" },
+} as const;
+
+export const LEGACY_FOUNDER_CONFIG = {
+  priceUsd: 24,
+  priceCents: 2400,
+  airdropTokens: 35000,
+  maxSpots: 10000,
+  deadline: new Date("2026-02-14T00:00:00Z"),
+  regularPriceMonthly: 20,
+  perks: [
+    "Unlimited AI analysis (crypto & stocks)",
+    "StrikeAgent sniper bot access",
+    "Founding member badge",
+    "Priority access to DWT staking pools",
+    "Early access to all new features",
+    "35,000 DWT token airdrop on launch",
+    "No recurring billing after initial payment",
+  ],
+} as const;
+
+export const APP_VERSION = "1.2.0";

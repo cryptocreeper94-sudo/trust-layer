@@ -51,6 +51,14 @@ const ONE_TOKEN = BigInt("1000000000000000000");
 const TOTAL_SUPPLY = BigInt("100000000") * ONE_TOKEN;
 const GENESIS_TIMESTAMP = new Date("2025-02-14T00:00:00Z");
 
+// Transaction Tax Configuration
+// 5% total on sells/transfers: 3% to treasury, 2% to liquidity pool
+const SELL_TAX_RATE = BigInt(5); // 5%
+const TREASURY_TAX_SHARE = BigInt(3); // 3% of 5%
+const LP_TAX_SHARE = BigInt(2); // 2% of 5%
+const TAX_DENOMINATOR = BigInt(100);
+const LP_POOL_ADDRESS = "0x" + "1".repeat(40); // Liquidity pool address
+
 export class DarkWaveBlockchain {
   private config: ChainConfig;
   private blocks: Map<number, Block> = new Map();
@@ -368,19 +376,55 @@ export class DarkWaveBlockchain {
     if (!fromAccount) return false;
 
     const gasCost = BigInt(tx.gasLimit) * BigInt(tx.gasPrice);
+    
+    // Apply 5% sell tax on transfers (except from treasury or system addresses)
+    const isTaxExempt = tx.from === this.treasuryAddress || 
+                        tx.from === LP_POOL_ADDRESS ||
+                        tx.data?.startsWith("SYSTEM:") ||
+                        tx.amount === BigInt(0);
+    
+    let taxAmount = BigInt(0);
+    let treasuryTax = BigInt(0);
+    let lpTax = BigInt(0);
+    
+    if (!isTaxExempt && tx.amount > BigInt(0)) {
+      taxAmount = (tx.amount * SELL_TAX_RATE) / TAX_DENOMINATOR;
+      treasuryTax = (tx.amount * TREASURY_TAX_SHARE) / TAX_DENOMINATOR;
+      lpTax = (tx.amount * LP_TAX_SHARE) / TAX_DENOMINATOR;
+    }
+    
     const totalCost = tx.amount + gasCost;
-
     if (fromAccount.balance < totalCost) return false;
 
+    // Deduct full amount + gas from sender
     fromAccount.balance -= totalCost;
     fromAccount.nonce++;
 
+    // Recipient receives amount minus tax
+    const recipientAmount = tx.amount - taxAmount;
     let toAccount = this.accounts.get(tx.to);
     if (!toAccount) {
       toAccount = { address: tx.to, balance: BigInt(0), nonce: 0 };
       this.accounts.set(tx.to, toAccount);
     }
-    toAccount.balance += tx.amount;
+    toAccount.balance += recipientAmount;
+
+    // Distribute tax to treasury and LP pool
+    if (taxAmount > BigInt(0)) {
+      // Treasury gets 3%
+      let treasuryAccount = this.accounts.get(this.treasuryAddress);
+      if (treasuryAccount) {
+        treasuryAccount.balance += treasuryTax;
+      }
+      
+      // LP pool gets 2%
+      let lpAccount = this.accounts.get(LP_POOL_ADDRESS);
+      if (!lpAccount) {
+        lpAccount = { address: LP_POOL_ADDRESS, balance: BigInt(0), nonce: 0 };
+        this.accounts.set(LP_POOL_ADDRESS, lpAccount);
+      }
+      lpAccount.balance += lpTax;
+    }
 
     return true;
   }
@@ -650,6 +694,26 @@ export class DarkWaveBlockchain {
 
   public isReady(): boolean {
     return this.isInitialized;
+  }
+
+  public getTaxConfig() {
+    return {
+      sellTaxRate: Number(SELL_TAX_RATE),
+      treasuryShare: Number(TREASURY_TAX_SHARE),
+      lpShare: Number(LP_TAX_SHARE),
+      buyTaxRate: 0, // No buy tax
+      description: "5% tax on sells/transfers: 3% to treasury (funds staking rewards), 2% to liquidity pool (price stability)",
+    };
+  }
+
+  public getLiquidityPoolBalance() {
+    const lpAccount = this.accounts.get(LP_POOL_ADDRESS);
+    const balance = lpAccount?.balance || BigInt(0);
+    return {
+      address: LP_POOL_ADDRESS,
+      balance: `${balance / ONE_TOKEN} DWT`,
+      balance_raw: balance.toString(),
+    };
   }
 }
 
