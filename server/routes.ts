@@ -1,7 +1,8 @@
-import type { Express } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import crypto from "crypto";
 import { WebSocketServer, WebSocket } from "ws";
+import { z } from "zod";
 import { storage } from "./storage";
 import { db } from "./db";
 import { sql, eq } from "drizzle-orm";
@@ -20,6 +21,56 @@ import { bridge } from "./bridge-engine";
 import { registerChatRoutes } from "./replit_integrations/chat";
 import { registerImageRoutes } from "./replit_integrations/image";
 import { stakingEngine } from "./staking-engine";
+
+const FaucetClaimRequestSchema = z.object({
+  walletAddress: z.string().min(10, "Invalid wallet address").max(100),
+});
+
+const SwapRequestSchema = z.object({
+  tokenIn: z.string().min(1),
+  tokenOut: z.string().min(1),
+  amountIn: z.string().regex(/^\d+$/, "Amount must be numeric"),
+  minAmountOut: z.string().regex(/^\d+$/, "Amount must be numeric").optional(),
+});
+
+const StakeRequestSchema = z.object({
+  amount: z.string().regex(/^\d+$/, "Amount must be numeric"),
+  tier: z.enum(["bronze", "silver", "gold", "platinum", "validator", "delegator"]).optional(),
+});
+
+const NftMintRequestSchema = z.object({
+  name: z.string().min(1, "Name is required").max(100),
+  description: z.string().max(1000).optional(),
+  imageUrl: z.string().url().optional().or(z.literal("")),
+  collectionId: z.string().optional(),
+});
+
+const rateLimitStore: Map<string, { count: number; resetTime: number }> = new Map();
+
+function rateLimit(maxRequests: number, windowMs: number) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const key = req.ip || "unknown";
+    const now = Date.now();
+    const record = rateLimitStore.get(key);
+    
+    if (!record || now > record.resetTime) {
+      rateLimitStore.set(key, { count: 1, resetTime: now + windowMs });
+      return next();
+    }
+    
+    if (record.count >= maxRequests) {
+      return res.status(429).json({ error: "Too many requests, please try again later" });
+    }
+    
+    record.count++;
+    return next();
+  };
+}
+
+const faucetRateLimit = rateLimit(5, 60 * 1000);
+const swapRateLimit = rateLimit(30, 60 * 1000);
+const nftMintRateLimit = rateLimit(10, 60 * 1000);
+const studioAiRateLimit = rateLimit(20, 60 * 1000);
 
 interface PresenceUser {
   id: string;
@@ -2663,7 +2714,7 @@ export async function registerRoutes(
   });
 
   // Studio AI Code Assistant - PAID feature using credits
-  app.post("/api/studio/ai/assist", isAuthenticated, async (req: any, res) => {
+  app.post("/api/studio/ai/assist", isAuthenticated, studioAiRateLimit, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Login required" });
@@ -2860,69 +2911,6 @@ Current context:
     }
   });
 
-  // AI Code Assistant for Studio
-  app.post("/api/studio/ai/assist", isAuthenticated, async (req: any, res) => {
-    try {
-      const { prompt, code, language, context } = req.body;
-      
-      if (!prompt) {
-        return res.status(400).json({ error: "Prompt is required" });
-      }
-
-      const OpenAI = (await import("openai")).default;
-      const openai = new OpenAI({
-        apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
-        baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
-      });
-
-      const systemPrompt = `You are an expert coding assistant in DarkWave Studio, a web-based IDE. 
-You help developers write, debug, and improve code. Be concise but thorough.
-When providing code, use markdown code blocks with the appropriate language.
-Current context:
-- Language: ${language || "unknown"}
-- User is working in a cloud IDE environment
-${context ? `- Additional context: ${context}` : ""}`;
-
-      res.setHeader("Content-Type", "text/event-stream");
-      res.setHeader("Cache-Control", "no-cache");
-      res.setHeader("Connection", "keep-alive");
-
-      const messages: any[] = [
-        { role: "system", content: systemPrompt },
-      ];
-      
-      if (code) {
-        messages.push({ role: "user", content: `Here's my current code:\n\`\`\`${language || ""}\n${code}\n\`\`\`` });
-      }
-      messages.push({ role: "user", content: prompt });
-
-      const stream = await openai.chat.completions.create({
-        model: "gpt-4o",
-        messages,
-        stream: true,
-        max_completion_tokens: 2048,
-      });
-
-      for await (const chunk of stream) {
-        const content = chunk.choices[0]?.delta?.content || "";
-        if (content) {
-          res.write(`data: ${JSON.stringify({ content })}\n\n`);
-        }
-      }
-
-      res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
-      res.end();
-    } catch (error) {
-      console.error("AI assist error:", error);
-      if (res.headersSent) {
-        res.write(`data: ${JSON.stringify({ error: "AI assistance failed" })}\n\n`);
-        res.end();
-      } else {
-        res.status(500).json({ error: "AI assistance failed" });
-      }
-    }
-  });
-
   // ============================================
   // DATABASE EXPLORER
   // ============================================
@@ -3035,9 +3023,45 @@ ${context ? `- Additional context: ${context}` : ""}`;
   // NFT MARKETPLACE
   // ============================================
 
+  async function seedNftCollections() {
+    const DEFAULT_COLLECTIONS = [
+      { name: "DarkWave Genesis", symbol: "DWGEN", description: "The original DarkWave NFT collection", imageUrl: "https://picsum.photos/seed/dwgen/400/400" },
+      { name: "Cyber Punks", symbol: "CYPK", description: "Futuristic cyber art collection", imageUrl: "https://picsum.photos/seed/cypk/400/400" },
+      { name: "Quantum Realms", symbol: "QREALM", description: "Explore quantum dimensions through art", imageUrl: "https://picsum.photos/seed/qrealm/400/400" },
+      { name: "Neon Dreams", symbol: "NEON", description: "Neon-infused digital artwork", imageUrl: "https://picsum.photos/seed/neon/400/400" },
+    ];
+    
+    for (const collection of DEFAULT_COLLECTIONS) {
+      await storage.createNftCollection(collection);
+    }
+  }
+
+  async function seedNfts(collections: any[]) {
+    const NFT_NAMES = ["Aurora Pulse", "Digital Dawn", "Quantum Shift", "Neon Wave", "Cyber Core", "Pixel Storm"];
+    
+    for (const collection of collections) {
+      for (let i = 0; i < 5; i++) {
+        await storage.createNft({
+          tokenId: `${collection.id}-${i}`,
+          collectionId: collection.id,
+          name: `${NFT_NAMES[i % NFT_NAMES.length]} #${i + 1}`,
+          description: `A unique NFT from the ${collection.name} collection`,
+          imageUrl: `https://picsum.photos/seed/${collection.id}-${i}/400/400`,
+        });
+      }
+    }
+  }
+
   app.get("/api/nft/collections", async (req, res) => {
     try {
-      const collections = await storage.getNftCollections();
+      let collections = await storage.getNftCollections();
+      
+      if (collections.length === 0) {
+        await seedNftCollections();
+        collections = await storage.getNftCollections();
+        await seedNfts(collections);
+      }
+      
       res.json({ collections });
     } catch (error) {
       console.error("NFT collections error:", error);
@@ -3065,19 +3089,22 @@ ${context ? `- Additional context: ${context}` : ""}`;
     }
   });
 
-  app.post("/api/nft/mint", async (req, res) => {
+  app.post("/api/nft/mint", isAuthenticated, nftMintRateLimit, async (req: any, res) => {
     try {
-      const { name, description, imageUrl } = req.body;
-      if (!name) {
-        return res.status(400).json({ error: "NFT name is required" });
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const parseResult = NftMintRequestSchema.safeParse(req.body);
+      if (!parseResult.success) {
+        return res.status(400).json({ error: parseResult.error.errors[0]?.message || "Invalid request" });
       }
+      const { name, description, imageUrl, collectionId } = parseResult.data;
 
       const nft = await storage.createNft({
         tokenId: `${Date.now()}`,
-        collectionId: "user-created",
+        collectionId: collectionId || "user-created",
         name,
         description: description || "",
         imageUrl: imageUrl || "",
+        ownerId: userId,
       });
 
       res.json({ success: true, nft });
@@ -3164,13 +3191,13 @@ ${context ? `- Additional context: ${context}` : ""}`;
     }
   });
 
-  app.post("/api/swap/execute", async (req, res) => {
+  app.post("/api/swap/execute", swapRateLimit, async (req, res) => {
     try {
-      const { tokenIn, tokenOut, amountIn, minAmountOut, slippage } = req.body;
-      
-      if (!tokenIn || !tokenOut || !amountIn) {
-        return res.status(400).json({ error: "Missing required fields" });
+      const parseResult = SwapRequestSchema.safeParse(req.body);
+      if (!parseResult.success) {
+        return res.status(400).json({ error: parseResult.error.errors[0]?.message || "Invalid request" });
       }
+      const { tokenIn, tokenOut, amountIn, minAmountOut } = parseResult.data;
       
       // Calculate output using same logic as quote
       const amountInBigInt = BigInt(amountIn);
@@ -3319,13 +3346,13 @@ ${context ? `- Additional context: ${context}` : ""}`;
     }
   });
   
-  app.post("/api/faucet/claim", async (req, res) => {
+  app.post("/api/faucet/claim", faucetRateLimit, async (req, res) => {
     try {
-      const { walletAddress } = req.body;
-      
-      if (!walletAddress || walletAddress.length < 10) {
-        return res.status(400).json({ error: "Invalid wallet address" });
+      const parseResult = FaucetClaimRequestSchema.safeParse(req.body);
+      if (!parseResult.success) {
+        return res.status(400).json({ error: parseResult.error.errors[0]?.message || "Invalid request" });
       }
+      const { walletAddress } = parseResult.data;
       
       // Check cooldown
       const recentClaim = await storage.getRecentFaucetClaim(walletAddress);
@@ -3550,10 +3577,15 @@ ${context ? `- Additional context: ${context}` : ""}`;
   // NFT GALLERY
   // ============================================
 
-  app.get("/api/nft/gallery", async (req, res) => {
+  app.get("/api/nft/gallery", isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user?.id || req.user?.claims?.sub;
       const { walletAddress } = req.query;
-      res.json({ nfts: [] });
+      
+      const ownerId = (walletAddress as string) || userId;
+      const nfts = await storage.getNftsByOwner(ownerId);
+      
+      res.json({ nfts });
     } catch (error) {
       console.error("NFT gallery error:", error);
       res.json({ nfts: [] });

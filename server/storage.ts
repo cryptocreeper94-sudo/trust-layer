@@ -65,7 +65,9 @@ export interface IStorage {
   getNftCollections(): Promise<NftCollection[]>;
   getNftListings(): Promise<any[]>;
   getNftStats(): Promise<{ totalVolume: string; totalNfts: number; totalCollections: number }>;
-  createNft(data: { tokenId: string; collectionId: string; name: string; description: string; imageUrl: string }): Promise<Nft>;
+  createNft(data: { tokenId: string; collectionId: string; name: string; description: string; imageUrl: string; ownerAddress?: string }): Promise<Nft>;
+  createNftCollection(data: { name: string; description?: string; imageUrl?: string; creatorAddress?: string }): Promise<NftCollection>;
+  getNftsByOwner(ownerAddress: string): Promise<Nft[]>;
   
   // Transaction History
   getTransactionHistory(): Promise<any[]>;
@@ -622,9 +624,24 @@ export class DatabaseStorage implements IStorage {
     };
   }
 
-  async createNft(data: { tokenId: string; collectionId: string; name: string; description: string; imageUrl: string }): Promise<Nft> {
+  async createNft(data: { tokenId: string; collectionId: string; name: string; description: string; imageUrl: string; ownerId?: string }): Promise<Nft> {
     const [nft] = await db.insert(nfts).values(data).returning();
     return nft;
+  }
+
+  async createNftCollection(data: { name: string; symbol?: string; description?: string; imageUrl?: string; creatorId?: string }): Promise<NftCollection> {
+    const [collection] = await db.insert(nftCollections).values({
+      name: data.name,
+      symbol: data.symbol || data.name.substring(0, 4).toUpperCase(),
+      description: data.description || "",
+      imageUrl: data.imageUrl || "",
+      creatorId: data.creatorId || null,
+    }).returning();
+    return collection;
+  }
+
+  async getNftsByOwner(ownerId: string): Promise<Nft[]> {
+    return db.select().from(nfts).where(eq(nfts.ownerId, ownerId)).orderBy(desc(nfts.createdAt));
   }
 
   // Transaction History - aggregate from various sources
