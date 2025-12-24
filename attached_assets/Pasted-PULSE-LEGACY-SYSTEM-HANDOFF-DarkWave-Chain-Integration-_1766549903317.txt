@@ -1,0 +1,103 @@
+PULSE LEGACY SYSTEM HANDOFF - DarkWave Chain Integration
+From: Pulse Development Team
+To: DarkWave Chain Team
+Date: December 24, 2025
+Purpose: Transfer of token, staking, and early adopter program details
+
+1. LEGACY FOUNDER PROGRAM (Initial Purchasers)
+"6 Months = Lifetime" Deal:
+
+Pay $24 one-time ($4/month equivalent)
+Receive 6 months full platform access
+After 6 months of paid access = FREE lifetime access forever
+Price grandfathered at $4/month (regular price becomes $20/month post-V2)
+Limited to first 10,000 spots
+Program closes February 14, 2026
+What Legacy Founders Receive:
+
+Unlimited AI analysis (crypto AND stocks)
+StrikeAgent sniper bot access
+Founding member badge
+Priority access to DWAV staking pools
+Early access to all new features
+No recurring billing after initial payment
+2. TOKEN AIRDROP PLAN
+Token: DWAV (formerly referenced as DWT in some docs)
+Network: Originally Solana SPL, transitioning to DarkWave Chain
+Total Supply: 100,000,000 DWAV
+Launch Date: February 14, 2026
+
+Legacy Founder Airdrop:
+
+Each Legacy Founder receives 35,000 DWAV tokens on launch day
+Tokens delivered to their connected wallet on Feb 14, 2026
+Token Allocation:
+
+Category	Amount	Percentage	Vesting
+Public Sale	40,000,000	40%	None
+Team	15,000,000	15%	6-month cliff, 12-month vest
+Development	20,000,000	20%	Unlocked as needed
+Marketing	10,000,000	10%	Unlocked
+Liquidity	10,000,000	10%	Locked in DEX
+Reserve	5,000,000	5%	12-month lock
+3. BETA TESTER / EARLY ADOPTER TREATMENT
+Current Beta Testers (Pre-Launch Users):
+
+Access via trial codes (777 = user trial, 888 = admin, 999 = owner, 0424 = quant)
+Early adopters tracked in database with registration dates
+Eligible for community airdrop allocation (from Marketing pool)
+Priority queue for new feature rollouts
+Community Airdrop Eligibility:
+
+Participate in community activities
+Follow official channels
+Active platform usage before token launch
+4. STAKING SYSTEM (To Be Migrated)
+Staking Tiers:
+
+Tier	DWAV Required	APY	Perks
+Bronze	1,000 - 9,999	8%	Base rewards
+Silver	10,000 - 49,999	10%	Enhanced rewards
+Gold	50,000+	12%	+ Bonus rewards
+Staking Features:
+
+Rewards distributed hourly
+Claim anytime (flexible)
+Legacy Founders get priority access to staking pools
+Platform revenue funds reward pool
+5. TAX STRUCTURE (Token Transactions)
+Transaction	Tax Rate	Purpose
+Buy	0%	Encourage accumulation
+Sell	5%	Revenue generation
+Transfer	5%	Anti-manipulation
+Tax Distribution:
+
+2% Treasury (development, operations)
+2% Liquidity Pool (price stability)
+1% Marketing (growth, partnerships)
+6. TOKEN UTILITY
+Staking Rewards - 8-12% APY based on tier
+Premium Access Discounts - Subscription discounts for holders
+Governance Rights - Vote on platform priorities
+NFT Trading Cards - Unlock exclusive AI Agent cards
+Cross-App Benefits - Benefits across all DarkWave products
+7. WHAT'S BEING SIMPLIFIED ON PULSE
+After DarkWave Chain takes over token/staking:
+
+Removing: Projects page (coin showcases)
+Removing: Staking page (moving to DarkWave Chain)
+Keeping: Pulse becomes purely AI predictions + quant trading signals
+Keeping: StrikeAgent sniper bot
+Keeping: Multi-chain wallet for trading
+8. CURRENT USER DATABASE
+14 registered users in system
+User data includes: Firebase UID, email, subscription tier, registration date
+Hallmark IDs assigned per user for personalization
+Prediction history and trading activity logged
+9. KEY DATES
+Now: Legacy Founder program open
+Feb 14, 2026: Token launch + airdrop delivery + staking goes live
+Post-Launch: Staking, governance, NFT cards fully operational on DarkWave Chain
+END OF HANDOFF
+
+Copy and paste the above to the DarkWave Chain agent. Let me know when you receive their handoff back and I'll help integrate their information.
