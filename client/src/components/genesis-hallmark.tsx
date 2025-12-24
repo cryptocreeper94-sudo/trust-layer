@@ -242,33 +242,39 @@ export function GenesisHallmarkCard() {
                 </div>
               </div>
               
-              {/* QR Code & Hash Section */}
-              <div className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 mb-4">
-                <div 
-                  className="w-20 h-20 rounded-lg bg-white p-1.5 flex-shrink-0"
-                  dangerouslySetInnerHTML={{ __html: genesis.qrCodeSvg }}
-                />
-                <div className="flex-1 min-w-0">
-                  <div className="text-[10px] text-white/50 uppercase mb-1">Payload Hash</div>
-                  <div className="flex items-center gap-2">
-                    <code className="text-[10px] font-mono text-purple-400 truncate">
-                      {genesis.payloadHash.slice(0, 24)}...
+              {/* QR Code & Hash Section - Stacked on mobile */}
+              <div className="flex flex-col items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 mb-4">
+                {/* QR Code */}
+                <div className="w-32 h-32 rounded-lg bg-white p-2 flex-shrink-0">
+                  <img 
+                    src={`data:image/svg+xml;base64,${btoa(genesis.qrCodeSvg)}`}
+                    alt="Verification QR Code"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                
+                {/* Hash Info */}
+                <div className="text-center w-full">
+                  <div className="text-[10px] text-white/50 uppercase mb-2">Payload Hash</div>
+                  <div className="flex items-center justify-center gap-2">
+                    <code className="text-[11px] font-mono text-purple-400 break-all">
+                      {genesis.payloadHash.slice(0, 16)}...
                     </code>
                     <button
                       onClick={(e) => {
                         e.preventDefault();
                         copyHash();
                       }}
-                      className="p-1 rounded hover:bg-white/10 transition-colors"
+                      className="p-1.5 rounded hover:bg-white/10 transition-colors flex-shrink-0"
                     >
                       {copied ? (
-                        <Check className="w-3 h-3 text-green-400" />
+                        <Check className="w-4 h-4 text-green-400" />
                       ) : (
-                        <Copy className="w-3 h-3 text-white/50" />
+                        <Copy className="w-4 h-4 text-white/50" />
                       )}
                     </button>
                   </div>
-                  <div className="flex items-center gap-1 mt-1">
+                  <div className="flex items-center justify-center gap-1 mt-2">
                     <QrCode className="w-3 h-3 text-white/30" />
                     <span className="text-[10px] text-white/30">Scan to verify</span>
                   </div>
@@ -277,7 +283,7 @@ export function GenesisHallmarkCard() {
               
               {/* View Explorer Button */}
               <Button
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium"
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium mt-2"
                 data-testid="button-view-explorer"
               >
                 <span>View on Explorer</span>
