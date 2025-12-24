@@ -78,6 +78,7 @@ export default function NetworkStats() {
               title="Real-Time Stats" 
               content="This dashboard shows live network performance metrics updated every 2 seconds. TPS (Transactions Per Second) represents the chain's throughput capacity." 
               variant="info"
+              testId="button-info-network-stats"
             />
           </div>
 

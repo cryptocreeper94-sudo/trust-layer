@@ -9,6 +9,7 @@ interface InfoButtonProps {
   variant?: "help" | "info" | "tip";
   size?: "sm" | "md";
   className?: string;
+  testId?: string;
 }
 
 export function InfoButton({ 
@@ -16,7 +17,8 @@ export function InfoButton({
   content, 
   variant = "help",
   size = "sm",
-  className 
+  className,
+  testId 
 }: InfoButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -47,7 +49,7 @@ export function InfoButton({
           "border border-white/20 hover:border-white/30",
           isOpen && "bg-white/20 border-white/30"
         )}
-        data-testid="button-info"
+        data-testid={testId || "button-info"}
       >
         <Icon className={cn(iconSize, "text-white/60")} />
       </button>

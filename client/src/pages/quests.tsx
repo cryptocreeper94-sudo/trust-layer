@@ -96,13 +96,19 @@ export default function Quests() {
                         title="How XP Works" 
                         content="Earn XP by completing quests and participating in the ecosystem. XP unlocks higher tiers with better rewards, fee discounts, and exclusive access." 
                         variant="help"
+                        testId="button-info-xp"
                       />
                     </div>
                     <p className="text-sm text-muted-foreground">Complete quests to earn XP and climb the ranks</p>
                   </div>
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${currentTier.color} flex items-center justify-center`}>
-                    <currentTier.icon className="w-7 h-7 text-white" />
-                  </div>
+                  {(() => {
+                    const TierIcon = currentTier.icon;
+                    return (
+                      <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${currentTier.color} flex items-center justify-center`}>
+                        <TierIcon className="w-7 h-7 text-white" />
+                      </div>
+                    );
+                  })()}
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
@@ -143,23 +149,26 @@ export default function Quests() {
                   <Trophy className="w-5 h-5 text-amber-400" /> Tier Benefits
                 </h3>
                 <div className="space-y-3">
-                  {TIERS.map((tier, i) => (
-                    <div 
-                      key={tier.name}
-                      className={`flex items-center gap-3 p-2 rounded-lg ${currentTier.name === tier.name ? 'bg-white/10 ring-1 ring-white/20' : 'opacity-60'}`}
-                    >
-                      <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${tier.color} flex items-center justify-center shrink-0`}>
-                        <tier.icon className="w-4 h-4 text-white" />
+                  {TIERS.map((tier, i) => {
+                    const TierItemIcon = tier.icon;
+                    return (
+                      <div 
+                        key={tier.name}
+                        className={`flex items-center gap-3 p-2 rounded-lg ${currentTier.name === tier.name ? 'bg-white/10 ring-1 ring-white/20' : 'opacity-60'}`}
+                      >
+                        <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${tier.color} flex items-center justify-center shrink-0`}>
+                          <TierItemIcon className="w-4 h-4 text-white" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium">{tier.name}</div>
+                          <div className="text-[10px] text-muted-foreground">{tier.minXp.toLocaleString()}+ XP</div>
+                        </div>
+                        {currentTier.name === tier.name && (
+                          <Badge className="bg-primary/20 text-primary text-[10px]">Current</Badge>
+                        )}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium">{tier.name}</div>
-                        <div className="text-[10px] text-muted-foreground">{tier.minXp.toLocaleString()}+ XP</div>
-                      </div>
-                      {currentTier.name === tier.name && (
-                        <Badge className="bg-primary/20 text-primary text-[10px]">Current</Badge>
-                      )}
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </GlassCard>
@@ -241,6 +250,7 @@ export default function Quests() {
                     title="Protocol Missions" 
                     content="Community-wide goals where everyone contributes and shares the reward pool. Complete the mission together to earn your share!" 
                     variant="tip"
+                    testId="button-info-missions"
                   />
                 </div>
                 
