@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette } from "lucide-react";
+import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +13,7 @@ const navItems = [
   { href: "/faucet", label: "Faucet", icon: Droplets },
   { href: "/launchpad", label: "Launchpad", icon: Rocket },
   { href: "/liquidity", label: "Liquidity", icon: Droplets },
+  { href: "/liquid-staking", label: "Liquid Staking", icon: TrendingUp },
   { href: "/nft", label: "NFT Market", icon: ImageIcon },
   { href: "/nft-gallery", label: "NFT Gallery", icon: ImageIcon },
   { href: "/nft-creator", label: "NFT Creator", icon: Palette },
@@ -23,9 +24,14 @@ const navItems = [
   { href: "/bridge", label: "Bridge", icon: ArrowLeftRight },
   { href: "/token", label: "Token", icon: Coins },
   { href: "/explorer", label: "Explorer", icon: SearchIcon },
+  { href: "/network", label: "Network Stats", icon: TrendingUp },
+  { href: "/validators", label: "Validators", icon: FileText },
   { href: "/developers", label: "Developers", icon: Code },
   { href: "/webhooks", label: "Webhooks", icon: Webhook },
   { href: "/studio", label: "Dev Studio", icon: Sparkles },
+  { href: "/founder-program", label: "Founders", icon: Sparkles, badge: "VIP" },
+  { href: "/quests", label: "Quests", icon: Rocket },
+  { href: "/airdrop", label: "Airdrop", icon: Coins },
 ];
 
 function MenuPanel({ onClose }: { onClose: () => void }) {
