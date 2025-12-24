@@ -45,6 +45,7 @@ import Quests from "@/pages/quests";
 import NetworkStats from "@/pages/network-stats";
 import FounderProgram from "@/pages/founder-program";
 import Validators from "@/pages/validators";
+import Wallet from "@/pages/wallet";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -100,6 +101,7 @@ function Router() {
         <Route path="/network" component={NetworkStats} />
         <Route path="/founder-program" component={FounderProgram} />
         <Route path="/validators" component={Validators} />
+        <Route path="/wallet" component={Wallet} />
         <Route component={NotFound} />
       </Switch>
     </>
