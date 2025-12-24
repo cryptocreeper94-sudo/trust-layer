@@ -4162,18 +4162,28 @@ Current context:
   app.post("/api/webhooks", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
-      const { url, events } = req.body;
+      const { url, events, secret } = req.body;
       if (!url || !events?.length) {
         return res.status(400).json({ error: "URL and events are required" });
       }
+      
+      const webhookSecret = secret || `whsec_${crypto.randomBytes(16).toString('hex')}`;
       
       const webhook = await storage.createWebhook({
         userId,
         url,
         events: JSON.stringify(events),
-        secret: `whsec_${crypto.randomBytes(16).toString('hex')}`,
+        secret: webhookSecret,
         isActive: true,
         failureCount: 0,
+      });
+      
+      // Also register with the real-time webhook service
+      const { webhookService } = await import("./webhook-service");
+      webhookService.registerWebhook({
+        url,
+        secret: webhookSecret,
+        events: events as any[]
       });
       
       res.json({ success: true, webhook });

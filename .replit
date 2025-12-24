@@ -57,3 +57,5 @@ integrations = ["resend:1.0.0", "javascript_log_in_with_replit:2.0.0", "stripe:2
 DARKWAVE_HUB_API_URL = "https://orbitstaffing.io/api"
 TREASURY_ADDRESS = "0x212686509aec07fab9a5c3e324494e0c8094e637"
 DARKWAVE_RPC_URL = "http://localhost:3030"
+PULSE_WEBHOOK_SECRET = "97c05418d9e0caf5f786915590e7991855d7224380a2f1f6a70659828c85fce6"
+PULSE_WEBHOOK_URL = "https://darkwave-pulse.replit.app/api/chain-events"

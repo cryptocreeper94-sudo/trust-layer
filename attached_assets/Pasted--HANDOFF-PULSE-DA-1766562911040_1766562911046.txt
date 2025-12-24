@@ -1,0 +1,131 @@
+================================================================================
+HANDOFF: PULSE → DARKWAVE CHAIN - INTEGRATION COMPLETE
+================================================================================
+
+SECTION 1: WHAT PULSE HAS IMPLEMENTED
+-------------------------------------
+✅ Full API client: src/services/darkwave-chain-client.ts
+✅ Webhook endpoint: POST /api/chain-events (HMAC-SHA256 verified)
+✅ Environment configured: WEBHOOK_SECRET set
+✅ All 9 event types handled (swap, stake, block, transaction, liquidity, token, bridge)
+
+================================================================================
+
+SECTION 2: WEBHOOK REGISTRATION REQUIRED
+----------------------------------------
+Register Pulse to receive events from DarkWave Chain.
+
+POST https://darkwave-studios.replit.app/api/webhooks
+Content-Type: application/json
+
+{
+  "url": "https://darkwave-pulse.replit.app/api/chain-events",
+  "secret": "97c05418d9e0caf5f786915590e7991855d7224380a2f1f6a70659828c85fce6",
+  "events": [
+    "swap.executed",
+    "stake.created", 
+    "stake.claimed",
+    "block.produced",
+    "transaction.confirmed",
+    "liquidity.added",
+    "token.launched",
+    "bridge.locked",
+    "bridge.released"
+  ]
+}
+
+================================================================================
+
+SECTION 3: WEBHOOK PAYLOAD FORMAT
+---------------------------------
+When sending events to Pulse, use this format:
+
+POST https://darkwave-pulse.replit.app/api/chain-events
+Content-Type: application/json
+
+{
+  "event": "swap.executed",
+  "data": {
+    "txHash": "0x...",
+    "fromToken": "USDC",
+    "toToken": "DWT",
+    "amount": "1000",
+    "walletAddress": "0x..."
+  },
+  "signature": "<HMAC-SHA256 of JSON.stringify(data) using shared secret>"
+}
+
+Signature generation (Node.js):
+const crypto = require('crypto');
+const signature = crypto
+  .createHmac('sha256', '97c05418d9e0caf5f786915590e7991855d7224380a2f1f6a70659828c85fce6')
+  .update(JSON.stringify(data))
+  .digest('hex');
+
+================================================================================
+
+SECTION 4: API ENDPOINTS PULSE WILL CALL
+----------------------------------------
+Pulse expects these endpoints on DarkWave Chain:
+
+TRADING:
+POST /api/swap - Execute DWT swaps
+GET  /api/swap/quote?from=DWT&to=USDC&amount=1000 - Get quote
+
+STAKING:
+POST /api/staking/stake - Stake tokens
+POST /api/staking/unstake - Unstake tokens
+POST /api/liquid-staking/stake - Liquid stake (stDWT)
+GET  /api/staking/positions/:walletAddress - Get positions
+
+PORTFOLIO:
+GET  /api/portfolio/:walletAddress - Full portfolio
+GET  /api/wallet/balance/:chain/:walletAddress - Chain balance
+GET  /api/transactions/:walletAddress?limit=50 - TX history
+
+CHAIN DATA:
+GET  /api/chain/stats - Block height, TPS, validators
+GET  /api/charts/price-history?token=DWT&timeframe=24h - Price data
+
+BRIDGE:
+POST /api/bridge/lock - Lock for cross-chain transfer
+
+================================================================================
+
+SECTION 5: SHARED WALLET DERIVATION
+-----------------------------------
+Both platforms use identical HD wallet derivation:
+
+const PATHS = {
+  darkwave: "m/44'/60'/0'/0/0",
+  ethereum: "m/44'/60'/0'/0/0", 
+  solana: "m/44'/501'/0'/0'"
+};
+
+Libraries: bip39, ed25519-hd-key, ethers
+
+One seed phrase = same addresses on both platforms.
+
+================================================================================
+
+SECTION 6: ACTION ITEMS FOR DARKWAVE CHAIN
+------------------------------------------
+1. [ ] Store the WEBHOOK_SECRET in your environment
+2. [ ] Implement webhook sender that signs payloads with HMAC-SHA256
+3. [ ] Emit events when swaps/stakes/blocks occur
+4. [ ] Verify Pulse can receive events (test with swap.executed)
+
+================================================================================
+
+SECTION 7: CONTACT
+------------------
+Pulse API Base: https://darkwave-pulse.replit.app
+Webhook Endpoint: https://darkwave-pulse.replit.app/api/chain-events
+Hub API: https://orbitstaffing.io (HMAC-SHA256 auth)
+
+Launch: February 14, 2026
+Legacy Founders: 35,000 DWT tokens
+
+================================================================================
+END OF HANDOFF - COPY THIS ENTIRE BLOCK TO DARKWAVE CHAIN AGENT
+================================================================================

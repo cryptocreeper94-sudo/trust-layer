@@ -2,6 +2,7 @@ import crypto from "crypto";
 import { db } from "./db";
 import { chainBlocks, chainTransactions, chainAccounts, chainConfig, chainValidators } from "@shared/schema";
 import { eq, desc, sql, and } from "drizzle-orm";
+import { webhookService } from "./webhook-service";
 
 export interface BlockHeader {
   height: number;
@@ -544,6 +545,16 @@ export class DarkWaveBlockchain {
     
     // Update validator's block count (awaited for persistence)
     await this.updateValidatorBlockCount(currentValidator.id);
+    
+    // Emit webhook event for block production (every 10th block to avoid spam)
+    if (header.height % 10 === 0) {
+      webhookService.emitBlockProduced(header.height, block.hash, pendingTxs.length, currentValidator.name).catch(() => {});
+    }
+    
+    // Emit transaction confirmed events
+    for (const tx of pendingTxs) {
+      webhookService.emitTransactionConfirmed(tx.hash, tx.from, tx.to, tx.amount.toString(), tx.data?.split(':')[0] || 'transfer').catch(() => {});
+    }
 
     if (header.height % 250 === 0) {
       console.log(`[DarkWave Mainnet] Block #${header.height} | ${pendingTxs.length} txs | Validator: ${currentValidator.name} | Hash: ${block.hash.slice(0, 18)}...`);
