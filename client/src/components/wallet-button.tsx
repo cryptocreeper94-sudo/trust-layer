@@ -171,7 +171,7 @@ export function WalletButton() {
 
       <AnimatePresence>
         {showModal && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -181,26 +181,23 @@ export function WalletButton() {
             />
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-sm bg-background/95 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl"
+              initial={{ opacity: 0, y: 100 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 100 }}
+              className="relative w-full max-w-sm bg-background border border-white/10 rounded-t-2xl sm:rounded-2xl p-5 shadow-2xl max-h-[85vh] overflow-y-auto"
             >
-              <button
-                onClick={() => setShowModal(false)}
-                className="absolute top-4 right-4 text-muted-foreground hover:text-white transition-colors"
-                data-testid="button-close-wallet-modal"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
-                  <Wallet className="w-8 h-8 text-primary" />
-                </div>
-                <h2 className="text-xl font-bold text-white mb-2">Connect Wallet</h2>
-                <p className="text-muted-foreground text-sm">Choose your wallet to connect to DarkWave Chain</p>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold text-white">Connect Wallet</h2>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="p-2 -mr-2 text-muted-foreground hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                  data-testid="button-close-wallet-modal"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
+
+              <p className="text-muted-foreground text-xs mb-4">Choose your wallet to connect to DarkWave Chain</p>
 
               {error && (
                 <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-xs">
