@@ -22,6 +22,7 @@ import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
 import { FirebaseLoginModal } from "@/components/firebase-login";
 import { useState } from "react";
 import { WalletButton } from "@/components/wallet-button";
+import { GenesisHallmarkSection } from "@/components/genesis-hallmark";
 
 const ecosystemImages: Record<string, string> = {
   "orbit-staffing": "/ecosystem/orbit-staffing.jpg",
@@ -254,6 +255,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Genesis Hallmark Section */}
+      <GenesisHallmarkSection />
 
       {/* DeFi Section - Premium Protocol Style */}
       <section className="py-16 px-4 relative overflow-hidden">

@@ -44,13 +44,23 @@ interface GenesisHallmark {
   message: string;
 }
 
+async function fetchGenesisHallmark(): Promise<GenesisHallmark> {
+  const response = await fetch("/api/hallmark/genesis");
+  if (!response.ok) {
+    throw new Error("Failed to fetch genesis hallmark");
+  }
+  return response.json();
+}
+
 export function GenesisHallmarkCard() {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   const { data: genesis, isLoading } = useQuery<GenesisHallmark>({
-    queryKey: ["/api/hallmark/genesis"],
+    queryKey: ["genesis-hallmark"],
+    queryFn: fetchGenesisHallmark,
+    staleTime: 60000,
   });
 
   const copyHash = () => {
