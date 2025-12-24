@@ -14,6 +14,30 @@ DarkWave Smart Chain (DSC) is a comprehensive blockchain ecosystem developed by 
 - Mobile: Mobile-first design with self-contained carousels, accordions, dropdowns
 - Branding: White-labeled, no Replit branding, dark theme only
 
+## Domain Strategy
+
+DarkWave Studios, LLC owns and operates three domains, each serving a distinct purpose:
+
+| Domain | Purpose | PWA Name | Theme Color |
+|--------|---------|----------|-------------|
+| **dwsc.io** | Main blockchain portal, explorer, DeFi, developer tools | DarkWave Smart Chain | #8b5cf6 (Purple) |
+| **darkwavegames.io** | Arcade, lottery, predictions, gaming section | DarkWave Games | #ec4899 (Pink) |
+| **darkwavestudios.io** | Parent company site, about, team, products | DarkWave Studios | #06b6d4 (Cyan) |
+
+### Technical Implementation
+- **Host-based routing**: Server detects hostname and serves appropriate manifest/theme
+- **Shared backend**: All three domains use the same API, auth, and DWC wallet
+- **Separate PWAs**: Each domain has its own manifest, icons, and installable experience
+- **App Store ready**: PWAs can be wrapped with PWABuilder for Google Play and Apple App Store
+
+### Files
+- `client/public/manifest-dwsc.webmanifest` - DWSC PWA manifest
+- `client/public/manifest-games.webmanifest` - Games PWA manifest
+- `client/public/manifest-studios.webmanifest` - Studios PWA manifest
+- `server/static.ts` - Host-based routing logic
+- `client/src/lib/app-config.ts` - Frontend app detection
+- `client/src/App.tsx` - Host-based router selection
+
 ---
 
 ## MASTER ROADMAP - CONSOLIDATED
