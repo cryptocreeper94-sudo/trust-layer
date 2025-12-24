@@ -271,11 +271,11 @@ export default function Webhooks() {
             </GlassCard>
           </div>
 
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-lg font-bold">Your Webhooks</h2>
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+            <h2 className="text-xl font-bold">Your Webhooks</h2>
             <Dialog open={createOpen} onOpenChange={setCreateOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-yellow-500 hover:bg-yellow-600 text-black" data-testid="button-create-webhook">
+                <Button className="bg-yellow-500 hover:bg-yellow-600 text-black h-10 px-4" data-testid="button-create-webhook">
                   <Plus className="w-4 h-4 mr-2" /> Create Webhook
                 </Button>
               </DialogTrigger>
