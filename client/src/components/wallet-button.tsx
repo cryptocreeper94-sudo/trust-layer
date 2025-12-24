@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Wallet, X, ExternalLink, Copy, Check, LogOut, ChevronDown } from "lucide-react";
+import { Wallet, X, ExternalLink, Copy, Check, LogOut, ChevronDown, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useWallet, shortenAddress } from "@/hooks/use-wallet";
+import { Link } from "wouter";
 
 export function WalletButton() {
   const { 
@@ -207,10 +208,35 @@ export function WalletButton() {
                 </div>
               )}
 
-              <div className="space-y-3">
+              <div className="space-y-2">
+                <Link href="/wallet" onClick={() => setShowModal(false)}>
+                  <Button
+                    variant="outline"
+                    className="w-full h-12 bg-gradient-to-r from-primary/20 to-secondary/20 border-primary/30 hover:border-primary/50 justify-start gap-3 text-white"
+                    data-testid="button-darkwave-wallet"
+                  >
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center flex-shrink-0">
+                      <Sparkles className="w-4 h-4 text-background" />
+                    </div>
+                    <div className="text-left min-w-0">
+                      <div className="font-medium text-sm">DarkWave Wallet</div>
+                      <div className="text-[10px] text-muted-foreground truncate">Create or manage your wallet</div>
+                    </div>
+                  </Button>
+                </Link>
+
+                <div className="relative py-2">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-white/10" />
+                  </div>
+                  <div className="relative flex justify-center text-[10px]">
+                    <span className="bg-background px-2 text-muted-foreground">or connect external</span>
+                  </div>
+                </div>
+
                 <Button
                   variant="outline"
-                  className="w-full h-14 bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 justify-start gap-4 text-white"
+                  className="w-full h-12 bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 justify-start gap-3 text-white"
                   onClick={async () => {
                     await connectEVM();
                     if (!error) setShowModal(false);
@@ -218,16 +244,16 @@ export function WalletButton() {
                   disabled={isConnecting}
                   data-testid="button-connect-metamask"
                 >
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" className="w-8 h-8" />
-                  <div className="text-left">
-                    <div className="font-medium">MetaMask</div>
-                    <div className="text-xs text-muted-foreground">Connect with browser extension</div>
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" className="w-7 h-7 flex-shrink-0" />
+                  <div className="text-left min-w-0">
+                    <div className="font-medium text-sm">MetaMask</div>
+                    <div className="text-[10px] text-muted-foreground truncate">Browser extension</div>
                   </div>
                 </Button>
 
                 <Button
                   variant="outline"
-                  className="w-full h-14 bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 justify-start gap-4 text-white"
+                  className="w-full h-12 bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 justify-start gap-3 text-white"
                   onClick={async () => {
                     await connectSolana();
                     if (!error) setShowModal(false);
@@ -235,15 +261,19 @@ export function WalletButton() {
                   disabled={isConnecting}
                   data-testid="button-connect-phantom"
                 >
-                  <img src="https://phantom.app/img/phantom-logo.svg" alt="Phantom" className="w-8 h-8" />
-                  <div className="text-left">
-                    <div className="font-medium">Phantom</div>
-                    <div className="text-xs text-muted-foreground">Connect Solana wallet</div>
+                  <div className="w-7 h-7 rounded-full bg-[#AB9FF2] flex items-center justify-center flex-shrink-0">
+                    <svg viewBox="0 0 128 128" className="w-4 h-4">
+                      <path fill="white" d="M110.6 46.5c-3.3-21.8-21.3-38.4-43.3-38.4-24.2 0-43.9 19.6-43.9 43.9 0 3.1.3 6.2 1 9.1-15.3 3.3-26.8 17-26.8 33.3 0 18.8 15.3 34.1 34.1 34.1h71.6c16.6 0 30.1-13.5 30.1-30.1 0-16.4-13.1-29.7-29.4-30.1-.7-8.2-1.7-15.5-3.4-21.8z"/>
+                    </svg>
+                  </div>
+                  <div className="text-left min-w-0">
+                    <div className="font-medium text-sm">Phantom</div>
+                    <div className="text-[10px] text-muted-foreground truncate">Solana wallet</div>
                   </div>
                 </Button>
 
-                <div className="pt-4 border-t border-white/10">
-                  <p className="text-xs text-center text-muted-foreground">
+                <div className="pt-3 border-t border-white/10">
+                  <p className="text-[10px] text-center text-muted-foreground">
                     By connecting, you agree to our Terms of Service
                   </p>
                 </div>

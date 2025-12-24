@@ -7,10 +7,11 @@ import { Badge } from "@/components/ui/badge";
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
+  { href: "/wallet", label: "Wallet", icon: Coins, badge: "New" },
   { href: "/ecosystem", label: "Ecosystem", icon: Box },
   { href: "/swap", label: "Swap", icon: ArrowUpDown, badge: "DeFi" },
   { href: "/faucet", label: "Faucet", icon: Droplets },
-  { href: "/launchpad", label: "Launchpad", icon: Rocket, badge: "New" },
+  { href: "/launchpad", label: "Launchpad", icon: Rocket },
   { href: "/liquidity", label: "Liquidity", icon: Droplets },
   { href: "/nft", label: "NFT Market", icon: ImageIcon },
   { href: "/nft-gallery", label: "NFT Gallery", icon: ImageIcon },
