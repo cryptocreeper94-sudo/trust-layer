@@ -251,7 +251,7 @@ export class DarkWaveBlockchain {
           }).onConflictDoNothing();
         }
 
-        for (const address of affectedAddresses) {
+        for (const address of Array.from(affectedAddresses)) {
           const account = this.accounts.get(address);
           if (!account) continue;
           
