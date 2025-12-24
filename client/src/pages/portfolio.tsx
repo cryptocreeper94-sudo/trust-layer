@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { 
   ArrowLeft, Wallet, TrendingUp, TrendingDown, PieChart, 
-  Coins, Lock, Gift, RefreshCw, ChevronDown, ExternalLink
+  Coins, Lock, Gift, RefreshCw, ChevronDown, ExternalLink, BarChart3
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -14,6 +14,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { WalletButton } from "@/components/wallet-button";
+import { PortfolioAnalytics } from "@/components/portfolio-analytics";
 
 const formatAmount = (amount: string) => {
   try {
@@ -160,10 +161,14 @@ export default function Portfolio() {
           </motion.div>
 
           <Tabs defaultValue="tokens" className="mb-6">
-            <TabsList className="w-full grid grid-cols-3">
+            <TabsList className="w-full grid grid-cols-4">
               <TabsTrigger value="tokens" className="text-xs">Tokens</TabsTrigger>
               <TabsTrigger value="staking" className="text-xs">Staking</TabsTrigger>
               <TabsTrigger value="nfts" className="text-xs">NFTs</TabsTrigger>
+              <TabsTrigger value="analytics" className="text-xs" data-testid="tab-analytics">
+                <BarChart3 className="w-3 h-3 mr-1" />
+                P/L
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="tokens" className="mt-4">
@@ -295,6 +300,15 @@ export default function Portfolio() {
                     </Link>
                   </div>
                 )}
+              </motion.div>
+            </TabsContent>
+
+            <TabsContent value="analytics" className="mt-4">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <PortfolioAnalytics />
               </motion.div>
             </TabsContent>
           </Tabs>

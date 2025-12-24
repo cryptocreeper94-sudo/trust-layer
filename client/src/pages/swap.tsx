@@ -4,18 +4,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { 
   ArrowUpDown, ArrowLeft, Wallet, Settings, ChevronDown, Loader2,
-  Sparkles, Zap, TrendingUp, RefreshCw, Info, AlertCircle
+  Sparkles, Zap, TrendingUp, RefreshCw, Info, AlertCircle, Target, Clock
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { WalletButton } from "@/components/wallet-button";
+import { LimitOrderForm, LimitOrdersList } from "@/components/limit-orders";
 
 interface TokenInfo {
   symbol: string;
@@ -69,6 +71,7 @@ export default function Swap() {
   const [showSettings, setShowSettings] = useState(false);
   const [recentOpen, setRecentOpen] = useState(false);
   const [selectingToken, setSelectingToken] = useState<"in" | "out" | null>(null);
+  const [orderType, setOrderType] = useState<"market" | "limit">("market");
 
   const { data: swapInfo } = useQuery<{ 
     pairs: any[]; 
@@ -231,7 +234,18 @@ export default function Swap() {
             <GlassCard glow>
               <div className="p-4">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm font-bold">Swap</span>
+                  <Tabs value={orderType} onValueChange={(v) => setOrderType(v as "market" | "limit")} className="w-auto">
+                    <TabsList className="h-8">
+                      <TabsTrigger value="market" className="text-xs px-3 h-6 gap-1" data-testid="tab-market">
+                        <Zap className="w-3 h-3" />
+                        Market
+                      </TabsTrigger>
+                      <TabsTrigger value="limit" className="text-xs px-3 h-6 gap-1" data-testid="tab-limit">
+                        <Target className="w-3 h-3" />
+                        Limit
+                      </TabsTrigger>
+                    </TabsList>
+                  </Tabs>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -277,7 +291,9 @@ export default function Swap() {
                   )}
                 </AnimatePresence>
 
-                <div className="space-y-2">
+                {orderType === "market" ? (
+                  <>
+                  <div className="space-y-2">
                   <div className="p-3 rounded-xl bg-white/5 border border-white/10">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-[10px] text-muted-foreground">You Pay</span>
@@ -344,47 +360,65 @@ export default function Swap() {
                   </div>
                 </div>
 
-                {amountIn && parseFloat(amountIn) > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-3 p-3 rounded-lg bg-primary/10 border border-primary/20"
-                  >
-                    <div className="space-y-1 text-xs">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Rate</span>
-                        <span>1 {tokenIn.symbol} = ~0.001 {tokenOut.symbol}</span>
+                  {amountIn && parseFloat(amountIn) > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-3 p-3 rounded-lg bg-primary/10 border border-primary/20"
+                    >
+                      <div className="space-y-1 text-xs">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Rate</span>
+                          <span>1 {tokenIn.symbol} = ~0.001 {tokenOut.symbol}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Price Impact</span>
+                          <span className="text-green-400">{quoteData?.priceImpact || "<0.01"}%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Min. Received</span>
+                          <span>{quoteData ? formatAmount(quoteData.minReceived) : "0"} {tokenOut.symbol}</span>
+                        </div>
                       </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Price Impact</span>
-                        <span className="text-green-400">{quoteData?.priceImpact || "<0.01"}%</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Min. Received</span>
-                        <span>{quoteData ? formatAmount(quoteData.minReceived) : "0"} {tokenOut.symbol}</span>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-
-                <Button
-                  className="w-full h-11 mt-4 text-sm font-bold bg-gradient-to-r from-primary to-cyan-400 text-black"
-                  onClick={() => swapMutation.mutate()}
-                  disabled={swapMutation.isPending || !amountIn || parseFloat(amountIn) <= 0}
-                  data-testid="button-swap"
-                >
-                  {swapMutation.isPending ? (
-                    <span className="flex items-center gap-2">
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Swapping...
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-2">
-                      <Sparkles className="w-4 h-4" />
-                      Swap
-                    </span>
+                    </motion.div>
                   )}
-                </Button>
+
+                  <Button
+                    className="w-full h-11 mt-4 text-sm font-bold bg-gradient-to-r from-primary to-cyan-400 text-black"
+                    onClick={() => swapMutation.mutate()}
+                    disabled={swapMutation.isPending || !amountIn || parseFloat(amountIn) <= 0}
+                    data-testid="button-swap"
+                  >
+                    {swapMutation.isPending ? (
+                      <span className="flex items-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Swapping...
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        <Sparkles className="w-4 h-4" />
+                        Swap
+                      </span>
+                    )}
+                  </Button>
+                  </>
+                ) : (
+                  <div className="space-y-4">
+                    <LimitOrderForm
+                      tokenIn={tokenIn}
+                      tokenOut={tokenOut}
+                      onTokenInClick={() => setSelectingToken("in")}
+                      onTokenOutClick={() => setSelectingToken("out")}
+                    />
+                    <div className="border-t border-white/10 pt-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Clock className="w-4 h-4 text-primary" />
+                        <h3 className="font-semibold text-sm">Your Limit Orders</h3>
+                      </div>
+                      <LimitOrdersList />
+                    </div>
+                  </div>
+                )}
               </div>
             </GlassCard>
           </motion.div>
