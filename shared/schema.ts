@@ -1194,4 +1194,123 @@ export const insertLiquidStakingEventSchema = createInsertSchema(liquidStakingEv
 export type InsertLiquidStakingEvent = z.infer<typeof insertLiquidStakingEventSchema>;
 export type LiquidStakingEvent = typeof liquidStakingEvents.$inferSelect;
 
-export const APP_VERSION = "1.0.8";
+// ============================================
+// WHITELIST & AIRDROP SYSTEM
+// ============================================
+
+export const whitelistTiers = pgTable("whitelist_tiers", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull().unique(),
+  description: text("description"),
+  allocation: text("allocation").notNull().default("0"),
+  multiplier: text("multiplier").notNull().default("1"),
+  maxMembers: integer("max_members"),
+  benefits: text("benefits"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertWhitelistTierSchema = createInsertSchema(whitelistTiers).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertWhitelistTier = z.infer<typeof insertWhitelistTierSchema>;
+export type WhitelistTier = typeof whitelistTiers.$inferSelect;
+
+export const whitelistEntries = pgTable("whitelist_entries", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id"),
+  email: text("email"),
+  walletAddress: text("wallet_address"),
+  tierId: varchar("tier_id").references(() => whitelistTiers.id),
+  status: text("status").notNull().default("pending"),
+  contributionScore: integer("contribution_score").notNull().default(0),
+  contributionNotes: text("contribution_notes"),
+  referralCode: text("referral_code"),
+  referredBy: text("referred_by"),
+  addedBy: text("added_by"),
+  approvedAt: timestamp("approved_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertWhitelistEntrySchema = createInsertSchema(whitelistEntries).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  approvedAt: true,
+});
+
+export type InsertWhitelistEntry = z.infer<typeof insertWhitelistEntrySchema>;
+export type WhitelistEntry = typeof whitelistEntries.$inferSelect;
+
+export const airdropAllocations = pgTable("airdrop_allocations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  category: text("category").notNull().default("genesis"),
+  totalAmount: text("total_amount").notNull().default("0"),
+  claimedAmount: text("claimed_amount").notNull().default("0"),
+  startDate: timestamp("start_date"),
+  endDate: timestamp("end_date"),
+  isActive: boolean("is_active").notNull().default(false),
+  requiresWhitelist: boolean("requires_whitelist").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertAirdropAllocationSchema = createInsertSchema(airdropAllocations).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertAirdropAllocation = z.infer<typeof insertAirdropAllocationSchema>;
+export type AirdropAllocation = typeof airdropAllocations.$inferSelect;
+
+export const airdropClaims = pgTable("airdrop_claims", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  allocationId: varchar("allocation_id").references(() => airdropAllocations.id),
+  userId: text("user_id"),
+  walletAddress: text("wallet_address"),
+  amount: text("amount").notNull().default("0"),
+  status: text("status").notNull().default("pending"),
+  claimTxHash: text("claim_tx_hash"),
+  claimedAt: timestamp("claimed_at"),
+  expiresAt: timestamp("expires_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertAirdropClaimSchema = createInsertSchema(airdropClaims).omit({
+  id: true,
+  createdAt: true,
+  claimedAt: true,
+});
+
+export type InsertAirdropClaim = z.infer<typeof insertAirdropClaimSchema>;
+export type AirdropClaim = typeof airdropClaims.$inferSelect;
+
+export const tokenGifts = pgTable("token_gifts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  recipientUserId: text("recipient_user_id"),
+  recipientEmail: text("recipient_email"),
+  recipientWallet: text("recipient_wallet"),
+  recipientName: text("recipient_name"),
+  amount: text("amount").notNull().default("0"),
+  reason: text("reason"),
+  category: text("category").notNull().default("gift"),
+  status: text("status").notNull().default("pending"),
+  grantedBy: text("granted_by"),
+  claimTxHash: text("claim_tx_hash"),
+  claimedAt: timestamp("claimed_at"),
+  expiresAt: timestamp("expires_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertTokenGiftSchema = createInsertSchema(tokenGifts).omit({
+  id: true,
+  createdAt: true,
+  claimedAt: true,
+});
+
+export type InsertTokenGift = z.infer<typeof insertTokenGiftSchema>;
+export type TokenGift = typeof tokenGifts.$inferSelect;
+
+export const APP_VERSION = "1.0.9";
