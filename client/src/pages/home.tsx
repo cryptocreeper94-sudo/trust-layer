@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, LogOut, User, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette } from "lucide-react";
+import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, LogOut, User, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Trophy, Target } from "lucide-react";
 import { InfoTooltip } from "@/components/info-tooltip";
 import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.png";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
@@ -413,6 +413,42 @@ export default function Home() {
                       <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-amber-500/40 hover:bg-amber-500/5 transition-all text-center group/item" data-testid="link-webhooks">
                         <Webhook className="w-4 h-4 mx-auto mb-1 text-amber-400" />
                         <span className="text-[10px] text-gray-300 group-hover/item:text-white">Webhooks</span>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+              </GlassCard>
+            </motion.div>
+
+            {/* Earn & Track Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
+              <GlassCard className="h-full group hover:border-amber-500/50 transition-all duration-300">
+                <div className="p-5">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center group-hover:shadow-[0_0_30px_rgba(251,191,36,0.3)] transition-shadow">
+                      <Trophy className="w-6 h-6 text-amber-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-white">Earn & Track</h3>
+                      <p className="text-[11px] text-muted-foreground">XP, quests & network</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Link href="/quests">
+                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-amber-500/40 hover:bg-amber-500/5 transition-all text-center group/item" data-testid="link-quests">
+                        <Target className="w-4 h-4 mx-auto mb-1 text-amber-400" />
+                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Quests</span>
+                      </div>
+                    </Link>
+                    <Link href="/network">
+                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-green-500/40 hover:bg-green-500/5 transition-all text-center group/item" data-testid="link-network">
+                        <Activity className="w-4 h-4 mx-auto mb-1 text-green-400" />
+                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Network</span>
                       </div>
                     </Link>
                   </div>
