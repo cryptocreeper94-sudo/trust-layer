@@ -174,6 +174,201 @@ if __name__ == '__main__':
 gunicorn==21.2.0` },
     ]
   },
+  vue: {
+    name: "Vue.js App",
+    icon: "💚",
+    files: [
+      { name: "index.html", content: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue App</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>` },
+      { name: "src/main.js", content: `import { createApp } from 'vue'
+import App from './App.vue'
+
+createApp(App).mount('#app')` },
+      { name: "src/App.vue", content: `<script setup>
+import { ref } from 'vue'
+const count = ref(0)
+</script>
+
+<template>
+  <div style="padding: 2rem; font-family: system-ui;">
+    <h1>Hello DarkWave!</h1>
+    <button @click="count++">Count: {{ count }}</button>
+  </div>
+</template>` },
+      { name: "package.json", content: `{
+  "name": "vue-app",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "@vitejs/plugin-vue": "^5.0.0"
+  }
+}` },
+    ]
+  },
+  nextjs: {
+    name: "Next.js App",
+    icon: "▲",
+    files: [
+      { name: "pages/index.js", content: `import { useState } from 'react'
+
+export default function Home() {
+  const [count, setCount] = useState(0)
+  
+  return (
+    <div style={{ padding: '2rem', fontFamily: 'system-ui' }}>
+      <h1>Hello DarkWave!</h1>
+      <p>Welcome to Next.js on DarkWave Studio</p>
+      <button onClick={() => setCount(c => c + 1)}>
+        Count: {count}
+      </button>
+    </div>
+  )
+}` },
+      { name: "pages/_app.js", content: `export default function App({ Component, pageProps }) {
+  return <Component {...pageProps} />
+}` },
+      { name: "package.json", content: `{
+  "name": "nextjs-app",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}` },
+    ]
+  },
+  django: {
+    name: "Django API",
+    icon: "🎸",
+    files: [
+      { name: "manage.py", content: `#!/usr/bin/env python
+import os
+import sys
+
+if __name__ == '__main__':
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+    from django.core.management import execute_from_command_line
+    execute_from_command_line(sys.argv)` },
+      { name: "config/settings.py", content: `from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
+SECRET_KEY = 'darkwave-dev-key'
+DEBUG = True
+ALLOWED_HOSTS = ['*']
+INSTALLED_APPS = ['django.contrib.contenttypes', 'api']
+ROOT_URLCONF = 'config.urls'` },
+      { name: "config/urls.py", content: `from django.urls import path
+from api.views import health, home
+
+urlpatterns = [
+    path('', home),
+    path('api/health/', health),
+]` },
+      { name: "api/views.py", content: `from django.http import JsonResponse
+
+def home(request):
+    return JsonResponse({'message': 'Welcome to DarkWave API!'})
+
+def health(request):
+    return JsonResponse({'status': 'ok'})` },
+      { name: "requirements.txt", content: `django==5.0.0
+gunicorn==21.2.0` },
+    ]
+  },
+  go: {
+    name: "Go API",
+    icon: "🐹",
+    files: [
+      { name: "main.go", content: `package main
+
+import (
+    "encoding/json"
+    "log"
+    "net/http"
+)
+
+func main() {
+    http.HandleFunc("/", homeHandler)
+    http.HandleFunc("/api/health", healthHandler)
+    log.Println("Server running on :8080")
+    log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(map[string]string{"message": "Welcome to DarkWave API!"})
+}
+
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(map[string]string{"status": "ok"})
+}` },
+      { name: "go.mod", content: `module darkwave-api
+
+go 1.21` },
+    ]
+  },
+  rust: {
+    name: "Rust API",
+    icon: "🦀",
+    files: [
+      { name: "src/main.rs", content: `use actix_web::{web, App, HttpServer, HttpResponse, Responder};
+use serde_json::json;
+
+async fn home() -> impl Responder {
+    HttpResponse::Ok().json(json!({"message": "Welcome to DarkWave API!"}))
+}
+
+async fn health() -> impl Responder {
+    HttpResponse::Ok().json(json!({"status": "ok"}))
+}
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    println!("Server running on http://0.0.0.0:8080");
+    HttpServer::new(|| {
+        App::new()
+            .route("/", web::get().to(home))
+            .route("/api/health", web::get().to(health))
+    })
+    .bind("0.0.0.0:8080")?
+    .run()
+    .await
+}` },
+      { name: "Cargo.toml", content: `[package]
+name = "darkwave-api"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+actix-web = "4"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }` },
+    ]
+  },
 };
 
 const PROTOCOL_DEFINITIONS: Record<string, string> = {
@@ -276,7 +471,15 @@ export default function Studio() {
   const [running, setRunning] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [commitMessage, setCommitMessage] = useState("");
-  const [bottomTab, setBottomTab] = useState<"console" | "git" | "terminal" | "deploy" | "packages">("console");
+  const [bottomTab, setBottomTab] = useState<"console" | "git" | "terminal" | "deploy" | "packages" | "cicd">("console");
+  
+  // CI/CD Pipeline state
+  const [pipelines, setPipelines] = useState<{id: string, name: string, trigger: string, status: string, lastRun: string}[]>([
+    { id: "1", name: "Build & Test", trigger: "on_push", status: "success", lastRun: "2 hours ago" },
+    { id: "2", name: "Deploy to Staging", trigger: "on_merge", status: "pending", lastRun: "1 day ago" },
+  ]);
+  const [newPipelineName, setNewPipelineName] = useState("");
+  const [newPipelineTrigger, setNewPipelineTrigger] = useState("on_push");
   const [mobileView, setMobileView] = useState<"editor" | "files" | "console" | "preview">("editor");
   const [terminalHistory, setTerminalHistory] = useState<TerminalLine[]>([
     { type: "output", content: "DarkWave Terminal v1.0.0" },
@@ -299,6 +502,16 @@ export default function Studio() {
   const [aiResponse, setAiResponse] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
   const aiPanelRef = useRef<HTMLDivElement>(null);
+  
+  // Database Explorer state
+  const [dbTables, setDbTables] = useState<{name: string, rowCount: number}[]>([]);
+  const [selectedTable, setSelectedTable] = useState<string | null>(null);
+  const [tableRows, setTableRows] = useState<any[]>([]);
+  const [tableColumns, setTableColumns] = useState<string[]>([]);
+  const [dbQuery, setDbQuery] = useState("");
+  const [dbQueryResult, setDbQueryResult] = useState<any>(null);
+  const [dbLoading, setDbLoading] = useState(false);
+  const [dbError, setDbError] = useState<string | null>(null);
   
   // Live Preview state
   const [showPreview, setShowPreview] = useState(false);
@@ -1684,12 +1897,15 @@ export default function Studio() {
         {/* Sidebar - Hidden on mobile, shown based on mobileView */}
         <aside className={`w-full md:w-64 border-r border-white/5 bg-black/40 flex flex-col shrink-0 ${mobileView === "files" ? "flex" : "hidden"} md:flex`}>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
-            <TabsList className="w-full grid grid-cols-4 h-10 bg-transparent border-b border-white/5 rounded-none">
+            <TabsList className="w-full grid grid-cols-5 h-10 bg-transparent border-b border-white/5 rounded-none">
               <TabsTrigger value="files" className="text-xs data-[state=active]:bg-white/5 rounded-none" data-testid="tab-files">
                 <FolderOpen className="w-3.5 h-3.5 mr-1" /> Files
               </TabsTrigger>
               <TabsTrigger value="search" className="text-xs data-[state=active]:bg-white/5 rounded-none" data-testid="tab-search">
                 <Search className="w-3.5 h-3.5 mr-1" /> Search
+              </TabsTrigger>
+              <TabsTrigger value="database" className="text-xs data-[state=active]:bg-white/5 rounded-none" data-testid="tab-database">
+                <Database className="w-3.5 h-3.5 mr-1" /> DB
               </TabsTrigger>
               <TabsTrigger value="secrets" className="text-xs data-[state=active]:bg-white/5 rounded-none" data-testid="tab-secrets">
                 <Lock className="w-3.5 h-3.5 mr-1" /> Secrets
@@ -1907,6 +2123,135 @@ export default function Studio() {
                       </div>
                     ))}
                   </div>
+                </div>
+              )}
+            </TabsContent>
+
+            <TabsContent value="database" className="flex-1 overflow-auto p-2 m-0">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs text-muted-foreground uppercase flex items-center gap-1">
+                  Database Explorer
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info className="w-3 h-3 text-muted-foreground hover:text-cyan-400 transition-colors cursor-help" />
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="max-w-xs bg-black/90 border-white/10">
+                      <p className="text-xs">Browse tables, view data, and run SQL queries on your project database.</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </span>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-6 w-6 p-0"
+                  onClick={async () => {
+                    setDbLoading(true);
+                    setDbError(null);
+                    try {
+                      const res = await fetch("/api/studio/database/tables");
+                      if (!res.ok) throw new Error("Failed to fetch tables");
+                      const data = await res.json();
+                      setDbTables(data.tables || []);
+                    } catch (e: any) {
+                      setDbError(e.message);
+                    } finally {
+                      setDbLoading(false);
+                    }
+                  }}
+                  data-testid="button-refresh-tables"
+                >
+                  <RotateCcw className={`w-3.5 h-3.5 ${dbLoading ? 'animate-spin' : ''}`} />
+                </Button>
+              </div>
+
+              {dbError && (
+                <div className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded p-2 mb-2">
+                  {dbError}
+                </div>
+              )}
+
+              <div className="space-y-1 mb-3">
+                {dbTables.length === 0 && !dbLoading && (
+                  <p className="text-xs text-muted-foreground">Click refresh to load tables from your database.</p>
+                )}
+                {dbTables.map((table) => (
+                  <div
+                    key={table.name}
+                    onClick={async () => {
+                      setSelectedTable(table.name);
+                      setDbLoading(true);
+                      try {
+                        const res = await fetch(`/api/studio/database/table/${table.name}`);
+                        if (!res.ok) throw new Error("Failed to fetch table data");
+                        const data = await res.json();
+                        setTableColumns(data.columns || []);
+                        setTableRows(data.rows || []);
+                      } catch (e: any) {
+                        setDbError(e.message);
+                      } finally {
+                        setDbLoading(false);
+                      }
+                    }}
+                    className={`flex items-center justify-between gap-2 p-2 rounded cursor-pointer text-xs transition-colors ${
+                      selectedTable === table.name ? "bg-cyan-500/20 text-cyan-400" : "bg-black/30 hover:bg-white/5"
+                    }`}
+                    data-testid={`table-${table.name}`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Database className="w-3 h-3" />
+                      <span className="font-mono">{table.name}</span>
+                    </div>
+                    <span className="text-muted-foreground">{table.rowCount} rows</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="border-t border-white/5 pt-2">
+                <span className="text-xs text-muted-foreground block mb-2">SQL Query</span>
+                <textarea
+                  value={dbQuery}
+                  onChange={(e) => setDbQuery(e.target.value)}
+                  placeholder="SELECT * FROM users LIMIT 10;"
+                  className="w-full h-16 text-xs bg-black/30 border border-white/10 rounded p-2 font-mono resize-none focus:outline-none focus:border-cyan-400/50"
+                  data-testid="input-sql-query"
+                />
+                <Button
+                  size="sm"
+                  onClick={async () => {
+                    if (!dbQuery.trim()) return;
+                    setDbLoading(true);
+                    setDbError(null);
+                    setDbQueryResult(null);
+                    try {
+                      const res = await fetch("/api/studio/database/query", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ query: dbQuery }),
+                      });
+                      if (!res.ok) {
+                        const err = await res.json();
+                        throw new Error(err.error || "Query failed");
+                      }
+                      const data = await res.json();
+                      setDbQueryResult(data);
+                    } catch (e: any) {
+                      setDbError(e.message);
+                    } finally {
+                      setDbLoading(false);
+                    }
+                  }}
+                  className="w-full mt-2 text-xs"
+                  disabled={dbLoading || !dbQuery.trim()}
+                  data-testid="button-run-query"
+                >
+                  {dbLoading ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <Play className="w-3 h-3 mr-1" />}
+                  Run Query
+                </Button>
+              </div>
+
+              {dbQueryResult && (
+                <div className="mt-2 p-2 bg-black/30 rounded text-xs border border-white/5 max-h-32 overflow-auto">
+                  <pre className="text-gray-300 whitespace-pre-wrap">{JSON.stringify(dbQueryResult, null, 2)}</pre>
                 </div>
               )}
             </TabsContent>
@@ -2244,6 +2589,15 @@ export default function Studio() {
               >
                 <Package className="w-3 h-3 mr-1" /> Packages
               </Button>
+              <Button
+                size="sm"
+                variant={bottomTab === "cicd" ? "secondary" : "ghost"}
+                onClick={() => setBottomTab("cicd")}
+                className={`h-6 text-xs px-2 transition-all duration-200 ${bottomTab === "cicd" ? "bg-emerald-500/20 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.3)]" : "hover:bg-white/5"}`}
+                data-testid="button-cicd-tab"
+              >
+                <Zap className="w-3 h-3 mr-1" /> CI/CD
+              </Button>
             </div>
 
             <AnimatePresence mode="wait">
@@ -2526,6 +2880,125 @@ export default function Studio() {
                           </Button>
                         </div>
                       ))
+                    )}
+                  </div>
+                </motion.div>
+              )}
+
+              {bottomTab === "cicd" && (
+                <motion.div
+                  key="cicd"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex-1 p-3 overflow-auto"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs text-muted-foreground uppercase">CI/CD Pipelines</span>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-6 text-xs"
+                      onClick={() => {
+                        if (newPipelineName.trim()) {
+                          setPipelines(prev => [...prev, {
+                            id: Math.random().toString(36).substring(2) + Date.now().toString(36),
+                            name: newPipelineName,
+                            trigger: newPipelineTrigger,
+                            status: "pending",
+                            lastRun: "Never",
+                          }]);
+                          setNewPipelineName("");
+                        }
+                      }}
+                      data-testid="button-add-pipeline"
+                    >
+                      <Plus className="w-3 h-3 mr-1" /> Add Pipeline
+                    </Button>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 mb-3">
+                    <Input
+                      value={newPipelineName}
+                      onChange={(e) => setNewPipelineName(e.target.value)}
+                      placeholder="Pipeline name..."
+                      className="flex-1 h-7 text-xs bg-black/30 border-white/10"
+                      data-testid="input-pipeline-name"
+                    />
+                    <select
+                      value={newPipelineTrigger}
+                      onChange={(e) => setNewPipelineTrigger(e.target.value)}
+                      className="h-7 text-xs bg-black/30 border border-white/10 rounded px-2 text-gray-300"
+                      data-testid="select-pipeline-trigger"
+                    >
+                      <option value="on_push">On Push</option>
+                      <option value="on_merge">On Merge</option>
+                      <option value="on_tag">On Tag</option>
+                      <option value="manual">Manual</option>
+                      <option value="scheduled">Scheduled</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    {pipelines.map((pipeline) => (
+                      <div
+                        key={pipeline.id}
+                        className="flex items-center justify-between p-2 rounded bg-black/30 border border-white/5 hover:border-emerald-500/30 transition-all group"
+                        data-testid={`pipeline-${pipeline.id}`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-2 h-2 rounded-full ${
+                            pipeline.status === "success" ? "bg-green-400" :
+                            pipeline.status === "failed" ? "bg-red-400" :
+                            pipeline.status === "running" ? "bg-cyan-400 animate-pulse" :
+                            "bg-gray-400"
+                          }`} />
+                          <div>
+                            <p className="text-xs text-gray-200">{pipeline.name}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {pipeline.trigger.replace("_", " ")} • {pipeline.lastRun}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-6 text-xs px-2"
+                            onClick={() => {
+                              setPipelines(prev => prev.map(p => 
+                                p.id === pipeline.id 
+                                  ? { ...p, status: "running", lastRun: "Just now" }
+                                  : p
+                              ));
+                              setTimeout(() => {
+                                setPipelines(prev => prev.map(p =>
+                                  p.id === pipeline.id
+                                    ? { ...p, status: Math.random() > 0.2 ? "success" : "failed" }
+                                    : p
+                                ));
+                              }, 2000);
+                            }}
+                            data-testid={`button-run-pipeline-${pipeline.id}`}
+                          >
+                            <Play className="w-3 h-3 mr-1" /> Run
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => setPipelines(prev => prev.filter(p => p.id !== pipeline.id))}
+                            data-testid={`button-delete-pipeline-${pipeline.id}`}
+                          >
+                            <X className="w-3 h-3 text-red-400" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                    {pipelines.length === 0 && (
+                      <p className="text-xs text-muted-foreground text-center py-4">
+                        No pipelines configured. Add a pipeline to automate your builds and deployments.
+                      </p>
                     )}
                   </div>
                 </motion.div>

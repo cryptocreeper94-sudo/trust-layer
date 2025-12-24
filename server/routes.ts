@@ -3,6 +3,8 @@ import { createServer, type Server } from "http";
 import crypto from "crypto";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
+import { db } from "./db";
+import { sql } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
 import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, APP_VERSION } from "@shared/schema";
@@ -2827,6 +2829,100 @@ ${context ? `- Additional context: ${context}` : ""}`;
       } else {
         res.status(500).json({ error: "AI assistance failed" });
       }
+    }
+  });
+
+  // ============================================
+  // DATABASE EXPLORER
+  // ============================================
+
+  app.get("/api/studio/database/tables", isAuthenticated, async (req: any, res) => {
+    try {
+      const result = await db.execute(sql`
+        SELECT 
+          table_name,
+          (SELECT COUNT(*) FROM information_schema.columns WHERE table_name = t.table_name AND table_schema = 'public') as column_count
+        FROM information_schema.tables t
+        WHERE table_schema = 'public' AND table_type = 'BASE TABLE'
+        ORDER BY table_name
+      `);
+      
+      const tables = await Promise.all(
+        result.rows.map(async (row: any) => {
+          try {
+            const countResult = await db.execute(sql.raw(`SELECT COUNT(*) as count FROM "${row.table_name}"`));
+            return {
+              name: row.table_name,
+              rowCount: Number(countResult.rows[0]?.count || 0),
+            };
+          } catch {
+            return { name: row.table_name, rowCount: 0 };
+          }
+        })
+      );
+      
+      res.json({ tables });
+    } catch (error: any) {
+      console.error("Database tables error:", error);
+      res.status(500).json({ error: error.message || "Failed to fetch tables" });
+    }
+  });
+
+  app.get("/api/studio/database/table/:name", isAuthenticated, async (req: any, res) => {
+    try {
+      const { name } = req.params;
+      
+      // Validate table name to prevent SQL injection
+      if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name)) {
+        return res.status(400).json({ error: "Invalid table name" });
+      }
+      
+      // Get columns
+      const columnsResult = await db.execute(sql`
+        SELECT column_name, data_type, is_nullable
+        FROM information_schema.columns
+        WHERE table_schema = 'public' AND table_name = ${name}
+        ORDER BY ordinal_position
+      `);
+      
+      const columns = columnsResult.rows.map((row: any) => row.column_name);
+      
+      // Get rows (limit to 100)
+      const rowsResult = await db.execute(sql.raw(`SELECT * FROM "${name}" LIMIT 100`));
+      
+      res.json({ columns, rows: rowsResult.rows });
+    } catch (error: any) {
+      console.error("Database table error:", error);
+      res.status(500).json({ error: error.message || "Failed to fetch table data" });
+    }
+  });
+
+  app.post("/api/studio/database/query", isAuthenticated, async (req: any, res) => {
+    try {
+      const { query } = req.body;
+      
+      if (!query) {
+        return res.status(400).json({ error: "Query is required" });
+      }
+      
+      // Only allow SELECT queries for safety
+      const trimmedQuery = query.trim().toLowerCase();
+      if (!trimmedQuery.startsWith("select")) {
+        return res.status(400).json({ error: "Only SELECT queries are allowed in the explorer. Use migrations for data modifications." });
+      }
+      
+      // Execute the query with a limit
+      const limitedQuery = query.includes("limit") ? query : `${query} LIMIT 100`;
+      const result = await db.execute(sql.raw(limitedQuery));
+      
+      res.json({
+        columns: result.rows.length > 0 ? Object.keys(result.rows[0]) : [],
+        rows: result.rows,
+        rowCount: result.rows.length,
+      });
+    } catch (error: any) {
+      console.error("Database query error:", error);
+      res.status(500).json({ error: error.message || "Query failed" });
     }
   });
 
