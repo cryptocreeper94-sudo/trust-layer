@@ -3432,27 +3432,63 @@ Current context:
       const oldPrice = parseFloat(priceHistory[1]?.price || String(currentPrice));
       const priceChange = oldPrice > 0 ? ((currentPrice - oldPrice) / oldPrice * 100) : 0;
       
-      const dwtValue = parseFloat(dwtBalance) / 1e18 * currentPrice;
+      const dwtBalanceNum = parseFloat(dwtBalance) / 1e18;
+      const dwtValue = dwtBalanceNum * currentPrice;
       
+      // Get liquid staking position
+      const liquidPosition = await storage.getLiquidStakingPosition(userId);
+      const stDwtBalance = liquidPosition?.stDwtBalance || "0";
+      const stDwtBalanceNum = parseFloat(stDwtBalance) / 1e18;
+      const liquidState = await storage.getLiquidStakingState();
+      const exchangeRate = parseFloat(liquidState?.exchangeRate || "1000000000000000000") / 1e18;
+      const stDwtDwtEquivalent = stDwtBalanceNum * exchangeRate;
+      const stDwtValue = stDwtDwtEquivalent * currentPrice;
+      
+      // Get regular staking positions - amounts are stored as tokens not wei
       const stakingPositions = await storage.getStakingPositions(userId);
-      const totalStaked = stakingPositions.reduce((sum, p) => (BigInt(sum) + BigInt(p.amount)).toString(), "0");
-      const pendingRewards = stakingPositions.reduce((sum, p) => (BigInt(sum) + BigInt(p.pendingRewards || "0")).toString(), "0");
-      const stakedValue = parseFloat(totalStaked) / 1e18 * currentPrice;
+      const totalStakedTokens = stakingPositions.reduce((sum, p) => sum + parseFloat(p.amount), 0);
+      const totalPendingRewards = stakingPositions.reduce((sum, p) => sum + parseFloat(p.pendingRewards || "0"), 0);
+      const stakedValue = totalStakedTokens * currentPrice;
       
       const lpPositions = await storage.getLiquidityPositions(userId);
-      const lpValue = lpPositions.reduce((sum, p) => sum + parseFloat(p.lpTokens) * 0.01, 0);
+      const lpValue = lpPositions.reduce((sum, p) => sum + parseFloat(p.lpTokens) * currentPrice, 0);
       
-      const totalValue = dwtValue + stakedValue + lpValue;
+      const totalValue = dwtValue + stDwtValue + stakedValue + lpValue;
+      
+      // Build tokens array
+      const tokens: any[] = [];
+      
+      // Always show DWT
+      tokens.push({ 
+        symbol: "DWT", 
+        name: "DarkWave Token", 
+        balance: dwtBalance, 
+        displayBalance: dwtBalanceNum.toFixed(2),
+        value: dwtValue, 
+        change: parseFloat(priceChange.toFixed(2)), 
+        icon: "🌊" 
+      });
+      
+      // Show stDWT if user has any
+      if (stDwtBalanceNum > 0) {
+        tokens.push({
+          symbol: "stDWT",
+          name: "Staked DarkWave Token",
+          balance: stDwtBalance,
+          displayBalance: stDwtBalanceNum.toFixed(2),
+          value: stDwtValue,
+          change: parseFloat(priceChange.toFixed(2)),
+          icon: "💧"
+        });
+      }
       
       res.json({
         totalValue,
         change24h: parseFloat(priceChange.toFixed(2)),
-        tokens: [
-          { symbol: "DWT", name: "DarkWave Token", balance: dwtBalance, value: dwtValue, change: parseFloat(priceChange.toFixed(2)), icon: "🌊" },
-        ],
+        tokens,
         staking: {
-          totalStaked,
-          pendingRewards,
+          totalStaked: totalStakedTokens.toString(),
+          pendingRewards: totalPendingRewards.toFixed(6),
           apy: 12.5,
           stakedValue,
           positions: stakingPositions.map(p => ({
@@ -3461,6 +3497,12 @@ Current context:
             apy: p.poolId.includes("validator") ? 15.0 : p.poolId.includes("delegator") ? 12.5 : 10.0,
             rewards: p.pendingRewards || "0",
           })),
+        },
+        liquidStaking: {
+          stDwtBalance: stDwtBalanceNum.toFixed(2),
+          dwtEquivalent: stDwtDwtEquivalent.toFixed(2),
+          value: stDwtValue,
+          apy: 12,
         },
         liquidity: {
           totalValue: lpValue,

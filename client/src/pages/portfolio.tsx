@@ -58,46 +58,13 @@ export default function Portfolio() {
     queryKey: ["/api/liquid-staking/position"],
   });
 
-  const basePortfolio = portfolioData || {
+  const portfolio = portfolioData || {
     totalValue: 0,
     change24h: 0,
     tokens: [],
     staking: { totalStaked: "0", pendingRewards: "0", apy: 0, stakedValue: 0, positions: [] },
+    liquidStaking: { stDwtBalance: "0", dwtEquivalent: "0", value: 0, apy: 12 },
     nfts: [],
-  };
-  
-  // Build derived tokens array immutably (don't mutate react-query cache)
-  let derivedTokens = [...basePortfolio.tokens];
-  
-  // Add stDWT to tokens if user has liquid staking position (only if not already present)
-  if (liquidPosition && BigInt(liquidPosition.stDwtBalance || "0") > BigInt(0)) {
-    const hasStDwt = derivedTokens.some(t => t.symbol === "stDWT");
-    if (!hasStDwt) {
-      const dwtEquivalent = Number(BigInt(liquidPosition.withdrawableDwt)) / 1e18;
-      const pricePerDwt = 0.000124;
-      const stDwtValue = dwtEquivalent * pricePerDwt;
-      
-      derivedTokens = [...derivedTokens, {
-        symbol: "stDWT",
-        name: "Staked DarkWave Token",
-        balance: liquidPosition.stDwtBalance,
-        value: stDwtValue,
-        change: basePortfolio.tokens[0]?.change || 0,
-        icon: "💧"
-      }];
-    }
-  }
-  
-  // Build immutable portfolio object
-  const portfolio = {
-    ...basePortfolio,
-    tokens: derivedTokens,
-    staking: stakingInfo ? {
-      ...basePortfolio.staking,
-      totalStaked: stakingInfo.totalStaked,
-      pendingRewards: stakingInfo.pendingRewards,
-      positions: stakingInfo.positions || [],
-    } : basePortfolio.staking,
   };
 
   return (
@@ -231,7 +198,7 @@ export default function Portfolio() {
                         </div>
                       </div>
                       <div className="mt-2 pt-2 border-t border-white/5 text-[10px] text-muted-foreground">
-                        Balance: {formatAmount(token.balance)} {token.symbol}
+                        Balance: {(token as any).displayBalance || formatAmount(token.balance)} {token.symbol}
                       </div>
                     </GlassCard>
                   </motion.div>
@@ -253,11 +220,11 @@ export default function Portfolio() {
                   <div className="grid grid-cols-2 gap-3">
                     <div className="p-2 rounded-lg bg-white/5">
                       <div className="text-[10px] text-muted-foreground">Total Staked</div>
-                      <div className="font-bold text-sm">{formatAmount(portfolio.staking.totalStaked)} DWT</div>
+                      <div className="font-bold text-sm">{parseFloat(portfolio.staking.totalStaked).toLocaleString()} DWT</div>
                     </div>
                     <div className="p-2 rounded-lg bg-white/5">
                       <div className="text-[10px] text-muted-foreground">Pending Rewards</div>
-                      <div className="font-bold text-sm text-green-400">{formatAmount(portfolio.staking.pendingRewards)} DWT</div>
+                      <div className="font-bold text-sm text-green-400">{parseFloat(portfolio.staking.pendingRewards || "0").toFixed(4)} DWT</div>
                     </div>
                   </div>
                 </GlassCard>
