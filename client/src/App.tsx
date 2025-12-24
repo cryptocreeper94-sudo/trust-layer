@@ -38,6 +38,7 @@ import Webhooks from "@/pages/webhooks";
 import MultiSig from "@/pages/multisig";
 import ProofOfReserve from "@/pages/proof-of-reserve";
 import LiquidStaking from "@/pages/liquid-staking";
+import AdminRewards from "@/pages/admin-rewards";
 import NotFound from "@/pages/not-found";
 
 function ScrollToTop() {
@@ -87,6 +88,7 @@ function Router() {
         <Route path="/multisig" component={MultiSig} />
         <Route path="/proof-of-reserve" component={ProofOfReserve} />
         <Route path="/liquid-staking" component={LiquidStaking} />
+        <Route path="/admin/rewards" component={AdminRewards} />
         <Route component={NotFound} />
       </Switch>
     </>
