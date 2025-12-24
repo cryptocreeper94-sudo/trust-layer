@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, LogOut, User, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Trophy, Target } from "lucide-react";
 import { InfoTooltip } from "@/components/info-tooltip";
 import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.png";
-import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { OnboardingTour } from "@/components/onboarding-tour";
@@ -69,7 +69,7 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2 mr-auto min-w-0 flex-shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7 flex-shrink-0" />
+            <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7 flex-shrink-0" />
             <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
           <div className="hidden lg:flex items-center gap-4 text-xs font-medium text-muted-foreground mr-4">
