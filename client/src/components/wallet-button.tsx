@@ -169,20 +169,39 @@ export function WalletButton() {
         </span>
       </Button>
 
-      <AnimatePresence>
-        {showModal && (
+      {showModal && (
           <>
             <div 
-              className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm"
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(0,0,0,0.7)',
+                backdropFilter: 'blur(4px)',
+                zIndex: 9998,
+              }}
               onClick={() => setShowModal(false)}
             />
             <div 
-              className="fixed inset-x-0 bottom-0 z-[101] p-4 pb-6 sm:inset-0 sm:flex sm:items-center sm:justify-center"
+              style={{
+                position: 'fixed',
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 'calc(100% - 32px)',
+                maxWidth: '380px',
+                maxHeight: '80vh',
+                overflowY: 'auto',
+                backgroundColor: '#0c1224',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '16px',
+                padding: '20px',
+                zIndex: 9999,
+                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
+              }}
             >
-              <div
-                className="w-full max-w-sm mx-auto bg-background border border-white/10 rounded-2xl p-5 shadow-2xl"
-                style={{ maxHeight: "75vh", overflowY: "auto" }}
-              >
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-bold text-white">Connect Wallet</h2>
                   <button
@@ -273,10 +292,8 @@ export function WalletButton() {
                 </div>
               </div>
             </div>
-          </div>
           </>
         )}
-      </AnimatePresence>
     </>
   );
 }
