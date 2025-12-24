@@ -149,4 +149,50 @@ describe("WDWC Upgradeable", function () {
       expect(await upgraded.isLockProcessed(lockId)).to.equal(true);
     });
   });
+
+  describe("Emergency Pause", function () {
+    const lockId = ethers.keccak256(ethers.toUtf8Bytes("lock1"));
+    const amount = ethers.parseEther("100");
+    const dscAddress = "DSC1abc123def456";
+
+    it("Should start unpaused", async function () {
+      expect(await wdwc.isPaused()).to.equal(false);
+    });
+
+    it("Should allow owner to pause", async function () {
+      await wdwc.pause();
+      expect(await wdwc.isPaused()).to.equal(true);
+    });
+
+    it("Should allow owner to unpause", async function () {
+      await wdwc.pause();
+      await wdwc.unpause();
+      expect(await wdwc.isPaused()).to.equal(false);
+    });
+
+    it("Should reject pause from non-owner", async function () {
+      await expect(wdwc.connect(user1).pause())
+        .to.be.revertedWithCustomError(wdwc, "OwnableUnauthorizedAccount");
+    });
+
+    it("Should block minting when paused", async function () {
+      await wdwc.pause();
+      await expect(wdwc.mint(user1.address, amount, lockId))
+        .to.be.revertedWithCustomError(wdwc, "EnforcedPause");
+    });
+
+    it("Should block bridge burning when paused", async function () {
+      await wdwc.mint(user1.address, amount, lockId);
+      await wdwc.pause();
+      await expect(wdwc.connect(user1).bridgeBurn(amount, dscAddress))
+        .to.be.revertedWithCustomError(wdwc, "EnforcedPause");
+    });
+
+    it("Should allow minting after unpause", async function () {
+      await wdwc.pause();
+      await wdwc.unpause();
+      await wdwc.mint(user1.address, amount, lockId);
+      expect(await wdwc.balanceOf(user1.address)).to.equal(amount);
+    });
+  });
 });

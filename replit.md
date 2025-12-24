@@ -195,7 +195,7 @@ Improvements follow the **DSC Improvement Proposal** process:
 | Control | Ethereum | Solana |
 |---------|----------|--------|
 | Governance Authority | Contract Owner | Program Authority |
-| Emergency Stop | Planned | `set_paused()` |
+| Emergency Stop | `pause()` / `unpause()` | `set_paused()` |
 | Multi-sig Ready | Transfer ownership | Transfer authority |
 | Version Tracking | `VERSION` constant | `protocol_version` field |
 | Timelock | Add via governance | Add via governance |

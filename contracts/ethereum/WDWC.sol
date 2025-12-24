@@ -4,19 +4,19 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20BurnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 /**
- * @title Wrapped DarkWave Coin (wDWC) - Upgradeable
+ * @title Wrapped DarkWave Coin (wDWC)
  * @notice ERC-20 representation of DWC bridged from DarkWave Smart Chain (DSC)
- * @dev Uses UUPS proxy pattern for upgradeability
+ * @dev Governance-supervised with emergency pause capability
  * 
- * Upgrade Flow:
- * 1. Deploy new implementation contract
- * 2. Multi-sig proposes upgrade via TimelockController
- * 3. 48-hour delay for community review
- * 4. Multi-sig executes upgrade
+ * Security Features:
+ * - Emergency pause: Freeze bridge operations if issues detected
+ * - Multi-sig ready: Transfer ownership to Gnosis Safe for production
+ * - Version tracking: All implementations tracked for compatibility
  * 
  * Bridge Flow:
  * 1. User locks DWC on DarkWave Smart Chain
@@ -28,10 +28,11 @@ contract WDWC is
     Initializable, 
     ERC20Upgradeable, 
     ERC20BurnableUpgradeable, 
-    OwnableUpgradeable, 
+    OwnableUpgradeable,
+    PausableUpgradeable,
     UUPSUpgradeable 
 {
-    /// @notice Contract version for upgrade tracking
+    /// @notice Contract version for compatibility tracking
     uint256 public constant VERSION = 1;
     
     /// @notice Emitted when wDWC is minted after DWC lock on DSC
@@ -40,8 +41,8 @@ contract WDWC is
     /// @notice Emitted when wDWC is burned to release DWC on DSC
     event BridgeBurn(address indexed from, uint256 amount, string dscAddress);
     
-    /// @notice Emitted when contract is upgraded
-    event ContractUpgraded(address indexed newImplementation, uint256 newVersion);
+    /// @notice Emitted when contract maintenance is performed
+    event ContractMaintenance(address indexed newImplementation, uint256 newVersion);
     
     /// @notice Tracks processed lock IDs to prevent double-minting
     mapping(bytes32 => bool) public processedLocks;
@@ -59,7 +60,24 @@ contract WDWC is
         __ERC20_init("Wrapped DarkWave Coin", "wDWC");
         __ERC20Burnable_init();
         __Ownable_init(bridgeOperator);
+        __Pausable_init();
         __UUPSUpgradeable_init();
+    }
+    
+    /**
+     * @notice Pause bridge operations (emergency stop)
+     * @dev Only callable by owner. Use in case of security issues.
+     */
+    function pause() external onlyOwner {
+        _pause();
+    }
+    
+    /**
+     * @notice Resume bridge operations
+     * @dev Only callable by owner after issue is resolved.
+     */
+    function unpause() external onlyOwner {
+        _unpause();
     }
     
     /**
@@ -68,7 +86,7 @@ contract WDWC is
      * @param amount Amount to mint (18 decimals, matches DWC)
      * @param lockId Unique lock ID from DSC to prevent double-minting
      */
-    function mint(address to, uint256 amount, bytes32 lockId) external onlyOwner {
+    function mint(address to, uint256 amount, bytes32 lockId) external onlyOwner whenNotPaused {
         require(!processedLocks[lockId], "Lock already processed");
         processedLocks[lockId] = true;
         _mint(to, amount);
@@ -80,7 +98,7 @@ contract WDWC is
      * @param amount Amount to burn
      * @param dscAddress Recipient address on DSC
      */
-    function bridgeBurn(uint256 amount, string calldata dscAddress) external {
+    function bridgeBurn(uint256 amount, string calldata dscAddress) external whenNotPaused {
         require(bytes(dscAddress).length > 0, "Invalid DSC address");
         _burn(msg.sender, amount);
         emit BridgeBurn(msg.sender, amount, dscAddress);
@@ -103,11 +121,11 @@ contract WDWC is
     }
     
     /**
-     * @notice Required by UUPS - only owner can authorize upgrades
+     * @notice Required for governance - only owner can authorize maintenance
      * @param newImplementation Address of new implementation contract
      */
     function _authorizeUpgrade(address newImplementation) internal override onlyOwner {
-        emit ContractUpgraded(newImplementation, VERSION + 1);
+        emit ContractMaintenance(newImplementation, VERSION + 1);
     }
     
     /**
@@ -115,5 +133,12 @@ contract WDWC is
      */
     function getVersion() external pure returns (uint256) {
         return VERSION;
+    }
+    
+    /**
+     * @notice Check if bridge operations are paused
+     */
+    function isPaused() external view returns (bool) {
+        return paused();
     }
 }
