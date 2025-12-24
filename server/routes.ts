@@ -3403,6 +3403,65 @@ ${context ? `- Additional context: ${context}` : ""}`;
     }
   });
 
+  // AI Assistant endpoint - simple chat without conversation storage
+  app.post("/api/assistant/chat", async (req, res) => {
+    try {
+      const { message } = req.body;
+      
+      if (!message || typeof message !== "string") {
+        return res.status(400).json({ error: "Message is required" });
+      }
+
+      const OpenAI = (await import("openai")).default;
+      const openai = new OpenAI({
+        apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
+        baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+      });
+
+      const systemPrompt = `You are DarkWave AI, a friendly and knowledgeable assistant for the DarkWave Chain ecosystem. 
+
+DarkWave Chain is a Layer 1 blockchain with:
+- 400ms block times
+- 200,000+ TPS capacity  
+- Proof-of-Authority consensus with the Founders Validator
+- Native DWT token (100 million total supply, 18 decimals)
+- Genesis block: February 14, 2025
+- Public launch: February 14, 2026
+
+Key features available:
+- Faucet: Get 1000 free test DWT (24-hour cooldown)
+- Swap/DEX: Trade tokens with 0.3% fee
+- NFT Marketplace: Buy, sell, and mint NFTs
+- Staking: Stake DWT to earn rewards
+- Portfolio: Track holdings and transactions
+- Liquidity Pools: Provide liquidity and earn fees
+- Launchpad: Launch new tokens
+- Bridge: Transfer DWT to Ethereum (wDWT) or Solana
+- DarkWave Studio: Full-featured web IDE
+
+Keep responses concise (2-3 sentences max), friendly, and helpful. If asked about prices, balances, or specific data, explain that you can guide them to the relevant page. Use casual, warm language like you're a helpful friend.`;
+
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: message }
+        ],
+        max_tokens: 200,
+      });
+
+      const response = completion.choices[0]?.message?.content || "I'm here to help! Could you rephrase that?";
+      
+      res.json({ response });
+    } catch (error: any) {
+      console.error("AI Assistant error:", error);
+      res.status(500).json({ 
+        error: "Failed to process message",
+        response: "Sorry, I'm having a moment. Try asking me again!"
+      });
+    }
+  });
+
   return httpServer;
 }
 
