@@ -7,15 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 import { Footer } from "@/components/footer";
+import { GlassCard } from "@/components/glass-card";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
-
-function GlassCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return (
-    <div className={`relative overflow-hidden rounded-xl p-6 bg-[rgba(12,18,36,0.65)] backdrop-blur-2xl border border-white/[0.08] shadow-lg shadow-black/20 ${className}`}>
-      {children}
-    </div>
-  );
-}
 
 export default function DevelopersRegister() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -88,8 +81,8 @@ export default function DevelopersRegister() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <GlassCard>
-              <div className="text-center mb-6">
+            <GlassCard glow>
+              <div className="p-6 text-center mb-6">
                 <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
                   <Key className="w-8 h-8 text-primary" />
                 </div>

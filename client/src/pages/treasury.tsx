@@ -174,7 +174,7 @@ export default function Treasury() {
               </div>
             </GlassCard>
 
-            <GlassCard>
+            <GlassCard glow>
               <div className="p-5">
                 <h2 className="text-sm font-bold flex items-center gap-2 mb-4">
                   <Send className="w-4 h-4 text-secondary" />
@@ -238,7 +238,7 @@ export default function Treasury() {
           </div>
 
           {lastTx && (
-            <GlassCard>
+            <GlassCard glow>
               <div className="p-5">
                 <h3 className="text-sm font-bold text-green-400 mb-3 flex items-center gap-2">
                   <Check className="w-4 h-4" />

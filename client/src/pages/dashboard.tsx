@@ -80,14 +80,14 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             <GlassCard glow>
-              <div className="p-5">
+              <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-4">
-                  <Wallet className="w-5 h-5 text-primary" />
-                  <h3 className="font-bold">Token Balance</h3>
+                  <Wallet className="w-5 h-5 text-primary shrink-0" />
+                  <h3 className="font-bold text-sm sm:text-base">Token Balance</h3>
                 </div>
-                <div className="text-3xl font-bold text-white mb-2">0 DWT</div>
+                <div className="text-2xl sm:text-3xl font-bold text-white mb-2 tracking-tight">0 DWT</div>
                 <p className="text-xs text-muted-foreground mb-4">Connect wallet to view balance</p>
                 <Button size="sm" className="w-full bg-primary text-background hover:bg-primary/90">
                   Connect Wallet
@@ -95,11 +95,11 @@ export default function Dashboard() {
               </div>
             </GlassCard>
 
-            <GlassCard>
-              <div className="p-5">
+            <GlassCard glow>
+              <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-4">
-                  <Key className="w-5 h-5 text-cyan-400" />
-                  <h3 className="font-bold">API Access</h3>
+                  <Key className="w-5 h-5 text-cyan-400 shrink-0" />
+                  <h3 className="font-bold text-sm sm:text-base">API Access</h3>
                 </div>
                 <p className="text-xs text-muted-foreground mb-4">
                   Generate API keys to integrate with DarkWave Chain
@@ -112,11 +112,11 @@ export default function Dashboard() {
               </div>
             </GlassCard>
 
-            <GlassCard>
-              <div className="p-5">
+            <GlassCard glow>
+              <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-4">
-                  <Activity className="w-5 h-5 text-green-400" />
-                  <h3 className="font-bold">Recent Activity</h3>
+                  <Activity className="w-5 h-5 text-green-400 shrink-0" />
+                  <h3 className="font-bold text-sm sm:text-base">Recent Activity</h3>
                 </div>
                 <div className="space-y-2">
                   <div className="text-xs text-muted-foreground py-2 text-center border border-dashed border-white/10 rounded-lg">
@@ -126,13 +126,13 @@ export default function Dashboard() {
               </div>
             </GlassCard>
 
-            <GlassCard className="md:col-span-2">
-              <div className="p-5">
+            <GlassCard glow className="sm:col-span-2">
+              <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-4">
-                  <Code className="w-5 h-5 text-secondary" />
-                  <h3 className="font-bold">Developer Tools</h3>
+                  <Code className="w-5 h-5 text-secondary shrink-0" />
+                  <h3 className="font-bold text-sm sm:text-base">Developer Tools</h3>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
                   <Link href="/api-playground">
                     <div className="p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors cursor-pointer text-center">
                       <Activity className="w-5 h-5 mx-auto mb-2 text-green-400" />
@@ -163,13 +163,13 @@ export default function Dashboard() {
 
             <PasskeyManager />
 
-            <GlassCard className="lg:col-span-2">
-              <div className="p-5">
+            <GlassCard glow className="sm:col-span-2 lg:col-span-2">
+              <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-4">
-                  <Settings className="w-5 h-5 text-white/50" />
-                  <h3 className="font-bold">Account</h3>
+                  <Settings className="w-5 h-5 text-white/50 shrink-0" />
+                  <h3 className="font-bold text-sm sm:text-base">Account</h3>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-sm">
                   <div className="flex justify-between items-center p-3 bg-white/5 rounded-lg">
                     <span className="text-muted-foreground">User ID</span>
                     <button 

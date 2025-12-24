@@ -314,7 +314,7 @@ export default function Staking() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.1 * i }}
               >
-                <GlassCard hover={false} className="relative overflow-hidden group">
+                <GlassCard glow hover={false} className="relative overflow-hidden group">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <div className="p-4 md:p-5 text-center relative">
                     <stat.icon className={`w-5 h-5 ${stat.color} mx-auto mb-2 opacity-60`} />
@@ -363,7 +363,7 @@ export default function Staking() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3, delay: i * 0.1 }}
                   >
-                    <GlassCard className="relative overflow-hidden" data-testid={`my-stake-${stake.id}`}>
+                    <GlassCard glow className="relative overflow-hidden" data-testid={`my-stake-${stake.id}`}>
                       <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-primary/10 to-transparent rounded-bl-full" />
                       <div className="p-5 relative">
                         <div className="flex items-center justify-between mb-4">
@@ -459,7 +459,7 @@ export default function Staking() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: i * 0.1 }}
                 >
-                  <GlassCard className="h-full relative overflow-hidden group" data-testid={`pool-card-${pool.slug}`}>
+                  <GlassCard glow className="h-full relative overflow-hidden group" data-testid={`pool-card-${pool.slug}`}>
                     {/* Premium glow effect on hover */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${getPoolGradient(pool.poolType, pool.lockDays)} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
                     

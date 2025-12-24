@@ -431,7 +431,7 @@ export default function Swap() {
             transition={{ delay: 0.3 }}
           >
             <Collapsible open={recentOpen} onOpenChange={setRecentOpen}>
-              <GlassCard>
+              <GlassCard glow>
                 <CollapsibleTrigger className="w-full p-3 flex items-center justify-between hover:bg-white/5 rounded-xl transition-colors">
                   <div className="flex items-center gap-2">
                     <RefreshCw className="w-4 h-4 text-primary" />

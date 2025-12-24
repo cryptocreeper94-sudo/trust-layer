@@ -134,7 +134,7 @@ export default function DocHub() {
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-col lg:flex-row gap-6">
             <div className="w-full lg:w-56 space-y-4 lg:sticky lg:top-20 h-fit">
-              <GlassCard hover={false}>
+              <GlassCard glow hover={false}>
                 <div className="p-2 flex items-center gap-2">
                   <Search className="w-4 h-4 text-muted-foreground shrink-0 ml-2" />
                   <Input
@@ -239,11 +239,11 @@ export default function DocHub() {
               {isLoading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {[1, 2, 3, 4].map((i) => (
-                    <GlassCard key={i}><div className="p-4 h-32 animate-pulse bg-white/5 rounded" /></GlassCard>
+                    <GlassCard glow key={i}><div className="p-4 h-32 animate-pulse bg-white/5 rounded" /></GlassCard>
                   ))}
                 </div>
               ) : filteredDocs.length === 0 ? (
-                <GlassCard hover={false}>
+                <GlassCard glow hover={false}>
                   <div className="p-8 text-center">
                     <FileText className="w-10 h-10 text-white/20 mx-auto mb-3" />
                     <p className="text-sm text-white/40">No documents found</p>
@@ -252,7 +252,7 @@ export default function DocHub() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {filteredDocs.map((doc) => (
-                    <GlassCard key={doc.id}>
+                    <GlassCard glow key={doc.id}>
                       <div className="p-4">
                         {editingDoc?.id === doc.id ? (
                           <div className="space-y-3">

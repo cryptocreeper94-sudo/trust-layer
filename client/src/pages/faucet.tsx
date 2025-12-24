@@ -236,7 +236,7 @@ export default function Faucet() {
             className="mb-4"
           >
             <Collapsible open={historyOpen} onOpenChange={setHistoryOpen}>
-              <GlassCard>
+              <GlassCard glow>
                 <CollapsibleTrigger className="w-full p-3 flex items-center justify-between hover:bg-white/5 rounded-xl transition-colors">
                   <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4 text-primary" />

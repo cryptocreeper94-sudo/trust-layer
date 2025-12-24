@@ -182,7 +182,7 @@ export default function Billing() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-10 pt-6">
-              <GlassCard className="flex flex-col h-full">
+              <GlassCard glow className="flex flex-col h-full">
                 <div className="p-5 flex flex-col h-full">
                   <div className="h-[30px] mb-2"></div>
                   <div className="mb-3">
@@ -231,7 +231,7 @@ export default function Billing() {
                 </div>
               </GlassCard>
 
-              <GlassCard className="flex flex-col h-full">
+              <GlassCard glow className="flex flex-col h-full">
                 <div className="p-5 flex flex-col h-full">
                   <div className="h-[30px] mb-2"></div>
                   <div className="mb-3">
@@ -262,7 +262,7 @@ export default function Billing() {
             </div>
 
             {paymentSuccess && (
-              <GlassCard className="mb-6 border-green-500/30">
+              <GlassCard glow className="mb-6 border-green-500/30">
                 <div className="p-4 flex items-center gap-3">
                   <div className="p-2 rounded-full bg-green-500/20">
                     <Check className="w-5 h-5 text-green-400" />
@@ -272,7 +272,7 @@ export default function Billing() {
               </GlassCard>
             )}
 
-            <GlassCard className="mb-6">
+            <GlassCard glow className="mb-6">
               <div className="p-6">
                 <Label htmlFor="apiKey" className="text-sm mb-2 block">Enter Your API Key</Label>
                 <div className="flex gap-3">
@@ -305,7 +305,7 @@ export default function Billing() {
             {stats && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <GlassCard className="p-5">
+                  <GlassCard glow className="p-5">
                     <div className="flex items-center gap-3 mb-2">
                       <div className="p-2 rounded-lg bg-primary/20">
                         <Activity className="w-5 h-5 text-primary" />
@@ -315,7 +315,7 @@ export default function Billing() {
                     <p className="text-2xl font-bold" data-testid="text-total-calls">{stats.totalCalls.toLocaleString()}</p>
                   </GlassCard>
 
-                  <GlassCard className="p-5">
+                  <GlassCard glow className="p-5">
                     <div className="flex items-center gap-3 mb-2">
                       <div className="p-2 rounded-lg bg-secondary/20">
                         <DollarSign className="w-5 h-5 text-secondary" />
@@ -325,7 +325,7 @@ export default function Billing() {
                     <p className="text-2xl font-bold">${(stats.costPerCallCents / 100).toFixed(2)}</p>
                   </GlassCard>
 
-                  <GlassCard className={`p-5 ${stats.outstandingBalanceCents > 0 ? 'border-amber-500/30' : 'border-green-500/30'}`}>
+                  <GlassCard glow className={`p-5 ${stats.outstandingBalanceCents > 0 ? 'border-amber-500/30' : 'border-green-500/30'}`}>
                     <div className="flex items-center gap-3 mb-2">
                       <div className={`p-2 rounded-lg ${stats.outstandingBalanceCents > 0 ? 'bg-amber-500/20' : 'bg-green-500/20'}`}>
                         <CreditCard className={`w-5 h-5 ${stats.outstandingBalanceCents > 0 ? 'text-amber-400' : 'text-green-400'}`} />
@@ -358,7 +358,7 @@ export default function Billing() {
                   </GlassCard>
                 </div>
 
-                <GlassCard>
+                <GlassCard glow>
                   <div className="p-5">
                     <h3 className="font-bold mb-4 flex items-center gap-2">
                       <Clock className="w-4 h-4 text-primary" /> Recent Activity

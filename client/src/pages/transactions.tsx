@@ -207,7 +207,7 @@ export default function Transactions() {
                       onClick={() => setSelectedTx(selectedTx?.id === tx.id ? null : tx)}
                       data-testid={`tx-row-${tx.id}`}
                     >
-                    <GlassCard className="p-3 cursor-pointer hover:border-primary/30 transition-colors">
+                    <GlassCard glow className="p-3 cursor-pointer hover:border-primary/30 transition-colors">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <div className={`w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center ${config.color}`}>

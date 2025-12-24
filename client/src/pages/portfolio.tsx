@@ -178,7 +178,7 @@ export default function Portfolio() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
                   >
-                    <GlassCard className="p-3" data-testid={`token-row-${token.symbol}`}>
+                    <GlassCard glow className="p-3" data-testid={`token-row-${token.symbol}`}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-xl">
@@ -212,7 +212,7 @@ export default function Portfolio() {
                 animate={{ opacity: 1 }}
                 className="space-y-3"
               >
-                <GlassCard className="p-4">
+                <GlassCard glow className="p-4">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-sm font-bold">Staking Overview</span>
                     <Badge className="bg-amber-500/20 text-amber-400 text-[10px]">{portfolio.staking.apy}% APY</Badge>
@@ -230,7 +230,7 @@ export default function Portfolio() {
                 </GlassCard>
 
                 {portfolio.staking.positions.map((position, index) => (
-                  <GlassCard key={index} className="p-3" data-testid={`staking-position-${index}`}>
+                  <GlassCard glow key={index} className="p-3" data-testid={`staking-position-${index}`}>
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-medium text-sm">{position.pool}</span>
                       <Badge variant="outline" className="text-[10px]">{position.apy}% APY</Badge>
@@ -260,7 +260,7 @@ export default function Portfolio() {
                 {portfolio.nfts.length > 0 ? (
                   <>
                     {portfolio.nfts.map((nft) => (
-                      <GlassCard key={nft.id} className="p-3" data-testid={`nft-row-${nft.id}`}>
+                      <GlassCard glow key={nft.id} className="p-3" data-testid={`nft-row-${nft.id}`}>
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20" />
                           <div className="flex-1">
