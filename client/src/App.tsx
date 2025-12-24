@@ -56,6 +56,7 @@ import NotFound from "@/pages/not-found";
 import TokenCompare from "@/pages/token-compare";
 import CodeSnippets from "@/pages/code-snippets";
 import ApiUsage from "@/pages/api-usage";
+import Referrals from "@/pages/referrals";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
 
 function ScrollToTop() {
@@ -121,6 +122,7 @@ function Router() {
         <Route path="/token-compare" component={TokenCompare} />
         <Route path="/code-snippets" component={CodeSnippets} />
         <Route path="/api-usage" component={ApiUsage} />
+        <Route path="/referrals" component={Referrals} />
         <Route component={NotFound} />
       </Switch>
     </>

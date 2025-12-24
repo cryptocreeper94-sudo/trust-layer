@@ -23,6 +23,7 @@ import { FirebaseLoginModal } from "@/components/firebase-login";
 import { useState } from "react";
 import { WalletButton } from "@/components/wallet-button";
 import { GenesisHallmarkSection } from "@/components/genesis-hallmark";
+import { HeaderTools } from "@/components/header-tools";
 
 const ecosystemImages: Record<string, string> = {
   "orbit-staffing": "/ecosystem/orbit-staffing.jpg",
@@ -98,6 +99,7 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <div className="hidden md:flex items-center gap-2">
               <GlobalSearch />
+              <HeaderTools />
               <NotificationsDropdown />
             </div>
             {authLoading ? (

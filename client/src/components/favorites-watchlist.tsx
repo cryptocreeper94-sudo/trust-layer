@@ -6,9 +6,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { GlassCard } from "@/components/glass-card";
 import { Link } from "wouter";
 
-interface FavoriteItem {
+export interface FavoriteItem {
   id: string;
-  type: "token" | "nft" | "address";
+  type: "token" | "nft" | "address" | "app";
   name: string;
   symbol?: string;
   address?: string;
