@@ -20,29 +20,32 @@ import tribalEmissaryImg from "@assets/generated_images/tribal_emissary_woman_po
 import tribalShamanImg from "@assets/generated_images/tribal_shaman_elder_portrait.png";
 import tribalWarriorImg from "@assets/generated_images/tribal_warrior_man_portrait.png";
 import tribalHealerImg from "@assets/generated_images/tribal_healer_woman_portrait.png";
+import tribalHunterImg from "@assets/generated_images/tribal_hunter_man_portrait.png";
+import tribalScoutImg from "@assets/generated_images/tribal_scout_woman_portrait.png";
+import tribalElderImg from "@assets/generated_images/tribal_elder_chief_portrait.png";
+import tribalBlacksmithImg from "@assets/generated_images/tribal_blacksmith_man_portrait.png";
+import tribalMysticImg from "@assets/generated_images/tribal_mystic_woman_portrait.png";
+import tribalMerchantImg from "@assets/generated_images/tribal_merchant_woman_portrait.png";
+import tribalCouncilImg from "@assets/generated_images/tribal_council_man_portrait.png";
+import tribalSoldierImg from "@assets/generated_images/tribal_soldier_woman_portrait.png";
 
-const CHARACTER_PORTRAITS: Record<string, string> = {
-  "emissary": tribalEmissaryImg,
-  "shaman": tribalShamanImg,
-  "warrior": tribalWarriorImg,
-  "healer": tribalHealerImg,
-  "guardian": tribalShamanImg,
-  "outsider": tribalEmissaryImg,
-  "chief": tribalWarriorImg,
-  "elder": tribalShamanImg,
-  "scout": tribalWarriorImg,
-  "mystic": tribalHealerImg,
-};
+const CHARACTER_PORTRAIT_POOL = [
+  tribalEmissaryImg,
+  tribalShamanImg,
+  tribalWarriorImg,
+  tribalHealerImg,
+  tribalHunterImg,
+  tribalScoutImg,
+  tribalElderImg,
+  tribalBlacksmithImg,
+  tribalMysticImg,
+  tribalMerchantImg,
+  tribalCouncilImg,
+  tribalSoldierImg,
+];
 
-function getCharacterPortrait(name: string, role: string): string {
-  const lowerRole = role.toLowerCase();
-  for (const [key, img] of Object.entries(CHARACTER_PORTRAITS)) {
-    if (lowerRole.includes(key)) return img;
-  }
-  // Deterministic fallback based on name hash to prevent re-randomization
-  const portraits = Object.values(CHARACTER_PORTRAITS);
-  const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  return portraits[hash % portraits.length];
+function getCharacterPortraitByIndex(index: number): string {
+  return CHARACTER_PORTRAIT_POOL[index % CHARACTER_PORTRAIT_POOL.length];
 }
 
 interface EmotionState {
@@ -132,8 +135,8 @@ function EmotionBar({ label, value, color, icon: Icon }: {
   );
 }
 
-function CharacterCard({ character }: { character: Character }) {
-  const portrait = getCharacterPortrait(character.name, character.role);
+function CharacterCard({ character, index }: { character: Character; index: number }) {
+  const portrait = getCharacterPortraitByIndex(index);
   
   return (
     <div className="h-full">
@@ -429,7 +432,7 @@ export default function ScenarioGenerator() {
                   <CarouselContent className="-ml-2 md:-ml-4">
                     {scenario.characters.map((char, i) => (
                       <CarouselItem key={i} className="pl-2 md:pl-4 basis-1/2 sm:basis-1/3 lg:basis-1/4">
-                        <CharacterCard character={char} />
+                        <CharacterCard character={char} index={i} />
                       </CarouselItem>
                     ))}
                   </CarouselContent>
