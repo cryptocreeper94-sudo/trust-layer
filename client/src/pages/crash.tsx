@@ -86,134 +86,234 @@ function NeonWaveform({ multiplier, crashed, progress }: { multiplier: number; c
   
   return (
     <div className="absolute inset-0 overflow-hidden">
-      <div className={`absolute inset-0 transition-all duration-300 ${
-        crashed 
-          ? "bg-gradient-to-b from-red-950/80 via-red-900/40 to-black" 
-          : "bg-gradient-to-b from-purple-950/60 via-black/80 to-black"
-      }`} />
-      
-      <motion.div 
-        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,0.4),transparent_70%)]"
-        animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.1, 1] }}
-        transition={{ duration: 2, repeat: Infinity }}
+      <div 
+        className="absolute inset-0"
+        style={{
+          background: crashed 
+            ? "radial-gradient(ellipse 120% 100% at 50% 120%, #1a0505 0%, #0a0000 40%, #050000 100%)"
+            : "radial-gradient(ellipse 120% 100% at 50% 120%, #1B0E3F 0%, #0B0420 40%, #050210 100%)",
+        }}
       />
       
-      <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+      <div 
+        className="absolute inset-0 opacity-30"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          mixBlendMode: "overlay",
+        }}
+      />
+      
+      <motion.div 
+        className="absolute inset-0"
+        style={{
+          background: crashed 
+            ? "radial-gradient(ellipse 80% 50% at 30% 70%, rgba(239,68,68,0.15) 0%, transparent 70%)"
+            : "radial-gradient(ellipse 80% 50% at 30% 70%, rgba(255,79,216,0.12) 0%, transparent 70%)",
+        }}
+        animate={{ 
+          opacity: [0.5, 0.8, 0.5],
+          x: [0, 20, 0],
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div 
+        className="absolute inset-0"
+        style={{
+          background: crashed 
+            ? "radial-gradient(ellipse 60% 40% at 70% 60%, rgba(249,115,22,0.1) 0%, transparent 70%)"
+            : "radial-gradient(ellipse 60% 40% at 70% 60%, rgba(76,244,255,0.08) 0%, transparent 70%)",
+        }}
+        animate={{ 
+          opacity: [0.3, 0.6, 0.3],
+          x: [0, -15, 0],
+        }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+      />
+      
+      {!crashed && (
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            background: "linear-gradient(135deg, transparent 0%, rgba(255,79,216,0.03) 25%, rgba(76,244,255,0.03) 50%, rgba(255,201,76,0.02) 75%, transparent 100%)",
+            backgroundSize: "200% 200%",
+          }}
+          animate={{
+            backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+        />
+      )}
+      
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.6) 100%)",
+        }}
+      />
+      
+      <div 
+        className="absolute inset-0 opacity-10 pointer-events-none"
+        style={{
+          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)",
+        }}
+      />
+      
+      <svg className="absolute inset-0 w-full h-full opacity-40" preserveAspectRatio="none">
         <defs>
-          <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor={crashed ? "#ef4444" : "#8b5cf6"} stopOpacity="0" />
-            <stop offset="50%" stopColor={crashed ? "#f97316" : "#ec4899"} stopOpacity="0.8" />
-            <stop offset="100%" stopColor={crashed ? "#ef4444" : "#06b6d4"} stopOpacity="0" />
+          <linearGradient id="gridGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor={crashed ? "#ef4444" : "#FF4FD8"} stopOpacity="0" />
+            <stop offset="50%" stopColor={crashed ? "#ef4444" : "#FF4FD8"} stopOpacity="0.3" />
+            <stop offset="100%" stopColor={crashed ? "#ef4444" : "#4CF4FF"} stopOpacity="0.1" />
           </linearGradient>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-            <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
         </defs>
-        {[...Array(6)].map((_, i) => (
-          <motion.path
-            key={i}
-            d={`M0,${60 + i * 8} Q25,${50 + i * 8 + Math.sin(multiplier + i) * 10} 50,${60 + i * 8} T100,${60 + i * 8}`}
-            fill="none"
-            stroke="url(#waveGradient)"
-            strokeWidth={2 - i * 0.2}
-            filter="url(#glow)"
-            opacity={0.3 + intensity * 0.4}
-            animate={{
-              d: [
-                `M0,${60 + i * 8} Q25,${40 + i * 8} 50,${60 + i * 8} T100,${60 + i * 8}`,
-                `M0,${60 + i * 8} Q25,${80 + i * 8} 50,${60 + i * 8} T100,${60 + i * 8}`,
-                `M0,${60 + i * 8} Q25,${40 + i * 8} 50,${60 + i * 8} T100,${60 + i * 8}`,
-              ]
-            }}
-            transition={{ duration: 2 - intensity, repeat: Infinity, delay: i * 0.1 }}
-            style={{ vectorEffect: "non-scaling-stroke" }}
+        {[...Array(20)].map((_, i) => (
+          <line
+            key={`h-${i}`}
+            x1="0%"
+            y1={`${5 + i * 5}%`}
+            x2="100%"
+            y2={`${5 + i * 5}%`}
+            stroke="url(#gridGrad)"
+            strokeWidth="0.5"
+            opacity={0.3 - (i * 0.01)}
+          />
+        ))}
+        {[...Array(30)].map((_, i) => (
+          <motion.line
+            key={`v-${i}`}
+            x1={`${i * 3.5}%`}
+            y1="100%"
+            x2={`${50 + (i - 15) * 1.5}%`}
+            y2="0%"
+            stroke="url(#gridGrad)"
+            strokeWidth="0.5"
+            opacity={0.2}
+            animate={{ opacity: [0.1, 0.25, 0.1] }}
+            transition={{ duration: 4, repeat: Infinity, delay: i * 0.1 }}
           />
         ))}
       </svg>
       
-      {[...Array(12)].map((_, i) => (
+      {[...Array(50)].map((_, i) => (
         <motion.div
-          key={`grid-${i}`}
-          className={`absolute left-0 right-0 h-px ${crashed ? "bg-red-500/20" : "bg-purple-500/20"}`}
-          style={{ bottom: `${i * 8 + 4}%` }}
-          animate={{ opacity: [0.1, 0.4, 0.1], scaleX: [0.9, 1, 0.9] }}
-          transition={{ duration: 3, repeat: Infinity, delay: i * 0.1 }}
-        />
-      ))}
-      
-      {!crashed && [...Array(30)].map((_, i) => (
-        <motion.div
-          key={`sparkle-${i}`}
+          key={`star-${i}`}
           className="absolute rounded-full"
           style={{
-            width: Math.random() * 3 + 1,
-            height: Math.random() * 3 + 1,
-            left: `${(i * 3.3) % 100}%`,
-            top: `${(i * 7) % 100}%`,
-            background: `radial-gradient(circle, ${
-              i % 3 === 0 ? "rgba(168,85,247,1)" : 
-              i % 3 === 1 ? "rgba(236,72,153,1)" : 
-              "rgba(6,182,212,1)"
-            }, transparent)`,
-            boxShadow: `0 0 ${4 + intensity * 4}px ${
-              i % 3 === 0 ? "rgba(168,85,247,0.8)" : 
-              i % 3 === 1 ? "rgba(236,72,153,0.8)" : 
-              "rgba(6,182,212,0.8)"
-            }`,
+            width: Math.random() * 2 + 1,
+            height: Math.random() * 2 + 1,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            background: i % 4 === 0 ? "#FF4FD8" : i % 4 === 1 ? "#4CF4FF" : i % 4 === 2 ? "#FFC94C" : "#ffffff",
           }}
           animate={{
-            opacity: [0, 1, 0],
-            scale: [0, 1 + intensity, 0],
-            y: [0, -30 - intensity * 20],
+            opacity: [0.2, 0.8, 0.2],
+            scale: [0.8, 1.2, 0.8],
           }}
           transition={{
-            duration: 1.5 - intensity * 0.5,
+            duration: 2 + Math.random() * 3,
             repeat: Infinity,
-            delay: i * 0.1,
+            delay: Math.random() * 5,
           }}
         />
       ))}
       
-      {crashed && [...Array(20)].map((_, i) => (
+      {!crashed && [...Array(15)].map((_, i) => (
         <motion.div
-          key={`explosion-${i}`}
-          className="absolute w-3 h-3 rounded-full"
+          key={`floater-${i}`}
+          className="absolute rounded-full blur-sm"
           style={{
-            left: "50%",
-            top: "50%",
-            background: i % 2 === 0 
-              ? "radial-gradient(circle, #ef4444, #f97316)" 
-              : "radial-gradient(circle, #f97316, #eab308)",
-            boxShadow: "0 0 10px rgba(239,68,68,0.8)",
+            width: 4 + Math.random() * 8,
+            height: 4 + Math.random() * 8,
+            left: `${10 + Math.random() * 80}%`,
+            background: `radial-gradient(circle, ${
+              i % 3 === 0 ? "rgba(255,79,216,0.6)" : 
+              i % 3 === 1 ? "rgba(76,244,255,0.6)" : 
+              "rgba(255,201,76,0.5)"
+            }, transparent)`,
           }}
-          initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
           animate={{
-            x: (Math.cos(i * 18 * Math.PI / 180) * (100 + Math.random() * 50)),
-            y: (Math.sin(i * 18 * Math.PI / 180) * (80 + Math.random() * 40)),
-            opacity: 0,
-            scale: 0,
+            y: [0, -150 - intensity * 100],
+            x: [0, (Math.random() - 0.5) * 50],
+            opacity: [0, 0.8, 0],
+            scale: [0.5, 1, 0.3],
           }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          transition={{
+            duration: 4 - intensity * 2,
+            repeat: Infinity,
+            delay: i * 0.3,
+            ease: "easeOut",
+          }}
         />
       ))}
+      
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 h-24"
+        style={{
+          background: crashed 
+            ? "linear-gradient(to top, rgba(239,68,68,0.3), transparent)"
+            : "linear-gradient(to top, rgba(255,79,216,0.15), transparent)",
+        }}
+        animate={{ opacity: [0.5, 0.8, 0.5] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      />
       
       <motion.div
         className="absolute bottom-0 left-0 right-0 h-1"
         style={{
           background: crashed 
-            ? "linear-gradient(90deg, transparent, #ef4444, #f97316, #ef4444, transparent)"
-            : "linear-gradient(90deg, transparent, #8b5cf6, #ec4899, #06b6d4, #8b5cf6, transparent)",
+            ? "linear-gradient(90deg, transparent 0%, #ef4444 20%, #f97316 50%, #ef4444 80%, transparent 100%)"
+            : "linear-gradient(90deg, transparent 0%, #FF4FD8 20%, #4CF4FF 50%, #FF4FD8 80%, transparent 100%)",
           boxShadow: crashed
-            ? "0 0 20px rgba(239,68,68,0.8), 0 0 40px rgba(239,68,68,0.4)"
-            : "0 0 20px rgba(168,85,247,0.8), 0 0 40px rgba(236,72,153,0.4)",
+            ? "0 0 30px rgba(239,68,68,1), 0 0 60px rgba(239,68,68,0.5), 0 -10px 40px rgba(239,68,68,0.3)"
+            : "0 0 30px rgba(255,79,216,1), 0 0 60px rgba(76,244,255,0.5), 0 -10px 40px rgba(255,79,216,0.3)",
         }}
-        animate={{ opacity: [0.6, 1, 0.6] }}
-        transition={{ duration: 1, repeat: Infinity }}
+        animate={{ 
+          opacity: [0.7, 1, 0.7],
+          boxShadow: crashed ? undefined : [
+            "0 0 30px rgba(255,79,216,1), 0 0 60px rgba(76,244,255,0.5), 0 -10px 40px rgba(255,79,216,0.3)",
+            "0 0 40px rgba(76,244,255,1), 0 0 80px rgba(255,79,216,0.6), 0 -15px 50px rgba(76,244,255,0.4)",
+            "0 0 30px rgba(255,79,216,1), 0 0 60px rgba(76,244,255,0.5), 0 -10px 40px rgba(255,79,216,0.3)",
+          ],
+        }}
+        transition={{ duration: 2, repeat: Infinity }}
       />
+      
+      {crashed && (
+        <>
+          <motion.div
+            className="absolute inset-0 bg-red-500/20"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          />
+          {[...Array(25)].map((_, i) => (
+            <motion.div
+              key={`explosion-${i}`}
+              className="absolute rounded-full"
+              style={{
+                width: 4 + Math.random() * 10,
+                height: 4 + Math.random() * 10,
+                left: "50%",
+                top: "40%",
+                background: i % 3 === 0 
+                  ? "radial-gradient(circle, #ff6b6b, #ee5a5a)" 
+                  : i % 3 === 1
+                  ? "radial-gradient(circle, #ffa502, #ff7f00)"
+                  : "radial-gradient(circle, #ffd93d, #ffb800)",
+                boxShadow: "0 0 15px rgba(255,107,107,0.8)",
+              }}
+              initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
+              animate={{
+                x: Math.cos(i * 14.4 * Math.PI / 180) * (80 + Math.random() * 80),
+                y: Math.sin(i * 14.4 * Math.PI / 180) * (60 + Math.random() * 60),
+                opacity: 0,
+                scale: 0,
+              }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+            />
+          ))}
+        </>
+      )}
     </div>
   );
 }
@@ -1105,23 +1205,43 @@ export default function CrashGame() {
                   )}
                 </AnimatePresence>
 
-                <div className="relative h-52 sm:h-64 md:h-80 rounded-xl bg-gradient-to-b from-black/90 via-purple-950/40 to-black/90 border border-purple-500/20 overflow-hidden">
+                <div 
+                  className="relative h-52 sm:h-64 md:h-80 rounded-2xl overflow-hidden"
+                  style={{
+                    background: "linear-gradient(180deg, rgba(11,4,32,0.95) 0%, rgba(27,14,63,0.9) 50%, rgba(11,4,32,0.95) 100%)",
+                    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.3), 0 0 60px rgba(255,79,216,0.15), 0 0 100px rgba(76,244,255,0.1)",
+                    border: "1px solid rgba(255,79,216,0.2)",
+                  }}
+                >
                   <NeonWaveform multiplier={multiplier} crashed={crashed} progress={(multiplier - 1) / 10} />
                   
-                  <div className="absolute right-2 sm:right-4 top-4 bottom-4 w-8 sm:w-10 flex flex-col justify-between items-end z-10">
-                    {[7, 6, 5, 4, 3, 2, 1.5, 1].map((tick, i) => {
+                  <div className="absolute right-2 sm:right-4 top-4 bottom-4 w-10 sm:w-14 flex flex-col justify-between items-end z-10">
+                    {[10, 7, 5, 4, 3, 2, 1.5, 1].map((tick) => {
                       const isActive = multiplier >= tick;
-                      const isPassed = multiplier > tick + 0.5;
+                      const isPassed = multiplier > tick + 0.3;
                       return (
                         <div key={tick} className="flex items-center gap-1 sm:gap-2">
-                          <div className={`h-px w-2 sm:w-3 transition-all duration-200 ${
-                            isActive ? (crashed ? "bg-red-500" : "bg-cyan-400") : "bg-white/20"
-                          }`} />
-                          <span className={`text-[8px] sm:text-[10px] font-mono transition-all duration-200 ${
-                            isActive 
-                              ? (crashed ? "text-red-400" : isPassed ? "text-cyan-400/60" : "text-cyan-400 font-bold") 
-                              : "text-white/30"
-                          }`}>
+                          <motion.div 
+                            className={`h-px transition-all duration-200 ${
+                              isActive 
+                                ? (crashed ? "bg-red-500 w-4 sm:w-6" : "bg-[#4CF4FF] w-4 sm:w-6") 
+                                : "bg-white/10 w-2 sm:w-3"
+                            }`}
+                            animate={isActive && !crashed ? { 
+                              boxShadow: ["0 0 4px #4CF4FF", "0 0 8px #4CF4FF", "0 0 4px #4CF4FF"] 
+                            } : undefined}
+                            transition={{ duration: 1, repeat: Infinity }}
+                          />
+                          <span 
+                            className={`text-[8px] sm:text-[10px] font-mono font-medium transition-all duration-200 ${
+                              isActive 
+                                ? (crashed ? "text-red-400" : isPassed ? "text-[#4CF4FF]/50" : "text-[#4CF4FF]") 
+                                : "text-white/20"
+                            }`}
+                            style={isActive && !crashed && !isPassed ? {
+                              textShadow: "0 0 10px rgba(76,244,255,0.8)",
+                            } : undefined}
+                          >
                             {tick.toFixed(tick % 1 === 0 ? 0 : 1)}x
                           </span>
                         </div>
@@ -1150,15 +1270,23 @@ export default function CrashGame() {
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30 pointer-events-none">
                     {roundStatus === "waiting" ? (
                       <motion.div
-                        animate={{ scale: [1, 1.05, 1], opacity: [0.8, 1, 0.8] }}
-                        transition={{ duration: 2, repeat: Infinity }}
+                        animate={{ scale: [1, 1.03, 1], opacity: [0.9, 1, 0.9] }}
+                        transition={{ duration: 3, repeat: Infinity }}
                         className="text-center"
                       >
-                        <div className="text-xs sm:text-sm text-purple-400/80 uppercase tracking-widest mb-1">Next Round</div>
                         <div 
-                          className="text-4xl sm:text-5xl md:text-7xl font-black font-mono text-purple-400"
+                          className="text-xs sm:text-sm uppercase tracking-[0.3em] mb-2 font-medium"
+                          style={{ color: "#FF4FD8", textShadow: "0 0 20px rgba(255,79,216,0.5)" }}
+                        >
+                          Next Round
+                        </div>
+                        <div 
+                          className="text-5xl sm:text-6xl md:text-8xl font-black font-mono"
                           style={{
-                            textShadow: "0 4px 0 rgba(88,28,135,0.8), 0 8px 20px rgba(168,85,247,0.5), 0 0 60px rgba(168,85,247,0.3)",
+                            background: "linear-gradient(180deg, #FF4FD8 0%, #4CF4FF 100%)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            filter: "drop-shadow(0 4px 0 rgba(255,79,216,0.5)) drop-shadow(0 8px 20px rgba(76,244,255,0.3))",
                           }}
                         >
                           {countdown}s
@@ -1166,39 +1294,49 @@ export default function CrashGame() {
                       </motion.div>
                     ) : (
                       <>
-                        <div className="text-[10px] sm:text-xs text-white/60 uppercase tracking-widest mb-1 sm:mb-2">
+                        <div 
+                          className="text-[10px] sm:text-xs uppercase tracking-[0.2em] mb-1 sm:mb-2 font-medium"
+                          style={{ 
+                            color: crashed ? "#ff6b6b" : cashedOut ? "#4ade80" : "#4CF4FF",
+                            textShadow: crashed 
+                              ? "0 0 15px rgba(255,107,107,0.5)" 
+                              : cashedOut 
+                              ? "0 0 15px rgba(74,222,128,0.5)"
+                              : "0 0 15px rgba(76,244,255,0.5)",
+                          }}
+                        >
                           {crashed ? "Crashed At" : cashedOut ? "Cashed Out" : "Current Payout"}
                         </div>
                         <motion.div
-                          className={`text-5xl sm:text-6xl md:text-8xl font-black font-mono relative ${
-                            crashed ? "text-red-500" : 
-                            cashedOut ? "text-green-400" : 
-                            multiplier >= 10 ? "text-cyan-400" :
-                            multiplier >= 5 ? "text-purple-400" :
-                            multiplier >= 2 ? "text-pink-400" :
-                            "text-white"
-                          }`}
+                          className="text-5xl sm:text-6xl md:text-8xl font-black font-mono relative"
                           style={{
-                            textShadow: crashed 
-                              ? "0 4px 0 rgba(127,29,29,1), 0 8px 0 rgba(69,10,10,0.8), 0 12px 30px rgba(239,68,68,0.6), 0 0 80px rgba(239,68,68,0.4)"
+                            background: crashed 
+                              ? "linear-gradient(180deg, #ff6b6b 0%, #ee5a5a 50%, #cc4444 100%)"
                               : cashedOut
-                              ? "0 4px 0 rgba(21,128,61,1), 0 8px 0 rgba(5,46,22,0.8), 0 12px 30px rgba(34,197,94,0.6), 0 0 80px rgba(34,197,94,0.4)"
+                              ? "linear-gradient(180deg, #4ade80 0%, #22c55e 50%, #16a34a 100%)"
                               : multiplier >= 5
-                              ? "0 4px 0 rgba(88,28,135,1), 0 8px 0 rgba(46,16,101,0.8), 0 12px 30px rgba(168,85,247,0.6), 0 0 80px rgba(168,85,247,0.4)"
-                              : "0 4px 0 rgba(75,0,130,0.8), 0 8px 20px rgba(168,85,247,0.5), 0 0 60px rgba(168,85,247,0.3)",
+                              ? "linear-gradient(180deg, #FFC94C 0%, #FF4FD8 50%, #4CF4FF 100%)"
+                              : multiplier >= 2
+                              ? "linear-gradient(180deg, #FF4FD8 0%, #a855f7 50%, #4CF4FF 100%)"
+                              : "linear-gradient(180deg, #ffffff 0%, #e0e0e0 50%, #a0a0a0 100%)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            filter: crashed 
+                              ? "drop-shadow(0 4px 0 rgba(200,50,50,0.9)) drop-shadow(0 8px 0 rgba(150,30,30,0.6)) drop-shadow(0 0 40px rgba(255,107,107,0.8))"
+                              : cashedOut
+                              ? "drop-shadow(0 4px 0 rgba(20,120,60,0.9)) drop-shadow(0 8px 0 rgba(10,80,40,0.6)) drop-shadow(0 0 40px rgba(74,222,128,0.8))"
+                              : multiplier >= 5
+                              ? "drop-shadow(0 4px 0 rgba(180,60,120,0.9)) drop-shadow(0 8px 0 rgba(100,30,80,0.6)) drop-shadow(0 0 60px rgba(255,79,216,0.6))"
+                              : "drop-shadow(0 4px 0 rgba(100,40,140,0.8)) drop-shadow(0 8px 20px rgba(168,85,247,0.4)) drop-shadow(0 0 40px rgba(255,79,216,0.3))",
                             letterSpacing: "-0.02em",
                           }}
                           animate={{ 
-                            scale: crashed ? [1, 1.1, 1] : cashedOut ? [1, 1.15, 1.1] : [1, 1.02, 1],
-                            textShadow: crashed ? undefined : cashedOut ? undefined : [
-                              "0 4px 0 rgba(75,0,130,0.8), 0 8px 20px rgba(168,85,247,0.5), 0 0 60px rgba(168,85,247,0.3)",
-                              "0 4px 0 rgba(75,0,130,0.9), 0 8px 25px rgba(168,85,247,0.7), 0 0 80px rgba(168,85,247,0.5)",
-                              "0 4px 0 rgba(75,0,130,0.8), 0 8px 20px rgba(168,85,247,0.5), 0 0 60px rgba(168,85,247,0.3)",
-                            ],
+                            scale: crashed ? [1, 1.08, 1] : cashedOut ? [1, 1.12, 1.08] : [1, 1.015, 1],
                           }}
                           transition={{ 
-                            duration: crashed || cashedOut ? 0.3 : 0.8,
+                            duration: crashed || cashedOut ? 0.4 : 1.5,
                             repeat: crashed || cashedOut ? 0 : Infinity,
+                            ease: "easeInOut",
                           }}
                         >
                           {multiplier.toFixed(2)}x
