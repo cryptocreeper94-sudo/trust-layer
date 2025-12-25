@@ -194,7 +194,7 @@ export default function Home() {
         </div>
         
         <motion.div 
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 cursor-pointer z-20"
+          className="absolute bottom-6 left-4 flex flex-col items-center gap-1 cursor-pointer z-20"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, y: [0, 8, 0] }}
           transition={{ 
@@ -202,9 +202,22 @@ export default function Home() {
             y: { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
           }}
           onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-          data-testid="button-scroll-down"
+          data-testid="button-scroll-down-left"
         >
-          <span className="text-[10px] text-muted-foreground/70 uppercase tracking-wider">Scroll</span>
+          <ChevronDown className="w-5 h-5 text-primary/70" />
+        </motion.div>
+        
+        <motion.div 
+          className="absolute bottom-6 right-4 flex flex-col items-center gap-1 cursor-pointer z-20"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, 8, 0] }}
+          transition={{ 
+            opacity: { delay: 1, duration: 0.5 },
+            y: { duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }
+          }}
+          onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+          data-testid="button-scroll-down-right"
+        >
           <ChevronDown className="w-5 h-5 text-primary/70" />
         </motion.div>
       </section>
