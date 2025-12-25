@@ -78,6 +78,7 @@ import DAOGovernance from "@/pages/dao-governance";
 import TxSimulator from "@/pages/tx-simulator";
 import PortfolioRebalancer from "@/pages/portfolio-rebalancer";
 import Arcade from "@/pages/arcade";
+import Crash from "@/pages/crash";
 import Predictions from "@/pages/predictions";
 import SocialFeed from "@/pages/social-feed";
 import Lottery from "@/pages/lottery";
@@ -104,6 +105,7 @@ function GamesRouter() {
       <Switch>
         <Route path="/" component={GamesHome} />
         <Route path="/arcade" component={Arcade} />
+        <Route path="/crash" component={Crash} />
         <Route path="/predictions" component={Predictions} />
         <Route path="/lottery" component={Lottery} />
         <Route path="/wallet" component={Wallet} />
