@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart } from "lucide-react";
+import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart, Gamepad2, Star, Zap } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+
+const featuredItems = [
+  { href: "/roadmap-chronicles", label: "DarkWave Chronicles", icon: Gamepad2, badge: "Game", bgGradient: "rgba(168, 85, 247, 0.15), rgba(236, 72, 153, 0.15)", iconGradient: "#a855f7, #ec4899", overlayColor: "rgba(168,85,247,0.1)", badgeClass: "bg-purple-500/30 text-purple-300", description: "AI-Powered Fantasy Life Sim" },
+  { href: "/crowdfund", label: "Fund Development", icon: Heart, badge: "Support", bgGradient: "rgba(6, 182, 212, 0.15), rgba(59, 130, 246, 0.15)", iconGradient: "#06b6d4, #3b82f6", overlayColor: "rgba(6,182,212,0.1)", badgeClass: "bg-cyan-500/30 text-cyan-300", description: "Help Build the Future" },
+  { href: "/presale", label: "Token Presale", icon: Coins, badge: "Live", bgGradient: "rgba(245, 158, 11, 0.15), rgba(239, 68, 68, 0.15)", iconGradient: "#f59e0b, #ef4444", overlayColor: "rgba(245,158,11,0.1)", badgeClass: "bg-amber-500/30 text-amber-300", description: "Get DWC at Best Price" },
+];
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
@@ -28,13 +34,12 @@ const navItems = [
   { href: "/network", label: "Network Stats", icon: TrendingUp },
   { href: "/validators", label: "Validators", icon: FileText },
   { href: "/developers", label: "Developers", icon: Code },
-  { href: "/presale", label: "Token Presale", icon: Coins, badge: "Live" },
-  { href: "/crowdfund", label: "Fund Development", icon: Heart, badge: "Support" },
   { href: "/webhooks", label: "Webhooks", icon: Webhook },
   { href: "/studio", label: "Dev Studio", icon: Sparkles },
   { href: "/founder-program", label: "Founders", icon: Sparkles, badge: "VIP" },
   { href: "/quests", label: "Quests", icon: Rocket },
   { href: "/airdrop", label: "Airdrop", icon: Coins },
+  { href: "/roadmap", label: "Roadmap", icon: Star },
 ];
 
 function MenuPanel({ onClose }: { onClose: () => void }) {
@@ -84,7 +89,7 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
         }}
       >
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
           <span style={{ fontWeight: 700, fontSize: '20px', color: '#ffffff', fontFamily: 'Space Grotesk, sans-serif' }}>Menu</span>
           <button
             onClick={onClose}
@@ -102,6 +107,82 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
             <X style={{ width: '20px', height: '20px' }} />
           </button>
         </div>
+
+        {/* Featured Section */}
+        <div style={{ marginBottom: '24px' }}>
+          <span style={{ 
+            fontSize: '11px', 
+            fontWeight: 600, 
+            color: '#a855f7', 
+            textTransform: 'uppercase', 
+            letterSpacing: '0.1em',
+            marginBottom: '12px',
+            display: 'block'
+          }}>
+            Featured
+          </span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {featuredItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = location === item.href;
+              
+              return (
+                <Link key={item.href} href={item.href} style={{ textDecoration: 'none' }}>
+                  <div
+                    onClick={onClose}
+                    data-testid={`featured-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                    style={{
+                      position: 'relative',
+                      padding: '16px',
+                      borderRadius: '16px',
+                      background: `linear-gradient(135deg, ${item.bgGradient})`,
+                      border: isActive ? '2px solid rgba(168, 85, 247, 0.6)' : '1px solid rgba(255, 255, 255, 0.1)',
+                      overflow: 'hidden',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <div style={{ 
+                      position: 'absolute', 
+                      top: 0, 
+                      left: 0, 
+                      right: 0, 
+                      bottom: 0, 
+                      background: `linear-gradient(135deg, ${item.overlayColor}, transparent)`,
+                      pointerEvents: 'none'
+                    }} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', position: 'relative', zIndex: 1 }}>
+                      <div style={{
+                        width: '44px',
+                        height: '44px',
+                        borderRadius: '12px',
+                        background: `linear-gradient(135deg, ${item.iconGradient})`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: `0 8px 32px ${item.overlayColor}`,
+                      }}>
+                        <Icon style={{ width: '22px', height: '22px', color: '#ffffff' }} />
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
+                          <span style={{ fontWeight: 600, fontSize: '14px', color: '#ffffff' }}>{item.label}</span>
+                          <Badge className={`text-[9px] px-1.5 py-0 ${item.badgeClass}`}>
+                            {item.badge}
+                          </Badge>
+                        </div>
+                        <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>{item.description}</span>
+                      </div>
+                      <Zap style={{ width: '16px', height: '16px', color: item.overlayColor }} />
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div style={{ height: '1px', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)', marginBottom: '16px' }} />
 
         {/* Nav Items */}
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
