@@ -76,7 +76,7 @@ export default function Home() {
           </Link>
           <div className="hidden lg:flex items-center gap-4 text-xs font-medium text-muted-foreground mr-4">
             <Link href="/ecosystem" className="hover:text-primary transition-colors whitespace-nowrap">Ecosystem</Link>
-            <Link href="/token" className="hover:text-primary transition-colors whitespace-nowrap">Token</Link>
+            <Link href="/token" className="hover:text-primary transition-colors whitespace-nowrap">Coin</Link>
             <Link href="/bridge" className="hover:text-primary transition-colors whitespace-nowrap flex items-center gap-1">
               Bridge
               <Badge variant="outline" className="text-[9px] border-cyan-500/50 text-cyan-400 px-1 py-0">Beta</Badge>

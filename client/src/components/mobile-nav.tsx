@@ -174,6 +174,43 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
   );
 }
 
+// Primary links shown in desktop nav bar
+const primaryNavItems = [
+  { href: "/wallet", label: "Wallet", icon: Coins },
+  { href: "/swap", label: "Swap", icon: ArrowUpDown },
+  { href: "/token", label: "Coin", icon: Coins },
+  { href: "/explorer", label: "Explorer", icon: SearchIcon },
+  { href: "/staking", label: "Staking", icon: TrendingUp },
+  { href: "/developers", label: "Developers", icon: Code },
+];
+
+export function DesktopNav() {
+  const [location] = useLocation();
+  
+  return (
+    <nav className="hidden lg:flex items-center gap-1">
+      {primaryNavItems.map((item) => {
+        const Icon = item.icon;
+        const isActive = location === item.href;
+        
+        return (
+          <Link key={item.href} href={item.href}>
+            <Button
+              variant="ghost"
+              size="sm"
+              className={`h-8 px-3 text-xs gap-1.5 ${isActive ? 'bg-white/10 text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-white/5'}`}
+              data-testid={`nav-${item.label.toLowerCase()}`}
+            >
+              <Icon className="w-3.5 h-3.5" />
+              {item.label}
+            </Button>
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
+
 export function MobileNav() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -183,7 +220,7 @@ export function MobileNav() {
   }, []);
 
   return (
-    <div className="md:hidden">
+    <div>
       <Button
         variant="ghost"
         size="icon"
