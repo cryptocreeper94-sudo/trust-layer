@@ -642,7 +642,7 @@ export default function Arcade() {
       </nav>
 
       <main className="flex-1 pt-16 pb-8 px-3 md:px-6">
-        <div className="mx-auto max-w-7xl">
+        <div className="mx-auto max-w-[1200px]">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
