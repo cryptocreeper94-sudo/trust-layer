@@ -16,6 +16,8 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 const REVIEW_CRITERIA = [
@@ -58,37 +60,50 @@ const SUBMISSION_STEPS = [
   { step: 4, title: "Go Live", description: "Your game joins the ecosystem" },
 ];
 
-const SAMPLE_SUBMISSIONS = [
-  {
-    name: "Lucky Dice",
-    developer: "CryptoDevs.eth",
-    status: "approved",
-    score: 94,
-    date: "Dec 20, 2024",
-  },
-  {
-    name: "Moon Roulette",
-    developer: "BlockBuilder",
-    status: "pending",
-    score: null,
-    date: "Dec 24, 2024",
-  },
-  {
-    name: "NFT Raffle",
-    developer: "Web3Games",
-    status: "rejected",
-    score: 42,
-    date: "Dec 18, 2024",
-  },
-];
 
 export default function GameDeveloper() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [gameName, setGameName] = useState("");
   const [gameDescription, setGameDescription] = useState("");
   const [repoUrl, setRepoUrl] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { data: recentSubmissions } = useQuery({
+    queryKey: ["/api/games/recent-submissions"],
+    refetchInterval: 10000,
+  });
+
+  const { data: mySubmissions } = useQuery({
+    queryKey: ["/api/games/submissions"],
+    enabled: !!user,
+    refetchInterval: 5000,
+  });
+
+  const submitMutation = useMutation({
+    mutationFn: async (data: { gameName: string; description: string; repoUrl: string }) => {
+      const response = await apiRequest("POST", "/api/games/submit", data);
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Submission Received!",
+        description: "Your game is now in the AI review queue. You'll see results within a few minutes.",
+      });
+      setGameName("");
+      setGameDescription("");
+      setRepoUrl("");
+      queryClient.invalidateQueries({ queryKey: ["/api/games/submissions"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/games/recent-submissions"] });
+    },
+    onError: (error) => {
+      toast({
+        title: "Submission Failed",
+        description: error instanceof Error ? error.message : "Please try again",
+        variant: "destructive",
+      });
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,19 +116,12 @@ export default function GameDeveloper() {
       return;
     }
     
-    setIsSubmitting(true);
-    
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast({
-        title: "Submission Received!",
-        description: "Your game is now in the AI review queue. We'll notify you within 48 hours.",
-      });
-      setGameName("");
-      setGameDescription("");
-      setRepoUrl("");
-    }, 2000);
+    submitMutation.mutate({ gameName, description: gameDescription, repoUrl });
   };
+  
+  const displaySubmissions = mySubmissions?.submissions?.length > 0 
+    ? mySubmissions.submissions 
+    : recentSubmissions?.submissions || [];
 
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
@@ -259,10 +267,10 @@ export default function GameDeveloper() {
                     <Button
                       type="submit"
                       className="w-full h-12 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
-                      disabled={isSubmitting}
+                      disabled={submitMutation.isPending}
                       data-testid="button-submit-game"
                     >
-                      {isSubmitting ? (
+                      {submitMutation.isPending ? (
                         <>
                           <Clock className="w-4 h-4 mr-2 animate-spin" />
                           Submitting...
@@ -324,46 +332,51 @@ export default function GameDeveloper() {
                 </h3>
                 
                 <div className="space-y-3">
-                  {SAMPLE_SUBMISSIONS.map((submission, i) => (
-                    <motion.div
-                      key={submission.name}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.1 }}
-                      className="p-3 rounded-lg bg-white/5"
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <p className="font-medium text-sm">{submission.name}</p>
-                        {submission.status === "approved" && (
-                          <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-[10px]">
-                            <CheckCircle2 className="w-3 h-3 mr-1" />
-                            Approved
-                          </Badge>
-                        )}
-                        {submission.status === "pending" && (
-                          <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 text-[10px]">
-                            <Clock className="w-3 h-3 mr-1" />
-                            In Review
-                          </Badge>
-                        )}
-                        {submission.status === "rejected" && (
-                          <Badge className="bg-red-500/20 text-red-400 border-red-500/30 text-[10px]">
-                            <XCircle className="w-3 h-3 mr-1" />
-                            Rejected
-                          </Badge>
-                        )}
-                      </div>
-                      <div className="flex items-center justify-between text-xs text-muted-foreground">
-                        <span>{submission.developer}</span>
-                        {submission.score && (
-                          <span className={submission.score >= 70 ? "text-green-400" : "text-red-400"}>
-                            Score: {submission.score}/100
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-[10px] text-muted-foreground mt-1">{submission.date}</p>
-                    </motion.div>
-                  ))}
+                  {displaySubmissions.length === 0 ? (
+                    <p className="text-sm text-muted-foreground text-center py-4">
+                      No submissions yet. Be the first to submit your game!
+                    </p>
+                  ) : (
+                    displaySubmissions.map((submission: any, i: number) => (
+                      <motion.div
+                        key={submission.id || submission.gameName}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="p-3 rounded-lg bg-white/5"
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <p className="font-medium text-sm">{submission.gameName}</p>
+                          {submission.status === "approved" && (
+                            <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-[10px]">
+                              <CheckCircle2 className="w-3 h-3 mr-1" />
+                              Approved
+                            </Badge>
+                          )}
+                          {submission.status === "pending" && (
+                            <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 text-[10px]">
+                              <Clock className="w-3 h-3 mr-1 animate-spin" />
+                              In Review
+                            </Badge>
+                          )}
+                          {submission.status === "rejected" && (
+                            <Badge className="bg-red-500/20 text-red-400 border-red-500/30 text-[10px]">
+                              <XCircle className="w-3 h-3 mr-1" />
+                              Rejected
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                          <span>Submitted {new Date(submission.createdAt).toLocaleDateString()}</span>
+                          {submission.overallScore && (
+                            <span className={submission.overallScore >= 70 ? "text-green-400" : "text-red-400"}>
+                              Score: {submission.overallScore}/100
+                            </span>
+                          )}
+                        </div>
+                      </motion.div>
+                    ))
+                  )}
                 </div>
               </GlassCard>
 

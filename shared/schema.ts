@@ -1641,3 +1641,38 @@ export const insertEmailPreferencesSchema = createInsertSchema(emailPreferences)
 
 export type InsertEmailPreferences = z.infer<typeof insertEmailPreferencesSchema>;
 export type EmailPreferences = typeof emailPreferences.$inferSelect;
+
+export const gameSubmissions = pgTable("game_submissions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  gameName: text("game_name").notNull(),
+  description: text("description").notNull(),
+  repoUrl: text("repo_url").notNull(),
+  status: text("status").notNull().default("pending"),
+  securityScore: integer("security_score"),
+  fairnessScore: integer("fairness_score"),
+  performanceScore: integer("performance_score"),
+  uxScore: integer("ux_score"),
+  codeQualityScore: integer("code_quality_score"),
+  overallScore: integer("overall_score"),
+  aiReview: text("ai_review"),
+  reviewedAt: timestamp("reviewed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertGameSubmissionSchema = createInsertSchema(gameSubmissions).omit({
+  id: true,
+  createdAt: true,
+  reviewedAt: true,
+  securityScore: true,
+  fairnessScore: true,
+  performanceScore: true,
+  uxScore: true,
+  codeQualityScore: true,
+  overallScore: true,
+  aiReview: true,
+  status: true,
+});
+
+export type InsertGameSubmission = z.infer<typeof insertGameSubmissionSchema>;
+export type GameSubmission = typeof gameSubmissions.$inferSelect;
