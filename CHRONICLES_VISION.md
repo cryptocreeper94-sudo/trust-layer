@@ -81,39 +81,211 @@ When you interact with someone in this world, you're not reading scripted dialog
 
 ## Era System & Time Travel
 
+### The Complete Era Taxonomy
+
+This is not 4-6 generic time periods. This is EVERY recognizable historical moment that people dream about living in. Organized using a three-tier system:
+
+**EPOCH → REGIONAL COLLECTION → SPOTLIGHT ERA**
+
+---
+
+### EPOCH 1: PREHISTORIC (Before Written History)
+
+**Global**
+- Time of Dinosaurs (prehistoric fantasy - survival, discovery)
+- Stone Age (early tools, cave dwellings, hunting mammoths)
+- Bronze Age (first metalworking, early civilizations forming)
+- Iron Age (advanced tools, tribal warfare, trade routes)
+- Cro-Magnon Era (early humans, pristine resources, untouched world)
+- Neolithic Revolution (first settlements, agriculture, domestication)
+
+**Era Incentive**: Rare pristine elements and resources that haven't been exploited - essential for advanced crafting, time/space travel technology.
+
+---
+
+### EPOCH 2: ANCIENT WORLD (3000 BCE - 500 CE)
+
+**Middle East & Africa**
+- Egyptian Old Kingdom (pyramid building, pharaohs, Nile civilization)
+- Egyptian New Kingdom (Tutankhamun, Ramses, Valley of Kings)
+- Mesopotamia (Babylon, Assyria, Code of Hammurabi)
+- Persian Empire (Cyrus, Darius, imperial grandeur)
+
+**Mediterranean**
+- Greek Golden Age (Athens, philosophy, democracy, Olympics)
+- Spartan Era (warrior culture, discipline, Thermopylae)
+- Hellenistic Period (Alexander the Great, cultural fusion)
+- Roman Republic (senators, Punic Wars, rise of Rome)
+- Roman Empire (Caesars, gladiators, Colosseum, engineering)
+
+**Asia**
+- Han Dynasty China (Silk Road, Confucius, ancient wisdom)
+- Maurya Empire India (Ashoka, Buddhism spreads)
+- Qin Dynasty (Great Wall, terracotta army, unification)
+
+**Era Incentive**: Lost knowledge, mystical artifacts, foundational wisdom, ancient technologies.
+
+---
+
+### EPOCH 3: MEDIEVAL (500 CE - 1500 CE)
+
+**Europe**
+- Dark Ages (fall of Rome, feudal lords, monasteries, plague)
+- Viking Age (Norse raiders, longships, exploration, Valhalla)
+- Crusades Era (holy wars, knights, Templar mysteries)
+- High Medieval (castle building, chivalry, troubadours)
+- Late Medieval (Black Death, peasant revolts, Hundred Years War)
+
+**Asia**
+- Feudal Japan (samurai, shoguns, bushido honor codes)
+- Tang Dynasty China (poetry, art, Silk Road peak)
+- Mongol Empire (Genghis Khan, conquest, vast empire)
+- Delhi Sultanate (Islamic India, cultural fusion)
+
+**Middle East**
+- Islamic Golden Age (science, mathematics, philosophy, Baghdad)
+- Ottoman Rise (early sultans, Janissaries, expansion)
+
+**Era Incentive**: Political power structures, land ownership, dynasties, military strength, religious influence.
+
+---
+
+### EPOCH 4: EARLY MODERN (1500 - 1800)
+
+**Europe**
+- Renaissance Italy (Medici, da Vinci, Michelangelo, art explosion)
+- Elizabethan England (Shakespeare, court intrigue, privateers)
+- King George Era (1700s England, Georgian architecture, empire)
+- French Revolution (liberty, guillotine, Napoleon rising)
+- Enlightenment (philosophers, reason, scientific revolution)
+
+**Americas**
+- Age of Discovery (Columbus, Magellan, new world exploration)
+- Colonial Americas (settlers, native cultures, frontier life)
+- American Revolution (founding fathers, independence, new nation)
+- Caribbean Pirates (Golden Age of Piracy, treasure, adventure)
+
+**Asia**
+- Edo Period Japan (isolation, Tokugawa, geisha, samurai peacetime)
+- Mughal Empire India (Taj Mahal, cultural splendor)
+- Qing Dynasty China (Forbidden City, last emperors)
+
+**Era Incentive**: Innovation, art, cultural influence, exploration, trade empires.
+
+---
+
+### EPOCH 5: INDUSTRIAL ERA (1800 - 1920)
+
+**Europe**
+- Victorian London (Sherlock Holmes era, Jack the Ripper, fog and gaslight)
+- Industrial Revolution Britain (factories, steam power, urbanization)
+- Belle Époque Paris (art nouveau, cafes, impressionists)
+- Imperial Germany (Bismarck, militarism, technological advance)
+
+**Americas**
+- Wild West (cowboys, outlaws, frontier justice, gold rush)
+- Gilded Age America (robber barons, immigrants, railroads)
+- Civil War Era (Union vs Confederacy, Lincoln, abolition)
+- Roaring Twenties Prelude (jazz emerging, prohibition beginning)
+
+**Global**
+- Colonial Africa (European scramble, resistance movements)
+- Meiji Japan (rapid modernization, samurai to soldiers)
+- Russian Empire (Tsars, Rasputin, revolution brewing)
+
+**Era Incentive**: Manufacturing capability, wealth accumulation, industrial power, technological access.
+
+---
+
+### EPOCH 6: CONTEMPORARY MOVEMENTS (1920 - 2000)
+
+**Cultural & Social Movements - Americas**
+- Roaring Twenties (jazz, flappers, speakeasies, bootleggers)
+- Great Depression Era (dust bowl, survival, New Deal)
+- World War II Homefront (rationing, Rosie the Riveter, sacrifice)
+- Post-War Boom (suburbs, cars, American Dream, 1950s)
+- Civil Rights Era (MLK, marches, segregation battles)
+- Watts Riots (1965 Los Angeles, urban uprising, tension)
+- Hippie Era (1960s-70s counterculture, Woodstock, peace movement)
+- Women's Suffrage / Feminist Movements (equal rights, change)
+- Disco Era (1970s nightlife, fashion, music)
+- Hip-Hop Origins (1980s Bronx, breakdancing, street culture)
+
+**Global Conflicts**
+- World War I Trenches (no man's land, gas warfare, lost generation)
+- World War II Europe (occupied territories, resistance, D-Day)
+- Cold War Era (spies, nuclear tension, Berlin Wall)
+- Vietnam War Era (protests, jungle warfare, cultural divide)
+
+**Cultural Movements - Global**
+- British Invasion (1960s London, Beatles, Swinging Sixties)
+- Apartheid South Africa (struggle, Mandela, resistance)
+- Fall of Soviet Union (1989-1991, freedom movements)
+
+**Era Incentive**: Technology access, global connections, social change, cultural influence, modern comforts.
+
+---
+
+### EPOCH 7: FUTURE & BEYOND (2000+)
+
+**Near Future**
+- Cyberpunk Era (megacities, corporations, neon, hackers)
+- Space Colonization (Mars, moon bases, asteroid mining)
+- AI Revolution (singularity, synthetic life, new humanity)
+
+**Far Future**
+- Interstellar Age (galaxy exploration, alien contact)
+- Post-Scarcity Society (abundance, new challenges)
+- Time of Legends (cycles repeat, new mythologies form)
+
+**Era Incentive**: Ultimate technology, space travel, resources from across the cosmos.
+
+---
+
+### Regional Variations
+
+Within each era, different geographic regions have distinct experiences:
+
+| Region | Example Spotlight Eras |
+|--------|----------------------|
+| **Western Europe** | Victorian London, Renaissance Florence, Viking Scandinavia |
+| **Eastern Europe** | Russian Empire, Slavic Tribes, Soviet Era |
+| **East Asia** | Feudal Japan, Han Dynasty, Mongol Empire |
+| **South Asia** | Mughal India, British Raj, Independence Movement |
+| **Middle East** | Islamic Golden Age, Ottoman Empire, Ancient Persia |
+| **Africa** | Egyptian Dynasties, Great Zimbabwe, Colonial Resistance |
+| **Americas** | Wild West, Aztec Empire, Civil Rights Movement |
+| **Oceania** | Aboriginal Dreamtime, Colonial Australia, Pacific Islands |
+
+---
+
+### Spotlight Era Structure
+
+Each Spotlight Era includes:
+1. **Overview & Dates**: When and where this era exists
+2. **Geographic Focus**: Primary locations and settings
+3. **Cultural Signatures**: Fashion, architecture, language, customs
+4. **Key Historical Events**: What happens around you (AI reenactment)
+5. **Player Affordances**: Missions, economy hooks, unique opportunities
+6. **DWC Commerce Role**: What can be bought, sold, traded
+7. **Transfer Prerequisites**: How to move to/from this era
+
+---
+
+### Historical Event Modules
+
+Major events are recreated through AI:
+- **Watts Riots (1965)**: You're in LA. The city burns around you. AI actors carry out historical events. Real players navigate, participate, or stay out of the way.
+- **Fall of Rome**: Watch an empire crumble. Politics, invasion, chaos.
+- **French Revolution**: The guillotine falls. Choose your side.
+- **Moon Landing**: Experience humanity's greatest achievement.
+
+These aren't cutscenes - they're **living, breathing events** you experience firsthand while making your own choices within them.
+
+---
+
 ### Choose Your Starting Era
-Begin your journey in any era from human history. These aren't vague 500-year spans - these are specific, recognizable moments that people dream about:
-
-**Prehistoric**
-- Cro-Magnon / Early Human (rare pristine resources, untouched elements)
-- Neolithic Revolution (first settlements, agriculture begins)
-
-**Ancient World**
-- Egyptian Dynasties (pharaohs, pyramids, mysteries)
-- Greek Golden Age (philosophy, democracy, Olympics)
-- Roman Empire (legions, conquests, engineering)
-- Han Dynasty China (silk road, ancient wisdom)
-
-**Medieval**
-- Dark Ages Europe (feudal lords, monasteries, plague)
-- Viking Age (raiders, explorers, Norse mythology)
-- Crusades Era (holy wars, knights, cultural collision)
-- Feudal Japan (samurai, shoguns, honor codes)
-
-**Early Modern**
-- Renaissance Italy (art, invention, Medici intrigue)
-- Age of Discovery (Columbus, exploration, new worlds)
-- Elizabethan England (Shakespeare, court politics, privateers)
-- Colonial Americas (settlers, native cultures, frontier)
-
-**Modern History**
-- Victorian Era (industry, empire, social change)
-- Wild West (cowboys, outlaws, frontier justice)
-- Industrial Revolution (factories, labor, innovation)
-- Gilded Age (robber barons, immigrants, progress)
-
-**And Beyond...**
-- Future eras to be developed as the world evolves
+Begin your journey in any era from human history. These aren't vague 500-year spans - these are specific, recognizable moments that people dream about.
 
 ### Era-Specific Incentives
 Each era offers unique advantages that make starting there worthwhile:
