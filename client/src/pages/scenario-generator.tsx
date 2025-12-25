@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import crystalBallImg from "@assets/generated_images/scenario_generator_crystal_ball.png";
@@ -135,18 +136,18 @@ function CharacterCard({ character }: { character: Character }) {
   const portrait = getCharacterPortrait(character.name, character.role);
   
   return (
-    <div className="p-1">
-      <div className="group relative rounded-2xl overflow-hidden" style={{ background: 'linear-gradient(135deg, #00ffff, #8b5cf6, #ec4899)' }}>
+    <div className="h-full">
+      <div className="group relative rounded-2xl overflow-hidden h-full" style={{ background: 'linear-gradient(135deg, #00ffff, #8b5cf6, #ec4899)' }}>
         {/* Card content */}
-        <div className="relative rounded-xl bg-black m-[2px] overflow-hidden">
-          {/* Portrait section */}
-          <div className="relative h-44 sm:h-48 overflow-hidden">
+        <div className="relative rounded-xl bg-black m-[2px] overflow-hidden h-[calc(100%-4px)] flex flex-col">
+          {/* Portrait section - aspect ratio container for full image */}
+          <div className="relative aspect-[3/4] w-full overflow-hidden bg-gradient-to-b from-gray-900 to-black">
             <img 
               src={portrait} 
               alt={character.name}
-              className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
+              className="absolute inset-0 w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
             
             {/* NPC Badge */}
             <div className="absolute top-2 right-2">
@@ -159,17 +160,17 @@ function CharacterCard({ character }: { character: Character }) {
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-transparent to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </div>
           
-          {/* Info section */}
-          <div className="p-3 sm:p-4 bg-gradient-to-b from-black/80 to-black">
+          {/* Info section - fixed height for consistent cards */}
+          <div className="p-3 sm:p-4 bg-gradient-to-b from-black/80 to-black flex-1 flex flex-col">
             <div className="mb-2">
-              <h4 className="font-display font-bold text-base sm:text-lg text-white drop-shadow-lg leading-tight">{character.name}</h4>
-              <p className="text-[10px] sm:text-xs text-cyan-400 font-medium uppercase tracking-wider">{character.role}</p>
+              <h4 className="font-display font-bold text-sm sm:text-base text-white drop-shadow-lg leading-tight truncate">{character.name}</h4>
+              <p className="text-[9px] sm:text-[10px] text-cyan-400 font-medium uppercase tracking-wider truncate">{character.role}</p>
             </div>
             
-            <p className="text-[10px] sm:text-xs text-gray-400 mb-3 italic line-clamp-3">"{character.motivation}"</p>
+            <p className="text-[9px] sm:text-[10px] text-gray-400 mb-2 italic line-clamp-2 flex-shrink-0">"{character.motivation}"</p>
             
             {/* Emotion bars - compact premium style */}
-            <div className="space-y-1">
+            <div className="space-y-0.5 mt-auto">
               <EmotionBar label="Arousal" value={character.emotions.arousal} color="text-red-400" icon={Flame} />
               <EmotionBar label="Valence" value={character.emotions.valence} color="text-green-400" icon={Heart} />
               <EmotionBar label="Cohesion" value={character.emotions.socialCohesion} color="text-blue-400" icon={Users} />
@@ -421,11 +422,20 @@ export default function ScenarioGenerator() {
                   <Users className="w-5 h-5 text-purple-400" />
                   Characters Involved
                 </h3>
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
-                  {scenario.characters.map((char, i) => (
-                    <CharacterCard key={i} character={char} />
-                  ))}
-                </div>
+                <Carousel
+                  opts={{ align: "start", loop: true }}
+                  className="w-full"
+                >
+                  <CarouselContent className="-ml-2 md:-ml-4">
+                    {scenario.characters.map((char, i) => (
+                      <CarouselItem key={i} className="pl-2 md:pl-4 basis-1/2 sm:basis-1/3 lg:basis-1/4">
+                        <CharacterCard character={char} />
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="left-0 -translate-x-1/2 bg-black/80 border-purple-500/50 text-white hover:bg-purple-500/20" />
+                  <CarouselNext className="right-0 translate-x-1/2 bg-black/80 border-purple-500/50 text-white hover:bg-purple-500/20" />
+                </Carousel>
               </div>
               
               {/* Choices */}
