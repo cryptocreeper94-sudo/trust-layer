@@ -12,6 +12,21 @@ DarkWave Smart Chain (DSC) is a comprehensive blockchain ecosystem developed by 
 - Mobile: Mobile-first design with self-contained carousels, accordions, dropdowns
 - Branding: White-labeled, no Replit branding, dark theme only
 
+## Design Protocol (Project-Wide)
+
+**All UI cards and components must follow:**
+- Bento grid layouts with varied card sizes
+- Trading card / NFT style with holographic borders and glow effects
+- Photorealistic images (no illustrations or cartoons)
+- Premium UI treatment: glass morphism, gradients, subtle animations
+- Refractor / holographic card aesthetic
+
+**Character Assets:**
+Characters are stored in `attached_assets/generated_images/` with naming convention:
+- `{role}_{descriptor}_portrait.png` (e.g., `tribal_emissary_woman_portrait.png`)
+- Characters can be reused as AI guides throughout the ecosystem
+- Character metadata (name, role, beliefs, emotions) stored in database for recall
+
 ## System Architecture
 
 ### Blockchain Architecture (`server/blockchain-engine.ts`)

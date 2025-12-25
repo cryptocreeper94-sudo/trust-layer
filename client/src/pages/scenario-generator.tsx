@@ -15,6 +15,32 @@ import balanceScaleImg from "@assets/generated_images/balance_scale_moral_judgme
 import emotionalWarriorImg from "@assets/generated_images/emotional_warrior_portrait.png";
 import rippleEffectsImg from "@assets/generated_images/glowing_ripple_effects_water.png";
 import mirrorPerspectivesImg from "@assets/generated_images/shattered_mirror_perspectives.png";
+import tribalEmissaryImg from "@assets/generated_images/tribal_emissary_woman_portrait.png";
+import tribalShamanImg from "@assets/generated_images/tribal_shaman_elder_portrait.png";
+import tribalWarriorImg from "@assets/generated_images/tribal_warrior_man_portrait.png";
+import tribalHealerImg from "@assets/generated_images/tribal_healer_woman_portrait.png";
+
+const CHARACTER_PORTRAITS: Record<string, string> = {
+  "emissary": tribalEmissaryImg,
+  "shaman": tribalShamanImg,
+  "warrior": tribalWarriorImg,
+  "healer": tribalHealerImg,
+  "guardian": tribalShamanImg,
+  "outsider": tribalEmissaryImg,
+  "chief": tribalWarriorImg,
+  "elder": tribalShamanImg,
+  "scout": tribalWarriorImg,
+  "mystic": tribalHealerImg,
+};
+
+function getCharacterPortrait(role: string): string {
+  const lowerRole = role.toLowerCase();
+  for (const [key, img] of Object.entries(CHARACTER_PORTRAITS)) {
+    if (lowerRole.includes(key)) return img;
+  }
+  const portraits = Object.values(CHARACTER_PORTRAITS);
+  return portraits[Math.floor(Math.random() * portraits.length)];
+}
 
 interface EmotionState {
   arousal: number;
@@ -104,28 +130,59 @@ function EmotionBar({ label, value, color, icon: Icon }: {
 }
 
 function CharacterCard({ character }: { character: Character }) {
+  const portrait = getCharacterPortrait(character.role);
+  
   return (
-    <GlassCard className="p-4">
-      <div className="flex items-start justify-between mb-3">
-        <div>
-          <h4 className="font-bold text-white">{character.name}</h4>
-          <p className="text-xs text-gray-400">{character.role}</p>
+    <div className="group relative">
+      {/* Holographic border effect */}
+      <div className="absolute -inset-[2px] rounded-2xl bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 opacity-60 group-hover:opacity-100 blur-sm transition-opacity duration-300" />
+      <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-cyan-400 via-purple-500 to-pink-500 opacity-80" />
+      
+      {/* Card content */}
+      <div className="relative rounded-2xl bg-black overflow-hidden">
+        {/* Portrait section */}
+        <div className="relative h-48 overflow-hidden">
+          <img 
+            src={portrait} 
+            alt={character.name}
+            className="absolute inset-0 w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+          
+          {/* NPC Badge */}
+          <div className="absolute top-3 right-3">
+            <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white border-0 text-[10px] font-bold shadow-lg shadow-purple-500/30">
+              NPC
+            </Badge>
+          </div>
+          
+          {/* Holographic shimmer overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
-        <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30 text-xs">
-          NPC
-        </Badge>
+        
+        {/* Info section */}
+        <div className="p-4 bg-gradient-to-b from-black/80 to-black">
+          <div className="mb-3">
+            <h4 className="font-display font-bold text-lg text-white drop-shadow-lg">{character.name}</h4>
+            <p className="text-xs text-cyan-400 font-medium uppercase tracking-wider">{character.role}</p>
+          </div>
+          
+          <p className="text-xs text-gray-400 mb-4 italic line-clamp-2">"{character.motivation}"</p>
+          
+          {/* Emotion bars - compact premium style */}
+          <div className="space-y-1.5">
+            <EmotionBar label="Arousal" value={character.emotions.arousal} color="text-red-400" icon={Flame} />
+            <EmotionBar label="Valence" value={character.emotions.valence} color="text-green-400" icon={Heart} />
+            <EmotionBar label="Cohesion" value={character.emotions.socialCohesion} color="text-blue-400" icon={Users} />
+            <EmotionBar label="Fear" value={character.emotions.fear} color="text-yellow-400" icon={AlertTriangle} />
+            <EmotionBar label="Ambition" value={character.emotions.ambition} color="text-purple-400" icon={Crown} />
+          </div>
+        </div>
+        
+        {/* Bottom holographic accent */}
+        <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500" />
       </div>
-      
-      <p className="text-sm text-gray-300 mb-4 italic">"{character.motivation}"</p>
-      
-      <div className="space-y-2">
-        <EmotionBar label="Arousal" value={character.emotions.arousal} color="text-red-400" icon={Flame} />
-        <EmotionBar label="Valence" value={character.emotions.valence} color="text-green-400" icon={Heart} />
-        <EmotionBar label="Cohesion" value={character.emotions.socialCohesion} color="text-blue-400" icon={Users} />
-        <EmotionBar label="Fear" value={character.emotions.fear} color="text-yellow-400" icon={AlertTriangle} />
-        <EmotionBar label="Ambition" value={character.emotions.ambition} color="text-purple-400" icon={Crown} />
-      </div>
-    </GlassCard>
+    </div>
   );
 }
 
