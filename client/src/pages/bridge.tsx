@@ -18,6 +18,9 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
+import spaceImg from "@assets/generated_images/deep_space_station.png";
+import cyberpunkImg from "@assets/generated_images/cyberpunk_neon_city.png";
 import { WalletButton } from "@/components/wallet-button";
 
 interface BridgeInfo {
@@ -667,34 +670,40 @@ export default function Bridge() {
             className="mb-3"
           >
             <Collapsible open={statusOpen} onOpenChange={setStatusOpen}>
-              <GlassCard>
-                <CollapsibleTrigger className="w-full p-3 flex items-center justify-between hover:bg-white/5 rounded-xl transition-colors">
-                  <div className="flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-primary" />
-                    <span className="font-bold text-sm">Bridge Status</span>
-                    <Badge variant="outline" className="border-green-500/50 text-green-400 text-[10px] ml-1">
-                      {bridgeInfo?.status || "Active"}
-                    </Badge>
-                  </div>
-                  <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${statusOpen ? "rotate-180" : ""}`} />
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <div className="px-3 pb-3 pt-1 space-y-2 text-xs border-t border-white/5 mt-1">
-                    <div className="flex justify-between items-center p-2 rounded-lg bg-white/5">
-                      <span className="text-muted-foreground">Operator</span>
-                      <span className="font-medium truncate ml-2">{bridgeInfo?.operator || "Founders Validator"}</span>
-                    </div>
-                    <div className="flex justify-between items-center p-2 rounded-lg bg-white/5">
-                      <span className="text-muted-foreground">Custody Balance</span>
-                      <span className="font-bold text-primary">{formatAmount(bridgeInfo?.custodyBalance || "0")} DWC</span>
-                    </div>
-                    <div className="flex justify-between items-center p-2 rounded-lg bg-white/5">
-                      <span className="text-muted-foreground">Phase</span>
-                      <span>{bridgeInfo?.phase || "MVP"}</span>
-                    </div>
-                  </div>
-                </CollapsibleContent>
-              </GlassCard>
+              <div className="relative overflow-hidden rounded-2xl">
+                <img src={blockchainImg} alt="Blockchain Network" className="absolute inset-0 w-full h-full object-cover opacity-40" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+                <div className="relative z-10">
+                  <GlassCard className="bg-transparent border-0">
+                    <CollapsibleTrigger className="w-full p-3 flex items-center justify-between hover:bg-white/5 rounded-xl transition-colors">
+                      <div className="flex items-center gap-2">
+                        <Shield className="w-4 h-4 text-primary" />
+                        <span className="font-bold text-sm">Bridge Status</span>
+                        <Badge variant="outline" className="border-green-500/50 text-green-400 text-[10px] ml-1">
+                          {bridgeInfo?.status || "Active"}
+                        </Badge>
+                      </div>
+                      <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${statusOpen ? "rotate-180" : ""}`} />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <div className="px-3 pb-3 pt-1 space-y-2 text-xs border-t border-white/5 mt-1">
+                        <div className="flex justify-between items-center p-2 rounded-lg bg-white/5">
+                          <span className="text-muted-foreground">Operator</span>
+                          <span className="font-medium truncate ml-2">{bridgeInfo?.operator || "Founders Validator"}</span>
+                        </div>
+                        <div className="flex justify-between items-center p-2 rounded-lg bg-white/5">
+                          <span className="text-muted-foreground">Custody Balance</span>
+                          <span className="font-bold text-primary">{formatAmount(bridgeInfo?.custodyBalance || "0")} DWC</span>
+                        </div>
+                        <div className="flex justify-between items-center p-2 rounded-lg bg-white/5">
+                          <span className="text-muted-foreground">Phase</span>
+                          <span>{bridgeInfo?.phase || "MVP"}</span>
+                        </div>
+                      </div>
+                    </CollapsibleContent>
+                  </GlassCard>
+                </div>
+              </div>
             </Collapsible>
           </motion.div>
 
@@ -705,66 +714,72 @@ export default function Bridge() {
             transition={{ delay: 0.6 }}
           >
             <Collapsible open={transfersOpen} onOpenChange={setTransfersOpen}>
-              <GlassCard>
-                <CollapsibleTrigger className="w-full p-3 flex items-center justify-between hover:bg-white/5 rounded-xl transition-colors">
-                  <div className="flex items-center gap-2">
-                    <Zap className="w-4 h-4 text-primary" />
-                    <span className="font-bold text-sm">Recent Transfers</span>
-                    <Badge variant="secondary" className="text-[10px] ml-1">
-                      {transfersData?.transfers?.length || 0}
-                    </Badge>
-                  </div>
-                  <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${transfersOpen ? "rotate-180" : ""}`} />
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <div className="px-3 pb-3 pt-1 border-t border-white/5 mt-1">
-                    {transfersData?.transfers?.length === 0 ? (
-                      <div className="text-center py-6">
-                        <ArrowLeftRight className="w-8 h-8 text-white/20 mx-auto mb-2" />
-                        <p className="text-xs text-muted-foreground">No transfers yet</p>
+              <div className="relative overflow-hidden rounded-2xl">
+                <img src={spaceImg} alt="Space Station" className="absolute inset-0 w-full h-full object-cover opacity-40" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+                <div className="relative z-10">
+                  <GlassCard className="bg-transparent border-0">
+                    <CollapsibleTrigger className="w-full p-3 flex items-center justify-between hover:bg-white/5 rounded-xl transition-colors">
+                      <div className="flex items-center gap-2">
+                        <Zap className="w-4 h-4 text-primary" />
+                        <span className="font-bold text-sm">Recent Transfers</span>
+                        <Badge variant="secondary" className="text-[10px] ml-1">
+                          {transfersData?.transfers?.length || 0}
+                        </Badge>
                       </div>
-                    ) : (
-                      <div className="space-y-2 max-h-48 overflow-y-auto">
-                        {transfersData?.transfers?.slice(0, 5).map((transfer) => (
-                          <div
-                            key={transfer.id}
-                            className="flex items-center justify-between p-2 bg-white/5 rounded-lg text-xs"
-                            data-testid={`transfer-${transfer.id}`}
-                          >
-                            <div className="flex items-center gap-2">
-                              <div className={`p-1.5 rounded ${
-                                transfer.type === "burn" ? "bg-orange-500/20" :
-                                transfer.type === "lock" ? "bg-cyan-500/20" :
-                                "bg-green-500/20"
-                              }`}>
-                                {getTypeIcon(transfer.type)}
-                              </div>
-                              <div>
-                                <div className="font-medium capitalize">{transfer.type}</div>
-                                <div className="text-[10px] text-muted-foreground">
-                                  {formatAmount(transfer.amount)} DWC
+                      <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${transfersOpen ? "rotate-180" : ""}`} />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <div className="px-3 pb-3 pt-1 border-t border-white/5 mt-1">
+                        {transfersData?.transfers?.length === 0 ? (
+                          <div className="text-center py-6">
+                            <ArrowLeftRight className="w-8 h-8 text-white/20 mx-auto mb-2" />
+                            <p className="text-xs text-muted-foreground">No transfers yet</p>
+                          </div>
+                        ) : (
+                          <div className="space-y-2 max-h-48 overflow-y-auto">
+                            {transfersData?.transfers?.slice(0, 5).map((transfer) => (
+                              <div
+                                key={transfer.id}
+                                className="flex items-center justify-between p-2 bg-white/5 rounded-lg text-xs"
+                                data-testid={`transfer-${transfer.id}`}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <div className={`p-1.5 rounded ${
+                                    transfer.type === "burn" ? "bg-orange-500/20" :
+                                    transfer.type === "lock" ? "bg-cyan-500/20" :
+                                    "bg-green-500/20"
+                                  }`}>
+                                    {getTypeIcon(transfer.type)}
+                                  </div>
+                                  <div>
+                                    <div className="font-medium capitalize">{transfer.type}</div>
+                                    <div className="text-[10px] text-muted-foreground">
+                                      {formatAmount(transfer.amount)} DWC
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  {getStatusIcon(transfer.status)}
+                                  <Badge 
+                                    variant="outline" 
+                                    className={`text-[9px] ${
+                                      transfer.status === "completed" ? "border-green-500/50 text-green-400" :
+                                      "border-amber-500/50 text-amber-400"
+                                    }`}
+                                  >
+                                    {transfer.status}
+                                  </Badge>
                                 </div>
                               </div>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              {getStatusIcon(transfer.status)}
-                              <Badge 
-                                variant="outline" 
-                                className={`text-[9px] ${
-                                  transfer.status === "completed" ? "border-green-500/50 text-green-400" :
-                                  "border-amber-500/50 text-amber-400"
-                                }`}
-                              >
-                                {transfer.status}
-                              </Badge>
-                            </div>
+                            ))}
                           </div>
-                        ))}
+                        )}
                       </div>
-                    )}
-                  </div>
-                </CollapsibleContent>
-              </GlassCard>
+                    </CollapsibleContent>
+                  </GlassCard>
+                </div>
+              </div>
             </Collapsible>
           </motion.div>
 

@@ -5,6 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import tokenBg from "@assets/generated_images/platinum_darkwave_token_holographic_fill.png";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
+import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
+import governanceImg from "@assets/generated_images/medieval_fantasy_kingdom.png";
+import spaceImg from "@assets/generated_images/deep_space_station.png";
+import cyberpunkImg from "@assets/generated_images/cyberpunk_neon_city.png";
+import quantumImg from "@assets/generated_images/quantum_dimension_realm.png";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
@@ -157,40 +163,58 @@ export default function Token() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <GlassCard>
-              <div className="p-5 h-full">
-                <div className="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center text-yellow-400 mb-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <motion.div 
+              whileHover={{ scale: 1.02, y: -4 }}
+              className="relative overflow-hidden rounded-2xl border border-white/10 group"
+              style={{ boxShadow: '0 0 40px rgba(0,0,0,0.5)' }}
+            >
+              <img src={blockchainImg} alt="Gas Fees" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30" />
+              <div className="relative z-10 p-5 h-full min-h-[180px] flex flex-col justify-end">
+                <div className="w-10 h-10 rounded-lg bg-yellow-500/30 backdrop-blur-sm flex items-center justify-center text-yellow-400 mb-3">
                   <Zap className="w-5 h-5" />
                 </div>
                 <h3 className="text-sm font-bold text-white mb-2">Gas Fees</h3>
-                <p className="text-[11px] text-white/50 leading-relaxed">
+                <p className="text-[11px] text-white/70 leading-relaxed">
                   Pay for transactions on DarkWave Smart Chain with $DWC. Micro-fees ensure speed without breaking the bank.
                 </p>
               </div>
-            </GlassCard>
-            <GlassCard>
-              <div className="p-5 h-full">
-                <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center text-green-400 mb-4">
+            </motion.div>
+            <motion.div 
+              whileHover={{ scale: 1.02, y: -4 }}
+              className="relative overflow-hidden rounded-2xl border border-white/10 group"
+              style={{ boxShadow: '0 0 40px rgba(0,0,0,0.5)' }}
+            >
+              <img src={dashboardImg} alt="Validator Staking" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30" />
+              <div className="relative z-10 p-5 h-full min-h-[180px] flex flex-col justify-end">
+                <div className="w-10 h-10 rounded-lg bg-green-500/30 backdrop-blur-sm flex items-center justify-center text-green-400 mb-3">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <h3 className="text-sm font-bold text-white mb-2">Validator Staking</h3>
-                <p className="text-[11px] text-white/50 leading-relaxed">
+                <p className="text-[11px] text-white/70 leading-relaxed">
                   Secure the network by staking $DWC. Earn rewards for validating transactions and honest behavior.
                 </p>
               </div>
-            </GlassCard>
-            <GlassCard>
-              <div className="p-5 h-full">
-                <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center text-blue-400 mb-4">
+            </motion.div>
+            <motion.div 
+              whileHover={{ scale: 1.02, y: -4 }}
+              className="relative overflow-hidden rounded-2xl border border-white/10 group"
+              style={{ boxShadow: '0 0 40px rgba(0,0,0,0.5)' }}
+            >
+              <img src={governanceImg} alt="Governance" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30" />
+              <div className="relative z-10 p-5 h-full min-h-[180px] flex flex-col justify-end">
+                <div className="w-10 h-10 rounded-lg bg-blue-500/30 backdrop-blur-sm flex items-center justify-center text-blue-400 mb-3">
                   <Globe className="w-5 h-5" />
                 </div>
                 <h3 className="text-sm font-bold text-white mb-2">Governance</h3>
-                <p className="text-[11px] text-white/50 leading-relaxed">
+                <p className="text-[11px] text-white/70 leading-relaxed">
                   Vote on protocol upgrades, grant funding, and ecosystem direction. Your voice matters.
                 </p>
               </div>
-            </GlassCard>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -258,68 +282,86 @@ export default function Token() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <GlassCard className="relative overflow-hidden" data-testid="card-tier-founder">
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent" />
-              <div className="p-6 relative">
+            <motion.div 
+              whileHover={{ scale: 1.02, y: -4 }}
+              className="relative overflow-hidden rounded-2xl border border-amber-500/30 group" 
+              style={{ boxShadow: '0 0 40px rgba(245,158,11,0.15)' }}
+              data-testid="card-tier-founder"
+            >
+              <img src={quantumImg} alt="Founder Tier" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-amber-900/30" />
+              <div className="p-6 relative z-10">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center backdrop-blur-sm">
                     <Crown className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg">Founder Tier</h3>
+                    <h3 className="font-bold text-lg text-white">Founder Tier</h3>
                     <Badge className="bg-amber-500/20 text-amber-400 text-[10px]">Limited to 100</Badge>
                   </div>
                 </div>
-                <ul className="space-y-2 text-sm text-muted-foreground">
+                <ul className="space-y-2 text-sm text-white/80">
                   <li className="flex items-center gap-2"><Sparkles className="w-3 h-3 text-amber-400" /> 10,000 DWC allocation</li>
                   <li className="flex items-center gap-2"><TrendingUp className="w-3 h-3 text-amber-400" /> 2x staking multiplier</li>
                   <li className="flex items-center gap-2"><Star className="w-3 h-3 text-amber-400" /> Exclusive NFT badge</li>
                   <li className="flex items-center gap-2"><Users className="w-3 h-3 text-amber-400" /> Private Discord access</li>
                 </ul>
               </div>
-            </GlassCard>
+            </motion.div>
 
-            <GlassCard className="relative overflow-hidden" data-testid="card-tier-genesis">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent" />
-              <div className="p-6 relative">
+            <motion.div 
+              whileHover={{ scale: 1.02, y: -4 }}
+              className="relative overflow-hidden rounded-2xl border border-purple-500/30 group" 
+              style={{ boxShadow: '0 0 40px rgba(168,85,247,0.15)' }}
+              data-testid="card-tier-genesis"
+            >
+              <img src={cyberpunkImg} alt="Genesis Tier" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-purple-900/30" />
+              <div className="p-6 relative z-10">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center backdrop-blur-sm">
                     <Star className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg">Genesis Tier</h3>
+                    <h3 className="font-bold text-lg text-white">Genesis Tier</h3>
                     <Badge className="bg-purple-500/20 text-purple-400 text-[10px]">Limited to 500</Badge>
                   </div>
                 </div>
-                <ul className="space-y-2 text-sm text-muted-foreground">
+                <ul className="space-y-2 text-sm text-white/80">
                   <li className="flex items-center gap-2"><Sparkles className="w-3 h-3 text-purple-400" /> 5,000 DWC allocation</li>
                   <li className="flex items-center gap-2"><TrendingUp className="w-3 h-3 text-purple-400" /> 1.5x staking multiplier</li>
                   <li className="flex items-center gap-2"><Star className="w-3 h-3 text-purple-400" /> Early access to features</li>
                   <li className="flex items-center gap-2"><Gift className="w-3 h-3 text-purple-400" /> Priority airdrop eligibility</li>
                 </ul>
               </div>
-            </GlassCard>
+            </motion.div>
 
-            <GlassCard className="relative overflow-hidden" data-testid="card-tier-beta">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent" />
-              <div className="p-6 relative">
+            <motion.div 
+              whileHover={{ scale: 1.02, y: -4 }}
+              className="relative overflow-hidden rounded-2xl border border-blue-500/30 group" 
+              style={{ boxShadow: '0 0 40px rgba(59,130,246,0.15)' }}
+              data-testid="card-tier-beta"
+            >
+              <img src={spaceImg} alt="Beta Tester" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-blue-900/30" />
+              <div className="p-6 relative z-10">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center backdrop-blur-sm">
                     <Users className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg">Beta Tester</h3>
+                    <h3 className="font-bold text-lg text-white">Beta Tester</h3>
                     <Badge className="bg-blue-500/20 text-blue-400 text-[10px]">Open Enrollment</Badge>
                   </div>
                 </div>
-                <ul className="space-y-2 text-sm text-muted-foreground">
+                <ul className="space-y-2 text-sm text-white/80">
                   <li className="flex items-center gap-2"><Sparkles className="w-3 h-3 text-blue-400" /> 1,000 DWC allocation</li>
                   <li className="flex items-center gap-2"><TrendingUp className="w-3 h-3 text-blue-400" /> 1.25x staking multiplier</li>
                   <li className="flex items-center gap-2"><Star className="w-3 h-3 text-blue-400" /> Bug bounty rewards</li>
                   <li className="flex items-center gap-2"><Gift className="w-3 h-3 text-blue-400" /> Contribution-based bonuses</li>
                 </ul>
               </div>
-            </GlassCard>
+            </motion.div>
           </div>
 
           <div className="text-center mt-8">

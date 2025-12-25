@@ -16,6 +16,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
+import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
 import { WalletButton } from "@/components/wallet-button";
 import { LimitOrderForm, LimitOrdersList } from "@/components/limit-orders";
 
@@ -467,48 +469,52 @@ export default function Swap() {
             transition={{ delay: 0.3 }}
           >
             <Collapsible open={recentOpen} onOpenChange={setRecentOpen}>
-              <GlassCard glow>
-                <CollapsibleTrigger className="w-full p-3 flex items-center justify-between hover:bg-white/5 rounded-xl transition-colors">
-                  <div className="flex items-center gap-2">
-                    <RefreshCw className="w-4 h-4 text-primary" />
-                    <span className="font-bold text-sm">Recent Swaps</span>
-                    <Badge variant="secondary" className="text-[10px] ml-1">
-                      {recentSwaps?.swaps?.length || 0}
-                    </Badge>
-                  </div>
-                  <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${recentOpen ? "rotate-180" : ""}`} />
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <div className="px-3 pb-3 pt-1 border-t border-white/5 mt-1">
-                    {!recentSwaps?.swaps?.length ? (
-                      <div className="text-center py-6">
-                        <ArrowUpDown className="w-8 h-8 text-white/20 mx-auto mb-2" />
-                        <p className="text-xs text-muted-foreground">No swaps yet</p>
-                        <p className="text-[10px] text-muted-foreground mt-1">Your trades will appear here</p>
-                      </div>
-                    ) : (
-                      <div className="space-y-2 max-h-48 overflow-y-auto">
-                        {recentSwaps.swaps.slice(0, 10).map((swap: any) => (
-                          <div
-                            key={swap.id}
-                            className="flex items-center justify-between p-2 bg-white/5 rounded-lg text-xs"
-                          >
-                            <div className="flex items-center gap-2">
-                              <TrendingUp className="w-3 h-3 text-green-400" />
-                              <span>{formatAmount(swap.amountIn)} {swap.tokenIn}</span>
-                              <ArrowUpDown className="w-3 h-3 text-muted-foreground" />
-                              <span>{formatAmount(swap.amountOut)} {swap.tokenOut}</span>
+              <div className="relative overflow-hidden rounded-2xl">
+                <img src={blockchainImg} alt="Blockchain network" className="absolute inset-0 w-full h-full object-cover opacity-40" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+                <div className="relative z-10 p-5">
+                  <CollapsibleTrigger className="w-full flex items-center justify-between hover:bg-white/5 rounded-xl transition-colors">
+                    <div className="flex items-center gap-2">
+                      <RefreshCw className="w-4 h-4 text-primary" />
+                      <span className="font-bold text-sm">Recent Swaps</span>
+                      <Badge variant="secondary" className="text-[10px] ml-1">
+                        {recentSwaps?.swaps?.length || 0}
+                      </Badge>
+                    </div>
+                    <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${recentOpen ? "rotate-180" : ""}`} />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <div className="pt-3 border-t border-white/5 mt-3">
+                      {!recentSwaps?.swaps?.length ? (
+                        <div className="text-center py-6">
+                          <ArrowUpDown className="w-8 h-8 text-white/20 mx-auto mb-2" />
+                          <p className="text-xs text-muted-foreground">No swaps yet</p>
+                          <p className="text-[10px] text-muted-foreground mt-1">Your trades will appear here</p>
+                        </div>
+                      ) : (
+                        <div className="space-y-2 max-h-48 overflow-y-auto">
+                          {recentSwaps.swaps.slice(0, 10).map((swap: any) => (
+                            <div
+                              key={swap.id}
+                              className="flex items-center justify-between p-2 bg-white/5 rounded-lg text-xs"
+                            >
+                              <div className="flex items-center gap-2">
+                                <TrendingUp className="w-3 h-3 text-green-400" />
+                                <span>{formatAmount(swap.amountIn)} {swap.tokenIn}</span>
+                                <ArrowUpDown className="w-3 h-3 text-muted-foreground" />
+                                <span>{formatAmount(swap.amountOut)} {swap.tokenOut}</span>
+                              </div>
+                              <Badge variant="outline" className="text-[9px] border-green-500/50 text-green-400">
+                                {swap.status}
+                              </Badge>
                             </div>
-                            <Badge variant="outline" className="text-[9px] border-green-500/50 text-green-400">
-                              {swap.status}
-                            </Badge>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </CollapsibleContent>
-              </GlassCard>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </CollapsibleContent>
+                </div>
+              </div>
             </Collapsible>
           </motion.div>
 

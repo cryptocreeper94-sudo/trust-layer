@@ -13,7 +13,14 @@ import { GlassCard } from "@/components/glass-card";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
+import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
+import spaceImg from "@assets/generated_images/deep_space_station.png";
+import cyberpunkImg from "@assets/generated_images/cyberpunk_neon_city.png";
 import { WalletButton } from "@/components/wallet-button";
+
+const poolBackgrounds = [blockchainImg, dashboardImg, spaceImg, cyberpunkImg];
+const featureBackgrounds = [blockchainImg, spaceImg, cyberpunkImg];
 
 interface StakingPool {
   id: string;
@@ -461,17 +468,25 @@ export default function Staking() {
                   transition={{ duration: 0.4, delay: i * 0.1 }}
                 >
                   <GlassCard glow className="h-full relative overflow-hidden group" data-testid={`pool-card-${pool.slug}`}>
+                    {/* Photorealistic background image */}
+                    <img 
+                      src={poolBackgrounds[i % poolBackgrounds.length]} 
+                      alt={pool.name} 
+                      className="absolute inset-0 w-full h-full object-cover opacity-30" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/40" />
+                    
                     {/* Premium glow effect on hover */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${getPoolGradient(pool.poolType, pool.lockDays)} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
                     
                     {/* Founders badge */}
                     {pool.poolType === "founders" && (
-                      <div className="absolute top-0 right-0 px-3 py-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-black text-[10px] font-bold rounded-bl-lg">
+                      <div className="absolute top-0 right-0 px-3 py-1 bg-gradient-to-r from-amber-500 to-yellow-400 text-black text-[10px] font-bold rounded-bl-lg z-20">
                         <Crown className="w-3 h-3 inline mr-1" /> EXCLUSIVE
                       </div>
                     )}
 
-                    <div className="p-5 flex flex-col h-full relative">
+                    <div className="p-5 flex flex-col h-full relative z-10">
                       <div className="flex items-start justify-between mb-4">
                         <motion.div 
                           className={`p-3 rounded-xl bg-gradient-to-br ${getPoolGradient(pool.poolType, pool.lockDays)} shadow-lg`}
@@ -695,8 +710,14 @@ export default function Staking() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
               >
-                <GlassCard className="h-full group hover:border-white/20 transition-colors">
-                  <div className="p-6 text-center">
+                <GlassCard className="h-full group hover:border-white/20 transition-colors relative overflow-hidden">
+                  <img 
+                    src={featureBackgrounds[i % featureBackgrounds.length]} 
+                    alt={feature.title} 
+                    className="absolute inset-0 w-full h-full object-cover opacity-30" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/40" />
+                  <div className="p-6 text-center relative z-10">
                     <div className={`w-14 h-14 rounded-2xl ${feature.bg} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
                       <feature.icon className={`w-7 h-7 ${feature.color}`} />
                     </div>

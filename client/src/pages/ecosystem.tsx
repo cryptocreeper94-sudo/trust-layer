@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
+import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
+import fantasyImg from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
@@ -136,8 +139,10 @@ export default function Ecosystem() {
           </p>
           
           <div className="max-w-lg mx-auto">
-            <GlassCard hover={false}>
-              <div className="p-2 flex items-center gap-2">
+            <div className="relative overflow-hidden rounded-2xl">
+              <img src={dashboardImg} alt="Dashboard interface" className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/60" />
+              <div className="relative z-10 p-2 flex items-center gap-2">
                 <Search className="w-4 h-4 text-muted-foreground shrink-0 ml-2" />
                 <Input 
                   placeholder="Search apps, protocols, and services..." 
@@ -146,7 +151,7 @@ export default function Ecosystem() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-            </GlassCard>
+            </div>
           </div>
         </div>
       </section>
@@ -172,8 +177,10 @@ export default function Ecosystem() {
                 </div>
               </div>
               
-              <GlassCard hover={false} className="hidden lg:block">
-                <div className="p-4">
+              <div className="relative overflow-hidden rounded-2xl hidden lg:block">
+                <img src={blockchainImg} alt="Blockchain network" className="absolute inset-0 w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+                <div className="relative z-10 p-5">
                   <div className="flex items-center gap-2 mb-2">
                     <ShieldCheck className="w-4 h-4 text-primary" />
                     <span className="text-xs font-bold text-white">Verified Apps</span>
@@ -184,7 +191,7 @@ export default function Ecosystem() {
                     These apps passed security audits.
                   </p>
                 </div>
-              </GlassCard>
+              </div>
             </div>
 
             <div className="flex-1">

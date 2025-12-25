@@ -25,6 +25,9 @@ import tetrisImg from "@assets/generated_images/colorful_tetris_blocks.png";
 import snakeImg from "@assets/generated_images/neon_snake_game.png";
 import pacmanImg from "@assets/generated_images/pac-man_arcade_maze.png";
 import spadesImg from "@assets/generated_images/spades_card_game_table.png";
+import fantasyImg from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
+import cyberpunkImg from "@assets/generated_images/cyberpunk_neon_city.png";
+import spaceImg from "@assets/generated_images/deep_space_station.png";
 import { useAuth } from "@/hooks/use-auth";
 
 const ONE_DWC = BigInt("1000000000000000000");
@@ -670,59 +673,79 @@ export default function Arcade() {
 
           {/* Live Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-            <GlassCard hover={false} className="p-3 text-center">
-              <Users className="w-5 h-5 mx-auto mb-1 text-blue-400" />
-              <p className="text-xl font-bold">{arcadeStats.playersOnline}</p>
-              <p className="text-[10px] text-muted-foreground">Playing Now</p>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3 text-center">
-              <Coins className="w-5 h-5 mx-auto mb-1 text-yellow-400" />
-              <p className="text-xl font-bold">{arcadeStats.wageredToday}</p>
-              <p className="text-[10px] text-muted-foreground">DWC Wagered Today</p>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3 text-center">
-              <Trophy className="w-5 h-5 mx-auto mb-1 text-amber-400" />
-              <p className="text-xl font-bold">{arcadeStats.paidOutToday}</p>
-              <p className="text-[10px] text-muted-foreground">Paid Out Today</p>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3 text-center">
-              <Target className="w-5 h-5 mx-auto mb-1 text-green-400" />
-              <p className="text-xl font-bold">99%</p>
-              <p className="text-[10px] text-muted-foreground">RTP</p>
-            </GlassCard>
+            <div className="relative overflow-hidden rounded-xl">
+              <img src={cyberpunkImg} className="absolute inset-0 w-full h-full object-cover opacity-30" alt="" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+              <div className="relative z-10 p-3 text-center">
+                <Users className="w-5 h-5 mx-auto mb-1 text-blue-400" />
+                <p className="text-xl font-bold">{arcadeStats.playersOnline}</p>
+                <p className="text-[10px] text-muted-foreground">Playing Now</p>
+              </div>
+            </div>
+            <div className="relative overflow-hidden rounded-xl">
+              <img src={goldenCoinsImg} className="absolute inset-0 w-full h-full object-cover opacity-30" alt="" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+              <div className="relative z-10 p-3 text-center">
+                <Coins className="w-5 h-5 mx-auto mb-1 text-yellow-400" />
+                <p className="text-xl font-bold">{arcadeStats.wageredToday}</p>
+                <p className="text-[10px] text-muted-foreground">DWC Wagered Today</p>
+              </div>
+            </div>
+            <div className="relative overflow-hidden rounded-xl">
+              <img src={fantasyImg} className="absolute inset-0 w-full h-full object-cover opacity-30" alt="" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+              <div className="relative z-10 p-3 text-center">
+                <Trophy className="w-5 h-5 mx-auto mb-1 text-amber-400" />
+                <p className="text-xl font-bold">{arcadeStats.paidOutToday}</p>
+                <p className="text-[10px] text-muted-foreground">Paid Out Today</p>
+              </div>
+            </div>
+            <div className="relative overflow-hidden rounded-xl">
+              <img src={spaceImg} className="absolute inset-0 w-full h-full object-cover opacity-30" alt="" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+              <div className="relative z-10 p-3 text-center">
+                <Target className="w-5 h-5 mx-auto mb-1 text-green-400" />
+                <p className="text-xl font-bold">99%</p>
+                <p className="text-[10px] text-muted-foreground">RTP</p>
+              </div>
+            </div>
           </div>
 
           {/* Demo/Real Mode Toggle */}
           {!isConnected && (
-            <GlassCard glow className="p-4 mb-6">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-                <div>
-                  <h3 className="font-bold flex items-center gap-2">
-                    <Play className="w-4 h-4 text-amber-400" />
-                    Try Demo Mode
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    Practice with play coins - no wallet needed!
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  <Button 
-                    variant={isDemoMode ? "default" : "outline"}
-                    onClick={() => setIsDemoMode(true)}
-                    className={isDemoMode ? "bg-amber-500 hover:bg-amber-600" : ""}
-                    data-testid="button-demo-mode"
-                  >
-                    Demo Mode
-                  </Button>
-                  <Link href="/wallet">
-                    <Button className="bg-gradient-to-r from-purple-500 to-pink-500" data-testid="button-play-real">
-                      <Wallet className="w-4 h-4 mr-2" />
-                      Play for Real
+            <div className="relative overflow-hidden rounded-xl mb-6">
+              <img src={cosmicRocketImg} className="absolute inset-0 w-full h-full object-cover opacity-40" alt="" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+              <div className="relative z-10 p-4">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                  <div>
+                    <h3 className="font-bold flex items-center gap-2">
+                      <Play className="w-4 h-4 text-amber-400" />
+                      Try Demo Mode
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Practice with play coins - no wallet needed!
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant={isDemoMode ? "default" : "outline"}
+                      onClick={() => setIsDemoMode(true)}
+                      className={isDemoMode ? "bg-amber-500 hover:bg-amber-600" : ""}
+                      data-testid="button-demo-mode"
+                    >
+                      Demo Mode
                     </Button>
-                  </Link>
+                    <Link href="/wallet">
+                      <Button className="bg-gradient-to-r from-purple-500 to-pink-500" data-testid="button-play-real">
+                        <Wallet className="w-4 h-4 mr-2" />
+                        Play for Real
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </GlassCard>
+            </div>
           )}
 
           {/* Games Grid */}
@@ -827,65 +850,77 @@ export default function Arcade() {
             {/* Right Column - Sidebar */}
             <div className="lg:w-80 space-y-3">
               {/* Recent Games */}
-              <GlassCard className="p-4">
-                <h3 className="font-bold mb-3 flex items-center gap-2">
-                  <History className="w-4 h-4 text-primary" />
-                  Your Recent Games
-                </h3>
-                {isConnected ? (
-                  <div className="text-center py-6 text-muted-foreground">
-                    <History className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <p className="text-sm">No games played yet</p>
-                    <p className="text-xs">Your game history will appear here</p>
-                  </div>
-                ) : (
-                  <div className="text-center py-6 text-muted-foreground">
-                    <Lock className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <p className="text-sm">Connect wallet to track history</p>
-                    <p className="text-xs">Demo games are not saved</p>
-                  </div>
-                )}
-              </GlassCard>
-
-              <GlassCard className="p-4">
-                <h3 className="font-bold mb-3 flex items-center gap-2">
-                  <Trophy className="w-4 h-4 text-amber-400" />
-                  Top Winners Today
-                </h3>
-                <div className="space-y-2">
-                  {[
-                    { name: "CryptoKing", amount: "12,450", game: "Crash" },
-                    { name: "LuckyDev", amount: "8,200", game: "Slots" },
-                    { name: "DiceWhale", amount: "6,800", game: "Coin Flip" },
-                  ].map((winner, i) => (
-                    <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-white/5">
-                      <div className="flex items-center gap-2">
-                        <span className={`text-sm font-bold ${i === 0 ? "text-amber-400" : i === 1 ? "text-gray-400" : "text-orange-400"}`}>
-                          #{i + 1}
-                        </span>
-                        <span className="text-sm">{winner.name}</span>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm font-mono text-green-400">+{winner.amount}</p>
-                        <p className="text-[10px] text-muted-foreground">{winner.game}</p>
-                      </div>
+              <div className="relative overflow-hidden rounded-xl">
+                <img src={cyberpunkImg} className="absolute inset-0 w-full h-full object-cover opacity-25" alt="" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+                <div className="relative z-10 p-4">
+                  <h3 className="font-bold mb-3 flex items-center gap-2">
+                    <History className="w-4 h-4 text-primary" />
+                    Your Recent Games
+                  </h3>
+                  {isConnected ? (
+                    <div className="text-center py-6 text-muted-foreground">
+                      <History className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">No games played yet</p>
+                      <p className="text-xs">Your game history will appear here</p>
                     </div>
-                  ))}
+                  ) : (
+                    <div className="text-center py-6 text-muted-foreground">
+                      <Lock className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">Connect wallet to track history</p>
+                      <p className="text-xs">Demo games are not saved</p>
+                    </div>
+                  )}
                 </div>
-              </GlassCard>
+              </div>
 
-              <GlassCard className="p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/20">
-                <h3 className="font-bold mb-2 flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-purple-400" />
-                  Provably Fair
-                </h3>
-                <p className="text-xs text-muted-foreground mb-3">
-                  All game outcomes are determined using on-chain randomness. Every result can be verified on the blockchain.
-                </p>
-                <Button variant="outline" size="sm" className="w-full text-xs">
-                  Verify Fairness
-                </Button>
-              </GlassCard>
+              <div className="relative overflow-hidden rounded-xl">
+                <img src={fantasyImg} className="absolute inset-0 w-full h-full object-cover opacity-25" alt="" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+                <div className="relative z-10 p-4">
+                  <h3 className="font-bold mb-3 flex items-center gap-2">
+                    <Trophy className="w-4 h-4 text-amber-400" />
+                    Top Winners Today
+                  </h3>
+                  <div className="space-y-2">
+                    {[
+                      { name: "CryptoKing", amount: "12,450", game: "Crash" },
+                      { name: "LuckyDev", amount: "8,200", game: "Slots" },
+                      { name: "DiceWhale", amount: "6,800", game: "Coin Flip" },
+                    ].map((winner, i) => (
+                      <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-white/5">
+                        <div className="flex items-center gap-2">
+                          <span className={`text-sm font-bold ${i === 0 ? "text-amber-400" : i === 1 ? "text-gray-400" : "text-orange-400"}`}>
+                            #{i + 1}
+                          </span>
+                          <span className="text-sm">{winner.name}</span>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-mono text-green-400">+{winner.amount}</p>
+                          <p className="text-[10px] text-muted-foreground">{winner.game}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative overflow-hidden rounded-xl">
+                <img src={spaceImg} className="absolute inset-0 w-full h-full object-cover opacity-25" alt="" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+                <div className="relative z-10 p-4">
+                  <h3 className="font-bold mb-2 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-purple-400" />
+                    Provably Fair
+                  </h3>
+                  <p className="text-xs text-muted-foreground mb-3">
+                    All game outcomes are determined using on-chain randomness. Every result can be verified on the blockchain.
+                  </p>
+                  <Button variant="outline" size="sm" className="w-full text-xs">
+                    Verify Fairness
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

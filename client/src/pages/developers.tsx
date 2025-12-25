@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import dagViz from "@assets/generated_images/abstract_visualization_of_directed_acyclic_graph_blockchain_consensus.png";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
+import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
+import cyberpunkImg from "@assets/generated_images/cyberpunk_neon_city.png";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
@@ -73,8 +76,14 @@ export default function Developers() {
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="space-y-4">
-              <GlassCard>
-                <div className="p-5">
+              <motion.div 
+                whileHover={{ scale: 1.02, y: -4 }}
+                className="relative overflow-hidden rounded-2xl border border-white/10 group"
+                style={{ boxShadow: '0 0 40px rgba(0,0,0,0.5)' }}
+              >
+                <img src={blockchainImg} alt="Blockchain Network" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30" />
+                <div className="relative z-10 p-5">
                   <div className="flex items-center gap-2 mb-3">
                     <div className="p-1.5 rounded-lg bg-primary/20 text-primary">
                       <Layers className="w-4 h-4" />
@@ -105,10 +114,16 @@ export default function Developers() {
                     </div>
                   </div>
                 </div>
-              </GlassCard>
+              </motion.div>
 
-              <GlassCard>
-                <div className="p-5">
+              <motion.div 
+                whileHover={{ scale: 1.02, y: -4 }}
+                className="relative overflow-hidden rounded-2xl border border-white/10 group"
+                style={{ boxShadow: '0 0 40px rgba(0,0,0,0.5)' }}
+              >
+                <img src={dashboardImg} alt="Development Dashboard" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30" />
+                <div className="relative z-10 p-5">
                   <div className="flex items-center gap-2 mb-3">
                     <div className="p-1.5 rounded-lg bg-secondary/20 text-secondary">
                       <Code className="w-4 h-4" />
@@ -128,10 +143,16 @@ export default function Developers() {
                     ))}
                   </div>
                 </div>
-              </GlassCard>
+              </motion.div>
 
-              <GlassCard>
-                <div className="p-5">
+              <motion.div 
+                whileHover={{ scale: 1.02, y: -4 }}
+                className="relative overflow-hidden rounded-2xl border border-white/10 group"
+                style={{ boxShadow: '0 0 40px rgba(0,0,0,0.5)' }}
+              >
+                <img src={cyberpunkImg} alt="DarkWave Studios Hub" className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30" />
+                <div className="relative z-10 p-5">
                   <div className="flex items-center gap-2 mb-3">
                     <div className="p-1.5 rounded-lg bg-purple-500/20 text-purple-400">
                       <Cpu className="w-4 h-4" />
@@ -159,7 +180,7 @@ export default function Developers() {
                     </div>
                   </div>
                 </div>
-              </GlassCard>
+              </motion.div>
             </div>
 
             <div className="space-y-4">
