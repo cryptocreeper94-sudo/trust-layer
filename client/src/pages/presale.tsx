@@ -209,6 +209,7 @@ function PresaleProgress() {
 
 function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
   const { toast } = useToast();
+  const [email, setEmail] = useState("");
   const tierImages = [quantumRealm, deepSpace, cyberpunkCity, fantasyWorld];
   const tierColors: Record<string, string> = {
     genesis: "from-yellow-400 to-amber-500",
@@ -217,17 +218,26 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
     early_bird: "from-green-400 to-emerald-500",
   };
   
+  const isValidEmail = email.includes("@") && email.includes(".");
+  
   const checkoutMutation = useMutation({
     mutationFn: async () => {
+      if (!isValidEmail) {
+        throw new Error("Valid email required");
+      }
       const res = await fetch("/api/presale/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           priceId: tier.priceId,
           tier: tier.tier,
+          email: email,
         }),
       });
-      if (!res.ok) throw new Error("Failed to create checkout");
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to create checkout");
+      }
       return res.json();
     },
     onSuccess: (data) => {
@@ -235,14 +245,26 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
         window.location.href = data.url;
       }
     },
-    onError: () => {
+    onError: (error: Error) => {
       toast({
         title: "Checkout Error",
-        description: "Failed to start checkout. Please try again.",
+        description: error.message || "Failed to start checkout. Please try again.",
         variant: "destructive",
       });
     },
   });
+
+  const handleBuyClick = () => {
+    if (!isValidEmail) {
+      toast({
+        title: "Email Required",
+        description: "Please enter a valid email to receive your token allocation.",
+        variant: "destructive",
+      });
+      return;
+    }
+    checkoutMutation.mutate();
+  };
 
   const color = tierColors[tier.tier] || "from-gray-400 to-gray-500";
   const tokenAmount = Math.floor((tier.amount / 100) / TOKEN_PRICE);
@@ -286,10 +308,27 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
           <p className="text-sm text-gray-400 mt-2">
             {tokenAmount.toLocaleString()} tokens + {bonusTokens.toLocaleString()} bonus
           </p>
+          
+          <div className="mt-4">
+            <Input
+              type="email"
+              placeholder="Your email for token allocation"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={`bg-black/50 border-white/20 text-white placeholder:text-gray-500 ${
+                email && !isValidEmail ? "border-red-500/50" : ""
+              } ${isValidEmail ? "border-green-500/50" : ""}`}
+              data-testid={`input-email-${tier.tier}`}
+            />
+            {email && !isValidEmail && (
+              <p className="text-xs text-red-400 mt-1">Please enter a valid email</p>
+            )}
+          </div>
+          
           <Button 
-            onClick={() => checkoutMutation.mutate()}
-            disabled={checkoutMutation.isPending}
-            className={`w-full mt-4 bg-gradient-to-r ${color} hover:opacity-90 border-0`}
+            onClick={handleBuyClick}
+            disabled={checkoutMutation.isPending || !isValidEmail}
+            className={`w-full mt-4 bg-gradient-to-r ${color} hover:opacity-90 border-0 disabled:opacity-50`}
             data-testid={`button-select-tier-${tier.tier}`}
           >
             {checkoutMutation.isPending ? (

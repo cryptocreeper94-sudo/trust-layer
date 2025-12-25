@@ -98,6 +98,7 @@ import EraCodex from "@/pages/era-codex";
 import ScenarioGenerator from "@/pages/scenario-generator";
 import Crowdfund from "@/pages/crowdfund";
 import Presale from "@/pages/presale";
+import PresaleSuccess from "@/pages/presale-success";
 import RoadmapChronicles from "@/pages/roadmap-chronicles";
 import RoadmapEcosystem from "@/pages/roadmap-ecosystem";
 import SocialFeed from "@/pages/social-feed";
@@ -144,6 +145,7 @@ function GamesRouter() {
         <Route path="/scenario-generator" component={ScenarioGenerator} />
         <Route path="/crowdfund" component={Crowdfund} />
         <Route path="/presale" component={Presale} />
+        <Route path="/presale/success" component={PresaleSuccess} />
         <Route path="/roadmap" component={RoadmapEcosystem} />
         <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
         <Route path="/roadmap-ecosystem" component={RoadmapEcosystem} />
@@ -268,6 +270,7 @@ function DWSCRouter() {
         <Route path="/scenario-generator" component={ScenarioGenerator} />
         <Route path="/crowdfund" component={Crowdfund} />
         <Route path="/presale" component={Presale} />
+        <Route path="/presale/success" component={PresaleSuccess} />
         <Route path="/roadmap" component={RoadmapEcosystem} />
         <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
         <Route path="/roadmap-ecosystem" component={RoadmapEcosystem} />

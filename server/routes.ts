@@ -2793,21 +2793,25 @@ export async function registerRoutes(
         query: "metadata['category']:'presale'",
       });
       
-      const tiers = await Promise.all(
+      const tiersRaw = await Promise.all(
         products.data.map(async (product) => {
           const prices = await stripe.prices.list({ product: product.id, active: true });
+          const activePrice = prices.data[0];
+          if (!activePrice || !activePrice.unit_amount) return null;
+          
           return {
             id: product.id,
             name: product.name.replace("DWC ", "").replace(" Tier", ""),
             description: product.description,
-            priceId: prices.data[0]?.id,
-            amount: prices.data[0]?.unit_amount || 0,
+            priceId: activePrice.id,
+            amount: activePrice.unit_amount,
             bonus: parseInt(product.metadata?.bonus_percent || "0"),
             tier: product.metadata?.tier,
           };
         })
       );
       
+      const tiers = tiersRaw.filter(t => t !== null);
       tiers.sort((a, b) => b.amount - a.amount);
       res.json({ tiers });
     } catch (error) {
@@ -2858,6 +2862,10 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Price ID required" });
       }
       
+      if (!email || !email.includes("@")) {
+        return res.status(400).json({ error: "Valid email required" });
+      }
+      
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
       
@@ -2875,6 +2883,7 @@ export async function registerRoutes(
         metadata: {
           type: "presale",
           tier: tier || "unknown",
+          email: email,
         },
       });
       
@@ -2894,14 +2903,21 @@ export async function registerRoutes(
       
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
-      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      const session = await stripe.checkout.sessions.retrieve(sessionId, {
+        expand: ["customer_details"],
+      });
       
       if (session.payment_status === "paid") {
+        const customerEmail = session.customer_details?.email 
+          || session.metadata?.email 
+          || session.customer_email 
+          || "anonymous";
+        
         await db.execute(sql`
           INSERT INTO presale_purchases (session_id, email, amount_cents, tier, status, created_at)
           VALUES (
             ${sessionId}, 
-            ${session.customer_email || 'anonymous'}, 
+            ${customerEmail}, 
             ${session.amount_total || 0}, 
             ${session.metadata?.tier || 'unknown'},
             'completed',
@@ -2912,7 +2928,7 @@ export async function registerRoutes(
         
         res.json({ 
           success: true, 
-          email: session.customer_email,
+          email: customerEmail,
           amountPaid: ((session.amount_total || 0) / 100).toFixed(2),
           tier: session.metadata?.tier,
         });
