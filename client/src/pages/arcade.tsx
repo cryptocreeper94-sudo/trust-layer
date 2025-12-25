@@ -570,14 +570,12 @@ export default function Arcade() {
             </GlassCard>
           )}
 
-          {/* Bento Grid Layout - Two Column */}
-          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-3 lg:gap-4">
+          {/* Bento Grid Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-4">
             
-            {/* LEFT COLUMN */}
-            <div className="space-y-3 lg:space-y-4">
-              {/* CRASH - Hero Card */}
-              <Link href="/crash" className="block group">
-              <div className="relative h-44 md:h-52 rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_40px_rgba(255,79,216,0.3)]">
+            {/* CRASH - Hero Card */}
+            <Link href="/crash" className="block group md:col-span-2 lg:col-span-1">
+              <div className="relative h-48 rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.01] group-hover:shadow-[0_0_40px_rgba(255,79,216,0.3)]">
                 <img 
                   src={cosmicRocketImg} 
                   alt="Crash Game" 
@@ -586,22 +584,20 @@ export default function Arcade() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
                 <div className="absolute inset-0 bg-gradient-to-r from-pink-500/20 to-purple-500/10" />
                 
-                <div className="absolute inset-0 p-4 md:p-5 flex flex-col justify-between">
+                <div className="absolute inset-0 p-4 flex flex-col justify-between">
                   <div className="flex items-start justify-between">
                     <div>
                       <Badge className="bg-pink-500/30 backdrop-blur-sm text-pink-200 border-pink-400/40 text-[10px] mb-2 shadow-lg">
                         <Rocket className="w-3 h-3 mr-1" /> Featured
                       </Badge>
-                      <h3 className="text-2xl md:text-3xl font-bold text-white drop-shadow-lg">
-                        Crash
-                      </h3>
+                      <h3 className="text-2xl font-bold text-white drop-shadow-lg">Crash</h3>
                     </div>
                     <motion.div
                       animate={{ y: [0, -8, 0], rotate: [-10, 10, -10] }}
                       transition={{ duration: 2, repeat: Infinity }}
                       className="p-2 rounded-full bg-pink-500/20 backdrop-blur-sm"
                     >
-                      <Rocket className="w-8 h-8 text-pink-300 drop-shadow-[0_0_15px_rgba(255,79,216,0.9)]" />
+                      <Rocket className="w-7 h-7 text-pink-300 drop-shadow-[0_0_15px_rgba(255,79,216,0.9)]" />
                     </motion.div>
                   </div>
                   
@@ -616,38 +612,10 @@ export default function Arcade() {
                   </div>
                 </div>
               </div>
-              </Link>
+            </Link>
 
-              {/* SLOTS Card */}
-              <div className="relative rounded-2xl overflow-hidden">
-                <img 
-                  src={slotMachineImg} 
-                  alt="Slots" 
-                  className="absolute inset-0 w-full h-full object-cover opacity-40"
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-900/80 via-black/70 to-black/90" />
-                <div className="relative z-10 p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="p-2 rounded-xl bg-purple-500/30 backdrop-blur-sm border border-purple-400/20">
-                      <Cherry className="w-5 h-5 text-purple-300" />
-                    </div>
-                    <h3 className="text-lg font-bold text-white">Jackpot Slots</h3>
-                    <Badge className="ml-auto bg-amber-500/30 backdrop-blur-sm text-amber-300 border-amber-400/30 text-[9px]">50x Max</Badge>
-                  </div>
-                  <SlotsGame 
-                    isConnected={isConnected} 
-                    isDemoMode={isDemoMode}
-                    userBalance={userBalance}
-                    onBalanceUpdate={fetchBalance}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* RIGHT COLUMN */}
-            <div className="space-y-3 lg:space-y-4">
-              {/* COIN FLIP Card */}
-              <div className="relative rounded-2xl overflow-hidden">
+            {/* COIN FLIP Card */}
+            <div className="relative rounded-2xl overflow-hidden">
               <img 
                 src={goldenCoinsImg} 
                 alt="Coin Flip" 
@@ -669,8 +637,35 @@ export default function Arcade() {
                   onBalanceUpdate={fetchBalance}
                 />
               </div>
-              </div>
+            </div>
 
+            {/* SLOTS Card */}
+            <div className="relative rounded-2xl overflow-hidden">
+              <img 
+                src={slotMachineImg} 
+                alt="Slots" 
+                className="absolute inset-0 w-full h-full object-cover opacity-40"
+              />
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-900/80 via-black/70 to-black/90" />
+              <div className="relative z-10 p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="p-2 rounded-xl bg-purple-500/30 backdrop-blur-sm border border-purple-400/20">
+                    <Cherry className="w-5 h-5 text-purple-300" />
+                  </div>
+                  <h3 className="text-lg font-bold text-white">Jackpot Slots</h3>
+                  <Badge className="ml-auto bg-amber-500/30 backdrop-blur-sm text-amber-300 border-amber-400/30 text-[9px]">50x Max</Badge>
+                </div>
+                <SlotsGame 
+                  isConnected={isConnected} 
+                  isDemoMode={isDemoMode}
+                  userBalance={userBalance}
+                  onBalanceUpdate={fetchBalance}
+                />
+              </div>
+            </div>
+
+            {/* Sidebar - spans full width on mobile, single column on desktop */}
+            <div className="space-y-3 md:col-span-2 lg:col-span-1">
               {/* Recent Games */}
               <GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
