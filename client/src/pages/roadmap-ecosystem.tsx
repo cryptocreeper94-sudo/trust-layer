@@ -30,7 +30,10 @@ interface Phase {
   milestones: Milestone[];
 }
 
-// ACCURATE STATUS - Only mark what's actually implemented in codebase
+// ACCURATE STATUS - Only mark what's actually fully implemented in codebase
+// "completed" = fully working, production-ready
+// "in_progress" = UI exists with some backend, needs more work
+// "pending" = not yet started
 const ECOSYSTEM_PHASES: Phase[] = [
   {
     id: "phase-foundations",
@@ -58,11 +61,11 @@ const ECOSYSTEM_PHASES: Phase[] = [
     icon: <Coins className="w-6 h-6" />,
     image: dashboardImg,
     milestones: [
-      { id: "e7", title: "DEX / Token Swap", description: "AMM-style trading for DWC/USDC/wETH/wSOL/USDT pairs", status: "in_progress", isRequired: true },
-      { id: "e8", title: "NFT Marketplace", description: "Mint, buy, sell, and trade digital collectibles", status: "in_progress", isRequired: true },
-      { id: "e9", title: "Liquid Staking (stDWC)", description: "12% APY with liquid staking tokens", status: "in_progress", isRequired: true },
-      { id: "e10", title: "Token Launchpad", description: "Launch new tokens on DarkWave Smart Chain", status: "in_progress", isRequired: true },
-      { id: "e11", title: "Portfolio Dashboard", description: "Track holdings, staking, and transaction history", status: "in_progress", isRequired: true },
+      { id: "e7", title: "DEX / Token Swap", description: "AMM-style trading for DWC/USDC/wETH/wSOL/USDT pairs", status: "pending", isRequired: true },
+      { id: "e8", title: "NFT Marketplace", description: "Mint, buy, sell, and trade digital collectibles", status: "pending", isRequired: true },
+      { id: "e9", title: "Liquid Staking (stDWC)", description: "12% APY with liquid staking tokens", status: "pending", isRequired: true },
+      { id: "e10", title: "Token Launchpad", description: "Launch new tokens on DarkWave Smart Chain", status: "pending", isRequired: true },
+      { id: "e11", title: "Portfolio Dashboard", description: "Track holdings, staking, and transaction history", status: "pending", isRequired: true },
       { id: "e12", title: "DarkWave Studio IDE", description: "Monaco-based development environment with 70+ languages", status: "in_progress", isRequired: true },
       { id: "e13", title: "Cross-Chain Bridge", description: "Lock & mint for DWC ↔ wDWC on Ethereum and Solana", status: "pending", isRequired: true },
       { id: "e14", title: "Mobile Wallet App", description: "iOS and Android native applications", status: "pending", isRequired: true },
