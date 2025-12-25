@@ -183,59 +183,71 @@ Characters stored in `attached_assets/generated_images/` with naming convention:
 
 ---
 
-## DarkWave Chronicles - AI Life Generator Blueprint
+## DarkWave Chronicles - The Flagship Product
 
-**Core Philosophy**: No external moral judgment. Only internal belief systems, free will, and consequences.
+**Tagline**: "The Game That Never Ends" / "Create Your Own Legacy"
 
-### The Sentient Mirror Concept
-The character isn't an avatar you control—it's an extension of your own psyche in a fantasy world. Their emotions mirror your emotions. Their struggles reflect your inner landscape. This is self-discovery through interactive narrative.
+**Full Vision Document**: See `CHRONICLES_VISION.md` for complete details.
 
-### Spiritual/Belief System Layer
-Players choose a belief framework that shapes their character's conscience and emotional responses:
-- **Real-world faiths**: Buddhism, Hinduism, Christianity, Islam, Judaism, indigenous spiritual traditions
-- **Philosophical stances**: Atheism, agnosticism, nihilism, stoicism, humanism
-- **Fantasy equivalents**: In-world deity representations that parallel real beliefs
+### What It Is
+A real-time, persistent life simulator set in a fantasy world where YOU are the character - not a fictional persona, but your actual self. Your personality, emotions, beliefs, faith, values. First-person. 24/7. The world moves whether you're there or not.
 
-The belief system affects:
-- How the character emotionally processes choices
-- What causes inner turmoil vs. peace
-- Relationship dynamics with characters of different beliefs
-- The character's interpretation of "right" and "wrong" (internal, not game-imposed)
+### Core Differentiators
+1. **Real-Time Persistent World**: 24-hour days. World continues when you're away. You miss events. Just like real life.
+2. **YOU Are The Character**: Not role-playing. YOUR actual personality, beliefs, emotions, deity. You step into this realm as yourself.
+3. **No Good/Evil**: No alignment system. Everything is perspective-based. Actions have consequences through relationships, not game-imposed morality.
+4. **Social/Political/Psychological Experiment**: Simulation of human society to help you understand real life.
+5. **Ongoing Legacy**: No winning. No end state. Build your legacy over time.
 
-**Key Distinction**: The game never labels actions as good/evil. The character's chosen belief system creates their OWN moral framework, and consequences flow from that.
+### Era System & Time Travel
+- Choose starting era (Cro-Magnon to Medieval to beyond)
+- Progress naturally through time
+- Time travel events transport you to other eras
+- Complete activities to return to home timeline
+- Side missions and adventures within the persistent framework
 
-### Emotion System (5-Axis Model)
+### Community-Driven Development
+- Developers submit ideas, team determines feasibility
+- Approved ideas become real content
+- Creators OWN their creations like real estate
+- Properties can be traded or LOST
+- World built BY the community FOR the community
 
+### AI Engine Requirements
+- Dynamic emotional/psychological model for every entity
+- Unique emotion sets (some emotional, some rational, some chaotic)
+- Belief systems shaping behavior
+- Full spectrum of human psychology through AI
+- Consequence webs rippling through society
+
+### The Goal
+Help players understand how to navigate REAL life by living a parallel one in fantasy. Not escapism - exploration of self and society.
+
+### Technical Architecture (Planned)
+
+**AI Stack (3-Tier)**:
+1. Deterministic Planners - Day-to-day decisions (fast, cheap)
+2. LLM Microservices - Dialogue, reactions, complex decisions (OpenAI)
+3. Offline LLM Batches - Major historical events, world-shaping moments
+
+**Emotion System (5-Axis Model)**:
 | Axis | Range | Affects |
 |------|-------|---------|
-| **Arousal** | Calm ↔ Agitated | Reaction speed, impulsiveness |
-| **Valence** | Sad ↔ Happy | Cooperation, risk-taking |
-| **Social Cohesion** | Isolated ↔ Bonded | Loyalty, betrayal threshold |
-| **Fear** | Secure ↔ Terrified | Fight/flight decisions |
-| **Ambition** | Content ↔ Driven | Power-seeking behavior |
+| Arousal | Calm ↔ Agitated | Reaction speed, impulsiveness |
+| Valence | Sad ↔ Happy | Cooperation, risk-taking |
+| Social Cohesion | Isolated ↔ Bonded | Loyalty, betrayal threshold |
+| Fear | Secure ↔ Terrified | Fight/flight decisions |
+| Ambition | Content ↔ Driven | Power-seeking behavior |
 
-- Emotions decay over time but can spike (overreactions)
-- Emotional contagion spreads through proximity and relationships
-- Collective emotion states trigger world events
-
-### Free Will Framework (No Alignment)
-
-- **Consequence Webs**: Actions update world variables (stability, scarcity, influence)
-- **Reputational Memory**: NPCs remember what you did, not moral judgment
-- **Multi-Criteria Utility**: Decisions based on goals + emotions + situation
-
-### Agent Schema
-
-Each AI life has: identity seed, traits, needs, motivations, relationships, memory shards, lifecycle (birth → death → legacy)
-
-### AI Stack (3-Tier)
-
-1. Deterministic Planners - Day-to-day (fast, cheap)
-2. LLM Microservices - Dialogue, reactions (OpenAI)
-3. Offline LLM Batches - Major historical events
+**Belief System Layer**: Real-world faiths, philosophical stances, fantasy deities - all shaping character conscience and emotional responses.
 
 ### MVP Roadmap
-
 - **Phase 0** (3-4 mo): Single-era sandbox, 200 agents, emotion dashboard
 - **Phase 1** (6-8 mo): Faction councils, treaties, player crises
 - **Phase 2** (12+ mo): Multi-era, time-travel echoes, full scale
+
+### Current Reality
+- One developer with a laptop
+- Crowdfunding infrastructure ready
+- Building excitement and community
+- Need: Servers, hosting, developer contributions as project scales
