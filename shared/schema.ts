@@ -1739,3 +1739,71 @@ export type CrashBet = typeof crashBets.$inferSelect;
 export type GameChatMessage = typeof gameChatMessages.$inferSelect;
 export type PlayerRewards = typeof playerRewards.$inferSelect;
 export type GameAirdrop = typeof gameAirdrops.$inferSelect;
+
+// Player Gaming Stats - Complete History
+export const playerGameHistory = pgTable("player_game_history", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  username: text("username").notNull(),
+  gameType: text("game_type").notNull(), // crash, coinflip, slots
+  betAmount: text("bet_amount").notNull(),
+  multiplier: text("multiplier"), // for crash
+  payout: text("payout").notNull(),
+  profit: text("profit").notNull(), // can be negative
+  outcome: text("outcome").notNull(), // win, loss, push
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertPlayerGameHistorySchema = createInsertSchema(playerGameHistory).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertPlayerGameHistory = z.infer<typeof insertPlayerGameHistorySchema>;
+export type PlayerGameHistory = typeof playerGameHistory.$inferSelect;
+
+// Player Stats Summary - Aggregated data
+export const playerStats = pgTable("player_stats", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  username: text("username").notNull(),
+  totalGamesPlayed: integer("total_games_played").notNull().default(0),
+  totalWagered: text("total_wagered").notNull().default("0"),
+  totalWon: text("total_won").notNull().default("0"),
+  totalLost: text("total_lost").notNull().default("0"),
+  netProfit: text("net_profit").notNull().default("0"),
+  winCount: integer("win_count").notNull().default(0),
+  lossCount: integer("loss_count").notNull().default(0),
+  winRate: text("win_rate").notNull().default("0"),
+  bestMultiplier: text("best_multiplier").notNull().default("0"),
+  currentStreak: integer("current_streak").notNull().default(0),
+  bestStreak: integer("best_streak").notNull().default(0),
+  level: integer("level").notNull().default(1),
+  xp: integer("xp").notNull().default(0),
+  xpToNextLevel: integer("xp_to_next_level").notNull().default(100),
+  joinedAt: timestamp("joined_at").defaultNow().notNull(),
+  lastPlayedAt: timestamp("last_played_at"),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertPlayerStatsSchema = createInsertSchema(playerStats).omit({
+  id: true,
+  joinedAt: true,
+  updatedAt: true,
+});
+
+export type InsertPlayerStats = z.infer<typeof insertPlayerStatsSchema>;
+export type PlayerStats = typeof playerStats.$inferSelect;
+
+// Daily Profit Tracking for Charts
+export const playerDailyProfit = pgTable("player_daily_profit", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  date: text("date").notNull(), // YYYY-MM-DD
+  gamesPlayed: integer("games_played").notNull().default(0),
+  wagered: text("wagered").notNull().default("0"),
+  profit: text("profit").notNull().default("0"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type PlayerDailyProfit = typeof playerDailyProfit.$inferSelect;
