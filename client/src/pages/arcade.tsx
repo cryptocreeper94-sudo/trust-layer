@@ -4,7 +4,8 @@ import { Link } from "wouter";
 import {
   ArrowLeft, Gamepad2, Dice1, TrendingUp, Coins, Trophy,
   Zap, RefreshCw, History, Users, Star, Flame, Target, Wallet, Lock, Play,
-  Cherry, Gem, Crown, Diamond, Sparkles, Volume2, VolumeX, Rocket, BarChart3
+  Cherry, Gem, Crown, Diamond, Sparkles, Volume2, VolumeX, Rocket, BarChart3,
+  ChevronLeft, ChevronRight
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -428,6 +429,103 @@ function SlotsGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }: {
   );
 }
 
+const CLASSIC_GAMES = [
+  { href: "/solitaire", img: solitaireImg, name: "Solitaire", glow: "rgba(34,197,94,0.3)" },
+  { href: "/minesweeper", img: minesweeperImg, name: "Minesweeper", glow: "rgba(239,68,68,0.3)" },
+  { href: "/galaga", img: spaceBlasterImg, name: "Space Blaster", glow: "rgba(139,92,246,0.3)" },
+  { href: "/tetris", img: tetrisImg, name: "Tetris", glow: "rgba(168,85,247,0.3)" },
+  { href: "/snake", img: snakeImg, name: "Snake", glow: "rgba(34,197,94,0.3)" },
+  { href: "/pacman", img: pacmanImg, name: "Pac-Man", glow: "rgba(234,179,8,0.3)" },
+];
+
+function ClassicGamesCarousel() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  
+  const goToPrev = () => {
+    setCurrentIndex(prev => (prev === 0 ? CLASSIC_GAMES.length - 1 : prev - 1));
+  };
+  
+  const goToNext = () => {
+    setCurrentIndex(prev => (prev === CLASSIC_GAMES.length - 1 ? 0 : prev + 1));
+  };
+
+  return (
+    <div className="relative">
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-sm font-bold text-white/80">Classic Games</h3>
+        <div className="flex gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={goToPrev}
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white"
+            data-testid="button-carousel-prev"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={goToNext}
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white"
+            data-testid="button-carousel-next"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+      
+      <div className="relative overflow-hidden rounded-2xl">
+        <motion.div
+          className="flex"
+          animate={{ x: `-${currentIndex * 100}%` }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        >
+          {CLASSIC_GAMES.map((game, index) => (
+            <Link 
+              key={game.href} 
+              href={game.href} 
+              className="block flex-shrink-0 w-full group"
+            >
+              <div 
+                className="relative h-48 rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:shadow-[0_0_40px_var(--glow)]"
+                style={{ "--glow": game.glow } as React.CSSProperties}
+              >
+                <img 
+                  src={game.img} 
+                  alt={game.name} 
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                <div className="absolute inset-0 p-4 flex flex-col justify-end">
+                  <h3 className="text-2xl font-bold text-white drop-shadow-lg">{game.name}</h3>
+                  <Badge className="bg-blue-500/50 text-blue-200 border-blue-400/30 text-xs w-fit mt-2 backdrop-blur-sm">FREE</Badge>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </motion.div>
+      </div>
+      
+      {/* Dots indicator */}
+      <div className="flex justify-center gap-1.5 mt-3">
+        {CLASSIC_GAMES.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentIndex(index)}
+            className={`w-2 h-2 rounded-full transition-all ${
+              index === currentIndex 
+                ? "bg-white w-4" 
+                : "bg-white/30 hover:bg-white/50"
+            }`}
+            data-testid={`button-carousel-dot-${index}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Arcade() {
   const { user } = useAuth();
   const isConnected = !!user;
@@ -707,80 +805,8 @@ export default function Arcade() {
                 </div>
               </Link>
 
-              {/* Classic Games Grid */}
-              <div className="grid grid-cols-3 gap-3">
-                {/* SOLITAIRE Card */}
-                <Link href="/solitaire" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(34,197,94,0.3)] h-32">
-                    <img src={solitaireImg} alt="Solitaire" className="absolute inset-0 w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-end">
-                      <h3 className="text-sm font-bold text-white drop-shadow-lg">Solitaire</h3>
-                      <Badge className="bg-blue-500/50 text-blue-200 border-blue-400/30 text-[7px] w-fit mt-1 backdrop-blur-sm">FREE</Badge>
-                    </div>
-                  </div>
-                </Link>
-
-                {/* MINESWEEPER Card */}
-                <Link href="/minesweeper" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(239,68,68,0.3)] h-32">
-                    <img src={minesweeperImg} alt="Minesweeper" className="absolute inset-0 w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-end">
-                      <h3 className="text-sm font-bold text-white drop-shadow-lg">Minesweeper</h3>
-                      <Badge className="bg-blue-500/50 text-blue-200 border-blue-400/30 text-[7px] w-fit mt-1 backdrop-blur-sm">FREE</Badge>
-                    </div>
-                  </div>
-                </Link>
-
-                {/* GALAGA Card */}
-                <Link href="/galaga" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(139,92,246,0.3)] h-32">
-                    <img src={spaceBlasterImg} alt="Space Blaster" className="absolute inset-0 w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-end">
-                      <h3 className="text-sm font-bold text-white drop-shadow-lg">Space Blaster</h3>
-                      <Badge className="bg-blue-500/50 text-blue-200 border-blue-400/30 text-[7px] w-fit mt-1 backdrop-blur-sm">FREE</Badge>
-                    </div>
-                  </div>
-                </Link>
-
-                {/* TETRIS Card */}
-                <Link href="/tetris" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] h-32">
-                    <img src={tetrisImg} alt="Tetris" className="absolute inset-0 w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-end">
-                      <h3 className="text-sm font-bold text-white drop-shadow-lg">Tetris</h3>
-                      <Badge className="bg-blue-500/50 text-blue-200 border-blue-400/30 text-[7px] w-fit mt-1 backdrop-blur-sm">FREE</Badge>
-                    </div>
-                  </div>
-                </Link>
-
-                {/* SNAKE Card */}
-                <Link href="/snake" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(34,197,94,0.3)] h-32">
-                    <img src={snakeImg} alt="Snake" className="absolute inset-0 w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-end">
-                      <h3 className="text-sm font-bold text-white drop-shadow-lg">Snake</h3>
-                      <Badge className="bg-blue-500/50 text-blue-200 border-blue-400/30 text-[7px] w-fit mt-1 backdrop-blur-sm">FREE</Badge>
-                    </div>
-                  </div>
-                </Link>
-
-                {/* PAC-MAN Card */}
-                <Link href="/pacman" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(234,179,8,0.3)] h-32">
-                    <img src={pacmanImg} alt="Pac-Man" className="absolute inset-0 w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-end">
-                      <h3 className="text-sm font-bold text-white drop-shadow-lg">Pac-Man</h3>
-                      <Badge className="bg-blue-500/50 text-blue-200 border-blue-400/30 text-[7px] w-fit mt-1 backdrop-blur-sm">FREE</Badge>
-                    </div>
-                  </div>
-                </Link>
-              </div>
+              {/* Classic Games Carousel */}
+              <ClassicGamesCarousel />
             </div>
 
             {/* Right Column - Sidebar */}
