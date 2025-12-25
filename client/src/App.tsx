@@ -11,6 +11,7 @@ import { getAppFromHost } from "@/lib/app-config";
 import Home from "@/pages/home";
 import GamesHome from "@/pages/games-home";
 import StudiosHome from "@/pages/studios-home";
+import GameDeveloper from "@/pages/game-developer";
 import Dashboard from "@/pages/dashboard";
 import Developers from "@/pages/developers";
 import DevelopersRegister from "@/pages/developers-register";
@@ -106,6 +107,7 @@ function GamesRouter() {
         <Route path="/predictions" component={Predictions} />
         <Route path="/lottery" component={Lottery} />
         <Route path="/wallet" component={Wallet} />
+        <Route path="/game-developer" component={GameDeveloper} />
         <Route path="/terms" component={Terms} />
         <Route path="/privacy" component={Privacy} />
         <Route component={NotFound} />
@@ -206,6 +208,7 @@ function DWSCRouter() {
         <Route path="/alerts" component={PriceAlerts} />
         <Route path="/paper-trading" component={PaperTrading} />
         <Route path="/achievements" component={Achievements} />
+        <Route path="/game-developer" component={GameDeveloper} />
         <Route component={NotFound} />
       </Switch>
     </>
