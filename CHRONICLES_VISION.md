@@ -44,7 +44,22 @@ This is not a game with quests to complete and bosses to defeat. This is a simul
 
 The goal: Understand how to navigate your REAL life by living a parallel one in a fantasy setting.
 
-### 5. Your Legacy Is What You Build
+### 5. Bad Actors Will Reveal Themselves
+The real world has corruption. Bad actors exist. In DarkWave Chronicles, they'll show themselves through their choices:
+- Players who manipulate, betray, or scheme will naturally do so in-game
+- Organic alliances will form - some for good, some for power
+- Political groups will emerge from player behavior, not scripted events
+- Coups, power struggles, and conflicts arise naturally
+- "One man's freedom fighter is another man's terrorist" - conflict is always perspective-based
+
+Different regions will develop different dynamics, just like the real world:
+- Some stable and prosperous
+- Some torn by strife and conflict
+- All shaped by the players who inhabit them
+
+**Anonymity protects players** - you can explore these dynamics without real-world exposure. Fantasy theming provides cover while still exploring genuine human behavior.
+
+### 6. Your Legacy Is What You Build
 There is no "winning." There is no end state. This is ongoing, forever.
 
 "Create Your Own Legacy" - what you build, who you become, what you leave behind. That's the game.
@@ -86,12 +101,15 @@ Begin your journey in any era you choose:
 - Must complete activities to return to your home timeline
 - Your "home" era is your base, but travel expands your experience
 
-### Side Missions
+### Side Missions & Rewards
 Traditional game elements exist alongside the life simulation:
 - Quests and adventures
 - Mysteries to solve
 - Challenges to overcome
+- Collections to gather
 - All within the persistent, real-time framework
+
+**DWC Token Rewards**: Certain missions and achievements may reward players with actual DarkWave Coin (DWC) - real blockchain tokens with real value. Your time investment can translate to tangible rewards.
 
 ---
 
