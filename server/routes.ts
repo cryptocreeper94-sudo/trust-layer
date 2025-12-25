@@ -2456,7 +2456,7 @@ export async function registerRoutes(
       
       const presaleResult = await db.execute(sql`
         SELECT 
-          COALESCE(SUM(amount_cents), 0) as presale_raised,
+          COALESCE(SUM(usd_amount_cents), 0) as presale_raised,
           COALESCE(COUNT(DISTINCT email), 0) as presale_contributors
         FROM presale_purchases 
         WHERE status = 'completed'
@@ -2942,16 +2942,18 @@ export async function registerRoutes(
         const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
         
         const insertResult = await db.execute(sql`
-          INSERT INTO presale_purchases (session_id, email, amount_cents, tier, status, created_at)
+          INSERT INTO presale_purchases (stripe_payment_intent_id, email, usd_amount_cents, token_amount, tier, status, payment_method, created_at)
           VALUES (
             ${sessionId}, 
             ${customerEmail}, 
             ${amountCents}, 
+            ${tokenAmount + bonusTokens},
             ${tier},
             'completed',
+            'stripe',
             NOW()
           )
-          ON CONFLICT (session_id) DO NOTHING
+          ON CONFLICT (stripe_payment_intent_id) DO NOTHING
           RETURNING id
         `);
         
@@ -2971,6 +2973,7 @@ export async function registerRoutes(
           amountPaid,
           tier,
           isNewPurchase,
+          message: isNewPurchase ? "Purchase confirmed!" : "This purchase was already processed.",
         });
       } else {
         res.json({ success: false, message: "Payment not completed" });
