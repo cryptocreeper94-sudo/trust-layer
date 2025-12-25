@@ -1943,3 +1943,99 @@ export const coinPackSchema = z.object({
 });
 
 export type CoinPack = z.infer<typeof coinPackSchema>;
+
+// ==================== SPADES CARD GAME ====================
+
+// Spades games table
+export const spadesGames = pgTable("spades_games", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  status: text("status").notNull().default("waiting"), // waiting, bidding, playing, finished
+  gameMode: text("game_mode").notNull().default("vs_ai"), // vs_ai, multiplayer
+  difficulty: text("difficulty").default("medium"), // easy, medium, hard (for AI games)
+  targetScore: integer("target_score").notNull().default(500),
+  currentRound: integer("current_round").notNull().default(1),
+  currentTrick: integer("current_trick").notNull().default(1),
+  currentPlayerIndex: integer("current_player_index").notNull().default(0),
+  leadSuit: text("lead_suit"), // current trick's lead suit
+  spadesbroken: boolean("spades_broken").notNull().default(false),
+  team1Score: integer("team1_score").notNull().default(0),
+  team2Score: integer("team2_score").notNull().default(0),
+  team1Bags: integer("team1_bags").notNull().default(0),
+  team2Bags: integer("team2_bags").notNull().default(0),
+  team1RoundTricks: integer("team1_round_tricks").notNull().default(0),
+  team2RoundTricks: integer("team2_round_tricks").notNull().default(0),
+  team1Bid: integer("team1_bid"),
+  team2Bid: integer("team2_bid"),
+  cardsPlayed: text("cards_played").default("[]"), // JSON array of played cards in current trick
+  winnerId: text("winner_id"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertSpadesGameSchema = createInsertSchema(spadesGames).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type SpadesGame = typeof spadesGames.$inferSelect;
+export type InsertSpadesGame = z.infer<typeof insertSpadesGameSchema>;
+
+// Spades players in a game
+export const spadesPlayers = pgTable("spades_players", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  gameId: varchar("game_id").notNull(),
+  oderId: text("user_id"), // null for AI players
+  playerName: text("player_name").notNull(),
+  isAI: boolean("is_ai").notNull().default(false),
+  seatPosition: integer("seat_position").notNull(), // 0-3 (0=South/you, 1=West, 2=North/partner, 3=East)
+  teamNumber: integer("team_number").notNull(), // 1 or 2 (positions 0,2 = team1, positions 1,3 = team2)
+  hand: text("hand").default("[]"), // JSON array of cards
+  bid: integer("bid"),
+  tricksWon: integer("tricks_won").notNull().default(0),
+  isConnected: boolean("is_connected").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertSpadesPlayerSchema = createInsertSchema(spadesPlayers).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type SpadesPlayer = typeof spadesPlayers.$inferSelect;
+export type InsertSpadesPlayer = z.infer<typeof insertSpadesPlayerSchema>;
+
+// Spades player stats (lifetime)
+export const spadesStats = pgTable("spades_stats", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  oderId: text("user_id").notNull().unique(),
+  gamesPlayed: integer("games_played").notNull().default(0),
+  gamesWon: integer("games_won").notNull().default(0),
+  totalBids: integer("total_bids").notNull().default(0),
+  bidsMade: integer("bids_made").notNull().default(0),
+  nilBidsAttempted: integer("nil_bids_attempted").notNull().default(0),
+  nilBidsSuccessful: integer("nil_bids_successful").notNull().default(0),
+  blindNilsAttempted: integer("blind_nils_attempted").notNull().default(0),
+  blindNilsSuccessful: integer("blind_nils_successful").notNull().default(0),
+  totalBags: integer("total_bags").notNull().default(0),
+  highestScore: integer("highest_score").notNull().default(0),
+  currentStreak: integer("current_streak").notNull().default(0),
+  longestStreak: integer("longest_streak").notNull().default(0),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertSpadesStatsSchema = createInsertSchema(spadesStats).omit({
+  id: true,
+  updatedAt: true,
+});
+
+export type SpadesStats = typeof spadesStats.$inferSelect;
+export type InsertSpadesStats = z.infer<typeof insertSpadesStatsSchema>;
+
+// Card type for Spades
+export const cardSchema = z.object({
+  suit: z.enum(["spades", "hearts", "diamonds", "clubs"]),
+  rank: z.enum(["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]),
+});
+
+export type Card = z.infer<typeof cardSchema>;
