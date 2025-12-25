@@ -181,7 +181,7 @@ export default function EraCodex() {
         <div className="container mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-2">
           <Link href="/genesis" className="flex items-center gap-1 sm:gap-2 text-gray-400 hover:text-white transition-colors shrink-0">
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-xs sm:text-sm hidden xs:inline">Genesis</span>
+            <span className="text-xs sm:text-sm hidden sm:inline">Genesis</span>
           </Link>
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             <img src={darkwaveLogo} alt="DarkWave" className="w-5 h-5 sm:w-6 sm:h-6" />

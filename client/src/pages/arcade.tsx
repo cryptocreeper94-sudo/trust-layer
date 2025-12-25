@@ -634,7 +634,7 @@ export default function Arcade() {
             <Link href="/dashboard-pro">
               <Button variant="ghost" size="sm" className="h-7 sm:h-8 text-[10px] sm:text-xs px-2">
                 <ArrowLeft className="w-3 h-3" />
-                <span className="hidden xs:inline ml-1">Back</span>
+                <span className="hidden sm:inline ml-1">Back</span>
               </Button>
             </Link>
           </div>

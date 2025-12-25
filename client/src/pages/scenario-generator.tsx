@@ -232,7 +232,7 @@ export default function ScenarioGenerator() {
         <div className="container mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-2">
           <Link href="/era-codex" className="flex items-center gap-1 sm:gap-2 text-gray-400 hover:text-white transition-colors shrink-0">
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-xs sm:text-sm hidden xs:inline">Era Codex</span>
+            <span className="text-xs sm:text-sm hidden sm:inline">Era Codex</span>
           </Link>
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             <img src={darkwaveLogo} alt="DarkWave" className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -240,7 +240,7 @@ export default function ScenarioGenerator() {
           </div>
           <Badge className="bg-pink-500/20 text-pink-300 border-pink-500/30 text-[10px] sm:text-xs shrink-0">
             <Brain className="w-3 h-3 mr-1" />
-            <span className="hidden xs:inline">AI </span>Demo
+            <span className="hidden sm:inline">AI </span>Demo
           </Badge>
         </div>
       </nav>
