@@ -89,6 +89,71 @@ export default function PresaleSuccess() {
               </Button>
             </Link>
           </div>
+        ) : data?.success && data?.isNewPurchase === false ? (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", delay: 0.2 }}
+              className="w-24 h-24 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-cyan-500/30"
+            >
+              <CheckCircle className="w-12 h-12 text-white" />
+            </motion.div>
+
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-6">
+              <Sparkles className="w-4 h-4 text-cyan-400" />
+              <span className="text-cyan-300 text-sm font-medium">Already Processed</span>
+            </div>
+
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Purchase Already Confirmed
+              </span>
+            </h1>
+            
+            <p className="text-xl text-gray-400 mb-8">
+              This purchase was already processed. Check your email for confirmation details.
+            </p>
+
+            <div className="bg-gradient-to-br from-gray-900/90 to-black/80 rounded-2xl border border-white/10 p-8 mb-8 backdrop-blur-xl">
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <img src={darkwaveLogo} alt="DWC" className="w-16 h-16 object-contain" />
+                <div className="text-left">
+                  <p className="text-gray-400 text-sm">Your Token Allocation</p>
+                  <p className="text-4xl font-bold text-white">{totalTokens.toLocaleString()} DWC</p>
+                </div>
+              </div>
+
+              <div className="text-sm text-gray-500 space-y-2">
+                <p>Registered email: <span className="text-white">{data.email}</span></p>
+                <p>Tier: <span className="text-white capitalize">{tier.replace("_", " ")}</span></p>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/">
+                <Button 
+                  variant="outline" 
+                  className="border-white/20 hover:bg-white/5"
+                  data-testid="button-explore-ecosystem"
+                >
+                  Explore Ecosystem
+                </Button>
+              </Link>
+              <Link href="/roadmap">
+                <Button 
+                  className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600"
+                  data-testid="button-view-roadmap"
+                >
+                  View Roadmap <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
+            </div>
+          </motion.div>
         ) : (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
