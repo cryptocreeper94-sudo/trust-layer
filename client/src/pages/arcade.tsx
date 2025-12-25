@@ -701,61 +701,88 @@ export default function Arcade() {
                 </div>
               </Link>
 
-              {/* Classic Games Row */}
+              {/* Classic Games Grid */}
               <div className="grid grid-cols-3 gap-3">
                 {/* SOLITAIRE Card */}
                 <Link href="/solitaire" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(34,197,94,0.3)] h-32">
+                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(34,197,94,0.3)] h-28">
                     <div className="absolute inset-0 bg-gradient-to-br from-green-800 via-emerald-700 to-teal-800" />
-                    <div className="relative z-10 p-3 h-full flex flex-col justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="p-1.5 rounded-lg bg-green-500/30 backdrop-blur-sm border border-green-400/20">
-                          <span className="text-xl">🃏</span>
-                        </div>
-                        <div>
-                          <h3 className="text-sm font-bold text-white">Solitaire</h3>
-                          <p className="text-[10px] text-green-300/80">Klondike</p>
-                        </div>
+                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-lg">🃏</span>
+                        <h3 className="text-xs font-bold text-white">Solitaire</h3>
                       </div>
-                      <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[8px] w-fit">FREE</Badge>
+                      <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[7px] w-fit">FREE</Badge>
                     </div>
                   </div>
                 </Link>
 
                 {/* MINESWEEPER Card */}
                 <Link href="/minesweeper" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(239,68,68,0.3)] h-32">
+                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(239,68,68,0.3)] h-28">
                     <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-gray-700 to-zinc-800" />
-                    <div className="relative z-10 p-3 h-full flex flex-col justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="p-1.5 rounded-lg bg-red-500/30 backdrop-blur-sm border border-red-400/20">
-                          <span className="text-xl">💣</span>
-                        </div>
-                        <div>
-                          <h3 className="text-sm font-bold text-white">Minesweeper</h3>
-                          <p className="text-[10px] text-gray-300/80">Puzzle</p>
-                        </div>
+                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-lg">💣</span>
+                        <h3 className="text-xs font-bold text-white">Minesweeper</h3>
                       </div>
-                      <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[8px] w-fit">FREE</Badge>
+                      <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[7px] w-fit">FREE</Badge>
                     </div>
                   </div>
                 </Link>
 
                 {/* GALAGA Card */}
                 <Link href="/galaga" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(139,92,246,0.3)] h-32">
+                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(139,92,246,0.3)] h-28">
                     <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-800 to-violet-900" />
-                    <div className="relative z-10 p-3 h-full flex flex-col justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="p-1.5 rounded-lg bg-purple-500/30 backdrop-blur-sm border border-purple-400/20">
-                          <span className="text-xl">🚀</span>
-                        </div>
-                        <div>
-                          <h3 className="text-sm font-bold text-white">Space Blaster</h3>
-                          <p className="text-[10px] text-purple-300/80">Arcade</p>
-                        </div>
+                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-lg">🚀</span>
+                        <h3 className="text-xs font-bold text-white">Space Blaster</h3>
                       </div>
-                      <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[8px] w-fit">FREE</Badge>
+                      <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[7px] w-fit">FREE</Badge>
+                    </div>
+                  </div>
+                </Link>
+
+                {/* TETRIS Card */}
+                <Link href="/tetris" className="block group">
+                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] h-28">
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-indigo-800 to-blue-900" />
+                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-lg">🧱</span>
+                        <h3 className="text-xs font-bold text-white">Tetris</h3>
+                      </div>
+                      <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[7px] w-fit">FREE</Badge>
+                    </div>
+                  </div>
+                </Link>
+
+                {/* SNAKE Card */}
+                <Link href="/snake" className="block group">
+                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(34,197,94,0.3)] h-28">
+                    <div className="absolute inset-0 bg-gradient-to-br from-green-900 via-emerald-800 to-teal-900" />
+                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-lg">🐍</span>
+                        <h3 className="text-xs font-bold text-white">Snake</h3>
+                      </div>
+                      <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[7px] w-fit">FREE</Badge>
+                    </div>
+                  </div>
+                </Link>
+
+                {/* PAC-MAN Card */}
+                <Link href="/pacman" className="block group">
+                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(234,179,8,0.3)] h-28">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-indigo-800 to-purple-900" />
+                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-lg">👻</span>
+                        <h3 className="text-xs font-bold text-white">Pac-Man</h3>
+                      </div>
+                      <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[7px] w-fit">FREE</Badge>
                     </div>
                   </div>
                 </Link>

@@ -90,6 +90,9 @@ import Spades from "@/pages/spades";
 import Solitaire from "@/pages/solitaire";
 import Minesweeper from "@/pages/minesweeper";
 import Galaga from "@/pages/galaga";
+import Tetris from "@/pages/tetris";
+import Snake from "@/pages/snake";
+import Pacman from "@/pages/pacman";
 import SocialFeed from "@/pages/social-feed";
 import Lottery from "@/pages/lottery";
 import AIAdvisor from "@/pages/ai-advisor";
@@ -126,6 +129,9 @@ function GamesRouter() {
         <Route path="/solitaire" component={Solitaire} />
         <Route path="/minesweeper" component={Minesweeper} />
         <Route path="/galaga" component={Galaga} />
+        <Route path="/tetris" component={Tetris} />
+        <Route path="/snake" component={Snake} />
+        <Route path="/pacman" component={Pacman} />
         <Route path="/crash" component={Crash} />
         <Route path="/predictions" component={Predictions} />
         <Route path="/lottery" component={Lottery} />
@@ -239,6 +245,9 @@ function DWSCRouter() {
         <Route path="/solitaire" component={Solitaire} />
         <Route path="/minesweeper" component={Minesweeper} />
         <Route path="/galaga" component={Galaga} />
+        <Route path="/tetris" component={Tetris} />
+        <Route path="/snake" component={Snake} />
+        <Route path="/pacman" component={Pacman} />
         <Route path="/sweepstakes-rules" component={SweepstakesRules} />
         <Route path="/coin-store" component={CoinStore} />
         <Route path="/daily-bonus" component={DailyBonus} />
