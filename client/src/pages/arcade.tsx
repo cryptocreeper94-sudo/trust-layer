@@ -570,11 +570,12 @@ export default function Arcade() {
             </GlassCard>
           )}
 
-          {/* Bento Grid Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-4">
-            
-            {/* CRASH - Hero Card */}
-            <Link href="/crash" className="block group md:col-span-2 lg:col-span-1">
+          {/* Games Grid */}
+          <div className="flex flex-col lg:flex-row gap-4">
+            {/* Left Column - Games */}
+            <div className="flex-1 space-y-4">
+              {/* CRASH - Hero Card */}
+              <Link href="/crash" className="block group">
               <div className="relative h-48 rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.01] group-hover:shadow-[0_0_40px_rgba(255,79,216,0.3)]">
                 <img 
                   src={cosmicRocketImg} 
@@ -612,60 +613,61 @@ export default function Arcade() {
                   </div>
                 </div>
               </div>
-            </Link>
+              </Link>
 
-            {/* COIN FLIP Card */}
-            <div className="relative rounded-2xl overflow-hidden">
-              <img 
-                src={goldenCoinsImg} 
-                alt="Coin Flip" 
-                className="absolute inset-0 w-full h-full object-cover opacity-30"
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-900/80 via-black/70 to-black/90" />
-              <div className="relative z-10 p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="p-2 rounded-xl bg-amber-500/30 backdrop-blur-sm border border-amber-400/20">
-                    <Coins className="w-5 h-5 text-amber-300" />
-                  </div>
-                  <h3 className="text-lg font-bold text-white">Coin Flip</h3>
-                  <Badge className="ml-auto bg-green-500/30 backdrop-blur-sm text-green-300 border-green-400/30 text-[9px]">1.98x</Badge>
-                </div>
-                <CoinFlipGame 
-                  isConnected={isConnected} 
-                  isDemoMode={isDemoMode} 
-                  userBalance={userBalance}
-                  onBalanceUpdate={fetchBalance}
+              {/* COIN FLIP Card */}
+              <div className="relative rounded-2xl overflow-hidden">
+                <img 
+                  src={goldenCoinsImg} 
+                  alt="Coin Flip" 
+                  className="absolute inset-0 w-full h-full object-cover opacity-30"
                 />
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-900/80 via-black/70 to-black/90" />
+                <div className="relative z-10 p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="p-2 rounded-xl bg-amber-500/30 backdrop-blur-sm border border-amber-400/20">
+                      <Coins className="w-5 h-5 text-amber-300" />
+                    </div>
+                    <h3 className="text-lg font-bold text-white">Coin Flip</h3>
+                    <Badge className="ml-auto bg-green-500/30 backdrop-blur-sm text-green-300 border-green-400/30 text-[9px]">1.98x</Badge>
+                  </div>
+                  <CoinFlipGame 
+                    isConnected={isConnected} 
+                    isDemoMode={isDemoMode} 
+                    userBalance={userBalance}
+                    onBalanceUpdate={fetchBalance}
+                  />
+                </div>
+              </div>
+
+              {/* SLOTS Card */}
+              <div className="relative rounded-2xl overflow-hidden">
+                <img 
+                  src={slotMachineImg} 
+                  alt="Slots" 
+                  className="absolute inset-0 w-full h-full object-cover opacity-40"
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-900/80 via-black/70 to-black/90" />
+                <div className="relative z-10 p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="p-2 rounded-xl bg-purple-500/30 backdrop-blur-sm border border-purple-400/20">
+                      <Cherry className="w-5 h-5 text-purple-300" />
+                    </div>
+                    <h3 className="text-lg font-bold text-white">Jackpot Slots</h3>
+                    <Badge className="ml-auto bg-amber-500/30 backdrop-blur-sm text-amber-300 border-amber-400/30 text-[9px]">50x Max</Badge>
+                  </div>
+                  <SlotsGame 
+                    isConnected={isConnected} 
+                    isDemoMode={isDemoMode}
+                    userBalance={userBalance}
+                    onBalanceUpdate={fetchBalance}
+                  />
+                </div>
               </div>
             </div>
 
-            {/* SLOTS Card */}
-            <div className="relative rounded-2xl overflow-hidden">
-              <img 
-                src={slotMachineImg} 
-                alt="Slots" 
-                className="absolute inset-0 w-full h-full object-cover opacity-40"
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-900/80 via-black/70 to-black/90" />
-              <div className="relative z-10 p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="p-2 rounded-xl bg-purple-500/30 backdrop-blur-sm border border-purple-400/20">
-                    <Cherry className="w-5 h-5 text-purple-300" />
-                  </div>
-                  <h3 className="text-lg font-bold text-white">Jackpot Slots</h3>
-                  <Badge className="ml-auto bg-amber-500/30 backdrop-blur-sm text-amber-300 border-amber-400/30 text-[9px]">50x Max</Badge>
-                </div>
-                <SlotsGame 
-                  isConnected={isConnected} 
-                  isDemoMode={isDemoMode}
-                  userBalance={userBalance}
-                  onBalanceUpdate={fetchBalance}
-                />
-              </div>
-            </div>
-
-            {/* Sidebar - spans full width on mobile, single column on desktop */}
-            <div className="space-y-3 md:col-span-2 lg:col-span-1">
+            {/* Right Column - Sidebar */}
+            <div className="lg:w-80 space-y-3">
               {/* Recent Games */}
               <GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
