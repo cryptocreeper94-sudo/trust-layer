@@ -82,6 +82,7 @@ import Crash from "@/pages/crash";
 import Predictions from "@/pages/predictions";
 import PlayerProfile from "@/pages/player-profile";
 import CoinStore from "@/pages/coin-store";
+import DailyBonus from "@/pages/daily-bonus";
 import SocialFeed from "@/pages/social-feed";
 import Lottery from "@/pages/lottery";
 import AIAdvisor from "@/pages/ai-advisor";
@@ -110,6 +111,7 @@ function GamesRouter() {
         <Route path="/arcade/profile" component={PlayerProfile} />
         <Route path="/arcade/profile/:userId" component={PlayerProfile} />
         <Route path="/coin-store" component={CoinStore} />
+        <Route path="/daily-bonus" component={DailyBonus} />
         <Route path="/crash" component={Crash} />
         <Route path="/predictions" component={Predictions} />
         <Route path="/lottery" component={Lottery} />
