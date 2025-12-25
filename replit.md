@@ -14,7 +14,50 @@ DarkWave Smart Chain (DSC) is a comprehensive blockchain ecosystem developed by 
 
 ## Design Protocol (Project-Wide) - MANDATORY FOR ALL PAGES
 
-**CRITICAL: Every new page MUST follow this design protocol. Reference this section before creating any UI.**
+**CRITICAL: Every new page MUST follow this design protocol. Reference this section BEFORE writing any UI code.**
+
+---
+
+### 🚨 PRE-BUILD CHECKLIST (MANDATORY BEFORE ANY PAGE WORK)
+
+**STOP! Before creating or modifying ANY page, complete this checklist:**
+
+#### Step 1: Asset Selection
+- [ ] Identify the page's subject matter and purpose
+- [ ] Select appropriate photorealistic images from `attached_assets/generated_images/`
+- [ ] Ensure EVERY card, tile, and panel has a matching background image
+- [ ] If no suitable image exists, generate one BEFORE building the page
+
+#### Step 2: Layout Planning
+- [ ] Design bento grid layout with varied card sizes (1x1, 2x1, 2x2, etc.)
+- [ ] Plan mobile-first responsive breakpoints
+- [ ] Identify which sections need carousels/accordions on mobile
+- [ ] Map out hero section with photorealistic background
+
+#### Step 3: Interactive Elements
+- [ ] Plan hover effects for all clickable elements (scale, glow, 3D transforms)
+- [ ] Add Framer Motion entrance animations
+- [ ] Include info tooltips (?) for technical terms
+- [ ] Add description modals for complex features
+
+#### Step 4: Visual Effects
+- [ ] Apply glassmorphism (backdrop-blur, semi-transparent backgrounds)
+- [ ] Add holographic borders with glow effects
+- [ ] Include gradient overlays on all images for text readability
+- [ ] Add shimmer effects on premium/CTA elements
+
+#### Step 5: Mobile Requirements
+- [ ] Touch targets ≥48px
+- [ ] Self-contained horizontal carousels (no scroll overflow)
+- [ ] Accordions for dense content sections
+- [ ] Test at 375px viewport width
+
+#### Step 6: Component Standards
+- [ ] Use `data-testid` on ALL interactive elements
+- [ ] Follow naming convention: `{action}-{target}` or `{type}-{content}-{id}`
+- [ ] Ensure consistent spacing and typography scale
+
+---
 
 ### ⚠️ ABSOLUTE RULE: Photorealistic Images on ALL Cards
 
