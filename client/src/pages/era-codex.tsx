@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { 
   ArrowLeft, Sparkles, Clock, Map, Users, Sword, Wand2, Cog, Cpu, Rocket, Atom,
-  ChevronLeft, ChevronRight, Lock, Unlock, Star, Zap, Shield, Crown
+  ChevronLeft, ChevronRight, Lock, Unlock, Star, Zap, Shield, Crown, Scale, Vote, Handshake, Swords
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +28,8 @@ interface Era {
   mechanics: string[];
   resources: string[];
   classes: string[];
+  governance: string;
+  politics: string[];
   unlockRequirement: string;
   isLocked: boolean;
 }
@@ -45,6 +47,8 @@ const ERAS: Era[] = [
     mechanics: ["Survival crafting", "Tribal politics", "Beast taming", "Cave exploration"],
     resources: ["Flint", "Hide", "Bone", "Sacred herbs"],
     classes: ["Hunter", "Shaman", "Chieftain"],
+    governance: "Tribal Councils",
+    politics: ["Elder councils", "Ritual challenges", "Blood oaths", "Territory disputes"],
     unlockRequirement: "Starting Era - Always Available",
     isLocked: false,
   },
@@ -60,6 +64,8 @@ const ERAS: Era[] = [
     mechanics: ["Kingdom building", "Magic systems", "Siege warfare", "Dragon hunting"],
     resources: ["Gold", "Iron", "Mana crystals", "Dragon scales"],
     classes: ["Knight", "Mage", "Assassin", "Cleric"],
+    governance: "Feudal Monarchy",
+    politics: ["Royal succession", "Noble houses", "Holy orders", "Peasant revolts"],
     unlockRequirement: "Complete Dawn Age: Chapter 1",
     isLocked: true,
   },
@@ -75,6 +81,8 @@ const ERAS: Era[] = [
     mechanics: ["Invention crafting", "Airship combat", "Factory management", "Automaton companions"],
     resources: ["Coal", "Brass", "Aether", "Cogwheels"],
     classes: ["Engineer", "Aeronaut", "Investigator", "Automancer"],
+    governance: "Industrial Parliament",
+    politics: ["Labor unions", "Trade wars", "Colonial powers", "Revolutionary cells"],
     unlockRequirement: "Reach Level 20 in Age of Crowns",
     isLocked: true,
   },
@@ -90,6 +98,8 @@ const ERAS: Era[] = [
     mechanics: ["Hacking minigames", "Cybernetic upgrades", "Street racing", "Corporate espionage"],
     resources: ["Credits", "Neurolink chips", "Synthetic blood", "Data shards"],
     classes: ["Netrunner", "Street Samurai", "Techie", "Fixer"],
+    governance: "Corporate Oligarchy",
+    politics: ["Megacorp boards", "Street gangs", "Underground resistance", "AI rights movement"],
     unlockRequirement: "Acquire 3 Chrono Keys",
     isLocked: true,
   },
@@ -105,6 +115,8 @@ const ERAS: Era[] = [
     mechanics: ["Space exploration", "Fleet command", "Diplomacy", "Planet terraforming"],
     resources: ["Plasma cores", "Xenominerals", "Dark matter", "Precursor artifacts"],
     classes: ["Commander", "Xenobiologist", "Pilot", "Psionic"],
+    governance: "Galactic Federation",
+    politics: ["Interstellar treaties", "Alien diplomacy", "Colony independence", "Fleet admiralty"],
     unlockRequirement: "Unite 5 Factions Across Eras",
     isLocked: true,
   },
@@ -120,6 +132,8 @@ const ERAS: Era[] = [
     mechanics: ["Reality manipulation", "Dimensional travel", "Probability crafting", "Cosmic entities"],
     resources: ["Quantum flux", "Thought essence", "Void fragments", "Pure potential"],
     classes: ["Architect", "Oracle", "Void Walker", "Ascended"],
+    governance: "Collective Consciousness",
+    politics: ["Reality councils", "Dimensional accords", "Thought wars", "Existence debates"],
     unlockRequirement: "Master All Previous Eras",
     isLocked: true,
   },
@@ -296,7 +310,7 @@ export default function EraCodex() {
         {/* Era Details */}
         <section className="px-4 py-10 bg-gradient-to-b from-black to-purple-950/20">
           <div className="max-w-6xl mx-auto">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
               {/* Mechanics */}
               <GlassCard className="p-5">
                 <div className="flex items-center gap-2 mb-4">
@@ -340,6 +354,22 @@ export default function EraCodex() {
                     <li key={i} className="flex items-center gap-2 text-sm text-gray-400">
                       <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
                       {c}
+                    </li>
+                  ))}
+                </ul>
+              </GlassCard>
+
+              {/* Governance */}
+              <GlassCard className="p-5">
+                <div className="flex items-center gap-2 mb-4">
+                  <Scale className="w-5 h-5 text-pink-400" />
+                  <h3 className="font-bold">{era.governance}</h3>
+                </div>
+                <ul className="space-y-2">
+                  {era.politics.map((p, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm text-gray-400">
+                      <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
+                      {p}
                     </li>
                   ))}
                 </ul>
@@ -415,6 +445,63 @@ export default function EraCodex() {
                   </button>
                 ))}
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Living World Vision */}
+        <section className="px-4 py-16 bg-gradient-to-b from-black via-purple-950/10 to-black">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <Badge className="mb-4 bg-pink-500/20 text-pink-300 border-pink-500/30">
+                <Scale className="w-3 h-3 mr-1" />
+                Living Political Simulation
+              </Badge>
+              <h2 className="text-3xl font-display font-bold mb-4">A World That Breathes</h2>
+              <p className="text-gray-400 max-w-2xl mx-auto">
+                This isn't just a game with quests. It's a living microcosm of civilization itself - 
+                with all its drama, politics, and pursuit of peace.
+              </p>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <GlassCard className="p-5 text-center">
+                <Vote className="w-8 h-8 mx-auto mb-3 text-cyan-400" />
+                <h3 className="font-bold mb-2">Player Councils</h3>
+                <p className="text-sm text-gray-400">
+                  Elected governing bodies run each realm. Campaign, vote, and shape policy.
+                </p>
+              </GlassCard>
+
+              <GlassCard className="p-5 text-center">
+                <Handshake className="w-8 h-8 mx-auto mb-3 text-green-400" />
+                <h3 className="font-bold mb-2">Treaties & Alliances</h3>
+                <p className="text-sm text-gray-400">
+                  Formal agreements between factions. Trade pacts, non-aggression, or full alliance.
+                </p>
+              </GlassCard>
+
+              <GlassCard className="p-5 text-center">
+                <Swords className="w-8 h-8 mx-auto mb-3 text-red-400" />
+                <h3 className="font-bold mb-2">Coups & Revolutions</h3>
+                <p className="text-sm text-gray-400">
+                  Overthrow corrupt leaders. Nothing is permanent. Power must be earned and defended.
+                </p>
+              </GlassCard>
+
+              <GlassCard className="p-5 text-center">
+                <Crown className="w-8 h-8 mx-auto mb-3 text-amber-400" />
+                <h3 className="font-bold mb-2">Peace Summits</h3>
+                <p className="text-sm text-gray-400">
+                  Multi-faction negotiations. Work towards lasting peace - or plot the next war.
+                </p>
+              </GlassCard>
+            </div>
+
+            <div className="mt-8 text-center">
+              <p className="text-sm text-gray-500">
+                The world evolves whether you're playing or not. Real-world timing. Real consequences.
+              </p>
             </div>
           </div>
         </section>
