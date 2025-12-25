@@ -38,7 +38,7 @@ export default function Token() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div className="space-y-6">
               <Badge variant="outline" className="px-3 py-1 border-secondary/50 text-secondary bg-secondary/10 rounded-full text-xs tracking-wider uppercase">
-                Native Utility Token
+                Native Utility Coin
               </Badge>
               <h1 className="text-4xl md:text-5xl font-display font-bold leading-tight">
                 DarkWave <br />
@@ -371,7 +371,7 @@ export default function Token() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
             <GlassCard className="p-5">
               <h4 className="font-bold mb-3 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-green-400" /> No Token Burns
+                <TrendingUp className="w-4 h-4 text-green-400" /> No Coin Burns
               </h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Unlike deflationary tokens, DWC maintains a fixed 100M supply. Protocol fees are redistributed to stakers and the ecosystem treasury, ensuring sustainable growth without artificial scarcity.

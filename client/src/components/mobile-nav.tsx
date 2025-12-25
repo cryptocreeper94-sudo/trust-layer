@@ -22,7 +22,7 @@ const navItems = [
   { href: "/charts", label: "Charts", icon: LineChart },
   { href: "/staking", label: "Staking", icon: TrendingUp },
   { href: "/bridge", label: "Bridge", icon: ArrowLeftRight },
-  { href: "/token", label: "Token", icon: Coins },
+  { href: "/token", label: "Coin", icon: Coins },
   { href: "/explorer", label: "Explorer", icon: SearchIcon },
   { href: "/network", label: "Network Stats", icon: TrendingUp },
   { href: "/validators", label: "Validators", icon: FileText },

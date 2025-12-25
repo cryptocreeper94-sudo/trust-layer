@@ -14,7 +14,7 @@ const KEYBOARD_SHORTCUTS = [
   { keys: ["G", "H"], description: "Go to Home" },
   { keys: ["G", "W"], description: "Go to Wallet" },
   { keys: ["G", "S"], description: "Go to Swap" },
-  { keys: ["G", "T"], description: "Go to Token" },
+  { keys: ["G", "T"], description: "Go to Coin" },
   { keys: ["G", "N"], description: "Go to NFT" },
   { keys: ["G", "E"], description: "Go to Explorer" },
   { keys: ["/"], description: "Focus Search" },
