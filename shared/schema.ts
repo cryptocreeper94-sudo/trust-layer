@@ -2197,3 +2197,56 @@ export const insertRoadmapMilestoneSchema = createInsertSchema(roadmapMilestones
 
 export type RoadmapMilestone = typeof roadmapMilestones.$inferSelect;
 export type InsertRoadmapMilestone = z.infer<typeof insertRoadmapMilestoneSchema>;
+
+// Token Presale tables
+export const presalePurchases = pgTable("presale_purchases", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id"),
+  walletAddress: text("wallet_address"),
+  email: text("email"),
+  tokenAmount: integer("token_amount").notNull().default(0),
+  usdAmountCents: integer("usd_amount_cents").notNull().default(0),
+  paymentMethod: text("payment_method").notNull().default("stripe"),
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
+  cryptoTxHash: text("crypto_tx_hash"),
+  status: text("status").notNull().default("pending"),
+  tier: text("tier").notNull().default("standard"),
+  bonusPercentage: integer("bonus_percentage").notNull().default(0),
+  referralCode: text("referral_code"),
+  referredBy: text("referred_by"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertPresalePurchaseSchema = createInsertSchema(presalePurchases).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type PresalePurchase = typeof presalePurchases.$inferSelect;
+export type InsertPresalePurchase = z.infer<typeof insertPresalePurchaseSchema>;
+
+export const presaleHolders = pgTable("presale_holders", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  walletAddress: text("wallet_address").notNull().unique(),
+  email: text("email"),
+  totalTokens: integer("total_tokens").notNull().default(0),
+  totalInvestedCents: integer("total_invested_cents").notNull().default(0),
+  tier: text("tier").notNull().default("standard"),
+  earlyAdopterRank: integer("early_adopter_rank"),
+  bonusTokens: integer("bonus_tokens").notNull().default(0),
+  referralCode: text("referral_code").unique(),
+  referralCount: integer("referral_count").notNull().default(0),
+  referralEarnings: integer("referral_earnings").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertPresaleHolderSchema = createInsertSchema(presaleHolders).omit({
+  id: true,
+  earlyAdopterRank: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type PresaleHolder = typeof presaleHolders.$inferSelect;
+export type InsertPresaleHolder = z.infer<typeof insertPresaleHolderSchema>;

@@ -30,6 +30,13 @@ export function Footer() {
             <span>© 2025</span>
             <span className="px-2 py-0.5 rounded bg-white/5 font-mono">v{APP_VERSION}</span>
             <Link 
+              href="/presale"
+              className="text-white/40 hover:text-cyan-400 transition-colors"
+              data-testid="link-presale"
+            >
+              Presale
+            </Link>
+            <Link 
               href="/roadmap"
               className="text-white/40 hover:text-cyan-400 transition-colors"
               data-testid="link-roadmap"

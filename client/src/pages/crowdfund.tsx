@@ -16,6 +16,22 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
+import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
+import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
+import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
+import deepSpace from "@assets/generated_images/deep_space_station.png";
+import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
+import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
+
+const CATEGORY_IMAGES: Record<string, string> = {
+  defi: blockchainBg,
+  wallet: dashboardImg,
+  nft: cyberpunkCity,
+  governance: medievalKingdom,
+  infrastructure: deepSpace,
+  gaming: fantasyWorld,
+  security: blockchainBg,
+};
 
 interface CrowdfundFeature {
   id: string;
@@ -246,6 +262,7 @@ function DonationModal({ feature, onSuccess }: { feature?: CrowdfundFeature; onS
 function FeatureCard({ feature }: { feature: CrowdfundFeature }) {
   const Icon = CATEGORY_ICONS[feature.category] || Zap;
   const colorClass = CATEGORY_COLORS[feature.category] || "from-gray-500/20 to-gray-600/20 border-gray-500/30";
+  const bgImage = CATEGORY_IMAGES[feature.category] || blockchainBg;
   const percentage = feature.goalAmountCents > 0 
     ? (feature.raisedAmountCents / feature.goalAmountCents) * 100 
     : 0;
@@ -256,43 +273,61 @@ function FeatureCard({ feature }: { feature: CrowdfundFeature }) {
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02, y: -4 }}
       transition={{ duration: 0.3 }}
+      className="group"
     >
-      <GlassCard className={`relative overflow-hidden bg-gradient-to-br ${colorClass} border p-6 h-full`}>
-        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
-        <div className="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 rounded-full blur-3xl" />
+      <div 
+        className="relative overflow-hidden rounded-2xl h-full"
+        style={{
+          boxShadow: "0 0 40px rgba(0,200,255,0.1), inset 0 1px 0 rgba(255,255,255,0.1)",
+        }}
+      >
+        <div className="absolute inset-0">
+          <img 
+            src={bgImage} 
+            alt={feature.title}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30" />
+        </div>
         
-        <div className="relative z-10 space-y-4">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500" />
+        
+        <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
+          background: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.02) 10px, rgba(255,255,255,0.02) 20px)",
+        }} />
+        
+        <div className="relative z-10 p-6 space-y-4 h-full flex flex-col">
           <div className="flex items-start justify-between">
-            <div className="p-2 rounded-lg bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30">
+            <div className="p-2 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
               <Icon className="w-5 h-5 text-cyan-400" />
             </div>
-            <Badge variant="outline" className="text-xs capitalize">
+            <Badge className="bg-white/10 backdrop-blur-sm text-white border-white/20 text-xs capitalize">
               {feature.category}
             </Badge>
           </div>
 
-          <div>
-            <h3 className="text-lg font-bold text-white mb-1">{feature.title}</h3>
-            <p className="text-gray-400 text-sm line-clamp-2">{feature.description}</p>
+          <div className="flex-1">
+            <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
+            <p className="text-gray-300 text-sm line-clamp-2">{feature.description}</p>
           </div>
 
           <div className="space-y-2">
-            <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+            <div className="h-3 bg-black/50 backdrop-blur-sm rounded-full overflow-hidden border border-white/10">
               <motion.div
-                className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full"
+                className="h-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full"
                 initial={{ width: 0 }}
                 animate={{ width: `${Math.min(percentage, 100)}%` }}
                 transition={{ duration: 1, ease: "easeOut" }}
               />
             </div>
             <div className="flex justify-between text-xs">
-              <span className="text-cyan-400">{formatCurrency(feature.raisedAmountCents)}</span>
-              <span className="text-gray-500">Goal: {formatCurrency(feature.goalAmountCents)}</span>
+              <span className="text-cyan-400 font-semibold">{formatCurrency(feature.raisedAmountCents)}</span>
+              <span className="text-gray-400">Goal: {formatCurrency(feature.goalAmountCents)}</span>
             </div>
           </div>
 
           {feature.targetRelease && (
-            <div className="flex items-center gap-1 text-xs text-gray-400">
+            <div className="flex items-center gap-1 text-xs text-gray-300">
               <Clock className="w-3 h-3" />
               <span>Target: {feature.targetRelease}</span>
             </div>
@@ -301,7 +336,7 @@ function FeatureCard({ feature }: { feature: CrowdfundFeature }) {
           <Dialog>
             <DialogTrigger asChild>
               <Button 
-                className="w-full bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500"
+                className="w-full bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:opacity-90 border-0"
                 data-testid={`button-fund-${feature.id}`}
               >
                 <Heart className="w-4 h-4 mr-2" />
@@ -313,7 +348,7 @@ function FeatureCard({ feature }: { feature: CrowdfundFeature }) {
             </DialogContent>
           </Dialog>
         </div>
-      </GlassCard>
+      </div>
     </motion.div>
   );
 }
@@ -442,7 +477,7 @@ export default function CrowdfundPage() {
           className="text-center mb-12"
         >
           <div className="flex items-center justify-center gap-3 mb-4">
-            <img src={darkwaveLogo} alt="DarkWave" className="w-12 h-12" />
+            <img src={darkwaveLogo} alt="DarkWave" className="w-12 h-12 flex-shrink-0 object-contain" />
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               Development Fund
             </h1>
@@ -458,17 +493,44 @@ export default function CrowdfundPage() {
           transition={{ delay: 0.1 }}
           className="mb-12"
         >
-          <GlassCard className="p-8 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
+          <div 
+            className="relative overflow-hidden rounded-2xl"
+            style={{
+              boxShadow: "0 0 60px rgba(0,200,255,0.15), inset 0 1px 0 rgba(255,255,255,0.1)",
+            }}
+          >
+            <div className="absolute inset-0">
+              <img 
+                src={blockchainBg} 
+                alt="DarkWave Development"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/50" />
+            </div>
+            
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500" />
+            
+            <div className="absolute inset-0 opacity-20 pointer-events-none" style={{
+              background: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.02) 10px, rgba(255,255,255,0.02) 20px)",
+            }} />
+            
+            <div className="relative z-10 p-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-white mb-2">{campaign?.name || "Development Fund"}</h2>
-                <p className="text-gray-400">{campaign?.description}</p>
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <img src={darkwaveLogo} alt="DWC" className="w-16 h-16 object-contain flex-shrink-0" />
+                  <div className="absolute inset-0 animate-pulse bg-cyan-400/20 rounded-full blur-xl" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-1">{campaign?.name || "DarkWave Development Fund"}</h2>
+                  <p className="text-gray-300">{campaign?.description || "Support the future of decentralized technology"}</p>
+                </div>
               </div>
               <Dialog>
                 <DialogTrigger asChild>
                   <Button 
                     size="lg" 
-                    className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 px-8"
+                    className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:opacity-90 px-8 border-0"
                     data-testid="button-donate-main"
                   >
                     <Gift className="w-5 h-5 mr-2" />
@@ -488,26 +550,27 @@ export default function CrowdfundPage() {
             />
 
             <div className="grid grid-cols-3 gap-4 mt-6">
-              <div className="text-center p-4 bg-gray-800/50 rounded-lg">
+              <div className="text-center p-4 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10">
                 <p className="text-2xl font-bold text-cyan-400">
                   {formatCurrency(stats?.totalRaised || 0)}
                 </p>
                 <p className="text-sm text-gray-400">Total Raised</p>
               </div>
-              <div className="text-center p-4 bg-gray-800/50 rounded-lg">
+              <div className="text-center p-4 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10">
                 <p className="text-2xl font-bold text-purple-400">
                   {stats?.contributorCount || 0}
                 </p>
                 <p className="text-sm text-gray-400">Contributors</p>
               </div>
-              <div className="text-center p-4 bg-gray-800/50 rounded-lg">
+              <div className="text-center p-4 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10">
                 <p className="text-2xl font-bold text-pink-400">
                   {features.length}
                 </p>
                 <p className="text-sm text-gray-400">Features Planned</p>
               </div>
             </div>
-          </GlassCard>
+            </div>
+          </div>
         </motion.div>
 
         <motion.div

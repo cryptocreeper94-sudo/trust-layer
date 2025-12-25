@@ -28,6 +28,7 @@ const navItems = [
   { href: "/network", label: "Network Stats", icon: TrendingUp },
   { href: "/validators", label: "Validators", icon: FileText },
   { href: "/developers", label: "Developers", icon: Code },
+  { href: "/presale", label: "Token Presale", icon: Coins, badge: "Live" },
   { href: "/crowdfund", label: "Fund Development", icon: Heart, badge: "Support" },
   { href: "/webhooks", label: "Webhooks", icon: Webhook },
   { href: "/studio", label: "Dev Studio", icon: Sparkles },
