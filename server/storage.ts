@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type InsertRoadmapVote, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
 import crypto from "crypto";
@@ -176,6 +176,16 @@ export interface IStorage {
   removeVote(featureId: string, oderId: string): Promise<boolean>;
   getUserVotes(oderId: string): Promise<string[]>;
   hasUserVoted(featureId: string, oderId: string): Promise<boolean>;
+  
+  // Crowdfunding
+  getCrowdfundCampaign(id: string): Promise<CrowdfundCampaign | undefined>;
+  getActiveCampaign(): Promise<CrowdfundCampaign | undefined>;
+  getCrowdfundFeatures(campaignId?: string): Promise<CrowdfundFeature[]>;
+  getCrowdfundFeature(id: string): Promise<CrowdfundFeature | undefined>;
+  createCrowdfundContribution(data: InsertCrowdfundContribution): Promise<CrowdfundContribution>;
+  updateCrowdfundContribution(id: string, data: Partial<InsertCrowdfundContribution>): Promise<CrowdfundContribution | undefined>;
+  getRecentContributions(limit?: number): Promise<CrowdfundContribution[]>;
+  getCrowdfundStats(): Promise<{ totalRaised: number; goalAmount: number; contributorCount: number }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1349,6 +1359,84 @@ export class DatabaseStorage implements IStorage {
       .from(roadmapVotes)
       .where(sql`${roadmapVotes.featureId} = ${featureId} AND ${roadmapVotes.oderId} = ${oderId}`);
     return !!vote;
+  }
+
+  // Crowdfunding methods
+  async getCrowdfundCampaign(id: string): Promise<CrowdfundCampaign | undefined> {
+    const [campaign] = await db.select().from(crowdfundCampaigns).where(eq(crowdfundCampaigns.id, id));
+    return campaign;
+  }
+
+  async getActiveCampaign(): Promise<CrowdfundCampaign | undefined> {
+    const [campaign] = await db.select().from(crowdfundCampaigns).where(eq(crowdfundCampaigns.isActive, true));
+    return campaign;
+  }
+
+  async getCrowdfundFeatures(campaignId?: string): Promise<CrowdfundFeature[]> {
+    if (campaignId) {
+      return db.select().from(crowdfundFeatures)
+        .where(eq(crowdfundFeatures.campaignId, campaignId))
+        .orderBy(desc(crowdfundFeatures.priority));
+    }
+    return db.select().from(crowdfundFeatures).orderBy(desc(crowdfundFeatures.priority));
+  }
+
+  async getCrowdfundFeature(id: string): Promise<CrowdfundFeature | undefined> {
+    const [feature] = await db.select().from(crowdfundFeatures).where(eq(crowdfundFeatures.id, id));
+    return feature;
+  }
+
+  async createCrowdfundContribution(data: InsertCrowdfundContribution): Promise<CrowdfundContribution> {
+    const transparencyHash = crypto.createHash('sha256')
+      .update(`${data.amountCents}-${data.userId || 'anon'}-${Date.now()}`)
+      .digest('hex').substring(0, 16).toUpperCase();
+    
+    const [contribution] = await db.insert(crowdfundContributions)
+      .values({ ...data, transparencyHash })
+      .returning();
+    return contribution;
+  }
+
+  async updateCrowdfundContribution(id: string, data: Partial<InsertCrowdfundContribution>): Promise<CrowdfundContribution | undefined> {
+    const [contribution] = await db.update(crowdfundContributions)
+      .set(data)
+      .where(eq(crowdfundContributions.id, id))
+      .returning();
+    
+    if (contribution && data.status === 'confirmed') {
+      if (contribution.campaignId) {
+        await db.update(crowdfundCampaigns)
+          .set({ raisedAmountCents: sql`${crowdfundCampaigns.raisedAmountCents} + ${contribution.amountCents}` })
+          .where(eq(crowdfundCampaigns.id, contribution.campaignId));
+      }
+      if (contribution.featureId) {
+        await db.update(crowdfundFeatures)
+          .set({ raisedAmountCents: sql`${crowdfundFeatures.raisedAmountCents} + ${contribution.amountCents}` })
+          .where(eq(crowdfundFeatures.id, contribution.featureId));
+      }
+    }
+    
+    return contribution;
+  }
+
+  async getRecentContributions(limit: number = 20): Promise<CrowdfundContribution[]> {
+    return db.select().from(crowdfundContributions)
+      .where(eq(crowdfundContributions.status, 'confirmed'))
+      .orderBy(desc(crowdfundContributions.createdAt))
+      .limit(limit);
+  }
+
+  async getCrowdfundStats(): Promise<{ totalRaised: number; goalAmount: number; contributorCount: number }> {
+    const campaign = await this.getActiveCampaign();
+    const [contributorResult] = await db.select({ count: count() })
+      .from(crowdfundContributions)
+      .where(eq(crowdfundContributions.status, 'confirmed'));
+    
+    return {
+      totalRaised: campaign?.raisedAmountCents || 0,
+      goalAmount: campaign?.goalAmountCents || 0,
+      contributorCount: contributorResult?.count || 0,
+    };
   }
 }
 

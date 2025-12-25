@@ -2426,6 +2426,214 @@ export async function registerRoutes(
     }
   });
 
+  // === CROWDFUNDING ROUTES ===
+  app.get("/api/crowdfund/campaign", async (_req, res) => {
+    try {
+      const campaign = await storage.getActiveCampaign();
+      if (!campaign) {
+        return res.status(404).json({ error: "No active campaign" });
+      }
+      res.json(campaign);
+    } catch (error) {
+      console.error("Get campaign error:", error);
+      res.status(500).json({ error: "Failed to fetch campaign" });
+    }
+  });
+
+  app.get("/api/crowdfund/features", async (_req, res) => {
+    try {
+      const features = await storage.getCrowdfundFeatures();
+      res.json(features);
+    } catch (error) {
+      console.error("Get crowdfund features error:", error);
+      res.status(500).json({ error: "Failed to fetch features" });
+    }
+  });
+
+  app.get("/api/crowdfund/stats", async (_req, res) => {
+    try {
+      const stats = await storage.getCrowdfundStats();
+      res.json(stats);
+    } catch (error) {
+      console.error("Get crowdfund stats error:", error);
+      res.status(500).json({ error: "Failed to fetch stats" });
+    }
+  });
+
+  app.get("/api/crowdfund/contributions", async (_req, res) => {
+    try {
+      const contributions = await storage.getRecentContributions(50);
+      res.json(contributions);
+    } catch (error) {
+      console.error("Get contributions error:", error);
+      res.status(500).json({ error: "Failed to fetch contributions" });
+    }
+  });
+
+  app.post("/api/crowdfund/checkout", async (req, res) => {
+    try {
+      const { amountCents, featureId, displayName, isAnonymous, message } = req.body;
+      
+      if (!amountCents || amountCents < 100) {
+        return res.status(400).json({ error: "Minimum donation is $1.00" });
+      }
+
+      const campaign = await storage.getActiveCampaign();
+      if (!campaign) {
+        return res.status(404).json({ error: "No active campaign" });
+      }
+
+      const user = req.user as any;
+      
+      const contribution = await storage.createCrowdfundContribution({
+        campaignId: campaign.id,
+        featureId: featureId || null,
+        userId: user?.id || null,
+        displayName: isAnonymous ? null : (displayName || user?.firstName || null),
+        amountCents,
+        currency: "USD",
+        paymentMethod: "stripe",
+        isAnonymous: isAnonymous || false,
+        message: message || null,
+        status: "pending",
+      });
+
+      const stripe = await import("stripe");
+      const stripeClient = new stripe.default(process.env.STRIPE_SECRET_KEY || "", {
+        apiVersion: "2025-04-30.basil",
+      });
+
+      const session = await stripeClient.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [{
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: featureId ? "Feature Funding Contribution" : "DarkWave Dev Fund Contribution",
+              description: "Transparent blockchain development funding",
+            },
+            unit_amount: amountCents,
+          },
+          quantity: 1,
+        }],
+        mode: "payment",
+        success_url: `${req.headers.origin || 'https://dwsc.io'}/crowdfund?success=true&contribution=${contribution.id}`,
+        cancel_url: `${req.headers.origin || 'https://dwsc.io'}/crowdfund?canceled=true`,
+        metadata: {
+          contributionId: contribution.id,
+          campaignId: campaign.id,
+          featureId: featureId || "",
+        },
+      });
+
+      await storage.updateCrowdfundContribution(contribution.id, {
+        stripePaymentIntentId: session.id,
+      });
+
+      res.json({ url: session.url, contributionId: contribution.id });
+    } catch (error) {
+      console.error("Crowdfund checkout error:", error);
+      res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  app.post("/api/crowdfund/confirm/:contributionId", async (req, res) => {
+    try {
+      const { contributionId } = req.params;
+      
+      const contribution = await storage.updateCrowdfundContribution(contributionId, {
+        status: "confirmed",
+      });
+
+      if (!contribution) {
+        return res.status(404).json({ error: "Contribution not found" });
+      }
+
+      res.json({ success: true, contribution });
+    } catch (error) {
+      console.error("Confirm contribution error:", error);
+      res.status(500).json({ error: "Failed to confirm contribution" });
+    }
+  });
+
+  // === COMMUNITY ROADMAP ROUTES ===
+  app.get("/api/roadmap/features", async (_req, res) => {
+    try {
+      const features = await storage.getRoadmapFeatures();
+      res.json(features);
+    } catch (error) {
+      console.error("Get roadmap features error:", error);
+      res.status(500).json({ error: "Failed to fetch features" });
+    }
+  });
+
+  app.get("/api/roadmap/features/:id", async (req, res) => {
+    try {
+      const feature = await storage.getRoadmapFeature(req.params.id);
+      if (!feature) {
+        return res.status(404).json({ error: "Feature not found" });
+      }
+      res.json(feature);
+    } catch (error) {
+      console.error("Get feature error:", error);
+      res.status(500).json({ error: "Failed to fetch feature" });
+    }
+  });
+
+  app.post("/api/roadmap/features/:id/vote", isAuthenticated, async (req, res) => {
+    try {
+      const user = req.user as any;
+      if (!user?.id) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const feature = await storage.getRoadmapFeature(req.params.id);
+      if (!feature) {
+        return res.status(404).json({ error: "Feature not found" });
+      }
+
+      const success = await storage.voteForFeature(req.params.id, user.id);
+      if (!success) {
+        return res.status(400).json({ error: "Already voted for this feature" });
+      }
+      
+      res.json({ success: true, message: "Vote recorded" });
+    } catch (error) {
+      console.error("Vote error:", error);
+      res.status(500).json({ error: "Failed to record vote" });
+    }
+  });
+
+  app.delete("/api/roadmap/features/:id/vote", isAuthenticated, async (req, res) => {
+    try {
+      const user = req.user as any;
+      if (!user?.id) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+
+      await storage.removeVote(req.params.id, user.id);
+      res.json({ success: true, message: "Vote removed" });
+    } catch (error) {
+      console.error("Remove vote error:", error);
+      res.status(500).json({ error: "Failed to remove vote" });
+    }
+  });
+
+  app.get("/api/roadmap/my-votes", isAuthenticated, async (req, res) => {
+    try {
+      const user = req.user as any;
+      if (!user?.id) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+
+      const votes = await storage.getUserVotes(user.id);
+      res.json(votes);
+    } catch (error) {
+      console.error("Get user votes error:", error);
+      res.status(500).json({ error: "Failed to fetch votes" });
+    }
+  });
+
   // === BILLING ROUTES ===
   app.get("/api/billing/usage", async (req, res) => {
     try {

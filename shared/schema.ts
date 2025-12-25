@@ -2077,3 +2077,79 @@ export const insertRoadmapVoteSchema = createInsertSchema(roadmapVotes).omit({
 
 export type RoadmapVote = typeof roadmapVotes.$inferSelect;
 export type InsertRoadmapVote = z.infer<typeof insertRoadmapVoteSchema>;
+
+// Crowdfunding System
+export const crowdfundCampaigns = pgTable("crowdfund_campaigns", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  goalAmountCents: integer("goal_amount_cents").notNull().default(0),
+  raisedAmountCents: integer("raised_amount_cents").notNull().default(0),
+  currency: text("currency").notNull().default("USD"),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertCrowdfundCampaignSchema = createInsertSchema(crowdfundCampaigns).omit({
+  id: true,
+  raisedAmountCents: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type CrowdfundCampaign = typeof crowdfundCampaigns.$inferSelect;
+export type InsertCrowdfundCampaign = z.infer<typeof insertCrowdfundCampaignSchema>;
+
+export const crowdfundFeatures = pgTable("crowdfund_features", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  campaignId: varchar("campaign_id").references(() => crowdfundCampaigns.id),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  category: text("category").notNull().default("general"),
+  goalAmountCents: integer("goal_amount_cents").notNull().default(0),
+  raisedAmountCents: integer("raised_amount_cents").notNull().default(0),
+  status: text("status").notNull().default("proposed"),
+  priority: integer("priority").notNull().default(0),
+  targetRelease: text("target_release"),
+  imageUrl: text("image_url"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertCrowdfundFeatureSchema = createInsertSchema(crowdfundFeatures).omit({
+  id: true,
+  raisedAmountCents: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type CrowdfundFeature = typeof crowdfundFeatures.$inferSelect;
+export type InsertCrowdfundFeature = z.infer<typeof insertCrowdfundFeatureSchema>;
+
+export const crowdfundContributions = pgTable("crowdfund_contributions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  campaignId: varchar("campaign_id").references(() => crowdfundCampaigns.id),
+  featureId: varchar("feature_id").references(() => crowdfundFeatures.id),
+  userId: text("user_id"),
+  displayName: text("display_name"),
+  amountCents: integer("amount_cents").notNull(),
+  currency: text("currency").notNull().default("USD"),
+  paymentMethod: text("payment_method").notNull().default("stripe"),
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
+  cryptoTxHash: text("crypto_tx_hash"),
+  transparencyHash: text("transparency_hash"),
+  status: text("status").notNull().default("pending"),
+  isAnonymous: boolean("is_anonymous").notNull().default(false),
+  message: text("message"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertCrowdfundContributionSchema = createInsertSchema(crowdfundContributions).omit({
+  id: true,
+  transparencyHash: true,
+  createdAt: true,
+});
+
+export type CrowdfundContribution = typeof crowdfundContributions.$inferSelect;
+export type InsertCrowdfundContribution = z.infer<typeof insertCrowdfundContributionSchema>;
