@@ -658,9 +658,9 @@ export default function CrashGame() {
         }
       } else {
         const elapsed = (Date.now() - roundStartTimeRef.current) / 1000;
-        const baseMultiplier = 1.0;
-        const growthRate = 0.06;
-        const newMultiplier = baseMultiplier * Math.exp(growthRate * elapsed);
+        const baseGrowth = 0.10;
+        const acceleration = 0.015;
+        const newMultiplier = 1.0 + (baseGrowth * elapsed) + (acceleration * elapsed * elapsed);
         
         if (newMultiplier >= crashPointRef.current) {
           const finalCrash = crashPointRef.current;
@@ -1105,44 +1105,127 @@ export default function CrashGame() {
                   )}
                 </AnimatePresence>
 
-                <div className="relative h-44 sm:h-56 md:h-64 rounded-xl bg-gradient-to-b from-black/80 via-purple-950/50 to-black/80 border border-purple-500/20 overflow-hidden">
+                <div className="relative h-52 sm:h-64 md:h-80 rounded-xl bg-gradient-to-b from-black/90 via-purple-950/40 to-black/90 border border-purple-500/20 overflow-hidden">
                   <NeonWaveform multiplier={multiplier} crashed={crashed} progress={(multiplier - 1) / 10} />
                   
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <div className="absolute right-2 sm:right-4 top-4 bottom-4 w-8 sm:w-10 flex flex-col justify-between items-end z-10">
+                    {[7, 6, 5, 4, 3, 2, 1.5, 1].map((tick, i) => {
+                      const isActive = multiplier >= tick;
+                      const isPassed = multiplier > tick + 0.5;
+                      return (
+                        <div key={tick} className="flex items-center gap-1 sm:gap-2">
+                          <div className={`h-px w-2 sm:w-3 transition-all duration-200 ${
+                            isActive ? (crashed ? "bg-red-500" : "bg-cyan-400") : "bg-white/20"
+                          }`} />
+                          <span className={`text-[8px] sm:text-[10px] font-mono transition-all duration-200 ${
+                            isActive 
+                              ? (crashed ? "text-red-400" : isPassed ? "text-cyan-400/60" : "text-cyan-400 font-bold") 
+                              : "text-white/30"
+                          }`}>
+                            {tick.toFixed(tick % 1 === 0 ? 0 : 1)}x
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  
+                  <motion.div 
+                    className="absolute left-4 sm:left-8 md:left-16 w-20 sm:w-24 flex justify-center z-20"
+                    style={{ 
+                      bottom: `${Math.min(Math.max(5, (multiplier - 1) * 12), 85)}%`,
+                    }}
+                    animate={{
+                      bottom: `${Math.min(Math.max(5, (multiplier - 1) * 12), 85)}%`,
+                    }}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  >
                     <DarkWaveHovercraft 
                       multiplier={multiplier} 
                       crashed={crashed} 
                       cashedOut={cashedOut} 
                       hasPartialCashout={partialCashouts.length > 0}
                     />
-                    
-                    <motion.div
-                      className={`mt-2 sm:mt-4 text-4xl sm:text-5xl md:text-7xl font-bold font-mono z-10 ${
-                        crashed ? "text-red-500" : 
-                        cashedOut ? "text-green-400" : 
-                        multiplier >= 10 ? "text-cyan-400" :
-                        multiplier >= 5 ? "text-purple-400" :
-                        "text-white"
-                      }`}
-                      animate={{ 
-                        scale: crashed ? [1, 1.2, 1] : cashedOut ? [1, 1.1, 1] : 1,
-                      }}
-                    >
-                      {roundStatus === "waiting" ? (
-                        <span className="text-2xl sm:text-3xl md:text-5xl text-purple-400">NEXT ROUND</span>
-                      ) : (
-                        `${multiplier.toFixed(2)}x`
-                      )}
-                    </motion.div>
+                  </motion.div>
+                  
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30 pointer-events-none">
+                    {roundStatus === "waiting" ? (
+                      <motion.div
+                        animate={{ scale: [1, 1.05, 1], opacity: [0.8, 1, 0.8] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="text-center"
+                      >
+                        <div className="text-xs sm:text-sm text-purple-400/80 uppercase tracking-widest mb-1">Next Round</div>
+                        <div 
+                          className="text-4xl sm:text-5xl md:text-7xl font-black font-mono text-purple-400"
+                          style={{
+                            textShadow: "0 4px 0 rgba(88,28,135,0.8), 0 8px 20px rgba(168,85,247,0.5), 0 0 60px rgba(168,85,247,0.3)",
+                          }}
+                        >
+                          {countdown}s
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <>
+                        <div className="text-[10px] sm:text-xs text-white/60 uppercase tracking-widest mb-1 sm:mb-2">
+                          {crashed ? "Crashed At" : cashedOut ? "Cashed Out" : "Current Payout"}
+                        </div>
+                        <motion.div
+                          className={`text-5xl sm:text-6xl md:text-8xl font-black font-mono relative ${
+                            crashed ? "text-red-500" : 
+                            cashedOut ? "text-green-400" : 
+                            multiplier >= 10 ? "text-cyan-400" :
+                            multiplier >= 5 ? "text-purple-400" :
+                            multiplier >= 2 ? "text-pink-400" :
+                            "text-white"
+                          }`}
+                          style={{
+                            textShadow: crashed 
+                              ? "0 4px 0 rgba(127,29,29,1), 0 8px 0 rgba(69,10,10,0.8), 0 12px 30px rgba(239,68,68,0.6), 0 0 80px rgba(239,68,68,0.4)"
+                              : cashedOut
+                              ? "0 4px 0 rgba(21,128,61,1), 0 8px 0 rgba(5,46,22,0.8), 0 12px 30px rgba(34,197,94,0.6), 0 0 80px rgba(34,197,94,0.4)"
+                              : multiplier >= 5
+                              ? "0 4px 0 rgba(88,28,135,1), 0 8px 0 rgba(46,16,101,0.8), 0 12px 30px rgba(168,85,247,0.6), 0 0 80px rgba(168,85,247,0.4)"
+                              : "0 4px 0 rgba(75,0,130,0.8), 0 8px 20px rgba(168,85,247,0.5), 0 0 60px rgba(168,85,247,0.3)",
+                            letterSpacing: "-0.02em",
+                          }}
+                          animate={{ 
+                            scale: crashed ? [1, 1.1, 1] : cashedOut ? [1, 1.15, 1.1] : [1, 1.02, 1],
+                            textShadow: crashed ? undefined : cashedOut ? undefined : [
+                              "0 4px 0 rgba(75,0,130,0.8), 0 8px 20px rgba(168,85,247,0.5), 0 0 60px rgba(168,85,247,0.3)",
+                              "0 4px 0 rgba(75,0,130,0.9), 0 8px 25px rgba(168,85,247,0.7), 0 0 80px rgba(168,85,247,0.5)",
+                              "0 4px 0 rgba(75,0,130,0.8), 0 8px 20px rgba(168,85,247,0.5), 0 0 60px rgba(168,85,247,0.3)",
+                            ],
+                          }}
+                          transition={{ 
+                            duration: crashed || cashedOut ? 0.3 : 0.8,
+                            repeat: crashed || cashedOut ? 0 : Infinity,
+                          }}
+                        >
+                          {multiplier.toFixed(2)}x
+                        </motion.div>
+                        
+                        {hasBet && !cashedOut && !crashed && ridingAmount > 0 && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mt-2 sm:mt-3 px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg bg-green-500/20 border border-green-500/40"
+                          >
+                            <span className="text-green-400 font-mono text-sm sm:text-base font-bold">
+                              +{(ridingAmount * multiplier * (1 - HOUSE_EDGE)).toFixed(2)} DWC
+                            </span>
+                          </motion.div>
+                        )}
+                      </>
+                    )}
                     
                     {crashed && crashPoint && (
                       <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="mt-2"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="mt-2 sm:mt-3"
                       >
-                        <Badge className="bg-red-500/30 text-red-400 border-red-500/50 text-lg px-4 py-1">
-                          CRASHED @ {crashPoint.toFixed(2)}x
+                        <Badge className="bg-red-500/30 text-red-400 border-red-500/50 text-sm sm:text-lg px-3 sm:px-4 py-1">
+                          BUSTED
                         </Badge>
                       </motion.div>
                     )}
