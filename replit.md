@@ -122,7 +122,24 @@ attached_assets/generated_images/
 ├── cyberpunk_neon_city.png (urban/tech)
 ├── medieval_fantasy_kingdom.png (fantasy/governance)
 ├── quantum_dimension_realm.png (abstract/premium)
-└── darkwave_token_transparent.png (logo/branding)
+├── darkwave_token_transparent.png (logo/branding)
+├── ancient_egyptian_kingdom_sunset.png (Egyptian era)
+├── wild_west_frontier_town.png (Wild West era)
+├── victorian_london_street_scene.png (Victorian era)
+├── ancient_greek_athens_parthenon.png (Greek era)
+├── viking_longship_fjord_scene.png (Viking era)
+├── renaissance_florence_italy_scene.png (Renaissance era)
+├── roman_empire_colosseum_gladiators.png (Roman era)
+├── feudal_japan_samurai_castle.png (Japanese era)
+├── stone_age_village_scene.png (Prehistoric era)
+└── industrial_steampunk_city.png (Industrial era)
+```
+
+### Available Video Assets
+```
+attached_assets/generated_videos/
+├── fantasy_world_cinematic_flyover.mp4 (hero background, 8s)
+└── medieval_kingdom_establishing_shot.mp4 (medieval scenes, 6s)
 ```
 
 ### Color Palette
