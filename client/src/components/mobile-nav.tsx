@@ -10,7 +10,7 @@ import crowdfundImg from "@assets/generated_images/futuristic_blockchain_network
 import presaleImg from "@assets/generated_images/darkwave_crypto_token_coin_holographic.png";
 
 const featuredItems = [
-  { href: "/roadmap-chronicles", label: "DarkWave Chronicles", icon: Gamepad2, badge: "Game", image: chroniclesImg, overlayGradient: "linear-gradient(135deg, rgba(168,85,247,0.85) 0%, rgba(236,72,153,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#a855f7, #ec4899", badgeClass: "bg-purple-500/30 text-purple-300", description: "AI-Powered Fantasy Life Sim" },
+  { href: "/chronicles", label: "DarkWave Chronicles", icon: Gamepad2, badge: "Game", image: chroniclesImg, overlayGradient: "linear-gradient(135deg, rgba(168,85,247,0.85) 0%, rgba(236,72,153,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#a855f7, #ec4899", badgeClass: "bg-purple-500/30 text-purple-300", description: "AI-Powered Fantasy Life Sim" },
   { href: "/crowdfund", label: "Fund Development", icon: Heart, badge: "Support", image: crowdfundImg, overlayGradient: "linear-gradient(135deg, rgba(6,182,212,0.85) 0%, rgba(59,130,246,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#06b6d4, #3b82f6", badgeClass: "bg-cyan-500/30 text-cyan-300", description: "Help Build the Future" },
   { href: "/presale", label: "Token Presale", icon: Coins, badge: "Live", image: presaleImg, overlayGradient: "linear-gradient(135deg, rgba(245,158,11,0.85) 0%, rgba(239,68,68,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#f59e0b, #ef4444", badgeClass: "bg-amber-500/30 text-amber-300", description: "Get DWC at Best Price" },
 ];

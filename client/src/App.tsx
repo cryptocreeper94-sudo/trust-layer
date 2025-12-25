@@ -102,6 +102,7 @@ import PresaleSuccess from "@/pages/presale-success";
 import InvestmentSimulator from "@/pages/investment-simulator";
 import RoadmapChronicles from "@/pages/roadmap-chronicles";
 import RoadmapEcosystem from "@/pages/roadmap-ecosystem";
+import Chronicles from "@/pages/chronicles";
 import SocialFeed from "@/pages/social-feed";
 import Lottery from "@/pages/lottery";
 import AIAdvisor from "@/pages/ai-advisor";
@@ -149,6 +150,7 @@ function GamesRouter() {
         <Route path="/presale/success" component={PresaleSuccess} />
         <Route path="/investment-simulator" component={InvestmentSimulator} />
         <Route path="/roadmap" component={RoadmapEcosystem} />
+        <Route path="/chronicles" component={Chronicles} />
         <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
         <Route path="/roadmap-ecosystem" component={RoadmapEcosystem} />
         <Route path="/crash" component={Crash} />
@@ -275,6 +277,7 @@ function DWSCRouter() {
         <Route path="/presale/success" component={PresaleSuccess} />
         <Route path="/investment-simulator" component={InvestmentSimulator} />
         <Route path="/roadmap" component={RoadmapEcosystem} />
+        <Route path="/chronicles" component={Chronicles} />
         <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
         <Route path="/roadmap-ecosystem" component={RoadmapEcosystem} />
         <Route path="/sweepstakes-rules" component={SweepstakesRules} />
