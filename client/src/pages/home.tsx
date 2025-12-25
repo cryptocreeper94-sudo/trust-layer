@@ -314,33 +314,35 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
-            {[
-              { img: stoneAgeImg, era: "Dawn Age", desc: "Stone Age origins" },
-              { img: medievalImg, era: "Age of Crowns", desc: "Medieval kingdoms" },
-              { img: cyberpunkImg, era: "Neon Dominion", desc: "Cyberpunk future" },
-              { img: spaceImg, era: "Stellar Exodus", desc: "Space exploration" },
-            ].map((item, i) => (
-              <motion.div
-                key={item.era}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="relative group overflow-hidden rounded-xl aspect-[3/4]"
-              >
-                <img 
-                  src={item.img} 
-                  alt={item.era}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-3">
-                  <p className="font-bold text-white text-sm">{item.era}</p>
-                  <p className="text-[10px] text-gray-400">{item.desc}</p>
-                </div>
-              </motion.div>
-            ))}
+          <div className="overflow-hidden mb-8">
+            <div className="flex md:grid md:grid-cols-4 gap-3 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:overflow-visible">
+              {[
+                { img: stoneAgeImg, era: "Dawn Age", desc: "Stone Age origins" },
+                { img: medievalImg, era: "Age of Crowns", desc: "Medieval kingdoms" },
+                { img: cyberpunkImg, era: "Neon Dominion", desc: "Cyberpunk future" },
+                { img: spaceImg, era: "Stellar Exodus", desc: "Space exploration" },
+              ].map((item, i) => (
+                <motion.div
+                  key={item.era}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="relative group overflow-hidden rounded-xl shrink-0 w-[200px] h-[280px] md:w-auto md:h-auto md:aspect-[3/4] snap-center"
+                >
+                  <img 
+                    src={item.img} 
+                    alt={item.era}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <p className="font-bold text-white text-sm">{item.era}</p>
+                    <p className="text-[10px] text-gray-400">{item.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
