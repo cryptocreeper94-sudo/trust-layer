@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield } from "lucide-react";
+import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +28,7 @@ const navItems = [
   { href: "/network", label: "Network Stats", icon: TrendingUp },
   { href: "/validators", label: "Validators", icon: FileText },
   { href: "/developers", label: "Developers", icon: Code },
+  { href: "/crowdfund", label: "Fund Development", icon: Heart, badge: "Support" },
   { href: "/webhooks", label: "Webhooks", icon: Webhook },
   { href: "/studio", label: "Dev Studio", icon: Sparkles },
   { href: "/founder-program", label: "Founders", icon: Sparkles, badge: "VIP" },

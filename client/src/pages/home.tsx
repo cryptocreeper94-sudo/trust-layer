@@ -92,6 +92,10 @@ export default function Home() {
             <Link href="/staking" className="hover:text-primary transition-colors whitespace-nowrap">Staking</Link>
             <Link href="/explorer" className="hover:text-primary transition-colors whitespace-nowrap">Explorer</Link>
             <Link href="/developers" className="hover:text-primary transition-colors whitespace-nowrap">Developers</Link>
+            <Link href="/crowdfund" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
+              Fund Us
+              <Badge variant="outline" className="text-[9px] border-pink-500/50 text-pink-400 px-1 py-0">Support</Badge>
+            </Link>
             <Link href="/swap" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
               DeFi
               <Badge variant="outline" className="text-[9px] border-green-500/50 text-green-400 px-1 py-0">New</Badge>

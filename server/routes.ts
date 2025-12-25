@@ -2500,7 +2500,7 @@ export async function registerRoutes(
 
       const stripe = await import("stripe");
       const stripeClient = new stripe.default(process.env.STRIPE_SECRET_KEY || "", {
-        apiVersion: "2025-04-30.basil",
+        apiVersion: "2025-11-17.clover",
       });
 
       const session = await stripeClient.checkout.sessions.create({
