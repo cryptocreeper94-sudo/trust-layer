@@ -2783,6 +2783,148 @@ export async function registerRoutes(
     }
   });
 
+  // DWC Token Presale Routes
+  app.get("/api/presale/tiers", async (req, res) => {
+    try {
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      
+      const products = await stripe.products.search({
+        query: "metadata['category']:'presale'",
+      });
+      
+      const tiers = await Promise.all(
+        products.data.map(async (product) => {
+          const prices = await stripe.prices.list({ product: product.id, active: true });
+          return {
+            id: product.id,
+            name: product.name.replace("DWC ", "").replace(" Tier", ""),
+            description: product.description,
+            priceId: prices.data[0]?.id,
+            amount: prices.data[0]?.unit_amount || 0,
+            bonus: parseInt(product.metadata?.bonus_percent || "0"),
+            tier: product.metadata?.tier,
+          };
+        })
+      );
+      
+      tiers.sort((a, b) => b.amount - a.amount);
+      res.json({ tiers });
+    } catch (error) {
+      console.error("Failed to fetch presale tiers:", error);
+      res.status(500).json({ error: "Failed to fetch presale tiers" });
+    }
+  });
+
+  app.get("/api/presale/stats", async (req, res) => {
+    try {
+      const result = await db.execute(sql`
+        SELECT 
+          COALESCE(SUM(amount_cents), 0) as total_raised_cents,
+          COALESCE(COUNT(*), 0) as total_purchases,
+          COALESCE(COUNT(DISTINCT email), 0) as unique_holders
+        FROM presale_purchases 
+        WHERE status = 'completed'
+      `);
+      
+      const stats = result.rows[0] || { total_raised_cents: 0, total_purchases: 0, unique_holders: 0 };
+      const tokenPrice = 0.008;
+      const totalRaisedCents = parseInt(stats.total_raised_cents as string || "0");
+      const tokensSold = Math.floor((totalRaisedCents / 100) / tokenPrice);
+      
+      res.json({
+        totalRaisedCents,
+        totalRaisedUsd: totalRaisedCents / 100,
+        tokensSold,
+        uniqueHolders: parseInt(stats.unique_holders as string || "0"),
+        totalPurchases: parseInt(stats.total_purchases as string || "0"),
+      });
+    } catch (error) {
+      res.json({
+        totalRaisedCents: 0,
+        totalRaisedUsd: 0,
+        tokensSold: 0,
+        uniqueHolders: 0,
+        totalPurchases: 0,
+      });
+    }
+  });
+
+  app.post("/api/presale/checkout", async (req, res) => {
+    try {
+      const { priceId, email, tier } = req.body;
+      
+      if (!priceId) {
+        return res.status(400).json({ error: "Price ID required" });
+      }
+      
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      
+      const host = req.get("host") || "dwsc.io";
+      const protocol = host.includes("localhost") ? "http" : "https";
+      const baseUrl = `${protocol}://${host}`;
+      
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [{ price: priceId, quantity: 1 }],
+        mode: "payment",
+        success_url: `${baseUrl}/presale/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${baseUrl}/presale`,
+        customer_email: email,
+        metadata: {
+          type: "presale",
+          tier: tier || "unknown",
+        },
+      });
+      
+      res.json({ url: session.url, sessionId: session.id });
+    } catch (error) {
+      console.error("Presale checkout error:", error);
+      res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  app.get("/api/presale/verify", async (req, res) => {
+    try {
+      const sessionId = req.query.session_id as string;
+      if (!sessionId) {
+        return res.status(400).json({ error: "Session ID required" });
+      }
+      
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      
+      if (session.payment_status === "paid") {
+        await db.execute(sql`
+          INSERT INTO presale_purchases (session_id, email, amount_cents, tier, status, created_at)
+          VALUES (
+            ${sessionId}, 
+            ${session.customer_email || 'anonymous'}, 
+            ${session.amount_total || 0}, 
+            ${session.metadata?.tier || 'unknown'},
+            'completed',
+            NOW()
+          )
+          ON CONFLICT (session_id) DO NOTHING
+        `);
+        
+        res.json({ 
+          success: true, 
+          email: session.customer_email,
+          amountPaid: ((session.amount_total || 0) / 100).toFixed(2),
+          tier: session.metadata?.tier,
+        });
+      } else {
+        res.json({ success: false, message: "Payment not completed" });
+      }
+    } catch (error) {
+      console.error("Presale verification error:", error);
+      res.status(500).json({ error: "Failed to verify payment" });
+    }
+  });
+
   app.get("/api/billing/verify-payment", async (req, res) => {
     try {
       const sessionId = req.query.session_id as string;

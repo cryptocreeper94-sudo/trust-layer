@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { 
   Zap, Shield, TrendingUp, Users, Gift, Award, Crown, Sparkles,
   ArrowRight, Clock, CheckCircle, Copy, ExternalLink, Wallet,
-  Coins, Target, Globe, Lock, Star, Rocket, ChevronDown
+  Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { GlassCard } from "@/components/glass-card";
+import { useToast } from "@/hooks/use-toast";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
@@ -19,22 +21,26 @@ import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
 import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
 import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
 
-const PRESALE_CONFIG = {
-  tokenPrice: 0.008,
-  minPurchase: 100,
-  maxPurchase: 1000000,
-  totalSupply: 100000000,
-  presaleAllocation: 15000000,
-  soldTokens: 2847500,
-  startDate: new Date("2025-01-15"),
-  endDate: new Date("2026-02-14"),
-  tiers: [
-    { name: "Genesis", minAmount: 50000, bonus: 25, color: "from-yellow-400 to-amber-500" },
-    { name: "Founder", minAmount: 10000, bonus: 15, color: "from-purple-400 to-pink-500" },
-    { name: "Pioneer", minAmount: 1000, bonus: 10, color: "from-cyan-400 to-blue-500" },
-    { name: "Early Bird", minAmount: 100, bonus: 5, color: "from-green-400 to-emerald-500" },
-  ],
-};
+const TOKEN_PRICE = 0.008;
+const PRESALE_ALLOCATION = 15000000;
+
+interface PresaleTier {
+  id: string;
+  name: string;
+  description: string;
+  priceId: string;
+  amount: number;
+  bonus: number;
+  tier: string;
+}
+
+interface PresaleStats {
+  totalRaisedCents: number;
+  totalRaisedUsd: number;
+  tokensSold: number;
+  uniqueHolders: number;
+  totalPurchases: number;
+}
 
 const ECOSYSTEM_FEATURES = [
   {
@@ -108,8 +114,14 @@ function HolographicCard({ children, className = "", glow = "cyan" }: { children
 }
 
 function PresaleProgress() {
-  const progress = (PRESALE_CONFIG.soldTokens / PRESALE_CONFIG.presaleAllocation) * 100;
-  const raised = PRESALE_CONFIG.soldTokens * PRESALE_CONFIG.tokenPrice;
+  const { data: stats, isLoading } = useQuery<PresaleStats>({
+    queryKey: ["/api/presale/stats"],
+  });
+
+  const tokensSold = stats?.tokensSold || 0;
+  const totalRaised = stats?.totalRaisedUsd || 0;
+  const uniqueHolders = stats?.uniqueHolders || 0;
+  const progress = (tokensSold / PRESALE_ALLOCATION) * 100;
   
   return (
     <HolographicCard className="p-8" glow="cyan">
@@ -122,21 +134,33 @@ function PresaleProgress() {
         </div>
         <div>
           <h2 className="text-2xl font-bold text-white">DWC Token Presale</h2>
-          <p className="text-gray-400">Launching February 14, 2026</p>
+          <p className="text-gray-400">Launching October 2026</p>
         </div>
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-6">
         <div className="text-center p-4 rounded-xl bg-white/5" data-testid="stat-token-price">
-          <p className="text-3xl font-bold text-cyan-400">${PRESALE_CONFIG.tokenPrice}</p>
+          <p className="text-3xl font-bold text-cyan-400">${TOKEN_PRICE}</p>
           <p className="text-gray-500 text-sm">Token Price</p>
         </div>
         <div className="text-center p-4 rounded-xl bg-white/5" data-testid="stat-tokens-sold">
-          <p className="text-3xl font-bold text-purple-400">{(PRESALE_CONFIG.soldTokens / 1000000).toFixed(2)}M</p>
+          {isLoading ? (
+            <Loader2 className="w-6 h-6 animate-spin mx-auto text-purple-400" />
+          ) : (
+            <p className="text-3xl font-bold text-purple-400">
+              {tokensSold > 0 ? `${(tokensSold / 1000).toFixed(1)}K` : "0"}
+            </p>
+          )}
           <p className="text-gray-500 text-sm">Tokens Sold</p>
         </div>
         <div className="text-center p-4 rounded-xl bg-white/5" data-testid="stat-total-raised">
-          <p className="text-3xl font-bold text-pink-400">${(raised / 1000).toFixed(0)}K</p>
+          {isLoading ? (
+            <Loader2 className="w-6 h-6 animate-spin mx-auto text-pink-400" />
+          ) : (
+            <p className="text-3xl font-bold text-pink-400">
+              ${totalRaised > 0 ? totalRaised.toLocaleString() : "0"}
+            </p>
+          )}
           <p className="text-gray-500 text-sm">Raised</p>
         </div>
       </div>
@@ -150,30 +174,79 @@ function PresaleProgress() {
           <motion.div
             className="h-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full"
             initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
+            animate={{ width: `${Math.max(progress, 0.5)}%` }}
             transition={{ duration: 2, ease: "easeOut" }}
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.3)_50%,transparent_100%)] animate-pulse" />
         </div>
         <div className="flex justify-between text-xs text-gray-500">
-          <span>{PRESALE_CONFIG.soldTokens.toLocaleString()} DWC</span>
-          <span>{PRESALE_CONFIG.presaleAllocation.toLocaleString()} DWC</span>
+          <span>{tokensSold.toLocaleString()} DWC</span>
+          <span>{PRESALE_ALLOCATION.toLocaleString()} DWC</span>
         </div>
       </div>
 
-      <Button 
-        className="w-full py-6 text-lg font-bold bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:opacity-90"
-        data-testid="button-buy-tokens"
-      >
-        <Wallet className="w-5 h-5 mr-2" />
-        Buy DWC Tokens
-      </Button>
+      {uniqueHolders > 0 && (
+        <div className="mb-4 p-3 rounded-xl bg-green-500/10 border border-green-500/20 text-center">
+          <p className="text-green-400 text-sm">
+            <Users className="w-4 h-4 inline mr-2" />
+            {uniqueHolders} early adopters have joined
+          </p>
+        </div>
+      )}
+
+      <Link href="#tiers">
+        <Button 
+          className="w-full py-6 text-lg font-bold bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:opacity-90"
+          data-testid="button-buy-tokens"
+        >
+          <Wallet className="w-5 h-5 mr-2" />
+          {uniqueHolders === 0 ? "Be the First to Buy" : "Buy DWC Tokens"}
+        </Button>
+      </Link>
     </HolographicCard>
   );
 }
 
-function TierCard({ tier, index }: { tier: typeof PRESALE_CONFIG.tiers[0]; index: number }) {
+function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
+  const { toast } = useToast();
   const tierImages = [quantumRealm, deepSpace, cyberpunkCity, fantasyWorld];
+  const tierColors: Record<string, string> = {
+    genesis: "from-yellow-400 to-amber-500",
+    founder: "from-purple-400 to-pink-500",
+    pioneer: "from-cyan-400 to-blue-500",
+    early_bird: "from-green-400 to-emerald-500",
+  };
+  
+  const checkoutMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch("/api/presale/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          priceId: tier.priceId,
+          tier: tier.tier,
+        }),
+      });
+      if (!res.ok) throw new Error("Failed to create checkout");
+      return res.json();
+    },
+    onSuccess: (data) => {
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    },
+    onError: () => {
+      toast({
+        title: "Checkout Error",
+        description: "Failed to start checkout. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const color = tierColors[tier.tier] || "from-gray-400 to-gray-500";
+  const tokenAmount = Math.floor((tier.amount / 100) / TOKEN_PRICE);
+  const bonusTokens = Math.floor(tokenAmount * (tier.bonus / 100));
   
   return (
     <motion.div
@@ -181,14 +254,14 @@ function TierCard({ tier, index }: { tier: typeof PRESALE_CONFIG.tiers[0]; index
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
       className="relative group"
-      data-testid={`card-tier-${tier.name.toLowerCase()}`}
+      data-testid={`card-tier-${tier.tier}`}
     >
-      <div className={`absolute inset-0 bg-gradient-to-r ${tier.color} opacity-20 blur-xl group-hover:opacity-30 transition-opacity rounded-2xl`} />
+      <div className={`absolute inset-0 bg-gradient-to-r ${color} opacity-20 blur-xl group-hover:opacity-30 transition-opacity rounded-2xl`} />
       <div className="relative overflow-hidden rounded-2xl border border-white/10" style={{
         boxShadow: `0 0 40px rgba(0,200,255,0.15)`,
       }}>
         <div className="absolute inset-0">
-          <img src={tierImages[index]} alt={tier.name} className="w-full h-full object-cover opacity-30" />
+          <img src={tierImages[index % 4]} alt={tier.name} className="w-full h-full object-cover opacity-30" />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/50" />
         </div>
         <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
@@ -197,29 +270,32 @@ function TierCard({ tier, index }: { tier: typeof PRESALE_CONFIG.tiers[0]; index
         <div className="relative z-10 p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              {index === 0 && <Crown className="w-6 h-6 text-yellow-400" />}
-              {index === 1 && <Star className="w-6 h-6 text-purple-400" />}
-              {index === 2 && <Rocket className="w-6 h-6 text-cyan-400" />}
-              {index === 3 && <Gift className="w-6 h-6 text-green-400" />}
+              {tier.tier === "genesis" && <Crown className="w-6 h-6 text-yellow-400" />}
+              {tier.tier === "founder" && <Star className="w-6 h-6 text-purple-400" />}
+              {tier.tier === "pioneer" && <Rocket className="w-6 h-6 text-cyan-400" />}
+              {tier.tier === "early_bird" && <Gift className="w-6 h-6 text-green-400" />}
               <h3 className="text-xl font-bold text-white">{tier.name}</h3>
             </div>
-            <Badge className={`bg-gradient-to-r ${tier.color} text-white border-0`} data-testid={`badge-tier-bonus-${index}`}>
+            <Badge className={`bg-gradient-to-r ${color} text-white border-0`} data-testid={`badge-tier-bonus-${index}`}>
               +{tier.bonus}% Bonus
             </Badge>
           </div>
           <p className="text-gray-300">
-            Min: <span className="text-white font-semibold">${tier.minAmount.toLocaleString()}</span>
+            <span className="text-white font-semibold text-2xl">${(tier.amount / 100).toLocaleString()}</span>
           </p>
           <p className="text-sm text-gray-400 mt-2">
-            {tier.minAmount / PRESALE_CONFIG.tokenPrice >= 1000000 
-              ? `${(tier.minAmount / PRESALE_CONFIG.tokenPrice / 1000000).toFixed(1)}M` 
-              : `${(tier.minAmount / PRESALE_CONFIG.tokenPrice / 1000).toFixed(0)}K`} tokens + {tier.bonus}% bonus
+            {tokenAmount.toLocaleString()} tokens + {bonusTokens.toLocaleString()} bonus
           </p>
           <Button 
-            className={`w-full mt-4 bg-gradient-to-r ${tier.color} hover:opacity-90 border-0`}
-            data-testid={`button-select-tier-${tier.name.toLowerCase()}`}
+            onClick={() => checkoutMutation.mutate()}
+            disabled={checkoutMutation.isPending}
+            className={`w-full mt-4 bg-gradient-to-r ${color} hover:opacity-90 border-0`}
+            data-testid={`button-select-tier-${tier.tier}`}
           >
-            Select {tier.name}
+            {checkoutMutation.isPending ? (
+              <Loader2 className="w-4 h-4 animate-spin mr-2" />
+            ) : null}
+            Buy {tier.name}
           </Button>
         </div>
       </div>
@@ -273,111 +349,18 @@ function EcosystemCard({ feature, index }: { feature: typeof ECOSYSTEM_FEATURES[
   );
 }
 
-function HolderDashboard() {
-  const [walletAddress, setWalletAddress] = useState("");
-  const [isConnected, setIsConnected] = useState(false);
-  
-  const mockHolderData = {
-    totalTokens: 125000,
-    bonusTokens: 12500,
-    tier: "Pioneer",
-    earlyAdopterRank: 847,
-    totalInvested: 1000,
-    referralCode: "DWC-PIONEER-847",
-    referralCount: 3,
-    referralEarnings: 150,
-  };
-
-  return (
-    <HolographicCard className="p-8" glow="purple">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-          <Wallet className="w-6 h-6 text-white" />
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold text-white">Your DWC Account</h2>
-          <p className="text-gray-400">Early Adopter Dashboard</p>
-        </div>
-      </div>
-
-      {!isConnected ? (
-        <div className="space-y-4">
-          <Input
-            placeholder="Enter wallet address or email..."
-            value={walletAddress}
-            onChange={(e) => setWalletAddress(e.target.value)}
-            className="bg-white/5 border-white/10"
-            data-testid="input-wallet-address"
-          />
-          <Button 
-            onClick={() => setIsConnected(true)}
-            className="w-full bg-gradient-to-r from-purple-600 to-pink-600"
-            data-testid="button-connect-wallet"
-          >
-            Connect to View Stats
-          </Button>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20" data-testid="stat-holder-tokens">
-              <p className="text-gray-400 text-sm">Total Tokens</p>
-              <p className="text-2xl font-bold text-white">{mockHolderData.totalTokens.toLocaleString()}</p>
-              <p className="text-green-400 text-sm">+{mockHolderData.bonusTokens.toLocaleString()} bonus</p>
-            </div>
-            <div className="p-4 rounded-xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20" data-testid="stat-holder-invested">
-              <p className="text-gray-400 text-sm">Total Invested</p>
-              <p className="text-2xl font-bold text-white">${mockHolderData.totalInvested.toLocaleString()}</p>
-              <p className="text-cyan-400 text-sm">{mockHolderData.tier} Tier</p>
-            </div>
-          </div>
-
-          <div className="p-4 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20" data-testid="stat-holder-rank">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-gray-400 text-sm">Early Adopter Rank</p>
-              <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30" data-testid="badge-top-rank">Top 1000</Badge>
-            </div>
-            <p className="text-3xl font-bold text-white">#{mockHolderData.earlyAdopterRank}</p>
-            <div className="flex items-center gap-2 mt-2">
-              <CheckCircle className="w-4 h-4 text-green-400" />
-              <span className="text-green-400 text-sm">Eligible for Early Adopter Rewards</span>
-            </div>
-          </div>
-
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10" data-testid="referral-section">
-            <p className="text-gray-400 text-sm mb-2">Your Referral Code</p>
-            <div className="flex items-center gap-2">
-              <code className="flex-1 px-3 py-2 bg-black/30 rounded-lg text-cyan-400 font-mono text-sm" data-testid="text-referral-code">
-                {mockHolderData.referralCode}
-              </code>
-              <Button size="sm" variant="outline" className="border-white/10" data-testid="button-copy-referral">
-                <Copy className="w-4 h-4" />
-              </Button>
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <div>
-                <p className="text-gray-500 text-xs">Referrals</p>
-                <p className="text-white font-bold">{mockHolderData.referralCount}</p>
-              </div>
-              <div>
-                <p className="text-gray-500 text-xs">Earnings</p>
-                <p className="text-green-400 font-bold">${mockHolderData.referralEarnings}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </HolographicCard>
-  );
-}
-
 function PurchaseCalculator() {
-  const [amount, setAmount] = useState("1000");
+  const [amount, setAmount] = useState("100");
+  const { data: tiers } = useQuery<{ tiers: PresaleTier[] }>({
+    queryKey: ["/api/presale/tiers"],
+  });
+
   const usdAmount = parseFloat(amount) || 0;
-  const tokenAmount = usdAmount / PRESALE_CONFIG.tokenPrice;
+  const tokenAmount = usdAmount / TOKEN_PRICE;
   
-  const tier = PRESALE_CONFIG.tiers.find(t => usdAmount >= t.minAmount) || { bonus: 0, name: "Standard" };
-  const bonusTokens = tokenAmount * (tier.bonus / 100);
+  const matchedTier = tiers?.tiers?.find(t => usdAmount >= (t.amount / 100));
+  const bonusPercent = matchedTier?.bonus || 0;
+  const bonusTokens = tokenAmount * (bonusPercent / 100);
   const totalTokens = tokenAmount + bonusTokens;
 
   return (
@@ -405,7 +388,7 @@ function PurchaseCalculator() {
             <p className="text-xl font-bold text-white">{tokenAmount.toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
           </div>
           <div>
-            <p className="text-gray-500 text-sm">Bonus ({tier.bonus}%)</p>
+            <p className="text-gray-500 text-sm">Bonus ({bonusPercent}%)</p>
             <p className="text-xl font-bold text-green-400">+{bonusTokens.toLocaleString(undefined, { maximumFractionDigits: 0 })}</p>
           </div>
         </div>
@@ -419,24 +402,26 @@ function PurchaseCalculator() {
               </p>
             </div>
             <Badge className="bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border-cyan-500/30">
-              {tier.name} Tier
+              {matchedTier?.name || "Standard"} Tier
             </Badge>
           </div>
         </div>
 
-        <Button 
-          className="w-full py-6 text-lg font-bold bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600"
-          data-testid="button-purchase-tokens"
-        >
-          Purchase Tokens
-          <ArrowRight className="w-5 h-5 ml-2" />
-        </Button>
+        <p className="text-xs text-gray-500 text-center">
+          This calculator shows potential token allocation. Actual amounts determined at checkout.
+        </p>
       </div>
     </HolographicCard>
   );
 }
 
 export default function Presale() {
+  const { data: tiersData, isLoading: tiersLoading } = useQuery<{ tiers: PresaleTier[] }>({
+    queryKey: ["/api/presale/tiers"],
+  });
+
+  const tiers = tiersData?.tiers || [];
+
   return (
     <div className="min-h-screen bg-[#080c18] text-white">
       <div 
@@ -459,7 +444,7 @@ export default function Presale() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-6">
             <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span className="text-cyan-300 text-sm font-medium">Token Presale Live</span>
+            <span className="text-cyan-300 text-sm font-medium">Founders Preview - Early Access</span>
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold mb-6">
@@ -469,7 +454,7 @@ export default function Presale() {
           </h1>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto">
             Be among the first to own DWC tokens and unlock exclusive early adopter rewards. 
-            Our Layer 1 blockchain launches February 14, 2026.
+            Ground floor opportunity - this is where it all begins.
           </p>
         </motion.div>
 
@@ -478,21 +463,23 @@ export default function Presale() {
           <PurchaseCalculator />
         </div>
 
-        <div className="mb-16">
+        <div id="tiers" className="mb-16">
           <h2 className="text-3xl font-bold text-center mb-8">
             <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
               Early Adopter Tiers
             </span>
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {PRESALE_CONFIG.tiers.map((tier, index) => (
-              <TierCard key={tier.name} tier={tier} index={index} />
-            ))}
-          </div>
-        </div>
-
-        <div className="mb-16">
-          <HolderDashboard />
+          {tiersLoading ? (
+            <div className="flex justify-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-cyan-400" />
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {tiers.map((tier, index) => (
+                <TierCard key={tier.id} tier={tier} index={index} />
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="mb-16">
