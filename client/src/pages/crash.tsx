@@ -1100,78 +1100,65 @@ export default function CrashGame() {
         </div>
       </nav>
 
-      <main className="flex-1 pt-16 pb-4 px-2 md:px-4">
-        <div className="container mx-auto max-w-7xl">
-          <div className="mb-3">
-            <CrashHistoryStrip history={history} />
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
-            <div className="lg:col-span-3 space-y-3">
-              <GlassCard glow className="p-4 relative overflow-hidden">
-                <div className="flex items-center justify-between mb-3">
+      <main className="flex-1 pt-14 pb-2 px-2 lg:px-4 lg:h-[calc(100vh-56px)] lg:overflow-hidden">
+        <div className="container mx-auto max-w-[1600px] h-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-3 h-full lg:py-2">
+            
+            {/* LEFT: Game Canvas + History (Desktop: 7 cols, stays visible) */}
+            <div className="lg:col-span-7 flex flex-col gap-2 lg:h-full">
+              {/* Game Canvas - Main Bento Card */}
+              <div 
+                className="relative overflow-hidden rounded-2xl flex-1 min-h-[280px] lg:min-h-0"
+                style={{
+                  background: "linear-gradient(135deg, rgba(20,10,40,0.95) 0%, rgba(30,15,60,0.9) 50%, rgba(15,8,35,0.95) 100%)",
+                  boxShadow: "0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05), inset 0 1px 0 rgba(255,255,255,0.1), 0 0 80px rgba(168,85,247,0.15)",
+                  border: "1px solid rgba(168,85,247,0.2)",
+                  transform: "perspective(1000px) rotateX(1deg)",
+                  transformStyle: "preserve-3d",
+                }}
+              >
+                {/* Canvas Header Bar */}
+                <div className="absolute top-2 left-2 right-2 z-30 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="text-[10px] font-mono">
-                      Round #{roundNumber}
+                    <Badge 
+                      variant="outline" 
+                      className="text-[9px] font-mono bg-black/40 backdrop-blur-sm border-purple-500/30"
+                    >
+                      #{roundNumber}
                     </Badge>
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-6 text-[10px]"
+                      className="h-6 text-[9px] bg-black/30 backdrop-blur-sm hover:bg-green-500/20"
                       onClick={() => setShowFairness(!showFairness)}
                     >
                       <Shield className="w-3 h-3 mr-1 text-green-400" />
-                      Provably Fair
+                      Fair
                     </Button>
                   </div>
                   
                   {roundStatus === "waiting" && (
                     <motion.div
-                      animate={{ scale: [1, 1.05, 1] }}
+                      animate={{ scale: [1, 1.03, 1] }}
                       transition={{ duration: 0.5, repeat: Infinity }}
                     >
-                      <Badge className="bg-gradient-to-r from-yellow-500/30 to-orange-500/30 text-yellow-400 border-yellow-500/50 text-sm px-3">
+                      <Badge className="bg-gradient-to-r from-yellow-500/40 to-orange-500/40 backdrop-blur-sm text-yellow-400 border-yellow-500/50 text-xs px-2">
                         <Clock className="w-3 h-3 mr-1" />
-                        Starting in {countdown}s
+                        {countdown}s
                       </Badge>
                     </motion.div>
                   )}
                   
                   {roundStatus === "running" && (
-                    <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
+                    <Badge className="bg-green-500/30 backdrop-blur-sm text-green-400 border-green-500/50 text-xs">
                       <Zap className="w-3 h-3 mr-1" />
                       LIVE
                     </Badge>
                   )}
                 </div>
 
-                <AnimatePresence>
-                  {showFairness && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="mb-3 p-3 rounded-lg bg-green-500/10 border border-green-500/30"
-                    >
-                      <div className="flex items-center gap-2 mb-2">
-                        <Shield className="w-4 h-4 text-green-400" />
-                        <span className="text-sm font-medium text-green-400">Provably Fair Gaming</span>
-                      </div>
-                      <p className="text-xs text-muted-foreground mb-2">
-                        Each round's crash point is cryptographically pre-determined before betting opens.
-                      </p>
-                      <div className="p-2 rounded bg-black/30">
-                        <span className="text-[10px] text-muted-foreground block mb-1">Server Seed Hash:</span>
-                        <code className="text-[10px] font-mono text-green-400 break-all">
-                          {serverSeedHash}
-                        </code>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
                 <div 
-                  className="relative h-52 sm:h-64 md:h-80 rounded-2xl overflow-hidden touch-pan-y"
+                  className="absolute inset-0 rounded-2xl overflow-hidden touch-pan-y"
                   style={{
                     background: "linear-gradient(180deg, rgba(11,4,32,0.95) 0%, rgba(27,14,63,0.9) 50%, rgba(11,4,32,0.95) 100%)",
                     boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.3), 0 0 60px rgba(255,79,216,0.15), 0 0 100px rgba(76,244,255,0.1)",
@@ -1337,93 +1324,142 @@ export default function CrashGame() {
                   </div>
                 </div>
 
-                {hasBet && (
-                  <div className="mt-3">
-                    <LiveLedger secured={securedAmount} riding={ridingAmount} lost={lostAmount} />
-                    {partialCashouts.length > 0 && <PartialCashoutChips cashouts={partialCashouts} />}
+              </div>
+              
+              {/* History Strip - Pinned below canvas */}
+              <div 
+                className="rounded-xl p-2 lg:p-3"
+                style={{
+                  background: "linear-gradient(135deg, rgba(15,8,30,0.9) 0%, rgba(25,12,50,0.85) 100%)",
+                  boxShadow: "0 10px 30px -10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(168,85,247,0.15)",
+                }}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <History className="w-3 h-3 text-purple-400" />
+                  <span className="text-[10px] font-medium text-white/60">Last 10 Rounds</span>
+                </div>
+                <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
+                  {history.slice(0, 10).map((point, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      className={`flex-shrink-0 px-2 py-1 rounded-lg text-xs font-mono font-bold ${
+                        point >= 10 ? "bg-gradient-to-br from-yellow-500/30 to-amber-500/20 text-yellow-400 border border-yellow-500/40" :
+                        point >= 2 ? "bg-gradient-to-br from-green-500/30 to-emerald-500/20 text-green-400 border border-green-500/40" :
+                        "bg-gradient-to-br from-red-500/30 to-rose-500/20 text-red-400 border border-red-500/40"
+                      }`}
+                      style={{
+                        boxShadow: point >= 10 ? "0 4px 12px rgba(234,179,8,0.2)" : 
+                                   point >= 2 ? "0 4px 12px rgba(34,197,94,0.2)" : 
+                                   "0 4px 12px rgba(239,68,68,0.2)",
+                      }}
+                    >
+                      {point.toFixed(2)}x
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Live Ledger (when betting) */}
+              {hasBet && (
+                <div 
+                  className="rounded-xl p-2"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(15,8,30,0.9) 0%, rgba(25,12,50,0.85) 100%)",
+                    border: "1px solid rgba(168,85,247,0.15)",
+                  }}
+                >
+                  <LiveLedger secured={securedAmount} riding={ridingAmount} lost={lostAmount} />
+                  {partialCashouts.length > 0 && <PartialCashoutChips cashouts={partialCashouts} />}
+                </div>
+              )}
+            </div>
+            
+            {/* RIGHT: Controls Dock (Desktop: 5 cols) */}
+            <div className="lg:col-span-5 flex flex-col gap-2 lg:h-full lg:overflow-y-auto scrollbar-hide">
+              
+              {/* Bet Controls - Primary Bento Card */}
+              <div 
+                className="rounded-2xl p-3 lg:p-4"
+                style={{
+                  background: "linear-gradient(145deg, rgba(25,12,50,0.95) 0%, rgba(35,18,70,0.9) 50%, rgba(20,10,45,0.95) 100%)",
+                  boxShadow: "0 20px 40px -15px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05), inset 0 1px 0 rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(168,85,247,0.25)",
+                  transform: "perspective(800px) rotateX(0.5deg)",
+                }}
+              >
+                {/* Bet Amount Row */}
+                <div className="flex gap-2 mb-3">
+                  <div className="flex-1">
+                    <label className="text-[9px] text-white/50 mb-1 block uppercase tracking-wider">Bet Amount</label>
+                    <Input
+                      type="number"
+                      value={betAmount}
+                      onChange={(e) => setBetAmount(e.target.value)}
+                      className="h-10 bg-black/40 border-purple-500/30 text-base font-mono font-bold"
+                      disabled={roundStatus !== "waiting" || hasBet}
+                      data-testid="input-bet-amount"
+                    />
                   </div>
-                )}
-
-                <div className="mt-4 space-y-4">
-                  <GlassCard className="p-4 border-purple-500/30 bg-gradient-to-br from-purple-500/5 to-pink-500/5">
-                    <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-sm font-bold flex items-center gap-2">
-                        <Settings className="w-4 h-4 text-purple-400" />
-                        Bet Strategy
-                      </h3>
-                      <Badge variant="outline" className="text-[10px]">
-                        {getModeIcon(betMode)}
-                        <span className="ml-1 capitalize">{betMode === "autoTP" ? "Auto TP" : betMode === "autoProgressive" ? "Auto Progressive" : betMode}</span>
-                      </Badge>
-                    </div>
+                  <div className="flex gap-1 items-end">
+                    {["½", "2×", "Max"].map((btn) => (
+                      <Button
+                        key={btn}
+                        variant="outline"
+                        size="sm"
+                        className="h-10 px-2 text-[10px] border-purple-500/30 hover:bg-purple-500/20"
+                        disabled={roundStatus !== "waiting" || hasBet}
+                        onClick={() => {
+                          const current = parseFloat(betAmount) || 0;
+                          if (btn === "½") setBetAmount(Math.max(1, current / 2).toFixed(0));
+                          if (btn === "2×") setBetAmount(Math.min(demoBalance, current * 2).toFixed(0));
+                          if (btn === "Max") setBetAmount(demoBalance.toFixed(0));
+                        }}
+                      >
+                        {btn}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Strategy Tabs - Compact */}
+                <div className="mb-3">
+                  <Tabs value={betMode} onValueChange={(v) => setBetMode(v as BetMode)} className="w-full">
+                    <TabsList className="grid grid-cols-4 w-full bg-black/50 p-0.5 h-8">
+                      <TabsTrigger value="standard" className="text-[9px] py-1 data-[state=active]:bg-purple-500/40" disabled={roundStatus !== "waiting"}>
+                        <Target className="w-3 h-3 mr-1" />Std
+                      </TabsTrigger>
+                      <TabsTrigger value="progressive" className="text-[9px] py-1 data-[state=active]:bg-yellow-500/40" disabled={roundStatus !== "waiting"}>
+                        <Percent className="w-3 h-3 mr-1" />Prog
+                      </TabsTrigger>
+                      <TabsTrigger value="autoTP" className="text-[9px] py-1 data-[state=active]:bg-cyan-500/40" disabled={roundStatus !== "waiting"}>
+                        <Zap className="w-3 h-3 mr-1" />TP
+                      </TabsTrigger>
+                      <TabsTrigger value="autoProgressive" className="text-[9px] py-1 data-[state=active]:bg-green-500/40" disabled={roundStatus !== "waiting"}>
+                        <Layers className="w-3 h-3 mr-1" />Auto
+                      </TabsTrigger>
+                    </TabsList>
                     
-                    <Tabs value={betMode} onValueChange={(v) => setBetMode(v as BetMode)} className="w-full">
-                      <TabsList className="grid grid-cols-4 w-full bg-black/40 p-0.5 md:p-1 h-auto">
-                        <TabsTrigger 
-                          value="standard" 
-                          className="text-[8px] md:text-[10px] py-1.5 md:py-2 data-[state=active]:bg-purple-500/30 flex flex-col md:flex-row gap-0.5 md:gap-1"
-                          disabled={roundStatus !== "waiting"}
-                        >
-                          <Target className="w-3 h-3" />
-                          <span className="hidden sm:inline">Standard</span>
-                          <span className="sm:hidden">Std</span>
-                        </TabsTrigger>
-                        <TabsTrigger 
-                          value="progressive"
-                          className="text-[8px] md:text-[10px] py-1.5 md:py-2 data-[state=active]:bg-yellow-500/30 flex flex-col md:flex-row gap-0.5 md:gap-1"
-                          disabled={roundStatus !== "waiting"}
-                        >
-                          <Percent className="w-3 h-3" />
-                          <span className="hidden sm:inline">Progressive</span>
-                          <span className="sm:hidden">Prog</span>
-                        </TabsTrigger>
-                        <TabsTrigger 
-                          value="autoTP"
-                          className="text-[8px] md:text-[10px] py-1.5 md:py-2 data-[state=active]:bg-cyan-500/30 flex flex-col md:flex-row gap-0.5 md:gap-1"
-                          disabled={roundStatus !== "waiting"}
-                        >
-                          <Zap className="w-3 h-3" />
-                          <span>Auto TP</span>
-                        </TabsTrigger>
-                        <TabsTrigger 
-                          value="autoProgressive"
-                          className="text-[8px] md:text-[10px] py-1.5 md:py-2 data-[state=active]:bg-green-500/30 flex flex-col md:flex-row gap-0.5 md:gap-1"
-                          disabled={roundStatus !== "waiting"}
-                        >
-                          <Layers className="w-3 h-3" />
-                          <span className="hidden sm:inline">Auto Prog</span>
-                          <span className="sm:hidden">A.Prog</span>
-                        </TabsTrigger>
-                      </TabsList>
-                      
-                      <TabsContent value="standard" className="mt-3">
-                        <p className="text-xs text-muted-foreground">
-                          Manual cashout. Click the button anytime to take your winnings.
-                        </p>
+                    <div className="mt-2 p-2 rounded-lg bg-black/30 min-h-[50px]">
+                      <TabsContent value="standard" className="mt-0">
+                        <p className="text-[10px] text-white/50">Manual cashout anytime.</p>
                       </TabsContent>
-                      
-                      <TabsContent value="progressive" className="mt-3 space-y-3">
-                        <div>
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-xs text-muted-foreground">Cashout Percentage</span>
-                            <Badge className="bg-yellow-500/20 text-yellow-400 font-mono">{progressivePercent}%</Badge>
-                          </div>
-                          <Slider
-                            value={[progressivePercent]}
-                            onValueChange={(v) => setProgressivePercent(v[0])}
-                            min={1}
-                            max={99}
-                            step={1}
-                            disabled={roundStatus !== "waiting" && !hasBet}
-                            className="[&>span:first-child]:bg-yellow-500/30 [&_[role=slider]]:bg-yellow-500"
-                          />
+                      <TabsContent value="progressive" className="mt-0 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] text-white/50">Take %</span>
+                          <Badge className="bg-yellow-500/20 text-yellow-400 text-[10px] font-mono">{progressivePercent}%</Badge>
                         </div>
-                        <p className="text-[10px] text-muted-foreground">
-                          Cashout button takes {progressivePercent}% of your riding amount. Adjust slider during bet to take more or less.
-                        </p>
+                        <Slider
+                          value={[progressivePercent]}
+                          onValueChange={(v) => setProgressivePercent(v[0])}
+                          min={1} max={99} step={1}
+                          disabled={roundStatus !== "waiting" && !hasBet}
+                          className="[&>span:first-child]:bg-yellow-500/30 [&_[role=slider]]:bg-yellow-500"
+                        />
                       </TabsContent>
-                      
-                      <TabsContent value="autoTP" className="mt-3 space-y-3">
+                      <TabsContent value="autoTP" className="mt-0">
                         <div>
                           <span className="text-xs text-muted-foreground block mb-2">Target Multiplier</span>
                           <div className="flex items-center gap-2">
@@ -1500,96 +1536,66 @@ export default function CrashGame() {
                           </p>
                         </div>
                       </TabsContent>
-                    </Tabs>
-                  </GlassCard>
-
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-                    <div className="col-span-1">
-                      <label className="text-[10px] text-muted-foreground mb-1 block">Bet Amount (DWC)</label>
-                      <Input
-                        type="number"
-                        value={betAmount}
-                        onChange={(e) => setBetAmount(e.target.value)}
-                        className="h-10 bg-white/5 border-white/10 text-sm font-mono"
-                        disabled={roundStatus !== "waiting" || hasBet}
-                        data-testid="input-bet-amount"
-                      />
                     </div>
-                    <div className="col-span-1 flex gap-1 items-end">
-                      {["½", "2×", "Max"].map((btn) => (
+                  </Tabs>
+                </div>
+                
+                {/* Bet/Cashout Button */}
+                <div>
+                  {roundStatus === "running" && hasBet && !cashedOut ? (
+                    <div className="flex gap-2">
+                      <Button
+                        className="flex-1 h-11 text-base bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 shadow-lg shadow-green-500/25"
+                        onClick={handleCashout}
+                        data-testid="button-cashout"
+                      >
+                        <Zap className="w-4 h-4 mr-2" />
+                        {betMode === "progressive" ? (
+                          `TAKE ${progressivePercent}%`
+                        ) : (
+                          `CASHOUT ${(ridingAmount * (1 - HOUSE_EDGE)).toFixed(0)}`
+                        )}
+                      </Button>
+                      {betMode === "progressive" && ridingAmount > 0 && (
                         <Button
-                          key={btn}
                           variant="outline"
-                          size="sm"
-                          className="flex-1 h-10 text-xs"
-                          disabled={roundStatus !== "waiting" || hasBet}
-                          onClick={() => {
-                            const current = parseFloat(betAmount) || 0;
-                            if (btn === "½") setBetAmount(Math.max(1, current / 2).toFixed(0));
-                            if (btn === "2×") setBetAmount(Math.min(demoBalance, current * 2).toFixed(0));
-                            if (btn === "Max") setBetAmount(demoBalance.toFixed(0));
-                          }}
+                          className="h-11 px-3 border-green-500/50 text-green-400 hover:bg-green-500/20"
+                          onClick={handleCashoutAll}
                         >
-                          {btn}
-                        </Button>
-                      ))}
-                    </div>
-                    <div className="col-span-2 md:col-span-3">
-                      {roundStatus === "running" && hasBet && !cashedOut ? (
-                        <div className="flex gap-2 h-full">
-                          <Button
-                            className="flex-1 h-10 text-lg bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 shadow-lg shadow-green-500/25"
-                            onClick={handleCashout}
-                            data-testid="button-cashout"
-                          >
-                            <Zap className="w-5 h-5 mr-2" />
-                            {betMode === "progressive" ? (
-                              `TAKE ${progressivePercent}% (${(ridingAmount * progressivePercent / 100 * (1 - HOUSE_EDGE)).toFixed(0)})`
-                            ) : (
-                              `CASHOUT ${(ridingAmount * (1 - HOUSE_EDGE)).toFixed(0)} DWC`
-                            )}
-                          </Button>
-                          {betMode === "progressive" && ridingAmount > 0 && (
-                            <Button
-                              variant="outline"
-                              className="h-10 px-4 border-green-500/50 text-green-400 hover:bg-green-500/20"
-                              onClick={handleCashoutAll}
-                            >
-                              ALL
-                            </Button>
-                          )}
-                        </div>
-                      ) : roundStatus === "waiting" ? (
-                        <Button
-                          className={`w-full h-10 text-lg ${
-                            hasBet 
-                              ? "bg-gradient-to-r from-green-500/50 to-emerald-500/50"
-                              : "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg shadow-purple-500/25"
-                          }`}
-                          onClick={placeBet}
-                          disabled={hasBet}
-                          data-testid="button-place-bet"
-                        >
-                          {hasBet ? (
-                            <>✓ Bet Placed - Waiting...</>
-                          ) : (
-                            <>
-                              <Rocket className="w-5 h-5 mr-2" />
-                              BET {betAmount} DWC
-                            </>
-                          )}
-                        </Button>
-                      ) : (
-                        <Button className="w-full h-10 text-lg" disabled>
-                          {crashed ? "Round Ended" : cashedOut ? "Cashed Out!" : "In Progress..."}
+                          ALL
                         </Button>
                       )}
                     </div>
-                  </div>
+                  ) : roundStatus === "waiting" ? (
+                    <Button
+                      className={`w-full h-11 text-base font-bold ${
+                        hasBet 
+                          ? "bg-gradient-to-r from-green-500/50 to-emerald-500/50"
+                          : "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg shadow-purple-500/25"
+                      }`}
+                      onClick={placeBet}
+                      disabled={hasBet}
+                      data-testid="button-place-bet"
+                    >
+                      {hasBet ? (
+                        <>✓ Waiting...</>
+                      ) : (
+                        <>
+                          <Rocket className="w-4 h-4 mr-2" />
+                          BET {betAmount} DWC
+                        </>
+                      )}
+                    </Button>
+                  ) : (
+                    <Button className="w-full h-11 text-base" disabled>
+                      {crashed ? "Round Ended" : cashedOut ? "Cashed Out!" : "In Progress..."}
+                    </Button>
+                  )}
                 </div>
-              </GlassCard>
+              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {/* Live Bets & Chat - Compact Bento Grid */}
+              <div className="grid grid-cols-2 gap-2">
                 <GlassCard className="p-3">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="text-sm font-bold flex items-center gap-2">
@@ -1690,155 +1696,66 @@ export default function CrashGame() {
                   </div>
                 </GlassCard>
               </div>
-            </div>
-
-            <div className="space-y-3">
-              <GlassCard className="p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/5 border-purple-500/30">
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <Crown className="w-5 h-5 text-purple-400" />
-                    <span className="font-bold text-sm">Leaderboard</span>
-                  </div>
-                  <Badge className="bg-green-500/20 text-green-400 text-[9px]">
-                    {prizePool[leaderboardTab].toLocaleString()} DWC
-                  </Badge>
+              
+              {/* Rewards & Stats - Compact Row */}
+              <div 
+                className="rounded-xl p-3 grid grid-cols-3 gap-3"
+                style={{
+                  background: "linear-gradient(135deg, rgba(20,10,40,0.9) 0%, rgba(30,15,55,0.85) 100%)",
+                  border: "1px solid rgba(168,85,247,0.15)",
+                }}
+              >
+                {/* Tier */}
+                <div className="text-center">
+                  <span className={`text-lg ${currentTier.color}`}>{currentTier.icon}</span>
+                  <p className="text-[9px] text-white/50">{currentTier.name}</p>
+                  <p className="text-[10px] text-green-400 font-mono">{(currentTier.rewardRate * 100).toFixed(1)}%</p>
                 </div>
-                
-                <Tabs value={leaderboardTab} onValueChange={(v) => setLeaderboardTab(v as "daily" | "weekly" | "alltime")} className="w-full">
-                  <TabsList className="grid grid-cols-3 w-full bg-black/40 p-0.5 h-7 mb-3">
-                    <TabsTrigger value="daily" className="text-[10px] py-1 data-[state=active]:bg-purple-500/30">Daily</TabsTrigger>
-                    <TabsTrigger value="weekly" className="text-[10px] py-1 data-[state=active]:bg-purple-500/30">Weekly</TabsTrigger>
-                    <TabsTrigger value="alltime" className="text-[10px] py-1 data-[state=active]:bg-purple-500/30">All-Time</TabsTrigger>
-                  </TabsList>
-                </Tabs>
-                
-                <ScrollArea className="h-[180px]">
-                  <div className="space-y-2">
-                    {leaderboardData[leaderboardTab].map((entry) => (
-                      <motion.div
-                        key={entry.rank}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className={`flex items-center gap-2 p-2 rounded-lg ${
-                          entry.rank === 1 ? 'bg-gradient-to-r from-yellow-500/20 to-amber-500/10 border border-yellow-500/30' :
-                          entry.rank === 2 ? 'bg-gradient-to-r from-gray-400/20 to-gray-500/10 border border-gray-400/30' :
-                          entry.rank === 3 ? 'bg-gradient-to-r from-orange-500/20 to-amber-600/10 border border-orange-500/30' :
-                          'bg-white/5'
-                        }`}
-                      >
-                        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                          entry.rank === 1 ? 'bg-yellow-500 text-black' :
-                          entry.rank === 2 ? 'bg-gray-400 text-black' :
-                          entry.rank === 3 ? 'bg-orange-500 text-black' :
-                          'bg-white/10 text-white/60'
-                        }`}>
-                          {entry.rank === 1 ? '👑' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : entry.rank}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium truncate">{entry.username}</p>
-                          <p className="text-[9px] text-muted-foreground">
-                            Best: <span className="text-purple-400 font-mono">{entry.multiplier.toFixed(1)}x</span>
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-xs font-mono text-green-400">+{(entry.profit / 1000).toFixed(1)}K</p>
-                          <p className="text-[9px] text-muted-foreground">{(entry.wagered / 1000).toFixed(0)}K wagered</p>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </ScrollArea>
-                
-                <div className="mt-3 p-2 rounded-lg bg-purple-500/10 border border-purple-500/20">
-                  <p className="text-[9px] text-muted-foreground text-center">
-                    🏆 Top 5 players share the prize pool based on wagered volume
-                  </p>
-                </div>
-              </GlassCard>
-
-              <GlassCard className="p-4 bg-gradient-to-br from-yellow-500/10 to-amber-500/5 border-yellow-500/30">
-                <div className="flex items-center gap-2 mb-3">
-                  <Gift className="w-5 h-5 text-yellow-400" />
-                  <span className="font-bold text-sm">Next Airdrop</span>
-                </div>
-                
-                <div className="text-center mb-3">
-                  <motion.p 
-                    className="text-3xl font-bold font-mono text-yellow-400"
-                    animate={{ scale: nextAirdrop < 60 ? [1, 1.05, 1] : 1 }}
-                    transition={{ duration: 0.5, repeat: Infinity }}
+                {/* Pending */}
+                <div className="text-center">
+                  <p className="text-sm font-bold text-green-400 font-mono">{pendingRewards.toFixed(1)}</p>
+                  <p className="text-[9px] text-white/50">Pending DWC</p>
+                  <Button
+                    size="sm"
+                    className="h-5 text-[9px] px-2 mt-1 bg-green-500/30 hover:bg-green-500/50"
+                    onClick={claimRewards}
+                    disabled={pendingRewards <= 0}
+                    data-testid="button-claim-rewards"
                   >
-                    {formatTime(nextAirdrop)}
-                  </motion.p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Pool: <span className="text-yellow-400 font-mono">{airdropPool.toFixed(0)} DWC</span>
-                  </p>
+                    Claim
+                  </Button>
                 </div>
-                
-                <div className="p-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-                  <p className="text-[10px] text-muted-foreground text-center">
-                    🎁 Active players share 1% of bets every 2 hours
-                  </p>
+                {/* Airdrop */}
+                <div className="text-center">
+                  <p className="text-sm font-bold text-yellow-400 font-mono">{Math.floor(nextAirdrop / 60)}m</p>
+                  <p className="text-[9px] text-white/50">Next Airdrop</p>
+                  <p className="text-[10px] text-yellow-400/70 font-mono">{airdropPool.toFixed(0)} Pool</p>
                 </div>
-              </GlassCard>
-
-              <GlassCard className={`p-4 bg-gradient-to-br ${currentTier.bg} to-transparent`}>
-                <div className="flex items-center gap-2 mb-3">
-                  <Trophy className="w-5 h-5 text-purple-400" />
-                  <span className="font-bold text-sm">Play-to-Earn</span>
-                </div>
-                
-                <div className="space-y-2 mb-3">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground">Your Tier:</span>
-                    <span className={`font-bold ${currentTier.color}`}>{currentTier.icon} {currentTier.name}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground">Reward Rate:</span>
-                    <span className="text-green-400 font-mono">{(currentTier.rewardRate * 100).toFixed(1)}%</span>
-                  </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-muted-foreground">Total Wagered:</span>
-                    <span className="font-mono">{totalWagered.toLocaleString()} DWC</span>
-                  </div>
-                </div>
-                
-                <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/30 mb-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">Pending:</span>
-                    <span className="text-xl font-bold text-green-400 font-mono">{pendingRewards.toFixed(2)} DWC</span>
-                  </div>
-                </div>
-                
-                <Button
-                  className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600"
-                  onClick={claimRewards}
-                  disabled={pendingRewards <= 0}
-                  data-testid="button-claim-rewards"
-                >
-                  <Coins className="w-4 h-4 mr-2" />
-                  Claim Rewards
-                </Button>
-              </GlassCard>
-
-              <GlassCard className="p-4 border-amber-500/20">
-                <div className="flex items-center gap-2 mb-3">
-                  <AlertTriangle className="w-5 h-5 text-amber-400" />
-                  <span className="font-bold text-sm">Responsible Gaming</span>
-                </div>
-                
-                <div className="space-y-2 text-[10px] text-muted-foreground">
-                  <p>• Only wager what you can afford to lose</p>
-                  <p>• Set limits on your betting activity</p>
-                  <p>• Must be 18+ to participate</p>
-                </div>
-                
-                <div className="mt-3 p-2 rounded-lg bg-amber-500/10 border border-amber-500/30">
-                  <p className="text-[10px] text-amber-400">
-                    <strong>DISCLAIMER:</strong> This is a game of chance. DarkWave Games is not responsible for any losses. Play responsibly.
-                  </p>
-                </div>
-              </GlassCard>
+              </div>
+              
+              {/* Provably Fair Toggle - Compact */}
+              <AnimatePresence>
+                {showFairness && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="rounded-xl p-2 overflow-hidden"
+                    style={{
+                      background: "linear-gradient(135deg, rgba(34,197,94,0.1) 0%, rgba(20,83,45,0.1) 100%)",
+                      border: "1px solid rgba(34,197,94,0.3)",
+                    }}
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <Shield className="w-3 h-3 text-green-400" />
+                      <span className="text-[10px] font-medium text-green-400">Provably Fair</span>
+                    </div>
+                    <code className="text-[8px] font-mono text-green-400/70 break-all block">
+                      {serverSeedHash.slice(0, 32)}...
+                    </code>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </div>
