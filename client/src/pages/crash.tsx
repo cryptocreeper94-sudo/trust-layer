@@ -217,30 +217,32 @@ function DarkWaveHovercraft({ multiplier, crashed, cashedOut, hasPartialCashout 
 
 function CrashHistoryStrip({ history }: { history: number[] }) {
   return (
-    <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
-      <span className="text-[10px] text-muted-foreground shrink-0 uppercase tracking-wider">Last Crashes:</span>
-      {history.map((h, i) => (
-        <motion.div
-          key={i}
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: i * 0.05 }}
-        >
-          <Badge
-            className={`text-xs font-mono shrink-0 ${
-              h < 1.5 ? "bg-red-500/30 text-red-400 border-red-500/50" : 
-              h < 2 ? "bg-orange-500/30 text-orange-400 border-orange-500/50" : 
-              h < 3 ? "bg-yellow-500/30 text-yellow-400 border-yellow-500/50" : 
-              h < 5 ? "bg-green-500/30 text-green-400 border-green-500/50" : 
-              h < 10 ? "bg-cyan-500/30 text-cyan-400 border-cyan-500/50" :
-              "bg-purple-500/30 text-purple-400 border-purple-500/50 animate-pulse"
-            }`}
+    <GlassCard className="p-2 md:p-3">
+      <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+        <span className="text-[9px] md:text-[10px] text-muted-foreground shrink-0 uppercase tracking-wider font-medium">History:</span>
+        {history.map((h, i) => (
+          <motion.div
+            key={i}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: i * 0.03 }}
           >
-            {h.toFixed(2)}x
-          </Badge>
-        </motion.div>
-      ))}
-    </div>
+            <Badge
+              className={`text-[10px] md:text-xs font-mono shrink-0 px-2 py-0.5 ${
+                h < 1.5 ? "bg-red-500/30 text-red-400 border-red-500/50" : 
+                h < 2 ? "bg-orange-500/30 text-orange-400 border-orange-500/50" : 
+                h < 3 ? "bg-yellow-500/30 text-yellow-400 border-yellow-500/50" : 
+                h < 5 ? "bg-green-500/30 text-green-400 border-green-500/50" : 
+                h < 10 ? "bg-cyan-500/30 text-cyan-400 border-cyan-500/50" :
+                "bg-purple-500/30 text-purple-400 border-purple-500/50 animate-pulse"
+              }`}
+            >
+              {h.toFixed(2)}x
+            </Badge>
+          </motion.div>
+        ))}
+      </div>
+    </GlassCard>
   );
 }
 
@@ -348,6 +350,37 @@ export default function CrashGame() {
   const [airdropPool, setAirdropPool] = useState(12500);
   
   const [history, setHistory] = useState<number[]>([1.23, 2.45, 1.02, 5.67, 1.89, 3.21, 1.05, 8.92, 2.34, 1.67]);
+  const [leaderboardTab, setLeaderboardTab] = useState<"daily" | "weekly" | "alltime">("daily");
+  
+  const leaderboardData = {
+    daily: [
+      { rank: 1, username: "CryptoKing", wagered: 125000, profit: 45200, multiplier: 287.5 },
+      { rank: 2, username: "MoonRider", wagered: 89000, profit: 32100, multiplier: 156.2 },
+      { rank: 3, username: "DegenMaster", wagered: 67500, profit: 28400, multiplier: 342.1 },
+      { rank: 4, username: "WhaleBoy", wagered: 54200, profit: 19800, multiplier: 89.5 },
+      { rank: 5, username: "DiamondHands", wagered: 42100, profit: 15600, multiplier: 124.8 },
+    ],
+    weekly: [
+      { rank: 1, username: "MegaWhale", wagered: 892000, profit: 324500, multiplier: 1245.8 },
+      { rank: 2, username: "CryptoKing", wagered: 675000, profit: 198700, multiplier: 892.3 },
+      { rank: 3, username: "LuckyDegen", wagered: 534000, profit: 156200, multiplier: 567.4 },
+      { rank: 4, username: "MoonRider", wagered: 423000, profit: 112400, multiplier: 445.2 },
+      { rank: 5, username: "ProGambler", wagered: 356000, profit: 89500, multiplier: 312.6 },
+    ],
+    alltime: [
+      { rank: 1, username: "LegendWhale", wagered: 12500000, profit: 4250000, multiplier: 4892.5 },
+      { rank: 2, username: "MegaWhale", wagered: 8920000, profit: 2890000, multiplier: 3567.2 },
+      { rank: 3, username: "CryptoKing", wagered: 6750000, profit: 1980000, multiplier: 2845.8 },
+      { rank: 4, username: "DiamondLegend", wagered: 5340000, profit: 1560000, multiplier: 2234.5 },
+      { rank: 5, username: "VeteranDegen", wagered: 4230000, profit: 1124000, multiplier: 1892.3 },
+    ],
+  };
+  
+  const prizePool = {
+    daily: 5000,
+    weekly: 25000,
+    alltime: 100000,
+  };
 
   const multiplierIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -841,7 +874,7 @@ export default function CrashGame() {
                   )}
                 </AnimatePresence>
 
-                <div className="relative h-56 md:h-64 rounded-xl bg-gradient-to-b from-black/80 via-purple-950/50 to-black/80 border border-purple-500/20 overflow-hidden">
+                <div className="relative h-44 sm:h-56 md:h-64 rounded-xl bg-gradient-to-b from-black/80 via-purple-950/50 to-black/80 border border-purple-500/20 overflow-hidden">
                   <NeonWaveform multiplier={multiplier} crashed={crashed} progress={(multiplier - 1) / 10} />
                   
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -853,7 +886,7 @@ export default function CrashGame() {
                     />
                     
                     <motion.div
-                      className={`mt-4 text-5xl md:text-7xl font-bold font-mono z-10 ${
+                      className={`mt-2 sm:mt-4 text-4xl sm:text-5xl md:text-7xl font-bold font-mono z-10 ${
                         crashed ? "text-red-500" : 
                         cashedOut ? "text-green-400" : 
                         multiplier >= 10 ? "text-cyan-400" :
@@ -865,7 +898,7 @@ export default function CrashGame() {
                       }}
                     >
                       {roundStatus === "waiting" ? (
-                        <span className="text-3xl md:text-5xl text-purple-400">NEXT ROUND</span>
+                        <span className="text-2xl sm:text-3xl md:text-5xl text-purple-400">NEXT ROUND</span>
                       ) : (
                         `${multiplier.toFixed(2)}x`
                       )}
@@ -906,38 +939,41 @@ export default function CrashGame() {
                     </div>
                     
                     <Tabs value={betMode} onValueChange={(v) => setBetMode(v as BetMode)} className="w-full">
-                      <TabsList className="grid grid-cols-4 w-full bg-black/40 p-1 h-auto">
+                      <TabsList className="grid grid-cols-4 w-full bg-black/40 p-0.5 md:p-1 h-auto">
                         <TabsTrigger 
                           value="standard" 
-                          className="text-[10px] py-2 data-[state=active]:bg-purple-500/30"
+                          className="text-[8px] md:text-[10px] py-1.5 md:py-2 data-[state=active]:bg-purple-500/30 flex flex-col md:flex-row gap-0.5 md:gap-1"
                           disabled={roundStatus !== "waiting"}
                         >
-                          <Target className="w-3 h-3 mr-1" />
-                          Standard
+                          <Target className="w-3 h-3" />
+                          <span className="hidden sm:inline">Standard</span>
+                          <span className="sm:hidden">Std</span>
                         </TabsTrigger>
                         <TabsTrigger 
                           value="progressive"
-                          className="text-[10px] py-2 data-[state=active]:bg-yellow-500/30"
+                          className="text-[8px] md:text-[10px] py-1.5 md:py-2 data-[state=active]:bg-yellow-500/30 flex flex-col md:flex-row gap-0.5 md:gap-1"
                           disabled={roundStatus !== "waiting"}
                         >
-                          <Percent className="w-3 h-3 mr-1" />
-                          Progressive
+                          <Percent className="w-3 h-3" />
+                          <span className="hidden sm:inline">Progressive</span>
+                          <span className="sm:hidden">Prog</span>
                         </TabsTrigger>
                         <TabsTrigger 
                           value="autoTP"
-                          className="text-[10px] py-2 data-[state=active]:bg-cyan-500/30"
+                          className="text-[8px] md:text-[10px] py-1.5 md:py-2 data-[state=active]:bg-cyan-500/30 flex flex-col md:flex-row gap-0.5 md:gap-1"
                           disabled={roundStatus !== "waiting"}
                         >
-                          <Zap className="w-3 h-3 mr-1" />
-                          Auto TP
+                          <Zap className="w-3 h-3" />
+                          <span>Auto TP</span>
                         </TabsTrigger>
                         <TabsTrigger 
                           value="autoProgressive"
-                          className="text-[10px] py-2 data-[state=active]:bg-green-500/30"
+                          className="text-[8px] md:text-[10px] py-1.5 md:py-2 data-[state=active]:bg-green-500/30 flex flex-col md:flex-row gap-0.5 md:gap-1"
                           disabled={roundStatus !== "waiting"}
                         >
-                          <Layers className="w-3 h-3 mr-1" />
-                          Auto Prog
+                          <Layers className="w-3 h-3" />
+                          <span className="hidden sm:inline">Auto Prog</span>
+                          <span className="sm:hidden">A.Prog</span>
                         </TabsTrigger>
                       </TabsList>
                       
@@ -1238,6 +1274,69 @@ export default function CrashGame() {
             </div>
 
             <div className="space-y-3">
+              <GlassCard className="p-4 bg-gradient-to-br from-purple-500/10 to-pink-500/5 border-purple-500/30">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Crown className="w-5 h-5 text-purple-400" />
+                    <span className="font-bold text-sm">Leaderboard</span>
+                  </div>
+                  <Badge className="bg-green-500/20 text-green-400 text-[9px]">
+                    {prizePool[leaderboardTab].toLocaleString()} DWC
+                  </Badge>
+                </div>
+                
+                <Tabs value={leaderboardTab} onValueChange={(v) => setLeaderboardTab(v as "daily" | "weekly" | "alltime")} className="w-full">
+                  <TabsList className="grid grid-cols-3 w-full bg-black/40 p-0.5 h-7 mb-3">
+                    <TabsTrigger value="daily" className="text-[10px] py-1 data-[state=active]:bg-purple-500/30">Daily</TabsTrigger>
+                    <TabsTrigger value="weekly" className="text-[10px] py-1 data-[state=active]:bg-purple-500/30">Weekly</TabsTrigger>
+                    <TabsTrigger value="alltime" className="text-[10px] py-1 data-[state=active]:bg-purple-500/30">All-Time</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+                
+                <ScrollArea className="h-[180px]">
+                  <div className="space-y-2">
+                    {leaderboardData[leaderboardTab].map((entry) => (
+                      <motion.div
+                        key={entry.rank}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className={`flex items-center gap-2 p-2 rounded-lg ${
+                          entry.rank === 1 ? 'bg-gradient-to-r from-yellow-500/20 to-amber-500/10 border border-yellow-500/30' :
+                          entry.rank === 2 ? 'bg-gradient-to-r from-gray-400/20 to-gray-500/10 border border-gray-400/30' :
+                          entry.rank === 3 ? 'bg-gradient-to-r from-orange-500/20 to-amber-600/10 border border-orange-500/30' :
+                          'bg-white/5'
+                        }`}
+                      >
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                          entry.rank === 1 ? 'bg-yellow-500 text-black' :
+                          entry.rank === 2 ? 'bg-gray-400 text-black' :
+                          entry.rank === 3 ? 'bg-orange-500 text-black' :
+                          'bg-white/10 text-white/60'
+                        }`}>
+                          {entry.rank === 1 ? '👑' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : entry.rank}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium truncate">{entry.username}</p>
+                          <p className="text-[9px] text-muted-foreground">
+                            Best: <span className="text-purple-400 font-mono">{entry.multiplier.toFixed(1)}x</span>
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs font-mono text-green-400">+{(entry.profit / 1000).toFixed(1)}K</p>
+                          <p className="text-[9px] text-muted-foreground">{(entry.wagered / 1000).toFixed(0)}K wagered</p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </ScrollArea>
+                
+                <div className="mt-3 p-2 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                  <p className="text-[9px] text-muted-foreground text-center">
+                    🏆 Top 5 players share the prize pool based on wagered volume
+                  </p>
+                </div>
+              </GlassCard>
+
               <GlassCard className="p-4 bg-gradient-to-br from-yellow-500/10 to-amber-500/5 border-yellow-500/30">
                 <div className="flex items-center gap-2 mb-3">
                   <Gift className="w-5 h-5 text-yellow-400" />
