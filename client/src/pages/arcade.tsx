@@ -4,7 +4,7 @@ import { Link } from "wouter";
 import {
   ArrowLeft, Gamepad2, Dice1, TrendingUp, Coins, Trophy,
   Zap, RefreshCw, History, Users, Star, Flame, Target, Wallet, Lock, Play,
-  Cherry, Gem, Crown, Diamond, Sparkles, Volume2, VolumeX
+  Cherry, Gem, Crown, Diamond, Sparkles, Volume2, VolumeX, Rocket
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -187,210 +187,6 @@ function CoinFlipGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }:
       
       <p className="text-center text-xs text-muted-foreground">
         Win 1.98x your bet! 50% chance • 99% RTP • Provably Fair
-      </p>
-    </div>
-  );
-}
-
-function CrashGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }: { 
-  isConnected: boolean; 
-  isDemoMode: boolean;
-  userBalance: string;
-  onBalanceUpdate: () => void;
-}) {
-  const { toast } = useToast();
-  const [betAmount, setBetAmount] = useState("10");
-  const [autoCashout, setAutoCashout] = useState("2.0");
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [multiplier, setMultiplier] = useState(1.0);
-  const [crashed, setCrashed] = useState(false);
-  const [cashedOut, setCashedOut] = useState(false);
-  const [winAmount, setWinAmount] = useState<string | null>(null);
-  const [crashPoint, setCrashPoint] = useState<number | null>(null);
-
-  const canPlay = isConnected || isDemoMode;
-
-  useEffect(() => {
-    if (isPlaying && !crashed && !cashedOut) {
-      const interval = setInterval(() => {
-        setMultiplier(prev => {
-          const newVal = prev + 0.01 + Math.random() * 0.02;
-          if (Math.random() < 0.005 + (prev - 1) * 0.003) {
-            setCrashed(true);
-            setCrashPoint(prev);
-            setIsPlaying(false);
-            return prev;
-          }
-          if (newVal >= parseFloat(autoCashout)) {
-            setCashedOut(true);
-            setIsPlaying(false);
-            const win = (parseFloat(betAmount) * parseFloat(autoCashout) * 0.99).toFixed(2);
-            setWinAmount(win);
-            if (!isDemoMode) {
-              onBalanceUpdate();
-            }
-            toast({
-              title: "Cashed Out!",
-              description: `+${win} ${isDemoMode ? "Play Coins" : "DWC"} at ${parseFloat(autoCashout).toFixed(2)}x`,
-            });
-          }
-          return newVal;
-        });
-      }, 50);
-      return () => clearInterval(interval);
-    }
-  }, [isPlaying, crashed, cashedOut, autoCashout, betAmount, isDemoMode, onBalanceUpdate, toast]);
-
-  const handlePlay = async () => {
-    if (!canPlay) return;
-    
-    if (!isDemoMode) {
-      try {
-        const betAmountWei = (BigInt(Math.floor(parseFloat(betAmount) * 1e18))).toString();
-        await apiRequest("POST", "/api/arcade/play", {
-          gameType: "crash",
-          betAmount: betAmountWei,
-          autoCashout: parseFloat(autoCashout),
-        });
-      } catch (error: any) {
-        toast({
-          title: "Error",
-          description: error.message || "Failed to place bet",
-          variant: "destructive",
-        });
-        return;
-      }
-    }
-    
-    setIsPlaying(true);
-    setMultiplier(1.0);
-    setCrashed(false);
-    setCashedOut(false);
-    setWinAmount(null);
-    setCrashPoint(null);
-  };
-
-  const handleCashout = () => {
-    setCashedOut(true);
-    setIsPlaying(false);
-    const win = (parseFloat(betAmount) * multiplier * 0.99).toFixed(2);
-    setWinAmount(win);
-    if (!isDemoMode) {
-      onBalanceUpdate();
-    }
-    toast({
-      title: "Cashed Out!",
-      description: `+${win} ${isDemoMode ? "Play Coins" : "DWC"} at ${multiplier.toFixed(2)}x`,
-    });
-  };
-
-  return (
-    <div className="space-y-4">
-      {isDemoMode && (
-        <div className="p-2 rounded-lg bg-amber-500/20 border border-amber-500/30 text-center">
-          <p className="text-sm text-amber-400">Demo Mode - Practice for Free!</p>
-        </div>
-      )}
-      
-      <div className="relative h-48 rounded-xl bg-gradient-to-br from-black/50 to-purple-900/30 border border-white/10 overflow-hidden flex items-center justify-center">
-        <div className="absolute inset-0 overflow-hidden">
-          {isPlaying && !crashed && (
-            <motion.div 
-              className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-green-500/30 to-transparent"
-              initial={{ height: 0 }}
-              animate={{ height: `${Math.min(multiplier * 20, 100)}%` }}
-            />
-          )}
-        </div>
-        
-        <motion.div
-          className={`text-6xl font-bold font-mono z-10 ${crashed ? "text-red-500" : cashedOut ? "text-green-400" : "text-white"}`}
-          animate={{ scale: crashed ? [1, 1.2, 1] : 1 }}
-        >
-          {multiplier.toFixed(2)}x
-        </motion.div>
-        
-        {crashed && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="absolute inset-0 bg-red-500/20 flex items-center justify-center"
-          >
-            <div className="text-center">
-              <p className="text-3xl font-bold text-red-500">CRASHED!</p>
-              <p className="text-sm text-red-400">at {crashPoint?.toFixed(2)}x</p>
-            </div>
-          </motion.div>
-        )}
-        
-        {cashedOut && winAmount && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="absolute bottom-2 left-0 right-0 text-center"
-          >
-            <Badge className="bg-green-500/20 text-green-400 text-lg px-4 py-1">
-              Won {winAmount} {isDemoMode ? "Play Coins" : "DWC"}!
-            </Badge>
-          </motion.div>
-        )}
-        
-        <div className="absolute top-2 right-2">
-          <Badge variant="outline" className="text-xs">
-            <Flame className="w-3 h-3 mr-1 text-orange-400" />
-            Live
-          </Badge>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label className="text-xs text-muted-foreground mb-1 block">Bet Amount (DWC)</label>
-          <Input
-            type="number"
-            value={betAmount}
-            onChange={(e) => setBetAmount(e.target.value)}
-            className="bg-white/5 border-white/10"
-            disabled={isPlaying}
-            data-testid="input-crash-bet"
-          />
-        </div>
-        <div>
-          <label className="text-xs text-muted-foreground mb-1 block">Auto Cashout (x)</label>
-          <Input
-            type="number"
-            value={autoCashout}
-            onChange={(e) => setAutoCashout(e.target.value)}
-            className="bg-white/5 border-white/10"
-            disabled={isPlaying}
-            data-testid="input-auto-cashout"
-          />
-        </div>
-      </div>
-
-      {isPlaying && !crashed && !cashedOut ? (
-        <Button
-          className="w-full h-14 text-lg bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600"
-          onClick={handleCashout}
-          data-testid="button-cashout"
-        >
-          <Zap className="w-5 h-5 mr-2" />
-          Cashout {(parseFloat(betAmount) * multiplier).toFixed(0)} {isDemoMode ? "Play Coins" : "DWC"}
-        </Button>
-      ) : (
-        <Button
-          className="w-full h-14 text-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
-          onClick={handlePlay}
-          disabled={!canPlay || isPlaying}
-          data-testid="button-play-crash"
-        >
-          <TrendingUp className="w-5 h-5 mr-2" />
-          {crashed || cashedOut ? "Play Again" : "Place Bet"} ({betAmount} {isDemoMode ? "Play Coins" : "DWC"})
-        </Button>
-      )}
-      
-      <p className="text-center text-xs text-muted-foreground">
-        Cash out before it crashes! 99% RTP • Provably Fair
       </p>
     </div>
   );
@@ -797,12 +593,48 @@ export default function Arcade() {
                     />
                   </TabsContent>
                   <TabsContent value="crash" className="mt-0">
-                    <CrashGame 
-                      isConnected={isConnected} 
-                      isDemoMode={isDemoMode}
-                      userBalance={userBalance}
-                      onBalanceUpdate={fetchBalance}
-                    />
+                    <div className="relative h-64 rounded-xl overflow-hidden flex flex-col items-center justify-center text-center p-6"
+                      style={{
+                        background: "linear-gradient(135deg, rgba(20,10,40,0.95) 0%, rgba(60,20,80,0.8) 50%, rgba(30,10,50,0.95) 100%)",
+                        border: "1px solid rgba(168,85,247,0.3)",
+                      }}
+                    >
+                      <motion.div
+                        className="absolute inset-0 opacity-30"
+                        style={{
+                          background: "radial-gradient(circle at 30% 70%, rgba(255,79,216,0.4), transparent 60%), radial-gradient(circle at 70% 30%, rgba(76,244,255,0.3), transparent 60%)",
+                        }}
+                        animate={{ opacity: [0.2, 0.4, 0.2] }}
+                        transition={{ duration: 3, repeat: Infinity }}
+                      />
+                      
+                      <motion.div
+                        animate={{ y: [0, -8, 0], rotate: [-5, 5, -5] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        className="mb-4"
+                      >
+                        <Rocket className="w-16 h-16 text-pink-400" />
+                      </motion.div>
+                      
+                      <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                        Crash
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-4 max-w-xs">
+                        Watch the multiplier rise and cash out before it crashes! Up to 5,000x wins with Orby flying through space.
+                      </p>
+                      
+                      <Link href="/crash">
+                        <Button className="gap-2 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 shadow-lg shadow-purple-500/25">
+                          <Play className="w-4 h-4" />
+                          Play Crash
+                        </Button>
+                      </Link>
+                      
+                      <div className="flex items-center gap-4 mt-4 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1"><Zap className="w-3 h-3 text-yellow-400" /> 99% RTP</span>
+                        <span className="flex items-center gap-1"><Trophy className="w-3 h-3 text-amber-400" /> 5,000x Max</span>
+                      </div>
+                    </div>
                   </TabsContent>
                   <TabsContent value="slots" className="mt-0">
                     <SlotsGame 
