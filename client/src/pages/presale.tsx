@@ -127,15 +127,15 @@ function PresaleProgress() {
       </div>
 
       <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="text-center p-4 rounded-xl bg-white/5">
+        <div className="text-center p-4 rounded-xl bg-white/5" data-testid="stat-token-price">
           <p className="text-3xl font-bold text-cyan-400">${PRESALE_CONFIG.tokenPrice}</p>
           <p className="text-gray-500 text-sm">Token Price</p>
         </div>
-        <div className="text-center p-4 rounded-xl bg-white/5">
+        <div className="text-center p-4 rounded-xl bg-white/5" data-testid="stat-tokens-sold">
           <p className="text-3xl font-bold text-purple-400">{(PRESALE_CONFIG.soldTokens / 1000000).toFixed(2)}M</p>
           <p className="text-gray-500 text-sm">Tokens Sold</p>
         </div>
-        <div className="text-center p-4 rounded-xl bg-white/5">
+        <div className="text-center p-4 rounded-xl bg-white/5" data-testid="stat-total-raised">
           <p className="text-3xl font-bold text-pink-400">${(raised / 1000).toFixed(0)}K</p>
           <p className="text-gray-500 text-sm">Raised</p>
         </div>
@@ -173,36 +173,56 @@ function PresaleProgress() {
 }
 
 function TierCard({ tier, index }: { tier: typeof PRESALE_CONFIG.tiers[0]; index: number }) {
+  const tierImages = [quantumRealm, deepSpace, cyberpunkCity, fantasyWorld];
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
       className="relative group"
+      data-testid={`card-tier-${tier.name.toLowerCase()}`}
     >
       <div className={`absolute inset-0 bg-gradient-to-r ${tier.color} opacity-20 blur-xl group-hover:opacity-30 transition-opacity rounded-2xl`} />
-      <HolographicCard className="p-6 relative" glow={index === 0 ? "amber" : index === 1 ? "purple" : "cyan"}>
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            {index === 0 && <Crown className="w-6 h-6 text-yellow-400" />}
-            {index === 1 && <Star className="w-6 h-6 text-purple-400" />}
-            {index === 2 && <Rocket className="w-6 h-6 text-cyan-400" />}
-            {index === 3 && <Gift className="w-6 h-6 text-green-400" />}
-            <h3 className="text-xl font-bold text-white">{tier.name}</h3>
-          </div>
-          <Badge className={`bg-gradient-to-r ${tier.color} text-white border-0`}>
-            +{tier.bonus}% Bonus
-          </Badge>
+      <div className="relative overflow-hidden rounded-2xl border border-white/10" style={{
+        boxShadow: `0 0 40px rgba(0,200,255,0.15)`,
+      }}>
+        <div className="absolute inset-0">
+          <img src={tierImages[index]} alt={tier.name} className="w-full h-full object-cover opacity-30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/50" />
         </div>
-        <p className="text-gray-400">
-          Min: <span className="text-white font-semibold">${tier.minAmount.toLocaleString()}</span>
-        </p>
-        <p className="text-sm text-gray-500 mt-2">
-          {tier.minAmount / PRESALE_CONFIG.tokenPrice >= 1000000 
-            ? `${(tier.minAmount / PRESALE_CONFIG.tokenPrice / 1000000).toFixed(1)}M` 
-            : `${(tier.minAmount / PRESALE_CONFIG.tokenPrice / 1000).toFixed(0)}K`} tokens + {tier.bonus}% bonus
-        </p>
-      </HolographicCard>
+        <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
+          background: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.02) 10px, rgba(255,255,255,0.02) 20px)",
+        }} />
+        <div className="relative z-10 p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              {index === 0 && <Crown className="w-6 h-6 text-yellow-400" />}
+              {index === 1 && <Star className="w-6 h-6 text-purple-400" />}
+              {index === 2 && <Rocket className="w-6 h-6 text-cyan-400" />}
+              {index === 3 && <Gift className="w-6 h-6 text-green-400" />}
+              <h3 className="text-xl font-bold text-white">{tier.name}</h3>
+            </div>
+            <Badge className={`bg-gradient-to-r ${tier.color} text-white border-0`} data-testid={`badge-tier-bonus-${index}`}>
+              +{tier.bonus}% Bonus
+            </Badge>
+          </div>
+          <p className="text-gray-300">
+            Min: <span className="text-white font-semibold">${tier.minAmount.toLocaleString()}</span>
+          </p>
+          <p className="text-sm text-gray-400 mt-2">
+            {tier.minAmount / PRESALE_CONFIG.tokenPrice >= 1000000 
+              ? `${(tier.minAmount / PRESALE_CONFIG.tokenPrice / 1000000).toFixed(1)}M` 
+              : `${(tier.minAmount / PRESALE_CONFIG.tokenPrice / 1000).toFixed(0)}K`} tokens + {tier.bonus}% bonus
+          </p>
+          <Button 
+            className={`w-full mt-4 bg-gradient-to-r ${tier.color} hover:opacity-90 border-0`}
+            data-testid={`button-select-tier-${tier.name.toLowerCase()}`}
+          >
+            Select {tier.name}
+          </Button>
+        </div>
+      </div>
     </motion.div>
   );
 }
@@ -238,7 +258,15 @@ function EcosystemCard({ feature, index }: { feature: typeof ECOSYSTEM_FEATURES[
           </div>
         </div>
         <div className="p-4">
-          <p className="text-gray-400">{feature.description}</p>
+          <p className="text-gray-400 mb-3">{feature.description}</p>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="w-full border-white/10 hover:bg-white/5"
+            data-testid={`button-learn-more-${index}`}
+          >
+            Learn More <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
         </div>
       </HolographicCard>
     </motion.div>
@@ -292,22 +320,22 @@ function HolderDashboard() {
       ) : (
         <div className="space-y-6">
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20">
+            <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20" data-testid="stat-holder-tokens">
               <p className="text-gray-400 text-sm">Total Tokens</p>
               <p className="text-2xl font-bold text-white">{mockHolderData.totalTokens.toLocaleString()}</p>
               <p className="text-green-400 text-sm">+{mockHolderData.bonusTokens.toLocaleString()} bonus</p>
             </div>
-            <div className="p-4 rounded-xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20">
+            <div className="p-4 rounded-xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20" data-testid="stat-holder-invested">
               <p className="text-gray-400 text-sm">Total Invested</p>
               <p className="text-2xl font-bold text-white">${mockHolderData.totalInvested.toLocaleString()}</p>
               <p className="text-cyan-400 text-sm">{mockHolderData.tier} Tier</p>
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20">
+          <div className="p-4 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20" data-testid="stat-holder-rank">
             <div className="flex items-center justify-between mb-2">
               <p className="text-gray-400 text-sm">Early Adopter Rank</p>
-              <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Top 1000</Badge>
+              <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30" data-testid="badge-top-rank">Top 1000</Badge>
             </div>
             <p className="text-3xl font-bold text-white">#{mockHolderData.earlyAdopterRank}</p>
             <div className="flex items-center gap-2 mt-2">
@@ -316,13 +344,13 @@ function HolderDashboard() {
             </div>
           </div>
 
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+          <div className="p-4 rounded-xl bg-white/5 border border-white/10" data-testid="referral-section">
             <p className="text-gray-400 text-sm mb-2">Your Referral Code</p>
             <div className="flex items-center gap-2">
-              <code className="flex-1 px-3 py-2 bg-black/30 rounded-lg text-cyan-400 font-mono text-sm">
+              <code className="flex-1 px-3 py-2 bg-black/30 rounded-lg text-cyan-400 font-mono text-sm" data-testid="text-referral-code">
                 {mockHolderData.referralCode}
               </code>
-              <Button size="sm" variant="outline" className="border-white/10">
+              <Button size="sm" variant="outline" className="border-white/10" data-testid="button-copy-referral">
                 <Copy className="w-4 h-4" />
               </Button>
             </div>
