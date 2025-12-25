@@ -203,6 +203,7 @@ function DWSCRouter() {
         <Route path="/simulate" component={TxSimulator} />
         <Route path="/rebalancer" component={PortfolioRebalancer} />
         <Route path="/arcade" component={Arcade} />
+        <Route path="/crash" component={Crash} />
         <Route path="/predictions" component={Predictions} />
         <Route path="/social" component={SocialFeed} />
         <Route path="/lottery" component={Lottery} />
