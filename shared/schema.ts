@@ -2039,3 +2039,41 @@ export const cardSchema = z.object({
 });
 
 export type Card = z.infer<typeof cardSchema>;
+
+// Community Roadmap Features
+export const roadmapFeatures = pgTable("roadmap_features", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  category: text("category").notNull().default("general"),
+  status: text("status").notNull().default("proposed"),
+  priority: integer("priority").notNull().default(0),
+  targetRelease: text("target_release"),
+  createdBy: text("created_by"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertRoadmapFeatureSchema = createInsertSchema(roadmapFeatures).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type RoadmapFeature = typeof roadmapFeatures.$inferSelect;
+export type InsertRoadmapFeature = z.infer<typeof insertRoadmapFeatureSchema>;
+
+export const roadmapVotes = pgTable("roadmap_votes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  featureId: varchar("feature_id").notNull().references(() => roadmapFeatures.id, { onDelete: "cascade" }),
+  oderId: text("user_id").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertRoadmapVoteSchema = createInsertSchema(roadmapVotes).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type RoadmapVote = typeof roadmapVotes.$inferSelect;
+export type InsertRoadmapVote = z.infer<typeof insertRoadmapVoteSchema>;

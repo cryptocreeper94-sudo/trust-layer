@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type InsertRoadmapVote, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
 import crypto from "crypto";
@@ -165,6 +165,17 @@ export interface IStorage {
   getSweepsRedemptions(userId: string): Promise<SweepsRedemption[]>;
   recordSweepsGame(data: InsertSweepsGameHistory): Promise<SweepsGameHistory>;
   getSweepsGameHistory(userId: string, limit?: number): Promise<SweepsGameHistory[]>;
+  
+  // Community Roadmap
+  getRoadmapFeatures(): Promise<(RoadmapFeature & { voteCount: number })[]>;
+  getRoadmapFeature(id: string): Promise<RoadmapFeature | undefined>;
+  createRoadmapFeature(data: InsertRoadmapFeature): Promise<RoadmapFeature>;
+  updateRoadmapFeature(id: string, data: Partial<InsertRoadmapFeature>): Promise<RoadmapFeature | undefined>;
+  deleteRoadmapFeature(id: string): Promise<boolean>;
+  voteForFeature(featureId: string, oderId: string): Promise<boolean>;
+  removeVote(featureId: string, oderId: string): Promise<boolean>;
+  getUserVotes(oderId: string): Promise<string[]>;
+  hasUserVoted(featureId: string, oderId: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1276,6 +1287,68 @@ export class DatabaseStorage implements IStorage {
       .where(eq(sweepsGameHistory.userId, userId))
       .orderBy(desc(sweepsGameHistory.createdAt))
       .limit(limit);
+  }
+
+  // Community Roadmap methods
+  async getRoadmapFeatures(): Promise<(RoadmapFeature & { voteCount: number })[]> {
+    const features = await db.select().from(roadmapFeatures).orderBy(desc(roadmapFeatures.priority), desc(roadmapFeatures.createdAt));
+    const featuresWithVotes = await Promise.all(features.map(async (feature) => {
+      const [voteResult] = await db.select({ count: count() }).from(roadmapVotes).where(eq(roadmapVotes.featureId, feature.id));
+      return { ...feature, voteCount: voteResult?.count || 0 };
+    }));
+    return featuresWithVotes.sort((a, b) => b.voteCount - a.voteCount);
+  }
+
+  async getRoadmapFeature(id: string): Promise<RoadmapFeature | undefined> {
+    const [feature] = await db.select().from(roadmapFeatures).where(eq(roadmapFeatures.id, id));
+    return feature;
+  }
+
+  async createRoadmapFeature(data: InsertRoadmapFeature): Promise<RoadmapFeature> {
+    const [feature] = await db.insert(roadmapFeatures).values(data).returning();
+    return feature;
+  }
+
+  async updateRoadmapFeature(id: string, data: Partial<InsertRoadmapFeature>): Promise<RoadmapFeature | undefined> {
+    const [feature] = await db.update(roadmapFeatures)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(roadmapFeatures.id, id))
+      .returning();
+    return feature;
+  }
+
+  async deleteRoadmapFeature(id: string): Promise<boolean> {
+    await db.delete(roadmapFeatures).where(eq(roadmapFeatures.id, id));
+    return true;
+  }
+
+  async voteForFeature(featureId: string, oderId: string): Promise<boolean> {
+    try {
+      await db.insert(roadmapVotes).values({ featureId, oderId });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async removeVote(featureId: string, oderId: string): Promise<boolean> {
+    await db.delete(roadmapVotes)
+      .where(sql`${roadmapVotes.featureId} = ${featureId} AND ${roadmapVotes.oderId} = ${oderId}`);
+    return true;
+  }
+
+  async getUserVotes(oderId: string): Promise<string[]> {
+    const votes = await db.select({ featureId: roadmapVotes.featureId })
+      .from(roadmapVotes)
+      .where(eq(roadmapVotes.oderId, oderId));
+    return votes.map(v => v.featureId);
+  }
+
+  async hasUserVoted(featureId: string, oderId: string): Promise<boolean> {
+    const [vote] = await db.select()
+      .from(roadmapVotes)
+      .where(sql`${roadmapVotes.featureId} = ${featureId} AND ${roadmapVotes.oderId} = ${oderId}`);
+    return !!vote;
   }
 }
 
