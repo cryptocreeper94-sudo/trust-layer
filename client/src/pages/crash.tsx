@@ -397,17 +397,19 @@ function OrbyFlyer({ multiplier, crashed, cashedOut, hasPartialCashout }: { mult
           transition={{ duration: 0.8, repeat: Infinity }}
         />
         
-        <img 
-          src={orbyFlying} 
-          alt="Orby" 
-          className="w-full h-full object-contain"
+        <div 
+          className="w-full h-full relative"
           style={{
-            mixBlendMode: "screen",
+            backgroundImage: `url(${orbyFlying})`,
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            mixBlendMode: "lighten",
             filter: crashed 
-              ? "drop-shadow(0 0 20px rgba(239,68,68,0.8)) brightness(0.7) saturate(0.5)"
+              ? "drop-shadow(0 0 20px rgba(239,68,68,0.8)) brightness(0.8) saturate(0.5)"
               : cashedOut
-              ? "drop-shadow(0 0 25px rgba(74,222,128,0.9)) brightness(1.2)"
-              : `drop-shadow(0 0 ${15 + intensity * 10}px rgba(76,244,255,0.8)) drop-shadow(0 0 ${25 + intensity * 15}px rgba(255,79,216,0.5)) brightness(1.1)`,
+              ? "drop-shadow(0 0 25px rgba(74,222,128,0.9)) brightness(1.3) saturate(1.2)"
+              : `drop-shadow(0 0 ${15 + intensity * 10}px rgba(76,244,255,0.9)) drop-shadow(0 0 ${25 + intensity * 15}px rgba(255,79,216,0.6)) brightness(1.2) saturate(1.1)`,
           }}
         />
       </motion.div>
