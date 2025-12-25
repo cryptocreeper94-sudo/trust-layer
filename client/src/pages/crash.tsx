@@ -85,7 +85,7 @@ function NeonWaveform({ multiplier, crashed, progress }: { multiplier: number; c
   const intensity = Math.min(multiplier / 10, 1);
   
   return (
-    <div className="absolute inset-0 overflow-hidden">
+    <div className="absolute inset-0 overflow-hidden touch-pan-y pointer-events-none">
       <div 
         className="absolute inset-0"
         style={{
@@ -1206,7 +1206,7 @@ export default function CrashGame() {
                 </AnimatePresence>
 
                 <div 
-                  className="relative h-52 sm:h-64 md:h-80 rounded-2xl overflow-hidden"
+                  className="relative h-52 sm:h-64 md:h-80 rounded-2xl overflow-hidden touch-pan-y"
                   style={{
                     background: "linear-gradient(180deg, rgba(11,4,32,0.95) 0%, rgba(27,14,63,0.9) 50%, rgba(11,4,32,0.95) 100%)",
                     boxShadow: "inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.3), 0 0 60px rgba(255,79,216,0.15), 0 0 100px rgba(76,244,255,0.1)",
@@ -1308,24 +1308,24 @@ export default function CrashGame() {
                           {crashed ? "Crashed At" : cashedOut ? "Cashed Out" : "Current Payout"}
                         </div>
                         <motion.div
-                          className="text-5xl sm:text-6xl md:text-8xl font-black font-mono relative"
-                          style={{
-                            background: crashed 
-                              ? "linear-gradient(180deg, #ff6b6b 0%, #ee5a5a 50%, #cc4444 100%)"
-                              : cashedOut
-                              ? "linear-gradient(180deg, #4ade80 0%, #22c55e 50%, #16a34a 100%)"
-                              : multiplier >= 5
+                          className={`text-5xl sm:text-6xl md:text-8xl font-black font-mono relative ${
+                            crashed ? "text-red-500" : cashedOut ? "text-green-400" : ""
+                          }`}
+                          style={crashed ? {
+                            textShadow: "0 4px 0 #7f1d1d, 0 8px 0 #450a0a, 0 0 60px rgba(239,68,68,0.8), 0 0 100px rgba(239,68,68,0.5)",
+                            letterSpacing: "-0.02em",
+                          } : cashedOut ? {
+                            textShadow: "0 4px 0 #14532d, 0 8px 0 #052e16, 0 0 60px rgba(74,222,128,0.8), 0 0 100px rgba(34,197,94,0.5)",
+                            letterSpacing: "-0.02em",
+                          } : {
+                            background: multiplier >= 5
                               ? "linear-gradient(180deg, #FFC94C 0%, #FF4FD8 50%, #4CF4FF 100%)"
                               : multiplier >= 2
                               ? "linear-gradient(180deg, #FF4FD8 0%, #a855f7 50%, #4CF4FF 100%)"
                               : "linear-gradient(180deg, #ffffff 0%, #e0e0e0 50%, #a0a0a0 100%)",
                             WebkitBackgroundClip: "text",
                             WebkitTextFillColor: "transparent",
-                            filter: crashed 
-                              ? "drop-shadow(0 4px 0 rgba(200,50,50,0.9)) drop-shadow(0 8px 0 rgba(150,30,30,0.6)) drop-shadow(0 0 40px rgba(255,107,107,0.8))"
-                              : cashedOut
-                              ? "drop-shadow(0 4px 0 rgba(20,120,60,0.9)) drop-shadow(0 8px 0 rgba(10,80,40,0.6)) drop-shadow(0 0 40px rgba(74,222,128,0.8))"
-                              : multiplier >= 5
+                            filter: multiplier >= 5
                               ? "drop-shadow(0 4px 0 rgba(180,60,120,0.9)) drop-shadow(0 8px 0 rgba(100,30,80,0.6)) drop-shadow(0 0 60px rgba(255,79,216,0.6))"
                               : "drop-shadow(0 4px 0 rgba(100,40,140,0.8)) drop-shadow(0 8px 20px rgba(168,85,247,0.4)) drop-shadow(0 0 40px rgba(255,79,216,0.3))",
                             letterSpacing: "-0.02em",
