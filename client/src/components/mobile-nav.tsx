@@ -5,10 +5,14 @@ import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
+import chroniclesImg from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
+import crowdfundImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
+import presaleImg from "@assets/generated_images/darkwave_crypto_token_coin_holographic.png";
+
 const featuredItems = [
-  { href: "/roadmap-chronicles", label: "DarkWave Chronicles", icon: Gamepad2, badge: "Game", bgGradient: "rgba(168, 85, 247, 0.15), rgba(236, 72, 153, 0.15)", iconGradient: "#a855f7, #ec4899", overlayColor: "rgba(168,85,247,0.1)", badgeClass: "bg-purple-500/30 text-purple-300", description: "AI-Powered Fantasy Life Sim" },
-  { href: "/crowdfund", label: "Fund Development", icon: Heart, badge: "Support", bgGradient: "rgba(6, 182, 212, 0.15), rgba(59, 130, 246, 0.15)", iconGradient: "#06b6d4, #3b82f6", overlayColor: "rgba(6,182,212,0.1)", badgeClass: "bg-cyan-500/30 text-cyan-300", description: "Help Build the Future" },
-  { href: "/presale", label: "Token Presale", icon: Coins, badge: "Live", bgGradient: "rgba(245, 158, 11, 0.15), rgba(239, 68, 68, 0.15)", iconGradient: "#f59e0b, #ef4444", overlayColor: "rgba(245,158,11,0.1)", badgeClass: "bg-amber-500/30 text-amber-300", description: "Get DWC at Best Price" },
+  { href: "/roadmap-chronicles", label: "DarkWave Chronicles", icon: Gamepad2, badge: "Game", image: chroniclesImg, overlayGradient: "linear-gradient(135deg, rgba(168,85,247,0.85) 0%, rgba(236,72,153,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#a855f7, #ec4899", badgeClass: "bg-purple-500/30 text-purple-300", description: "AI-Powered Fantasy Life Sim" },
+  { href: "/crowdfund", label: "Fund Development", icon: Heart, badge: "Support", image: crowdfundImg, overlayGradient: "linear-gradient(135deg, rgba(6,182,212,0.85) 0%, rgba(59,130,246,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#06b6d4, #3b82f6", badgeClass: "bg-cyan-500/30 text-cyan-300", description: "Help Build the Future" },
+  { href: "/presale", label: "Token Presale", icon: Coins, badge: "Live", image: presaleImg, overlayGradient: "linear-gradient(135deg, rgba(245,158,11,0.85) 0%, rgba(239,68,68,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#f59e0b, #ef4444", badgeClass: "bg-amber-500/30 text-amber-300", description: "Get DWC at Best Price" },
 ];
 
 const navItems = [
@@ -135,19 +139,35 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
                       position: 'relative',
                       padding: '16px',
                       borderRadius: '16px',
-                      background: `linear-gradient(135deg, ${item.bgGradient})`,
-                      border: isActive ? '2px solid rgba(168, 85, 247, 0.6)' : '1px solid rgba(255, 255, 255, 0.1)',
+                      border: isActive ? '2px solid rgba(168, 85, 247, 0.6)' : '1px solid rgba(255, 255, 255, 0.2)',
                       overflow: 'hidden',
                       cursor: 'pointer',
                     }}
                   >
+                    {/* Photorealistic Background Image */}
+                    <img 
+                      src={item.image} 
+                      alt=""
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        objectPosition: 'center',
+                      }}
+                    />
+                    {/* Color Overlay for Readability */}
                     <div style={{ 
                       position: 'absolute', 
                       top: 0, 
                       left: 0, 
                       right: 0, 
                       bottom: 0, 
-                      background: `linear-gradient(135deg, ${item.overlayColor}, transparent)`,
+                      background: item.overlayGradient,
                       pointerEvents: 'none'
                     }} />
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', position: 'relative', zIndex: 1 }}>
@@ -159,20 +179,21 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        boxShadow: `0 8px 32px ${item.overlayColor}`,
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+                        backdropFilter: 'blur(8px)',
                       }}>
                         <Icon style={{ width: '22px', height: '22px', color: '#ffffff' }} />
                       </div>
                       <div style={{ flex: 1 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
-                          <span style={{ fontWeight: 600, fontSize: '14px', color: '#ffffff' }}>{item.label}</span>
+                          <span style={{ fontWeight: 600, fontSize: '14px', color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{item.label}</span>
                           <Badge className={`text-[9px] px-1.5 py-0 ${item.badgeClass}`}>
                             {item.badge}
                           </Badge>
                         </div>
-                        <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>{item.description}</span>
+                        <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.8)', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>{item.description}</span>
                       </div>
-                      <Zap style={{ width: '16px', height: '16px', color: item.overlayColor }} />
+                      <Zap style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.6)' }} />
                     </div>
                   </div>
                 </Link>

@@ -16,6 +16,40 @@ DarkWave Smart Chain (DSC) is a comprehensive blockchain ecosystem developed by 
 
 **CRITICAL: Every new page MUST follow this design protocol. Reference this section before creating any UI.**
 
+### ⚠️ ABSOLUTE RULE: Photorealistic Images on ALL Cards
+
+**THIS IS NON-NEGOTIABLE. ZERO EXCEPTIONS.**
+
+Every card, tile, panel, or container that displays subject matter MUST have a photorealistic background image that reflects the card's content. This applies to:
+
+- ✅ Feature cards on any page
+- ✅ Navigation menu cards (mobile and desktop)
+- ✅ Carousel/slideshow items
+- ✅ Accordion items when expanded
+- ✅ Dashboard widgets and stat cards
+- ✅ Category cards in grids
+- ✅ NFT/product cards
+- ✅ Any clickable card with a destination
+
+**NEVER create:**
+- ❌ Transparent/see-through cards with just icons
+- ❌ Gradient-only backgrounds without imagery
+- ❌ Plain colored cards
+- ❌ Cards with just text and icons
+- ❌ "Skeleton" or placeholder cards in production
+
+**Implementation Pattern:**
+```jsx
+<div className="relative overflow-hidden rounded-xl">
+  {/* 1. Background Image (required) */}
+  <img src={subjectMatterImage} className="absolute inset-0 w-full h-full object-cover" />
+  {/* 2. Gradient Overlay (required for text readability) */}
+  <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+  {/* 3. Content (z-indexed above) */}
+  <div className="relative z-10">...</div>
+</div>
+```
+
 ### Card & Layout Requirements
 - **Bento grid layouts**: Varied card sizes (1x1, 2x1, 2x2, etc.) in responsive grid
 - **Photorealistic backgrounds**: Every card must have a photorealistic image from `attached_assets/generated_images/`
