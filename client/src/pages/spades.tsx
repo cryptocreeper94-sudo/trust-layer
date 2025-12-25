@@ -104,17 +104,17 @@ function PlayerArea({
   trickCard?: GameCard;
 }) {
   const positionStyles = {
-    south: "bottom-0 left-1/2 -translate-x-1/2 flex-col",
-    north: "top-0 left-1/2 -translate-x-1/2 flex-col-reverse",
-    west: "left-0 top-1/2 -translate-y-1/2 flex-row",
-    east: "right-0 top-1/2 -translate-y-1/2 flex-row-reverse",
+    south: "bottom-4 left-1/2 -translate-x-1/2 flex-col",
+    north: "top-20 left-1/2 -translate-x-1/2 flex-col-reverse",
+    west: "left-2 top-1/2 -translate-y-1/2 flex-row",
+    east: "right-2 top-1/2 -translate-y-1/2 flex-row-reverse",
   };
 
   const cardPositionStyles = {
-    south: "bottom-32 left-1/2 -translate-x-1/2",
-    north: "top-24 left-1/2 -translate-x-1/2",
-    west: "left-20 top-1/2 -translate-y-1/2",
-    east: "right-20 top-1/2 -translate-y-1/2",
+    south: "bottom-36 left-1/2 -translate-x-1/2",
+    north: "top-36 left-1/2 -translate-x-1/2",
+    west: "left-24 top-1/2 -translate-y-1/2",
+    east: "right-24 top-1/2 -translate-y-1/2",
   };
 
   return (
