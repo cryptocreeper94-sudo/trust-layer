@@ -42,7 +42,7 @@ interface Bet {
     intervalPercent: number;
     nextTrigger: number;
   };
-  status: "active" | "cashed" | "crashed" | "partial";
+  status: "active" | "cashed" | "crashed" | "partial" | "waiting";
   cashoutMultiplier?: number;
   payout?: number;
   partialCashouts: { multiplier: number; percent: number; amount: number }[];
@@ -332,6 +332,9 @@ export default function CrashGame() {
   const [lostAmount, setLostAmount] = useState(0);
   const [partialCashouts, setPartialCashouts] = useState<{ multiplier: number; percent: number; amount: number }[]>([]);
   const [nextAutoProgTrigger, setNextAutoProgTrigger] = useState<number | null>(null);
+  const [lockedStake, setLockedStake] = useState(0);
+  const [lockedMode, setLockedMode] = useState<BetMode>("standard");
+  const [myBetId, setMyBetId] = useState<string | null>(null);
   
   const [bets, setBets] = useState<Bet[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
@@ -381,10 +384,26 @@ export default function CrashGame() {
     const cashoutAmount = ridingAmount * (percent / 100) * (1 - HOUSE_EDGE);
     const newRiding = ridingAmount * (1 - percent / 100);
     
+    const newCashout = { multiplier: mult, percent, amount: cashoutAmount };
+    
     setSecuredAmount(prev => prev + cashoutAmount);
     setRidingAmount(newRiding);
-    setPartialCashouts(prev => [...prev, { multiplier: mult, percent, amount: cashoutAmount }]);
+    setPartialCashouts(prev => [...prev, newCashout]);
     setDemoBalance(prev => prev + cashoutAmount);
+    
+    if (myBetId) {
+      setBets(prev => prev.map(b => 
+        b.id === myBetId 
+          ? { 
+              ...b, 
+              securedAmount: b.securedAmount + cashoutAmount,
+              ridingAmount: newRiding,
+              partialCashouts: [...b.partialCashouts, newCashout],
+              status: "partial" as const
+            }
+          : b
+      ));
+    }
     
     const reward = cashoutAmount * currentTier.rewardRate;
     setPendingRewards(prev => prev + reward);
@@ -394,14 +413,17 @@ export default function CrashGame() {
       description: `Secured ${percent}% (+${cashoutAmount.toFixed(2)} DWC) at ${mult.toFixed(2)}x`,
     });
     
-    if (newRiding < parseFloat(betAmount) * MIN_PROGRESSIVE_FLOOR) {
+    if (newRiding < lockedStake * MIN_PROGRESSIVE_FLOOR) {
       setCashedOut(true);
+      if (myBetId) {
+        setBets(prev => prev.map(b => b.id === myBetId ? { ...b, status: "cashed" as const, ridingAmount: 0 } : b));
+      }
       toast({
         title: "Fully Cashed Out!",
         description: "Remaining amount below minimum threshold",
       });
     }
-  }, [ridingAmount, cashedOut, betAmount, currentTier, toast]);
+  }, [ridingAmount, cashedOut, lockedStake, currentTier, toast, myBetId]);
 
   const startRound = useCallback(() => {
     setRoundStatus("running");
@@ -415,6 +437,9 @@ export default function CrashGame() {
     setLostAmount(0);
     setPartialCashouts([]);
     setNextAutoProgTrigger(null);
+    setLockedStake(0);
+    setLockedMode("standard");
+    setMyBetId(null);
     setRoundNumber(prev => prev + 1);
     
     const targetCrash = generateCrashPoint();
@@ -453,7 +478,7 @@ export default function CrashGame() {
   }, [ridingAmount]);
 
   useEffect(() => {
-    if (roundStatus === "running" && hasBet && !cashedOut && betMode === "autoTP") {
+    if (roundStatus === "running" && hasBet && !cashedOut && lockedMode === "autoTP") {
       const target = parseFloat(autoTPTarget);
       if (!isNaN(target) && multiplier >= target) {
         const payout = ridingAmount * (1 - HOUSE_EDGE);
@@ -462,16 +487,35 @@ export default function CrashGame() {
         setCashedOut(true);
         setDemoBalance(prev => prev + payout);
         
+        if (myBetId) {
+          setBets(prev => prev.map(b => 
+            b.id === myBetId 
+              ? { 
+                  ...b, 
+                  status: "cashed" as const, 
+                  cashoutMultiplier: target, 
+                  payout,
+                  securedAmount: payout,
+                  ridingAmount: 0,
+                  partialCashouts: [{ multiplier: target, percent: 100, amount: payout }]
+                }
+              : b
+          ));
+        }
+        
+        const reward = payout * currentTier.rewardRate;
+        setPendingRewards(prev => prev + reward);
+        
         toast({
           title: "Auto Take Profit! 🎯",
           description: `+${payout.toFixed(2)} DWC at ${target.toFixed(2)}x`,
         });
       }
     }
-  }, [multiplier, roundStatus, hasBet, cashedOut, betMode, autoTPTarget, ridingAmount, toast]);
+  }, [multiplier, roundStatus, hasBet, cashedOut, lockedMode, autoTPTarget, ridingAmount, toast, myBetId, currentTier]);
 
   useEffect(() => {
-    if (roundStatus === "running" && hasBet && !cashedOut && betMode === "autoProgressive" && nextAutoProgTrigger) {
+    if (roundStatus === "running" && hasBet && !cashedOut && lockedMode === "autoProgressive" && nextAutoProgTrigger) {
       if (multiplier >= nextAutoProgTrigger) {
         const stepPercent = parseFloat(autoProgStep);
         executePartialCashout(stepPercent, multiplier);
@@ -479,9 +523,20 @@ export default function CrashGame() {
         const intervalPercent = parseFloat(autoProgInterval);
         const newTrigger = multiplier * (1 + intervalPercent / 100);
         setNextAutoProgTrigger(newTrigger);
+        
+        if (myBetId) {
+          setBets(prev => prev.map(b => 
+            b.id === myBetId && b.autoProgressiveConfig
+              ? { 
+                  ...b, 
+                  autoProgressiveConfig: { ...b.autoProgressiveConfig, nextTrigger: newTrigger }
+                }
+              : b
+          ));
+        }
       }
     }
-  }, [multiplier, roundStatus, hasBet, cashedOut, betMode, nextAutoProgTrigger, autoProgStep, autoProgInterval, executePartialCashout]);
+  }, [multiplier, roundStatus, hasBet, cashedOut, lockedMode, nextAutoProgTrigger, autoProgStep, autoProgInterval, executePartialCashout, myBetId]);
 
   useEffect(() => {
     return () => {
@@ -509,14 +564,19 @@ export default function CrashGame() {
     setTotalWagered(prev => prev + amount);
     setAirdropPool(prev => prev + amount * 0.01);
     setRidingAmount(amount);
+    setLockedStake(amount);
+    setLockedMode(betMode);
     
     if (betMode === "autoProgressive") {
       const intervalPercent = parseFloat(autoProgInterval);
       setNextAutoProgTrigger(1 * (1 + intervalPercent / 100));
     }
     
+    const betId = crypto.randomUUID();
+    setMyBetId(betId);
+    
     const newBet: Bet = {
-      id: crypto.randomUUID(),
+      id: betId,
       username,
       amount,
       mode: betMode,
@@ -567,14 +627,32 @@ export default function CrashGame() {
   const handleCashout = () => {
     if (cashedOut || roundStatus !== "running" || !hasBet) return;
     
-    if (betMode === "progressive") {
+    if (lockedMode === "progressive") {
       executePartialCashout(progressivePercent, multiplier);
     } else {
       const payout = ridingAmount * (1 - HOUSE_EDGE);
+      const cashoutMult = multiplier;
+      
       setSecuredAmount(prev => prev + payout);
       setRidingAmount(0);
       setCashedOut(true);
       setDemoBalance(prev => prev + payout);
+      
+      if (myBetId) {
+        setBets(prev => prev.map(b => 
+          b.id === myBetId 
+            ? { 
+                ...b, 
+                status: "cashed" as const, 
+                cashoutMultiplier: cashoutMult, 
+                payout,
+                securedAmount: b.securedAmount + payout,
+                ridingAmount: 0,
+                partialCashouts: [...b.partialCashouts, { multiplier: cashoutMult, percent: 100, amount: payout }]
+              }
+            : b
+        ));
+      }
       
       const reward = payout * currentTier.rewardRate;
       setPendingRewards(prev => prev + reward);
@@ -590,10 +668,30 @@ export default function CrashGame() {
     if (cashedOut || roundStatus !== "running" || !hasBet || ridingAmount <= 0) return;
     
     const payout = ridingAmount * (1 - HOUSE_EDGE);
+    const cashoutMult = multiplier;
     setSecuredAmount(prev => prev + payout);
     setRidingAmount(0);
     setCashedOut(true);
     setDemoBalance(prev => prev + payout);
+    
+    if (myBetId) {
+      setBets(prev => prev.map(b => 
+        b.id === myBetId 
+          ? { 
+              ...b, 
+              status: "cashed" as const, 
+              cashoutMultiplier: cashoutMult, 
+              payout: b.securedAmount + payout,
+              securedAmount: b.securedAmount + payout,
+              ridingAmount: 0,
+              partialCashouts: [...b.partialCashouts, { multiplier: cashoutMult, percent: 100, amount: payout }]
+            }
+          : b
+      ));
+    }
+    
+    const reward = payout * currentTier.rewardRate;
+    setPendingRewards(prev => prev + reward);
     
     toast({
       title: "Fully Cashed Out! 💰",
@@ -787,10 +885,10 @@ export default function CrashGame() {
                   </div>
                 </div>
 
-                {hasBet && (betMode === "progressive" || betMode === "autoProgressive") && (
+                {hasBet && (
                   <div className="mt-3">
                     <LiveLedger secured={securedAmount} riding={ridingAmount} lost={lostAmount} />
-                    <PartialCashoutChips cashouts={partialCashouts} />
+                    {partialCashouts.length > 0 && <PartialCashoutChips cashouts={partialCashouts} />}
                   </div>
                 )}
 
