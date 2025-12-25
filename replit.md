@@ -2,7 +2,7 @@
 
 ## Overview
 
-DarkWave Smart Chain (DSC) is a comprehensive blockchain ecosystem developed by DarkWave Studios, designed to surpass Solana and Ethereum in speed, stability, and features. It includes a Layer 1 Proof-of-Authority blockchain and the DarkWave Portal, a React web application serving as the ecosystem's interface, block explorer, and developer hub. The project also envisions "DarkWave Chronicles," a fantasy-themed game with a living political simulation and community-driven creation. The ecosystem is structured across three domains: dwsc.io (main blockchain portal), darkwavegames.io (gaming), and darkwavestudios.io (parent company site).
+DarkWave Smart Chain (DSC) is a comprehensive blockchain ecosystem developed by DarkWave Studios, designed to surpass Solana and Ethereum in speed, stability, and features. It includes a Layer 1 Proof-of-Authority blockchain and the DarkWave Portal, a React web application serving as the ecosystem's interface, block explorer, and developer hub. The project also envisions "DarkWave Chronicles," a fantasy-themed game with a living political simulation and community-driven creation. The ecosystem is structured across four domains: dwsc.io (main blockchain portal), darkwavegames.io (gaming), darkwavestudios.io (parent company site), and yourlegacy.io (Chronicles standalone).
 
 ## User Preferences
 
@@ -168,7 +168,7 @@ Characters stored in `attached_assets/generated_images/` with naming convention:
 - **Backend**: Node.js, Express.js, TypeScript, Drizzle ORM, PostgreSQL
 - **Auth**: Replit Auth (OAuth 2.0), WebAuthn/Passkeys
 - **Payments**: Stripe (cards), Coinbase Commerce (crypto)
-- **Multi-PWA**: Host-based routing serves distinct PWA manifests, themes, and installable experiences for `dwsc.io`, `darkwavegames.io`, and `darkwavestudios.io` from a shared backend.
+- **Multi-PWA**: Host-based routing serves distinct PWA manifests, themes, and installable experiences for `dwsc.io`, `darkwavegames.io`, `darkwavestudios.io`, and `yourlegacy.io` from a shared backend.
 
 ### DarkWave Studio
 - **Editor**: Monaco v0.52.2 via CDN (70+ language support)

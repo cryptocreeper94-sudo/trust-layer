@@ -568,7 +568,7 @@ export default function Chronicles() {
                 Not A Game. <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">A Life.</span>
               </p>
               <p className="text-lg md:text-xl text-white/70 mb-8 max-w-3xl mx-auto leading-relaxed">
-                A real-time life simulator where YOU are the character. Your beliefs. Your emotions. Your legacy.
+                A real-time life simulator where YOU are the character. Your beliefs. Your emotions. <span className="text-white font-semibold">Your Legacy.</span>
                 <br className="hidden md:block" />
                 The world moves whether you're there or not. As real as it gets without being your actual life.
               </p>
@@ -846,7 +846,7 @@ export default function Chronicles() {
             </h2>
             
             <p className="text-2xl text-muted-foreground mb-4">
-              Live Your Legacy.
+              <span className="bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent font-bold">Live Your Legacy.</span>
             </p>
             
             <p className="text-lg text-white/50 mb-10 max-w-2xl mx-auto">
