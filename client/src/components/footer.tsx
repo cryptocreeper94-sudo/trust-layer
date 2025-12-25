@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { APP_VERSION } from "@shared/schema";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 
 export function Footer() {
   const [showPinModal, setShowPinModal] = useState(false);
@@ -29,6 +29,20 @@ export function Footer() {
             <span className="font-semibold text-white">DarkWave Studios, LLC</span>
             <span>© 2025</span>
             <span className="px-2 py-0.5 rounded bg-white/5 font-mono">v{APP_VERSION}</span>
+            <Link 
+              href="/roadmap"
+              className="text-white/40 hover:text-cyan-400 transition-colors"
+              data-testid="link-roadmap"
+            >
+              Roadmap
+            </Link>
+            <Link 
+              href="/roadmap-chronicles"
+              className="text-white/40 hover:text-purple-400 transition-colors"
+              data-testid="link-roadmap-chronicles"
+            >
+              Chronicles
+            </Link>
             <button 
               onClick={() => setShowPinModal(true)}
               className="text-white/30 hover:text-white/60 transition-colors"

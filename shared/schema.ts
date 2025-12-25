@@ -2153,3 +2153,47 @@ export const insertCrowdfundContributionSchema = createInsertSchema(crowdfundCon
 
 export type CrowdfundContribution = typeof crowdfundContributions.$inferSelect;
 export type InsertCrowdfundContribution = z.infer<typeof insertCrowdfundContributionSchema>;
+
+// Roadmap tables
+export const roadmapPhases = pgTable("roadmap_phases", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  roadmapType: text("roadmap_type").notNull(), // "chronicles" or "ecosystem"
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  order: integer("order").notNull().default(0),
+  status: text("status").notNull().default("upcoming"), // upcoming, in_progress, completed
+  targetDate: text("target_date"),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertRoadmapPhaseSchema = createInsertSchema(roadmapPhases).omit({
+  id: true,
+  completedAt: true,
+  createdAt: true,
+});
+
+export type RoadmapPhase = typeof roadmapPhases.$inferSelect;
+export type InsertRoadmapPhase = z.infer<typeof insertRoadmapPhaseSchema>;
+
+export const roadmapMilestones = pgTable("roadmap_milestones", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  phaseId: varchar("phase_id").references(() => roadmapPhases.id),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  order: integer("order").notNull().default(0),
+  status: text("status").notNull().default("pending"), // pending, in_progress, completed
+  isRequired: boolean("is_required").notNull().default(true),
+  targetDate: text("target_date"),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertRoadmapMilestoneSchema = createInsertSchema(roadmapMilestones).omit({
+  id: true,
+  completedAt: true,
+  createdAt: true,
+});
+
+export type RoadmapMilestone = typeof roadmapMilestones.$inferSelect;
+export type InsertRoadmapMilestone = z.infer<typeof insertRoadmapMilestoneSchema>;
