@@ -194,31 +194,23 @@ export default function Home() {
         </div>
         
         <motion.div 
-          className="absolute bottom-6 left-4 flex flex-col items-center gap-1 cursor-pointer z-20"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, y: [0, 8, 0] }}
-          transition={{ 
-            opacity: { delay: 1, duration: 0.5 },
-            y: { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
-          }}
+          className="absolute bottom-20 left-4 flex flex-col items-center cursor-pointer z-20"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
           onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
           data-testid="button-scroll-down-left"
         >
-          <ChevronDown className="w-5 h-5 text-primary/70" />
+          <ChevronDown className="w-6 h-6 text-primary" />
         </motion.div>
         
         <motion.div 
-          className="absolute bottom-6 right-4 flex flex-col items-center gap-1 cursor-pointer z-20"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, y: [0, 8, 0] }}
-          transition={{ 
-            opacity: { delay: 1, duration: 0.5 },
-            y: { duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }
-          }}
+          className="absolute bottom-20 right-4 flex flex-col items-center cursor-pointer z-20"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
           onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
           data-testid="button-scroll-down-right"
         >
-          <ChevronDown className="w-5 h-5 text-primary/70" />
+          <ChevronDown className="w-6 h-6 text-primary" />
         </motion.div>
       </section>
 
