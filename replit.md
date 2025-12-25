@@ -60,7 +60,24 @@ DarkWave Smart Chain (DSC) is a comprehensive blockchain ecosystem developed by 
 
 ## DarkWave Chronicles - AI Life Generator Blueprint
 
-**Core Philosophy**: No good guys. No bad guys. Only free will and consequences.
+**Core Philosophy**: No external moral judgment. Only internal belief systems, free will, and consequences.
+
+### The Sentient Mirror Concept
+The character isn't an avatar you control—it's an extension of your own psyche in a fantasy world. Their emotions mirror your emotions. Their struggles reflect your inner landscape. This is self-discovery through interactive narrative.
+
+### Spiritual/Belief System Layer
+Players choose a belief framework that shapes their character's conscience and emotional responses:
+- **Real-world faiths**: Buddhism, Hinduism, Christianity, Islam, Judaism, indigenous spiritual traditions
+- **Philosophical stances**: Atheism, agnosticism, nihilism, stoicism, humanism
+- **Fantasy equivalents**: In-world deity representations that parallel real beliefs
+
+The belief system affects:
+- How the character emotionally processes choices
+- What causes inner turmoil vs. peace
+- Relationship dynamics with characters of different beliefs
+- The character's interpretation of "right" and "wrong" (internal, not game-imposed)
+
+**Key Distinction**: The game never labels actions as good/evil. The character's chosen belief system creates their OWN moral framework, and consequences flow from that.
 
 ### Emotion System (5-Axis Model)
 
