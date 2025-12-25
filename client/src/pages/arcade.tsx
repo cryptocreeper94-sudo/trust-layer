@@ -24,6 +24,7 @@ import spaceBlasterImg from "@assets/generated_images/space_shooter_arcade_scene
 import tetrisImg from "@assets/generated_images/colorful_tetris_blocks.png";
 import snakeImg from "@assets/generated_images/neon_snake_game.png";
 import pacmanImg from "@assets/generated_images/pac-man_arcade_maze.png";
+import spadesImg from "@assets/generated_images/spades_card_game_table.png";
 import { useAuth } from "@/hooks/use-auth";
 
 const ONE_DWC = BigInt("1000000000000000000");
@@ -430,16 +431,21 @@ function SlotsGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }: {
 }
 
 const CLASSIC_GAMES = [
-  { href: "/solitaire", img: solitaireImg, name: "Solitaire", glow: "rgba(34,197,94,0.3)" },
-  { href: "/minesweeper", img: minesweeperImg, name: "Minesweeper", glow: "rgba(239,68,68,0.3)" },
-  { href: "/galaga", img: spaceBlasterImg, name: "Space Blaster", glow: "rgba(139,92,246,0.3)" },
-  { href: "/tetris", img: tetrisImg, name: "Tetris", glow: "rgba(168,85,247,0.3)" },
-  { href: "/snake", img: snakeImg, name: "Snake", glow: "rgba(34,197,94,0.3)" },
-  { href: "/pacman", img: pacmanImg, name: "Pac-Man", glow: "rgba(234,179,8,0.3)" },
+  { href: "/spades", img: spadesImg, name: "Spades", desc: "4-Player Card Game", glow: "rgba(34,197,94,0.4)" },
+  { href: "/solitaire", img: solitaireImg, name: "Solitaire", desc: "Klondike Classic", glow: "rgba(34,197,94,0.3)" },
+  { href: "/minesweeper", img: minesweeperImg, name: "Minesweeper", desc: "Puzzle Strategy", glow: "rgba(239,68,68,0.3)" },
+  { href: "/galaga", img: spaceBlasterImg, name: "Space Blaster", desc: "Arcade Shooter", glow: "rgba(139,92,246,0.3)" },
+  { href: "/tetris", img: tetrisImg, name: "Tetris", desc: "Block Puzzle", glow: "rgba(168,85,247,0.3)" },
+  { href: "/snake", img: snakeImg, name: "Snake", desc: "Classic Retro", glow: "rgba(34,197,94,0.3)" },
+  { href: "/pacman", img: pacmanImg, name: "Pac-Man", desc: "Maze Chase", glow: "rgba(234,179,8,0.3)" },
 ];
 
 function ClassicGamesCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  
+  const minSwipeDistance = 50;
   
   const goToPrev = () => {
     setCurrentIndex(prev => (prev === 0 ? CLASSIC_GAMES.length - 1 : prev - 1));
@@ -449,46 +455,72 @@ function ClassicGamesCarousel() {
     setCurrentIndex(prev => (prev === CLASSIC_GAMES.length - 1 ? 0 : prev + 1));
   };
 
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    if (Math.abs(distance) > minSwipeDistance) {
+      if (distance > 0) goToNext();
+      else goToPrev();
+    }
+  };
+
   return (
     <div className="relative">
-      <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-bold text-white/80">Classic Games</h3>
-        <div className="flex gap-1">
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-base font-bold text-white flex items-center gap-2">
+          <Gamepad2 className="w-4 h-4 text-pink-400" />
+          Free Arcade Games
+        </h3>
+        <div className="flex gap-2">
           <Button
             variant="ghost"
             size="icon"
             onClick={goToPrev}
-            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white"
+            className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/10 active:scale-95 transition-transform"
             data-testid="button-carousel-prev"
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-5 h-5" />
           </Button>
           <Button
             variant="ghost"
             size="icon"
             onClick={goToNext}
-            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white"
+            className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/10 active:scale-95 transition-transform"
             data-testid="button-carousel-next"
           >
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-5 h-5" />
           </Button>
         </div>
       </div>
       
-      <div className="relative overflow-hidden rounded-2xl">
+      <div 
+        className="relative overflow-hidden rounded-2xl"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
         <motion.div
           className="flex"
           animate={{ x: `-${currentIndex * 100}%` }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
-          {CLASSIC_GAMES.map((game, index) => (
+          {CLASSIC_GAMES.map((game) => (
             <Link 
               key={game.href} 
               href={game.href} 
               className="block flex-shrink-0 w-full group"
             >
               <div 
-                className="relative h-48 rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:shadow-[0_0_40px_var(--glow)]"
+                className="relative h-56 sm:h-64 rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:shadow-[0_0_50px_var(--glow)]"
                 style={{ "--glow": game.glow } as React.CSSProperties}
               >
                 <img 
@@ -496,10 +528,16 @@ function ClassicGamesCarousel() {
                   alt={game.name} 
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                <div className="absolute inset-0 p-4 flex flex-col justify-end">
-                  <h3 className="text-2xl font-bold text-white drop-shadow-lg">{game.name}</h3>
-                  <Badge className="bg-blue-500/50 text-blue-200 border-blue-400/30 text-xs w-fit mt-2 backdrop-blur-sm">FREE</Badge>
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                <div className="absolute inset-0 p-5 flex flex-col justify-end">
+                  <Badge className="bg-blue-500/60 text-blue-100 border-blue-400/40 text-[10px] w-fit mb-2 backdrop-blur-sm">FREE TO PLAY</Badge>
+                  <h3 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">{game.name}</h3>
+                  <p className="text-sm text-white/70 mt-1">{game.desc}</p>
+                  <div className="mt-3 flex items-center gap-2">
+                    <span className="text-xs px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm text-white/80 border border-white/10">
+                      Tap to Play
+                    </span>
+                  </div>
                 </div>
               </div>
             </Link>
@@ -508,20 +546,25 @@ function ClassicGamesCarousel() {
       </div>
       
       {/* Dots indicator */}
-      <div className="flex justify-center gap-1.5 mt-3">
+      <div className="flex justify-center gap-2 mt-4">
         {CLASSIC_GAMES.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}
-            className={`w-2 h-2 rounded-full transition-all ${
+            className={`h-2 rounded-full transition-all duration-300 ${
               index === currentIndex 
-                ? "bg-white w-4" 
-                : "bg-white/30 hover:bg-white/50"
+                ? "bg-pink-400 w-6" 
+                : "bg-white/20 w-2 hover:bg-white/40"
             }`}
             data-testid={`button-carousel-dot-${index}`}
           />
         ))}
       </div>
+      
+      {/* Game counter */}
+      <p className="text-center text-xs text-white/40 mt-2">
+        {currentIndex + 1} / {CLASSIC_GAMES.length}
+      </p>
     </div>
   );
 }
@@ -777,35 +820,7 @@ export default function Arcade() {
                 </div>
               </div>
 
-              {/* SPADES Card */}
-              <Link href="/spades" className="block group">
-                <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.01] group-hover:shadow-[0_0_40px_rgba(139,92,246,0.3)]">
-                  <div className="absolute inset-0 bg-gradient-to-br from-green-900 via-emerald-800 to-green-900" />
-                  <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48cGF0aCBkPSJNMzAgNUMxNSAxNSAxMCAyNSAxMCAzMGMwIDEwIDEwIDE1IDIwIDI1IDEwLTEwIDIwLTE1IDIwLTI1IDAtNS01LTE1LTIwLTI1eiIgZmlsbD0iIzAwMDAwMDIwIi8+PC9zdmc+')] opacity-20" />
-                  <div className="relative z-10 p-4">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="p-2 rounded-xl bg-green-500/30 backdrop-blur-sm border border-green-400/20">
-                        <span className="text-2xl">♠</span>
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-bold text-white">Spades</h3>
-                        <p className="text-xs text-green-300/80">Classic Card Game</p>
-                      </div>
-                      <Badge className="ml-auto bg-blue-500/30 backdrop-blur-sm text-blue-300 border-blue-400/30 text-[9px]">FREE</Badge>
-                    </div>
-                    <p className="text-sm text-white/70 mb-3">
-                      Partner up against AI opponents in this classic trick-taking game. First to 500 wins!
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-sm text-green-300 border border-green-400/30">4 Players</span>
-                      <span className="text-[10px] px-2.5 py-1 rounded-full bg-purple-500/30 backdrop-blur-sm text-purple-300 border border-purple-400/30">AI Opponents</span>
-                      <span className="text-[10px] px-2.5 py-1 rounded-full bg-amber-500/30 backdrop-blur-sm text-amber-300 border border-amber-400/30">Social</span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-
-              {/* Classic Games Carousel */}
+              {/* Free Arcade Games Carousel */}
               <ClassicGamesCarousel />
             </div>
 
