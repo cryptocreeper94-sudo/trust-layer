@@ -4138,6 +4138,343 @@ Current context:
   });
 
   // ============================================
+  // SWEEPSTAKES SYSTEM (GC/SC)
+  // ============================================
+
+  // Define coin packs for purchase
+  const COIN_PACKS = [
+    { id: "starter", name: "Starter Pack", priceUsd: "4.99", goldCoins: "10000", bonusSc: "5" },
+    { id: "value", name: "Value Pack", priceUsd: "9.99", goldCoins: "25000", bonusSc: "15" },
+    { id: "popular", name: "Popular Pack", priceUsd: "19.99", goldCoins: "60000", bonusSc: "40" },
+    { id: "mega", name: "Mega Pack", priceUsd: "49.99", goldCoins: "175000", bonusSc: "125" },
+    { id: "premium", name: "Premium Pack", priceUsd: "99.99", goldCoins: "400000", bonusSc: "300" },
+    { id: "whale", name: "Whale Pack", priceUsd: "199.99", goldCoins: "900000", bonusSc: "750" },
+  ];
+
+  // Daily bonus amounts by streak day (max 7)
+  const DAILY_BONUS_GC = [100, 200, 300, 500, 750, 1000, 2000];
+  const DAILY_BONUS_SC = [0.5, 1, 1.5, 2, 3, 4, 5];
+
+  // Get sweepstakes balance
+  app.get("/api/sweeps/balance", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      let balance = await storage.getSweepsBalance(userId);
+      
+      if (!balance) {
+        balance = await storage.createSweepsBalance(userId);
+      }
+      
+      res.json({
+        goldCoins: balance.goldCoins,
+        sweepsCoins: balance.sweepsCoins,
+        totalGcPurchased: balance.totalGcPurchased,
+        totalScEarned: balance.totalScEarned,
+        totalScRedeemed: balance.totalScRedeemed,
+      });
+    } catch (error) {
+      console.error("Get balance error:", error);
+      res.status(500).json({ error: "Failed to get balance" });
+    }
+  });
+
+  // Get available coin packs
+  app.get("/api/sweeps/packs", async (req, res) => {
+    res.json(COIN_PACKS);
+  });
+
+  // Purchase coin pack
+  app.post("/api/sweeps/purchase", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const { packId, stripePaymentId } = req.body;
+      
+      const pack = COIN_PACKS.find(p => p.id === packId);
+      if (!pack) {
+        return res.status(400).json({ error: "Invalid pack" });
+      }
+      
+      // Record the purchase
+      const purchase = await storage.recordSweepsPurchase({
+        userId,
+        packId: pack.id,
+        packName: pack.name,
+        priceUsd: pack.priceUsd,
+        goldCoinsAmount: pack.goldCoins,
+        sweepsCoinsBonus: pack.bonusSc,
+        stripePaymentId: stripePaymentId || null,
+        status: "completed",
+      });
+      
+      // Update balance
+      const newBalance = await storage.updateSweepsBalance(userId, pack.goldCoins, pack.bonusSc);
+      
+      // Record bonus
+      await storage.recordSweepsBonus({
+        userId,
+        bonusType: "purchase_bonus",
+        sweepsCoinsAmount: pack.bonusSc,
+        goldCoinsAmount: "0",
+        description: `FREE SC with ${pack.name} purchase`,
+      });
+      
+      res.json({
+        success: true,
+        purchase,
+        newBalance: {
+          goldCoins: newBalance.goldCoins,
+          sweepsCoins: newBalance.sweepsCoins,
+        },
+      });
+    } catch (error) {
+      console.error("Purchase error:", error);
+      res.status(500).json({ error: "Failed to process purchase" });
+    }
+  });
+
+  // Get daily login status
+  app.get("/api/sweeps/daily", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const loginStatus = await storage.getDailyLoginStatus(userId);
+      
+      if (!loginStatus) {
+        // New login today - calculate streak
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+        
+        // For now, start at streak day 1 (would need yesterday's login to continue streak)
+        const streakDay = 1;
+        
+        res.json({
+          canClaim: true,
+          streakDay,
+          bonusGc: DAILY_BONUS_GC[Math.min(streakDay - 1, 6)],
+          bonusSc: DAILY_BONUS_SC[Math.min(streakDay - 1, 6)],
+          claimed: false,
+        });
+      } else {
+        res.json({
+          canClaim: !loginStatus.bonusClaimed,
+          streakDay: loginStatus.streakDay,
+          bonusGc: DAILY_BONUS_GC[Math.min(loginStatus.streakDay - 1, 6)],
+          bonusSc: DAILY_BONUS_SC[Math.min(loginStatus.streakDay - 1, 6)],
+          claimed: loginStatus.bonusClaimed,
+        });
+      }
+    } catch (error) {
+      console.error("Daily status error:", error);
+      res.status(500).json({ error: "Failed to get daily status" });
+    }
+  });
+
+  // Claim daily bonus
+  app.post("/api/sweeps/daily/claim", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      let loginStatus = await storage.getDailyLoginStatus(userId);
+      
+      if (loginStatus?.bonusClaimed) {
+        return res.status(400).json({ error: "Already claimed today" });
+      }
+      
+      let streakDay = 1;
+      if (!loginStatus) {
+        // Record new login
+        loginStatus = await storage.recordDailyLogin(userId, streakDay);
+      } else {
+        streakDay = loginStatus.streakDay;
+      }
+      
+      // Claim the bonus
+      await storage.claimDailyBonus(userId);
+      
+      const bonusGc = DAILY_BONUS_GC[Math.min(streakDay - 1, 6)].toString();
+      const bonusSc = DAILY_BONUS_SC[Math.min(streakDay - 1, 6)].toString();
+      
+      // Update balance
+      const newBalance = await storage.updateSweepsBalance(userId, bonusGc, bonusSc);
+      
+      // Record bonus
+      await storage.recordSweepsBonus({
+        userId,
+        bonusType: "daily_login",
+        sweepsCoinsAmount: bonusSc,
+        goldCoinsAmount: bonusGc,
+        description: `Day ${streakDay} login bonus`,
+      });
+      
+      res.json({
+        success: true,
+        streakDay,
+        bonusGc,
+        bonusSc,
+        newBalance: {
+          goldCoins: newBalance.goldCoins,
+          sweepsCoins: newBalance.sweepsCoins,
+        },
+      });
+    } catch (error) {
+      console.error("Claim daily error:", error);
+      res.status(500).json({ error: "Failed to claim daily bonus" });
+    }
+  });
+
+  // Request SC redemption (convert SC to DWC)
+  app.post("/api/sweeps/redeem", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const { scAmount, walletAddress } = req.body;
+      
+      if (!scAmount || parseFloat(scAmount) < 100) {
+        return res.status(400).json({ error: "Minimum redemption is 100 SC" });
+      }
+      
+      if (!walletAddress) {
+        return res.status(400).json({ error: "Wallet address required" });
+      }
+      
+      const balance = await storage.getSweepsBalance(userId);
+      if (!balance || parseFloat(balance.sweepsCoins) < parseFloat(scAmount)) {
+        return res.status(400).json({ error: "Insufficient SC balance" });
+      }
+      
+      // 1 SC = 1 DWC conversion rate
+      const dwcAmount = scAmount;
+      
+      const redemption = await storage.requestSweepsRedemption({
+        userId,
+        sweepsCoinsAmount: scAmount,
+        dwcAmount,
+        walletAddress,
+        status: "pending",
+        kycVerified: false,
+      });
+      
+      res.json({
+        success: true,
+        redemption,
+        message: "Redemption request submitted. KYC verification may be required.",
+      });
+    } catch (error) {
+      console.error("Redemption error:", error);
+      res.status(500).json({ error: "Failed to process redemption" });
+    }
+  });
+
+  // Get redemption history
+  app.get("/api/sweeps/redemptions", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const redemptions = await storage.getSweepsRedemptions(userId);
+      res.json(redemptions);
+    } catch (error) {
+      console.error("Get redemptions error:", error);
+      res.status(500).json({ error: "Failed to get redemptions" });
+    }
+  });
+
+  // Get purchase history
+  app.get("/api/sweeps/purchases", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const purchases = await storage.getSweepsPurchases(userId);
+      res.json(purchases);
+    } catch (error) {
+      console.error("Get purchases error:", error);
+      res.status(500).json({ error: "Failed to get purchases" });
+    }
+  });
+
+  // Record sweepstakes game result
+  app.post("/api/sweeps/game", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const { gameType, currencyType, betAmount, multiplier, payout, profit, outcome } = req.body;
+      
+      // Validate currency type
+      if (currencyType !== "GC" && currencyType !== "SC") {
+        return res.status(400).json({ error: "Invalid currency type" });
+      }
+      
+      // Deduct bet and add payout
+      const balanceDelta = parseFloat(profit);
+      const gcDelta = currencyType === "GC" ? balanceDelta.toString() : "0";
+      const scDelta = currencyType === "SC" ? balanceDelta.toString() : "0";
+      
+      const newBalance = await storage.updateSweepsBalance(userId, gcDelta, scDelta);
+      
+      // Record game history
+      const game = await storage.recordSweepsGame({
+        userId,
+        gameType,
+        currencyType,
+        betAmount: betAmount.toString(),
+        multiplier: multiplier?.toString() || null,
+        payout: payout.toString(),
+        profit: profit.toString(),
+        outcome,
+      });
+      
+      res.json({
+        success: true,
+        game,
+        newBalance: {
+          goldCoins: newBalance.goldCoins,
+          sweepsCoins: newBalance.sweepsCoins,
+        },
+      });
+    } catch (error) {
+      console.error("Record game error:", error);
+      res.status(500).json({ error: "Failed to record game" });
+    }
+  });
+
+  // Get sweepstakes game history
+  app.get("/api/sweeps/history", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const limit = parseInt(req.query.limit as string) || 50;
+      const history = await storage.getSweepsGameHistory(userId, limit);
+      res.json(history);
+    } catch (error) {
+      console.error("Get history error:", error);
+      res.status(500).json({ error: "Failed to get history" });
+    }
+  });
+
+  // AMOE (Alternate Method of Entry) - Free SC without purchase
+  app.post("/api/sweeps/amoe", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const { method } = req.body; // "mail", "social", etc.
+      
+      // AMOE gives small SC bonus (legal requirement for sweepstakes)
+      const bonusSc = "5"; // 5 SC free
+      
+      await storage.updateSweepsBalance(userId, "0", bonusSc);
+      
+      await storage.recordSweepsBonus({
+        userId,
+        bonusType: "amoe",
+        sweepsCoinsAmount: bonusSc,
+        goldCoinsAmount: "0",
+        description: `Free entry via ${method || "alternative method"}`,
+      });
+      
+      res.json({
+        success: true,
+        bonusSc,
+        message: "Free Sweeps Coins credited to your account!",
+      });
+    } catch (error) {
+      console.error("AMOE error:", error);
+      res.status(500).json({ error: "Failed to process AMOE entry" });
+    }
+  });
+
+  // ============================================
   // TESTNET FAUCET
   // ============================================
   
