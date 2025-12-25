@@ -1676,3 +1676,66 @@ export const insertGameSubmissionSchema = createInsertSchema(gameSubmissions).om
 
 export type InsertGameSubmission = z.infer<typeof insertGameSubmissionSchema>;
 export type GameSubmission = typeof gameSubmissions.$inferSelect;
+
+export const crashRounds = pgTable("crash_rounds", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  roundNumber: serial("round_number"),
+  serverSeed: text("server_seed").notNull(),
+  serverSeedHash: text("server_seed_hash").notNull(),
+  crashPoint: text("crash_point"),
+  totalBets: text("total_bets").default("0"),
+  totalPayout: text("total_payout").default("0"),
+  status: text("status").notNull().default("pending"),
+  startedAt: timestamp("started_at"),
+  crashedAt: timestamp("crashed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const crashBets = pgTable("crash_bets", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  roundId: text("round_id").notNull(),
+  oderId: text("user_id").notNull(),
+  username: text("username").notNull(),
+  betAmount: text("bet_amount").notNull(),
+  autoCashout: text("auto_cashout"),
+  cashoutMultiplier: text("cashout_multiplier"),
+  payout: text("payout"),
+  status: text("status").notNull().default("active"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const gameChatMessages = pgTable("game_chat_messages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  gameType: text("game_type").notNull(),
+  userId: text("user_id").notNull(),
+  username: text("username").notNull(),
+  message: text("message").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const playerRewards = pgTable("player_rewards", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  oderId: text("user_id").notNull(),
+  pendingRewards: text("pending_rewards").notNull().default("0"),
+  totalEarned: text("total_earned").notNull().default("0"),
+  totalClaimed: text("total_claimed").notNull().default("0"),
+  tier: text("tier").notNull().default("bronze"),
+  totalWagered: text("total_wagered").notNull().default("0"),
+  gamesPlayed: integer("games_played").notNull().default(0),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const gameAirdrops = pgTable("game_airdrops", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  poolAmount: text("pool_amount").notNull(),
+  participantCount: integer("participant_count").notNull(),
+  status: text("status").notNull().default("pending"),
+  distributedAt: timestamp("distributed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type CrashRound = typeof crashRounds.$inferSelect;
+export type CrashBet = typeof crashBets.$inferSelect;
+export type GameChatMessage = typeof gameChatMessages.$inferSelect;
+export type PlayerRewards = typeof playerRewards.$inferSelect;
+export type GameAirdrop = typeof gameAirdrops.$inferSelect;
