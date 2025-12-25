@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, LogOut, User, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Trophy, Target } from "lucide-react";
+import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, LogOut, User, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Trophy, Target, ChevronDown } from "lucide-react";
 import { InfoTooltip } from "@/components/info-tooltip";
 import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.png";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
@@ -192,6 +192,21 @@ export default function Home() {
             </div>
           </motion.div>
         </div>
+        
+        <motion.div 
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 cursor-pointer z-20"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, 8, 0] }}
+          transition={{ 
+            opacity: { delay: 1, duration: 0.5 },
+            y: { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
+          }}
+          onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+          data-testid="button-scroll-down"
+        >
+          <span className="text-[10px] text-muted-foreground/70 uppercase tracking-wider">Scroll</span>
+          <ChevronDown className="w-5 h-5 text-primary/70" />
+        </motion.div>
       </section>
 
       <section className="py-12 px-4">
