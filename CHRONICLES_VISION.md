@@ -82,24 +82,72 @@ When you interact with someone in this world, you're not reading scripted dialog
 ## Era System & Time Travel
 
 ### Choose Your Starting Era
-Begin your journey in any era you choose:
-- Cro-Magnon / Early Human
-- Ancient Civilizations
-- Medieval Period
-- Renaissance
-- Industrial Age
-- And more...
+Begin your journey in any era from human history. These aren't vague 500-year spans - these are specific, recognizable moments that people dream about:
 
-### Progress Naturally
-- Build your clan
-- Discover your world
-- Advance through time organically
+**Prehistoric**
+- Cro-Magnon / Early Human (rare pristine resources, untouched elements)
+- Neolithic Revolution (first settlements, agriculture begins)
 
-### Time Travel Events
-- Discover mysterious artifacts or phenomena
-- Get transported to different eras unexpectedly
-- Must complete activities to return to your home timeline
-- Your "home" era is your base, but travel expands your experience
+**Ancient World**
+- Egyptian Dynasties (pharaohs, pyramids, mysteries)
+- Greek Golden Age (philosophy, democracy, Olympics)
+- Roman Empire (legions, conquests, engineering)
+- Han Dynasty China (silk road, ancient wisdom)
+
+**Medieval**
+- Dark Ages Europe (feudal lords, monasteries, plague)
+- Viking Age (raiders, explorers, Norse mythology)
+- Crusades Era (holy wars, knights, cultural collision)
+- Feudal Japan (samurai, shoguns, honor codes)
+
+**Early Modern**
+- Renaissance Italy (art, invention, Medici intrigue)
+- Age of Discovery (Columbus, exploration, new worlds)
+- Elizabethan England (Shakespeare, court politics, privateers)
+- Colonial Americas (settlers, native cultures, frontier)
+
+**Modern History**
+- Victorian Era (industry, empire, social change)
+- Wild West (cowboys, outlaws, frontier justice)
+- Industrial Revolution (factories, labor, innovation)
+- Gilded Age (robber barons, immigrants, progress)
+
+**And Beyond...**
+- Future eras to be developed as the world evolves
+
+### Era-Specific Incentives
+Each era offers unique advantages that make starting there worthwhile:
+- **Cro-Magnon**: Rare pristine elements and resources that haven't been exploited yet - essential for advanced crafting, time/space travel technology
+- **Ancient Eras**: Lost knowledge, mystical artifacts, foundational wisdom
+- **Medieval**: Political power structures, land ownership, dynasties
+- **Renaissance**: Innovation, art, cultural influence
+- **Industrial**: Manufacturing capability, wealth accumulation
+- **Modern**: Technology access, global connections
+
+### Era Progression System
+**You are NOT trapped in your starting era forever.**
+
+The world runs in real-time - if you start in Cro-Magnon times and can only progress at the speed of actual time, you'd never see another era in your lifetime. The solution:
+
+**Monthly Era Switch Opportunities**
+- Approximately once per month, players gain the opportunity to permanently relocate to a new era
+- Must complete sufficient tasks, missions, or milestones to unlock the switch
+- When you switch, your story continues from there - new home era
+- Your legacy, relationships, and achievements carry forward in meaningful ways
+
+**Time Travel for Missions**
+- Separate from permanent era switches
+- Travel to other times to complete specific missions
+- Collect resources, meet historical figures, influence events
+- Always return to your "home" era after the mission
+- Time travel is earned, not infinite - special events, artifacts, or achievements unlock trips
+
+### The Connected Story
+Everything weaves together:
+- Resources gathered in prehistoric times → needed for future technology
+- Alliances formed across eras → political power spanning time
+- Time travel, space travel, fantasy realms → all part of one continuous experience
+- Your choices in one era → ripple effects in others
 
 ### Side Missions & Rewards
 Traditional game elements exist alongside the life simulation:
@@ -110,6 +158,34 @@ Traditional game elements exist alongside the life simulation:
 - All within the persistent, real-time framework
 
 **DWC Token Rewards**: Certain missions and achievements may reward players with actual DarkWave Coin (DWC) - real blockchain tokens with real value. Your time investment can translate to tangible rewards.
+
+---
+
+## DWC: The In-Game Economy
+
+### How DWC Works In Chronicles
+DarkWave Coin serves as the universal currency within the game:
+
+- **Buy gear and supplies** from players who have them
+- **Trade resources** gathered from different eras
+- **Commission services** from skilled craftsmen and merchants
+- **Own property** and stake your claim in the world
+- **Reward contributions** to community content
+
+### Why This Works Legally
+**This is commerce, not gambling:**
+- No games of chance - Chronicles is a skill-based life simulator
+- No house edge or casino mechanics
+- Pure peer-to-peer marketplace transactions
+- DWC functions as a utility token for in-world commerce
+- Players earn through skill, time investment, and smart decisions
+
+### The Real-World Value Loop
+1. Players invest time and skill in the game
+2. Earn DWC through missions, achievements, trading
+3. DWC has real blockchain value on DarkWave Smart Chain
+4. Can trade, hold, or use across the DarkWave ecosystem
+5. Real stakes, real economy, real incentives
 
 ---
 
@@ -176,4 +252,4 @@ When you step into DarkWave Chronicles, you're not escaping reality - you're exp
 
 ---
 
-*This document captures the core vision as of December 2024. This is the source of truth for what DarkWave Chronicles is meant to be.*
+*This document captures the core vision as of December 2025. This is the source of truth for what DarkWave Chronicles is meant to be.*
