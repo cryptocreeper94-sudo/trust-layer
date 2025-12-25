@@ -568,87 +568,136 @@ export default function Arcade() {
             </GlassCard>
           )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2">
-              <Tabs defaultValue="coinflip">
-                <TabsList className="w-full grid grid-cols-3 mb-4">
-                  <TabsTrigger value="coinflip" className="gap-1" data-testid="tab-coinflip">
-                    <Coins className="w-3 h-3" /> Coin Flip
-                  </TabsTrigger>
-                  <TabsTrigger value="crash" className="gap-1" data-testid="tab-crash">
-                    <TrendingUp className="w-3 h-3" /> Crash
-                  </TabsTrigger>
-                  <TabsTrigger value="slots" className="gap-1" data-testid="tab-slots">
-                    <Cherry className="w-3 h-3" /> Jackpot Slots
-                  </TabsTrigger>
-                </TabsList>
+          {/* Bento Grid Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3 lg:gap-4">
+            
+            {/* CRASH - Hero Card (Full width on mobile, spans 7 cols on desktop) */}
+            <Link href="/crash" className="lg:col-span-7 block group">
+              <div 
+                className="relative h-48 md:h-56 rounded-2xl overflow-hidden p-4 md:p-6 flex flex-col justify-between cursor-pointer transition-transform duration-300 group-hover:scale-[1.02]"
+                style={{
+                  background: "linear-gradient(135deg, rgba(15,5,35,0.98) 0%, rgba(50,20,80,0.95) 50%, rgba(20,8,40,0.98) 100%)",
+                  border: "1px solid rgba(255,79,216,0.3)",
+                  boxShadow: "inset 0 0 40px rgba(255,79,216,0.1), 0 0 30px rgba(168,85,247,0.15)",
+                }}
+              >
+                <motion.div
+                  className="absolute inset-0"
+                  style={{
+                    background: "radial-gradient(ellipse 60% 50% at 80% 70%, rgba(255,79,216,0.2), transparent 60%), radial-gradient(ellipse 50% 40% at 20% 30%, rgba(76,244,255,0.15), transparent 60%)",
+                  }}
+                  animate={{ opacity: [0.5, 0.8, 0.5] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                />
+                
+                {[...Array(6)].map((_, i) => (
+                  <motion.div
+                    key={`p-${i}`}
+                    className="absolute w-1 h-1 rounded-full"
+                    style={{
+                      left: `${15 + i * 15}%`,
+                      top: `${20 + (i % 3) * 25}%`,
+                      background: i % 2 === 0 ? "#FF4FD8" : "#4CF4FF",
+                      boxShadow: `0 0 8px ${i % 2 === 0 ? "rgba(255,79,216,0.8)" : "rgba(76,244,255,0.8)"}`,
+                    }}
+                    animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.3, 0.8] }}
+                    transition={{ duration: 2 + i * 0.3, repeat: Infinity, delay: i * 0.2 }}
+                  />
+                ))}
+                
+                <div className="relative z-10 flex items-start justify-between">
+                  <div>
+                    <Badge className="bg-pink-500/20 text-pink-300 border-pink-500/30 text-[10px] mb-2">
+                      <Rocket className="w-3 h-3 mr-1" /> Featured
+                    </Badge>
+                    <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                      Crash
+                    </h3>
+                  </div>
+                  <motion.div
+                    animate={{ y: [0, -6, 0], rotate: [-5, 5, -5] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <Rocket className="w-10 h-10 text-pink-400 drop-shadow-[0_0_12px_rgba(255,79,216,0.7)]" />
+                  </motion.div>
+                </div>
+                
+                <div className="relative z-10">
+                  <p className="text-xs md:text-sm text-white/60 mb-3">Up to <span className="text-cyan-400 font-bold">5,000x</span> multiplier</p>
+                  <div className="flex items-center gap-3">
+                    <span className="text-[10px] px-2 py-1 rounded-full bg-yellow-500/10 text-yellow-300 border border-yellow-500/20">99% RTP</span>
+                    <span className="text-[10px] px-2 py-1 rounded-full bg-green-500/10 text-green-300 border border-green-500/20">Live</span>
+                  </div>
+                </div>
+              </div>
+            </Link>
 
-                <GlassCard glow className="p-4">
-                  <TabsContent value="coinflip" className="mt-0">
-                    <CoinFlipGame 
-                      isConnected={isConnected} 
-                      isDemoMode={isDemoMode} 
-                      userBalance={userBalance}
-                      onBalanceUpdate={fetchBalance}
-                    />
-                  </TabsContent>
-                  <TabsContent value="crash" className="mt-0">
-                    <div className="relative h-64 rounded-xl overflow-hidden flex flex-col items-center justify-center text-center p-6"
-                      style={{
-                        background: "linear-gradient(135deg, rgba(20,10,40,0.95) 0%, rgba(60,20,80,0.8) 50%, rgba(30,10,50,0.95) 100%)",
-                        border: "1px solid rgba(168,85,247,0.3)",
-                      }}
-                    >
-                      <motion.div
-                        className="absolute inset-0 opacity-30"
-                        style={{
-                          background: "radial-gradient(circle at 30% 70%, rgba(255,79,216,0.4), transparent 60%), radial-gradient(circle at 70% 30%, rgba(76,244,255,0.3), transparent 60%)",
-                        }}
-                        animate={{ opacity: [0.2, 0.4, 0.2] }}
-                        transition={{ duration: 3, repeat: Infinity }}
-                      />
-                      
-                      <motion.div
-                        animate={{ y: [0, -8, 0], rotate: [-5, 5, -5] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                        className="mb-4"
-                      >
-                        <Rocket className="w-16 h-16 text-pink-400" />
-                      </motion.div>
-                      
-                      <h3 className="text-2xl font-bold mb-2 bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                        Crash
-                      </h3>
-                      <p className="text-sm text-muted-foreground mb-4 max-w-xs">
-                        Watch the multiplier rise and cash out before it crashes! Up to 5,000x wins with Orby flying through space.
-                      </p>
-                      
-                      <Link href="/crash">
-                        <Button className="gap-2 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 shadow-lg shadow-purple-500/25">
-                          <Play className="w-4 h-4" />
-                          Play Crash
-                        </Button>
-                      </Link>
-                      
-                      <div className="flex items-center gap-4 mt-4 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1"><Zap className="w-3 h-3 text-yellow-400" /> 99% RTP</span>
-                        <span className="flex items-center gap-1"><Trophy className="w-3 h-3 text-amber-400" /> 5,000x Max</span>
-                      </div>
-                    </div>
-                  </TabsContent>
-                  <TabsContent value="slots" className="mt-0">
-                    <SlotsGame 
-                      isConnected={isConnected} 
-                      isDemoMode={isDemoMode}
-                      userBalance={userBalance}
-                      onBalanceUpdate={fetchBalance}
-                    />
-                  </TabsContent>
-                </GlassCard>
-              </Tabs>
+            {/* COIN FLIP Card */}
+            <div 
+              className="lg:col-span-5 relative rounded-2xl overflow-hidden p-4"
+              style={{
+                background: "linear-gradient(135deg, rgba(15,25,40,0.98) 0%, rgba(30,50,80,0.95) 50%, rgba(15,25,40,0.98) 100%)",
+                border: "1px solid rgba(168,85,247,0.2)",
+                boxShadow: "inset 0 0 30px rgba(168,85,247,0.08), 0 0 20px rgba(168,85,247,0.1)",
+              }}
+            >
+              <motion.div
+                className="absolute inset-0"
+                style={{ background: "radial-gradient(ellipse 70% 60% at 50% 80%, rgba(168,85,247,0.1), transparent 60%)" }}
+                animate={{ opacity: [0.4, 0.7, 0.4] }}
+                transition={{ duration: 4, repeat: Infinity }}
+              />
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="p-2 rounded-lg bg-amber-500/20">
+                    <Coins className="w-5 h-5 text-amber-400" />
+                  </div>
+                  <h3 className="text-lg font-bold">Coin Flip</h3>
+                  <Badge className="ml-auto bg-green-500/20 text-green-300 border-green-500/30 text-[9px]">1.98x</Badge>
+                </div>
+                <CoinFlipGame 
+                  isConnected={isConnected} 
+                  isDemoMode={isDemoMode} 
+                  userBalance={userBalance}
+                  onBalanceUpdate={fetchBalance}
+                />
+              </div>
             </div>
 
-            <div className="space-y-4">
+            {/* SLOTS Card */}
+            <div 
+              className="lg:col-span-7 relative rounded-2xl overflow-hidden p-4"
+              style={{
+                background: "linear-gradient(135deg, rgba(25,15,35,0.98) 0%, rgba(50,30,60,0.95) 50%, rgba(25,15,35,0.98) 100%)",
+                border: "1px solid rgba(168,85,247,0.2)",
+                boxShadow: "inset 0 0 30px rgba(168,85,247,0.08), 0 0 20px rgba(168,85,247,0.1)",
+              }}
+            >
+              <motion.div
+                className="absolute inset-0"
+                style={{ background: "radial-gradient(ellipse 60% 50% at 30% 70%, rgba(255,201,76,0.08), transparent 60%)" }}
+                animate={{ opacity: [0.4, 0.7, 0.4] }}
+                transition={{ duration: 4, repeat: Infinity }}
+              />
+              <div className="relative z-10">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="p-2 rounded-lg bg-purple-500/20">
+                    <Cherry className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <h3 className="text-lg font-bold">Jackpot Slots</h3>
+                  <Badge className="ml-auto bg-amber-500/20 text-amber-300 border-amber-500/30 text-[9px]">50x Max</Badge>
+                </div>
+                <SlotsGame 
+                  isConnected={isConnected} 
+                  isDemoMode={isDemoMode}
+                  userBalance={userBalance}
+                  onBalanceUpdate={fetchBalance}
+                />
+              </div>
+            </div>
+
+            {/* Sidebar Cards */}
+            <div className="lg:col-span-5 space-y-3">
               <GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <History className="w-4 h-4 text-primary" />
