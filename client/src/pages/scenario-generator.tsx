@@ -11,6 +11,10 @@ import { GlassCard } from "@/components/glass-card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import crystalBallImg from "@assets/generated_images/scenario_generator_crystal_ball.png";
+import balanceScaleImg from "@assets/generated_images/balance_scale_moral_judgment.png";
+import emotionalWarriorImg from "@assets/generated_images/emotional_warrior_portrait.png";
+import rippleEffectsImg from "@assets/generated_images/glowing_ripple_effects_water.png";
+import mirrorPerspectivesImg from "@assets/generated_images/shattered_mirror_perspectives.png";
 
 interface EmotionState {
   arousal: number;
@@ -411,37 +415,53 @@ export default function ScenarioGenerator() {
             </div>
             
             <div className="grid sm:grid-cols-2 gap-4">
-              <GlassCard className="p-5">
-                <Shield className="w-8 h-8 text-cyan-400 mb-3" />
-                <h3 className="font-bold mb-2">No Moral Judgment</h3>
-                <p className="text-sm text-gray-400">
-                  The system doesn't label actions as "good" or "evil." It only tracks consequences and how others perceive you.
-                </p>
-              </GlassCard>
+              <div className="relative overflow-hidden rounded-xl group">
+                <img src={balanceScaleImg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+                <div className="relative p-5 z-10">
+                  <Shield className="w-8 h-8 text-cyan-400 mb-3 drop-shadow-lg" />
+                  <h3 className="font-bold mb-2 text-white drop-shadow-lg">No Moral Judgment</h3>
+                  <p className="text-sm text-gray-300">
+                    The system doesn't label actions as "good" or "evil." It only tracks consequences and how others perceive you.
+                  </p>
+                </div>
+              </div>
               
-              <GlassCard className="p-5">
-                <Heart className="w-8 h-8 text-pink-400 mb-3" />
-                <h3 className="font-bold mb-2">Emotion-Driven</h3>
-                <p className="text-sm text-gray-400">
-                  Characters act based on their emotional state - fear, ambition, loyalty, desperation. Not scripted alignments.
-                </p>
-              </GlassCard>
+              <div className="relative overflow-hidden rounded-xl group">
+                <img src={emotionalWarriorImg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+                <div className="relative p-5 z-10">
+                  <Heart className="w-8 h-8 text-pink-400 mb-3 drop-shadow-lg" />
+                  <h3 className="font-bold mb-2 text-white drop-shadow-lg">Emotion-Driven</h3>
+                  <p className="text-sm text-gray-300">
+                    Characters act based on their emotional state - fear, ambition, loyalty, desperation. Not scripted alignments.
+                  </p>
+                </div>
+              </div>
               
-              <GlassCard className="p-5">
-                <Zap className="w-8 h-8 text-yellow-400 mb-3" />
-                <h3 className="font-bold mb-2">Ripple Effects</h3>
-                <p className="text-sm text-gray-400">
-                  Every choice creates consequences that spread beyond the immediate situation. Your actions echo through time.
-                </p>
-              </GlassCard>
+              <div className="relative overflow-hidden rounded-xl group">
+                <img src={rippleEffectsImg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+                <div className="relative p-5 z-10">
+                  <Zap className="w-8 h-8 text-yellow-400 mb-3 drop-shadow-lg" />
+                  <h3 className="font-bold mb-2 text-white drop-shadow-lg">Ripple Effects</h3>
+                  <p className="text-sm text-gray-300">
+                    Every choice creates consequences that spread beyond the immediate situation. Your actions echo through time.
+                  </p>
+                </div>
+              </div>
               
-              <GlassCard className="p-5">
-                <Brain className="w-8 h-8 text-purple-400 mb-3" />
-                <h3 className="font-bold mb-2">Perspective Matters</h3>
-                <p className="text-sm text-gray-400">
-                  Heroes and villains only exist in the eyes of the beholder. Everyone is the protagonist of their own story.
-                </p>
-              </GlassCard>
+              <div className="relative overflow-hidden rounded-xl group">
+                <img src={mirrorPerspectivesImg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+                <div className="relative p-5 z-10">
+                  <Brain className="w-8 h-8 text-purple-400 mb-3 drop-shadow-lg" />
+                  <h3 className="font-bold mb-2 text-white drop-shadow-lg">Perspective Matters</h3>
+                  <p className="text-sm text-gray-300">
+                    Heroes and villains only exist in the eyes of the beholder. Everyone is the protagonist of their own story.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
