@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, RotateCcw, Undo2, Lightbulb, Play, Trophy, Clock, Layers, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,32 +18,39 @@ import {
   getSuitSymbol,
   getSuitColor,
   isRed,
+  canMoveToTableau,
+  canMoveToFoundation,
 } from "@/lib/solitaire-engine";
+
+interface DragState {
+  cards: GameCard[];
+  from: { type: "waste" | "tableau" | "foundation"; index?: number; cardIndex?: number };
+  startX: number;
+  startY: number;
+  currentX: number;
+  currentY: number;
+}
 
 function PlayingCard({
   card,
-  onClick,
-  onDoubleClick,
   isDragging,
   isHinted,
-  small = false,
+  isValidDrop,
+  onPointerDown,
+  onDoubleClick,
 }: {
   card: GameCard;
-  onClick?: () => void;
-  onDoubleClick?: () => void;
   isDragging?: boolean;
   isHinted?: boolean;
-  small?: boolean;
+  isValidDrop?: boolean;
+  onPointerDown?: (e: React.PointerEvent) => void;
+  onDoubleClick?: () => void;
 }) {
   if (!card.faceUp) {
     return (
       <div
-        className={`
-          ${small ? "w-12 h-16" : "w-14 h-20 md:w-16 md:h-24"}
-          rounded-lg bg-gradient-to-br from-blue-800 to-purple-900 border-2 border-white/30
-          shadow-lg flex items-center justify-center cursor-pointer hover:shadow-xl transition-shadow
-        `}
-        onClick={onClick}
+        className="w-14 h-20 md:w-16 md:h-24 rounded-lg bg-gradient-to-br from-blue-800 to-purple-900 border-2 border-white/30
+          shadow-lg flex items-center justify-center"
       >
         <div className="w-3/4 h-3/4 border border-white/20 rounded-sm bg-gradient-to-br from-purple-600/50 to-blue-600/50" />
       </div>
@@ -51,16 +58,17 @@ function PlayingCard({
   }
 
   return (
-    <motion.div
-      onClick={onClick}
+    <div
+      onPointerDown={onPointerDown}
       onDoubleClick={onDoubleClick}
-      whileHover={{ y: -2 }}
       className={`
-        ${small ? "w-12 h-16" : "w-14 h-20 md:w-16 md:h-24"}
+        w-14 h-20 md:w-16 md:h-24
         rounded-lg bg-white border-2 shadow-lg flex flex-col items-start justify-start p-1
-        cursor-pointer hover:shadow-xl transition-all select-none
-        ${isDragging ? "opacity-50" : ""}
+        cursor-grab active:cursor-grabbing select-none touch-none
+        transition-all duration-150
+        ${isDragging ? "opacity-50 scale-95" : "hover:shadow-xl hover:-translate-y-0.5"}
         ${isHinted ? "ring-2 ring-yellow-400 animate-pulse" : ""}
+        ${isValidDrop ? "ring-2 ring-green-400 shadow-[0_0_15px_rgba(34,197,94,0.5)]" : ""}
         ${isRed(card.suit) ? "border-red-200" : "border-gray-300"}
       `}
       data-testid={`card-${card.id}`}
@@ -71,55 +79,33 @@ function PlayingCard({
       <span className={`text-sm md:text-lg ${getSuitColor(card.suit)}`}>
         {getSuitSymbol(card.suit)}
       </span>
-    </motion.div>
-  );
-}
-
-function EmptyPile({ onClick, label }: { onClick?: () => void; label?: string }) {
-  return (
-    <div
-      onClick={onClick}
-      className="w-14 h-20 md:w-16 md:h-24 rounded-lg border-2 border-dashed border-white/30 
-        flex items-center justify-center cursor-pointer hover:border-white/50 transition-colors"
-    >
-      {label && <span className="text-xs text-white/50">{label}</span>}
     </div>
   );
 }
 
-function TableauPile({
-  cards,
-  pileIndex,
-  onCardClick,
-  onCardDoubleClick,
-  hintedCardId,
-}: {
-  cards: GameCard[];
-  pileIndex: number;
-  onCardClick: (cardIndex: number) => void;
-  onCardDoubleClick: (cardIndex: number) => void;
-  hintedCardId?: string;
+function EmptyPile({ 
+  onClick, 
+  label,
+  isValidDrop,
+  onPointerUp,
+}: { 
+  onClick?: () => void; 
+  label?: string;
+  isValidDrop?: boolean;
+  onPointerUp?: () => void;
 }) {
-  if (cards.length === 0) {
-    return <EmptyPile label="K" />;
-  }
-
   return (
-    <div className="relative" style={{ minHeight: `${80 + cards.length * 20}px` }}>
-      {cards.map((card, index) => (
-        <div
-          key={card.id}
-          className="absolute left-0"
-          style={{ top: `${index * 20}px`, zIndex: index }}
-        >
-          <PlayingCard
-            card={card}
-            onClick={() => onCardClick(index)}
-            onDoubleClick={() => onCardDoubleClick(index)}
-            isHinted={card.id === hintedCardId}
-          />
-        </div>
-      ))}
+    <div
+      onClick={onClick}
+      onPointerUp={onPointerUp}
+      className={`w-14 h-20 md:w-16 md:h-24 rounded-lg border-2 border-dashed 
+        flex items-center justify-center cursor-pointer transition-all duration-150
+        ${isValidDrop 
+          ? "border-green-400 bg-green-500/20 shadow-[0_0_15px_rgba(34,197,94,0.5)]" 
+          : "border-white/30 hover:border-white/50"
+        }`}
+    >
+      {label && <span className="text-xs text-white/50">{label}</span>}
     </div>
   );
 }
@@ -127,20 +113,20 @@ function TableauPile({
 export default function Solitaire() {
   const [, navigate] = useLocation();
   const { toast } = useToast();
+  const containerRef = useRef<HTMLDivElement>(null);
   
   const [gameState, setGameState] = useState<GameState | null>(null);
-  const [selectedCard, setSelectedCard] = useState<{ type: string; index?: number; cardIndex?: number } | null>(null);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [hintedCard, setHintedCard] = useState<string | null>(null);
+  const [dragState, setDragState] = useState<DragState | null>(null);
 
   const startNewGame = useCallback(() => {
     setGameState(createInitialState());
-    setSelectedCard(null);
     setElapsedTime(0);
     setHintedCard(null);
+    setDragState(null);
   }, []);
 
-  // Timer
   useEffect(() => {
     if (!gameState || gameState.status !== "playing") return;
     
@@ -161,96 +147,108 @@ export default function Solitaire() {
   const handleStockClick = () => {
     if (!gameState) return;
     setGameState(drawFromStock(gameState));
-    setSelectedCard(null);
     setHintedCard(null);
   };
 
-  const handleWasteClick = () => {
-    if (!gameState || gameState.waste.length === 0) return;
-    setSelectedCard({ type: "waste" });
+  const startDrag = (
+    e: React.PointerEvent,
+    cards: GameCard[],
+    from: DragState["from"]
+  ) => {
+    if (!gameState || cards.length === 0) return;
+    if (!cards[0].faceUp) return;
+    
+    e.preventDefault();
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+    
+    setDragState({
+      cards,
+      from,
+      startX: e.clientX,
+      startY: e.clientY,
+      currentX: e.clientX,
+      currentY: e.clientY,
+    });
     setHintedCard(null);
   };
+
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    if (!dragState) return;
+    setDragState(prev => prev ? { ...prev, currentX: e.clientX, currentY: e.clientY } : null);
+  }, [dragState]);
+
+  const handlePointerUp = useCallback((e: React.PointerEvent) => {
+    if (!dragState || !gameState) {
+      setDragState(null);
+      return;
+    }
+    
+    const dropTarget = document.elementFromPoint(e.clientX, e.clientY);
+    if (!dropTarget) {
+      setDragState(null);
+      return;
+    }
+
+    const pileElement = dropTarget.closest("[data-pile-type]");
+    
+    if (pileElement) {
+      const pileType = pileElement.getAttribute("data-pile-type") as "tableau" | "foundation";
+      const pileIndex = parseInt(pileElement.getAttribute("data-pile-index") || "0");
+      
+      const result = moveCards(gameState, dragState.from, { type: pileType, index: pileIndex });
+      
+      if (result) {
+        setGameState(result);
+        if (result.status === "won") {
+          toast({ title: "Congratulations!", description: "You won the game!" });
+        }
+      }
+    }
+    
+    setDragState(null);
+  }, [dragState, gameState, toast]);
 
   const handleWasteDoubleClick = () => {
     if (!gameState || gameState.waste.length === 0) return;
     
-    // Try to auto-move to foundation
     const card = gameState.waste[gameState.waste.length - 1];
     for (let i = 0; i < 4; i++) {
-      const result = moveCards(gameState, { type: "waste" }, { type: "foundation", index: i });
-      if (result) {
-        setGameState(result);
-        setSelectedCard(null);
-        return;
+      if (canMoveToFoundation(card, gameState.foundations[i])) {
+        const result = moveCards(gameState, { type: "waste" }, { type: "foundation", index: i });
+        if (result) {
+          setGameState(result);
+          if (result.status === "won") {
+            toast({ title: "Congratulations!", description: "You won the game!" });
+          }
+          return;
+        }
       }
     }
   };
 
-  const handleFoundationClick = (index: number) => {
-    if (!gameState || !selectedCard) return;
-    
-    const result = moveCards(
-      gameState,
-      selectedCard as any,
-      { type: "foundation", index }
-    );
-    
-    if (result) {
-      setGameState(result);
-      if (result.status === "won") {
-        toast({ title: "Congratulations!", description: "You won the game!" });
-      }
-    }
-    setSelectedCard(null);
-    setHintedCard(null);
-  };
-
-  const handleTableauCardClick = (pileIndex: number, cardIndex: number) => {
+  const handleTableauDoubleClick = (pileIndex: number, cardIndex: number) => {
     if (!gameState) return;
     
     const pile = gameState.tableau[pileIndex];
-    const card = pile[cardIndex];
-    
-    if (!card.faceUp) return;
-    
-    if (selectedCard) {
-      // Try to move selected card(s) here
-      const result = moveCards(
-        gameState,
-        selectedCard as any,
-        { type: "tableau", index: pileIndex }
-      );
-      
-      if (result) {
-        setGameState(result);
-      }
-      setSelectedCard(null);
-    } else {
-      // Select this card
-      setSelectedCard({ type: "tableau", index: pileIndex, cardIndex });
-    }
-    setHintedCard(null);
-  };
-
-  const handleTableauCardDoubleClick = (pileIndex: number, cardIndex: number) => {
-    if (!gameState) return;
-    
-    const pile = gameState.tableau[pileIndex];
-    if (cardIndex !== pile.length - 1) return; // Only top card
+    if (cardIndex !== pile.length - 1) return;
     
     const card = pile[cardIndex];
     if (!card.faceUp) return;
     
-    // Try to auto-move to foundation
     for (let i = 0; i < 4; i++) {
-      const result = moveCards(
-        gameState,
-        { type: "tableau", index: pileIndex, cardIndex },
-        { type: "foundation", index: i }
-      );
-      if (result) {
-        setGameState(result);
-        return;
+      if (canMoveToFoundation(card, gameState.foundations[i])) {
+        const result = moveCards(
+          gameState,
+          { type: "tableau", index: pileIndex, cardIndex },
+          { type: "foundation", index: i }
+        );
+        if (result) {
+          setGameState(result);
+          if (result.status === "won") {
+            toast({ title: "Congratulations!", description: "You won the game!" });
+          }
+          return;
+        }
       }
     }
   };
@@ -260,7 +258,6 @@ export default function Solitaire() {
     const prev = undo(gameState);
     if (prev) {
       setGameState(prev);
-      setSelectedCard(null);
       setHintedCard(null);
     }
   };
@@ -272,7 +269,6 @@ export default function Solitaire() {
       const hint = hints[0];
       toast({ title: "Hint", description: hint.description });
       
-      // Highlight the source card
       if (hint.from.type === "waste" && gameState.waste.length > 0) {
         setHintedCard(gameState.waste[gameState.waste.length - 1].id);
       } else if (hint.from.type === "tableau") {
@@ -294,6 +290,32 @@ export default function Solitaire() {
       toast({ title: "Congratulations!", description: "You won the game!" });
     }
   };
+
+  const getValidDropTargets = useCallback(() => {
+    if (!dragState || !gameState) return { foundations: [], tableaus: [] };
+    
+    const card = dragState.cards[0];
+    const foundations: number[] = [];
+    const tableaus: number[] = [];
+    
+    if (dragState.cards.length === 1) {
+      for (let i = 0; i < 4; i++) {
+        if (canMoveToFoundation(card, gameState.foundations[i])) {
+          foundations.push(i);
+        }
+      }
+    }
+    
+    for (let i = 0; i < 7; i++) {
+      if (canMoveToTableau(card, gameState.tableau[i])) {
+        tableaus.push(i);
+      }
+    }
+    
+    return { foundations, tableaus };
+  }, [dragState, gameState]);
+
+  const validTargets = getValidDropTargets();
 
   if (!gameState) {
     return (
@@ -319,8 +341,8 @@ export default function Solitaire() {
                 <ul className="space-y-1 list-disc list-inside">
                   <li>Build foundation piles from Ace to King by suit</li>
                   <li>Stack cards in tableau by alternating colors (K to A)</li>
-                  <li>Click stock pile to draw new cards</li>
-                  <li>Double-click to auto-move to foundations</li>
+                  <li>Drag cards to move them between piles</li>
+                  <li>Double-tap to auto-move to foundations</li>
                 </ul>
               </div>
 
@@ -336,9 +358,14 @@ export default function Solitaire() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-emerald-900 text-white overflow-x-auto">
+    <div 
+      ref={containerRef}
+      className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-emerald-900 text-white overflow-x-auto touch-none"
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+    >
       {/* Header */}
-      <div className="bg-black/30 backdrop-blur-sm px-4 py-2 sticky top-0 z-50">
+      <div className="bg-black/30 backdrop-blur-sm px-4 py-2 sticky top-0 z-40">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="sm" onClick={() => navigate("/arcade")} className="hover:bg-white/10">
@@ -379,39 +406,59 @@ export default function Solitaire() {
           {/* Stock and Waste */}
           <div className="flex gap-2">
             {/* Stock */}
-            {gameState.stock.length > 0 ? (
-              <div onClick={handleStockClick} className="cursor-pointer">
-                <PlayingCard card={{ ...gameState.stock[0], faceUp: false } as GameCard} />
-              </div>
-            ) : (
-              <EmptyPile onClick={handleStockClick} label="↻" />
-            )}
+            <div onClick={handleStockClick} className="cursor-pointer">
+              {gameState.stock.length > 0 ? (
+                <div className="w-14 h-20 md:w-16 md:h-24 rounded-lg bg-gradient-to-br from-blue-800 to-purple-900 border-2 border-white/30 shadow-lg flex items-center justify-center">
+                  <div className="w-3/4 h-3/4 border border-white/20 rounded-sm bg-gradient-to-br from-purple-600/50 to-blue-600/50" />
+                </div>
+              ) : (
+                <EmptyPile label="↻" />
+              )}
+            </div>
             
             {/* Waste */}
-            {gameState.waste.length > 0 ? (
-              <div
-                onClick={handleWasteClick}
-                onDoubleClick={handleWasteDoubleClick}
-                className={selectedCard?.type === "waste" ? "ring-2 ring-yellow-400 rounded-lg" : ""}
-              >
+            <div
+              data-pile-type="waste"
+              onPointerDown={(e) => {
+                if (gameState.waste.length > 0) {
+                  startDrag(e, [gameState.waste[gameState.waste.length - 1]], { type: "waste" });
+                }
+              }}
+              onDoubleClick={handleWasteDoubleClick}
+            >
+              {gameState.waste.length > 0 ? (
                 <PlayingCard
                   card={gameState.waste[gameState.waste.length - 1]}
+                  isDragging={dragState?.from.type === "waste"}
                   isHinted={hintedCard === gameState.waste[gameState.waste.length - 1].id}
                 />
-              </div>
-            ) : (
-              <EmptyPile />
-            )}
+              ) : (
+                <EmptyPile />
+              )}
+            </div>
           </div>
 
           {/* Foundations */}
           <div className="flex gap-2">
             {gameState.foundations.map((foundation, index) => (
-              <div key={index} onClick={() => handleFoundationClick(index)}>
+              <div 
+                key={index} 
+                data-pile-type="foundation"
+                data-pile-index={index}
+              >
                 {foundation.length > 0 ? (
-                  <PlayingCard card={foundation[foundation.length - 1]} />
+                  <PlayingCard 
+                    card={foundation[foundation.length - 1]}
+                    isValidDrop={validTargets.foundations.includes(index)}
+                    onPointerDown={(e) => {
+                      startDrag(e, [foundation[foundation.length - 1]], { type: "foundation", index });
+                    }}
+                  />
                 ) : (
-                  <EmptyPile label={["♠", "♥", "♦", "♣"][index]} />
+                  <EmptyPile 
+                    label={["♠", "♥", "♦", "♣"][index]} 
+                    isValidDrop={validTargets.foundations.includes(index)}
+                  />
                 )}
               </div>
             ))}
@@ -423,24 +470,80 @@ export default function Solitaire() {
           {gameState.tableau.map((pile, pileIndex) => (
             <div
               key={pileIndex}
-              className={`flex-1 max-w-20 ${
-                selectedCard?.type === "tableau" && selectedCard.index === pileIndex
-                  ? "ring-2 ring-yellow-400 rounded-lg"
-                  : ""
-              }`}
-              onClick={() => pile.length === 0 && selectedCard && handleTableauCardClick(pileIndex, 0)}
+              data-pile-type="tableau"
+              data-pile-index={pileIndex}
+              className="flex-1 max-w-20"
             >
-              <TableauPile
-                cards={pile}
-                pileIndex={pileIndex}
-                onCardClick={(cardIndex) => handleTableauCardClick(pileIndex, cardIndex)}
-                onCardDoubleClick={(cardIndex) => handleTableauCardDoubleClick(pileIndex, cardIndex)}
-                hintedCardId={hintedCard || undefined}
-              />
+              {pile.length === 0 ? (
+                <EmptyPile 
+                  label="K" 
+                  isValidDrop={validTargets.tableaus.includes(pileIndex)}
+                />
+              ) : (
+                <div className="relative" style={{ minHeight: `${80 + pile.length * 20}px` }}>
+                  {pile.map((card, cardIndex) => (
+                    <div
+                      key={card.id}
+                      className="absolute left-0"
+                      style={{ top: `${cardIndex * 20}px`, zIndex: cardIndex }}
+                      onPointerDown={(e) => {
+                        if (card.faceUp) {
+                          const cardsToMove = pile.slice(cardIndex);
+                          startDrag(e, cardsToMove, { type: "tableau", index: pileIndex, cardIndex });
+                        }
+                      }}
+                      onDoubleClick={() => handleTableauDoubleClick(pileIndex, cardIndex)}
+                    >
+                      <PlayingCard
+                        card={card}
+                        isDragging={
+                          dragState?.from.type === "tableau" &&
+                          dragState.from.index === pileIndex &&
+                          (dragState.from.cardIndex ?? 0) <= cardIndex
+                        }
+                        isHinted={card.id === hintedCard}
+                        isValidDrop={cardIndex === pile.length - 1 && validTargets.tableaus.includes(pileIndex)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
       </div>
+
+      {/* Dragged Cards Overlay */}
+      {dragState && (
+        <div
+          className="fixed pointer-events-none z-50"
+          style={{
+            left: dragState.currentX - 28,
+            top: dragState.currentY - 40,
+          }}
+        >
+          {dragState.cards.map((card, index) => (
+            <div 
+              key={card.id} 
+              className="absolute"
+              style={{ top: `${index * 20}px` }}
+            >
+              <div className={`
+                w-14 h-20 md:w-16 md:h-24 rounded-lg bg-white border-2 shadow-2xl 
+                flex flex-col items-start justify-start p-1 rotate-3
+                ${isRed(card.suit) ? "border-red-200" : "border-gray-300"}
+              `}>
+                <span className={`text-xs md:text-sm font-bold ${getSuitColor(card.suit)}`}>
+                  {card.rank}
+                </span>
+                <span className={`text-sm md:text-lg ${getSuitColor(card.suit)}`}>
+                  {getSuitSymbol(card.suit)}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Win Modal */}
       <AnimatePresence>
