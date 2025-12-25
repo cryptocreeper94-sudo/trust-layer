@@ -75,25 +75,22 @@ export default function Home() {
             <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
           <div className="hidden lg:flex items-center gap-4 text-xs font-medium text-muted-foreground mr-4">
+            <Link href="/arcade" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
+              Games
+              <Badge variant="outline" className="text-[9px] border-pink-500/50 text-pink-400 px-1 py-0">Hot</Badge>
+            </Link>
             <Link href="/ecosystem" className="hover:text-primary transition-colors whitespace-nowrap">Ecosystem</Link>
             <Link href="/token" className="hover:text-primary transition-colors whitespace-nowrap">Coin</Link>
             <Link href="/bridge" className="hover:text-primary transition-colors whitespace-nowrap flex items-center gap-1">
               Bridge
               <Badge variant="outline" className="text-[9px] border-cyan-500/50 text-cyan-400 px-1 py-0">Beta</Badge>
             </Link>
-            <a href="https://darkwavepulse.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
-              Staking
-              <ArrowRight className="w-2.5 h-2.5 -rotate-45" />
-            </a>
+            <Link href="/staking" className="hover:text-primary transition-colors whitespace-nowrap">Staking</Link>
             <Link href="/explorer" className="hover:text-primary transition-colors whitespace-nowrap">Explorer</Link>
             <Link href="/developers" className="hover:text-primary transition-colors whitespace-nowrap">Developers</Link>
-            <Link href="/studio" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
-              Studio
-              <Badge variant="outline" className="text-[9px] border-green-500/50 text-green-400 px-1 py-0">Live</Badge>
-            </Link>
             <Link href="/swap" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
               DeFi
-              <Badge variant="outline" className="text-[9px] border-pink-500/50 text-pink-400 px-1 py-0">New</Badge>
+              <Badge variant="outline" className="text-[9px] border-green-500/50 text-green-400 px-1 py-0">New</Badge>
             </Link>
           </div>
           <div className="flex items-center gap-2">

@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 const navItems = [
   { href: "/", label: "Home", icon: Home },
   { href: "/wallet", label: "Wallet", icon: Coins, badge: "New" },
+  { href: "/arcade", label: "Games", icon: Rocket, badge: "Hot" },
   { href: "/ecosystem", label: "Ecosystem", icon: Box },
   { href: "/swap", label: "Swap", icon: ArrowUpDown, badge: "DeFi" },
   { href: "/faucet", label: "Faucet", icon: Droplets },
