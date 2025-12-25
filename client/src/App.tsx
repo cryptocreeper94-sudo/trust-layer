@@ -85,6 +85,7 @@ import CoinStore from "@/pages/coin-store";
 import DailyBonus from "@/pages/daily-bonus";
 import Slots from "@/pages/slots";
 import Coinflip from "@/pages/coinflip";
+import SweepstakesRules from "@/pages/sweepstakes-rules";
 import SocialFeed from "@/pages/social-feed";
 import Lottery from "@/pages/lottery";
 import AIAdvisor from "@/pages/ai-advisor";
@@ -116,6 +117,7 @@ function GamesRouter() {
         <Route path="/daily-bonus" component={DailyBonus} />
         <Route path="/slots" component={Slots} />
         <Route path="/coinflip" component={Coinflip} />
+        <Route path="/sweepstakes-rules" component={SweepstakesRules} />
         <Route path="/crash" component={Crash} />
         <Route path="/predictions" component={Predictions} />
         <Route path="/lottery" component={Lottery} />

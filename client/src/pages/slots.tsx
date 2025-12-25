@@ -104,6 +104,8 @@ type ThemeKey = keyof typeof SLOT_THEMES;
 
 const BET_OPTIONS = [10, 25, 50, 100, 250, 500, 1000];
 
+const DEMO_BALANCE = { goldCoins: "10000", sweepsCoins: "100" };
+
 export default function Slots() {
   const { user, isLoading: authLoading } = useAuth();
   const [, navigate] = useLocation();
@@ -119,6 +121,8 @@ export default function Slots() {
   const [lastWin, setLastWin] = useState<number | null>(null);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showPayTable, setShowPayTable] = useState(false);
+  const [demoBalance, setDemoBalance] = useState(DEMO_BALANCE);
+  const isDemo = !user;
   
   const reelControls = [useAnimation(), useAnimation(), useAnimation()];
   
@@ -151,9 +155,11 @@ export default function Slots() {
     return parseFloat(num.toString()).toLocaleString();
   };
 
+  const currentBalance = isDemo ? demoBalance : balance;
+
   const getBalance = () => {
-    if (!balance) return 0;
-    return parseFloat(currencyType === "GC" ? balance.goldCoins : balance.sweepsCoins);
+    if (!currentBalance) return 0;
+    return parseFloat(currencyType === "GC" ? currentBalance.goldCoins : currentBalance.sweepsCoins);
   };
 
   const generateReelSymbols = () => {
@@ -162,10 +168,10 @@ export default function Slots() {
   };
 
   const spin = async () => {
-    if (!user || isSpinning) return;
+    if (isSpinning) return;
     
-    const currentBalance = getBalance();
-    if (currentBalance < betAmount) {
+    const bal = getBalance();
+    if (bal < betAmount) {
       toast({
         title: "Insufficient Balance",
         description: `You need at least ${betAmount} ${currencyType} to spin`,
@@ -209,16 +215,24 @@ export default function Slots() {
     const payout = betAmount * multiplier;
     const profit = payout - betAmount;
 
-    // Record game result
-    await gameMutation.mutateAsync({
-      gameType: `slots_${selectedTheme}`,
-      currencyType,
-      betAmount,
-      multiplier,
-      payout,
-      profit,
-      outcome: multiplier > 0 ? "win" : "loss",
-    });
+    // Update balance (demo mode uses local state, logged in uses API)
+    if (isDemo) {
+      setDemoBalance(prev => {
+        const key = currencyType === "GC" ? "goldCoins" : "sweepsCoins";
+        const newVal = parseFloat(prev[key]) + profit;
+        return { ...prev, [key]: String(Math.max(0, newVal)) };
+      });
+    } else {
+      await gameMutation.mutateAsync({
+        gameType: `slots_${selectedTheme}`,
+        currencyType,
+        betAmount,
+        multiplier,
+        payout,
+        profit,
+        outcome: multiplier > 0 ? "win" : "loss",
+      });
+    }
 
     if (multiplier > 0) {
       setLastWin(payout);
@@ -338,8 +352,19 @@ export default function Slots() {
           })}
         </div>
 
+        {/* Demo Mode Banner */}
+        {isDemo && (
+          <div className="mb-4 bg-gradient-to-r from-purple-900/50 to-pink-900/50 border border-purple-500/30 rounded-xl p-3 text-center">
+            <p className="text-purple-300 text-sm">
+              <Sparkles className="w-4 h-4 inline mr-1" />
+              <strong>Demo Mode</strong> - Playing with free demo coins! 
+              <a href="/api/login" className="underline ml-2 text-purple-200 hover:text-white">Sign up</a> to save your winnings.
+            </p>
+          </div>
+        )}
+
         {/* Balance */}
-        {balance && (
+        {currentBalance && (
           <div className="flex items-center justify-center gap-6 mb-6">
             <div 
               className={`flex items-center gap-3 px-4 py-2 rounded-xl cursor-pointer transition-all ${currencyType === 'GC' ? 'bg-yellow-500/20 ring-2 ring-yellow-400/50' : 'bg-black/30 hover:bg-black/40'}`}
@@ -347,8 +372,8 @@ export default function Slots() {
             >
               <Coins className="w-6 h-6 text-yellow-400" />
               <div>
-                <div className="text-xs text-yellow-400/80">Gold Coins</div>
-                <div className="text-lg font-bold text-yellow-400">{formatNumber(balance.goldCoins)}</div>
+                <div className="text-xs text-yellow-400/80">Gold Coins {isDemo && "(Demo)"}</div>
+                <div className="text-lg font-bold text-yellow-400">{formatNumber(currentBalance.goldCoins)}</div>
               </div>
             </div>
             <div 
@@ -357,8 +382,8 @@ export default function Slots() {
             >
               <Sparkles className="w-6 h-6 text-green-400" />
               <div>
-                <div className="text-xs text-green-400/80">Sweeps Coins</div>
-                <div className="text-lg font-bold text-green-400">{parseFloat(balance.sweepsCoins).toFixed(2)}</div>
+                <div className="text-xs text-green-400/80">Sweeps Coins {isDemo && "(Demo)"}</div>
+                <div className="text-lg font-bold text-green-400">{parseFloat(currentBalance.sweepsCoins).toFixed(2)}</div>
               </div>
             </div>
           </div>
@@ -472,10 +497,10 @@ export default function Slots() {
               {/* Spin Button */}
               <Button
                 onClick={spin}
-                disabled={isSpinning || !user || getBalance() < betAmount}
+                disabled={isSpinning || getBalance() < betAmount}
                 className={`
                   px-12 py-6 text-xl font-bold rounded-full shadow-lg transition-all
-                  ${!isSpinning && user && getBalance() >= betAmount
+                  ${!isSpinning && getBalance() >= betAmount
                     ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 hover:from-yellow-300 hover:via-amber-400 hover:to-orange-400 text-black hover:scale-105'
                     : 'bg-gray-700 text-gray-400 cursor-not-allowed'
                   }

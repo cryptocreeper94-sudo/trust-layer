@@ -28,6 +28,8 @@ const BET_OPTIONS = [10, 25, 50, 100, 250, 500, 1000, 2500, 5000];
 
 const RECENT_RESULTS_COUNT = 20;
 
+const DEMO_BALANCE = { goldCoins: "10000", sweepsCoins: "100" };
+
 export default function Coinflip() {
   const { user, isLoading: authLoading } = useAuth();
   const [, navigate] = useLocation();
@@ -44,6 +46,8 @@ export default function Coinflip() {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [coinRotation, setCoinRotation] = useState(0);
   const [currentSide, setCurrentSide] = useState<"heads" | "tails">("heads");
+  const [demoBalance, setDemoBalance] = useState(DEMO_BALANCE);
+  const isDemo = !user;
   
   const coinControls = useAnimation();
 
@@ -51,6 +55,8 @@ export default function Coinflip() {
     queryKey: ["/api/sweeps/balance"],
     enabled: !!user,
   });
+
+  const currentBalance = isDemo ? demoBalance : balance;
 
   const gameMutation = useMutation({
     mutationFn: async (data: {
@@ -75,15 +81,15 @@ export default function Coinflip() {
   };
 
   const getBalance = () => {
-    if (!balance) return 0;
-    return parseFloat(currencyType === "GC" ? balance.goldCoins : balance.sweepsCoins);
+    if (!currentBalance) return 0;
+    return parseFloat(currencyType === "GC" ? currentBalance.goldCoins : currentBalance.sweepsCoins);
   };
 
   const flipCoin = async () => {
-    if (!user || isFlipping) return;
+    if (isFlipping) return;
     
-    const currentBalance = getBalance();
-    if (currentBalance < betAmount) {
+    const bal = getBalance();
+    if (bal < betAmount) {
       toast({
         title: "Insufficient Balance",
         description: `You need at least ${formatNumber(betAmount)} ${currencyType} to play`,
@@ -117,16 +123,24 @@ export default function Coinflip() {
 
     setCurrentSide(result);
 
-    // Record game result
-    await gameMutation.mutateAsync({
-      gameType: "coinflip",
-      currencyType,
-      betAmount,
-      multiplier,
-      payout,
-      profit,
-      outcome: won ? "win" : "loss",
-    });
+    // Update balance (demo mode uses local state, logged in uses API)
+    if (isDemo) {
+      setDemoBalance(prev => {
+        const key = currencyType === "GC" ? "goldCoins" : "sweepsCoins";
+        const newVal = parseFloat(prev[key]) + profit;
+        return { ...prev, [key]: String(Math.max(0, newVal)) };
+      });
+    } else {
+      await gameMutation.mutateAsync({
+        gameType: "coinflip",
+        currencyType,
+        betAmount,
+        multiplier,
+        payout,
+        profit,
+        outcome: won ? "win" : "loss",
+      });
+    }
 
     // Update recent results
     setRecentResults(prev => [result, ...prev.slice(0, RECENT_RESULTS_COUNT - 1)]);
@@ -233,8 +247,19 @@ export default function Coinflip() {
           </Button>
         </div>
 
+        {/* Demo Mode Banner */}
+        {isDemo && (
+          <div className="mb-4 bg-gradient-to-r from-purple-900/50 to-pink-900/50 border border-purple-500/30 rounded-xl p-3 text-center">
+            <p className="text-purple-300 text-sm">
+              <Sparkles className="w-4 h-4 inline mr-1" />
+              <strong>Demo Mode</strong> - Playing with free demo coins! 
+              <a href="/api/login" className="underline ml-2 text-purple-200 hover:text-white">Sign up</a> to save your winnings.
+            </p>
+          </div>
+        )}
+
         {/* Balance */}
-        {balance && (
+        {currentBalance && (
           <div className="flex items-center justify-center gap-4 mb-6">
             <div 
               className={`flex items-center gap-3 px-4 py-2 rounded-xl cursor-pointer transition-all ${currencyType === 'GC' ? 'bg-yellow-500/20 ring-2 ring-yellow-400/50' : 'bg-black/30 hover:bg-black/40'}`}
@@ -242,8 +267,8 @@ export default function Coinflip() {
             >
               <Coins className="w-5 h-5 text-yellow-400" />
               <div>
-                <div className="text-xs text-yellow-400/80">Gold Coins</div>
-                <div className="text-lg font-bold text-yellow-400">{formatNumber(balance.goldCoins)}</div>
+                <div className="text-xs text-yellow-400/80">Gold Coins {isDemo && "(Demo)"}</div>
+                <div className="text-lg font-bold text-yellow-400">{formatNumber(currentBalance.goldCoins)}</div>
               </div>
             </div>
             <div 
@@ -252,8 +277,8 @@ export default function Coinflip() {
             >
               <Sparkles className="w-5 h-5 text-green-400" />
               <div>
-                <div className="text-xs text-green-400/80">Sweeps Coins</div>
-                <div className="text-lg font-bold text-green-400">{parseFloat(balance.sweepsCoins).toFixed(2)}</div>
+                <div className="text-xs text-green-400/80">Sweeps Coins {isDemo && "(Demo)"}</div>
+                <div className="text-lg font-bold text-green-400">{parseFloat(currentBalance.sweepsCoins).toFixed(2)}</div>
               </div>
             </div>
           </div>
@@ -407,10 +432,10 @@ export default function Coinflip() {
           {/* Flip Button */}
           <Button
             onClick={flipCoin}
-            disabled={isFlipping || !user || getBalance() < betAmount}
+            disabled={isFlipping || getBalance() < betAmount}
             className={`
               px-16 py-8 text-2xl font-bold rounded-full shadow-lg transition-all
-              ${!isFlipping && user && getBalance() >= betAmount
+              ${!isFlipping && getBalance() >= betAmount
                 ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 hover:from-yellow-300 hover:via-amber-400 hover:to-orange-400 text-black hover:scale-105'
                 : 'bg-gray-700 text-gray-400 cursor-not-allowed'
               }
