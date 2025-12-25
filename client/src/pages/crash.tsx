@@ -400,13 +400,14 @@ function OrbyFlyer({ multiplier, crashed, cashedOut, hasPartialCashout }: { mult
         <img 
           src={orbyFlying} 
           alt="Orby" 
-          className="w-full h-full object-contain drop-shadow-2xl"
+          className="w-full h-full object-contain"
           style={{
+            mixBlendMode: "screen",
             filter: crashed 
               ? "drop-shadow(0 0 20px rgba(239,68,68,0.8)) brightness(0.7) saturate(0.5)"
               : cashedOut
-              ? "drop-shadow(0 0 25px rgba(74,222,128,0.9)) brightness(1.1)"
-              : `drop-shadow(0 0 ${15 + intensity * 10}px rgba(76,244,255,0.8)) drop-shadow(0 0 ${25 + intensity * 15}px rgba(255,79,216,0.5))`,
+              ? "drop-shadow(0 0 25px rgba(74,222,128,0.9)) brightness(1.2)"
+              : `drop-shadow(0 0 ${15 + intensity * 10}px rgba(76,244,255,0.8)) drop-shadow(0 0 ${25 + intensity * 15}px rgba(255,79,216,0.5)) brightness(1.1)`,
           }}
         />
       </motion.div>
@@ -1201,17 +1202,12 @@ export default function CrashGame() {
                     })}
                   </div>
                   
-                  <motion.div 
-                    className="absolute w-20 h-20 sm:w-24 sm:h-24 z-20"
+                  <div 
+                    className="absolute w-16 h-16 sm:w-20 sm:h-20 z-20 transition-all duration-100 ease-linear"
                     style={{ 
                       left: `${Math.min(Math.max(5, (multiplier - 1) * 8), 70)}%`,
                       bottom: `${Math.min(Math.max(10, (multiplier - 1) * 10 + Math.pow(multiplier - 1, 1.3) * 2), 80)}%`,
                     }}
-                    animate={{
-                      left: `${Math.min(Math.max(5, (multiplier - 1) * 8), 70)}%`,
-                      bottom: `${Math.min(Math.max(10, (multiplier - 1) * 10 + Math.pow(multiplier - 1, 1.3) * 2), 80)}%`,
-                    }}
-                    transition={{ type: "tween", duration: 0.05, ease: "linear" }}
                   >
                     <OrbyFlyer 
                       multiplier={multiplier} 
@@ -1219,7 +1215,7 @@ export default function CrashGame() {
                       cashedOut={cashedOut} 
                       hasPartialCashout={partialCashouts.length > 0}
                     />
-                  </motion.div>
+                  </div>
                   
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center z-30 pointer-events-none">
                     {roundStatus === "waiting" ? (
