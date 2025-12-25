@@ -672,6 +672,34 @@ export default function Arcade() {
                   />
                 </div>
               </div>
+
+              {/* SPADES Card */}
+              <Link href="/spades" className="block group">
+                <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.01] group-hover:shadow-[0_0_40px_rgba(139,92,246,0.3)]">
+                  <div className="absolute inset-0 bg-gradient-to-br from-green-900 via-emerald-800 to-green-900" />
+                  <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48cGF0aCBkPSJNMzAgNUMxNSAxNSAxMCAyNSAxMCAzMGMwIDEwIDEwIDE1IDIwIDI1IDEwLTEwIDIwLTE1IDIwLTI1IDAtNS01LTE1LTIwLTI1eiIgZmlsbD0iIzAwMDAwMDIwIi8+PC9zdmc+')] opacity-20" />
+                  <div className="relative z-10 p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="p-2 rounded-xl bg-green-500/30 backdrop-blur-sm border border-green-400/20">
+                        <span className="text-2xl">♠</span>
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-bold text-white">Spades</h3>
+                        <p className="text-xs text-green-300/80">Classic Card Game</p>
+                      </div>
+                      <Badge className="ml-auto bg-blue-500/30 backdrop-blur-sm text-blue-300 border-blue-400/30 text-[9px]">FREE</Badge>
+                    </div>
+                    <p className="text-sm text-white/70 mb-3">
+                      Partner up against AI opponents in this classic trick-taking game. First to 500 wins!
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-sm text-green-300 border border-green-400/30">4 Players</span>
+                      <span className="text-[10px] px-2.5 py-1 rounded-full bg-purple-500/30 backdrop-blur-sm text-purple-300 border border-purple-400/30">AI Opponents</span>
+                      <span className="text-[10px] px-2.5 py-1 rounded-full bg-amber-500/30 backdrop-blur-sm text-amber-300 border border-amber-400/30">Social</span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
             </div>
 
             {/* Right Column - Sidebar */}
