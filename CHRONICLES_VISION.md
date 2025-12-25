@@ -279,8 +279,45 @@ Major events are recreated through AI:
 - **Fall of Rome**: Watch an empire crumble. Politics, invasion, chaos.
 - **French Revolution**: The guillotine falls. Choose your side.
 - **Moon Landing**: Experience humanity's greatest achievement.
+- **Biblical Times**: Walk through ancient Jerusalem, witness the great stories, live the faith.
 
 These aren't cutscenes - they're **living, breathing events** you experience firsthand while making your own choices within them.
+
+---
+
+### The Temporal Model: Parallel Timelines with Echoes
+
+**The Challenge**: If 1600s players reshape their world, and that affects 1700s, which affects 1800s... it becomes impossible to manage. Every era would be in constant flux.
+
+**The Solution**: Each era runs as its own self-contained universe.
+
+**How It Works:**
+- The 1600s world evolves based on 1600s players ONLY
+- The 1700s world evolves based on 1700s players ONLY
+- They are parallel experiences, not causally linked in real-time
+- Each era is its own social experiment running simultaneously
+
+**Connected Through "Echoes":**
+When you time travel to another era, you find:
+- **Artifacts** that reference major events from other eras
+- **Legends** passed down that tell of player-driven history
+- **Stories and lore** that give narrative connection
+- These are flavor and immersion, not gameplay causality
+
+**Why This Works:**
+1. **Every era is immediately playable** - no waiting for "earlier" eras to finish
+2. **No impossible calculations** - we're not simulating true causality across centuries
+3. **Still feels connected** - echoes and artifacts create a shared universe feeling
+4. **Players can specialize** - Medieval fans have their world, Victorian fans have theirs
+5. **Each era evolves organically** - shaped by the players who choose to live there
+
+**History Starts As Recorded, Then Diverges:**
+- When you enter an era, it begins based on documented history
+- But YOUR actions and other players' decisions reshape it
+- The world evolves based on human psychology, sociology, emotion, and beliefs
+- You get to see what would happen if PEOPLE actually controlled civilization
+- Governments, democracies, dictatorships might form... or not
+- Whatever emerges from player behavior becomes the new reality of that era
 
 ---
 
