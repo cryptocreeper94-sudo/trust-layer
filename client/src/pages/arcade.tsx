@@ -17,6 +17,12 @@ import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.pn
 import slotMachineImg from "@assets/stock_images/slot_machine_casino__6a7c017a.jpg";
 import goldenCoinsImg from "@assets/stock_images/golden_coins_casino__27bb74b8.jpg";
 import cosmicRocketImg from "@assets/stock_images/rocket_space_stars_c_1373e3eb.jpg";
+import solitaireImg from "@assets/generated_images/solitaire_cards_on_felt.png";
+import minesweeperImg from "@assets/generated_images/minesweeper_bomb_grid.png";
+import spaceBlasterImg from "@assets/generated_images/space_shooter_arcade_scene.png";
+import tetrisImg from "@assets/generated_images/colorful_tetris_blocks.png";
+import snakeImg from "@assets/generated_images/neon_snake_game.png";
+import pacmanImg from "@assets/generated_images/pac-man_arcade_maze.png";
 import { useAuth } from "@/hooks/use-auth";
 
 const ONE_DWC = BigInt("1000000000000000000");
@@ -705,84 +711,72 @@ export default function Arcade() {
               <div className="grid grid-cols-3 gap-3">
                 {/* SOLITAIRE Card */}
                 <Link href="/solitaire" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(34,197,94,0.3)] h-28">
-                    <div className="absolute inset-0 bg-gradient-to-br from-green-800 via-emerald-700 to-teal-800" />
-                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-between">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-lg">🃏</span>
-                        <h3 className="text-xs font-bold text-white">Solitaire</h3>
-                      </div>
-                      <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[7px] w-fit">FREE</Badge>
+                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(34,197,94,0.3)] h-32">
+                    <img src={solitaireImg} alt="Solitaire" className="absolute inset-0 w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-end">
+                      <h3 className="text-sm font-bold text-white drop-shadow-lg">Solitaire</h3>
+                      <Badge className="bg-blue-500/50 text-blue-200 border-blue-400/30 text-[7px] w-fit mt-1 backdrop-blur-sm">FREE</Badge>
                     </div>
                   </div>
                 </Link>
 
                 {/* MINESWEEPER Card */}
                 <Link href="/minesweeper" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(239,68,68,0.3)] h-28">
-                    <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-gray-700 to-zinc-800" />
-                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-between">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-lg">💣</span>
-                        <h3 className="text-xs font-bold text-white">Minesweeper</h3>
-                      </div>
-                      <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[7px] w-fit">FREE</Badge>
+                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(239,68,68,0.3)] h-32">
+                    <img src={minesweeperImg} alt="Minesweeper" className="absolute inset-0 w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-end">
+                      <h3 className="text-sm font-bold text-white drop-shadow-lg">Minesweeper</h3>
+                      <Badge className="bg-blue-500/50 text-blue-200 border-blue-400/30 text-[7px] w-fit mt-1 backdrop-blur-sm">FREE</Badge>
                     </div>
                   </div>
                 </Link>
 
                 {/* GALAGA Card */}
                 <Link href="/galaga" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(139,92,246,0.3)] h-28">
-                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-800 to-violet-900" />
-                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-between">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-lg">🚀</span>
-                        <h3 className="text-xs font-bold text-white">Space Blaster</h3>
-                      </div>
-                      <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[7px] w-fit">FREE</Badge>
+                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(139,92,246,0.3)] h-32">
+                    <img src={spaceBlasterImg} alt="Space Blaster" className="absolute inset-0 w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-end">
+                      <h3 className="text-sm font-bold text-white drop-shadow-lg">Space Blaster</h3>
+                      <Badge className="bg-blue-500/50 text-blue-200 border-blue-400/30 text-[7px] w-fit mt-1 backdrop-blur-sm">FREE</Badge>
                     </div>
                   </div>
                 </Link>
 
                 {/* TETRIS Card */}
                 <Link href="/tetris" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] h-28">
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-indigo-800 to-blue-900" />
-                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-between">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-lg">🧱</span>
-                        <h3 className="text-xs font-bold text-white">Tetris</h3>
-                      </div>
-                      <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[7px] w-fit">FREE</Badge>
+                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] h-32">
+                    <img src={tetrisImg} alt="Tetris" className="absolute inset-0 w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-end">
+                      <h3 className="text-sm font-bold text-white drop-shadow-lg">Tetris</h3>
+                      <Badge className="bg-blue-500/50 text-blue-200 border-blue-400/30 text-[7px] w-fit mt-1 backdrop-blur-sm">FREE</Badge>
                     </div>
                   </div>
                 </Link>
 
                 {/* SNAKE Card */}
                 <Link href="/snake" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(34,197,94,0.3)] h-28">
-                    <div className="absolute inset-0 bg-gradient-to-br from-green-900 via-emerald-800 to-teal-900" />
-                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-between">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-lg">🐍</span>
-                        <h3 className="text-xs font-bold text-white">Snake</h3>
-                      </div>
-                      <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[7px] w-fit">FREE</Badge>
+                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(34,197,94,0.3)] h-32">
+                    <img src={snakeImg} alt="Snake" className="absolute inset-0 w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-end">
+                      <h3 className="text-sm font-bold text-white drop-shadow-lg">Snake</h3>
+                      <Badge className="bg-blue-500/50 text-blue-200 border-blue-400/30 text-[7px] w-fit mt-1 backdrop-blur-sm">FREE</Badge>
                     </div>
                   </div>
                 </Link>
 
                 {/* PAC-MAN Card */}
                 <Link href="/pacman" className="block group">
-                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(234,179,8,0.3)] h-28">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-indigo-800 to-purple-900" />
-                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-between">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-lg">👻</span>
-                        <h3 className="text-xs font-bold text-white">Pac-Man</h3>
-                      </div>
-                      <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[7px] w-fit">FREE</Badge>
+                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(234,179,8,0.3)] h-32">
+                    <img src={pacmanImg} alt="Pac-Man" className="absolute inset-0 w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    <div className="relative z-10 p-2.5 h-full flex flex-col justify-end">
+                      <h3 className="text-sm font-bold text-white drop-shadow-lg">Pac-Man</h3>
+                      <Badge className="bg-blue-500/50 text-blue-200 border-blue-400/30 text-[7px] w-fit mt-1 backdrop-blur-sm">FREE</Badge>
                     </div>
                   </div>
                 </Link>
