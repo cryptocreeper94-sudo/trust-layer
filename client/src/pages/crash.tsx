@@ -19,7 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
-import orbyFlying from "@assets/generated_images/orby_planet_flying_right.png";
+import orbyFlying from "@assets/generated_images/orby_planet_mascot_flying.png";
 
 const MAX_MULTIPLIER = 5000;
 const HOUSE_EDGE = 0.015;
@@ -402,6 +402,7 @@ function OrbyFlyer({ multiplier, crashed, cashedOut, hasPartialCashout }: { mult
           alt="Orby"
           className="w-full h-full object-contain"
           style={{
+            mixBlendMode: "screen",
             filter: crashed 
               ? "drop-shadow(0 0 20px rgba(239,68,68,0.8)) brightness(0.8) saturate(0.5)"
               : cashedOut
@@ -1204,8 +1205,8 @@ export default function CrashGame() {
                   <div 
                     className="absolute w-16 h-16 sm:w-20 sm:h-20 z-20 transition-all duration-100 ease-linear"
                     style={{ 
-                      left: `${Math.min(Math.max(5, (multiplier - 1) * 8), 70)}%`,
-                      bottom: `${Math.min(Math.max(10, (multiplier - 1) * 10 + Math.pow(multiplier - 1, 1.3) * 2), 80)}%`,
+                      left: `${Math.min(Math.max(5, (multiplier - 1) * 12), 75)}%`,
+                      bottom: `${Math.min(20 + Math.sin((multiplier - 1) * 0.5) * 10, 35)}%`,
                     }}
                   >
                     <OrbyFlyer 
