@@ -28,6 +28,10 @@ import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.png";
 import medievalImg from "@assets/generated_images/medieval_fantasy_kingdom.png";
 import cyberpunkImg from "@assets/generated_images/cyberpunk_neon_city.png";
 import spaceImg from "@assets/generated_images/deep_space_station.png";
+import tradingImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
+import nftImg from "@assets/generated_images/fantasy_character_heroes.png";
+import toolsImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
+import earnImg from "@assets/generated_images/darkwave_crypto_token_coin_holographic.png";
 
 const ecosystemImages: Record<string, string> = {
   "orbit-staffing": "/ecosystem/orbit-staffing.jpg",
@@ -364,39 +368,41 @@ export default function Home() {
               viewport={{ once: true }}
               transition={{ delay: 0 }}
             >
-              <GlassCard className="h-full group hover:border-pink-500/50 transition-all duration-300">
-                <div className="p-5">
+              <div className="relative h-full overflow-hidden rounded-2xl border border-white/10 hover:border-pink-500/50 transition-all duration-300 group" style={{ boxShadow: '0 0 40px rgba(236,72,153,0.15)' }}>
+                <img src={tradingImg} alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-pink-900/40" />
+                <div className="relative z-10 p-5">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center group-hover:shadow-[0_0_30px_rgba(236,72,153,0.3)] transition-shadow">
-                      <ArrowUpDown className="w-6 h-6 text-pink-400" />
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500/40 to-purple-500/40 backdrop-blur-sm flex items-center justify-center group-hover:shadow-[0_0_30px_rgba(236,72,153,0.4)] transition-shadow">
+                      <ArrowUpDown className="w-6 h-6 text-pink-300" />
                     </div>
                     <div>
-                      <h3 className="text-base font-bold text-white">Trading</h3>
-                      <p className="text-[11px] text-muted-foreground">Swap, liquidity & charts</p>
+                      <h3 className="text-base font-bold text-white text-shadow">Trading</h3>
+                      <p className="text-[11px] text-white/70">Swap, liquidity & charts</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2">
                     <Link href="/swap">
-                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-pink-500/40 hover:bg-pink-500/5 transition-all text-center group/item" data-testid="link-swap">
+                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-pink-500/40 hover:bg-pink-500/20 transition-all text-center group/item" data-testid="link-swap">
                         <ArrowUpDown className="w-4 h-4 mx-auto mb-1 text-pink-400" />
-                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Swap</span>
+                        <span className="text-[10px] text-gray-200 group-hover/item:text-white">Swap</span>
                       </div>
                     </Link>
                     <Link href="/liquidity">
-                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-emerald-500/40 hover:bg-emerald-500/5 transition-all text-center group/item" data-testid="link-liquidity">
+                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-emerald-500/40 hover:bg-emerald-500/20 transition-all text-center group/item" data-testid="link-liquidity">
                         <Droplets className="w-4 h-4 mx-auto mb-1 text-emerald-400" />
-                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Pools</span>
+                        <span className="text-[10px] text-gray-200 group-hover/item:text-white">Pools</span>
                       </div>
                     </Link>
                     <Link href="/charts">
-                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-sky-500/40 hover:bg-sky-500/5 transition-all text-center group/item" data-testid="link-charts">
+                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-sky-500/40 hover:bg-sky-500/20 transition-all text-center group/item" data-testid="link-charts">
                         <LineChart className="w-4 h-4 mx-auto mb-1 text-sky-400" />
-                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Charts</span>
+                        <span className="text-[10px] text-gray-200 group-hover/item:text-white">Charts</span>
                       </div>
                     </Link>
                   </div>
                 </div>
-              </GlassCard>
+              </div>
             </motion.div>
 
             {/* NFT Hub Card */}
@@ -406,39 +412,41 @@ export default function Home() {
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
             >
-              <GlassCard className="h-full group hover:border-purple-500/50 transition-all duration-300">
-                <div className="p-5">
+              <div className="relative h-full overflow-hidden rounded-2xl border border-white/10 hover:border-purple-500/50 transition-all duration-300 group" style={{ boxShadow: '0 0 40px rgba(168,85,247,0.15)' }}>
+                <img src={nftImg} alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-purple-900/40" />
+                <div className="relative z-10 p-5">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-violet-500/20 flex items-center justify-center group-hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-shadow">
-                      <ImageIcon className="w-6 h-6 text-purple-400" />
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/40 to-violet-500/40 backdrop-blur-sm flex items-center justify-center group-hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-shadow">
+                      <ImageIcon className="w-6 h-6 text-purple-300" />
                     </div>
                     <div>
-                      <h3 className="text-base font-bold text-white">NFT</h3>
-                      <p className="text-[11px] text-muted-foreground">Collect, create & explore</p>
+                      <h3 className="text-base font-bold text-white text-shadow">NFT</h3>
+                      <p className="text-[11px] text-white/70">Collect, create & explore</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2">
                     <Link href="/nft">
-                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-purple-500/40 hover:bg-purple-500/5 transition-all text-center group/item" data-testid="link-nft-market">
+                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-purple-500/40 hover:bg-purple-500/20 transition-all text-center group/item" data-testid="link-nft-market">
                         <ImageIcon className="w-4 h-4 mx-auto mb-1 text-purple-400" />
-                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Market</span>
+                        <span className="text-[10px] text-gray-200 group-hover/item:text-white">Market</span>
                       </div>
                     </Link>
                     <Link href="/nft-gallery">
-                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-violet-500/40 hover:bg-violet-500/5 transition-all text-center group/item" data-testid="link-nft-gallery">
+                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-violet-500/40 hover:bg-violet-500/20 transition-all text-center group/item" data-testid="link-nft-gallery">
                         <ImageIcon className="w-4 h-4 mx-auto mb-1 text-violet-400" />
-                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Gallery</span>
+                        <span className="text-[10px] text-gray-200 group-hover/item:text-white">Gallery</span>
                       </div>
                     </Link>
                     <Link href="/nft-creator">
-                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-rose-500/40 hover:bg-rose-500/5 transition-all text-center group/item" data-testid="link-nft-creator">
+                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-rose-500/40 hover:bg-rose-500/20 transition-all text-center group/item" data-testid="link-nft-creator">
                         <Palette className="w-4 h-4 mx-auto mb-1 text-rose-400" />
-                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Create</span>
+                        <span className="text-[10px] text-gray-200 group-hover/item:text-white">Create</span>
                       </div>
                     </Link>
                   </div>
                 </div>
-              </GlassCard>
+              </div>
             </motion.div>
 
             {/* Tools Hub Card */}
@@ -448,53 +456,55 @@ export default function Home() {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              <GlassCard className="h-full group hover:border-cyan-500/50 transition-all duration-300">
-                <div className="p-5">
+              <div className="relative h-full overflow-hidden rounded-2xl border border-white/10 hover:border-cyan-500/50 transition-all duration-300 group" style={{ boxShadow: '0 0 40px rgba(6,182,212,0.15)' }}>
+                <img src={toolsImg} alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-cyan-900/40" />
+                <div className="relative z-10 p-5">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center group-hover:shadow-[0_0_30px_rgba(0,255,255,0.3)] transition-shadow">
-                      <Zap className="w-6 h-6 text-cyan-400" />
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/40 to-blue-500/40 backdrop-blur-sm flex items-center justify-center group-hover:shadow-[0_0_30px_rgba(6,182,212,0.4)] transition-shadow">
+                      <Zap className="w-6 h-6 text-cyan-300" />
                     </div>
                     <div>
-                      <h3 className="text-base font-bold text-white">Tools</h3>
-                      <p className="text-[11px] text-muted-foreground">Faucet, portfolio & more</p>
+                      <h3 className="text-base font-bold text-white text-shadow">Tools</h3>
+                      <p className="text-[11px] text-white/70">Faucet, portfolio & more</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2">
                     <Link href="/faucet">
-                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-cyan-500/40 hover:bg-cyan-500/5 transition-all text-center group/item" data-testid="link-faucet">
+                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-cyan-500/40 hover:bg-cyan-500/20 transition-all text-center group/item" data-testid="link-faucet">
                         <Droplets className="w-4 h-4 mx-auto mb-1 text-cyan-400" />
-                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Faucet</span>
+                        <span className="text-[10px] text-gray-200 group-hover/item:text-white">Faucet</span>
                       </div>
                     </Link>
                     <Link href="/portfolio">
-                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-green-500/40 hover:bg-green-500/5 transition-all text-center group/item" data-testid="link-portfolio">
+                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-green-500/40 hover:bg-green-500/20 transition-all text-center group/item" data-testid="link-portfolio">
                         <PieChart className="w-4 h-4 mx-auto mb-1 text-green-400" />
-                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Portfolio</span>
+                        <span className="text-[10px] text-gray-200 group-hover/item:text-white">Portfolio</span>
                       </div>
                     </Link>
                     <Link href="/transactions">
-                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-blue-500/40 hover:bg-blue-500/5 transition-all text-center group/item" data-testid="link-history">
+                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-blue-500/40 hover:bg-blue-500/20 transition-all text-center group/item" data-testid="link-history">
                         <History className="w-4 h-4 mx-auto mb-1 text-blue-400" />
-                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">History</span>
+                        <span className="text-[10px] text-gray-200 group-hover/item:text-white">History</span>
                       </div>
                     </Link>
                   </div>
                   <div className="grid grid-cols-2 gap-2 mt-2">
                     <Link href="/launchpad">
-                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-orange-500/40 hover:bg-orange-500/5 transition-all text-center group/item" data-testid="link-launchpad">
+                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-orange-500/40 hover:bg-orange-500/20 transition-all text-center group/item" data-testid="link-launchpad">
                         <Rocket className="w-4 h-4 mx-auto mb-1 text-orange-400" />
-                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Launchpad</span>
+                        <span className="text-[10px] text-gray-200 group-hover/item:text-white">Launchpad</span>
                       </div>
                     </Link>
                     <Link href="/webhooks">
-                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-amber-500/40 hover:bg-amber-500/5 transition-all text-center group/item" data-testid="link-webhooks">
+                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-amber-500/40 hover:bg-amber-500/20 transition-all text-center group/item" data-testid="link-webhooks">
                         <Webhook className="w-4 h-4 mx-auto mb-1 text-amber-400" />
-                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Webhooks</span>
+                        <span className="text-[10px] text-gray-200 group-hover/item:text-white">Webhooks</span>
                       </div>
                     </Link>
                   </div>
                 </div>
-              </GlassCard>
+              </div>
             </motion.div>
 
             {/* Earn & Track Card */}
@@ -504,33 +514,35 @@ export default function Home() {
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
             >
-              <GlassCard className="h-full group hover:border-amber-500/50 transition-all duration-300">
-                <div className="p-5">
+              <div className="relative h-full overflow-hidden rounded-2xl border border-white/10 hover:border-amber-500/50 transition-all duration-300 group" style={{ boxShadow: '0 0 40px rgba(245,158,11,0.15)' }}>
+                <img src={earnImg} alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-amber-900/40" />
+                <div className="relative z-10 p-5">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center group-hover:shadow-[0_0_30px_rgba(251,191,36,0.3)] transition-shadow">
-                      <Trophy className="w-6 h-6 text-amber-400" />
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/40 to-orange-500/40 backdrop-blur-sm flex items-center justify-center group-hover:shadow-[0_0_30px_rgba(245,158,11,0.4)] transition-shadow">
+                      <Trophy className="w-6 h-6 text-amber-300" />
                     </div>
                     <div>
-                      <h3 className="text-base font-bold text-white">Earn & Track</h3>
-                      <p className="text-[11px] text-muted-foreground">XP, quests & network</p>
+                      <h3 className="text-base font-bold text-white text-shadow">Earn & Track</h3>
+                      <p className="text-[11px] text-white/70">XP, quests & network</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <Link href="/quests">
-                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-amber-500/40 hover:bg-amber-500/5 transition-all text-center group/item" data-testid="link-quests">
+                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-amber-500/40 hover:bg-amber-500/20 transition-all text-center group/item" data-testid="link-quests">
                         <Target className="w-4 h-4 mx-auto mb-1 text-amber-400" />
-                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Quests</span>
+                        <span className="text-[10px] text-gray-200 group-hover/item:text-white">Quests</span>
                       </div>
                     </Link>
                     <Link href="/network">
-                      <div className="p-2.5 rounded-lg bg-black/30 border border-white/5 hover:border-green-500/40 hover:bg-green-500/5 transition-all text-center group/item" data-testid="link-network">
+                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-green-500/40 hover:bg-green-500/20 transition-all text-center group/item" data-testid="link-network">
                         <Activity className="w-4 h-4 mx-auto mb-1 text-green-400" />
-                        <span className="text-[10px] text-gray-300 group-hover/item:text-white">Network</span>
+                        <span className="text-[10px] text-gray-200 group-hover/item:text-white">Network</span>
                       </div>
                     </Link>
                   </div>
                 </div>
-              </GlassCard>
+              </div>
             </motion.div>
           </div>
         </div>
