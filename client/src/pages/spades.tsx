@@ -187,7 +187,6 @@ export default function Spades() {
   const [showRules, setShowRules] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("medium");
-  const [isProcessing, setIsProcessing] = useState(false);
   const [showTrickResult, setShowTrickResult] = useState(false);
 
   const playerName = user?.firstName || "You";
@@ -201,22 +200,25 @@ export default function Spades() {
 
   // Handle AI bidding
   useEffect(() => {
-    if (!gameState || gameState.status !== "bidding" || isProcessing) return;
+    if (!gameState || gameState.status !== "bidding") return;
     
     const currentPlayer = gameState.players[gameState.currentPlayerIndex];
     if (!currentPlayer.isAI) return;
-    
-    setIsProcessing(true);
     
     const timer = setTimeout(() => {
       const bid = getAIBid(currentPlayer, gameState.difficulty);
       
       setGameState(prev => {
-        if (!prev) return null;
+        if (!prev || prev.status !== "bidding") return prev;
         const newPlayers = [...prev.players];
-        newPlayers[prev.currentPlayerIndex] = { ...currentPlayer, bid };
+        const currentIdx = prev.currentPlayerIndex;
         
-        const nextIndex = (prev.currentPlayerIndex + 1) % 4;
+        // Make sure we're still on the same AI player
+        if (!newPlayers[currentIdx].isAI || newPlayers[currentIdx].bid !== null) return prev;
+        
+        newPlayers[currentIdx] = { ...newPlayers[currentIdx], bid };
+        
+        const nextIndex = (currentIdx + 1) % 4;
         const allBid = newPlayers.every(p => p.bid !== null);
         
         return {
@@ -226,30 +228,25 @@ export default function Spades() {
           status: allBid ? "playing" : "bidding",
         };
       });
-      
-      setIsProcessing(false);
     }, 800);
     
     return () => clearTimeout(timer);
-  }, [gameState, isProcessing]);
+  }, [gameState?.status, gameState?.currentPlayerIndex]);
 
   // Handle AI playing
   useEffect(() => {
-    if (!gameState || gameState.status !== "playing" || isProcessing || showTrickResult) return;
+    if (!gameState || gameState.status !== "playing" || showTrickResult) return;
     
     const currentPlayer = gameState.players[gameState.currentPlayerIndex];
     if (!currentPlayer.isAI) return;
     
-    setIsProcessing(true);
-    
     const timer = setTimeout(() => {
       const card = getAIPlay(currentPlayer, gameState.currentTrick, gameState, gameState.difficulty);
       playCard(card, currentPlayer);
-      setIsProcessing(false);
     }, 1000);
     
     return () => clearTimeout(timer);
-  }, [gameState, isProcessing, showTrickResult]);
+  }, [gameState?.status, gameState?.currentPlayerIndex, gameState?.trickNumber, showTrickResult]);
 
   const submitBid = () => {
     if (!gameState) return;
