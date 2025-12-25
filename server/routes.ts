@@ -14,7 +14,7 @@ import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
 import { blockchain } from "./blockchain-engine";
-import { sendEmail, sendApiKeyEmail, sendHallmarkEmail } from "./email";
+import { sendEmail, sendApiKeyEmail, sendHallmarkEmail, sendPresaleConfirmationEmail } from "./email";
 import { submitMemoToSolana, isHeliusConfigured, getSolanaTreasuryAddress, getSolanaBalance } from "./helius";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
 import { startRegistration, finishRegistration, startAuthentication, finishAuthentication, getUserPasskeys, deletePasskey } from "./webauthn";
@@ -2452,8 +2452,25 @@ export async function registerRoutes(
 
   app.get("/api/crowdfund/stats", async (_req, res) => {
     try {
-      const stats = await storage.getCrowdfundStats();
-      res.json(stats);
+      const crowdfundStats = await storage.getCrowdfundStats();
+      
+      const presaleResult = await db.execute(sql`
+        SELECT 
+          COALESCE(SUM(amount_cents), 0) as presale_raised,
+          COALESCE(COUNT(DISTINCT email), 0) as presale_contributors
+        FROM presale_purchases 
+        WHERE status = 'completed'
+      `);
+      const presaleRaised = parseInt(presaleResult.rows[0]?.presale_raised as string || "0");
+      const presaleContributors = parseInt(presaleResult.rows[0]?.presale_contributors as string || "0");
+      
+      res.json({
+        ...crowdfundStats,
+        totalRaised: (crowdfundStats.totalRaised || 0) + presaleRaised,
+        contributorCount: (crowdfundStats.contributorCount || 0) + presaleContributors,
+        presaleRaisedCents: presaleRaised,
+        presaleContributors,
+      });
     } catch (error) {
       console.error("Get crowdfund stats error:", error);
       res.status(500).json({ error: "Failed to fetch stats" });
@@ -2912,25 +2929,48 @@ export async function registerRoutes(
           || session.metadata?.email 
           || session.customer_email 
           || "anonymous";
+        const amountCents = session.amount_total || 0;
+        const tier = session.metadata?.tier || 'unknown';
+        const amountPaid = (amountCents / 100).toFixed(2);
         
-        await db.execute(sql`
+        const TOKEN_PRICE = 0.008;
+        const TIER_BONUSES: Record<string, number> = {
+          genesis: 25, founder: 15, pioneer: 10, early_bird: 5
+        };
+        const tokenAmount = Math.floor((amountCents / 100) / TOKEN_PRICE);
+        const bonusPercent = TIER_BONUSES[tier] || 0;
+        const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
+        
+        const insertResult = await db.execute(sql`
           INSERT INTO presale_purchases (session_id, email, amount_cents, tier, status, created_at)
           VALUES (
             ${sessionId}, 
             ${customerEmail}, 
-            ${session.amount_total || 0}, 
-            ${session.metadata?.tier || 'unknown'},
+            ${amountCents}, 
+            ${tier},
             'completed',
             NOW()
           )
           ON CONFLICT (session_id) DO NOTHING
+          RETURNING id
         `);
+        
+        const isNewPurchase = (insertResult.rowCount ?? 0) > 0;
+        
+        if (isNewPurchase && customerEmail !== "anonymous") {
+          try {
+            await sendPresaleConfirmationEmail(customerEmail, amountPaid, tier, tokenAmount, bonusTokens);
+          } catch (emailError) {
+            console.error("Failed to send presale confirmation email:", emailError);
+          }
+        }
         
         res.json({ 
           success: true, 
           email: customerEmail,
-          amountPaid: ((session.amount_total || 0) / 100).toFixed(2),
-          tier: session.metadata?.tier,
+          amountPaid,
+          tier,
+          isNewPurchase,
         });
       } else {
         res.json({ success: false, message: "Payment not completed" });

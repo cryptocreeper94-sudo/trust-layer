@@ -241,6 +241,58 @@ export async function sendReferralBonusEmail(to: string, referralCount: number, 
   });
 }
 
+export async function sendPresaleConfirmationEmail(to: string, amountPaid: string, tier: string, tokenAmount: number, bonusTokens: number) {
+  const tierNames: Record<string, string> = {
+    genesis: "Genesis",
+    founder: "Founder",
+    pioneer: "Pioneer",
+    early_bird: "Early Bird",
+  };
+  const tierName = tierNames[tier] || tier;
+  const totalTokens = tokenAmount + bonusTokens;
+  
+  return sendEmail({
+    to,
+    subject: `DWC Token Purchase Confirmed - ${tierName} Tier`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #ffffff; padding: 30px; border-radius: 12px;">
+        <h1 style="color: #00FFFF; margin-bottom: 20px; text-align: center;">Purchase Confirmed!</h1>
+        <p style="text-align: center; color: #888;">Welcome to the DarkWave ecosystem, early adopter!</p>
+        
+        <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 25px; border-radius: 10px; text-align: center; margin: 20px 0;">
+          <p style="color: #888; margin: 0 0 10px 0; font-size: 14px;">Your Token Allocation</p>
+          <p style="color: #00FFFF; font-size: 36px; font-weight: bold; margin: 0;">${totalTokens.toLocaleString()} DWC</p>
+          <p style="color: #00ff88; margin-top: 10px; font-size: 14px;">Includes +${bonusTokens.toLocaleString()} bonus tokens</p>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+          <div style="background: #1a1a2e; padding: 15px; border-radius: 8px; text-align: center;">
+            <p style="color: #888; margin: 0; font-size: 12px;">Amount Paid</p>
+            <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 20px; font-weight: bold;">$${amountPaid}</p>
+          </div>
+          <div style="background: #1a1a2e; padding: 15px; border-radius: 8px; text-align: center;">
+            <p style="color: #888; margin: 0; font-size: 12px;">Tier</p>
+            <p style="color: #A855F7; margin: 5px 0 0 0; font-size: 20px; font-weight: bold;">${tierName}</p>
+          </div>
+        </div>
+        
+        <div style="background: #1a1a2e; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #00FFFF;">
+          <h3 style="color: #00FFFF; margin: 0 0 10px 0;">What's Next?</h3>
+          <ul style="color: #888; margin: 0; padding-left: 20px; line-height: 1.8;">
+            <li>Your tokens will be available at mainnet launch (October 2026)</li>
+            <li>20% released at TGE, 80% vested over 12 months</li>
+            <li>You'll receive updates and early access announcements</li>
+            <li>Join our community to stay connected</li>
+          </ul>
+        </div>
+        
+        <p style="color: #888; font-size: 12px; text-align: center;">Thank you for being an early supporter of DarkWave Smart Chain!</p>
+        <p style="color: #888; margin-top: 20px; text-align: center;">— The DarkWave Team</p>
+      </div>
+    `,
+  });
+}
+
 export async function sendBridgeCompletionEmail(to: string, amount: string, fromChain: string, toChain: string, txHash: string) {
   return sendEmail({
     to,

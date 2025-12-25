@@ -32,19 +32,20 @@ interface Phase {
 // "completed" = fully working, production-ready
 // "in_progress" = actively being developed
 // "pending" = not yet started
+// Progress: ~5% complete (architecture defined, scenario generator prototype exists)
 const CHRONICLES_PHASES: Phase[] = [
   {
     id: "phase-0",
     name: "Phase 0: Foundation",
     description: "Build the core systems that power every AI life in the world",
-    status: "upcoming",
-    targetDate: "Q2 2025",
+    status: "in_progress",
+    targetDate: "Q3 2026",
     icon: <Brain className="w-6 h-6" />,
     image: fantasyWorld,
     milestones: [
-      { id: "m1", title: "5-Axis Emotion System", description: "Arousal, Valence, Social Cohesion, Fear, and Ambition driving every decision", status: "pending", isRequired: true },
+      { id: "m1", title: "5-Axis Emotion System", description: "Arousal, Valence, Social Cohesion, Fear, and Ambition driving every decision", status: "in_progress", isRequired: true },
       { id: "m2", title: "Belief System Framework", description: "Buddhism, Christianity, Islam, Hinduism, atheism, and more shaping moral compass", status: "pending", isRequired: true },
-      { id: "m3", title: "Scenario Generator", description: "AI-generated situations with consequence webs and emotional impact", status: "pending", isRequired: true },
+      { id: "m3", title: "Scenario Generator", description: "AI-generated situations with consequence webs and emotional impact", status: "in_progress", isRequired: true },
       { id: "m4", title: "Character Portrait System", description: "Photorealistic character cards with emotion visualization", status: "pending", isRequired: true },
       { id: "m5", title: "Single-Era Sandbox", description: "One historical era with 200 AI agents living their lives", status: "pending", isRequired: true },
       { id: "m6", title: "Emotion Dashboard", description: "See how your character feels and why", status: "pending", isRequired: true },
@@ -55,7 +56,7 @@ const CHRONICLES_PHASES: Phase[] = [
     name: "Phase 1: Political Simulation",
     description: "Factions rise and fall. Treaties are made and broken. Your actions ripple through society.",
     status: "upcoming",
-    targetDate: "Q4 2025",
+    targetDate: "Q1 2027",
     icon: <Crown className="w-6 h-6" />,
     image: medievalKingdom,
     milestones: [
@@ -72,7 +73,7 @@ const CHRONICLES_PHASES: Phase[] = [
     name: "Phase 2: Living World",
     description: "The world breathes. Time flows. Your legacy echoes through generations.",
     status: "upcoming",
-    targetDate: "Q2 2026",
+    targetDate: "Q3 2027",
     icon: <Globe className="w-6 h-6" />,
     image: quantumRealm,
     milestones: [

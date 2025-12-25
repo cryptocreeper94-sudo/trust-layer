@@ -5,7 +5,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { 
   Zap, Shield, TrendingUp, Users, Gift, Award, Crown, Sparkles,
   ArrowRight, Clock, CheckCircle, Copy, ExternalLink, Wallet,
-  Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2
+  Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -552,7 +552,10 @@ export default function Presale() {
           </HolographicCard>
         </div>
 
-        <div className="text-center">
+        <div className="text-center space-x-6">
+          <Link href="/investment-simulator" className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300" data-testid="link-simulator">
+            <Calculator className="w-4 h-4" /> Investment Simulator
+          </Link>
           <Link href="/roadmap" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300" data-testid="link-view-roadmap">
             View Full Roadmap <ArrowRight className="w-4 h-4" />
           </Link>
