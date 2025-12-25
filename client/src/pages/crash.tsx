@@ -82,131 +82,352 @@ function generateCrashPoint(): number {
 }
 
 function NeonWaveform({ multiplier, crashed, progress }: { multiplier: number; crashed: boolean; progress: number }) {
+  const intensity = Math.min(multiplier / 10, 1);
+  
   return (
     <div className="absolute inset-0 overflow-hidden">
-      {[...Array(8)].map((_, i) => (
+      <div className={`absolute inset-0 transition-all duration-300 ${
+        crashed 
+          ? "bg-gradient-to-b from-red-950/80 via-red-900/40 to-black" 
+          : "bg-gradient-to-b from-purple-950/60 via-black/80 to-black"
+      }`} />
+      
+      <motion.div 
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,0.4),transparent_70%)]"
+        animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.1, 1] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      />
+      
+      <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor={crashed ? "#ef4444" : "#8b5cf6"} stopOpacity="0" />
+            <stop offset="50%" stopColor={crashed ? "#f97316" : "#ec4899"} stopOpacity="0.8" />
+            <stop offset="100%" stopColor={crashed ? "#ef4444" : "#06b6d4"} stopOpacity="0" />
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        {[...Array(6)].map((_, i) => (
+          <motion.path
+            key={i}
+            d={`M0,${60 + i * 8} Q25,${50 + i * 8 + Math.sin(multiplier + i) * 10} 50,${60 + i * 8} T100,${60 + i * 8}`}
+            fill="none"
+            stroke="url(#waveGradient)"
+            strokeWidth={2 - i * 0.2}
+            filter="url(#glow)"
+            opacity={0.3 + intensity * 0.4}
+            animate={{
+              d: [
+                `M0,${60 + i * 8} Q25,${40 + i * 8} 50,${60 + i * 8} T100,${60 + i * 8}`,
+                `M0,${60 + i * 8} Q25,${80 + i * 8} 50,${60 + i * 8} T100,${60 + i * 8}`,
+                `M0,${60 + i * 8} Q25,${40 + i * 8} 50,${60 + i * 8} T100,${60 + i * 8}`,
+              ]
+            }}
+            transition={{ duration: 2 - intensity, repeat: Infinity, delay: i * 0.1 }}
+            style={{ vectorEffect: "non-scaling-stroke" }}
+          />
+        ))}
+      </svg>
+      
+      {[...Array(12)].map((_, i) => (
         <motion.div
-          key={i}
-          className={`absolute left-0 right-0 h-0.5 ${crashed ? "bg-red-500/30" : "bg-gradient-to-r from-transparent via-purple-500/50 to-transparent"}`}
-          style={{ bottom: `${i * 12 + 5}%` }}
+          key={`grid-${i}`}
+          className={`absolute left-0 right-0 h-px ${crashed ? "bg-red-500/20" : "bg-purple-500/20"}`}
+          style={{ bottom: `${i * 8 + 4}%` }}
+          animate={{ opacity: [0.1, 0.4, 0.1], scaleX: [0.9, 1, 0.9] }}
+          transition={{ duration: 3, repeat: Infinity, delay: i * 0.1 }}
+        />
+      ))}
+      
+      {!crashed && [...Array(30)].map((_, i) => (
+        <motion.div
+          key={`sparkle-${i}`}
+          className="absolute rounded-full"
+          style={{
+            width: Math.random() * 3 + 1,
+            height: Math.random() * 3 + 1,
+            left: `${(i * 3.3) % 100}%`,
+            top: `${(i * 7) % 100}%`,
+            background: `radial-gradient(circle, ${
+              i % 3 === 0 ? "rgba(168,85,247,1)" : 
+              i % 3 === 1 ? "rgba(236,72,153,1)" : 
+              "rgba(6,182,212,1)"
+            }, transparent)`,
+            boxShadow: `0 0 ${4 + intensity * 4}px ${
+              i % 3 === 0 ? "rgba(168,85,247,0.8)" : 
+              i % 3 === 1 ? "rgba(236,72,153,0.8)" : 
+              "rgba(6,182,212,0.8)"
+            }`,
+          }}
           animate={{
-            opacity: [0.3, 0.8, 0.3],
-            scaleX: [0.8, 1, 0.8],
+            opacity: [0, 1, 0],
+            scale: [0, 1 + intensity, 0],
+            y: [0, -30 - intensity * 20],
           }}
           transition={{
-            duration: 2 - (multiplier / 100),
+            duration: 1.5 - intensity * 0.5,
             repeat: Infinity,
             delay: i * 0.1,
           }}
         />
       ))}
       
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(168,85,247,0.2),transparent_60%)]" />
-      
-      {!crashed && [...Array(20)].map((_, i) => (
+      {crashed && [...Array(20)].map((_, i) => (
         <motion.div
-          key={`star-${i}`}
-          className="absolute w-1 h-1 bg-white rounded-full"
+          key={`explosion-${i}`}
+          className="absolute w-3 h-3 rounded-full"
           style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            left: "50%",
+            top: "50%",
+            background: i % 2 === 0 
+              ? "radial-gradient(circle, #ef4444, #f97316)" 
+              : "radial-gradient(circle, #f97316, #eab308)",
+            boxShadow: "0 0 10px rgba(239,68,68,0.8)",
           }}
+          initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
           animate={{
-            opacity: [0, 1, 0],
-            y: [0, 50],
+            x: (Math.cos(i * 18 * Math.PI / 180) * (100 + Math.random() * 50)),
+            y: (Math.sin(i * 18 * Math.PI / 180) * (80 + Math.random() * 40)),
+            opacity: 0,
+            scale: 0,
           }}
-          transition={{
-            duration: 1,
-            repeat: Infinity,
-            delay: i * 0.15,
-          }}
+          transition={{ duration: 1, ease: "easeOut" }}
         />
       ))}
+      
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 h-1"
+        style={{
+          background: crashed 
+            ? "linear-gradient(90deg, transparent, #ef4444, #f97316, #ef4444, transparent)"
+            : "linear-gradient(90deg, transparent, #8b5cf6, #ec4899, #06b6d4, #8b5cf6, transparent)",
+          boxShadow: crashed
+            ? "0 0 20px rgba(239,68,68,0.8), 0 0 40px rgba(239,68,68,0.4)"
+            : "0 0 20px rgba(168,85,247,0.8), 0 0 40px rgba(236,72,153,0.4)",
+        }}
+        animate={{ opacity: [0.6, 1, 0.6] }}
+        transition={{ duration: 1, repeat: Infinity }}
+      />
     </div>
   );
 }
 
 function DarkWaveHovercraft({ multiplier, crashed, cashedOut, hasPartialCashout }: { multiplier: number; crashed: boolean; cashedOut: boolean; hasPartialCashout: boolean }) {
+  const intensity = Math.min(multiplier / 10, 1);
+  
   return (
     <motion.div
       className="relative z-20"
       animate={{
-        y: crashed ? [0, 20, 0] : 0,
-        rotate: crashed ? [0, 15, -15, 0] : [0, 2, -2, 0],
-        scale: crashed ? [1, 0.9, 1] : cashedOut ? 1.1 : 1,
+        y: crashed ? [0, 30, 10] : cashedOut ? -10 : [0, -5, 0],
+        rotate: crashed ? [0, 20, -20, 10, 0] : [0, 1, -1, 0],
+        scale: crashed ? [1, 0.8, 0.9] : cashedOut ? [1, 1.2, 1.15] : 1 + intensity * 0.1,
       }}
       transition={{
-        duration: crashed ? 0.5 : 2,
-        repeat: crashed ? 0 : Infinity,
+        duration: crashed ? 0.8 : cashedOut ? 0.5 : 3,
+        repeat: crashed || cashedOut ? 0 : Infinity,
+        ease: "easeInOut",
       }}
     >
-      <div className={`relative w-20 h-20 ${crashed ? "opacity-50" : ""}`}>
+      <div className={`relative w-24 h-24 ${crashed ? "opacity-70" : ""}`}>
         <motion.div
-          className={`absolute inset-0 rounded-full blur-xl ${
-            crashed ? "bg-red-500/50" : 
-            cashedOut ? "bg-green-500/50" : 
-            hasPartialCashout ? "bg-yellow-500/50" :
-            "bg-gradient-to-r from-purple-500/50 via-pink-500/50 to-cyan-500/50"
-          }`}
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.5, 0.8, 0.5],
+          className="absolute -inset-4 rounded-full blur-2xl"
+          style={{
+            background: crashed 
+              ? "radial-gradient(circle, rgba(239,68,68,0.6), rgba(249,115,22,0.4), transparent)"
+              : cashedOut
+              ? "radial-gradient(circle, rgba(34,197,94,0.6), rgba(16,185,129,0.4), transparent)"
+              : hasPartialCashout
+              ? "radial-gradient(circle, rgba(234,179,8,0.6), rgba(251,191,36,0.4), transparent)"
+              : "radial-gradient(circle, rgba(168,85,247,0.5), rgba(236,72,153,0.4), rgba(6,182,212,0.3), transparent)",
           }}
-          transition={{ duration: 1, repeat: Infinity }}
+          animate={{
+            scale: [1, 1.4 + intensity * 0.3, 1],
+            opacity: [0.4, 0.8, 0.4],
+          }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+        />
+        
+        <motion.div
+          className="absolute -inset-2 rounded-full blur-lg"
+          style={{
+            background: crashed 
+              ? "conic-gradient(from 0deg, #ef4444, #f97316, #ef4444)"
+              : cashedOut
+              ? "conic-gradient(from 0deg, #22c55e, #10b981, #22c55e)"
+              : "conic-gradient(from 0deg, #8b5cf6, #ec4899, #06b6d4, #8b5cf6)",
+          }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
         />
         
         <div className="absolute inset-0 flex items-center justify-center">
           <motion.div
-            className={`w-16 h-8 rounded-full ${
-              crashed ? "bg-gradient-to-r from-red-600 to-orange-600" :
-              cashedOut ? "bg-gradient-to-r from-green-500 to-emerald-500" :
-              hasPartialCashout ? "bg-gradient-to-r from-yellow-500 to-amber-500" :
-              "bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-500"
-            } shadow-2xl relative overflow-hidden`}
+            className={`w-20 h-10 rounded-full relative overflow-hidden`}
+            style={{
+              background: crashed 
+                ? "linear-gradient(135deg, #dc2626, #ea580c, #dc2626)"
+                : cashedOut
+                ? "linear-gradient(135deg, #16a34a, #059669, #16a34a)"
+                : hasPartialCashout
+                ? "linear-gradient(135deg, #ca8a04, #d97706, #ca8a04)"
+                : "linear-gradient(135deg, #7c3aed, #db2777, #0891b2)",
+              boxShadow: crashed 
+                ? "0 0 30px rgba(239,68,68,0.8), 0 0 60px rgba(249,115,22,0.5), inset 0 0 20px rgba(255,255,255,0.1)"
+                : cashedOut
+                ? "0 0 30px rgba(34,197,94,0.8), 0 0 60px rgba(16,185,129,0.5), inset 0 0 20px rgba(255,255,255,0.2)"
+                : `0 0 ${20 + intensity * 20}px rgba(168,85,247,0.8), 0 0 ${40 + intensity * 30}px rgba(236,72,153,0.5), inset 0 0 20px rgba(255,255,255,0.1)`,
+            }}
             animate={{
               boxShadow: crashed 
-                ? ["0 0 20px rgba(239,68,68,0.5)", "0 0 40px rgba(239,68,68,0.8)"]
+                ? ["0 0 30px rgba(239,68,68,0.8)", "0 0 50px rgba(239,68,68,1)", "0 0 30px rgba(239,68,68,0.8)"]
                 : cashedOut
-                ? ["0 0 20px rgba(34,197,94,0.5)", "0 0 40px rgba(34,197,94,0.8)"]
-                : hasPartialCashout
-                ? ["0 0 20px rgba(234,179,8,0.5)", "0 0 40px rgba(234,179,8,0.8)"]
-                : ["0 0 20px rgba(168,85,247,0.5)", "0 0 40px rgba(236,72,153,0.8)", "0 0 20px rgba(168,85,247,0.5)"],
+                ? ["0 0 40px rgba(34,197,94,0.8)", "0 0 70px rgba(34,197,94,1)", "0 0 40px rgba(34,197,94,0.8)"]
+                : undefined,
             }}
-            transition={{ duration: 0.5, repeat: Infinity }}
+            transition={{ duration: 0.3, repeat: crashed || cashedOut ? 3 : 0 }}
           >
-            <div className="absolute inset-0 bg-gradient-to-t from-transparent to-white/20" />
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-t from-transparent via-white/10 to-white/30"
+              animate={{ opacity: [0.5, 0.8, 0.5] }}
+              transition={{ duration: 1, repeat: Infinity }}
+            />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <img src={darkwaveLogo} alt="DWC" className="w-6 h-6" />
+              <motion.img 
+                src={darkwaveLogo} 
+                alt="DWC" 
+                className="w-7 h-7 drop-shadow-lg"
+                animate={{ 
+                  filter: crashed 
+                    ? ["drop-shadow(0 0 5px #ef4444)", "drop-shadow(0 0 15px #ef4444)"]
+                    : cashedOut
+                    ? ["drop-shadow(0 0 5px #22c55e)", "drop-shadow(0 0 15px #22c55e)"]
+                    : ["drop-shadow(0 0 5px #8b5cf6)", "drop-shadow(0 0 10px #ec4899)", "drop-shadow(0 0 5px #8b5cf6)"],
+                }}
+                transition={{ duration: 0.5, repeat: Infinity }}
+              />
             </div>
           </motion.div>
         </div>
         
         {!crashed && (
-          <motion.div
-            className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-8 h-12"
-            animate={{ opacity: [0.5, 1, 0.5], scaleY: [0.8, 1.2, 0.8] }}
-            transition={{ duration: 0.2, repeat: Infinity }}
-          >
-            <div className="w-full h-full bg-gradient-to-b from-cyan-400 via-purple-500 to-transparent rounded-full blur-sm" />
-          </motion.div>
+          <>
+            <motion.div
+              className="absolute -bottom-6 left-1/2 -translate-x-1/2"
+              animate={{ opacity: [0.6, 1, 0.6], scaleY: [0.8, 1.3, 0.8] }}
+              transition={{ duration: 0.15 + (1 - intensity) * 0.1, repeat: Infinity }}
+            >
+              <div 
+                className="w-10 h-16 rounded-full blur-md"
+                style={{
+                  background: cashedOut
+                    ? "linear-gradient(to bottom, #22c55e, #10b981, transparent)"
+                    : "linear-gradient(to bottom, #06b6d4, #8b5cf6, #ec4899, transparent)",
+                }}
+              />
+            </motion.div>
+            
+            {[...Array(6)].map((_, i) => (
+              <motion.div
+                key={`exhaust-${i}`}
+                className="absolute rounded-full"
+                style={{
+                  width: 4 + Math.random() * 4,
+                  height: 4 + Math.random() * 4,
+                  left: `${45 + Math.random() * 10}%`,
+                  bottom: -10,
+                  background: cashedOut
+                    ? "radial-gradient(circle, #22c55e, transparent)"
+                    : "radial-gradient(circle, #06b6d4, transparent)",
+                  boxShadow: cashedOut
+                    ? "0 0 8px #22c55e"
+                    : "0 0 8px #06b6d4",
+                }}
+                animate={{
+                  y: [0, -40 - intensity * 20, -60],
+                  opacity: [1, 0.5, 0],
+                  scale: [1, 0.5, 0],
+                }}
+                transition={{
+                  duration: 0.5,
+                  repeat: Infinity,
+                  delay: i * 0.08,
+                }}
+              />
+            ))}
+          </>
         )}
         
         {crashed && (
           <>
-            {[...Array(8)].map((_, i) => (
+            {[...Array(16)].map((_, i) => (
               <motion.div
-                key={i}
-                className="absolute w-2 h-2 bg-orange-500 rounded-full"
-                initial={{ x: 0, y: 0, opacity: 1 }}
+                key={`debris-${i}`}
+                className="absolute rounded-full"
+                style={{
+                  width: 3 + Math.random() * 6,
+                  height: 3 + Math.random() * 6,
+                  left: "50%",
+                  top: "50%",
+                  background: i % 3 === 0 
+                    ? "radial-gradient(circle, #ef4444, #dc2626)" 
+                    : i % 3 === 1
+                    ? "radial-gradient(circle, #f97316, #ea580c)"
+                    : "radial-gradient(circle, #eab308, #ca8a04)",
+                  boxShadow: "0 0 10px rgba(239,68,68,0.8)",
+                }}
+                initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
                 animate={{
-                  x: (Math.random() - 0.5) * 100,
-                  y: (Math.random() - 0.5) * 100,
+                  x: Math.cos(i * 22.5 * Math.PI / 180) * (60 + Math.random() * 40),
+                  y: Math.sin(i * 22.5 * Math.PI / 180) * (50 + Math.random() * 30) + 20,
+                  opacity: 0,
+                  scale: 0,
+                  rotate: Math.random() * 360,
+                }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
+              />
+            ))}
+            
+            <motion.div
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: "radial-gradient(circle, rgba(255,255,255,0.8), rgba(239,68,68,0.5), transparent)",
+              }}
+              initial={{ scale: 0.5, opacity: 1 }}
+              animate={{ scale: 3, opacity: 0 }}
+              transition={{ duration: 0.5 }}
+            />
+          </>
+        )}
+        
+        {cashedOut && (
+          <>
+            {[...Array(12)].map((_, i) => (
+              <motion.div
+                key={`win-${i}`}
+                className="absolute"
+                style={{
+                  left: "50%",
+                  top: "50%",
+                  fontSize: "16px",
+                }}
+                initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
+                animate={{
+                  x: Math.cos(i * 30 * Math.PI / 180) * 60,
+                  y: Math.sin(i * 30 * Math.PI / 180) * 50 - 20,
                   opacity: 0,
                   scale: 0,
                 }}
-                transition={{ duration: 0.8 }}
-                style={{ left: "50%", top: "50%" }}
-              />
+                transition={{ duration: 1, ease: "easeOut" }}
+              >
+                ✨
+              </motion.div>
             ))}
           </>
         )}
@@ -382,7 +603,17 @@ export default function CrashGame() {
     alltime: 100000,
   };
 
-  const multiplierIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const gameLoopRef = useRef<number | null>(null);
+  const roundStartTimeRef = useRef<number>(0);
+  const waitingStartTimeRef = useRef<number>(Date.now());
+  const crashPointRef = useRef<number>(0);
+  const ridingAmountRef = useRef<number>(0);
+  const isRunningRef = useRef<boolean>(false);
+  const lastAirdropTickRef = useRef<number>(Date.now());
+
+  useEffect(() => {
+    ridingAmountRef.current = ridingAmount;
+  }, [ridingAmount]);
 
   useEffect(() => {
     const tier = REWARD_TIERS.slice().reverse().find(t => totalWagered >= t.minWager) || REWARD_TIERS[0];
@@ -390,26 +621,85 @@ export default function CrashGame() {
   }, [totalWagered]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setNextAirdrop(prev => prev > 0 ? prev - 1 : 7200);
-    }, 1000);
-    return () => clearInterval(interval);
+    const COUNTDOWN_DURATION = 20;
+    const CRASH_COOLDOWN = 3000;
+    
+    const gameLoop = (timestamp: number) => {
+      if (lastAirdropTickRef.current + 1000 < timestamp) {
+        lastAirdropTickRef.current = timestamp;
+        setNextAirdrop(prev => prev > 0 ? prev - 1 : 7200);
+      }
+      
+      if (!isRunningRef.current) {
+        const elapsed = (Date.now() - waitingStartTimeRef.current) / 1000;
+        const remaining = Math.max(0, Math.ceil(COUNTDOWN_DURATION - elapsed));
+        setCountdown(remaining);
+        
+        if (remaining <= 0) {
+          isRunningRef.current = true;
+          roundStartTimeRef.current = Date.now();
+          crashPointRef.current = generateCrashPoint();
+          
+          setRoundStatus("running");
+          setMultiplier(1.0);
+          setCrashed(false);
+          setCashedOut(false);
+          setCrashPoint(null);
+          setHasBet(false);
+          setSecuredAmount(0);
+          setRidingAmount(0);
+          setLostAmount(0);
+          setPartialCashouts([]);
+          setNextAutoProgTrigger(null);
+          setLockedStake(0);
+          setLockedMode("standard");
+          setMyBetId(null);
+          setRoundNumber(prev => prev + 1);
+        }
+      } else {
+        const elapsed = (Date.now() - roundStartTimeRef.current) / 1000;
+        const baseMultiplier = 1.0;
+        const growthRate = 0.06;
+        const newMultiplier = baseMultiplier * Math.exp(growthRate * elapsed);
+        
+        if (newMultiplier >= crashPointRef.current) {
+          const finalCrash = crashPointRef.current;
+          setMultiplier(finalCrash);
+          setCrashed(true);
+          setCrashPoint(finalCrash);
+          setRoundStatus("crashed");
+          
+          setLostAmount(ridingAmountRef.current);
+          setRidingAmount(0);
+          ridingAmountRef.current = 0;
+          
+          setBets(prev => prev.map(b => b.status === "active" ? { ...b, status: "crashed" as const } : b));
+          setHistory(prev => [finalCrash, ...prev.slice(0, 9)]);
+          
+          setTimeout(() => {
+            isRunningRef.current = false;
+            waitingStartTimeRef.current = Date.now();
+            setRoundStatus("waiting");
+            setCountdown(COUNTDOWN_DURATION);
+            setBets([]);
+            setServerSeedHash(generateServerSeedHash());
+          }, CRASH_COOLDOWN);
+        } else {
+          setMultiplier(newMultiplier);
+        }
+      }
+      
+      gameLoopRef.current = requestAnimationFrame(gameLoop);
+    };
+    
+    gameLoopRef.current = requestAnimationFrame(gameLoop);
+    
+    return () => {
+      if (gameLoopRef.current) {
+        cancelAnimationFrame(gameLoopRef.current);
+      }
+    };
   }, []);
-
-  useEffect(() => {
-    if (roundStatus === "waiting") {
-      const countdownInterval = setInterval(() => {
-        setCountdown(prev => {
-          if (prev <= 1) {
-            startRound();
-            return 20;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-      return () => clearInterval(countdownInterval);
-    }
-  }, [roundStatus]);
 
   const executePartialCashout = useCallback((percent: number, mult: number) => {
     if (ridingAmount <= 0 || cashedOut) return;
@@ -457,58 +747,6 @@ export default function CrashGame() {
       });
     }
   }, [ridingAmount, cashedOut, lockedStake, currentTier, toast, myBetId]);
-
-  const startRound = useCallback(() => {
-    setRoundStatus("running");
-    setMultiplier(1.0);
-    setCrashed(false);
-    setCashedOut(false);
-    setCrashPoint(null);
-    setHasBet(false);
-    setSecuredAmount(0);
-    setRidingAmount(0);
-    setLostAmount(0);
-    setPartialCashouts([]);
-    setNextAutoProgTrigger(null);
-    setLockedStake(0);
-    setLockedMode("standard");
-    setMyBetId(null);
-    setRoundNumber(prev => prev + 1);
-    
-    const targetCrash = generateCrashPoint();
-    
-    multiplierIntervalRef.current = setInterval(() => {
-      setMultiplier(prev => {
-        const growth = 1 + (0.0005 * Math.sqrt(prev));
-        const newVal = prev * growth;
-        
-        if (newVal >= targetCrash) {
-          if (multiplierIntervalRef.current) {
-            clearInterval(multiplierIntervalRef.current);
-          }
-          setCrashed(true);
-          setCrashPoint(targetCrash);
-          setRoundStatus("crashed");
-          
-          setLostAmount(prev => prev + ridingAmount);
-          setRidingAmount(0);
-          
-          setBets(prev => prev.map(b => b.status === "active" ? { ...b, status: "crashed" as const } : b));
-          setHistory(prev => [targetCrash, ...prev.slice(0, 9)]);
-          
-          setTimeout(() => {
-            setRoundStatus("waiting");
-            setCountdown(20);
-            setBets([]);
-            setServerSeedHash(generateServerSeedHash());
-          }, 3000);
-          
-          return targetCrash;
-        }
-        return newVal;
-      });
-    }, 50);
-  }, [ridingAmount]);
 
   useEffect(() => {
     if (roundStatus === "running" && hasBet && !cashedOut && lockedMode === "autoTP") {
@@ -571,13 +809,6 @@ export default function CrashGame() {
     }
   }, [multiplier, roundStatus, hasBet, cashedOut, lockedMode, nextAutoProgTrigger, autoProgStep, autoProgInterval, executePartialCashout, myBetId]);
 
-  useEffect(() => {
-    return () => {
-      if (multiplierIntervalRef.current) {
-        clearInterval(multiplierIntervalRef.current);
-      }
-    };
-  }, []);
 
   const placeBet = () => {
     if (roundStatus !== "waiting" || hasBet) return;
