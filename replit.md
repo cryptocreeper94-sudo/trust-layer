@@ -55,3 +55,45 @@ DarkWave Smart Chain (DSC) is a comprehensive blockchain ecosystem developed by 
 - **Payments**: Stripe, Coinbase Commerce
 - **Hub API**: https://orbitstaffing.io (HMAC-SHA256 authenticated)
 - **AI**: OpenAI (for TTS and AI code assistant)
+
+---
+
+## DarkWave Chronicles - AI Life Generator Blueprint
+
+**Core Philosophy**: No good guys. No bad guys. Only free will and consequences.
+
+### Emotion System (5-Axis Model)
+
+| Axis | Range | Affects |
+|------|-------|---------|
+| **Arousal** | Calm ↔ Agitated | Reaction speed, impulsiveness |
+| **Valence** | Sad ↔ Happy | Cooperation, risk-taking |
+| **Social Cohesion** | Isolated ↔ Bonded | Loyalty, betrayal threshold |
+| **Fear** | Secure ↔ Terrified | Fight/flight decisions |
+| **Ambition** | Content ↔ Driven | Power-seeking behavior |
+
+- Emotions decay over time but can spike (overreactions)
+- Emotional contagion spreads through proximity and relationships
+- Collective emotion states trigger world events
+
+### Free Will Framework (No Alignment)
+
+- **Consequence Webs**: Actions update world variables (stability, scarcity, influence)
+- **Reputational Memory**: NPCs remember what you did, not moral judgment
+- **Multi-Criteria Utility**: Decisions based on goals + emotions + situation
+
+### Agent Schema
+
+Each AI life has: identity seed, traits, needs, motivations, relationships, memory shards, lifecycle (birth → death → legacy)
+
+### AI Stack (3-Tier)
+
+1. Deterministic Planners - Day-to-day (fast, cheap)
+2. LLM Microservices - Dialogue, reactions (OpenAI)
+3. Offline LLM Batches - Major historical events
+
+### MVP Roadmap
+
+- **Phase 0** (3-4 mo): Single-era sandbox, 200 agents, emotion dashboard
+- **Phase 1** (6-8 mo): Faction councils, treaties, player crises
+- **Phase 2** (12+ mo): Multi-era, time-travel echoes, full scale
