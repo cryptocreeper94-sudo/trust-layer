@@ -488,7 +488,7 @@ export default function Chronicles() {
   };
   
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden overflow-y-auto selection:bg-primary/20 selection:text-primary w-full max-w-full">
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/80 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0" data-testid="link-home">
@@ -545,9 +545,10 @@ export default function Chronicles() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            <Badge className="mb-6 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-500/30 text-white text-sm backdrop-blur-sm">
-              <Flame className="w-4 h-4 mr-2 text-orange-400 animate-pulse" />
-              The Flagship Product of DarkWave Smart Chain
+            <Badge className="mb-6 px-3 py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-500/30 text-white text-xs sm:text-sm backdrop-blur-sm max-w-full whitespace-normal text-center leading-tight">
+              <Flame className="w-4 h-4 mr-2 text-orange-400 animate-pulse flex-shrink-0" />
+              <span className="hidden sm:inline">The Flagship Product of DarkWave Smart Chain</span>
+              <span className="sm:hidden">DarkWave Flagship Product</span>
             </Badge>
             
             <h1 className="text-5xl sm:text-6xl md:text-8xl font-display font-black mb-6 leading-tight">
