@@ -227,6 +227,12 @@ function DWSCRouter() {
         <Route path="/paper-trading" component={PaperTrading} />
         <Route path="/achievements" component={Achievements} />
         <Route path="/game-developer" component={GameDeveloper} />
+        <Route path="/slots" component={Slots} />
+        <Route path="/coinflip" component={Coinflip} />
+        <Route path="/spades" component={Spades} />
+        <Route path="/sweepstakes-rules" component={SweepstakesRules} />
+        <Route path="/coin-store" component={CoinStore} />
+        <Route path="/daily-bonus" component={DailyBonus} />
         <Route component={NotFound} />
       </Switch>
     </>
