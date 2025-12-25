@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, LogOut, User, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Trophy, Target, ChevronDown } from "lucide-react";
+import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, LogOut, User, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Trophy, Target, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { InfoTooltip } from "@/components/info-tooltip";
 import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.png";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
@@ -20,7 +20,7 @@ import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
 import { FirebaseLoginModal } from "@/components/firebase-login";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { WalletButton } from "@/components/wallet-button";
 import { GenesisHallmarkSection } from "@/components/genesis-hallmark";
 import { HeaderTools } from "@/components/header-tools";
@@ -46,6 +46,92 @@ const ecosystemImages: Record<string, string> = {
   "orby": "/ecosystem/orby.jpg",
   "strike-agent": "/ecosystem/strike-agent.jpg",
 };
+
+const CHRONICLES_ERAS = [
+  { img: stoneAgeImg, era: "Dawn Age", desc: "Stone Age origins", color: "from-amber-500/30 to-orange-600/30" },
+  { img: medievalImg, era: "Age of Crowns", desc: "Medieval kingdoms", color: "from-purple-500/30 to-indigo-600/30" },
+  { img: cyberpunkImg, era: "Neon Dominion", desc: "Cyberpunk future", color: "from-pink-500/30 to-cyan-600/30" },
+  { img: spaceImg, era: "Stellar Exodus", desc: "Space exploration", color: "from-blue-500/30 to-purple-600/30" },
+];
+
+function ChroniclesCarousel() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const cardWidth = 240;
+      const scrollAmount = direction === 'left' ? -cardWidth : cardWidth;
+      scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <div className="relative mb-8">
+      <button
+        onClick={() => scroll('left')}
+        className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/60 backdrop-blur-xl border border-white/20 flex items-center justify-center transition-all ${canScrollLeft ? 'opacity-100 hover:bg-white/10' : 'opacity-30 cursor-not-allowed'}`}
+        disabled={!canScrollLeft}
+        data-testid="button-carousel-left"
+      >
+        <ChevronLeft className="w-5 h-5 text-white" />
+      </button>
+      
+      <button
+        onClick={() => scroll('right')}
+        className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/60 backdrop-blur-xl border border-white/20 flex items-center justify-center transition-all ${canScrollRight ? 'opacity-100 hover:bg-white/10' : 'opacity-30 cursor-not-allowed'}`}
+        disabled={!canScrollRight}
+        data-testid="button-carousel-right"
+      >
+        <ChevronRight className="w-5 h-5 text-white" />
+      </button>
+
+      <div 
+        ref={scrollRef}
+        onScroll={checkScroll}
+        className="flex gap-4 overflow-x-auto scrollbar-hide px-12 py-2 snap-x snap-mandatory"
+      >
+        {CHRONICLES_ERAS.map((item, i) => (
+          <motion.div
+            key={item.era}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.1 }}
+            whileHover={{ scale: 1.02, y: -4 }}
+            className="relative group shrink-0 w-[220px] h-[300px] rounded-2xl overflow-hidden snap-center border border-white/10 bg-black/40 backdrop-blur-xl"
+            style={{ boxShadow: '0 0 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)' }}
+            data-testid={`card-era-${item.era.toLowerCase().replace(/\s+/g, '-')}`}
+          >
+            <img 
+              src={item.img} 
+              alt={item.era}
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            />
+            <div className={`absolute inset-0 bg-gradient-to-t ${item.color}`} />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+            <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
+              background: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.02) 10px, rgba(255,255,255,0.02) 20px)",
+            }} />
+            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+              <p className="font-bold text-white text-lg">{item.era}</p>
+              <p className="text-xs text-gray-300">{item.desc}</p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Home() {
   const { preferences } = usePreferences();
@@ -314,36 +400,7 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div className="overflow-hidden mb-8">
-            <div className="flex md:grid md:grid-cols-4 gap-3 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:overflow-visible">
-              {[
-                { img: stoneAgeImg, era: "Dawn Age", desc: "Stone Age origins" },
-                { img: medievalImg, era: "Age of Crowns", desc: "Medieval kingdoms" },
-                { img: cyberpunkImg, era: "Neon Dominion", desc: "Cyberpunk future" },
-                { img: spaceImg, era: "Stellar Exodus", desc: "Space exploration" },
-              ].map((item, i) => (
-                <motion.div
-                  key={item.era}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="relative group overflow-hidden rounded-xl shrink-0 w-[200px] h-[280px] md:w-auto md:h-auto md:aspect-[3/4] snap-center"
-                >
-                  <img 
-                    src={item.img} 
-                    alt={item.era}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-3">
-                    <p className="font-bold text-white text-sm">{item.era}</p>
-                    <p className="text-[10px] text-gray-400">{item.desc}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+          <ChroniclesCarousel />
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link href="/era-codex">
