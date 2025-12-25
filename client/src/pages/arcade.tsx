@@ -700,6 +700,53 @@ export default function Arcade() {
                   </div>
                 </div>
               </Link>
+
+              {/* Classic Games Row */}
+              <div className="grid grid-cols-2 gap-3">
+                {/* SOLITAIRE Card */}
+                <Link href="/solitaire" className="block group">
+                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(34,197,94,0.3)] h-32">
+                    <div className="absolute inset-0 bg-gradient-to-br from-green-800 via-emerald-700 to-teal-800" />
+                    <div className="relative z-10 p-3 h-full flex flex-col justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="p-1.5 rounded-lg bg-green-500/30 backdrop-blur-sm border border-green-400/20">
+                          <span className="text-xl">🃏</span>
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-bold text-white">Solitaire</h3>
+                          <p className="text-[10px] text-green-300/80">Klondike Classic</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[8px]">FREE</Badge>
+                        <Badge className="bg-amber-500/30 text-amber-300 border-amber-400/30 text-[8px]">Solo</Badge>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+
+                {/* MINESWEEPER Card */}
+                <Link href="/minesweeper" className="block group">
+                  <div className="relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_30px_rgba(239,68,68,0.3)] h-32">
+                    <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-gray-700 to-zinc-800" />
+                    <div className="relative z-10 p-3 h-full flex flex-col justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="p-1.5 rounded-lg bg-red-500/30 backdrop-blur-sm border border-red-400/20">
+                          <span className="text-xl">💣</span>
+                        </div>
+                        <div>
+                          <h3 className="text-sm font-bold text-white">Minesweeper</h3>
+                          <p className="text-[10px] text-gray-300/80">Classic Puzzle</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Badge className="bg-blue-500/30 text-blue-300 border-blue-400/30 text-[8px]">FREE</Badge>
+                        <Badge className="bg-red-500/30 text-red-300 border-red-400/30 text-[8px]">3 Modes</Badge>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </div>
             </div>
 
             {/* Right Column - Sidebar */}

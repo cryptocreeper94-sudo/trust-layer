@@ -87,6 +87,8 @@ import Slots from "@/pages/slots";
 import Coinflip from "@/pages/coinflip";
 import SweepstakesRules from "@/pages/sweepstakes-rules";
 import Spades from "@/pages/spades";
+import Solitaire from "@/pages/solitaire";
+import Minesweeper from "@/pages/minesweeper";
 import SocialFeed from "@/pages/social-feed";
 import Lottery from "@/pages/lottery";
 import AIAdvisor from "@/pages/ai-advisor";
@@ -120,6 +122,8 @@ function GamesRouter() {
         <Route path="/coinflip" component={Coinflip} />
         <Route path="/sweepstakes-rules" component={SweepstakesRules} />
         <Route path="/spades" component={Spades} />
+        <Route path="/solitaire" component={Solitaire} />
+        <Route path="/minesweeper" component={Minesweeper} />
         <Route path="/crash" component={Crash} />
         <Route path="/predictions" component={Predictions} />
         <Route path="/lottery" component={Lottery} />
@@ -230,6 +234,8 @@ function DWSCRouter() {
         <Route path="/slots" component={Slots} />
         <Route path="/coinflip" component={Coinflip} />
         <Route path="/spades" component={Spades} />
+        <Route path="/solitaire" component={Solitaire} />
+        <Route path="/minesweeper" component={Minesweeper} />
         <Route path="/sweepstakes-rules" component={SweepstakesRules} />
         <Route path="/coin-store" component={CoinStore} />
         <Route path="/daily-bonus" component={DailyBonus} />
