@@ -16,6 +16,10 @@ import warriorImg from "@assets/generated_images/warrior_character_concept_art.p
 import mageImg from "@assets/generated_images/mage_character_concept_art.png";
 import rogueImg from "@assets/generated_images/rogue_assassin_concept_art.png";
 import dragonImg from "@assets/generated_images/crystal_dragon_creature.png";
+import landsImg from "@assets/generated_images/fantasy_lands_and_realms.png";
+import charactersImg from "@assets/generated_images/fantasy_character_heroes.png";
+import loreImg from "@assets/generated_images/ancient_lore_library.png";
+import artifactsImg from "@assets/generated_images/legendary_weapons_artifacts.png";
 
 const CONTRIBUTION_TYPES = [
   {
@@ -23,28 +27,32 @@ const CONTRIBUTION_TYPES = [
     title: "Lands & Realms",
     desc: "Design regions, cities, and sacred grounds that become permanent fixtures in the world",
     color: "from-emerald-500 to-teal-500",
-    example: "The Shattered Isles, Nexus Prime, Crystal Caverns"
+    example: "The Shattered Isles, Nexus Prime, Crystal Caverns",
+    img: landsImg
   },
   {
     icon: Users,
     title: "Characters & Legends",
     desc: "Create heroes, villains, and mythical figures whose stories echo through the ages",
     color: "from-purple-500 to-pink-500",
-    example: "NPCs, bosses, historical figures"
+    example: "NPCs, bosses, historical figures",
+    img: charactersImg
   },
   {
     icon: Scroll,
     title: "Lore & History",
     desc: "Write the ancient texts, prophecies, and historical events that shape the narrative",
     color: "from-amber-500 to-orange-500",
-    example: "Creation myths, faction histories, legends"
+    example: "Creation myths, faction histories, legends",
+    img: loreImg
   },
   {
     icon: Palette,
     title: "Items & Artifacts",
     desc: "Design weapons, armor, and magical items that players will quest to obtain",
     color: "from-cyan-500 to-blue-500",
-    example: "Legendary swords, enchanted relics, rare mounts"
+    example: "Legendary swords, enchanted relics, rare mounts",
+    img: artifactsImg
   },
 ];
 
@@ -196,50 +204,59 @@ export default function Genesis() {
                 onClick={() => setSelectedContribution(selectedContribution === i ? null : i)}
                 className="cursor-pointer"
               >
-                <GlassCard 
-                  className={`p-6 transition-all duration-300 ${
+                <div 
+                  className={`relative rounded-2xl overflow-hidden transition-all duration-300 ${
                     selectedContribution === i 
-                      ? "ring-2 ring-purple-500 bg-purple-500/10" 
-                      : "hover:bg-white/5"
+                      ? "ring-2 ring-purple-500" 
+                      : "hover:ring-1 hover:ring-white/20"
                   }`}
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`p-3 rounded-xl bg-gradient-to-br ${type.color}`}>
-                      <type.icon className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-bold mb-1">{type.title}</h3>
-                      <p className="text-sm text-gray-400 mb-3">{type.desc}</p>
-                      <p className="text-xs text-gray-500 italic">"{type.example}"</p>
-                    </div>
-                  </div>
+                  <img 
+                    src={type.img} 
+                    alt={type.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/40" />
                   
-                  <AnimatePresence>
-                    {selectedContribution === i && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="mt-4 pt-4 border-t border-white/10"
-                      >
-                        <div className="bg-black/30 rounded-xl p-4 space-y-3">
-                          <div className="flex items-center gap-2 text-sm text-gray-400">
-                            <Lock className="w-4 h-4 text-amber-400" />
-                            <span>Submissions open to Founding Creators</span>
+                  <div className="relative p-6">
+                    <div className="flex items-start gap-4">
+                      <div className={`p-3 rounded-xl bg-gradient-to-br ${type.color} shadow-lg`}>
+                        <type.icon className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-bold mb-1 text-white drop-shadow-lg">{type.title}</h3>
+                        <p className="text-sm text-gray-200 mb-3 drop-shadow-md">{type.desc}</p>
+                        <p className="text-xs text-gray-300 italic">"{type.example}"</p>
+                      </div>
+                    </div>
+                    
+                    <AnimatePresence>
+                      {selectedContribution === i && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="mt-4 pt-4 border-t border-white/20"
+                        >
+                          <div className="bg-black/60 backdrop-blur-sm rounded-xl p-4 space-y-3">
+                            <div className="flex items-center gap-2 text-sm text-gray-200">
+                              <Lock className="w-4 h-4 text-amber-400" />
+                              <span>Submissions open to Founding Creators</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-sm text-gray-200">
+                              <Star className="w-4 h-4 text-purple-400" />
+                              <span>Accepted works credited permanently on-chain</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-sm text-gray-200">
+                              <Crown className="w-4 h-4 text-pink-400" />
+                              <span>Top contributors earn revenue share</span>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-2 text-sm text-gray-400">
-                            <Star className="w-4 h-4 text-purple-400" />
-                            <span>Accepted works credited permanently on-chain</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-sm text-gray-400">
-                            <Crown className="w-4 h-4 text-pink-400" />
-                            <span>Top contributors earn revenue share</span>
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </GlassCard>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </div>
               </motion.div>
             ))}
           </div>
