@@ -570,11 +570,13 @@ export default function Arcade() {
             </GlassCard>
           )}
 
-          {/* Bento Grid Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3 lg:gap-4">
+          {/* Bento Grid Layout - Two Column */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-3 lg:gap-4">
             
-            {/* CRASH - Hero Card */}
-            <Link href="/crash" className="lg:col-span-7 block group">
+            {/* LEFT COLUMN */}
+            <div className="space-y-3 lg:space-y-4">
+              {/* CRASH - Hero Card */}
+              <Link href="/crash" className="block group">
               <div className="relative h-44 md:h-52 rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-[0_0_40px_rgba(255,79,216,0.3)]">
                 <img 
                   src={cosmicRocketImg} 
@@ -614,10 +616,38 @@ export default function Arcade() {
                   </div>
                 </div>
               </div>
-            </Link>
+              </Link>
 
-            {/* COIN FLIP Card */}
-            <div className="lg:col-span-5 relative rounded-2xl overflow-hidden">
+              {/* SLOTS Card */}
+              <div className="relative rounded-2xl overflow-hidden">
+                <img 
+                  src={slotMachineImg} 
+                  alt="Slots" 
+                  className="absolute inset-0 w-full h-full object-cover opacity-40"
+                />
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-900/80 via-black/70 to-black/90" />
+                <div className="relative z-10 p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="p-2 rounded-xl bg-purple-500/30 backdrop-blur-sm border border-purple-400/20">
+                      <Cherry className="w-5 h-5 text-purple-300" />
+                    </div>
+                    <h3 className="text-lg font-bold text-white">Jackpot Slots</h3>
+                    <Badge className="ml-auto bg-amber-500/30 backdrop-blur-sm text-amber-300 border-amber-400/30 text-[9px]">50x Max</Badge>
+                  </div>
+                  <SlotsGame 
+                    isConnected={isConnected} 
+                    isDemoMode={isDemoMode}
+                    userBalance={userBalance}
+                    onBalanceUpdate={fetchBalance}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT COLUMN */}
+            <div className="space-y-3 lg:space-y-4">
+              {/* COIN FLIP Card */}
+              <div className="relative rounded-2xl overflow-hidden">
               <img 
                 src={goldenCoinsImg} 
                 alt="Coin Flip" 
@@ -639,35 +669,9 @@ export default function Arcade() {
                   onBalanceUpdate={fetchBalance}
                 />
               </div>
-            </div>
-
-            {/* SLOTS Card */}
-            <div className="lg:col-span-7 relative rounded-2xl overflow-hidden">
-              <img 
-                src={slotMachineImg} 
-                alt="Slots" 
-                className="absolute inset-0 w-full h-full object-cover opacity-40"
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-900/80 via-black/70 to-black/90" />
-              <div className="relative z-10 p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="p-2 rounded-xl bg-purple-500/30 backdrop-blur-sm border border-purple-400/20">
-                    <Cherry className="w-5 h-5 text-purple-300" />
-                  </div>
-                  <h3 className="text-lg font-bold text-white">Jackpot Slots</h3>
-                  <Badge className="ml-auto bg-amber-500/30 backdrop-blur-sm text-amber-300 border-amber-400/30 text-[9px]">50x Max</Badge>
-                </div>
-                <SlotsGame 
-                  isConnected={isConnected} 
-                  isDemoMode={isDemoMode}
-                  userBalance={userBalance}
-                  onBalanceUpdate={fetchBalance}
-                />
               </div>
-            </div>
 
-            {/* Sidebar Cards */}
-            <div className="lg:col-span-5 space-y-3">
+              {/* Recent Games */}
               <GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <History className="w-4 h-4 text-primary" />
