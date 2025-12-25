@@ -541,6 +541,26 @@ export default function EraCodex() {
             </GlassCard>
           </div>
         </section>
+
+        {/* AI Demo CTA */}
+        <section className="px-4 py-10 bg-gradient-to-b from-purple-950/30 to-black">
+          <div className="max-w-2xl mx-auto text-center">
+            <Badge className="mb-4 bg-pink-500/20 text-pink-300 border-pink-500/30">
+              <Sparkles className="w-3 h-3 mr-1" />
+              Try It Now
+            </Badge>
+            <h2 className="text-2xl font-display font-bold mb-4">Experience the AI</h2>
+            <p className="text-gray-400 mb-6">
+              See how the emotion-driven scenario generator creates morally complex situations with no "right" answers.
+            </p>
+            <Link href="/scenario-generator">
+              <Button className="bg-gradient-to-r from-pink-600 to-purple-600">
+                <Zap className="w-4 h-4 mr-2" />
+                Launch Scenario Generator
+              </Button>
+            </Link>
+          </div>
+        </section>
       </main>
 
       {/* Footer */}

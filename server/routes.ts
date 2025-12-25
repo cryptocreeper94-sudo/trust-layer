@@ -22,6 +22,7 @@ import { bridge } from "./bridge-engine";
 import { registerChatRoutes } from "./replit_integrations/chat";
 import { registerImageRoutes } from "./replit_integrations/image";
 import { stakingEngine } from "./staking-engine";
+import { generateScenario, randomizeEmotions, describeEmotionalState } from "./scenario-generator";
 
 const FaucetClaimRequestSchema = z.object({
   walletAddress: z.string().min(10, "Invalid wallet address").max(100),
@@ -99,6 +100,24 @@ export async function registerRoutes(
   registerAuthRoutes(app);
   registerChatRoutes(app);
   registerImageRoutes(app);
+
+  // Scenario Generator API for DarkWave Chronicles
+  app.post("/api/generate-scenario", rateLimit("scenario", 10, 60000), async (req: Request, res: Response) => {
+    try {
+      const { era = "Dawn Age", emotionalTone = "tense", complexity = "moderate" } = req.body;
+      const scenario = await generateScenario(era, emotionalTone, complexity);
+      res.json(scenario);
+    } catch (error) {
+      console.error("Scenario generation error:", error);
+      res.status(500).json({ error: "Failed to generate scenario" });
+    }
+  });
+
+  app.get("/api/random-emotions", (_req: Request, res: Response) => {
+    const emotions = randomizeEmotions();
+    const description = describeEmotionalState(emotions);
+    res.json({ emotions, description });
+  });
 
   const wss = new WebSocketServer({ server: httpServer, path: "/ws/studio" });
   

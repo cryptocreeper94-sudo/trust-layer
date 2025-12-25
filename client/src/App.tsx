@@ -95,6 +95,7 @@ import Snake from "@/pages/snake";
 import Pacman from "@/pages/pacman";
 import Genesis from "@/pages/genesis";
 import EraCodex from "@/pages/era-codex";
+import ScenarioGenerator from "@/pages/scenario-generator";
 import SocialFeed from "@/pages/social-feed";
 import Lottery from "@/pages/lottery";
 import AIAdvisor from "@/pages/ai-advisor";
@@ -136,6 +137,7 @@ function GamesRouter() {
         <Route path="/pacman" component={Pacman} />
         <Route path="/genesis" component={Genesis} />
         <Route path="/era-codex" component={EraCodex} />
+        <Route path="/scenario-generator" component={ScenarioGenerator} />
         <Route path="/crash" component={Crash} />
         <Route path="/predictions" component={Predictions} />
         <Route path="/lottery" component={Lottery} />
@@ -254,6 +256,7 @@ function DWSCRouter() {
         <Route path="/pacman" component={Pacman} />
         <Route path="/genesis" component={Genesis} />
         <Route path="/era-codex" component={EraCodex} />
+        <Route path="/scenario-generator" component={ScenarioGenerator} />
         <Route path="/sweepstakes-rules" component={SweepstakesRules} />
         <Route path="/coin-store" component={CoinStore} />
         <Route path="/daily-bonus" component={DailyBonus} />
