@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
 import crypto from "crypto";
@@ -149,6 +149,22 @@ export interface IStorage {
   getPlayerGameHistory(userId: string, limit?: number): Promise<PlayerGameHistory[]>;
   getPlayerDailyProfit(userId: string, days?: number): Promise<PlayerDailyProfit[]>;
   recordDailyProfit(userId: string, date: string, gamesPlayed: number, wagered: string, profit: string): Promise<PlayerDailyProfit>;
+  
+  // Sweepstakes System (GC/SC)
+  getSweepsBalance(userId: string): Promise<SweepsBalance | undefined>;
+  createSweepsBalance(userId: string): Promise<SweepsBalance>;
+  updateSweepsBalance(userId: string, gcDelta: string, scDelta: string): Promise<SweepsBalance>;
+  recordSweepsPurchase(data: InsertSweepsPurchase): Promise<SweepsPurchase>;
+  getSweepsPurchases(userId: string): Promise<SweepsPurchase[]>;
+  recordSweepsBonus(data: InsertSweepsBonus): Promise<SweepsBonus>;
+  getSweepsBonuses(userId: string): Promise<SweepsBonus[]>;
+  getDailyLoginStatus(userId: string): Promise<SweepsDailyLogin | undefined>;
+  recordDailyLogin(userId: string, streakDay: number): Promise<SweepsDailyLogin>;
+  claimDailyBonus(userId: string): Promise<boolean>;
+  requestSweepsRedemption(data: InsertSweepsRedemption): Promise<SweepsRedemption>;
+  getSweepsRedemptions(userId: string): Promise<SweepsRedemption[]>;
+  recordSweepsGame(data: InsertSweepsGameHistory): Promise<SweepsGameHistory>;
+  getSweepsGameHistory(userId: string, limit?: number): Promise<SweepsGameHistory[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1133,6 +1149,133 @@ export class DatabaseStorage implements IStorage {
       .values({ userId, date, gamesPlayed, wagered, profit })
       .returning();
     return daily;
+  }
+
+  // ============================================
+  // SWEEPSTAKES SYSTEM (GC/SC)
+  // ============================================
+
+  async getSweepsBalance(userId: string): Promise<SweepsBalance | undefined> {
+    const [balance] = await db.select().from(sweepsBalances).where(eq(sweepsBalances.userId, userId));
+    return balance;
+  }
+
+  async createSweepsBalance(userId: string): Promise<SweepsBalance> {
+    const existing = await this.getSweepsBalance(userId);
+    if (existing) return existing;
+    
+    const [balance] = await db.insert(sweepsBalances)
+      .values({ userId, goldCoins: "0", sweepsCoins: "0" })
+      .returning();
+    return balance;
+  }
+
+  async updateSweepsBalance(userId: string, gcDelta: string, scDelta: string): Promise<SweepsBalance> {
+    let balance = await this.getSweepsBalance(userId);
+    if (!balance) {
+      balance = await this.createSweepsBalance(userId);
+    }
+    
+    const newGc = (parseFloat(balance.goldCoins) + parseFloat(gcDelta)).toString();
+    const newSc = (parseFloat(balance.sweepsCoins) + parseFloat(scDelta)).toString();
+    
+    const [updated] = await db.update(sweepsBalances)
+      .set({
+        goldCoins: newGc,
+        sweepsCoins: newSc,
+        totalGcPurchased: parseFloat(gcDelta) > 0 
+          ? (parseFloat(balance.totalGcPurchased) + parseFloat(gcDelta)).toString()
+          : balance.totalGcPurchased,
+        totalScEarned: parseFloat(scDelta) > 0 
+          ? (parseFloat(balance.totalScEarned) + parseFloat(scDelta)).toString()
+          : balance.totalScEarned,
+        updatedAt: new Date(),
+      })
+      .where(eq(sweepsBalances.userId, userId))
+      .returning();
+    return updated;
+  }
+
+  async recordSweepsPurchase(data: InsertSweepsPurchase): Promise<SweepsPurchase> {
+    const [purchase] = await db.insert(sweepsPurchases).values(data).returning();
+    return purchase;
+  }
+
+  async getSweepsPurchases(userId: string): Promise<SweepsPurchase[]> {
+    return db.select().from(sweepsPurchases)
+      .where(eq(sweepsPurchases.userId, userId))
+      .orderBy(desc(sweepsPurchases.createdAt));
+  }
+
+  async recordSweepsBonus(data: InsertSweepsBonus): Promise<SweepsBonus> {
+    const [bonus] = await db.insert(sweepsBonuses).values(data).returning();
+    return bonus;
+  }
+
+  async getSweepsBonuses(userId: string): Promise<SweepsBonus[]> {
+    return db.select().from(sweepsBonuses)
+      .where(eq(sweepsBonuses.userId, userId))
+      .orderBy(desc(sweepsBonuses.createdAt));
+  }
+
+  async getDailyLoginStatus(userId: string): Promise<SweepsDailyLogin | undefined> {
+    const today = new Date().toISOString().split('T')[0];
+    const [login] = await db.select().from(sweepsDailyLogin)
+      .where(sql`${sweepsDailyLogin.userId} = ${userId} AND ${sweepsDailyLogin.loginDate} = ${today}`);
+    return login;
+  }
+
+  async recordDailyLogin(userId: string, streakDay: number): Promise<SweepsDailyLogin> {
+    const today = new Date().toISOString().split('T')[0];
+    const [login] = await db.insert(sweepsDailyLogin)
+      .values({ userId, loginDate: today, streakDay, bonusClaimed: false })
+      .returning();
+    return login;
+  }
+
+  async claimDailyBonus(userId: string): Promise<boolean> {
+    const today = new Date().toISOString().split('T')[0];
+    const [login] = await db.select().from(sweepsDailyLogin)
+      .where(sql`${sweepsDailyLogin.userId} = ${userId} AND ${sweepsDailyLogin.loginDate} = ${today}`);
+    
+    if (!login || login.bonusClaimed) return false;
+    
+    await db.update(sweepsDailyLogin)
+      .set({ bonusClaimed: true })
+      .where(eq(sweepsDailyLogin.id, login.id));
+    return true;
+  }
+
+  async requestSweepsRedemption(data: InsertSweepsRedemption): Promise<SweepsRedemption> {
+    const [redemption] = await db.insert(sweepsRedemptions).values(data).returning();
+    
+    await db.update(sweepsBalances)
+      .set({
+        sweepsCoins: sql`${sweepsBalances.sweepsCoins}::numeric - ${data.sweepsCoinsAmount}::numeric`,
+        totalScRedeemed: sql`${sweepsBalances.totalScRedeemed}::numeric + ${data.sweepsCoinsAmount}::numeric`,
+        updatedAt: new Date(),
+      })
+      .where(eq(sweepsBalances.userId, data.userId));
+    
+    return redemption;
+  }
+
+  async getSweepsRedemptions(userId: string): Promise<SweepsRedemption[]> {
+    return db.select().from(sweepsRedemptions)
+      .where(eq(sweepsRedemptions.userId, userId))
+      .orderBy(desc(sweepsRedemptions.createdAt));
+  }
+
+  async recordSweepsGame(data: InsertSweepsGameHistory): Promise<SweepsGameHistory> {
+    const [game] = await db.insert(sweepsGameHistory).values(data).returning();
+    return game;
+  }
+
+  async getSweepsGameHistory(userId: string, limit: number = 50): Promise<SweepsGameHistory[]> {
+    return db.select().from(sweepsGameHistory)
+      .where(eq(sweepsGameHistory.userId, userId))
+      .orderBy(desc(sweepsGameHistory.createdAt))
+      .limit(limit);
   }
 }
 

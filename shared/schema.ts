@@ -1807,3 +1807,139 @@ export const playerDailyProfit = pgTable("player_daily_profit", {
 });
 
 export type PlayerDailyProfit = typeof playerDailyProfit.$inferSelect;
+
+// ============================================
+// SWEEPSTAKES SYSTEM (GC/SC)
+// ============================================
+
+// User sweepstakes balances
+export const sweepsBalances = pgTable("sweeps_balances", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  goldCoins: text("gold_coins").notNull().default("0"), // Purchased, no cash value
+  sweepsCoins: text("sweeps_coins").notNull().default("0"), // Free bonus, redeemable
+  totalGcPurchased: text("total_gc_purchased").notNull().default("0"),
+  totalScEarned: text("total_sc_earned").notNull().default("0"),
+  totalScRedeemed: text("total_sc_redeemed").notNull().default("0"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertSweepsBalanceSchema = createInsertSchema(sweepsBalances).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type SweepsBalance = typeof sweepsBalances.$inferSelect;
+export type InsertSweepsBalance = z.infer<typeof insertSweepsBalanceSchema>;
+
+// Coin pack purchases
+export const sweepsPurchases = pgTable("sweeps_purchases", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  packId: text("pack_id").notNull(), // starter, value, mega, whale
+  packName: text("pack_name").notNull(),
+  priceUsd: text("price_usd").notNull(),
+  goldCoinsAmount: text("gold_coins_amount").notNull(),
+  sweepsCoinsBonus: text("sweeps_coins_bonus").notNull(), // Free SC included
+  stripePaymentId: text("stripe_payment_id"),
+  status: text("status").notNull().default("pending"), // pending, completed, failed, refunded
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertSweepsPurchaseSchema = createInsertSchema(sweepsPurchases).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type SweepsPurchase = typeof sweepsPurchases.$inferSelect;
+export type InsertSweepsPurchase = z.infer<typeof insertSweepsPurchaseSchema>;
+
+// Free SC bonuses (daily login, social, AMOE)
+export const sweepsBonuses = pgTable("sweeps_bonuses", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  bonusType: text("bonus_type").notNull(), // daily_login, social_share, amoe_mail, signup, streak
+  sweepsCoinsAmount: text("sweeps_coins_amount").notNull(),
+  goldCoinsAmount: text("gold_coins_amount").notNull().default("0"),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertSweepsBonusSchema = createInsertSchema(sweepsBonuses).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type SweepsBonus = typeof sweepsBonuses.$inferSelect;
+export type InsertSweepsBonus = z.infer<typeof insertSweepsBonusSchema>;
+
+// Daily login tracking
+export const sweepsDailyLogin = pgTable("sweeps_daily_login", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  loginDate: text("login_date").notNull(), // YYYY-MM-DD
+  streakDay: integer("streak_day").notNull().default(1), // 1-7 for weekly streak
+  bonusClaimed: boolean("bonus_claimed").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type SweepsDailyLogin = typeof sweepsDailyLogin.$inferSelect;
+
+// SC Redemptions to DWC
+export const sweepsRedemptions = pgTable("sweeps_redemptions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  sweepsCoinsAmount: text("sweeps_coins_amount").notNull(),
+  dwcAmount: text("dwc_amount").notNull(), // 1:1 conversion
+  walletAddress: text("wallet_address").notNull(),
+  status: text("status").notNull().default("pending"), // pending, processing, completed, rejected
+  kycVerified: boolean("kyc_verified").notNull().default(false),
+  processedAt: timestamp("processed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertSweepsRedemptionSchema = createInsertSchema(sweepsRedemptions).omit({
+  id: true,
+  createdAt: true,
+  processedAt: true,
+});
+
+export type SweepsRedemption = typeof sweepsRedemptions.$inferSelect;
+export type InsertSweepsRedemption = z.infer<typeof insertSweepsRedemptionSchema>;
+
+// Game history for sweeps (tracks which currency used)
+export const sweepsGameHistory = pgTable("sweeps_game_history", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  gameType: text("game_type").notNull(), // crash, coinflip, slots
+  currencyType: text("currency_type").notNull(), // gc or sc
+  betAmount: text("bet_amount").notNull(),
+  multiplier: text("multiplier"),
+  payout: text("payout").notNull(),
+  profit: text("profit").notNull(),
+  outcome: text("outcome").notNull(), // win, loss
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertSweepsGameHistorySchema = createInsertSchema(sweepsGameHistory).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type SweepsGameHistory = typeof sweepsGameHistory.$inferSelect;
+export type InsertSweepsGameHistory = z.infer<typeof insertSweepsGameHistorySchema>;
+
+// Coin pack definitions (not stored in DB, just types)
+export const coinPackSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  priceUsd: z.number(),
+  goldCoins: z.number(),
+  sweepsCoinsBonus: z.number(),
+  popular: z.boolean().optional(),
+  bestValue: z.boolean().optional(),
+});
+
+export type CoinPack = z.infer<typeof coinPackSchema>;
