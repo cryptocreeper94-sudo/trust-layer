@@ -19,6 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
+import orbyFlying from "@assets/generated_images/orby_planet_flying_right.png";
 
 const MAX_MULTIPLIER = 5000;
 const HOUSE_EDGE = 0.015;
@@ -318,221 +319,185 @@ function NeonWaveform({ multiplier, crashed, progress }: { multiplier: number; c
   );
 }
 
-function DarkWaveHovercraft({ multiplier, crashed, cashedOut, hasPartialCashout }: { multiplier: number; crashed: boolean; cashedOut: boolean; hasPartialCashout: boolean }) {
+function OrbyFlyer({ multiplier, crashed, cashedOut, hasPartialCashout }: { multiplier: number; crashed: boolean; cashedOut: boolean; hasPartialCashout: boolean }) {
   const intensity = Math.min(multiplier / 10, 1);
+  const trailCount = 12;
   
   return (
-    <motion.div
-      className="relative z-20"
-      animate={{
-        y: crashed ? [0, 30, 10] : cashedOut ? -10 : [0, -5, 0],
-        rotate: crashed ? [0, 20, -20, 10, 0] : [0, 1, -1, 0],
-        scale: crashed ? [1, 0.8, 0.9] : cashedOut ? [1, 1.2, 1.15] : 1 + intensity * 0.1,
-      }}
-      transition={{
-        duration: crashed ? 0.8 : cashedOut ? 0.5 : 3,
-        repeat: crashed || cashedOut ? 0 : Infinity,
-        ease: "easeInOut",
-      }}
-    >
-      <div className={`relative w-24 h-24 ${crashed ? "opacity-70" : ""}`}>
+    <div className="relative w-full h-full pointer-events-none">
+      {!crashed && [...Array(trailCount)].map((_, i) => (
         <motion.div
-          className="absolute -inset-4 rounded-full blur-2xl"
+          key={`trail-${i}`}
+          className="absolute rounded-full"
           style={{
-            background: crashed 
-              ? "radial-gradient(circle, rgba(239,68,68,0.6), rgba(249,115,22,0.4), transparent)"
-              : cashedOut
-              ? "radial-gradient(circle, rgba(34,197,94,0.6), rgba(16,185,129,0.4), transparent)"
-              : hasPartialCashout
-              ? "radial-gradient(circle, rgba(234,179,8,0.6), rgba(251,191,36,0.4), transparent)"
-              : "radial-gradient(circle, rgba(168,85,247,0.5), rgba(236,72,153,0.4), rgba(6,182,212,0.3), transparent)",
+            width: 8 - i * 0.5,
+            height: 8 - i * 0.5,
+            background: cashedOut
+              ? `radial-gradient(circle, rgba(74,222,128,${0.8 - i * 0.06}), transparent)`
+              : `radial-gradient(circle, rgba(76,244,255,${0.8 - i * 0.06}), rgba(255,79,216,${0.4 - i * 0.03}), transparent)`,
+            boxShadow: cashedOut
+              ? `0 0 ${12 - i}px rgba(74,222,128,${0.6 - i * 0.04})`
+              : `0 0 ${12 - i}px rgba(76,244,255,${0.6 - i * 0.04})`,
+            left: `${-8 - i * 4}%`,
+            top: `${4 + i * 3}%`,
           }}
           animate={{
-            scale: [1, 1.4 + intensity * 0.3, 1],
-            opacity: [0.4, 0.8, 0.4],
+            opacity: [0.8 - i * 0.05, 0.4 - i * 0.03, 0.8 - i * 0.05],
+            scale: [1, 1.2, 1],
           }}
-          transition={{ duration: 1.5, repeat: Infinity }}
+          transition={{
+            duration: 0.3,
+            repeat: Infinity,
+            delay: i * 0.02,
+          }}
         />
-        
+      ))}
+      
+      {!crashed && (
         <motion.div
-          className="absolute -inset-2 rounded-full blur-lg"
+          className="absolute -left-4 top-1/2 -translate-y-1/2 w-24 h-8 blur-md"
+          style={{
+            background: cashedOut
+              ? "linear-gradient(to left, rgba(74,222,128,0.6), rgba(74,222,128,0.3), transparent)"
+              : "linear-gradient(to left, rgba(76,244,255,0.6), rgba(255,79,216,0.4), transparent)",
+          }}
+          animate={{
+            opacity: [0.5, 0.8, 0.5],
+            scaleX: [0.8, 1.2, 0.8],
+          }}
+          transition={{ duration: 0.2, repeat: Infinity }}
+        />
+      )}
+      
+      <motion.div
+        className="absolute left-0 top-0 w-16 h-16 sm:w-20 sm:h-20"
+        animate={{
+          rotate: crashed ? [0, 180, 360] : cashedOut ? [-15, -10, -15] : [-20, -25, -20],
+          scale: crashed ? [1, 0.5, 0] : cashedOut ? [1.1, 1.15, 1.1] : [1, 1.02, 1],
+        }}
+        transition={{
+          duration: crashed ? 1 : 2,
+          repeat: crashed ? 0 : Infinity,
+          ease: crashed ? "easeIn" : "easeInOut",
+        }}
+      >
+        <motion.div
+          className="absolute -inset-2 rounded-full blur-xl"
           style={{
             background: crashed 
-              ? "conic-gradient(from 0deg, #ef4444, #f97316, #ef4444)"
+              ? "radial-gradient(circle, rgba(239,68,68,0.8), rgba(249,115,22,0.5), transparent)"
               : cashedOut
-              ? "conic-gradient(from 0deg, #22c55e, #10b981, #22c55e)"
-              : "conic-gradient(from 0deg, #8b5cf6, #ec4899, #06b6d4, #8b5cf6)",
+              ? "radial-gradient(circle, rgba(74,222,128,0.8), rgba(16,185,129,0.5), transparent)"
+              : "radial-gradient(circle, rgba(76,244,255,0.6), rgba(255,79,216,0.4), transparent)",
           }}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.6, 1, 0.6],
+          }}
+          transition={{ duration: 0.8, repeat: Infinity }}
         />
         
-        <div className="absolute inset-0 flex items-center justify-center">
+        <img 
+          src={orbyFlying} 
+          alt="Orby" 
+          className="w-full h-full object-contain drop-shadow-2xl"
+          style={{
+            filter: crashed 
+              ? "drop-shadow(0 0 20px rgba(239,68,68,0.8)) brightness(0.7) saturate(0.5)"
+              : cashedOut
+              ? "drop-shadow(0 0 25px rgba(74,222,128,0.9)) brightness(1.1)"
+              : `drop-shadow(0 0 ${15 + intensity * 10}px rgba(76,244,255,0.8)) drop-shadow(0 0 ${25 + intensity * 15}px rgba(255,79,216,0.5))`,
+          }}
+        />
+      </motion.div>
+      
+      {crashed && (
+        <>
           <motion.div
-            className={`w-20 h-10 rounded-full relative overflow-hidden`}
-            style={{
-              background: crashed 
-                ? "linear-gradient(135deg, #dc2626, #ea580c, #dc2626)"
-                : cashedOut
-                ? "linear-gradient(135deg, #16a34a, #059669, #16a34a)"
-                : hasPartialCashout
-                ? "linear-gradient(135deg, #ca8a04, #d97706, #ca8a04)"
-                : "linear-gradient(135deg, #7c3aed, #db2777, #0891b2)",
-              boxShadow: crashed 
-                ? "0 0 30px rgba(239,68,68,0.8), 0 0 60px rgba(249,115,22,0.5), inset 0 0 20px rgba(255,255,255,0.1)"
-                : cashedOut
-                ? "0 0 30px rgba(34,197,94,0.8), 0 0 60px rgba(16,185,129,0.5), inset 0 0 20px rgba(255,255,255,0.2)"
-                : `0 0 ${20 + intensity * 20}px rgba(168,85,247,0.8), 0 0 ${40 + intensity * 30}px rgba(236,72,153,0.5), inset 0 0 20px rgba(255,255,255,0.1)`,
-            }}
-            animate={{
-              boxShadow: crashed 
-                ? ["0 0 30px rgba(239,68,68,0.8)", "0 0 50px rgba(239,68,68,1)", "0 0 30px rgba(239,68,68,0.8)"]
-                : cashedOut
-                ? ["0 0 40px rgba(34,197,94,0.8)", "0 0 70px rgba(34,197,94,1)", "0 0 40px rgba(34,197,94,0.8)"]
-                : undefined,
-            }}
-            transition={{ duration: 0.3, repeat: crashed || cashedOut ? 3 : 0 }}
+            className="absolute left-6 top-6 w-20 h-20"
+            initial={{ scale: 0, opacity: 1 }}
+            animate={{ scale: [0, 2, 3], opacity: [1, 0.8, 0] }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <motion.div 
-              className="absolute inset-0 bg-gradient-to-t from-transparent via-white/10 to-white/30"
-              animate={{ opacity: [0.5, 0.8, 0.5] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <motion.img 
-                src={darkwaveLogo} 
-                alt="DWC" 
-                className="w-7 h-7 drop-shadow-lg"
-                animate={{ 
-                  filter: crashed 
-                    ? ["drop-shadow(0 0 5px #ef4444)", "drop-shadow(0 0 15px #ef4444)"]
-                    : cashedOut
-                    ? ["drop-shadow(0 0 5px #22c55e)", "drop-shadow(0 0 15px #22c55e)"]
-                    : ["drop-shadow(0 0 5px #8b5cf6)", "drop-shadow(0 0 10px #ec4899)", "drop-shadow(0 0 5px #8b5cf6)"],
-                }}
-                transition={{ duration: 0.5, repeat: Infinity }}
-              />
-            </div>
-          </motion.div>
-        </div>
-        
-        {!crashed && (
-          <>
-            <motion.div
-              className="absolute -bottom-6 left-1/2 -translate-x-1/2"
-              animate={{ opacity: [0.6, 1, 0.6], scaleY: [0.8, 1.3, 0.8] }}
-              transition={{ duration: 0.15 + (1 - intensity) * 0.1, repeat: Infinity }}
-            >
-              <div 
-                className="w-10 h-16 rounded-full blur-md"
-                style={{
-                  background: cashedOut
-                    ? "linear-gradient(to bottom, #22c55e, #10b981, transparent)"
-                    : "linear-gradient(to bottom, #06b6d4, #8b5cf6, #ec4899, transparent)",
-                }}
-              />
-            </motion.div>
-            
-            {[...Array(6)].map((_, i) => (
-              <motion.div
-                key={`exhaust-${i}`}
-                className="absolute rounded-full"
-                style={{
-                  width: 4 + Math.random() * 4,
-                  height: 4 + Math.random() * 4,
-                  left: `${45 + Math.random() * 10}%`,
-                  bottom: -10,
-                  background: cashedOut
-                    ? "radial-gradient(circle, #22c55e, transparent)"
-                    : "radial-gradient(circle, #06b6d4, transparent)",
-                  boxShadow: cashedOut
-                    ? "0 0 8px #22c55e"
-                    : "0 0 8px #06b6d4",
-                }}
-                animate={{
-                  y: [0, -40 - intensity * 20, -60],
-                  opacity: [1, 0.5, 0],
-                  scale: [1, 0.5, 0],
-                }}
-                transition={{
-                  duration: 0.5,
-                  repeat: Infinity,
-                  delay: i * 0.08,
-                }}
-              />
-            ))}
-          </>
-        )}
-        
-        {crashed && (
-          <>
-            {[...Array(16)].map((_, i) => (
-              <motion.div
-                key={`debris-${i}`}
-                className="absolute rounded-full"
-                style={{
-                  width: 3 + Math.random() * 6,
-                  height: 3 + Math.random() * 6,
-                  left: "50%",
-                  top: "50%",
-                  background: i % 3 === 0 
-                    ? "radial-gradient(circle, #ef4444, #dc2626)" 
-                    : i % 3 === 1
-                    ? "radial-gradient(circle, #f97316, #ea580c)"
-                    : "radial-gradient(circle, #eab308, #ca8a04)",
-                  boxShadow: "0 0 10px rgba(239,68,68,0.8)",
-                }}
-                initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
-                animate={{
-                  x: Math.cos(i * 22.5 * Math.PI / 180) * (60 + Math.random() * 40),
-                  y: Math.sin(i * 22.5 * Math.PI / 180) * (50 + Math.random() * 30) + 20,
-                  opacity: 0,
-                  scale: 0,
-                  rotate: Math.random() * 360,
-                }}
-                transition={{ duration: 1.2, ease: "easeOut" }}
-              />
-            ))}
-            
-            <motion.div
-              className="absolute inset-0 rounded-full"
+            <div 
+              className="w-full h-full rounded-full"
               style={{
-                background: "radial-gradient(circle, rgba(255,255,255,0.8), rgba(239,68,68,0.5), transparent)",
+                background: "radial-gradient(circle, rgba(255,255,255,0.9), rgba(255,150,100,0.6), rgba(100,100,100,0.4), transparent)",
               }}
-              initial={{ scale: 0.5, opacity: 1 }}
-              animate={{ scale: 3, opacity: 0 }}
-              transition={{ duration: 0.5 }}
             />
-          </>
-        )}
-        
-        {cashedOut && (
-          <>
-            {[...Array(12)].map((_, i) => (
-              <motion.div
-                key={`win-${i}`}
-                className="absolute"
-                style={{
-                  left: "50%",
-                  top: "50%",
-                  fontSize: "16px",
-                }}
-                initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
-                animate={{
-                  x: Math.cos(i * 30 * Math.PI / 180) * 60,
-                  y: Math.sin(i * 30 * Math.PI / 180) * 50 - 20,
-                  opacity: 0,
-                  scale: 0,
-                }}
-                transition={{ duration: 1, ease: "easeOut" }}
-              >
-                ✨
-              </motion.div>
-            ))}
-          </>
-        )}
-      </div>
-    </motion.div>
+          </motion.div>
+          
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={`smoke-${i}`}
+              className="absolute rounded-full"
+              style={{
+                width: 20 + Math.random() * 30,
+                height: 20 + Math.random() * 30,
+                left: "20%",
+                top: "20%",
+                background: `radial-gradient(circle, rgba(${80 + i * 15},${80 + i * 15},${80 + i * 15},0.8), transparent)`,
+              }}
+              initial={{ x: 0, y: 0, scale: 0.5, opacity: 0.9 }}
+              animate={{
+                x: (Math.random() - 0.5) * 120,
+                y: (Math.random() - 0.5) * 100 - 30,
+                scale: [0.5, 1.5, 2],
+                opacity: [0.9, 0.6, 0],
+              }}
+              transition={{ duration: 1.5, ease: "easeOut", delay: i * 0.05 }}
+            />
+          ))}
+          
+          {[...Array(12)].map((_, i) => (
+            <motion.div
+              key={`spark-${i}`}
+              className="absolute w-2 h-2 rounded-full"
+              style={{
+                left: "25%",
+                top: "25%",
+                background: i % 2 === 0 ? "#ff6b6b" : "#ffa500",
+                boxShadow: `0 0 8px ${i % 2 === 0 ? "#ff6b6b" : "#ffa500"}`,
+              }}
+              initial={{ x: 0, y: 0, opacity: 1 }}
+              animate={{
+                x: Math.cos(i * 30 * Math.PI / 180) * (50 + Math.random() * 50),
+                y: Math.sin(i * 30 * Math.PI / 180) * (40 + Math.random() * 40),
+                opacity: 0,
+                scale: 0,
+              }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            />
+          ))}
+        </>
+      )}
+      
+      {cashedOut && (
+        <>
+          {[...Array(16)].map((_, i) => (
+            <motion.div
+              key={`sparkle-${i}`}
+              className="absolute text-lg"
+              style={{
+                left: "30%",
+                top: "30%",
+              }}
+              initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
+              animate={{
+                x: Math.cos(i * 22.5 * Math.PI / 180) * 80,
+                y: Math.sin(i * 22.5 * Math.PI / 180) * 60,
+                opacity: 0,
+                scale: 0,
+                rotate: 360,
+              }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+            >
+              {i % 3 === 0 ? "✨" : i % 3 === 1 ? "💫" : "⭐"}
+            </motion.div>
+          ))}
+        </>
+      )}
+    </div>
   );
 }
 
@@ -1250,16 +1215,18 @@ export default function CrashGame() {
                   </div>
                   
                   <motion.div 
-                    className="absolute left-4 sm:left-8 md:left-16 w-20 sm:w-24 flex justify-center z-20"
+                    className="absolute w-20 h-20 sm:w-24 sm:h-24 z-20"
                     style={{ 
-                      bottom: `${Math.min(Math.max(5, (multiplier - 1) * 12), 85)}%`,
+                      left: `${Math.min(Math.max(5, (multiplier - 1) * 8), 70)}%`,
+                      bottom: `${Math.min(Math.max(10, (multiplier - 1) * 10 + Math.pow(multiplier - 1, 1.3) * 2), 80)}%`,
                     }}
                     animate={{
-                      bottom: `${Math.min(Math.max(5, (multiplier - 1) * 12), 85)}%`,
+                      left: `${Math.min(Math.max(5, (multiplier - 1) * 8), 70)}%`,
+                      bottom: `${Math.min(Math.max(10, (multiplier - 1) * 10 + Math.pow(multiplier - 1, 1.3) * 2), 80)}%`,
                     }}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    transition={{ type: "tween", duration: 0.05, ease: "linear" }}
                   >
-                    <DarkWaveHovercraft 
+                    <OrbyFlyer 
                       multiplier={multiplier} 
                       crashed={crashed} 
                       cashedOut={cashedOut} 
