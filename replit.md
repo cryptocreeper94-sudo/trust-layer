@@ -12,17 +12,50 @@ DarkWave Smart Chain (DSC) is a comprehensive blockchain ecosystem developed by 
 - Mobile: Mobile-first design with self-contained carousels, accordions, dropdowns
 - Branding: White-labeled, no Replit branding, dark theme only
 
-## Design Protocol (Project-Wide)
+## Design Protocol (Project-Wide) - MANDATORY FOR ALL PAGES
 
-**All UI cards and components must follow:**
-- Bento grid layouts with varied card sizes
-- Trading card / NFT style with holographic borders and glow effects
-- Photorealistic images (no illustrations or cartoons)
-- Premium UI treatment: glass morphism, gradients, subtle animations
-- Refractor / holographic card aesthetic
+**CRITICAL: Every new page MUST follow this design protocol. Reference this section before creating any UI.**
 
-**Character Assets:**
-Characters are stored in `attached_assets/generated_images/` with naming convention:
+### Card & Layout Requirements
+- **Bento grid layouts**: Varied card sizes (1x1, 2x1, 2x2, etc.) in responsive grid
+- **Photorealistic backgrounds**: Every card must have a photorealistic image from `attached_assets/generated_images/`
+- **No plain cards**: Never create cards without background imagery
+- **Trading card / NFT aesthetic**: Holographic borders, rainbow refractor effects, glow overlays
+
+### Visual Effects (Required)
+- **Glassmorphism**: `backdrop-blur-xl`, semi-transparent backgrounds (`bg-black/60`)
+- **Holographic borders**: Gradient borders with glow (`box-shadow: 0 0 40px rgba(color)`)
+- **Gradient overlays**: Always overlay images with gradients for text readability
+- **Subtle animations**: Framer Motion for hover effects, entrance animations
+- **Shimmer effects**: Diagonal light sweep on premium elements
+
+### Interactive Components
+- **Accordion dropdowns**: Expandable sections for detailed content
+- **Carousels**: Self-contained horizontal scrolling for mobile
+- **Hover states**: Scale transforms, glow intensification
+- **data-testid**: Required on ALL interactive elements
+
+### Available Background Images
+```
+attached_assets/generated_images/
+├── futuristic_blockchain_network_activity_monitor.png (blockchain/tech)
+├── futuristic_dashboard_interface_for_managing_decentralized_applications.png (dashboards)
+├── fantasy_sci-fi_world_landscape.png (gaming/fantasy)
+├── deep_space_station.png (space/cosmos)
+├── cyberpunk_neon_city.png (urban/tech)
+├── medieval_fantasy_kingdom.png (fantasy/governance)
+├── quantum_dimension_realm.png (abstract/premium)
+└── darkwave_token_transparent.png (logo/branding)
+```
+
+### Color Palette
+- Primary: Cyan (`#06B6D4`), Purple (`#A855F7`), Pink (`#EC4899`)
+- Gradients: `from-cyan-500 via-purple-500 to-pink-500`
+- Backgrounds: Dark grays (`gray-900`, `gray-950`, `black`)
+- Text: White for headings, `gray-400` for body, color accents for highlights
+
+### Character Assets
+Characters stored in `attached_assets/generated_images/` with naming convention:
 - `{role}_{descriptor}_portrait.png` (e.g., `tribal_emissary_woman_portrait.png`)
 - Characters can be reused as AI guides throughout the ecosystem
 - Character metadata (name, role, beliefs, emotions) stored in database for recall
