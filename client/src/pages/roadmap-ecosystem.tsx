@@ -115,6 +115,7 @@ function PhaseCard({ phase, isExpanded, onToggle }: { phase: Phase; isExpanded: 
     >
       <div 
         onClick={onToggle}
+        data-testid={`card-phase-${phase.id}`}
         className="cursor-pointer relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-gray-900/80 to-black/60 backdrop-blur-xl p-6 hover:border-cyan-500/30 transition-all"
         style={{
           boxShadow: phase.status === "in_progress" 
@@ -189,6 +190,7 @@ function MilestoneItem({ milestone, index }: { milestone: Milestone; index: numb
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.05 }}
+      data-testid={`milestone-${milestone.id}`}
       className={`flex items-start gap-3 p-4 rounded-xl border transition-all ${
         milestone.status === "completed" 
           ? "bg-green-500/5 border-green-500/20" 
@@ -224,7 +226,7 @@ export default function RoadmapEcosystem() {
   return (
     <div className="min-h-screen bg-[#080c18] text-white">
       <div className="max-w-4xl mx-auto px-4 py-12">
-        <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors">
+        <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors" data-testid="link-back-home">
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Home</span>
         </Link>
@@ -282,11 +284,11 @@ export default function RoadmapEcosystem() {
         </div>
 
         <div className="mt-12 grid md:grid-cols-2 gap-4">
-          <Link href="/roadmap-chronicles" className="block p-6 rounded-2xl bg-gradient-to-br from-purple-900/30 to-pink-900/30 border border-purple-500/20 hover:border-purple-500/40 transition-all">
+          <Link href="/roadmap-chronicles" className="block p-6 rounded-2xl bg-gradient-to-br from-purple-900/30 to-pink-900/30 border border-purple-500/20 hover:border-purple-500/40 transition-all" data-testid="link-chronicles-roadmap">
             <h3 className="text-lg font-semibold text-white mb-2">DarkWave Chronicles</h3>
             <p className="text-gray-400 text-sm">View the game development roadmap</p>
           </Link>
-          <Link href="/crowdfund" className="block p-6 rounded-2xl bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border border-cyan-500/20 hover:border-cyan-500/40 transition-all">
+          <Link href="/crowdfund" className="block p-6 rounded-2xl bg-gradient-to-br from-cyan-900/30 to-blue-900/30 border border-cyan-500/20 hover:border-cyan-500/40 transition-all" data-testid="link-support-crowdfund">
             <h3 className="text-lg font-semibold text-white mb-2">Support Development</h3>
             <p className="text-gray-400 text-sm">Help fund features and accelerate progress</p>
           </Link>

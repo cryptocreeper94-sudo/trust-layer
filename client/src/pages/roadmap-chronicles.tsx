@@ -97,6 +97,7 @@ function PhaseCard({ phase, isExpanded, onToggle }: { phase: Phase; isExpanded: 
     >
       <div 
         onClick={onToggle}
+        data-testid={`card-phase-${phase.id}`}
         className="cursor-pointer relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-gray-900/80 to-black/60 backdrop-blur-xl p-6 hover:border-purple-500/30 transition-all"
         style={{
           boxShadow: phase.status === "in_progress" 
@@ -171,6 +172,7 @@ function MilestoneItem({ milestone, index }: { milestone: Milestone; index: numb
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.05 }}
+      data-testid={`milestone-${milestone.id}`}
       className={`flex items-start gap-3 p-4 rounded-xl border transition-all ${
         milestone.status === "completed" 
           ? "bg-green-500/5 border-green-500/20" 
@@ -206,7 +208,7 @@ export default function RoadmapChronicles() {
   return (
     <div className="min-h-screen bg-[#080c18] text-white">
       <div className="max-w-4xl mx-auto px-4 py-12">
-        <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors">
+        <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors" data-testid="link-back-home">
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Home</span>
         </Link>
@@ -269,7 +271,7 @@ export default function RoadmapChronicles() {
             Your character's emotions mirror your emotions. Their struggles reflect your inner landscape. 
             This isn't just a game—it's self-discovery through interactive narrative.
           </p>
-          <Link href="/crowdfund" className="inline-flex items-center gap-2 mt-4 px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium hover:opacity-90 transition-opacity">
+          <Link href="/crowdfund" className="inline-flex items-center gap-2 mt-4 px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium hover:opacity-90 transition-opacity" data-testid="link-support-development">
             <Zap className="w-4 h-4" />
             Support Development
           </Link>
