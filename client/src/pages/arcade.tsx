@@ -11,7 +11,6 @@ import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
@@ -487,8 +486,8 @@ export default function Arcade() {
         </div>
       </nav>
 
-      <main className="flex-1 pt-16 pb-8 px-4">
-        <div className="container mx-auto max-w-5xl">
+      <main className="flex-1 pt-16 pb-8 px-3 md:px-6">
+        <div className="mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
