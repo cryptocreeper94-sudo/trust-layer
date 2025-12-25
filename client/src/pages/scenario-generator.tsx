@@ -229,18 +229,18 @@ export default function ScenarioGenerator() {
     <div className="min-h-screen bg-black text-white">
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/era-codex" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+        <div className="container mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-2">
+          <Link href="/era-codex" className="flex items-center gap-1 sm:gap-2 text-gray-400 hover:text-white transition-colors shrink-0">
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm">Era Codex</span>
+            <span className="text-xs sm:text-sm hidden xs:inline">Era Codex</span>
           </Link>
-          <div className="flex items-center gap-2">
-            <img src={darkwaveLogo} alt="DarkWave" className="w-6 h-6" />
-            <span className="font-display font-bold">Scenario Generator</span>
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+            <img src={darkwaveLogo} alt="DarkWave" className="w-5 h-5 sm:w-6 sm:h-6" />
+            <span className="font-display font-bold text-sm sm:text-base truncate max-w-[120px] sm:max-w-none">Scenario Generator</span>
           </div>
-          <Badge className="bg-pink-500/20 text-pink-300 border-pink-500/30">
+          <Badge className="bg-pink-500/20 text-pink-300 border-pink-500/30 text-[10px] sm:text-xs shrink-0">
             <Brain className="w-3 h-3 mr-1" />
-            AI Demo
+            <span className="hidden xs:inline">AI </span>Demo
           </Badge>
         </div>
       </nav>

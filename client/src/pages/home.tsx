@@ -24,6 +24,10 @@ import { useState } from "react";
 import { WalletButton } from "@/components/wallet-button";
 import { GenesisHallmarkSection } from "@/components/genesis-hallmark";
 import { HeaderTools } from "@/components/header-tools";
+import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.png";
+import medievalImg from "@assets/generated_images/medieval_fantasy_kingdom.png";
+import cyberpunkImg from "@assets/generated_images/cyberpunk_neon_city.png";
+import spaceImg from "@assets/generated_images/deep_space_station.png";
 
 const ecosystemImages: Record<string, string> = {
   "orbit-staffing": "/ecosystem/orbit-staffing.jpg",
@@ -257,6 +261,75 @@ export default function Home() {
 
       {/* Genesis Hallmark Section */}
       <GenesisHallmarkSection />
+
+      {/* DarkWave Chronicles - Coming Soon */}
+      <section className="py-16 px-4 relative overflow-hidden bg-gradient-to-b from-purple-950/20 via-black to-black">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent" />
+        <div className="container mx-auto max-w-6xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-8"
+          >
+            <Badge variant="outline" className="border-purple-500/50 text-purple-400 text-[10px] mb-3">
+              <Sparkles className="w-3 h-3 mr-1" />
+              Coming 2026
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
+                DarkWave Chronicles
+              </span>
+            </h2>
+            <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
+              An AI-powered life simulator where emotions drive behavior, consequences ripple through time, and there are no heroes or villains—only perspectives.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+            {[
+              { img: stoneAgeImg, era: "Dawn Age", desc: "Stone Age origins" },
+              { img: medievalImg, era: "Age of Crowns", desc: "Medieval kingdoms" },
+              { img: cyberpunkImg, era: "Neon Dominion", desc: "Cyberpunk future" },
+              { img: spaceImg, era: "Stellar Exodus", desc: "Space exploration" },
+            ].map((item, i) => (
+              <motion.div
+                key={item.era}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="relative group overflow-hidden rounded-xl aspect-[3/4]"
+              >
+                <img 
+                  src={item.img} 
+                  alt={item.era}
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-3">
+                  <p className="font-bold text-white text-sm">{item.era}</p>
+                  <p className="text-[10px] text-gray-400">{item.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link href="/era-codex">
+              <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500" data-testid="button-explore-eras">
+                <Sparkles className="w-4 h-4 mr-2" />
+                Explore All Eras
+              </Button>
+            </Link>
+            <Link href="/genesis">
+              <Button variant="outline" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10" data-testid="button-genesis-page">
+                Learn About Genesis
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* DeFi Section - Premium Protocol Style */}
       <section className="py-16 px-4 relative overflow-hidden">

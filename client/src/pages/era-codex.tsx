@@ -178,16 +178,16 @@ export default function EraCodex() {
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/genesis" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+        <div className="container mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-2">
+          <Link href="/genesis" className="flex items-center gap-1 sm:gap-2 text-gray-400 hover:text-white transition-colors shrink-0">
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm">Genesis</span>
+            <span className="text-xs sm:text-sm hidden xs:inline">Genesis</span>
           </Link>
-          <div className="flex items-center gap-2">
-            <img src={darkwaveLogo} alt="DarkWave" className="w-6 h-6" />
-            <span className="font-display font-bold">Era Codex</span>
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+            <img src={darkwaveLogo} alt="DarkWave" className="w-5 h-5 sm:w-6 sm:h-6" />
+            <span className="font-display font-bold text-sm sm:text-base">Era Codex</span>
           </div>
-          <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30">
+          <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30 text-[10px] sm:text-xs shrink-0">
             <Clock className="w-3 h-3 mr-1" />
             {ERAS.length} Eras
           </Badge>

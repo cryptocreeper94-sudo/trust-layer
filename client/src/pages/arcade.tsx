@@ -613,28 +613,28 @@ export default function Arcade() {
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+        <div className="container mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-2 overflow-x-auto">
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
-          <div className="flex items-center gap-2">
-            <Badge className="bg-green-500/20 text-green-400 text-xs">
-              <span className="w-2 h-2 rounded-full bg-green-400 mr-1 animate-pulse" />
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+            <Badge className="bg-green-500/20 text-green-400 text-[10px] sm:text-xs whitespace-nowrap">
+              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-400 mr-1 animate-pulse" />
               {arcadeStats.playersOnline} Playing
             </Badge>
             {isConnected && (
               <Link href="/arcade/profile" data-testid="link-player-profile">
-                <Button variant="ghost" size="sm" className="h-8 text-xs">
-                  <BarChart3 className="w-3 h-3 mr-1" />
-                  Stats
+                <Button variant="ghost" size="sm" className="h-7 sm:h-8 text-[10px] sm:text-xs px-2">
+                  <BarChart3 className="w-3 h-3" />
+                  <span className="hidden sm:inline ml-1">Stats</span>
                 </Button>
               </Link>
             )}
             <Link href="/dashboard-pro">
-              <Button variant="ghost" size="sm" className="h-8 text-xs">
-                <ArrowLeft className="w-3 h-3 mr-1" />
-                Dashboard
+              <Button variant="ghost" size="sm" className="h-7 sm:h-8 text-[10px] sm:text-xs px-2">
+                <ArrowLeft className="w-3 h-3" />
+                <span className="hidden xs:inline ml-1">Back</span>
               </Button>
             </Link>
           </div>
