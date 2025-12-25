@@ -202,7 +202,9 @@ Characters stored in `attached_assets/generated_images/` with naming convention:
 
 ## DarkWave Chronicles - The Flagship Product
 
-**Tagline**: "The Game That Never Ends" / "Create Your Own Legacy"
+**Tagline**: "Not A Game. A Life." / "Live Your Legacy."
+**Universe**: The ChronoVerse - 70+ historical eras as parallel timelines with echoes
+**Domain**: yourlegacy.io
 
 **Full Vision Document**: See `CHRONICLES_VISION.md` for complete details.
 

@@ -1,7 +1,13 @@
 # DarkWave Chronicles: The Complete Vision
 
 **Flagship Product of DarkWave Smart Chain**
-**"The Game That Never Ends"**
+**"Not A Game. A Life."** | **"Live Your Legacy."**
+
+---
+
+## The ChronoVerse
+
+**Welcome to the ChronoVerse** - the unified universe spanning all 70+ historical eras, connected through parallel timelines with echoes. The ChronoVerse is not one world, but many - each era running as its own living experiment in human civilization, linked through artifacts, legends, and the threads of time.
 
 ---
 
