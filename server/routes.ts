@@ -4050,6 +4050,73 @@ Current context:
   });
 
   // ============================================
+  // PLAYER GAMING STATS
+  // ============================================
+  
+  app.get("/api/player-stats/:userId", async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const stats = await storage.getPlayerStats(userId);
+      
+      if (!stats) {
+        return res.json({
+          username: "Player",
+          level: 1,
+          xp: 0,
+          xpToNextLevel: 100,
+          totalGamesPlayed: 0,
+          totalWagered: "0",
+          totalWon: "0",
+          totalLost: "0",
+          netProfit: "0",
+          winCount: 0,
+          lossCount: 0,
+          winRate: "0",
+          bestMultiplier: "0",
+          currentStreak: 0,
+          bestStreak: 0,
+        });
+      }
+      
+      res.json(stats);
+    } catch (error) {
+      console.error("Player stats error:", error);
+      res.status(500).json({ error: "Failed to get player stats" });
+    }
+  });
+  
+  app.get("/api/player-history/:userId", async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const limit = parseInt(req.query.limit as string) || 50;
+      const history = await storage.getPlayerGameHistory(userId, limit);
+      res.json(history);
+    } catch (error) {
+      console.error("Player history error:", error);
+      res.status(500).json({ error: "Failed to get player history" });
+    }
+  });
+  
+  app.get("/api/player-daily-profit/:userId", async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const days = parseInt(req.query.days as string) || 14;
+      const dailyProfit = await storage.getPlayerDailyProfit(userId, days);
+      
+      // Transform to chart format
+      const chartData = dailyProfit.map(d => ({
+        date: d.date.substring(5), // MM-DD format
+        profit: parseFloat(d.profit),
+      })).reverse();
+      
+      res.json(chartData);
+    } catch (error) {
+      console.error("Daily profit error:", error);
+      res.status(500).json({ error: "Failed to get daily profit" });
+    }
+  });
+
+  // ============================================
   // TESTNET FAUCET
   // ============================================
   

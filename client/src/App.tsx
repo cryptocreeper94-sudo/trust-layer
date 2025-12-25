@@ -80,6 +80,7 @@ import PortfolioRebalancer from "@/pages/portfolio-rebalancer";
 import Arcade from "@/pages/arcade";
 import Crash from "@/pages/crash";
 import Predictions from "@/pages/predictions";
+import PlayerProfile from "@/pages/player-profile";
 import SocialFeed from "@/pages/social-feed";
 import Lottery from "@/pages/lottery";
 import AIAdvisor from "@/pages/ai-advisor";
@@ -105,6 +106,8 @@ function GamesRouter() {
       <Switch>
         <Route path="/" component={GamesHome} />
         <Route path="/arcade" component={Arcade} />
+        <Route path="/arcade/profile" component={PlayerProfile} />
+        <Route path="/arcade/profile/:userId" component={PlayerProfile} />
         <Route path="/crash" component={Crash} />
         <Route path="/predictions" component={Predictions} />
         <Route path="/lottery" component={Lottery} />

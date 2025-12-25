@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
 import crypto from "crypto";
@@ -141,6 +141,14 @@ export interface IStorage {
   updateHallmarkMint(id: string, data: Partial<InsertHallmarkMint>): Promise<HallmarkMint | undefined>;
   getNextGlobalSerial(tier?: string): Promise<string>;
   getGenesisHallmark(): Promise<HallmarkMint | undefined>;
+  
+  // Player Gaming Stats
+  getPlayerStats(userId: string): Promise<PlayerStats | undefined>;
+  upsertPlayerStats(userId: string, data: Partial<InsertPlayerStats>): Promise<PlayerStats>;
+  recordGameHistory(data: InsertPlayerGameHistory): Promise<PlayerGameHistory>;
+  getPlayerGameHistory(userId: string, limit?: number): Promise<PlayerGameHistory[]>;
+  getPlayerDailyProfit(userId: string, days?: number): Promise<PlayerDailyProfit[]>;
+  recordDailyProfit(userId: string, date: string, gamesPlayed: number, wagered: string, profit: string): Promise<PlayerDailyProfit>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1063,6 +1071,68 @@ export class DatabaseStorage implements IStorage {
     const [genesis] = await db.select().from(hallmarkMints)
       .where(eq(hallmarkMints.globalSerial, 'DWH-000000000001'));
     return genesis;
+  }
+
+  // Player Gaming Stats
+  async getPlayerStats(userId: string): Promise<PlayerStats | undefined> {
+    const [stats] = await db.select().from(playerStats).where(eq(playerStats.userId, userId));
+    return stats;
+  }
+
+  async upsertPlayerStats(userId: string, data: Partial<InsertPlayerStats>): Promise<PlayerStats> {
+    const existing = await this.getPlayerStats(userId);
+    if (existing) {
+      const [updated] = await db.update(playerStats)
+        .set({ ...data, updatedAt: new Date() })
+        .where(eq(playerStats.userId, userId))
+        .returning();
+      return updated;
+    }
+    const [stats] = await db.insert(playerStats)
+      .values({ userId, username: data.username || 'Player', ...data })
+      .returning();
+    return stats;
+  }
+
+  async recordGameHistory(data: InsertPlayerGameHistory): Promise<PlayerGameHistory> {
+    const [history] = await db.insert(playerGameHistory).values(data).returning();
+    return history;
+  }
+
+  async getPlayerGameHistory(userId: string, limit: number = 50): Promise<PlayerGameHistory[]> {
+    return db.select().from(playerGameHistory)
+      .where(eq(playerGameHistory.userId, userId))
+      .orderBy(desc(playerGameHistory.createdAt))
+      .limit(limit);
+  }
+
+  async getPlayerDailyProfit(userId: string, days: number = 14): Promise<PlayerDailyProfit[]> {
+    return db.select().from(playerDailyProfit)
+      .where(eq(playerDailyProfit.userId, userId))
+      .orderBy(desc(playerDailyProfit.date))
+      .limit(days);
+  }
+
+  async recordDailyProfit(userId: string, date: string, gamesPlayed: number, wagered: string, profit: string): Promise<PlayerDailyProfit> {
+    const existing = await db.select().from(playerDailyProfit)
+      .where(sql`${playerDailyProfit.userId} = ${userId} AND ${playerDailyProfit.date} = ${date}`);
+    
+    if (existing.length > 0) {
+      const [updated] = await db.update(playerDailyProfit)
+        .set({
+          gamesPlayed: existing[0].gamesPlayed + gamesPlayed,
+          wagered: (parseFloat(existing[0].wagered) + parseFloat(wagered)).toString(),
+          profit: (parseFloat(existing[0].profit) + parseFloat(profit)).toString(),
+        })
+        .where(eq(playerDailyProfit.id, existing[0].id))
+        .returning();
+      return updated;
+    }
+    
+    const [daily] = await db.insert(playerDailyProfit)
+      .values({ userId, date, gamesPlayed, wagered, profit })
+      .returning();
+    return daily;
   }
 }
 

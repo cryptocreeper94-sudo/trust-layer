@@ -4,7 +4,7 @@ import { Link } from "wouter";
 import {
   ArrowLeft, Gamepad2, Dice1, TrendingUp, Coins, Trophy,
   Zap, RefreshCw, History, Users, Star, Flame, Target, Wallet, Lock, Play,
-  Cherry, Gem, Crown, Diamond, Sparkles, Volume2, VolumeX, Rocket
+  Cherry, Gem, Crown, Diamond, Sparkles, Volume2, VolumeX, Rocket, BarChart3
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -476,6 +476,14 @@ export default function Arcade() {
               <span className="w-2 h-2 rounded-full bg-green-400 mr-1 animate-pulse" />
               {arcadeStats.playersOnline} Playing
             </Badge>
+            {isConnected && (
+              <Link href="/arcade/profile" data-testid="link-player-profile">
+                <Button variant="ghost" size="sm" className="h-8 text-xs">
+                  <BarChart3 className="w-3 h-3 mr-1" />
+                  Stats
+                </Button>
+              </Link>
+            )}
             <Link href="/dashboard-pro">
               <Button variant="ghost" size="sm" className="h-8 text-xs">
                 <ArrowLeft className="w-3 h-3 mr-1" />
