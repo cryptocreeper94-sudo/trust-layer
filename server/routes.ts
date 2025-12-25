@@ -4050,12 +4050,19 @@ Current context:
   });
 
   // ============================================
-  // PLAYER GAMING STATS
+  // PLAYER GAMING STATS (Authenticated)
   // ============================================
   
-  app.get("/api/player-stats/:userId", async (req, res) => {
+  app.get("/api/player-stats/:userId", isAuthenticated, async (req: any, res) => {
     try {
       const { userId } = req.params;
+      const authUserId = req.user?.id || req.user?.claims?.sub;
+      
+      // Users can only view their own stats
+      if (userId !== authUserId) {
+        return res.status(403).json({ error: "Cannot view other users' stats" });
+      }
+      
       const stats = await storage.getPlayerStats(userId);
       
       if (!stats) {
@@ -4085,9 +4092,16 @@ Current context:
     }
   });
   
-  app.get("/api/player-history/:userId", async (req, res) => {
+  app.get("/api/player-history/:userId", isAuthenticated, async (req: any, res) => {
     try {
       const { userId } = req.params;
+      const authUserId = req.user?.id || req.user?.claims?.sub;
+      
+      // Users can only view their own history
+      if (userId !== authUserId) {
+        return res.status(403).json({ error: "Cannot view other users' history" });
+      }
+      
       const limit = parseInt(req.query.limit as string) || 50;
       const history = await storage.getPlayerGameHistory(userId, limit);
       res.json(history);
@@ -4097,9 +4111,16 @@ Current context:
     }
   });
   
-  app.get("/api/player-daily-profit/:userId", async (req, res) => {
+  app.get("/api/player-daily-profit/:userId", isAuthenticated, async (req: any, res) => {
     try {
       const { userId } = req.params;
+      const authUserId = req.user?.id || req.user?.claims?.sub;
+      
+      // Users can only view their own profit data
+      if (userId !== authUserId) {
+        return res.status(403).json({ error: "Cannot view other users' profit data" });
+      }
+      
       const days = parseInt(req.query.days as string) || 14;
       const dailyProfit = await storage.getPlayerDailyProfit(userId, days);
       
