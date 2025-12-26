@@ -93,6 +93,37 @@ Instead of labels, AI generates fluid reflections:
 ### Demo Page
 Access at `/chronicles/ai` - requires authentication to create personalized profile.
 
+### Build Your Legacy Page
+Access at `/legacy` - pre-launch feature for recording voice samples, viewing personality summary, and managing credits.
+
+---
+
+## Credits System
+
+### Credit Costs
+- **AI Chat Message**: 10 credits
+- **Scenario Generation**: 20 credits
+- **Choice Processing**: 5 credits
+- **Voice Clone Creation**: 500 credits
+- **Voice TTS (per 100 chars)**: 5 credits
+- **Personality Summary**: 30 credits
+
+### Credit Packages
+- **Starter**: $10 (1,000 credits)
+- **Builder**: $25 (3,000 + 500 bonus credits)
+- **Architect**: $50 (7,000 + 1,500 bonus credits)
+- **Founder**: $100 (15,000 + 5,000 bonus credits)
+
+### API Endpoints
+- `GET /api/credits/balance`: Get user credit balance
+- `GET /api/credits/packages`: List available packages
+- `GET /api/credits/transactions`: Get transaction history
+- `POST /api/credits/purchase`: Create Stripe checkout
+
+### Key Files
+- `server/credits-service.ts`: Credits management
+- `server/voice-service.ts`: Voice sample handling
+
 ---
 
 ## Marketing Automation System

@@ -23,6 +23,8 @@ import { registerChatRoutes } from "./replit_integrations/chat";
 import { registerImageRoutes } from "./replit_integrations/image";
 import { stakingEngine } from "./staking-engine";
 import { generateScenario, randomizeEmotions, describeEmotionalState } from "./scenario-generator";
+import { creditsService, CREDIT_COSTS } from "./credits-service";
+import { voiceService, VOICE_SAMPLE_PROMPTS } from "./voice-service";
 
 const FaucetClaimRequestSchema = z.object({
   walletAddress: z.string().min(10, "Invalid wallet address").max(100),
@@ -205,6 +207,20 @@ export async function registerRoutes(
             console.log(`[Stripe Webhook] Crowdfund confirmed: ${metadata.contributionId}`);
           } catch (dbError) {
             console.error("[Stripe Webhook] DB error for crowdfund:", dbError);
+          }
+        }
+        
+        // Handle credits purchases
+        if (metadata.type === "credits_purchase" && metadata.userId && metadata.packageId) {
+          try {
+            const result = await creditsService.processPurchase(
+              metadata.userId,
+              metadata.packageId,
+              paymentId as string
+            );
+            console.log(`[Stripe Webhook] Credits purchased: user=${metadata.userId}, credits=${result.creditsAdded}, balance=${result.newBalance}`);
+          } catch (dbError) {
+            console.error("[Stripe Webhook] DB error for credits purchase:", dbError);
           }
         }
       }
@@ -6980,8 +6996,20 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(401).json({ error: "Authentication required" });
       }
       
+      // Check credits availability first (without deducting)
+      const hasCredits = await creditsService.hasCredits(userId, CREDIT_COSTS.SCENARIO_GENERATION);
+      if (!hasCredits) {
+        const balance = await creditsService.getBalance(userId);
+        return res.status(402).json({ 
+          error: "Insufficient credits", 
+          required: CREDIT_COSTS.SCENARIO_GENERATION,
+          balance 
+        });
+      }
+      
       const { era, location, situation, npcPresent } = req.body;
       
+      // Generate scenario first
       const personality = await chroniclesAI.getOrCreatePersonality(userId);
       const scenario = await chroniclesAI.generateScenario(personality, {
         era: era || "Medieval Fantasy",
@@ -6990,7 +7018,20 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         npcPresent,
       });
       
-      res.json({ scenario });
+      // Only deduct credits AFTER successful generation
+      const creditsResult = await creditsService.deductCredits(
+        userId,
+        CREDIT_COSTS.SCENARIO_GENERATION,
+        "Scenario generation",
+        "ai_usage"
+      );
+      
+      // Handle race condition where credits were consumed concurrently
+      if (!creditsResult.success) {
+        console.warn(`[Credits] Scenario generated but deduction failed for user ${userId} - returning free result`);
+      }
+      
+      res.json({ scenario, creditsUsed: creditsResult.success ? CREDIT_COSTS.SCENARIO_GENERATION : 0, creditsRemaining: creditsResult.newBalance });
     } catch (error: any) {
       console.error("Generate scenario error:", error);
       res.status(500).json({ error: error.message || "Failed to generate scenario" });
@@ -7004,12 +7045,24 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(401).json({ error: "Authentication required" });
       }
       
+      // Validate request BEFORE deducting credits
       const { scenario, chosenOption, choiceReasoning, era } = req.body;
-      
       if (!scenario || !chosenOption) {
         return res.status(400).json({ error: "Scenario and chosen option required" });
       }
       
+      // Check credits availability first (without deducting)
+      const hasCredits = await creditsService.hasCredits(userId, CREDIT_COSTS.CHOICE_PROCESSING);
+      if (!hasCredits) {
+        const balance = await creditsService.getBalance(userId);
+        return res.status(402).json({ 
+          error: "Insufficient credits", 
+          required: CREDIT_COSTS.CHOICE_PROCESSING,
+          balance 
+        });
+      }
+      
+      // Process the choice first
       const personality = await chroniclesAI.getOrCreatePersonality(userId);
       const result = await chroniclesAI.processChoice(
         personality.id,
@@ -7019,7 +7072,20 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         era
       );
       
-      res.json(result);
+      // Only deduct credits AFTER successful processing
+      const creditsResult = await creditsService.deductCredits(
+        userId,
+        CREDIT_COSTS.CHOICE_PROCESSING,
+        "Choice processing",
+        "ai_usage"
+      );
+      
+      // Handle race condition where credits were consumed concurrently
+      if (!creditsResult.success) {
+        console.warn(`[Credits] Choice processed but deduction failed for user ${userId} - returning free result`);
+      }
+      
+      res.json({ ...result, creditsUsed: creditsResult.success ? CREDIT_COSTS.CHOICE_PROCESSING : 0, creditsRemaining: creditsResult.newBalance });
     } catch (error: any) {
       console.error("Process choice error:", error);
       res.status(500).json({ error: error.message || "Failed to process choice" });
@@ -7033,12 +7099,24 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(401).json({ error: "Authentication required" });
       }
       
+      // Validate request BEFORE deducting credits
       const { message, era, situation } = req.body;
-      
       if (!message) {
         return res.status(400).json({ error: "Message required" });
       }
       
+      // Check credits availability first (without deducting)
+      const hasCredits = await creditsService.hasCredits(userId, CREDIT_COSTS.AI_CHAT_MESSAGE);
+      if (!hasCredits) {
+        const balance = await creditsService.getBalance(userId);
+        return res.status(402).json({ 
+          error: "Insufficient credits", 
+          required: CREDIT_COSTS.AI_CHAT_MESSAGE,
+          balance 
+        });
+      }
+      
+      // Process the chat first
       const personality = await chroniclesAI.getOrCreatePersonality(userId);
       const response = await chroniclesAI.generateParallelSelfResponse(
         personality,
@@ -7046,7 +7124,20 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         { era, situation }
       );
       
-      res.json(response);
+      // Only deduct credits AFTER successful processing
+      const creditsResult = await creditsService.deductCredits(
+        userId,
+        CREDIT_COSTS.AI_CHAT_MESSAGE,
+        "Chat with parallel self",
+        "ai_usage"
+      );
+      
+      // Handle race condition where credits were consumed concurrently
+      if (!creditsResult.success) {
+        console.warn(`[Credits] Chat processed but deduction failed for user ${userId} - returning free result`);
+      }
+      
+      res.json({ ...response, creditsUsed: creditsResult.success ? CREDIT_COSTS.AI_CHAT_MESSAGE : 0, creditsRemaining: creditsResult.newBalance });
     } catch (error: any) {
       console.error("Chat error:", error);
       res.status(500).json({ error: error.message || "Failed to generate response" });
@@ -7075,6 +7166,196 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       observedValues: chroniclesAI.OBSERVED_VALUES,
       visualPresentations: chroniclesAI.VISUAL_PRESENTATIONS,
     });
+  });
+
+  // ============================================
+  // CREDITS API
+  // ============================================
+  
+  app.get("/api/credits/balance", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const credits = await creditsService.getOrCreateUserCredits(userId);
+      res.json({
+        balance: credits.creditBalance,
+        bonusCredits: credits.bonusCredits,
+        lifetimeEarned: credits.lifetimeCreditsEarned,
+        lifetimeSpent: credits.lifetimeCreditsSpent,
+        dailyUsage: credits.dailyUsageCount,
+      });
+    } catch (error: any) {
+      console.error("Get credits balance error:", error);
+      res.status(500).json({ error: error.message || "Failed to get balance" });
+    }
+  });
+
+  app.get("/api/credits/packages", async (req, res) => {
+    try {
+      const packages = await creditsService.getPackages();
+      res.json({ packages });
+    } catch (error: any) {
+      console.error("Get packages error:", error);
+      res.status(500).json({ error: error.message || "Failed to get packages" });
+    }
+  });
+
+  app.get("/api/credits/transactions", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const limit = Math.min(parseInt(req.query.limit as string) || 50, 100);
+      const transactions = await creditsService.getTransactionHistory(userId, limit);
+      res.json({ transactions });
+    } catch (error: any) {
+      console.error("Get transactions error:", error);
+      res.status(500).json({ error: error.message || "Failed to get transactions" });
+    }
+  });
+
+  app.post("/api/credits/purchase", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const { packageId } = req.body;
+      if (!packageId) {
+        return res.status(400).json({ error: "Package ID required" });
+      }
+      
+      const pkg = await creditsService.getPackageById(packageId);
+      if (!pkg) {
+        return res.status(404).json({ error: "Package not found" });
+      }
+      
+      // Create Stripe checkout session
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [
+          {
+            price_data: {
+              currency: "usd",
+              product_data: {
+                name: `${pkg.name} Credits Package`,
+                description: `${pkg.credits} credits${pkg.bonusCredits ? ` + ${pkg.bonusCredits} bonus` : ""}`,
+              },
+              unit_amount: pkg.priceUsd,
+            },
+            quantity: 1,
+          },
+        ],
+        mode: "payment",
+        success_url: `${req.protocol}://${req.get("host")}/credits?success=true&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${req.protocol}://${req.get("host")}/credits?cancelled=true`,
+        metadata: {
+          userId,
+          packageId,
+          type: "credits_purchase",
+        },
+      });
+      
+      res.json({ checkoutUrl: session.url, sessionId: session.id });
+    } catch (error: any) {
+      console.error("Create checkout error:", error);
+      res.status(500).json({ error: error.message || "Failed to create checkout" });
+    }
+  });
+
+  // ============================================
+  // VOICE API
+  // ============================================
+
+  app.get("/api/voice/status", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const sample = await voiceService.getUserVoiceSample(userId);
+      const provider = voiceService.getBestProvider();
+      
+      res.json({
+        hasVoiceSample: !!sample,
+        sample: sample ? {
+          id: sample.id,
+          status: sample.cloneStatus,
+          provider: sample.voiceCloneProvider,
+          duration: sample.sampleDurationSec,
+          createdAt: sample.createdAt,
+        } : null,
+        availableProvider: provider,
+        prompts: VOICE_SAMPLE_PROMPTS,
+      });
+    } catch (error: any) {
+      console.error("Get voice status error:", error);
+      res.status(500).json({ error: error.message || "Failed to get voice status" });
+    }
+  });
+
+  app.get("/api/voice/prompt", async (req, res) => {
+    res.json({ prompt: voiceService.getRandomPrompt() });
+  });
+
+  app.post("/api/voice/sample", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const { sampleUrl, duration, transcript, personalityId } = req.body;
+      
+      if (!sampleUrl) {
+        return res.status(400).json({ error: "Sample URL required" });
+      }
+      
+      const sample = await voiceService.saveVoiceSample(userId, personalityId || null, {
+        sampleUrl,
+        sampleDurationSec: duration,
+        transcriptText: transcript,
+      });
+      
+      res.json({ 
+        success: true, 
+        sample: {
+          id: sample.id,
+          status: sample.cloneStatus,
+          provider: sample.voiceCloneProvider,
+        }
+      });
+    } catch (error: any) {
+      console.error("Save voice sample error:", error);
+      res.status(500).json({ error: error.message || "Failed to save voice sample" });
+    }
+  });
+
+  app.post("/api/voice/clone", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const sample = await voiceService.getUserVoiceSample(userId);
+      if (!sample) {
+        return res.status(404).json({ error: "No voice sample found. Please record a sample first." });
+      }
+      
+      const result = await voiceService.createVoiceClone(userId, sample.id);
+      res.json(result);
+    } catch (error: any) {
+      console.error("Create voice clone error:", error);
+      res.status(500).json({ error: error.message || "Failed to create voice clone" });
+    }
   });
 
   return httpServer;
