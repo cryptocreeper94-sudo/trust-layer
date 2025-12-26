@@ -134,6 +134,10 @@ The "portal" concept: Like putting on a mask or VR goggles - you step through an
 
 **The Deeper Mission**: Help expose the constructs - the "man behind the curtain" protected truths that are starting to unravel. Not through propaganda, but through a subconscious tool that naturally invites questioning. Fun and engaging first, but with awakening woven into the fabric. Whether players land on mainstream beliefs or alternative truths, they've engaged in the act of questioning - and that's the victory.
 
+**The Mirror Effect**: Chronicles shows players how they come across to others - something nearly impossible in real life. AI-driven NPCs react authentically to player choices, patterns, integrity, and character. Over time, players see themselves reflected back: Are they trustworthy? Do they keep promises? Do they question or conform? This self-awareness is wrapped in adventure, not lecture. Growth happens as a side effect of fun, not as homework.
+
+**The Hook**: You can't help but be affected. Even masked in fantasy, the experience reveals truths about yourself and the world. It's not forced, not obvious - it just happens. That's the power of Chronicles: awakening disguised as entertainment.
+
 ## Marketing & Community Strategy
 
 - **Discord**: Server with channels for announcements, dev updates, community chat, creator collaboration
