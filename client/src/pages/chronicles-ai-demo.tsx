@@ -20,8 +20,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { 
   Brain, Sparkles, Heart, Shield, Compass, Flame, Eye,
   MessageSquare, Swords, Map, Users, Send, RefreshCw,
-  ChevronRight, Loader2, User, Crown, Zap
+  ChevronRight, Loader2, User, Crown, Zap, ArrowLeft
 } from "lucide-react";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -246,20 +247,32 @@ export default function ChroniclesAIDemo() {
 
   if (!personalityData && !loadingPersonality) {
     return (
-      <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
-        <BentoCard className="max-w-md text-center">
-          <Brain className="w-16 h-16 mx-auto mb-4 text-purple-400" />
-          <h2 className="text-2xl font-bold mb-2">Sign In Required</h2>
-          <p className="text-gray-400 mb-4">
-            The Personality AI requires authentication to create your unique parallel self.
-          </p>
-          <Button 
-            className="bg-gradient-to-r from-purple-600 to-pink-600"
-            onClick={() => window.location.href = "/api/login"}
-          >
-            Sign In to Begin
-          </Button>
-        </BentoCard>
+      <div className="min-h-screen bg-slate-950 text-white flex flex-col">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+            <Link href="/chronicles">
+              <Button variant="ghost" className="text-slate-400 hover:text-white text-sm sm:text-base px-2 sm:px-4" data-testid="link-back-chronicles-auth">
+                <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2 flex-shrink-0" />
+                <span className="hidden xs:inline">Back to </span>Chronicles
+              </Button>
+            </Link>
+          </div>
+        </nav>
+        <div className="flex-1 flex items-center justify-center pt-20 px-4">
+          <BentoCard className="max-w-md text-center">
+            <Brain className="w-16 h-16 mx-auto mb-4 text-purple-400" />
+            <h2 className="text-2xl font-bold mb-2">Sign In Required</h2>
+            <p className="text-gray-400 mb-4">
+              The Personality AI requires authentication to create your unique parallel self.
+            </p>
+            <Button 
+              className="bg-gradient-to-r from-purple-600 to-pink-600"
+              onClick={() => window.location.href = "/api/login"}
+            >
+              Sign In to Begin
+            </Button>
+          </BentoCard>
+        </div>
       </div>
     );
   }
@@ -271,7 +284,18 @@ export default function ChroniclesAIDemo() {
       
       <MobileNav />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 py-8 pt-20">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between">
+          <Link href="/chronicles">
+            <Button variant="ghost" className="text-slate-400 hover:text-white text-sm sm:text-base px-2 sm:px-4" data-testid="link-back-chronicles">
+              <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2 flex-shrink-0" />
+              <span className="hidden xs:inline">Back to </span>Chronicles
+            </Button>
+          </Link>
+        </div>
+      </nav>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 py-8 pt-24">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
