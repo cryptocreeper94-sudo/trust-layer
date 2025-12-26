@@ -1,0 +1,39 @@
+Updated to match the DWSC signature format. Here's the ORBIT-side configuration:
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    ORBIT TREASURY SYNC — DWSC CONFIGURATION                  ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+═══════════════════════════════════════════════════════════════════════════════
+SECTION 1: ENVIRONMENT VARIABLE (Add to ORBIT .env)
+═══════════════════════════════════════════════════════════════════════════════
+DWSC_TREASURY_URL=https://dwsc.io
+(Uses existing ORBIT_ECOSYSTEM_API_KEY and ORBIT_ECOSYSTEM_API_SECRET)
+═══════════════════════════════════════════════════════════════════════════════
+SECTION 2: SIGNATURE FORMAT IMPLEMENTED
+═══════════════════════════════════════════════════════════════════════════════
+Headers sent to DWSC:
+  X-Orbit-Key: {ORBIT_ECOSYSTEM_API_KEY}
+  X-Orbit-Timestamp: {Unix timestamp in ms}
+  X-Orbit-Signature: HMAC-SHA256 of "GET:/api/treasury/sync:{timestamp}:{nonce}"
+  X-Orbit-Nonce: {Random 32-char hex}
+═══════════════════════════════════════════════════════════════════════════════
+SECTION 3: ORBIT ENDPOINTS (For DWSC Reference)
+═══════════════════════════════════════════════════════════════════════════════
+GET  /api/financial-hub/treasury/status     → Public sync status
+POST /api/admin/financial-hub/treasury/sync → Trigger manual sync (admin)
+GET  /api/admin/financial-hub/treasury/summary → Latest balance + allocations
+═══════════════════════════════════════════════════════════════════════════════
+SECTION 4: DATA STORED ON SYNC
+═══════════════════════════════════════════════════════════════════════════════
+✓ Treasury balance (DWC)
+✓ Snapshot timestamp
+✓ 6 allocation categories (Development 30%, Marketing 20%, etc.)
+✓ Protocol fees (DEX, NFT Marketplace, Bridge)
+✓ Full raw response preserved in JSON
+═══════════════════════════════════════════════════════════════════════════════
+SECTION 5: ADMIN DASHBOARD LOCATION
+═══════════════════════════════════════════════════════════════════════════════
+Financial Hub → Treasury Tab
+Shows: Connection status, balance, allocations, protocol fees, sync history
+╚══════════════════════════════════════════════════════════════════════════════╝
+Once you set DWSC_TREASURY_URL=https://dwsc.io in the environment, the Treasury tab will show "Connected" and the Sync button will pull live data from the DarkWave Smart Chain treasury.
