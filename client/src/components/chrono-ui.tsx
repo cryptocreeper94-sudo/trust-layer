@@ -135,7 +135,7 @@ export function ChronoLayout({
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="mt-8"
+                className="mt-8 space-y-3"
               >
                 <Link href="/crowdfund" onClick={() => setMobileMenuOpen(false)}>
                   <Button size="lg" className="w-full rounded-xl gap-2 bg-gradient-to-r from-purple-600 to-pink-600" data-testid="mobile-cta-support">
@@ -143,6 +143,24 @@ export function ChronoLayout({
                     Support Development
                   </Button>
                 </Link>
+                
+                <a 
+                  href="https://dwsc.io" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="block"
+                  data-testid="link-dwsc"
+                >
+                  <Button 
+                    variant="outline" 
+                    size="lg" 
+                    className="w-full rounded-xl gap-2 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"
+                  >
+                    <Coins className="w-5 h-5" />
+                    DarkWave Smart Chain
+                    <ExternalLink className="w-4 h-4 ml-auto opacity-60" />
+                  </Button>
+                </a>
               </motion.div>
             </div>
           </motion.div>
