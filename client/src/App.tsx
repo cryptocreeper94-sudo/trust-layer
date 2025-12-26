@@ -56,6 +56,7 @@ import ApiDocs from "@/pages/api-docs";
 import AdminAnalytics from "@/pages/admin-analytics";
 import AdminPartnerRequests from "@/pages/admin-partner-requests";
 import AdminMarketing from "@/pages/admin-marketing";
+import AdminDashboard from "@/pages/admin-dashboard";
 import Terms from "@/pages/terms";
 import Privacy from "@/pages/privacy";
 import ErrorPage from "@/pages/error";
@@ -270,6 +271,7 @@ function DWSCRouter() {
         <Route path="/wallet" component={Wallet} />
         <Route path="/status" component={Status} />
         <Route path="/api-docs" component={ApiDocs} />
+        <Route path="/admin" component={AdminDashboard} />
         <Route path="/admin/analytics" component={AdminAnalytics} />
         <Route path="/admin/partner-requests" component={AdminPartnerRequests} />
         <Route path="/admin/marketing" component={AdminMarketing} />
