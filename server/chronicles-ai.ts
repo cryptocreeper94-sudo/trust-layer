@@ -23,9 +23,12 @@
  * 
  * BELIEF SYSTEM LAYER:
  * - Worldview: optimist / realist / pessimist
- * - Moral Alignment: D&D-style 9-point alignment
+ * - Choice Tendencies: How you naturally approach decisions (NO moral labels)
  * - Core Values: justice, freedom, power, knowledge, love, loyalty, etc.
  * - Faction Affinity: Game-world political leanings
+ * 
+ * IMPORTANT: This system does NOT judge choices as "good" or "evil"
+ * It only observes patterns in how you make decisions. Free will, not morality.
  * 
  * USAGE:
  * 1. Create or load player personality profile
@@ -100,10 +103,22 @@ const CORE_VALUES = [
   "truth", "family", "wealth", "glory", "vengeance"
 ];
 
+// Choice Tendencies - NO moral judgment, just patterns of decision-making
+// This system observes HOW you choose, not WHETHER choices are "right"
+const CHOICE_TENDENCIES = {
+  // Structure Preference: How you relate to rules and systems
+  structure: ["follows_structure", "adapts_to_context", "challenges_systems"],
+  // Priority Focus: What drives your decisions
+  priority: ["self_focused", "inner_circle", "greater_whole", "principles_first"],
+  // Action Style: How you approach action
+  action: ["cautious_observer", "balanced_responder", "bold_initiator"],
+};
+
+// Legacy alias for backwards compatibility (but we'll phase this out)
 const MORAL_ALIGNMENTS = [
-  "lawful_good", "neutral_good", "chaotic_good",
-  "lawful_neutral", "true_neutral", "chaotic_neutral", 
-  "lawful_evil", "neutral_evil", "chaotic_evil"
+  "follows_structure", "adapts_to_context", "challenges_systems",
+  "self_focused", "inner_circle", "greater_whole", 
+  "principles_first", "balanced", "independent"
 ];
 
 export interface EmotionalState {
@@ -252,7 +267,7 @@ PLAYER PROFILE:
 - Archetype: ${archetype.name} - ${archetype.description}
 - Emotional State: ${emotionalState}
 - Worldview: ${personality.worldview}
-- Moral Alignment: ${personality.moralAlignment.replace("_", " ")}
+- Choice Tendency: ${personality.moralAlignment.replace("_", " ")}
 - Core Values: ${(personality.coreValues || []).join(", ") || "undefined"}
 - Decision Style: ${personality.decisionStyle}
 - Conflict Approach: ${personality.conflictApproach}
@@ -424,7 +439,7 @@ YOUR IDENTITY:
 - Archetype: ${archetype.name} - ${archetype.description}
 - Emotional State: ${emotionalState}
 - Worldview: ${personality.worldview}
-- Moral Alignment: ${personality.moralAlignment.replace("_", " ")}
+- Choice Tendency: ${personality.moralAlignment.replace("_", " ")}
 - Core Values: ${(personality.coreValues || []).join(", ") || "honor, adventure"}
 - Decision Style: ${personality.decisionStyle}
 - Conflict Approach: ${personality.conflictApproach}
@@ -475,7 +490,7 @@ INSTRUCTIONS:
 Archetype: ${archetype.name}
 Emotional State: ${emotionalState}
 Worldview: ${personality.worldview}
-Alignment: ${personality.moralAlignment}
+Choice Pattern: ${personality.moralAlignment}
 Values: ${(personality.coreValues || []).join(", ")}
 Choices Made: ${personality.totalChoicesMade}
 

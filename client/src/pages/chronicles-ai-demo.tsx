@@ -133,7 +133,7 @@ export default function ChroniclesAIDemo() {
     playerName: "",
     parallelSelfName: "",
     worldview: "realist",
-    moralAlignment: "neutral_good",
+    moralAlignment: "balanced",
     coreValues: [] as string[],
   });
 
@@ -314,7 +314,7 @@ export default function ChroniclesAIDemo() {
                   <span className="text-white capitalize">{personality?.worldview}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-400">Alignment</span>
+                  <span className="text-gray-400">Choice Style</span>
                   <span className="text-white capitalize">{personality?.moralAlignment?.replace("_", " ")}</span>
                 </div>
                 <div className="flex justify-between">
@@ -560,7 +560,7 @@ export default function ChroniclesAIDemo() {
                   </div>
 
                   <div>
-                    <label className="text-sm text-gray-400 mb-1 block">Moral Alignment</label>
+                    <label className="text-sm text-gray-400 mb-1 block">Decision Style</label>
                     <Select
                       value={setupData.moralAlignment}
                       onValueChange={(v) => setSetupData(s => ({ ...s, moralAlignment: v }))}
@@ -569,11 +569,11 @@ export default function ChroniclesAIDemo() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {archetypesData?.moralAlignments?.map((a: string) => (
-                          <SelectItem key={a} value={a} className="capitalize">
-                            {a.replace("_", " ")}
-                          </SelectItem>
-                        ))}
+                        <SelectItem value="follows_structure">Follows Structure</SelectItem>
+                        <SelectItem value="adapts_to_context">Adapts to Context</SelectItem>
+                        <SelectItem value="challenges_systems">Challenges Systems</SelectItem>
+                        <SelectItem value="balanced">Balanced</SelectItem>
+                        <SelectItem value="independent">Independent</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

@@ -2614,3 +2614,146 @@ export const chroniclesConversations = pgTable("chronicles_conversations", {
 });
 
 export type ChroniclesConversation = typeof chroniclesConversations.$inferSelect;
+
+// =====================================================
+// DARKWAVE CREDITS SYSTEM
+// =====================================================
+// Credits are the universal currency for AI-powered features
+// Users purchase credits to interact with AI, train personalities,
+// create voice clones, and prepare their "parallel self" for launch
+// =====================================================
+
+export const userCredits = pgTable("user_credits", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  
+  // Credit Balance
+  creditBalance: integer("credit_balance").notNull().default(0),
+  lifetimeCreditsEarned: integer("lifetime_credits_earned").notNull().default(0),
+  lifetimeCreditsSpent: integer("lifetime_credits_spent").notNull().default(0),
+  
+  // Bonus tracking
+  bonusCredits: integer("bonus_credits").notNull().default(0), // From promotions, etc.
+  
+  // Rate limiting
+  dailyUsageCount: integer("daily_usage_count").notNull().default(0),
+  dailyUsageDate: text("daily_usage_date"), // YYYY-MM-DD format for daily reset
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertUserCreditsSchema = createInsertSchema(userCredits).omit({
+  id: true,
+  lifetimeCreditsEarned: true,
+  lifetimeCreditsSpent: true,
+  dailyUsageCount: true,
+  dailyUsageDate: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type UserCredits = typeof userCredits.$inferSelect;
+export type InsertUserCredits = z.infer<typeof insertUserCreditsSchema>;
+
+// Credit Transactions - Purchase and usage history
+export const creditTransactions = pgTable("credit_transactions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  
+  // Transaction details
+  type: text("type").notNull(), // "purchase", "usage", "bonus", "refund"
+  amount: integer("amount").notNull(), // Positive = credit, Negative = debit
+  balanceAfter: integer("balance_after").notNull(),
+  
+  // Context
+  description: text("description").notNull(),
+  category: text("category"), // "voice_clone", "ai_chat", "scenario", "purchase"
+  stripePaymentId: text("stripe_payment_id"), // For purchases
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertCreditTransactionSchema = createInsertSchema(creditTransactions).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type CreditTransaction = typeof creditTransactions.$inferSelect;
+export type InsertCreditTransaction = z.infer<typeof insertCreditTransactionSchema>;
+
+// Credit Packages - Available for purchase
+export const creditPackages = pgTable("credit_packages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(), // "Starter", "Builder", "Architect", "Founder"
+  credits: integer("credits").notNull(),
+  bonusCredits: integer("bonus_credits").notNull().default(0),
+  priceUsd: integer("price_usd").notNull(), // In cents
+  stripePriceId: text("stripe_price_id"), // Optional: for recurring subscriptions
+  isActive: boolean("is_active").notNull().default(true),
+  sortOrder: integer("sort_order").notNull().default(0),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type CreditPackage = typeof creditPackages.$inferSelect;
+
+// =====================================================
+// VOICE CLONING SYSTEM
+// =====================================================
+// Stores user voice samples for creating their parallel self's voice
+// =====================================================
+
+export const voiceSamples = pgTable("voice_samples", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  personalityId: varchar("personality_id"),
+  
+  // Sample info
+  sampleUrl: text("sample_url"), // URL to stored audio file
+  sampleDurationSec: integer("sample_duration_sec"),
+  transcriptText: text("transcript_text"), // What they said
+  
+  // Voice clone status
+  voiceCloneId: text("voice_clone_id"), // ID from ElevenLabs/Resemble
+  voiceCloneProvider: text("voice_clone_provider"), // "elevenlabs", "resemble"
+  cloneStatus: text("clone_status").notNull().default("pending"), // "pending", "processing", "ready", "failed"
+  
+  // Quality tracking
+  qualityScore: integer("quality_score"), // 0-100 based on sample quality
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertVoiceSampleSchema = createInsertSchema(voiceSamples).omit({
+  id: true,
+  voiceCloneId: true,
+  cloneStatus: true,
+  qualityScore: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type VoiceSample = typeof voiceSamples.$inferSelect;
+export type InsertVoiceSample = z.infer<typeof insertVoiceSampleSchema>;
+
+// Voice Usage Tracking - For rate limiting voice API calls
+export const voiceUsage = pgTable("voice_usage", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  
+  // Usage tracking
+  usageType: text("usage_type").notNull(), // "tts", "stt", "clone"
+  creditsUsed: integer("credits_used").notNull(),
+  charactersProcessed: integer("characters_processed"),
+  durationMs: integer("duration_ms"),
+  
+  // Context
+  sessionId: text("session_id"),
+  provider: text("provider"), // "browser", "elevenlabs", "resemble"
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type VoiceUsage = typeof voiceUsage.$inferSelect;
