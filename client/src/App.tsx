@@ -156,7 +156,6 @@ function GamesRouter() {
         <Route path="/presale/success" component={PresaleSuccess} />
         <Route path="/investment-simulator" component={InvestmentSimulator} />
         <Route path="/roadmap" component={RoadmapEcosystem} />
-        <Route path="/chronicles" component={Chronicles} />
         <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
         <Route path="/roadmap-ecosystem" component={RoadmapEcosystem} />
         <Route path="/crash" component={Crash} />
@@ -308,7 +307,6 @@ function DWSCRouter() {
         <Route path="/presale/success" component={PresaleSuccess} />
         <Route path="/investment-simulator" component={InvestmentSimulator} />
         <Route path="/roadmap" component={RoadmapEcosystem} />
-        <Route path="/chronicles" component={Chronicles} />
         <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
         <Route path="/roadmap-ecosystem" component={RoadmapEcosystem} />
         <Route path="/sweepstakes-rules" component={SweepstakesRules} />

@@ -153,8 +153,87 @@ export function ChronoLayout({
         {children}
       </main>
 
+      <ChronoFooter />
       <StickyJoinBar />
     </div>
+  );
+}
+
+function ChronoFooter() {
+  return (
+    <footer className="bg-black border-t border-white/10 py-12 px-4 pb-28">
+      <div className="container mx-auto max-w-6xl">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          <div className="md:col-span-2">
+            <div className="flex items-center gap-2 mb-4">
+              <img src={orbitLogo} alt="ChronoVerse" className="w-8 h-8" />
+              <span className="font-display font-bold text-xl bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                DarkWave Chronicles
+              </span>
+            </div>
+            <p className="text-white/60 text-sm mb-4 max-w-md">
+              Not a game. A life. Live your legacy across 70+ historical eras in the ChronoVerse. Coming 2026.
+            </p>
+            <div className="flex items-center gap-2 text-xs text-white/40">
+              <span>Powered by</span>
+              <a 
+                href="https://dwsc.io" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 px-2 py-1 rounded bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:text-purple-300 hover:bg-purple-500/30 transition-all"
+                data-testid="link-dwsc-branding"
+              >
+                <Coins className="w-3 h-3" />
+                DarkWave Smart Chain
+                <ExternalLink className="w-2.5 h-2.5" />
+              </a>
+            </div>
+          </div>
+          
+          <div>
+            <h4 className="font-display font-semibold text-white mb-4">Explore</h4>
+            <ul className="space-y-2">
+              <li><Link href="/chronicles" className="text-sm text-white/60 hover:text-white transition-colors" data-testid="footer-link-overview">Overview</Link></li>
+              <li><Link href="/eras" className="text-sm text-white/60 hover:text-white transition-colors" data-testid="footer-link-eras">Era Explorer</Link></li>
+              <li><Link href="/gameplay" className="text-sm text-white/60 hover:text-white transition-colors" data-testid="footer-link-gameplay">Gameplay</Link></li>
+              <li><Link href="/economy" className="text-sm text-white/60 hover:text-white transition-colors" data-testid="footer-link-economy">Economy</Link></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="font-display font-semibold text-white mb-4">Ecosystem</h4>
+            <ul className="space-y-2">
+              <li>
+                <a href="https://dwsc.io" target="_blank" rel="noopener noreferrer" className="text-sm text-white/60 hover:text-cyan-400 transition-colors flex items-center gap-1" data-testid="footer-link-dwsc">
+                  DarkWave Smart Chain <ExternalLink className="w-3 h-3" />
+                </a>
+              </li>
+              <li>
+                <a href="https://darkwavegames.io" target="_blank" rel="noopener noreferrer" className="text-sm text-white/60 hover:text-pink-400 transition-colors flex items-center gap-1" data-testid="footer-link-games">
+                  DarkWave Games <ExternalLink className="w-3 h-3" />
+                </a>
+              </li>
+              <li>
+                <a href="https://darkwavestudios.io" target="_blank" rel="noopener noreferrer" className="text-sm text-white/60 hover:text-purple-400 transition-colors flex items-center gap-1" data-testid="footer-link-studios">
+                  DarkWave Studios <ExternalLink className="w-3 h-3" />
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-white/40">
+            &copy; {new Date().getFullYear()} DarkWave Studios LLC. All rights reserved.
+          </p>
+          <div className="flex items-center gap-4">
+            <Link href="/community" className="text-xs text-white/40 hover:text-white transition-colors" data-testid="footer-link-community">Community</Link>
+            <Link href="/roadmap" className="text-xs text-white/40 hover:text-white transition-colors" data-testid="footer-link-roadmap">Roadmap</Link>
+            <Link href="/crowdfund" className="text-xs text-white/40 hover:text-white transition-colors" data-testid="footer-link-crowdfund">Support</Link>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 }
 
