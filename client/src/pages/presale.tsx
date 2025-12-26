@@ -138,30 +138,30 @@ function PresaleProgress() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="text-center p-4 rounded-xl bg-white/5" data-testid="stat-token-price">
-          <p className="text-3xl font-bold text-cyan-400">${TOKEN_PRICE}</p>
-          <p className="text-gray-500 text-sm">Token Price</p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+        <div className="text-center p-3 sm:p-4 rounded-xl bg-white/5" data-testid="stat-token-price">
+          <p className="text-xl sm:text-3xl font-bold text-cyan-400">${TOKEN_PRICE}</p>
+          <p className="text-gray-500 text-xs sm:text-sm">Token Price</p>
         </div>
-        <div className="text-center p-4 rounded-xl bg-white/5" data-testid="stat-tokens-sold">
+        <div className="text-center p-3 sm:p-4 rounded-xl bg-white/5" data-testid="stat-tokens-sold">
           {isLoading ? (
-            <Loader2 className="w-6 h-6 animate-spin mx-auto text-purple-400" />
+            <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin mx-auto text-purple-400" />
           ) : (
-            <p className="text-3xl font-bold text-purple-400">
+            <p className="text-xl sm:text-3xl font-bold text-purple-400">
               {tokensSold > 0 ? `${(tokensSold / 1000).toFixed(1)}K` : "0"}
             </p>
           )}
-          <p className="text-gray-500 text-sm">Tokens Sold</p>
+          <p className="text-gray-500 text-xs sm:text-sm">Tokens Sold</p>
         </div>
-        <div className="text-center p-4 rounded-xl bg-white/5" data-testid="stat-total-raised">
+        <div className="text-center p-3 sm:p-4 rounded-xl bg-white/5" data-testid="stat-total-raised">
           {isLoading ? (
-            <Loader2 className="w-6 h-6 animate-spin mx-auto text-pink-400" />
+            <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin mx-auto text-pink-400" />
           ) : (
-            <p className="text-3xl font-bold text-pink-400">
+            <p className="text-xl sm:text-3xl font-bold text-pink-400">
               ${totalRaised > 0 ? totalRaised.toLocaleString() : "0"}
             </p>
           )}
-          <p className="text-gray-500 text-sm">Raised</p>
+          <p className="text-gray-500 text-xs sm:text-sm">Raised</p>
         </div>
       </div>
 
