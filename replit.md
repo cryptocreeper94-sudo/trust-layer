@@ -39,7 +39,7 @@ DarkWave Smart Chain (DSC) is a blockchain ecosystem by DarkWave Studios, aiming
     - **Messaging Guidelines**: 
       - AVOID: "life simulator," "simulate," "manage," "responsibilities," "second life," "persistent chores"
       - EMBRACE: "missions," "campaigns," "story arcs," "parallel self," "legend," "adventures," "chronicle wins," "factions," "alliances"
-    - **Taglines**: "Your Legend. Your Moves." / "Live Your Legacy" / "Not an avatar. YOU."
+    - **Taglines**: "YOU. The Legend." / "Live Your Legacy" / "Not an avatar. YOU."
     - **Four Pillars**: (1) Player-as-Prime Hero, (2) Living Worlds of Discovery, (3) Impactful Choices & Alliances, (4) Power Progression Without Grind
     - **Era System**: 70+ Mission Theaters across all of human history, each with unique campaigns, factions, and rewards.
     - **Community-Driven Development**: User-submitted ideas, creator ownership of in-game properties with blockchain verification.

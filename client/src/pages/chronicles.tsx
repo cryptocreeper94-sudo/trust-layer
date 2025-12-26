@@ -565,7 +565,7 @@ export default function Chronicles() {
               transition={{ delay: 0.5, duration: 0.8 }}
             >
               <p className="text-2xl md:text-4xl font-bold text-white mb-2">
-                Your Legend. <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Your Moves.</span>
+                YOU. <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">The Legend.</span>
               </p>
               <p className="text-lg md:text-xl text-white/70 mb-8 max-w-3xl mx-auto leading-relaxed">
                 An epic adventure across 70+ eras where YOU are the hero. Not an avatar. Not a puppet. Your actual self.
