@@ -89,6 +89,11 @@ export const pageViews = pgTable("page_views", {
   visitorId: text("visitor_id").notNull(),
   referrer: text("referrer"),
   userAgent: text("user_agent"),
+  host: text("host").default("dwsc.io"),
+  country: text("country"),
+  city: text("city"),
+  deviceType: text("device_type"),
+  browser: text("browser"),
   timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
 
@@ -2825,3 +2830,64 @@ export const protocolFeeConfigSchema = z.object({
 });
 
 export type ProtocolFeeConfig = z.infer<typeof protocolFeeConfigSchema>;
+
+// =====================================================
+// OWNER ADMIN PORTAL
+// =====================================================
+
+// Owner/Admin designation - who has access to owner portal
+export const ownerAdmins = pgTable("owner_admins", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  email: text("email"),
+  displayName: text("display_name"),
+  role: text("role").notNull().default("admin"), // "owner" | "admin" | "moderator"
+  hosts: text("hosts").array().default(sql`ARRAY['dwsc.io', 'yourlegacy.io']::text[]`), // Which hosts they can access
+  permissions: text("permissions").array().default(sql`ARRAY['analytics', 'seo', 'marketing', 'rewards']::text[]`),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertOwnerAdminSchema = createInsertSchema(ownerAdmins).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type OwnerAdmin = typeof ownerAdmins.$inferSelect;
+export type InsertOwnerAdmin = z.infer<typeof insertOwnerAdminSchema>;
+
+// SEO Configuration per route/host
+export const seoConfigs = pgTable("seo_configs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  host: text("host").notNull().default("dwsc.io"), // dwsc.io, yourlegacy.io, etc.
+  route: text("route").notNull().default("/"), // /presale, /chronicles, etc.
+  title: text("title"),
+  description: text("description"),
+  keywords: text("keywords"),
+  ogTitle: text("og_title"),
+  ogDescription: text("og_description"),
+  ogImage: text("og_image"),
+  ogType: text("og_type").default("website"),
+  twitterCard: text("twitter_card").default("summary_large_image"),
+  twitterTitle: text("twitter_title"),
+  twitterDescription: text("twitter_description"),
+  twitterImage: text("twitter_image"),
+  canonicalUrl: text("canonical_url"),
+  robots: text("robots").default("index, follow"),
+  structuredData: text("structured_data"), // JSON-LD as string
+  customTags: text("custom_tags"), // Additional meta tags as JSON
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertSeoConfigSchema = createInsertSchema(seoConfigs).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type SeoConfig = typeof seoConfigs.$inferSelect;
+export type InsertSeoConfig = z.infer<typeof insertSeoConfigSchema>;
