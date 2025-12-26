@@ -25,6 +25,7 @@ const NAV_LINKS = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/economy", label: "Economy" },
   { href: "/community", label: "Community" },
+  { href: "/team", label: "Team" },
   { href: "/roadmap", label: "Roadmap" },
 ];
 
