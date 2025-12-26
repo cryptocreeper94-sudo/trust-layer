@@ -22,6 +22,7 @@ const NAV_LINKS = [
   { href: "/chronicles", label: "Overview" },
   { href: "/eras", label: "Eras" },
   { href: "/gameplay", label: "Gameplay" },
+  { href: "/dashboard", label: "Dashboard" },
   { href: "/economy", label: "Economy" },
   { href: "/community", label: "Community" },
   { href: "/roadmap", label: "Roadmap" },

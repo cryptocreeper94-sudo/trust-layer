@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { 
-  Clock, Users, Brain, Shield, Crown, Sparkles, Heart, Eye, Map, Coins, 
-  ChevronRight, ChevronDown, Star, Flame, Compass, Globe, Zap, History, 
-  Sword, BookOpen, Building, Rocket, Play, ArrowRight
+  Clock, Users, Shield, Sparkles, Heart, Eye, Coins, 
+  ChevronDown, Flame, Compass, Globe, History, 
+  Sword, Rocket, Play, ArrowRight, Lock, Wand2, 
+  Telescope, Ghost, Target, Scroll
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -71,6 +72,45 @@ const SOCIAL_STATS = [
   { label: "Founding Members", value: "Join First 1,000", icon: <Users className="w-4 h-4 text-cyan-400" /> },
   { label: "Target Launch", value: "2026", icon: <Rocket className="w-4 h-4 text-pink-400" /> },
   { label: "Blockchain", value: "DWC", icon: <Coins className="w-4 h-4 text-amber-400" /> },
+];
+
+const ADVENTURES = [
+  {
+    icon: Scroll,
+    title: "Epic Quests & Missions",
+    desc: "Hidden storylines. Multi-era adventures. Objectives that span centuries and test your skills.",
+    color: "from-amber-500 to-orange-600",
+  },
+  {
+    icon: Lock,
+    title: "Codes & Secrets",
+    desc: "Crack ancient ciphers. Uncover lost knowledge. Some secrets take years to solve.",
+    color: "from-emerald-500 to-teal-600",
+  },
+  {
+    icon: Wand2,
+    title: "Parallel Realms",
+    desc: "Time rifts open to alternate dimensions. Fantastical worlds beyond normal existence await.",
+    color: "from-purple-500 to-violet-600",
+  },
+  {
+    icon: Ghost,
+    title: "Legends & Myths",
+    desc: "Mythical creatures. Ancient prophecies. Supernatural encounters that defy explanation.",
+    color: "from-pink-500 to-rose-600",
+  },
+  {
+    icon: Target,
+    title: "Bounties & Hunts",
+    desc: "Track legendary artifacts. Hunt notorious criminals. Compete for rare rewards.",
+    color: "from-red-500 to-orange-600",
+  },
+  {
+    icon: Telescope,
+    title: "Realm Transport",
+    desc: "Teleport through time rifts. Visit parallel universes. Every journey changes you.",
+    color: "from-cyan-500 to-blue-600",
+  },
 ];
 
 export default function ChronoHome() {
@@ -255,6 +295,65 @@ export default function ChronoHome() {
                 Explore All 70+ Eras
               </Button>
             </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="py-24 px-4 bg-gradient-to-b from-transparent via-pink-950/10 to-transparent">
+        <div className="container mx-auto max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <Badge className="mb-4 bg-pink-500/20 text-pink-400 border-pink-500/30">
+              <Sword className="w-3 h-3 mr-1" /> Beyond Daily Life
+            </Badge>
+            <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 text-white">
+              Adventures Await
+            </h2>
+            <p className="text-white/60 max-w-2xl mx-auto text-lg">
+              Yes, it's a life simulator. But it's also a <span className="text-pink-400 font-semibold">game</span>. Epic quests. Hidden secrets. Fantastical realms beyond imagination.
+            </p>
+          </motion.div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {ADVENTURES.map((adventure, i) => {
+              const Icon = adventure.icon;
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08 }}
+                >
+                  <div className="group relative p-6 rounded-2xl bg-gradient-to-br from-white/5 to-transparent border border-white/10 hover:border-pink-500/30 transition-all duration-300 hover:bg-white/[0.03]">
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${adventure.color} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-white mb-2">{adventure.title}</h3>
+                    <p className="text-white/60 text-sm">{adventure.desc}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+          
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="mt-12 text-center"
+          >
+            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-cyan-500/10 border border-white/10">
+              <Sparkles className="w-5 h-5 text-pink-400" />
+              <span className="text-white/80 text-sm">
+                Life simulator by day. <span className="text-pink-400 font-semibold">Epic adventure</span> whenever you choose.
+              </span>
+              <Sparkles className="w-5 h-5 text-cyan-400" />
+            </div>
           </motion.div>
         </div>
       </section>
