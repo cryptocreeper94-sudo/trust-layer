@@ -435,7 +435,7 @@ export default function ChronoCreators() {
         </div>
       </section>
 
-      <section className="py-16 px-4 bg-gradient-to-b from-transparent via-emerald-950/10 to-transparent">
+      <section id="business" className="py-16 px-4 bg-gradient-to-b from-transparent via-emerald-950/10 to-transparent">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -512,7 +512,7 @@ export default function ChronoCreators() {
                 <p className="text-sm text-white/60">
                   Storefront sponsorships are part of our roadmap. Property registry, licensing system, 
                   and business partner portal are scheduled for Phase 1. Full marketplace launch in Phase 2.
-                  <Link href="/team" className="text-emerald-400 hover:underline ml-1">View full roadmap →</Link>
+                  <Link href="/team" className="text-emerald-400 hover:underline ml-1" data-testid="business-roadmap-link">View full roadmap →</Link>
                 </p>
               </div>
             </div>

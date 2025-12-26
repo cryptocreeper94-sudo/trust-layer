@@ -4,7 +4,8 @@ import {
   Clock, Users, Shield, Sparkles, Heart, Eye, Coins, 
   ChevronDown, Flame, Compass, Globe, History, 
   Sword, Rocket, Play, ArrowRight, Lock, Wand2, 
-  Telescope, Ghost, Target, Scroll
+  Telescope, Ghost, Target, Scroll, Building, Store,
+  Bell, Calendar, Megaphone
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -398,6 +399,157 @@ export default function ChronoHome() {
                 </Link>
               </div>
             </HoloCard>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 px-4 bg-gradient-to-b from-transparent via-emerald-950/10 to-transparent">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <Badge className="mb-4 bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+              <Calendar className="w-3 h-3 mr-1" /> Coming Soon
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
+              Planned Features
+            </h2>
+            <p className="text-white/60 max-w-2xl mx-auto">
+              Here's what's on the horizon. Join the waitlist to get early access and shape the future of the ChronoVerse.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
+            {[
+              {
+                icon: Store,
+                title: "Storefront Sponsorships",
+                timeline: "Phase 1-2 (2025-2026)",
+                desc: "Businesses sponsor in-game locations. Premium real estate in every era. Location-based advertising with real ROI.",
+                cta: "Pre-Register Business",
+                href: "/creators#business",
+                color: "emerald"
+              },
+              {
+                icon: Users,
+                title: "Creator Marketplace",
+                timeline: "Phase 2 (Q1 2026)",
+                desc: "Own your creations as digital real estate. Earn royalties. Trade properties. Build your legacy.",
+                cta: "Join Creator Waitlist",
+                href: "/creators",
+                color: "purple"
+              },
+              {
+                icon: Globe,
+                title: "Mobile Apps",
+                timeline: "Phase 2 (Q2 2026)",
+                desc: "Android & iOS apps. Live your legacy on the go. Push notifications for world events.",
+                cta: "Get Notified",
+                href: "/crowdfund",
+                color: "cyan"
+              },
+            ].map((feature, i) => {
+              const Icon = feature.icon;
+              const colorClasses = {
+                emerald: { bg: "from-emerald-500 to-teal-600", border: "border-emerald-500/30", text: "text-emerald-400" },
+                purple: { bg: "from-purple-500 to-pink-600", border: "border-purple-500/30", text: "text-purple-400" },
+                cyan: { bg: "from-cyan-500 to-blue-600", border: "border-cyan-500/30", text: "text-cyan-400" },
+              }[feature.color];
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <div className={`h-full p-6 rounded-2xl bg-white/5 border ${colorClasses?.border} hover:bg-white/10 transition-all`}>
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colorClasses?.bg} flex items-center justify-center mb-4`}>
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <Badge variant="outline" className={`mb-3 text-xs ${colorClasses?.text} border-current`}>
+                      {feature.timeline}
+                    </Badge>
+                    <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
+                    <p className="text-white/60 text-sm mb-4">{feature.desc}</p>
+                    <Link href={feature.href}>
+                      <Button size="sm" variant="outline" className={`rounded-full gap-2 ${colorClasses?.border} hover:bg-white/10`} data-testid={`planned-${feature.color}-cta`}>
+                        <Bell className="w-4 h-4" />
+                        {feature.cta}
+                      </Button>
+                    </Link>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <div className="p-6 rounded-2xl bg-gradient-to-br from-amber-500/10 to-transparent border border-amber-500/20">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shrink-0">
+                    <Building className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white mb-1">Business Pre-Registration</h3>
+                    <p className="text-white/60 text-sm mb-3">
+                      Want your brand in the ChronoVerse? Pre-register for storefront sponsorship opportunities. 
+                      Early partners get priority placement and founding rates.
+                    </p>
+                    <Link href="/creators">
+                      <Button size="sm" className="rounded-full gap-2 bg-gradient-to-r from-amber-600 to-orange-600" data-testid="business-preregister">
+                        <Store className="w-4 h-4" />
+                        Pre-Register Your Business
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <div className="p-6 rounded-2xl bg-gradient-to-br from-pink-500/10 to-transparent border border-pink-500/20">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shrink-0">
+                    <Megaphone className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-white mb-1">Join Our Community</h3>
+                    <p className="text-white/60 text-sm mb-3">
+                      Discord • Telegram • Twitter. Stay updated on development, participate in decisions, 
+                      and connect with other founding members.
+                    </p>
+                    <Link href="/community">
+                      <Button size="sm" className="rounded-full gap-2 bg-gradient-to-r from-pink-600 to-purple-600" data-testid="join-socials">
+                        <Users className="w-4 h-4" />
+                        Join the Community
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <Link href="/team">
+              <Button variant="link" className="text-white/50 hover:text-white gap-2" data-testid="view-full-roadmap">
+                View Full Development Roadmap
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

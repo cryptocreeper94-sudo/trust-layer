@@ -48,3 +48,46 @@ DarkWave Smart Chain (DSC) is a blockchain ecosystem by DarkWave Studios, aiming
 - **Payments**: Stripe, Coinbase Commerce
 - **Hub API**: https://orbitstaffing.io (HMAC-SHA256 authenticated)
 - **AI**: OpenAI (for TTS and AI code assistant)
+
+## Chronicles Development Roadmap
+
+### Phase 0 (Q1-Q2 2025) - Foundation
+- Website & branding launch ✓
+- Crowdfunding infrastructure ✓
+- Discord setup & community launch
+- Telegram re-engagement & DarkWave Pulse mini-app
+- Social media presence (Twitter/X)
+- Core database schema design
+- Basic AI agent framework
+- Single-era sandbox (Medieval)
+
+### Phase 1 (Q3-Q4 2025) - Economy & Property
+- Property registry (blockchain-backed)
+- Storefront sponsorship system design
+- Business partner portal
+- Location-based pricing engine
+- Traffic analytics & conversion tracking
+- Creator licensing & royalty system
+
+### Phase 2 (Q1-Q2 2026) - Multi-Era Launch
+- 10 historical eras live
+- Storefront marketplace launch
+- Era-specific sponsor integration
+- Cross-era quest framework
+- Public alpha release
+- Mobile app (Android/iOS)
+
+### Phase 3 (Q3-Q4 2026) - Full ChronoVerse
+- Full 70+ era deployment
+- City district auctions (premium locations)
+- Advanced sponsor analytics dashboard
+- Community content creation tools
+- Public beta release
+- DWC mainnet integration
+
+## Marketing & Community Strategy
+
+- **Discord**: Server with channels for announcements, dev updates, community chat, creator collaboration
+- **Telegram**: Re-engage existing community, deploy DarkWave Pulse mini-app for ecosystem updates
+- **Twitter/X**: Regular development updates, teasers, community engagement
+- **Business Outreach**: Partner pre-registration, storefront sponsorship marketing to brands

@@ -23,14 +23,16 @@ const ROADMAP_PHASES = [
     timeline: "Q1-Q2 2025",
     status: "in_progress",
     progress: 35,
-    description: "Core infrastructure, database schema, single-era sandbox with basic AI agents.",
+    description: "Core infrastructure, community building, database schema, single-era sandbox.",
     milestones: [
       { text: "Website & branding launch", done: true },
       { text: "Crowdfunding infrastructure", done: true },
+      { text: "Discord setup & community launch", done: false },
+      { text: "Telegram re-engagement & DarkWave Pulse", done: false },
+      { text: "Social media presence (Twitter/X)", done: false },
       { text: "Core database schema design", done: false },
       { text: "Basic AI agent framework", done: false },
       { text: "Single-era sandbox (Medieval)", done: false },
-      { text: "200 AI agents prototype", done: false },
     ]
   },
   {
