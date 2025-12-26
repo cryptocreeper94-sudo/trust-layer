@@ -35,9 +35,14 @@ DarkWave Smart Chain (DSC) is a blockchain ecosystem by DarkWave Studios, aiming
 - **Cross-Chain Bridge**: Lock & mint (DWC ↔ wDWC) for Ethereum Sepolia & Solana Devnet. Includes wDWC ERC-20 contract and Solana bridge program.
 - **Contract Architecture**: UUPS Proxy for Ethereum (wDWC.sol), BPF Loader for Solana (wdwc-bridge). Governance via DSC Improvement Proposal (DSCIP) with Testnet, Canary, Mainnet stages.
 - **DarkWave Chronicles (Flagship Product)**:
-    - **Core Concept**: Real-time, persistent life simulator where the player is their actual self in a fantasy world (ChronoVerse).
-    - **Era System**: Choose starting era, natural progression, time travel events.
-    - **Community-Driven Development**: User-submitted ideas, creator ownership of in-game properties.
+    - **Core Concept**: Epic adventure across 70+ historical eras where YOU are the hero - not an avatar, your actual parallel self. Mission-driven gameplay with campaigns, factions, and legend-building.
+    - **Messaging Guidelines**: 
+      - AVOID: "life simulator," "simulate," "manage," "responsibilities," "second life," "persistent chores"
+      - EMBRACE: "missions," "campaigns," "story arcs," "parallel self," "legend," "adventures," "chronicle wins," "factions," "alliances"
+    - **Taglines**: "Your Legend. Your Moves." / "Live Your Legacy" / "Not an avatar. YOU."
+    - **Four Pillars**: (1) Player-as-Prime Hero, (2) Living Worlds of Discovery, (3) Impactful Choices & Alliances, (4) Power Progression Without Grind
+    - **Era System**: 70+ Mission Theaters across all of human history, each with unique campaigns, factions, and rewards.
+    - **Community-Driven Development**: User-submitted ideas, creator ownership of in-game properties with blockchain verification.
     - **Storefront Sponsorship**: Real businesses sponsor in-game locations, with revenue from licensing fees, click royalties, and conversion bonuses.
     - **AI Engine (Planned)**: 3-tier stack (Deterministic Planners, LLM Microservices, Offline LLM Batches), 5-Axis Emotion System, Belief System Layer.
 

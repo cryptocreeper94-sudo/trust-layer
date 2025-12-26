@@ -37,10 +37,10 @@ import heroVideo from "@assets/generated_videos/fantasy_world_cinematic_flyover.
 const CORE_FEATURES = [
   {
     id: "realtime",
-    title: "Real-Time Persistent World",
-    subtitle: "24/7 - The World Never Sleeps",
-    description: "The world runs in real-time. 24-hour days. When you sleep, work, or step away - life continues. Events unfold. Relationships change. Opportunities pass. Just like real life.",
-    longDescription: "This isn't a game you pause. It's a life you live. Every second that passes in your world, passes here. Miss a day? The world moved without you. That's the point. Real stakes. Real time. Real consequences.",
+    title: "Living World Adventures",
+    subtitle: "Dynamic Events & Missions",
+    description: "A breathing world with ongoing story arcs. New missions emerge. Alliances shift. Faction wars ignite. Drop in for quick quests or dive deep into epic campaigns.",
+    longDescription: "The world evolves with or without you - but that's freedom, not obligation. Jump in for a 10-minute mission or spend hours on campaign arcs. Your legend grows at your pace. Daily raids, seasonal events, and faction battles await.",
     icon: Clock,
     image: deepSpace,
     color: "from-cyan-500 to-blue-600",
@@ -48,10 +48,10 @@ const CORE_FEATURES = [
   },
   {
     id: "you",
-    title: "YOU Are The Character",
-    subtitle: "Not Role-Playing. BEING.",
-    description: "This is YOU stepping into a fantasy realm as yourself. Your personality, emotions, beliefs, faith, values. First-person. You don't control a puppet - you ARE the person.",
-    longDescription: "Strip away the avatar. This is your actual self - your psychology, your moral compass, your decision-making patterns - placed into a fantasy world. How would YOU navigate ancient Rome? What would YOU do during the French Revolution? Find out.",
+    title: "YOU Are The Hero",
+    subtitle: "Not An Avatar. YOU.",
+    description: "This is YOUR parallel self stepping into history. Your instincts, values, and strategic mind - unleashed across 70+ eras. Not puppeteering a character. Being one.",
+    longDescription: "What would YOU do in ancient Rome? How would YOUR mind navigate the French Revolution? This isn't role-playing someone else - it's discovering what the real you becomes when placed in extraordinary worlds. Your legend, your way.",
     icon: Eye,
     image: fantasyHeroes,
     color: "from-purple-500 to-pink-600",
@@ -59,10 +59,10 @@ const CORE_FEATURES = [
   },
   {
     id: "morality",
-    title: "No Good. No Evil.",
-    subtitle: "Only Perspective",
-    description: "No alignment system. No karma meter. Everything is in the eye of the beholder. One person's freedom fighter is another's terrorist.",
-    longDescription: "We removed the moral judgment. There's no game telling you what's right or wrong. Actions have consequences based on relationships and perspectives - not artificial game-imposed morality. Just like real life.",
+    title: "No Alignment System",
+    subtitle: "Freedom of Choice",
+    description: "No karma meters. No forced morality. Your choices define your path. One player's alliance is another's rivalry.",
+    longDescription: "We removed the judgment systems. Make strategic decisions based on YOUR values. Actions have consequences through relationships and faction standings - creating organic story arcs, not scripted morality lessons.",
     icon: Shield,
     image: medievalKingdom,
     color: "from-amber-500 to-red-600",
@@ -70,10 +70,10 @@ const CORE_FEATURES = [
   },
   {
     id: "political",
-    title: "Political Simulation",
-    subtitle: "Alliances. Coups. Power.",
-    description: "Bad actors reveal themselves through choices. Organic alliances form. Political groups emerge from player behavior, not scripts.",
-    longDescription: "Governments form. Dictatorships rise. Democracies emerge. Coups happen. All based on real player behavior. This is a social experiment - watching how human psychology shapes civilization when people actually control it.",
+    title: "Faction & Alliance Wars",
+    subtitle: "Councils. Battles. Power.",
+    description: "Join factions. Build alliances. Compete for territory. Player-driven campaigns where your choices shape which powers rise and fall.",
+    longDescription: "Guilds form. Territories shift. Power struggles play out in real-time. Join co-op councils, participate in faction raids, and watch as player behavior shapes the political landscape of each era.",
     icon: Crown,
     image: cyberpunkCity,
     color: "from-red-500 to-orange-600",
@@ -81,10 +81,10 @@ const CORE_FEATURES = [
   },
   {
     id: "ai",
-    title: "AI-Driven Souls",
-    subtitle: "Every Entity Thinks & Feels",
-    description: "Each person has unique emotional responses. Beliefs shape behavior. The full spectrum of human psychology, emulated through AI.",
-    longDescription: "Every NPC runs on a dynamic psychological model. Some are emotional. Some rational. Some chaotic. Their beliefs, fears, ambitions, and traumas shape every interaction. You're not reading scripts - you're engaging with simulated consciousness.",
+    title: "Intelligent NPCs",
+    subtitle: "Dynamic Allies & Rivals",
+    description: "Every character has unique motivations. Build relationships, recruit allies, or create rivalries. Each NPC remembers your history.",
+    longDescription: "NPCs aren't quest dispensers. They're potential allies, rivals, and story drivers. Their beliefs, ambitions, and memories of YOU shape every interaction. Recruit them for missions, trade with them, or earn their enmity.",
     icon: Brain,
     image: quantumRealm,
     color: "from-violet-500 to-purple-600",
@@ -92,10 +92,10 @@ const CORE_FEATURES = [
   },
   {
     id: "eras",
-    title: "70+ Historical Eras",
+    title: "70+ Mission Theaters",
     subtitle: "All of Human History",
-    description: "From dinosaurs to space colonies. Stone Age to Cyberpunk. Victorian London to the Wild West. Every era you've ever dreamed of living in.",
-    longDescription: "This isn't 4-6 generic time periods. This is EVERY recognizable historical moment. Biblical times. Egyptian dynasties. Roman gladiators. Viking raids. Renaissance art. Civil Rights movement. All accessible. All playable. All yours.",
+    description: "From dinosaurs to space colonies. Viking raids to cyberpunk heists. Every era is a new campaign with unique missions and rewards.",
+    longDescription: "This isn't 4-6 generic settings. It's EVERY recognizable historical moment as a playable campaign. Egyptian dynasties. Roman gladiators. Wild West outlaws. Renaissance intrigue. Each era offers unique missions, factions, and legend-tier rewards.",
     icon: Compass,
     image: fantasyLands,
     color: "from-emerald-500 to-teal-600",
@@ -103,10 +103,10 @@ const CORE_FEATURES = [
   },
   {
     id: "community",
-    title: "Community-Built World",
-    subtitle: "Your Creations. Your Property.",
-    description: "Developers submit ideas. Approved content becomes real. Creators OWN their creations like real estate. Can be traded or LOST.",
-    longDescription: "This world is built BY players FOR players. Submit an idea. If approved, it becomes real content - and you OWN it. Like actual property. It can be traded, sold, or lost. Real stakes in a virtual world.",
+    title: "Player-Created Content",
+    subtitle: "Build. Own. Profit.",
+    description: "Create missions, locations, and items. Approved content becomes real - and you OWN it. Trade, license, or build an empire.",
+    longDescription: "This world is built BY players FOR players. Submit content ideas. If approved, it becomes real - and you OWN it with blockchain verification. License it to others, trade it, or use it as your base of operations.",
     icon: Users,
     image: fantasyWorld,
     color: "from-blue-500 to-indigo-600",
@@ -115,9 +115,9 @@ const CORE_FEATURES = [
   {
     id: "economy",
     title: "DWC Blockchain Economy",
-    subtitle: "Real Currency. Real Value.",
-    description: "Trade with DarkWave Coin. Every transaction is blockchain-verified. Buy, sell, trade - with real cryptocurrency that has real value.",
-    longDescription: "DWC isn't play money. It's real blockchain currency on DarkWave Smart Chain. Buy gear from other players. Trade resources across eras. Every transaction is stamped, tracked, and auditable. A real economy with a fantasy skin.",
+    subtitle: "Earn. Trade. Own.",
+    description: "Complete missions for DWC tokens. Trade gear with players. Every transaction is blockchain-verified with real value.",
+    longDescription: "DWC isn't play money. It's real blockchain currency on DarkWave Smart Chain. Earn through missions, trade with other players, own property with blockchain deeds. A real economy powering epic adventures.",
     icon: Coins,
     image: deepSpace,
     color: "from-yellow-500 to-amber-600",
@@ -246,11 +246,11 @@ const EPOCHS = [
 ];
 
 const DEFINITIONS: Record<string, { term: string; definition: string }> = {
-  "persistent": { term: "Persistent World", definition: "A game world that continues to exist and evolve even when you're not playing. Events happen, economies shift, and relationships change 24/7." },
-  "era": { term: "Era", definition: "A specific historical time period you can choose to live in. Each era has unique fashion, architecture, events, and opportunities." },
-  "dwc": { term: "DWC (DarkWave Coin)", definition: "The cryptocurrency used within Chronicles. Real blockchain tokens with real value that can be traded, spent, and earned through gameplay." },
-  "epoch": { term: "Epoch", definition: "A major division of historical time containing multiple related eras. Example: The Medieval Epoch contains Dark Ages, Crusades, and High Medieval eras." },
-  "echoes": { term: "Temporal Echoes", definition: "Narrative connections between eras - artifacts, legends, and stories that reference events from other time periods without creating causal paradoxes." }
+  "persistent": { term: "Living World", definition: "A dynamic world with evolving story arcs and missions. Drop in anytime - the adventure continues whether you're on an epic campaign or taking a break." },
+  "era": { term: "Mission Theater", definition: "A historical time period with unique campaigns, factions, and rewards. Each era offers different missions, NPCs, and ways to build your legend." },
+  "dwc": { term: "DWC (DarkWave Coin)", definition: "The cryptocurrency earned through missions and traded between players. Real blockchain tokens with real value." },
+  "epoch": { term: "Epoch", definition: "A major division of historical time containing multiple mission theaters. Example: The Medieval Epoch contains Dark Ages, Crusades, and High Medieval campaigns." },
+  "echoes": { term: "Cross-Era Echoes", definition: "Narrative connections between eras - legendary artifacts and story arcs that span multiple time periods, creating epic cross-campaign quests." }
 };
 
 function DefinitionModal({ term, onClose }: { term: string; onClose: () => void }) {
@@ -565,12 +565,12 @@ export default function Chronicles() {
               transition={{ delay: 0.5, duration: 0.8 }}
             >
               <p className="text-2xl md:text-4xl font-bold text-white mb-2">
-                Not A Game. <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">A Life.</span>
+                Your Legend. <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Your Moves.</span>
               </p>
               <p className="text-lg md:text-xl text-white/70 mb-8 max-w-3xl mx-auto leading-relaxed">
-                A real-time life simulator where YOU are the character. Your beliefs. Your emotions. Your legacy.
+                An epic adventure across 70+ eras where YOU are the hero. Not an avatar. Not a puppet. Your actual self.
                 <br className="hidden md:block" />
-                The world moves whether you're there or not. As real as it gets without being your actual life.
+                Embark on missions, forge alliances, and chronicle wins that echo through history.
               </p>
             </motion.div>
             
@@ -582,14 +582,14 @@ export default function Chronicles() {
             >
               <Link href="/crowdfund">
                 <Button size="lg" className="rounded-full gap-2 text-lg px-8 py-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white shadow-xl shadow-purple-500/25 hover:shadow-purple-500/40 transition-all" data-testid="button-support-development">
-                  <Heart className="w-5 h-5" />
-                  Support Development
+                  <Rocket className="w-5 h-5" />
+                  Join the Campaign
                 </Button>
               </Link>
               <Link href="/presale">
                 <Button size="lg" variant="outline" className="rounded-full gap-2 text-lg px-8 py-6 border-white/20 hover:bg-white/10 backdrop-blur-sm" data-testid="button-get-dwc">
                   <Coins className="w-5 h-5" />
-                  Get DWC Tokens
+                  Secure Your Gear
                 </Button>
               </Link>
             </motion.div>
@@ -615,14 +615,14 @@ export default function Chronicles() {
             className="text-center mb-16"
           >
             <Badge className="mb-4 bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
-              <Target className="w-3 h-3 mr-1" /> Core Philosophy
+              <Target className="w-3 h-3 mr-1" /> What Makes Chronicles Different
             </Badge>
             <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">
-              <InfoTooltip termKey="persistent">Not a Game You Play.</InfoTooltip> A Life You Live.
+              <InfoTooltip termKey="persistent">Epic Adventures.</InfoTooltip> Your Way.
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-              This isn't escapism. It's exploration. Understand your real life by living a parallel one.
-              <br />Every choice matters. Every action echoes. Every moment is yours.
+              Drop in for quick missions or dive deep into campaigns. Your parallel self, your strategic choices, your legend.
+              <br />No grind. No obligations. Just epic adventures at YOUR pace.
             </p>
           </motion.div>
           
@@ -719,7 +719,7 @@ export default function Chronicles() {
                 </Badge>
                 
                 <h2 className="text-3xl md:text-4xl font-display font-bold mb-4 text-white">
-                  Real Currency.<br />Real Economy.<br />Real Stakes.
+                  Earn Rewards.<br />Trade Gear.<br />Own Assets.
                 </h2>
                 
                 <p className="text-white/70 mb-6 leading-relaxed">
