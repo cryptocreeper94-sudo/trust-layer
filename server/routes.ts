@@ -2573,6 +2573,263 @@ export async function registerRoutes(
     }
   });
 
+  // === BLOCKCHAIN DOMAIN SERVICE ROUTES ===
+  const DomainSearchSchema = z.object({
+    name: z.string().min(1).max(63),
+  });
+
+  const DomainRegisterSchema = z.object({
+    name: z.string().min(3).max(63),
+    ownerAddress: z.string().min(10),
+    years: z.number().min(1).max(10).default(1),
+    primaryWallet: z.string().optional(),
+    description: z.string().max(500).optional(),
+    website: z.string().optional(),
+    email: z.string().email().optional(),
+    twitter: z.string().optional(),
+    discord: z.string().optional(),
+    telegram: z.string().optional(),
+  });
+
+  const DomainRecordSchema = z.object({
+    domainId: z.string(),
+    recordType: z.enum(["wallet", "text", "url", "avatar", "content"]),
+    key: z.string().min(1).max(100),
+    value: z.string().min(1).max(2000),
+  });
+
+  const DomainTransferSchema = z.object({
+    toAddress: z.string().min(10),
+  });
+
+  app.get("/api/domains/search/:name", async (req, res) => {
+    try {
+      const { name } = req.params;
+      const result = await storage.searchDomain(name);
+      
+      const nameLength = name.replace(/\.dwsc$/, '').length;
+      let pricePerYear = 500;
+      let isPremium = false;
+      
+      if (nameLength <= 3) {
+        pricePerYear = 10000;
+        isPremium = true;
+      } else if (nameLength <= 4) {
+        pricePerYear = 5000;
+        isPremium = true;
+      } else if (nameLength <= 5) {
+        pricePerYear = 2000;
+      }
+      
+      res.json({
+        ...result,
+        name: name.replace(/\.dwsc$/, ''),
+        tld: "dwsc",
+        pricePerYearCents: pricePerYear,
+        isPremium,
+      });
+    } catch (error) {
+      console.error("Domain search error:", error);
+      res.status(500).json({ error: "Failed to search domain" });
+    }
+  });
+
+  app.get("/api/domains/stats", async (_req, res) => {
+    try {
+      const stats = await storage.getDomainStats();
+      res.json(stats);
+    } catch (error) {
+      console.error("Domain stats error:", error);
+      res.status(500).json({ error: "Failed to fetch domain stats" });
+    }
+  });
+
+  app.get("/api/domains/recent", async (_req, res) => {
+    try {
+      const domains = await storage.getRecentDomains(20);
+      res.json(domains);
+    } catch (error) {
+      console.error("Recent domains error:", error);
+      res.status(500).json({ error: "Failed to fetch recent domains" });
+    }
+  });
+
+  app.get("/api/domains/owner/:address", async (req, res) => {
+    try {
+      const { address } = req.params;
+      const domains = await storage.getDomainsByOwner(address);
+      res.json(domains);
+    } catch (error) {
+      console.error("Get domains by owner error:", error);
+      res.status(500).json({ error: "Failed to fetch domains" });
+    }
+  });
+
+  app.get("/api/domains/:name", async (req, res) => {
+    try {
+      const { name } = req.params;
+      const domain = await storage.getDomain(name);
+      if (!domain) {
+        return res.status(404).json({ error: "Domain not found" });
+      }
+      
+      const records = await storage.getDomainRecords(domain.id);
+      res.json({ ...domain, records });
+    } catch (error) {
+      console.error("Get domain error:", error);
+      res.status(500).json({ error: "Failed to fetch domain" });
+    }
+  });
+
+  app.post("/api/domains/register", async (req, res) => {
+    try {
+      const data = DomainRegisterSchema.parse(req.body);
+      
+      const existing = await storage.searchDomain(data.name);
+      if (!existing.available) {
+        return res.status(400).json({ error: "Domain is not available" });
+      }
+      
+      const nameLength = data.name.length;
+      let pricePerYear = 500;
+      let isPremium = false;
+      
+      if (nameLength <= 3) {
+        pricePerYear = 10000;
+        isPremium = true;
+      } else if (nameLength <= 4) {
+        pricePerYear = 5000;
+        isPremium = true;
+      } else if (nameLength <= 5) {
+        pricePerYear = 2000;
+      }
+      
+      const totalPrice = pricePerYear * (data.years || 1);
+      const expiresAt = new Date();
+      expiresAt.setFullYear(expiresAt.getFullYear() + (data.years || 1));
+      
+      const txHash = `0x${crypto.randomBytes(32).toString('hex')}`;
+      
+      const domain = await storage.registerDomain({
+        name: data.name,
+        tld: "dwsc",
+        ownerAddress: data.ownerAddress,
+        registrationTxHash: txHash,
+        expiresAt,
+        isPremium,
+        isProtected: false,
+        primaryWallet: data.primaryWallet || data.ownerAddress,
+        description: data.description,
+        website: data.website,
+        email: data.email,
+        twitter: data.twitter,
+        discord: data.discord,
+        telegram: data.telegram,
+      });
+      
+      res.json({
+        success: true,
+        domain,
+        transactionHash: txHash,
+        pricePaidCents: totalPrice,
+      });
+    } catch (error: any) {
+      console.error("Domain registration error:", error);
+      if (error.name === "ZodError") {
+        return res.status(400).json({ error: "Invalid request data", details: error.errors });
+      }
+      res.status(500).json({ error: "Failed to register domain" });
+    }
+  });
+
+  app.put("/api/domains/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { description, website, email, twitter, discord, telegram, avatarUrl, primaryWallet } = req.body;
+      
+      const domain = await storage.updateDomain(id, {
+        description,
+        website,
+        email,
+        twitter,
+        discord,
+        telegram,
+        avatarUrl,
+        primaryWallet,
+      });
+      
+      if (!domain) {
+        return res.status(404).json({ error: "Domain not found" });
+      }
+      
+      res.json(domain);
+    } catch (error) {
+      console.error("Update domain error:", error);
+      res.status(500).json({ error: "Failed to update domain" });
+    }
+  });
+
+  app.post("/api/domains/:id/records", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const data = DomainRecordSchema.parse({ ...req.body, domainId: id });
+      
+      const record = await storage.setDomainRecord(data);
+      res.json(record);
+    } catch (error: any) {
+      console.error("Set domain record error:", error);
+      if (error.name === "ZodError") {
+        return res.status(400).json({ error: "Invalid request data", details: error.errors });
+      }
+      res.status(500).json({ error: "Failed to set domain record" });
+    }
+  });
+
+  app.delete("/api/domains/:domainId/records/:recordId", async (req, res) => {
+    try {
+      const { recordId } = req.params;
+      await storage.deleteDomainRecord(recordId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Delete domain record error:", error);
+      res.status(500).json({ error: "Failed to delete record" });
+    }
+  });
+
+  app.post("/api/domains/:id/transfer", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { toAddress, fromAddress } = req.body;
+      
+      if (!toAddress || !fromAddress) {
+        return res.status(400).json({ error: "Both fromAddress and toAddress are required" });
+      }
+      
+      const txHash = `0x${crypto.randomBytes(32).toString('hex')}`;
+      const success = await storage.transferDomain(id, fromAddress, toAddress, txHash);
+      
+      if (!success) {
+        return res.status(400).json({ error: "Transfer failed - domain not found or not owned by fromAddress" });
+      }
+      
+      res.json({ success: true, transactionHash: txHash });
+    } catch (error) {
+      console.error("Domain transfer error:", error);
+      res.status(500).json({ error: "Failed to transfer domain" });
+    }
+  });
+
+  app.get("/api/domains/:id/history", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const history = await storage.getDomainTransferHistory(id);
+      res.json(history);
+    } catch (error) {
+      console.error("Get transfer history error:", error);
+      res.status(500).json({ error: "Failed to fetch transfer history" });
+    }
+  });
+
   // === COMMUNITY ROADMAP ROUTES ===
   app.get("/api/roadmap/features", async (_req, res) => {
     try {
