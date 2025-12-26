@@ -57,6 +57,13 @@ export function Footer() {
             >
               Team
             </button>
+            <Link 
+              href="/admin"
+              className="text-white/20 hover:text-amber-400 transition-colors"
+              data-testid="link-admin"
+            >
+              Admin
+            </Link>
           </div>
         </div>
       </footer>
