@@ -532,6 +532,11 @@ export default function Chronicles() {
 
   useEffect(() => {
     const handleVideoEnd = () => {
+      const currentVideo = currentVideoRef.current;
+      if (currentVideo && !videoMuted) {
+        fadeAudio(currentVideo, false, 250);
+      }
+      
       setIsVideoTransitioning(true);
       
       setTimeout(() => {
@@ -557,8 +562,11 @@ export default function Chronicles() {
   useEffect(() => {
     if (currentVideoRef.current && !isVideoTransitioning) {
       const video = currentVideoRef.current;
-      video.volume = videoMuted ? 0 : 1;
+      video.volume = 0;
       video.play().catch(() => {});
+      if (!videoMuted) {
+        fadeAudio(video, true, 250);
+      }
     }
   }, [currentVideoIndex, isVideoTransitioning, videoMuted]);
   
