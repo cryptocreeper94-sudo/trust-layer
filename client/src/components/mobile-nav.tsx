@@ -269,6 +269,8 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
                     border: isActive ? '2px solid rgba(168, 85, 247, 0.6)' : '1px solid rgba(255, 255, 255, 0.2)',
                     overflow: 'hidden',
                     cursor: 'pointer',
+                    height: '88px',
+                    boxSizing: 'border-box',
                   }}
                 >
                   <img 
