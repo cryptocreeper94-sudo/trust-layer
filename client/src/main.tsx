@@ -10,7 +10,7 @@ function getManifestForDomain(): string {
   if (host.includes("darkwavestudios") || host.includes("studios.")) {
     return "/manifest-studios.webmanifest";
   }
-  if (host.includes("yourlegacy") || host.includes("chrono.")) {
+  if (host.includes("yourlegacy") || host.includes("chrono.") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
     return "/manifest-chrono.webmanifest";
   }
   return "/manifest-dwsc.webmanifest";
@@ -24,7 +24,7 @@ function getThemeColorForDomain(): string {
   if (host.includes("darkwavestudios") || host.includes("studios.")) {
     return "#06b6d4";
   }
-  if (host.includes("yourlegacy") || host.includes("chrono.")) {
+  if (host.includes("yourlegacy") || host.includes("chrono.") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
     return "#a855f7";
   }
   return "#8b5cf6";

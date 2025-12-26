@@ -9,7 +9,7 @@ export function getAppFromHost(): AppDomain {
   if (host.includes("darkwavestudios") || host.includes("studios.")) {
     return "studios";
   }
-  if (host.includes("yourlegacy") || host.includes("chrono.")) {
+  if (host.includes("yourlegacy") || host.includes("chrono.") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
     return "chrono";
   }
   return "dwsc";
