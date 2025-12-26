@@ -180,13 +180,20 @@ export async function deploySocialPost(
   content: string,
   imageUrl?: string | null
 ): Promise<DeployResult> {
+  // Convert relative URLs to absolute URLs for social media platforms
+  let absoluteImageUrl = imageUrl;
+  if (imageUrl && imageUrl.startsWith('/')) {
+    const baseUrl = process.env.SITE_BASE_URL || 'https://dwsc.io';
+    absoluteImageUrl = `${baseUrl}${imageUrl}`;
+  }
+  
   switch (platform.toLowerCase()) {
     case 'discord': {
       const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
       if (!webhookUrl) {
         return { success: false, error: 'Discord webhook URL not configured (DISCORD_WEBHOOK_URL)' };
       }
-      return deployToDiscord(webhookUrl, content, imageUrl);
+      return deployToDiscord(webhookUrl, content, absoluteImageUrl);
     }
     
     case 'telegram': {
@@ -195,16 +202,16 @@ export async function deploySocialPost(
       if (!botToken || !channelId) {
         return { success: false, error: 'Telegram credentials not configured (TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID)' };
       }
-      return deployToTelegram(botToken, channelId, content, imageUrl);
+      return deployToTelegram(botToken, channelId, content, absoluteImageUrl);
     }
     
     case 'twitter':
     case 'x': {
-      return deployToTwitter(content, imageUrl);
+      return deployToTwitter(content, absoluteImageUrl);
     }
     
     case 'facebook': {
-      return deployToFacebook(content, imageUrl);
+      return deployToFacebook(content, absoluteImageUrl);
     }
     
     default:
