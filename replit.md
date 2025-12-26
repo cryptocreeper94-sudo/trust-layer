@@ -24,7 +24,7 @@ The design philosophy mandates a "Premium UI Protocol" for all new components an
 - **Color Palette**: Primary use of Cyan, Purple, and Pink for accents and gradients, with `slate-950`, `slate-900`, `slate-800` for backgrounds, and white/gray for text.
 
 ### Technical Implementations
-- **Blockchain**: Proof-of-Authority (PoA) with Founders Validator, PostgreSQL for data storage, SHA-256/Merkle trees/HMAC-SHA256 cryptography, 400ms block time, and 200K+ TPS. Native token DWC (100M supply, 18 decimals, no burn).
+- **Blockchain**: Proof-of-Authority (PoA) with Founders Validator, PostgreSQL for data storage, SHA-256/Merkle trees/HMAC-SHA256 cryptography, 400ms block time, and 200K+ TPS. Native token DWC (100M supply, 18 decimals, no burn). No buy/sell tax - revenue from protocol fees (DEX 0.3%, NFT marketplace 2.5%, bridge 0.1%, launchpad listings).
 - **Web Portal (Frontend)**: React 18, TypeScript, Vite, Wouter, TanStack Query, Tailwind CSS v4, Framer Motion.
 - **Web Portal (Backend)**: Node.js, Express.js, TypeScript, Drizzle ORM, PostgreSQL.
 - **Authentication**: Replit Auth (OAuth 2.0), WebAuthn/Passkeys.

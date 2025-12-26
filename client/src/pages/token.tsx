@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Coins, BarChart3, Lock, Globe, ShieldCheck, Zap, Sparkles, Crown, Star, Gift, Users, TrendingUp, Percent } from "lucide-react";
+import { ArrowLeft, ArrowRightLeft, Coins, BarChart3, Lock, Globe, ShieldCheck, Zap, Sparkles, Crown, Star, Gift, Users, TrendingUp, Percent } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -377,9 +377,9 @@ export default function Token() {
       <section className="py-12 px-4 bg-white/[0.02]">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-display font-bold mb-3">Sustainable Revenue Model</h2>
+            <h2 className="text-2xl md:text-3xl font-display font-bold mb-3">Protocol Revenue Model</h2>
             <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-              DarkWave generates real revenue through ecosystem fees, ensuring long-term sustainability.
+              No buy or sell taxes. DarkWave generates sustainable revenue through protocol fees across the ecosystem.
             </p>
           </div>
 
@@ -392,31 +392,39 @@ export default function Token() {
             </GlassCard>
             <GlassCard hover={false}>
               <div className="p-4 text-center">
-                <div className="text-2xl font-bold text-primary mb-1">5%</div>
-                <div className="text-xs text-muted-foreground">Sell/Transfer Tax</div>
+                <div className="text-2xl font-bold text-green-400 mb-1">0%</div>
+                <div className="text-xs text-muted-foreground">Sell Tax</div>
               </div>
             </GlassCard>
             <GlassCard hover={false}>
               <div className="p-4 text-center">
-                <div className="text-2xl font-bold text-secondary mb-1">3%</div>
-                <div className="text-xs text-muted-foreground">→ Treasury</div>
+                <div className="text-2xl font-bold text-primary mb-1">0.3%</div>
+                <div className="text-xs text-muted-foreground">DEX Swap Fee</div>
               </div>
             </GlassCard>
             <GlassCard hover={false}>
               <div className="p-4 text-center">
-                <div className="text-2xl font-bold text-blue-400 mb-1">2%</div>
-                <div className="text-xs text-muted-foreground">→ Liquidity Pool</div>
+                <div className="text-2xl font-bold text-secondary mb-1">2.5%</div>
+                <div className="text-xs text-muted-foreground">NFT Market Fee</div>
               </div>
             </GlassCard>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+            <GlassCard className="p-5">
+              <h4 className="font-bold mb-3 flex items-center gap-2">
+                <ArrowRightLeft className="w-4 h-4 text-cyan-400" /> Transaction Fees
+              </h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Minimal gas fees (0.0001 DWC) on all on-chain transactions fund network operations and validator rewards.
+              </p>
+            </GlassCard>
             <GlassCard className="p-5">
               <h4 className="font-bold mb-3 flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-green-400" /> No Coin Burns
               </h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Unlike deflationary tokens, DWC maintains a fixed 100M supply. Protocol fees are redistributed to stakers and the ecosystem treasury, ensuring sustainable growth without artificial scarcity.
+                Fixed 100M supply. Protocol fees fund staking rewards and treasury, ensuring sustainable growth without artificial scarcity.
               </p>
             </GlassCard>
             <GlassCard className="p-5">
@@ -424,10 +432,32 @@ export default function Token() {
                 <ShieldCheck className="w-4 h-4 text-blue-400" /> Vesting & Lockups
               </h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Team tokens are locked with a 6-month cliff and 12-month linear vesting. This ensures long-term alignment and prevents early dumping by insiders.
+                Team tokens locked with 6-month cliff and 12-month vesting. Long-term alignment prevents early dumping.
               </p>
             </GlassCard>
           </div>
+
+          <GlassCard className="p-5 mt-6">
+            <h4 className="font-bold mb-4 text-center">Revenue Streams</h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+              <div>
+                <div className="text-lg font-bold text-cyan-400">DEX Swaps</div>
+                <div className="text-xs text-muted-foreground">0.3% per trade</div>
+              </div>
+              <div>
+                <div className="text-lg font-bold text-purple-400">NFT Sales</div>
+                <div className="text-xs text-muted-foreground">2.5% seller fee</div>
+              </div>
+              <div>
+                <div className="text-lg font-bold text-pink-400">Launchpad</div>
+                <div className="text-xs text-muted-foreground">Listing fees</div>
+              </div>
+              <div>
+                <div className="text-lg font-bold text-amber-400">Bridge</div>
+                <div className="text-xs text-muted-foreground">0.1% crossing fee</div>
+              </div>
+            </div>
+          </GlassCard>
         </div>
       </section>
 
