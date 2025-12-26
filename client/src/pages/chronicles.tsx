@@ -532,18 +532,13 @@ export default function Chronicles() {
 
   useEffect(() => {
     const handleVideoEnd = () => {
-      const currentVideo = currentVideoRef.current;
-      if (currentVideo && !videoMuted) {
-        fadeAudio(currentVideo, false, 600);
-      }
-      
       setIsVideoTransitioning(true);
       
       setTimeout(() => {
         setCurrentVideoIndex(nextVideoIndex);
         setNextVideoIndex((nextVideoIndex + 1) % HERO_VIDEOS.length);
         setIsVideoTransitioning(false);
-      }, 800);
+      }, 400);
     };
 
     const video = currentVideoRef.current;
@@ -562,11 +557,8 @@ export default function Chronicles() {
   useEffect(() => {
     if (currentVideoRef.current && !isVideoTransitioning) {
       const video = currentVideoRef.current;
-      video.volume = 0;
+      video.volume = videoMuted ? 0 : 1;
       video.play().catch(() => {});
-      if (!videoMuted) {
-        setTimeout(() => fadeAudio(video, true, 800), 200);
-      }
     }
   }, [currentVideoIndex, isVideoTransitioning, videoMuted]);
   
