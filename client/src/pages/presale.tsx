@@ -534,6 +534,64 @@ export default function Presale() {
           </div>
         </div>
 
+        <div id="how-it-works" className="mb-16">
+          <h2 className="text-3xl font-bold text-center mb-4">
+            <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+              How It Works
+            </span>
+          </h2>
+          <p className="text-gray-400 text-center mb-8 max-w-2xl mx-auto">
+            Your tokens are allocated immediately upon purchase and will be distributed to your DarkWave wallet at mainnet launch.
+          </p>
+          
+          <div className="grid md:grid-cols-4 gap-4 mb-8">
+            <HolographicCard className="p-6 text-center relative" glow="cyan">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm">1</div>
+              <Wallet className="w-8 h-8 text-cyan-400 mx-auto mb-4 mt-2" />
+              <h3 className="text-lg font-bold text-white mb-2">Purchase Tokens</h3>
+              <p className="text-gray-400 text-sm">Choose your tier and complete payment via Stripe</p>
+            </HolographicCard>
+            
+            <HolographicCard className="p-6 text-center relative" glow="purple">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">2</div>
+              <CheckCircle className="w-8 h-8 text-purple-400 mx-auto mb-4 mt-2" />
+              <h3 className="text-lg font-bold text-white mb-2">Tokens Allocated</h3>
+              <p className="text-gray-400 text-sm">Your DWC allocation is recorded to your email</p>
+            </HolographicCard>
+            
+            <HolographicCard className="p-6 text-center relative" glow="pink">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm">3</div>
+              <Users className="w-8 h-8 text-pink-400 mx-auto mb-4 mt-2" />
+              <h3 className="text-lg font-bold text-white mb-2">Create Wallet</h3>
+              <p className="text-gray-400 text-sm">Sign up and create your DarkWave wallet before launch</p>
+            </HolographicCard>
+            
+            <HolographicCard className="p-6 text-center relative" glow="amber">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm">4</div>
+              <Coins className="w-8 h-8 text-amber-400 mx-auto mb-4 mt-2" />
+              <h3 className="text-lg font-bold text-white mb-2">Receive Tokens</h3>
+              <p className="text-gray-400 text-sm">Tokens distributed to your wallet at mainnet launch</p>
+            </HolographicCard>
+          </div>
+          
+          <div className="max-w-3xl mx-auto p-6 rounded-2xl bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 border border-white/10">
+            <div className="flex items-start gap-4">
+              <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                <Shield className="w-5 h-5 text-blue-400" />
+              </div>
+              <div>
+                <h4 className="text-white font-semibold mb-2">Important: Token Distribution Timeline</h4>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  Your presale purchase is <span className="text-cyan-400 font-medium">recorded immediately</span> and linked to your email. 
+                  Before our mainnet launch (October 2026), you'll receive instructions to create your DarkWave wallet. 
+                  At launch, your tokens will be <span className="text-green-400 font-medium">automatically distributed</span> to your wallet 
+                  according to the vesting schedule (20% at TGE, 80% vested over 12 months).
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="grid md:grid-cols-3 gap-4 mb-16">
           <HolographicCard className="p-6 text-center">
             <Lock className="w-8 h-8 text-cyan-400 mx-auto mb-4" />

@@ -212,10 +212,36 @@ export default function PresaleSuccess() {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20 mb-8">
-              <p className="text-cyan-300 text-sm">
-                Your tokens will be available at mainnet launch (October 2026). 
-                You'll receive updates at your registered email.
+            <div className="p-6 rounded-2xl bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 border border-white/10 mb-8">
+              <h3 className="text-white font-semibold mb-4 text-lg">What Happens Next?</h3>
+              <div className="space-y-3 text-left">
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <CheckCircle className="w-3.5 h-3.5 text-green-400" />
+                  </div>
+                  <p className="text-gray-300 text-sm">
+                    <span className="text-green-400 font-medium">Done:</span> Your token allocation is recorded and linked to your email
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-cyan-400 font-bold text-xs">2</span>
+                  </div>
+                  <p className="text-gray-300 text-sm">
+                    <span className="text-cyan-400 font-medium">Before Launch:</span> Create your DarkWave wallet using the same email
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-purple-400 font-bold text-xs">3</span>
+                  </div>
+                  <p className="text-gray-300 text-sm">
+                    <span className="text-purple-400 font-medium">At Launch (Oct 2026):</span> Tokens automatically distributed to your wallet
+                  </p>
+                </div>
+              </div>
+              <p className="text-gray-500 text-xs mt-4 pt-4 border-t border-white/5">
+                Vesting: 20% available immediately at TGE, remaining 80% released over 12 months
               </p>
             </div>
 
