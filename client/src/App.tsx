@@ -57,6 +57,7 @@ import AdminAnalytics from "@/pages/admin-analytics";
 import AdminPartnerRequests from "@/pages/admin-partner-requests";
 import AdminMarketing from "@/pages/admin-marketing";
 import AdminDashboard from "@/pages/admin-dashboard";
+import ChroniclesAIDemo from "@/pages/chronicles-ai-demo";
 import Terms from "@/pages/terms";
 import Privacy from "@/pages/privacy";
 import ErrorPage from "@/pages/error";
@@ -202,6 +203,7 @@ function ChronoRouter() {
       <Switch>
         <Route path="/" component={ChronoHome} />
         <Route path="/chronicles" component={Chronicles} />
+        <Route path="/chronicles/ai" component={ChroniclesAIDemo} />
         <Route path="/eras" component={ChronoEras} />
         <Route path="/gameplay" component={ChronoGameplay} />
         <Route path="/economy" component={ChronoEconomy} />
@@ -330,6 +332,7 @@ function DWSCRouter() {
         <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
         <Route path="/roadmap-ecosystem" component={RoadmapEcosystem} />
         <Route path="/chronicles" component={Chronicles} />
+        <Route path="/chronicles/ai" component={ChroniclesAIDemo} />
         <Route path="/sweepstakes-rules" component={SweepstakesRules} />
         <Route path="/coin-store" component={CoinStore} />
         <Route path="/daily-bonus" component={DailyBonus} />

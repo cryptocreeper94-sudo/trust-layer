@@ -34,10 +34,115 @@ The design philosophy mandates a "Premium UI Protocol" for all new components an
 - **Cross-Chain Bridge**: Lock & mint mechanism (DWC ↔ wDWC) for Ethereum Sepolia and Solana Devnet, utilizing UUPS Proxy for Ethereum and BPF Loader for Solana.
 - **DarkWave Chronicles (Flagship Game)**: An epic adventure where players embody their "parallel self" across 70+ historical eras. Key design principles include player-as-prime-hero, living worlds, impactful choices, and progression without grind. Messaging focuses on "missions," "campaigns," and "legend-building." The game incorporates a "Many Lenses Design" where the world adapts to player beliefs and an AI engine (planned) with a 5-Axis Emotion System and Belief System Layer.
 
+## Chronicles Personality AI System
+
+The Personality AI is a proprietary system that powers the "Parallel Self" experience in DarkWave Chronicles. It learns from player choices, beliefs, and emotional responses to become a personalized representation of the player in the fantasy world.
+
+### Core Philosophy
+- **Player IS the Hero**: Not just controlling a character - the AI becomes them
+- **Many Lenses Design**: Reality itself shifts based on player beliefs
+- **Every Choice Matters**: Decisions shape how the world perceives and reacts
+- **Awakening Tool**: Deeper purpose as a questioning/awakening tool disguised as entertainment
+
+### 5-Axis Emotion System
+Each axis ranges from -100 (negative) to +100 (positive):
+1. **Courage ↔ Fear**: How the player faces danger and uncertainty
+2. **Hope ↔ Despair**: Outlook on the future and possibilities
+3. **Trust ↔ Suspicion**: Relationship with NPCs and institutions
+4. **Passion ↔ Apathy**: Emotional investment in causes and people
+5. **Wisdom ↔ Recklessness**: Decision-making approach and risk tolerance
+
+### Belief System Layer
+- **Worldview**: optimist / realist / pessimist
+- **Moral Alignment**: D&D-style 9-point system (lawful/neutral/chaotic × good/neutral/evil)
+- **Core Values**: justice, freedom, power, knowledge, love, loyalty, honor, survival, peace, adventure, truth, family, wealth, glory, vengeance
+- **Faction Affinity**: Game-world political leanings
+
+### Archetypes
+The AI predicts player archetype based on personality patterns:
+- **The Guardian**: Protector of the innocent, defender of justice
+- **The Seeker**: Pursuer of truth, knowledge above all
+- **The Rebel**: Challenger of authority, freedom fighter
+- **The Sage**: Wise counselor, patient strategist
+- **The Champion**: Bold warrior, inspirer of hope
+- **The Shadow**: Master of secrets, pragmatic survivor
+- **The Healer**: Compassionate soul, restorer of broken things
+- **The Wanderer**: Free spirit, seeker of experience
+
+### Key Files
+- `shared/schema.ts`: Database schemas (playerPersonalities, playerChoices, chroniclesConversations)
+- `server/chronicles-ai.ts`: Main AI engine with scenario generation, choice processing, and chat
+- `server/routes.ts`: API endpoints under `/api/chronicles/*`
+- `client/src/pages/chronicles-ai-demo.tsx`: Interactive demo page
+
+### API Endpoints
+- `GET /api/chronicles/personality`: Get/create player personality profile
+- `POST /api/chronicles/personality`: Update personality settings
+- `POST /api/chronicles/scenario`: Generate scenario based on personality
+- `POST /api/chronicles/choice`: Process player choice and evolve personality
+- `POST /api/chronicles/chat`: Chat with parallel self
+- `GET /api/chronicles/summary`: Generate AI personality summary
+- `GET /api/chronicles/archetypes`: Get all archetypes and values
+
+### Demo Page
+Access at `/chronicles/ai` - requires authentication to create personalized profile.
+
+---
+
+## Marketing Automation System
+
+Proprietary auto-deployment system for social media marketing with 264 posts seeded across 4 platforms.
+
+### Platforms
+- Twitter/X (280 char limit)
+- Facebook (~500 char optimal)
+- Discord (2,000 char limit, webhook-based)
+- Telegram (4,096 char limit, bot-based)
+
+### Features
+- 3-hour interval scheduling (8 posts/day)
+- Category rotation (vision, tech, community, hype, news)
+- Deploy logs and analytics
+- Resellable as separate product component
+
+### Admin Access
+- **Owner Control Center**: `/admin`
+- **Marketing Dashboard**: `/admin/marketing`
+- **Footer Admin Link**: Available on every DWSC page
+
+### Required Environment Variables
+- `DISCORD_WEBHOOK_URL`
+- `TELEGRAM_BOT_TOKEN`
+- `TELEGRAM_CHANNEL_ID`
+- `TWITTER_API_KEY`, `TWITTER_API_SECRET`, `TWITTER_ACCESS_TOKEN`, `TWITTER_ACCESS_TOKEN_SECRET`
+- `FACEBOOK_PAGE_ID`, `FACEBOOK_ACCESS_TOKEN`
+
+---
+
+## Payment Infrastructure
+
+### Crowdfund Donations
+- Presets: $25, $50, $100, $500, $1000
+- Dynamic Stripe Checkout (no dashboard setup needed)
+- Auto-reward: Early Adopter status on completion
+
+### Token Presale
+- **Genesis Tier**: $1,000 (25% bonus, 156,250 DWC)
+- **Founder Tier**: $500 (15% bonus, 71,875 DWC)
+- **Pioneer Tier**: $250 (10% bonus, 34,375 DWC)
+- **Early Bird Tier**: $100 (5% bonus, 13,125 DWC)
+
+### Stripe Webhook
+- Endpoint: `/api/stripe/webhook`
+- Requires: `STRIPE_WEBHOOK_SECRET` environment variable
+- Security: Signature verification, server-side token calculations
+
+---
+
 ## External Dependencies
 
 - **Database**: PostgreSQL
 - **Authentication**: Replit Auth, WebAuthn
 - **Payments**: Stripe, Coinbase Commerce
 - **Hub API**: https://orbitstaffing.io (HMAC-SHA256 authenticated)
-- **AI**: OpenAI (for TTS and AI code assistant)
+- **AI**: OpenAI (via Replit AI Integrations - no API key required)

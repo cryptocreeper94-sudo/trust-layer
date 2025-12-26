@@ -2487,3 +2487,130 @@ export const marketingScheduleConfig = pgTable("marketing_schedule_config", {
 });
 
 export type MarketingScheduleConfig = typeof marketingScheduleConfig.$inferSelect;
+
+// =====================================================
+// CHRONICLES PERSONALITY AI SYSTEM
+// =====================================================
+// The Personality AI adapts to become the player's "parallel self"
+// in the DarkWave Chronicles fantasy world. It learns from:
+// - Player choices and actions
+// - Stated beliefs and values
+// - Emotional responses to scenarios
+// - Play style and decision patterns
+//
+// The AI uses a 5-Axis Emotion System:
+// 1. Courage ↔ Fear
+// 2. Hope ↔ Despair  
+// 3. Trust ↔ Suspicion
+// 4. Passion ↔ Apathy
+// 5. Wisdom ↔ Recklessness
+//
+// The Belief System Layer tracks:
+// - Worldview (optimist/realist/pessimist)
+// - Moral compass (lawful/neutral/chaotic × good/neutral/evil)
+// - Core values (justice, freedom, power, knowledge, love, etc.)
+// - Political alignment (within game world factions)
+// =====================================================
+
+export const playerPersonalities = pgTable("player_personalities", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  
+  // Identity
+  playerName: text("player_name").notNull().default("Hero"),
+  parallelSelfName: text("parallel_self_name"), // Name in Chronicles world
+  
+  // 5-Axis Emotion System (-100 to +100)
+  courageFear: integer("courage_fear").notNull().default(0), // Positive = courage, Negative = fear
+  hopeDespair: integer("hope_despair").notNull().default(0), // Positive = hope, Negative = despair
+  trustSuspicion: integer("trust_suspicion").notNull().default(0), // Positive = trust, Negative = suspicion
+  passionApathy: integer("passion_apathy").notNull().default(0), // Positive = passion, Negative = apathy
+  wisdomRecklessness: integer("wisdom_recklessness").notNull().default(0), // Positive = wisdom, Negative = recklessness
+  
+  // Belief System Layer
+  worldview: text("worldview").notNull().default("realist"), // "optimist", "realist", "pessimist"
+  moralAlignment: text("moral_alignment").notNull().default("neutral_good"), // D&D style alignment
+  coreValues: text("core_values").array().notNull().default(sql`'{}'::text[]`), // ["justice", "freedom", etc.]
+  factionAffinity: text("faction_affinity"), // Which Chronicles faction they lean toward
+  
+  // Play Style Traits
+  decisionStyle: text("decision_style").notNull().default("balanced"), // "impulsive", "analytical", "balanced", "intuitive"
+  conflictApproach: text("conflict_approach").notNull().default("diplomatic"), // "aggressive", "diplomatic", "avoidant", "strategic"
+  explorationStyle: text("exploration_style").notNull().default("thorough"), // "speedrun", "thorough", "completionist", "story_focused"
+  
+  // Personality Insights (AI-generated summaries)
+  personalitySummary: text("personality_summary"),
+  strengthsWeaknesses: text("strengths_weaknesses"),
+  predictedArchetype: text("predicted_archetype"), // "Guardian", "Seeker", "Rebel", etc.
+  
+  // Learning Data
+  totalChoicesMade: integer("total_choices_made").notNull().default(0),
+  lastInteractionAt: timestamp("last_interaction_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertPlayerPersonalitySchema = createInsertSchema(playerPersonalities).omit({
+  id: true,
+  totalChoicesMade: true,
+  lastInteractionAt: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type PlayerPersonality = typeof playerPersonalities.$inferSelect;
+export type InsertPlayerPersonality = z.infer<typeof insertPlayerPersonalitySchema>;
+
+// Player Choice History - Tracks decisions for personality learning
+export const playerChoices = pgTable("player_choices", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  personalityId: varchar("personality_id").notNull(),
+  
+  // Context
+  scenarioType: text("scenario_type").notNull(), // "moral_dilemma", "combat", "social", "exploration"
+  scenarioDescription: text("scenario_description").notNull(),
+  era: text("era"), // Which of the 70+ historical eras
+  
+  // Choice Made
+  optionsPresented: text("options_presented").array().notNull(),
+  chosenOption: text("chosen_option").notNull(),
+  choiceReasoning: text("choice_reasoning"), // Optional player explanation
+  
+  // Impact Analysis (AI-generated)
+  emotionalImpact: text("emotional_impact"), // JSON: { courageFear: +5, hopeDespair: -3, ... }
+  alignmentImpact: text("alignment_impact"), // How this affects moral alignment
+  
+  chosenAt: timestamp("chosen_at").defaultNow().notNull(),
+});
+
+export const insertPlayerChoiceSchema = createInsertSchema(playerChoices).omit({
+  id: true,
+  emotionalImpact: true,
+  alignmentImpact: true,
+  chosenAt: true,
+});
+
+export type PlayerChoice = typeof playerChoices.$inferSelect;
+export type InsertPlayerChoice = z.infer<typeof insertPlayerChoiceSchema>;
+
+// AI Conversation Memory - For context continuity
+export const chroniclesConversations = pgTable("chronicles_conversations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  personalityId: varchar("personality_id").notNull(),
+  
+  // Conversation context
+  era: text("era"),
+  location: text("location"),
+  npcName: text("npc_name"),
+  
+  // Messages
+  messages: text("messages").notNull(), // JSON array of {role, content}
+  
+  // Summary for long-term memory
+  conversationSummary: text("conversation_summary"),
+  keyInsights: text("key_insights").array(),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ChroniclesConversation = typeof chroniclesConversations.$inferSelect;

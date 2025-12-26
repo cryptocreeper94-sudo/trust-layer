@@ -9,7 +9,7 @@ import { db } from "./db";
 import { sql, eq } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -6899,6 +6899,190 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error: any) {
       res.status(500).json({ error: error.message || "Failed to bulk create posts" });
     }
+  });
+
+  // =====================================================
+  // CHRONICLES PERSONALITY AI - API Routes
+  // =====================================================
+  
+  const { chroniclesAI } = await import("./chronicles-ai");
+
+  app.get("/api/chronicles/personality", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const personality = await chroniclesAI.getOrCreatePersonality(userId);
+      const archetype = chroniclesAI.predictArchetype(personality);
+      const emotionalState = chroniclesAI.getEmotionalState(personality);
+      const description = chroniclesAI.describeEmotionalState(emotionalState);
+      
+      res.json({
+        personality,
+        archetype: chroniclesAI.ARCHETYPES[archetype],
+        emotionalState,
+        emotionalDescription: description,
+      });
+    } catch (error: any) {
+      console.error("Get personality error:", error);
+      res.status(500).json({ error: error.message || "Failed to get personality" });
+    }
+  });
+
+  const UpdatePersonalitySchema = z.object({
+    playerName: z.string().max(100).optional(),
+    parallelSelfName: z.string().max(100).optional(),
+    worldview: z.enum(["optimist", "realist", "pessimist"]).optional(),
+    moralAlignment: z.string().optional(),
+    coreValues: z.array(z.string()).max(10).optional(),
+    decisionStyle: z.string().optional(),
+    conflictApproach: z.string().optional(),
+  });
+
+  app.post("/api/chronicles/personality", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const parseResult = UpdatePersonalitySchema.safeParse(req.body);
+      if (!parseResult.success) {
+        return res.status(400).json({ error: "Invalid request body", details: parseResult.error.issues });
+      }
+      
+      const { playerName, parallelSelfName, worldview, moralAlignment, coreValues, decisionStyle, conflictApproach } = parseResult.data;
+      
+      const personality = await chroniclesAI.getOrCreatePersonality(userId, playerName);
+      
+      if (playerName || parallelSelfName || worldview || moralAlignment || coreValues || decisionStyle || conflictApproach) {
+        const updates: any = { updatedAt: new Date() };
+        if (playerName) updates.playerName = playerName;
+        if (parallelSelfName) updates.parallelSelfName = parallelSelfName;
+        if (worldview) updates.worldview = worldview;
+        if (moralAlignment) updates.moralAlignment = moralAlignment;
+        if (decisionStyle) updates.decisionStyle = decisionStyle;
+        if (conflictApproach) updates.conflictApproach = conflictApproach;
+        if (coreValues) updates.coreValues = coreValues;
+        
+        await db.update(playerPersonalities)
+          .set(updates)
+          .where(eq(playerPersonalities.userId, userId));
+      }
+      
+      const updated = await chroniclesAI.getOrCreatePersonality(userId);
+      res.json({ personality: updated });
+    } catch (error: any) {
+      console.error("Update personality error:", error);
+      res.status(500).json({ error: error.message || "Failed to update personality" });
+    }
+  });
+
+  app.post("/api/chronicles/scenario", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const { era, location, situation, npcPresent } = req.body;
+      
+      const personality = await chroniclesAI.getOrCreatePersonality(userId);
+      const scenario = await chroniclesAI.generateScenario(personality, {
+        era: era || "Medieval Fantasy",
+        location: location || "Crossroads",
+        situation: situation || "A moment of decision",
+        npcPresent,
+      });
+      
+      res.json({ scenario });
+    } catch (error: any) {
+      console.error("Generate scenario error:", error);
+      res.status(500).json({ error: error.message || "Failed to generate scenario" });
+    }
+  });
+
+  app.post("/api/chronicles/choice", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const { scenario, chosenOption, choiceReasoning, era } = req.body;
+      
+      if (!scenario || !chosenOption) {
+        return res.status(400).json({ error: "Scenario and chosen option required" });
+      }
+      
+      const personality = await chroniclesAI.getOrCreatePersonality(userId);
+      const result = await chroniclesAI.processChoice(
+        personality.id,
+        scenario,
+        chosenOption,
+        choiceReasoning,
+        era
+      );
+      
+      res.json(result);
+    } catch (error: any) {
+      console.error("Process choice error:", error);
+      res.status(500).json({ error: error.message || "Failed to process choice" });
+    }
+  });
+
+  app.post("/api/chronicles/chat", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const { message, era, situation } = req.body;
+      
+      if (!message) {
+        return res.status(400).json({ error: "Message required" });
+      }
+      
+      const personality = await chroniclesAI.getOrCreatePersonality(userId);
+      const response = await chroniclesAI.generateParallelSelfResponse(
+        personality,
+        message,
+        { era, situation }
+      );
+      
+      res.json(response);
+    } catch (error: any) {
+      console.error("Chat error:", error);
+      res.status(500).json({ error: error.message || "Failed to generate response" });
+    }
+  });
+
+  app.get("/api/chronicles/summary", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const personality = await chroniclesAI.getOrCreatePersonality(userId);
+      const summary = await chroniclesAI.generatePersonalitySummary(personality);
+      
+      res.json({ summary });
+    } catch (error: any) {
+      console.error("Summary error:", error);
+      res.status(500).json({ error: error.message || "Failed to generate summary" });
+    }
+  });
+
+  app.get("/api/chronicles/archetypes", async (req, res) => {
+    res.json({ 
+      archetypes: chroniclesAI.ARCHETYPES,
+      coreValues: chroniclesAI.CORE_VALUES,
+      moralAlignments: chroniclesAI.MORAL_ALIGNMENTS,
+    });
   });
 
   return httpServer;
