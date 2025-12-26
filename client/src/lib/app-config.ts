@@ -1,4 +1,4 @@
-export type AppDomain = "dwsc" | "games" | "studios";
+export type AppDomain = "dwsc" | "games" | "studios" | "chrono";
 
 export function getAppFromHost(): AppDomain {
   const host = window.location.hostname.toLowerCase();
@@ -8,6 +8,9 @@ export function getAppFromHost(): AppDomain {
   }
   if (host.includes("darkwavestudios") || host.includes("studios.")) {
     return "studios";
+  }
+  if (host.includes("yourlegacy") || host.includes("chrono.")) {
+    return "chrono";
   }
   return "dwsc";
 }
@@ -43,6 +46,14 @@ export const APP_CONFIG: Record<AppDomain, {
     description: "Building the future of blockchain",
     logoText: "DarkWave Studios",
     primaryGradient: "from-cyan-500 to-teal-500",
+  },
+  chrono: {
+    name: "DarkWave Chronicles",
+    shortName: "Chronicles",
+    themeColor: "#a855f7",
+    description: "Not a game. A life. Live your legacy.",
+    logoText: "ChronoVerse",
+    primaryGradient: "from-purple-500 to-pink-500",
   },
 };
 

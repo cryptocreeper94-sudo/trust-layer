@@ -103,6 +103,12 @@ import InvestmentSimulator from "@/pages/investment-simulator";
 import RoadmapChronicles from "@/pages/roadmap-chronicles";
 import RoadmapEcosystem from "@/pages/roadmap-ecosystem";
 import Chronicles from "@/pages/chronicles";
+import ChronoHome from "@/pages/chrono-home";
+import ChronoEras from "@/pages/chrono-eras";
+import ChronoGameplay from "@/pages/chrono-gameplay";
+import ChronoEconomy from "@/pages/chrono-economy";
+import ChronoCommunity from "@/pages/chrono-community";
+import ChronoRoadmap from "@/pages/chrono-roadmap";
 import SocialFeed from "@/pages/social-feed";
 import Lottery from "@/pages/lottery";
 import AIAdvisor from "@/pages/ai-advisor";
@@ -172,6 +178,31 @@ function StudiosRouter() {
       <ScrollToTop />
       <Switch>
         <Route path="/" component={StudiosHome} />
+        <Route path="/terms" component={Terms} />
+        <Route path="/privacy" component={Privacy} />
+        <Route component={NotFound} />
+      </Switch>
+    </>
+  );
+}
+
+function ChronoRouter() {
+  return (
+    <>
+      <ScrollToTop />
+      <Switch>
+        <Route path="/" component={ChronoHome} />
+        <Route path="/chronicles" component={Chronicles} />
+        <Route path="/eras" component={ChronoEras} />
+        <Route path="/gameplay" component={ChronoGameplay} />
+        <Route path="/economy" component={ChronoEconomy} />
+        <Route path="/community" component={ChronoCommunity} />
+        <Route path="/roadmap" component={ChronoRoadmap} />
+        <Route path="/genesis" component={Genesis} />
+        <Route path="/era-codex" component={EraCodex} />
+        <Route path="/crowdfund" component={Crowdfund} />
+        <Route path="/presale" component={Presale} />
+        <Route path="/presale/success" component={PresaleSuccess} />
         <Route path="/terms" component={Terms} />
         <Route path="/privacy" component={Privacy} />
         <Route component={NotFound} />
@@ -297,6 +328,9 @@ function Router() {
   }
   if (appType === "studios") {
     return <StudiosRouter />;
+  }
+  if (appType === "chrono") {
+    return <ChronoRouter />;
   }
   return <DWSCRouter />;
 }
