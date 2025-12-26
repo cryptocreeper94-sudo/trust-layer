@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, type BlockchainDomain, type InsertBlockchainDomain, type DomainRecord, type InsertDomainRecord, type DomainTransfer, type InsertDomainTransfer, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory, blockchainDomains, domainRecords, domainTransfers } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count } from "drizzle-orm";
 import crypto from "crypto";
@@ -186,6 +186,21 @@ export interface IStorage {
   updateCrowdfundContribution(id: string, data: Partial<InsertCrowdfundContribution>): Promise<CrowdfundContribution | undefined>;
   getRecentContributions(limit?: number): Promise<CrowdfundContribution[]>;
   getCrowdfundStats(): Promise<{ totalRaised: number; goalAmount: number; contributorCount: number }>;
+  
+  // Blockchain Domain Service
+  searchDomain(name: string): Promise<{ available: boolean; domain?: BlockchainDomain }>;
+  getDomain(name: string): Promise<BlockchainDomain | undefined>;
+  getDomainById(id: string): Promise<BlockchainDomain | undefined>;
+  getDomainsByOwner(ownerAddress: string): Promise<BlockchainDomain[]>;
+  registerDomain(data: InsertBlockchainDomain): Promise<BlockchainDomain>;
+  updateDomain(id: string, data: Partial<InsertBlockchainDomain>): Promise<BlockchainDomain | undefined>;
+  transferDomain(domainId: string, fromAddress: string, toAddress: string, txHash?: string): Promise<boolean>;
+  getDomainRecords(domainId: string): Promise<DomainRecord[]>;
+  setDomainRecord(data: InsertDomainRecord): Promise<DomainRecord>;
+  deleteDomainRecord(id: string): Promise<boolean>;
+  getDomainTransferHistory(domainId: string): Promise<DomainTransfer[]>;
+  getRecentDomains(limit?: number): Promise<BlockchainDomain[]>;
+  getDomainStats(): Promise<{ totalDomains: number; totalOwners: number; premiumCount: number }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1436,6 +1451,120 @@ export class DatabaseStorage implements IStorage {
       totalRaised: campaign?.raisedAmountCents || 0,
       goalAmount: campaign?.goalAmountCents || 0,
       contributorCount: contributorResult?.count || 0,
+    };
+  }
+
+  // Blockchain Domain Service methods
+  async searchDomain(name: string): Promise<{ available: boolean; domain?: BlockchainDomain }> {
+    const normalizedName = name.toLowerCase().replace(/\.dwsc$/, '').trim();
+    const domain = await this.getDomain(normalizedName);
+    return {
+      available: !domain || new Date(domain.expiresAt) < new Date(),
+      domain: domain || undefined
+    };
+  }
+
+  async getDomain(name: string): Promise<BlockchainDomain | undefined> {
+    const normalizedName = name.toLowerCase().replace(/\.dwsc$/, '').trim();
+    const [domain] = await db.select().from(blockchainDomains)
+      .where(eq(blockchainDomains.name, normalizedName));
+    return domain;
+  }
+
+  async getDomainById(id: string): Promise<BlockchainDomain | undefined> {
+    const [domain] = await db.select().from(blockchainDomains)
+      .where(eq(blockchainDomains.id, id));
+    return domain;
+  }
+
+  async getDomainsByOwner(ownerAddress: string): Promise<BlockchainDomain[]> {
+    return db.select().from(blockchainDomains)
+      .where(eq(blockchainDomains.ownerAddress, ownerAddress))
+      .orderBy(desc(blockchainDomains.registeredAt));
+  }
+
+  async registerDomain(data: InsertBlockchainDomain): Promise<BlockchainDomain> {
+    const normalizedName = data.name.toLowerCase().replace(/\.dwsc$/, '').trim();
+    const [domain] = await db.insert(blockchainDomains)
+      .values({ ...data, name: normalizedName })
+      .returning();
+    return domain;
+  }
+
+  async updateDomain(id: string, data: Partial<InsertBlockchainDomain>): Promise<BlockchainDomain | undefined> {
+    const [domain] = await db.update(blockchainDomains)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(blockchainDomains.id, id))
+      .returning();
+    return domain;
+  }
+
+  async transferDomain(domainId: string, fromAddress: string, toAddress: string, txHash?: string): Promise<boolean> {
+    const domain = await this.getDomainById(domainId);
+    if (!domain || domain.ownerAddress !== fromAddress) return false;
+    
+    await db.insert(domainTransfers).values({
+      domainId,
+      fromAddress,
+      toAddress,
+      txHash
+    });
+    
+    await db.update(blockchainDomains)
+      .set({ ownerAddress: toAddress, updatedAt: new Date() })
+      .where(eq(blockchainDomains.id, domainId));
+    
+    return true;
+  }
+
+  async getDomainRecords(domainId: string): Promise<DomainRecord[]> {
+    return db.select().from(domainRecords)
+      .where(eq(domainRecords.domainId, domainId));
+  }
+
+  async setDomainRecord(data: InsertDomainRecord): Promise<DomainRecord> {
+    const existing = await db.select().from(domainRecords)
+      .where(sql`${domainRecords.domainId} = ${data.domainId} AND ${domainRecords.key} = ${data.key}`);
+    
+    if (existing.length > 0) {
+      const [record] = await db.update(domainRecords)
+        .set({ value: data.value, recordType: data.recordType, updatedAt: new Date() })
+        .where(eq(domainRecords.id, existing[0].id))
+        .returning();
+      return record;
+    }
+    
+    const [record] = await db.insert(domainRecords).values(data).returning();
+    return record;
+  }
+
+  async deleteDomainRecord(id: string): Promise<boolean> {
+    const result = await db.delete(domainRecords).where(eq(domainRecords.id, id));
+    return true;
+  }
+
+  async getDomainTransferHistory(domainId: string): Promise<DomainTransfer[]> {
+    return db.select().from(domainTransfers)
+      .where(eq(domainTransfers.domainId, domainId))
+      .orderBy(desc(domainTransfers.transferredAt));
+  }
+
+  async getRecentDomains(limit: number = 20): Promise<BlockchainDomain[]> {
+    return db.select().from(blockchainDomains)
+      .orderBy(desc(blockchainDomains.registeredAt))
+      .limit(limit);
+  }
+
+  async getDomainStats(): Promise<{ totalDomains: number; totalOwners: number; premiumCount: number }> {
+    const [totalResult] = await db.select({ count: count() }).from(blockchainDomains);
+    const [premiumResult] = await db.select({ count: count() }).from(blockchainDomains)
+      .where(eq(blockchainDomains.isPremium, true));
+    const ownersResult = await db.selectDistinct({ owner: blockchainDomains.ownerAddress }).from(blockchainDomains);
+    
+    return {
+      totalDomains: totalResult?.count || 0,
+      totalOwners: ownersResult.length,
+      premiumCount: premiumResult?.count || 0,
     };
   }
 }

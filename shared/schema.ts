@@ -2250,3 +2250,82 @@ export const insertPresaleHolderSchema = createInsertSchema(presaleHolders).omit
 
 export type PresaleHolder = typeof presaleHolders.$inferSelect;
 export type InsertPresaleHolder = z.infer<typeof insertPresaleHolderSchema>;
+
+// Blockchain Domain Service tables
+export const blockchainDomains = pgTable("blockchain_domains", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull().unique(), // e.g., "alice" (without .dwsc)
+  tld: text("tld").notNull().default("dwsc"), // top-level domain
+  ownerAddress: text("owner_address").notNull(), // wallet address
+  ownerUserId: text("owner_user_id"), // optional user ID
+  registrationTxHash: text("registration_tx_hash"),
+  registeredAt: timestamp("registered_at").defaultNow().notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  isPremium: boolean("is_premium").notNull().default(false),
+  isProtected: boolean("is_protected").notNull().default(false), // reserved names
+  primaryWallet: text("primary_wallet"), // default wallet resolution
+  avatarUrl: text("avatar_url"),
+  description: text("description"),
+  website: text("website"),
+  email: text("email"),
+  twitter: text("twitter"),
+  discord: text("discord"),
+  telegram: text("telegram"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertBlockchainDomainSchema = createInsertSchema(blockchainDomains).omit({
+  id: true,
+  registeredAt: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type BlockchainDomain = typeof blockchainDomains.$inferSelect;
+export type InsertBlockchainDomain = z.infer<typeof insertBlockchainDomainSchema>;
+
+export const domainRecords = pgTable("domain_records", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  domainId: varchar("domain_id").notNull().references(() => blockchainDomains.id, { onDelete: "cascade" }),
+  recordType: text("record_type").notNull(), // WALLET, TEXT, URL, CONTENT_HASH
+  key: text("key").notNull(), // e.g., "eth", "sol", "btc", "avatar", "url"
+  value: text("value").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertDomainRecordSchema = createInsertSchema(domainRecords).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type DomainRecord = typeof domainRecords.$inferSelect;
+export type InsertDomainRecord = z.infer<typeof insertDomainRecordSchema>;
+
+export const domainTransfers = pgTable("domain_transfers", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  domainId: varchar("domain_id").notNull().references(() => blockchainDomains.id, { onDelete: "cascade" }),
+  fromAddress: text("from_address").notNull(),
+  toAddress: text("to_address").notNull(),
+  txHash: text("tx_hash"),
+  transferredAt: timestamp("transferred_at").defaultNow().notNull(),
+});
+
+export const insertDomainTransferSchema = createInsertSchema(domainTransfers).omit({
+  id: true,
+  transferredAt: true,
+});
+
+export type DomainTransfer = typeof domainTransfers.$inferSelect;
+export type InsertDomainTransfer = z.infer<typeof insertDomainTransferSchema>;
+
+// Domain pricing tiers
+export const domainPricingSchema = z.object({
+  length: z.number(), // character length
+  priceUsd: z.number(), // annual price in USD
+  priceDwc: z.number(), // annual price in DWC
+});
+
+export type DomainPricing = z.infer<typeof domainPricingSchema>;
