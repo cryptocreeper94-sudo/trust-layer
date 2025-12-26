@@ -112,6 +112,7 @@ import ChronoRoadmap from "@/pages/chrono-roadmap";
 import ChronoDashboard from "@/pages/chrono-dashboard";
 import ChronoTeam from "@/pages/chrono-team";
 import ChronoCreators from "@/pages/chrono-creators";
+import ChronoExecutiveSummary from "@/pages/chrono-executive-summary";
 import SocialFeed from "@/pages/social-feed";
 import Lottery from "@/pages/lottery";
 import AIAdvisor from "@/pages/ai-advisor";
@@ -202,6 +203,7 @@ function ChronoRouter() {
         <Route path="/dashboard" component={ChronoDashboard} />
         <Route path="/team" component={ChronoTeam} />
         <Route path="/creators" component={ChronoCreators} />
+        <Route path="/executive-summary" component={ChronoExecutiveSummary} />
         <Route path="/roadmap" component={ChronoRoadmap} />
         <Route path="/genesis" component={Genesis} />
         <Route path="/era-codex" component={EraCodex} />

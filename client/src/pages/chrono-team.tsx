@@ -403,19 +403,19 @@ export default function ChronoTeam() {
                 Every contribution helps bring the ChronoVerse closer to reality. 
                 Supporters get early access, exclusive rewards, and their name in history.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
                 <Link href="/crowdfund">
                   <Button size="lg" className="rounded-full gap-2 bg-gradient-to-r from-pink-600 to-purple-600" data-testid="support-dev-cta">
                     <Heart className="w-5 h-5" />
                     Fund Development
                   </Button>
                 </Link>
-                <a href="https://dwsc.io/developers" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" variant="outline" className="rounded-full gap-2 border-white/20 hover:bg-white/10" data-testid="dwsc-dev-link">
+                <Link href="/executive-summary">
+                  <Button size="lg" variant="outline" className="rounded-full gap-2 border-amber-500/30 hover:bg-amber-500/10 text-amber-400" data-testid="exec-summary-link">
                     <ExternalLink className="w-5 h-5" />
-                    DWSC Developer Docs
+                    Executive Summary
                   </Button>
-                </a>
+                </Link>
               </div>
             </div>
           </HoloCard>
