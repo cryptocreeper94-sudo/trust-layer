@@ -604,8 +604,8 @@ export default function Chronicles() {
           }}
         />
         
-        {/* Video indicator dots */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+        {/* Video indicator dots - hidden on small mobile, visible on larger screens */}
+        <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 hidden sm:flex items-center gap-1.5 sm:gap-2 bg-black/30 backdrop-blur-sm rounded-full px-3 py-2">
           {HERO_VIDEOS.map((video, idx) => (
             <button
               key={idx}
@@ -621,8 +621,8 @@ export default function Chronicles() {
                 }
               }}
               className={`transition-all ${currentVideoIndex === idx 
-                ? 'w-8 h-2 bg-white rounded-full' 
-                : 'w-2 h-2 bg-white/40 hover:bg-white/60 rounded-full'}`}
+                ? 'w-6 sm:w-8 h-1.5 sm:h-2 bg-white rounded-full' 
+                : 'w-1.5 sm:w-2 h-1.5 sm:h-2 bg-white/40 hover:bg-white/60 rounded-full'}`}
               title={video.label}
               data-testid={`button-video-${idx}`}
             />
@@ -631,10 +631,10 @@ export default function Chronicles() {
         
         <button
           onClick={() => setVideoMuted(!videoMuted)}
-          className="absolute bottom-8 right-8 z-20 w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all"
+          className="absolute top-20 right-4 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all"
           data-testid="button-toggle-sound"
         >
-          {videoMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+          {videoMuted ? <VolumeX className="w-4 h-4 sm:w-5 sm:h-5" /> : <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />}
         </button>
         
         <div className="relative z-10 container mx-auto px-4 text-center">
