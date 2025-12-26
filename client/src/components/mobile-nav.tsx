@@ -199,24 +199,24 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
                 </div>
               );
               
-              const handleClick = (e: React.MouseEvent) => {
-                if (item.external) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  window.open(item.href, '_blank', 'noopener,noreferrer');
-                  onClose();
-                }
-              };
+              if (item.external) {
+                return (
+                  <a 
+                    key={item.href} 
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    style={{ textDecoration: 'none', display: 'block' }}
+                  >
+                    {cardContent}
+                  </a>
+                );
+              }
               
-              return item.external ? (
-                <div 
-                  key={item.href} 
-                  onClick={handleClick}
-                  style={{ textDecoration: 'none', cursor: 'pointer' }}
-                >
-                  {cardContent}
-                </div>
-              ) : (
+              return (
                 <Link key={item.href} href={item.href} style={{ textDecoration: 'none' }}>
                   {cardContent}
                 </Link>
