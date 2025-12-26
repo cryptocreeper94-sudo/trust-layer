@@ -2260,7 +2260,8 @@ export const blockchainDomains = pgTable("blockchain_domains", {
   ownerUserId: text("owner_user_id"), // optional user ID
   registrationTxHash: text("registration_tx_hash"),
   registeredAt: timestamp("registered_at").defaultNow().notNull(),
-  expiresAt: timestamp("expires_at").notNull(),
+  expiresAt: timestamp("expires_at"), // null for lifetime ownership
+  ownershipType: text("ownership_type").notNull().default("term"), // "term" or "lifetime"
   isPremium: boolean("is_premium").notNull().default(false),
   isProtected: boolean("is_protected").notNull().default(false), // reserved names
   primaryWallet: text("primary_wallet"), // default wallet resolution

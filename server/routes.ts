@@ -2578,10 +2578,25 @@ export async function registerRoutes(
     name: z.string().min(1).max(63),
   });
 
+  const DOMAIN_PRICING = {
+    ultraPremium: { yearly: 10000, lifetime: 120000 }, // 3 chars or less
+    premium: { yearly: 5000, lifetime: 60000 }, // 4 chars
+    standardPlus: { yearly: 2000, lifetime: 24000 }, // 5 chars
+    standard: { yearly: 500, lifetime: 6000 }, // 6+ chars (was 500, now 60 for lifetime to be reasonable)
+  };
+
+  function getDomainPricing(nameLength: number) {
+    if (nameLength <= 3) return { ...DOMAIN_PRICING.ultraPremium, isPremium: true, tier: "Ultra Premium" };
+    if (nameLength <= 4) return { ...DOMAIN_PRICING.premium, isPremium: true, tier: "Premium" };
+    if (nameLength <= 5) return { ...DOMAIN_PRICING.standardPlus, isPremium: false, tier: "Standard+" };
+    return { ...DOMAIN_PRICING.standard, isPremium: false, tier: "Standard" };
+  }
+
   const DomainRegisterSchema = z.object({
     name: z.string().min(3).max(63),
     ownerAddress: z.string().min(10),
-    years: z.number().min(1).max(10).default(1),
+    ownershipType: z.enum(["term", "lifetime"]).default("term"),
+    years: z.number().min(1).max(10).default(1), // only used for term ownership
     primaryWallet: z.string().optional(),
     description: z.string().max(500).optional(),
     website: z.string().optional(),
@@ -2607,26 +2622,17 @@ export async function registerRoutes(
       const { name } = req.params;
       const result = await storage.searchDomain(name);
       
-      const nameLength = name.replace(/\.dwsc$/, '').length;
-      let pricePerYear = 500;
-      let isPremium = false;
-      
-      if (nameLength <= 3) {
-        pricePerYear = 10000;
-        isPremium = true;
-      } else if (nameLength <= 4) {
-        pricePerYear = 5000;
-        isPremium = true;
-      } else if (nameLength <= 5) {
-        pricePerYear = 2000;
-      }
+      const normalizedName = name.replace(/\.dwsc$/, '');
+      const pricing = getDomainPricing(normalizedName.length);
       
       res.json({
         ...result,
-        name: name.replace(/\.dwsc$/, ''),
+        name: normalizedName,
         tld: "dwsc",
-        pricePerYearCents: pricePerYear,
-        isPremium,
+        pricePerYearCents: pricing.yearly,
+        priceLifetimeCents: pricing.lifetime,
+        isPremium: pricing.isPremium,
+        tier: pricing.tier,
       });
     } catch (error) {
       console.error("Domain search error:", error);
@@ -2690,23 +2696,20 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Domain is not available" });
       }
       
-      const nameLength = data.name.length;
-      let pricePerYear = 500;
-      let isPremium = false;
+      const pricing = getDomainPricing(data.name.length);
+      const isLifetime = data.ownershipType === "lifetime";
       
-      if (nameLength <= 3) {
-        pricePerYear = 10000;
-        isPremium = true;
-      } else if (nameLength <= 4) {
-        pricePerYear = 5000;
-        isPremium = true;
-      } else if (nameLength <= 5) {
-        pricePerYear = 2000;
+      let totalPrice: number;
+      let expiresAt: Date | null;
+      
+      if (isLifetime) {
+        totalPrice = pricing.lifetime;
+        expiresAt = null; // Lifetime ownership - never expires
+      } else {
+        totalPrice = pricing.yearly * (data.years || 1);
+        expiresAt = new Date();
+        expiresAt.setFullYear(expiresAt.getFullYear() + (data.years || 1));
       }
-      
-      const totalPrice = pricePerYear * (data.years || 1);
-      const expiresAt = new Date();
-      expiresAt.setFullYear(expiresAt.getFullYear() + (data.years || 1));
       
       const txHash = `0x${crypto.randomBytes(32).toString('hex')}`;
       
@@ -2716,7 +2719,8 @@ export async function registerRoutes(
         ownerAddress: data.ownerAddress,
         registrationTxHash: txHash,
         expiresAt,
-        isPremium,
+        ownershipType: data.ownershipType || "term",
+        isPremium: pricing.isPremium,
         isProtected: false,
         primaryWallet: data.primaryWallet || data.ownerAddress,
         description: data.description,
@@ -2732,6 +2736,7 @@ export async function registerRoutes(
         domain,
         transactionHash: txHash,
         pricePaidCents: totalPrice,
+        ownershipType: data.ownershipType || "term",
       });
     } catch (error: any) {
       console.error("Domain registration error:", error);
