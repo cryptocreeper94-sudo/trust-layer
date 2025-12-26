@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { 
-  ArrowLeft, Lock, Eye, EyeOff, Shield, Target, Zap, Globe, Brain, 
-  Layers, Rocket, Users, Calendar, TrendingUp, Code, Database,
+  ArrowLeft, ArrowRight, Lock, Eye, EyeOff, Shield, Target, Zap, Globe, Brain, 
+  Layers, Rocket, Users, User, Calendar, TrendingUp, Code, Database,
   Download, FileText, Mail, CheckCircle, Building, Coins, Sparkles,
   ChevronRight, ExternalLink, Play, Server, Cpu, Network, Activity
 } from "lucide-react";
@@ -64,6 +64,150 @@ const DOWNLOADS = [
   { name: "Visual Style Guide", type: "PDF", size: "8.7 MB", icon: Sparkles },
   { name: "Roadmap Overview", type: "PDF", size: "1.8 MB", icon: Calendar },
 ];
+
+const VISION_SLIDES = [
+  {
+    title: "YOU. The Legend.",
+    subtitle: "Not an avatar. Your parallel self across history.",
+    description: "Step through a portal and wake up as yourself in another era. Same you, different world. This is what separates Chronicles from every other game.",
+    gradient: "from-cyan-500 to-blue-600",
+    icon: User,
+  },
+  {
+    title: "70+ Mission Theaters",
+    subtitle: "From prehistoric times to speculative futures",
+    description: "Each era is a fully realized world with its own campaigns, factions, and rewards. Medieval kingdoms, Renaissance courts, Wild West frontiers, cyberpunk cities.",
+    gradient: "from-purple-500 to-pink-600",
+    icon: Globe,
+  },
+  {
+    title: "The Many Lenses",
+    subtitle: "Reality adapts to what you believe",
+    description: "No two players experience the same Chronicles. The AI learns your patterns organically and shapes narratives that feel personally tailored.",
+    gradient: "from-pink-500 to-orange-600",
+    icon: Brain,
+  },
+  {
+    title: "Community-Driven Worlds",
+    subtitle: "Players and businesses shape the universe",
+    description: "User-submitted ideas become canon. Real businesses sponsor in-game locations. Your contributions are verified on blockchain.",
+    gradient: "from-emerald-500 to-cyan-600",
+    icon: Users,
+  },
+  {
+    title: "Production-Ready Infrastructure",
+    subtitle: "200K+ TPS blockchain powering the ecosystem",
+    description: "DarkWave Smart Chain is live and operational. We need world-class partners for graphics, AI, and narrative systems.",
+    gradient: "from-amber-500 to-red-600",
+    icon: Zap,
+  },
+];
+
+function VisionShowcase() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % VISION_SLIDES.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [isPaused]);
+
+  const slide = VISION_SLIDES[currentSlide];
+  const SlideIcon = slide.icon;
+
+  return (
+    <section className="py-16 px-4 bg-slate-900/50">
+      <div className="container mx-auto max-w-4xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-8"
+        >
+          <h2 className="text-3xl font-display font-bold text-white mb-4 flex items-center justify-center gap-3">
+            <Sparkles className="w-8 h-8 text-cyan-400" />
+            Vision Overview
+          </h2>
+          <p className="text-white/60">The Chronicles experience in five key pillars</p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          className="relative rounded-2xl overflow-hidden border border-white/10"
+          style={{ boxShadow: "0 0 80px rgba(6, 182, 212, 0.1)" }}
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentSlide}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.5 }}
+              className={`relative p-8 md:p-12 bg-gradient-to-br ${slide.gradient} min-h-[300px] md:min-h-[350px]`}
+            >
+              <div className="absolute inset-0 bg-black/40" />
+              <div className="relative z-10 flex flex-col h-full">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <SlideIcon className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="text-2xl md:text-3xl font-display font-bold text-white">{slide.title}</h3>
+                    <p className="text-white/80 text-sm md:text-base">{slide.subtitle}</p>
+                  </div>
+                </div>
+                <p className="text-white/90 text-lg md:text-xl leading-relaxed flex-1">
+                  {slide.description}
+                </p>
+                <div className="flex items-center justify-between mt-8">
+                  <div className="flex gap-2">
+                    {VISION_SLIDES.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setCurrentSlide(i)}
+                        className={`w-3 h-3 rounded-full transition-all ${
+                          i === currentSlide ? "bg-white scale-125" : "bg-white/40 hover:bg-white/60"
+                        }`}
+                        data-testid={`slide-dot-${i}`}
+                      />
+                    ))}
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setCurrentSlide((prev) => (prev - 1 + VISION_SLIDES.length) % VISION_SLIDES.length)}
+                      className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+                      data-testid="slide-prev"
+                    >
+                      <ArrowLeft className="w-5 h-5 text-white" />
+                    </button>
+                    <button
+                      onClick={() => setCurrentSlide((prev) => (prev + 1) % VISION_SLIDES.length)}
+                      className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+                      data-testid="slide-next"
+                    >
+                      <ArrowRight className="w-5 h-5 text-white" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
+
+        <p className="text-center text-white/40 text-sm mt-4">
+          Hover to pause • Click dots or arrows to navigate • Interested in a deeper dive? Request a call below.
+        </p>
+      </div>
+    </section>
+  );
+}
 
 function InteractiveDemo() {
   const [scenario, setScenario] = useState<any>(null);
@@ -885,42 +1029,8 @@ function PartnerContent() {
         {/* Interactive Demo */}
         <InteractiveDemo />
 
-        {/* Video Pitch Section */}
-        <section className="py-16 px-4 bg-slate-900/50">
-          <div className="container mx-auto max-w-4xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-8"
-            >
-              <h2 className="text-3xl font-display font-bold text-white mb-4 flex items-center justify-center gap-3">
-                <Play className="w-8 h-8 text-cyan-400" />
-                Vision Overview
-              </h2>
-              <p className="text-white/60">A quick introduction to DarkWave Chronicles and what makes it unique</p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-slate-900"
-              style={{ boxShadow: "0 0 80px rgba(6, 182, 212, 0.1)" }}
-            >
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-cyan-950/50 to-purple-950/50">
-                <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center mb-6 border border-white/20">
-                  <Play className="w-8 h-8 text-white ml-1" />
-                </div>
-                <p className="text-white/60 text-lg mb-2">Video Coming Soon</p>
-                <p className="text-white/40 text-sm max-w-md text-center px-4">
-                  We're preparing an executive overview video. In the meantime, explore the live materials below 
-                  or schedule a call for a personal walkthrough.
-                </p>
-              </div>
-            </motion.div>
-          </div>
-        </section>
+        {/* Vision Showcase - Animated Slideshow */}
+        <VisionShowcase />
 
         {/* Roadmap */}
         <section className="py-16 px-4">
