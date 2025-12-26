@@ -2877,6 +2877,126 @@ export async function registerRoutes(
     }
   });
 
+  // === CHRONICLES SPONSORSHIP ROUTES ===
+  app.get("/api/sponsorship/slots", async (req, res) => {
+    try {
+      const { eraId, districtTier, includeUnavailable } = req.query;
+      const availableOnly = includeUnavailable !== 'true';
+      const slots = await storage.getSponsorshipSlots(
+        eraId as string | undefined,
+        districtTier as string | undefined,
+        availableOnly
+      );
+      res.json(slots);
+    } catch (error) {
+      console.error("Get sponsorship slots error:", error);
+      res.status(500).json({ error: "Failed to fetch sponsorship slots" });
+    }
+  });
+
+  app.get("/api/sponsorship/slots/:id", async (req, res) => {
+    try {
+      const slot = await storage.getSponsorshipSlot(req.params.id);
+      if (!slot) {
+        return res.status(404).json({ error: "Slot not found" });
+      }
+      res.json(slot);
+    } catch (error) {
+      console.error("Get sponsorship slot error:", error);
+      res.status(500).json({ error: "Failed to fetch sponsorship slot" });
+    }
+  });
+
+  app.get("/api/sponsorship/eligible/:domainTier", async (req, res) => {
+    try {
+      const { domainTier } = req.params;
+      const slots = await storage.getAvailableSlotsForDomainTier(domainTier);
+      res.json({ eligible: slots.length > 0, availableSlots: slots });
+    } catch (error) {
+      console.error("Check sponsorship eligibility error:", error);
+      res.status(500).json({ error: "Failed to check eligibility" });
+    }
+  });
+
+  app.post("/api/sponsorship/claim", async (req, res) => {
+    try {
+      const { domainId, slotId, businessName, businessUrl, businessDescription, isEarlyAdopter } = req.body;
+      
+      if (!domainId || !slotId) {
+        return res.status(400).json({ error: "domainId and slotId are required" });
+      }
+
+      const domain = await storage.getDomainById(domainId);
+      if (!domain) {
+        return res.status(404).json({ error: "Domain not found" });
+      }
+
+      const slot = await storage.getSponsorshipSlot(slotId);
+      if (!slot) {
+        return res.status(404).json({ error: "Sponsorship slot not found" });
+      }
+
+      if (slot.currentOccupancy >= slot.capacity) {
+        return res.status(400).json({ error: "Sponsorship slot is full" });
+      }
+
+      const expiryDate = storage.calculateSponsorshipExpiry(domain.expiresAt);
+
+      const claim = await storage.claimSponsorshipSlot({
+        domainId,
+        slotId,
+        businessName,
+        businessUrl,
+        businessDescription,
+        isEarlyAdopter: isEarlyAdopter || false,
+        expiryDate,
+      });
+
+      res.json({ success: true, claim });
+    } catch (error) {
+      console.error("Claim sponsorship slot error:", error);
+      res.status(500).json({ error: "Failed to claim sponsorship slot" });
+    }
+  });
+
+  app.get("/api/sponsorship/claims/domain/:domainId", async (req, res) => {
+    try {
+      const claims = await storage.getDomainSponsorshipClaims(req.params.domainId);
+      res.json(claims);
+    } catch (error) {
+      console.error("Get domain sponsorship claims error:", error);
+      res.status(500).json({ error: "Failed to fetch sponsorship claims" });
+    }
+  });
+
+  app.put("/api/sponsorship/claims/:id/status", async (req, res) => {
+    try {
+      const { status } = req.body;
+      if (!status || !['pending', 'verified', 'rejected'].includes(status)) {
+        return res.status(400).json({ error: "Valid status required (pending, verified, rejected)" });
+      }
+
+      const claim = await storage.updateSponsorshipClaimStatus(req.params.id, status);
+      if (!claim) {
+        return res.status(404).json({ error: "Claim not found" });
+      }
+      res.json(claim);
+    } catch (error) {
+      console.error("Update sponsorship claim status error:", error);
+      res.status(500).json({ error: "Failed to update claim status" });
+    }
+  });
+
+  app.get("/api/sponsorship/early-adopter-program", async (_req, res) => {
+    try {
+      const program = await storage.getEarlyAdopterProgram();
+      res.json(program || { isActive: false });
+    } catch (error) {
+      console.error("Get early adopter program error:", error);
+      res.status(500).json({ error: "Failed to fetch early adopter program" });
+    }
+  });
+
   // === COMMUNITY ROADMAP ROUTES ===
   app.get("/api/roadmap/features", async (_req, res) => {
     try {

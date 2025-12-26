@@ -1,6 +1,6 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, type BlockchainDomain, type InsertBlockchainDomain, type DomainRecord, type InsertDomainRecord, type DomainTransfer, type InsertDomainTransfer, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory, blockchainDomains, domainRecords, domainTransfers } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, type BlockchainDomain, type InsertBlockchainDomain, type DomainRecord, type InsertDomainRecord, type DomainTransfer, type InsertDomainTransfer, type ChronicleSponsorshipSlot, type InsertChronicleSponsorshipSlot, type DomainSponsorshipClaim, type InsertDomainSponsorshipClaim, type EarlyAdopterProgram, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory, blockchainDomains, domainRecords, domainTransfers, chronicleSponsorshipSlots, domainSponsorshipClaims, earlyAdopterProgram } from "@shared/schema";
 import { db } from "./db";
-import { eq, sql, desc, count } from "drizzle-orm";
+import { eq, sql, desc, count, and, lt } from "drizzle-orm";
 import crypto from "crypto";
 
 export interface IStorage {
@@ -201,6 +201,19 @@ export interface IStorage {
   getDomainTransferHistory(domainId: string): Promise<DomainTransfer[]>;
   getRecentDomains(limit?: number): Promise<BlockchainDomain[]>;
   getDomainStats(): Promise<{ totalDomains: number; totalOwners: number; premiumCount: number }>;
+  
+  // Sponsorship System
+  getSponsorshipSlots(eraId?: string, districtTier?: string, availableOnly?: boolean): Promise<ChronicleSponsorshipSlot[]>;
+  getSponsorshipSlot(id: string): Promise<ChronicleSponsorshipSlot | undefined>;
+  createSponsorshipSlot(data: InsertChronicleSponsorshipSlot): Promise<ChronicleSponsorshipSlot>;
+  getAvailableSlotsForDomainTier(domainTier: string): Promise<ChronicleSponsorshipSlot[]>;
+  claimSponsorshipSlot(data: InsertDomainSponsorshipClaim): Promise<DomainSponsorshipClaim>;
+  getDomainSponsorshipClaims(domainId: string): Promise<DomainSponsorshipClaim[]>;
+  getSponsorshipClaimsBySlot(slotId: string): Promise<DomainSponsorshipClaim[]>;
+  updateSponsorshipClaimStatus(id: string, status: string): Promise<DomainSponsorshipClaim | undefined>;
+  getEarlyAdopterProgram(): Promise<EarlyAdopterProgram | undefined>;
+  incrementEarlyAdopterRegistrations(): Promise<void>;
+  calculateSponsorshipExpiry(domainExpiresAt: Date | null): Date;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1458,8 +1471,9 @@ export class DatabaseStorage implements IStorage {
   async searchDomain(name: string): Promise<{ available: boolean; domain?: BlockchainDomain }> {
     const normalizedName = name.toLowerCase().replace(/\.dwsc$/, '').trim();
     const domain = await this.getDomain(normalizedName);
+    const isExpired = domain?.expiresAt ? new Date(domain.expiresAt) < new Date() : false;
     return {
-      available: !domain || new Date(domain.expiresAt) < new Date(),
+      available: !domain || isExpired,
       domain: domain || undefined
     };
   }
@@ -1566,6 +1580,114 @@ export class DatabaseStorage implements IStorage {
       totalOwners: ownersResult.length,
       premiumCount: premiumResult?.count || 0,
     };
+  }
+
+  async getSponsorshipSlots(eraId?: string, districtTier?: string, availableOnly: boolean = true): Promise<ChronicleSponsorshipSlot[]> {
+    const conditions = [];
+    if (eraId) {
+      conditions.push(eq(chronicleSponsorshipSlots.eraId, eraId));
+    }
+    if (districtTier) {
+      conditions.push(eq(chronicleSponsorshipSlots.districtTier, districtTier));
+    }
+    if (availableOnly) {
+      conditions.push(eq(chronicleSponsorshipSlots.status, 'available'));
+      conditions.push(lt(chronicleSponsorshipSlots.currentOccupancy, chronicleSponsorshipSlots.capacity));
+    }
+    if (conditions.length > 0) {
+      return db.select().from(chronicleSponsorshipSlots).where(and(...conditions));
+    }
+    return db.select().from(chronicleSponsorshipSlots);
+  }
+
+  async getSponsorshipSlot(id: string): Promise<ChronicleSponsorshipSlot | undefined> {
+    const [slot] = await db.select().from(chronicleSponsorshipSlots)
+      .where(eq(chronicleSponsorshipSlots.id, id));
+    return slot;
+  }
+
+  async createSponsorshipSlot(data: InsertChronicleSponsorshipSlot): Promise<ChronicleSponsorshipSlot> {
+    const [slot] = await db.insert(chronicleSponsorshipSlots).values(data).returning();
+    return slot;
+  }
+
+  async getAvailableSlotsForDomainTier(domainTier: string): Promise<ChronicleSponsorshipSlot[]> {
+    const tierMapping: Record<string, string[]> = {
+      'Ultra Premium': ['prime', 'signature', 'emerging'],
+      'Premium': ['signature', 'emerging'],
+      'Standard+': ['emerging'],
+      'Standard': ['emerging'],
+      'Economy': ['emerging'],
+    };
+    const allowedDistricts = tierMapping[domainTier] || ['emerging'];
+    return db.select().from(chronicleSponsorshipSlots)
+      .where(and(
+        eq(chronicleSponsorshipSlots.status, 'available'),
+        lt(chronicleSponsorshipSlots.currentOccupancy, chronicleSponsorshipSlots.capacity),
+        sql`${chronicleSponsorshipSlots.districtTier} = ANY(${allowedDistricts})`
+      ));
+  }
+
+  async claimSponsorshipSlot(data: InsertDomainSponsorshipClaim): Promise<DomainSponsorshipClaim> {
+    return await db.transaction(async (tx) => {
+      const [updatedSlot] = await tx.update(chronicleSponsorshipSlots)
+        .set({ 
+          currentOccupancy: sql`${chronicleSponsorshipSlots.currentOccupancy} + 1`,
+          updatedAt: new Date() 
+        })
+        .where(and(
+          eq(chronicleSponsorshipSlots.id, data.slotId),
+          eq(chronicleSponsorshipSlots.status, 'available'),
+          lt(chronicleSponsorshipSlots.currentOccupancy, chronicleSponsorshipSlots.capacity)
+        ))
+        .returning();
+      
+      if (!updatedSlot) {
+        throw new Error("Slot is full, not available, or does not exist");
+      }
+
+      const [claim] = await tx.insert(domainSponsorshipClaims).values(data).returning();
+      return claim;
+    });
+  }
+
+  calculateSponsorshipExpiry(domainExpiresAt: Date | null): Date {
+    const SPONSORSHIP_DURATION_MONTHS = 36;
+    const baseDate = domainExpiresAt ? new Date(domainExpiresAt) : new Date();
+    const expiryDate = new Date(baseDate);
+    expiryDate.setMonth(expiryDate.getMonth() + SPONSORSHIP_DURATION_MONTHS);
+    return expiryDate;
+  }
+
+  async getDomainSponsorshipClaims(domainId: string): Promise<DomainSponsorshipClaim[]> {
+    return db.select().from(domainSponsorshipClaims)
+      .where(eq(domainSponsorshipClaims.domainId, domainId));
+  }
+
+  async getSponsorshipClaimsBySlot(slotId: string): Promise<DomainSponsorshipClaim[]> {
+    return db.select().from(domainSponsorshipClaims)
+      .where(eq(domainSponsorshipClaims.slotId, slotId));
+  }
+
+  async updateSponsorshipClaimStatus(id: string, status: string): Promise<DomainSponsorshipClaim | undefined> {
+    const [claim] = await db.update(domainSponsorshipClaims)
+      .set({ verificationStatus: status, updatedAt: new Date() })
+      .where(eq(domainSponsorshipClaims.id, id))
+      .returning();
+    return claim;
+  }
+
+  async getEarlyAdopterProgram(): Promise<EarlyAdopterProgram | undefined> {
+    const [program] = await db.select().from(earlyAdopterProgram)
+      .where(eq(earlyAdopterProgram.isActive, true))
+      .limit(1);
+    return program;
+  }
+
+  async incrementEarlyAdopterRegistrations(): Promise<void> {
+    await db.update(earlyAdopterProgram)
+      .set({ currentRegistrations: sql`${earlyAdopterProgram.currentRegistrations} + 1` })
+      .where(eq(earlyAdopterProgram.isActive, true));
   }
 }
 
