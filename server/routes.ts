@@ -101,6 +101,27 @@ export async function registerRoutes(
   registerChatRoutes(app);
   registerImageRoutes(app);
 
+  // Partner Portal Authentication (server-side validation)
+  const PARTNER_ACCESS_CODE = process.env.PARTNER_ACCESS_CODE || "darkwave2026";
+  app.post("/api/partner/verify", rateLimit("partner-auth", 5, 60000), async (req: Request, res: Response) => {
+    try {
+      const { accessCode } = req.body;
+      if (!accessCode || typeof accessCode !== 'string') {
+        return res.status(400).json({ success: false, error: "Access code required" });
+      }
+      
+      if (accessCode === PARTNER_ACCESS_CODE) {
+        const token = crypto.randomBytes(32).toString('hex');
+        return res.json({ success: true, token });
+      }
+      
+      return res.status(401).json({ success: false, error: "Invalid access code" });
+    } catch (error) {
+      console.error("Partner auth error:", error);
+      return res.status(500).json({ success: false, error: "Authentication failed" });
+    }
+  });
+
   // Scenario Generator API for DarkWave Chronicles
   app.post("/api/generate-scenario", rateLimit("scenario", 10, 60000), async (req: Request, res: Response) => {
     try {

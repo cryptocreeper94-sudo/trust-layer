@@ -121,6 +121,7 @@ import PriceAlerts from "@/pages/price-alerts";
 import PaperTrading from "@/pages/paper-trading";
 import Achievements from "@/pages/achievements";
 import Domains from "@/pages/domains";
+import PartnerPortal from "@/pages/partner-portal";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
 
 function ScrollToTop() {
@@ -301,6 +302,7 @@ function DWSCRouter() {
         <Route path="/paper-trading" component={PaperTrading} />
         <Route path="/achievements" component={Achievements} />
         <Route path="/domains" component={Domains} />
+        <Route path="/partners" component={PartnerPortal} />
         <Route path="/game-developer" component={GameDeveloper} />
         <Route path="/slots" component={Slots} />
         <Route path="/coinflip" component={Coinflip} />
