@@ -2757,3 +2757,59 @@ export const voiceUsage = pgTable("voice_usage", {
 });
 
 export type VoiceUsage = typeof voiceUsage.$inferSelect;
+
+// =====================================================
+// TREASURY ALLOCATION SYSTEM
+// =====================================================
+// Transparent allocation tracking for DWC treasury funds
+// =====================================================
+
+export const treasuryAllocationCategories = [
+  "development",
+  "marketing", 
+  "staking_rewards",
+  "team_founder",
+  "operations",
+  "reserve"
+] as const;
+
+export type TreasuryAllocationCategory = typeof treasuryAllocationCategories[number];
+
+export const treasuryAllocations = pgTable("treasury_allocations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  category: text("category").notNull(), // development, marketing, staking_rewards, team_founder, operations, reserve
+  percentage: integer("percentage").notNull(), // 30, 20, 20, 15, 10, 5
+  label: text("label").notNull(), // "Development", "Marketing", etc.
+  description: text("description"),
+  color: text("color").notNull(), // Tailwind color for UI
+  icon: text("icon"), // Icon name for UI
+  isActive: boolean("is_active").notNull().default(true),
+  sortOrder: integer("sort_order").notNull().default(0),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type TreasuryAllocation = typeof treasuryAllocations.$inferSelect;
+
+export const treasuryLedger = pgTable("treasury_ledger", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  category: text("category").notNull(), // Which allocation bucket
+  amountDwc: text("amount_dwc").notNull(), // Amount in DWC
+  amountUsd: text("amount_usd"), // Optional USD equivalent
+  transactionType: text("transaction_type").notNull(), // "deposit", "withdrawal", "allocation"
+  txHash: text("tx_hash"), // On-chain tx hash if applicable
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type TreasuryLedgerEntry = typeof treasuryLedger.$inferSelect;
+
+// Protocol Fee Configuration (for display purposes)
+export const protocolFeeConfigSchema = z.object({
+  dexSwapFee: z.string(),
+  nftMarketplaceFee: z.string(),
+  bridgeFee: z.string(),
+  launchpadFee: z.string(),
+  stakingRewardsSource: z.string(),
+});
+
+export type ProtocolFeeConfig = z.infer<typeof protocolFeeConfigSchema>;
