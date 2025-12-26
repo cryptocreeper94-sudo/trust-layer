@@ -227,19 +227,19 @@ export default function BuildYourLegacy() {
       </div>
 
       <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between gap-2">
           <Link href="/chronicles">
-            <Button variant="ghost" className="text-slate-400 hover:text-white" data-testid="link-back">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Chronicles
+            <Button variant="ghost" className="text-slate-400 hover:text-white text-sm sm:text-base px-2 sm:px-4" data-testid="link-back">
+              <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2 flex-shrink-0" />
+              <span className="hidden xs:inline">Back to </span>Chronicles
             </Button>
           </Link>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center">
             {creditsData && (
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/50 border border-amber-500/30">
-                <Coins className="w-4 h-4 text-amber-400" />
-                <span className="text-amber-300 font-medium" data-testid="text-credit-balance">
+              <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-slate-800/50 border border-amber-500/30">
+                <Coins className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
+                <span className="text-amber-300 font-medium text-sm sm:text-base" data-testid="text-credit-balance">
                   {creditsData.balance?.toLocaleString() || 0} Credits
                 </span>
               </div>
@@ -592,17 +592,17 @@ export default function BuildYourLegacy() {
             transition={{ delay: 0.4 }}
             className="text-center"
           >
-            <div className="inline-flex items-center gap-4 p-6 rounded-2xl bg-gradient-to-r from-slate-800/50 to-slate-900/50 border border-slate-700">
+            <div className="flex flex-col sm:flex-row items-center gap-4 p-4 sm:p-6 rounded-2xl bg-gradient-to-r from-slate-800/50 to-slate-900/50 border border-slate-700 max-w-lg mx-auto sm:max-w-none sm:inline-flex">
               <img 
                 src={fantasyHeroes} 
                 alt="Fantasy heroes" 
-                className="w-24 h-24 rounded-xl object-cover"
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl object-cover flex-shrink-0"
               />
-              <div className="text-left">
-                <h3 className="text-xl font-bold text-white">Ready for Adventure?</h3>
-                <p className="text-slate-400 mb-3">Try the AI demo now - experience your parallel self in action.</p>
+              <div className="text-center sm:text-left">
+                <h3 className="text-lg sm:text-xl font-bold text-white">Ready for Adventure?</h3>
+                <p className="text-slate-400 mb-3 text-sm sm:text-base">Try the AI demo now - experience your parallel self in action.</p>
                 <Link href="/chronicles/ai">
-                  <Button className="bg-gradient-to-r from-cyan-500 to-purple-600" data-testid="link-experience-demo">
+                  <Button className="bg-gradient-to-r from-cyan-500 to-purple-600 w-full sm:w-auto" data-testid="link-experience-demo">
                     <Sparkles className="w-4 h-4 mr-2" />
                     Experience the Demo
                   </Button>
