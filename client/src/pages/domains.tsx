@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Search, Globe, Shield, Zap, Check, X, ArrowRight, Crown, Clock, Users, Sparkles, ExternalLink, Copy, Wallet, Infinity } from "lucide-react";
+import { ArrowLeft, Search, Globe, Shield, Zap, Check, X, ArrowRight, Crown, Clock, Users, Sparkles, ExternalLink, Copy, Wallet, Infinity as InfinityIcon } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -294,7 +294,7 @@ export default function DomainsPage() {
                       </div>
                       <div className="p-3 rounded-lg bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 text-center">
                         <p className="text-xs text-cyan-400 mb-1 flex items-center justify-center gap-1">
-                          <Infinity className="w-3 h-3" /> Own Forever
+                          <InfinityIcon className="w-3 h-3" /> Own Forever
                         </p>
                         <p className="text-lg font-bold text-cyan-400">
                           {formatPrice(searchResult.priceLifetimeCents)}
@@ -334,7 +334,7 @@ export default function DomainsPage() {
                         <span className="text-white flex items-center gap-1">
                           {searchResult.domain?.ownershipType === "lifetime" ? (
                             <>
-                              <Infinity className="w-4 h-4 text-cyan-400" />
+                              <InfinityIcon className="w-4 h-4 text-cyan-400" />
                               <span className="text-cyan-400">Forever</span>
                             </>
                           ) : (
@@ -365,7 +365,7 @@ export default function DomainsPage() {
               <div className="space-y-1">
                 <p className="text-lg font-bold text-white">{tier.yearly}</p>
                 <p className="text-sm text-cyan-400 flex items-center justify-center gap-1">
-                  <Infinity className="w-3 h-3" /> {tier.lifetime}
+                  <InfinityIcon className="w-3 h-3" /> {tier.lifetime}
                 </p>
               </div>
             </GlassCard>
@@ -424,7 +424,7 @@ export default function DomainsPage() {
                   <div className="flex items-center gap-2 text-sm text-white/60 mb-3">
                     {domain.ownershipType === "lifetime" ? (
                       <>
-                        <Infinity className="w-4 h-4 text-cyan-400" />
+                        <InfinityIcon className="w-4 h-4 text-cyan-400" />
                         <span className="text-cyan-400">Owned Forever</span>
                       </>
                     ) : (
