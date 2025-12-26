@@ -36,12 +36,20 @@ import heroVideo from "@assets/generated_videos/fantasy_world_cinematic_flyover.
 import wildWestVideo from "@assets/generated_videos/wild_west_frontier_town_flyover.mp4";
 import ancientRomeVideo from "@assets/generated_videos/ancient_rome_colosseum_glory.mp4";
 import medievalCastleVideo from "@assets/generated_videos/medieval_castle_twilight_scene.mp4";
+import victorianLondonVideo from "@assets/generated_videos/victorian_london_foggy_streets.mp4";
+import ancientEgyptVideo from "@assets/generated_videos/ancient_egypt_pyramids_sunset.mp4";
+import prehistoricVideo from "@assets/generated_videos/prehistoric_dinosaur_jungle_scene.mp4";
+import biblicalVideo from "@assets/generated_videos/biblical_jerusalem_temple_scene.mp4";
 
 const HERO_VIDEOS = [
   { src: heroVideo, label: "Fantasy Realm" },
   { src: wildWestVideo, label: "Wild West" },
   { src: ancientRomeVideo, label: "Ancient Rome" },
   { src: medievalCastleVideo, label: "Medieval Era" },
+  { src: victorianLondonVideo, label: "Victorian London" },
+  { src: ancientEgyptVideo, label: "Ancient Egypt" },
+  { src: prehistoricVideo, label: "Prehistoric" },
+  { src: biblicalVideo, label: "Biblical Era" },
 ];
 
 const CORE_FEATURES = [
