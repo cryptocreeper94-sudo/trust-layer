@@ -24,6 +24,7 @@ const NAV_LINKS = [
   { href: "/gameplay", label: "Gameplay" },
   { href: "/dashboard", label: "Dashboard" },
   { href: "/economy", label: "Economy" },
+  { href: "/creators", label: "Creators" },
   { href: "/community", label: "Community" },
   { href: "/team", label: "Team" },
   { href: "/roadmap", label: "Roadmap" },
