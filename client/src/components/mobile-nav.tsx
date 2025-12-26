@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart, Gamepad2, Star, Zap, Globe } from "lucide-react";
+import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart, Gamepad2, Star, Zap, Globe, ChevronDown, ChevronRight, Layers, Gift, Users } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,38 +15,164 @@ const featuredItems = [
   { href: "/presale", label: "Token Presale", icon: Coins, badge: "Live", image: presaleImg, overlayGradient: "linear-gradient(135deg, rgba(245,158,11,0.85) 0%, rgba(239,68,68,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#f59e0b, #ef4444", badgeClass: "bg-amber-500/30 text-amber-300", description: "Get DWC at Best Price", external: false },
 ];
 
-const navItems = [
-  { href: "/", label: "Home", icon: Home },
-  { href: "/executive-summary", label: "Investors", icon: Star, badge: "New" },
-  { href: "/wallet", label: "Wallet", icon: Coins },
-  { href: "/arcade", label: "Games", icon: Rocket, badge: "Hot" },
-  { href: "/ecosystem", label: "Ecosystem", icon: Box },
-  { href: "/swap", label: "Swap", icon: ArrowUpDown, badge: "DeFi" },
-  { href: "/faucet", label: "Faucet", icon: Droplets },
-  { href: "/domains", label: "Domains", icon: Globe, badge: "New" },
-  { href: "/launchpad", label: "Launchpad", icon: Rocket },
-  { href: "/liquidity", label: "Liquidity", icon: Droplets },
-  { href: "/liquid-staking", label: "Liquid Staking", icon: TrendingUp },
-  { href: "/nft", label: "NFT Market", icon: ImageIcon },
-  { href: "/nft-gallery", label: "NFT Gallery", icon: ImageIcon },
-  { href: "/nft-creator", label: "NFT Creator", icon: Palette },
-  { href: "/portfolio", label: "Portfolio", icon: PieChart },
-  { href: "/transactions", label: "History", icon: History },
-  { href: "/charts", label: "Charts", icon: LineChart },
-  { href: "/staking", label: "Staking", icon: TrendingUp },
-  { href: "/bridge", label: "Bridge", icon: ArrowLeftRight },
-  { href: "/token", label: "Coin", icon: Coins },
-  { href: "/explorer", label: "Explorer", icon: SearchIcon },
-  { href: "/network", label: "Network Stats", icon: TrendingUp },
-  { href: "/validators", label: "Validators", icon: FileText },
-  { href: "/developers", label: "Developers", icon: Code },
-  { href: "/webhooks", label: "Webhooks", icon: Webhook },
-  { href: "/studio", label: "Dev Studio", icon: Sparkles },
-  { href: "/founder-program", label: "Founders", icon: Sparkles, badge: "VIP" },
-  { href: "/quests", label: "Quests", icon: Rocket },
-  { href: "/airdrop", label: "Airdrop", icon: Coins },
-  { href: "/roadmap", label: "Roadmap", icon: Star },
+// Organized nav categories for cleaner menu
+const navCategories = [
+  {
+    label: "Essentials",
+    icon: Home,
+    defaultOpen: true,
+    items: [
+      { href: "/", label: "Home", icon: Home },
+      { href: "/wallet", label: "Wallet", icon: Coins },
+      { href: "/ecosystem", label: "Ecosystem", icon: Box },
+      { href: "/arcade", label: "Games", icon: Rocket, badge: "Hot" },
+    ]
+  },
+  {
+    label: "DeFi",
+    icon: TrendingUp,
+    items: [
+      { href: "/swap", label: "Swap", icon: ArrowUpDown, badge: "DeFi" },
+      { href: "/staking", label: "Staking", icon: TrendingUp },
+      { href: "/liquid-staking", label: "Liquid Staking", icon: TrendingUp },
+      { href: "/liquidity", label: "Liquidity", icon: Droplets },
+      { href: "/bridge", label: "Bridge", icon: ArrowLeftRight },
+      { href: "/launchpad", label: "Launchpad", icon: Rocket },
+    ]
+  },
+  {
+    label: "NFTs",
+    icon: ImageIcon,
+    items: [
+      { href: "/nft", label: "Marketplace", icon: ImageIcon },
+      { href: "/nft-gallery", label: "Gallery", icon: Layers },
+      { href: "/nft-creator", label: "Creator", icon: Palette },
+    ]
+  },
+  {
+    label: "Portfolio",
+    icon: PieChart,
+    items: [
+      { href: "/portfolio", label: "Dashboard", icon: PieChart },
+      { href: "/transactions", label: "History", icon: History },
+      { href: "/charts", label: "Charts", icon: LineChart },
+    ]
+  },
+  {
+    label: "Blockchain",
+    icon: Box,
+    items: [
+      { href: "/token", label: "DWC Coin", icon: Coins },
+      { href: "/explorer", label: "Explorer", icon: SearchIcon },
+      { href: "/network", label: "Network", icon: TrendingUp },
+      { href: "/validators", label: "Validators", icon: FileText },
+      { href: "/faucet", label: "Faucet", icon: Droplets },
+    ]
+  },
+  {
+    label: "Developers",
+    icon: Code,
+    items: [
+      { href: "/developers", label: "Docs", icon: Code },
+      { href: "/studio", label: "Dev Studio", icon: Sparkles },
+      { href: "/webhooks", label: "Webhooks", icon: Webhook },
+    ]
+  },
+  {
+    label: "Rewards",
+    icon: Gift,
+    items: [
+      { href: "/founder-program", label: "Founders", icon: Sparkles, badge: "VIP" },
+      { href: "/quests", label: "Quests", icon: Rocket },
+      { href: "/airdrop", label: "Airdrop", icon: Coins },
+      { href: "/domains", label: "Domains", icon: Globe, badge: "New" },
+    ]
+  },
+  {
+    label: "About",
+    icon: Users,
+    items: [
+      { href: "/executive-summary", label: "Investors", icon: Star, badge: "New" },
+      { href: "/roadmap", label: "Roadmap", icon: Star },
+    ]
+  },
 ];
+
+function NavCategory({ category, location, onClose }: { 
+  category: typeof navCategories[0]; 
+  location: string; 
+  onClose: () => void;
+}) {
+  const [isOpen, setIsOpen] = useState(category.defaultOpen || false);
+  const Icon = category.icon;
+  const hasActiveItem = category.items.some(item => location === item.href);
+  
+  return (
+    <div style={{ marginBottom: '4px' }}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          width: '100%',
+          gap: '12px',
+          padding: '10px 12px',
+          borderRadius: '10px',
+          backgroundColor: hasActiveItem ? 'rgba(168, 85, 247, 0.1)' : 'transparent',
+          color: hasActiveItem ? '#a855f7' : '#a1a1aa',
+          cursor: 'pointer',
+          border: 'none',
+          textAlign: 'left',
+        }}
+        data-testid={`nav-category-${category.label.toLowerCase()}`}
+      >
+        <Icon style={{ width: '18px', height: '18px', flexShrink: 0 }} />
+        <span style={{ fontWeight: 600, flex: 1, fontSize: '14px', fontFamily: 'Inter, sans-serif' }}>{category.label}</span>
+        {isOpen ? (
+          <ChevronDown style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.4)' }} />
+        ) : (
+          <ChevronRight style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.4)' }} />
+        )}
+      </button>
+      
+      {isOpen && (
+        <div style={{ marginLeft: '16px', marginTop: '4px', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+          {category.items.map((item) => {
+            const ItemIcon = item.icon;
+            const isActive = location === item.href;
+            
+            return (
+              <Link key={item.href} href={item.href} style={{ textDecoration: 'none' }}>
+                <div
+                  onClick={onClose}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    backgroundColor: isActive ? 'rgba(0, 255, 255, 0.1)' : 'transparent',
+                    color: isActive ? '#00ffff' : '#a1a1aa',
+                    cursor: 'pointer',
+                  }}
+                  data-testid={`nav-item-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  <ItemIcon style={{ width: '16px', height: '16px', flexShrink: 0 }} />
+                  <span style={{ fontWeight: 500, flex: 1, fontSize: '13px', fontFamily: 'Inter, sans-serif' }}>{item.label}</span>
+                  {'badge' in item && (item as any).badge && (
+                    <Badge className="text-[9px] bg-pink-500/20 text-pink-400 px-1.5 py-0">
+                      {(item as any).badge}
+                    </Badge>
+                  )}
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function MenuPanel({ onClose }: { onClose: () => void }) {
   const [location] = useLocation();
@@ -230,61 +356,16 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
         {/* Divider */}
         <div style={{ height: '1px', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)', marginBottom: '16px' }} />
 
-        {/* Nav Items */}
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px', flex: 1 }}>
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = location === item.href;
-            const comingSoon = 'comingSoon' in item && (item as any).comingSoon;
-            const isExternal = 'external' in item && item.external;
-            
-            const content = (
-              <div
-                onClick={onClose}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  padding: '12px 16px',
-                  borderRadius: '12px',
-                  backgroundColor: isActive ? 'rgba(0, 255, 255, 0.1)' : 'transparent',
-                  color: isActive ? '#00ffff' : '#a1a1aa',
-                  cursor: 'pointer',
-                  textDecoration: 'none',
-                }}
-              >
-                <Icon style={{ width: '20px', height: '20px', flexShrink: 0 }} />
-                <span style={{ fontWeight: 500, flex: 1, fontFamily: 'Inter, sans-serif' }}>{item.label}</span>
-                {'badge' in item && (item as any).badge && (
-                  <Badge className="text-[9px] bg-pink-500/20 text-pink-400 px-1.5 py-0">
-                    {(item as any).badge}
-                  </Badge>
-                )}
-                {comingSoon && (
-                  <Badge variant="outline" className="text-[10px] border-primary/50 text-primary px-1.5 py-0">
-                    Soon
-                  </Badge>
-                )}
-                {isExternal && (
-                  <ArrowUpRight style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.4)' }} />
-                )}
-              </div>
-            );
-            
-            if (isExternal) {
-              return (
-                <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-                  {content}
-                </a>
-              );
-            }
-            
-            return (
-              <Link key={item.href} href={item.href} style={{ textDecoration: 'none' }}>
-                {content}
-              </Link>
-            );
-          })}
+        {/* Nav Categories */}
+        <nav style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+          {navCategories.map((category) => (
+            <NavCategory 
+              key={category.label} 
+              category={category} 
+              location={location} 
+              onClose={onClose} 
+            />
+          ))}
         </nav>
 
         {/* Bottom Button */}

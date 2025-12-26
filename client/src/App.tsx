@@ -54,6 +54,7 @@ import Wallet from "@/pages/wallet";
 import Status from "@/pages/status";
 import ApiDocs from "@/pages/api-docs";
 import AdminAnalytics from "@/pages/admin-analytics";
+import AdminPartnerRequests from "@/pages/admin-partner-requests";
 import Terms from "@/pages/terms";
 import Privacy from "@/pages/privacy";
 import ErrorPage from "@/pages/error";
@@ -269,6 +270,7 @@ function DWSCRouter() {
         <Route path="/status" component={Status} />
         <Route path="/api-docs" component={ApiDocs} />
         <Route path="/admin/analytics" component={AdminAnalytics} />
+        <Route path="/admin/partner-requests" component={AdminPartnerRequests} />
         <Route path="/terms" component={Terms} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/error" component={ErrorPage} />

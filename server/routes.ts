@@ -102,7 +102,10 @@ export async function registerRoutes(
   registerImageRoutes(app);
 
   // Partner Portal Authentication (server-side validation)
-  const PARTNER_ACCESS_CODE = process.env.PARTNER_ACCESS_CODE || "darkwave2026";
+  const PARTNER_ACCESS_CODE = process.env.PARTNER_ACCESS_CODE;
+  if (!PARTNER_ACCESS_CODE) {
+    console.warn("[Partner Portal] PARTNER_ACCESS_CODE env var not set - master partner auth will be unavailable");
+  }
   app.post("/api/partner/verify", rateLimit("partner-auth", 5, 60000), async (req: Request, res: Response) => {
     try {
       const { accessCode } = req.body;
@@ -110,15 +113,183 @@ export async function registerRoutes(
         return res.status(400).json({ success: false, error: "Access code required" });
       }
       
-      if (accessCode === PARTNER_ACCESS_CODE) {
+      if (PARTNER_ACCESS_CODE && accessCode === PARTNER_ACCESS_CODE) {
         const token = crypto.randomBytes(32).toString('hex');
         return res.json({ success: true, token });
+      }
+      
+      // Check if it's a studio-specific access code
+      const studioRequest = await db.execute(sql`
+        SELECT * FROM partner_access_requests 
+        WHERE access_code = ${accessCode} AND status = 'approved'
+        LIMIT 1
+      `);
+      
+      if (studioRequest.rows.length > 0) {
+        const token = crypto.randomBytes(32).toString('hex');
+        return res.json({ success: true, token, studioName: studioRequest.rows[0].studio_name });
       }
       
       return res.status(401).json({ success: false, error: "Invalid access code" });
     } catch (error) {
       console.error("Partner auth error:", error);
       return res.status(500).json({ success: false, error: "Authentication failed" });
+    }
+  });
+
+  // Partner Access Request - submit new request
+  app.post("/api/partner/request", rateLimit("partner-request", 3, 60000), async (req: Request, res: Response) => {
+    try {
+      const { studioName, contactName, email, website, teamSize, expertise, previousProjects, interestReason, partnershipType, ndaAccepted } = req.body;
+      
+      if (!studioName || !contactName || !email) {
+        return res.status(400).json({ success: false, error: "Studio name, contact name, and email are required" });
+      }
+      
+      if (!ndaAccepted) {
+        return res.status(400).json({ success: false, error: "NDA must be accepted to proceed" });
+      }
+      
+      const result = await db.execute(sql`
+        INSERT INTO partner_access_requests (studio_name, contact_name, email, website, team_size, expertise, previous_projects, interest_reason, partnership_type, nda_accepted)
+        VALUES (${studioName}, ${contactName}, ${email}, ${website || null}, ${teamSize || null}, ${expertise || null}, ${previousProjects || null}, ${interestReason || null}, ${partnershipType || null}, ${ndaAccepted})
+        RETURNING id
+      `);
+      
+      // Send notification email
+      try {
+        await sendEmail({
+          to: "partners@darkwavestudios.io",
+          subject: `New Partner Request: ${studioName}`,
+          html: `
+            <h2>New Partner Access Request</h2>
+            <p><strong>Studio:</strong> ${studioName}</p>
+            <p><strong>Contact:</strong> ${contactName}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Website:</strong> ${website || 'Not provided'}</p>
+            <p><strong>Team Size:</strong> ${teamSize || 'Not provided'}</p>
+            <p><strong>Expertise:</strong> ${expertise || 'Not provided'}</p>
+            <p><strong>Partnership Type:</strong> ${partnershipType || 'Not specified'}</p>
+            <p><strong>Interest Reason:</strong> ${interestReason || 'Not provided'}</p>
+            <p><strong>Previous Projects:</strong> ${previousProjects || 'Not provided'}</p>
+            <hr>
+            <p>Review and approve/reject this request in the admin panel.</p>
+          `,
+        });
+      } catch (emailErr) {
+        console.error("Failed to send partner notification email:", emailErr);
+      }
+      
+      return res.json({ success: true, message: "Request submitted successfully. We'll review your application and get back to you soon." });
+    } catch (error) {
+      console.error("Partner request error:", error);
+      return res.status(500).json({ success: false, error: "Failed to submit request" });
+    }
+  });
+
+  // Admin: Get all partner requests
+  app.get("/api/partner/requests", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const result = await db.execute(sql`
+        SELECT * FROM partner_access_requests 
+        ORDER BY created_at DESC
+      `);
+      return res.json({ success: true, requests: result.rows });
+    } catch (error) {
+      console.error("Get partner requests error:", error);
+      return res.status(500).json({ success: false, error: "Failed to fetch requests" });
+    }
+  });
+
+  // Admin: Approve partner request
+  app.post("/api/partner/requests/:id/approve", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const accessCode = `DWP-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
+      
+      const result = await db.execute(sql`
+        UPDATE partner_access_requests 
+        SET status = 'approved', access_code = ${accessCode}, reviewed_at = CURRENT_TIMESTAMP
+        WHERE id = ${id}
+        RETURNING *
+      `);
+      
+      if (result.rows.length === 0) {
+        return res.status(404).json({ success: false, error: "Request not found" });
+      }
+      
+      const request = result.rows[0] as any;
+      
+      // Send approval email with access code
+      try {
+        await sendEmail({
+          to: request.email,
+          subject: "DarkWave Chronicles - Partner Access Approved",
+          html: `
+            <h2>Welcome to DarkWave Studios Partner Program!</h2>
+            <p>Dear ${request.contact_name},</p>
+            <p>Great news! Your partner access request for <strong>${request.studio_name}</strong> has been approved.</p>
+            <p>Your exclusive access code is: <strong style="font-size: 18px; color: #a855f7;">${accessCode}</strong></p>
+            <p>Use this code to access the Partner Portal at: <a href="https://dwsc.io/partners">dwsc.io/partners</a></p>
+            <p>We're excited to explore partnership opportunities with you!</p>
+            <hr>
+            <p>Best regards,<br>DarkWave Studios Team</p>
+          `,
+        });
+      } catch (emailErr) {
+        console.error("Failed to send approval email:", emailErr);
+      }
+      
+      return res.json({ success: true, message: "Request approved", accessCode });
+    } catch (error) {
+      console.error("Approve partner request error:", error);
+      return res.status(500).json({ success: false, error: "Failed to approve request" });
+    }
+  });
+
+  // Admin: Reject partner request
+  app.post("/api/partner/requests/:id/reject", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { reason } = req.body;
+      
+      const result = await db.execute(sql`
+        UPDATE partner_access_requests 
+        SET status = 'rejected', reviewed_at = CURRENT_TIMESTAMP
+        WHERE id = ${id}
+        RETURNING *
+      `);
+      
+      if (result.rows.length === 0) {
+        return res.status(404).json({ success: false, error: "Request not found" });
+      }
+      
+      const request = result.rows[0] as any;
+      
+      // Send rejection email
+      try {
+        await sendEmail({
+          to: request.email,
+          subject: "DarkWave Chronicles - Partner Application Update",
+          html: `
+            <h2>Partner Application Update</h2>
+            <p>Dear ${request.contact_name},</p>
+            <p>Thank you for your interest in partnering with DarkWave Studios.</p>
+            <p>After careful consideration, we're unable to move forward with a partnership at this time.</p>
+            ${reason ? `<p><strong>Reason:</strong> ${reason}</p>` : ''}
+            <p>We appreciate your understanding and wish you success in your future endeavors.</p>
+            <hr>
+            <p>Best regards,<br>DarkWave Studios Team</p>
+          `,
+        });
+      } catch (emailErr) {
+        console.error("Failed to send rejection email:", emailErr);
+      }
+      
+      return res.json({ success: true, message: "Request rejected" });
+    } catch (error) {
+      console.error("Reject partner request error:", error);
+      return res.status(500).json({ success: false, error: "Failed to reject request" });
     }
   });
 

@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { 
   ArrowLeft, Lock, Eye, EyeOff, Shield, Target, Zap, Globe, Brain, 
   Layers, Rocket, Users, Calendar, TrendingUp, Code, Database,
   Download, FileText, Mail, CheckCircle, Building, Coins, Sparkles,
-  ChevronRight, ExternalLink, Play, Server, Cpu, Network
+  ChevronRight, ExternalLink, Play, Server, Cpu, Network, Activity
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,11 +65,403 @@ const DOWNLOADS = [
   { name: "Roadmap Overview", type: "PDF", size: "1.8 MB", icon: Calendar },
 ];
 
+function InteractiveDemo() {
+  const [scenario, setScenario] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [era, setEra] = useState("Medieval");
+
+  const generateScenario = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/generate-scenario', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ era, emotionalTone: "tense", complexity: "moderate" }),
+      });
+      const data = await response.json();
+      setScenario(data);
+    } catch (err) {
+      console.error("Failed to generate scenario:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <section className="py-16 px-4 bg-slate-900/50">
+      <div className="container mx-auto max-w-4xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-8"
+        >
+          <h2 className="text-3xl font-display font-bold text-white mb-4 flex items-center justify-center gap-3">
+            <Brain className="w-8 h-8 text-purple-400" />
+            AI Engine Demo
+          </h2>
+          <p className="text-white/60">Experience our scenario generation system - the foundation of Chronicles' adaptive storytelling</p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="p-8 rounded-2xl border border-purple-500/20 bg-purple-950/10"
+        >
+          <div className="flex flex-col md:flex-row gap-4 mb-6">
+            <select
+              value={era}
+              onChange={(e) => setEra(e.target.value)}
+              className="flex-1 h-12 px-4 rounded-xl bg-slate-800/50 border border-white/10 text-white"
+              data-testid="select-era"
+            >
+              <option value="Medieval">Medieval Kingdom</option>
+              <option value="Renaissance">Renaissance Italy</option>
+              <option value="Industrial">Industrial Revolution</option>
+              <option value="WildWest">Wild West</option>
+              <option value="Futuristic">Cyberpunk Future</option>
+            </select>
+            <Button
+              onClick={generateScenario}
+              disabled={loading}
+              className="h-12 px-8 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 text-white font-semibold"
+              data-testid="button-generate-scenario"
+            >
+              {loading ? "Generating..." : "Generate Scenario"}
+            </Button>
+          </div>
+
+          {scenario && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-4"
+            >
+              <div className="p-4 rounded-xl bg-slate-800/50 border border-white/10">
+                <h4 className="text-sm text-purple-400 uppercase tracking-wider mb-2">Setting</h4>
+                <p className="text-white/80">{scenario.setting || "A mysterious location awaits..."}</p>
+              </div>
+              <div className="p-4 rounded-xl bg-slate-800/50 border border-white/10">
+                <h4 className="text-sm text-cyan-400 uppercase tracking-wider mb-2">Scenario</h4>
+                <p className="text-white/80">{scenario.scenario || scenario.description || "An intriguing situation unfolds..."}</p>
+              </div>
+              {scenario.characters && scenario.characters.length > 0 && (
+                <div className="p-4 rounded-xl bg-slate-800/50 border border-white/10">
+                  <h4 className="text-sm text-pink-400 uppercase tracking-wider mb-2">Characters</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {scenario.characters.map((char: any, i: number) => (
+                      <span key={i} className="px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 text-sm">
+                        {typeof char === 'string' ? char : char.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <p className="text-xs text-white/40 text-center mt-4">
+                This is a simplified demo. The full system includes emotional states, belief tracking, and adaptive branching.
+              </p>
+            </motion.div>
+          )}
+
+          {!scenario && !loading && (
+            <div className="text-center py-8 text-white/40">
+              <Brain className="w-12 h-12 mx-auto mb-4 opacity-30" />
+              <p>Click "Generate Scenario" to see our AI engine in action</p>
+            </div>
+          )}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function LiveStatCard({ label, endpoint, field, color }: { label: string; endpoint: string; field: string; color: string }) {
+  const [value, setValue] = useState<string>("...");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStat = async () => {
+      try {
+        const response = await fetch(endpoint);
+        const data = await response.json();
+        setValue(data[field] || "N/A");
+      } catch {
+        setValue("N/A");
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchStat();
+    const interval = setInterval(fetchStat, 5000);
+    return () => clearInterval(interval);
+  }, [endpoint, field]);
+
+  const colorClasses: Record<string, string> = {
+    cyan: "text-cyan-400 border-cyan-500/30 bg-cyan-950/20",
+    purple: "text-purple-400 border-purple-500/30 bg-purple-950/20",
+    pink: "text-pink-400 border-pink-500/30 bg-pink-950/20",
+    emerald: "text-emerald-400 border-emerald-500/30 bg-emerald-950/20",
+  };
+
+  return (
+    <div className={`p-6 rounded-xl border ${colorClasses[color] || colorClasses.cyan}`} data-testid={`stat-${field}`}>
+      <div className={`text-3xl font-bold mb-1 ${loading ? "animate-pulse" : ""}`}>
+        {value}
+      </div>
+      <div className="text-sm text-white/50">{label}</div>
+    </div>
+  );
+}
+
+function AccessRequestForm({ onBack }: { onBack: () => void }) {
+  const [formData, setFormData] = useState({
+    studioName: "",
+    contactName: "",
+    email: "",
+    website: "",
+    teamSize: "",
+    expertise: "",
+    previousProjects: "",
+    interestReason: "",
+    partnershipType: "",
+    ndaAccepted: false,
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('/api/partner/request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setSubmitted(true);
+        toast.success("Request submitted! We'll review and get back to you.");
+      } else {
+        toast.error(data.error || "Failed to submit request");
+        setIsSubmitting(false);
+      }
+    } catch (err) {
+      toast.error("Failed to submit request");
+      setIsSubmitting(false);
+    }
+  };
+
+  if (submitted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center px-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center max-w-md"
+        >
+          <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-emerald-500/20 flex items-center justify-center">
+            <CheckCircle className="w-10 h-10 text-emerald-400" />
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-4">Request Submitted!</h2>
+          <p className="text-white/60 mb-8">
+            Thank you for your interest in partnering with DarkWave Studios. 
+            Our team will review your application and send your access code via email within 2-3 business days.
+          </p>
+          <Link href="/">
+            <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+              Return to Main Site
+            </Button>
+          </Link>
+        </motion.div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 py-12 px-4">
+      <div className="container mx-auto max-w-2xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <button
+            onClick={onBack}
+            className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-8 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to login
+          </button>
+
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-display font-bold text-white mb-2">Request Partner Access</h1>
+            <p className="text-white/60">Tell us about your studio and partnership interests</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-2xl p-8 space-y-6">
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm text-white/70 mb-2">Studio/Company Name *</label>
+                <Input
+                  required
+                  value={formData.studioName}
+                  onChange={(e) => setFormData({ ...formData, studioName: e.target.value })}
+                  className="bg-slate-800/50 border-white/10 text-white"
+                  placeholder="Your studio name"
+                  data-testid="input-studio-name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-white/70 mb-2">Contact Name *</label>
+                <Input
+                  required
+                  value={formData.contactName}
+                  onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
+                  className="bg-slate-800/50 border-white/10 text-white"
+                  placeholder="Your name"
+                  data-testid="input-contact-name"
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm text-white/70 mb-2">Email *</label>
+                <Input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="bg-slate-800/50 border-white/10 text-white"
+                  placeholder="your@email.com"
+                  data-testid="input-email"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-white/70 mb-2">Website</label>
+                <Input
+                  value={formData.website}
+                  onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                  className="bg-slate-800/50 border-white/10 text-white"
+                  placeholder="https://yourstudio.com"
+                  data-testid="input-website"
+                />
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm text-white/70 mb-2">Team Size</label>
+                <select
+                  value={formData.teamSize}
+                  onChange={(e) => setFormData({ ...formData, teamSize: e.target.value })}
+                  className="w-full h-10 px-3 rounded-md bg-slate-800/50 border border-white/10 text-white"
+                  data-testid="select-team-size"
+                >
+                  <option value="">Select team size</option>
+                  <option value="1-10">1-10 people</option>
+                  <option value="11-50">11-50 people</option>
+                  <option value="51-200">51-200 people</option>
+                  <option value="200+">200+ people</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm text-white/70 mb-2">Partnership Type</label>
+                <select
+                  value={formData.partnershipType}
+                  onChange={(e) => setFormData({ ...formData, partnershipType: e.target.value })}
+                  className="w-full h-10 px-3 rounded-md bg-slate-800/50 border border-white/10 text-white"
+                  data-testid="select-partnership-type"
+                >
+                  <option value="">Select type</option>
+                  <option value="co-dev">Co-Development Partner</option>
+                  <option value="graphics">Graphics & Engine Partner</option>
+                  <option value="ai-tech">AI/Tech Partner</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm text-white/70 mb-2">Your Expertise</label>
+              <Input
+                value={formData.expertise}
+                onChange={(e) => setFormData({ ...formData, expertise: e.target.value })}
+                className="bg-slate-800/50 border-white/10 text-white"
+                placeholder="e.g., Unreal Engine, AI/ML, Narrative Design, etc."
+                data-testid="input-expertise"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm text-white/70 mb-2">Notable Previous Projects</label>
+              <textarea
+                value={formData.previousProjects}
+                onChange={(e) => setFormData({ ...formData, previousProjects: e.target.value })}
+                className="w-full h-24 px-3 py-2 rounded-md bg-slate-800/50 border border-white/10 text-white resize-none"
+                placeholder="Share some of your notable work..."
+                data-testid="input-previous-projects"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm text-white/70 mb-2">Why are you interested in Chronicles?</label>
+              <textarea
+                value={formData.interestReason}
+                onChange={(e) => setFormData({ ...formData, interestReason: e.target.value })}
+                className="w-full h-24 px-3 py-2 rounded-md bg-slate-800/50 border border-white/10 text-white resize-none"
+                placeholder="What excites you about this project?"
+                data-testid="input-interest-reason"
+              />
+            </div>
+
+            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.ndaAccepted}
+                  onChange={(e) => setFormData({ ...formData, ndaAccepted: e.target.checked })}
+                  className="mt-1"
+                  data-testid="checkbox-nda"
+                />
+                <span className="text-sm text-white/80">
+                  I agree to keep all information shared in the Partner Portal confidential. 
+                  I understand that all materials, technical details, and business information 
+                  are proprietary to DarkWave Studios and may not be shared without written consent.
+                </span>
+              </label>
+            </div>
+
+            <Button
+              type="submit"
+              disabled={isSubmitting || !formData.ndaAccepted}
+              className="w-full h-12 bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white font-semibold"
+              data-testid="button-submit-request"
+            >
+              {isSubmitting ? "Submitting..." : "Submit Request"}
+            </Button>
+          </form>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
+
 function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
+  const [showRequestForm, setShowRequestForm] = useState(false);
+
+  if (showRequestForm) {
+    return <AccessRequestForm onBack={() => setShowRequestForm(false)} />;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -197,15 +589,26 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
             </Button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-white/10 text-center">
-            <p className="text-white/40 text-sm mb-3">Need access credentials?</p>
-            <a 
-              href="mailto:partners@darkwavestudios.io" 
-              className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 text-sm transition-colors"
+          <div className="mt-6 pt-6 border-t border-white/10">
+            <p className="text-white/40 text-sm mb-4 text-center">Don't have access yet?</p>
+            <Button
+              variant="outline"
+              onClick={() => setShowRequestForm(true)}
+              className="w-full border-purple-500/30 text-purple-400 hover:bg-purple-500/10 hover:border-purple-500/50"
+              data-testid="button-request-access"
             >
-              <Mail className="w-4 h-4" />
-              partners@darkwavestudios.io
-            </a>
+              <Users className="w-4 h-4 mr-2" />
+              Request Partner Access
+            </Button>
+            <p className="text-center mt-4">
+              <a 
+                href="mailto:partners@darkwavestudios.io" 
+                className="inline-flex items-center gap-2 text-white/40 hover:text-cyan-400 text-xs transition-colors"
+              >
+                <Mail className="w-3 h-3" />
+                partners@darkwavestudios.io
+              </a>
+            </p>
           </div>
         </motion.div>
 
@@ -428,6 +831,92 @@ function PartnerContent() {
                     web portal are production-ready. We need world-class talent to bring the game experience to life.
                   </p>
                 </div>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Live Blockchain Stats */}
+        <section className="py-16 px-4">
+          <div className="container mx-auto max-w-6xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mb-8"
+            >
+              <h2 className="text-3xl font-display font-bold text-white mb-4 flex items-center gap-3">
+                <Activity className="w-8 h-8 text-emerald-400" />
+                Live Infrastructure
+              </h2>
+              <p className="text-white/60">Real-time stats from our production blockchain - not mockups, actual infrastructure</p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="grid grid-cols-2 md:grid-cols-4 gap-4"
+            >
+              <LiveStatCard label="Block Height" endpoint="/api/blockchain/stats" field="currentBlock" color="cyan" />
+              <LiveStatCard label="Transactions/sec" endpoint="/api/blockchain/stats" field="tps" color="purple" />
+              <LiveStatCard label="Active Validators" endpoint="/api/blockchain/stats" field="activeNodes" color="pink" />
+              <LiveStatCard label="Finality Time" endpoint="/api/blockchain/stats" field="finalityTime" color="emerald" />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mt-8 p-6 rounded-xl bg-emerald-950/20 border border-emerald-500/20"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-emerald-400 font-semibold">Production Status: Live</span>
+              </div>
+              <p className="text-white/70 text-sm">
+                Our DarkWave Smart Chain is fully operational with Proof-of-Authority consensus. 
+                This isn't a testnet or simulation - it's the same infrastructure that will power Chronicles.
+              </p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Interactive Demo */}
+        <InteractiveDemo />
+
+        {/* Video Pitch Section */}
+        <section className="py-16 px-4 bg-slate-900/50">
+          <div className="container mx-auto max-w-4xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-8"
+            >
+              <h2 className="text-3xl font-display font-bold text-white mb-4 flex items-center justify-center gap-3">
+                <Play className="w-8 h-8 text-cyan-400" />
+                Vision Overview
+              </h2>
+              <p className="text-white/60">A quick introduction to DarkWave Chronicles and what makes it unique</p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 bg-slate-900"
+              style={{ boxShadow: "0 0 80px rgba(6, 182, 212, 0.1)" }}
+            >
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-cyan-950/50 to-purple-950/50">
+                <div className="w-20 h-20 rounded-full bg-white/10 flex items-center justify-center mb-6 border border-white/20">
+                  <Play className="w-8 h-8 text-white ml-1" />
+                </div>
+                <p className="text-white/60 text-lg mb-2">Video Coming Soon</p>
+                <p className="text-white/40 text-sm max-w-md text-center px-4">
+                  We're preparing an executive overview video. In the meantime, explore the live materials below 
+                  or schedule a call for a personal walkthrough.
+                </p>
               </div>
             </motion.div>
           </div>

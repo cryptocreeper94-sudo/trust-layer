@@ -2399,3 +2399,35 @@ export const earlyAdopterProgram = pgTable("early_adopter_program", {
 });
 
 export type EarlyAdopterProgram = typeof earlyAdopterProgram.$inferSelect;
+
+// Partner Access Requests - for studio partnership inquiries
+export const partnerAccessRequests = pgTable("partner_access_requests", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  studioName: text("studio_name").notNull(),
+  contactName: text("contact_name").notNull(),
+  email: text("email").notNull(),
+  website: text("website"),
+  teamSize: text("team_size"),
+  expertise: text("expertise"), // "graphics", "ai", "narrative", "full-stack", etc.
+  previousProjects: text("previous_projects"),
+  interestReason: text("interest_reason"),
+  partnershipType: text("partnership_type"), // "co-dev", "graphics", "ai-tech"
+  ndaAccepted: boolean("nda_accepted").notNull().default(false),
+  status: text("status").notNull().default("pending"), // "pending", "approved", "rejected"
+  accessCode: text("access_code"), // Generated on approval
+  reviewedBy: text("reviewed_by"),
+  reviewedAt: timestamp("reviewed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertPartnerAccessRequestSchema = createInsertSchema(partnerAccessRequests).omit({
+  id: true,
+  status: true,
+  accessCode: true,
+  reviewedBy: true,
+  reviewedAt: true,
+  createdAt: true,
+});
+
+export type PartnerAccessRequest = typeof partnerAccessRequests.$inferSelect;
+export type InsertPartnerAccessRequest = z.infer<typeof insertPartnerAccessRequestSchema>;
