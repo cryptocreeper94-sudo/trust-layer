@@ -435,6 +435,91 @@ export default function ChronoCreators() {
         </div>
       </section>
 
+      <section className="py-16 px-4 bg-gradient-to-b from-transparent via-emerald-950/10 to-transparent">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <Building className="w-6 h-6 text-emerald-400" />
+              <h2 className="text-2xl md:text-3xl font-display font-bold text-white">Business Partnerships</h2>
+            </div>
+            <p className="text-white/60 max-w-3xl">
+              <span className="text-emerald-400 font-semibold">Storefront Sponsorships</span> - Real businesses can sponsor in-game locations. 
+              A medieval blacksmith becomes a portal to an outdoor gear company. A Victorian clockmaker links to a watch brand. 
+              Location-based pricing means prime spots are worth more - just like real estate.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            {[
+              {
+                title: "Storefront Properties",
+                description: "Sponsor shops, taverns, guilds, and marketplaces across 70+ historical eras. Players who 'enter' your location connect to your brand.",
+                icon: Building,
+                features: ["Era-appropriate branding", "Location-based pricing", "Traffic analytics"]
+              },
+              {
+                title: "Premium Locations",
+                description: "Town squares, festival grounds, royal courts - high-traffic areas command premium licensing fees but deliver maximum exposure.",
+                icon: Crown,
+                features: ["Auction system for prime spots", "Surge pricing during events", "Exclusive district rights"]
+              },
+              {
+                title: "Revenue Model",
+                description: "Monthly licensing, per-visit royalties, conversion bonuses. Full analytics dashboard shows traffic, engagement, and ROI.",
+                icon: Coins,
+                features: ["Transparent blockchain tracking", "Real-time analytics", "Conversion attribution"]
+              }
+            ].map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <div className="h-full p-6 rounded-xl bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/20">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center mb-4">
+                      <Icon className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
+                    <p className="text-white/60 text-sm mb-4">{item.description}</p>
+                    <ul className="space-y-1">
+                      {item.features.map((feature, j) => (
+                        <li key={j} className="flex items-center gap-2 text-xs text-emerald-300">
+                          <Check className="w-3 h-3" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+            <div className="flex items-start gap-3">
+              <Shield className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-semibold text-white mb-1">Coming Phase 1-2 (Q3 2025 - Q2 2026)</h4>
+                <p className="text-sm text-white/60">
+                  Storefront sponsorships are part of our roadmap. Property registry, licensing system, 
+                  and business partner portal are scheduled for Phase 1. Full marketplace launch in Phase 2.
+                  <Link href="/team" className="text-emerald-400 hover:underline ml-1">View full roadmap →</Link>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-4xl">
           <HoloCard image={deepSpace} glow="amber" className="min-h-[200px]">

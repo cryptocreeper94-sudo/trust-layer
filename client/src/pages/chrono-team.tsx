@@ -35,18 +35,18 @@ const ROADMAP_PHASES = [
   },
   {
     phase: "Phase 1",
-    title: "Social Systems",
+    title: "Economy & Property",
     timeline: "Q3-Q4 2025",
     status: "planned",
     progress: 0,
-    description: "Faction systems, political simulation, player-NPC relationships, economy basics.",
+    description: "Property ownership, storefront infrastructure, economy systems, business partnerships.",
     milestones: [
-      { text: "Faction creation & management", done: false },
-      { text: "Political council mechanics", done: false },
-      { text: "Treaty & alliance systems", done: false },
-      { text: "Basic economy (trade, property)", done: false },
-      { text: "Relationship tracking system", done: false },
-      { text: "Player crisis events", done: false },
+      { text: "Property registry (blockchain-backed)", done: false },
+      { text: "Storefront sponsorship system design", done: false },
+      { text: "Business partner portal", done: false },
+      { text: "Location-based pricing engine", done: false },
+      { text: "Traffic analytics & conversion tracking", done: false },
+      { text: "Creator licensing & royalty system", done: false },
     ]
   },
   {
@@ -55,12 +55,12 @@ const ROADMAP_PHASES = [
     timeline: "Q1-Q2 2026",
     status: "planned",
     progress: 0,
-    description: "Expand to 10+ eras, time-travel mechanics, cross-era quests, public alpha.",
+    description: "10+ eras live, storefronts operational, time-travel mechanics, public alpha.",
     milestones: [
       { text: "10 historical eras live", done: false },
-      { text: "Time rift transport system", done: false },
+      { text: "Storefront marketplace launch", done: false },
+      { text: "Era-specific sponsor integration", done: false },
       { text: "Cross-era quest framework", done: false },
-      { text: "Temporal echoes feature", done: false },
       { text: "Public alpha release", done: false },
       { text: "Mobile app (Android/iOS)", done: false },
     ]
@@ -71,14 +71,14 @@ const ROADMAP_PHASES = [
     timeline: "Q3-Q4 2026",
     status: "future",
     progress: 0,
-    description: "70+ eras, advanced AI, blockchain integration, public beta, community content.",
+    description: "70+ eras, city districts, premium storefronts, advanced AI, public beta.",
     milestones: [
       { text: "Full 70+ era deployment", done: false },
-      { text: "Advanced AI emotion system", done: false },
-      { text: "DWC blockchain integration", done: false },
-      { text: "Community content creation", done: false },
+      { text: "City district auctions (premium locations)", done: false },
+      { text: "Advanced sponsor analytics dashboard", done: false },
+      { text: "Community content creation tools", done: false },
       { text: "Public beta release", done: false },
-      { text: "Mainnet launch prep", done: false },
+      { text: "DWC mainnet integration", done: false },
     ]
   },
 ];
