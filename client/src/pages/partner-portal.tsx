@@ -106,104 +106,199 @@ const VISION_SLIDES = [
 function VisionShowcase() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    if (isPaused) return;
-    const timer = setInterval(() => {
+    if (isPaused) {
+      setProgress(0);
+      return;
+    }
+    
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => Math.min(prev + 1.67, 100));
+    }, 100);
+    
+    const slideInterval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % VISION_SLIDES.length);
+      setProgress(0);
     }, 6000);
-    return () => clearInterval(timer);
-  }, [isPaused]);
+    
+    return () => {
+      clearInterval(progressInterval);
+      clearInterval(slideInterval);
+    };
+  }, [isPaused, currentSlide]);
 
   const slide = VISION_SLIDES[currentSlide];
   const SlideIcon = slide.icon;
 
   return (
-    <section className="py-16 px-4 bg-slate-900/50">
-      <div className="container mx-auto max-w-4xl">
+    <section className="py-20 px-4 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900/50 to-slate-950" />
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+      </div>
+      
+      <div className="container mx-auto max-w-5xl relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-8"
+          className="text-center mb-12"
         >
-          <h2 className="text-3xl font-display font-bold text-white mb-4 flex items-center justify-center gap-3">
-            <Sparkles className="w-8 h-8 text-cyan-400" />
-            Vision Overview
+          <Badge className="mb-4 px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-500/30 text-white backdrop-blur-sm">
+            <Sparkles className="w-4 h-4 mr-2" />
+            Executive Overview
+          </Badge>
+          <h2 className="text-4xl md:text-5xl font-display font-black text-white mb-4">
+            <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              The Vision
+            </span>
           </h2>
-          <p className="text-white/60">The Chronicles experience in five key pillars</p>
+          <p className="text-white/60 text-lg max-w-2xl mx-auto">Five pillars that define the Chronicles experience</p>
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="relative rounded-2xl overflow-hidden border border-white/10"
-          style={{ boxShadow: "0 0 80px rgba(6, 182, 212, 0.1)" }}
+          className="relative group"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentSlide}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.5 }}
-              className={`relative p-8 md:p-12 bg-gradient-to-br ${slide.gradient} min-h-[300px] md:min-h-[350px]`}
-            >
-              <div className="absolute inset-0 bg-black/40" />
-              <div className="relative z-10 flex flex-col h-full">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                    <SlideIcon className="w-8 h-8 text-white" />
+          <div className="absolute -inset-[1px] bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-3xl opacity-50 group-hover:opacity-75 blur-sm transition-opacity" />
+          <div className="absolute -inset-[1px] bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-3xl opacity-75" />
+          
+          <div className="relative rounded-3xl overflow-hidden bg-slate-950">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentSlide}
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="relative"
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${slide.gradient} opacity-20`} />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
+                
+                <div className="relative z-10 p-8 md:p-12 lg:p-16 min-h-[400px] md:min-h-[450px] flex flex-col">
+                  <div className="flex items-start gap-6 mb-8">
+                    <motion.div 
+                      initial={{ scale: 0, rotate: -180 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ duration: 0.5, delay: 0.2 }}
+                      className={`w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-gradient-to-br ${slide.gradient} p-[2px] shrink-0`}
+                    >
+                      <div className="w-full h-full rounded-2xl bg-slate-950/80 backdrop-blur-xl flex items-center justify-center">
+                        <SlideIcon className="w-10 h-10 md:w-12 md:h-12 text-white" />
+                      </div>
+                    </motion.div>
+                    <div className="text-left pt-2">
+                      <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.4, delay: 0.3 }}
+                      >
+                        <span className="text-xs uppercase tracking-widest text-white/40 mb-2 block">
+                          Pillar {currentSlide + 1} of {VISION_SLIDES.length}
+                        </span>
+                        <h3 className="text-3xl md:text-4xl lg:text-5xl font-display font-black text-white mb-2">
+                          {slide.title}
+                        </h3>
+                        <p className="text-lg md:text-xl text-white/70 font-light">{slide.subtitle}</p>
+                      </motion.div>
+                    </div>
                   </div>
-                  <div className="text-left">
-                    <h3 className="text-2xl md:text-3xl font-display font-bold text-white">{slide.title}</h3>
-                    <p className="text-white/80 text-sm md:text-base">{slide.subtitle}</p>
-                  </div>
-                </div>
-                <p className="text-white/90 text-lg md:text-xl leading-relaxed flex-1">
-                  {slide.description}
-                </p>
-                <div className="flex items-center justify-between mt-8">
-                  <div className="flex gap-2">
-                    {VISION_SLIDES.map((_, i) => (
+                  
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                    className="flex-1 flex items-center"
+                  >
+                    <p className="text-xl md:text-2xl text-white/80 leading-relaxed font-light max-w-3xl">
+                      {slide.description}
+                    </p>
+                  </motion.div>
+                  
+                  <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/10">
+                    <div className="flex items-center gap-3">
+                      {VISION_SLIDES.map((s, i) => (
+                        <button
+                          key={i}
+                          onClick={() => { setCurrentSlide(i); setProgress(0); }}
+                          className="group/dot relative"
+                          data-testid={`slide-dot-${i}`}
+                        >
+                          <div className={`w-12 h-1.5 rounded-full transition-all ${
+                            i === currentSlide 
+                              ? "bg-white/20" 
+                              : i < currentSlide 
+                              ? "bg-white/40" 
+                              : "bg-white/10 hover:bg-white/20"
+                          }`}>
+                            {i === currentSlide && (
+                              <motion.div 
+                                className={`h-full rounded-full bg-gradient-to-r ${slide.gradient}`}
+                                style={{ width: `${progress}%` }}
+                              />
+                            )}
+                          </div>
+                          <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs text-white/0 group-hover/dot:text-white/60 transition-colors whitespace-nowrap">
+                            {s.title.split('.')[0]}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
                       <button
-                        key={i}
-                        onClick={() => setCurrentSlide(i)}
-                        className={`w-3 h-3 rounded-full transition-all ${
-                          i === currentSlide ? "bg-white scale-125" : "bg-white/40 hover:bg-white/60"
-                        }`}
-                        data-testid={`slide-dot-${i}`}
-                      />
-                    ))}
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setCurrentSlide((prev) => (prev - 1 + VISION_SLIDES.length) % VISION_SLIDES.length)}
-                      className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
-                      data-testid="slide-prev"
-                    >
-                      <ArrowLeft className="w-5 h-5 text-white" />
-                    </button>
-                    <button
-                      onClick={() => setCurrentSlide((prev) => (prev + 1) % VISION_SLIDES.length)}
-                      className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
-                      data-testid="slide-next"
-                    >
-                      <ArrowRight className="w-5 h-5 text-white" />
-                    </button>
+                        onClick={() => { setCurrentSlide((prev) => (prev - 1 + VISION_SLIDES.length) % VISION_SLIDES.length); setProgress(0); }}
+                        className="w-12 h-12 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 flex items-center justify-center transition-all group/btn"
+                        data-testid="slide-prev"
+                      >
+                        <ArrowLeft className="w-5 h-5 text-white/60 group-hover/btn:text-white transition-colors" />
+                      </button>
+                      <button
+                        onClick={() => { setCurrentSlide((prev) => (prev + 1) % VISION_SLIDES.length); setProgress(0); }}
+                        className="w-12 h-12 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 flex items-center justify-center transition-all group/btn"
+                        data-testid="slide-next"
+                      >
+                        <ArrowRight className="w-5 h-5 text-white/60 group-hover/btn:text-white transition-colors" />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+              </motion.div>
+            </AnimatePresence>
+            
+            {isPaused && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20"
+              >
+                <span className="text-xs text-white/60">Paused</span>
+              </motion.div>
+            )}
+          </div>
         </motion.div>
 
-        <p className="text-center text-white/40 text-sm mt-4">
-          Hover to pause • Click dots or arrows to navigate • Interested in a deeper dive? Request a call below.
-        </p>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-8 flex flex-col md:flex-row items-center justify-center gap-4 text-center"
+        >
+          <p className="text-white/40 text-sm">
+            Hover to pause • Click progress bars or arrows to navigate
+          </p>
+          <span className="hidden md:block text-white/20">•</span>
+          <p className="text-white/50 text-sm">
+            Want a personal walkthrough? <span className="text-cyan-400">Schedule a call below</span>
+          </p>
+        </motion.div>
       </div>
     </section>
   );
