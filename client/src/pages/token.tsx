@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRightLeft, Coins, BarChart3, Lock, Globe, ShieldCheck, Zap, Sparkles, Crown, Star, Gift, Users, TrendingUp, Percent } from "lucide-react";
+import { ArrowLeft, ArrowRightLeft, Coins, BarChart3, Lock, Globe, ShieldCheck, Zap, Sparkles, Crown, Star, Gift, Users, TrendingUp, Percent, PieChart, Code, Megaphone, Settings, Shield, ExternalLink } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -458,6 +458,85 @@ export default function Token() {
               </div>
             </div>
           </GlassCard>
+        </div>
+      </section>
+
+      <section className="py-12 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-10">
+            <Badge className="mb-4 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border-0">
+              <PieChart className="w-3 h-3 mr-1" /> Full Transparency
+            </Badge>
+            <h2 className="text-2xl md:text-3xl font-display font-bold mb-3">Treasury Allocation</h2>
+            <p className="text-sm text-muted-foreground max-w-lg mx-auto">
+              Know exactly where every DWC goes. Transparent allocation across development, marketing, and community rewards.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            <GlassCard hover className="border border-cyan-500/30 hover:shadow-lg hover:shadow-cyan-500/20 transition-all">
+              <div className="p-4 text-center">
+                <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center mx-auto mb-2">
+                  <Code className="w-5 h-5 text-cyan-400" />
+                </div>
+                <div className="text-xl font-bold text-cyan-400">30%</div>
+                <div className="text-[10px] text-muted-foreground">Development</div>
+              </div>
+            </GlassCard>
+            <GlassCard hover className="border border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/20 transition-all">
+              <div className="p-4 text-center">
+                <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center mx-auto mb-2">
+                  <Megaphone className="w-5 h-5 text-purple-400" />
+                </div>
+                <div className="text-xl font-bold text-purple-400">20%</div>
+                <div className="text-[10px] text-muted-foreground">Marketing</div>
+              </div>
+            </GlassCard>
+            <GlassCard hover className="border border-green-500/30 hover:shadow-lg hover:shadow-green-500/20 transition-all">
+              <div className="p-4 text-center">
+                <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center mx-auto mb-2">
+                  <TrendingUp className="w-5 h-5 text-green-400" />
+                </div>
+                <div className="text-xl font-bold text-green-400">20%</div>
+                <div className="text-[10px] text-muted-foreground">Staking</div>
+              </div>
+            </GlassCard>
+            <GlassCard hover className="border border-amber-500/30 hover:shadow-lg hover:shadow-amber-500/20 transition-all">
+              <div className="p-4 text-center">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center mx-auto mb-2">
+                  <Users className="w-5 h-5 text-amber-400" />
+                </div>
+                <div className="text-xl font-bold text-amber-400">15%</div>
+                <div className="text-[10px] text-muted-foreground">Team</div>
+              </div>
+            </GlassCard>
+            <GlassCard hover className="border border-blue-500/30 hover:shadow-lg hover:shadow-blue-500/20 transition-all">
+              <div className="p-4 text-center">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center mx-auto mb-2">
+                  <Settings className="w-5 h-5 text-blue-400" />
+                </div>
+                <div className="text-xl font-bold text-blue-400">10%</div>
+                <div className="text-[10px] text-muted-foreground">Operations</div>
+              </div>
+            </GlassCard>
+            <GlassCard hover className="border border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20 transition-all">
+              <div className="p-4 text-center">
+                <div className="w-10 h-10 rounded-xl bg-pink-500/20 flex items-center justify-center mx-auto mb-2">
+                  <Shield className="w-5 h-5 text-pink-400" />
+                </div>
+                <div className="text-xl font-bold text-pink-400">5%</div>
+                <div className="text-[10px] text-muted-foreground">Reserve</div>
+              </div>
+            </GlassCard>
+          </div>
+
+          <div className="text-center mt-6">
+            <Link href="/treasury">
+              <Button variant="outline" className="gap-2 rounded-full border-white/20 hover:bg-white/5" data-testid="button-view-treasury">
+                <ExternalLink className="w-4 h-4" /> View Full Treasury Report
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 

@@ -2788,7 +2788,13 @@ export const treasuryAllocations = pgTable("treasury_allocations", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
+export const insertTreasuryAllocationSchema = createInsertSchema(treasuryAllocations).omit({
+  id: true,
+  updatedAt: true,
+});
+
 export type TreasuryAllocation = typeof treasuryAllocations.$inferSelect;
+export type InsertTreasuryAllocation = z.infer<typeof insertTreasuryAllocationSchema>;
 
 export const treasuryLedger = pgTable("treasury_ledger", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -2801,7 +2807,13 @@ export const treasuryLedger = pgTable("treasury_ledger", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const insertTreasuryLedgerSchema = createInsertSchema(treasuryLedger).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type TreasuryLedgerEntry = typeof treasuryLedger.$inferSelect;
+export type InsertTreasuryLedgerEntry = z.infer<typeof insertTreasuryLedgerSchema>;
 
 // Protocol Fee Configuration (for display purposes)
 export const protocolFeeConfigSchema = z.object({
