@@ -132,7 +132,7 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
               
               const cardContent = (
                 <div
-                  onClick={onClose}
+                  onClick={item.external ? undefined : onClose}
                   data-testid={`featured-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                   style={{
                     position: 'relative',
