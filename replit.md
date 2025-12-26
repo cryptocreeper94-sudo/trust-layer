@@ -87,8 +87,16 @@ DarkWave Smart Chain (DSC) is a blockchain ecosystem by DarkWave Studios, aiming
 - City district auctions (premium locations)
 - Advanced sponsor analytics dashboard
 - Community content creation tools
-- Public beta release
+- Public beta release (July 4, 2026 target)
 - DWC mainnet integration
+
+### Phase 4+ (2027+) - Future Vision
+- **VR/AR Integration**: Chronicles' "parallel self" concept is perfectly suited for immersive VR - you're not playing a character, you're stepping through a portal. Same you, different era. Potential partnership with VR studios rather than building from scratch. Hardware costs declining (Quest 3, Vision Pro pushing mainstream adoption).
+- **Cross-Platform Expansion**: Console ports, streaming platforms
+- **Chronicles Universe Expansion**: Spin-off experiences, merchandise, media adaptations
+
+## Core Experience Metaphor
+The "portal" concept: Like putting on a mask or VR goggles - you step through and wake up as yourself in another era. Laying in bed staring at the ceiling? Now you're in a 1920s speakeasy. Same you, different world. This is what separates Chronicles from every other game - no character creation screen, no avatar customization. YOU are already the character.
 
 ## Marketing & Community Strategy
 
