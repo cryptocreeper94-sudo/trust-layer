@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Clock, Users, Brain, Shield, Crown, Sparkles, Heart, Eye, Map, Coins, 
@@ -33,6 +33,16 @@ import romanColosseum from "@assets/generated_images/roman_empire_colosseum_glad
 import feudalJapan from "@assets/generated_images/feudal_japan_samurai_castle.png";
 
 import heroVideo from "@assets/generated_videos/fantasy_world_cinematic_flyover.mp4";
+import wildWestVideo from "@assets/generated_videos/wild_west_frontier_town_flyover.mp4";
+import ancientRomeVideo from "@assets/generated_videos/ancient_rome_colosseum_glory.mp4";
+import medievalCastleVideo from "@assets/generated_videos/medieval_castle_twilight_scene.mp4";
+
+const HERO_VIDEOS = [
+  { src: heroVideo, label: "Fantasy Realm" },
+  { src: wildWestVideo, label: "Wild West" },
+  { src: ancientRomeVideo, label: "Ancient Rome" },
+  { src: medievalCastleVideo, label: "Medieval Era" },
+];
 
 const CORE_FEATURES = [
   {
@@ -486,6 +496,32 @@ export default function Chronicles() {
   usePageAnalytics();
   const [epochScrollPos, setEpochScrollPos] = useState(0);
   const [videoMuted, setVideoMuted] = useState(true);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [isVideoTransitioning, setIsVideoTransitioning] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  
+  useEffect(() => {
+    const handleVideoEnd = () => {
+      setIsVideoTransitioning(true);
+      setTimeout(() => {
+        setCurrentVideoIndex((prev) => (prev + 1) % HERO_VIDEOS.length);
+        setIsVideoTransitioning(false);
+      }, 500);
+    };
+
+    const video = videoRef.current;
+    if (video) {
+      video.addEventListener('ended', handleVideoEnd);
+      return () => video.removeEventListener('ended', handleVideoEnd);
+    }
+  }, [currentVideoIndex]);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.load();
+      videoRef.current.play().catch(() => {});
+    }
+  }, [currentVideoIndex]);
   
   const scrollEpochs = (direction: 'left' | 'right') => {
     const container = document.getElementById('epoch-carousel');
@@ -520,14 +556,15 @@ export default function Chronicles() {
       <section className="relative min-h-screen flex items-center justify-center pt-14 overflow-hidden">
         <div className="absolute inset-0">
           <video 
+            ref={videoRef}
+            key={currentVideoIndex}
             autoPlay 
-            loop 
             muted={videoMuted}
             playsInline
-            className="w-full h-full object-cover"
+            className={`w-full h-full object-cover transition-opacity duration-500 ${isVideoTransitioning ? 'opacity-0' : 'opacity-100'}`}
             poster={fantasyWorld}
           >
-            <source src={heroVideo} type="video/mp4" />
+            <source src={HERO_VIDEOS[currentVideoIndex].src} type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-transparent to-black/70" />
@@ -538,6 +575,27 @@ export default function Chronicles() {
             backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(168,85,247,0.4) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(6,182,212,0.4) 0%, transparent 50%)',
           }}
         />
+        
+        {/* Video indicator dots */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+          {HERO_VIDEOS.map((video, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                setIsVideoTransitioning(true);
+                setTimeout(() => {
+                  setCurrentVideoIndex(idx);
+                  setIsVideoTransitioning(false);
+                }, 300);
+              }}
+              className={`transition-all ${currentVideoIndex === idx 
+                ? 'w-8 h-2 bg-white rounded-full' 
+                : 'w-2 h-2 bg-white/40 hover:bg-white/60 rounded-full'}`}
+              title={video.label}
+              data-testid={`button-video-${idx}`}
+            />
+          ))}
+        </div>
         
         <button
           onClick={() => setVideoMuted(!videoMuted)}
