@@ -50,7 +50,7 @@ export default function ChronoExecutiveSummary() {
                 </span>
               </h1>
               <p className="text-xl md:text-2xl text-white/80 mb-2">The ChronoVerse</p>
-              <p className="text-lg text-white/60 italic">"Not A Game. A Life."</p>
+              <p className="text-lg text-white/60 italic">"YOU. The Legend."</p>
             </motion.div>
 
             <motion.div
@@ -64,11 +64,11 @@ export default function ChronoExecutiveSummary() {
                 Executive Overview
               </h2>
               <p className="text-white/80 leading-relaxed mb-4">
-                DarkWave Chronicles is a <span className="text-amber-400 font-semibold">real-time, persistent life simulation platform</span> that 
-                transcends traditional gaming. Players exist as themselves within 70+ historically-accurate parallel universes spanning 
-                from the Prehistoric Era to a speculative 2200 CE future. The simulation runs continuously—24/7/365—creating a living 
-                world where AI-driven NPCs pursue their own goals, economies fluctuate, and political systems evolve with or without 
-                player intervention.
+                DarkWave Chronicles is an <span className="text-amber-400 font-semibold">unprecedented adventure platform</span> where 
+                YOU are the hero—not an avatar, your actual parallel self. Experience 70+ mission theaters spanning 
+                from the Prehistoric Era to a speculative 2200 CE future, each with unique campaigns, factions, and ways to build your legend. 
+                The world evolves dynamically—AI-driven NPCs pursue their own goals, economies shift, and alliances form—creating a living 
+                experience that responds authentically to your choices.
               </p>
               <p className="text-white/80 leading-relaxed">
                 Built on the <span className="text-cyan-400 font-semibold">DarkWave Smart Chain (DWSC)</span> blockchain infrastructure, 
@@ -98,8 +98,8 @@ export default function ChronoExecutiveSummary() {
             <div className="grid md:grid-cols-2 gap-6">
               {[
                 {
-                  title: "Persistent Living World",
-                  description: "Unlike session-based games, the ChronoVerse continues evolving in real-time. AI agents live their lives, trade, form relationships, and make decisions 24/7. Your character ages, your businesses operate, and the world changes whether you're online or not.",
+                  title: "Living World Adventures",
+                  description: "The ChronoVerse evolves dynamically. AI-driven NPCs pursue quests, form alliances, and remember your actions. Drop in for quick missions or commit to epic campaigns—your legend grows at your pace, with no grinding or forced obligations.",
                   icon: Globe,
                   color: "cyan"
                 },
@@ -110,8 +110,8 @@ export default function ChronoExecutiveSummary() {
                   color: "amber"
                 },
                 {
-                  title: "70+ Parallel Universes",
-                  description: "From Prehistoric tribes to Victorian commerce to cyberpunk futures. Each era is a complete world with accurate historical systems, economies, and social structures. Cross-era gameplay through time travel mechanics.",
+                  title: "70+ Mission Theaters",
+                  description: "From Prehistoric tribes to Victorian commerce to cyberpunk futures. Each era offers unique campaigns, factions, and rewards. Your choices ripple across time through our cross-era quest system.",
                   icon: Zap,
                   color: "purple"
                 },
@@ -139,6 +139,25 @@ export default function ChronoExecutiveSummary() {
                 </motion.div>
               ))}
             </div>
+
+            {/* The Unprecedented Teaser */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mt-8 bg-gradient-to-r from-amber-950/30 via-purple-950/30 to-cyan-950/30 border border-white/10 rounded-xl p-6"
+            >
+              <h3 className="text-lg font-semibold text-white mb-3">What Makes This Unprecedented</h3>
+              <p className="text-white/70 leading-relaxed mb-3">
+                Every game tells you what reality is. Chronicles lets you <span className="text-amber-400">discover it</span>. 
+                Our adaptive AI doesn't just react to your choices—it learns how you think, what you question, and what you accept. 
+                The world subtly reshapes itself around your perspective.
+              </p>
+              <p className="text-white/70 leading-relaxed">
+                The result: an experience that <span className="text-purple-400">reveals as much about you</span> as it does about 
+                the historical eras you explore. No two players experience the same Chronicles. No one leaves unchanged.
+              </p>
+            </motion.div>
           </div>
         </section>
 
