@@ -893,6 +893,122 @@ export async function registerRoutes(
     }
   });
 
+  // ============================================
+  // TREASURY SYNC API (Orbit Staffing Integration)
+  // ============================================
+  // HMAC-authenticated endpoint for external bookkeeping sync
+  
+  app.get("/api/treasury/sync", async (req, res) => {
+    try {
+      const apiKey = req.headers["x-orbit-key"] as string;
+      const timestamp = req.headers["x-orbit-timestamp"] as string;
+      const signature = req.headers["x-orbit-signature"] as string;
+      const nonce = req.headers["x-orbit-nonce"] as string || "";
+      
+      // Verify HMAC signature
+      const expectedKey = process.env.ORBIT_HUB_API_KEY;
+      const expectedSecret = process.env.ORBIT_HUB_API_SECRET;
+      
+      if (!expectedKey || !expectedSecret) {
+        console.error("Treasury sync: ORBIT_HUB credentials not configured");
+        return res.status(500).json({ error: "Integration not configured", code: "CONFIG_ERROR" });
+      }
+      
+      if (!apiKey || !timestamp || !signature) {
+        return res.status(401).json({ error: "Missing authentication headers", code: "AUTH_MISSING" });
+      }
+      
+      // Verify timestamp is within 5 minutes
+      const timestampMs = parseInt(timestamp);
+      const now = Date.now();
+      if (isNaN(timestampMs) || Math.abs(now - timestampMs) > 5 * 60 * 1000) {
+        return res.status(401).json({ error: "Request expired or invalid timestamp", code: "TIMESTAMP_INVALID" });
+      }
+      
+      // Constant-time API key comparison
+      const keyBuffer = Buffer.from(apiKey);
+      const expectedKeyBuffer = Buffer.from(expectedKey);
+      if (keyBuffer.length !== expectedKeyBuffer.length || !crypto.timingSafeEqual(keyBuffer, expectedKeyBuffer)) {
+        return res.status(401).json({ error: "Invalid API key", code: "AUTH_INVALID" });
+      }
+      
+      // Verify HMAC signature with nonce for replay protection
+      const payload = `GET:/api/treasury/sync:${timestamp}:${nonce}`;
+      const expectedSignature = crypto.createHmac("sha256", expectedSecret).update(payload).digest("hex");
+      
+      // Constant-time signature comparison
+      const sigBuffer = Buffer.from(signature);
+      const expectedSigBuffer = Buffer.from(expectedSignature);
+      if (sigBuffer.length !== expectedSigBuffer.length || !crypto.timingSafeEqual(sigBuffer, expectedSigBuffer)) {
+        return res.status(401).json({ error: "Invalid signature", code: "SIG_INVALID" });
+      }
+      
+      // Fetch treasury data with error handling
+      let treasuryInfo;
+      try {
+        treasuryInfo = await fetchTreasuryInfo();
+      } catch (fetchError) {
+        console.error("Treasury sync: Failed to fetch treasury info", fetchError);
+        return res.status(503).json({ error: "Treasury data temporarily unavailable", code: "TREASURY_FETCH_ERROR" });
+      }
+      
+      let allocations, ledger;
+      try {
+        allocations = await storage.getTreasuryAllocations();
+        ledger = await storage.getTreasuryLedger(100);
+      } catch (storageError) {
+        console.error("Treasury sync: Storage error", storageError);
+        return res.status(503).json({ error: "Database temporarily unavailable", code: "STORAGE_ERROR" });
+      }
+      
+      const syncResponse = {
+        snapshot: {
+          asOf: new Date().toISOString(),
+          chainBlock: blockchain.getLatestBlock()?.header?.height || 0,
+          treasuryAddress: treasuryInfo?.address || "unknown",
+          treasuryBalanceDwc: treasuryInfo?.balance || "0",
+          totalSupply: treasuryInfo?.total_supply || "100,000,000 DWC",
+        },
+        allocations: (allocations || []).map(a => ({
+          category: a.category,
+          label: a.label,
+          percentage: a.percentage,
+          description: a.description,
+          color: a.color,
+        })),
+        ledger: (ledger || []).map(l => ({
+          id: l.id,
+          category: l.category,
+          amountDwc: l.amountDwc,
+          amountUsd: l.amountUsd,
+          transactionType: l.transactionType,
+          txHash: l.txHash,
+          notes: l.notes,
+          createdAt: l.createdAt,
+        })),
+        protocolFees: {
+          dexSwapFee: "0.3%",
+          nftMarketplaceFee: "2.5%",
+          bridgeFee: "0.1%",
+          launchpadFee: "Listing-based",
+          buyTax: "0%",
+          sellTax: "0%",
+        },
+        meta: {
+          version: "1.0",
+          source: "dwsc.io",
+          syncTimestamp: Date.now(),
+          requestNonce: nonce || null,
+        },
+      };
+      
+      res.json(syncResponse);
+    } catch (error: any) {
+      console.error("Treasury sync error:", error);
+      res.status(500).json({ error: "Internal server error", code: "INTERNAL_ERROR" });
+    }
+  });
+
   app.get("/api/chain", async (req, res) => {
     try {
       const chainInfo = blockchain.getChainInfo();
@@ -7237,6 +7353,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       }
       
       // Create Stripe checkout session
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: [
