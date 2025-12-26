@@ -145,12 +145,12 @@ export default function ChronoHome() {
             transition={{ delay: 0.5, duration: 0.8 }}
           >
             <p className="text-2xl md:text-4xl font-bold text-white mb-2">
-              Not A Game. <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">A Life.</span>
+              <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">YOU.</span> The Legend.
             </p>
             <p className="text-lg md:text-xl text-white/70 mb-8 max-w-3xl mx-auto leading-relaxed">
-              A real-time life simulator spanning 70+ historical eras.
+              An unprecedented adventure platform spanning 70+ mission theaters.
               <br className="hidden md:block" />
-              As real as it gets without being your actual life.
+              Not an avatar. Your parallel self across history.
             </p>
           </motion.div>
           
@@ -202,7 +202,7 @@ export default function ChronoHome() {
               What Makes This Different
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto text-lg">
-              This isn't another MMO. It's a social experiment. A life simulator. A world that breathes.
+              This isn't another MMO. It's an unprecedented adventure where YOU are the hero. A world that breathes.
             </p>
           </motion.div>
           
@@ -315,7 +315,7 @@ export default function ChronoHome() {
               Adventures Await
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto text-lg">
-              Yes, it's a life simulator. But it's also a <span className="text-pink-400 font-semibold">game</span>. Epic quests. Hidden secrets. Fantastical realms beyond imagination.
+              Yes, it's a living world. But it's also a <span className="text-pink-400 font-semibold">game</span>. Epic quests. Hidden secrets. Fantastical realms beyond imagination.
             </p>
           </motion.div>
           
@@ -351,7 +351,7 @@ export default function ChronoHome() {
             <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-cyan-500/10 border border-white/10">
               <Sparkles className="w-5 h-5 text-pink-400" />
               <span className="text-white/80 text-sm">
-                Life simulator by day. <span className="text-pink-400 font-semibold">Epic adventure</span> whenever you choose.
+                Living world by day. <span className="text-pink-400 font-semibold">Epic adventure</span> whenever you choose.
               </span>
               <Sparkles className="w-5 h-5 text-cyan-400" />
             </div>

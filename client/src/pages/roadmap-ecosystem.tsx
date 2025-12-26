@@ -99,7 +99,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
     milestones: [
       { id: "e21", title: "Mainnet Genesis Block", description: "Official network launch on Valentine's Day 2026", status: "pending", isRequired: true },
       { id: "e22", title: "Token Migration", description: "Testnet to mainnet token conversion", status: "pending", isRequired: true },
-      { id: "e23", title: "DarkWave Chronicles Alpha", description: "First playable version of the AI life simulator", status: "pending", isRequired: true },
+      { id: "e23", title: "DarkWave Chronicles Alpha", description: "First playable adventure platform with AI-driven missions", status: "pending", isRequired: true },
       { id: "e24", title: "Exchange Listings", description: "CEX and DEX trading availability", status: "pending", isRequired: false },
       { id: "e25", title: "Layer 2 Scaling", description: "High-throughput rollup solution", status: "pending", isRequired: false },
       { id: "e26", title: "DarkWave Games Portal", description: "darkwavegames.io gaming ecosystem launch", status: "pending", isRequired: true },

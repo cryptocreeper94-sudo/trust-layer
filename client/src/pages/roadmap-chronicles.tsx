@@ -293,7 +293,7 @@ export default function RoadmapChronicles() {
               </span>
             </h1>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Follow our journey to create the most ambitious AI life simulator ever made. 
+              Follow our journey to create the most ambitious AI-powered adventure platform ever made. 
               Your character isn't an avatar—it's an extension of your psyche.
             </p>
           </div>

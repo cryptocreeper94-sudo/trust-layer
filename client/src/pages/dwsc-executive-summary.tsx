@@ -95,8 +95,8 @@ export default function DWSCExecutiveSummary() {
               <p className="text-white/80 leading-relaxed mb-4">
                 The ecosystem comprises three pillars: the <span className="text-purple-400 font-semibold">DWSC blockchain infrastructure</span>, 
                 the <span className="text-pink-400 font-semibold">DarkWave Portal</span> for ecosystem access and DeFi services, 
-                and <span className="text-amber-400 font-semibold">DarkWave Chronicles</span> - a revolutionary persistent 
-                life simulation spanning 70+ historical eras that serves as the flagship application demonstrating 
+                and <span className="text-amber-400 font-semibold">DarkWave Chronicles</span> - an unprecedented adventure platform 
+                spanning 70+ mission theaters where YOU are the hero that serves as the flagship application demonstrating 
                 the chain's capabilities.
               </p>
               <p className="text-white/80 leading-relaxed">
@@ -144,7 +144,7 @@ export default function DWSCExecutiveSummary() {
                 {
                   title: "DarkWave Chronicles",
                   subtitle: "Flagship Application",
-                  description: "Persistent life simulation across 70+ historical eras. Real-time AI-driven world where players exist as themselves. Revenue through creator licensing and brand sponsorships.",
+                  description: "Unprecedented adventure platform across 70+ mission theaters. Real-time AI-driven world where YOU are the hero. Revenue through creator licensing and brand sponsorships.",
                   icon: Gamepad2,
                   color: "pink",
                   features: ["70+ Eras", "AI NPCs", "Creator Economy", "Brand Sponsorships"]

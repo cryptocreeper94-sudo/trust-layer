@@ -551,7 +551,7 @@ export default function ChronoExecutiveSummary() {
                 className="bg-slate-800/50 border border-white/10 rounded-xl p-6 text-center"
               >
                 <div className="text-3xl font-bold text-purple-400 mb-2">$65B</div>
-                <div className="text-sm text-white/60">Life Simulation Genre (Est.)</div>
+                <div className="text-sm text-white/60">Adventure/RPG Genre (Est.)</div>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}

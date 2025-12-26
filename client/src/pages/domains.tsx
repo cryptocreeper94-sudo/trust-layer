@@ -15,6 +15,13 @@ import { WalletButton } from "@/components/wallet-button";
 import { useWallet } from "@/hooks/use-wallet";
 import { toast } from "sonner";
 
+import deepSpaceBg from "@assets/generated_images/deep_space_station.png";
+import cyberpunkBg from "@assets/generated_images/cyberpunk_neon_city.png";
+import quantumBg from "@assets/generated_images/quantum_dimension_realm.png";
+import medievalBg from "@assets/generated_images/medieval_fantasy_kingdom.png";
+import fantasyBg from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
+import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
+
 interface DomainSearchResult {
   available: boolean;
   name: string;
@@ -63,12 +70,12 @@ function formatDate(dateStr: string): string {
 }
 
 const pricingTiers = [
-  { chars: "1-2 chars", yearly: "Reserved", lifetime: "Enterprise", tag: "Reserved", gradient: "from-red-500 via-rose-400 to-red-600", isReserved: true },
-  { chars: "3 chars", yearly: "$350/year", lifetime: "$8,750", tag: "Ultra Premium", gradient: "from-amber-500 via-yellow-400 to-amber-600" },
-  { chars: "4 chars", yearly: "$120/year", lifetime: "$3,000", tag: "Premium", gradient: "from-purple-500 to-violet-600" },
-  { chars: "5 chars", yearly: "$45/year", lifetime: "$1,125", tag: "Standard+", gradient: "from-blue-500 to-indigo-600" },
-  { chars: "6-10 chars", yearly: "$20/year", lifetime: "$500", tag: "Standard", gradient: "from-cyan-500 to-teal-600" },
-  { chars: "11+ chars", yearly: "$12/year", lifetime: "$300", tag: "Economy", gradient: "from-emerald-500 to-green-600" },
+  { chars: "1-2 chars", yearly: "Reserved", lifetime: "Enterprise", tag: "Reserved", gradient: "from-red-500 via-rose-400 to-red-600", isReserved: true, image: deepSpaceBg },
+  { chars: "3 chars", yearly: "$350/year", lifetime: "$8,750", tag: "Ultra Premium", gradient: "from-amber-500 via-yellow-400 to-amber-600", image: quantumBg },
+  { chars: "4 chars", yearly: "$120/year", lifetime: "$3,000", tag: "Premium", gradient: "from-purple-500 to-violet-600", image: cyberpunkBg },
+  { chars: "5 chars", yearly: "$45/year", lifetime: "$1,125", tag: "Standard+", gradient: "from-blue-500 to-indigo-600", image: medievalBg },
+  { chars: "6-10 chars", yearly: "$20/year", lifetime: "$500", tag: "Standard", gradient: "from-cyan-500 to-teal-600", image: fantasyBg },
+  { chars: "11+ chars", yearly: "$12/year", lifetime: "$300", tag: "Economy", gradient: "from-emerald-500 to-green-600", image: blockchainBg },
 ];
 
 function FloatingParticle({ delay, duration, x }: { delay: number; duration: number; x: number }) {
@@ -395,18 +402,26 @@ export default function DomainsPage() {
           className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12"
         >
           {pricingTiers.map((tier, idx) => (
-            <GlassCard key={idx} className="p-4 text-center">
-              <Badge className={`mb-2 bg-gradient-to-r ${tier.gradient} text-white`}>
-                {tier.tag}
-              </Badge>
-              <p className="text-white/60 text-sm mb-2">{tier.chars}</p>
-              <div className="space-y-1">
-                <p className="text-lg font-bold text-white">{tier.yearly}</p>
-                <p className="text-sm text-cyan-400 flex items-center justify-center gap-1">
-                  <InfinityIcon className="w-3 h-3" /> {tier.lifetime}
-                </p>
+            <div key={idx} className="relative overflow-hidden rounded-xl border border-white/10 p-4 text-center group hover:border-white/20 transition-all">
+              <img 
+                src={tier.image} 
+                alt="" 
+                className="absolute inset-0 w-full h-full object-cover opacity-15 group-hover:opacity-25 transition-opacity"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/70 to-black/80" />
+              <div className="relative z-10">
+                <Badge className={`mb-2 bg-gradient-to-r ${tier.gradient} text-white`}>
+                  {tier.tag}
+                </Badge>
+                <p className="text-white/60 text-sm mb-2">{tier.chars}</p>
+                <div className="space-y-1">
+                  <p className="text-lg font-bold text-white">{tier.yearly}</p>
+                  <p className="text-sm text-cyan-400 flex items-center justify-center gap-1">
+                    <InfinityIcon className="w-3 h-3" /> {tier.lifetime}
+                  </p>
+                </div>
               </div>
-            </GlassCard>
+            </div>
           ))}
         </motion.div>
 

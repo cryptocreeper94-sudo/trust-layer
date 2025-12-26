@@ -59,7 +59,7 @@ const ECOSYSTEM_FEATURES = [
   },
   {
     title: "DarkWave Chronicles",
-    description: "AI life simulator with Sentient Mirror technology",
+    description: "Unprecedented adventure platform where YOU are the hero",
     icon: Sparkles,
     image: fantasyWorld,
     gradient: "from-purple-500/20 to-pink-600/20",

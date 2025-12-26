@@ -396,7 +396,7 @@ export default function Home() {
               </span>
             </h2>
             <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
-              An AI-powered life simulator where emotions drive behavior, consequences ripple through time, and there are no heroes or villains—only perspectives.
+              An unprecedented adventure platform where YOU are the hero. Emotions drive behavior, consequences ripple through time, and every perspective matters.
             </p>
           </motion.div>
 
