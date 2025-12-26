@@ -19,7 +19,7 @@ const staticPages: SearchResult[] = [
   { type: "page", id: "home", title: "Home", description: "DarkWave Smart Chain homepage", href: "/", icon: Box },
   { type: "page", id: "ecosystem", title: "Ecosystem", description: "Browse DarkWave ecosystem apps", href: "/ecosystem", icon: Box },
   { type: "page", id: "developers", title: "Developers", description: "Developer resources and tools", href: "/developers", icon: FileText },
-  { type: "page", id: "whitepaper", title: "Whitepaper", description: "Read the technical whitepaper", href: "/whitepaper", icon: FileText },
+  { type: "page", id: "whitepaper", title: "Whitepaper", description: "Read the technical whitepaper", href: "/executive-summary", icon: FileText },
   { type: "page", id: "doc-hub", title: "Document Hub", description: "Browse all documentation", href: "/doc-hub", icon: FileText },
 ];
 
