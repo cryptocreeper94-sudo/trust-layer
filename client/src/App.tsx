@@ -321,6 +321,7 @@ function DWSCRouter() {
         <Route path="/roadmap" component={RoadmapEcosystem} />
         <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
         <Route path="/roadmap-ecosystem" component={RoadmapEcosystem} />
+        <Route path="/chronicles" component={Chronicles} />
         <Route path="/sweepstakes-rules" component={SweepstakesRules} />
         <Route path="/coin-store" component={CoinStore} />
         <Route path="/daily-bonus" component={DailyBonus} />
