@@ -117,6 +117,23 @@ DarkWave Smart Chain (DSC) is a blockchain ecosystem by DarkWave Studios, aiming
 ## Core Experience Metaphor
 The "portal" concept: Like putting on a mask or VR goggles - you step through and wake up as yourself in another era. Laying in bed staring at the ceiling? Now you're in a 1920s speakeasy. Same you, different world. This is what separates Chronicles from every other game - no character creation screen, no avatar customization. YOU are already the character.
 
+## Chronicles Philosophy: "The Veil Is Dropping"
+
+**Core Purpose**: Chronicles isn't just entertainment - it's a tool for awakening. The deeper mission is to help players question what they've been told about reality, history, and the nature of existence. Not through preaching or forcing conclusions, but by creating a space where organic exploration naturally leads to questioning.
+
+**The Many Lenses Design**:
+1. **Bedrock Layer** (Shared by all players): Mechanics work. Physics function. NPCs exist. Economy runs. Historical events provide structure. This is the foundation everyone agrees on.
+
+2. **Lens Layer** (Reality adapts to belief): Different players can experience fundamentally different cosmologies. One sails to the edge and finds the firmament - the dome, the ice walls, the boundary. Another circumnavigates a sphere. Neither is "wrong." Both are true in their experience. The world doesn't tell you what reality IS - it reflects back your journey of discovery.
+
+3. **Belief Detection** (No surveys, no A/B choices): The AI watches organic behavior - what questions you ask NPCs, what books you read, what expeditions you pursue, whether you trust "official" narratives or seek alternative sources. Over time, it infers your worldview and seamlessly adapts what you experience.
+
+4. **Invisible Branching**: No "Choose Path A or B" moments. Instead, content weaves differently based on accumulated signals. The skybox subtly shifts. Maps reveal different truths. NPCs share different knowledge. It feels like discovery, not selection.
+
+**What Makes It Unprecedented**: Every other game picks one reality and enforces it. Chronicles is the first to treat cosmology itself as a discovery - not a given. Players don't consume a pre-built narrative about what's real. They explore, question, and come to their own understanding.
+
+**The Deeper Mission**: Help expose the constructs - the "man behind the curtain" protected truths that are starting to unravel. Not through propaganda, but through a subconscious tool that naturally invites questioning. Fun and engaging first, but with awakening woven into the fabric. Whether players land on mainstream beliefs or alternative truths, they've engaged in the act of questioning - and that's the victory.
+
 ## Marketing & Community Strategy
 
 - **Discord**: Server with channels for announcements, dev updates, community chat, creator collaboration
