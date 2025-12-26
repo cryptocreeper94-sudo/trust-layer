@@ -2431,3 +2431,59 @@ export const insertPartnerAccessRequestSchema = createInsertSchema(partnerAccess
 
 export type PartnerAccessRequest = typeof partnerAccessRequests.$inferSelect;
 export type InsertPartnerAccessRequest = z.infer<typeof insertPartnerAccessRequestSchema>;
+
+// Marketing Posts - Social media auto-deployment system
+export const marketingPosts = pgTable("marketing_posts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  platform: text("platform").notNull(), // "twitter", "facebook", "telegram", "discord"
+  content: text("content").notNull(),
+  imageUrl: text("image_url"),
+  category: text("category").notNull().default("general"), // "vision", "tech", "community", "hype", "news"
+  status: text("status").notNull().default("active"), // "active", "used", "archived"
+  usedCount: integer("used_count").notNull().default(0),
+  lastUsedAt: timestamp("last_used_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertMarketingPostSchema = createInsertSchema(marketingPosts).omit({
+  id: true,
+  usedCount: true,
+  lastUsedAt: true,
+  createdAt: true,
+});
+
+export type MarketingPost = typeof marketingPosts.$inferSelect;
+export type InsertMarketingPost = z.infer<typeof insertMarketingPostSchema>;
+
+// Marketing Deploy Logs - Track what was posted and when
+export const marketingDeployLogs = pgTable("marketing_deploy_logs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  postId: varchar("post_id").notNull(),
+  platform: text("platform").notNull(),
+  status: text("status").notNull().default("pending"), // "pending", "success", "failed"
+  externalId: text("external_id"), // Tweet ID, Telegram message ID, etc.
+  errorMessage: text("error_message"),
+  deployedAt: timestamp("deployed_at").defaultNow().notNull(),
+});
+
+export const insertMarketingDeployLogSchema = createInsertSchema(marketingDeployLogs).omit({
+  id: true,
+  deployedAt: true,
+});
+
+export type MarketingDeployLog = typeof marketingDeployLogs.$inferSelect;
+export type InsertMarketingDeployLog = z.infer<typeof insertMarketingDeployLogSchema>;
+
+// Marketing Schedule Config - Platform settings and timing
+export const marketingScheduleConfig = pgTable("marketing_schedule_config", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  platform: text("platform").notNull().unique(), // "twitter", "facebook", "telegram", "discord"
+  isActive: boolean("is_active").notNull().default(false),
+  intervalMinutes: integer("interval_minutes").notNull().default(180), // Default 3 hours
+  lastDeployedAt: timestamp("last_deployed_at"),
+  webhookUrl: text("webhook_url"), // For Discord
+  channelId: text("channel_id"), // For Telegram
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type MarketingScheduleConfig = typeof marketingScheduleConfig.$inferSelect;
