@@ -129,7 +129,7 @@ function DonationModal({ feature, onSuccess }: { feature?: CrowdfundFeature; onS
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const presetAmounts = [10, 25, 50, 100, 250, 500];
+  const presetAmounts = [25, 50, 100, 500, 1000];
 
   const handleDonate = async () => {
     const amountCents = Math.round(parseFloat(amount) * 100);

@@ -101,6 +101,121 @@ export async function registerRoutes(
   registerChatRoutes(app);
   registerImageRoutes(app);
 
+  // =====================================================
+  // STRIPE WEBHOOK - Must be early for raw body access
+  // =====================================================
+  app.post("/api/stripe/webhook", async (req: any, res) => {
+    try {
+      const sig = req.headers["stripe-signature"];
+      const rawBody = req.rawBody;
+      
+      if (!sig || !rawBody) {
+        console.error("Stripe webhook: Missing signature or raw body");
+        return res.status(400).json({ error: "Missing signature or raw body" });
+      }
+      
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      
+      // SECURITY: Require webhook secret - never process without signature verification
+      const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+      if (!webhookSecret) {
+        console.error("Stripe webhook: STRIPE_WEBHOOK_SECRET not configured - rejecting request");
+        return res.status(500).json({ error: "Webhook not configured" });
+      }
+      
+      let event;
+      try {
+        event = stripe.webhooks.constructEvent(rawBody as Buffer, sig, webhookSecret);
+      } catch (err: any) {
+        console.error("Stripe webhook signature verification failed:", err.message);
+        return res.status(400).json({ error: "Webhook signature verification failed" });
+      }
+      
+      console.log(`[Stripe Webhook] Event received: ${event.type}`);
+      
+      // Handle checkout.session.completed
+      if (event.type === "checkout.session.completed") {
+        const session = event.data.object;
+        const metadata = session.metadata || {};
+        const customerEmail = session.customer_details?.email || metadata.email || session.customer_email;
+        const amountCents = session.amount_total || 0;
+        
+        // Use payment_intent as the idempotency key (not session.id)
+        const paymentId = session.payment_intent || session.id;
+        
+        console.log(`[Stripe Webhook] Checkout completed: ${paymentId}, type: ${metadata.type}, email: ${customerEmail}, amount: ${amountCents}`);
+        
+        // Handle presale purchases
+        if (metadata.type === "presale") {
+          try {
+            const tier = metadata.tier || "custom";
+            
+            // SECURITY: Calculate tokens server-side from verified amount, not from metadata
+            const TIER_BONUSES: Record<string, number> = {
+              genesis: 25, founder: 15, pioneer: 10, early_bird: 5
+            };
+            const TOKEN_PRICE = 0.008;
+            const tokenAmount = Math.floor((amountCents / 100) / TOKEN_PRICE);
+            const bonusPercent = TIER_BONUSES[tier] || 0;
+            const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
+            const totalTokens = tokenAmount + bonusTokens;
+            
+            // Record the purchase with payment_intent as key
+            await db.execute(sql`
+              INSERT INTO presale_purchases (stripe_payment_intent_id, email, usd_amount_cents, token_amount, tier, status, payment_method, created_at)
+              VALUES (${paymentId}, ${customerEmail}, ${amountCents}, ${totalTokens}, ${tier}, 'completed', 'stripe', NOW())
+              ON CONFLICT (stripe_payment_intent_id) DO NOTHING
+            `);
+            
+            // Grant Early Adopter status automatically
+            if (customerEmail) {
+              const adoperTier = tier === 'genesis' || amountCents >= 100000 ? 'founder' : 'supporter';
+              await db.execute(sql`
+                INSERT INTO early_adopter_program (email, tier, status, registered_at)
+                VALUES (${customerEmail}, ${adoperTier}, 'active', NOW())
+                ON CONFLICT (email) DO UPDATE SET
+                  tier = CASE WHEN EXCLUDED.tier = 'founder' THEN 'founder' ELSE early_adopter_program.tier END,
+                  status = 'active'
+              `);
+            }
+            
+            console.log(`[Stripe Webhook] Presale recorded: ${customerEmail}, ${totalTokens} tokens from $${(amountCents/100).toFixed(2)}`);
+          } catch (dbError) {
+            console.error("[Stripe Webhook] DB error for presale:", dbError);
+          }
+        }
+        
+        // Handle crowdfund donations
+        if (metadata.contributionId) {
+          try {
+            await storage.updateCrowdfundContribution(metadata.contributionId, {
+              status: "confirmed",
+            });
+            
+            // Grant Early Adopter status for donors too
+            if (customerEmail) {
+              await db.execute(sql`
+                INSERT INTO early_adopter_program (email, tier, status, registered_at)
+                VALUES (${customerEmail}, 'supporter', 'active', NOW())
+                ON CONFLICT (email) DO NOTHING
+              `);
+            }
+            
+            console.log(`[Stripe Webhook] Crowdfund confirmed: ${metadata.contributionId}`);
+          } catch (dbError) {
+            console.error("[Stripe Webhook] DB error for crowdfund:", dbError);
+          }
+        }
+      }
+      
+      res.json({ received: true });
+    } catch (error: any) {
+      console.error("Stripe webhook error:", error);
+      res.status(500).json({ error: error.message || "Webhook processing failed" });
+    }
+  });
+
   // Partner Portal Authentication (server-side validation)
   const PARTNER_ACCESS_CODE = process.env.PARTNER_ACCESS_CODE;
   if (!PARTNER_ACCESS_CODE) {
@@ -3419,34 +3534,47 @@ export async function registerRoutes(
   // DWC Token Presale Routes
   app.get("/api/presale/tiers", async (req, res) => {
     try {
-      const { getUncachableStripeClient } = await import("./stripeClient");
-      const stripe = await getUncachableStripeClient();
+      // Hardcoded tiers for immediate availability (no Stripe dashboard setup needed)
+      const hardcodedTiers = [
+        {
+          id: "genesis",
+          name: "Genesis",
+          description: "Maximum bonus for visionary early supporters",
+          priceId: "dynamic", // Will use dynamic pricing
+          amount: 100000, // $1000
+          bonus: 25,
+          tier: "genesis",
+        },
+        {
+          id: "founder",
+          name: "Founder",
+          description: "Premium tier with significant token bonus",
+          priceId: "dynamic",
+          amount: 50000, // $500
+          bonus: 15,
+          tier: "founder",
+        },
+        {
+          id: "pioneer",
+          name: "Pioneer",
+          description: "Early believer tier with bonus rewards",
+          priceId: "dynamic",
+          amount: 25000, // $250
+          bonus: 10,
+          tier: "pioneer",
+        },
+        {
+          id: "early_bird",
+          name: "Early Bird",
+          description: "Accessible entry point for new supporters",
+          priceId: "dynamic",
+          amount: 10000, // $100
+          bonus: 5,
+          tier: "early_bird",
+        },
+      ];
       
-      const products = await stripe.products.search({
-        query: "metadata['category']:'presale'",
-      });
-      
-      const tiersRaw = await Promise.all(
-        products.data.map(async (product) => {
-          const prices = await stripe.prices.list({ product: product.id, active: true });
-          const activePrice = prices.data[0];
-          if (!activePrice || !activePrice.unit_amount) return null;
-          
-          return {
-            id: product.id,
-            name: product.name.replace("DWC ", "").replace(" Tier", ""),
-            description: product.description,
-            priceId: activePrice.id,
-            amount: activePrice.unit_amount,
-            bonus: parseInt(product.metadata?.bonus_percent || "0"),
-            tier: product.metadata?.tier,
-          };
-        })
-      );
-      
-      const tiers = tiersRaw.filter(t => t !== null);
-      tiers.sort((a, b) => b.amount - a.amount);
-      res.json({ tiers });
+      return res.json(hardcodedTiers);
     } catch (error) {
       console.error("Failed to fetch presale tiers:", error);
       res.status(500).json({ error: "Failed to fetch presale tiers" });
@@ -3489,14 +3617,25 @@ export async function registerRoutes(
 
   app.post("/api/presale/checkout", async (req, res) => {
     try {
-      const { priceId, email, tier } = req.body;
-      
-      if (!priceId) {
-        return res.status(400).json({ error: "Price ID required" });
-      }
+      const { priceId, email, tier, amountCents } = req.body;
       
       if (!email || !email.includes("@")) {
         return res.status(400).json({ error: "Valid email required" });
+      }
+      
+      // Tier definitions for dynamic pricing
+      const TIER_CONFIG: Record<string, { amount: number; bonus: number; name: string }> = {
+        genesis: { amount: 100000, bonus: 25, name: "Genesis Tier" },
+        founder: { amount: 50000, bonus: 15, name: "Founder Tier" },
+        pioneer: { amount: 25000, bonus: 10, name: "Pioneer Tier" },
+        early_bird: { amount: 10000, bonus: 5, name: "Early Bird Tier" },
+      };
+      
+      const tierConfig = TIER_CONFIG[tier];
+      const finalAmount = amountCents || tierConfig?.amount;
+      
+      if (!finalAmount || finalAmount < 100) {
+        return res.status(400).json({ error: "Invalid amount" });
       }
       
       const { getUncachableStripeClient } = await import("./stripeClient");
@@ -3506,17 +3645,37 @@ export async function registerRoutes(
       const protocol = host.includes("localhost") ? "http" : "https";
       const baseUrl = `${protocol}://${host}`;
       
+      const TOKEN_PRICE = 0.008;
+      const tokenAmount = Math.floor((finalAmount / 100) / TOKEN_PRICE);
+      const bonusPercent = tierConfig?.bonus || 0;
+      const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
+      const totalTokens = tokenAmount + bonusTokens;
+      
+      // Use dynamic price_data (no Stripe dashboard setup required)
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
-        line_items: [{ price: priceId, quantity: 1 }],
+        line_items: [{
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: tierConfig?.name || "DWC Token Presale",
+              description: `${totalTokens.toLocaleString()} DWC tokens (${tokenAmount.toLocaleString()} base + ${bonusTokens.toLocaleString()} bonus)`,
+            },
+            unit_amount: finalAmount,
+          },
+          quantity: 1,
+        }],
         mode: "payment",
         success_url: `${baseUrl}/presale/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${baseUrl}/presale`,
         customer_email: email,
         metadata: {
           type: "presale",
-          tier: tier || "unknown",
+          tier: tier || "custom",
           email: email,
+          tokenAmount: String(tokenAmount),
+          bonusTokens: String(bonusTokens),
+          totalTokens: String(totalTokens),
         },
       });
       
