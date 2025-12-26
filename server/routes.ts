@@ -6578,6 +6578,170 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // ===== Marketing Automation Routes =====
+  
+  // Get all marketing posts
+  app.get("/api/marketing/posts", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const { platform, status } = req.query;
+      const posts = await storage.getMarketingPosts(
+        platform as string | undefined,
+        status as string | undefined
+      );
+      res.json({ posts });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to fetch posts" });
+    }
+  });
+
+  // Create new marketing post
+  app.post("/api/marketing/posts", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const { platform, content, imageUrl, category, status } = req.body;
+      if (!platform || !content) {
+        return res.status(400).json({ error: "Platform and content are required" });
+      }
+      const post = await storage.createMarketingPost({
+        platform,
+        content,
+        imageUrl: imageUrl || null,
+        category: category || "general",
+        status: status || "active",
+      });
+      res.json({ post });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to create post" });
+    }
+  });
+
+  // Update marketing post
+  app.patch("/api/marketing/posts/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { content, imageUrl, category, status } = req.body;
+      const post = await storage.updateMarketingPost(id, { content, imageUrl, category, status });
+      if (!post) {
+        return res.status(404).json({ error: "Post not found" });
+      }
+      res.json({ post });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to update post" });
+    }
+  });
+
+  // Delete marketing post
+  app.delete("/api/marketing/posts/:id", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      await storage.deleteMarketingPost(id);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to delete post" });
+    }
+  });
+
+  // Get schedule configs
+  app.get("/api/marketing/config", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const configs = await storage.getMarketingScheduleConfigs();
+      res.json({ configs });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to fetch configs" });
+    }
+  });
+
+  // Update schedule config for a platform
+  app.post("/api/marketing/config/:platform", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const { platform } = req.params;
+      const { isActive, intervalMinutes, webhookUrl, channelId } = req.body;
+      const config = await storage.upsertMarketingScheduleConfig(platform, {
+        isActive,
+        intervalMinutes,
+        webhookUrl,
+        channelId,
+      });
+      res.json({ config });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to update config" });
+    }
+  });
+
+  // Get deploy logs
+  app.get("/api/marketing/logs", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const logs = await storage.getMarketingDeployLogs(100);
+      res.json({ logs });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to fetch logs" });
+    }
+  });
+
+  // Manual deploy to a platform
+  app.post("/api/marketing/deploy/:platform", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const { platform } = req.params;
+      const { postId } = req.body;
+      
+      let post;
+      if (postId) {
+        post = await storage.getMarketingPost(postId);
+      } else {
+        post = await storage.getRandomActivePost(platform);
+      }
+      
+      if (!post) {
+        return res.status(404).json({ error: "No active posts available for this platform" });
+      }
+
+      const { deploySocialPost } = await import("./social-connectors");
+      const result = await deploySocialPost(platform, post.content, post.imageUrl);
+      
+      await storage.recordMarketingDeploy({
+        postId: post.id,
+        platform,
+        status: result.success ? "success" : "failed",
+        externalId: result.externalId,
+        errorMessage: result.error,
+      });
+      
+      if (result.success) {
+        await storage.markPostUsed(post.id);
+        await storage.updateLastDeployed(platform);
+      }
+      
+      res.json({ success: result.success, post, result });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to deploy" });
+    }
+  });
+
+  // Bulk create posts
+  app.post("/api/marketing/posts/bulk", isAuthenticated, async (req: Request, res: Response) => {
+    try {
+      const { posts } = req.body;
+      if (!Array.isArray(posts) || posts.length === 0) {
+        return res.status(400).json({ error: "Posts array is required" });
+      }
+      const created = [];
+      for (const p of posts) {
+        if (p.platform && p.content) {
+          const post = await storage.createMarketingPost({
+            platform: p.platform,
+            content: p.content,
+            imageUrl: p.imageUrl || null,
+            category: p.category || "general",
+            status: p.status || "active",
+          });
+          created.push(post);
+        }
+      }
+      res.json({ created, count: created.length });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to bulk create posts" });
+    }
+  });
+
   return httpServer;
 }
 

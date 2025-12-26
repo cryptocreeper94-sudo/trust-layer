@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, type BlockchainDomain, type InsertBlockchainDomain, type DomainRecord, type InsertDomainRecord, type DomainTransfer, type InsertDomainTransfer, type ChronicleSponsorshipSlot, type InsertChronicleSponsorshipSlot, type DomainSponsorshipClaim, type InsertDomainSponsorshipClaim, type EarlyAdopterProgram, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory, blockchainDomains, domainRecords, domainTransfers, chronicleSponsorshipSlots, domainSponsorshipClaims, earlyAdopterProgram } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type MarketingPost, type InsertMarketingPost, type MarketingDeployLog, type InsertMarketingDeployLog, type MarketingScheduleConfig, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, type BlockchainDomain, type InsertBlockchainDomain, type DomainRecord, type InsertDomainRecord, type DomainTransfer, type InsertDomainTransfer, type ChronicleSponsorshipSlot, type InsertChronicleSponsorshipSlot, type DomainSponsorshipClaim, type InsertDomainSponsorshipClaim, type EarlyAdopterProgram, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory, blockchainDomains, domainRecords, domainTransfers, chronicleSponsorshipSlots, domainSponsorshipClaims, earlyAdopterProgram, marketingPosts, marketingDeployLogs, marketingScheduleConfig } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, count, and, lt } from "drizzle-orm";
 import crypto from "crypto";
@@ -1688,6 +1688,91 @@ export class DatabaseStorage implements IStorage {
     await db.update(earlyAdopterProgram)
       .set({ currentRegistrations: sql`${earlyAdopterProgram.currentRegistrations} + 1` })
       .where(eq(earlyAdopterProgram.isActive, true));
+  }
+
+  // Marketing Posts
+  async getMarketingPosts(platform?: string, status?: string): Promise<MarketingPost[]> {
+    const conditions = [];
+    if (platform) conditions.push(eq(marketingPosts.platform, platform));
+    if (status) conditions.push(eq(marketingPosts.status, status));
+    if (conditions.length > 0) {
+      return db.select().from(marketingPosts).where(and(...conditions)).orderBy(desc(marketingPosts.createdAt));
+    }
+    return db.select().from(marketingPosts).orderBy(desc(marketingPosts.createdAt));
+  }
+
+  async getMarketingPost(id: string): Promise<MarketingPost | undefined> {
+    const [post] = await db.select().from(marketingPosts).where(eq(marketingPosts.id, id));
+    return post;
+  }
+
+  async getRandomActivePost(platform: string): Promise<MarketingPost | undefined> {
+    const posts = await db.select().from(marketingPosts)
+      .where(and(eq(marketingPosts.platform, platform), eq(marketingPosts.status, 'active')));
+    if (posts.length === 0) return undefined;
+    return posts[Math.floor(Math.random() * posts.length)];
+  }
+
+  async createMarketingPost(data: InsertMarketingPost): Promise<MarketingPost> {
+    const [post] = await db.insert(marketingPosts).values(data).returning();
+    return post;
+  }
+
+  async updateMarketingPost(id: string, data: Partial<InsertMarketingPost>): Promise<MarketingPost | undefined> {
+    const [post] = await db.update(marketingPosts).set(data).where(eq(marketingPosts.id, id)).returning();
+    return post;
+  }
+
+  async markPostUsed(id: string): Promise<void> {
+    await db.update(marketingPosts)
+      .set({ usedCount: sql`${marketingPosts.usedCount} + 1`, lastUsedAt: new Date() })
+      .where(eq(marketingPosts.id, id));
+  }
+
+  async deleteMarketingPost(id: string): Promise<boolean> {
+    await db.delete(marketingPosts).where(eq(marketingPosts.id, id));
+    return true;
+  }
+
+  // Marketing Deploy Logs
+  async recordMarketingDeploy(data: InsertMarketingDeployLog): Promise<MarketingDeployLog> {
+    const [log] = await db.insert(marketingDeployLogs).values(data).returning();
+    return log;
+  }
+
+  async getMarketingDeployLogs(limit: number = 50): Promise<MarketingDeployLog[]> {
+    return db.select().from(marketingDeployLogs).orderBy(desc(marketingDeployLogs.deployedAt)).limit(limit);
+  }
+
+  // Marketing Schedule Config
+  async getMarketingScheduleConfigs(): Promise<MarketingScheduleConfig[]> {
+    return db.select().from(marketingScheduleConfig);
+  }
+
+  async getMarketingScheduleConfig(platform: string): Promise<MarketingScheduleConfig | undefined> {
+    const [config] = await db.select().from(marketingScheduleConfig).where(eq(marketingScheduleConfig.platform, platform));
+    return config;
+  }
+
+  async upsertMarketingScheduleConfig(platform: string, data: Partial<MarketingScheduleConfig>): Promise<MarketingScheduleConfig> {
+    const existing = await this.getMarketingScheduleConfig(platform);
+    if (existing) {
+      const [updated] = await db.update(marketingScheduleConfig)
+        .set({ ...data, updatedAt: new Date() })
+        .where(eq(marketingScheduleConfig.platform, platform))
+        .returning();
+      return updated;
+    }
+    const [created] = await db.insert(marketingScheduleConfig)
+      .values({ platform, ...data })
+      .returning();
+    return created;
+  }
+
+  async updateLastDeployed(platform: string): Promise<void> {
+    await db.update(marketingScheduleConfig)
+      .set({ lastDeployedAt: new Date(), updatedAt: new Date() })
+      .where(eq(marketingScheduleConfig.platform, platform));
   }
 }
 
