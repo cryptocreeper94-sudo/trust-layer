@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart, Gamepad2, Star, Zap } from "lucide-react";
+import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart, Gamepad2, Star, Zap, Globe } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +23,7 @@ const navItems = [
   { href: "/ecosystem", label: "Ecosystem", icon: Box },
   { href: "/swap", label: "Swap", icon: ArrowUpDown, badge: "DeFi" },
   { href: "/faucet", label: "Faucet", icon: Droplets },
+  { href: "/domains", label: "Domains", icon: Globe, badge: "New" },
   { href: "/launchpad", label: "Launchpad", icon: Rocket },
   { href: "/liquidity", label: "Liquidity", icon: Droplets },
   { href: "/liquid-staking", label: "Liquid Staking", icon: TrendingUp },

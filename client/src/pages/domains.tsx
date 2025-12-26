@@ -116,7 +116,9 @@ export default function DomainsPage() {
       setShowRegisterDialog(false);
       setSearchResult(null);
       setSearchQuery("");
-      queryClient.invalidateQueries({ queryKey: ["/api/domains"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/domains/stats"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/domains/recent"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/domains/owner", walletAddress] });
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to register domain");
@@ -130,10 +132,14 @@ export default function DomainsPage() {
     try {
       const normalizedName = searchQuery.toLowerCase().replace(/\.dwsc$/, "").trim();
       const res = await fetch(`/api/domains/search/${encodeURIComponent(normalizedName)}`);
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || `Search failed with status ${res.status}`);
+      }
       const result = await res.json();
       setSearchResult(result);
-    } catch (error) {
-      toast.error("Failed to search domain");
+    } catch (error: any) {
+      toast.error(error.message || "Failed to search domain");
     } finally {
       setIsSearching(false);
     }
