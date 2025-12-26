@@ -95,6 +95,25 @@ DarkWave Smart Chain (DSC) is a blockchain ecosystem by DarkWave Studios, aiming
 - **Cross-Platform Expansion**: Console ports, streaming platforms
 - **Chronicles Universe Expansion**: Spin-off experiences, merchandise, media adaptations
 
+## Cross-Platform Strategy
+
+**Target Platforms** (in order of priority):
+1. **Web** (Phase 0-2): Desktop browsers, responsive for tablets/mobile - lowest barrier to entry
+2. **Mobile Native** (Phase 2): iOS/Android apps for optimized touch experience
+3. **Desktop Native** (Phase 3): Windows/Mac apps for enhanced performance
+4. **Smart TV/Console** (Phase 4): Living room experience, controller support
+5. **VR/AR** (Phase 4+): Immersive experience via partnerships
+
+**Architecture Considerations**:
+- Design core game logic as platform-agnostic from day one
+- Use shared backend/API layer across all clients
+- Progressive enhancement: same experience scales up/down based on device capabilities
+- Cloud save sync across all platforms - start on phone, continue on desktop, experience in VR
+- Input abstraction layer: touch, mouse/keyboard, controller, VR controllers all map to same actions
+- UI/UX adapts to form factor (compact mobile UI vs. expansive desktop vs. immersive VR)
+
+**Timing**: Address architecture decisions in Phase 0-1 to avoid costly rewrites later. Actual multi-platform shipping can be phased.
+
 ## Core Experience Metaphor
 The "portal" concept: Like putting on a mask or VR goggles - you step through and wake up as yourself in another era. Laying in bed staring at the ceiling? Now you're in a 1920s speakeasy. Same you, different world. This is what separates Chronicles from every other game - no character creation screen, no avatar customization. YOU are already the character.
 
