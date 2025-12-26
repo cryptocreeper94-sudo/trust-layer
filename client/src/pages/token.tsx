@@ -60,9 +60,9 @@ export default function Token() {
                     Read Whitepaper
                   </Button>
                 </Link>
-                <Link href="/billing">
-                  <Button size="lg" variant="outline" className="h-11 px-6 border-white/20 hover:bg-white/5 rounded-full text-sm">
-                    View Memberships
+                <Link href="/executive-summary">
+                  <Button size="lg" variant="outline" className="h-11 px-6 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 rounded-full text-sm" data-testid="button-exec-summary">
+                    Executive Summary
                   </Button>
                 </Link>
               </div>

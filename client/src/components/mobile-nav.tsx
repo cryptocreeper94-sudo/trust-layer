@@ -17,7 +17,8 @@ const featuredItems = [
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
-  { href: "/wallet", label: "Wallet", icon: Coins, badge: "New" },
+  { href: "/executive-summary", label: "Investors", icon: Star, badge: "New" },
+  { href: "/wallet", label: "Wallet", icon: Coins },
   { href: "/arcade", label: "Games", icon: Rocket, badge: "Hot" },
   { href: "/ecosystem", label: "Ecosystem", icon: Box },
   { href: "/swap", label: "Swap", icon: ArrowUpDown, badge: "DeFi" },
