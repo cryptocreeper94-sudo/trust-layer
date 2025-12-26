@@ -623,6 +623,13 @@ export default function ChronoExecutiveSummary() {
               className="bg-gradient-to-r from-amber-950/30 via-purple-950/30 to-cyan-950/30 border border-white/10 rounded-xl p-8 text-center"
             >
               <div className="flex flex-wrap justify-center gap-4 mb-6">
+                <a 
+                  href="mailto:cryptocreeper94@gmail.com?subject=ChronoVerse%20Investment%20Inquiry"
+                  className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-lg text-white font-semibold transition-colors"
+                  data-testid="contact-investor"
+                >
+                  Contact for Investment
+                </a>
                 <Link 
                   href="/team" 
                   className="px-6 py-3 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/30 rounded-lg text-amber-400 font-medium transition-colors"
@@ -642,11 +649,14 @@ export default function ChronoExecutiveSummary() {
                   className="px-6 py-3 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 rounded-lg text-emerald-400 font-medium transition-colors"
                   data-testid="link-invest"
                 >
-                  Investment Opportunities
+                  Support Development
                 </Link>
               </div>
               <p className="text-white/40 text-sm">
                 DarkWave Studios • DarkWave Smart Chain • yourlegacy.io
+              </p>
+              <p className="text-white/30 text-xs mt-2">
+                Direct inquiries: cryptocreeper94@gmail.com
               </p>
             </motion.div>
           </div>

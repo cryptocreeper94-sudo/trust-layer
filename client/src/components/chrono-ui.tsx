@@ -28,6 +28,7 @@ const NAV_LINKS = [
   { href: "/community", label: "Community" },
   { href: "/team", label: "Team" },
   { href: "/roadmap", label: "Roadmap" },
+  { href: "/executive-summary", label: "Investors" },
 ];
 
 export function ChronoLayout({ 
