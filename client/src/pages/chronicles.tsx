@@ -510,8 +510,33 @@ export default function Chronicles() {
   const currentVideoRef = useRef<HTMLVideoElement>(null);
   const nextVideoRef = useRef<HTMLVideoElement>(null);
   
+  const fadeAudio = (video: HTMLVideoElement, fadeIn: boolean, duration: number = 500) => {
+    const steps = 20;
+    const stepTime = duration / steps;
+    const startVolume = fadeIn ? 0 : 1;
+    const endVolume = fadeIn ? 1 : 0;
+    const volumeStep = (endVolume - startVolume) / steps;
+    
+    video.volume = startVolume;
+    let step = 0;
+    
+    const interval = setInterval(() => {
+      step++;
+      video.volume = Math.max(0, Math.min(1, startVolume + (volumeStep * step)));
+      if (step >= steps) {
+        clearInterval(interval);
+        video.volume = endVolume;
+      }
+    }, stepTime);
+  };
+
   useEffect(() => {
     const handleVideoEnd = () => {
+      const currentVideo = currentVideoRef.current;
+      if (currentVideo && !videoMuted) {
+        fadeAudio(currentVideo, false, 600);
+      }
+      
       setIsVideoTransitioning(true);
       
       setTimeout(() => {
@@ -526,7 +551,7 @@ export default function Chronicles() {
       video.addEventListener('ended', handleVideoEnd);
       return () => video.removeEventListener('ended', handleVideoEnd);
     }
-  }, [nextVideoIndex]);
+  }, [nextVideoIndex, videoMuted]);
 
   useEffect(() => {
     if (nextVideoRef.current) {
@@ -536,9 +561,14 @@ export default function Chronicles() {
 
   useEffect(() => {
     if (currentVideoRef.current && !isVideoTransitioning) {
-      currentVideoRef.current.play().catch(() => {});
+      const video = currentVideoRef.current;
+      video.volume = 0;
+      video.play().catch(() => {});
+      if (!videoMuted) {
+        setTimeout(() => fadeAudio(video, true, 800), 200);
+      }
     }
-  }, [currentVideoIndex, isVideoTransitioning]);
+  }, [currentVideoIndex, isVideoTransitioning, videoMuted]);
   
   const scrollEpochs = (direction: 'left' | 'right') => {
     const container = document.getElementById('epoch-carousel');
