@@ -497,31 +497,40 @@ export default function Chronicles() {
   const [epochScrollPos, setEpochScrollPos] = useState(0);
   const [videoMuted, setVideoMuted] = useState(true);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [nextVideoIndex, setNextVideoIndex] = useState(1);
   const [isVideoTransitioning, setIsVideoTransitioning] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const currentVideoRef = useRef<HTMLVideoElement>(null);
+  const nextVideoRef = useRef<HTMLVideoElement>(null);
   
   useEffect(() => {
     const handleVideoEnd = () => {
       setIsVideoTransitioning(true);
+      
       setTimeout(() => {
-        setCurrentVideoIndex((prev) => (prev + 1) % HERO_VIDEOS.length);
+        setCurrentVideoIndex(nextVideoIndex);
+        setNextVideoIndex((nextVideoIndex + 1) % HERO_VIDEOS.length);
         setIsVideoTransitioning(false);
-      }, 500);
+      }, 800);
     };
 
-    const video = videoRef.current;
+    const video = currentVideoRef.current;
     if (video) {
       video.addEventListener('ended', handleVideoEnd);
       return () => video.removeEventListener('ended', handleVideoEnd);
     }
-  }, [currentVideoIndex]);
+  }, [nextVideoIndex]);
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.load();
-      videoRef.current.play().catch(() => {});
+    if (nextVideoRef.current) {
+      nextVideoRef.current.load();
     }
-  }, [currentVideoIndex]);
+  }, [nextVideoIndex]);
+
+  useEffect(() => {
+    if (currentVideoRef.current && !isVideoTransitioning) {
+      currentVideoRef.current.play().catch(() => {});
+    }
+  }, [currentVideoIndex, isVideoTransitioning]);
   
   const scrollEpochs = (direction: 'left' | 'right') => {
     const container = document.getElementById('epoch-carousel');
@@ -554,17 +563,28 @@ export default function Chronicles() {
       </nav>
 
       <section className="relative min-h-screen flex items-center justify-center pt-14 overflow-hidden">
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-black">
+          {/* Current video */}
           <video 
-            ref={videoRef}
-            key={currentVideoIndex}
+            ref={currentVideoRef}
+            key={`current-${currentVideoIndex}`}
             autoPlay 
             muted={videoMuted}
             playsInline
-            className={`w-full h-full object-cover transition-opacity duration-500 ${isVideoTransitioning ? 'opacity-0' : 'opacity-100'}`}
-            poster={fantasyWorld}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${isVideoTransitioning ? 'opacity-0' : 'opacity-100'}`}
           >
             <source src={HERO_VIDEOS[currentVideoIndex].src} type="video/mp4" />
+          </video>
+          {/* Next video (preloaded, hidden until transition) */}
+          <video 
+            ref={nextVideoRef}
+            key={`next-${nextVideoIndex}`}
+            muted={videoMuted}
+            playsInline
+            preload="auto"
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${isVideoTransitioning ? 'opacity-100' : 'opacity-0'}`}
+          >
+            <source src={HERO_VIDEOS[nextVideoIndex].src} type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-transparent to-black/70" />
@@ -582,11 +602,15 @@ export default function Chronicles() {
             <button
               key={idx}
               onClick={() => {
-                setIsVideoTransitioning(true);
-                setTimeout(() => {
-                  setCurrentVideoIndex(idx);
-                  setIsVideoTransitioning(false);
-                }, 300);
+                if (idx !== currentVideoIndex) {
+                  setNextVideoIndex(idx);
+                  setIsVideoTransitioning(true);
+                  setTimeout(() => {
+                    setCurrentVideoIndex(idx);
+                    setNextVideoIndex((idx + 1) % HERO_VIDEOS.length);
+                    setIsVideoTransitioning(false);
+                  }, 700);
+                }
               }}
               className={`transition-all ${currentVideoIndex === idx 
                 ? 'w-8 h-2 bg-white rounded-full' 
