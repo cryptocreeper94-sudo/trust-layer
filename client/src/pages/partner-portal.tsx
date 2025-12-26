@@ -5,7 +5,7 @@ import {
   ArrowLeft, ArrowRight, Lock, Eye, EyeOff, Shield, Target, Zap, Globe, Brain, 
   Layers, Rocket, Users, User, Calendar, TrendingUp, Code, Database,
   Download, FileText, Mail, CheckCircle, Building, Coins, Sparkles,
-  ChevronRight, ExternalLink, Play, Server, Cpu, Network, Activity
+  ChevronRight, ExternalLink, Play, Server, Cpu, Network, Activity, X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -999,6 +999,234 @@ function PartnerContent() {
                 </div>
               </motion.div>
             </div>
+          </div>
+        </section>
+
+        {/* Many Lenses Philosophy - Complete Differentiator Section */}
+        <section className="py-20 px-4 bg-gradient-to-b from-purple-950/20 via-slate-900/50 to-cyan-950/20">
+          <div className="container mx-auto max-w-6xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-16"
+            >
+              <Badge className="mb-6 px-4 py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-500/30 text-white backdrop-blur-sm">
+                <Brain className="w-4 h-4 mr-2" />
+                Proprietary AI Philosophy
+              </Badge>
+              <h2 className="text-4xl md:text-5xl font-display font-black mb-6">
+                <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+                  The Many Lenses Design
+                </span>
+              </h2>
+              <p className="text-xl text-white/70 max-w-3xl mx-auto">
+                What makes Chronicles fundamentally different from every other game ever made
+              </p>
+            </motion.div>
+
+            <div className="grid lg:grid-cols-2 gap-12 mb-16">
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="space-y-6"
+              >
+                <div className="p-6 rounded-2xl bg-red-950/30 border border-red-500/20">
+                  <h3 className="text-xl font-bold text-red-400 mb-4 flex items-center gap-3">
+                    <X className="w-6 h-6" />
+                    What Other Games Do
+                  </h3>
+                  <ul className="space-y-3 text-white/70">
+                    <li className="flex items-start gap-3">
+                      <span className="text-red-400 shrink-0">✗</span>
+                      <span><strong className="text-white">Moral Alignment:</strong> Good/Evil, Light/Dark, Paragon/Renegade meters that judge your choices</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-red-400 shrink-0">✗</span>
+                      <span><strong className="text-white">Character Classes:</strong> Pick "Warrior" or "Mage" and be locked into that identity</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-red-400 shrink-0">✗</span>
+                      <span><strong className="text-white">Personality Archetypes:</strong> "You are a Guardian" or "You are a Rebel" based on a quiz</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-red-400 shrink-0">✗</span>
+                      <span><strong className="text-white">Karma Systems:</strong> NPCs treat you differently based on arbitrary "good" or "bad" scores</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="p-6 rounded-2xl bg-emerald-950/30 border border-emerald-500/20">
+                  <h3 className="text-xl font-bold text-emerald-400 mb-4 flex items-center gap-3">
+                    <CheckCircle className="w-6 h-6" />
+                    What Chronicles Does
+                  </h3>
+                  <ul className="space-y-3 text-white/70">
+                    <li className="flex items-start gap-3">
+                      <span className="text-emerald-400 shrink-0">✓</span>
+                      <span><strong className="text-white">Lens Markers:</strong> Observe HOW you decide, not WHETHER decisions are "right" - Courage↔Fear, Hope↔Despair, Trust↔Suspicion</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-emerald-400 shrink-0">✓</span>
+                      <span><strong className="text-white">Emergent Identity:</strong> YOU define who you are through choices - no predetermined boxes</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-emerald-400 shrink-0">✓</span>
+                      <span><strong className="text-white">Choice Signatures:</strong> "Your choices reveal an affinity for connection" not "You are Chaotic Good"</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="text-emerald-400 shrink-0">✓</span>
+                      <span><strong className="text-white">Reality Adapts:</strong> The world subtly shifts based on your emerging patterns - not punishes or rewards</span>
+                    </li>
+                  </ul>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="space-y-6"
+              >
+                <div className="relative overflow-hidden rounded-2xl border border-purple-500/30 p-8"
+                  style={{ boxShadow: "0 0 80px rgba(168, 85, 247, 0.15)" }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-950/50 via-slate-950/80 to-pink-950/50" />
+                  <div className="relative z-10">
+                    <h3 className="text-2xl font-bold text-white mb-6">The 5-Axis Emotion System</h3>
+                    <p className="text-white/70 mb-6">
+                      Instead of good/evil, we observe emotional patterns across five dimensions. Each ranges from -100 to +100 - 
+                      neither end is "better," they simply reflect different approaches to life.
+                    </p>
+                    <div className="space-y-4">
+                      {[
+                        { axis: "Courage ↔ Fear", desc: "How you face danger and uncertainty" },
+                        { axis: "Hope ↔ Despair", desc: "Your outlook on the future" },
+                        { axis: "Trust ↔ Suspicion", desc: "How you approach relationships" },
+                        { axis: "Passion ↔ Apathy", desc: "Your emotional investment in causes" },
+                        { axis: "Wisdom ↔ Recklessness", desc: "Your decision-making approach" },
+                      ].map((item, i) => (
+                        <div key={i} className="flex items-center gap-4 p-3 rounded-lg bg-white/5">
+                          <div className="w-3 h-3 rounded-full bg-gradient-to-r from-cyan-400 to-purple-400" />
+                          <div>
+                            <span className="text-cyan-400 font-semibold">{item.axis}</span>
+                            <span className="text-white/50 text-sm ml-2">— {item.desc}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-6 rounded-2xl bg-cyan-950/30 border border-cyan-500/20">
+                  <h3 className="text-xl font-bold text-cyan-400 mb-4">Deeper Purpose</h3>
+                  <p className="text-white/70 leading-relaxed">
+                    Chronicles is designed as a <span className="text-cyan-400">questioning and awakening tool</span> disguised as entertainment. 
+                    Players naturally explore their own beliefs, biases, and patterns through gameplay - 
+                    not through lectures or morality meters, but through organic story experiences.
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="p-8 rounded-3xl bg-gradient-to-r from-purple-950/40 via-pink-950/40 to-cyan-950/40 border border-purple-500/20 text-center"
+              style={{ boxShadow: "0 0 100px rgba(168, 85, 247, 0.1)" }}
+            >
+              <h3 className="text-2xl font-bold text-white mb-4">Why This Matters for Partners</h3>
+              <p className="text-white/70 max-w-3xl mx-auto leading-relaxed">
+                This isn't just a design choice - it's a <span className="text-purple-400 font-semibold">competitive moat</span>. 
+                No other game operates this way. Players who experience the Many Lenses system describe it as 
+                "finally feeling seen" rather than "judged." This creates <span className="text-cyan-400 font-semibold">unprecedented engagement and retention</span> because 
+                the experience genuinely adapts to each individual.
+              </p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Voice Cloning Technology - Industry First */}
+        <section className="py-20 px-4 relative overflow-hidden">
+          <div className="absolute inset-0">
+            <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+          </div>
+          
+          <div className="container mx-auto max-w-6xl relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-16"
+            >
+              <Badge className="mb-6 px-4 py-2 bg-gradient-to-r from-pink-500/20 to-cyan-500/20 border-pink-500/30 text-white backdrop-blur-sm">
+                <Sparkles className="w-4 h-4 mr-2" />
+                Industry First Technology
+              </Badge>
+              <h2 className="text-4xl md:text-5xl font-display font-black mb-6">
+                <span className="bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                  Your Voice. Your Parallel Self.
+                </span>
+              </h2>
+              <p className="text-xl text-white/70 max-w-3xl mx-auto">
+                The first game where your character speaks with YOUR actual voice, accent, and inflections
+              </p>
+            </motion.div>
+
+            <div className="grid lg:grid-cols-3 gap-8">
+              {[
+                {
+                  step: "1",
+                  title: "Record Your Voice",
+                  desc: "Provide short voice samples reading curated phrases. Our AI captures your unique vocal signature - your accent, tone, and speech patterns.",
+                  icon: "🎙️"
+                },
+                {
+                  step: "2",
+                  title: "AI Creates Your Clone",
+                  desc: "Advanced voice synthesis technology creates a perfect digital version of YOUR voice that can speak any dialogue naturally.",
+                  icon: "🧠"
+                },
+                {
+                  step: "3",
+                  title: "Hear Yourself Across Eras",
+                  desc: "Your parallel self speaks as a medieval knight, a space captain, a Wild West sheriff - all in YOUR voice. It's genuinely you in another world.",
+                  icon: "🌍"
+                }
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.15 }}
+                  className="relative p-8 rounded-2xl bg-slate-900/80 border border-white/10 backdrop-blur-sm"
+                  style={{ boxShadow: "0 0 40px rgba(0,0,0,0.3)" }}
+                >
+                  <div className="absolute -top-4 -left-4 w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-xl font-bold shadow-lg">
+                    {item.step}
+                  </div>
+                  <div className="text-4xl mb-4 mt-2">{item.icon}</div>
+                  <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
+                  <p className="text-white/60 leading-relaxed">{item.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mt-12 p-8 rounded-2xl bg-gradient-to-r from-pink-950/30 to-purple-950/30 border border-pink-500/20 text-center"
+            >
+              <p className="text-lg text-white/80">
+                <span className="text-pink-400 font-semibold">No other game has this.</span> When players hear themselves speaking as characters across history, 
+                it creates an emotional connection impossible with generic voice acting. This is true immersion.
+              </p>
+            </motion.div>
           </div>
         </section>
 

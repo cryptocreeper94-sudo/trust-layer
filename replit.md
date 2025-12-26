@@ -126,6 +126,44 @@ Access at `/legacy` - pre-launch feature for recording voice samples, viewing pe
 
 ---
 
+## Voice Cloning Technology
+
+Industry-first feature where players' parallel selves speak with their actual voice, accent, and inflections.
+
+### How It Works
+1. **Record Voice Samples**: Users provide short recordings reading curated phrases
+2. **AI Voice Clone**: Advanced synthesis creates a digital replica of their unique vocal signature
+3. **Speak Across Eras**: Parallel self speaks in the user's voice across 70+ mission theaters
+
+### API Endpoints
+- `GET /api/voice/status`: Get voice sample status and count
+- `GET /api/voice/prompt`: Get random recording prompt
+- `POST /api/voice/sample`: Save recorded voice sample (base64 audio)
+- `POST /api/voice/clone`: Initiate voice clone creation
+
+### Technical Notes
+- Uses Web Audio API for browser recording
+- Placeholder for ElevenLabs/Resemble API integration
+- 500 credits per voice clone creation
+
+---
+
+## Early Adopter Rewards
+
+Participants who join before public beta (July 4, 2026) receive:
+
+### Rewards
+- **500 DWC**: Bonus coins for early signup
+- **Pioneer Title**: Exclusive in-game recognition
+- **Era Access**: First to explore new mission theaters
+
+### How To Qualify
+- Create account on Build Your Legacy page (`/legacy`)
+- Record at least one voice sample
+- Complete at least one AI scenario
+
+---
+
 ## Marketing Automation System
 
 Proprietary auto-deployment system for social media marketing with 264 posts seeded across 4 platforms.

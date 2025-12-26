@@ -252,7 +252,13 @@ const DEFINITIONS: Record<string, { term: string; definition: string }> = {
   "epoch": { term: "Epoch", definition: "A major division of historical time containing multiple mission theaters. Example: The Medieval Epoch contains Dark Ages, Crusades, and High Medieval campaigns." },
   "echoes": { term: "Cross-Era Echoes", definition: "Narrative connections between eras - legendary artifacts and story arcs that span multiple time periods, creating epic cross-campaign quests." },
   "lens": { term: "Your Lens", definition: "Every legend brings their own lens. The world adapts to what you seek, what you question, and what you accept. No two experiences are identical." },
-  "veil": { term: "The Veil", definition: "Some truths hide in plain sight. Spelling is casting a spell. A-muse means 'not to think.' The deeper you look, the more you see." }
+  "veil": { term: "The Veil", definition: "Some truths hide in plain sight. Spelling is casting a spell. A-muse means 'not to think.' The deeper you look, the more you see." },
+  "many_lenses": { term: "Many Lenses Design", definition: "Our revolutionary approach where reality itself adapts to your beliefs and patterns. No labels, no boxes, no predetermined categories. Your identity emerges through choices, not predefined archetypes. The world sees YOU, not a character type." },
+  "lens_markers": { term: "Lens Markers", definition: "Unlike traditional good/evil meters, Lens Markers observe HOW you approach decisions - not whether they're 'right' or 'wrong'. They track patterns like Courage↔Fear, Hope↔Despair, Trust↔Suspicion. These aren't judgments - they're reflections of your emerging journey." },
+  "parallel_self": { term: "Parallel Self", definition: "This isn't an avatar you control - it's YOU in another reality. The AI learns your voice, your patterns, your instincts. When your parallel self speaks, it sounds like you, thinks like you, and makes choices aligned with your emerging identity." },
+  "voice_clone": { term: "Voice Cloning", definition: "Record your voice and your parallel self speaks WITH YOUR ACTUAL VOICE across 70+ eras. Your accent, your inflections, your unique sound - brought to life in the game world. Industry first: hear yourself as an ancient warrior, a space captain, or a medieval noble." },
+  "choice_signatures": { term: "Choice Signatures", definition: "Fluid observations of your emerging patterns, not labels. Instead of 'You are a Guardian,' we say 'Your choices reveal an affinity for protection.' Instead of 'Chaotic alignment,' we observe 'You embrace uncertainty.' Your identity remains your own to define." },
+  "early_adopter": { term: "Early Adopter Rewards", definition: "Pioneer participants who join before public beta receive DWC coin bonuses, exclusive titles, and priority access to new eras. Your early belief in Chronicles is recognized and rewarded." }
 };
 
 function DefinitionModal({ term, onClose }: { term: string; onClose: () => void }) {
@@ -868,6 +874,220 @@ export default function Chronicles() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Voice Cloning - Industry First */}
+      <section className="py-24 px-4 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+        </div>
+        
+        <div className="container mx-auto max-w-6xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <Badge className="mb-4 bg-pink-500/20 text-pink-400 border-pink-500/30">
+              <Volume2 className="w-3 h-3 mr-1" /> Industry First
+            </Badge>
+            
+            <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">
+              <span className="text-white">Your Voice.</span>
+              <br />
+              <span className="bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                Your Parallel Self.
+              </span>
+            </h2>
+            
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
+              The first game where your character speaks with YOUR actual voice, accent, and inflections. 
+              Hear yourself as a medieval knight, a space captain, or a Wild West sheriff.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            {[
+              { icon: "🎙️", title: "Record Your Voice", desc: "Provide short voice samples. Our AI captures your unique vocal signature - your accent, tone, and speech patterns." },
+              { icon: "🧠", title: "AI Voice Clone", desc: "Advanced synthesis creates a perfect digital version of YOUR voice that can speak any dialogue naturally." },
+              { icon: "🌍", title: "Speak Across Eras", desc: "Your parallel self speaks in YOUR voice across 70+ mission theaters. It's genuinely you in another world." }
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="p-8 rounded-2xl bg-slate-900/80 border border-white/10 backdrop-blur-sm text-center"
+                style={{ boxShadow: "0 0 40px rgba(0,0,0,0.3)" }}
+              >
+                <div className="text-5xl mb-4">{item.icon}</div>
+                <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
+                <p className="text-white/60 leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <Link href="/legacy">
+              <Button size="lg" className="rounded-full gap-2 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white shadow-lg" data-testid="button-build-legacy">
+                <Volume2 className="w-5 h-5" />
+                Build Your Legacy Now
+              </Button>
+            </Link>
+            <p className="mt-4 text-sm text-white/40">Start recording voice samples today - be ready when the game launches</p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Many Lenses Philosophy - User-facing */}
+      <section className="py-24 px-4 bg-gradient-to-b from-slate-950 via-purple-950/20 to-slate-950">
+        <div className="container mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <Badge className="mb-4 bg-purple-500/20 text-purple-400 border-purple-500/30">
+              <Brain className="w-3 h-3 mr-1" /> Revolutionary Design
+            </Badge>
+            
+            <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">
+              <span className="text-white">No Labels.</span>
+              <br />
+              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
+                No Boxes. Just You.
+              </span>
+            </h2>
+            
+            <p className="text-xl text-white/70 max-w-3xl mx-auto">
+              Most games judge you: Good or Evil. Light or Dark. We don't. 
+              Our <InfoTooltip termKey="many_lenses">Many Lenses</InfoTooltip> system observes how you approach choices - 
+              not whether they're "right."
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="p-8 rounded-2xl bg-slate-900/50 border border-purple-500/20"
+              style={{ boxShadow: "0 0 60px rgba(168, 85, 247, 0.1)" }}
+            >
+              <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                <Eye className="w-7 h-7 text-purple-400" />
+                <InfoTooltip termKey="lens_markers">Lens Markers</InfoTooltip>
+              </h3>
+              <div className="space-y-4">
+                {[
+                  { axis: "Courage ↔ Fear", example: "\"You face uncertainty head-on\" or \"You weigh risks carefully\"" },
+                  { axis: "Hope ↔ Despair", example: "\"Openness to possibility\" or \"Pragmatic awareness\"" },
+                  { axis: "Trust ↔ Suspicion", example: "\"You extend trust readily\" or \"You maintain careful boundaries\"" },
+                ].map((item, i) => (
+                  <div key={i} className="p-4 rounded-xl bg-white/5 border border-white/5">
+                    <div className="text-cyan-400 font-semibold mb-1">{item.axis}</div>
+                    <div className="text-white/50 text-sm italic">{item.example}</div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="p-8 rounded-2xl bg-slate-900/50 border border-cyan-500/20"
+              style={{ boxShadow: "0 0 60px rgba(6, 182, 212, 0.1)" }}
+            >
+              <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                <Sparkles className="w-7 h-7 text-cyan-400" />
+                <InfoTooltip termKey="choice_signatures">Choice Signatures</InfoTooltip>
+              </h3>
+              <p className="text-white/70 mb-6 leading-relaxed">
+                Instead of labeling you, we generate fluid reflections of your emerging patterns. 
+                Your identity remains your own to define.
+              </p>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                  <span className="text-emerald-400">✓</span>
+                  <span className="text-white/80">"Your choices reveal an affinity for protection"</span>
+                </div>
+                <div className="flex items-center gap-3 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                  <span className="text-red-400">✗</span>
+                  <span className="text-white/50 line-through">"You are a Guardian class"</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Early Adopter Rewards */}
+      <section className="py-24 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-amber-950/10 via-slate-950 to-slate-950" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-3xl" />
+        
+        <div className="container mx-auto max-w-4xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <Badge className="mb-4 bg-amber-500/20 text-amber-400 border-amber-500/30">
+              <Coins className="w-3 h-3 mr-1" /> Limited Time Offer
+            </Badge>
+            
+            <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">
+              <span className="bg-gradient-to-r from-amber-400 via-yellow-400 to-orange-400 bg-clip-text text-transparent">
+                Early Adopter Rewards
+              </span>
+            </h2>
+            
+            <p className="text-xl text-white/70 max-w-2xl mx-auto mb-12">
+              Join before public beta and receive <InfoTooltip termKey="dwc">DWC</InfoTooltip> coin bonuses, 
+              exclusive titles, and priority access to new eras.
+            </p>
+
+            <div className="grid sm:grid-cols-3 gap-6 mb-12">
+              {[
+                { reward: "500 DWC", desc: "Bonus coins for early signup", icon: Coins },
+                { reward: "Pioneer Title", desc: "Exclusive in-game recognition", icon: Crown },
+                { reward: "Era Access", desc: "First to explore new theaters", icon: Compass }
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="p-6 rounded-2xl bg-slate-900/80 border border-amber-500/20"
+                  style={{ boxShadow: "0 0 40px rgba(245, 158, 11, 0.1)" }}
+                >
+                  <item.icon className="w-10 h-10 text-amber-400 mx-auto mb-3" />
+                  <div className="text-2xl font-bold text-amber-400 mb-1">{item.reward}</div>
+                  <div className="text-white/50 text-sm">{item.desc}</div>
+                </motion.div>
+              ))}
+            </div>
+
+            <Link href="/legacy">
+              <Button size="lg" className="rounded-full gap-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white shadow-lg" data-testid="button-claim-rewards">
+                <Sparkles className="w-5 h-5" />
+                Claim Your Rewards
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
