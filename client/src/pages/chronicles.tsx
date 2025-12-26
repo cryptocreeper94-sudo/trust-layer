@@ -250,7 +250,9 @@ const DEFINITIONS: Record<string, { term: string; definition: string }> = {
   "era": { term: "Mission Theater", definition: "A historical time period with unique campaigns, factions, and rewards. Each era offers different missions, NPCs, and ways to build your legend." },
   "dwc": { term: "DWC (DarkWave Coin)", definition: "The cryptocurrency earned through missions and traded between players. Real blockchain tokens with real value." },
   "epoch": { term: "Epoch", definition: "A major division of historical time containing multiple mission theaters. Example: The Medieval Epoch contains Dark Ages, Crusades, and High Medieval campaigns." },
-  "echoes": { term: "Cross-Era Echoes", definition: "Narrative connections between eras - legendary artifacts and story arcs that span multiple time periods, creating epic cross-campaign quests." }
+  "echoes": { term: "Cross-Era Echoes", definition: "Narrative connections between eras - legendary artifacts and story arcs that span multiple time periods, creating epic cross-campaign quests." },
+  "lens": { term: "Your Lens", definition: "Every legend brings their own lens. The world adapts to what you seek, what you question, and what you accept. No two experiences are identical." },
+  "veil": { term: "The Veil", definition: "Some truths hide in plain sight. Spelling is casting a spell. A-muse means 'not to think.' The deeper you look, the more you see." }
 };
 
 function DefinitionModal({ term, onClose }: { term: string; onClose: () => void }) {
@@ -631,6 +633,45 @@ export default function Chronicles() {
               <FeatureCard key={feature.id} feature={feature} index={i} />
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Reality Adapts Section */}
+      <section className="py-16 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-950/20 via-purple-950/30 to-pink-950/20 pointer-events-none" />
+        <div className="container mx-auto max-w-4xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center p-8 md:p-12 rounded-3xl border border-white/10 backdrop-blur-sm"
+            style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(30,20,40,0.6) 100%)' }}
+          >
+            <Badge className="mb-4 bg-white/10 text-white/80 border-white/20">
+              <Eye className="w-3 h-3 mr-1" /> Unprecedented
+            </Badge>
+            <h2 className="text-2xl md:text-4xl font-display font-bold mb-4 text-white">
+              Reality Adapts To <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">You</span>
+            </h2>
+            <p className="text-white/70 leading-relaxed mb-6 max-w-2xl mx-auto">
+              Every legend brings their own <InfoTooltip termKey="lens">lens</InfoTooltip>. Sail to the edge of the world - what you find depends on what you seek. 
+              Chronicles doesn't tell you what's real. It mirrors your journey of discovery.
+            </p>
+            <div className="grid md:grid-cols-3 gap-4 text-left">
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                <h4 className="font-semibold text-cyan-400 mb-2">No Canon Reality</h4>
+                <p className="text-sm text-white/60">Your beliefs shape your experience. Every perspective is valid.</p>
+              </div>
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                <h4 className="font-semibold text-purple-400 mb-2">Organic Discovery</h4>
+                <p className="text-sm text-white/60">No A/B choices. The world responds to how you play, what you question.</p>
+              </div>
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                <h4 className="font-semibold text-pink-400 mb-2">The <InfoTooltip termKey="veil">Veil</InfoTooltip> Drops</h4>
+                <p className="text-sm text-white/60">Some truths hide in plain sight. Look deeper. Discover more.</p>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
