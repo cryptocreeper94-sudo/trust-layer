@@ -2330,3 +2330,72 @@ export const domainPricingSchema = z.object({
 });
 
 export type DomainPricing = z.infer<typeof domainPricingSchema>;
+
+// Chronicles Sponsorship System - Early Adopter Benefits
+export const chronicleSponsorshipSlots = pgTable("chronicle_sponsorship_slots", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  eraId: text("era_id").notNull(), // Which historical era (e.g., "medieval", "renaissance")
+  districtTier: text("district_tier").notNull(), // "prime", "signature", "emerging"
+  locationName: text("location_name").notNull(), // Human-readable location name
+  description: text("description"),
+  capacity: integer("capacity").notNull().default(1), // How many businesses can share this slot
+  currentOccupancy: integer("current_occupancy").notNull().default(0),
+  status: text("status").notNull().default("available"), // "available", "claimed", "reserved"
+  minimumDomainTier: text("minimum_domain_tier"), // Which domain tier qualifies ("ultra_premium", "premium", etc.)
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChronicleSponsorshipSlotSchema = createInsertSchema(chronicleSponsorshipSlots).omit({
+  id: true,
+  currentOccupancy: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type ChronicleSponsorshipSlot = typeof chronicleSponsorshipSlots.$inferSelect;
+export type InsertChronicleSponsorshipSlot = z.infer<typeof insertChronicleSponsorshipSlotSchema>;
+
+// Domain sponsorship claims - links domains to sponsorship slots
+export const domainSponsorshipClaims = pgTable("domain_sponsorship_claims", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  domainId: varchar("domain_id").notNull().references(() => blockchainDomains.id, { onDelete: "cascade" }),
+  slotId: varchar("slot_id").notNull().references(() => chronicleSponsorshipSlots.id, { onDelete: "cascade" }),
+  businessName: text("business_name"),
+  businessUrl: text("business_url"),
+  businessDescription: text("business_description"),
+  verificationStatus: text("verification_status").notNull().default("pending"), // "pending", "verified", "rejected"
+  activationDate: timestamp("activation_date"),
+  expiryDate: timestamp("expiry_date"), // null for lifetime domain holders (36 months + renewal)
+  engagementMetrics: text("engagement_metrics"), // JSON blob for impressions, clicks, conversions
+  isEarlyAdopter: boolean("is_early_adopter").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertDomainSponsorshipClaimSchema = createInsertSchema(domainSponsorshipClaims).omit({
+  id: true,
+  verificationStatus: true,
+  activationDate: true,
+  engagementMetrics: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type DomainSponsorshipClaim = typeof domainSponsorshipClaims.$inferSelect;
+export type InsertDomainSponsorshipClaim = z.infer<typeof insertDomainSponsorshipClaimSchema>;
+
+// Early Adopter Program tracking
+export const earlyAdopterProgram = pgTable("early_adopter_program", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  programName: text("program_name").notNull().default("Domain Launch"),
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date").notNull(),
+  maxRegistrations: integer("max_registrations").notNull().default(5000),
+  currentRegistrations: integer("current_registrations").notNull().default(0),
+  discountPercent: integer("discount_percent").notNull().default(30),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type EarlyAdopterProgram = typeof earlyAdopterProgram.$inferSelect;

@@ -2579,17 +2579,25 @@ export async function registerRoutes(
   });
 
   const DOMAIN_PRICING = {
-    ultraPremium: { yearly: 10000, lifetime: 120000 }, // 3 chars or less
-    premium: { yearly: 5000, lifetime: 60000 }, // 4 chars
-    standardPlus: { yearly: 2000, lifetime: 24000 }, // 5 chars
-    standard: { yearly: 500, lifetime: 6000 }, // 6+ chars (was 500, now 60 for lifetime to be reasonable)
+    reserved: { yearly: 250000, lifetime: 0 }, // 1-2 chars - reserved/auction only ($2,500+/yr)
+    ultraPremium: { yearly: 35000, lifetime: 875000 }, // 3 chars - $350/yr, $8,750 lifetime (25x)
+    premium: { yearly: 12000, lifetime: 300000 }, // 4 chars - $120/yr, $3,000 lifetime (25x)
+    standardPlus: { yearly: 4500, lifetime: 112500 }, // 5 chars - $45/yr, $1,125 lifetime (25x)
+    standard: { yearly: 2000, lifetime: 50000 }, // 6-10 chars - $20/yr, $500 lifetime (25x)
+    economy: { yearly: 1200, lifetime: 30000 }, // 11+ chars - $12/yr, $300 lifetime (25x)
   };
 
+  const EARLY_ADOPTER_DISCOUNT = 0.30; // 30% off for early adopters (annual only, not lifetime)
+  const EARLY_ADOPTER_MAX_REGISTRATIONS = 5000;
+  const EARLY_ADOPTER_END_DATE = new Date('2026-01-01'); // 12 months from launch
+
   function getDomainPricing(nameLength: number) {
-    if (nameLength <= 3) return { ...DOMAIN_PRICING.ultraPremium, isPremium: true, tier: "Ultra Premium" };
-    if (nameLength <= 4) return { ...DOMAIN_PRICING.premium, isPremium: true, tier: "Premium" };
-    if (nameLength <= 5) return { ...DOMAIN_PRICING.standardPlus, isPremium: false, tier: "Standard+" };
-    return { ...DOMAIN_PRICING.standard, isPremium: false, tier: "Standard" };
+    if (nameLength <= 2) return { ...DOMAIN_PRICING.reserved, isPremium: true, tier: "Reserved", isReserved: true };
+    if (nameLength <= 3) return { ...DOMAIN_PRICING.ultraPremium, isPremium: true, tier: "Ultra Premium", isReserved: false };
+    if (nameLength <= 4) return { ...DOMAIN_PRICING.premium, isPremium: true, tier: "Premium", isReserved: false };
+    if (nameLength <= 5) return { ...DOMAIN_PRICING.standardPlus, isPremium: false, tier: "Standard+", isReserved: false };
+    if (nameLength <= 10) return { ...DOMAIN_PRICING.standard, isPremium: false, tier: "Standard", isReserved: false };
+    return { ...DOMAIN_PRICING.economy, isPremium: false, tier: "Economy", isReserved: false };
   }
 
   const DomainRegisterSchema = z.object({
@@ -2625,14 +2633,28 @@ export async function registerRoutes(
       const normalizedName = name.replace(/\.dwsc$/, '');
       const pricing = getDomainPricing(normalizedName.length);
       
+      // Check early adopter eligibility
+      const stats = await storage.getDomainStats();
+      const now = new Date();
+      const isEarlyAdopterPeriod = now < EARLY_ADOPTER_END_DATE && stats.totalDomains < EARLY_ADOPTER_MAX_REGISTRATIONS;
+      
+      // Calculate early adopter discount (only on yearly, not lifetime)
+      const earlyAdopterYearly = isEarlyAdopterPeriod 
+        ? Math.round(pricing.yearly * (1 - EARLY_ADOPTER_DISCOUNT))
+        : pricing.yearly;
+      
       res.json({
         ...result,
         name: normalizedName,
         tld: "dwsc",
         pricePerYearCents: pricing.yearly,
         priceLifetimeCents: pricing.lifetime,
+        earlyAdopterPriceCents: earlyAdopterYearly,
         isPremium: pricing.isPremium,
         tier: pricing.tier,
+        isReserved: pricing.isReserved,
+        isEarlyAdopterPeriod,
+        earlyAdopterDiscount: isEarlyAdopterPeriod ? EARLY_ADOPTER_DISCOUNT : 0,
       });
     } catch (error) {
       console.error("Domain search error:", error);
@@ -2691,22 +2713,41 @@ export async function registerRoutes(
     try {
       const data = DomainRegisterSchema.parse(req.body);
       
+      const pricing = getDomainPricing(data.name.length);
+      
+      // Block reserved domains (1-2 characters)
+      if (pricing.isReserved) {
+        return res.status(400).json({ 
+          error: "Reserved domain", 
+          message: "1-2 character domains are reserved for special release. Contact us for enterprise availability." 
+        });
+      }
+      
       const existing = await storage.searchDomain(data.name);
       if (!existing.available) {
         return res.status(400).json({ error: "Domain is not available" });
       }
       
-      const pricing = getDomainPricing(data.name.length);
+      // Check early adopter eligibility
+      const stats = await storage.getDomainStats();
+      const now = new Date();
+      const isEarlyAdopterPeriod = now < EARLY_ADOPTER_END_DATE && stats.totalDomains < EARLY_ADOPTER_MAX_REGISTRATIONS;
+      
       const isLifetime = data.ownershipType === "lifetime";
       
       let totalPrice: number;
       let expiresAt: Date | null;
       
       if (isLifetime) {
+        // Lifetime purchases don't get early adopter discount (preserves long-term value)
         totalPrice = pricing.lifetime;
-        expiresAt = null; // Lifetime ownership - never expires
+        expiresAt = null;
       } else {
-        totalPrice = pricing.yearly * (data.years || 1);
+        // Apply early adopter discount to annual pricing
+        const yearlyPrice = isEarlyAdopterPeriod 
+          ? Math.round(pricing.yearly * (1 - EARLY_ADOPTER_DISCOUNT))
+          : pricing.yearly;
+        totalPrice = yearlyPrice * (data.years || 1);
         expiresAt = new Date();
         expiresAt.setFullYear(expiresAt.getFullYear() + (data.years || 1));
       }
@@ -2737,6 +2778,7 @@ export async function registerRoutes(
         transactionHash: txHash,
         pricePaidCents: totalPrice,
         ownershipType: data.ownershipType || "term",
+        earlyAdopterApplied: isEarlyAdopterPeriod && !isLifetime,
       });
     } catch (error: any) {
       console.error("Domain registration error:", error);

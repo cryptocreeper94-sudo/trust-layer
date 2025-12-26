@@ -21,8 +21,12 @@ interface DomainSearchResult {
   tld: string;
   pricePerYearCents: number;
   priceLifetimeCents: number;
+  earlyAdopterPriceCents: number;
   isPremium: boolean;
   tier: string;
+  isReserved: boolean;
+  isEarlyAdopterPeriod: boolean;
+  earlyAdopterDiscount: number;
   domain?: BlockchainDomain;
 }
 
@@ -59,10 +63,12 @@ function formatDate(dateStr: string): string {
 }
 
 const pricingTiers = [
-  { chars: "3 or less", yearly: "$100/year", lifetime: "$1,200", tag: "Ultra Premium", gradient: "from-amber-500 via-yellow-400 to-amber-600" },
-  { chars: "4 characters", yearly: "$50/year", lifetime: "$600", tag: "Premium", gradient: "from-purple-500 to-violet-600" },
-  { chars: "5 characters", yearly: "$20/year", lifetime: "$240", tag: "Standard+", gradient: "from-blue-500 to-indigo-600" },
-  { chars: "6+ characters", yearly: "$5/year", lifetime: "$60", tag: "Standard", gradient: "from-cyan-500 to-teal-600" },
+  { chars: "1-2 chars", yearly: "Reserved", lifetime: "Enterprise", tag: "Reserved", gradient: "from-red-500 via-rose-400 to-red-600", isReserved: true },
+  { chars: "3 chars", yearly: "$350/year", lifetime: "$8,750", tag: "Ultra Premium", gradient: "from-amber-500 via-yellow-400 to-amber-600" },
+  { chars: "4 chars", yearly: "$120/year", lifetime: "$3,000", tag: "Premium", gradient: "from-purple-500 to-violet-600" },
+  { chars: "5 chars", yearly: "$45/year", lifetime: "$1,125", tag: "Standard+", gradient: "from-blue-500 to-indigo-600" },
+  { chars: "6-10 chars", yearly: "$20/year", lifetime: "$500", tag: "Standard", gradient: "from-cyan-500 to-teal-600" },
+  { chars: "11+ chars", yearly: "$12/year", lifetime: "$300", tag: "Economy", gradient: "from-emerald-500 to-green-600" },
 ];
 
 function FloatingParticle({ delay, duration, x }: { delay: number; duration: number; x: number }) {
@@ -284,36 +290,68 @@ export default function DomainsPage() {
                 </div>
 
                 {searchResult.available ? (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="p-3 rounded-lg bg-white/5 text-center">
-                        <p className="text-xs text-white/60 mb-1">Yearly Rental</p>
-                        <p className="text-lg font-bold text-white">
-                          {formatPrice(searchResult.pricePerYearCents)}/yr
+                  searchResult.isReserved ? (
+                    <div className="space-y-4">
+                      <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-center">
+                        <p className="text-red-400 font-medium">Reserved Domain</p>
+                        <p className="text-sm text-white/60 mt-1">
+                          1-2 character domains are reserved for enterprise customers and special auctions.
                         </p>
                       </div>
-                      <div className="p-3 rounded-lg bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 text-center">
-                        <p className="text-xs text-cyan-400 mb-1 flex items-center justify-center gap-1">
-                          <InfinityIcon className="w-3 h-3" /> Own Forever
-                        </p>
-                        <p className="text-lg font-bold text-cyan-400">
-                          {formatPrice(searchResult.priceLifetimeCents)}
-                        </p>
-                      </div>
+                      <Button disabled className="w-full opacity-50" data-testid="button-register-domain">
+                        Contact for Enterprise Pricing
+                      </Button>
                     </div>
-                    <p className="text-xs text-center text-white/40">
-                      {searchResult.tier} tier domain
-                    </p>
-                    <Button
-                      onClick={() => setShowRegisterDialog(true)}
-                      disabled={!isConnected}
-                      className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"
-                      data-testid="button-register-domain"
-                    >
-                      {isConnected ? "Register Now" : "Connect Wallet to Register"}
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {searchResult.isEarlyAdopterPeriod && (
+                        <div className="p-2 rounded-lg bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 text-center">
+                          <p className="text-xs text-emerald-400 font-medium">
+                            Early Adopter Pricing: 30% OFF Annual Plans
+                          </p>
+                        </div>
+                      )}
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="p-3 rounded-lg bg-white/5 text-center">
+                          <p className="text-xs text-white/60 mb-1">Yearly Rental</p>
+                          {searchResult.isEarlyAdopterPeriod ? (
+                            <>
+                              <p className="text-sm text-white/40 line-through">
+                                {formatPrice(searchResult.pricePerYearCents)}/yr
+                              </p>
+                              <p className="text-lg font-bold text-emerald-400">
+                                {formatPrice(searchResult.earlyAdopterPriceCents)}/yr
+                              </p>
+                            </>
+                          ) : (
+                            <p className="text-lg font-bold text-white">
+                              {formatPrice(searchResult.pricePerYearCents)}/yr
+                            </p>
+                          )}
+                        </div>
+                        <div className="p-3 rounded-lg bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 text-center">
+                          <p className="text-xs text-cyan-400 mb-1 flex items-center justify-center gap-1">
+                            <InfinityIcon className="w-3 h-3" /> Own Forever
+                          </p>
+                          <p className="text-lg font-bold text-cyan-400">
+                            {formatPrice(searchResult.priceLifetimeCents)}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="text-xs text-center text-white/40">
+                        {searchResult.tier} tier domain
+                      </p>
+                      <Button
+                        onClick={() => setShowRegisterDialog(true)}
+                        disabled={!isConnected}
+                        className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"
+                        data-testid="button-register-domain"
+                      >
+                        {isConnected ? "Register Now" : "Connect Wallet to Register"}
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </div>
+                  )
                 ) : (
                   <div className="space-y-3">
                     <div className="p-3 rounded-lg bg-white/5">
@@ -354,7 +392,7 @@ export default function DomainsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12"
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12"
         >
           {pricingTiers.map((tier, idx) => (
             <GlassCard key={idx} className="p-4 text-center">
@@ -514,7 +552,7 @@ export default function DomainsPage() {
       </main>
 
       <Dialog open={showRegisterDialog} onOpenChange={setShowRegisterDialog}>
-        <DialogContent className="bg-slate-900 border-white/10 text-white">
+        <DialogContent className="bg-slate-900 border-white/10 text-white max-w-md">
           <DialogHeader>
             <DialogTitle className="text-xl">Register Domain</DialogTitle>
             <DialogDescription className="text-white/60">
@@ -522,10 +560,10 @@ export default function DomainsPage() {
             </DialogDescription>
           </DialogHeader>
           
-          {searchResult && (
+          {searchResult && !searchResult.isReserved && (
             <div className="space-y-4 py-4">
               <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between">
                   <span className="text-white/60">Domain</span>
                   <span className="text-lg font-bold text-white">
                     {searchResult.name}.{searchResult.tld}
@@ -534,34 +572,104 @@ export default function DomainsPage() {
               </div>
 
               <div>
-                <label className="text-sm text-white/60 mb-2 block">Registration Period</label>
-                <div className="flex gap-2">
-                  {[1, 2, 5].map((years) => (
-                    <Button
-                      key={years}
-                      variant={selectedYears === years ? "default" : "outline"}
-                      onClick={() => setSelectedYears(years)}
-                      className={selectedYears === years ? "bg-cyan-500 hover:bg-cyan-600" : ""}
-                      data-testid={`button-years-${years}`}
-                    >
-                      {years} {years === 1 ? "year" : "years"}
-                    </Button>
-                  ))}
+                <label className="text-sm text-white/60 mb-2 block">Ownership Type</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button
+                    variant={ownershipType === "term" ? "default" : "outline"}
+                    onClick={() => setOwnershipType("term")}
+                    className={ownershipType === "term" ? "bg-cyan-500 hover:bg-cyan-600" : ""}
+                    data-testid="button-ownership-term"
+                  >
+                    <Clock className="w-4 h-4 mr-2" />
+                    Yearly Rental
+                  </Button>
+                  <Button
+                    variant={ownershipType === "lifetime" ? "default" : "outline"}
+                    onClick={() => setOwnershipType("lifetime")}
+                    className={ownershipType === "lifetime" ? "bg-gradient-to-r from-cyan-500 to-purple-500" : ""}
+                    data-testid="button-ownership-lifetime"
+                  >
+                    <InfinityIcon className="w-4 h-4 mr-2" />
+                    Own Forever
+                  </Button>
                 </div>
               </div>
 
+              {ownershipType === "term" && (
+                <div>
+                  <label className="text-sm text-white/60 mb-2 block">Registration Period</label>
+                  <div className="flex gap-2">
+                    {[1, 2, 5, 10].map((years) => (
+                      <Button
+                        key={years}
+                        variant={selectedYears === years ? "default" : "outline"}
+                        onClick={() => setSelectedYears(years)}
+                        className={selectedYears === years ? "bg-cyan-500 hover:bg-cyan-600" : ""}
+                        size="sm"
+                        data-testid={`button-years-${years}`}
+                      >
+                        {years}yr
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-white/60">Price per year</span>
-                  <span className="text-white">{formatPrice(searchResult.pricePerYearCents)}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-white/60">Total</span>
-                  <span className="text-xl font-bold text-cyan-400">
-                    {formatPrice(searchResult.pricePerYearCents * selectedYears)}
-                  </span>
-                </div>
+                {ownershipType === "term" ? (
+                  <>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-white/60">Price per year</span>
+                      {searchResult.isEarlyAdopterPeriod ? (
+                        <div className="text-right">
+                          <span className="text-sm text-white/40 line-through mr-2">
+                            {formatPrice(searchResult.pricePerYearCents)}
+                          </span>
+                          <span className="text-emerald-400">
+                            {formatPrice(searchResult.earlyAdopterPriceCents)}
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-white">{formatPrice(searchResult.pricePerYearCents)}</span>
+                      )}
+                    </div>
+                    {searchResult.isEarlyAdopterPeriod && (
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-emerald-400 text-sm">Early Adopter Discount</span>
+                        <span className="text-emerald-400 text-sm">-30%</span>
+                      </div>
+                    )}
+                    <div className="flex items-center justify-between pt-2 border-t border-white/10">
+                      <span className="text-white/60">Total ({selectedYears} {selectedYears === 1 ? "year" : "years"})</span>
+                      <span className="text-xl font-bold text-cyan-400">
+                        {formatPrice((searchResult.isEarlyAdopterPeriod ? searchResult.earlyAdopterPriceCents : searchResult.pricePerYearCents) * selectedYears)}
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-white/60 flex items-center gap-1">
+                        <InfinityIcon className="w-3 h-3" /> Lifetime Ownership
+                      </span>
+                      <span className="text-xl font-bold text-cyan-400">
+                        {formatPrice(searchResult.priceLifetimeCents)}
+                      </span>
+                    </div>
+                    <p className="text-xs text-white/40">
+                      One-time payment. Never pay renewal fees again.
+                    </p>
+                  </>
+                )}
               </div>
+
+              {searchResult.isEarlyAdopterPeriod && ownershipType === "term" && (
+                <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
+                  <p className="text-xs text-emerald-400 text-center">
+                    + FREE Chronicles Sponsorship Slot (Early Adopter Exclusive)
+                  </p>
+                </div>
+              )}
 
               <Button
                 onClick={handleRegister}
