@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Search, Globe, Shield, Zap, Check, X, ArrowRight, Crown, Clock, Users, Sparkles, ExternalLink, Copy, Wallet } from "lucide-react";
+import { ArrowLeft, Search, Globe, Shield, Zap, Check, X, ArrowRight, Crown, Clock, Users, Sparkles, ExternalLink, Copy, Wallet, Infinity } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +20,9 @@ interface DomainSearchResult {
   name: string;
   tld: string;
   pricePerYearCents: number;
+  priceLifetimeCents: number;
   isPremium: boolean;
+  tier: string;
   domain?: BlockchainDomain;
 }
 
@@ -30,7 +32,8 @@ interface BlockchainDomain {
   tld: string;
   ownerAddress: string;
   registeredAt: string;
-  expiresAt: string;
+  expiresAt: string | null;
+  ownershipType: "term" | "lifetime";
   isPremium: boolean;
   primaryWallet?: string;
   description?: string;
@@ -56,10 +59,10 @@ function formatDate(dateStr: string): string {
 }
 
 const pricingTiers = [
-  { chars: "3 or less", price: "$100/year", tag: "Ultra Premium", gradient: "from-amber-500 via-yellow-400 to-amber-600" },
-  { chars: "4 characters", price: "$50/year", tag: "Premium", gradient: "from-purple-500 to-violet-600" },
-  { chars: "5 characters", price: "$20/year", tag: "Standard+", gradient: "from-blue-500 to-indigo-600" },
-  { chars: "6+ characters", price: "$5/year", tag: "Standard", gradient: "from-cyan-500 to-teal-600" },
+  { chars: "3 or less", yearly: "$100/year", lifetime: "$1,200", tag: "Ultra Premium", gradient: "from-amber-500 via-yellow-400 to-amber-600" },
+  { chars: "4 characters", yearly: "$50/year", lifetime: "$600", tag: "Premium", gradient: "from-purple-500 to-violet-600" },
+  { chars: "5 characters", yearly: "$20/year", lifetime: "$240", tag: "Standard+", gradient: "from-blue-500 to-indigo-600" },
+  { chars: "6+ characters", yearly: "$5/year", lifetime: "$60", tag: "Standard", gradient: "from-cyan-500 to-teal-600" },
 ];
 
 function FloatingParticle({ delay, duration, x }: { delay: number; duration: number; x: number }) {
@@ -92,6 +95,7 @@ export default function DomainsPage() {
   const [isSearching, setIsSearching] = useState(false);
   const [showRegisterDialog, setShowRegisterDialog] = useState(false);
   const [selectedYears, setSelectedYears] = useState(1);
+  const [ownershipType, setOwnershipType] = useState<"term" | "lifetime">("term");
 
   const { data: stats } = useQuery<DomainStats>({
     queryKey: ["/api/domains/stats"],
@@ -107,7 +111,7 @@ export default function DomainsPage() {
   });
 
   const registerMutation = useMutation({
-    mutationFn: async (data: { name: string; ownerAddress: string; years: number }) => {
+    mutationFn: async (data: { name: string; ownerAddress: string; ownershipType: "term" | "lifetime"; years?: number }) => {
       const res = await apiRequest("POST", "/api/domains/register", data);
       return res.json();
     },
@@ -116,6 +120,7 @@ export default function DomainsPage() {
       setShowRegisterDialog(false);
       setSearchResult(null);
       setSearchQuery("");
+      setOwnershipType("term");
       queryClient.invalidateQueries({ queryKey: ["/api/domains/stats"] });
       queryClient.invalidateQueries({ queryKey: ["/api/domains/recent"] });
       queryClient.invalidateQueries({ queryKey: ["/api/domains/owner", walletAddress] });
@@ -151,7 +156,8 @@ export default function DomainsPage() {
     registerMutation.mutate({
       name: searchResult.name,
       ownerAddress: walletAddress,
-      years: selectedYears,
+      ownershipType,
+      years: ownershipType === "term" ? selectedYears : undefined,
     });
   };
 
@@ -279,12 +285,25 @@ export default function DomainsPage() {
 
                 {searchResult.available ? (
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
-                      <span className="text-white/60">Price per year</span>
-                      <span className="text-xl font-bold text-white">
-                        {formatPrice(searchResult.pricePerYearCents)}
-                      </span>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="p-3 rounded-lg bg-white/5 text-center">
+                        <p className="text-xs text-white/60 mb-1">Yearly Rental</p>
+                        <p className="text-lg font-bold text-white">
+                          {formatPrice(searchResult.pricePerYearCents)}/yr
+                        </p>
+                      </div>
+                      <div className="p-3 rounded-lg bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 text-center">
+                        <p className="text-xs text-cyan-400 mb-1 flex items-center justify-center gap-1">
+                          <Infinity className="w-3 h-3" /> Own Forever
+                        </p>
+                        <p className="text-lg font-bold text-cyan-400">
+                          {formatPrice(searchResult.priceLifetimeCents)}
+                        </p>
+                      </div>
                     </div>
+                    <p className="text-xs text-center text-white/40">
+                      {searchResult.tier} tier domain
+                    </p>
                     <Button
                       onClick={() => setShowRegisterDialog(true)}
                       disabled={!isConnected}
@@ -311,9 +330,16 @@ export default function DomainsPage() {
                         </button>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-white/60">Expires</span>
-                        <span className="text-white">
-                          {searchResult.domain?.expiresAt && formatDate(searchResult.domain.expiresAt)}
+                        <span className="text-white/60">Ownership</span>
+                        <span className="text-white flex items-center gap-1">
+                          {searchResult.domain?.ownershipType === "lifetime" ? (
+                            <>
+                              <Infinity className="w-4 h-4 text-cyan-400" />
+                              <span className="text-cyan-400">Forever</span>
+                            </>
+                          ) : (
+                            <>Expires {searchResult.domain?.expiresAt && formatDate(searchResult.domain.expiresAt)}</>
+                          )}
                         </span>
                       </div>
                     </div>
@@ -335,8 +361,13 @@ export default function DomainsPage() {
               <Badge className={`mb-2 bg-gradient-to-r ${tier.gradient} text-white`}>
                 {tier.tag}
               </Badge>
-              <p className="text-white/60 text-sm mb-1">{tier.chars}</p>
-              <p className="text-xl font-bold text-white">{tier.price}</p>
+              <p className="text-white/60 text-sm mb-2">{tier.chars}</p>
+              <div className="space-y-1">
+                <p className="text-lg font-bold text-white">{tier.yearly}</p>
+                <p className="text-sm text-cyan-400 flex items-center justify-center gap-1">
+                  <Infinity className="w-3 h-3" /> {tier.lifetime}
+                </p>
+              </div>
             </GlassCard>
           ))}
         </motion.div>
@@ -391,8 +422,17 @@ export default function DomainsPage() {
                     )}
                   </div>
                   <div className="flex items-center gap-2 text-sm text-white/60 mb-3">
-                    <Clock className="w-4 h-4" />
-                    <span>Expires {formatDate(domain.expiresAt)}</span>
+                    {domain.ownershipType === "lifetime" ? (
+                      <>
+                        <Infinity className="w-4 h-4 text-cyan-400" />
+                        <span className="text-cyan-400">Owned Forever</span>
+                      </>
+                    ) : (
+                      <>
+                        <Clock className="w-4 h-4" />
+                        <span>Expires {domain.expiresAt && formatDate(domain.expiresAt)}</span>
+                      </>
+                    )}
                   </div>
                   <Link href={`/domain/${domain.name}`}>
                     <Button variant="outline" size="sm" className="w-full" data-testid={`button-manage-domain-${domain.id}`}>
