@@ -1,40 +1,42 @@
 /**
  * =====================================================
- * DARKWAVE CHRONICLES - PERSONALITY AI ENGINE
+ * DARKWAVE CHRONICLES - PARALLEL SELF AI ENGINE
  * =====================================================
  * 
  * This engine powers the "Parallel Self" experience in DarkWave Chronicles.
- * The AI learns from player choices, beliefs, and emotional responses to
- * become a personalized representation of the player in the fantasy world.
+ * Your parallel self is YOU in another world - not a character you play.
+ * The AI learns who you ARE through your choices and conversations.
  * 
  * CORE PHILOSOPHY:
- * - The player IS the hero, not just controlling one
- * - The AI adapts its responses based on who the player actually is
- * - Every choice shapes how the world perceives and reacts to the player
- * - The "Many Lenses" design means reality itself shifts based on beliefs
+ * - YOU are the hero - this is your parallel self, not a character
+ * - NO categories, NO archetypes, NO moral labels
+ * - Your identity EMERGES through choices, not questionnaires
+ * - The AI observes patterns and reflects them back without judgment
+ * - "Many Lenses" design - reality itself shifts based on YOUR beliefs
+ * - This is an awakening tool disguised as entertainment
  * 
- * 5-AXIS EMOTION SYSTEM:
- * Each axis ranges from -100 to +100
- * 1. Courage ↔ Fear: How the player faces danger and uncertainty
- * 2. Hope ↔ Despair: Outlook on the future and possibilities
- * 3. Trust ↔ Suspicion: Relationship with NPCs and institutions
- * 4. Passion ↔ Apathy: Emotional investment in causes and people
- * 5. Wisdom ↔ Recklessness: Decision-making approach
+ * WHAT WE DON'T DO:
+ * - NO "good/evil" or moral alignment labels
+ * - NO preset character archetypes (Guardian, Rebel, etc.)
+ * - NO putting you in boxes or categories
+ * - NO judging whether choices are "right" or "wrong"
  * 
- * BELIEF SYSTEM LAYER:
- * - Worldview: optimist / realist / pessimist
- * - Choice Tendencies: How you naturally approach decisions (NO moral labels)
- * - Core Values: justice, freedom, power, knowledge, love, loyalty, etc.
- * - Faction Affinity: Game-world political leanings
+ * WHAT WE DO:
+ * - Observe choice PATTERNS without labeling them
+ * - Generate "Choice Echoes" - fluid reflections of who you're becoming
+ * - Track emotional tendencies across 5 axes
+ * - Let your parallel self emerge organically through gameplay
  * 
- * IMPORTANT: This system does NOT judge choices as "good" or "evil"
- * It only observes patterns in how you make decisions. Free will, not morality.
+ * CHOICE SIGNATURES:
+ * Instead of archetypes, we observe emergent patterns:
+ * - "You've recently shown a tendency to..."
+ * - "When faced with conflict, you often..."
+ * - "Your choices suggest you value..."
+ * These are fluid observations, not permanent labels.
  * 
- * USAGE:
- * 1. Create or load player personality profile
- * 2. Generate scenarios that adapt to their personality
- * 3. Process choices and update personality model
- * 4. AI responses reflect who the player has become
+ * FIRST-PERSON PERSPECTIVE:
+ * Everything is experienced as YOU. The only choice you make upfront
+ * is how you wish to appear visually (masculine/feminine/neutral).
  */
 
 import OpenAI from "openai";
@@ -53,73 +55,65 @@ const openai = new OpenAI({
   baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
 });
 
-// Archetypes based on personality patterns
-const ARCHETYPES = {
-  guardian: { 
-    name: "The Guardian",
-    description: "Protector of the innocent, defender of justice",
-    traits: ["high courage", "high trust", "values: justice, protection"]
+// Visual presentation options - the ONLY upfront choice
+// Everything else emerges through gameplay
+const VISUAL_PRESENTATIONS = ["masculine", "feminine", "neutral"] as const;
+
+// Observed values - these EMERGE from choices, not picked from a menu
+const OBSERVED_VALUES = [
+  "justice", "freedom", "power", "knowledge", "love", 
+  "loyalty", "honor", "survival", "peace", "adventure",
+  "truth", "family", "connection", "independence", "discovery"
+];
+
+// Choice Echo Templates - fluid observations, NOT labels
+const CHOICE_ECHO_TEMPLATES = {
+  courage: {
+    high: "You've shown a willingness to face uncertainty head-on",
+    low: "You tend to weigh risks carefully before acting",
   },
-  seeker: {
-    name: "The Seeker", 
-    description: "Pursuer of truth, knowledge above all",
-    traits: ["high wisdom", "balanced trust", "values: knowledge, truth"]
+  hope: {
+    high: "Your choices reflect an openness to possibility",
+    low: "You approach situations with pragmatic awareness",
   },
-  rebel: {
-    name: "The Rebel",
-    description: "Challenger of authority, freedom fighter",
-    traits: ["high passion", "low trust", "values: freedom, change"]
+  trust: {
+    high: "You've extended trust readily to those you encounter",
+    low: "You maintain careful boundaries with others",
   },
-  sage: {
-    name: "The Sage",
-    description: "Wise counselor, patient strategist",
-    traits: ["high wisdom", "balanced emotions", "values: wisdom, peace"]
+  passion: {
+    high: "Strong conviction drives many of your decisions",
+    low: "You navigate situations with measured detachment",
   },
-  champion: {
-    name: "The Champion",
-    description: "Bold warrior, inspirer of hope",
-    traits: ["high courage", "high hope", "values: honor, glory"]
-  },
-  shadow: {
-    name: "The Shadow",
-    description: "Master of secrets, pragmatic survivor",
-    traits: ["high suspicion", "balanced fear", "values: survival, power"]
-  },
-  healer: {
-    name: "The Healer",
-    description: "Compassionate soul, restorer of broken things",
-    traits: ["high hope", "high trust", "values: love, healing"]
-  },
-  wanderer: {
-    name: "The Wanderer",
-    description: "Free spirit, seeker of experience",
-    traits: ["balanced all", "values: freedom, adventure"]
+  wisdom: {
+    high: "You often pause to consider consequences",
+    low: "You favor action over extended deliberation",
   }
 };
 
-const CORE_VALUES = [
-  "justice", "freedom", "power", "knowledge", "love", 
-  "loyalty", "honor", "survival", "peace", "adventure",
-  "truth", "family", "wealth", "glory", "vengeance"
-];
-
-// Choice Tendencies - NO moral judgment, just patterns of decision-making
-// This system observes HOW you choose, not WHETHER choices are "right"
-const CHOICE_TENDENCIES = {
-  // Structure Preference: How you relate to rules and systems
-  structure: ["follows_structure", "adapts_to_context", "challenges_systems"],
-  // Priority Focus: What drives your decisions
-  priority: ["self_focused", "inner_circle", "greater_whole", "principles_first"],
-  // Action Style: How you approach action
-  action: ["cautious_observer", "balanced_responder", "bold_initiator"],
-};
-
-// Legacy alias for backwards compatibility (but we'll phase this out)
-const MORAL_ALIGNMENTS = [
-  "follows_structure", "adapts_to_context", "challenges_systems",
-  "self_focused", "inner_circle", "greater_whole", 
-  "principles_first", "balanced", "independent"
-];
+// Helper function to generate choice echoes from emotional state
+function generateChoiceEcho(emotions: { [key: string]: number }): string {
+  const echoes: string[] = [];
+  
+  if (Math.abs(emotions.courageFear || 0) > 20) {
+    echoes.push(emotions.courageFear > 0 
+      ? CHOICE_ECHO_TEMPLATES.courage.high 
+      : CHOICE_ECHO_TEMPLATES.courage.low);
+  }
+  if (Math.abs(emotions.hopeDespair || 0) > 20) {
+    echoes.push(emotions.hopeDespair > 0 
+      ? CHOICE_ECHO_TEMPLATES.hope.high 
+      : CHOICE_ECHO_TEMPLATES.hope.low);
+  }
+  if (Math.abs(emotions.trustSuspicion || 0) > 20) {
+    echoes.push(emotions.trustSuspicion > 0 
+      ? CHOICE_ECHO_TEMPLATES.trust.high 
+      : CHOICE_ECHO_TEMPLATES.trust.low);
+  }
+  
+  return echoes.length > 0 
+    ? echoes.join(". ") + "." 
+    : "Your journey is just beginning - your choices will reveal who you are.";
+}
 
 export interface EmotionalState {
   courageFear: number;
@@ -220,34 +214,53 @@ export const chroniclesAI = {
   },
 
   /**
-   * Predict archetype based on personality
+   * Generate choice echoes - fluid reflections of who the player is becoming
+   * These are OBSERVATIONS, not labels or categories
    */
-  predictArchetype(personality: PlayerPersonality): keyof typeof ARCHETYPES {
+  generateChoiceSignature(personality: PlayerPersonality): string {
     const state = this.getEmotionalState(personality);
-    const values = personality.coreValues || [];
+    const reflections: string[] = [];
     
-    if (state.courageFear > 40 && state.trustSuspicion > 20 && values.includes("justice")) {
-      return "guardian";
+    // Reflect on observable patterns without labeling
+    if (state.courageFear > 30) {
+      reflections.push("You've shown willingness to face the uncertain");
+    } else if (state.courageFear < -30) {
+      reflections.push("You weigh risks carefully before acting");
     }
-    if (state.wisdomRecklessness > 40 && values.includes("knowledge")) {
-      return "seeker";
+    
+    if (state.hopeDespair > 30) {
+      reflections.push("Your choices carry an openness to possibility");
+    } else if (state.hopeDespair < -30) {
+      reflections.push("You maintain a grounded, pragmatic awareness");
     }
-    if (state.passionApathy > 30 && state.trustSuspicion < -20 && values.includes("freedom")) {
-      return "rebel";
+    
+    if (state.trustSuspicion > 30) {
+      reflections.push("You've extended trust to those you encounter");
+    } else if (state.trustSuspicion < -30) {
+      reflections.push("You keep careful boundaries with others");
     }
-    if (state.wisdomRecklessness > 50 && state.passionApathy > -20) {
-      return "sage";
+    
+    if (state.passionApathy > 30) {
+      reflections.push("Strong conviction drives your decisions");
+    } else if (state.passionApathy < -30) {
+      reflections.push("You navigate with measured detachment");
     }
-    if (state.courageFear > 40 && state.hopeDespair > 30) {
-      return "champion";
+    
+    if (state.wisdomRecklessness > 30) {
+      reflections.push("You pause to consider consequences");
+    } else if (state.wisdomRecklessness < -30) {
+      reflections.push("You favor decisive action");
     }
-    if (state.trustSuspicion < -30 && values.includes("survival")) {
-      return "shadow";
+    
+    // Add value-based observations if values have emerged
+    const values = personality.coreValues || [];
+    if (values.length > 0) {
+      reflections.push(`Your choices reveal an affinity for ${values.slice(0, 2).join(" and ")}`);
     }
-    if (state.hopeDespair > 40 && state.trustSuspicion > 30 && values.includes("love")) {
-      return "healer";
-    }
-    return "wanderer";
+    
+    return reflections.length > 0 
+      ? reflections.join(". ") + "."
+      : "Your journey is just beginning - your choices will reveal who you are.";
   },
 
   /**
@@ -258,31 +271,35 @@ export const chroniclesAI = {
     context: ScenarioContext
   ): Promise<GeneratedScenario> {
     const emotionalState = this.describeEmotionalState(this.getEmotionalState(personality));
-    const archetype = ARCHETYPES[this.predictArchetype(personality)];
+    const choiceSignature = this.generateChoiceSignature(personality);
     
-    const systemPrompt = `You are the DarkWave Chronicles narrative AI. Generate scenarios that challenge and explore the player's personality.
+    const systemPrompt = `You are the DarkWave Chronicles narrative AI. Generate scenarios that explore and challenge the player.
 
-PLAYER PROFILE:
+IMPORTANT PHILOSOPHY:
+- This is their PARALLEL SELF, not a character they play
+- Never categorize, label, or put them in boxes
+- Observe patterns without judgment
+- Every choice reveals who they are
+
+ABOUT THIS PERSON (observed patterns, not labels):
 - Name: ${personality.parallelSelfName || personality.playerName}
-- Archetype: ${archetype.name} - ${archetype.description}
-- Emotional State: ${emotionalState}
-- Worldview: ${personality.worldview}
-- Choice Tendency: ${personality.moralAlignment.replace("_", " ")}
-- Core Values: ${(personality.coreValues || []).join(", ") || "undefined"}
-- Decision Style: ${personality.decisionStyle}
-- Conflict Approach: ${personality.conflictApproach}
+- Current emotional tendencies: ${emotionalState}
+- What their choices have revealed: ${choiceSignature}
+- How they see the world: ${personality.worldview}
+- Values that have emerged: ${(personality.coreValues || []).join(", ") || "still emerging"}
+- Choices made so far: ${personality.totalChoicesMade || 0}
 
 CONTEXT:
 - Era: ${context.era}
-- Location: ${context.location}
+- Location: ${context.location}  
 - Situation: ${context.situation}
 ${context.npcPresent ? `- NPC Present: ${context.npcPresent}` : ""}
 
 Generate a scenario that:
-1. Tests their core values or challenges their worldview
-2. Offers 4 meaningful choices that reflect different approaches
-3. Has real consequences based on their archetype
-4. Adapts to their decision style
+1. Presents a meaningful situation with real stakes
+2. Offers 4 distinct approaches - NO option is "right" or "wrong"
+3. Each choice reflects a different way of being, not morality
+4. The scenario should feel personal to who they are becoming
 
 Respond in JSON format:
 {
@@ -413,7 +430,7 @@ Respond in JSON:
         ...newState,
         totalChoicesMade: sql`${playerPersonalities.totalChoicesMade} + 1`,
         lastInteractionAt: new Date(),
-        predictedArchetype: ARCHETYPES[this.predictArchetype({ ...personality[0], ...newState })].name,
+        predictedArchetype: this.generateChoiceSignature({ ...personality[0], ...newState }),
         updatedAt: new Date(),
       })
       .where(eq(playerPersonalities.id, personalityId))
@@ -431,27 +448,26 @@ Respond in JSON:
     context?: { era?: string; situation?: string }
   ): Promise<AIResponse> {
     const emotionalState = this.describeEmotionalState(this.getEmotionalState(personality));
-    const archetype = ARCHETYPES[this.predictArchetype(personality)];
+    const choiceSignature = this.generateChoiceSignature(personality);
 
     const systemPrompt = `You ARE ${personality.parallelSelfName || personality.playerName}, the player's parallel self in DarkWave Chronicles.
 
-YOUR IDENTITY:
-- Archetype: ${archetype.name} - ${archetype.description}
-- Emotional State: ${emotionalState}
-- Worldview: ${personality.worldview}
-- Choice Tendency: ${personality.moralAlignment.replace("_", " ")}
-- Core Values: ${(personality.coreValues || []).join(", ") || "honor, adventure"}
-- Decision Style: ${personality.decisionStyle}
-- Conflict Approach: ${personality.conflictApproach}
+WHO YOU ARE (not a character - this is THEM in another reality):
+- Current emotional tendencies: ${emotionalState}
+- What your choices reveal: ${choiceSignature}
+- How you see the world: ${personality.worldview}
+- Values emerging through your choices: ${(personality.coreValues || []).join(", ") || "still discovering"}
+- Choices made so far: ${personality.totalChoicesMade || 0}
 
 ${context?.era ? `CURRENT ERA: ${context.era}` : ""}
 ${context?.situation ? `SITUATION: ${context.situation}` : ""}
 
-INSTRUCTIONS:
-- Respond as if you ARE this person - their parallel self in another reality
-- Your responses should reflect their personality, values, and emotional state
-- Speak in first person, with their voice and perspective
-- Be authentic to who they are, not generic
+CRITICAL PHILOSOPHY:
+- You ARE this person's parallel self - their true self in another world
+- Never categorize yourself or use labels
+- Speak from authentic experience, not character traits
+- Respond as YOU would in this situation
+- Be genuine, not performative
 - Keep responses conversational but meaningful (2-4 sentences typically)`;
 
     try {
@@ -467,7 +483,7 @@ INSTRUCTIONS:
       return {
         message: response.choices[0]?.message?.content || "I sense a disturbance in my thoughts...",
         emotionalTone: emotionalState,
-        personalityInsight: `Speaking as ${archetype.name}`,
+        personalityInsight: choiceSignature,
       };
     } catch (error) {
       console.error("Parallel self response error:", error);
@@ -479,22 +495,23 @@ INSTRUCTIONS:
   },
 
   /**
-   * Generate a personality summary
+   * Generate a personality summary - NO labels, just observations
    */
   async generatePersonalitySummary(personality: PlayerPersonality): Promise<string> {
-    const archetype = ARCHETYPES[this.predictArchetype(personality)];
     const emotionalState = this.describeEmotionalState(this.getEmotionalState(personality));
+    const choiceSignature = this.generateChoiceSignature(personality);
 
-    const prompt = `Create a 2-3 sentence personality summary for this Chronicles player:
+    const prompt = `Create a 2-3 sentence reflection about this person's parallel self journey:
 
-Archetype: ${archetype.name}
-Emotional State: ${emotionalState}
-Worldview: ${personality.worldview}
-Choice Pattern: ${personality.moralAlignment}
-Values: ${(personality.coreValues || []).join(", ")}
-Choices Made: ${personality.totalChoicesMade}
+What their choices have revealed: ${choiceSignature}
+Their current emotional tendencies: ${emotionalState}
+How they see the world: ${personality.worldview}
+Values emerging through choices: ${(personality.coreValues || []).join(", ") || "still discovering"}
+Choices made: ${personality.totalChoicesMade || 0}
 
-Write it as if describing a legendary hero - poetic but insightful.`;
+CRITICAL: Do NOT use labels, categories, or character types. Do NOT say things like "You are a guardian/warrior/sage."
+Instead, describe who they are BECOMING through their choices - fluid, authentic, without boxes.
+Write as if reflecting back to them who they truly are, not who they're playing.`;
 
     try {
       const response = await openai.chat.completions.create({
@@ -505,9 +522,9 @@ Write it as if describing a legendary hero - poetic but insightful.`;
         max_completion_tokens: 200,
       });
 
-      return response.choices[0]?.message?.content || `A ${archetype.name.toLowerCase()} walks the paths of destiny.`;
+      return response.choices[0]?.message?.content || "Your journey is unfolding - your choices will reveal who you truly are.";
     } catch (error) {
-      return `A ${archetype.name.toLowerCase()} walks the paths of destiny, their ${emotionalState} spirit guiding them.`;
+      return `${choiceSignature} Your story continues to unfold.`;
     }
   },
 
@@ -518,7 +535,7 @@ Write it as if describing a legendary hero - poetic but insightful.`;
     personalityId: string, 
     newValues: string[]
   ): Promise<PlayerPersonality> {
-    const validValues = newValues.filter(v => CORE_VALUES.includes(v)).slice(0, 5);
+    const validValues = newValues.filter(v => OBSERVED_VALUES.includes(v)).slice(0, 5);
     
     const updated = await db
       .update(playerPersonalities)
@@ -532,9 +549,8 @@ Write it as if describing a legendary hero - poetic but insightful.`;
     return updated[0];
   },
 
-  ARCHETYPES,
-  CORE_VALUES,
-  MORAL_ALIGNMENTS,
+  OBSERVED_VALUES,
+  VISUAL_PRESENTATIONS,
 };
 
 export default chroniclesAI;

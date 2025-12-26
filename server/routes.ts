@@ -6915,13 +6915,13 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       }
       
       const personality = await chroniclesAI.getOrCreatePersonality(userId);
-      const archetype = chroniclesAI.predictArchetype(personality);
+      const choiceSignature = chroniclesAI.generateChoiceSignature(personality);
       const emotionalState = chroniclesAI.getEmotionalState(personality);
       const description = chroniclesAI.describeEmotionalState(emotionalState);
       
       res.json({
         personality,
-        archetype: chroniclesAI.ARCHETYPES[archetype],
+        choiceSignature,
         emotionalState,
         emotionalDescription: description,
       });
@@ -6935,10 +6935,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     playerName: z.string().max(100).optional(),
     parallelSelfName: z.string().max(100).optional(),
     worldview: z.enum(["optimist", "realist", "pessimist"]).optional(),
-    moralAlignment: z.string().optional(),
-    coreValues: z.array(z.string()).max(10).optional(),
-    decisionStyle: z.string().optional(),
-    conflictApproach: z.string().optional(),
+    visualPresentation: z.enum(["masculine", "feminine", "neutral"]).optional(),
   });
 
   app.post("/api/chronicles/personality", isAuthenticated, async (req: any, res) => {
@@ -6953,19 +6950,15 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(400).json({ error: "Invalid request body", details: parseResult.error.issues });
       }
       
-      const { playerName, parallelSelfName, worldview, moralAlignment, coreValues, decisionStyle, conflictApproach } = parseResult.data;
+      const { playerName, parallelSelfName, worldview, visualPresentation } = parseResult.data;
       
       const personality = await chroniclesAI.getOrCreatePersonality(userId, playerName);
       
-      if (playerName || parallelSelfName || worldview || moralAlignment || coreValues || decisionStyle || conflictApproach) {
+      if (playerName || parallelSelfName || worldview || visualPresentation) {
         const updates: any = { updatedAt: new Date() };
         if (playerName) updates.playerName = playerName;
         if (parallelSelfName) updates.parallelSelfName = parallelSelfName;
         if (worldview) updates.worldview = worldview;
-        if (moralAlignment) updates.moralAlignment = moralAlignment;
-        if (decisionStyle) updates.decisionStyle = decisionStyle;
-        if (conflictApproach) updates.conflictApproach = conflictApproach;
-        if (coreValues) updates.coreValues = coreValues;
         
         await db.update(playerPersonalities)
           .set(updates)
@@ -7077,11 +7070,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.get("/api/chronicles/archetypes", async (req, res) => {
+  app.get("/api/chronicles/values", async (req, res) => {
     res.json({ 
-      archetypes: chroniclesAI.ARCHETYPES,
-      coreValues: chroniclesAI.CORE_VALUES,
-      moralAlignments: chroniclesAI.MORAL_ALIGNMENTS,
+      observedValues: chroniclesAI.OBSERVED_VALUES,
+      visualPresentations: chroniclesAI.VISUAL_PRESENTATIONS,
     });
   });
 

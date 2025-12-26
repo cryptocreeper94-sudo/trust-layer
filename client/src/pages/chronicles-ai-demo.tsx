@@ -133,8 +133,6 @@ export default function ChroniclesAIDemo() {
     playerName: "",
     parallelSelfName: "",
     worldview: "realist",
-    moralAlignment: "balanced",
-    coreValues: [] as string[],
   });
 
   const { data: personalityData, isLoading: loadingPersonality, refetch: refetchPersonality } = useQuery({
@@ -149,11 +147,11 @@ export default function ChroniclesAIDemo() {
     },
   });
 
-  const { data: archetypesData } = useQuery({
-    queryKey: ["/api/chronicles/archetypes"],
+  const { data: valuesData } = useQuery({
+    queryKey: ["/api/chronicles/values"],
     queryFn: async () => {
-      const res = await fetch("/api/chronicles/archetypes");
-      if (!res.ok) throw new Error("Failed to fetch archetypes");
+      const res = await fetch("/api/chronicles/values");
+      if (!res.ok) throw new Error("Failed to fetch values");
       return res.json();
     },
   });
@@ -243,7 +241,7 @@ export default function ChroniclesAIDemo() {
   };
 
   const personality = personalityData?.personality;
-  const archetype = personalityData?.archetype;
+  const choiceSignature = personalityData?.choiceSignature;
   const emotionalState = personalityData?.emotionalState;
 
   if (!personalityData && !loadingPersonality) {
@@ -299,23 +297,19 @@ export default function ChroniclesAIDemo() {
                   <User className="w-6 h-6 text-purple-400" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold">{personality?.parallelSelfName || personality?.playerName || "Hero"}</h2>
-                  <p className="text-sm text-gray-400">{archetype?.name || "The Wanderer"}</p>
+                  <h2 className="text-xl font-bold">{personality?.parallelSelfName || personality?.playerName || "You"}</h2>
+                  <p className="text-sm text-gray-400">Your Parallel Self</p>
                 </div>
               </div>
               
-              {archetype && (
-                <p className="text-sm text-gray-300 mb-4 italic">"{archetype.description}"</p>
+              {personalityData?.choiceSignature && (
+                <p className="text-sm text-gray-300 mb-4 italic">"{personalityData.choiceSignature}"</p>
               )}
 
               <div className="space-y-2 text-sm mb-4">
                 <div className="flex justify-between">
-                  <span className="text-gray-400">Worldview</span>
+                  <span className="text-gray-400">How You See the World</span>
                   <span className="text-white capitalize">{personality?.worldview}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Choice Style</span>
-                  <span className="text-white capitalize">{personality?.moralAlignment?.replace("_", " ")}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Choices Made</span>
@@ -325,7 +319,7 @@ export default function ChroniclesAIDemo() {
 
               {personality?.coreValues?.length > 0 && (
                 <div className="mb-4">
-                  <span className="text-xs text-gray-400">Core Values</span>
+                  <span className="text-xs text-gray-400">Values Emerging Through Choices</span>
                   <div className="flex flex-wrap gap-1 mt-1">
                     {personality.coreValues.map((v: string) => (
                       <span key={v} className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-xs capitalize">
@@ -342,7 +336,7 @@ export default function ChroniclesAIDemo() {
                 className="w-full border-purple-500/30 text-purple-400"
                 onClick={() => setSetupMode(true)}
               >
-                Edit Personality
+                Update Name
               </Button>
             </BentoCard>
 
@@ -519,7 +513,11 @@ export default function ChroniclesAIDemo() {
                 onClick={(e) => e.stopPropagation()}
                 className="bg-slate-900 border border-white/10 rounded-2xl p-6 max-w-md w-full max-h-[80vh] overflow-y-auto"
               >
-                <h3 className="text-xl font-bold mb-4">Shape Your Parallel Self</h3>
+                <h3 className="text-xl font-bold mb-4">Your Parallel Self</h3>
+                <p className="text-sm text-gray-400 mb-6">
+                  Your values and tendencies will emerge through your choices. 
+                  Here you can only set how you wish to be addressed.
+                </p>
                 
                 <div className="space-y-4">
                   <div>
@@ -527,7 +525,7 @@ export default function ChroniclesAIDemo() {
                     <Input
                       value={setupData.playerName}
                       onChange={(e) => setSetupData(s => ({ ...s, playerName: e.target.value }))}
-                      placeholder={personality?.playerName || "Hero"}
+                      placeholder={personality?.playerName || "Your real name"}
                       className="bg-slate-800/50 border-white/10"
                     />
                   </div>
@@ -537,13 +535,13 @@ export default function ChroniclesAIDemo() {
                     <Input
                       value={setupData.parallelSelfName}
                       onChange={(e) => setSetupData(s => ({ ...s, parallelSelfName: e.target.value }))}
-                      placeholder={personality?.parallelSelfName || "Your fantasy name..."}
+                      placeholder={personality?.parallelSelfName || "How you'll be known in this world..."}
                       className="bg-slate-800/50 border-white/10"
                     />
                   </div>
 
                   <div>
-                    <label className="text-sm text-gray-400 mb-1 block">Worldview</label>
+                    <label className="text-sm text-gray-400 mb-1 block">How You See the World</label>
                     <Select
                       value={setupData.worldview}
                       onValueChange={(v) => setSetupData(s => ({ ...s, worldview: v }))}
@@ -552,55 +550,11 @@ export default function ChroniclesAIDemo() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="optimist">Optimist</SelectItem>
-                        <SelectItem value="realist">Realist</SelectItem>
-                        <SelectItem value="pessimist">Pessimist</SelectItem>
+                        <SelectItem value="optimist">Through hopeful eyes</SelectItem>
+                        <SelectItem value="realist">As it truly is</SelectItem>
+                        <SelectItem value="pessimist">With cautious awareness</SelectItem>
                       </SelectContent>
                     </Select>
-                  </div>
-
-                  <div>
-                    <label className="text-sm text-gray-400 mb-1 block">Decision Style</label>
-                    <Select
-                      value={setupData.moralAlignment}
-                      onValueChange={(v) => setSetupData(s => ({ ...s, moralAlignment: v }))}
-                    >
-                      <SelectTrigger className="bg-slate-800/50 border-white/10">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="follows_structure">Follows Structure</SelectItem>
-                        <SelectItem value="adapts_to_context">Adapts to Context</SelectItem>
-                        <SelectItem value="challenges_systems">Challenges Systems</SelectItem>
-                        <SelectItem value="balanced">Balanced</SelectItem>
-                        <SelectItem value="independent">Independent</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <label className="text-sm text-gray-400 mb-1 block">Core Values (select up to 5)</label>
-                    <div className="flex flex-wrap gap-1">
-                      {archetypesData?.coreValues?.map((v: string) => (
-                        <button
-                          key={v}
-                          onClick={() => {
-                            if (setupData.coreValues.includes(v)) {
-                              setSetupData(s => ({ ...s, coreValues: s.coreValues.filter(x => x !== v) }));
-                            } else if (setupData.coreValues.length < 5) {
-                              setSetupData(s => ({ ...s, coreValues: [...s.coreValues, v] }));
-                            }
-                          }}
-                          className={`px-2 py-1 rounded-full text-xs capitalize transition-all ${
-                            setupData.coreValues.includes(v)
-                              ? "bg-purple-500 text-white"
-                              : "bg-slate-700 text-gray-300 hover:bg-slate-600"
-                          }`}
-                        >
-                          {v}
-                        </button>
-                      ))}
-                    </div>
                   </div>
                 </div>
 

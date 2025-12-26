@@ -52,22 +52,28 @@ Each axis ranges from -100 (negative) to +100 (positive):
 4. **Passion ↔ Apathy**: Emotional investment in causes and people
 5. **Wisdom ↔ Recklessness**: Decision-making approach and risk tolerance
 
-### Belief System Layer
-- **Worldview**: optimist / realist / pessimist
-- **Moral Alignment**: D&D-style 9-point system (lawful/neutral/chaotic × good/neutral/evil)
-- **Core Values**: justice, freedom, power, knowledge, love, loyalty, honor, survival, peace, adventure, truth, family, wealth, glory, vengeance
-- **Faction Affinity**: Game-world political leanings
+### Core Philosophy - NO LABELS, NO BOXES
+CRITICAL: This system does NOT judge morality or categorize players.
+- **NO moral alignment** (good/evil) - we only observe choice PATTERNS
+- **NO archetypes** - you are not a "Guardian" or "Rebel" - you are YOU
+- **NO predetermined categories** - your identity EMERGES through choices
+- **Free will only** - we observe HOW you choose, not WHETHER choices are "right"
 
-### Archetypes
-The AI predicts player archetype based on personality patterns:
-- **The Guardian**: Protector of the innocent, defender of justice
-- **The Seeker**: Pursuer of truth, knowledge above all
-- **The Rebel**: Challenger of authority, freedom fighter
-- **The Sage**: Wise counselor, patient strategist
-- **The Champion**: Bold warrior, inspirer of hope
-- **The Shadow**: Master of secrets, pragmatic survivor
-- **The Healer**: Compassionate soul, restorer of broken things
-- **The Wanderer**: Free spirit, seeker of experience
+### What We DO Observe (Without Judgment)
+- **Worldview**: optimist / realist / pessimist (how you see the world)
+- **Choice Signatures**: Fluid observations of your emerging patterns
+  - "You've shown willingness to face uncertainty"
+  - "Your choices reveal an affinity for connection"
+- **Values (Emergent)**: Observed through choices, not pre-selected
+- **Visual Presentation**: masculine / feminine / neutral (TODO: UI implementation)
+
+### Choice Echo Templates
+Instead of labels, AI generates fluid reflections:
+- Courage: "You face uncertainty head-on" / "You weigh risks carefully"
+- Hope: "Openness to possibility" / "Pragmatic awareness"  
+- Trust: "You extend trust readily" / "You maintain careful boundaries"
+- Passion: "Strong conviction drives you" / "Measured detachment guides you"
+- Wisdom: "You pause to consider" / "You favor decisive action"
 
 ### Key Files
 - `shared/schema.ts`: Database schemas (playerPersonalities, playerChoices, chroniclesConversations)
@@ -82,7 +88,7 @@ The AI predicts player archetype based on personality patterns:
 - `POST /api/chronicles/choice`: Process player choice and evolve personality
 - `POST /api/chronicles/chat`: Chat with parallel self
 - `GET /api/chronicles/summary`: Generate AI personality summary
-- `GET /api/chronicles/archetypes`: Get all archetypes and values
+- `GET /api/chronicles/values`: Get observed values and visual presentations
 
 ### Demo Page
 Access at `/chronicles/ai` - requires authentication to create personalized profile.
