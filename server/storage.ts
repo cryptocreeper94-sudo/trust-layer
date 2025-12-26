@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type MarketingPost, type InsertMarketingPost, type MarketingDeployLog, type InsertMarketingDeployLog, type MarketingScheduleConfig, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, type BlockchainDomain, type InsertBlockchainDomain, type DomainRecord, type InsertDomainRecord, type DomainTransfer, type InsertDomainTransfer, type ChronicleSponsorshipSlot, type InsertChronicleSponsorshipSlot, type DomainSponsorshipClaim, type InsertDomainSponsorshipClaim, type EarlyAdopterProgram, type TreasuryAllocation, type TreasuryLedgerEntry, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory, blockchainDomains, domainRecords, domainTransfers, chronicleSponsorshipSlots, domainSponsorshipClaims, earlyAdopterProgram, marketingPosts, marketingDeployLogs, marketingScheduleConfig, treasuryAllocations, treasuryLedger } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type MarketingPost, type InsertMarketingPost, type MarketingDeployLog, type InsertMarketingDeployLog, type MarketingScheduleConfig, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, type BlockchainDomain, type InsertBlockchainDomain, type DomainRecord, type InsertDomainRecord, type DomainTransfer, type InsertDomainTransfer, type ChronicleSponsorshipSlot, type InsertChronicleSponsorshipSlot, type DomainSponsorshipClaim, type InsertDomainSponsorshipClaim, type EarlyAdopterProgram, type TreasuryAllocation, type TreasuryLedgerEntry, type SeoConfig, type InsertSeoConfig, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory, blockchainDomains, domainRecords, domainTransfers, chronicleSponsorshipSlots, domainSponsorshipClaims, earlyAdopterProgram, marketingPosts, marketingDeployLogs, marketingScheduleConfig, treasuryAllocations, treasuryLedger, seoConfigs } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, asc, count, and, lt } from "drizzle-orm";
 import crypto from "crypto";
@@ -218,6 +218,21 @@ export interface IStorage {
   // Treasury Transparency
   getTreasuryAllocations(): Promise<TreasuryAllocation[]>;
   getTreasuryLedger(limit?: number): Promise<TreasuryLedgerEntry[]>;
+  
+  // Owner Portal Analytics
+  getPageViewsByHost(host: string, days: number): Promise<number>;
+  getUniqueVisitorsByHost(host: string, days: number): Promise<number>;
+  getTopPagesByHost(host: string, days: number, limit: number): Promise<{ path: string; views: number }[]>;
+  getTopReferrersByHost(host: string, days: number, limit: number): Promise<{ source: string; visits: number }[]>;
+  getDeviceBreakdownByHost(host: string, days: number): Promise<{ name: string; value: number }[]>;
+  getGeoDataByHost(host: string, days: number, limit: number): Promise<{ country: string; visitors: number }[]>;
+  getPageViewsOverTimeByHost(host: string, days: number): Promise<{ date: string; views: number }[]>;
+  
+  // SEO Configuration
+  getSeoConfigsByHost(host: string): Promise<SeoConfig[]>;
+  createSeoConfig(data: InsertSeoConfig): Promise<SeoConfig>;
+  updateSeoConfig(id: string, data: Partial<InsertSeoConfig>): Promise<SeoConfig | undefined>;
+  deleteSeoConfig(id: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1793,6 +1808,180 @@ export class DatabaseStorage implements IStorage {
 
   async getTreasuryLedger(limit: number = 100): Promise<TreasuryLedgerEntry[]> {
     return db.select().from(treasuryLedger).orderBy(desc(treasuryLedger.createdAt)).limit(limit);
+  }
+
+  // Owner Portal Analytics
+  async getPageViewsByHost(host: string, days: number): Promise<number> {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - days);
+    
+    const result = await db.select({ count: count() })
+      .from(pageViews)
+      .where(and(
+        eq(pageViews.host, host),
+        sql`${pageViews.timestamp} >= ${cutoff}`
+      ));
+    return result[0]?.count || 0;
+  }
+
+  async getUniqueVisitorsByHost(host: string, days: number): Promise<number> {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - days);
+    
+    const result = await db.selectDistinct({ visitorId: pageViews.visitorId })
+      .from(pageViews)
+      .where(and(
+        eq(pageViews.host, host),
+        sql`${pageViews.timestamp} >= ${cutoff}`
+      ));
+    return result.length;
+  }
+
+  async getTopPagesByHost(host: string, days: number, limit: number): Promise<{ path: string; views: number }[]> {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - days);
+    
+    const views = await db.select()
+      .from(pageViews)
+      .where(and(
+        eq(pageViews.host, host),
+        sql`${pageViews.timestamp} >= ${cutoff}`
+      ));
+    
+    const pageMap = new Map<string, number>();
+    views.forEach(v => {
+      pageMap.set(v.pageSlug, (pageMap.get(v.pageSlug) || 0) + 1);
+    });
+    
+    return Array.from(pageMap.entries())
+      .map(([path, views]) => ({ path, views }))
+      .sort((a, b) => b.views - a.views)
+      .slice(0, limit);
+  }
+
+  async getTopReferrersByHost(host: string, days: number, limit: number): Promise<{ source: string; visits: number }[]> {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - days);
+    
+    const views = await db.select()
+      .from(pageViews)
+      .where(and(
+        eq(pageViews.host, host),
+        sql`${pageViews.timestamp} >= ${cutoff}`
+      ));
+    
+    const refMap = new Map<string, number>();
+    views.forEach(v => {
+      let source = "Direct";
+      if (v.referrer) {
+        try {
+          source = new URL(v.referrer).hostname;
+        } catch {
+          source = v.referrer.slice(0, 50);
+        }
+      }
+      refMap.set(source, (refMap.get(source) || 0) + 1);
+    });
+    
+    return Array.from(refMap.entries())
+      .map(([source, visits]) => ({ source, visits }))
+      .sort((a, b) => b.visits - a.visits)
+      .slice(0, limit);
+  }
+
+  async getDeviceBreakdownByHost(host: string, days: number): Promise<{ name: string; value: number }[]> {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - days);
+    
+    const views = await db.select()
+      .from(pageViews)
+      .where(and(
+        eq(pageViews.host, host),
+        sql`${pageViews.timestamp} >= ${cutoff}`
+      ));
+    
+    const deviceMap = new Map<string, number>();
+    views.forEach(v => {
+      const device = v.deviceType || "Unknown";
+      deviceMap.set(device, (deviceMap.get(device) || 0) + 1);
+    });
+    
+    return Array.from(deviceMap.entries())
+      .map(([name, value]) => ({ name, value }));
+  }
+
+  async getGeoDataByHost(host: string, days: number, limit: number): Promise<{ country: string; visitors: number }[]> {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - days);
+    
+    const views = await db.select()
+      .from(pageViews)
+      .where(and(
+        eq(pageViews.host, host),
+        sql`${pageViews.timestamp} >= ${cutoff}`
+      ));
+    
+    const geoMap = new Map<string, number>();
+    views.forEach(v => {
+      const country = v.country || "Unknown";
+      geoMap.set(country, (geoMap.get(country) || 0) + 1);
+    });
+    
+    return Array.from(geoMap.entries())
+      .map(([country, visitors]) => ({ country, visitors }))
+      .sort((a, b) => b.visitors - a.visitors)
+      .slice(0, limit);
+  }
+
+  async getPageViewsOverTimeByHost(host: string, days: number): Promise<{ date: string; views: number }[]> {
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - days);
+    
+    const views = await db.select()
+      .from(pageViews)
+      .where(and(
+        eq(pageViews.host, host),
+        sql`${pageViews.timestamp} >= ${cutoff}`
+      ));
+    
+    const dateMap = new Map<string, number>();
+    views.forEach(v => {
+      const date = v.timestamp.toISOString().split('T')[0];
+      dateMap.set(date, (dateMap.get(date) || 0) + 1);
+    });
+    
+    const result: { date: string; views: number }[] = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().split('T')[0];
+      result.push({ date: dateStr, views: dateMap.get(dateStr) || 0 });
+    }
+    
+    return result;
+  }
+
+  // SEO Configuration
+  async getSeoConfigsByHost(host: string): Promise<SeoConfig[]> {
+    return db.select().from(seoConfigs).where(eq(seoConfigs.host, host)).orderBy(asc(seoConfigs.route));
+  }
+
+  async createSeoConfig(data: InsertSeoConfig): Promise<SeoConfig> {
+    const [config] = await db.insert(seoConfigs).values(data).returning();
+    return config;
+  }
+
+  async updateSeoConfig(id: string, data: Partial<InsertSeoConfig>): Promise<SeoConfig | undefined> {
+    const [config] = await db.update(seoConfigs)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(seoConfigs.id, id))
+      .returning();
+    return config;
+  }
+
+  async deleteSeoConfig(id: string): Promise<boolean> {
+    await db.delete(seoConfigs).where(eq(seoConfigs.id, id));
+    return true;
   }
 }
 

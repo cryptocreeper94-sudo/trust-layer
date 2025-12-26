@@ -164,6 +164,33 @@ Participants who join before public beta (July 4, 2026) receive:
 
 ---
 
+## Owner Admin Portal Security
+
+The Owner Admin Portal (`/owner-admin`) provides exclusive access for system administrators.
+
+### Security Requirements
+- **OWNER_SECRET**: Required environment variable (minimum 16 characters)
+- Portal is **disabled** if OWNER_SECRET is not set or too short
+- Generate a secure secret: `openssl rand -hex 16`
+
+### Authentication Flow
+1. User enters secret key on login page
+2. Server validates using constant-time comparison (prevents timing attacks)
+3. Server issues cryptographic token (32 bytes hex, 24-hour expiry)
+4. All subsequent API calls require `x-owner-token` header
+
+### Rate Limiting & Lockout
+- 5 requests per 5 minutes per IP
+- After 3 failed attempts: progressive lockout (60s, 120s, 180s, ...)
+- Failed attempts logged with IP address
+
+### Protected Endpoints
+- `POST /api/owner/auth` - Authentication
+- `GET /api/owner/analytics` - Traffic analytics
+- `GET/POST/PUT/DELETE /api/owner/seo` - SEO configuration
+
+---
+
 ## Marketing Automation System
 
 Proprietary auto-deployment system for social media marketing with 264 posts seeded across 4 platforms.

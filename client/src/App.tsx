@@ -127,6 +127,9 @@ import PaperTrading from "@/pages/paper-trading";
 import Achievements from "@/pages/achievements";
 import Domains from "@/pages/domains";
 import PartnerPortal from "@/pages/partner-portal";
+import OwnerAdminPortal from "@/pages/owner-admin";
+import OwnerAnalytics from "@/pages/owner-admin/analytics";
+import OwnerSeoManager from "@/pages/owner-admin/seo";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
 
 function ScrollToTop() {
@@ -279,6 +282,9 @@ function DWSCRouter() {
         <Route path="/admin/analytics" component={AdminAnalytics} />
         <Route path="/admin/partner-requests" component={AdminPartnerRequests} />
         <Route path="/admin/marketing" component={AdminMarketing} />
+        <Route path="/owner-admin" component={OwnerAdminPortal} />
+        <Route path="/owner-admin/analytics" component={OwnerAnalytics} />
+        <Route path="/owner-admin/seo" component={OwnerSeoManager} />
         <Route path="/terms" component={Terms} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/error" component={ErrorPage} />

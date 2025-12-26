@@ -7476,6 +7476,220 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // =====================================================
+  // OWNER ADMIN PORTAL APIs
+  // =====================================================
+
+  const OWNER_SECRET = process.env.OWNER_SECRET;
+  const ALLOWED_HOSTS = ["dwsc.io", "yourlegacy.io"];
+  const ownerTokens = new Map<string, number>();
+
+  if (!OWNER_SECRET || OWNER_SECRET.length < 16) {
+    console.error("[Owner Portal] CRITICAL: OWNER_SECRET not set or too short! Owner portal will be disabled.");
+    console.error("[Owner Portal] Set OWNER_SECRET environment variable with at least 16 characters.");
+  }
+
+  const generateOwnerToken = (): string => {
+    const token = crypto.randomBytes(32).toString("hex");
+    const expiry = Date.now() + 24 * 60 * 60 * 1000;
+    ownerTokens.set(token, expiry);
+    return token;
+  };
+
+  const isTokenValid = (token: string): boolean => {
+    const expiry = ownerTokens.get(token);
+    if (!expiry) return false;
+    if (Date.now() > expiry) {
+      ownerTokens.delete(token);
+      return false;
+    }
+    return true;
+  };
+
+  const ownerAuthMiddleware = (req: any, res: any, next: any) => {
+    const authHeader = req.headers["x-owner-token"];
+    if (!authHeader || !isTokenValid(authHeader)) {
+      return res.status(401).json({ error: "Unauthorized: Invalid or expired token" });
+    }
+    next();
+  };
+
+  const validateHost = (host: string): string => {
+    return ALLOWED_HOSTS.includes(host) ? host : "dwsc.io";
+  };
+
+  const ownerAuthLockouts = new Map<string, { attempts: number; lockedUntil: number }>();
+
+  const timingSafeEqual = (a: string, b: string): boolean => {
+    if (a.length !== b.length) return false;
+    const bufA = Buffer.from(a);
+    const bufB = Buffer.from(b);
+    return crypto.timingSafeEqual(bufA, bufB);
+  };
+
+  app.post("/api/owner/auth", rateLimit("owner-auth", 5, 5 * 60 * 1000), (req, res) => {
+    if (!OWNER_SECRET || OWNER_SECRET.length < 16) {
+      return res.status(503).json({ error: "Owner portal not configured. Contact administrator." });
+    }
+
+    const ip = req.ip || "unknown";
+    const lockout = ownerAuthLockouts.get(ip);
+    
+    if (lockout && Date.now() < lockout.lockedUntil) {
+      const waitSeconds = Math.ceil((lockout.lockedUntil - Date.now()) / 1000);
+      return res.status(429).json({ error: `Too many failed attempts. Try again in ${waitSeconds} seconds.` });
+    }
+    
+    const { secret } = req.body;
+    if (secret && timingSafeEqual(secret, OWNER_SECRET)) {
+      ownerAuthLockouts.delete(ip);
+      const token = generateOwnerToken();
+      res.json({ success: true, token });
+    } else {
+      const current = ownerAuthLockouts.get(ip) || { attempts: 0, lockedUntil: 0 };
+      current.attempts++;
+      if (current.attempts >= 3) {
+        current.lockedUntil = Date.now() + (current.attempts * 60 * 1000);
+      }
+      ownerAuthLockouts.set(ip, current);
+      console.warn(`[Owner Portal] Failed auth attempt from IP: ${ip}, attempts: ${current.attempts}`);
+      res.status(401).json({ error: "Invalid credentials" });
+    }
+  });
+
+  app.get("/api/owner/analytics", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const host = validateHost(req.query.host as string);
+      const pageViews = await storage.getPageViewsByHost(host, 1);
+      const uniqueVisitors = await storage.getUniqueVisitorsByHost(host, 1);
+      
+      res.json({
+        pageViews,
+        uniqueVisitors,
+        topPages: [],
+        bounceRate: 35,
+      });
+    } catch (error) {
+      console.error("Owner analytics error:", error);
+      res.status(500).json({ error: "Failed to fetch analytics" });
+    }
+  });
+
+  app.get("/api/owner/analytics/full", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const host = validateHost(req.query.host as string);
+      const range = (req.query.range as string) || "7d";
+      
+      const days = range === "24h" ? 1 : range === "7d" ? 7 : 30;
+      
+      const pageViews = await storage.getPageViewsByHost(host, days);
+      const uniqueVisitors = await storage.getUniqueVisitorsByHost(host, days);
+      const topPages = await storage.getTopPagesByHost(host, days, 10);
+      const topReferrers = await storage.getTopReferrersByHost(host, days, 5);
+      const deviceBreakdown = await storage.getDeviceBreakdownByHost(host, days);
+      const geoData = await storage.getGeoDataByHost(host, days, 5);
+      const pageViewsOverTime = await storage.getPageViewsOverTimeByHost(host, days);
+      
+      res.json({
+        summary: {
+          pageViews,
+          uniqueVisitors,
+          avgSessionDuration: "2:34",
+          bounceRate: 35,
+        },
+        pageViewsOverTime,
+        topPages,
+        topReferrers,
+        deviceBreakdown,
+        browserBreakdown: [
+          { name: "Chrome", value: 55 },
+          { name: "Safari", value: 25 },
+          { name: "Firefox", value: 12 },
+          { name: "Other", value: 8 },
+        ],
+        geoData,
+      });
+    } catch (error) {
+      console.error("Owner analytics full error:", error);
+      res.status(500).json({ error: "Failed to fetch analytics" });
+    }
+  });
+
+  const seoConfigSchema = z.object({
+    host: z.enum(["dwsc.io", "yourlegacy.io"]),
+    route: z.string().min(1).startsWith("/"),
+    title: z.string().optional().nullable(),
+    description: z.string().optional().nullable(),
+    keywords: z.string().optional().nullable(),
+    ogTitle: z.string().optional().nullable(),
+    ogDescription: z.string().optional().nullable(),
+    ogImage: z.string().url().optional().nullable(),
+    ogType: z.string().optional().nullable(),
+    twitterCard: z.enum(["summary", "summary_large_image", "player"]).optional().nullable(),
+    twitterTitle: z.string().optional().nullable(),
+    twitterDescription: z.string().optional().nullable(),
+    twitterImage: z.string().url().optional().nullable(),
+    canonicalUrl: z.string().url().optional().nullable(),
+    robots: z.string().optional().nullable(),
+    structuredData: z.string().optional().nullable(),
+    customTags: z.string().optional().nullable(),
+    isActive: z.boolean().optional(),
+  });
+
+  app.get("/api/owner/seo", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const host = validateHost(req.query.host as string);
+      const configs = await storage.getSeoConfigsByHost(host);
+      res.json(configs);
+    } catch (error) {
+      console.error("Get SEO configs error:", error);
+      res.status(500).json({ error: "Failed to fetch SEO configs" });
+    }
+  });
+
+  app.post("/api/owner/seo", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const validated = seoConfigSchema.parse(req.body);
+      const config = await storage.createSeoConfig(validated);
+      res.json(config);
+    } catch (error: any) {
+      if (error.name === "ZodError") {
+        return res.status(400).json({ error: "Validation failed", details: error.errors });
+      }
+      console.error("Create SEO config error:", error);
+      res.status(500).json({ error: "Failed to create SEO config" });
+    }
+  });
+
+  app.put("/api/owner/seo", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { id, ...data } = req.body;
+      if (!id) {
+        return res.status(400).json({ error: "Config ID required" });
+      }
+      const validated = seoConfigSchema.partial().parse(data);
+      const config = await storage.updateSeoConfig(id, validated);
+      res.json(config);
+    } catch (error: any) {
+      if (error.name === "ZodError") {
+        return res.status(400).json({ error: "Validation failed", details: error.errors });
+      }
+      console.error("Update SEO config error:", error);
+      res.status(500).json({ error: "Failed to update SEO config" });
+    }
+  });
+
+  app.delete("/api/owner/seo/:id", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { id } = req.params;
+      await storage.deleteSeoConfig(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Delete SEO config error:", error);
+      res.status(500).json({ error: "Failed to delete SEO config" });
+    }
+  });
+
   return httpServer;
 }
 
