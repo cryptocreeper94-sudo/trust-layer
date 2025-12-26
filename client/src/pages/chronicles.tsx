@@ -534,7 +534,7 @@ export default function Chronicles() {
     const handleVideoEnd = () => {
       const currentVideo = currentVideoRef.current;
       if (currentVideo && !videoMuted) {
-        fadeAudio(currentVideo, false, 250);
+        fadeAudio(currentVideo, false, 500);
       }
       
       setIsVideoTransitioning(true);
@@ -565,7 +565,7 @@ export default function Chronicles() {
       video.volume = 0;
       video.play().catch(() => {});
       if (!videoMuted) {
-        fadeAudio(video, true, 250);
+        fadeAudio(video, true, 500);
       }
     }
   }, [currentVideoIndex, isVideoTransitioning, videoMuted]);
