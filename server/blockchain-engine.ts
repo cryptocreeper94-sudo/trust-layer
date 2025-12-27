@@ -148,42 +148,29 @@ export class DarkWaveBlockchain {
       if (latestBlock.length > 0) {
         console.log(`[DarkWave Mainnet] Loading existing chain state...`);
         
-        const allBlocks = await db.select().from(chainBlocks).orderBy(sql`CAST(${chainBlocks.height} AS INTEGER)`);
+        // Only load the latest block into memory (not all 400K+ blocks!)
+        const dbBlock = latestBlock[0];
+        this.latestHeight = parseInt(dbBlock.height);
         
-        for (const dbBlock of allBlocks) {
-          const txs = await db.select()
-            .from(chainTransactions)
-            .where(eq(chainTransactions.blockHeight, dbBlock.height));
-          
-          const block: Block = {
-            header: {
-              height: parseInt(dbBlock.height),
-              prevHash: dbBlock.prevHash,
-              timestamp: dbBlock.timestamp,
-              validator: dbBlock.validator,
-              merkleRoot: dbBlock.merkleRoot,
-            },
-            hash: dbBlock.hash,
-            transactions: txs.map(tx => ({
-              hash: tx.hash,
-              from: tx.fromAddress,
-              to: tx.toAddress,
-              amount: BigInt(tx.amount),
-              nonce: parseInt(tx.nonce),
-              gasLimit: parseInt(tx.gasLimit),
-              gasPrice: parseInt(tx.gasPrice),
-              data: tx.data || "",
-              signature: tx.signature || undefined,
-              timestamp: tx.timestamp,
-            })),
-          };
-          
-          this.blocks.set(block.header.height, block);
-          this.totalTransactions += block.transactions.length;
-        }
+        const block: Block = {
+          header: {
+            height: this.latestHeight,
+            prevHash: dbBlock.prevHash,
+            timestamp: dbBlock.timestamp,
+            validator: dbBlock.validator,
+            merkleRoot: dbBlock.merkleRoot,
+          },
+          hash: dbBlock.hash,
+          transactions: [],
+        };
+        
+        this.blocks.set(block.header.height, block);
+        
+        // Get total transaction count from database efficiently
+        const txCountResult = await db.select({ count: sql<number>`count(*)` }).from(chainTransactions);
+        this.totalTransactions = Number(txCountResult[0]?.count || 0);
 
-        this.latestHeight = parseInt(latestBlock[0].height);
-
+        // Load account states
         const allAccounts = await db.select().from(chainAccounts);
         for (const acc of allAccounts) {
           this.accounts.set(acc.address, {
@@ -193,7 +180,7 @@ export class DarkWaveBlockchain {
           });
         }
 
-        console.log(`[DarkWave Mainnet] Loaded ${this.blocks.size} blocks, ${this.accounts.size} accounts`);
+        console.log(`[DarkWave Mainnet] Loaded chain state, ${this.accounts.size} accounts`);
         console.log(`[DarkWave Mainnet] Chain height: ${this.latestHeight}`);
         console.log(`[DarkWave Mainnet] Total transactions: ${this.totalTransactions}`);
         
