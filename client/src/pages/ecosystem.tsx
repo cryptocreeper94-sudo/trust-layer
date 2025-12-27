@@ -28,6 +28,7 @@ const ecosystemImages: Record<string, string> = {
   "paintpros": "/ecosystem/paintpros.jpg",
   "orby": "/ecosystem/orby.jpg",
   "strike-agent": "/ecosystem/strike-agent.jpg",
+  "darkwave-chain": "/ecosystem/darkwave-chain.png",
 };
 
 function getAppImage(appId: string): string {
@@ -46,41 +47,74 @@ const gradientColors: Record<string, { from: string; to: string }> = {
   "from-red-600 to-rose-700": { from: "#dc2626", to: "#be123c" },
 };
 
-function AppImage({ src, alt, gradient, name }: { src: string; alt: string; gradient?: string; name: string }) {
+function AppCard({ src, alt, gradient, name, category, verified, tags, url }: { 
+  src: string; 
+  alt: string; 
+  gradient?: string; 
+  name: string;
+  category: string;
+  verified?: boolean;
+  tags?: string[];
+  url?: string;
+}) {
   const [failed, setFailed] = useState(false);
   const [loaded, setLoaded] = useState(false);
   
   const colors = gradientColors[gradient || "from-cyan-600 to-blue-700"] || { from: "#0891b2", to: "#1d4ed8" };
   
-  if (!src) {
-    return (
-      <div 
-        className="aspect-[3/4] flex items-center justify-center"
-        style={{ background: `linear-gradient(to bottom right, ${colors.from}, ${colors.to})` }}
-      >
-        <span className="text-4xl font-bold text-white/80">{name.charAt(0)}</span>
-      </div>
-    );
-  }
-  
   return (
-    <div className="aspect-[3/4] overflow-hidden relative">
-      {(!loaded || failed) && (
-        <div 
-          className="absolute inset-0 flex items-center justify-center"
-          style={{ background: `linear-gradient(to bottom right, ${colors.from}, ${colors.to})` }}
-        >
-          <span className="text-4xl font-bold text-white/80">{name.charAt(0)}</span>
+    <a 
+      href={url} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className="block group"
+      data-testid={`app-card-${name.toLowerCase().replace(/\s+/g, '-')}`}
+    >
+      <GlassCard className="overflow-hidden hover:border-primary/30 transition-all duration-300">
+        <div className="aspect-[3/4] overflow-hidden relative">
+          {(!loaded || failed || !src) && (
+            <div 
+              className="absolute inset-0 flex items-center justify-center"
+              style={{ background: `linear-gradient(to bottom right, ${colors.from}, ${colors.to})` }}
+            >
+              <span className="text-4xl font-bold text-white/80">{name.charAt(0)}</span>
+            </div>
+          )}
+          {src && (
+            <img 
+              src={src} 
+              alt={alt}
+              className={`w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ${loaded && !failed ? 'opacity-100' : 'opacity-0'}`}
+              onLoad={() => setLoaded(true)}
+              onError={() => setFailed(true)}
+            />
+          )}
+          {/* Fade to black gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+          
+          {/* Content overlay at bottom */}
+          <div className="absolute bottom-0 left-0 right-0 p-3">
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="text-sm font-bold text-white truncate flex-1">{name}</h3>
+              {verified && <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />}
+            </div>
+            <p className="text-[10px] text-white/60 mb-2">{category}</p>
+            <div className="flex items-center justify-between">
+              <div className="flex flex-wrap gap-1">
+                {(tags || []).slice(0, 1).map((tag, j) => (
+                  <Badge key={j} variant="outline" className="text-[8px] px-1.5 py-0 border-white/20 text-white/50 bg-black/30">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+              <Button variant="ghost" size="sm" className="h-5 px-2 text-[9px] text-primary group-hover:bg-primary/10 transition-colors">
+                Launch <ExternalLink className="w-2 h-2 ml-1" />
+              </Button>
+            </div>
+          </div>
         </div>
-      )}
-      <img 
-        src={src} 
-        alt={alt}
-        className={`w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ${loaded && !failed ? 'opacity-100' : 'opacity-0'}`}
-        onLoad={() => setLoaded(true)}
-        onError={() => setFailed(true)}
-      />
-    </div>
+      </GlassCard>
+    </a>
   );
 }
 
@@ -229,47 +263,19 @@ export default function Ecosystem() {
                 </div>
               ) : (
                 <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {filteredApps.map((app, i) => {
-                    const appImage = getAppImage(app.id);
-                    return (
-                      <a 
-                        key={app.id || i} 
-                        href={app.url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="block group"
-                        data-testid={`app-card-${app.id}`}
-                      >
-                        <GlassCard className="overflow-hidden hover:border-primary/30 transition-all duration-300">
-                          <AppImage 
-                            src={appImage || ""} 
-                            alt={app.name} 
-                            gradient={app.gradient} 
-                            name={app.name} 
-                          />
-                          <div className="p-3 bg-black/60 backdrop-blur-sm">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h3 className="text-sm font-bold text-white truncate flex-1">{app.name}</h3>
-                              {app.verified && <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />}
-                            </div>
-                            <p className="text-[10px] text-white/50 mb-2">{app.category}</p>
-                            <div className="flex items-center justify-between">
-                              <div className="flex flex-wrap gap-1">
-                                {(app.tags || []).slice(0, 1).map((tag, j) => (
-                                  <Badge key={j} variant="outline" className="text-[8px] px-1.5 py-0 border-white/10 text-white/40">
-                                    {tag}
-                                  </Badge>
-                                ))}
-                              </div>
-                              <Button variant="ghost" size="sm" className="h-5 px-2 text-[9px] text-primary group-hover:bg-primary/10 transition-colors">
-                                Launch <ExternalLink className="w-2 h-2 ml-1" />
-                              </Button>
-                            </div>
-                          </div>
-                        </GlassCard>
-                      </a>
-                    );
-                  })}
+                  {filteredApps.map((app, i) => (
+                    <AppCard 
+                      key={app.id || i}
+                      src={getAppImage(app.id)} 
+                      alt={app.name} 
+                      gradient={app.gradient} 
+                      name={app.name}
+                      category={app.category}
+                      verified={app.verified}
+                      tags={app.tags}
+                      url={app.url}
+                    />
+                  ))}
                 </div>
               )}
             </div>
