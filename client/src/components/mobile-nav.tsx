@@ -89,8 +89,16 @@ const navCategories = [
     ]
   },
   {
-    label: "About",
+    label: "Community",
     icon: Users,
+    items: [
+      { href: "/community", label: "Hub", icon: Users, badge: "Soon" },
+      { href: "/referrals", label: "Referrals", icon: Gift },
+    ]
+  },
+  {
+    label: "About",
+    icon: Star,
     items: [
       { href: "/executive-summary", label: "Investors", icon: Star, badge: "New" },
       { href: "/roadmap", label: "Roadmap", icon: Star },
