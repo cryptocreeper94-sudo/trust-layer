@@ -3204,6 +3204,37 @@ export const communityBots = pgTable("community_bots", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+export const messageReactions = pgTable("message_reactions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  messageId: varchar("message_id").notNull().references(() => communityMessages.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull(),
+  username: text("username").notNull(),
+  emoji: text("emoji").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const messageAttachments = pgTable("message_attachments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  messageId: varchar("message_id").notNull().references(() => communityMessages.id, { onDelete: "cascade" }),
+  type: text("type").notNull(),
+  url: text("url").notNull(),
+  filename: text("filename"),
+  size: integer("size"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const memberTips = pgTable("member_tips", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  fromUserId: text("from_user_id").notNull(),
+  fromUsername: text("from_username").notNull(),
+  toUserId: text("to_user_id").notNull(),
+  toUsername: text("to_username").notNull(),
+  communityId: varchar("community_id").notNull().references(() => communities.id, { onDelete: "cascade" }),
+  amount: text("amount").notNull(),
+  messageId: varchar("message_id"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
 export const insertCommunitySchema = createInsertSchema(communities).omit({
   id: true,
   memberCount: true,
@@ -3234,6 +3265,21 @@ export const insertBotSchema = createInsertSchema(communityBots).omit({
   createdAt: true,
 });
 
+export const insertReactionSchema = createInsertSchema(messageReactions).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertAttachmentSchema = createInsertSchema(messageAttachments).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertTipSchema = createInsertSchema(memberTips).omit({
+  id: true,
+  createdAt: true,
+});
+
 export type Community = typeof communities.$inferSelect;
 export type InsertCommunity = z.infer<typeof insertCommunitySchema>;
 export type CommunityChannel = typeof communityChannels.$inferSelect;
@@ -3244,3 +3290,9 @@ export type CommunityMessage = typeof communityMessages.$inferSelect;
 export type InsertCommunityMessage = z.infer<typeof insertCommunityMessageSchema>;
 export type CommunityBot = typeof communityBots.$inferSelect;
 export type InsertBot = z.infer<typeof insertBotSchema>;
+export type MessageReaction = typeof messageReactions.$inferSelect;
+export type InsertReaction = z.infer<typeof insertReactionSchema>;
+export type MessageAttachment = typeof messageAttachments.$inferSelect;
+export type InsertAttachment = z.infer<typeof insertAttachmentSchema>;
+export type MemberTip = typeof memberTips.$inferSelect;
+export type InsertTip = z.infer<typeof insertTipSchema>;

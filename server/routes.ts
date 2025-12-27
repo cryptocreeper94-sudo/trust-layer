@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import crypto from "crypto";
 import QRCode from "qrcode";
 import { WebSocketServer, WebSocket } from "ws";
+import { setupCommunityWebSocket } from "./community-ws";
 import { z } from "zod";
 import { storage } from "./storage";
 import { db } from "./db";
@@ -30,6 +31,7 @@ import { voiceService, VOICE_SAMPLE_PROMPTS } from "./voice-service";
 import { communityHubService } from "./community-hub-service";
 import { walletBotService } from "./wallet-bot-service";
 import { pulseClient } from "./pulse-client";
+import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 
 const FaucetClaimRequestSchema = z.object({
   walletAddress: z.string().min(10, "Invalid wallet address").max(100),
@@ -107,6 +109,7 @@ export async function registerRoutes(
   registerAuthRoutes(app);
   registerChatRoutes(app);
   registerImageRoutes(app);
+  registerObjectStorageRoutes(app);
 
   // =====================================================
   // STRIPE WEBHOOK - Must be early for raw body access
@@ -534,6 +537,8 @@ export async function registerRoutes(
       }
     });
   }
+
+  setupCommunityWebSocket(httpServer);
 
   // Firebase auth sync - syncs Firebase users to our database
   app.post("/api/auth/firebase-sync", async (req, res) => {

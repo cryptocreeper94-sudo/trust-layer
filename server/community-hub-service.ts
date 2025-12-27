@@ -6,15 +6,28 @@ import {
   communityMembers,
   communityMessages,
   communityBots,
+  messageReactions,
+  messageAttachments,
   type Community,
   type CommunityChannel,
   type CommunityMember,
   type CommunityMessage,
+  type MessageReaction,
   type InsertCommunity,
   type InsertChannel,
   type InsertCommunityMessage,
 } from "@shared/schema";
 import crypto from "crypto";
+
+interface AttachmentData {
+  url: string;
+  name: string;
+  type: string;
+}
+
+interface SendMessageData extends InsertCommunityMessage {
+  attachment?: AttachmentData | null;
+}
 
 export class CommunityHubService {
   async createCommunity(data: InsertCommunity): Promise<Community> {
@@ -151,19 +164,51 @@ export class CommunityHubService {
       ));
   }
   
-  async sendMessage(data: InsertCommunityMessage): Promise<CommunityMessage> {
-    const [message] = await db.insert(communityMessages).values(data).returning();
-    return message;
+  async sendMessage(data: SendMessageData): Promise<CommunityMessage & { attachment?: AttachmentData | null }> {
+    const { attachment, ...messageData } = data;
+    const [message] = await db.insert(communityMessages).values(messageData).returning();
+    
+    if (attachment) {
+      await db.insert(messageAttachments).values({
+        messageId: message.id,
+        type: attachment.type,
+        url: attachment.url,
+        filename: attachment.name,
+      });
+    }
+    
+    return { ...message, attachment: attachment || null };
   }
   
-  async getMessages(channelId: string, limit = 50): Promise<CommunityMessage[]> {
-    return db.select()
+  async getMessages(channelId: string, limit = 50): Promise<(CommunityMessage & { attachment?: AttachmentData | null })[]> {
+    const messages = await db.select()
       .from(communityMessages)
       .where(eq(communityMessages.channelId, channelId))
       .orderBy(desc(communityMessages.createdAt))
       .limit(limit);
+    
+    const messagesWithAttachments = await Promise.all(
+      messages.map(async (msg) => {
+        const [att] = await db.select()
+          .from(messageAttachments)
+          .where(eq(messageAttachments.messageId, msg.id));
+        return {
+          ...msg,
+          attachment: att ? { url: att.url, name: att.filename || "", type: att.type } : null,
+        };
+      })
+    );
+    
+    return messagesWithAttachments;
   }
   
+  async getMessageById(messageId: string): Promise<CommunityMessage | null> {
+    const [message] = await db.select()
+      .from(communityMessages)
+      .where(eq(communityMessages.id, messageId));
+    return message || null;
+  }
+
   async deleteMessage(messageId: string, userId: string): Promise<boolean> {
     const [message] = await db.select()
       .from(communityMessages)
@@ -173,6 +218,87 @@ export class CommunityHubService {
     
     await db.delete(communityMessages).where(eq(communityMessages.id, messageId));
     return true;
+  }
+
+  async editMessage(messageId: string, userId: string, content: string): Promise<CommunityMessage | null> {
+    const [message] = await db.select()
+      .from(communityMessages)
+      .where(eq(communityMessages.id, messageId));
+    
+    if (!message || message.userId !== userId) return null;
+    
+    const [updated] = await db.update(communityMessages)
+      .set({ content, editedAt: new Date() })
+      .where(eq(communityMessages.id, messageId))
+      .returning();
+    
+    return updated;
+  }
+
+  async addReaction(messageId: string, userId: string, username: string, emoji: string): Promise<MessageReaction> {
+    const existing = await db.select()
+      .from(messageReactions)
+      .where(and(
+        eq(messageReactions.messageId, messageId),
+        eq(messageReactions.userId, userId),
+        eq(messageReactions.emoji, emoji)
+      ));
+    
+    if (existing.length > 0) return existing[0];
+    
+    const [reaction] = await db.insert(messageReactions).values({
+      messageId,
+      userId,
+      username,
+      emoji,
+    }).returning();
+    
+    return reaction;
+  }
+
+  async removeReaction(messageId: string, userId: string, emoji: string): Promise<void> {
+    await db.delete(messageReactions)
+      .where(and(
+        eq(messageReactions.messageId, messageId),
+        eq(messageReactions.userId, userId),
+        eq(messageReactions.emoji, emoji)
+      ));
+  }
+
+  async getReactions(messageId: string): Promise<{ emoji: string; count: number; users: { userId: string; username: string }[] }[]> {
+    const reactions = await db.select()
+      .from(messageReactions)
+      .where(eq(messageReactions.messageId, messageId));
+    
+    const grouped = reactions.reduce((acc, r) => {
+      if (!acc[r.emoji]) {
+        acc[r.emoji] = { emoji: r.emoji, count: 0, users: [] };
+      }
+      acc[r.emoji].count++;
+      acc[r.emoji].users.push({ userId: r.userId, username: r.username });
+      return acc;
+    }, {} as Record<string, { emoji: string; count: number; users: { userId: string; username: string }[] }>);
+    
+    return Object.values(grouped);
+  }
+
+  async getMessagesWithReactions(channelId: string, limit = 50): Promise<(CommunityMessage & { reactions: any[]; replyTo: CommunityMessage | null })[]> {
+    const messages = await db.select()
+      .from(communityMessages)
+      .where(eq(communityMessages.channelId, channelId))
+      .orderBy(desc(communityMessages.createdAt))
+      .limit(limit);
+    
+    const enriched = await Promise.all(messages.map(async (msg) => {
+      const reactions = await this.getReactions(msg.id);
+      let replyTo = null;
+      if (msg.replyToId) {
+        replyTo = await this.getMessageById(msg.replyToId);
+      }
+      return { ...msg, reactions, replyTo };
+    }));
+    
+    return enriched;
   }
   
   async createBot(communityId: string, name: string, description: string): Promise<{ id: string; apiKey: string }> {

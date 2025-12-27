@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -7,8 +7,9 @@ import {
   Plus, ChevronRight, ChevronDown, Sparkles, Crown, Shield,
   Zap, Star, Heart, Send, Smile, Image, Mic, MoreHorizontal,
   Home, Compass, Radio, Lock, Globe, ArrowLeft, Menu, X, Loader2,
-  Activity, TrendingUp
+  Activity, TrendingUp, Reply, Edit2, Trash2, Coins, Paperclip, ImageIcon
 } from "lucide-react";
+import { useUpload } from "@/hooks/use-upload";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,120 @@ const COMMUNITY_COLORS = [
   "from-rose-500 to-red-600",
   "from-indigo-500 to-violet-600",
 ];
+
+const QUICK_REACTIONS = ["👍", "❤️", "😂", "🔥", "👀", "🎉", "💎", "🚀"];
+
+function useWebSocket(channelId: string | null, communityId: string | null, user: any) {
+  const [messages, setMessages] = useState<any[]>([]);
+  const [typingUsers, setTypingUsers] = useState<string[]>([]);
+  const [onlineUsers, setOnlineUsers] = useState<any[]>([]);
+  const wsRef = useRef<WebSocket | null>(null);
+  const reconnectTimeout = useRef<any>(null);
+
+  const connect = useCallback(() => {
+    if (!channelId || !user) return;
+
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const ws = new WebSocket(`${protocol}//${window.location.host}/ws/community`);
+    wsRef.current = ws;
+
+    ws.onopen = () => {
+      ws.send(JSON.stringify({
+        type: "join",
+        channelId,
+        communityId,
+        userId: user.claims?.sub || user.id,
+        username: user.claims?.firstName || user.firstName || "User",
+      }));
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      
+      switch (data.type) {
+        case "new_message":
+          setMessages(prev => [...prev, data.message]);
+          break;
+        case "message_edited":
+          setMessages(prev => prev.map(m => m.id === data.message.id ? data.message : m));
+          break;
+        case "message_deleted":
+          setMessages(prev => prev.filter(m => m.id !== data.messageId));
+          break;
+        case "reaction_update":
+          setMessages(prev => prev.map(m => m.id === data.messageId ? { ...m, reactions: data.reactions } : m));
+          break;
+        case "typing":
+          setTypingUsers(prev => {
+            if (!prev.includes(data.username)) {
+              setTimeout(() => {
+                setTypingUsers(p => p.filter(u => u !== data.username));
+              }, 3000);
+              return [...prev, data.username];
+            }
+            return prev;
+          });
+          break;
+        case "presence":
+          setOnlineUsers(data.users);
+          break;
+        case "user_joined":
+        case "user_left":
+          break;
+      }
+    };
+
+    ws.onclose = () => {
+      reconnectTimeout.current = setTimeout(() => {
+        connect();
+      }, 2000);
+    };
+
+    ws.onerror = () => {
+      ws.close();
+    };
+  }, [channelId, communityId, user]);
+
+  useEffect(() => {
+    connect();
+    return () => {
+      if (wsRef.current) wsRef.current.close();
+      if (reconnectTimeout.current) clearTimeout(reconnectTimeout.current);
+    };
+  }, [connect]);
+
+  const sendMessage = useCallback((content: string, replyToId?: string, attachment?: { url: string; name: string; type: string }) => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({ type: "message", content, replyToId, attachment }));
+    }
+  }, []);
+
+  const addReaction = useCallback((messageId: string, emoji: string) => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({ type: "reaction", messageId, emoji, action: "add" }));
+    }
+  }, []);
+
+  const removeReaction = useCallback((messageId: string, emoji: string) => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({ type: "reaction", messageId, emoji, action: "remove" }));
+    }
+  }, []);
+
+  const sendTyping = useCallback(() => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({ type: "typing" }));
+    }
+  }, []);
+
+  const deleteMessage = useCallback((messageId: string) => {
+    if (wsRef.current?.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({ type: "delete_message", messageId }));
+    }
+  }, []);
+
+  return { messages, setMessages, typingUsers, onlineUsers, sendMessage, addReaction, removeReaction, sendTyping, deleteMessage };
+}
 
 function CommunityIcon({ community, selected, onClick }: { community: any; selected: boolean; onClick: () => void }) {
   const colorIndex = community.name.length % COMMUNITY_COLORS.length;
@@ -68,18 +183,36 @@ function ChannelItem({ channel, selected, onClick }: { channel: any; selected: b
   );
 }
 
-function MessageBubble({ message }: { message: any }) {
+interface MessageBubbleProps {
+  message: any;
+  currentUserId?: string;
+  onReply: (message: any) => void;
+  onReaction: (messageId: string, emoji: string) => void;
+  onDelete: (messageId: string) => void;
+}
+
+function MessageBubble({ message, currentUserId, onReply, onReaction, onDelete }: MessageBubbleProps) {
+  const [showReactions, setShowReactions] = useState(false);
   const time = new Date(message.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const isOwn = currentUserId && (message.userId === currentUserId);
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex gap-3 px-4 py-2 hover:bg-white/5 rounded-lg group"
+      className="flex gap-3 px-4 py-2 hover:bg-white/5 rounded-lg group relative"
     >
-      <Avatar className={`w-10 h-10 ${message.isBot ? "bg-purple-500/30 border border-purple-500/50" : "bg-gradient-to-br from-cyan-500 to-purple-500"}`}>
+      <Avatar className={`w-10 h-10 shrink-0 ${message.isBot ? "bg-purple-500/30 border border-purple-500/50" : "bg-gradient-to-br from-cyan-500 to-purple-500"}`}>
         <AvatarFallback className="text-sm">{message.username?.slice(0, 2).toUpperCase() || "??"}</AvatarFallback>
       </Avatar>
       <div className="flex-1 min-w-0">
+        {message.replyTo && (
+          <div className="flex items-center gap-2 mb-1 pl-2 border-l-2 border-cyan-500/50 text-xs text-gray-500">
+            <Reply className="w-3 h-3" />
+            <span className="text-cyan-400">{message.replyTo.username}</span>
+            <span className="truncate">{message.replyTo.content?.slice(0, 50)}{message.replyTo.content?.length > 50 ? "..." : ""}</span>
+          </div>
+        )}
         <div className="flex items-center gap-2">
           <span className={`font-medium text-sm ${message.isBot ? "text-purple-400" : "text-white"}`}>
             {message.username}
@@ -88,12 +221,108 @@ function MessageBubble({ message }: { message: any }) {
             <Badge className="h-4 text-[10px] bg-purple-500/20 text-purple-400 border-purple-500/30">BOT</Badge>
           )}
           <span className="text-[10px] text-gray-500">{time}</span>
+          {message.editedAt && <span className="text-[10px] text-gray-600">(edited)</span>}
         </div>
-        <p className="text-sm text-gray-300 mt-0.5">{message.content}</p>
+        {message.content && <p className="text-sm text-gray-300 mt-0.5 break-words">{message.content}</p>}
+        
+        {message.attachment && (
+          <div className="mt-2">
+            {message.attachment.type?.startsWith("image/") ? (
+              <a href={message.attachment.url} target="_blank" rel="noopener noreferrer" className="block">
+                <img 
+                  src={message.attachment.url} 
+                  alt={message.attachment.name || "Attachment"} 
+                  className="max-w-xs max-h-64 rounded-lg border border-white/10 hover:border-cyan-500/50 transition-colors"
+                />
+              </a>
+            ) : message.attachment.type?.startsWith("video/") ? (
+              <video 
+                src={message.attachment.url} 
+                controls 
+                className="max-w-xs max-h-64 rounded-lg border border-white/10"
+              />
+            ) : (
+              <a 
+                href={message.attachment.url} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-3 py-2 bg-white/5 border border-white/10 rounded-lg hover:border-cyan-500/50 transition-colors max-w-xs"
+              >
+                <Paperclip className="w-4 h-4 text-cyan-400 shrink-0" />
+                <span className="text-sm text-gray-300 truncate">{message.attachment.name || "Download file"}</span>
+              </a>
+            )}
+          </div>
+        )}
+        
+        {message.reactions?.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-2">
+            {message.reactions.map((r: any) => (
+              <button
+                key={r.emoji}
+                onClick={() => onReaction(message.id, r.emoji)}
+                className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs transition-all ${
+                  r.users?.some((u: any) => u.userId === currentUserId)
+                    ? "bg-cyan-500/30 border border-cyan-500/50"
+                    : "bg-white/5 border border-white/10 hover:border-white/30"
+                }`}
+                data-testid={`reaction-${message.id}-${r.emoji}`}
+              >
+                <span>{r.emoji}</span>
+                <span className="text-gray-400">{r.count}</span>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
-      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
-        <button className="p-1 hover:bg-white/10 rounded"><Smile className="w-4 h-4 text-gray-400" /></button>
-        <button className="p-1 hover:bg-white/10 rounded"><MoreHorizontal className="w-4 h-4 text-gray-400" /></button>
+      
+      <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 shrink-0">
+        <div className="relative">
+          <button 
+            onClick={() => setShowReactions(!showReactions)}
+            className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
+            data-testid={`btn-reactions-${message.id}`}
+          >
+            <Smile className="w-4 h-4 text-gray-400" />
+          </button>
+          <AnimatePresence>
+            {showReactions && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 5 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="absolute bottom-full right-0 mb-1 bg-gray-900 border border-white/10 rounded-xl p-2 flex gap-1 z-50"
+              >
+                {QUICK_REACTIONS.map((emoji) => (
+                  <button
+                    key={emoji}
+                    onClick={() => { onReaction(message.id, emoji); setShowReactions(false); }}
+                    className="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded-lg transition-colors text-lg"
+                    data-testid={`add-reaction-${emoji}`}
+                  >
+                    {emoji}
+                  </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+        <button 
+          onClick={() => onReply(message)}
+          className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
+          data-testid={`btn-reply-${message.id}`}
+        >
+          <Reply className="w-4 h-4 text-gray-400" />
+        </button>
+        {isOwn && (
+          <button 
+            onClick={() => onDelete(message.id)}
+            className="p-1.5 hover:bg-red-500/20 rounded-lg transition-colors"
+            data-testid={`btn-delete-${message.id}`}
+          >
+            <Trash2 className="w-4 h-4 text-gray-400 hover:text-red-400" />
+          </button>
+        )}
       </div>
     </motion.div>
   );
@@ -105,17 +334,47 @@ export default function CommunityHub() {
   const [selectedChannelId, setSelectedChannelId] = useState<string | null>(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showBots, setShowBots] = useState(false);
-  const [message, setMessage] = useState("");
+  const [messageInput, setMessageInput] = useState("");
   const [newCommunityName, setNewCommunityName] = useState("");
   const [newCommunityDesc, setNewCommunityDesc] = useState("");
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [activeView, setActiveView] = useState<"chat" | "pulse">("chat");
+  const [replyingTo, setReplyingTo] = useState<any>(null);
+  const [pendingAttachment, setPendingAttachment] = useState<{ url: string; name: string; type: string } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const typingTimeoutRef = useRef<any>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { uploadFile, isUploading } = useUpload({
+    onSuccess: (response) => {
+      setPendingAttachment({
+        url: response.objectPath,
+        name: response.metadata.name,
+        type: response.metadata.contentType,
+      });
+    },
+    onError: (error) => {
+      console.error("Upload failed:", error);
+    },
+  });
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      await uploadFile(file);
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
   const { data: user } = useQuery({
     queryKey: ["/api/auth/user"],
     retry: false,
   });
+
+  const wsHook = useWebSocket(selectedChannelId, selectedCommunityId, user);
+  const { messages: wsMessages, setMessages: setWsMessages, typingUsers, sendMessage: wsSendMessage, addReaction, deleteMessage: wsDeleteMessage, sendTyping } = wsHook;
 
   const { data: communitiesData, isLoading: loadingCommunities } = useQuery<{ communities: any[] }>({
     queryKey: ["/api/community/list"],
@@ -153,8 +412,13 @@ export default function CommunityHub() {
       return res.json();
     },
     enabled: !!selectedChannelId,
-    refetchInterval: 3000,
   });
+
+  useEffect(() => {
+    if (messagesData?.messages) {
+      setWsMessages(messagesData.messages.reverse());
+    }
+  }, [messagesData, setWsMessages]);
 
   const createCommunity = useMutation({
     mutationFn: async (data: { name: string; description: string }) => {
@@ -188,20 +452,6 @@ export default function CommunityHub() {
     },
   });
 
-  const sendMessage = useMutation({
-    mutationFn: async (data: { channelId: string; content: string }) => {
-      const res = await fetch(`/api/channel/${data.channelId}/messages`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: data.content }),
-      });
-      return res.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/channel", selectedChannelId, "messages"] });
-      setMessage("");
-    },
-  });
 
   useEffect(() => {
     if (communitiesData?.communities?.length && !selectedCommunityId) {
@@ -218,12 +468,27 @@ export default function CommunityHub() {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messagesData]);
+  }, [wsMessages]);
 
   const handleSendMessage = () => {
-    if (!message.trim() || !selectedChannelId) return;
-    sendMessage.mutate({ channelId: selectedChannelId, content: message.trim() });
+    if ((!messageInput.trim() && !pendingAttachment) || !selectedChannelId) return;
+    wsSendMessage(messageInput.trim() || "", replyingTo?.id, pendingAttachment || undefined);
+    setMessageInput("");
+    setReplyingTo(null);
+    setPendingAttachment(null);
   };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessageInput(e.target.value);
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => sendTyping(), 500);
+  };
+
+  const handleReaction = (messageId: string, emoji: string) => {
+    addReaction(messageId, emoji);
+  };
+
+  const currentUserId = (user as any)?.claims?.sub || (user as any)?.id;
 
   const selectedChannel = channelsData?.channels?.find((c: any) => c.id === selectedChannelId);
   const isMember = myCommunities?.communities?.some((c: any) => c.id === selectedCommunityId);
@@ -501,10 +766,17 @@ export default function CommunityHub() {
                   <div className="flex items-center justify-center py-12">
                     <Loader2 className="w-8 h-8 text-gray-400 animate-spin" />
                   </div>
-                ) : messagesData?.messages?.length > 0 ? (
+                ) : wsMessages.length > 0 ? (
                   <div className="space-y-1">
-                    {messagesData.messages.map((msg: any) => (
-                      <MessageBubble key={msg.id} message={msg} />
+                    {wsMessages.map((msg: any) => (
+                      <MessageBubble 
+                        key={msg.id} 
+                        message={msg}
+                        currentUserId={currentUserId}
+                        onReply={setReplyingTo}
+                        onReaction={handleReaction}
+                        onDelete={wsDeleteMessage}
+                      />
                     ))}
                     <div ref={messagesEndRef} />
                   </div>
@@ -521,25 +793,84 @@ export default function CommunityHub() {
                     </GlassCard>
                   </div>
                 )}
+                {typingUsers.length > 0 && (
+                  <div className="px-4 py-2 text-xs text-gray-400">
+                    {typingUsers.join(", ")} {typingUsers.length === 1 ? "is" : "are"} typing...
+                  </div>
+                )}
               </ScrollArea>
 
               <div className="p-4 border-t border-white/5 bg-gray-900/40">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileSelect}
+                  accept="image/*,video/*,.pdf,.doc,.docx,.txt"
+                  className="hidden"
+                  data-testid="input-file"
+                />
+                {replyingTo && (
+                  <div className="mb-2 flex items-center gap-2 px-3 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
+                    <Reply className="w-4 h-4 text-cyan-400 shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <span className="text-xs text-cyan-400">Replying to {replyingTo.username}</span>
+                      <p className="text-xs text-gray-400 truncate">{replyingTo.content}</p>
+                    </div>
+                    <button onClick={() => setReplyingTo(null)} className="p-1 hover:bg-white/10 rounded">
+                      <X className="w-4 h-4 text-gray-400" />
+                    </button>
+                  </div>
+                )}
+                {pendingAttachment && (
+                  <div className="mb-2 flex items-center gap-2 px-3 py-2 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+                    {pendingAttachment.type.startsWith("image/") ? (
+                      <ImageIcon className="w-4 h-4 text-purple-400 shrink-0" />
+                    ) : (
+                      <Paperclip className="w-4 h-4 text-purple-400 shrink-0" />
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <span className="text-xs text-purple-400">Attachment</span>
+                      <p className="text-xs text-gray-400 truncate">{pendingAttachment.name}</p>
+                    </div>
+                    <button onClick={() => setPendingAttachment(null)} className="p-1 hover:bg-white/10 rounded">
+                      <X className="w-4 h-4 text-gray-400" />
+                    </button>
+                  </div>
+                )}
+                {isUploading && (
+                  <div className="mb-2 flex items-center gap-2 px-3 py-2 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                    <Loader2 className="w-4 h-4 text-blue-400 animate-spin" />
+                    <span className="text-xs text-blue-400">Uploading file...</span>
+                  </div>
+                )}
                 <div className="flex items-center gap-2">
-                  <button className="p-2 hover:bg-white/10 rounded-lg">
+                  <button 
+                    onClick={() => fileInputRef.current?.click()}
+                    className="p-2 hover:bg-white/10 rounded-lg disabled:opacity-50"
+                    disabled={!user || isUploading}
+                    data-testid="btn-attach-file"
+                  >
                     <Plus className="w-5 h-5 text-gray-400" />
                   </button>
                   <div className="flex-1 relative">
                     <Input
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+                      value={messageInput}
+                      onChange={handleInputChange}
+                      onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
                       placeholder={user ? `Message #${selectedChannel?.name || "channel"}` : "Sign in to send messages"}
                       className="bg-white/5 border-white/10 pr-24"
                       disabled={!user || !selectedChannelId}
                       data-testid="input-message"
                     />
                     <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                      <button className="p-1.5 hover:bg-white/10 rounded"><Image className="w-4 h-4 text-gray-400" /></button>
+                      <button 
+                        onClick={() => fileInputRef.current?.click()}
+                        className="p-1.5 hover:bg-white/10 rounded disabled:opacity-50"
+                        disabled={!user || isUploading}
+                        data-testid="btn-image-upload"
+                      >
+                        <Image className="w-4 h-4 text-gray-400" />
+                      </button>
                       <button className="p-1.5 hover:bg-white/10 rounded"><Smile className="w-4 h-4 text-gray-400" /></button>
                       <button className="p-1.5 hover:bg-white/10 rounded"><Mic className="w-4 h-4 text-gray-400" /></button>
                     </div>
@@ -548,10 +879,10 @@ export default function CommunityHub() {
                     size="icon" 
                     className="bg-cyan-500 hover:bg-cyan-600"
                     onClick={handleSendMessage}
-                    disabled={!message.trim() || sendMessage.isPending || !user}
+                    disabled={(!messageInput.trim() && !pendingAttachment) || !user || isUploading}
                     data-testid="send-message-btn"
                   >
-                    {sendMessage.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                    <Send className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
