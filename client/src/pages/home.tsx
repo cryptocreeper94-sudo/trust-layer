@@ -225,10 +225,9 @@ export default function Home() {
       />
       
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center">
-          <Link href="/" className="flex items-center gap-2 mr-auto min-w-0 flex-shrink-0">
-            <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7 flex-shrink-0" />
-            <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center flex-shrink-0">
+            <span className="font-display font-bold text-xl tracking-tight">DarkWave</span>
           </Link>
           <div className="hidden lg:flex items-center gap-4 text-xs font-medium text-muted-foreground mr-4">
             <Link href="/arcade" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">

@@ -467,10 +467,10 @@ export function MobileNav() {
         variant="ghost"
         size="icon"
         onClick={() => setIsOpen(true)}
-        className="hover:bg-white/5 min-w-[44px] min-h-[44px]"
+        className="hover:bg-white/5 min-w-[56px] min-h-[56px] w-14 h-14"
         data-testid="button-mobile-menu"
       >
-        <Menu className="w-6 h-6" />
+        <Menu className="w-10 h-10" />
       </Button>
 
       {mounted && isOpen && <MenuPanel onClose={() => setIsOpen(false)} />}
