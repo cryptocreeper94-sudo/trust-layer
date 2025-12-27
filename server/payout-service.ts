@@ -5,7 +5,7 @@ import {
   fraudFlags,
   chainAccounts
 } from "@shared/schema";
-import { eq, and, sql, lt, desc, gte } from "drizzle-orm";
+import { eq, and, sql, lte, desc, gte } from "drizzle-orm";
 import crypto from "crypto";
 import { blockchain } from "./blockchain-engine";
 
@@ -60,8 +60,7 @@ async function getOrbitHubHeaders(payload: object) {
 
 export class PayoutService {
   async getEligibleAffiliates() {
-    const eligibilityDate = new Date();
-    eligibilityDate.setDate(eligibilityDate.getDate() - SETTLEMENT_WAIT_DAYS);
+    const now = new Date();
 
     const affiliates = await db
       .select({
@@ -74,7 +73,7 @@ export class PayoutService {
         and(
           eq(commissionPayouts.userId, affiliateProfiles.userId),
           eq(commissionPayouts.payoutStatus, "eligible"),
-          lt(commissionPayouts.eligibleForPayoutAt, eligibilityDate)
+          lte(commissionPayouts.eligibleForPayoutAt, now)
         )
       )
       .where(
@@ -116,10 +115,37 @@ export class PayoutService {
     return batch;
   }
 
-  async processAffiliatePayout(userId: string, walletAddress: string, amountCents: number): Promise<PayoutResult> {
+  async processAffiliatePayout(userId: string, walletAddress: string, _amountCents: number): Promise<PayoutResult & { settledAmount?: number; settledDwc?: string }> {
     const payoutId = `payout_${Date.now()}_${crypto.randomBytes(4).toString("hex")}`;
-    const amountDwc = (amountCents / 100 / DWC_EXCHANGE_RATE).toFixed(2);
+    const now = new Date();
+
+    // First, select the specific commission IDs for this payout batch with maturity filter
+    const eligibleCommissions = await db.query.commissionPayouts.findMany({
+      where: and(
+        eq(commissionPayouts.userId, userId),
+        eq(commissionPayouts.payoutStatus, "eligible"),
+        lte(commissionPayouts.eligibleForPayoutAt, now)
+      ),
+    });
+
+    if (eligibleCommissions.length === 0) {
+      return { success: false, payoutId, error: "No eligible commissions found" };
+    }
+
+    const commissionIds = eligibleCommissions.map(c => c.id);
+    const actualAmount = eligibleCommissions.reduce((sum, c) => sum + c.amount, 0);
+    const amountDwc = (actualAmount / 100 / DWC_EXCHANGE_RATE).toFixed(2);
     const amountWei = BigInt(Math.floor(parseFloat(amountDwc) * 1e18));
+
+    // Mark only these specific commissions as processing
+    await db
+      .update(commissionPayouts)
+      .set({
+        payoutStatus: "processing",
+        payoutBatchId: payoutId,
+        updatedAt: new Date(),
+      })
+      .where(sql`${commissionPayouts.id} = ANY(${commissionIds})`);
 
     try {
       const treasuryPrivateKey = process.env.TREASURY_PRIVATE_KEY;
@@ -148,6 +174,7 @@ export class PayoutService {
         throw new Error(result.error || "Transaction failed");
       }
 
+      // Transaction succeeded - mark only the batched commissions as paid
       await db
         .update(commissionPayouts)
         .set({
@@ -157,48 +184,40 @@ export class PayoutService {
           exchangeRateSource: "fixed",
           treasuryTxHash: signedTx.hash,
           processedAt: new Date(),
-          payoutBatchId: payoutId,
           updatedAt: new Date(),
         })
-        .where(
-          and(
-            eq(commissionPayouts.userId, userId),
-            eq(commissionPayouts.payoutStatus, "eligible")
-          )
-        );
+        .where(sql`${commissionPayouts.id} = ANY(${commissionIds})`);
 
       await db
         .update(affiliateProfiles)
         .set({
-          pendingCommission: sql`${affiliateProfiles.pendingCommission} - ${amountCents}`,
-          paidCommission: sql`${affiliateProfiles.paidCommission} + ${amountCents}`,
+          pendingCommission: sql`${affiliateProfiles.pendingCommission} - ${actualAmount}`,
+          paidCommission: sql`${affiliateProfiles.paidCommission} + ${actualAmount}`,
           lastPayoutAt: new Date(),
           updatedAt: new Date(),
         })
         .where(eq(affiliateProfiles.userId, userId));
 
-      console.log(`[Payout] Sent ${amountDwc} DWC to ${walletAddress} for user ${userId}, tx: ${signedTx.hash}`);
+      console.log(`[Payout] Sent ${amountDwc} DWC to ${walletAddress} for user ${userId}, tx: ${signedTx.hash}, commissions: ${commissionIds.length}`);
 
-      return { success: true, payoutId, txHash: signedTx.hash };
+      return { success: true, payoutId, txHash: signedTx.hash, settledAmount: actualAmount, settledDwc: amountDwc };
     } catch (error) {
       console.error(`[Payout] Failed for user ${userId}:`, error);
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       
+      // Restore only these specific commissions to eligible for retry
       await db
         .update(commissionPayouts)
         .set({
-          payoutStatus: "failed",
-          failureReason: error instanceof Error ? error.message : "Unknown error",
+          payoutStatus: "eligible",
+          failureReason: errorMessage,
           retryCount: sql`${commissionPayouts.retryCount} + 1`,
+          payoutBatchId: null,
           updatedAt: new Date(),
         })
-        .where(
-          and(
-            eq(commissionPayouts.userId, userId),
-            eq(commissionPayouts.payoutStatus, "processing")
-          )
-        );
+        .where(sql`${commissionPayouts.id} = ANY(${commissionIds})`);
 
-      return { success: false, payoutId, error: error instanceof Error ? error.message : "Unknown error" };
+      return { success: false, payoutId, error: errorMessage };
     }
   }
 
@@ -230,42 +249,61 @@ export class PayoutService {
       return false;
     }
 
-    try {
-      const response = await fetch(`${ORBIT_HUB_URL}/api/v1/webhooks/payout`, {
-        method: "POST",
-        headers,
-        body: JSON.stringify(payload),
-      });
+    const MAX_RETRIES = 3;
+    const BASE_DELAY_MS = 1000;
 
-      if (!response.ok) {
+    for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+      try {
+        const response = await fetch(`${ORBIT_HUB_URL}/api/v1/webhooks/payout`, {
+          method: "POST",
+          headers,
+          body: JSON.stringify(payload),
+        });
+
+        if (response.ok) {
+          await db
+            .update(commissionPayouts)
+            .set({
+              orbitSyncStatus: "synced",
+              orbitSyncedAt: new Date(),
+              updatedAt: new Date(),
+            })
+            .where(eq(commissionPayouts.treasuryTxHash, payoutResult.txHash || ""));
+
+          console.log(`[Payout] Synced to Orbit Hub: ${payoutResult.payoutId}`);
+          return true;
+        }
+
+        if (response.status >= 500 && attempt < MAX_RETRIES - 1) {
+          const delay = BASE_DELAY_MS * Math.pow(2, attempt);
+          console.log(`[Payout] Orbit Hub sync failed (${response.status}), retrying in ${delay}ms...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          continue;
+        }
+
         console.error(`[Payout] Orbit Hub sync failed: ${response.status}`);
-        return false;
+        break;
+      } catch (error) {
+        if (attempt < MAX_RETRIES - 1) {
+          const delay = BASE_DELAY_MS * Math.pow(2, attempt);
+          console.log(`[Payout] Orbit Hub sync error, retrying in ${delay}ms...`, error);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          continue;
+        }
+        console.error("[Payout] Orbit Hub sync error after all retries:", error);
+        break;
       }
-
-      await db
-        .update(commissionPayouts)
-        .set({
-          orbitSyncStatus: "synced",
-          orbitSyncedAt: new Date(),
-          updatedAt: new Date(),
-        })
-        .where(eq(commissionPayouts.treasuryTxHash, payoutResult.txHash || ""));
-
-      console.log(`[Payout] Synced to Orbit Hub: ${payoutResult.payoutId}`);
-      return true;
-    } catch (error) {
-      console.error("[Payout] Orbit Hub sync error:", error);
-      
-      await db
-        .update(commissionPayouts)
-        .set({
-          orbitSyncStatus: "failed",
-          updatedAt: new Date(),
-        })
-        .where(eq(commissionPayouts.treasuryTxHash, payoutResult.txHash || ""));
-
-      return false;
     }
+
+    await db
+      .update(commissionPayouts)
+      .set({
+        orbitSyncStatus: "failed",
+        updatedAt: new Date(),
+      })
+      .where(eq(commissionPayouts.treasuryTxHash, payoutResult.txHash || ""));
+
+    return false;
   }
 
   async runPayoutCycle(): Promise<{
@@ -297,17 +335,17 @@ export class PayoutService {
         affiliate.pendingAmount
       );
 
-      if (result.success) {
+      if (result.success && result.settledAmount && result.settledDwc) {
         processedCount++;
-        totalDwc += parseFloat(result.txHash ? (affiliate.pendingAmount / 100 / DWC_EXCHANGE_RATE).toFixed(2) : "0");
+        totalDwc += parseFloat(result.settledDwc);
 
         await this.syncPayoutToOrbit(result, {
           userId: affiliate.profile.userId,
           host: affiliate.profile.preferredHost || "dwsc.io",
-          amountUsd: affiliate.pendingAmount,
-          amountDwc: (affiliate.pendingAmount / 100 / DWC_EXCHANGE_RATE).toFixed(2),
+          amountUsd: result.settledAmount,
+          amountDwc: result.settledDwc,
         });
-      } else {
+      } else if (!result.success) {
         failedCount++;
         errors.push(`${affiliate.profile.userId}: ${result.error}`);
       }
