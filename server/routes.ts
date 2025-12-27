@@ -5087,10 +5087,10 @@ Current context:
 
   async function seedNftCollections() {
     const DEFAULT_COLLECTIONS = [
-      { name: "DarkWave Genesis", symbol: "DWGEN", description: "The original DarkWave NFT collection", imageUrl: "https://picsum.photos/seed/dwgen/400/400" },
-      { name: "Cyber Punks", symbol: "CYPK", description: "Futuristic cyber art collection", imageUrl: "https://picsum.photos/seed/cypk/400/400" },
-      { name: "Quantum Realms", symbol: "QREALM", description: "Explore quantum dimensions through art", imageUrl: "https://picsum.photos/seed/qrealm/400/400" },
-      { name: "Neon Dreams", symbol: "NEON", description: "Neon-infused digital artwork", imageUrl: "https://picsum.photos/seed/neon/400/400" },
+      { name: "DarkWave Genesis", symbol: "DWGEN", description: "The original DarkWave NFT collection - commemorating the birth of the ecosystem", imageUrl: "/assets/generated_images/genesis_nft_cosmic_orb_collectible.png" },
+      { name: "Cyber Collective", symbol: "CYBER", description: "Elite cyber warriors from the digital frontier", imageUrl: "/assets/generated_images/cyber_warrior_nft_collectible.png" },
+      { name: "Quantum Realms", symbol: "QREALM", description: "Explore quantum dimensions through holographic art", imageUrl: "/assets/generated_images/quantum_shift_holographic_nft_card.png" },
+      { name: "Neon Dreams", symbol: "NEON", description: "Neon-infused ethereal dreamscapes", imageUrl: "/assets/generated_images/neon_dreams_nft_collectible.png" },
     ];
     
     for (const collection of DEFAULT_COLLECTIONS) {
@@ -5098,17 +5098,37 @@ Current context:
     }
   }
 
+  // NFT images mapped to names for proper matching
+  const NFT_IMAGE_MAP: Record<string, string> = {
+    "Genesis Orb": "/assets/generated_images/genesis_nft_cosmic_orb_collectible.png",
+    "Genesis Crystal": "/assets/generated_images/genesis_nft_crystal_formation_collectible.png",
+    "Genesis Portal": "/assets/generated_images/genesis_nft_portal_vortex_collectible.png",
+    "Aurora Pulse": "/assets/generated_images/aurora_pulse_holographic_nft_card.png",
+    "Digital Dawn": "/assets/generated_images/digital_dawn_holographic_nft_card.png",
+    "Quantum Shift": "/assets/generated_images/quantum_shift_holographic_nft_card.png",
+    "Neon Wave": "/assets/generated_images/neon_wave_holographic_nft_card.png",
+    "Cyber Warrior": "/assets/generated_images/cyber_warrior_nft_collectible.png",
+    "Golden Aura": "/assets/generated_images/golden_aura_nft_collectible.png",
+  };
+
   async function seedNfts(collections: any[]) {
-    const NFT_NAMES = ["Aurora Pulse", "Digital Dawn", "Quantum Shift", "Neon Wave", "Cyber Core", "Pixel Storm"];
+    const NFT_CONFIGS = [
+      { name: "Genesis Orb", desc: "The original cosmic orb - first of the genesis collection" },
+      { name: "Aurora Pulse", desc: "Northern lights energy pulsing with cosmic power" },
+      { name: "Digital Dawn", desc: "Sunrise made of pixels and code" },
+      { name: "Quantum Shift", desc: "Dimensional portal warping space-time" },
+      { name: "Neon Wave", desc: "Flowing waves of electric neon light" },
+    ];
     
     for (const collection of collections) {
       for (let i = 0; i < 5; i++) {
+        const config = NFT_CONFIGS[i];
         await storage.createNft({
           tokenId: `${collection.id}-${i}`,
           collectionId: collection.id,
-          name: `${NFT_NAMES[i % NFT_NAMES.length]} #${i + 1}`,
-          description: `A unique NFT from the ${collection.name} collection`,
-          imageUrl: `https://picsum.photos/seed/${collection.id}-${i}/400/400`,
+          name: `${config.name} #${i + 1}`,
+          description: config.desc,
+          imageUrl: NFT_IMAGE_MAP[config.name] || "/assets/generated_images/genesis_nft_cosmic_orb_collectible.png",
         });
       }
     }
