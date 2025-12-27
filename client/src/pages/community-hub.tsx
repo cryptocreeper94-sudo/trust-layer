@@ -677,19 +677,19 @@ export default function CommunityHub() {
                 </Dialog>
               </div>
 
-              <div className="w-60 bg-gray-900/60 backdrop-blur-xl border-r border-white/5 flex flex-col">
-                <div className="p-4 border-b border-white/5">
+              <div className="w-52 sm:w-60 bg-gray-900/60 backdrop-blur-xl border-r border-white/5 flex flex-col overflow-hidden">
+                <div className="p-3 sm:p-4 border-b border-white/5">
                   {selectedCommunity ? (
                     <>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="text-lg">{selectedCommunity.icon || "⚡"}</span>
-                          <h2 className="font-bold text-white truncate">{selectedCommunity.name}</h2>
-                          {selectedCommunity.isVerified && <Shield className="w-4 h-4 text-cyan-400" />}
+                      <div className="flex items-center justify-between gap-2 min-w-0">
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                          <span className="text-base sm:text-lg flex-shrink-0">{selectedCommunity.icon || "⚡"}</span>
+                          <h2 className="font-bold text-white text-sm sm:text-base truncate">{selectedCommunity.name}</h2>
+                          {selectedCommunity.isVerified && <Shield className="w-3 h-3 sm:w-4 sm:h-4 text-cyan-400 flex-shrink-0" />}
                         </div>
-                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                        <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0" />
                       </div>
-                      <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
+                      <div className="flex items-center gap-2 sm:gap-3 mt-2 text-[10px] sm:text-xs text-gray-400">
                         <span className="flex items-center gap-1">
                           <Users className="w-3 h-3" /> {selectedCommunity.memberCount || 0}
                         </span>
@@ -700,17 +700,17 @@ export default function CommunityHub() {
                       {user && !isMember && (
                         <Button 
                           size="sm" 
-                          className="w-full mt-3 bg-cyan-500 hover:bg-cyan-600"
+                          className="w-full mt-3 bg-cyan-500 hover:bg-cyan-600 text-xs sm:text-sm"
                           onClick={() => joinCommunity.mutate(selectedCommunityId!)}
                           disabled={joinCommunity.isPending}
                           data-testid="join-community-btn"
                         >
-                          {joinCommunity.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Join Community"}
+                          {joinCommunity.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Join"}
                         </Button>
                       )}
                     </>
                   ) : (
-                    <p className="text-gray-400 text-sm">Select a community</p>
+                    <p className="text-gray-400 text-xs sm:text-sm">Select a community</p>
                   )}
                 </div>
 
@@ -763,21 +763,21 @@ export default function CommunityHub() {
                   </div>
                 </ScrollArea>
 
-                <div className="p-3 border-t border-white/5 bg-black/20">
+                <div className="p-2 sm:p-3 border-t border-white/5 bg-black/20">
                   <div className="flex items-center gap-2">
-                    <Avatar className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-purple-500">
-                      <AvatarFallback className="text-xs">
+                    <Avatar className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-cyan-500 to-purple-500 flex-shrink-0">
+                      <AvatarFallback className="text-[10px] sm:text-xs">
                         {user ? (user as any).username?.slice(0, 2).toUpperCase() || "ME" : "??"}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-white truncate">
+                      <p className="text-xs sm:text-sm font-medium text-white truncate">
                         {user ? (user as any).username || "You" : "Guest"}
                       </p>
-                      <p className="text-[10px] text-emerald-400">{user ? "Online" : "Sign in to chat"}</p>
+                      <p className="text-[9px] sm:text-[10px] text-emerald-400">{user ? "Online" : "Sign in"}</p>
                     </div>
-                    <button className="p-1.5 hover:bg-white/10 rounded-lg">
-                      <Settings className="w-4 h-4 text-gray-400" />
+                    <button className="p-1 sm:p-1.5 hover:bg-white/10 rounded-lg flex-shrink-0">
+                      <Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400" />
                     </button>
                   </div>
                 </div>
@@ -793,31 +793,31 @@ export default function CommunityHub() {
         ) : (
           <>
             <div className="flex-1 flex flex-col min-w-0">
-              <div className="h-12 border-b border-white/5 bg-gray-900/40 backdrop-blur-sm flex items-center justify-between px-4">
-                <div className="flex items-center gap-2">
-                  <Hash className="w-5 h-5 text-gray-400" />
-                  <span className="font-medium text-white">{selectedChannel?.name || "Select a channel"}</span>
+              <div className="h-12 border-b border-white/5 bg-gray-900/40 backdrop-blur-sm flex items-center justify-between px-2 sm:px-4 gap-2 overflow-hidden">
+                <div className="flex items-center gap-2 min-w-0 flex-shrink">
+                  <Hash className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
+                  <span className="font-medium text-white text-sm sm:text-base truncate max-w-[120px] sm:max-w-none">{selectedChannel?.name || "Select a channel"}</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                   {!!user && (
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full">
-                      <Coins className="w-4 h-4 text-amber-400" />
-                      <span className="text-sm font-medium text-amber-400" data-testid="orbs-balance">
-                        {orbsData?.balance?.toLocaleString() || 0} Orbs
+                    <div className="flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full flex-shrink-0">
+                      <Coins className="w-3 h-3 sm:w-4 sm:h-4 text-amber-400" />
+                      <span className="text-xs sm:text-sm font-medium text-amber-400" data-testid="orbs-balance">
+                        {orbsData?.balance?.toLocaleString() || 0}
                       </span>
                     </div>
                   )}
-                  <div className="relative hidden sm:block">
+                  <div className="relative hidden md:block">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                     <Input 
                       placeholder="Search..." 
                       className="w-48 h-8 pl-9 bg-white/5 border-white/10 text-sm"
                     />
                   </div>
-                  <button className="p-2 hover:bg-white/10 rounded-lg">
+                  <button className="p-1.5 sm:p-2 hover:bg-white/10 rounded-lg">
                     <Bell className="w-4 h-4 text-gray-400" />
                   </button>
-                  <button className="p-2 hover:bg-white/10 rounded-lg">
+                  <button className="p-1.5 sm:p-2 hover:bg-white/10 rounded-lg hidden sm:block">
                     <Users className="w-4 h-4 text-gray-400" />
                   </button>
                 </div>
@@ -906,41 +906,33 @@ export default function CommunityHub() {
                     <span className="text-xs text-blue-400">Uploading file...</span>
                   </div>
                 )}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 sm:gap-2">
                   <button 
                     onClick={() => fileInputRef.current?.click()}
-                    className="p-2 hover:bg-white/10 rounded-lg disabled:opacity-50"
+                    className="p-1.5 sm:p-2 hover:bg-white/10 rounded-lg disabled:opacity-50 flex-shrink-0"
                     disabled={!user || isUploading}
                     data-testid="btn-attach-file"
                   >
-                    <Plus className="w-5 h-5 text-gray-400" />
+                    <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
                   </button>
-                  <div className="flex-1 relative">
+                  <div className="flex-1 relative min-w-0">
                     <Input
                       value={messageInput}
                       onChange={handleInputChange}
                       onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
-                      placeholder={user ? `Message #${selectedChannel?.name || "channel"}` : "Sign in to send messages"}
-                      className="bg-white/5 border-white/10 pr-24"
+                      placeholder={user ? `Message #${selectedChannel?.name || "channel"}` : "Sign in to chat"}
+                      className="bg-white/5 border-white/10 pr-16 sm:pr-24 text-sm"
                       disabled={!user || !selectedChannelId}
                       data-testid="input-message"
                     />
-                    <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                      <button 
-                        onClick={() => fileInputRef.current?.click()}
-                        className="p-1.5 hover:bg-white/10 rounded disabled:opacity-50"
-                        disabled={!user || isUploading}
-                        data-testid="btn-image-upload"
-                      >
-                        <Image className="w-4 h-4 text-gray-400" />
-                      </button>
-                      <button className="p-1.5 hover:bg-white/10 rounded"><Smile className="w-4 h-4 text-gray-400" /></button>
-                      <button className="p-1.5 hover:bg-white/10 rounded"><Mic className="w-4 h-4 text-gray-400" /></button>
+                    <div className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 flex items-center gap-0.5 sm:gap-1">
+                      <button className="p-1 sm:p-1.5 hover:bg-white/10 rounded"><Smile className="w-4 h-4 text-gray-400" /></button>
+                      <button className="p-1 sm:p-1.5 hover:bg-white/10 rounded"><Mic className="w-4 h-4 text-gray-400" /></button>
                     </div>
                   </div>
                   <Button 
                     size="icon" 
-                    className="bg-cyan-500 hover:bg-cyan-600"
+                    className="bg-cyan-500 hover:bg-cyan-600 h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0"
                     onClick={handleSendMessage}
                     disabled={(!messageInput.trim() && !pendingAttachment) || !user || isUploading}
                     data-testid="send-message-btn"
