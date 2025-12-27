@@ -549,24 +549,24 @@ export default function CrowdfundPage() {
               size="large" 
             />
 
-            <div className="grid grid-cols-3 gap-4 mt-6">
-              <div className="text-center p-4 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10">
-                <p className="text-2xl font-bold text-cyan-400">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 mt-6">
+              <div className="text-center p-2 sm:p-4 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10">
+                <p className="text-lg sm:text-2xl font-bold text-cyan-400">
                   {formatCurrency(stats?.totalRaised || 0)}
                 </p>
-                <p className="text-sm text-gray-400">Total Raised</p>
+                <p className="text-[10px] sm:text-sm text-gray-400">Total Raised</p>
               </div>
-              <div className="text-center p-4 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10">
-                <p className="text-2xl font-bold text-purple-400">
+              <div className="text-center p-2 sm:p-4 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10">
+                <p className="text-lg sm:text-2xl font-bold text-purple-400">
                   {stats?.contributorCount || 0}
                 </p>
-                <p className="text-sm text-gray-400">Contributors</p>
+                <p className="text-[10px] sm:text-sm text-gray-400">Backers</p>
               </div>
-              <div className="text-center p-4 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10">
-                <p className="text-2xl font-bold text-pink-400">
+              <div className="text-center p-2 sm:p-4 bg-black/40 backdrop-blur-sm rounded-xl border border-white/10">
+                <p className="text-lg sm:text-2xl font-bold text-pink-400">
                   {features.length}
                 </p>
-                <p className="text-sm text-gray-400">Features Planned</p>
+                <p className="text-[10px] sm:text-sm text-gray-400">Features</p>
               </div>
             </div>
             </div>
