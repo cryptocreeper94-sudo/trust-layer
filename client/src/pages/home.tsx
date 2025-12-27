@@ -901,6 +901,13 @@ function AppCard({ id, name, category, desc, gradient, showFavorite, url }: { id
           </div>
         )}
         
+        {/* Beta badge at top left */}
+        <div className="absolute top-2 left-2 z-10">
+          <Badge className="text-[8px] uppercase bg-amber-500/90 text-black font-bold px-1.5 py-0.5 shadow-lg">
+            Beta
+          </Badge>
+        </div>
+        
         {/* Content overlay at bottom */}
         <div className="absolute bottom-0 left-0 right-0 p-3">
           <div className="flex items-center gap-2 mb-1">
