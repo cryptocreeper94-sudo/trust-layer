@@ -15,6 +15,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+import genesisNft from "@assets/generated_images/genesis_nft_cosmic_orb_collectible.png";
+import cyberNft from "@assets/generated_images/cyber_warrior_nft_collectible.png";
+import neonNft from "@assets/generated_images/neon_dreams_nft_collectible.png";
+import goldenNft from "@assets/generated_images/golden_aura_nft_collectible.png";
 
 interface NFT {
   id: string;
@@ -28,12 +32,12 @@ interface NFT {
 }
 
 const SAMPLE_NFTS: NFT[] = [
-  { id: "1", tokenId: "1", name: "Cosmic Voyager #42", collectionName: "DarkWave Genesis", imageUrl: "", description: "A rare cosmic explorer from the genesis collection" },
-  { id: "2", tokenId: "2", name: "Neon Dreams #128", collectionName: "DarkWave Genesis", imageUrl: "", description: "Ethereal neon artwork" },
-  { id: "3", tokenId: "3", name: "Cyber Punk #89", collectionName: "Cyber Collective", imageUrl: "", description: "Cyberpunk aesthetic collectible" },
-  { id: "4", tokenId: "4", name: "Abstract Mind #15", collectionName: "Art Blocks", imageUrl: "", description: "Generative art piece" },
-  { id: "5", tokenId: "5", name: "Pixel Warrior #256", collectionName: "Pixel Army", imageUrl: "", description: "8-bit warrior NFT" },
-  { id: "6", tokenId: "6", name: "Golden Aura #7", collectionName: "Aura Collection", imageUrl: "", description: "Limited golden edition" },
+  { id: "1", tokenId: "001", name: "Genesis #001", collectionName: "DarkWave Genesis", imageUrl: genesisNft, description: "The original genesis collectible - commemorating the birth of DarkWave Smart Chain" },
+  { id: "2", tokenId: "002", name: "Genesis #002", collectionName: "DarkWave Genesis", imageUrl: genesisNft, description: "Limited genesis edition from the founding collection" },
+  { id: "3", tokenId: "001", name: "Cyber Warrior #001", collectionName: "Cyber Collective", imageUrl: cyberNft, description: "Elite cyber warrior from the digital frontier" },
+  { id: "4", tokenId: "101", name: "Neon Dreams #101", collectionName: "Neon Dreams", imageUrl: neonNft, description: "Ethereal dreamscape of flowing neon energy" },
+  { id: "5", tokenId: "042", name: "Golden Aura #042", collectionName: "Golden Aura", imageUrl: goldenNft, description: "Radiant cosmic energy sphere - ultra rare golden edition" },
+  { id: "6", tokenId: "003", name: "Genesis #003", collectionName: "DarkWave Genesis", imageUrl: genesisNft, description: "Third minted genesis NFT - legendary status" },
 ];
 
 function NFTCard({ nft, onClick }: { nft: NFT; onClick: () => void }) {

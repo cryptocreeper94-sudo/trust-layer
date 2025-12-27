@@ -16,6 +16,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+import genesisNft from "@assets/generated_images/genesis_nft_cosmic_orb_collectible.png";
+import cyberNft from "@assets/generated_images/cyber_warrior_nft_collectible.png";
+import neonNft from "@assets/generated_images/neon_dreams_nft_collectible.png";
+import goldenNft from "@assets/generated_images/golden_aura_nft_collectible.png";
 
 const formatPrice = (price: string) => {
   try {
@@ -28,19 +32,19 @@ const formatPrice = (price: string) => {
 };
 
 const SAMPLE_COLLECTIONS = [
-  { id: "1", name: "DarkWave Genesis", symbol: "DWG", imageUrl: "", itemCount: 1000, floorPrice: "100000000000000000000", isVerified: true },
-  { id: "2", name: "Cyber Punks", symbol: "CPNK", imageUrl: "", itemCount: 500, floorPrice: "50000000000000000000", isVerified: true },
-  { id: "3", name: "Wave Riders", symbol: "WAVE", imageUrl: "", itemCount: 2500, floorPrice: "25000000000000000000", isVerified: false },
-  { id: "4", name: "Neon Dreams", symbol: "NEON", imageUrl: "", itemCount: 888, floorPrice: "75000000000000000000", isVerified: true },
+  { id: "1", name: "DarkWave Genesis", symbol: "DWG", imageUrl: genesisNft, itemCount: 1000, floorPrice: "100000000000000000000", isVerified: true },
+  { id: "2", name: "Cyber Collective", symbol: "CYBER", imageUrl: cyberNft, itemCount: 500, floorPrice: "50000000000000000000", isVerified: true },
+  { id: "3", name: "Golden Aura", symbol: "AURA", imageUrl: goldenNft, itemCount: 2500, floorPrice: "25000000000000000000", isVerified: true },
+  { id: "4", name: "Neon Dreams", symbol: "NEON", imageUrl: neonNft, itemCount: 888, floorPrice: "75000000000000000000", isVerified: true },
 ];
 
 const SAMPLE_NFTS = [
-  { id: "1", tokenId: "1", name: "Genesis #1", collectionId: "1", imageUrl: "", price: "150000000000000000000", likes: 42 },
-  { id: "2", tokenId: "2", name: "Genesis #2", collectionId: "1", imageUrl: "", price: "120000000000000000000", likes: 28 },
-  { id: "3", tokenId: "1", name: "Punk #001", collectionId: "2", imageUrl: "", price: "80000000000000000000", likes: 56 },
-  { id: "4", tokenId: "1", name: "Wave #042", collectionId: "3", imageUrl: "", price: "30000000000000000000", likes: 15 },
-  { id: "5", tokenId: "2", name: "Neon #101", collectionId: "4", imageUrl: "", price: "90000000000000000000", likes: 33 },
-  { id: "6", tokenId: "3", name: "Genesis #3", collectionId: "1", imageUrl: "", price: "200000000000000000000", likes: 71 },
+  { id: "1", tokenId: "1", name: "Genesis #001", collectionId: "1", imageUrl: genesisNft, price: "150000000000000000000", likes: 142 },
+  { id: "2", tokenId: "2", name: "Genesis #002", collectionId: "1", imageUrl: genesisNft, price: "120000000000000000000", likes: 98 },
+  { id: "3", tokenId: "1", name: "Cyber Warrior #001", collectionId: "2", imageUrl: cyberNft, price: "80000000000000000000", likes: 256 },
+  { id: "4", tokenId: "1", name: "Golden Aura #042", collectionId: "3", imageUrl: goldenNft, price: "30000000000000000000", likes: 75 },
+  { id: "5", tokenId: "2", name: "Neon Dreams #101", collectionId: "4", imageUrl: neonNft, price: "90000000000000000000", likes: 183 },
+  { id: "6", tokenId: "3", name: "Genesis #003", collectionId: "1", imageUrl: genesisNft, price: "200000000000000000000", likes: 321 },
 ];
 
 export default function NftMarketplace() {
