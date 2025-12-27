@@ -2704,6 +2704,94 @@ export const creditPackages = pgTable("credit_packages", {
 export type CreditPackage = typeof creditPackages.$inferSelect;
 
 // =====================================================
+// SUBSCRIPTION SYSTEM
+// =====================================================
+// Unified subscription management for Pulse Pro, StrikeAgent, and Complete Bundle
+// Synced with main Pulse app structure
+// =====================================================
+
+export const subscriptionPlanIds = [
+  "free",
+  "basic",
+  "premium",
+  "pulse_pro",
+  "strike_agent",
+  "complete_bundle",
+  "founder",
+  "free_demo",
+  "rm_monthly",
+  "rm_annual",
+  "legacy_founder",
+] as const;
+
+export type SubscriptionPlanId = typeof subscriptionPlanIds[number];
+
+export const subscriptionStatuses = [
+  "active",
+  "inactive",
+  "cancelled",
+  "expired",
+  "trialing",
+  "past_due",
+] as const;
+
+export type SubscriptionStatus = typeof subscriptionStatuses[number];
+
+export const subscriptions = pgTable("subscriptions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  
+  // Plan details
+  plan: text("plan").notNull().default("free"), // free, pulse_pro, strike_agent, complete_bundle, founder, etc.
+  status: text("status").notNull().default("inactive"), // active, inactive, cancelled, expired, trialing, past_due
+  billingCycle: text("billing_cycle"), // "monthly", "annual", null for one-time
+  
+  // Stripe integration
+  stripeCustomerId: text("stripe_customer_id"),
+  stripeSubscriptionId: text("stripe_subscription_id"),
+  stripePriceId: text("stripe_price_id"),
+  
+  // Period tracking
+  currentPeriodStart: timestamp("current_period_start"),
+  currentPeriodEnd: timestamp("current_period_end"),
+  trialStart: timestamp("trial_start"),
+  trialEnd: timestamp("trial_end"),
+  
+  // Founder/one-time specific
+  founderPurchaseDate: timestamp("founder_purchase_date"),
+  founderExpiryDate: timestamp("founder_expiry_date"),
+  dwcTokensAllocated: integer("dwc_tokens_allocated").default(0), // 35,000 for founders
+  
+  // Cancellation tracking
+  cancelledAt: timestamp("cancelled_at"),
+  cancelReason: text("cancel_reason"),
+  
+  // Metadata
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertSubscriptionSchema = createInsertSchema(subscriptions).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type Subscription = typeof subscriptions.$inferSelect;
+export type InsertSubscription = z.infer<typeof insertSubscriptionSchema>;
+
+// Whitelisted Users - Bypass all limits
+export const whitelistedUsers = pgTable("whitelisted_users", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  reason: text("reason"), // "team", "beta_tester", "partner", etc.
+  addedBy: text("added_by"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type WhitelistedUser = typeof whitelistedUsers.$inferSelect;
+
+// =====================================================
 // VOICE CLONING SYSTEM
 // =====================================================
 // Stores user voice samples for creating their parallel self's voice
