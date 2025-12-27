@@ -56,7 +56,7 @@ const ALL_ERAS: Era[] = [
     epoch: "Prehistoric",
     image: stoneAgeVillage,
     color: "from-amber-600 to-orange-700",
-    description: "Where every journey begins. Primitive tribes struggle for survival against megafauna and the elements.",
+    description: "Humanity's earliest chapter. Primitive tribes struggle for survival against megafauna and the elements.",
     features: ["Survival crafting", "Tribal politics", "Beast taming", "Cave exploration"],
     classes: ["Hunter", "Shaman", "Chieftain"],
     governance: "Tribal Councils"
@@ -70,7 +70,7 @@ const ALL_ERAS: Era[] = [
     epoch: "Ancient",
     image: egyptianKingdom,
     color: "from-yellow-500 to-amber-600",
-    description: "Build monuments to eternity. Navigate the courts of pharaohs. Unlock the mysteries of the pyramids.",
+    description: "Build monuments to eternity. Navigate the courts of pharaohs. Explore the mysteries of the pyramids.",
     features: ["Monument building", "Divine politics", "Trade routes", "Tomb exploration"],
     classes: ["Priest", "Scribe", "Warrior", "Architect"],
     governance: "Divine Monarchy"
@@ -126,7 +126,7 @@ const ALL_ERAS: Era[] = [
     epoch: "Medieval",
     image: medievalKingdom,
     color: "from-violet-600 to-purple-700",
-    description: "Kingdoms rise and fall. Knights quest for glory while dark forces gather. Choose your allegiance wisely.",
+    description: "Kingdoms rise and fall. Navigate court intrigue while dark forces gather. Choose your allegiance wisely.",
     features: ["Kingdom building", "Siege warfare", "Jousting tournaments", "Castle intrigue"],
     classes: ["Knight", "Mage", "Assassin", "Cleric"],
     governance: "Feudal Monarchy"
@@ -196,7 +196,7 @@ const ALL_ERAS: Era[] = [
     epoch: "Industrial",
     image: industrialCity,
     color: "from-zinc-500 to-zinc-700",
-    description: "Steam power transforms civilization. Airship pirates rule the skies while inventors race to unlock forbidden sciences.",
+    description: "Steam power transforms civilization. Airship pirates rule the skies while inventors pursue forbidden sciences.",
     features: ["Invention crafting", "Airship combat", "Factory management", "Automaton companions"],
     classes: ["Engineer", "Aeronaut", "Investigator", "Automancer"],
     governance: "Industrial Parliament"
@@ -271,7 +271,7 @@ function EraModal({ era, onClose }: { era: Era; onClose: () => void }) {
           <p className="text-white/80 text-lg leading-relaxed">{era.description}</p>
           
           <div>
-            <h4 className="text-sm font-bold text-white/50 uppercase tracking-wider mb-3">Core Features</h4>
+            <h4 className="text-sm font-bold text-white/50 uppercase tracking-wider mb-3">Era Experiences</h4>
             <div className="flex flex-wrap gap-2">
               {era.features.map((feature, i) => (
                 <Badge key={i} variant="outline" className="border-white/20 text-white/70">
@@ -283,7 +283,7 @@ function EraModal({ era, onClose }: { era: Era; onClose: () => void }) {
           
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <h4 className="text-sm font-bold text-white/50 uppercase tracking-wider mb-3">Classes</h4>
+              <h4 className="text-sm font-bold text-white/50 uppercase tracking-wider mb-3">Life Paths</h4>
               <div className="space-y-2">
                 {era.classes.map((cls, i) => (
                   <div key={i} className="flex items-center gap-2 text-white/70">
@@ -352,7 +352,7 @@ export default function ChronoEras() {
             </h1>
             <p className="text-xl text-white/60 max-w-2xl mx-auto">
               70+ historical periods. Each running as its own living world.
-              Choose where your legacy begins.
+              Time-warp to any era you choose.
             </p>
           </motion.div>
           

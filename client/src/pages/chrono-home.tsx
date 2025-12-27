@@ -75,41 +75,41 @@ const SOCIAL_STATS = [
   { label: "Blockchain", value: "DWC", icon: <Coins className="w-4 h-4 text-amber-400" /> },
 ];
 
-const ADVENTURES = [
+const EXPERIENCES = [
   {
     icon: Scroll,
-    title: "Epic Quests & Missions",
-    desc: "Hidden storylines. Multi-era adventures. Objectives that span centuries and test your skills.",
+    title: "The Veil is Lifting",
+    desc: "Truth reveals itself. Awaken those around you. Uncover hidden realities others refuse to see.",
     color: "from-amber-500 to-orange-600",
   },
   {
     icon: Lock,
-    title: "Codes & Secrets",
-    desc: "Crack ancient ciphers. Uncover lost knowledge. Some secrets take years to solve.",
+    title: "Hidden Truths",
+    desc: "Some knowledge is buried for a reason. Your choices determine what you discover and who you become.",
     color: "from-emerald-500 to-teal-600",
   },
   {
     icon: Wand2,
-    title: "Parallel Realms",
-    desc: "Time rifts open to alternate dimensions. Fantastical worlds beyond normal existence await.",
+    title: "Time-Warp Freedom",
+    desc: "Leap between eras when you're ready. Permanently relocate or visit temporarily - you choose the path.",
     color: "from-purple-500 to-violet-600",
   },
   {
     icon: Ghost,
-    title: "Legends & Myths",
-    desc: "Mythical creatures. Ancient prophecies. Supernatural encounters that defy explanation.",
+    title: "Living History",
+    desc: "The world continues without you. Other parallel selves shape the same reality. Your ripples travel through time.",
     color: "from-pink-500 to-rose-600",
   },
   {
     icon: Target,
-    title: "Bounties & Hunts",
-    desc: "Track legendary artifacts. Hunt notorious criminals. Compete for rare rewards.",
+    title: "Consequences Echo",
+    desc: "Every action shapes how others perceive you. Bad choices lead to hardship. Good choices open new paths.",
     color: "from-red-500 to-orange-600",
   },
   {
     icon: Telescope,
-    title: "Realm Transport",
-    desc: "Teleport through time rifts. Visit parallel universes. Every journey changes you.",
+    title: "Your Beliefs Matter",
+    desc: "Faith, spirituality, atheism - whatever shapes you in life shapes your parallel experience.",
     color: "from-cyan-500 to-blue-600",
   },
 ];
@@ -148,9 +148,9 @@ export default function ChronoHome() {
               <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">YOU.</span> The Legend.
             </p>
             <p className="text-lg md:text-xl text-white/70 mb-8 max-w-3xl mx-auto leading-relaxed">
-              An unprecedented adventure platform spanning 70+ mission theaters.
+              A revolutionary parallel life experience spanning 70+ eras of history.
               <br className="hidden md:block" />
-              Not an avatar. Your parallel self across history.
+              Not a game. Not role-playing. Your mirror across time.
             </p>
           </motion.div>
           
@@ -309,19 +309,19 @@ export default function ChronoHome() {
             className="text-center mb-12"
           >
             <Badge className="mb-4 bg-pink-500/20 text-pink-400 border-pink-500/30">
-              <Sword className="w-3 h-3 mr-1" /> Beyond Daily Life
+              <Sword className="w-3 h-3 mr-1" /> The Parallel Life
             </Badge>
             <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 text-white">
-              Adventures Await
+              Your Mirror Awaits
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto text-lg">
-              Yes, it's a living world. But it's also a <span className="text-pink-400 font-semibold">game</span>. Epic quests. Hidden secrets. Fantastical realms beyond imagination.
+              A social experiment in self-discovery. Your choices reveal who you truly are. The world reacts to <span className="text-pink-400 font-semibold">you</span>.
             </p>
           </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {ADVENTURES.map((adventure, i) => {
-              const Icon = adventure.icon;
+            {EXPERIENCES.map((experience, i) => {
+              const Icon = experience.icon;
               return (
                 <motion.div
                   key={i}
@@ -331,11 +331,11 @@ export default function ChronoHome() {
                   transition={{ delay: i * 0.08 }}
                 >
                   <div className="group relative p-6 rounded-2xl bg-gradient-to-br from-white/5 to-transparent border border-white/10 hover:border-pink-500/30 transition-all duration-300 hover:bg-white/[0.03]">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${adventure.color} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${experience.color} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
                       <Icon className="w-6 h-6 text-white" />
                     </div>
-                    <h3 className="text-lg font-bold text-white mb-2">{adventure.title}</h3>
-                    <p className="text-white/60 text-sm">{adventure.desc}</p>
+                    <h3 className="text-lg font-bold text-white mb-2">{experience.title}</h3>
+                    <p className="text-white/60 text-sm">{experience.desc}</p>
                   </div>
                 </motion.div>
               );
@@ -351,7 +351,7 @@ export default function ChronoHome() {
             <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-cyan-500/10 border border-white/10">
               <Sparkles className="w-5 h-5 text-pink-400" />
               <span className="text-white/80 text-sm">
-                Living world by day. <span className="text-pink-400 font-semibold">Epic adventure</span> whenever you choose.
+                A living world 24/7. <span className="text-pink-400 font-semibold">Your parallel self</span> shapes history.
               </span>
               <Sparkles className="w-5 h-5 text-cyan-400" />
             </div>

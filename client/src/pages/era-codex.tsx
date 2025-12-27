@@ -43,13 +43,13 @@ const ERAS: Era[] = [
     img: stoneAgeImg,
     icon: Map,
     color: "from-amber-600 to-orange-700",
-    description: "Where every journey begins. Primitive tribes struggle for survival against megafauna and the elements. Master fire, craft basic tools, and unite the first clans.",
+    description: "Humanity's earliest chapter. Primitive tribes struggle for survival against megafauna and the elements. Master fire, craft basic tools, and shape the dawn of civilization.",
     mechanics: ["Survival crafting", "Tribal politics", "Beast taming", "Cave exploration"],
     resources: ["Flint", "Hide", "Bone", "Sacred herbs"],
     classes: ["Hunter", "Shaman", "Chieftain"],
     governance: "Tribal Councils",
     politics: ["Elder councils", "Ritual challenges", "Blood oaths", "Territory disputes"],
-    unlockRequirement: "Starting Era - Always Available",
+    unlockRequirement: "Time-Warp Available",
     isLocked: false,
   },
   {
@@ -60,14 +60,14 @@ const ERAS: Era[] = [
     img: medievalImg,
     icon: Sword,
     color: "from-violet-600 to-purple-700",
-    description: "Kingdoms rise and fall. Magic awakens in ancient bloodlines. Knights quest for glory while dark forces gather in shadow. Choose your allegiance wisely.",
-    mechanics: ["Kingdom building", "Magic systems", "Siege warfare", "Dragon hunting"],
+    description: "Kingdoms rise and fall. Magic awakens in ancient bloodlines. Navigate court intrigue while dark forces gather in shadow. Choose your allegiance wisely.",
+    mechanics: ["Political intrigue", "Ancient magic", "War and peace", "Mythical encounters"],
     resources: ["Gold", "Iron", "Mana crystals", "Dragon scales"],
     classes: ["Knight", "Mage", "Assassin", "Cleric"],
     governance: "Feudal Monarchy",
     politics: ["Royal succession", "Noble houses", "Holy orders", "Peasant revolts"],
-    unlockRequirement: "Complete Dawn Age: Chapter 1",
-    isLocked: true,
+    unlockRequirement: "Time-Warp Available",
+    isLocked: false,
   },
   {
     id: "industrial",
@@ -77,14 +77,14 @@ const ERAS: Era[] = [
     img: industrialImg,
     icon: Cog,
     color: "from-amber-500 to-yellow-600",
-    description: "Steam power transforms civilization. Clockwork automatons walk alongside humans. Airship pirates rule the skies while inventors race to unlock forbidden sciences.",
+    description: "Steam power transforms civilization. Clockwork automatons walk alongside humans. Airship pirates rule the skies while inventors pursue forbidden sciences.",
     mechanics: ["Invention crafting", "Airship combat", "Factory management", "Automaton companions"],
     resources: ["Coal", "Brass", "Aether", "Cogwheels"],
     classes: ["Engineer", "Aeronaut", "Investigator", "Automancer"],
     governance: "Industrial Parliament",
     politics: ["Labor unions", "Trade wars", "Colonial powers", "Revolutionary cells"],
-    unlockRequirement: "Reach Level 20 in Age of Crowns",
-    isLocked: true,
+    unlockRequirement: "Time-Warp Available",
+    isLocked: false,
   },
   {
     id: "cyber",
@@ -95,13 +95,13 @@ const ERAS: Era[] = [
     icon: Cpu,
     color: "from-cyan-500 to-blue-600",
     description: "Megacorporations rule the sprawl. Hack the grid, upgrade your chrome, and survive the digital underground. The line between human and machine blurs.",
-    mechanics: ["Hacking minigames", "Cybernetic upgrades", "Street racing", "Corporate espionage"],
+    mechanics: ["Digital frontier", "Human enhancement", "Street culture", "Corporate power"],
     resources: ["Credits", "Neurolink chips", "Synthetic blood", "Data shards"],
     classes: ["Netrunner", "Street Samurai", "Techie", "Fixer"],
     governance: "Corporate Oligarchy",
     politics: ["Megacorp boards", "Street gangs", "Underground resistance", "AI rights movement"],
-    unlockRequirement: "Acquire 3 Chrono Keys",
-    isLocked: true,
+    unlockRequirement: "Time-Warp Available",
+    isLocked: false,
   },
   {
     id: "space",
@@ -117,8 +117,8 @@ const ERAS: Era[] = [
     classes: ["Commander", "Xenobiologist", "Pilot", "Psionic"],
     governance: "Galactic Federation",
     politics: ["Interstellar treaties", "Alien diplomacy", "Colony independence", "Fleet admiralty"],
-    unlockRequirement: "Unite 5 Factions Across Eras",
-    isLocked: true,
+    unlockRequirement: "Time-Warp Available",
+    isLocked: false,
   },
   {
     id: "quantum",
@@ -129,13 +129,13 @@ const ERAS: Era[] = [
     icon: Atom,
     color: "from-pink-500 to-purple-600",
     description: "Reality itself becomes malleable. Transcend physical form, manipulate probability, and explore dimensions beyond comprehension. The final frontier is consciousness itself.",
-    mechanics: ["Reality manipulation", "Dimensional travel", "Probability crafting", "Cosmic entities"],
+    mechanics: ["Reality beyond limits", "Dimensional existence", "Probability flows", "Cosmic awareness"],
     resources: ["Quantum flux", "Thought essence", "Void fragments", "Pure potential"],
     classes: ["Architect", "Oracle", "Void Walker", "Ascended"],
     governance: "Collective Consciousness",
     politics: ["Reality councils", "Dimensional accords", "Thought wars", "Existence debates"],
-    unlockRequirement: "Master All Previous Eras",
-    isLocked: true,
+    unlockRequirement: "Time-Warp Available",
+    isLocked: false,
   },
 ];
 
@@ -311,11 +311,11 @@ export default function EraCodex() {
         <section className="px-4 py-10 bg-gradient-to-b from-black to-purple-950/20">
           <div className="max-w-6xl mx-auto">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-              {/* Mechanics */}
+              {/* Era Experiences */}
               <GlassCard className="p-5">
                 <div className="flex items-center gap-2 mb-4">
                   <Cog className="w-5 h-5 text-cyan-400" />
-                  <h3 className="font-bold">Core Mechanics</h3>
+                  <h3 className="font-bold">Era Experiences</h3>
                 </div>
                 <ul className="space-y-2">
                   {era.mechanics.map((m, i) => (
@@ -327,11 +327,11 @@ export default function EraCodex() {
                 </ul>
               </GlassCard>
 
-              {/* Resources */}
+              {/* Era Elements */}
               <GlassCard className="p-5">
                 <div className="flex items-center gap-2 mb-4">
                   <Star className="w-5 h-5 text-amber-400" />
-                  <h3 className="font-bold">Resources</h3>
+                  <h3 className="font-bold">Era Elements</h3>
                 </div>
                 <ul className="space-y-2">
                   {era.resources.map((r, i) => (
@@ -343,11 +343,11 @@ export default function EraCodex() {
                 </ul>
               </GlassCard>
 
-              {/* Classes */}
+              {/* Life Paths */}
               <GlassCard className="p-5">
                 <div className="flex items-center gap-2 mb-4">
                   <Users className="w-5 h-5 text-purple-400" />
-                  <h3 className="font-bold">Character Classes</h3>
+                  <h3 className="font-bold">Life Paths</h3>
                 </div>
                 <ul className="space-y-2">
                   {era.classes.map((c, i) => (
@@ -459,8 +459,8 @@ export default function EraCodex() {
               </Badge>
               <h2 className="text-3xl font-display font-bold mb-4">A World That Breathes</h2>
               <p className="text-gray-400 max-w-2xl mx-auto">
-                This isn't just a game with quests. It's a living microcosm of civilization itself - 
-                with all its drama, politics, and pursuit of peace.
+                This isn't a scripted experience. It's a living microcosm of civilization itself - 
+                with all its drama, politics, and pursuit of peace. The world evolves with or without you.
               </p>
             </div>
 
@@ -515,8 +515,8 @@ export default function EraCodex() {
               </div>
               <h2 className="text-2xl font-display font-bold mb-4">Chrono Keys</h2>
               <p className="text-gray-400 mb-6">
-                Legendary achievements that unlock passage through time. 
-                Earn them by mastering each era, and carry your legacy across all of history.
+                Achievements that grant passage through time. 
+                Earn them through your choices and actions, carrying your legacy across all of history.
               </p>
               <div className="grid grid-cols-3 gap-4 mb-6">
                 <div className="bg-black/30 rounded-lg p-3">

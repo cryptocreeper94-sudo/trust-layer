@@ -31,8 +31,16 @@ The design adheres to a "Premium UI Protocol" featuring:
 - **Multi-PWA**: Host-based routing for various ecosystem domains.
 - **DeFi Features**: Testnet Faucet, AMM-style DEX/Token Swap, NFT Marketplace & Gallery, Portfolio Dashboard, Transaction History, Token Launchpad, Liquidity Pools, NFT Creator Tool, Price Charts (Recharts), Webhook/Events API, Liquid Staking (stDWC).
 - **Cross-Chain Bridge**: Lock & mint mechanism (DWC ↔ wDWC) for Ethereum Sepolia and Solana Devnet, utilizing UUPS Proxy for Ethereum and BPF Loader for Solana.
-- **DarkWave Chronicles (Flagship Game)**: Player-as-prime-hero, living worlds, impactful choices, progression without grind. Messaging focuses on "missions," "campaigns," and "legend-building." Incorporates "Many Lenses Design" and a planned AI engine with a 5-Axis Emotion System and Belief System Layer.
-- **Chronicles Personality AI System**: Proprietary system for "Parallel Self" experience, learning from player choices, beliefs, and emotional responses. Features a 5-Axis Emotion System (Courage/Fear, Hope/Despair, Trust/Suspicion, Passion/Apathy, Wisdom/Recklessness). Emphasizes no moral alignment, archetypes, or predetermined categories.
+- **DarkWave Chronicles (Parallel Life Experience)**: NOT a traditional RPG. A revolutionary social experiment and parallel life simulation where you experience yourself as YOU in different eras of history and beyond. Core philosophy:
+  - **Parallel Self Mirror**: Chronicles holds a mirror to who you truly are. Your choices reveal your character - bad choices lead to hardship, good choices to prosperity (but not always, just like real life).
+  - **Quantum Leap Freedom**: Start in ANY era you choose. No forced progression, no unlocking. Time-warp between eras based on achievements, permanently or temporarily.
+  - **Living Persistent World**: The world continues 24/7 whether you're there or not. Other players affect the same world. Your actions ripple through time.
+  - **Belief System Integration**: Your faith, deities, atheism, agnosticism - whatever shapes you in real life shapes your experience. No moral labels, no "good vs evil" paths.
+  - **Emotion-Driven AI**: The world and its inhabitants react based on genuine human emotion patterns, not scripted responses. The AI learns from your choices, beliefs, and emotional responses.
+  - **"The Veil is Lifting" Theme**: Truth revelation, self-discovery. Missions may involve awakening others, uncovering hidden truths, seeing reality clearly.
+  - **NEVER Use**: Levels, XP, skill trees, quests, character classes as fixed paths, "journey begins here," unlock requirements, linear progression language.
+  - **TRIGGER PHRASE**: "Let's revisit Chronicles" = Review all Chronicles philosophy and messaging to ensure alignment.
+- **Chronicles Personality AI System**: Proprietary "Parallel Self" system learning from player choices, beliefs, and emotional responses. Features a 5-Axis Emotion System (Courage/Fear, Hope/Despair, Trust/Suspicion, Passion/Apathy, Wisdom/Recklessness). NO moral alignment, NO archetypes, NO predetermined categories. You are always YOU.
 - **Credits System**: Manages costs for AI chat, scenario generation, voice cloning, and personality summaries.
 - **Voice Cloning Technology**: Allows players' parallel selves to speak with their actual voice. Uses Web Audio API for recording and integrates with external APIs for synthesis.
 - **Owner Admin Portal**: Secure portal (`/owner-admin`) for system administrators with `OWNER_SECRET` authentication, rate limiting, and lockout mechanisms.
