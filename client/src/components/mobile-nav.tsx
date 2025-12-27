@@ -288,12 +288,12 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
                   data-testid={`featured-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                   style={{
                     position: 'relative',
-                    padding: '16px',
+                    padding: '12px',
                     borderRadius: '16px',
                     border: isActive ? '2px solid rgba(168, 85, 247, 0.6)' : '1px solid rgba(255, 255, 255, 0.2)',
                     overflow: 'hidden',
                     cursor: 'pointer',
-                    height: '88px',
+                    height: '80px',
                     boxSizing: 'border-box',
                     width: '100%',
                     maxWidth: '100%',
@@ -323,34 +323,38 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
                     background: item.overlayGradient,
                     pointerEvents: 'none'
                   }} />
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', position: 'relative', zIndex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', position: 'relative', zIndex: 1, width: '100%' }}>
                     <div style={{
-                      width: '44px',
-                      height: '44px',
-                      borderRadius: '12px',
+                      width: '40px',
+                      height: '40px',
+                      minWidth: '40px',
+                      borderRadius: '10px',
                       background: `linear-gradient(135deg, ${item.iconGradient})`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
                       backdropFilter: 'blur(8px)',
+                      flexShrink: 0,
                     }}>
-                      <Icon style={{ width: '22px', height: '22px', color: '#ffffff' }} />
+                      <Icon style={{ width: '20px', height: '20px', color: '#ffffff' }} />
                     </div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
-                        <span style={{ fontWeight: 600, fontSize: '14px', color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{item.label}</span>
+                    <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px', flexWrap: 'wrap' }}>
+                        <span style={{ fontWeight: 600, fontSize: '13px', color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{item.label}</span>
                         <Badge className={`text-[9px] px-1.5 py-0 ${item.badgeClass}`}>
                           {item.badge}
                         </Badge>
                       </div>
-                      <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.8)', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>{item.description}</span>
+                      <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.8)', textShadow: '0 1px 2px rgba(0,0,0,0.5)', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.description}</span>
                     </div>
-                    {item.external ? (
-                      <ArrowUpRight style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.6)' }} />
-                    ) : (
-                      <Zap style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.6)' }} />
-                    )}
+                    <div style={{ flexShrink: 0 }}>
+                      {item.external ? (
+                        <ArrowUpRight style={{ width: '14px', height: '14px', color: 'rgba(255,255,255,0.6)' }} />
+                      ) : (
+                        <Zap style={{ width: '14px', height: '14px', color: 'rgba(255,255,255,0.6)' }} />
+                      )}
+                    </div>
                   </div>
                 </div>
               );
