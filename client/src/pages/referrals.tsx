@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowLeft, Users } from "lucide-react";
+import { ArrowLeft, Users, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/footer";
 import { ReferralTracker } from "@/components/referral-tracker";
+import { AirdropDashboard } from "@/components/airdrop-dashboard";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 export default function Referrals() {
@@ -44,21 +46,46 @@ export default function Referrals() {
                 <Users className="w-5 h-5 text-purple-400" />
               </motion.div>
               <h1 className="text-2xl md:text-3xl font-display font-bold">
-                Referral Program
+                Rewards & Referrals
               </h1>
             </div>
             <p className="text-xs text-muted-foreground">
-              Invite friends and earn rewards together
+              Earn DWC tokens and exclusive rewards
             </p>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <ReferralTracker />
-          </motion.div>
+          <Tabs defaultValue="airdrop" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger value="airdrop" className="flex items-center gap-2" data-testid="tab-airdrop">
+                <Coins className="w-4 h-4" />
+                Airdrop
+              </TabsTrigger>
+              <TabsTrigger value="referrals" className="flex items-center gap-2" data-testid="tab-referrals">
+                <Users className="w-4 h-4" />
+                Referrals
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="airdrop">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <AirdropDashboard />
+              </motion.div>
+            </TabsContent>
+            
+            <TabsContent value="referrals">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <ReferralTracker />
+              </motion.div>
+            </TabsContent>
+          </Tabs>
         </div>
       </main>
 
