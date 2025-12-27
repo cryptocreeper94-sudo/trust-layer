@@ -1,0 +1,1196 @@
+================================================================================
+         PULSE API INTEGRATION - DARKWAVE COMMUNITY HUB WALLET BOT
+                    Complete Technical Documentation
+================================================================================
+
+================================================================================
+                            SECTION 1: OVERVIEW
+================================================================================
+
+This documentation provides everything needed to integrate the DWCH Wallet Bot
+with Pulse's AI prediction system, StrikeAgent trading, and the Quant 
+autonomous trading system.
+
+CAPABILITIES:
+- Fetch real-time AI predictions and signals
+- Analyze tokens across 6 chains (Solana, Ethereum, Base, Polygon, Arbitrum, BSC)
+- Execute snipe trades with safety checks
+- Configure autonomous trading modes (Observer → Full Auto)
+- Receive webhook notifications for new signals
+- Track portfolio and P&L
+
+================================================================================
+                          SECTION 2: BASE URLS
+================================================================================
+
+PRODUCTION:
+  Public API:    https://pulse.darkwavestudios.io/api/v1/
+  Internal API:  https://pulse.darkwavestudios.io/api/
+  
+DEVELOPMENT:
+  Public API:    http://localhost:3002/api/v1/
+  Internal API:  http://localhost:5000/api/
+
+================================================================================
+                        SECTION 3: AUTHENTICATION
+================================================================================
+
+METHOD: API Key Header
+HEADER: X-Pulse-Api-Key
+
+KEY FORMATS:
+  Live Keys:  pk_live_xxxxxxxxxxxxxxxxxxxxxxxxx  (real data)
+  Test Keys:  pk_test_xxxxxxxxxxxxxxxxxxxxxxxxx  (mock data for dev)
+
+API KEY TIERS:
+┌────────────┬────────────┬─────────────┬──────────────────────────────────────┐
+│ Tier       │ Rate/min   │ Daily Limit │ Scopes                               │
+├────────────┼────────────┼─────────────┼──────────────────────────────────────┤
+│ Free       │ 60         │ 2,000       │ market:read, signals:read            │
+│ Pro        │ 600        │ 100,000     │ + predictions:read, accuracy:read,   │
+│            │            │             │   strikeagent:read                   │
+│ Enterprise │ 3,000      │ 1,000,000   │ + webhooks:write                     │
+└────────────┴────────────┴─────────────┴──────────────────────────────────────┘
+
+ERROR CODES:
+  MISSING_API_KEY      - No X-Pulse-Api-Key header provided
+  INVALID_API_KEY      - Key doesn't exist or is revoked
+  RATE_LIMIT_EXCEEDED  - Too many requests (wait for reset)
+  INSUFFICIENT_SCOPE   - Key tier doesn't have access to endpoint
+  UPGRADE_REQUIRED     - Feature requires Pro or Enterprise tier
+
+================================================================================
+                    SECTION 4: MARKET DATA ENDPOINTS
+================================================================================
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/v1/market-overview
+─────────────────────────────────────────────────────────────────────────────────
+Get global market data including Fear & Greed Index.
+
+Query Parameters:
+  category  - top | defi | meme | layer1 | layer2
+
+Headers:
+  X-Pulse-Api-Key: pk_live_xxx
+
+Response:
+{
+  "success": true,
+  "data": [
+    {
+      "id": "bitcoin",
+      "symbol": "btc",
+      "name": "Bitcoin",
+      "current_price": 45000,
+      "price_change_percentage_24h": 2.5,
+      "market_cap": 850000000000
+    }
+  ],
+  "meta": {
+    "category": "top",
+    "count": 20,
+    "environment": "live",
+    "timestamp": "2024-12-27T10:00:00Z"
+  }
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/v1/price/:symbol
+─────────────────────────────────────────────────────────────────────────────────
+Get current price for a specific symbol.
+
+Path Parameters:
+  symbol  - btc | eth | sol | etc.
+
+Response:
+{
+  "success": true,
+  "data": {
+    "bitcoin": {
+      "usd": 45000,
+      "usd_24h_change": 2.5
+    }
+  },
+  "meta": {
+    "symbol": "BTC",
+    "environment": "live",
+    "timestamp": "2024-12-27T10:00:00Z"
+  }
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/crypto/market-overview  (Internal API)
+─────────────────────────────────────────────────────────────────────────────────
+Get full market dashboard data including Fear & Greed and Altcoin Season Index.
+
+Response:
+{
+  "totalMarketCap": 3037298195161,
+  "totalMarketCapChange": -0.38,
+  "totalVolume": 110058347104,
+  "btcDominance": 57.55,
+  "ethDominance": 11.64,
+  "fearGreed": 20,
+  "fearGreedLabel": "Extreme Fear",
+  "altcoinSeason": 38,
+  "activeCryptocurrencies": 19070,
+  "markets": 1444,
+  "timestamp": 1766783697910
+}
+
+================================================================================
+                  SECTION 5: AI PREDICTION/SIGNAL ENDPOINTS
+================================================================================
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/v1/signals
+─────────────────────────────────────────────────────────────────────────────────
+Get latest AI-generated trading signals.
+
+Headers:
+  X-Pulse-Api-Key: pk_live_xxx
+
+Response:
+{
+  "success": true,
+  "data": [
+    {
+      "id": "pred_mjndepvc_e09f6dd9bbc63c82",
+      "ticker": "BTC",
+      "signal": "BUY",
+      "confidence": "0.85",
+      "priceAtPrediction": "45000",
+      "createdAt": "2024-12-27T10:00:00Z"
+    }
+  ],
+  "meta": {
+    "count": 20,
+    "environment": "live",
+    "timestamp": "2024-12-27T10:05:00Z"
+  }
+}
+
+SIGNAL TYPES:
+  STRONG_BUY  - Very bullish, high confidence
+  BUY         - Bullish
+  HOLD        - Neutral/Wait
+  SELL        - Bearish
+  STRONG_SELL - Very bearish, high confidence
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/v1/predictions/:symbol  (Pro+ Tier)
+─────────────────────────────────────────────────────────────────────────────────
+Get prediction history with outcomes for a specific symbol.
+
+Path Parameters:
+  symbol  - BTC | ETH | SOL | etc.
+
+Response:
+{
+  "success": true,
+  "data": [
+    {
+      "prediction_events": {
+        "id": "pred_abc123",
+        "ticker": "BTC",
+        "signal": "BUY",
+        "confidence": "0.85",
+        "priceAtPrediction": "45000",
+        "horizon": "24h",
+        "createdAt": "2024-12-27T10:00:00Z"
+      },
+      "prediction_outcomes": {
+        "isCorrect": true,
+        "priceAtOutcome": "47500",
+        "percentageChange": "5.5"
+      }
+    }
+  ],
+  "meta": {
+    "symbol": "BTC",
+    "count": 10,
+    "environment": "live",
+    "timestamp": "2024-12-27T10:05:00Z"
+  }
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/v1/accuracy
+─────────────────────────────────────────────────────────────────────────────────
+Get prediction accuracy statistics.
+
+Response:
+{
+  "success": true,
+  "data": [
+    {
+      "ticker": "BTC",
+      "signalType": "BUY",
+      "horizon": "24h",
+      "accuracy": 0.68,
+      "sampleCount": 150
+    },
+    {
+      "ticker": "SOL",
+      "signalType": "STRONG_BUY",
+      "horizon": "4h",
+      "accuracy": 0.71,
+      "sampleCount": 85
+    }
+  ],
+  "meta": {
+    "count": 50,
+    "environment": "live",
+    "timestamp": "2024-12-27T10:05:00Z"
+  }
+}
+
+================================================================================
+            SECTION 6: STRIKEAGENT / QUANT SYSTEM ENDPOINTS
+================================================================================
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/quant/signals
+─────────────────────────────────────────────────────────────────────────────────
+Get top StrikeAgent signals across multiple chains.
+
+Query Parameters:
+  chain     - solana | ethereum | base | polygon | arbitrum | bsc | all
+  category  - meme | trending | new | gainers
+  limit     - 1-100 (default: 20)
+
+Response:
+{
+  "signals": [
+    {
+      "id": "sig_mjnde123",
+      "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+      "tokenSymbol": "BONK",
+      "tokenName": "Bonk",
+      "chain": "solana",
+      "priceUsd": "0.00003",
+      "marketCapUsd": "2000000000",
+      "liquidityUsd": "5000000",
+      "compositeScore": 85,
+      "technicalScore": 80,
+      "safetyScore": 75,
+      "momentumScore": 90,
+      "reasoning": "Strong momentum with high volume, safe liquidity pool",
+      "rank": 1,
+      "category": "meme",
+      "dex": "raydium",
+      "createdAt": "2024-12-27T10:00:00Z"
+    }
+  ],
+  "chainDistribution": {
+    "solana": 15,
+    "ethereum": 5,
+    "base": 3,
+    "polygon": 2,
+    "arbitrum": 2,
+    "bsc": 1
+  },
+  "supportedChains": ["solana", "ethereum", "base", "polygon", "arbitrum", "bsc"],
+  "total": 28
+}
+
+SCORE RANGES:
+  90-100  A+ (Excellent)
+  80-89   A  (Very Good)
+  70-79   B  (Good)
+  60-69   C  (Fair)
+  50-59   D  (Poor)
+  0-49    F  (Avoid)
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/quant/metrics
+─────────────────────────────────────────────────────────────────────────────────
+Get Quant system performance metrics.
+
+Response:
+{
+  "totalScans": 15420,
+  "totalTokensAnalyzed": 284350,
+  "signalsGenerated": 1250,
+  "tradesExecuted": 89,
+  "winRate": "67.4",
+  "modelAccuracy": "64.2",
+  "recentMetrics": [
+    {
+      "date": "2024-12-27T00:00:00Z",
+      "scans": 520,
+      "tokens": 9840,
+      "signals": 42
+    }
+  ]
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/quant/trade-feed
+─────────────────────────────────────────────────────────────────────────────────
+Get recent Quant system trades.
+
+Response:
+{
+  "trades": [
+    {
+      "id": "trade_xyz123",
+      "type": "BUY",
+      "tokenSymbol": "BONK",
+      "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+      "priceUsd": "0.00003",
+      "amountSol": "0.5",
+      "pnlPercent": "15.2",
+      "pnlUsd": "8.50",
+      "executedAt": "2024-12-27T09:30:00Z",
+      "status": "completed"
+    }
+  ]
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/quant/chains
+─────────────────────────────────────────────────────────────────────────────────
+Get supported chains for multi-chain scanning.
+
+Response:
+{
+  "chains": [
+    { "id": "solana", "name": "Solana", "symbol": "SOL" },
+    { "id": "ethereum", "name": "Ethereum", "symbol": "ETH" },
+    { "id": "base", "name": "Base", "symbol": "ETH" },
+    { "id": "polygon", "name": "Polygon", "symbol": "MATIC" },
+    { "id": "arbitrum", "name": "Arbitrum", "symbol": "ETH" },
+    { "id": "bsc", "name": "BNB Chain", "symbol": "BNB" }
+  ]
+}
+
+================================================================================
+              SECTION 7: TOKEN ANALYSIS & SNIPING ENDPOINTS
+================================================================================
+
+─────────────────────────────────────────────────────────────────────────────────
+POST /api/sniper/analyze-token
+─────────────────────────────────────────────────────────────────────────────────
+Analyze a token for safety, momentum, and AI recommendation.
+
+Request Body:
+{
+  "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+  "userId": "dwch_user_123"
+}
+
+Response:
+{
+  "token": {
+    "address": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+    "symbol": "BONK",
+    "name": "Bonk",
+    "priceUsd": "0.00003",
+    "priceSol": "0.00000015",
+    "liquidityUsd": 5000000,
+    "marketCapUsd": 2000000000,
+    "dex": "raydium"
+  },
+  "safetyMetrics": {
+    "score": 75,
+    "grade": "B",
+    "isHoneypot": false,
+    "hasMintAuthority": false,
+    "hasFreezeAuthority": false,
+    "risks": ["Large holder concentration"]
+  },
+  "movementMetrics": {
+    "priceChange5m": 2.5,
+    "priceChange1h": 8.3,
+    "priceChange24h": 25.1,
+    "volumeUsd24h": 15000000,
+    "volumeChange": 150
+  },
+  "aiAnalysis": {
+    "recommendation": "SNIPE",
+    "score": 85,
+    "reasoning": "Strong safety profile with high momentum signals"
+  }
+}
+
+AI RECOMMENDATIONS:
+  SNIPE   - Strong buy signal, execute immediately
+  WATCH   - Promising but wait for better entry
+  AVOID   - High risk, do not trade
+
+─────────────────────────────────────────────────────────────────────────────────
+POST /api/sniper/discover
+─────────────────────────────────────────────────────────────────────────────────
+Discover new tokens matching filter criteria.
+
+Request Body:
+{
+  "userId": "dwch_user_123",
+  "config": {
+    "minLiquidityUsd": 5000,
+    "minMarketCapUsd": 10000,
+    "maxMarketCapUsd": 50000000,
+    "minVolumeUsd": 1000,
+    "maxTokenAgeMinutes": 60,
+    "minSafetyScore": 60
+  }
+}
+
+Response:
+{
+  "tokens": [
+    {
+      "address": "xxx",
+      "symbol": "NEWTOKEN",
+      "name": "New Token",
+      "priceUsd": 0.001,
+      "priceSol": 0.000005,
+      "marketCapUsd": 500000,
+      "liquidityUsd": 25000,
+      "ageMinutes": 30,
+      "dex": "raydium",
+      "aiRecommendation": "WATCH",
+      "aiScore": 72,
+      "aiReasoning": "New token with decent liquidity, monitor closely",
+      "safetyMetrics": { ... },
+      "movementMetrics": { ... }
+    }
+  ],
+  "count": 5
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+POST /api/sniper/quote
+─────────────────────────────────────────────────────────────────────────────────
+Get a trade quote before executing.
+
+Request Body:
+{
+  "tokenMint": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+  "solAmount": "0.5",
+  "slippagePercent": 5,
+  "action": "buy"
+}
+
+Response:
+{
+  "inputAmount": "0.5",
+  "outputAmount": "16666.67",
+  "expectedPrice": "0.00003",
+  "minimumReceived": "15833.34",
+  "priceImpact": "0.25",
+  "fee": "0.0025"
+}
+
+================================================================================
+                   SECTION 8: ORDER MANAGEMENT ENDPOINTS
+================================================================================
+
+─────────────────────────────────────────────────────────────────────────────────
+POST /api/sniper/orders
+─────────────────────────────────────────────────────────────────────────────────
+Create a snipe order.
+
+Request Body:
+{
+  "userId": "dwch_user_123",
+  "walletId": "wallet_abc",
+  "orderType": "auto_snipe",
+  "targetToken": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+  "config": {
+    "buyAmountSol": 0.5,
+    "slippagePercent": 5,
+    "takeProfitPercent": 50,
+    "stopLossPercent": 20,
+    "autoBuy": true,
+    "autoSell": true
+  }
+}
+
+ORDER TYPES:
+  auto_snipe  - Automatically execute when conditions met
+  manual      - Prepare order, wait for manual trigger
+  limit       - Execute at specific price
+
+Response:
+{
+  "success": true,
+  "order": {
+    "id": "order_xyz123",
+    "userId": "dwch_user_123",
+    "status": "active",
+    "targetToken": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
+    "config": { ... },
+    "createdAt": "2024-12-27T10:00:00Z"
+  }
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/sniper/orders?userId=xxx
+─────────────────────────────────────────────────────────────────────────────────
+Get all active orders for a user.
+
+Response:
+{
+  "orders": [
+    {
+      "id": "order_xyz123",
+      "status": "active",
+      "orderType": "auto_snipe",
+      "targetToken": "xxx",
+      "config": { ... },
+      "createdAt": "2024-12-27T10:00:00Z"
+    }
+  ]
+}
+
+ORDER STATUSES:
+  active     - Order is live and monitoring
+  paused     - Order temporarily paused
+  filled     - Order executed successfully
+  cancelled  - Order cancelled
+  expired    - Order expired without fill
+
+─────────────────────────────────────────────────────────────────────────────────
+POST /api/sniper/orders/:id/pause
+POST /api/sniper/orders/:id/resume
+POST /api/sniper/orders/:id/cancel
+─────────────────────────────────────────────────────────────────────────────────
+Manage order lifecycle.
+
+Request Body:
+{
+  "userId": "dwch_user_123",
+  "reason": "User requested cancellation"  // For cancel only
+}
+
+Response:
+{
+  "success": true
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/sniper/executions?userId=xxx&limit=50
+─────────────────────────────────────────────────────────────────────────────────
+Get execution history.
+
+Response:
+{
+  "executions": [
+    {
+      "id": "exec_abc123",
+      "orderId": "order_xyz123",
+      "tokenAddress": "xxx",
+      "tokenSymbol": "BONK",
+      "action": "BUY",
+      "amountSol": "0.5",
+      "amountTokens": "16666.67",
+      "priceUsd": "0.00003",
+      "txSignature": "5xyzabc...",
+      "status": "confirmed",
+      "executedAt": "2024-12-27T10:05:00Z"
+    }
+  ]
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/sniper/positions?userId=xxx
+─────────────────────────────────────────────────────────────────────────────────
+Get open positions.
+
+Response:
+{
+  "positions": [
+    {
+      "id": "pos_abc123",
+      "tokenAddress": "xxx",
+      "tokenSymbol": "BONK",
+      "entryPrice": "0.00003",
+      "currentPrice": "0.000035",
+      "quantity": "16666.67",
+      "pnlPercent": "16.67",
+      "pnlUsd": "8.33",
+      "openedAt": "2024-12-27T10:05:00Z"
+    }
+  ]
+}
+
+================================================================================
+              SECTION 9: AUTONOMOUS TRADING CONFIGURATION
+================================================================================
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/trading/config?userId=xxx
+─────────────────────────────────────────────────────────────────────────────────
+Get user's autonomous trading profile.
+
+Response:
+{
+  "success": true,
+  "profile": {
+    "userId": "dwch_user_123",
+    "mode": "approval",
+    "confidenceThreshold": 75,
+    "accuracyThreshold": 60,
+    "maxPositionSizeSol": "0.5",
+    "maxOpenPositions": 5,
+    "dailyLossLimitSol": "1.0",
+    "preferredChains": ["solana", "base"],
+    "enabled": true,
+    "createdAt": "2024-12-20T00:00:00Z",
+    "updatedAt": "2024-12-27T10:00:00Z"
+  }
+}
+
+TRADING MODES:
+  observer   - AI watches and learns, no trading
+  approval   - AI suggests trades, user approves each one
+  semi_auto  - AI executes high-confidence trades, asks for low-confidence
+  full_auto  - AI executes all qualifying trades automatically
+
+─────────────────────────────────────────────────────────────────────────────────
+PUT /api/trading/config
+─────────────────────────────────────────────────────────────────────────────────
+Update trading configuration.
+
+Request Body:
+{
+  "userId": "dwch_user_123",
+  "mode": "semi_auto",
+  "confidenceThreshold": 80,
+  "maxPositionSizeSol": "1.0",
+  "maxOpenPositions": 3,
+  "dailyLossLimitSol": "2.0",
+  "preferredChains": ["solana"]
+}
+
+Response:
+{
+  "success": true,
+  "profile": { ... updated profile ... }
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+PUT /api/trading/mode
+─────────────────────────────────────────────────────────────────────────────────
+Quick mode change.
+
+Request Body:
+{
+  "userId": "dwch_user_123",
+  "mode": "full_auto"
+}
+
+Response:
+{
+  "success": true,
+  "profile": { ... }
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/trading/suggestions?userId=xxx&status=pending
+─────────────────────────────────────────────────────────────────────────────────
+Get pending trade suggestions (for approval mode).
+
+Query Parameters:
+  userId  - Required
+  status  - pending | approved | rejected | expired | all
+
+Response:
+{
+  "success": true,
+  "suggestions": [
+    {
+      "id": "sug_abc123",
+      "userId": "dwch_user_123",
+      "tokenAddress": "xxx",
+      "tokenSymbol": "BONK",
+      "chain": "solana",
+      "action": "BUY",
+      "suggestedAmount": "0.5",
+      "confidence": 85,
+      "reasoning": "High momentum detected with safe profile, RSI oversold",
+      "signalSource": "quant_scanner",
+      "expiresAt": "2024-12-27T11:00:00Z",
+      "status": "pending",
+      "createdAt": "2024-12-27T10:00:00Z"
+    }
+  ],
+  "count": 1
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+POST /api/trading/suggestions/:id/approve
+POST /api/trading/suggestions/:id/reject
+─────────────────────────────────────────────────────────────────────────────────
+Approve or reject a trade suggestion.
+
+Request Body (reject only):
+{
+  "userId": "dwch_user_123",
+  "reason": "Market conditions unfavorable"
+}
+
+Response:
+{
+  "success": true,
+  "suggestion": { ... updated suggestion ... }
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+POST /api/trading/suggestions/:id/execute
+─────────────────────────────────────────────────────────────────────────────────
+Execute an approved suggestion.
+
+Request Body:
+{
+  "userId": "dwch_user_123",
+  "exchangeConnectionId": "conn_xyz"  // Optional: linked exchange
+}
+
+Response:
+{
+  "success": true,
+  "execution": {
+    "id": "exec_abc123",
+    "suggestionId": "sug_abc123",
+    "status": "submitted",
+    "txSignature": "5xyzabc...",
+    "executedAt": "2024-12-27T10:05:00Z"
+  }
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/trading/history?userId=xxx&limit=50
+─────────────────────────────────────────────────────────────────────────────────
+Get autonomous trade history.
+
+Response:
+{
+  "success": true,
+  "trades": [
+    {
+      "id": "trade_abc123",
+      "tokenSymbol": "BONK",
+      "action": "BUY",
+      "amount": "0.5",
+      "priceUsd": "0.00003",
+      "pnlPercent": "15.2",
+      "pnlUsd": "8.50",
+      "mode": "semi_auto",
+      "executedAt": "2024-12-27T09:30:00Z"
+    }
+  ],
+  "count": 25
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/trading/open?userId=xxx
+─────────────────────────────────────────────────────────────────────────────────
+Get currently open autonomous trades.
+
+Response:
+{
+  "success": true,
+  "positions": [ ... ],
+  "count": 3
+}
+
+================================================================================
+                     SECTION 10: WALLET MANAGEMENT
+================================================================================
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/sniper/wallets?userId=xxx
+─────────────────────────────────────────────────────────────────────────────────
+Get user's linked wallets.
+
+Response:
+{
+  "wallets": [
+    {
+      "id": "wallet_abc123",
+      "userId": "dwch_user_123",
+      "address": "DWCxxxxxxxxxxxxx",
+      "chain": "solana",
+      "nickname": "Trading Wallet",
+      "createdAt": "2024-12-20T00:00:00Z"
+    }
+  ]
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+POST /api/sniper/wallets
+─────────────────────────────────────────────────────────────────────────────────
+Link a wallet to a user.
+
+Request Body:
+{
+  "userId": "dwch_user_123",
+  "address": "DWCxxxxxxxxxxxxx",
+  "nickname": "My Trading Wallet"
+}
+
+Response:
+{
+  "success": true,
+  "wallet": {
+    "id": "wallet_abc123",
+    "userId": "dwch_user_123",
+    "address": "DWCxxxxxxxxxxxxx",
+    "chain": "solana",
+    "nickname": "My Trading Wallet",
+    "createdAt": "2024-12-27T10:00:00Z"
+  }
+}
+
+─────────────────────────────────────────────────────────────────────────────────
+GET /api/sniper/wallets/balance?address=xxx
+─────────────────────────────────────────────────────────────────────────────────
+Get wallet SOL balance.
+
+Response:
+{
+  "address": "DWCxxxxxxxxxxxxx",
+  "balance": "5.2500",
+  "balanceLamports": 5250000000
+}
+
+USER ID FORMAT FOR BOT:
+Use a consistent format to identify bot users:
+  dwch_<telegram_user_id>        - e.g., dwch_123456789
+  dwch_<discord_user_id>         - e.g., dwch_987654321
+  dwch_<wallet_address_short>    - e.g., dwch_DWCxxx
+
+================================================================================
+                        SECTION 11: WEBHOOKS
+================================================================================
+
+Enterprise tier can register webhooks for real-time notifications.
+
+─────────────────────────────────────────────────────────────────────────────────
+POST /api/webhooks/register (Enterprise Only)
+─────────────────────────────────────────────────────────────────────────────────
+Register a webhook endpoint.
+
+Headers:
+  X-Pulse-Api-Key: pk_live_xxx (Enterprise tier)
+
+Request Body:
+{
+  "url": "https://your-bot.darkwave.io/pulse-webhook",
+  "events": ["signal.new", "prediction.outcome", "trade.executed", "suggestion.created"],
+  "secret": "your_webhook_secret_for_hmac_verification"
+}
+
+WEBHOOK EVENTS:
+  signal.new           - New AI signal generated
+  prediction.outcome   - Prediction result determined
+  trade.executed       - Trade completed
+  suggestion.created   - New trade suggestion (for approval mode)
+  position.updated     - Position P&L changed significantly
+
+─────────────────────────────────────────────────────────────────────────────────
+WEBHOOK PAYLOAD FORMAT
+─────────────────────────────────────────────────────────────────────────────────
+
+All webhooks include:
+  - HMAC-SHA256 signature in X-Pulse-Signature header
+  - Timestamp in X-Pulse-Timestamp header
+
+Example Payload (signal.new):
+{
+  "event": "signal.new",
+  "timestamp": "2024-12-27T10:00:00Z",
+  "data": {
+    "id": "sig_xyz",
+    "ticker": "SOL",
+    "signal": "STRONG_BUY",
+    "confidence": 0.92,
+    "priceAtSignal": "98.50",
+    "chain": "solana",
+    "category": "trending"
+  }
+}
+
+Example Payload (suggestion.created):
+{
+  "event": "suggestion.created",
+  "timestamp": "2024-12-27T10:00:00Z",
+  "data": {
+    "id": "sug_abc123",
+    "userId": "dwch_user_123",
+    "tokenSymbol": "BONK",
+    "action": "BUY",
+    "confidence": 85,
+    "reasoning": "High momentum detected",
+    "expiresAt": "2024-12-27T11:00:00Z"
+  }
+}
+
+VERIFYING WEBHOOKS:
+const crypto = require('crypto');
+
+function verifyWebhook(payload, signature, secret, timestamp) {
+  const signedPayload = `${timestamp}.${JSON.stringify(payload)}`;
+  const expectedSig = crypto
+    .createHmac('sha256', secret)
+    .update(signedPayload)
+    .digest('hex');
+  return crypto.timingSafeEqual(
+    Buffer.from(signature),
+    Buffer.from(`sha256=${expectedSig}`)
+  );
+}
+
+================================================================================
+                     SECTION 12: ENVIRONMENT VARIABLES
+================================================================================
+
+Add these to your bot's secrets/environment:
+
+# Required
+PULSE_API_KEY=pk_live_xxxxxxxxxxxxxxxxxxxxxxxxx
+PULSE_API_BASE_URL=https://pulse.darkwavestudios.io
+
+# Optional - For development/testing
+PULSE_TEST_API_KEY=pk_test_xxxxxxxxxxxxxxxxxxxxxxxxx
+
+# For webhook verification
+PULSE_WEBHOOK_SECRET=your_webhook_secret_here
+
+================================================================================
+                      SECTION 13: NODE.JS SDK
+================================================================================
+
+// pulse-client.js - Complete SDK for DWCH Wallet Bot
+
+const axios = require('axios');
+const crypto = require('crypto');
+
+class PulseClient {
+  constructor(apiKey, baseUrl = 'https://pulse.darkwavestudios.io') {
+    this.apiKey = apiKey;
+    this.baseUrl = baseUrl;
+    this.client = axios.create({
+      baseURL: baseUrl,
+      headers: { 'X-Pulse-Api-Key': apiKey },
+      timeout: 30000
+    });
+  }
+
+  // ==================== MARKET DATA ====================
+
+  async getMarketOverview(category = 'top') {
+    const { data } = await this.client.get('/api/v1/market-overview', {
+      params: { category }
+    });
+    return data;
+  }
+
+  async getPrice(symbol) {
+    const { data } = await this.client.get(`/api/v1/price/${symbol}`);
+    return data;
+  }
+
+  async getGlobalMetrics() {
+    const { data } = await this.client.get('/api/crypto/market-overview');
+    return data;
+  }
+
+  // ==================== SIGNALS & PREDICTIONS ====================
+
+  async getSignals() {
+    const { data } = await this.client.get('/api/v1/signals');
+    return data;
+  }
+
+  async getPredictions(symbol) {
+    const { data } = await this.client.get(`/api/v1/predictions/${symbol}`);
+    return data;
+  }
+
+  async getAccuracy() {
+    const { data } = await this.client.get('/api/v1/accuracy');
+    return data;
+  }
+
+  // ==================== STRIKEAGENT / QUANT ====================
+
+  async getStrikeAgentSignals(chain = 'all', category = null, limit = 20) {
+    const params = { chain, limit };
+    if (category) params.category = category;
+    const { data } = await this.client.get('/api/quant/signals', { params });
+    return data;
+  }
+
+  async getQuantMetrics() {
+    const { data } = await this.client.get('/api/quant/metrics');
+    return data;
+  }
+
+  async getQuantTradeFeed() {
+    const { data } = await this.client.get('/api/quant/trade-feed');
+    return data;
+  }
+
+  async getSupportedChains() {
+    const { data } = await this.client.get('/api/quant/chains');
+    return data;
+  }
+
+  // ==================== TOKEN ANALYSIS ====================
+
+  async analyzeToken(tokenAddress, userId) {
+    const { data } = await this.client.post('/api/sniper/analyze-token', {
+      tokenAddress,
+      userId
+    });
+    return data;
+  }
+
+  async discoverTokens(userId, config = {}) {
+    const { data } = await this.client.post('/api/sniper/discover', {
+      userId,
+      config
+    });
+    return data;
+  }
+
+  async getQuote(tokenMint, solAmount, action = 'buy', slippage = 5) {
+    const { data } = await this.client.post('/api/sniper/quote', {
+      tokenMint,
+      solAmount: String(solAmount),
+      slippagePercent: slippage,
+      action
+    });
+    return data;
+  }
+
+  // ==================== ORDER MANAGEMENT ====================
+
+  async createOrder(userId, walletId, targetToken, config, orderType = 'auto_snipe') {
+    const { data } = await this.client.post('/api/sniper/orders', {
+      userId,
+      walletId,
+      targetToken,
+      orderType,
+      config
+    });
+    return data;
+  }
+
+  async getOrders(userId) {
+    const { data } = await this.client.get('/api/sniper/orders', {
+      params: { userId }
+    });
+    return data;
+  }
+
+  async pauseOrder(orderId, userId) {
+    const { data } = await this.client.post(`/api/sniper/orders/${orderId}/pause`, { userId });
+    return data;
+  }
+
+  async resumeOrder(orderId, userId) {
+    const { data } = await this.client.post(`/api/sniper/orders/${orderId}/resume`, { userId });
+    return data;
+  }
+
+  async cancelOrder(orderId, userId, reason = null) {
+    const { data } = await this.client.post(`/api/sniper/orders/${orderId}/cancel`, {
+      userId,
+      reason
+    });
+    return data;
+  }
+
+  async getExecutions(userId, limit = 50) {
+    const { data } = await this.client.get('/api/sniper/executions', {
+      params: { userId, limit }
+    });
+    return data;
+  }
+
+  async getPositions(userId) {
+    const { data } = await this.client.get('/api/sniper/positions', {
+      params: { userId }
+    });
+    return data;
+  }
+
+  // ==================== AUTONOMOUS TRADING ====================
+
+  async getTradingConfig(userId) {
+    const { data } = await this.client.get('/api/trading/config', {
+      params: { userId }
+    });
+    return data;
+  }
+
+  async updateTradingConfig(userId, updates) {
+    const { data } = await this.client.put('/api/trading/config', {
+      userId,
+      ...updates
+    });
+    return data;
+  }
+
+  async setTradingMode(userId, mode) {
+    const { data } = await this.client.put('/api/trading/mode', {
+      userId,
+      mode
+    });
+    return data;
+  }
+
+  async getSuggestions(userId, status = 'pending') {
+    const { data } = await this.client.get('/api/trading/suggestions', {
+      params: { userId, status }
+    });
+    return data;
+  }
+
+  async approveSuggestion(suggestionId, userId) {
+    const { data } = await this.client.post(
+      `/api/trading/suggestions/${suggestionId}/approve`,
+      { userId }
+    );
+    return data;
+  }
+
+  async rejectSuggestion(suggestionId, userId, reason = null) {
+    const { data } = await this.client.post(
+      `/api/trading/suggestions/${suggestionId}/reject`,
+      { userId, reason }
+    );
+    return data;
+  }
+
+  async executeSuggestion(suggestionId, userId, exchangeConnectionId = null) {
+    const { data } = await this.client.post(
+      `/api/trading/suggestions/${suggestionId}/execute`,
+      { userId, exchangeConnectionId }
+    );
+    return data;
+  }
+
+  async getTradeHistory(userId, limit = 50) {
+    const { data } = await this.client.get('/api/trading/history', {
+      params: { userId, limit }
+    });
+    return data;
+  }
+
+  async getOpenTrades(userId) {
+    const { data } = await this.client.get('/api/trading/open', {
+      params: { userId }
+    });
+    return data;
+  }
+
+  // ==================== WALLET MANAGEMENT ==================== **...**
+
+_This response is too long to display in full._

@@ -28,6 +28,8 @@ import { referralService } from "./referral-service";
 import { payoutService, startPayoutScheduler } from "./payout-service";
 import { voiceService, VOICE_SAMPLE_PROMPTS } from "./voice-service";
 import { communityHubService } from "./community-hub-service";
+import { walletBotService } from "./wallet-bot-service";
+import { pulseClient } from "./pulse-client";
 
 const FaucetClaimRequestSchema = z.object({
   walletAddress: z.string().min(10, "Invalid wallet address").max(100),
@@ -225,8 +227,7 @@ export async function registerRoutes(
             
             // Process affiliate commission if user was referred
             try {
-              const host = metadata.host || "dwsc.io";
-              await referralService.processConversion(metadata.userId, amountCents, host as any);
+              await referralService.processConversion(metadata.userId, amountCents);
               
               // Mark commission eligible for payout after settlement
               await payoutService.markCommissionEligible(paymentId as string, amountCents);
@@ -242,8 +243,7 @@ export async function registerRoutes(
         // Process affiliate commission for presale purchases
         if (metadata.type === "presale" && metadata.userId) {
           try {
-            const host = metadata.host || "dwsc.io";
-            await referralService.processConversion(metadata.userId, amountCents, host as any);
+            await referralService.processConversion(metadata.userId, amountCents);
             await payoutService.markCommissionEligible(paymentId as string, amountCents);
             console.log(`[Stripe Webhook] Presale affiliate commission tracked for user ${metadata.userId}`);
           } catch (refErr) {
@@ -8222,14 +8222,24 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const { content, replyToId } = req.body;
       if (!content) return res.status(400).json({ error: "Message content required" });
       
+      const channelId = req.params.id;
+      
       const message = await communityHubService.sendMessage({
-        channelId: req.params.id,
+        channelId,
         userId,
         username,
         content,
         replyToId: replyToId || null,
         isBot: false,
       });
+      
+      // Process bot commands if message starts with /
+      if (content.startsWith("/")) {
+        const botResponse = await walletBotService.processMessage(content, userId, channelId);
+        if (botResponse) {
+          await walletBotService.sendBotMessage(channelId, botResponse);
+        }
+      }
       
       res.json({ success: true, message });
     } catch (error) {
@@ -8293,6 +8303,81 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error) {
       console.error("Bot message error:", error);
       res.status(500).json({ error: "Failed to send bot message" });
+    }
+  });
+
+  // Pulse API webhook for real-time signal notifications
+  app.post("/api/webhooks/pulse", async (req, res) => {
+    try {
+      const signature = req.headers["x-pulse-signature"] as string;
+      const timestamp = req.headers["x-pulse-timestamp"] as string;
+      
+      if (!signature || !timestamp) {
+        return res.status(400).json({ error: "Missing signature headers" });
+      }
+      
+      // Verify webhook signature
+      if (!walletBotService.verifyWebhook(req.body, signature, timestamp)) {
+        return res.status(401).json({ error: "Invalid signature" });
+      }
+      
+      const { event, data } = req.body;
+      console.log(`[Pulse Webhook] Event: ${event}`, data);
+      
+      // TODO: Route to appropriate community channels based on event type
+      // For now, just acknowledge the webhook
+      switch (event) {
+        case "signal.new":
+          console.log(`[Pulse] New signal: ${data.ticker} - ${data.signal} (${data.confidence}%)`);
+          break;
+        case "suggestion.created":
+          console.log(`[Pulse] New suggestion for user ${data.userId}: ${data.tokenSymbol}`);
+          break;
+        case "trade.executed":
+          console.log(`[Pulse] Trade executed: ${data.tokenSymbol} - ${data.action}`);
+          break;
+        case "prediction.outcome":
+          console.log(`[Pulse] Prediction ${data.id}: ${data.isCorrect ? "CORRECT" : "INCORRECT"}`);
+          break;
+      }
+      
+      res.status(200).json({ success: true });
+    } catch (error) {
+      console.error("Pulse webhook error:", error);
+      res.status(500).json({ error: "Webhook processing failed" });
+    }
+  });
+
+  // Pulse API proxy endpoints for frontend
+  app.get("/api/pulse/market", async (req, res) => {
+    try {
+      const data = await pulseClient.getMarketOverview();
+      res.json(data || { error: "Could not fetch market data" });
+    } catch (error) {
+      console.error("Pulse market error:", error);
+      res.status(500).json({ error: "Failed to fetch market data" });
+    }
+  });
+
+  app.get("/api/pulse/signals", async (req, res) => {
+    try {
+      const chain = (req.query.chain as string) || "all";
+      const limit = parseInt(req.query.limit as string) || 10;
+      const data = await pulseClient.getStrikeAgentSignals(chain, undefined, limit);
+      res.json(data);
+    } catch (error) {
+      console.error("Pulse signals error:", error);
+      res.status(500).json({ error: "Failed to fetch signals" });
+    }
+  });
+
+  app.get("/api/pulse/price/:symbol", async (req, res) => {
+    try {
+      const data = await pulseClient.getPrice(req.params.symbol);
+      res.json(data || { error: "Could not fetch price" });
+    } catch (error) {
+      console.error("Pulse price error:", error);
+      res.status(500).json({ error: "Failed to fetch price" });
     }
   });
 
