@@ -22,7 +22,6 @@ import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
 import { FirebaseLoginModal } from "@/components/firebase-login";
 import { useState, useRef } from "react";
 import { WalletButton } from "@/components/wallet-button";
-import { GenesisHallmarkSection } from "@/components/genesis-hallmark";
 import { HeaderTools } from "@/components/header-tools";
 import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.png";
 import medievalImg from "@assets/generated_images/medieval_fantasy_kingdom.png";
@@ -384,9 +383,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Genesis Hallmark Section */}
-      <GenesisHallmarkSection />
 
       {/* DarkWave Chronicles - Coming Soon */}
       <section className="py-16 px-4 relative overflow-hidden bg-gradient-to-b from-purple-950/20 via-black to-black">
