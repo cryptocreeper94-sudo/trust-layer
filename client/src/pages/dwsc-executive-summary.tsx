@@ -521,11 +521,25 @@ export default function DWSCExecutiveSummary() {
                   Contact for Investment
                 </a>
                 <Link 
-                  href="/doc-hub"
+                  href="/tokenomics"
                   className="px-6 py-3 bg-white/10 hover:bg-white/15 border border-white/20 rounded-lg text-white font-medium transition-colors"
-                  data-testid="link-whitepaper"
+                  data-testid="link-tokenomics"
                 >
-                  Read Whitepaper
+                  Tokenomics
+                </Link>
+                <Link 
+                  href="/competitive-analysis"
+                  className="px-6 py-3 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/30 rounded-lg text-amber-400 font-medium transition-colors"
+                  data-testid="link-competitive"
+                >
+                  Competitive Analysis
+                </Link>
+                <Link 
+                  href="/faq"
+                  className="px-6 py-3 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 rounded-lg text-purple-400 font-medium transition-colors"
+                  data-testid="link-faq"
+                >
+                  FAQ
                 </Link>
                 <Link 
                   href="/crowdfund"

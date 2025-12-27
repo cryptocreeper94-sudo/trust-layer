@@ -128,6 +128,9 @@ import PaperTrading from "@/pages/paper-trading";
 import Achievements from "@/pages/achievements";
 import Domains from "@/pages/domains";
 import PartnerPortal from "@/pages/partner-portal";
+import Tokenomics from "@/pages/tokenomics";
+import FAQ from "@/pages/faq";
+import CompetitiveAnalysis from "@/pages/competitive-analysis";
 import OwnerAdminPortal from "@/pages/owner-admin";
 import OwnerAnalytics from "@/pages/owner-admin/analytics";
 import OwnerSeoManager from "@/pages/owner-admin/seo";
@@ -245,6 +248,9 @@ function DWSCRouter() {
         <Route path="/developers/register" component={DevelopersRegister} />
         <Route path="/ecosystem" component={Ecosystem} />
         <Route path="/token" component={Token} />
+        <Route path="/tokenomics" component={Tokenomics} />
+        <Route path="/faq" component={FAQ} />
+        <Route path="/competitive-analysis" component={CompetitiveAnalysis} />
         <Route path="/explorer" component={Explorer} />
         <Route path="/doc-hub" component={DocHub} />
         <Route path="/executive-summary" component={DWSCExecutiveSummary} />

@@ -54,15 +54,20 @@ export default function Token() {
                 The fuel of the DarkWave Ecosystem. Not just a currency; it's the governance, security, and utility layer for the next generation of decentralized apps.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Link href="/doc-hub">
-                  <Button size="lg" className="h-11 px-6 bg-white text-black hover:bg-white/90 font-bold rounded-full text-sm" data-testid="button-whitepaper">
-                    Read Whitepaper
+              <div className="flex flex-wrap gap-3">
+                <Link href="/tokenomics">
+                  <Button size="lg" className="h-11 px-6 bg-white text-black hover:bg-white/90 font-bold rounded-full text-sm" data-testid="button-tokenomics">
+                    Full Tokenomics
                   </Button>
                 </Link>
                 <Link href="/executive-summary">
                   <Button size="lg" variant="outline" className="h-11 px-6 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 rounded-full text-sm" data-testid="button-exec-summary">
                     Executive Summary
+                  </Button>
+                </Link>
+                <Link href="/faq">
+                  <Button size="lg" variant="outline" className="h-11 px-6 border-purple-500/30 text-purple-400 hover:bg-purple-500/10 rounded-full text-sm" data-testid="button-faq">
+                    FAQ
                   </Button>
                 </Link>
               </div>
