@@ -226,6 +226,10 @@ class ReferralService {
       const commissionPercent = tier?.commissionPercent || 10;
       const commissionAmount = Math.floor(conversionValueCents * (commissionPercent / 100));
       
+      const DWC_LAUNCH_DATE = new Date("2026-02-14T00:00:00Z");
+      const isPreLaunch = new Date() < DWC_LAUNCH_DATE;
+      const distributionMode = isPreLaunch ? "airdrop" : "cash";
+      
       const updatedReferral = await storage.updateReferralStatus(referral.id, "converted", {
         conversionValue: conversionValueCents,
         commissionAmount,
@@ -239,21 +243,48 @@ class ReferralService {
         await storage.createReferralEvent({
           referralId: referral.id,
           eventType: "converted",
-          eventData: JSON.stringify({ conversionValueCents, commissionAmount, commissionPercent }),
+          eventData: JSON.stringify({ conversionValueCents, commissionAmount, commissionPercent, distributionMode }),
           creditsAwarded: 0,
           commissionAwarded: commissionAmount,
         });
         
         const profile = await storage.getAffiliateProfile(referral.referrerId);
         if (profile) {
-          await storage.updateAffiliateProfile(referral.referrerId, {
-            lifetimeConversions: (profile.lifetimeConversions || 0) + 1,
-            lifetimeCommissionEarned: (profile.lifetimeCommissionEarned || 0) + commissionAmount,
-            pendingCommission: (profile.pendingCommission || 0) + commissionAmount,
-          });
+          const dwcExchangeRate = 0.008;
+          
+          if (isPreLaunch) {
+            const newAirdropBalance = (profile.airdropBalance || 0) + commissionAmount;
+            const airdropDwc = (newAirdropBalance / 100 / dwcExchangeRate).toFixed(2);
+            
+            await storage.updateAffiliateProfile(referral.referrerId, {
+              lifetimeConversions: (profile.lifetimeConversions || 0) + 1,
+              lifetimeCommissionEarned: (profile.lifetimeCommissionEarned || 0) + commissionAmount,
+              airdropBalance: newAirdropBalance,
+              airdropBalanceDwc: airdropDwc,
+              airdropStatus: "accumulating",
+            });
+          } else {
+            await storage.updateAffiliateProfile(referral.referrerId, {
+              lifetimeConversions: (profile.lifetimeConversions || 0) + 1,
+              lifetimeCommissionEarned: (profile.lifetimeCommissionEarned || 0) + commissionAmount,
+              pendingCommission: (profile.pendingCommission || 0) + commissionAmount,
+            });
+          }
           
           await this.checkTierUpgrade(referral.referrerId, referral.host as ReferralHost);
         }
+        
+        await storage.createCommissionPayout({
+          userId: referral.referrerId,
+          affiliateUserId: referral.referrerId,
+          host: referral.host,
+          amount: commissionAmount,
+          currency: "USD",
+          status: "pending",
+          payoutStatus: isPreLaunch ? "accruing" : "accruing",
+          distributionMode,
+          notes: `Commission from referral ${referral.id} (${distributionMode} mode)`,
+        });
       }
       
       return { success: true, referral: updatedReferral, commissionAmount };

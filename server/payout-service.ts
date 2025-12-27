@@ -15,6 +15,12 @@ const DWC_EXCHANGE_RATE = 0.008;
 const PAYOUT_BATCH_SIZE = 50;
 const SETTLEMENT_WAIT_DAYS = 7;
 
+const DWC_LAUNCH_DATE = new Date("2026-02-14T00:00:00Z");
+
+function isPreLaunch(): boolean {
+  return new Date() < DWC_LAUNCH_DATE;
+}
+
 interface PayoutBatch {
   id: string;
   createdAt: Date;
@@ -306,20 +312,68 @@ export class PayoutService {
     return false;
   }
 
+  async getAirdropSummary() {
+    const affiliates = await db
+      .select({
+        userId: affiliateProfiles.userId,
+        airdropBalance: affiliateProfiles.airdropBalance,
+        airdropBalanceDwc: affiliateProfiles.airdropBalanceDwc,
+        airdropStatus: affiliateProfiles.airdropStatus,
+        dwcWalletAddress: affiliateProfiles.dwcWalletAddress,
+        walletVerified: affiliateProfiles.walletVerified,
+      })
+      .from(affiliateProfiles)
+      .where(gte(affiliateProfiles.airdropBalance, 1));
+
+    const totalAirdropUsd = affiliates.reduce((sum, a) => sum + (a.airdropBalance || 0), 0);
+    const totalAirdropDwc = (totalAirdropUsd / 100 / DWC_EXCHANGE_RATE).toFixed(2);
+    const readyForAirdrop = affiliates.filter(a => a.walletVerified && a.dwcWalletAddress);
+
+    return {
+      isPreLaunch: isPreLaunch(),
+      launchDate: DWC_LAUNCH_DATE.toISOString(),
+      totalAffiliates: affiliates.length,
+      readyForAirdrop: readyForAirdrop.length,
+      totalAirdropUsd: totalAirdropUsd / 100,
+      totalAirdropDwc,
+      affiliates: affiliates.map(a => ({
+        userId: a.userId,
+        balanceUsd: (a.airdropBalance || 0) / 100,
+        balanceDwc: a.airdropBalanceDwc || "0",
+        status: a.airdropStatus,
+        walletReady: !!(a.walletVerified && a.dwcWalletAddress),
+      })),
+    };
+  }
+
   async runPayoutCycle(): Promise<{
     batchId: string;
     processed: number;
     failed: number;
     totalDwc: string;
     errors: string[];
+    mode: string;
   }> {
+    if (isPreLaunch()) {
+      console.log("[Payout] Pre-launch mode - commissions are being accumulated for airdrop at launch");
+      const summary = await this.getAirdropSummary();
+      return {
+        batchId: "pre-launch",
+        processed: 0,
+        failed: 0,
+        totalDwc: summary.totalAirdropDwc,
+        errors: [],
+        mode: "accumulating",
+      };
+    }
+
     console.log("[Payout] Starting automated payout cycle...");
     
     const eligibleAffiliates = await this.getEligibleAffiliates();
     
     if (eligibleAffiliates.length === 0) {
       console.log("[Payout] No eligible affiliates for payout");
-      return { batchId: "", processed: 0, failed: 0, totalDwc: "0", errors: [] };
+      return { batchId: "", processed: 0, failed: 0, totalDwc: "0", errors: [], mode: "live" };
     }
 
     const batch = await this.createPayoutBatch();
@@ -355,6 +409,104 @@ export class PayoutService {
 
     return {
       batchId: batch.id,
+      processed: processedCount,
+      failed: failedCount,
+      totalDwc: totalDwc.toFixed(2),
+      errors,
+      mode: "live",
+    };
+  }
+
+  async executeAirdrop(): Promise<{
+    batchId: string;
+    processed: number;
+    failed: number;
+    totalDwc: string;
+    errors: string[];
+  }> {
+    if (isPreLaunch()) {
+      console.log("[Airdrop] Cannot execute airdrop before launch date");
+      return { batchId: "", processed: 0, failed: 0, totalDwc: "0", errors: ["DWC has not launched yet"] };
+    }
+
+    console.log("[Airdrop] Executing post-launch airdrop...");
+
+    const affiliates = await db
+      .select()
+      .from(affiliateProfiles)
+      .where(
+        and(
+          gte(affiliateProfiles.airdropBalance, 1),
+          eq(affiliateProfiles.walletVerified, true),
+          sql`${affiliateProfiles.dwcWalletAddress} IS NOT NULL`,
+          eq(affiliateProfiles.airdropStatus, "accumulating")
+        )
+      );
+
+    const batchId = `airdrop_${Date.now()}_${crypto.randomBytes(4).toString("hex")}`;
+    const errors: string[] = [];
+    let processedCount = 0;
+    let failedCount = 0;
+    let totalDwc = 0;
+
+    for (const affiliate of affiliates) {
+      const amountDwc = affiliate.airdropBalanceDwc || (affiliate.airdropBalance / 100 / DWC_EXCHANGE_RATE).toFixed(2);
+      
+      try {
+        const txHash = await blockchain.processDwcTransfer(
+          affiliate.dwcWalletAddress!,
+          amountDwc,
+          `Airdrop distribution for accumulated affiliate commissions (${batchId})`
+        );
+
+        if (txHash) {
+          await db
+            .update(affiliateProfiles)
+            .set({
+              airdropStatus: "distributed",
+              airdropBalance: 0,
+              airdropBalanceDwc: "0",
+              paidCommission: sql`${affiliateProfiles.paidCommission} + ${affiliate.airdropBalance}`,
+              updatedAt: new Date(),
+            })
+            .where(eq(affiliateProfiles.userId, affiliate.userId));
+
+          await db
+            .update(commissionPayouts)
+            .set({
+              payoutStatus: "paid",
+              payoutTransactionHash: txHash,
+              payoutMethod: "airdrop",
+              payoutBatchId: batchId,
+              paidAt: new Date(),
+              processedAt: new Date(),
+              updatedAt: new Date(),
+            })
+            .where(
+              and(
+                eq(commissionPayouts.affiliateUserId, affiliate.userId),
+                eq(commissionPayouts.distributionMode, "airdrop"),
+                eq(commissionPayouts.payoutStatus, "accruing")
+              )
+            );
+
+          processedCount++;
+          totalDwc += parseFloat(amountDwc);
+          console.log(`[Airdrop] Sent ${amountDwc} DWC to ${affiliate.dwcWalletAddress} (tx: ${txHash})`);
+        } else {
+          failedCount++;
+          errors.push(`${affiliate.userId}: Blockchain transfer failed`);
+        }
+      } catch (error) {
+        failedCount++;
+        errors.push(`${affiliate.userId}: ${error instanceof Error ? error.message : "Unknown error"}`);
+      }
+    }
+
+    console.log(`[Airdrop] Complete: ${processedCount} distributed, ${failedCount} failed, ${totalDwc.toFixed(2)} DWC total`);
+
+    return {
+      batchId,
       processed: processedCount,
       failed: failedCount,
       totalDwc: totalDwc.toFixed(2),

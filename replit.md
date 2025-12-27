@@ -241,6 +241,40 @@ Proprietary auto-deployment system for social media marketing with 264 posts see
 
 ---
 
+## Pre-Launch Airdrop System
+
+Affiliate commissions are accumulated during pre-launch and distributed as DWC tokens at launch.
+
+### Dual-Ledger Design
+- **Pre-launch mode**: Commissions go to `airdropBalance` only (not `pendingCommission`)
+- **Post-launch mode**: Commissions go to `pendingCommission` only (for regular payout cycle)
+- Commission payouts have `distributionMode` field: "airdrop" or "cash"
+
+### Key Dates
+- **DWC Launch Date**: February 14, 2026 (Valentine's Day)
+- **Runtime Check**: `isPreLaunch()` function checks `new Date() < DWC_LAUNCH_DATE`
+
+### Exchange Rate
+- Fixed at $0.008 per DWC for all commission calculations
+
+### API Endpoints
+- `GET /api/owner/airdrop/summary` - Owner sees total pending airdrop (protected)
+- `POST /api/owner/airdrop/execute` - Owner triggers airdrop after launch (protected)
+- `GET /api/referrals/my-airdrop` - User sees their pending airdrop balance
+
+### Key Files
+- `server/payout-service.ts`: Airdrop execution and summary
+- `server/referral-service.ts`: Commission routing based on launch mode
+- `shared/schema.ts`: `affiliateProfiles.airdropBalance`, `commissionPayouts.distributionMode`
+
+### Airdrop Execution Flow
+1. Owner triggers `/api/owner/airdrop/execute` after launch date
+2. System selects affiliates with `airdropBalance > 0`, verified wallet, status "accumulating"
+3. For each affiliate: Send DWC via blockchain, mark commission records as "paid"
+4. Update affiliate's `airdropStatus` to "distributed", zero out balance
+
+---
+
 ## External Dependencies
 
 - **Database**: PostgreSQL

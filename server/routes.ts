@@ -7998,6 +7998,56 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  app.get("/api/owner/airdrop/summary", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const summary = await payoutService.getAirdropSummary();
+      res.json(summary);
+    } catch (error) {
+      console.error("Get airdrop summary error:", error);
+      res.status(500).json({ error: "Failed to get airdrop summary" });
+    }
+  });
+
+  app.post("/api/owner/airdrop/execute", ownerAuthMiddleware, async (req, res) => {
+    try {
+      console.log("[Owner] Airdrop execution triggered");
+      const result = await payoutService.executeAirdrop();
+      res.json({ success: true, ...result });
+    } catch (error) {
+      console.error("Execute airdrop error:", error);
+      res.status(500).json({ error: "Failed to execute airdrop" });
+    }
+  });
+
+  app.get("/api/referrals/my-airdrop", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req as any).user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const profile = await storage.getAffiliateProfile(userId);
+      if (!profile) {
+        return res.json({ 
+          airdropBalance: 0, 
+          airdropBalanceDwc: "0",
+          airdropStatus: "none",
+          message: "No affiliate profile found"
+        });
+      }
+      res.json({
+        airdropBalance: (profile.airdropBalance || 0) / 100,
+        airdropBalanceDwc: profile.airdropBalanceDwc || "0",
+        airdropStatus: profile.airdropStatus || "none",
+        launchDate: "2026-02-14T00:00:00Z",
+        walletVerified: profile.walletVerified,
+        dwcWalletAddress: profile.dwcWalletAddress,
+      });
+    } catch (error) {
+      console.error("Get my airdrop error:", error);
+      res.status(500).json({ error: "Failed to get airdrop status" });
+    }
+  });
+
   startPayoutScheduler(24);
 
   return httpServer;
