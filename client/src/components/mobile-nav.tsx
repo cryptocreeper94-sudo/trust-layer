@@ -265,7 +265,7 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
         </div>
 
         {/* Featured Section */}
-        <div style={{ marginBottom: '24px' }}>
+        <div style={{ marginBottom: '24px', width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
           <span style={{ 
             fontSize: '11px', 
             fontWeight: 600, 
@@ -277,7 +277,7 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
           }}>
             Featured
           </span>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
             {featuredItems.map((item) => {
               const Icon = item.icon;
               const isActive = !item.external && location === item.href;
@@ -295,6 +295,8 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
                     cursor: 'pointer',
                     height: '88px',
                     boxSizing: 'border-box',
+                    width: '100%',
+                    maxWidth: '100%',
                   }}
                 >
                   <img 
@@ -363,7 +365,7 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
                     onClick={(e) => {
                       e.stopPropagation();
                     }}
-                    style={{ textDecoration: 'none', display: 'block' }}
+                    style={{ textDecoration: 'none', display: 'block', width: '100%' }}
                   >
                     {cardContent}
                   </a>
@@ -371,7 +373,7 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
               }
               
               return (
-                <Link key={item.href} href={item.href} style={{ textDecoration: 'none' }}>
+                <Link key={item.href} href={item.href} style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
                   {cardContent}
                 </Link>
               );
