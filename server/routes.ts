@@ -9423,9 +9423,9 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 }
 
 const APP_URL_MAP: Record<string, string> = {
-  "orbit-chain": "https://orbitstaffing.io",
   "orbitstaffing": "https://orbitstaffing.io",
   "darkwave-staffing": "https://orbitstaffing.io",
+  "darkwave-chain": "https://dwsc.io",
   "lotopspro": "https://lotopspro.io",
   "lotops-pro": "https://lotopspro.io",
   "orby": "https://getorby.io",
@@ -9527,14 +9527,27 @@ function getLocalEcosystemApps(): EcosystemApp[] {
     {
       id: "lotops-pro",
       name: "Lot Ops Pro",
-      category: "Real Estate",
-      description: "Professional lot operations for automotive dealerships.",
-      hook: "Dealership operations streamlined",
-      tags: ["Auto", "B2B", "Inventory", "Real Estate"],
+      category: "Automotive",
+      description: "Autonomous lot management system for auto auctions, dealers, manufacturers, and businesses with lot inventory and operations personnel.",
+      hook: "Autonomous Lot Management System",
+      tags: ["Auto", "B2B", "Inventory", "Fleet", "Automation"],
       gradient: "from-indigo-600 to-violet-800",
       verified: true,
       users: "DarkWave Verified",
       url: "https://lotopspro.io",
+    },
+    {
+      id: "darkwave-chain",
+      name: "DarkWave Smart Chain",
+      category: "Blockchain",
+      description: "High-performance Layer 1 blockchain with 200K+ TPS, 400ms finality, and enterprise-grade security.",
+      hook: "The universal ledger for the next web",
+      tags: ["Blockchain", "DeFi", "Infrastructure", "L1"],
+      gradient: "from-cyan-500 to-blue-600",
+      verified: true,
+      featured: true,
+      users: "DarkWave Verified",
+      url: "https://dwsc.io",
     },
     {
       id: "darkwave-pulse",

@@ -21,7 +21,6 @@ const ecosystemImages: Record<string, string> = {
   "lotopspro": "/ecosystem/lotopspro.jpg",
   "lotops-pro": "/ecosystem/lotopspro.jpg",
   "brew-board": "/ecosystem/brew-board.jpg",
-  "orbit-chain": "/ecosystem/orbit-chain.jpg",
   "garagebot": "/ecosystem/garagebot-prod.jpg",
   "garagebot-prod": "/ecosystem/garagebot-prod.jpg",
   "darkwave-pulse": "/ecosystem/darkwave-pulse.jpg",
