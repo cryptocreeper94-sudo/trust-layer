@@ -349,8 +349,8 @@ function OwnerDashboard() {
   const portalModules = [
     { id: "analytics", title: "Analytics Dashboard", description: "Real visitor data, traffic sources, geographic insights", icon: <BarChart3 className="w-6 h-6" />, href: "/owner-admin/analytics", glow: "cyan" as const },
     { id: "seo", title: "SEO Manager", description: "Meta tags, OpenGraph, structured data per route", icon: <Search className="w-6 h-6" />, href: "/owner-admin/seo", glow: "purple" as const },
-    { id: "marketing", title: "Marketing Automation", description: "264 branded posts, auto-deployment", icon: <Megaphone className="w-6 h-6" />, href: "/admin/marketing", glow: "pink" as const },
-    { id: "settings", title: "Portal Settings", description: "Admin access, host configuration", icon: <Settings className="w-6 h-6" />, href: "/owner-admin/settings", glow: "amber" as const },
+    { id: "referrals", title: "Referral Dashboard", description: "Affiliate management, fraud detection, payouts", icon: <Users className="w-6 h-6" />, href: "/owner-admin/referrals", glow: "pink" as const },
+    { id: "marketing", title: "Marketing Automation", description: "264 branded posts, auto-deployment", icon: <Megaphone className="w-6 h-6" />, href: "/admin/marketing", glow: "amber" as const },
   ];
 
   const hosts = [

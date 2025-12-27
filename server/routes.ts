@@ -24,6 +24,7 @@ import { registerImageRoutes } from "./replit_integrations/image";
 import { stakingEngine } from "./staking-engine";
 import { generateScenario, randomizeEmotions, describeEmotionalState } from "./scenario-generator";
 import { creditsService, CREDIT_COSTS } from "./credits-service";
+import { referralService } from "./referral-service";
 import { voiceService, VOICE_SAMPLE_PROMPTS } from "./voice-service";
 
 const FaucetClaimRequestSchema = z.object({
@@ -7477,6 +7478,135 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   // =====================================================
+  // REFERRAL & AFFILIATE SYSTEM APIs
+  // =====================================================
+
+  app.get("/api/referrals/code", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const host = (req.query.host as string) || "dwsc.io";
+      const code = await referralService.getOrCreateReferralCode(userId, host as any);
+      
+      res.json({ 
+        code: code.code,
+        host: code.host,
+        isActive: code.isActive,
+        stats: {
+          clicks: code.clickCount,
+          signups: code.signupCount,
+          conversions: code.conversionCount,
+        }
+      });
+    } catch (error: any) {
+      console.error("Get referral code error:", error);
+      res.status(500).json({ error: error.message || "Failed to get referral code" });
+    }
+  });
+
+  app.get("/api/referrals/stats", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const stats = await referralService.getUserStats(userId);
+      res.json(stats);
+    } catch (error: any) {
+      console.error("Get referral stats error:", error);
+      res.status(500).json({ error: error.message || "Failed to get referral stats" });
+    }
+  });
+
+  app.get("/api/referrals/tiers", async (req, res) => {
+    try {
+      const host = (req.query.host as string) || "dwsc.io";
+      const tiers = await referralService.getAffiliateTiers(host as any);
+      res.json({ tiers });
+    } catch (error: any) {
+      console.error("Get affiliate tiers error:", error);
+      res.status(500).json({ error: error.message || "Failed to get tiers" });
+    }
+  });
+
+  app.post("/api/referrals/track-click", async (req, res) => {
+    try {
+      const { code } = req.body;
+      if (!code) {
+        return res.status(400).json({ error: "Referral code required" });
+      }
+      
+      const referralCode = await referralService.getReferralCodeByCode(code);
+      if (!referralCode) {
+        return res.status(404).json({ error: "Invalid referral code" });
+      }
+      
+      await referralService.trackReferralClick(code);
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error("Track referral click error:", error);
+      res.status(500).json({ error: error.message || "Failed to track click" });
+    }
+  });
+
+  app.post("/api/referrals/signup", isAuthenticated, async (req: any, res) => {
+    try {
+      const refereeId = req.user?.id || req.user?.claims?.sub;
+      if (!refereeId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const { code, host } = req.body;
+      if (!code) {
+        return res.status(400).json({ error: "Referral code required" });
+      }
+      
+      const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+      const result = await referralService.processNewSignup(
+        refereeId, 
+        code, 
+        host || "dwsc.io",
+        { ipAddress: ip as string, userAgent: req.headers["user-agent"] }
+      );
+      
+      if (!result.success) {
+        return res.status(400).json({ error: result.error });
+      }
+      
+      res.json({
+        success: true,
+        referral: result.referral,
+        rewards: {
+          referrer: result.referrerReward,
+          referee: result.refereeReward,
+        }
+      });
+    } catch (error: any) {
+      console.error("Process referral signup error:", error);
+      res.status(500).json({ error: error.message || "Failed to process signup" });
+    }
+  });
+
+  app.get("/api/referrals/my-referrals", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const referrals = await referralService.getUserReferrals(userId);
+      res.json({ referrals });
+    } catch (error: any) {
+      console.error("Get my referrals error:", error);
+      res.status(500).json({ error: error.message || "Failed to get referrals" });
+    }
+  });
+
+  // =====================================================
   // OWNER ADMIN PORTAL APIs
   // =====================================================
 
@@ -7687,6 +7817,95 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error) {
       console.error("Delete SEO config error:", error);
       res.status(500).json({ error: "Failed to delete SEO config" });
+    }
+  });
+
+  // =====================================================
+  // OWNER ADMIN - REFERRAL DASHBOARD APIs
+  // =====================================================
+
+  app.get("/api/owner/referrals/stats", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const host = req.query.host as string | undefined;
+      const adminStats = await referralService.getAdminStats(host as any);
+      res.json(adminStats);
+    } catch (error) {
+      console.error("Get admin referral stats error:", error);
+      res.status(500).json({ error: "Failed to fetch referral stats" });
+    }
+  });
+
+  app.get("/api/owner/referrals/codes", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const host = req.query.host as string | undefined;
+      const limit = parseInt(req.query.limit as string) || 100;
+      const codes = await storage.getAllReferralCodes(host, limit);
+      res.json({ codes });
+    } catch (error) {
+      console.error("Get referral codes error:", error);
+      res.status(500).json({ error: "Failed to fetch referral codes" });
+    }
+  });
+
+  app.get("/api/owner/referrals/all", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const host = req.query.host as string | undefined;
+      const status = req.query.status as string | undefined;
+      const limit = parseInt(req.query.limit as string) || 100;
+      const referrals = await storage.getAllReferrals(host, status, limit);
+      res.json({ referrals });
+    } catch (error) {
+      console.error("Get all referrals error:", error);
+      res.status(500).json({ error: "Failed to fetch referrals" });
+    }
+  });
+
+  app.get("/api/owner/referrals/affiliates", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 100;
+      const affiliates = await storage.getAllAffiliateProfiles(limit);
+      res.json({ affiliates });
+    } catch (error) {
+      console.error("Get affiliates error:", error);
+      res.status(500).json({ error: "Failed to fetch affiliates" });
+    }
+  });
+
+  app.get("/api/owner/referrals/fraud-flags", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const flags = await storage.getFraudFlags();
+      res.json({ flags });
+    } catch (error) {
+      console.error("Get fraud flags error:", error);
+      res.status(500).json({ error: "Failed to fetch fraud flags" });
+    }
+  });
+
+  app.post("/api/owner/referrals/resolve-fraud", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { id, notes } = req.body;
+      if (!id) {
+        return res.status(400).json({ error: "Flag ID required" });
+      }
+      const flag = await storage.resolveFraudFlag(id, "owner", notes);
+      res.json({ success: true, flag });
+    } catch (error) {
+      console.error("Resolve fraud flag error:", error);
+      res.status(500).json({ error: "Failed to resolve fraud flag" });
+    }
+  });
+
+  app.post("/api/owner/referrals/qualify", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { referralId } = req.body;
+      if (!referralId) {
+        return res.status(400).json({ error: "Referral ID required" });
+      }
+      const referral = await referralService.qualifyReferral(referralId);
+      res.json({ success: true, referral });
+    } catch (error) {
+      console.error("Qualify referral error:", error);
+      res.status(500).json({ error: "Failed to qualify referral" });
     }
   });
 

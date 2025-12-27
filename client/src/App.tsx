@@ -130,6 +130,7 @@ import PartnerPortal from "@/pages/partner-portal";
 import OwnerAdminPortal from "@/pages/owner-admin";
 import OwnerAnalytics from "@/pages/owner-admin/analytics";
 import OwnerSeoManager from "@/pages/owner-admin/seo";
+import OwnerReferrals from "@/pages/owner-admin/referrals";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
 
 function ScrollToTop() {
@@ -285,6 +286,7 @@ function DWSCRouter() {
         <Route path="/owner-admin" component={OwnerAdminPortal} />
         <Route path="/owner-admin/analytics" component={OwnerAnalytics} />
         <Route path="/owner-admin/seo" component={OwnerSeoManager} />
+        <Route path="/owner-admin/referrals" component={OwnerReferrals} />
         <Route path="/terms" component={Terms} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/error" component={ErrorPage} />

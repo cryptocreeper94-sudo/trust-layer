@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type MarketingPost, type InsertMarketingPost, type MarketingDeployLog, type InsertMarketingDeployLog, type MarketingScheduleConfig, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, type BlockchainDomain, type InsertBlockchainDomain, type DomainRecord, type InsertDomainRecord, type DomainTransfer, type InsertDomainTransfer, type ChronicleSponsorshipSlot, type InsertChronicleSponsorshipSlot, type DomainSponsorshipClaim, type InsertDomainSponsorshipClaim, type EarlyAdopterProgram, type TreasuryAllocation, type TreasuryLedgerEntry, type SeoConfig, type InsertSeoConfig, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory, blockchainDomains, domainRecords, domainTransfers, chronicleSponsorshipSlots, domainSponsorshipClaims, earlyAdopterProgram, marketingPosts, marketingDeployLogs, marketingScheduleConfig, treasuryAllocations, treasuryLedger, seoConfigs } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type ReferralCode, type InsertReferralCode, type Referral, type InsertReferral, type ReferralEvent, type InsertReferralEvent, type AffiliateTierRecord, type InsertAffiliateTier, type CommissionPayout, type InsertCommissionPayout, type AffiliateProfile, type InsertAffiliateProfile, type FraudFlag, type InsertFraudFlag, type MarketingPost, type InsertMarketingPost, type MarketingDeployLog, type InsertMarketingDeployLog, type MarketingScheduleConfig, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, type BlockchainDomain, type InsertBlockchainDomain, type DomainRecord, type InsertDomainRecord, type DomainTransfer, type InsertDomainTransfer, type ChronicleSponsorshipSlot, type InsertChronicleSponsorshipSlot, type DomainSponsorshipClaim, type InsertDomainSponsorshipClaim, type EarlyAdopterProgram, type TreasuryAllocation, type TreasuryLedgerEntry, type SeoConfig, type InsertSeoConfig, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory, blockchainDomains, domainRecords, domainTransfers, chronicleSponsorshipSlots, domainSponsorshipClaims, earlyAdopterProgram, marketingPosts, marketingDeployLogs, marketingScheduleConfig, treasuryAllocations, treasuryLedger, seoConfigs, referralCodes, referrals, referralEvents, affiliateTiers, commissionPayouts, affiliateProfiles, fraudFlags } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, asc, count, and, lt } from "drizzle-orm";
 import crypto from "crypto";
@@ -233,6 +233,43 @@ export interface IStorage {
   createSeoConfig(data: InsertSeoConfig): Promise<SeoConfig>;
   updateSeoConfig(id: string, data: Partial<InsertSeoConfig>): Promise<SeoConfig | undefined>;
   deleteSeoConfig(id: string): Promise<boolean>;
+  
+  // Referral & Affiliate System
+  getReferralCode(userId: string, host?: string): Promise<ReferralCode | undefined>;
+  createReferralCode(data: InsertReferralCode): Promise<ReferralCode>;
+  getReferralCodeByCode(code: string): Promise<ReferralCode | undefined>;
+  incrementReferralCodeClicks(code: string): Promise<void>;
+  incrementReferralCodeSignups(code: string): Promise<void>;
+  incrementReferralCodeConversions(code: string): Promise<void>;
+  
+  getReferralsByReferrer(referrerId: string): Promise<Referral[]>;
+  getReferralByReferee(refereeId: string): Promise<Referral | undefined>;
+  createReferral(data: InsertReferral): Promise<Referral>;
+  updateReferralStatus(id: string, status: string, rewards?: { referrerReward?: number; refereeReward?: number; conversionValue?: number; commissionAmount?: number }): Promise<Referral | undefined>;
+  
+  createReferralEvent(data: InsertReferralEvent): Promise<ReferralEvent>;
+  getReferralEvents(referralId: string): Promise<ReferralEvent[]>;
+  
+  getAffiliateTiers(host?: string): Promise<AffiliateTierRecord[]>;
+  getAffiliateTier(slug: string): Promise<AffiliateTierRecord | undefined>;
+  
+  getAffiliateProfile(userId: string): Promise<AffiliateProfile | undefined>;
+  createAffiliateProfile(data: InsertAffiliateProfile): Promise<AffiliateProfile>;
+  updateAffiliateProfile(userId: string, data: Partial<InsertAffiliateProfile & { totalReferrals?: number; qualifiedReferrals?: number; lifetimeConversions?: number; lifetimeCreditsEarned?: number; lifetimeCommissionEarned?: number; pendingCommission?: number; paidCommission?: number; }>): Promise<AffiliateProfile | undefined>;
+  
+  createCommissionPayout(data: InsertCommissionPayout): Promise<CommissionPayout>;
+  getCommissionPayouts(userId: string): Promise<CommissionPayout[]>;
+  updateCommissionPayoutStatus(id: string, status: string, processedAt?: Date): Promise<CommissionPayout | undefined>;
+  
+  createFraudFlag(data: InsertFraudFlag): Promise<FraudFlag>;
+  getFraudFlags(referralId?: string, userId?: string): Promise<FraudFlag[]>;
+  resolveFraudFlag(id: string, resolvedBy: string, notes?: string): Promise<FraudFlag | undefined>;
+  
+  // Admin Referral Dashboard
+  getAllReferralCodes(host?: string, limit?: number): Promise<ReferralCode[]>;
+  getAllReferrals(host?: string, status?: string, limit?: number): Promise<Referral[]>;
+  getAllAffiliateProfiles(limit?: number): Promise<AffiliateProfile[]>;
+  getReferralStats(host?: string): Promise<{ totalReferrals: number; totalConversions: number; totalCreditsRewarded: number; totalCommissionPaid: number }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1982,6 +2019,186 @@ export class DatabaseStorage implements IStorage {
   async deleteSeoConfig(id: string): Promise<boolean> {
     await db.delete(seoConfigs).where(eq(seoConfigs.id, id));
     return true;
+  }
+
+  // =====================================================
+  // REFERRAL & AFFILIATE SYSTEM
+  // =====================================================
+
+  async getReferralCode(userId: string, host: string = "dwsc.io"): Promise<ReferralCode | undefined> {
+    const [code] = await db.select().from(referralCodes).where(and(eq(referralCodes.userId, userId), eq(referralCodes.host, host)));
+    return code;
+  }
+
+  async createReferralCode(data: InsertReferralCode): Promise<ReferralCode> {
+    const [code] = await db.insert(referralCodes).values(data).returning();
+    return code;
+  }
+
+  async getReferralCodeByCode(code: string): Promise<ReferralCode | undefined> {
+    const [refCode] = await db.select().from(referralCodes).where(eq(referralCodes.code, code));
+    return refCode;
+  }
+
+  async incrementReferralCodeClicks(code: string): Promise<void> {
+    await db.update(referralCodes)
+      .set({ clickCount: sql`${referralCodes.clickCount} + 1`, updatedAt: new Date() })
+      .where(eq(referralCodes.code, code));
+  }
+
+  async incrementReferralCodeSignups(code: string): Promise<void> {
+    await db.update(referralCodes)
+      .set({ signupCount: sql`${referralCodes.signupCount} + 1`, updatedAt: new Date() })
+      .where(eq(referralCodes.code, code));
+  }
+
+  async incrementReferralCodeConversions(code: string): Promise<void> {
+    await db.update(referralCodes)
+      .set({ conversionCount: sql`${referralCodes.conversionCount} + 1`, updatedAt: new Date() })
+      .where(eq(referralCodes.code, code));
+  }
+
+  async getReferralsByReferrer(referrerId: string): Promise<Referral[]> {
+    return db.select().from(referrals).where(eq(referrals.referrerId, referrerId)).orderBy(desc(referrals.createdAt));
+  }
+
+  async getReferralByReferee(refereeId: string): Promise<Referral | undefined> {
+    const [referral] = await db.select().from(referrals).where(eq(referrals.refereeId, refereeId));
+    return referral;
+  }
+
+  async createReferral(data: InsertReferral): Promise<Referral> {
+    const [referral] = await db.insert(referrals).values(data).returning();
+    return referral;
+  }
+
+  async updateReferralStatus(id: string, status: string, rewards?: { referrerReward?: number; refereeReward?: number; conversionValue?: number; commissionAmount?: number }): Promise<Referral | undefined> {
+    const updateData: any = { status };
+    if (status === "qualified") updateData.qualifiedAt = new Date();
+    if (status === "converted") updateData.convertedAt = new Date();
+    if (rewards?.referrerReward !== undefined) updateData.referrerReward = rewards.referrerReward;
+    if (rewards?.refereeReward !== undefined) updateData.refereeReward = rewards.refereeReward;
+    if (rewards?.conversionValue !== undefined) updateData.conversionValue = rewards.conversionValue;
+    if (rewards?.commissionAmount !== undefined) updateData.commissionAmount = rewards.commissionAmount;
+    
+    const [referral] = await db.update(referrals).set(updateData).where(eq(referrals.id, id)).returning();
+    return referral;
+  }
+
+  async createReferralEvent(data: InsertReferralEvent): Promise<ReferralEvent> {
+    const [event] = await db.insert(referralEvents).values(data).returning();
+    return event;
+  }
+
+  async getReferralEvents(referralId: string): Promise<ReferralEvent[]> {
+    return db.select().from(referralEvents).where(eq(referralEvents.referralId, referralId)).orderBy(desc(referralEvents.createdAt));
+  }
+
+  async getAffiliateTiers(host: string = "dwsc.io"): Promise<AffiliateTierRecord[]> {
+    return db.select().from(affiliateTiers).where(eq(affiliateTiers.host, host)).orderBy(asc(affiliateTiers.sortOrder));
+  }
+
+  async getAffiliateTier(slug: string): Promise<AffiliateTierRecord | undefined> {
+    const [tier] = await db.select().from(affiliateTiers).where(eq(affiliateTiers.slug, slug));
+    return tier;
+  }
+
+  async getAffiliateProfile(userId: string): Promise<AffiliateProfile | undefined> {
+    const [profile] = await db.select().from(affiliateProfiles).where(eq(affiliateProfiles.userId, userId));
+    return profile;
+  }
+
+  async createAffiliateProfile(data: InsertAffiliateProfile): Promise<AffiliateProfile> {
+    const [profile] = await db.insert(affiliateProfiles).values(data).returning();
+    return profile;
+  }
+
+  async updateAffiliateProfile(userId: string, data: Partial<InsertAffiliateProfile & { totalReferrals?: number; qualifiedReferrals?: number; lifetimeConversions?: number; lifetimeCreditsEarned?: number; lifetimeCommissionEarned?: number; pendingCommission?: number; paidCommission?: number; }>): Promise<AffiliateProfile | undefined> {
+    const [profile] = await db.update(affiliateProfiles)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(affiliateProfiles.userId, userId))
+      .returning();
+    return profile;
+  }
+
+  async createCommissionPayout(data: InsertCommissionPayout): Promise<CommissionPayout> {
+    const [payout] = await db.insert(commissionPayouts).values(data).returning();
+    return payout;
+  }
+
+  async getCommissionPayouts(userId: string): Promise<CommissionPayout[]> {
+    return db.select().from(commissionPayouts).where(eq(commissionPayouts.userId, userId)).orderBy(desc(commissionPayouts.createdAt));
+  }
+
+  async updateCommissionPayoutStatus(id: string, status: string, processedAt?: Date): Promise<CommissionPayout | undefined> {
+    const updateData: any = { status, updatedAt: new Date() };
+    if (processedAt) updateData.processedAt = processedAt;
+    
+    const [payout] = await db.update(commissionPayouts).set(updateData).where(eq(commissionPayouts.id, id)).returning();
+    return payout;
+  }
+
+  async createFraudFlag(data: InsertFraudFlag): Promise<FraudFlag> {
+    const [flag] = await db.insert(fraudFlags).values(data).returning();
+    return flag;
+  }
+
+  async getFraudFlags(referralId?: string, userId?: string): Promise<FraudFlag[]> {
+    if (referralId) {
+      return db.select().from(fraudFlags).where(eq(fraudFlags.referralId, referralId)).orderBy(desc(fraudFlags.createdAt));
+    }
+    if (userId) {
+      return db.select().from(fraudFlags).where(eq(fraudFlags.userId, userId)).orderBy(desc(fraudFlags.createdAt));
+    }
+    return db.select().from(fraudFlags).orderBy(desc(fraudFlags.createdAt));
+  }
+
+  async resolveFraudFlag(id: string, resolvedBy: string, notes?: string): Promise<FraudFlag | undefined> {
+    const [flag] = await db.update(fraudFlags)
+      .set({ isResolved: true, resolvedBy, resolvedAt: new Date(), notes })
+      .where(eq(fraudFlags.id, id))
+      .returning();
+    return flag;
+  }
+
+  // Admin Referral Dashboard
+  async getAllReferralCodes(host?: string, limit: number = 100): Promise<ReferralCode[]> {
+    if (host) {
+      return db.select().from(referralCodes).where(eq(referralCodes.host, host)).orderBy(desc(referralCodes.createdAt)).limit(limit);
+    }
+    return db.select().from(referralCodes).orderBy(desc(referralCodes.createdAt)).limit(limit);
+  }
+
+  async getAllReferrals(host?: string, status?: string, limit: number = 100): Promise<Referral[]> {
+    let query = db.select().from(referrals);
+    const conditions: any[] = [];
+    if (host) conditions.push(eq(referrals.host, host));
+    if (status) conditions.push(eq(referrals.status, status));
+    
+    if (conditions.length > 0) {
+      query = query.where(and(...conditions)) as any;
+    }
+    return query.orderBy(desc(referrals.createdAt)).limit(limit);
+  }
+
+  async getAllAffiliateProfiles(limit: number = 100): Promise<AffiliateProfile[]> {
+    return db.select().from(affiliateProfiles).orderBy(desc(affiliateProfiles.lifetimeConversions)).limit(limit);
+  }
+
+  async getReferralStats(host?: string): Promise<{ totalReferrals: number; totalConversions: number; totalCreditsRewarded: number; totalCommissionPaid: number }> {
+    let allReferrals: Referral[];
+    if (host) {
+      allReferrals = await db.select().from(referrals).where(eq(referrals.host, host));
+    } else {
+      allReferrals = await db.select().from(referrals);
+    }
+    
+    const totalReferrals = allReferrals.length;
+    const totalConversions = allReferrals.filter(r => r.status === "converted").length;
+    const totalCreditsRewarded = allReferrals.reduce((sum, r) => sum + (r.referrerReward || 0) + (r.refereeReward || 0), 0);
+    const totalCommissionPaid = allReferrals.reduce((sum, r) => sum + (r.commissionAmount || 0), 0);
+    
+    return { totalReferrals, totalConversions, totalCreditsRewarded, totalCommissionPaid };
   }
 }
 
