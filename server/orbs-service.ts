@@ -76,6 +76,16 @@ class OrbsService {
     };
   }
 
+  async getTransactionByReference(referenceId: string, referenceType: string): Promise<OrbTransaction | null> {
+    const [tx] = await db.select()
+      .from(orbTransactions)
+      .where(and(
+        eq(orbTransactions.referenceId, referenceId),
+        eq(orbTransactions.referenceType, referenceType)
+      ));
+    return tx || null;
+  }
+
   async addOrbs(
     userId: string, 
     username: string, 

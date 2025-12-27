@@ -8456,6 +8456,113 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // Stripe checkout for Orb packages
+  app.post("/api/orbs/checkout", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const username = req.user?.claims?.firstName || req.user?.firstName || "User";
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { packageKey } = req.body;
+      if (!packageKey || !ORB_PACKAGES[packageKey as keyof typeof ORB_PACKAGES]) {
+        return res.status(400).json({ error: "Invalid package" });
+      }
+      
+      const pkg = ORB_PACKAGES[packageKey as keyof typeof ORB_PACKAGES];
+      
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [{
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: pkg.name,
+              description: `${pkg.amount.toLocaleString()} Orbs for the DarkWave ecosystem`,
+            },
+            unit_amount: pkg.price,
+          },
+          quantity: 1,
+        }],
+        mode: "payment",
+        success_url: `${req.headers.origin}/community-hub?orbs_success=true&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${req.headers.origin}/community-hub?orbs_cancelled=true`,
+        metadata: {
+          userId,
+          username,
+          packageKey,
+          orbAmount: pkg.amount.toString(),
+          type: "orb_purchase",
+        },
+      });
+      
+      res.json({ url: session.url, sessionId: session.id });
+    } catch (error) {
+      console.error("Orbs checkout error:", error);
+      res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  // Verify Orb purchase and credit Orbs (idempotent - prevents replay attacks)
+  app.post("/api/orbs/verify-purchase", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const username = req.user?.claims?.firstName || req.user?.firstName || "User";
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { sessionId } = req.body;
+      if (!sessionId) return res.status(400).json({ error: "Session ID required" });
+      
+      // Check if this session has already been processed (idempotency guard)
+      const existingTx = await orbsService.getTransactionByReference(sessionId, "stripe_payment");
+      if (existingTx) {
+        // Already processed - return success without double-crediting
+        const balance = await orbsService.getBalance(userId);
+        return res.json({ 
+          success: true, 
+          alreadyProcessed: true, 
+          balance,
+          message: "This purchase has already been credited"
+        });
+      }
+      
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      
+      if (session.payment_status !== "paid") {
+        return res.status(400).json({ error: "Payment not completed" });
+      }
+      
+      if (session.metadata?.userId !== userId) {
+        return res.status(403).json({ error: "Session does not belong to this user" });
+      }
+      
+      if (session.metadata?.type !== "orb_purchase") {
+        return res.status(400).json({ error: "Invalid session type" });
+      }
+      
+      const packageKey = session.metadata?.packageKey as keyof typeof ORB_PACKAGES;
+      const orbAmount = parseInt(session.metadata?.orbAmount || "0");
+      
+      if (!packageKey || !orbAmount) {
+        return res.status(400).json({ error: "Invalid package data" });
+      }
+      
+      // Credit the Orbs (uses sessionId as referenceId for idempotency)
+      const transaction = await orbsService.purchaseOrbs(userId, username, packageKey, session.id);
+      const balance = await orbsService.getBalance(userId);
+      
+      res.json({ success: true, transaction, balance, orbsAdded: orbAmount });
+    } catch (error) {
+      console.error("Verify orbs purchase error:", error);
+      res.status(500).json({ error: "Failed to verify purchase" });
+    }
+  });
+
   // Pulse API webhook for real-time signal notifications
   app.post("/api/webhooks/pulse", async (req, res) => {
     try {
