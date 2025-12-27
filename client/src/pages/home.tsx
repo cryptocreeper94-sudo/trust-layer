@@ -41,8 +41,8 @@ function BetaBadge() {
         className="absolute top-2 left-2 z-10 cursor-pointer" 
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(true); }}
       >
-        <Badge className="text-[8px] uppercase bg-amber-500/90 text-black font-bold px-1.5 py-0.5 shadow-lg hover:bg-amber-400 transition-colors">
-          Beta
+        <Badge className="text-[8px] uppercase bg-amber-500/90 text-black font-bold px-1.5 py-0.5 shadow-lg hover:bg-amber-400 transition-colors flex items-center gap-1">
+          Beta <span className="text-[6px] opacity-70">ⓘ</span>
         </Badge>
       </div>
       <Dialog open={open} onOpenChange={setOpen}>
