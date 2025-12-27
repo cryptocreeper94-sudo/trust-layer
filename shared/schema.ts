@@ -2891,3 +2891,216 @@ export const insertSeoConfigSchema = createInsertSchema(seoConfigs).omit({
 
 export type SeoConfig = typeof seoConfigs.$inferSelect;
 export type InsertSeoConfig = z.infer<typeof insertSeoConfigSchema>;
+
+// =====================================================
+// REFERRAL & AFFILIATE SYSTEM
+// =====================================================
+// Multi-host referral program for dwsc.io and yourlegacy.io
+// =====================================================
+
+export const REFERRAL_HOSTS = ["dwsc.io", "yourlegacy.io"] as const;
+export type ReferralHost = typeof REFERRAL_HOSTS[number];
+
+export const AFFILIATE_TIERS = ["explorer", "builder", "architect", "oracle"] as const;
+export type AffiliateTier = typeof AFFILIATE_TIERS[number];
+
+export const REFERRAL_STATUS = ["pending", "qualified", "converted", "expired", "fraud"] as const;
+export type ReferralStatus = typeof REFERRAL_STATUS[number];
+
+// Referral Codes - Unique codes per user per host
+export const referralCodes = pgTable("referral_codes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  code: text("code").notNull().unique(),
+  host: text("host").notNull().default("dwsc.io"),
+  isActive: boolean("is_active").notNull().default(true),
+  clickCount: integer("click_count").notNull().default(0),
+  signupCount: integer("signup_count").notNull().default(0),
+  conversionCount: integer("conversion_count").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertReferralCodeSchema = createInsertSchema(referralCodes).omit({
+  id: true,
+  clickCount: true,
+  signupCount: true,
+  conversionCount: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type ReferralCode = typeof referralCodes.$inferSelect;
+export type InsertReferralCode = z.infer<typeof insertReferralCodeSchema>;
+
+// Referrals - Tracks who referred whom
+export const referrals = pgTable("referrals", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  referrerId: text("referrer_id").notNull(),
+  refereeId: text("referee_id").notNull(),
+  referralCodeId: varchar("referral_code_id").references(() => referralCodes.id),
+  host: text("host").notNull().default("dwsc.io"),
+  status: text("status").notNull().default("pending"),
+  referrerReward: integer("referrer_reward").notNull().default(0),
+  refereeReward: integer("referee_reward").notNull().default(0),
+  conversionValue: integer("conversion_value").default(0),
+  commissionAmount: integer("commission_amount").default(0),
+  qualifiedAt: timestamp("qualified_at"),
+  convertedAt: timestamp("converted_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertReferralSchema = createInsertSchema(referrals).omit({
+  id: true,
+  qualifiedAt: true,
+  convertedAt: true,
+  createdAt: true,
+});
+
+export type Referral = typeof referrals.$inferSelect;
+export type InsertReferral = z.infer<typeof insertReferralSchema>;
+
+// Referral Events - Granular milestone tracking
+export const referralEvents = pgTable("referral_events", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  referralId: varchar("referral_id").notNull().references(() => referrals.id, { onDelete: "cascade" }),
+  eventType: text("event_type").notNull(),
+  eventData: text("event_data"),
+  creditsAwarded: integer("credits_awarded").default(0),
+  commissionAwarded: integer("commission_awarded").default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertReferralEventSchema = createInsertSchema(referralEvents).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type ReferralEvent = typeof referralEvents.$inferSelect;
+export type InsertReferralEvent = z.infer<typeof insertReferralEventSchema>;
+
+// Affiliate Tiers - Configurable tier thresholds and perks
+export const affiliateTiers = pgTable("affiliate_tiers", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  slug: text("slug").notNull().unique(),
+  host: text("host").notNull().default("dwsc.io"),
+  minConversions: integer("min_conversions").notNull().default(0),
+  minRevenue: integer("min_revenue").notNull().default(0),
+  referrerRewardCredits: integer("referrer_reward_credits").notNull().default(250),
+  refereeRewardCredits: integer("referee_reward_credits").notNull().default(100),
+  commissionPercent: integer("commission_percent").notNull().default(10),
+  badgeColor: text("badge_color").default("#06b6d4"),
+  description: text("description"),
+  isActive: boolean("is_active").notNull().default(true),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertAffiliateTierSchema = createInsertSchema(affiliateTiers).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type AffiliateTierRecord = typeof affiliateTiers.$inferSelect;
+export type InsertAffiliateTier = z.infer<typeof insertAffiliateTierSchema>;
+
+// Commission Payouts - Disbursement ledger
+export const commissionPayouts = pgTable("commission_payouts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  host: text("host").notNull().default("dwsc.io"),
+  amount: integer("amount").notNull(),
+  currency: text("currency").notNull().default("USD"),
+  status: text("status").notNull().default("pending"),
+  paymentMethod: text("payment_method"),
+  paymentDetails: text("payment_details"),
+  processedAt: timestamp("processed_at"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertCommissionPayoutSchema = createInsertSchema(commissionPayouts).omit({
+  id: true,
+  processedAt: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type CommissionPayout = typeof commissionPayouts.$inferSelect;
+export type InsertCommissionPayout = z.infer<typeof insertCommissionPayoutSchema>;
+
+// User Affiliate Profile - Stores per-user affiliate status
+export const affiliateProfiles = pgTable("affiliate_profiles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  currentTier: text("current_tier").notNull().default("explorer"),
+  totalReferrals: integer("total_referrals").notNull().default(0),
+  qualifiedReferrals: integer("qualified_referrals").notNull().default(0),
+  lifetimeConversions: integer("lifetime_conversions").notNull().default(0),
+  lifetimeCreditsEarned: integer("lifetime_credits_earned").notNull().default(0),
+  lifetimeCommissionEarned: integer("lifetime_commission_earned").notNull().default(0),
+  pendingCommission: integer("pending_commission").notNull().default(0),
+  paidCommission: integer("paid_commission").notNull().default(0),
+  preferredHost: text("preferred_host").default("dwsc.io"),
+  payoutMethod: text("payout_method"),
+  payoutDetails: text("payout_details"),
+  isAffiliate: boolean("is_affiliate").notNull().default(false),
+  affiliateApprovedAt: timestamp("affiliate_approved_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertAffiliateProfileSchema = createInsertSchema(affiliateProfiles).omit({
+  id: true,
+  totalReferrals: true,
+  qualifiedReferrals: true,
+  lifetimeConversions: true,
+  lifetimeCreditsEarned: true,
+  lifetimeCommissionEarned: true,
+  pendingCommission: true,
+  paidCommission: true,
+  affiliateApprovedAt: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type AffiliateProfile = typeof affiliateProfiles.$inferSelect;
+export type InsertAffiliateProfile = z.infer<typeof insertAffiliateProfileSchema>;
+
+// Fraud Flags - Soft indicators for suspicious activity
+export const fraudFlags = pgTable("fraud_flags", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  referralId: varchar("referral_id").references(() => referrals.id),
+  userId: text("user_id"),
+  flagType: text("flag_type").notNull(),
+  reason: text("reason").notNull(),
+  severity: text("severity").notNull().default("low"),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  isResolved: boolean("is_resolved").notNull().default(false),
+  resolvedBy: text("resolved_by"),
+  resolvedAt: timestamp("resolved_at"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertFraudFlagSchema = createInsertSchema(fraudFlags).omit({
+  id: true,
+  isResolved: true,
+  resolvedBy: true,
+  resolvedAt: true,
+  createdAt: true,
+});
+
+export type FraudFlag = typeof fraudFlags.$inferSelect;
+export type InsertFraudFlag = z.infer<typeof insertFraudFlagSchema>;
+
+// Referral reward constants
+export const REFERRAL_REWARDS = {
+  REFERRER_SIGNUP_BONUS: 250,
+  REFEREE_SIGNUP_BONUS: 100,
+  REFERRER_CONVERSION_BONUS: 500,
+  COMMISSION_PERCENT_DEFAULT: 10,
+} as const;
