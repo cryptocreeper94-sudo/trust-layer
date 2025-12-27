@@ -3005,7 +3005,7 @@ export const insertAffiliateTierSchema = createInsertSchema(affiliateTiers).omit
 export type AffiliateTierRecord = typeof affiliateTiers.$inferSelect;
 export type InsertAffiliateTier = z.infer<typeof insertAffiliateTierSchema>;
 
-// Commission Payouts - Disbursement ledger
+// Commission Payouts - Disbursement ledger with full lifecycle tracking
 export const commissionPayouts = pgTable("commission_payouts", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: text("user_id").notNull(),
@@ -3013,9 +3013,23 @@ export const commissionPayouts = pgTable("commission_payouts", {
   amount: integer("amount").notNull(),
   currency: text("currency").notNull().default("USD"),
   status: text("status").notNull().default("pending"),
+  payoutStatus: text("payout_status").notNull().default("accruing"),
+  amountDwc: text("amount_dwc"),
+  exchangeRate: text("exchange_rate"),
+  exchangeRateSource: text("exchange_rate_source"),
+  treasuryTxHash: text("treasury_tx_hash"),
+  orbitSyncStatus: text("orbit_sync_status").default("pending"),
+  orbitSyncedAt: timestamp("orbit_synced_at"),
+  stripePaymentIntent: text("stripe_payment_intent"),
+  stripeSettlementStatus: text("stripe_settlement_status"),
+  settledAt: timestamp("settled_at"),
+  eligibleForPayoutAt: timestamp("eligible_for_payout_at"),
+  payoutBatchId: text("payout_batch_id"),
   paymentMethod: text("payment_method"),
   paymentDetails: text("payment_details"),
   processedAt: timestamp("processed_at"),
+  failureReason: text("failure_reason"),
+  retryCount: integer("retry_count").default(0),
   notes: text("notes"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -3023,6 +3037,10 @@ export const commissionPayouts = pgTable("commission_payouts", {
 
 export const insertCommissionPayoutSchema = createInsertSchema(commissionPayouts).omit({
   id: true,
+  treasuryTxHash: true,
+  orbitSyncedAt: true,
+  settledAt: true,
+  eligibleForPayoutAt: true,
   processedAt: true,
   createdAt: true,
   updatedAt: true,
@@ -3031,7 +3049,7 @@ export const insertCommissionPayoutSchema = createInsertSchema(commissionPayouts
 export type CommissionPayout = typeof commissionPayouts.$inferSelect;
 export type InsertCommissionPayout = z.infer<typeof insertCommissionPayoutSchema>;
 
-// User Affiliate Profile - Stores per-user affiliate status
+// User Affiliate Profile - Stores per-user affiliate status with wallet for DWC payouts
 export const affiliateProfiles = pgTable("affiliate_profiles", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: text("user_id").notNull().unique(),
@@ -3044,10 +3062,15 @@ export const affiliateProfiles = pgTable("affiliate_profiles", {
   pendingCommission: integer("pending_commission").notNull().default(0),
   paidCommission: integer("paid_commission").notNull().default(0),
   preferredHost: text("preferred_host").default("dwsc.io"),
-  payoutMethod: text("payout_method"),
+  dwcWalletAddress: text("dwc_wallet_address"),
+  walletVerified: boolean("wallet_verified").default(false),
+  walletVerifiedAt: timestamp("wallet_verified_at"),
+  minPayoutThreshold: integer("min_payout_threshold").default(5000),
+  payoutMethod: text("payout_method").default("dwc"),
   payoutDetails: text("payout_details"),
   isAffiliate: boolean("is_affiliate").notNull().default(false),
   affiliateApprovedAt: timestamp("affiliate_approved_at"),
+  lastPayoutAt: timestamp("last_payout_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

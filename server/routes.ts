@@ -25,6 +25,7 @@ import { stakingEngine } from "./staking-engine";
 import { generateScenario, randomizeEmotions, describeEmotionalState } from "./scenario-generator";
 import { creditsService, CREDIT_COSTS } from "./credits-service";
 import { referralService } from "./referral-service";
+import { payoutService, startPayoutScheduler } from "./payout-service";
 import { voiceService, VOICE_SAMPLE_PROMPTS } from "./voice-service";
 
 const FaucetClaimRequestSchema = z.object({
@@ -220,8 +221,32 @@ export async function registerRoutes(
               paymentId as string
             );
             console.log(`[Stripe Webhook] Credits purchased: user=${metadata.userId}, credits=${result.creditsAdded}, balance=${result.newBalance}`);
+            
+            // Process affiliate commission if user was referred
+            try {
+              const host = metadata.host || "dwsc.io";
+              await referralService.processConversion(metadata.userId, amountCents, host as any);
+              
+              // Mark commission eligible for payout after settlement
+              await payoutService.markCommissionEligible(paymentId as string, amountCents);
+              console.log(`[Stripe Webhook] Affiliate commission tracked for user ${metadata.userId}`);
+            } catch (refErr) {
+              console.error("[Stripe Webhook] Referral commission error:", refErr);
+            }
           } catch (dbError) {
             console.error("[Stripe Webhook] DB error for credits purchase:", dbError);
+          }
+        }
+        
+        // Process affiliate commission for presale purchases
+        if (metadata.type === "presale" && metadata.userId) {
+          try {
+            const host = metadata.host || "dwsc.io";
+            await referralService.processConversion(metadata.userId, amountCents, host as any);
+            await payoutService.markCommissionEligible(paymentId as string, amountCents);
+            console.log(`[Stripe Webhook] Presale affiliate commission tracked for user ${metadata.userId}`);
+          } catch (refErr) {
+            console.error("[Stripe Webhook] Presale referral commission error:", refErr);
           }
         }
       }
@@ -7908,6 +7933,72 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       res.status(500).json({ error: "Failed to qualify referral" });
     }
   });
+
+  app.get("/api/owner/payouts/stats", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const stats = await payoutService.getPayoutStats();
+      res.json(stats);
+    } catch (error) {
+      console.error("Get payout stats error:", error);
+      res.status(500).json({ error: "Failed to get payout stats" });
+    }
+  });
+
+  app.get("/api/owner/payouts/eligible", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const affiliates = await payoutService.getEligibleAffiliates();
+      res.json({ affiliates, count: affiliates.length });
+    } catch (error) {
+      console.error("Get eligible affiliates error:", error);
+      res.status(500).json({ error: "Failed to get eligible affiliates" });
+    }
+  });
+
+  app.post("/api/owner/payouts/run", ownerAuthMiddleware, async (req, res) => {
+    try {
+      console.log("[Owner] Manual payout run triggered");
+      const result = await payoutService.runPayoutCycle();
+      res.json({ success: true, ...result });
+    } catch (error) {
+      console.error("Run payout cycle error:", error);
+      res.status(500).json({ error: "Failed to run payout cycle" });
+    }
+  });
+
+  app.post("/api/owner/payouts/start-scheduler", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const intervalHours = parseInt(req.body.intervalHours as string) || 24;
+      startPayoutScheduler(intervalHours);
+      res.json({ success: true, message: `Payout scheduler started (every ${intervalHours} hours)` });
+    } catch (error) {
+      console.error("Start payout scheduler error:", error);
+      res.status(500).json({ error: "Failed to start payout scheduler" });
+    }
+  });
+
+  app.post("/api/referrals/verify-wallet", isAuthenticated, async (req, res) => {
+    try {
+      const userId = (req as any).user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const { walletAddress } = req.body;
+      if (!walletAddress) {
+        return res.status(400).json({ error: "Wallet address required" });
+      }
+      const verified = await payoutService.verifyAffiliateWallet(userId, walletAddress);
+      if (verified) {
+        res.json({ success: true, message: "Wallet verified for payouts" });
+      } else {
+        res.status(400).json({ error: "Invalid wallet address format" });
+      }
+    } catch (error) {
+      console.error("Verify wallet error:", error);
+      res.status(500).json({ error: "Failed to verify wallet" });
+    }
+  });
+
+  startPayoutScheduler(24);
 
   return httpServer;
 }
