@@ -3138,3 +3138,109 @@ export const REFERRAL_REWARDS = {
   REFERRER_CONVERSION_BONUS: 500,
   COMMISSION_PERCENT_DEFAULT: 10,
 } as const;
+
+// ============================================
+// COMMUNITY HUB
+// ============================================
+
+export const communities = pgTable("communities", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description"),
+  icon: text("icon").default("⚡"),
+  imageUrl: text("image_url"),
+  ownerId: text("owner_id").notNull(),
+  isVerified: boolean("is_verified").notNull().default(false),
+  isPublic: boolean("is_public").notNull().default(true),
+  memberCount: integer("member_count").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const communityChannels = pgTable("community_channels", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  communityId: varchar("community_id").notNull().references(() => communities.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description"),
+  type: text("type").notNull().default("chat"),
+  position: integer("position").notNull().default(0),
+  isLocked: boolean("is_locked").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const communityMembers = pgTable("community_members", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  communityId: varchar("community_id").notNull().references(() => communities.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull(),
+  username: text("username").notNull(),
+  role: text("role").notNull().default("member"),
+  isOnline: boolean("is_online").notNull().default(false),
+  lastSeenAt: timestamp("last_seen_at").defaultNow(),
+  joinedAt: timestamp("joined_at").defaultNow().notNull(),
+});
+
+export const communityMessages = pgTable("community_messages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  channelId: varchar("channel_id").notNull().references(() => communityChannels.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull(),
+  username: text("username").notNull(),
+  content: text("content").notNull(),
+  isBot: boolean("is_bot").notNull().default(false),
+  replyToId: varchar("reply_to_id"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  editedAt: timestamp("edited_at"),
+});
+
+export const communityBots = pgTable("community_bots", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  communityId: varchar("community_id").notNull().references(() => communities.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description"),
+  icon: text("icon").default("🤖"),
+  webhookUrl: text("webhook_url"),
+  apiKey: text("api_key"),
+  isActive: boolean("is_active").notNull().default(true),
+  permissions: text("permissions").default("read,write"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertCommunitySchema = createInsertSchema(communities).omit({
+  id: true,
+  memberCount: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertChannelSchema = createInsertSchema(communityChannels).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertMemberSchema = createInsertSchema(communityMembers).omit({
+  id: true,
+  isOnline: true,
+  lastSeenAt: true,
+  joinedAt: true,
+});
+
+export const insertCommunityMessageSchema = createInsertSchema(communityMessages).omit({
+  id: true,
+  createdAt: true,
+  editedAt: true,
+});
+
+export const insertBotSchema = createInsertSchema(communityBots).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type Community = typeof communities.$inferSelect;
+export type InsertCommunity = z.infer<typeof insertCommunitySchema>;
+export type CommunityChannel = typeof communityChannels.$inferSelect;
+export type InsertChannel = z.infer<typeof insertChannelSchema>;
+export type CommunityMember = typeof communityMembers.$inferSelect;
+export type InsertMember = z.infer<typeof insertMemberSchema>;
+export type CommunityMessage = typeof communityMessages.$inferSelect;
+export type InsertCommunityMessage = z.infer<typeof insertCommunityMessageSchema>;
+export type CommunityBot = typeof communityBots.$inferSelect;
+export type InsertBot = z.infer<typeof insertBotSchema>;

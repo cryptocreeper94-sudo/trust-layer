@@ -27,6 +27,7 @@ import { creditsService, CREDIT_COSTS } from "./credits-service";
 import { referralService } from "./referral-service";
 import { payoutService, startPayoutScheduler } from "./payout-service";
 import { voiceService, VOICE_SAMPLE_PROMPTS } from "./voice-service";
+import { communityHubService } from "./community-hub-service";
 
 const FaucetClaimRequestSchema = z.object({
   walletAddress: z.string().min(10, "Invalid wallet address").max(100),
@@ -8069,6 +8070,231 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   startPayoutScheduler(24);
+
+  // ============================================
+  // COMMUNITY HUB API
+  // ============================================
+
+  app.get("/api/community/list", async (req, res) => {
+    try {
+      const communities = await communityHubService.getCommunities();
+      res.json({ communities });
+    } catch (error) {
+      console.error("Get communities error:", error);
+      res.status(500).json({ error: "Failed to get communities" });
+    }
+  });
+
+  app.get("/api/community/my-communities", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const communities = await communityHubService.getUserCommunities(userId);
+      res.json({ communities });
+    } catch (error) {
+      console.error("Get user communities error:", error);
+      res.status(500).json({ error: "Failed to get your communities" });
+    }
+  });
+
+  app.post("/api/community/create", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { name, description, icon, isPublic } = req.body;
+      if (!name) return res.status(400).json({ error: "Community name required" });
+      
+      const community = await communityHubService.createCommunity({
+        name,
+        description: description || null,
+        icon: icon || "⚡",
+        ownerId: userId,
+        isPublic: isPublic !== false,
+      });
+      
+      res.json({ success: true, community });
+    } catch (error) {
+      console.error("Create community error:", error);
+      res.status(500).json({ error: "Failed to create community" });
+    }
+  });
+
+  app.get("/api/community/:id", async (req, res) => {
+    try {
+      const community = await communityHubService.getCommunity(req.params.id);
+      if (!community) return res.status(404).json({ error: "Community not found" });
+      res.json({ community });
+    } catch (error) {
+      console.error("Get community error:", error);
+      res.status(500).json({ error: "Failed to get community" });
+    }
+  });
+
+  app.get("/api/community/:id/channels", async (req, res) => {
+    try {
+      const channels = await communityHubService.getChannels(req.params.id);
+      res.json({ channels });
+    } catch (error) {
+      console.error("Get channels error:", error);
+      res.status(500).json({ error: "Failed to get channels" });
+    }
+  });
+
+  app.post("/api/community/:id/channels", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { name, description, type } = req.body;
+      if (!name) return res.status(400).json({ error: "Channel name required" });
+      
+      const channel = await communityHubService.createChannel({
+        communityId: req.params.id,
+        name,
+        description: description || null,
+        type: type || "chat",
+        position: 0,
+      });
+      
+      res.json({ success: true, channel });
+    } catch (error) {
+      console.error("Create channel error:", error);
+      res.status(500).json({ error: "Failed to create channel" });
+    }
+  });
+
+  app.post("/api/community/:id/join", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      const username = req.user?.username || req.user?.email?.split("@")[0] || "User";
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const member = await communityHubService.joinCommunity(req.params.id, userId, username);
+      res.json({ success: true, member });
+    } catch (error) {
+      console.error("Join community error:", error);
+      res.status(500).json({ error: "Failed to join community" });
+    }
+  });
+
+  app.post("/api/community/:id/leave", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      await communityHubService.leaveCommunity(req.params.id, userId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Leave community error:", error);
+      res.status(500).json({ error: "Failed to leave community" });
+    }
+  });
+
+  app.get("/api/community/:id/members", async (req, res) => {
+    try {
+      const members = await communityHubService.getMembers(req.params.id);
+      res.json({ members });
+    } catch (error) {
+      console.error("Get members error:", error);
+      res.status(500).json({ error: "Failed to get members" });
+    }
+  });
+
+  app.get("/api/channel/:id/messages", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 50;
+      const messages = await communityHubService.getMessages(req.params.id, limit);
+      res.json({ messages: messages.reverse() });
+    } catch (error) {
+      console.error("Get messages error:", error);
+      res.status(500).json({ error: "Failed to get messages" });
+    }
+  });
+
+  app.post("/api/channel/:id/messages", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      const username = req.user?.username || req.user?.email?.split("@")[0] || "User";
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { content, replyToId } = req.body;
+      if (!content) return res.status(400).json({ error: "Message content required" });
+      
+      const message = await communityHubService.sendMessage({
+        channelId: req.params.id,
+        userId,
+        username,
+        content,
+        replyToId: replyToId || null,
+        isBot: false,
+      });
+      
+      res.json({ success: true, message });
+    } catch (error) {
+      console.error("Send message error:", error);
+      res.status(500).json({ error: "Failed to send message" });
+    }
+  });
+
+  app.delete("/api/message/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const deleted = await communityHubService.deleteMessage(req.params.id, userId);
+      if (!deleted) return res.status(403).json({ error: "Cannot delete this message" });
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Delete message error:", error);
+      res.status(500).json({ error: "Failed to delete message" });
+    }
+  });
+
+  app.post("/api/community/:id/bots", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { name, description } = req.body;
+      if (!name) return res.status(400).json({ error: "Bot name required" });
+      
+      const bot = await communityHubService.createBot(req.params.id, name, description || "");
+      res.json({ success: true, bot });
+    } catch (error) {
+      console.error("Create bot error:", error);
+      res.status(500).json({ error: "Failed to create bot" });
+    }
+  });
+
+  app.get("/api/community/:id/bots", async (req, res) => {
+    try {
+      const bots = await communityHubService.getBots(req.params.id);
+      res.json({ bots });
+    } catch (error) {
+      console.error("Get bots error:", error);
+      res.status(500).json({ error: "Failed to get bots" });
+    }
+  });
+
+  app.post("/api/bot/message", async (req, res) => {
+    try {
+      const { apiKey, channelId, content } = req.body;
+      if (!apiKey || !channelId || !content) {
+        return res.status(400).json({ error: "API key, channel ID, and content required" });
+      }
+      
+      const message = await communityHubService.sendBotMessage(apiKey, channelId, content);
+      if (!message) return res.status(403).json({ error: "Invalid bot API key or bot disabled" });
+      
+      res.json({ success: true, message });
+    } catch (error) {
+      console.error("Bot message error:", error);
+      res.status(500).json({ error: "Failed to send bot message" });
+    }
+  });
 
   return httpServer;
 }
