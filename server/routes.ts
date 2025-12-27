@@ -6606,7 +6606,7 @@ Current context:
   // Get user AI credits balance (for Studio AI features)
   app.get("/api/assistant/credits", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.id;
+      const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Login required" });
       
       const credits = await getUserCredits(userId);
@@ -6625,7 +6625,7 @@ Current context:
   // Buy AI credits via Stripe (for Studio AI features)
   app.post("/api/assistant/buy-credits", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.id;
+      const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Login required" });
 
       const { amountCents } = req.body;
@@ -8218,7 +8218,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 
   app.get("/api/community/my-communities", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.id;
+      const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       
       const communities = await communityHubService.getUserCommunities(userId);
@@ -8231,7 +8231,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 
   app.post("/api/community/create", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.id;
+      const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       
       const { name, description, icon, isPublic } = req.body;
@@ -8275,7 +8275,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 
   app.post("/api/community/:id/channels", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.id;
+      const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       
       const { name, description, type } = req.body;
@@ -8298,8 +8298,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 
   app.post("/api/community/:id/join", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.id;
-      const username = req.user?.username || req.user?.email?.split("@")[0] || "User";
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const username = req.user?.claims?.firstName || req.user?.username || req.user?.email?.split("@")[0] || "User";
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       
       const member = await communityHubService.joinCommunity(req.params.id, userId, username);
@@ -8312,7 +8312,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 
   app.post("/api/community/:id/leave", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.id;
+      const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       
       await communityHubService.leaveCommunity(req.params.id, userId);
@@ -8346,8 +8346,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 
   app.post("/api/channel/:id/messages", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.id;
-      const username = req.user?.username || req.user?.email?.split("@")[0] || "User";
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const username = req.user?.claims?.firstName || req.user?.username || req.user?.email?.split("@")[0] || "User";
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       
       const { content, replyToId } = req.body;
@@ -8381,7 +8381,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 
   app.delete("/api/message/:id", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.id;
+      const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       
       const deleted = await communityHubService.deleteMessage(req.params.id, userId);
@@ -8396,7 +8396,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 
   app.post("/api/community/:id/bots", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.id;
+      const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       
       const { name, description } = req.body;

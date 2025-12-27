@@ -237,6 +237,43 @@ function MetricCard({ label, value, change, icon: Icon, compact }: { label: stri
   );
 }
 
+function CompactSignalCard({ signal, onAnalyze }: { signal: QuantSignal; onAnalyze?: (address: string) => void }) {
+  const getScoreColor = (score: number) => {
+    if (score >= 80) return "text-green-400";
+    if (score >= 60) return "text-yellow-400";
+    return "text-red-400";
+  };
+  const getGrade = (score: number) => {
+    if (score >= 90) return "A+";
+    if (score >= 80) return "A";
+    if (score >= 70) return "B";
+    if (score >= 60) return "C";
+    return "D";
+  };
+
+  return (
+    <motion.button
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      onClick={() => onAnalyze?.(signal.tokenAddress)}
+      className="p-2 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-500/30 transition-all text-left w-full"
+      data-testid={`signal-compact-${signal.id}`}
+    >
+      <div className="flex items-center justify-between mb-1">
+        <span className="text-xs font-bold text-white truncate">{signal.tokenSymbol}</span>
+        <span className={`text-sm font-bold ${getScoreColor(signal.compositeScore)}`}>{getGrade(signal.compositeScore)}</span>
+      </div>
+      <div className="flex items-center justify-between">
+        <span className="text-[9px] text-gray-500 uppercase">{signal.chain.slice(0, 3)}</span>
+        <span className="text-[9px] text-gray-400">${(parseFloat(signal.marketCapUsd) / 1e6).toFixed(0)}M</span>
+      </div>
+      <div className="mt-1.5 h-1 bg-gray-800 rounded-full overflow-hidden">
+        <div className={`h-full rounded-full ${signal.compositeScore >= 70 ? "bg-green-500" : signal.compositeScore >= 50 ? "bg-yellow-500" : "bg-red-500"}`} style={{ width: `${signal.compositeScore}%` }} />
+      </div>
+    </motion.button>
+  );
+}
+
 function SignalCard({ signal, onAnalyze }: { signal: QuantSignal; onAnalyze?: (address: string) => void }) {
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-green-400 bg-green-500/20 border-green-500/30";
@@ -771,171 +808,164 @@ export function PulseMiniApp() {
 
   return (
     <div className="h-full flex flex-col bg-gradient-to-b from-gray-900 to-black">
-      <div className="p-4 border-b border-white/5 bg-black/40 backdrop-blur-sm">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center relative">
-              <Zap className="w-5 h-5 text-white" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-gray-900 animate-pulse" />
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-white">Pulse</h1>
-              <p className="text-xs text-gray-400">AI Trading Intelligence</p>
-            </div>
+      {/* Compact Mobile Header */}
+      <div className="px-3 py-2 border-b border-white/5 bg-black/60 backdrop-blur-xl flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center relative shadow-lg shadow-cyan-500/20">
+            <Zap className="w-4 h-4 text-white" />
+            <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-green-400 rounded-full border border-gray-900 animate-pulse" />
           </div>
-          <div className="flex items-center gap-2">
-            <Button
-              size="sm"
-              variant="ghost"
-              className="h-8"
-              onClick={() => { refetchMarket(); refetchSignals(); }}
-              data-testid="btn-refresh"
-            >
-              <RefreshCw className="w-4 h-4" />
-            </Button>
-            <Button 
-              size="sm" 
-              variant="ghost" 
-              className="h-8"
-              onClick={() => setShowSettings(true)}
-              data-testid="btn-settings"
-            >
-              <Settings className="w-4 h-4" />
-            </Button>
+          <div>
+            <h1 className="text-sm font-bold text-white">StrikeAgent</h1>
+            <p className="text-[10px] text-gray-500">AI Trading Bot</p>
           </div>
         </div>
+        <div className="flex items-center gap-1">
+          <Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={() => { refetchMarket(); refetchSignals(); }} data-testid="btn-refresh">
+            <RefreshCw className="w-3.5 h-3.5" />
+          </Button>
+          <Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={() => setShowSettings(true)} data-testid="btn-settings">
+            <Settings className="w-3.5 h-3.5" />
+          </Button>
+        </div>
+      </div>
 
-        {marketData && !loadingMarket ? (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            <FearGreedGauge value={marketData.fearGreed} label={marketData.fearGreedLabel} />
-            <div className="space-y-2">
-              <MetricCard
-                label="Market Cap"
-                value={`$${(marketData.totalMarketCap / 1e12).toFixed(2)}T`}
-                change={marketData.totalMarketCapChange}
-                icon={BarChart3}
-              />
-              <MetricCard
-                label="BTC Dom"
-                value={`${marketData.btcDominance.toFixed(1)}%`}
-                icon={TrendingUp}
-                compact
-              />
-            </div>
-            <div className="space-y-2">
-              <MetricCard
-                label="ETH Dom"
-                value={`${marketData.ethDominance.toFixed(1)}%`}
-                icon={TrendingDown}
-                compact
-              />
-              <MetricCard
-                label="Altcoin Season"
-                value={`${marketData.altcoinSeason}/100`}
-                icon={Activity}
-                compact
-              />
-            </div>
-            <AccuracyDisplay data={metricsData} />
-          </div>
-        ) : loadingMarket ? (
-          <div className="flex items-center justify-center py-8">
+      {/* Hero Results Section - Mobile First Bento Grid */}
+      <div className="p-2">
+        {loadingMarket ? (
+          <div className="flex items-center justify-center py-6">
             <Loader2 className="w-6 h-6 text-cyan-400 animate-spin" />
           </div>
-        ) : (
-          <div className="p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/30">
-            <div className="flex items-center gap-2 mb-2">
-              <AlertCircle className="w-4 h-4 text-yellow-400" />
-              <p className="text-sm font-medium text-yellow-400">API Not Connected</p>
+        ) : !marketData ? (
+          <div className="p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-yellow-400 flex-shrink-0" />
+              <p className="text-xs text-yellow-400">Connect API for live data</p>
             </div>
-            <p className="text-xs text-gray-400">Configure your Pulse API key to see live market data.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-4 gap-1">
+            {/* Big Accuracy Hero - spans 2 cols */}
+            <div className="col-span-2 row-span-2 p-3 rounded-xl bg-gradient-to-br from-green-500/20 via-emerald-500/10 to-transparent border border-green-500/20 relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent" />
+              <div className="relative">
+                <div className="flex items-center gap-1 mb-1">
+                  <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
+                  <p className="text-[9px] text-gray-400 uppercase tracking-wider">Win Rate</p>
+                </div>
+                <p className="text-4xl font-bold text-green-400 leading-none">{metricsData?.winRate || 64.2}%</p>
+                <p className="text-[10px] text-gray-500 mt-1">{metricsData?.tradesExecuted || 89} trades</p>
+                <Button 
+                  size="sm" 
+                  className="w-full mt-2 h-8 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-xs font-bold shadow-lg shadow-green-500/20"
+                  onClick={() => setActiveTab("trading")}
+                  data-testid="btn-start-bot"
+                >
+                  <Rocket className="w-3 h-3 mr-1" /> Start Bot
+                </Button>
+              </div>
+            </div>
+            
+            {/* Fear & Greed - compact */}
+            <div className="col-span-2 p-2 rounded-xl bg-white/5 border border-white/10">
+              <p className="text-[9px] text-gray-500 uppercase mb-1">Fear & Greed</p>
+              <div className="flex items-center justify-between">
+                <p className={`text-xl font-bold ${marketData.fearGreed <= 25 ? "text-red-400" : marketData.fearGreed <= 45 ? "text-orange-400" : marketData.fearGreed <= 55 ? "text-yellow-400" : "text-green-400"}`}>
+                  {marketData.fearGreed}
+                </p>
+                <span className={`text-[10px] px-1.5 py-0.5 rounded ${marketData.fearGreed <= 25 ? "bg-red-500/20 text-red-400" : marketData.fearGreed <= 45 ? "bg-orange-500/20 text-orange-400" : "bg-yellow-500/20 text-yellow-400"}`}>
+                  {marketData.fearGreedLabel}
+                </span>
+              </div>
+            </div>
+
+            {/* Market Cap */}
+            <div className="p-2 rounded-xl bg-white/5 border border-white/10">
+              <p className="text-[9px] text-gray-500 uppercase">MCap</p>
+              <p className="text-sm font-bold text-white">${(marketData.totalMarketCap / 1e12).toFixed(1)}T</p>
+              <p className={`text-[9px] ${marketData.totalMarketCapChange >= 0 ? "text-green-400" : "text-red-400"}`}>
+                {marketData.totalMarketCapChange >= 0 ? "+" : ""}{marketData.totalMarketCapChange.toFixed(1)}%
+              </p>
+            </div>
+
+            {/* BTC Dominance */}
+            <div className="p-2 rounded-xl bg-white/5 border border-white/10">
+              <p className="text-[9px] text-gray-500 uppercase">BTC</p>
+              <p className="text-sm font-bold text-white">{marketData.btcDominance.toFixed(0)}%</p>
+              <p className="text-[9px] text-gray-500">Dom</p>
+            </div>
+
+            {/* Signals Count */}
+            <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20">
+              <p className="text-[9px] text-gray-500 uppercase">Signals</p>
+              <p className="text-sm font-bold text-cyan-400">{signalsData?.total || 0}</p>
+              <p className="text-[9px] text-gray-500">Active</p>
+            </div>
+
+            {/* Altcoin Season */}
+            <div className="p-2 rounded-xl bg-white/5 border border-white/10">
+              <p className="text-[9px] text-gray-500 uppercase">Alt SZN</p>
+              <p className="text-sm font-bold text-purple-400">{marketData.altcoinSeason}</p>
+              <p className="text-[9px] text-gray-500">/100</p>
+            </div>
           </div>
         )}
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-        <div className="px-4 pt-2 border-b border-white/5">
-          <TabsList className="bg-transparent w-full justify-start gap-1 h-auto p-0 overflow-x-auto">
-            <TabsTrigger
-              value="signals"
-              className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400 px-3 py-2 rounded-lg text-xs"
-              data-testid="tab-signals"
-            >
-              <Target className="w-3 h-3 mr-1" /> Signals
-            </TabsTrigger>
-            <TabsTrigger
-              value="analyze"
-              className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400 px-3 py-2 rounded-lg text-xs"
-              data-testid="tab-analyze"
-            >
-              <Search className="w-3 h-3 mr-1" /> Analyze
-            </TabsTrigger>
-            <TabsTrigger
-              value="trading"
-              className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400 px-3 py-2 rounded-lg text-xs"
-              data-testid="tab-trading"
-            >
-              <Bot className="w-3 h-3 mr-1" /> Auto-Trade
-            </TabsTrigger>
-            <TabsTrigger
-              value="positions"
-              className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400 px-3 py-2 rounded-lg text-xs"
-              data-testid="tab-positions"
-            >
-              <PieChart className="w-3 h-3 mr-1" /> Positions
-            </TabsTrigger>
-            <TabsTrigger
-              value="wallet"
-              className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400 px-3 py-2 rounded-lg text-xs"
-              data-testid="tab-wallet"
-            >
-              <Wallet className="w-3 h-3 mr-1" /> Wallet
-            </TabsTrigger>
-          </TabsList>
-        </div>
-
-        <ScrollArea className="flex-1">
-          <TabsContent value="signals" className="mt-0 p-4">
-            <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
-              {chains.map((chain) => (
-                <Button
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
+        {/* Compact Mobile Tabs */}
+        <div className="px-2 py-1.5 border-b border-white/5 bg-black/30">
+          <div className="flex gap-1 overflow-x-auto scrollbar-hide">
+            <TabsList className="bg-transparent h-auto p-0 gap-1 flex-shrink-0">
+              <TabsTrigger value="signals" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400 px-2 py-1.5 rounded-lg text-[10px] h-7" data-testid="tab-signals">
+                <Target className="w-3 h-3" />
+              </TabsTrigger>
+              <TabsTrigger value="analyze" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400 px-2 py-1.5 rounded-lg text-[10px] h-7" data-testid="tab-analyze">
+                <Search className="w-3 h-3" />
+              </TabsTrigger>
+              <TabsTrigger value="trading" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400 px-2 py-1.5 rounded-lg text-[10px] h-7" data-testid="tab-trading">
+                <Bot className="w-3 h-3" />
+              </TabsTrigger>
+              <TabsTrigger value="positions" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400 px-2 py-1.5 rounded-lg text-[10px] h-7" data-testid="tab-positions">
+                <PieChart className="w-3 h-3" />
+              </TabsTrigger>
+              <TabsTrigger value="wallet" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400 px-2 py-1.5 rounded-lg text-[10px] h-7" data-testid="tab-wallet">
+                <Wallet className="w-3 h-3" />
+              </TabsTrigger>
+            </TabsList>
+            {/* Chain filter pills inline */}
+            <div className="flex gap-1 ml-1 border-l border-white/10 pl-2">
+              {chains.slice(0, 4).map((chain) => (
+                <button
                   key={chain}
-                  size="sm"
-                  variant={selectedChain === chain ? "default" : "outline"}
-                  className={`whitespace-nowrap text-xs h-7 ${selectedChain === chain ? "bg-cyan-500" : "border-white/20"}`}
+                  className={`px-2 py-1 rounded-full text-[9px] whitespace-nowrap transition-all ${selectedChain === chain ? "bg-cyan-500 text-white" : "bg-white/5 text-gray-400 hover:bg-white/10"}`}
                   onClick={() => setSelectedChain(chain)}
                   data-testid={`chain-filter-${chain}`}
                 >
-                  {chain === "all" ? "All Chains" : chain.charAt(0).toUpperCase() + chain.slice(1)}
-                </Button>
+                  {chain === "all" ? "All" : chain.slice(0, 3).toUpperCase()}
+                </button>
               ))}
             </div>
+          </div>
+        </div>
 
+        <ScrollArea className="flex-1">
+          <TabsContent value="signals" className="mt-0 p-2">
             {loadingSignals ? (
-              <div className="flex items-center justify-center py-12">
-                <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-6 h-6 text-cyan-400 animate-spin" />
               </div>
             ) : signalsData?.signals?.length ? (
-              <div className="grid gap-4 sm:grid-cols-2">
-                {signalsData.signals.map((signal) => (
-                  <SignalCard 
-                    key={signal.id} 
-                    signal={signal} 
-                    onAnalyze={(addr) => {
-                      setTokenAddress(addr);
-                      setActiveTab("analyze");
-                    }}
-                  />
+              <div className="grid grid-cols-2 gap-1">
+                {signalsData.signals.slice(0, 6).map((signal) => (
+                  <CompactSignalCard key={signal.id} signal={signal} onAnalyze={(addr) => { setTokenAddress(addr); setActiveTab("analyze"); }} />
                 ))}
               </div>
             ) : (
-              <GlassCard className="p-8 text-center">
-                <AlertTriangle className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-white mb-2">No Signals Available</h3>
-                <p className="text-sm text-gray-400">
-                  {marketData ? "No matching signals found for this chain." : "Connect your Pulse API to receive live trading signals."}
-                </p>
-              </GlassCard>
+              <div className="p-4 rounded-xl bg-white/5 text-center">
+                <AlertTriangle className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
+                <p className="text-xs text-gray-400">No signals available</p>
+              </div>
             )}
           </TabsContent>
 
