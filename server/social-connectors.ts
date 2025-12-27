@@ -89,7 +89,7 @@ async function deployToTelegram(botToken: string, channelId: string, content: st
 }
 
 /**
- * Deploy to X/Twitter via API v2
+ * Deploy to X/Twitter via API v2 with media upload support
  */
 async function deployToTwitter(content: string, imageUrl?: string | null): Promise<DeployResult> {
   const apiKey = process.env.TWITTER_API_KEY;
@@ -102,7 +102,6 @@ async function deployToTwitter(content: string, imageUrl?: string | null): Promi
   }
   
   try {
-    // For now, text-only tweets. Media upload requires additional OAuth complexity
     const { TwitterApi } = await import('twitter-api-v2');
     
     const client = new TwitterApi({
@@ -112,6 +111,42 @@ async function deployToTwitter(content: string, imageUrl?: string | null): Promi
       accessSecret: accessTokenSecret,
     });
     
+    // If we have an image URL, download and upload it to Twitter
+    if (imageUrl) {
+      try {
+        // Download the image
+        const imageResponse = await fetch(imageUrl);
+        if (!imageResponse.ok) {
+          console.error(`Failed to download image from ${imageUrl}: ${imageResponse.status}`);
+          // Fall back to text-only tweet
+          const tweet = await client.v2.tweet(content);
+          return { success: true, externalId: tweet.data.id };
+        }
+        
+        const imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
+        
+        // Upload media to Twitter using v1 API (required for media upload)
+        const mediaId = await client.v1.uploadMedia(imageBuffer, { 
+          mimeType: 'image/png',
+          target: 'tweet'
+        });
+        
+        // Post tweet with media
+        const tweet = await client.v2.tweet({
+          text: content,
+          media: { media_ids: [mediaId] }
+        });
+        
+        return { success: true, externalId: tweet.data.id };
+      } catch (mediaError: any) {
+        console.error('Media upload failed, posting text-only:', mediaError.message);
+        // Fall back to text-only tweet if media upload fails
+        const tweet = await client.v2.tweet(content);
+        return { success: true, externalId: tweet.data.id };
+      }
+    }
+    
+    // Text-only tweet
     const tweet = await client.v2.tweet(content);
     return { success: true, externalId: tweet.data.id };
   } catch (error: any) {
