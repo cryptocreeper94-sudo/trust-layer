@@ -3280,6 +3280,69 @@ export const insertTipSchema = createInsertSchema(memberTips).omit({
   createdAt: true,
 });
 
+// =====================================================
+// ORBS ECONOMY SYSTEM
+// =====================================================
+
+export const orbWallets = pgTable("orb_wallets", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  username: text("username").notNull(),
+  balance: integer("balance").notNull().default(0),
+  lockedBalance: integer("locked_balance").notNull().default(0),
+  totalEarned: integer("total_earned").notNull().default(0),
+  totalSpent: integer("total_spent").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const orbTransactions = pgTable("orb_transactions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  walletId: varchar("wallet_id").notNull().references(() => orbWallets.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull(),
+  type: text("type").notNull(), // 'earn', 'spend', 'tip_sent', 'tip_received', 'purchase', 'refund', 'conversion'
+  amount: integer("amount").notNull(),
+  balance: integer("balance").notNull(), // Balance after transaction
+  description: text("description"),
+  referenceId: text("reference_id"), // For linking to tips, purchases, etc.
+  referenceType: text("reference_type"), // 'tip', 'stripe_payment', 'feature_unlock', etc.
+  metadata: text("metadata"), // JSON string for extra data
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const orbConversionSnapshots = pgTable("orb_conversion_snapshots", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  walletId: varchar("wallet_id").notNull().references(() => orbWallets.id),
+  orbBalance: integer("orb_balance").notNull(),
+  dwcAmount: text("dwc_amount").notNull(), // Conversion amount in DWC
+  conversionRate: text("conversion_rate").notNull(),
+  status: text("status").notNull().default("pending"), // 'pending', 'converted', 'claimed'
+  snapshotAt: timestamp("snapshot_at").defaultNow().notNull(),
+  convertedAt: timestamp("converted_at"),
+});
+
+export const insertOrbWalletSchema = createInsertSchema(orbWallets).omit({
+  id: true,
+  balance: true,
+  lockedBalance: true,
+  totalEarned: true,
+  totalSpent: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertOrbTransactionSchema = createInsertSchema(orbTransactions).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type OrbWallet = typeof orbWallets.$inferSelect;
+export type InsertOrbWallet = z.infer<typeof insertOrbWalletSchema>;
+export type OrbTransaction = typeof orbTransactions.$inferSelect;
+export type InsertOrbTransaction = z.infer<typeof insertOrbTransactionSchema>;
+export type OrbConversionSnapshot = typeof orbConversionSnapshots.$inferSelect;
+
 export type Community = typeof communities.$inferSelect;
 export type InsertCommunity = z.infer<typeof insertCommunitySchema>;
 export type CommunityChannel = typeof communityChannels.$inferSelect;
