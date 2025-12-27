@@ -14,7 +14,46 @@ import { GlassCard } from "@/components/glass-card";
 import { useQuery } from "@tanstack/react-query";
 import { fetchEcosystemApps } from "@/lib/api";
 import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { InfoTooltip } from "@/components/info-tooltip";
+
+function BetaBadge() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <div 
+        className="absolute top-2 left-2 z-10 cursor-pointer" 
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(true); }}
+      >
+        <Badge className="text-[8px] uppercase bg-amber-500/90 text-black font-bold px-1.5 py-0.5 shadow-lg hover:bg-amber-400 transition-colors">
+          Beta
+        </Badge>
+      </div>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-md bg-slate-900 border-white/10">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold flex items-center gap-2">
+              <Badge className="bg-amber-500 text-black">Beta</Badge>
+              App Status
+            </DialogTitle>
+            <DialogDescription className="text-white/70 pt-4 space-y-3">
+              <p>
+                This application is <strong className="text-white">fully functional</strong> and ready for use. 
+              </p>
+              <p>
+                As a Beta product, it is constantly being updated with new features and improvements. 
+                These updates may occasionally affect visual continuity or functionality in demo modes.
+              </p>
+              <p className="text-primary">
+                Your data and transactions remain secure throughout all updates.
+              </p>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
 
 const ecosystemImages: Record<string, string> = {
   "orbit-staffing": "/ecosystem/orbit-staffing.jpg",
@@ -92,11 +131,7 @@ function AppCard({ src, alt, gradient, name, category, verified, tags, url }: {
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
           
           {/* Beta badge at top left */}
-          <div className="absolute top-2 left-2 z-10">
-            <Badge className="text-[8px] uppercase bg-amber-500/90 text-black font-bold px-1.5 py-0.5 shadow-lg">
-              Beta
-            </Badge>
-          </div>
+          <BetaBadge />
           
           {/* Content overlay at bottom */}
           <div className="absolute bottom-0 left-0 right-0 p-3">

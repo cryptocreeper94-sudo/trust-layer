@@ -21,6 +21,7 @@ import { GlassCard } from "@/components/glass-card";
 import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
 import { FirebaseLoginModal } from "@/components/firebase-login";
 import { useState, useRef } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { WalletButton } from "@/components/wallet-button";
 import { HeaderTools } from "@/components/header-tools";
 import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.png";
@@ -31,6 +32,44 @@ import tradingImg from "@assets/generated_images/futuristic_blockchain_network_a
 import nftImg from "@assets/generated_images/fantasy_character_heroes.png";
 import toolsImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
 import earnImg from "@assets/generated_images/darkwave_crypto_token_coin_holographic.png";
+
+function BetaBadge() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <div 
+        className="absolute top-2 left-2 z-10 cursor-pointer" 
+        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(true); }}
+      >
+        <Badge className="text-[8px] uppercase bg-amber-500/90 text-black font-bold px-1.5 py-0.5 shadow-lg hover:bg-amber-400 transition-colors">
+          Beta
+        </Badge>
+      </div>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-md bg-slate-900 border-white/10">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold flex items-center gap-2">
+              <Badge className="bg-amber-500 text-black">Beta</Badge>
+              App Status
+            </DialogTitle>
+            <DialogDescription className="text-white/70 pt-4 space-y-3">
+              <p>
+                This application is <strong className="text-white">fully functional</strong> and ready for use. 
+              </p>
+              <p>
+                As a Beta product, it is constantly being updated with new features and improvements. 
+                These updates may occasionally affect visual continuity or functionality in demo modes.
+              </p>
+              <p className="text-primary">
+                Your data and transactions remain secure throughout all updates.
+              </p>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
 
 const ecosystemImages: Record<string, string> = {
   "orbit-staffing": "/ecosystem/orbit-staffing.jpg",
@@ -902,11 +941,7 @@ function AppCard({ id, name, category, desc, gradient, showFavorite, url }: { id
         )}
         
         {/* Beta badge at top left */}
-        <div className="absolute top-2 left-2 z-10">
-          <Badge className="text-[8px] uppercase bg-amber-500/90 text-black font-bold px-1.5 py-0.5 shadow-lg">
-            Beta
-          </Badge>
-        </div>
+        <BetaBadge />
         
         {/* Content overlay at bottom */}
         <div className="absolute bottom-0 left-0 right-0 p-3">
