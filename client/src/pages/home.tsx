@@ -856,49 +856,67 @@ export default function Home() {
   );
 }
 
+const gradientColors: Record<string, { from: string; to: string }> = {
+  "from-gray-500 to-gray-700": { from: "#6b7280", to: "#374151" },
+  "from-indigo-600 to-violet-800": { from: "#4f46e5", to: "#5b21b6" },
+  "from-cyan-400 to-blue-500": { from: "#22d3ee", to: "#3b82f6" },
+  "from-slate-600 to-zinc-800": { from: "#475569", to: "#27272a" },
+  "from-emerald-600 to-teal-800": { from: "#059669", to: "#115e59" },
+  "from-amber-600 to-yellow-800": { from: "#d97706", to: "#854d0e" },
+  "from-cyan-600 to-blue-700": { from: "#0891b2", to: "#1d4ed8" },
+  "from-cyan-500 to-blue-600": { from: "#06b6d4", to: "#2563eb" },
+  "from-orange-500 to-red-600": { from: "#f97316", to: "#dc2626" },
+  "from-red-600 to-rose-700": { from: "#dc2626", to: "#be123c" },
+};
+
 function AppCard({ id, name, category, desc, gradient, showFavorite, url }: { id?: string, name: string, category: string, desc: string, gradient: string, showFavorite?: boolean, url?: string }) {
-  const truncatedDesc = desc.length > 60 ? desc.slice(0, 60) + "..." : desc;
   const [imgFailed, setImgFailed] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
   const imageSrc = id ? ecosystemImages[id] : "";
+  const colors = gradientColors[gradient] || { from: "#0891b2", to: "#1d4ed8" };
   
   const cardContent = (
-    <GlassCard className="h-full min-h-[180px]">
-      <div className="p-4 h-full flex flex-col">
-        <div className="flex justify-between items-start mb-3">
-          <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-sm shadow-lg shrink-0 overflow-hidden relative`}>
-            {imageSrc && !imgFailed ? (
-              <>
-                {!imgLoaded && <span className="absolute inset-0 flex items-center justify-center">{name.charAt(0)}</span>}
-                <img 
-                  src={imageSrc} 
-                  alt={name}
-                  className={`w-full h-full object-cover ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
-                  onLoad={() => setImgLoaded(true)}
-                  onError={() => setImgFailed(true)}
-                />
-              </>
-            ) : (
-              name.charAt(0)
-            )}
+    <GlassCard className="h-full overflow-hidden">
+      <div className="aspect-[3/4] relative">
+        {(!imgLoaded || imgFailed || !imageSrc) && (
+          <div 
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ background: `linear-gradient(to bottom right, ${colors.from}, ${colors.to})` }}
+          >
+            <span className="text-4xl font-bold text-white/80">{name.charAt(0)}</span>
           </div>
-          {showFavorite && id && (
-            <div onClick={(e) => e.stopPropagation()}>
-              <FavoriteButton appId={id} />
-            </div>
-          )}
-        </div>
-        <div className="flex items-start justify-between gap-2 mb-2">
-          <h3 className="text-sm font-bold text-white group-hover:text-primary transition-colors line-clamp-1">{name}</h3>
-          <Badge variant="secondary" className="text-[9px] uppercase bg-white/10 text-white/60 shrink-0 px-1.5 py-0">
-            {category}
-          </Badge>
-        </div>
-        <p className="text-[11px] text-white/50 leading-relaxed mb-3 flex-grow line-clamp-2">
-          {truncatedDesc}
-        </p>
-        <div className="flex items-center text-primary text-[10px] font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity mt-auto">
-          Launch <ArrowRight className="w-3 h-3 ml-1" />
+        )}
+        {imageSrc && (
+          <img 
+            src={imageSrc} 
+            alt={name}
+            className={`w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ${imgLoaded && !imgFailed ? 'opacity-100' : 'opacity-0'}`}
+            onLoad={() => setImgLoaded(true)}
+            onError={() => setImgFailed(true)}
+          />
+        )}
+        {/* Fade to black gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+        
+        {/* Favorite button at top right */}
+        {showFavorite && id && (
+          <div className="absolute top-2 right-2 z-10" onClick={(e) => e.stopPropagation()}>
+            <FavoriteButton appId={id} />
+          </div>
+        )}
+        
+        {/* Content overlay at bottom */}
+        <div className="absolute bottom-0 left-0 right-0 p-3">
+          <div className="flex items-center gap-2 mb-1">
+            <h3 className="text-sm font-bold text-white truncate flex-1">{name}</h3>
+            <Badge variant="secondary" className="text-[8px] uppercase bg-white/10 text-white/60 shrink-0 px-1.5 py-0">
+              {category}
+            </Badge>
+          </div>
+          <p className="text-[10px] text-white/60 line-clamp-2 mb-2">{desc}</p>
+          <div className="flex items-center text-primary text-[9px] font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
+            Launch <ArrowRight className="w-2.5 h-2.5 ml-1" />
+          </div>
         </div>
       </div>
     </GlassCard>
