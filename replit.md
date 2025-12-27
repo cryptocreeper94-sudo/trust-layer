@@ -11,6 +11,7 @@ DarkWave Smart Chain (DSC) is a blockchain ecosystem by DarkWave Studios, design
 - Design: Premium UI with extensive visual effects ("everything should sparkle and shine")
 - Mobile: Mobile-first design with self-contained carousels, accordions, dropdowns
 - Branding: White-labeled, no Replit branding, dark theme only
+- Stripe: FULLY CONFIGURED - do not ask about Stripe keys, payments are ready
 
 ## System Architecture
 
