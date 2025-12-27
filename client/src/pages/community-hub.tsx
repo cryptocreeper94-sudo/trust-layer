@@ -7,7 +7,8 @@ import {
   Plus, ChevronRight, ChevronDown, Sparkles, Crown, Shield,
   Zap, Star, Heart, Send, Smile, Image, Mic, MoreHorizontal,
   Home, Compass, Radio, Lock, Globe, ArrowLeft, Menu, X, Loader2,
-  Activity, TrendingUp, Reply, Edit2, Trash2, Coins, Paperclip, ImageIcon
+  Activity, TrendingUp, Reply, Edit2, Trash2, Coins, Paperclip, ImageIcon,
+  Pin, Mail, BarChart2, Clock, Forward, MessageSquare, BellOff, Calendar
 } from "lucide-react";
 import { useUpload } from "@/hooks/use-upload";
 import { Footer } from "@/components/footer";
@@ -189,9 +190,11 @@ interface MessageBubbleProps {
   onReaction: (messageId: string, emoji: string) => void;
   onDelete: (messageId: string) => void;
   onTip?: (userId: string, username: string, messageId: string) => void;
+  onPin?: (messageId: string) => void;
+  onStartDm?: (userId: string, username: string) => void;
 }
 
-function MessageBubble({ message, currentUserId, onReply, onReaction, onDelete, onTip }: MessageBubbleProps) {
+function MessageBubble({ message, currentUserId, onReply, onReaction, onDelete, onTip, onPin, onStartDm }: MessageBubbleProps) {
   const [showReactions, setShowReactions] = useState(false);
   const time = new Date(message.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   const isOwn = currentUserId && (message.userId === currentUserId);
@@ -324,6 +327,26 @@ function MessageBubble({ message, currentUserId, onReply, onReaction, onDelete, 
             <Coins className="w-4 h-4 text-gray-400 hover:text-amber-400" />
           </button>
         )}
+        {!isOwn && onStartDm && (
+          <button 
+            onClick={() => onStartDm(message.userId, message.username)}
+            className="p-1.5 hover:bg-pink-500/20 rounded-lg transition-colors"
+            data-testid={`btn-dm-${message.id}`}
+            title="Send Direct Message"
+          >
+            <Mail className="w-4 h-4 text-gray-400 hover:text-pink-400" />
+          </button>
+        )}
+        {onPin && (
+          <button 
+            onClick={() => onPin(message.id)}
+            className="p-1.5 hover:bg-cyan-500/20 rounded-lg transition-colors"
+            data-testid={`btn-pin-${message.id}`}
+            title="Pin Message"
+          >
+            <Pin className="w-4 h-4 text-gray-400 hover:text-cyan-400" />
+          </button>
+        )}
         {isOwn && (
           <button 
             onClick={() => onDelete(message.id)}
@@ -354,6 +377,15 @@ export default function CommunityHub() {
   const [tipDialogOpen, setTipDialogOpen] = useState(false);
   const [tipTarget, setTipTarget] = useState<{ userId: string; username: string; messageId: string } | null>(null);
   const [tipAmount, setTipAmount] = useState("10");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+  const [showPinned, setShowPinned] = useState(false);
+  const [showDMs, setShowDMs] = useState(false);
+  const [showPolls, setShowPolls] = useState(false);
+  const [selectedDmId, setSelectedDmId] = useState<string | null>(null);
+  const [newPollQuestion, setNewPollQuestion] = useState("");
+  const [newPollOptions, setNewPollOptions] = useState(["", ""]);
+  const [createPollOpen, setCreatePollOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -445,6 +477,95 @@ export default function CommunityHub() {
       return res.json();
     },
     enabled: !!selectedChannelId,
+  });
+
+  const { data: pinnedData } = useQuery<{ messages: any[] }>({
+    queryKey: ["/api/community/channel", selectedChannelId, "pinned"],
+    queryFn: async () => {
+      const res = await fetch(`/api/community/channel/${selectedChannelId}/pinned`);
+      return res.json();
+    },
+    enabled: !!selectedChannelId && showPinned,
+  });
+
+  const { data: pollsData, refetch: refetchPolls } = useQuery<{ polls: any[] }>({
+    queryKey: ["/api/community/channel", selectedChannelId, "polls"],
+    queryFn: async () => {
+      const res = await fetch(`/api/community/channel/${selectedChannelId}/polls`);
+      return res.json();
+    },
+    enabled: !!selectedChannelId,
+  });
+
+  const { data: dmConversationsData, refetch: refetchDms } = useQuery<{ conversations: any[] }>({
+    queryKey: ["/api/dm/conversations"],
+    queryFn: async () => {
+      const res = await fetch("/api/dm/conversations");
+      return res.json();
+    },
+    enabled: !!user,
+  });
+
+  const { data: searchResults } = useQuery<{ messages: any[] }>({
+    queryKey: ["/api/community/channel", selectedChannelId, "search", searchQuery],
+    queryFn: async () => {
+      const res = await fetch(`/api/community/channel/${selectedChannelId}/search?q=${encodeURIComponent(searchQuery)}`);
+      return res.json();
+    },
+    enabled: !!selectedChannelId && searchQuery.length > 2,
+  });
+
+  const pinMessage = useMutation({
+    mutationFn: async (messageId: string) => {
+      const res = await fetch(`/api/community/channel/${selectedChannelId}/pin/${messageId}`, { method: "POST" });
+      return res.json();
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["/api/community/channel", selectedChannelId, "pinned"] }),
+  });
+
+  const createPoll = useMutation({
+    mutationFn: async (data: { question: string; options: string[] }) => {
+      const res = await fetch(`/api/community/channel/${selectedChannelId}/polls`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      return res.json();
+    },
+    onSuccess: () => {
+      refetchPolls();
+      setCreatePollOpen(false);
+      setNewPollQuestion("");
+      setNewPollOptions(["", ""]);
+    },
+  });
+
+  const votePoll = useMutation({
+    mutationFn: async ({ pollId, optionIndex }: { pollId: string; optionIndex: number }) => {
+      const res = await fetch(`/api/community/poll/${pollId}/vote`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ optionIndex }),
+      });
+      return res.json();
+    },
+    onSuccess: () => refetchPolls(),
+  });
+
+  const startDm = useMutation({
+    mutationFn: async (data: { targetUserId: string; targetUsername: string }) => {
+      const res = await fetch("/api/dm/start", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      return res.json();
+    },
+    onSuccess: (data) => {
+      refetchDms();
+      setSelectedDmId(data.conversation.id);
+      setShowDMs(true);
+    },
   });
 
   useEffect(() => {
@@ -808,13 +929,53 @@ export default function CommunityHub() {
                       </span>
                     </div>
                   )}
-                  <div className="relative hidden md:block">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                    <Input 
-                      placeholder="Search..." 
-                      className="w-48 h-8 pl-9 bg-white/5 border-white/10 text-sm"
-                    />
-                  </div>
+                  {showSearch ? (
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                      <Input 
+                        placeholder="Search messages..." 
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-40 sm:w-48 h-8 pl-9 bg-white/5 border-white/10 text-sm"
+                        autoFocus
+                        data-testid="input-search"
+                      />
+                      <button onClick={() => { setShowSearch(false); setSearchQuery(""); }} className="absolute right-2 top-1/2 -translate-y-1/2">
+                        <X className="w-3 h-3 text-gray-500 hover:text-white" />
+                      </button>
+                    </div>
+                  ) : (
+                    <button onClick={() => setShowSearch(true)} className="p-1.5 sm:p-2 hover:bg-white/10 rounded-lg" data-testid="btn-search">
+                      <Search className="w-4 h-4 text-gray-400" />
+                    </button>
+                  )}
+                  <button 
+                    onClick={() => setShowPinned(!showPinned)} 
+                    className={`p-1.5 sm:p-2 hover:bg-white/10 rounded-lg ${showPinned ? "bg-cyan-500/20 text-cyan-400" : ""}`}
+                    data-testid="btn-pinned"
+                    title="Pinned Messages"
+                  >
+                    <Pin className="w-4 h-4 text-gray-400" />
+                  </button>
+                  <button 
+                    onClick={() => setShowPolls(!showPolls)} 
+                    className={`p-1.5 sm:p-2 hover:bg-white/10 rounded-lg hidden sm:block ${showPolls ? "bg-purple-500/20 text-purple-400" : ""}`}
+                    data-testid="btn-polls"
+                    title="Channel Polls"
+                  >
+                    <BarChart2 className="w-4 h-4 text-gray-400" />
+                  </button>
+                  <button 
+                    onClick={() => setShowDMs(!showDMs)}
+                    className={`p-1.5 sm:p-2 hover:bg-white/10 rounded-lg ${showDMs ? "bg-pink-500/20 text-pink-400" : ""}`}
+                    data-testid="btn-dms"
+                    title="Direct Messages"
+                  >
+                    <Mail className="w-4 h-4 text-gray-400" />
+                    {dmConversationsData?.conversations?.some((c: any) => c.unreadCount > 0) && (
+                      <span className="absolute -top-1 -right-1 w-2 h-2 bg-pink-500 rounded-full" />
+                    )}
+                  </button>
                   <button className="p-1.5 sm:p-2 hover:bg-white/10 rounded-lg">
                     <Bell className="w-4 h-4 text-gray-400" />
                   </button>
@@ -823,6 +984,163 @@ export default function CommunityHub() {
                   </button>
                 </div>
               </div>
+
+              {/* Search Results Panel */}
+              <AnimatePresence>
+                {showSearch && searchQuery.length > 2 && searchResults?.messages && (
+                  <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="border-b border-white/10 bg-gray-900/60 overflow-hidden">
+                    <div className="p-3 max-h-48 overflow-y-auto">
+                      <div className="text-xs text-gray-500 mb-2">Found {searchResults.messages.length} results for "{searchQuery}"</div>
+                      {searchResults.messages.slice(0, 5).map((msg: any) => (
+                        <div key={msg.id} className="p-2 hover:bg-white/5 rounded text-sm">
+                          <span className="text-cyan-400">{msg.username}</span>
+                          <span className="text-gray-500 text-xs ml-2">{new Date(msg.createdAt).toLocaleDateString()}</span>
+                          <p className="text-gray-300 text-xs truncate">{msg.content}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Pinned Messages Panel */}
+              <AnimatePresence>
+                {showPinned && (
+                  <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="border-b border-cyan-500/30 bg-cyan-500/5 overflow-hidden">
+                    <div className="p-3 max-h-48 overflow-y-auto">
+                      <div className="flex items-center gap-2 text-xs text-cyan-400 mb-2">
+                        <Pin className="w-3 h-3" /> Pinned Messages ({pinnedData?.messages?.length || 0})
+                      </div>
+                      {pinnedData?.messages?.length ? pinnedData.messages.map((msg: any) => (
+                        <div key={msg.id} className="p-2 bg-white/5 rounded mb-1 text-sm border border-cyan-500/20">
+                          <span className="text-cyan-400 font-medium">{msg.username}</span>
+                          <p className="text-gray-300 text-xs">{msg.content}</p>
+                        </div>
+                      )) : <p className="text-gray-500 text-xs">No pinned messages</p>}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Polls Panel */}
+              <AnimatePresence>
+                {showPolls && (
+                  <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="border-b border-purple-500/30 bg-purple-500/5 overflow-hidden">
+                    <div className="p-3 max-h-64 overflow-y-auto">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2 text-xs text-purple-400">
+                          <BarChart2 className="w-3 h-3" /> Channel Polls
+                        </div>
+                        <Button size="sm" variant="ghost" onClick={() => setCreatePollOpen(true)} className="h-6 text-xs text-purple-400">
+                          <Plus className="w-3 h-3 mr-1" /> New Poll
+                        </Button>
+                      </div>
+                      {pollsData?.polls?.length ? pollsData.polls.map((poll: any) => {
+                        const options = JSON.parse(poll.options);
+                        return (
+                          <div key={poll.id} className="p-3 bg-white/5 rounded-lg mb-2 border border-purple-500/20">
+                            <p className="text-white text-sm font-medium mb-2">{poll.question}</p>
+                            <div className="space-y-1">
+                              {options.map((opt: string, i: number) => (
+                                <button
+                                  key={i}
+                                  onClick={() => votePoll.mutate({ pollId: poll.id, optionIndex: i })}
+                                  className="w-full text-left px-3 py-1.5 text-xs bg-white/5 hover:bg-purple-500/20 rounded border border-white/10 hover:border-purple-500/30 transition-colors"
+                                >
+                                  {opt}
+                                </button>
+                              ))}
+                            </div>
+                            <p className="text-[10px] text-gray-500 mt-2">Created by {poll.creatorName}</p>
+                          </div>
+                        );
+                      }) : <p className="text-gray-500 text-xs">No active polls</p>}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Create Poll Dialog */}
+              <Dialog open={createPollOpen} onOpenChange={setCreatePollOpen}>
+                <DialogContent className="bg-gray-900 border-purple-500/30">
+                  <DialogHeader>
+                    <DialogTitle className="text-white">Create Poll</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-gray-300">Question</Label>
+                      <Input 
+                        value={newPollQuestion}
+                        onChange={(e) => setNewPollQuestion(e.target.value)}
+                        placeholder="What do you want to ask?"
+                        className="bg-white/5 border-white/10"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-gray-300">Options</Label>
+                      {newPollOptions.map((opt, i) => (
+                        <Input
+                          key={i}
+                          value={opt}
+                          onChange={(e) => {
+                            const newOpts = [...newPollOptions];
+                            newOpts[i] = e.target.value;
+                            setNewPollOptions(newOpts);
+                          }}
+                          placeholder={`Option ${i + 1}`}
+                          className="bg-white/5 border-white/10 mt-2"
+                        />
+                      ))}
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={() => setNewPollOptions([...newPollOptions, ""])}
+                        className="mt-2 text-xs"
+                      >
+                        <Plus className="w-3 h-3 mr-1" /> Add Option
+                      </Button>
+                    </div>
+                    <Button 
+                      onClick={() => createPoll.mutate({ question: newPollQuestion, options: newPollOptions.filter(o => o.trim()) })}
+                      disabled={!newPollQuestion || newPollOptions.filter(o => o.trim()).length < 2}
+                      className="w-full bg-purple-500 hover:bg-purple-600"
+                    >
+                      Create Poll
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+
+              {/* DMs Panel */}
+              <AnimatePresence>
+                {showDMs && (
+                  <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="border-b border-pink-500/30 bg-pink-500/5 overflow-hidden">
+                    <div className="p-3 max-h-48 overflow-y-auto">
+                      <div className="flex items-center gap-2 text-xs text-pink-400 mb-2">
+                        <Mail className="w-3 h-3" /> Direct Messages
+                      </div>
+                      {dmConversationsData?.conversations?.length ? dmConversationsData.conversations.map((conv: any) => {
+                        const otherUser = conv.participant1Id === (user as any)?.claims?.sub ? conv.participant2Name : conv.participant1Name;
+                        return (
+                          <div 
+                            key={conv.id} 
+                            className={`p-2 hover:bg-white/10 rounded cursor-pointer flex items-center gap-2 ${selectedDmId === conv.id ? "bg-pink-500/20" : ""}`}
+                            onClick={() => setSelectedDmId(conv.id)}
+                          >
+                            <Avatar className="w-6 h-6 bg-gradient-to-br from-pink-500 to-rose-500">
+                              <AvatarFallback className="text-[10px]">{otherUser?.slice(0, 2).toUpperCase()}</AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm text-white flex-1">{otherUser}</span>
+                            {conv.unreadCount > 0 && (
+                              <Badge className="h-4 min-w-[16px] text-[10px] bg-pink-500">{conv.unreadCount}</Badge>
+                            )}
+                          </div>
+                        );
+                      }) : <p className="text-gray-500 text-xs">No conversations yet. Click on a user to start one!</p>}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               <ScrollArea className="flex-1 py-4">
                 {loadingMessages ? (
@@ -840,6 +1158,8 @@ export default function CommunityHub() {
                         onReaction={handleReaction}
                         onDelete={wsDeleteMessage}
                         onTip={user ? handleTip : undefined}
+                        onPin={user ? (msgId: string) => pinMessage.mutate(msgId) : undefined}
+                        onStartDm={user ? (userId: string, username: string) => startDm.mutate({ targetUserId: userId, targetUsername: username }) : undefined}
                       />
                     ))}
                     <div ref={messagesEndRef} />

@@ -8438,6 +8438,377 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   // ============================================
+  // CHRONOCHAT ENHANCED FEATURES
+  // ============================================
+
+  // Pinned Messages
+  app.post("/api/community/channel/:channelId/pin/:messageId", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const pinned = await communityHubService.pinMessage(req.params.messageId, req.params.channelId, userId);
+      res.json({ success: true, pinned });
+    } catch (error) {
+      console.error("Pin message error:", error);
+      res.status(500).json({ error: "Failed to pin message" });
+    }
+  });
+
+  app.delete("/api/community/channel/:channelId/pin/:messageId", isAuthenticated, async (req: any, res) => {
+    try {
+      await communityHubService.unpinMessage(req.params.messageId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Unpin message error:", error);
+      res.status(500).json({ error: "Failed to unpin message" });
+    }
+  });
+
+  app.get("/api/community/channel/:channelId/pinned", async (req, res) => {
+    try {
+      const messages = await communityHubService.getPinnedMessages(req.params.channelId);
+      res.json({ messages });
+    } catch (error) {
+      console.error("Get pinned messages error:", error);
+      res.status(500).json({ error: "Failed to get pinned messages" });
+    }
+  });
+
+  // Message Search
+  app.get("/api/community/channel/:channelId/search", async (req, res) => {
+    try {
+      const query = req.query.q as string;
+      if (!query) return res.status(400).json({ error: "Search query required" });
+      const messages = await communityHubService.searchMessages(req.params.channelId, query);
+      res.json({ messages });
+    } catch (error) {
+      console.error("Search messages error:", error);
+      res.status(500).json({ error: "Failed to search messages" });
+    }
+  });
+
+  app.get("/api/community/:communityId/search", async (req, res) => {
+    try {
+      const query = req.query.q as string;
+      if (!query) return res.status(400).json({ error: "Search query required" });
+      const messages = await communityHubService.searchMessagesGlobal(req.params.communityId, query);
+      res.json({ messages });
+    } catch (error) {
+      console.error("Global search error:", error);
+      res.status(500).json({ error: "Failed to search messages" });
+    }
+  });
+
+  // Polls
+  app.post("/api/community/channel/:channelId/polls", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const username = req.user?.claims?.firstName || req.user?.firstName || "User";
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { question, options, allowMultiple, endsAt } = req.body;
+      if (!question || !options || options.length < 2) {
+        return res.status(400).json({ error: "Question and at least 2 options required" });
+      }
+      const poll = await communityHubService.createPoll(req.params.channelId, userId, username, question, options, allowMultiple, endsAt ? new Date(endsAt) : undefined);
+      res.json({ success: true, poll });
+    } catch (error) {
+      console.error("Create poll error:", error);
+      res.status(500).json({ error: "Failed to create poll" });
+    }
+  });
+
+  app.get("/api/community/channel/:channelId/polls", async (req, res) => {
+    try {
+      const polls = await communityHubService.getChannelPolls(req.params.channelId);
+      res.json({ polls });
+    } catch (error) {
+      console.error("Get polls error:", error);
+      res.status(500).json({ error: "Failed to get polls" });
+    }
+  });
+
+  app.post("/api/community/poll/:pollId/vote", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { optionIndex } = req.body;
+      if (optionIndex === undefined) return res.status(400).json({ error: "Option index required" });
+      await communityHubService.votePoll(req.params.pollId, userId, optionIndex);
+      const results = await communityHubService.getPollResults(req.params.pollId);
+      res.json({ success: true, results });
+    } catch (error) {
+      console.error("Vote poll error:", error);
+      res.status(500).json({ error: "Failed to vote" });
+    }
+  });
+
+  app.get("/api/community/poll/:pollId/results", async (req, res) => {
+    try {
+      const results = await communityHubService.getPollResults(req.params.pollId);
+      res.json(results);
+    } catch (error) {
+      console.error("Get poll results error:", error);
+      res.status(500).json({ error: "Failed to get poll results" });
+    }
+  });
+
+  // Scheduled Messages
+  app.post("/api/community/channel/:channelId/schedule", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const username = req.user?.claims?.firstName || req.user?.firstName || "User";
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { content, scheduledFor } = req.body;
+      if (!content || !scheduledFor) return res.status(400).json({ error: "Content and scheduled time required" });
+      const msg = await communityHubService.scheduleMessage(req.params.channelId, userId, username, content, new Date(scheduledFor));
+      res.json({ success: true, message: msg });
+    } catch (error) {
+      console.error("Schedule message error:", error);
+      res.status(500).json({ error: "Failed to schedule message" });
+    }
+  });
+
+  app.get("/api/community/channel/:channelId/scheduled", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const messages = await communityHubService.getScheduledMessages(req.params.channelId, userId);
+      res.json({ messages });
+    } catch (error) {
+      console.error("Get scheduled messages error:", error);
+      res.status(500).json({ error: "Failed to get scheduled messages" });
+    }
+  });
+
+  app.delete("/api/community/scheduled/:messageId", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      await communityHubService.cancelScheduledMessage(req.params.messageId, userId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Cancel scheduled message error:", error);
+      res.status(500).json({ error: "Failed to cancel scheduled message" });
+    }
+  });
+
+  // Direct Messages
+  app.get("/api/dm/conversations", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const conversations = await communityHubService.getUserConversations(userId);
+      res.json({ conversations });
+    } catch (error) {
+      console.error("Get conversations error:", error);
+      res.status(500).json({ error: "Failed to get conversations" });
+    }
+  });
+
+  app.post("/api/dm/start", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const username = req.user?.claims?.firstName || req.user?.firstName || "User";
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { targetUserId, targetUsername } = req.body;
+      if (!targetUserId || !targetUsername) return res.status(400).json({ error: "Target user required" });
+      const conversation = await communityHubService.getOrCreateDmConversation(userId, username, targetUserId, targetUsername);
+      res.json({ conversation });
+    } catch (error) {
+      console.error("Start DM error:", error);
+      res.status(500).json({ error: "Failed to start conversation" });
+    }
+  });
+
+  app.get("/api/dm/:conversationId/messages", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const messages = await communityHubService.getDirectMessages(req.params.conversationId);
+      await communityHubService.markDmAsRead(req.params.conversationId, userId);
+      res.json({ messages: messages.reverse() });
+    } catch (error) {
+      console.error("Get DM messages error:", error);
+      res.status(500).json({ error: "Failed to get messages" });
+    }
+  });
+
+  app.post("/api/dm/:conversationId/send", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const username = req.user?.claims?.firstName || req.user?.firstName || "User";
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { content, attachment } = req.body;
+      if (!content?.trim()) return res.status(400).json({ error: "Message content required" });
+      const message = await communityHubService.sendDirectMessage(req.params.conversationId, userId, username, content, attachment);
+      res.json({ success: true, message });
+    } catch (error) {
+      console.error("Send DM error:", error);
+      res.status(500).json({ error: "Failed to send message" });
+    }
+  });
+
+  // Roles & Permissions
+  app.get("/api/community/:communityId/roles", async (req, res) => {
+    try {
+      const roles = await communityHubService.getRoles(req.params.communityId);
+      res.json({ roles });
+    } catch (error) {
+      console.error("Get roles error:", error);
+      res.status(500).json({ error: "Failed to get roles" });
+    }
+  });
+
+  app.post("/api/community/:communityId/roles", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const hasPermission = await communityHubService.hasPermission(req.params.communityId, userId, "manage_roles");
+      if (!hasPermission) return res.status(403).json({ error: "No permission to manage roles" });
+      const { name, permissions, color } = req.body;
+      if (!name || !permissions) return res.status(400).json({ error: "Role name and permissions required" });
+      const role = await communityHubService.createRole(req.params.communityId, name, permissions, color);
+      res.json({ success: true, role });
+    } catch (error) {
+      console.error("Create role error:", error);
+      res.status(500).json({ error: "Failed to create role" });
+    }
+  });
+
+  app.post("/api/community/:communityId/members/:memberId/role", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const hasPermission = await communityHubService.hasPermission(req.params.communityId, userId, "manage_roles");
+      if (!hasPermission) return res.status(403).json({ error: "No permission to assign roles" });
+      const { role } = req.body;
+      if (!role) return res.status(400).json({ error: "Role name required" });
+      await communityHubService.assignRole(req.params.communityId, req.params.memberId, role);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Assign role error:", error);
+      res.status(500).json({ error: "Failed to assign role" });
+    }
+  });
+
+  app.get("/api/community/:communityId/permissions", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const permissions = await communityHubService.getMemberPermissions(req.params.communityId, userId);
+      res.json({ permissions });
+    } catch (error) {
+      console.error("Get permissions error:", error);
+      res.status(500).json({ error: "Failed to get permissions" });
+    }
+  });
+
+  // Custom Emojis
+  app.get("/api/community/:communityId/emojis", async (req, res) => {
+    try {
+      const emojis = await communityHubService.getCustomEmojis(req.params.communityId);
+      res.json({ emojis });
+    } catch (error) {
+      console.error("Get emojis error:", error);
+      res.status(500).json({ error: "Failed to get emojis" });
+    }
+  });
+
+  app.post("/api/community/:communityId/emojis", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { name, imageUrl } = req.body;
+      if (!name || !imageUrl) return res.status(400).json({ error: "Emoji name and image required" });
+      const emoji = await communityHubService.addCustomEmoji(req.params.communityId, name, imageUrl, userId);
+      res.json({ success: true, emoji });
+    } catch (error) {
+      console.error("Add emoji error:", error);
+      res.status(500).json({ error: "Failed to add emoji" });
+    }
+  });
+
+  app.delete("/api/community/emoji/:emojiId", isAuthenticated, async (req: any, res) => {
+    try {
+      await communityHubService.deleteCustomEmoji(req.params.emojiId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Delete emoji error:", error);
+      res.status(500).json({ error: "Failed to delete emoji" });
+    }
+  });
+
+  // Notification Settings
+  app.get("/api/community/:communityId/notifications", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const channelId = req.query.channelId as string | undefined;
+      const level = await communityHubService.getNotificationLevel(userId, req.params.communityId, channelId);
+      res.json({ level });
+    } catch (error) {
+      console.error("Get notification level error:", error);
+      res.status(500).json({ error: "Failed to get notification settings" });
+    }
+  });
+
+  app.post("/api/community/:communityId/notifications", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { level, channelId } = req.body;
+      if (!level) return res.status(400).json({ error: "Notification level required" });
+      await communityHubService.setNotificationLevel(userId, req.params.communityId, level, channelId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Set notification level error:", error);
+      res.status(500).json({ error: "Failed to set notification settings" });
+    }
+  });
+
+  // Thread Replies
+  app.get("/api/community/message/:messageId/thread", async (req, res) => {
+    try {
+      const replies = await communityHubService.getThreadReplies(req.params.messageId);
+      res.json({ replies });
+    } catch (error) {
+      console.error("Get thread replies error:", error);
+      res.status(500).json({ error: "Failed to get thread replies" });
+    }
+  });
+
+  app.post("/api/community/message/:messageId/thread", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const username = req.user?.claims?.firstName || req.user?.firstName || "User";
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { channelId, content } = req.body;
+      if (!channelId || !content) return res.status(400).json({ error: "Channel and content required" });
+      const reply = await communityHubService.addThreadReply(req.params.messageId, channelId, userId, username, content);
+      res.json({ success: true, reply });
+    } catch (error) {
+      console.error("Add thread reply error:", error);
+      res.status(500).json({ error: "Failed to add thread reply" });
+    }
+  });
+
+  // Message Forwarding
+  app.post("/api/community/message/:messageId/forward", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const username = req.user?.claims?.firstName || req.user?.firstName || "User";
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { toChannelId } = req.body;
+      if (!toChannelId) return res.status(400).json({ error: "Target channel required" });
+      const forwarded = await communityHubService.forwardMessage(req.params.messageId, toChannelId, userId, username);
+      res.json({ success: true, message: forwarded });
+    } catch (error) {
+      console.error("Forward message error:", error);
+      res.status(500).json({ error: "Failed to forward message" });
+    }
+  });
+
+  // ============================================
   // ORBS ECONOMY API
   // ============================================
 
