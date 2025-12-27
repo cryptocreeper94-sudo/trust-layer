@@ -265,7 +265,7 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
         </div>
 
         {/* Featured Section */}
-        <div style={{ marginBottom: '24px', width: '100%', maxWidth: '100%', overflow: 'hidden' }}>
+        <div style={{ marginBottom: '24px' }}>
           <span style={{ 
             fontSize: '11px', 
             fontWeight: 600, 
@@ -277,7 +277,7 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
           }}>
             Featured
           </span>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {featuredItems.map((item) => {
               const Icon = item.icon;
               const isActive = !item.external && location === item.href;
@@ -288,15 +288,13 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
                   data-testid={`featured-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                   style={{
                     position: 'relative',
-                    padding: '12px',
+                    padding: '14px',
                     borderRadius: '16px',
                     border: isActive ? '2px solid rgba(168, 85, 247, 0.6)' : '1px solid rgba(255, 255, 255, 0.2)',
                     overflow: 'hidden',
                     cursor: 'pointer',
-                    height: '80px',
+                    minHeight: '70px',
                     boxSizing: 'border-box',
-                    width: '100%',
-                    maxWidth: '100%',
                   }}
                 >
                   <img 
@@ -323,37 +321,29 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
                     background: item.overlayGradient,
                     pointerEvents: 'none'
                   }} />
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', position: 'relative', zIndex: 1, width: '100%' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', position: 'relative', zIndex: 1 }}>
                     <div style={{
-                      width: '40px',
-                      height: '40px',
-                      minWidth: '40px',
+                      width: '38px',
+                      height: '38px',
+                      minWidth: '38px',
                       borderRadius: '10px',
                       background: `linear-gradient(135deg, ${item.iconGradient})`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
-                      backdropFilter: 'blur(8px)',
                       flexShrink: 0,
                     }}>
-                      <Icon style={{ width: '20px', height: '20px', color: '#ffffff' }} />
+                      <Icon style={{ width: '18px', height: '18px', color: '#ffffff' }} />
                     </div>
-                    <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px', flexWrap: 'wrap' }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ marginBottom: '2px' }}>
                         <span style={{ fontWeight: 600, fontSize: '13px', color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{item.label}</span>
-                        <Badge className={`text-[9px] px-1.5 py-0 ${item.badgeClass}`}>
+                        <Badge className={`text-[9px] px-1 py-0 ml-2 ${item.badgeClass}`}>
                           {item.badge}
                         </Badge>
                       </div>
-                      <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.8)', textShadow: '0 1px 2px rgba(0,0,0,0.5)', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.description}</span>
-                    </div>
-                    <div style={{ flexShrink: 0 }}>
-                      {item.external ? (
-                        <ArrowUpRight style={{ width: '14px', height: '14px', color: 'rgba(255,255,255,0.6)' }} />
-                      ) : (
-                        <Zap style={{ width: '14px', height: '14px', color: 'rgba(255,255,255,0.6)' }} />
-                      )}
+                      <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.8)', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>{item.description}</span>
                     </div>
                   </div>
                 </div>
@@ -369,7 +359,7 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
                     onClick={(e) => {
                       e.stopPropagation();
                     }}
-                    style={{ textDecoration: 'none', display: 'block', width: '100%' }}
+                    style={{ textDecoration: 'none', display: 'block' }}
                   >
                     {cardContent}
                   </a>
@@ -377,7 +367,7 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
               }
               
               return (
-                <Link key={item.href} href={item.href} style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
+                <Link key={item.href} href={item.href} style={{ textDecoration: 'none', display: 'block' }}>
                   {cardContent}
                 </Link>
               );
