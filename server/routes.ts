@@ -9477,7 +9477,10 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
         !hubIds.has(la.id) && !hubNames.has(la.name.toLowerCase())
       );
       
-      return [...hubApps, ...additionalLocalApps];
+      // Filter out deprecated/renamed apps
+      const excludedIds = new Set(["orbit-chain"]);
+      const allApps = [...hubApps, ...additionalLocalApps];
+      return allApps.filter(app => !excludedIds.has(app.id));
     }
   } catch (error) {
     console.warn("DarkWave Hub API not available, using local data:", error);
