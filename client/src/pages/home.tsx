@@ -33,38 +33,62 @@ import nftImg from "@assets/generated_images/fantasy_character_heroes.png";
 import toolsImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
 import earnImg from "@assets/generated_images/darkwave_crypto_token_coin_holographic.png";
 
-function BetaBadge() {
+function ExploreButton({ url, appName }: { url?: string; appName: string }) {
   const [open, setOpen] = useState(false);
+  
+  const handleContinue = () => {
+    setOpen(false);
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  };
+  
   return (
     <>
-      <div 
-        className="absolute top-2 left-2 z-10 cursor-pointer" 
+      <Button 
+        className="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs py-2 rounded-lg transition-colors"
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(true); }}
+        data-testid={`button-explore-${appName.toLowerCase().replace(/\s+/g, '-')}`}
       >
-        <Badge className="text-[8px] uppercase bg-amber-500/90 text-black font-bold px-1.5 py-0.5 shadow-lg hover:bg-amber-400 transition-colors flex items-center gap-1">
-          Beta <span className="text-[6px] opacity-70">ⓘ</span>
-        </Badge>
-      </div>
+        Explore
+      </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md bg-slate-900 border-white/10">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold flex items-center gap-2">
               <Badge className="bg-amber-500 text-black">Beta</Badge>
-              App Status
+              {appName}
             </DialogTitle>
-            <DialogDescription className="text-white/70 pt-4 space-y-3">
-              <p>
-                This application is <strong className="text-white">fully functional</strong> and ready for use. 
-              </p>
-              <p>
-                As a Beta product, it is constantly being updated with new features and improvements. 
-                These updates may occasionally affect visual continuity or functionality in demo modes.
-              </p>
-              <p className="text-primary">
-                Your data and transactions remain secure throughout all updates.
-              </p>
+            <DialogDescription asChild>
+              <div className="text-white/70 pt-4 space-y-3">
+                <p>
+                  This application is <strong className="text-white">fully functional</strong> and ready for use. 
+                </p>
+                <p>
+                  As a Beta product, it is constantly being updated with new features and improvements. 
+                  These updates may occasionally affect visual continuity or functionality in demo modes.
+                </p>
+                <p className="text-primary">
+                  Your data and transactions remain secure throughout all updates.
+                </p>
+              </div>
             </DialogDescription>
           </DialogHeader>
+          <div className="flex gap-3 mt-4">
+            <Button 
+              variant="outline" 
+              className="flex-1 border-white/20 hover:bg-white/5"
+              onClick={() => setOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button 
+              className="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-bold"
+              onClick={handleContinue}
+            >
+              I Understand, Continue
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </>
@@ -910,67 +934,50 @@ function AppCard({ id, name, category, desc, gradient, showFavorite, url }: { id
   const imageSrc = id ? ecosystemImages[id] : "";
   const colors = gradientColors[gradient] || { from: "#0891b2", to: "#1d4ed8" };
   
-  const cardContent = (
-    <GlassCard className="h-full overflow-hidden">
-      <div className="aspect-[3/4] relative">
-        {(!imgLoaded || imgFailed || !imageSrc) && (
-          <div 
-            className="absolute inset-0 flex items-center justify-center"
-            style={{ background: `linear-gradient(to bottom right, ${colors.from}, ${colors.to})` }}
-          >
-            <span className="text-4xl font-bold text-white/80">{name.charAt(0)}</span>
-          </div>
-        )}
-        {imageSrc && (
-          <img 
-            src={imageSrc} 
-            alt={name}
-            className={`w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ${imgLoaded && !imgFailed ? 'opacity-100' : 'opacity-0'}`}
-            onLoad={() => setImgLoaded(true)}
-            onError={() => setImgFailed(true)}
-          />
-        )}
-        {/* Fade to black gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
-        
-        {/* Favorite button at top right */}
-        {showFavorite && id && (
-          <div className="absolute top-2 right-2 z-10" onClick={(e) => e.stopPropagation()}>
-            <FavoriteButton appId={id} />
-          </div>
-        )}
-        
-        {/* Beta badge at top left */}
-        <BetaBadge />
-        
-        {/* Content overlay at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 p-3">
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="text-sm font-bold text-white truncate flex-1">{name}</h3>
-            <Badge variant="secondary" className="text-[8px] uppercase bg-white/10 text-white/60 shrink-0 px-1.5 py-0">
-              {category}
-            </Badge>
-          </div>
-          <p className="text-[10px] text-white/60 line-clamp-2 mb-2">{desc}</p>
-          <div className="flex items-center text-primary text-[9px] font-bold uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
-            Launch <ArrowRight className="w-2.5 h-2.5 ml-1" />
+  return (
+    <div data-testid={`card-app-${id}`} className="group">
+      <GlassCard className="h-full overflow-hidden">
+        <div className="aspect-[3/4] relative">
+          {(!imgLoaded || imgFailed || !imageSrc) && (
+            <div 
+              className="absolute inset-0 flex items-center justify-center"
+              style={{ background: `linear-gradient(to bottom right, ${colors.from}, ${colors.to})` }}
+            >
+              <span className="text-4xl font-bold text-white/80">{name.charAt(0)}</span>
+            </div>
+          )}
+          {imageSrc && (
+            <img 
+              src={imageSrc} 
+              alt={name}
+              className={`w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ${imgLoaded && !imgFailed ? 'opacity-100' : 'opacity-0'}`}
+              onLoad={() => setImgLoaded(true)}
+              onError={() => setImgFailed(true)}
+            />
+          )}
+          {/* Fade to black gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+          
+          {/* Favorite button at top right */}
+          {showFavorite && id && (
+            <div className="absolute top-2 right-2 z-10" onClick={(e) => e.stopPropagation()}>
+              <FavoriteButton appId={id} />
+            </div>
+          )}
+          
+          {/* Content overlay at bottom */}
+          <div className="absolute bottom-0 left-0 right-0 p-3">
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="text-sm font-bold text-white truncate flex-1">{name}</h3>
+              <Badge variant="secondary" className="text-[8px] uppercase bg-white/10 text-white/60 shrink-0 px-1.5 py-0">
+                {category}
+              </Badge>
+            </div>
+            <p className="text-[10px] text-white/60 line-clamp-2 mb-3">{desc}</p>
+            <ExploreButton url={url} appName={name} />
           </div>
         </div>
-      </div>
-    </GlassCard>
-  );
-
-  if (url) {
-    return (
-      <a href={url} target="_blank" rel="noopener noreferrer" data-testid={`card-app-${id}`} className="group">
-        {cardContent}
-      </a>
-    );
-  }
-
-  return (
-    <Link href={`/ecosystem/${id || name.toLowerCase().replace(/\s+/g, '-')}`}>
-      <div data-testid={`card-app-${id}`} className="group">{cardContent}</div>
-    </Link>
+      </GlassCard>
+    </div>
   );
 }

@@ -17,38 +17,62 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { InfoTooltip } from "@/components/info-tooltip";
 
-function BetaBadge() {
+function ExploreButton({ url, appName }: { url?: string; appName: string }) {
   const [open, setOpen] = useState(false);
+  
+  const handleContinue = () => {
+    setOpen(false);
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  };
+  
   return (
     <>
-      <div 
-        className="absolute top-2 left-2 z-10 cursor-pointer" 
+      <Button 
+        className="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-bold text-xs py-2 rounded-lg transition-colors"
         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpen(true); }}
+        data-testid={`button-explore-${appName.toLowerCase().replace(/\s+/g, '-')}`}
       >
-        <Badge className="text-[8px] uppercase bg-amber-500/90 text-black font-bold px-1.5 py-0.5 shadow-lg hover:bg-amber-400 transition-colors flex items-center gap-1">
-          Beta <span className="text-[6px] opacity-70">ⓘ</span>
-        </Badge>
-      </div>
+        Explore
+      </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md bg-slate-900 border-white/10">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold flex items-center gap-2">
               <Badge className="bg-amber-500 text-black">Beta</Badge>
-              App Status
+              {appName}
             </DialogTitle>
-            <DialogDescription className="text-white/70 pt-4 space-y-3">
-              <p>
-                This application is <strong className="text-white">fully functional</strong> and ready for use. 
-              </p>
-              <p>
-                As a Beta product, it is constantly being updated with new features and improvements. 
-                These updates may occasionally affect visual continuity or functionality in demo modes.
-              </p>
-              <p className="text-primary">
-                Your data and transactions remain secure throughout all updates.
-              </p>
+            <DialogDescription asChild>
+              <div className="text-white/70 pt-4 space-y-3">
+                <p>
+                  This application is <strong className="text-white">fully functional</strong> and ready for use. 
+                </p>
+                <p>
+                  As a Beta product, it is constantly being updated with new features and improvements. 
+                  These updates may occasionally affect visual continuity or functionality in demo modes.
+                </p>
+                <p className="text-primary">
+                  Your data and transactions remain secure throughout all updates.
+                </p>
+              </div>
             </DialogDescription>
           </DialogHeader>
+          <div className="flex gap-3 mt-4">
+            <Button 
+              variant="outline" 
+              className="flex-1 border-white/20 hover:bg-white/5"
+              onClick={() => setOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button 
+              className="flex-1 bg-emerald-500 hover:bg-emerald-400 text-black font-bold"
+              onClick={handleContinue}
+            >
+              I Understand, Continue
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </>
@@ -101,10 +125,7 @@ function AppCard({ src, alt, gradient, name, category, verified, tags, url }: {
   const colors = gradientColors[gradient || "from-cyan-600 to-blue-700"] || { from: "#0891b2", to: "#1d4ed8" };
   
   return (
-    <a 
-      href={url} 
-      target="_blank" 
-      rel="noopener noreferrer"
+    <div 
       className="block group"
       data-testid={`app-card-${name.toLowerCase().replace(/\s+/g, '-')}`}
     >
@@ -130,32 +151,18 @@ function AppCard({ src, alt, gradient, name, category, verified, tags, url }: {
           {/* Fade to black gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
           
-          {/* Beta badge at top left */}
-          <BetaBadge />
-          
           {/* Content overlay at bottom */}
           <div className="absolute bottom-0 left-0 right-0 p-3">
             <div className="flex items-center gap-2 mb-1">
               <h3 className="text-sm font-bold text-white truncate flex-1">{name}</h3>
               {verified && <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />}
             </div>
-            <p className="text-[10px] text-white/60 mb-2">{category}</p>
-            <div className="flex items-center justify-between">
-              <div className="flex flex-wrap gap-1">
-                {(tags || []).slice(0, 1).map((tag, j) => (
-                  <Badge key={j} variant="outline" className="text-[8px] px-1.5 py-0 border-white/20 text-white/50 bg-black/30">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-              <Button variant="ghost" size="sm" className="h-5 px-2 text-[9px] text-primary group-hover:bg-primary/10 transition-colors">
-                Launch <ExternalLink className="w-2 h-2 ml-1" />
-              </Button>
-            </div>
+            <p className="text-[10px] text-white/60 mb-3">{category}</p>
+            <ExploreButton url={url} appName={name} />
           </div>
         </div>
       </GlassCard>
-    </a>
+    </div>
   );
 }
 
