@@ -1,4 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
+import helmet from "helmet";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
@@ -6,6 +7,58 @@ import { startScheduler } from "./marketing-scheduler";
 
 const app = express();
 const httpServer = createServer(app);
+
+// Security headers via Helmet
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "blob:", "https:"],
+      connectSrc: ["'self'", "wss:", "https:"],
+      frameSrc: ["'self'", "https://js.stripe.com"],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: [],
+    },
+  },
+  crossOriginEmbedderPolicy: false,
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+}));
+
+// CORS headers for API access with strict origin allowlist
+const ALLOWED_ORIGINS = [
+  "https://dwsc.io",
+  "https://www.dwsc.io",
+  "https://darkwavegames.io",
+  "https://www.darkwavegames.io",
+  "https://darkwavestudios.io",
+  "https://www.darkwavestudios.io",
+  "https://yourlegacy.io",
+  "https://www.yourlegacy.io",
+  "https://chronochat.io",
+  "https://www.chronochat.io",
+];
+
+// Allow localhost in development
+if (process.env.NODE_ENV !== "production") {
+  ALLOWED_ORIGINS.push("http://localhost:5000", "http://127.0.0.1:5000");
+}
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+  }
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-API-Key, X-API-Secret");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 declare module "http" {
   interface IncomingMessage {

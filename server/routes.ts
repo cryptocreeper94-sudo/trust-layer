@@ -89,6 +89,12 @@ const faucetRateLimit = rateLimit("faucet", 5, 60 * 1000);
 const swapRateLimit = rateLimit("swap", 30, 60 * 1000);
 const nftMintRateLimit = rateLimit("nft-mint", 10, 60 * 1000);
 const studioAiRateLimit = rateLimit("studio-ai", 20, 60 * 1000);
+const apiGeneralRateLimit = rateLimit("api-general", 100, 60 * 1000);
+const authRateLimit = rateLimit("auth", 10, 60 * 1000);
+const documentRateLimit = rateLimit("document", 50, 60 * 1000);
+const developerRateLimit = rateLimit("developer", 30, 60 * 1000);
+const hashSubmitRateLimit = rateLimit("hash-submit", 20, 60 * 1000);
+const ecosystemRateLimit = rateLimit("ecosystem", 60, 60 * 1000);
 
 interface PresenceUser {
   id: string;
@@ -667,7 +673,7 @@ export async function registerRoutes(
   setupCommunityWebSocket(httpServer);
 
   // Firebase auth sync - syncs Firebase users to our database
-  app.post("/api/auth/firebase-sync", async (req, res) => {
+  app.post("/api/auth/firebase-sync", authRateLimit, async (req, res) => {
     try {
       const { uid, email, displayName, photoURL } = req.body;
       
@@ -776,7 +782,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/ecosystem/hub/status", async (req, res) => {
+  app.get("/api/ecosystem/hub/status", ecosystemRateLimit, async (req, res) => {
     try {
       if (!ecosystemClient.isConfigured()) {
         return res.json({ 
@@ -792,7 +798,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/ecosystem/register", async (req, res) => {
+  app.post("/api/ecosystem/register", ecosystemRateLimit, async (req, res) => {
     try {
       const { appName, appSlug, appUrl, description, permissions, category, metadata } = req.body;
       
@@ -871,7 +877,7 @@ export async function registerRoutes(
     }
   });
   
-  app.get("/api/ecosystem/apps", async (req, res) => {
+  app.get("/api/ecosystem/apps", ecosystemRateLimit, async (req, res) => {
     try {
       const apps = await fetchEcosystemApps();
       res.json(apps);
@@ -1314,7 +1320,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/documents", async (req, res) => {
+  app.get("/api/documents", documentRateLimit, async (req, res) => {
     try {
       const { category, appId } = req.query;
       let docs;
@@ -1345,7 +1351,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/documents", async (req, res) => {
+  app.post("/api/documents", documentRateLimit, async (req, res) => {
     try {
       const parsed = insertDocumentSchema.safeParse(req.body);
       if (!parsed.success) {
@@ -1436,7 +1442,7 @@ export async function registerRoutes(
     return true;
   }
 
-  app.post("/api/developer/auth", async (req, res) => {
+  app.post("/api/developer/auth", developerRateLimit, async (req, res) => {
     try {
       const { pin } = req.body;
       const clientIp = req.ip || req.socket.remoteAddress || "unknown";
@@ -1537,7 +1543,7 @@ export async function registerRoutes(
     return `dwc_${bytes.toString("hex")}`;
   }
 
-  app.post("/api/developer/register", async (req, res) => {
+  app.post("/api/developer/register", developerRateLimit, async (req, res) => {
     try {
       const sessionToken = req.headers["x-developer-session"] as string;
       const user = (req as any).user;
@@ -1582,7 +1588,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/hash/submit", async (req, res) => {
+  app.post("/api/hash/submit", hashSubmitRateLimit, async (req, res) => {
     try {
       const apiKey = req.headers["x-api-key"] as string;
       
