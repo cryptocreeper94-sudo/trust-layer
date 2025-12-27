@@ -53,4 +53,4 @@ PULSE_WEBHOOK_SECRET = "97c05418d9e0caf5f786915590e7991855d7224380a2f1f6a7065982
 PULSE_WEBHOOK_URL = "https://darkwave-pulse.replit.app/api/chain-events"
 PARTNER_ACCESS_CODE = "dwc26"
 SITE_BASE_URL = "https://dwsc.io"
-PULSE_API_BASE_URL = "https://pulse.darkwavestudios.io"
+PULSE_API_BASE_URL = "https://darkwavepulse.com"
