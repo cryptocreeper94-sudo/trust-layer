@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, Circle, Clock, Sparkles, Layers, Shield, Globe, Rocket, Server, ChevronDown, ChevronUp, ArrowLeft, Coins, ArrowLeftRight } from "lucide-react";
+import { Check, Circle, Clock, Sparkles, Layers, Shield, Globe, Rocket, Server, ChevronDown, ChevronUp, ArrowLeft, Coins, ArrowLeftRight, MessageCircle, Gamepad2, Cloud, Code2 } from "lucide-react";
 import { Link } from "wouter";
 
 import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
@@ -69,6 +69,22 @@ const ECOSYSTEM_PHASES: Phase[] = [
       { id: "e12", title: "DarkWave Studio IDE", description: "Monaco-based development environment with 70+ languages", status: "in_progress", isRequired: true },
       { id: "e13", title: "Cross-Chain Bridge", description: "Lock & mint for DWC ↔ wDWC on Ethereum and Solana", status: "pending", isRequired: true },
       { id: "e14", title: "Mobile Wallet App", description: "iOS and Android native applications", status: "pending", isRequired: true },
+    ],
+  },
+  {
+    id: "phase-chronochat",
+    name: "ChronoChat Platform",
+    description: "Community hub with tiered product offerings",
+    status: "in_progress",
+    targetDate: "Q4 2025 - Q2 2026",
+    icon: <MessageCircle className="w-6 h-6" />,
+    image: cyberpunkCity,
+    milestones: [
+      { id: "cc1", title: "ChronoChat for Communities", description: "Core community platform with channels, reactions, and Orbs integration", status: "in_progress", isRequired: true },
+      { id: "cc2", title: "ChronoChat Cloud", description: "SaaS hosting for partner communities ($149+/mo)", status: "pending", isRequired: true },
+      { id: "cc3", title: "ChronoChat for Gaming", description: "Gaming overlays: matchmaking lobbies, game telemetry, Orbs rewards", status: "pending", isRequired: true },
+      { id: "cc4", title: "ChronoChat for Teams", description: "Enterprise collaboration with tasks, docs, compliance", status: "pending", isRequired: false },
+      { id: "cc5", title: "ChronoChat API", description: "Developer API with rate limits, keys, and documentation", status: "pending", isRequired: false },
     ],
   },
   {
