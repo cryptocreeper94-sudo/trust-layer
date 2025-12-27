@@ -225,7 +225,7 @@ export default function Home() {
       />
       
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+        <div className="w-full px-3 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center flex-shrink-0">
             <span className="font-display font-bold text-xl tracking-tight">DarkWave</span>
           </Link>
@@ -290,7 +290,9 @@ export default function Home() {
               </Button>
             )}
             <WalletButton />
-            <MobileNav />
+            <div className="lg:hidden">
+              <MobileNav />
+            </div>
           </div>
         </div>
       </nav>
