@@ -47,7 +47,8 @@ The design adheres to a "Premium UI Protocol" featuring:
 - **Marketing Automation System**: Proprietary auto-deployment system for social media (Twitter/X, Facebook, Discord, Telegram) with scheduled posts and category rotation.
 - **Payment Infrastructure**: Handles crowdfund donations and token presales with Stripe integration and webhook processing.
 - **Pre-Launch Airdrop System**: Manages affiliate commissions for pre-launch, distributed as DWC tokens at launch, using a dual-ledger design.
-- **Community Hub**: White-labeled platform with community creation, channels, real-time messaging (polling-based, WebSockets planned), member management, and a bot framework.
+- **Community Hub**: White-labeled platform with community creation, channels, real-time WebSocket messaging, reactions, replies, file uploads, member management, and a bot framework.
+- **Orbs Economy System**: Internal virtual currency for the ecosystem pre-DWC launch. Users earn Orbs through engagement, purchase via Stripe, tip other users, and unlock premium features. At DWC token launch, Orbs convert to DWC tokens. Features atomic transaction handling for tipping to prevent double-spending. Tables: orb_wallets, orb_transactions, orb_conversion_snapshots. Earn rates: daily_login (5), send_message (1), receive_reaction (2), join_community (10), referral_signup (50). Packages: Starter (100/$4.99), Popular (500/$19.99), Premium (1200/$39.99), Ultimate (3000/$79.99).
 
 ## External Dependencies
 - **Database**: PostgreSQL

@@ -32,6 +32,7 @@ import { communityHubService } from "./community-hub-service";
 import { walletBotService } from "./wallet-bot-service";
 import { pulseClient } from "./pulse-client";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
+import { orbsService, ORB_PACKAGES, ORB_EARN_RATES, ORB_COSTS } from "./orbs-service";
 
 const FaucetClaimRequestSchema = z.object({
   walletAddress: z.string().min(10, "Invalid wallet address").max(100),
@@ -8308,6 +8309,150 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error) {
       console.error("Bot message error:", error);
       res.status(500).json({ error: "Failed to send bot message" });
+    }
+  });
+
+  // ============================================
+  // ORBS ECONOMY API
+  // ============================================
+
+  app.get("/api/orbs/wallet", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const username = req.user?.claims?.firstName || req.user?.firstName || "User";
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const wallet = await orbsService.getOrCreateWallet(userId, username);
+      res.json({ wallet });
+    } catch (error) {
+      console.error("Get wallet error:", error);
+      res.status(500).json({ error: "Failed to get wallet" });
+    }
+  });
+
+  app.get("/api/orbs/balance", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const balance = await orbsService.getBalance(userId);
+      res.json(balance);
+    } catch (error) {
+      console.error("Get balance error:", error);
+      res.status(500).json({ error: "Failed to get balance" });
+    }
+  });
+
+  app.get("/api/orbs/transactions", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const limit = parseInt(req.query.limit as string) || 50;
+      const transactions = await orbsService.getTransactions(userId, limit);
+      res.json({ transactions });
+    } catch (error) {
+      console.error("Get transactions error:", error);
+      res.status(500).json({ error: "Failed to get transactions" });
+    }
+  });
+
+  app.post("/api/orbs/tip", isAuthenticated, async (req: any, res) => {
+    try {
+      const fromUserId = req.user?.claims?.sub || req.user?.id;
+      const fromUsername = req.user?.claims?.firstName || req.user?.firstName || "User";
+      if (!fromUserId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { toUserId, toUsername, amount, messageId } = req.body;
+      if (!toUserId || !toUsername || !amount || amount <= 0) {
+        return res.status(400).json({ error: "Invalid tip data" });
+      }
+      
+      if (fromUserId === toUserId) {
+        return res.status(400).json({ error: "Cannot tip yourself" });
+      }
+      
+      const result = await orbsService.tipUser(fromUserId, fromUsername, toUserId, toUsername, amount, messageId);
+      if (!result) {
+        return res.status(400).json({ error: "Insufficient Orbs balance" });
+      }
+      
+      res.json({ success: true, sent: result.sent, received: result.received });
+    } catch (error) {
+      console.error("Tip error:", error);
+      res.status(500).json({ error: "Failed to send tip" });
+    }
+  });
+
+  app.get("/api/orbs/packages", async (req, res) => {
+    try {
+      const packages = Object.entries(ORB_PACKAGES).map(([key, pkg]) => ({
+        id: key,
+        ...pkg,
+        formattedPrice: `$${(pkg.price / 100).toFixed(2)}`,
+      }));
+      res.json({ packages });
+    } catch (error) {
+      console.error("Get packages error:", error);
+      res.status(500).json({ error: "Failed to get packages" });
+    }
+  });
+
+  app.get("/api/orbs/earn-rates", async (req, res) => {
+    try {
+      res.json({ rates: ORB_EARN_RATES });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to get earn rates" });
+    }
+  });
+
+  app.get("/api/orbs/costs", async (req, res) => {
+    try {
+      res.json({ costs: ORB_COSTS });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to get costs" });
+    }
+  });
+
+  app.get("/api/orbs/leaderboard", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 10;
+      const leaderboard = await orbsService.getLeaderboard(limit);
+      res.json({ leaderboard });
+    } catch (error) {
+      console.error("Get leaderboard error:", error);
+      res.status(500).json({ error: "Failed to get leaderboard" });
+    }
+  });
+
+  app.get("/api/orbs/stats", async (req, res) => {
+    try {
+      const stats = await orbsService.getTotalStats();
+      res.json(stats);
+    } catch (error) {
+      console.error("Get stats error:", error);
+      res.status(500).json({ error: "Failed to get stats" });
+    }
+  });
+
+  app.post("/api/orbs/earn", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const username = req.user?.claims?.firstName || req.user?.firstName || "User";
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { action } = req.body;
+      if (!action || !ORB_EARN_RATES[action as keyof typeof ORB_EARN_RATES]) {
+        return res.status(400).json({ error: "Invalid action" });
+      }
+      
+      const transaction = await orbsService.awardEngagementOrbs(userId, username, action as keyof typeof ORB_EARN_RATES);
+      const balance = await orbsService.getBalance(userId);
+      
+      res.json({ success: true, transaction, balance });
+    } catch (error) {
+      console.error("Earn orbs error:", error);
+      res.status(500).json({ error: "Failed to earn orbs" });
     }
   });
 

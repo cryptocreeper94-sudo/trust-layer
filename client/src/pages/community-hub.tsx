@@ -189,9 +189,10 @@ interface MessageBubbleProps {
   onReply: (message: any) => void;
   onReaction: (messageId: string, emoji: string) => void;
   onDelete: (messageId: string) => void;
+  onTip?: (userId: string, username: string, messageId: string) => void;
 }
 
-function MessageBubble({ message, currentUserId, onReply, onReaction, onDelete }: MessageBubbleProps) {
+function MessageBubble({ message, currentUserId, onReply, onReaction, onDelete, onTip }: MessageBubbleProps) {
   const [showReactions, setShowReactions] = useState(false);
   const time = new Date(message.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   const isOwn = currentUserId && (message.userId === currentUserId);
@@ -314,6 +315,16 @@ function MessageBubble({ message, currentUserId, onReply, onReaction, onDelete }
         >
           <Reply className="w-4 h-4 text-gray-400" />
         </button>
+        {!isOwn && onTip && (
+          <button 
+            onClick={() => onTip(message.userId, message.username, message.id)}
+            className="p-1.5 hover:bg-amber-500/20 rounded-lg transition-colors"
+            data-testid={`btn-tip-${message.id}`}
+            title="Tip Orbs"
+          >
+            <Coins className="w-4 h-4 text-gray-400 hover:text-amber-400" />
+          </button>
+        )}
         {isOwn && (
           <button 
             onClick={() => onDelete(message.id)}
@@ -341,6 +352,9 @@ export default function CommunityHub() {
   const [activeView, setActiveView] = useState<"chat" | "pulse">("chat");
   const [replyingTo, setReplyingTo] = useState<any>(null);
   const [pendingAttachment, setPendingAttachment] = useState<{ url: string; name: string; type: string } | null>(null);
+  const [tipDialogOpen, setTipDialogOpen] = useState(false);
+  const [tipTarget, setTipTarget] = useState<{ userId: string; username: string; messageId: string } | null>(null);
+  const [tipAmount, setTipAmount] = useState("10");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -371,6 +385,26 @@ export default function CommunityHub() {
   const { data: user } = useQuery({
     queryKey: ["/api/auth/user"],
     retry: false,
+  });
+
+  const { data: orbsData, refetch: refetchOrbs } = useQuery<{ balance: number; lockedBalance: number }>({
+    queryKey: ["/api/orbs/balance"],
+    enabled: !!user,
+  });
+
+  const tipMutation = useMutation({
+    mutationFn: async (data: { toUserId: string; toUsername: string; amount: number; messageId?: string }) => {
+      const res = await fetch("/api/orbs/tip", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error((await res.json()).error || "Failed to tip");
+      return res.json();
+    },
+    onSuccess: () => {
+      refetchOrbs();
+    },
   });
 
   const wsHook = useWebSocket(selectedChannelId, selectedCommunityId, user);
@@ -486,6 +520,26 @@ export default function CommunityHub() {
 
   const handleReaction = (messageId: string, emoji: string) => {
     addReaction(messageId, emoji);
+  };
+
+  const handleTip = (userId: string, username: string, messageId: string) => {
+    setTipTarget({ userId, username, messageId });
+    setTipAmount("10");
+    setTipDialogOpen(true);
+  };
+
+  const submitTip = () => {
+    if (!tipTarget) return;
+    const amount = parseInt(tipAmount);
+    if (isNaN(amount) || amount <= 0) return;
+    tipMutation.mutate({
+      toUserId: tipTarget.userId,
+      toUsername: tipTarget.username,
+      amount,
+      messageId: tipTarget.messageId,
+    });
+    setTipDialogOpen(false);
+    setTipTarget(null);
   };
 
   const currentUserId = (user as any)?.claims?.sub || (user as any)?.id;
@@ -745,6 +799,14 @@ export default function CommunityHub() {
                   <span className="font-medium text-white">{selectedChannel?.name || "Select a channel"}</span>
                 </div>
                 <div className="flex items-center gap-2">
+                  {!!user && (
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full">
+                      <Coins className="w-4 h-4 text-amber-400" />
+                      <span className="text-sm font-medium text-amber-400" data-testid="orbs-balance">
+                        {orbsData?.balance?.toLocaleString() || 0} Orbs
+                      </span>
+                    </div>
+                  )}
                   <div className="relative hidden sm:block">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                     <Input 
@@ -776,6 +838,7 @@ export default function CommunityHub() {
                         onReply={setReplyingTo}
                         onReaction={handleReaction}
                         onDelete={wsDeleteMessage}
+                        onTip={user ? handleTip : undefined}
                       />
                     ))}
                     <div ref={messagesEndRef} />
@@ -922,6 +985,68 @@ export default function CommunityHub() {
           </>
         )}
       </div>
+
+      <Dialog open={tipDialogOpen} onOpenChange={setTipDialogOpen}>
+        <DialogContent className="bg-gray-900 border-white/10 max-w-sm">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Coins className="w-5 h-5 text-amber-400" />
+              Tip Orbs
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm text-gray-400">
+              Send Orbs to <span className="text-white font-medium">{tipTarget?.username}</span>
+            </p>
+            <div>
+              <Label>Amount</Label>
+              <div className="flex gap-2 mt-1">
+                {[5, 10, 25, 50, 100].map((amount) => (
+                  <button
+                    key={amount}
+                    onClick={() => setTipAmount(amount.toString())}
+                    className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                      tipAmount === amount.toString()
+                        ? "bg-amber-500 text-white"
+                        : "bg-white/5 text-gray-400 hover:bg-white/10"
+                    }`}
+                    data-testid={`tip-amount-${amount}`}
+                  >
+                    {amount}
+                  </button>
+                ))}
+              </div>
+              <Input
+                type="number"
+                value={tipAmount}
+                onChange={(e) => setTipAmount(e.target.value)}
+                className="mt-2 bg-white/5 border-white/10"
+                placeholder="Custom amount"
+                data-testid="input-tip-amount"
+              />
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-gray-400">Your balance:</span>
+              <span className="text-amber-400 font-medium">{orbsData?.balance?.toLocaleString() || 0} Orbs</span>
+            </div>
+            <Button
+              onClick={submitTip}
+              disabled={!tipAmount || parseInt(tipAmount) <= 0 || parseInt(tipAmount) > (orbsData?.balance || 0) || tipMutation.isPending}
+              className="w-full bg-amber-500 hover:bg-amber-600"
+              data-testid="submit-tip"
+            >
+              {tipMutation.isPending ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <>Send {tipAmount} Orbs</>
+              )}
+            </Button>
+            {parseInt(tipAmount) > (orbsData?.balance || 0) && (
+              <p className="text-xs text-red-400 text-center">Insufficient Orbs balance</p>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
