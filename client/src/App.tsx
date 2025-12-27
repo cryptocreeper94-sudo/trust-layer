@@ -103,6 +103,7 @@ import Genesis from "@/pages/genesis";
 import EraCodex from "@/pages/era-codex";
 import ScenarioGenerator from "@/pages/scenario-generator";
 import Crowdfund from "@/pages/crowdfund";
+import CommunityHub from "@/pages/community-hub";
 import Presale from "@/pages/presale";
 import PresaleSuccess from "@/pages/presale-success";
 import InvestmentSimulator from "@/pages/investment-simulator";
@@ -168,6 +169,7 @@ function GamesRouter() {
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/scenario-generator" component={ScenarioGenerator} />
         <Route path="/crowdfund" component={Crowdfund} />
+        <Route path="/community" component={CommunityHub} />
         <Route path="/presale" component={Presale} />
         <Route path="/presale/success" component={PresaleSuccess} />
         <Route path="/investment-simulator" component={InvestmentSimulator} />
@@ -335,6 +337,7 @@ function DWSCRouter() {
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/scenario-generator" component={ScenarioGenerator} />
         <Route path="/crowdfund" component={Crowdfund} />
+        <Route path="/community" component={CommunityHub} />
         <Route path="/presale" component={Presale} />
         <Route path="/presale/success" component={PresaleSuccess} />
         <Route path="/investment-simulator" component={InvestmentSimulator} />
