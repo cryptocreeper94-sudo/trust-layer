@@ -33,6 +33,7 @@ import { walletBotService } from "./wallet-bot-service";
 import { pulseClient } from "./pulse-client";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { orbsService, ORB_PACKAGES, ORB_EARN_RATES, ORB_COSTS } from "./orbs-service";
+import { subscriptionService, SUBSCRIPTION_PLANS } from "./subscription-service";
 
 const FaucetClaimRequestSchema = z.object({
   walletAddress: z.string().min(10, "Invalid wallet address").max(100),
@@ -252,6 +253,130 @@ export async function registerRoutes(
             console.log(`[Stripe Webhook] Presale affiliate commission tracked for user ${metadata.userId}`);
           } catch (refErr) {
             console.error("[Stripe Webhook] Presale referral commission error:", refErr);
+          }
+        }
+        
+        // Handle new subscription activation (with server-side validation)
+        if (metadata.type === "subscription" && session.subscription) {
+          try {
+            const { getUncachableStripeClient } = await import("./stripeClient");
+            const stripe = await getUncachableStripeClient();
+            const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
+            const subData = subscription as any;
+            
+            // SECURITY: Validate subscription is actually active/trialing before granting access
+            if (subData.status !== "active" && subData.status !== "trialing") {
+              console.error(`[Stripe Webhook] Subscription not active: status=${subData.status}`);
+              return res.json({ received: true });
+            }
+            
+            // SECURITY: Validate plan from subscription metadata (set server-side during checkout creation)
+            const subMetadata = subData.metadata || {};
+            const userId = subMetadata.userId;
+            const plan = subMetadata.plan;
+            const billingCycle = subMetadata.billingCycle as "monthly" | "annual";
+            
+            // SECURITY: Validate plan is a valid subscription plan
+            const validPlans = ["pulse_pro", "strike_agent", "complete_bundle", "rm_monthly", "rm_annual"];
+            if (!userId || !plan || !validPlans.includes(plan)) {
+              console.error(`[Stripe Webhook] Invalid subscription metadata: userId=${userId}, plan=${plan}`);
+              return res.json({ received: true });
+            }
+            
+            // SECURITY: Verify price matches expected plan pricing
+            const priceId = subData.items?.data?.[0]?.price?.id;
+            const priceAmount = subData.items?.data?.[0]?.price?.unit_amount;
+            const expectedPrices: Record<string, number[]> = {
+              pulse_pro: [1499, 14999],      // monthly, annual
+              strike_agent: [3000, 30000],
+              complete_bundle: [3999, 39999],
+              rm_monthly: [800],
+              rm_annual: [8000],
+            };
+            
+            if (expectedPrices[plan] && !expectedPrices[plan].includes(priceAmount)) {
+              console.error(`[Stripe Webhook] Price mismatch: plan=${plan}, expected=${expectedPrices[plan]}, got=${priceAmount}`);
+              return res.json({ received: true });
+            }
+            
+            await subscriptionService.activateSubscription(
+              userId,
+              plan,
+              session.customer as string,
+              subscription.id,
+              priceId || "",
+              billingCycle,
+              new Date(subData.current_period_start * 1000),
+              new Date(subData.current_period_end * 1000),
+              subData.trial_end ? new Date(subData.trial_end * 1000) : undefined
+            );
+            
+            console.log(`[Stripe Webhook] Subscription activated: user=${userId}, plan=${plan}, cycle=${billingCycle}, price=${priceAmount}`);
+          } catch (subErr) {
+            console.error("[Stripe Webhook] Subscription activation error:", subErr);
+          }
+        }
+      }
+      
+      // Handle subscription updated (renewal, plan change)
+      if (event.type === "customer.subscription.updated") {
+        const subscription = event.data.object as any;
+        try {
+          const sub = await subscriptionService.getByStripeSubscriptionId(subscription.id);
+          if (sub) {
+            await subscriptionService.renewSubscription(
+              subscription.id,
+              new Date(subscription.current_period_start * 1000),
+              new Date(subscription.current_period_end * 1000)
+            );
+            console.log(`[Stripe Webhook] Subscription renewed: ${subscription.id}`);
+          }
+        } catch (err) {
+          console.error("[Stripe Webhook] Subscription update error:", err);
+        }
+      }
+      
+      // Handle subscription cancelled
+      if (event.type === "customer.subscription.deleted") {
+        const subscription = event.data.object as any;
+        try {
+          await subscriptionService.expireSubscription(subscription.id);
+          console.log(`[Stripe Webhook] Subscription expired: ${subscription.id}`);
+        } catch (err) {
+          console.error("[Stripe Webhook] Subscription delete error:", err);
+        }
+      }
+      
+      // Handle payment failed
+      if (event.type === "invoice.payment_failed") {
+        const invoice = event.data.object as any;
+        if (invoice.subscription) {
+          try {
+            await subscriptionService.markPastDue(invoice.subscription as string);
+            console.log(`[Stripe Webhook] Subscription marked past_due: ${invoice.subscription}`);
+          } catch (err) {
+            console.error("[Stripe Webhook] Payment failed handling error:", err);
+          }
+        }
+      }
+      
+      // Handle successful invoice payment (renewal)
+      if (event.type === "invoice.paid") {
+        const invoice = event.data.object as any;
+        if (invoice.subscription && invoice.billing_reason === "subscription_cycle") {
+          try {
+            const { getUncachableStripeClient } = await import("./stripeClient");
+            const stripe = await getUncachableStripeClient();
+            const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string) as any;
+            
+            await subscriptionService.renewSubscription(
+              subscription.id,
+              new Date(subscription.current_period_start * 1000),
+              new Date(subscription.current_period_end * 1000)
+            );
+            console.log(`[Stripe Webhook] Subscription renewed via invoice: ${subscription.id}`);
+          } catch (err) {
+            console.error("[Stripe Webhook] Invoice paid handling error:", err);
           }
         }
       }
@@ -8561,6 +8686,291 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       console.error("Verify orbs purchase error:", error);
       res.status(500).json({ error: "Failed to verify purchase" });
     }
+  });
+
+  // =====================================================
+  // SUBSCRIPTION ENDPOINTS
+  // =====================================================
+  // Unified subscription system for Pulse Pro, StrikeAgent, Complete Bundle
+  // Synced with main Pulse app structure
+  // =====================================================
+
+  // Get subscription status
+  app.get("/api/subscription/status", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const status = await subscriptionService.getSubscriptionStatus(userId);
+      res.json(status);
+    } catch (error) {
+      console.error("Get subscription status error:", error);
+      res.status(500).json({ error: "Failed to get subscription status" });
+    }
+  });
+
+  // Get available plans
+  app.get("/api/subscription/plans", async (req, res) => {
+    try {
+      res.json({ plans: SUBSCRIPTION_PLANS });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to get plans" });
+    }
+  });
+
+  // Create Pulse Pro subscription checkout
+  app.post("/api/payments/stripe/create-pulse-monthly", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      
+      const plan = SUBSCRIPTION_PLANS.pulse_pro;
+      
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [{
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: plan.name,
+              description: "AI-powered predictions & analysis - Monthly subscription",
+            },
+            unit_amount: plan.monthlyPrice,
+            recurring: { interval: "month" },
+          },
+          quantity: 1,
+        }],
+        mode: "subscription",
+        subscription_data: {
+          trial_period_days: plan.trialDays,
+          metadata: { userId, plan: "pulse_pro", billingCycle: "monthly" },
+        },
+        success_url: `${req.headers.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${req.headers.origin}/subscription/cancelled`,
+        metadata: { userId, plan: "pulse_pro", billingCycle: "monthly", type: "subscription" },
+      });
+      
+      res.json({ url: session.url, sessionId: session.id });
+    } catch (error) {
+      console.error("Create Pulse monthly checkout error:", error);
+      res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  app.post("/api/payments/stripe/create-pulse-annual", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      
+      const plan = SUBSCRIPTION_PLANS.pulse_pro;
+      
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [{
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: plan.name,
+              description: "AI-powered predictions & analysis - Annual subscription (Save $30)",
+            },
+            unit_amount: plan.annualPrice,
+            recurring: { interval: "year" },
+          },
+          quantity: 1,
+        }],
+        mode: "subscription",
+        subscription_data: {
+          trial_period_days: plan.trialDays,
+          metadata: { userId, plan: "pulse_pro", billingCycle: "annual" },
+        },
+        success_url: `${req.headers.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${req.headers.origin}/subscription/cancelled`,
+        metadata: { userId, plan: "pulse_pro", billingCycle: "annual", type: "subscription" },
+      });
+      
+      res.json({ url: session.url, sessionId: session.id });
+    } catch (error) {
+      console.error("Create Pulse annual checkout error:", error);
+      res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  // Create StrikeAgent subscription checkout
+  app.post("/api/payments/stripe/create-strike-monthly", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      
+      const plan = SUBSCRIPTION_PLANS.strike_agent;
+      
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [{
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: plan.name,
+              description: "AI-powered sniper bot - Monthly subscription",
+            },
+            unit_amount: plan.monthlyPrice,
+            recurring: { interval: "month" },
+          },
+          quantity: 1,
+        }],
+        mode: "subscription",
+        subscription_data: {
+          trial_period_days: plan.trialDays,
+          metadata: { userId, plan: "strike_agent", billingCycle: "monthly" },
+        },
+        success_url: `${req.headers.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${req.headers.origin}/subscription/cancelled`,
+        metadata: { userId, plan: "strike_agent", billingCycle: "monthly", type: "subscription" },
+      });
+      
+      res.json({ url: session.url, sessionId: session.id });
+    } catch (error) {
+      console.error("Create Strike monthly checkout error:", error);
+      res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  app.post("/api/payments/stripe/create-strike-annual", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      
+      const plan = SUBSCRIPTION_PLANS.strike_agent;
+      
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [{
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: plan.name,
+              description: "AI-powered sniper bot - Annual subscription (Save $60)",
+            },
+            unit_amount: plan.annualPrice,
+            recurring: { interval: "year" },
+          },
+          quantity: 1,
+        }],
+        mode: "subscription",
+        subscription_data: {
+          trial_period_days: plan.trialDays,
+          metadata: { userId, plan: "strike_agent", billingCycle: "annual" },
+        },
+        success_url: `${req.headers.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${req.headers.origin}/subscription/cancelled`,
+        metadata: { userId, plan: "strike_agent", billingCycle: "annual", type: "subscription" },
+      });
+      
+      res.json({ url: session.url, sessionId: session.id });
+    } catch (error) {
+      console.error("Create Strike annual checkout error:", error);
+      res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  // Create Complete Bundle subscription checkout
+  app.post("/api/payments/stripe/create-bundle-monthly", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      
+      const plan = SUBSCRIPTION_PLANS.complete_bundle;
+      
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [{
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: plan.name,
+              description: "Everything included - Monthly subscription",
+            },
+            unit_amount: plan.monthlyPrice,
+            recurring: { interval: "month" },
+          },
+          quantity: 1,
+        }],
+        mode: "subscription",
+        subscription_data: {
+          trial_period_days: plan.trialDays,
+          metadata: { userId, plan: "complete_bundle", billingCycle: "monthly" },
+        },
+        success_url: `${req.headers.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${req.headers.origin}/subscription/cancelled`,
+        metadata: { userId, plan: "complete_bundle", billingCycle: "monthly", type: "subscription" },
+      });
+      
+      res.json({ url: session.url, sessionId: session.id });
+    } catch (error) {
+      console.error("Create Bundle monthly checkout error:", error);
+      res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  app.post("/api/payments/stripe/create-bundle-annual", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      
+      const plan = SUBSCRIPTION_PLANS.complete_bundle;
+      
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [{
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: plan.name,
+              description: "Everything included - Annual subscription (Save $80)",
+            },
+            unit_amount: plan.annualPrice,
+            recurring: { interval: "year" },
+          },
+          quantity: 1,
+        }],
+        mode: "subscription",
+        subscription_data: {
+          trial_period_days: plan.trialDays,
+          metadata: { userId, plan: "complete_bundle", billingCycle: "annual" },
+        },
+        success_url: `${req.headers.origin}/subscription/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${req.headers.origin}/subscription/cancelled`,
+        metadata: { userId, plan: "complete_bundle", billingCycle: "annual", type: "subscription" },
+      });
+      
+      res.json({ url: session.url, sessionId: session.id });
+    } catch (error) {
+      console.error("Create Bundle annual checkout error:", error);
+      res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  // Legacy Founder one-time purchase (disabled for new purchases)
+  app.post("/api/payments/stripe/create-founder", isAuthenticated, async (req: any, res) => {
+    // Founder tier is disabled for new purchases
+    res.status(410).json({ error: "Legacy Founder tier is no longer available for new purchases" });
   });
 
   // Pulse API webhook for real-time signal notifications

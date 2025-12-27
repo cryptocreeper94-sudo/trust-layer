@@ -153,7 +153,7 @@ class SubscriptionService {
     const isPremium = isActive && sub.plan !== "free" && sub.plan !== "free_demo";
 
     const planConfig = SUBSCRIPTION_PLANS[sub.plan as keyof typeof SUBSCRIPTION_PLANS];
-    const features = planConfig?.features || ["Basic features"];
+    const features = planConfig?.features ? [...planConfig.features] : ["Basic features"];
 
     return {
       plan: sub.plan,
