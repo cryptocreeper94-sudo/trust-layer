@@ -6,7 +6,8 @@ import {
   MessageCircle, Users, Bot, Hash, Bell, Settings, Search,
   Plus, ChevronRight, ChevronDown, Sparkles, Crown, Shield,
   Zap, Star, Heart, Send, Smile, Image, Mic, MoreHorizontal,
-  Home, Compass, Radio, Lock, Globe, ArrowLeft, Menu, X, Loader2
+  Home, Compass, Radio, Lock, Globe, ArrowLeft, Menu, X, Loader2,
+  Activity, TrendingUp
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -17,6 +18,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { PulseMiniApp } from "@/components/pulse-mini-app";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 
 const COMMUNITY_COLORS = [
@@ -107,6 +109,7 @@ export default function CommunityHub() {
   const [newCommunityName, setNewCommunityName] = useState("");
   const [newCommunityDesc, setNewCommunityDesc] = useState("");
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [activeView, setActiveView] = useState<"chat" | "pulse">("chat");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const { data: user } = useQuery({
@@ -270,8 +273,22 @@ export default function CommunityHub() {
               className="fixed lg:relative inset-y-0 left-0 top-14 z-40 flex"
             >
               <div className="w-[72px] bg-gray-900/80 backdrop-blur-xl border-r border-white/5 flex flex-col items-center py-4 gap-3">
-                <button className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/20 transition-all">
-                  <Home className="w-5 h-5" />
+                <button 
+                  onClick={() => setActiveView("chat")}
+                  className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${activeView === "chat" ? "bg-cyan-500/20 text-cyan-400 ring-2 ring-cyan-500/30" : "bg-white/10 text-gray-400 hover:text-white hover:bg-white/20"}`}
+                  data-testid="toggle-chat-view"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                </button>
+                <button 
+                  onClick={() => setActiveView("pulse")}
+                  className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all group relative ${activeView === "pulse" ? "bg-gradient-to-br from-cyan-500 to-purple-500 text-white ring-2 ring-cyan-500/30" : "bg-white/5 text-gray-400 hover:text-white hover:bg-white/10"}`}
+                  data-testid="toggle-pulse-view"
+                >
+                  <Activity className="w-5 h-5" />
+                  <div className="absolute left-full ml-3 px-2 py-1 bg-gray-900 rounded text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                    Pulse Trading
+                  </div>
                 </button>
                 <button className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all">
                   <Compass className="w-5 h-5" />
@@ -450,121 +467,129 @@ export default function CommunityHub() {
           )}
         </AnimatePresence>
 
-        <div className="flex-1 flex flex-col min-w-0">
-          <div className="h-12 border-b border-white/5 bg-gray-900/40 backdrop-blur-sm flex items-center justify-between px-4">
-            <div className="flex items-center gap-2">
-              <Hash className="w-5 h-5 text-gray-400" />
-              <span className="font-medium text-white">{selectedChannel?.name || "Select a channel"}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="relative hidden sm:block">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                <Input 
-                  placeholder="Search..." 
-                  className="w-48 h-8 pl-9 bg-white/5 border-white/10 text-sm"
-                />
-              </div>
-              <button className="p-2 hover:bg-white/10 rounded-lg">
-                <Bell className="w-4 h-4 text-gray-400" />
-              </button>
-              <button className="p-2 hover:bg-white/10 rounded-lg">
-                <Users className="w-4 h-4 text-gray-400" />
-              </button>
-            </div>
+        {activeView === "pulse" ? (
+          <div className="flex-1 min-w-0">
+            <PulseMiniApp />
           </div>
-
-          <ScrollArea className="flex-1 py-4">
-            {loadingMessages ? (
-              <div className="flex items-center justify-center py-12">
-                <Loader2 className="w-8 h-8 text-gray-400 animate-spin" />
-              </div>
-            ) : messagesData?.messages?.length > 0 ? (
-              <div className="space-y-1">
-                {messagesData.messages.map((msg: any) => (
-                  <MessageBubble key={msg.id} message={msg} />
-                ))}
-                <div ref={messagesEndRef} />
-              </div>
-            ) : (
-              <div className="px-4 py-8">
-                <GlassCard className="p-6 text-center max-w-md mx-auto">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center">
-                    <MessageCircle className="w-8 h-8 text-cyan-400" />
+        ) : (
+          <>
+            <div className="flex-1 flex flex-col min-w-0">
+              <div className="h-12 border-b border-white/5 bg-gray-900/40 backdrop-blur-sm flex items-center justify-between px-4">
+                <div className="flex items-center gap-2">
+                  <Hash className="w-5 h-5 text-gray-400" />
+                  <span className="font-medium text-white">{selectedChannel?.name || "Select a channel"}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="relative hidden sm:block">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                    <Input 
+                      placeholder="Search..." 
+                      className="w-48 h-8 pl-9 bg-white/5 border-white/10 text-sm"
+                    />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2">Start the Conversation</h3>
-                  <p className="text-sm text-gray-400 mb-4">
-                    Be the first to send a message in this channel!
-                  </p>
-                </GlassCard>
-              </div>
-            )}
-          </ScrollArea>
-
-          <div className="p-4 border-t border-white/5 bg-gray-900/40">
-            <div className="flex items-center gap-2">
-              <button className="p-2 hover:bg-white/10 rounded-lg">
-                <Plus className="w-5 h-5 text-gray-400" />
-              </button>
-              <div className="flex-1 relative">
-                <Input
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                  placeholder={user ? `Message #${selectedChannel?.name || "channel"}` : "Sign in to send messages"}
-                  className="bg-white/5 border-white/10 pr-24"
-                  disabled={!user || !selectedChannelId}
-                  data-testid="input-message"
-                />
-                <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                  <button className="p-1.5 hover:bg-white/10 rounded"><Image className="w-4 h-4 text-gray-400" /></button>
-                  <button className="p-1.5 hover:bg-white/10 rounded"><Smile className="w-4 h-4 text-gray-400" /></button>
-                  <button className="p-1.5 hover:bg-white/10 rounded"><Mic className="w-4 h-4 text-gray-400" /></button>
+                  <button className="p-2 hover:bg-white/10 rounded-lg">
+                    <Bell className="w-4 h-4 text-gray-400" />
+                  </button>
+                  <button className="p-2 hover:bg-white/10 rounded-lg">
+                    <Users className="w-4 h-4 text-gray-400" />
+                  </button>
                 </div>
               </div>
-              <Button 
-                size="icon" 
-                className="bg-cyan-500 hover:bg-cyan-600"
-                onClick={handleSendMessage}
-                disabled={!message.trim() || sendMessage.isPending || !user}
-                data-testid="send-message-btn"
-              >
-                {sendMessage.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-              </Button>
+
+              <ScrollArea className="flex-1 py-4">
+                {loadingMessages ? (
+                  <div className="flex items-center justify-center py-12">
+                    <Loader2 className="w-8 h-8 text-gray-400 animate-spin" />
+                  </div>
+                ) : messagesData?.messages?.length > 0 ? (
+                  <div className="space-y-1">
+                    {messagesData.messages.map((msg: any) => (
+                      <MessageBubble key={msg.id} message={msg} />
+                    ))}
+                    <div ref={messagesEndRef} />
+                  </div>
+                ) : (
+                  <div className="px-4 py-8">
+                    <GlassCard className="p-6 text-center max-w-md mx-auto">
+                      <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center">
+                        <MessageCircle className="w-8 h-8 text-cyan-400" />
+                      </div>
+                      <h3 className="text-xl font-bold text-white mb-2">Start the Conversation</h3>
+                      <p className="text-sm text-gray-400 mb-4">
+                        Be the first to send a message in this channel!
+                      </p>
+                    </GlassCard>
+                  </div>
+                )}
+              </ScrollArea>
+
+              <div className="p-4 border-t border-white/5 bg-gray-900/40">
+                <div className="flex items-center gap-2">
+                  <button className="p-2 hover:bg-white/10 rounded-lg">
+                    <Plus className="w-5 h-5 text-gray-400" />
+                  </button>
+                  <div className="flex-1 relative">
+                    <Input
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+                      placeholder={user ? `Message #${selectedChannel?.name || "channel"}` : "Sign in to send messages"}
+                      className="bg-white/5 border-white/10 pr-24"
+                      disabled={!user || !selectedChannelId}
+                      data-testid="input-message"
+                    />
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                      <button className="p-1.5 hover:bg-white/10 rounded"><Image className="w-4 h-4 text-gray-400" /></button>
+                      <button className="p-1.5 hover:bg-white/10 rounded"><Smile className="w-4 h-4 text-gray-400" /></button>
+                      <button className="p-1.5 hover:bg-white/10 rounded"><Mic className="w-4 h-4 text-gray-400" /></button>
+                    </div>
+                  </div>
+                  <Button 
+                    size="icon" 
+                    className="bg-cyan-500 hover:bg-cyan-600"
+                    onClick={handleSendMessage}
+                    disabled={!message.trim() || sendMessage.isPending || !user}
+                    data-testid="send-message-btn"
+                  >
+                    {sendMessage.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                  </Button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div className="hidden xl:block w-60 border-l border-white/5 bg-gray-900/40 backdrop-blur-sm">
-          <div className="p-4 border-b border-white/5">
-            <h3 className="text-sm font-medium text-white flex items-center gap-2">
-              <Users className="w-4 h-4 text-cyan-400" />
-              Members ({membersData?.members?.length || 0})
-            </h3>
-          </div>
-          <div className="p-3 space-y-2">
-            {membersData?.members?.slice(0, 10).map((member: any) => (
-              <div key={member.id} className="flex items-center gap-2">
-                <div className="relative">
-                  <Avatar className="w-7 h-7 bg-gradient-to-br from-cyan-500 to-purple-500">
-                    <AvatarFallback className="text-[10px]">{member.username?.slice(0, 2).toUpperCase()}</AvatarFallback>
-                  </Avatar>
-                  {member.isOnline && (
-                    <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-gray-900" />
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <span className="text-sm text-gray-300 truncate block">{member.username}</span>
-                  {member.role === "owner" && (
-                    <Badge className="h-3 text-[8px] bg-amber-500/20 text-amber-400 border-amber-500/30">OWNER</Badge>
-                  )}
-                </div>
+            <div className="hidden xl:block w-60 border-l border-white/5 bg-gray-900/40 backdrop-blur-sm">
+              <div className="p-4 border-b border-white/5">
+                <h3 className="text-sm font-medium text-white flex items-center gap-2">
+                  <Users className="w-4 h-4 text-cyan-400" />
+                  Members ({membersData?.members?.length || 0})
+                </h3>
               </div>
-            ))}
-            {(membersData?.members?.length || 0) > 10 && (
-              <p className="text-[10px] text-gray-500">+{membersData.members.length - 10} more</p>
-            )}
-          </div>
-        </div>
+              <div className="p-3 space-y-2">
+                {membersData?.members?.slice(0, 10).map((member: any) => (
+                  <div key={member.id} className="flex items-center gap-2">
+                    <div className="relative">
+                      <Avatar className="w-7 h-7 bg-gradient-to-br from-cyan-500 to-purple-500">
+                        <AvatarFallback className="text-[10px]">{member.username?.slice(0, 2).toUpperCase()}</AvatarFallback>
+                      </Avatar>
+                      {member.isOnline && (
+                        <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-gray-900" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm text-gray-300 truncate block">{member.username}</span>
+                      {member.role === "owner" && (
+                        <Badge className="h-3 text-[8px] bg-amber-500/20 text-amber-400 border-amber-500/30">OWNER</Badge>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                {(membersData?.members?.length || 0) > 10 && (
+                  <p className="text-[10px] text-gray-500">+{membersData.members.length - 10} more</p>
+                )}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
