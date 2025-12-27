@@ -1,4 +1,4 @@
-export type AppDomain = "dwsc" | "games" | "studios" | "chrono";
+export type AppDomain = "dwsc" | "games" | "studios" | "chrono" | "chronochat";
 
 export function getAppFromHost(): AppDomain {
   const host = window.location.hostname.toLowerCase();
@@ -8,6 +8,9 @@ export function getAppFromHost(): AppDomain {
   }
   if (host.includes("darkwavestudios") || host.includes("studios.")) {
     return "studios";
+  }
+  if (host.includes("chronochat") || host === "chronochat.io" || host === "www.chronochat.io") {
+    return "chronochat";
   }
   if (host.includes("yourlegacy") || host.includes("chrono.") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
     return "chrono";
@@ -54,6 +57,14 @@ export const APP_CONFIG: Record<AppDomain, {
     description: "Not a game. A life. Live your legacy.",
     logoText: "ChronoVerse",
     primaryGradient: "from-purple-500 to-pink-500",
+  },
+  chronochat: {
+    name: "Chronochat",
+    shortName: "Chronochat",
+    themeColor: "#06b6d4",
+    description: "Connect across timelines. Chat beyond eras.",
+    logoText: "Chronochat",
+    primaryGradient: "from-cyan-500 to-purple-500",
   },
 };
 
