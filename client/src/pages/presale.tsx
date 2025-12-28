@@ -21,7 +21,7 @@ import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
 import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
 import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
 
-const TOKEN_PRICE = 0.008;
+const TOKEN_PRICE = 0.005;
 const PRESALE_ALLOCATION = 15000000;
 
 interface PresaleTier {

@@ -115,6 +115,21 @@ Developers who learn DarkWave Script become part of OUR ecosystem permanently.
 
 ---
 
+## Token Presale
+
+| Round | Price | Discount | Status |
+|-------|-------|----------|--------|
+| Seed Round | $0.005 | 50% | Open |
+| Private Sale | $0.007 | 30% | Coming Soon |
+| Public Presale | $0.008 | 20% | Coming Soon |
+| Launch Price | $0.01 | - | Feb 2026 |
+
+**Presale Allocation:** 15M tokens (15% of supply)  
+**Minimum Investment:** $25  
+**Bonus Tokens:** Up to 25% for early tiers
+
+---
+
 ## Revenue Streams
 
 | Stream | Type | Revenue Potential |
@@ -125,6 +140,7 @@ Developers who learn DarkWave Script become part of OUR ecosystem permanently.
 | Orbs Economy | Transactional | $4.99-$79.99 packages |
 | Domain Registration | Recurring | $12-$350/year |
 | Protocol Fees (DEX, NFT, Bridge) | Transaction | Variable |
+| Token Presale | One-time | $75,000 target (15M tokens × $0.005) |
 
 ---
 
