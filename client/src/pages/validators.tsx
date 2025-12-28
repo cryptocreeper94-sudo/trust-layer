@@ -349,16 +349,38 @@ export default function Validators() {
                       </div>
                     </div>
 
-                    <div className="mt-6 p-4 rounded-lg bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20">
+                    <div className="mt-6 p-4 rounded-lg bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/30">
                       <h4 className="font-bold text-sm mb-2 flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-amber-400" />
-                        Validator Rewards
+                        Launch Day Airdrop
+                      </h4>
+                      <div className="space-y-2 text-xs">
+                        <div className="flex justify-between items-center p-2 rounded bg-white/5">
+                          <span className="text-amber-400 font-semibold">Founder Validators (1-10)</span>
+                          <span className="text-white font-bold">10,000 DWC</span>
+                        </div>
+                        <div className="flex justify-between items-center p-2 rounded bg-white/5">
+                          <span className="text-cyan-400 font-semibold">Early Validators (11-50)</span>
+                          <span className="text-white font-bold">5,000 DWC</span>
+                        </div>
+                        <div className="flex justify-between items-center p-2 rounded bg-white/5">
+                          <span className="text-purple-400 font-semibold">Standard Validators (51+)</span>
+                          <span className="text-white font-bold">1,000 DWC</span>
+                        </div>
+                      </div>
+                      <p className="text-[10px] text-muted-foreground mt-2">* Airdrop at DWC token launch + ongoing transaction fee share</p>
+                    </div>
+
+                    <div className="mt-4 p-4 rounded-lg bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20">
+                      <h4 className="font-bold text-sm mb-2 flex items-center gap-2">
+                        <Shield className="w-4 h-4 text-cyan-400" />
+                        Ongoing Rewards
                       </h4>
                       <ul className="text-xs text-muted-foreground space-y-1">
                         <li>• Earn a share of all transaction fees</li>
                         <li>• Priority access to new features</li>
-                        <li>• Founder Validator badge (first 10 validators)</li>
                         <li>• Governance voting rights</li>
+                        <li>• Permanent Founder badge (first 10)</li>
                       </ul>
                     </div>
                   </div>
