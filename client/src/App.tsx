@@ -132,6 +132,7 @@ import Tokenomics from "@/pages/tokenomics";
 import FAQ from "@/pages/faq";
 import CompetitiveAnalysis from "@/pages/competitive-analysis";
 import SecurityPage from "@/pages/security";
+import GuardianCertification from "@/pages/guardian-certification";
 import OwnerAdminPortal from "@/pages/owner-admin";
 import OwnerAnalytics from "@/pages/owner-admin/analytics";
 import OwnerSeoManager from "@/pages/owner-admin/seo";
@@ -253,6 +254,7 @@ function DWSCRouter() {
         <Route path="/faq" component={FAQ} />
         <Route path="/competitive-analysis" component={CompetitiveAnalysis} />
         <Route path="/security" component={SecurityPage} />
+        <Route path="/guardian" component={GuardianCertification} />
         <Route path="/explorer" component={Explorer} />
         <Route path="/doc-hub" component={DocHub} />
         <Route path="/executive-summary" component={DWSCExecutiveSummary} />

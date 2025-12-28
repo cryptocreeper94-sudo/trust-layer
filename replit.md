@@ -57,6 +57,14 @@ The design adheres to a "Premium UI Protocol" featuring:
   - **Core Features**: Community creation, channels, real-time WebSocket messaging, reactions, replies, file uploads, member management, bot framework.
 - **Orbs Economy System**: Internal virtual currency for the ecosystem pre-DWC launch. Users earn Orbs through engagement, purchase via Stripe, tip other users, and unlock premium features. At DWC token launch, Orbs convert to DWC tokens. Features atomic transaction handling for tipping to prevent double-spending. Tables: orb_wallets, orb_transactions, orb_conversion_snapshots. Earn rates: daily_login (5), send_message (1), receive_reaction (2), join_community (10), referral_signup (50). Packages: Starter (100/$4.99), Popular (500/$19.99), Premium (1200/$39.99), Ultimate (3000/$79.99).
 - **Subscription System**: Unified subscription management synced with main Pulse app. Tiers: Pulse Pro ($14.99/mo, $149.99/yr), StrikeAgent Elite ($30/mo, $300/yr), DarkWave Complete ($39.99/mo, $399.99/yr). Features 2-day free trials, webhook handlers for lifecycle events (renewals, cancellations, payment failures), whitelist support for team/partners, and cross-app entitlement checking via /api/subscription/status. Tables: subscriptions, whitelisted_users. Plan IDs: pulse_pro, strike_agent, complete_bundle, founder, rm_monthly, rm_annual.
+- **Guardian Certification Program**: In-house blockchain security audit service offering enterprise-grade audits at 70% less than traditional firms like CertiK.
+  - **Tiers**: Self-Cert (Free, quarterly for ecosystem projects), Assurance Lite ($5,999), Guardian Premier ($14,999)
+  - **Methodology**: 6-pillar approach (Threat Modeling, Static Analysis, Dynamic Testing, Infrastructure Audit, Cryptographic Review, Compliance Mapping)
+  - **Process**: 6-step certification (Engagement → Discovery → Assessment → Findings → Remediation → Certification)
+  - **Registry**: Public listing of certified projects with scores and status
+  - **Revenue Stream**: New services revenue from external project audits
+  - **Pages**: /security (transparency report, 78/100 score), /guardian (certification program)
+- **Security Infrastructure**: Helmet.js security headers with environment-aware CSP (strict in production), CORS with strict origin allowlist (5 ecosystem domains only), 10+ rate limiting categories, AES-256-GCM encryption, HMAC-SHA256 signatures, parameterized SQL via Drizzle ORM. Internal security score: 78/100 (50% above industry average).
 
 ## External Dependencies
 - **Database**: PostgreSQL

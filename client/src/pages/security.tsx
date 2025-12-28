@@ -432,6 +432,47 @@ export default function SecurityPage() {
           </div>
         </section>
 
+        <section className="py-20 px-4 bg-gradient-to-b from-transparent via-cyan-950/20 to-transparent">
+          <div className="container mx-auto max-w-4xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <GlassCard className="p-8 md:p-12 text-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-pink-500/5" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-48 bg-gradient-to-b from-purple-500/20 to-transparent blur-3xl" />
+                <div className="relative">
+                  <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-cyan-500/20 via-purple-500/20 to-pink-500/20 border-2 border-cyan-500/50 flex items-center justify-center">
+                    <ShieldCheck className="w-10 h-10 text-cyan-400" />
+                  </div>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full mb-4">
+                    <Sparkles className="w-4 h-4 text-purple-400" />
+                    <span className="text-purple-400 text-sm font-medium">New Service</span>
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                    Guardian Certification Program
+                  </h2>
+                  <p className="text-white/60 mb-8 max-w-xl mx-auto">
+                    We're not just securing ourselves - we're offering enterprise-grade security audits 
+                    to other blockchain projects at 70% less than traditional audit firms.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Link
+                      href="/guardian"
+                      className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-500 hover:via-purple-500 hover:to-pink-500 rounded-xl text-white font-semibold text-lg transition-all hover:scale-105 shadow-lg shadow-purple-500/25"
+                      data-testid="link-guardian-certification"
+                    >
+                      <ShieldCheck className="w-6 h-6" />
+                      Explore Guardian
+                    </Link>
+                  </div>
+                </div>
+              </GlassCard>
+            </motion.div>
+          </div>
+        </section>
+
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-4xl">
             <motion.div
