@@ -250,6 +250,89 @@ const PIONEER_BENEFITS = [
   { icon: Star, title: "Founding Client Badge", description: "Exclusive 'Pioneer' designation in Guardian Registry" }
 ];
 
+const SHIELD_TIERS = [
+  {
+    name: "Guardian Watch",
+    tagline: "Automated Security Monitoring",
+    price: "$299",
+    priceNote: "per month",
+    features: [
+      "24/7 automated smart contract monitoring",
+      "Unusual transaction pattern alerts",
+      "Weekly security reports",
+      "Email & Discord notifications",
+      "Up to 5 contracts monitored",
+      "Basic threat intelligence feed"
+    ],
+    icon: Eye,
+    color: "cyan",
+    comingSoon: true
+  },
+  {
+    name: "Guardian Shield",
+    tagline: "Real-Time Protection Suite",
+    price: "$999",
+    priceNote: "per month",
+    features: [
+      "Everything in Guardian Watch",
+      "Real-time incident alerts (< 1 min)",
+      "Governance attack detection",
+      "Bridge & liquidity pool monitoring",
+      "Whale movement tracking",
+      "Up to 25 contracts monitored",
+      "Dedicated Slack channel",
+      "Monthly security review calls"
+    ],
+    highlight: true,
+    icon: Shield,
+    color: "purple",
+    comingSoon: true
+  },
+  {
+    name: "Guardian Command",
+    tagline: "Enterprise Security Operations",
+    price: "$2,999",
+    priceNote: "per month",
+    features: [
+      "Everything in Guardian Shield",
+      "24/7 Security Operations Center",
+      "Active threat mitigation",
+      "Rug pull early warning system",
+      "Unlimited contract monitoring",
+      "Custom detection rules",
+      "Incident response team",
+      "Quarterly penetration testing",
+      "Executive security briefings"
+    ],
+    icon: Building,
+    color: "pink",
+    comingSoon: true
+  }
+];
+
+const SHIELD_FEATURES = [
+  {
+    icon: Activity,
+    title: "Real-Time Monitoring",
+    description: "24/7 surveillance of your smart contracts and on-chain activity"
+  },
+  {
+    icon: AlertTriangle,
+    title: "Threat Detection",
+    description: "AI-powered anomaly detection for unusual patterns and attacks"
+  },
+  {
+    icon: Globe,
+    title: "Multi-Chain Coverage",
+    description: "Monitor assets across Ethereum, BSC, Polygon, and 20+ chains"
+  },
+  {
+    icon: Zap,
+    title: "Instant Alerts",
+    description: "Sub-minute notifications via email, Slack, Discord, and SMS"
+  }
+];
+
 function GuardianBadge({ tier, size = "lg" }: { tier: string; size?: "sm" | "lg" }) {
   const sizeClasses = size === "lg" ? "w-32 h-32" : "w-16 h-16";
   const innerSize = size === "lg" ? "w-24 h-24" : "w-12 h-12";
@@ -760,6 +843,143 @@ export default function GuardianCertificationPage() {
                     </div>
                   </div>
                 </div>
+              </GlassCard>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Guardian Shield - Continuous Monitoring Section */}
+        <section className="py-20 px-4 bg-gradient-to-b from-transparent via-violet-950/20 to-transparent relative overflow-hidden">
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-violet-500/10 rounded-full blur-3xl animate-pulse" />
+            <div className="absolute bottom-1/3 right-1/4 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1.5s" }} />
+          </div>
+          
+          <div className="container mx-auto max-w-6xl relative">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-violet-500/10 border border-violet-500/30 rounded-full mb-6">
+                <Shield className="w-4 h-4 text-violet-400" />
+                <span className="text-violet-400 text-sm font-medium">Coming Q3 2025</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                <span className="bg-gradient-to-r from-violet-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
+                  Guardian Shield
+                </span>
+              </h2>
+              <p className="text-xl text-white/60 max-w-3xl mx-auto mb-4">
+                Continuous Blockchain Security Monitoring
+              </p>
+              <p className="text-white/50 max-w-2xl mx-auto">
+                Think Norton for blockchain. 24/7 protection for your smart contracts, tokens, and on-chain assets. 
+                Detect threats before they become exploits.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-4 gap-4 mb-16">
+              {SHIELD_FEATURES.map((feature, index) => (
+                <motion.div
+                  key={feature.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <GlassCard className="p-5 text-center h-full" data-testid={`card-shield-feature-${index}`}>
+                    <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br from-violet-500/20 to-indigo-500/20 flex items-center justify-center">
+                      <feature.icon className="w-6 h-6 text-violet-400" />
+                    </div>
+                    <h4 className="text-white font-semibold mb-1 text-sm">{feature.title}</h4>
+                    <p className="text-white/50 text-xs">{feature.description}</p>
+                  </GlassCard>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {SHIELD_TIERS.map((tier, index) => {
+                const colorMap: Record<string, string> = {
+                  cyan: "from-cyan-500/20 to-cyan-600/20 border-cyan-500/30",
+                  purple: "from-violet-500/20 to-purple-600/20 border-violet-500/30",
+                  pink: "from-pink-500/20 to-rose-600/20 border-pink-500/30"
+                };
+                
+                return (
+                  <motion.div
+                    key={tier.name}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.15 }}
+                    className="h-full"
+                  >
+                    <div className={`relative h-full rounded-2xl bg-gradient-to-b ${colorMap[tier.color]} border ${tier.highlight ? "border-2 border-violet-500/50" : ""} p-1`}>
+                      {tier.highlight && (
+                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-violet-500 to-purple-500 rounded-full">
+                          <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1">
+                            <Star className="w-3 h-3" /> Most Popular
+                          </span>
+                        </div>
+                      )}
+                      <div className="absolute -top-1 -right-1">
+                        <span className="px-3 py-1 bg-amber-500/90 text-amber-950 rounded-full text-xs font-bold uppercase">
+                          Coming Soon
+                        </span>
+                      </div>
+                      <div className="h-full rounded-xl bg-slate-900/90 p-6 flex flex-col">
+                        <div className="text-center mb-6">
+                          <div className={`w-16 h-16 mx-auto mb-4 rounded-xl bg-gradient-to-br ${colorMap[tier.color].split(" ")[0]} ${colorMap[tier.color].split(" ")[1]} flex items-center justify-center`}>
+                            <tier.icon className="w-8 h-8" style={{ color: tier.color === "cyan" ? "#06b6d4" : tier.color === "purple" ? "#8b5cf6" : "#ec4899" }} />
+                          </div>
+                          <h3 className="text-2xl font-bold text-white mb-1" data-testid={`text-shield-tier-${index}`}>{tier.name}</h3>
+                          <p className="text-white/50 text-sm">{tier.tagline}</p>
+                        </div>
+                        
+                        <div className="text-center mb-6">
+                          <div className="text-4xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
+                            {tier.price}
+                          </div>
+                          <p className="text-white/40 text-sm mt-1">{tier.priceNote}</p>
+                        </div>
+                        
+                        <ul className="space-y-3 flex-grow mb-6">
+                          {tier.features.map((feature, i) => (
+                            <li key={i} className="flex items-start gap-2 text-sm">
+                              <CheckCircle className="w-4 h-4 text-violet-400 mt-0.5 flex-shrink-0" />
+                              <span className="text-white/70">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        
+                        <a
+                          href="mailto:guardian@dwsc.io?subject=Guardian%20Shield%20Waitlist%20-%20Interest"
+                          className="w-full py-3 rounded-lg font-semibold text-center transition-all bg-white/10 hover:bg-white/20 text-white/70 border border-white/10 flex items-center justify-center gap-2"
+                          data-testid={`link-shield-waitlist-${index}`}
+                        >
+                          <Mail className="w-4 h-4" />
+                          Join Waitlist
+                        </a>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mt-12 text-center"
+            >
+              <GlassCard className="p-6 inline-block bg-gradient-to-r from-violet-950/30 to-indigo-950/30">
+                <p className="text-white/60 text-sm">
+                  <span className="text-violet-400 font-semibold">Early Access:</span> Get 20% off your first year when you join the waitlist before launch.
+                </p>
               </GlassCard>
             </motion.div>
           </div>

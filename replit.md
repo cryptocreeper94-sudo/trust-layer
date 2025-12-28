@@ -64,6 +64,14 @@ The design adheres to a "Premium UI Protocol" featuring:
   - **Registry**: Public listing of certified projects with scores and status
   - **Revenue Stream**: New services revenue from external project audits
   - **Pages**: /security (transparency report, 78/100 score), /guardian (certification program)
+  - **Trust Center**: Downloadable methodology docs, sample findings reports, DWSC self-audit report
+  - **Pioneer Program**: First 5 audits with 50% deposit model and exclusive benefits
+  - **Validation Roadmap**: 5-phase journey to credibility (Phase 0-4, ending Feb 2026)
+- **Guardian Shield (Coming Q3 2025)**: Continuous blockchain security monitoring service - "Norton for blockchain"
+  - **Tiers**: Guardian Watch ($299/mo), Guardian Shield ($999/mo), Guardian Command ($2,999/mo)
+  - **Features**: 24/7 smart contract monitoring, threat detection, multi-chain coverage, instant alerts
+  - **Capabilities**: Real-time anomaly detection, governance attack detection, rug pull early warning, SOC operations
+  - **Status**: Coming Soon with waitlist signup
 - **Security Infrastructure**: Helmet.js security headers with environment-aware CSP (strict in production), CORS with strict origin allowlist (5 ecosystem domains only), 10+ rate limiting categories, AES-256-GCM encryption, HMAC-SHA256 signatures, parameterized SQL via Drizzle ORM. Internal security score: 78/100 (50% above industry average).
 
 ## External Dependencies
