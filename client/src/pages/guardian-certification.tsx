@@ -1,10 +1,13 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
+import { useState, type FormEvent } from "react";
 import { 
   Shield, ShieldCheck, Award, CheckCircle, Star, Zap, FileText,
   ArrowLeft, ExternalLink, Clock, Users, Target, Lock, Eye,
   Sparkles, TrendingUp, Building, Code, Server, Database,
-  BadgeCheck, Layers, Activity, FileCheck, AlertTriangle
+  BadgeCheck, Layers, Activity, FileCheck, AlertTriangle,
+  Download, Calendar, Rocket, UserCheck, Mail, Send, ChevronRight,
+  Trophy, Gift, Percent, FileSearch, Globe, Bug, Handshake
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -142,6 +145,111 @@ const CERTIFIED_PROJECTS = [
   { name: "DarkWave Chronicles", status: "Scheduled", score: null, date: "Q2 2025" }
 ];
 
+const TRUST_CENTER_DOCS = [
+  {
+    icon: FileText,
+    title: "Methodology Framework",
+    description: "Complete 6-pillar security assessment methodology documentation",
+    type: "PDF",
+    size: "2.4 MB",
+    available: true,
+    email: "guardian@dwsc.io?subject=Request%20Methodology%20Framework%20Document"
+  },
+  {
+    icon: FileSearch,
+    title: "Sample Findings Report",
+    description: "Redacted findings from a Guardian Premier audit (anonymized)",
+    type: "PDF",
+    size: "1.8 MB",
+    available: false,
+    email: "guardian@dwsc.io?subject=Request%20Sample%20Findings%20Report"
+  },
+  {
+    icon: Shield,
+    title: "DWSC Self-Audit Report",
+    description: "Full transparency report for DarkWave Smart Chain (78/100)",
+    type: "PDF",
+    size: "3.2 MB",
+    available: true,
+    email: "guardian@dwsc.io?subject=Request%20DWSC%20Self-Audit%20Report"
+  },
+  {
+    icon: CheckCircle,
+    title: "Compliance Checklist",
+    description: "Industry-standard security controls mapped to Guardian pillars",
+    type: "PDF",
+    size: "892 KB",
+    available: true,
+    email: "guardian@dwsc.io?subject=Request%20Compliance%20Checklist"
+  }
+];
+
+const ROADMAP_MILESTONES = [
+  {
+    phase: "Phase 0",
+    title: "Internal Readiness",
+    date: "Jan - Feb 2025",
+    status: "completed",
+    items: ["DWSC self-audit complete", "Stripe pricing configured", "Trust Center launched", "Intake workflow ready"]
+  },
+  {
+    phase: "Phase 1", 
+    title: "Credibility Foundation",
+    date: "Feb - Apr 2025",
+    status: "in_progress",
+    items: ["Advisory board formation", "Verifiable badge metadata", "Sample reports published", "Community outreach"]
+  },
+  {
+    phase: "Phase 2",
+    title: "External Validation",
+    date: "May - Aug 2025",
+    status: "upcoming",
+    items: ["Third-party review", "Bug bounty program", "Security consortium listing", "Partner webinars"]
+  },
+  {
+    phase: "Phase 3",
+    title: "Customer Acquisition",
+    date: "Sep - Dec 2025",
+    status: "upcoming",
+    items: ["Pioneer cohort (5 audits)", "Case study publications", "Guardian Clinics launch", "Referral program"]
+  },
+  {
+    phase: "Phase 4",
+    title: "Launch Amplification",
+    date: "Jan - Feb 2026",
+    status: "upcoming",
+    items: ["Token launch integration", "Benchmark report release", "Launchpad bundling", "Full certification registry"]
+  }
+];
+
+const ADVISORY_BOARD = [
+  {
+    name: "Position Available",
+    role: "Chief Security Advisor",
+    bio: "Seeking experienced CISO or security lead from major blockchain project",
+    placeholder: true
+  },
+  {
+    name: "Position Available",
+    role: "Smart Contract Expert",
+    bio: "Seeking auditor with 5+ years experience in DeFi protocol security",
+    placeholder: true
+  },
+  {
+    name: "Position Available",
+    role: "Infrastructure Specialist",
+    bio: "Seeking cloud security expert with blockchain node operation experience",
+    placeholder: true
+  }
+];
+
+const PIONEER_BENEFITS = [
+  { icon: Percent, title: "50% Deposit Only", description: "Pay just half upfront, remainder upon certification" },
+  { icon: Trophy, title: "Featured Case Study", description: "Your project showcased in our marketing materials" },
+  { icon: Gift, title: "Extended Support", description: "120 days of priority support vs standard 90 days" },
+  { icon: Star, title: "Founding Client Badge", description: "Exclusive 'Pioneer' designation in Guardian Registry" }
+];
+
 function GuardianBadge({ tier, size = "lg" }: { tier: string; size?: "sm" | "lg" }) {
   const sizeClasses = size === "lg" ? "w-32 h-32" : "w-16 h-16";
   const innerSize = size === "lg" ? "w-24 h-24" : "w-12 h-12";
@@ -158,6 +266,178 @@ function GuardianBadge({ tier, size = "lg" }: { tier: string; size?: "sm" | "lg"
         <span className="text-xs font-bold text-white uppercase tracking-wider">{tier}</span>
       </div>
     </div>
+  );
+}
+
+function IntakeWizard() {
+  const [formData, setFormData] = useState({
+    projectName: "",
+    website: "",
+    email: "",
+    projectType: "",
+    tier: "",
+    description: ""
+  });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const mailtoLink = `mailto:guardian@dwsc.io?subject=Guardian%20Certification%20Inquiry%20-%20${encodeURIComponent(formData.projectName)}&body=${encodeURIComponent(
+      `Project Name: ${formData.projectName}\nWebsite: ${formData.website}\nEmail: ${formData.email}\nProject Type: ${formData.projectType}\nInterested Tier: ${formData.tier}\n\nDescription:\n${formData.description}`
+    )}`;
+    window.location.href = mailtoLink;
+    setSubmitted(true);
+  };
+
+  return (
+    <section className="py-20 px-4 bg-gradient-to-b from-transparent via-pink-950/10 to-transparent">
+      <div className="container mx-auto max-w-4xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-pink-500/10 border border-pink-500/30 rounded-full mb-6">
+            <Mail className="w-4 h-4 text-pink-400" />
+            <span className="text-pink-400 text-sm font-medium">Get Started</span>
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <span className="bg-gradient-to-r from-pink-400 to-cyan-400 bg-clip-text text-transparent">
+              Request a Consultation
+            </span>
+          </h2>
+          <p className="text-white/60 max-w-2xl mx-auto">
+            Tell us about your project and we'll help you choose the right certification path. No commitment required.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <GlassCard className="p-8">
+            {submitted ? (
+              <div className="text-center py-8">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/20 flex items-center justify-center">
+                  <CheckCircle className="w-8 h-8 text-green-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Your email client should open</h3>
+                <p className="text-white/60">If it didn't open, please email us directly at guardian@dwsc.io</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-white/70 mb-2">Project Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.projectName}
+                      onChange={(e) => setFormData({ ...formData, projectName: e.target.value })}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all"
+                      placeholder="Your project name"
+                      data-testid="input-project-name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-white/70 mb-2">Website</label>
+                    <input
+                      type="url"
+                      value={formData.website}
+                      onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all"
+                      placeholder="https://yourproject.io"
+                      data-testid="input-website"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-white/70 mb-2">Contact Email *</label>
+                    <input
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all"
+                      placeholder="your@email.com"
+                      data-testid="input-email"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-white/70 mb-2">Project Type</label>
+                    <select
+                      value={formData.projectType}
+                      onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all"
+                      data-testid="select-project-type"
+                    >
+                      <option value="" className="bg-slate-900">Select type...</option>
+                      <option value="defi" className="bg-slate-900">DeFi Protocol</option>
+                      <option value="nft" className="bg-slate-900">NFT / Marketplace</option>
+                      <option value="l1" className="bg-slate-900">Layer 1 / Layer 2</option>
+                      <option value="bridge" className="bg-slate-900">Bridge / Cross-chain</option>
+                      <option value="dao" className="bg-slate-900">DAO / Governance</option>
+                      <option value="infrastructure" className="bg-slate-900">Infrastructure</option>
+                      <option value="other" className="bg-slate-900">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white/70 mb-2">Interested Tier</label>
+                  <div className="grid grid-cols-3 gap-3">
+                    {["Self-Cert", "Assurance Lite", "Guardian Premier"].map((tier) => (
+                      <button
+                        key={tier}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, tier })}
+                        className={`p-3 rounded-xl border text-sm font-medium transition-all ${
+                          formData.tier === tier
+                            ? "bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-500/50 text-cyan-400"
+                            : "bg-white/5 border-white/10 text-white/60 hover:border-white/20"
+                        }`}
+                        data-testid={`button-tier-${tier.toLowerCase().replace(/\s+/g, '-')}`}
+                      >
+                        {tier}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-white/70 mb-2">Tell us about your project</label>
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all resize-none"
+                    placeholder="Brief description of your project, tech stack, and any specific security concerns..."
+                    data-testid="textarea-description"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-4 bg-gradient-to-r from-pink-600 via-purple-600 to-cyan-600 hover:from-pink-500 hover:via-purple-500 hover:to-cyan-500 rounded-xl text-white font-semibold text-lg transition-all hover:scale-[1.02] shadow-lg shadow-purple-500/25 flex items-center justify-center gap-2"
+                  data-testid="button-submit-consultation"
+                >
+                  <Send className="w-5 h-5" />
+                  Request Consultation
+                </button>
+
+                <p className="text-center text-white/40 text-sm">
+                  We typically respond within 1-2 business days
+                </p>
+              </form>
+            )}
+          </GlassCard>
+        </motion.div>
+      </div>
+    </section>
   );
 }
 
@@ -395,6 +675,300 @@ export default function GuardianCertificationPage() {
           </div>
         </section>
 
+        {/* Trust Center Section */}
+        <section className="py-20 px-4 bg-gradient-to-b from-transparent via-emerald-950/10 to-transparent">
+          <div className="container mx-auto max-w-6xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full mb-6">
+                <Lock className="w-4 h-4 text-emerald-400" />
+                <span className="text-emerald-400 text-sm font-medium">Full Transparency</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                  Guardian Trust Center
+                </span>
+              </h2>
+              <p className="text-white/60 max-w-2xl mx-auto">
+                Complete transparency into our methodology, findings, and processes. Download our documentation to understand exactly how Guardian audits work.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-12">
+              {TRUST_CENTER_DOCS.map((doc, index) => (
+                <motion.div
+                  key={doc.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <a 
+                    href={`mailto:${doc.email}`}
+                    className="block"
+                    data-testid={`link-doc-${index}`}
+                  >
+                    <GlassCard className="p-6 hover:scale-[1.02] transition-transform cursor-pointer group" data-testid={`card-doc-${index}`}>
+                      <div className="flex items-start gap-4">
+                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                          <doc.icon className="w-7 h-7 text-emerald-400" />
+                        </div>
+                        <div className="flex-grow">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="text-white font-semibold" data-testid={`text-doc-title-${index}`}>{doc.title}</h3>
+                            {!doc.available && (
+                              <span className="px-2 py-0.5 bg-amber-500/20 text-amber-400 rounded text-xs">Coming Soon</span>
+                            )}
+                          </div>
+                          <p className="text-white/50 text-sm mb-3">{doc.description}</p>
+                          <div className="flex items-center gap-3">
+                            <span className="px-2 py-1 bg-white/5 rounded text-xs text-white/40">{doc.type}</span>
+                            <span className="text-xs text-white/30">{doc.size}</span>
+                            <span className="ml-auto inline-flex items-center gap-1 text-emerald-400 text-sm font-medium group-hover:gap-2 transition-all">
+                              <Mail className="w-4 h-4" />
+                              Request Document
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </GlassCard>
+                  </a>
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <GlassCard className="p-8 bg-gradient-to-r from-emerald-950/20 to-cyan-950/20">
+                <div className="flex flex-col md:flex-row items-center gap-6">
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center flex-shrink-0">
+                    <Bug className="w-10 h-10 text-emerald-400" />
+                  </div>
+                  <div className="flex-grow text-center md:text-left">
+                    <h3 className="text-xl font-bold text-white mb-2">Bug Bounty Program</h3>
+                    <p className="text-white/60 mb-4">Coming Q2 2025 - We're launching a public bug bounty through Immunefi to strengthen our security posture and demonstrate commitment to transparency.</p>
+                    <div className="flex flex-wrap gap-3 justify-center md:justify-start">
+                      <span className="px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full text-sm border border-amber-500/30">Coming Soon</span>
+                      <span className="px-3 py-1 bg-white/5 text-white/50 rounded-full text-sm">Up to $50,000 rewards</span>
+                    </div>
+                  </div>
+                </div>
+              </GlassCard>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Roadmap Timeline Section */}
+        <section className="py-20 px-4">
+          <div className="container mx-auto max-w-6xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/30 rounded-full mb-6">
+                <Calendar className="w-4 h-4 text-blue-400" />
+                <span className="text-blue-400 text-sm font-medium">Our Journey</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                  Validation Roadmap
+                </span>
+              </h2>
+              <p className="text-white/60 max-w-2xl mx-auto">
+                Our transparent path to becoming a trusted security certification authority, aligned with the DWC token launch in February 2026.
+              </p>
+            </motion.div>
+
+            <div className="relative">
+              <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-500/50 via-purple-500/50 to-pink-500/50" />
+              
+              <div className="space-y-8">
+                {ROADMAP_MILESTONES.map((milestone, index) => (
+                  <motion.div
+                    key={milestone.phase}
+                    initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    className={`relative flex flex-col ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"} items-center gap-8`}
+                  >
+                    <div className="hidden md:block absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 z-10" />
+                    
+                    <div className={`flex-1 ${index % 2 === 0 ? "md:text-right md:pr-12" : "md:text-left md:pl-12"}`}>
+                      <GlassCard 
+                        className={`p-6 ${
+                          milestone.status === "completed" 
+                            ? "border-green-500/30 bg-green-950/10" 
+                            : milestone.status === "in_progress"
+                            ? "border-amber-500/30 bg-amber-950/10"
+                            : ""
+                        }`}
+                        data-testid={`card-milestone-${index}`}
+                      >
+                        <div className="flex items-center gap-3 mb-3 flex-wrap">
+                          <span className="px-3 py-1 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-full text-sm font-semibold text-cyan-400">
+                            {milestone.phase}
+                          </span>
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            milestone.status === "completed" 
+                              ? "bg-green-500/20 text-green-400"
+                              : milestone.status === "in_progress"
+                              ? "bg-amber-500/20 text-amber-400"
+                              : "bg-white/10 text-white/50"
+                          }`}>
+                            {milestone.status === "completed" ? "Completed" : milestone.status === "in_progress" ? "In Progress" : "Upcoming"}
+                          </span>
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-1" data-testid={`text-milestone-title-${index}`}>{milestone.title}</h3>
+                        <p className="text-white/40 text-sm mb-4">{milestone.date}</p>
+                        <ul className="space-y-2">
+                          {milestone.items.map((item, i) => (
+                            <li key={i} className="flex items-center gap-2 text-sm text-white/60">
+                              <CheckCircle className={`w-4 h-4 flex-shrink-0 ${milestone.status === "completed" ? "text-green-400" : "text-white/30"}`} />
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </GlassCard>
+                    </div>
+                    
+                    <div className="flex-1 hidden md:block" />
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Pioneer Program Section */}
+        <section className="py-20 px-4 bg-gradient-to-b from-transparent via-amber-950/10 to-transparent">
+          <div className="container mx-auto max-w-5xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <GlassCard className="p-8 md:p-12 bg-gradient-to-r from-amber-950/20 via-orange-950/20 to-red-950/20 border-amber-500/30 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-amber-500/10 to-transparent rounded-full blur-3xl" />
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-orange-500/10 to-transparent rounded-full blur-3xl" />
+                
+                <div className="relative">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-500/30 to-orange-500/30 flex items-center justify-center">
+                      <Rocket className="w-7 h-7 text-amber-400" />
+                    </div>
+                    <div>
+                      <span className="px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full text-xs font-bold uppercase tracking-wider">Limited Offer</span>
+                    </div>
+                  </div>
+                  
+                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                    Guardian Pioneer Program
+                  </h2>
+                  <p className="text-white/60 text-lg mb-8 max-w-2xl">
+                    Be among the first 5 projects to receive a Guardian Premier audit. Get exclusive benefits while helping us build our track record.
+                  </p>
+                  
+                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    {PIONEER_BENEFITS.map((benefit, index) => (
+                      <div key={benefit.title} className="p-4 bg-white/5 rounded-xl border border-white/10" data-testid={`card-pioneer-benefit-${index}`}>
+                        <benefit.icon className="w-8 h-8 text-amber-400 mb-3" />
+                        <h4 className="text-white font-semibold mb-1">{benefit.title}</h4>
+                        <p className="text-white/50 text-sm">{benefit.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="flex flex-col sm:flex-row gap-4 items-center">
+                    <a
+                      href="mailto:guardian@dwsc.io?subject=Pioneer%20Program%20Application"
+                      className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 rounded-xl text-white font-semibold text-lg transition-all hover:scale-105 shadow-lg shadow-amber-500/25"
+                      data-testid="link-apply-pioneer"
+                    >
+                      <Rocket className="w-5 h-5" />
+                      Apply for Pioneer Program
+                    </a>
+                    <span className="text-white/40 text-sm">
+                      <span className="text-amber-400 font-bold">3 of 5</span> spots remaining
+                    </span>
+                  </div>
+                </div>
+              </GlassCard>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Advisory Board Section */}
+        <section className="py-20 px-4">
+          <div className="container mx-auto max-w-5xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full mb-6">
+                <Users className="w-4 h-4 text-purple-400" />
+                <span className="text-purple-400 text-sm font-medium">Expert Guidance</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  Advisory Board
+                </span>
+              </h2>
+              <p className="text-white/60 max-w-2xl mx-auto">
+                We're building a panel of industry experts to guide Guardian's evolution. Interested in joining? Reach out.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              {ADVISORY_BOARD.map((advisor, index) => (
+                <motion.div
+                  key={advisor.role}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <GlassCard className="p-6 text-center h-full border-dashed" data-testid={`card-advisor-${index}`}>
+                    <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center border-2 border-dashed border-white/20">
+                      <UserCheck className="w-8 h-8 text-white/30" />
+                    </div>
+                    <h3 className="text-white/50 font-semibold mb-1">{advisor.name}</h3>
+                    <p className="text-purple-400 text-sm font-medium mb-3">{advisor.role}</p>
+                    <p className="text-white/40 text-sm">{advisor.bio}</p>
+                  </GlassCard>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="text-center">
+              <a
+                href="mailto:guardian@dwsc.io?subject=Advisory%20Board%20Interest"
+                className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors"
+                data-testid="link-join-advisory"
+              >
+                <Handshake className="w-5 h-5" />
+                Interested in joining? Contact us
+                <ChevronRight className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Intake Wizard Section */}
+        <IntakeWizard />
+
+        {/* Guardian Registry */}
         <section className="py-20 px-4 bg-gradient-to-b from-transparent via-cyan-950/20 to-transparent">
           <div className="container mx-auto max-w-4xl">
             <motion.div
