@@ -3227,8 +3227,8 @@ export async function registerRoutes(
         }],
         mode: "payment",
         customer_email: data.contactEmail,
-        success_url: `${req.headers.origin || 'https://dwsc.io'}/guardian?success=true&tier=${data.tier}`,
-        cancel_url: `${req.headers.origin || 'https://dwsc.io'}/guardian?canceled=true`,
+        success_url: `${req.headers.origin || 'https://dwsc.io'}/guardian-certification?success=true&tier=${data.tier}`,
+        cancel_url: `${req.headers.origin || 'https://dwsc.io'}/guardian-certification?canceled=true`,
         metadata: {
           type: "guardian_certification",
           tier: data.tier,

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { 
   Shield, ShieldCheck, Award, CheckCircle, Star, Zap, FileText,
   ArrowLeft, ExternalLink, Clock, Users, Target, Lock, Eye,
@@ -524,7 +524,157 @@ function IntakeWizard() {
   );
 }
 
+function CheckoutModal({ tier, isOpen, onClose }: { tier: typeof CERTIFICATION_TIERS[0]; isOpen: boolean; onClose: () => void }) {
+  const [formData, setFormData] = useState({
+    projectName: "",
+    projectUrl: "",
+    contactEmail: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+
+    const tierId = tier.name === "Assurance Lite" ? "assurance_lite" : "guardian_premier";
+
+    try {
+      const response = await fetch("/api/guardian/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tier: tierId,
+          projectName: formData.projectName,
+          projectUrl: formData.projectUrl || undefined,
+          contactEmail: formData.contactEmail,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to create checkout");
+      }
+
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+      setIsLoading(false);
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="relative w-full max-w-md bg-slate-900 border border-white/10 rounded-2xl p-6 shadow-2xl"
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
+          data-testid="button-close-checkout"
+        >
+          <span className="sr-only">Close</span>
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <div className="text-center mb-6">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
+            <tier.icon className="w-8 h-8 text-purple-400" />
+          </div>
+          <h3 className="text-xl font-bold text-white">{tier.name}</h3>
+          <p className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mt-2">
+            {tier.price}
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-white/60 text-sm mb-1">Project Name *</label>
+            <input
+              type="text"
+              required
+              value={formData.projectName}
+              onChange={(e) => setFormData({ ...formData, projectName: e.target.value })}
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50"
+              placeholder="Your project name"
+              data-testid="input-checkout-project-name"
+            />
+          </div>
+
+          <div>
+            <label className="block text-white/60 text-sm mb-1">Project URL (optional)</label>
+            <input
+              type="url"
+              value={formData.projectUrl}
+              onChange={(e) => setFormData({ ...formData, projectUrl: e.target.value })}
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50"
+              placeholder="https://yourproject.com"
+              data-testid="input-checkout-project-url"
+            />
+          </div>
+
+          <div>
+            <label className="block text-white/60 text-sm mb-1">Contact Email *</label>
+            <input
+              type="email"
+              required
+              value={formData.contactEmail}
+              onChange={(e) => setFormData({ ...formData, contactEmail: e.target.value })}
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-purple-500/50"
+              placeholder="you@example.com"
+              data-testid="input-checkout-email"
+            />
+          </div>
+
+          {error && (
+            <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
+              {error}
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 disabled:opacity-50 rounded-xl text-white font-semibold transition-all flex items-center justify-center gap-2"
+            data-testid="button-proceed-checkout"
+          >
+            {isLoading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>
+                <Lock className="w-4 h-4" />
+                Proceed to Payment
+              </>
+            )}
+          </button>
+
+          <p className="text-center text-white/40 text-xs">
+            Secure payment powered by Stripe
+          </p>
+        </form>
+      </motion.div>
+    </div>
+  );
+}
+
 function TierCard({ tier, index }: { tier: typeof CERTIFICATION_TIERS[0]; index: number }) {
+  const [showCheckout, setShowCheckout] = useState(false);
+  const isPaid = tier.name === "Assurance Lite" || tier.name === "Guardian Premier";
+  
   const colorMap: Record<string, string> = {
     cyan: "from-cyan-500/20 to-cyan-600/20 border-cyan-500/30 hover:border-cyan-400/50",
     purple: "from-purple-500/20 to-purple-600/20 border-purple-500/30 hover:border-purple-400/50",
@@ -532,57 +682,118 @@ function TierCard({ tier, index }: { tier: typeof CERTIFICATION_TIERS[0]; index:
   };
   
   return (
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: index * 0.15 }}
+        className="h-full"
+      >
+        <div className={`relative h-full rounded-2xl bg-gradient-to-b ${colorMap[tier.color]} border ${tier.highlight ? "border-2" : ""} p-1 transition-all duration-300 hover:scale-[1.02]`}>
+          {tier.highlight && (
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full">
+              <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1">
+                <Star className="w-3 h-3" /> Most Popular
+              </span>
+            </div>
+          )}
+          <div className="h-full rounded-xl bg-slate-900/90 p-6 flex flex-col">
+            <div className="text-center mb-6">
+              <div className={`w-16 h-16 mx-auto mb-4 rounded-xl bg-gradient-to-br ${colorMap[tier.color].split(" ")[0]} ${colorMap[tier.color].split(" ")[1]} flex items-center justify-center`}>
+                <tier.icon className="w-8 h-8" style={{ color: tier.color === "cyan" ? "#06b6d4" : tier.color === "purple" ? "#a855f7" : "#ec4899" }} />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-1">{tier.name}</h3>
+              <p className="text-white/50 text-sm">{tier.tagline}</p>
+            </div>
+            
+            <div className="text-center mb-6">
+              <div className="text-4xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                {tier.price}
+              </div>
+              <p className="text-white/40 text-sm mt-1">{tier.priceNote}</p>
+            </div>
+            
+            <ul className="space-y-3 flex-grow mb-6">
+              {tier.features.map((feature, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm">
+                  <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
+                  <span className="text-white/70">{feature}</span>
+                </li>
+              ))}
+            </ul>
+            
+            {isPaid ? (
+              <button
+                onClick={() => setShowCheckout(true)}
+                className={`w-full py-3 rounded-lg font-semibold text-center transition-all ${
+                  tier.highlight 
+                    ? "bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white"
+                    : "bg-white/10 hover:bg-white/20 text-white border border-white/10"
+                }`}
+                data-testid={`button-tier-${tier.name.toLowerCase().replace(/\s+/g, '-')}`}
+              >
+                Get Started
+              </button>
+            ) : (
+              <a
+                href="mailto:guardian@dwsc.io?subject=Guardian%20Self-Cert%20Inquiry"
+                className="w-full py-3 rounded-lg font-semibold text-center transition-all bg-white/10 hover:bg-white/20 text-white border border-white/10 block"
+                data-testid={`link-tier-${tier.name.toLowerCase().replace(/\s+/g, '-')}`}
+              >
+                Contact Us
+              </a>
+            )}
+          </div>
+        </div>
+      </motion.div>
+      
+      {isPaid && <CheckoutModal tier={tier} isOpen={showCheckout} onClose={() => setShowCheckout(false)} />}
+    </>
+  );
+}
+
+function PaymentSuccessBanner() {
+  const [show, setShow] = useState(false);
+  const [tier, setTier] = useState("");
+  
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("success") === "true") {
+      setShow(true);
+      setTier(params.get("tier") || "");
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, []);
+
+  if (!show) return null;
+
+  return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.15 }}
-      className="h-full"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="fixed top-20 left-1/2 -translate-x-1/2 z-50 max-w-lg w-full px-4"
     >
-      <div className={`relative h-full rounded-2xl bg-gradient-to-b ${colorMap[tier.color]} border ${tier.highlight ? "border-2" : ""} p-1 transition-all duration-300 hover:scale-[1.02]`}>
-        {tier.highlight && (
-          <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full">
-            <span className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1">
-              <Star className="w-3 h-3" /> Most Popular
-            </span>
+      <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/40 rounded-2xl p-6 backdrop-blur-sm">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
+            <CheckCircle className="w-6 h-6 text-green-400" />
           </div>
-        )}
-        <div className="h-full rounded-xl bg-slate-900/90 p-6 flex flex-col">
-          <div className="text-center mb-6">
-            <div className={`w-16 h-16 mx-auto mb-4 rounded-xl bg-gradient-to-br ${colorMap[tier.color].split(" ")[0]} ${colorMap[tier.color].split(" ")[1]} flex items-center justify-center`}>
-              <tier.icon className="w-8 h-8" style={{ color: tier.color === "cyan" ? "#06b6d4" : tier.color === "purple" ? "#a855f7" : "#ec4899" }} />
-            </div>
-            <h3 className="text-2xl font-bold text-white mb-1">{tier.name}</h3>
-            <p className="text-white/50 text-sm">{tier.tagline}</p>
+          <div className="flex-grow">
+            <h3 className="text-xl font-bold text-white mb-1">Payment Successful!</h3>
+            <p className="text-white/60 text-sm">
+              Thank you for purchasing {tier === "assurance_lite" ? "Assurance Lite" : "Guardian Premier"}. 
+              Our security team will contact you within 1-2 business days to begin your audit.
+            </p>
           </div>
-          
-          <div className="text-center mb-6">
-            <div className="text-4xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              {tier.price}
-            </div>
-            <p className="text-white/40 text-sm mt-1">{tier.priceNote}</p>
-          </div>
-          
-          <ul className="space-y-3 flex-grow mb-6">
-            {tier.features.map((feature, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm">
-                <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                <span className="text-white/70">{feature}</span>
-              </li>
-            ))}
-          </ul>
-          
-          <a
-            href="mailto:guardian@dwsc.io?subject=Guardian%20Certification%20Inquiry"
-            className={`w-full py-3 rounded-lg font-semibold text-center transition-all ${
-              tier.highlight 
-                ? "bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white"
-                : "bg-white/10 hover:bg-white/20 text-white border border-white/10"
-            }`}
-            data-testid={`link-tier-${tier.name.toLowerCase().replace(/\s+/g, '-')}`}
+          <button 
+            onClick={() => setShow(false)}
+            className="text-white/50 hover:text-white"
           >
-            Get Started
-          </a>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
       </div>
     </motion.div>
@@ -595,6 +806,7 @@ export default function GuardianCertificationPage() {
   return (
     <div className="min-h-screen bg-slate-950 text-white overflow-hidden">
       <HeaderTools />
+      <PaymentSuccessBanner />
       
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
