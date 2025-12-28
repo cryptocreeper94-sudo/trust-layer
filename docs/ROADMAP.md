@@ -211,5 +211,32 @@ DarkWave Chain is a Layer 1 blockchain launching with 100,000,000 DWT tokens. Th
 
 ---
 
-*Last Updated: December 21, 2025*
-*Version: 1.0*
+---
+
+## Revenue Launch Checklist (Guardian Certification)
+*Priority: Take first $5,999-$14,999 payment*
+
+- [x] Guardian Certification checkout flow with Stripe
+- [x] Guardian Portal with authenticated user data
+- [x] Blockchain stamping service (SHA-256, Merkle roots)
+- [x] NFT minting for completed certifications
+- [x] Public registry API endpoint
+- [ ] Admin dashboard for marking certifications complete
+- [ ] PDF report generator for deliverables
+- [ ] Public registry page (credibility showcase)
+- [ ] Payment webhook handler (auto-create certifications)
+
+## Guardian Shield Launch Checklist
+*Target: Q1 2026 - Recurring revenue $299-$2,999/mo*
+
+- [x] Guardian Shield UI with Coming Soon messaging
+- [x] Pricing tiers defined (Watch/Shield/Command)
+- [ ] Real-time monitoring scheduler
+- [ ] Health scoring algorithm
+- [ ] Alert system with escalation rules
+- [ ] SOC operations dashboard
+
+---
+
+*Last Updated: December 28, 2025*
+*Version: 1.1*

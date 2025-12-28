@@ -3,6 +3,23 @@
 ## Overview
 DarkWave Smart Chain (DSC) is a blockchain ecosystem by DarkWave Studios, designed as a high-performance alternative to existing blockchains. It features a Layer 1 Proof-of-Authority (PoA) blockchain and the DarkWave Portal, a React web application that serves as an ecosystem interface, block explorer, and developer hub. The project also includes "DarkWave Chronicles," a fantasy-themed game with a living political simulation and community-driven content. The ecosystem spans five key domains: dwsc.io (main blockchain portal), darkwavegames.io (gaming), darkwavestudios.io (parent company site), yourlegacy.io (Chronicles standalone), and chronochat.io (community hub). The overarching goal is to deliver a comprehensive, high-speed, and feature-rich blockchain environment with a premium user experience and innovative gaming.
 
+## Domain Strategy (5 Required Domains)
+| Domain | Purpose | Priority |
+|--------|---------|----------|
+| **dwsc.io** | Main blockchain portal, DeFi, explorer | Critical |
+| **darkwavegames.io** | Gaming portal, arcade | High |
+| **darkwavestudios.io** | Parent company, investors | High |
+| **yourlegacy.io** | Chronicles standalone | High |
+| **chronochat.io** | Community hub | Medium |
+
+## Payment Systems Quick Reference
+- **Subscriptions**: pulse_pro ($14.99/mo), strike_agent ($30/mo), complete_bundle ($39.99/mo), founder ($24 one-time)
+- **Orbs**: starter (100/$4.99), popular (500/$19.99), premium (1200/$39.99), ultimate (3000/$79.99)
+- **Guardian Cert**: self_cert (free), assurance_lite ($5,999), guardian_premier ($14,999)
+- **Guardian Shield**: watch ($299/mo), shield ($999/mo), command ($2,999/mo) - COMING SOON
+- **Domains**: $12-350/yr based on length, 30% early adopter discount
+- **Full details**: See `docs/SYSTEMS-INVENTORY.md`
+
 ## User Preferences
 - Preferred communication style: Simple, everyday language
 - User wants: Full blockchain implementation, not just a web portal. No piggybacking on other chains.
