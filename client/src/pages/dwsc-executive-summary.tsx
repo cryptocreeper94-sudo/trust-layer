@@ -187,64 +187,82 @@ export default function DWSCExecutiveSummary() {
           </div>
         </section>
 
-        {/* Platform Features - Full Ecosystem */}
-        <section className="py-12 px-4">
-          <div className="container mx-auto max-w-5xl">
+        {/* Platform Features - Full Ecosystem Carousel */}
+        <section className="py-12 px-4 relative overflow-hidden">
+          <div className="container mx-auto max-w-6xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="mb-8"
+              className="mb-8 text-center"
             >
-              <h2 className="text-2xl font-display font-bold text-white mb-2 flex items-center gap-3">
+              <h2 className="text-2xl md:text-3xl font-display font-bold text-white mb-2 flex items-center justify-center gap-3">
                 <Sparkles className="w-6 h-6 text-amber-400" />
                 Complete Platform Features
               </h2>
-              <p className="text-white/60">Everything built and operational in the DarkWave ecosystem</p>
+              <p className="text-white/60">Swipe to explore everything built and operational in the DarkWave ecosystem</p>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[
-                { title: "Guardian Certification", desc: "Enterprise blockchain security audits at 70% less than competitors. $5,999-$14,999 per audit.", icon: Shield, color: "emerald" },
-                { title: "Guardian Shield", desc: "24/7 smart contract monitoring. Norton for blockchain. $299-$2,999/month. Coming Q3 2025.", icon: Activity, color: "blue" },
-                { title: "ChronoChat", desc: "Community platform with real-time messaging, channels, reactions, and Orbs integration.", icon: MessageSquare, color: "purple" },
-                { title: "Orbs Economy", desc: "Pre-launch virtual currency. Earn through engagement, purchase via Stripe, converts to DWC at launch.", icon: Sparkles, color: "pink" },
-                { title: "Validator Program", desc: "Become a network validator. 10,000 DWC airdrop for founders, longevity bonuses up to 10,000 DWC.", icon: Server, color: "cyan" },
-                { title: "Token Presale", desc: "DWC at $0.005 per coin. Tiered pricing through $0.01 launch. Up to 25% bonus tokens for early buyers.", icon: Coins, color: "amber" },
-                { title: "DEX & Token Swap", desc: "AMM-style decentralized exchange. Trade tokens with low fees and instant settlement.", icon: ArrowRightLeft, color: "green" },
-                { title: "Liquid Staking", desc: "Stake DWC, receive stDWC. Earn rewards while maintaining liquidity for DeFi activities.", icon: TrendingUp, color: "teal" },
-                { title: "NFT Marketplace", desc: "Create, buy, sell NFTs. 2.5% transaction fees. Rarity analyzer and gallery viewer included.", icon: Store, color: "orange" },
-                { title: "Cross-Chain Bridge", desc: "Lock & mint DWC ↔ wDWC. Ethereum and Solana bridges for multi-chain accessibility.", icon: Layers, color: "indigo" },
-                { title: "Domain Registration", desc: "Premium .dwsc domains. 30% early adopter discount. $12-$350/year based on length.", icon: Globe, color: "violet" },
-                { title: "Subscription Tiers", desc: "Pulse Pro ($14.99/mo), StrikeAgent ($30/mo), Complete Bundle ($39.99/mo). Free trials available.", icon: CreditCard, color: "rose" },
-                { title: "Arcade Games", desc: "Provably fair casino games: Slots, Crash, Coinflip, Dice. Play with DWC or Orbs.", icon: Gamepad2, color: "fuchsia" },
-                { title: "AI NFT Generator", desc: "Describe your vision, AI generates artwork, mint as NFT. No artistic skills required.", icon: Brain, color: "sky" },
-                { title: "Developer Portal", desc: "APIs, SDKs, webhooks, testnet faucet. Full documentation for building on DWSC.", icon: Code, color: "lime" },
-                { title: "Multi-Domain PWA", desc: "5 domains: dwsc.io, darkwavegames.io, darkwavestudios.io, yourlegacy.io, chronochat.io", icon: Zap, color: "yellow" },
-                { title: "Referral Program", desc: "Earn DWC for referrals. Fraud detection, affiliate tracking, and automated payouts.", icon: Gift, color: "red" },
-                { title: "Marketing Automation", desc: "312 branded posts across Twitter, Facebook, Discord, Telegram. Scheduled deployment.", icon: BadgeCheck, color: "slate" }
-              ].map((feature, i) => (
-                <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.03 }}
-                  className="bg-slate-800/50 border border-white/10 rounded-xl p-4 hover:border-white/20 transition-colors"
-                  data-testid={`feature-${i}`}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className={`w-9 h-9 rounded-lg bg-${feature.color}-500/20 flex items-center justify-center flex-shrink-0`}>
-                      <feature.icon className={`w-4 h-4 text-${feature.color}-400`} />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-white text-sm mb-1">{feature.title}</h3>
-                      <p className="text-xs text-white/60 leading-relaxed">{feature.desc}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+            <div className="relative">
+              <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none" />
+              <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none" />
+              
+              <div className="flex gap-4 overflow-x-auto scrollbar-hide px-8 py-4 snap-x snap-mandatory">
+                {[
+                  { title: "Guardian Certification", desc: "Enterprise blockchain security audits at 70% less than competitors. $5,999-$14,999 per audit.", icon: Shield, color: "emerald", href: "/guardian" },
+                  { title: "Guardian Shield", desc: "24/7 smart contract monitoring. Norton for blockchain. $299-$2,999/month.", icon: Activity, color: "blue", href: "/guardian" },
+                  { title: "ChronoChat", desc: "Community platform with real-time messaging, channels, reactions, and Orbs integration.", icon: MessageSquare, color: "purple", href: "/community-hub" },
+                  { title: "Orbs Economy", desc: "Pre-launch virtual currency. Earn through engagement, purchase via Stripe, converts to DWC.", icon: Sparkles, color: "pink", href: "/coin-store" },
+                  { title: "Validator Program", desc: "Become a network validator. 10,000 DWC airdrop for founders, longevity bonuses.", icon: Server, color: "cyan", href: "/validators" },
+                  { title: "Token Presale", desc: "DWC at $0.005 per coin. Tiered pricing through $0.01 launch. Up to 25% bonus.", icon: Coins, color: "amber", href: "/presale" },
+                  { title: "DEX & Token Swap", desc: "AMM-style decentralized exchange. Trade tokens with low fees and instant settlement.", icon: ArrowRightLeft, color: "green", href: "/swap" },
+                  { title: "Liquid Staking", desc: "Stake DWC, receive stDWC. Earn rewards while maintaining liquidity.", icon: TrendingUp, color: "teal", href: "/liquid-staking" },
+                  { title: "NFT Marketplace", desc: "Create, buy, sell NFTs. 2.5% transaction fees. Rarity analyzer included.", icon: Store, color: "orange", href: "/nft-marketplace" },
+                  { title: "Cross-Chain Bridge", desc: "Lock & mint DWC ↔ wDWC. Ethereum and Solana bridges.", icon: Layers, color: "indigo", href: "/bridge" },
+                  { title: "Domain Registration", desc: "Premium .dwsc domains. 30% early adopter discount. $12-$350/year.", icon: Globe, color: "violet", href: "/domains" },
+                  { title: "Subscriptions", desc: "Pulse Pro, StrikeAgent, Complete Bundle. Free trials available.", icon: CreditCard, color: "rose", href: "/billing" },
+                  { title: "Arcade Games", desc: "Provably fair casino games: Slots, Crash, Coinflip, Dice.", icon: Gamepad2, color: "fuchsia", href: "/arcade" },
+                  { title: "AI NFT Generator", desc: "Describe your vision, AI generates artwork, mint as NFT.", icon: Brain, color: "sky", href: "/ai-nft-generator" },
+                  { title: "Developer Portal", desc: "APIs, SDKs, webhooks, testnet faucet. Full documentation.", icon: Code, color: "lime", href: "/developers" },
+                  { title: "Block Explorer", desc: "Real-time blockchain data. Transaction history and network stats.", icon: Database, color: "yellow", href: "/explorer" },
+                  { title: "Referral Program", desc: "Earn DWC for referrals. Fraud detection and automated payouts.", icon: Gift, color: "red", href: "/referrals" },
+                  { title: "Chronicles Game", desc: "70+ eras. AI-powered parallel life experience. YOUR legend.", icon: Gamepad2, color: "slate", href: "/chronicles" }
+                ].map((feature, i) => (
+                  <Link key={feature.title} href={feature.href}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.05 }}
+                      whileHover={{ scale: 1.03, y: -4 }}
+                      className="shrink-0 w-[260px] h-[180px] snap-center cursor-pointer group"
+                      data-testid={`feature-${i}`}
+                    >
+                      <div className="h-full bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-2xl p-5 relative overflow-hidden hover:border-white/30 transition-all duration-300">
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                        
+                        <div className="relative z-10">
+                          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br from-${feature.color}-500/30 to-${feature.color}-600/10 border border-${feature.color}-500/30 flex items-center justify-center mb-3`}>
+                            <feature.icon className={`w-5 h-5 text-${feature.color}-400`} />
+                          </div>
+                          <h3 className="font-semibold text-white text-sm mb-2 group-hover:text-cyan-300 transition-colors">{feature.title}</h3>
+                          <p className="text-xs text-white/50 leading-relaxed line-clamp-3">{feature.desc}</p>
+                        </div>
+                        
+                        <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <ArrowRightLeft className="w-4 h-4 text-cyan-400 rotate-45" />
+                        </div>
+                      </div>
+                    </motion.div>
+                  </Link>
+                ))}
+              </div>
             </div>
+            
+            <p className="text-center text-white/40 text-xs mt-4">
+              ← Swipe to explore all features →
+            </p>
           </div>
         </section>
 
