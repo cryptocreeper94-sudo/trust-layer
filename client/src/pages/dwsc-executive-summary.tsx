@@ -35,11 +35,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Footer } from "@/components/footer";
+import { GamesComingSoonModal } from "@/components/games-coming-soon-modal";
+import { useState } from "react";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 
 export default function DWSCExecutiveSummary() {
+  const [showGamesModal, setShowGamesModal] = useState(false);
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
+      {showGamesModal && <GamesComingSoonModal onClose={() => setShowGamesModal(false)} />}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
@@ -221,14 +226,14 @@ export default function DWSCExecutiveSummary() {
                   { title: "Cross-Chain Bridge", desc: "Lock & mint DWC ↔ wDWC. Ethereum and Solana bridges.", icon: Layers, color: "indigo", href: "/bridge" },
                   { title: "Domain Registration", desc: "Premium .dwsc domains. 30% early adopter discount. $12-$350/year.", icon: Globe, color: "violet", href: "/domains" },
                   { title: "Subscriptions", desc: "Pulse Pro, StrikeAgent, Complete Bundle. Free trials available.", icon: CreditCard, color: "rose", href: "/billing" },
-                  { title: "Arcade Games", desc: "Provably fair casino games: Slots, Crash, Coinflip, Dice.", icon: Gamepad2, color: "fuchsia", href: "/arcade" },
+                  { title: "Arcade Games", desc: "Provably fair casino games: Slots, Crash, Coinflip, Dice.", icon: Gamepad2, color: "fuchsia", href: "#", comingSoon: true },
                   { title: "AI NFT Generator", desc: "Describe your vision, AI generates artwork, mint as NFT.", icon: Brain, color: "sky", href: "/ai-nft-generator" },
                   { title: "Developer Portal", desc: "APIs, SDKs, webhooks, testnet faucet. Full documentation.", icon: Code, color: "lime", href: "/developers" },
                   { title: "Block Explorer", desc: "Real-time blockchain data. Transaction history and network stats.", icon: Database, color: "yellow", href: "/explorer" },
                   { title: "Referral Program", desc: "Earn DWC for referrals. Fraud detection and automated payouts.", icon: Gift, color: "red", href: "/referrals" },
                   { title: "Chronicles Game", desc: "70+ eras. AI-powered parallel life experience. YOUR legend.", icon: Gamepad2, color: "slate", href: "/chronicles" }
-                ].map((feature, i) => (
-                  <Link key={feature.title} href={feature.href}>
+                ].map((feature, i) => {
+                  const cardContent = (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -255,8 +260,22 @@ export default function DWSCExecutiveSummary() {
                         </div>
                       </div>
                     </motion.div>
-                  </Link>
-                ))}
+                  );
+                  
+                  if ('comingSoon' in feature && feature.comingSoon) {
+                    return (
+                      <div key={feature.title} onClick={() => setShowGamesModal(true)}>
+                        {cardContent}
+                      </div>
+                    );
+                  }
+                  
+                  return (
+                    <Link key={feature.title} href={feature.href}>
+                      {cardContent}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
             

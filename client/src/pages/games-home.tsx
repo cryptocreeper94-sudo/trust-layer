@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
+import { GamesComingSoonModal } from "@/components/games-coming-soon-modal";
 import {
   Gamepad2, Trophy, Coins, TrendingUp, Sparkles, Target,
   ArrowRight, Users, Zap, Gift, Crown, Star, Flame, Shield,
@@ -19,7 +20,8 @@ const GAMES = [
     icon: Coins,
     color: "from-yellow-500 to-amber-500",
     rtp: "99%",
-    href: "/arcade",
+    href: "#",
+    comingSoon: true,
     players: 127,
     hot: true,
   },
@@ -29,7 +31,8 @@ const GAMES = [
     icon: TrendingUp,
     color: "from-green-500 to-emerald-500",
     rtp: "99%",
-    href: "/arcade",
+    href: "#",
+    comingSoon: true,
     players: 89,
     hot: true,
   },
@@ -39,7 +42,8 @@ const GAMES = [
     icon: Crown,
     color: "from-purple-500 to-pink-500",
     rtp: "96%",
-    href: "/arcade",
+    href: "#",
+    comingSoon: true,
     players: 156,
     hot: false,
   },
@@ -136,6 +140,7 @@ function SparkleEffect() {
 export default function GamesHome() {
   const [jackpot, setJackpot] = useState(125847);
   const [playersOnline, setPlayersOnline] = useState(247);
+  const [showGamesModal, setShowGamesModal] = useState(false);
   
   useEffect(() => {
     const interval = setInterval(() => {
@@ -147,6 +152,7 @@ export default function GamesHome() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+      {showGamesModal && <GamesComingSoonModal onClose={() => setShowGamesModal(false)} />}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2 shrink-0">
@@ -276,12 +282,15 @@ export default function GamesHome() {
                   </motion.p>
                   <p className="text-muted-foreground mt-2">Play Jackpot Slots for a chance to win it all!</p>
                 </div>
-                <Link href="/arcade">
-                  <Button size="lg" className="h-14 px-10 bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-bold hover:from-yellow-400 hover:to-amber-400 shadow-lg shadow-yellow-500/25" data-testid="button-play-jackpot">
-                    <Sparkles className="w-5 h-5 mr-2" />
-                    Play for Jackpot
-                  </Button>
-                </Link>
+                <Button 
+                  size="lg" 
+                  className="h-14 px-10 bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-bold hover:from-yellow-400 hover:to-amber-400 shadow-lg shadow-yellow-500/25" 
+                  data-testid="button-play-jackpot"
+                  onClick={() => setShowGamesModal(true)}
+                >
+                  <Sparkles className="w-5 h-5 mr-2" />
+                  Play for Jackpot
+                </Button>
               </div>
             </GlassCard>
           </div>
@@ -301,47 +310,58 @@ export default function GamesHome() {
             </motion.div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {GAMES.map((game, i) => (
-                <motion.div
-                  key={game.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                >
-                  <Link href={game.href}>
-                    <GlassCard hover glow className="p-6 h-full group cursor-pointer relative overflow-hidden">
-                      {game.hot && (
-                        <div className="absolute top-3 right-3">
-                          <Badge className="bg-orange-500/20 text-orange-400 border-orange-500/30 text-[10px]">
-                            <Flame className="w-3 h-3 mr-1" />
-                            HOT
-                          </Badge>
-                        </div>
-                      )}
-                      
-                      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${game.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg`}>
-                        <game.icon className="w-8 h-8 text-white" />
+              {GAMES.map((game, i) => {
+                const cardContent = (
+                  <GlassCard hover glow className="p-6 h-full group cursor-pointer relative overflow-hidden">
+                    {game.hot && (
+                      <div className="absolute top-3 right-3">
+                        <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-[10px]">
+                          SOON
+                        </Badge>
                       </div>
-                      
-                      <h3 className="font-bold text-xl mb-2">{game.name}</h3>
-                      <p className="text-sm text-muted-foreground mb-4">{game.description}</p>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <Badge variant="outline" className="text-[10px] text-green-400 border-green-500/30">
-                            {game.rtp} RTP
-                          </Badge>
-                          <span className="text-xs text-muted-foreground flex items-center gap-1">
-                            <Users className="w-3 h-3" />
-                            {game.players}
-                          </span>
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-pink-400 group-hover:translate-x-1 transition-transform" />
+                    )}
+                    
+                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${game.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg`}>
+                      <game.icon className="w-8 h-8 text-white" />
+                    </div>
+                    
+                    <h3 className="font-bold text-xl mb-2">{game.name}</h3>
+                    <p className="text-sm text-muted-foreground mb-4">{game.description}</p>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Badge variant="outline" className="text-[10px] text-green-400 border-green-500/30">
+                          {game.rtp} RTP
+                        </Badge>
+                        <span className="text-xs text-muted-foreground flex items-center gap-1">
+                          <Users className="w-3 h-3" />
+                          {game.players}
+                        </span>
                       </div>
-                    </GlassCard>
-                  </Link>
-                </motion.div>
-              ))}
+                      <ChevronRight className="w-5 h-5 text-pink-400 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </GlassCard>
+                );
+                
+                return (
+                  <motion.div
+                    key={game.name}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                  >
+                    {'comingSoon' in game && game.comingSoon ? (
+                      <div onClick={() => setShowGamesModal(true)}>
+                        {cardContent}
+                      </div>
+                    ) : (
+                      <Link href={game.href}>
+                        {cardContent}
+                      </Link>
+                    )}
+                  </motion.div>
+                );
+              })}
               
               <motion.div
                 initial={{ opacity: 0, y: 20 }}

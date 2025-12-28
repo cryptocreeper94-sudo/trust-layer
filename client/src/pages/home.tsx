@@ -20,6 +20,7 @@ import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
 import { FirebaseLoginModal } from "@/components/firebase-login";
+import { GamesComingSoonModal } from "@/components/games-coming-soon-modal";
 import { useState, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { WalletButton } from "@/components/wallet-button";
@@ -199,6 +200,7 @@ export default function Home() {
   const { preferences } = usePreferences();
   const { user, loading: authLoading, isAuthenticated, displayName, signOut } = useFirebaseAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showGamesModal, setShowGamesModal] = useState(false);
   usePageAnalytics();
   
   const { data: apps = [], isLoading: appsLoading } = useQuery({
@@ -223,6 +225,7 @@ export default function Home() {
         isOpen={showLoginModal} 
         onClose={() => setShowLoginModal(false)} 
       />
+      {showGamesModal && <GamesComingSoonModal onClose={() => setShowGamesModal(false)} />}
       
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="w-full px-3 h-14 flex items-center justify-between">
@@ -230,10 +233,10 @@ export default function Home() {
             <span className="font-display font-bold text-xl tracking-tight">DarkWave</span>
           </Link>
           <div className="hidden lg:flex items-center gap-4 text-xs font-medium text-muted-foreground mr-4">
-            <Link href="/arcade" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
+            <button onClick={() => setShowGamesModal(true)} className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap bg-transparent border-none cursor-pointer text-muted-foreground text-xs font-medium">
               Games
-              <Badge variant="outline" className="text-[9px] border-pink-500/50 text-pink-400 px-1 py-0">Hot</Badge>
-            </Link>
+              <Badge variant="outline" className="text-[9px] border-amber-500/50 text-amber-400 px-1 py-0">Soon</Badge>
+            </button>
             <Link href="/ecosystem" className="hover:text-primary transition-colors whitespace-nowrap">Ecosystem</Link>
             <Link href="/token" className="hover:text-primary transition-colors whitespace-nowrap">Coin</Link>
             <Link href="/bridge" className="hover:text-primary transition-colors whitespace-nowrap flex items-center gap-1">

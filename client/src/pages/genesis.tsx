@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { GlassCard } from "@/components/glass-card";
+import { GamesComingSoonModal } from "@/components/games-coming-soon-modal";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import worldImg from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
 import warriorImg from "@assets/generated_images/warrior_character_concept_art.png";
@@ -66,6 +67,7 @@ export default function Genesis() {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [selectedContribution, setSelectedContribution] = useState<number | null>(null);
+  const [showGamesModal, setShowGamesModal] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,6 +78,7 @@ export default function Genesis() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
+      {showGamesModal && <GamesComingSoonModal onClose={() => setShowGamesModal(false)} />}
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <img 
@@ -498,9 +501,9 @@ export default function Genesis() {
             <span className="text-sm text-gray-500">DarkWave Studios, LLC</span>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/arcade" className="text-sm text-gray-400 hover:text-white transition-colors">
+            <button onClick={() => setShowGamesModal(true)} className="text-sm text-gray-400 hover:text-white transition-colors bg-transparent border-none cursor-pointer">
               Arcade
-            </Link>
+            </button>
             <Link href="/dashboard-pro" className="text-sm text-gray-400 hover:text-white transition-colors">
               Portal
             </Link>
