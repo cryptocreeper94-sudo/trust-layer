@@ -121,11 +121,11 @@ const MOCK_STAMPS = [
 function getTierInfo(tier: string) {
   switch (tier) {
     case "guardian_premier":
-      return { name: "Guardian Premier", color: "pink", icon: Award };
+      return { name: "Guardian Premier", gradientClass: "from-pink-500 to-pink-700", icon: Award };
     case "assurance_lite":
-      return { name: "Assurance Lite", color: "purple", icon: ShieldCheck };
+      return { name: "Assurance Lite", gradientClass: "from-purple-500 to-purple-700", icon: ShieldCheck };
     default:
-      return { name: "Self-Cert", color: "cyan", icon: Shield };
+      return { name: "Self-Cert", gradientClass: "from-cyan-500 to-cyan-700", icon: Shield };
   }
 }
 
@@ -282,7 +282,7 @@ export default function GuardianPortal() {
                         className="flex items-center gap-4 p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors"
                         data-testid={`certification-${cert.id}`}
                       >
-                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br from-${tierInfo.color}-500 to-${tierInfo.color}-700 flex items-center justify-center`}>
+                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tierInfo.gradientClass} flex items-center justify-center`}>
                           <TierIcon className="w-6 h-6 text-white" />
                         </div>
                         <div className="flex-1 min-w-0">

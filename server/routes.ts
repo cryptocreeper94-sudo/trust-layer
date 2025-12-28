@@ -34,6 +34,7 @@ import { pulseClient } from "./pulse-client";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { orbsService, ORB_PACKAGES, ORB_EARN_RATES, ORB_COSTS } from "./orbs-service";
 import { subscriptionService, SUBSCRIPTION_PLANS } from "./subscription-service";
+import { guardianService, generateDataHash as guardianHash, generateMerkleRoot } from "./guardian-service";
 
 const FaucetClaimRequestSchema = z.object({
   walletAddress: z.string().min(10, "Invalid wallet address").max(100),
@@ -3259,6 +3260,188 @@ export async function registerRoutes(
         priceCents: tier.price,
       })),
     });
+  });
+
+  app.get("/api/guardian/certifications", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.query.userId as string;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const certifications = await guardianService.getCertificationsByUser(userId);
+      res.json({ certifications });
+    } catch (error) {
+      console.error("Error fetching certifications:", error);
+      res.status(500).json({ error: "Failed to fetch certifications" });
+    }
+  });
+
+  app.get("/api/guardian/certifications/:id", async (req, res) => {
+    try {
+      const certification = await guardianService.getCertification(req.params.id);
+      if (!certification) {
+        return res.status(404).json({ error: "Certification not found" });
+      }
+      res.json({ certification });
+    } catch (error) {
+      console.error("Error fetching certification:", error);
+      res.status(500).json({ error: "Failed to fetch certification" });
+    }
+  });
+
+  app.post("/api/guardian/certifications", isAuthenticated, async (req: any, res) => {
+    try {
+      const schema = z.object({
+        projectName: z.string().min(1),
+        projectUrl: z.string().optional(),
+        contactEmail: z.string().email(),
+        tier: z.enum(["self_cert", "assurance_lite", "guardian_premier"]),
+        stripePaymentId: z.string().optional()
+      });
+      const data = schema.parse(req.body);
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const certification = await guardianService.createCertification({ ...data, userId });
+      res.json({ certification });
+    } catch (error) {
+      console.error("Error creating certification:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: "Invalid request", details: error.errors });
+      }
+      res.status(500).json({ error: "Failed to create certification" });
+    }
+  });
+
+  app.get("/api/guardian/assets", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const assets = await guardianService.getMonitoredAssets(userId);
+      res.json({ assets });
+    } catch (error) {
+      console.error("Error fetching assets:", error);
+      res.status(500).json({ error: "Failed to fetch monitored assets" });
+    }
+  });
+
+  app.post("/api/guardian/assets", isAuthenticated, async (req: any, res) => {
+    try {
+      const schema = z.object({
+        assetType: z.enum(["contract", "wallet", "validator", "bridge", "pool"]),
+        assetAddress: z.string().min(10),
+        assetName: z.string().optional(),
+        chainId: z.string(),
+        monitoringTier: z.enum(["watch", "shield", "command"]),
+        alertChannels: z.string().optional()
+      });
+      const data = schema.parse(req.body);
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const asset = await guardianService.addMonitoredAsset({ ...data, userId });
+      res.json({ asset });
+    } catch (error) {
+      console.error("Error adding asset:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: "Invalid request", details: error.errors });
+      }
+      res.status(500).json({ error: "Failed to add monitored asset" });
+    }
+  });
+
+  app.get("/api/guardian/incidents", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const incidents = await guardianService.getIncidents(userId);
+      res.json({ incidents });
+    } catch (error) {
+      console.error("Error fetching incidents:", error);
+      res.status(500).json({ error: "Failed to fetch incidents" });
+    }
+  });
+
+  app.post("/api/guardian/incidents/:id/resolve", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const incident = await guardianService.resolveIncident(req.params.id);
+      if (!incident) {
+        return res.status(404).json({ error: "Incident not found" });
+      }
+      res.json({ incident });
+    } catch (error) {
+      console.error("Error resolving incident:", error);
+      res.status(500).json({ error: "Failed to resolve incident" });
+    }
+  });
+
+  app.get("/api/guardian/stamps", async (req, res) => {
+    try {
+      const referenceId = req.query.referenceId as string | undefined;
+      const stamps = await guardianService.getBlockchainStamps(referenceId);
+      res.json({ stamps });
+    } catch (error) {
+      console.error("Error fetching stamps:", error);
+      res.status(500).json({ error: "Failed to fetch blockchain stamps" });
+    }
+  });
+
+  app.post("/api/guardian/certifications/:id/mint-nft", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const cert = await guardianService.getCertification(req.params.id);
+      if (!cert || cert.userId !== userId) {
+        return res.status(403).json({ error: "Not authorized to mint this certification NFT" });
+      }
+      const result = await guardianService.mintCertificationNFT(req.params.id);
+      res.json(result);
+    } catch (error: any) {
+      console.error("Error minting NFT:", error);
+      res.status(400).json({ error: error.message || "Failed to mint NFT" });
+    }
+  });
+
+  app.get("/api/guardian/registry", async (_req, res) => {
+    try {
+      const registry = await guardianService.getPublicRegistry();
+      res.json({ registry });
+    } catch (error) {
+      console.error("Error fetching registry:", error);
+      res.status(500).json({ error: "Failed to fetch public registry" });
+    }
+  });
+
+  app.post("/api/guardian/stamps/batch-confirm", async (req, res) => {
+    try {
+      const schema = z.object({
+        stampIds: z.array(z.string()),
+        transactionHash: z.string(),
+        blockNumber: z.number()
+      });
+      const { stampIds, transactionHash, blockNumber } = schema.parse(req.body);
+      
+      const hashes = stampIds.map(id => guardianHash({ id, confirmed: true }));
+      const merkleRoot = generateMerkleRoot(hashes);
+      
+      const confirmed = await guardianService.batchConfirmStamps(stampIds, merkleRoot, transactionHash, blockNumber);
+      res.json({ confirmed, merkleRoot });
+    } catch (error) {
+      console.error("Error batch confirming stamps:", error);
+      res.status(500).json({ error: "Failed to batch confirm stamps" });
+    }
   });
 
   // === BLOCKCHAIN DOMAIN SERVICE ROUTES ===
