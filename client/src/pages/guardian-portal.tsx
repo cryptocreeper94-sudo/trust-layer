@@ -1,11 +1,13 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { 
   Shield, ShieldCheck, Award, Activity, AlertTriangle, Clock,
   CheckCircle, XCircle, Eye, ExternalLink, Plus, Settings,
   Wallet, ChevronRight, Zap, Lock, Server, Database, Globe,
-  Bell, TrendingUp, ArrowLeft, BarChart3, FileText, RefreshCw
+  Bell, TrendingUp, ArrowLeft, BarChart3, FileText, RefreshCw, Loader
 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -13,110 +15,8 @@ import { HeaderTools } from "@/components/header-tools";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { usePageAnalytics } from "@/hooks/use-analytics";
-
-const MOCK_CERTIFICATIONS = [
-  {
-    id: "cert-001",
-    projectName: "DarkWave DEX",
-    tier: "guardian_premier",
-    status: "completed",
-    score: 94,
-    validUntil: "2026-01-15",
-    txHash: "0xdwsc...a4f2",
-    nftTokenId: "1001"
-  },
-  {
-    id: "cert-002",
-    projectName: "Lunar Bridge",
-    tier: "assurance_lite",
-    status: "in_progress",
-    score: null,
-    validUntil: null,
-    txHash: null,
-    nftTokenId: null
-  }
-];
-
-const MOCK_ASSETS = [
-  {
-    id: "asset-001",
-    name: "DEX Router Contract",
-    type: "contract",
-    address: "0xdwsc...8a3f",
-    chain: "DWSC",
-    healthScore: 98,
-    status: "active",
-    lastChecked: "2 mins ago"
-  },
-  {
-    id: "asset-002",
-    name: "Treasury Wallet",
-    type: "wallet",
-    address: "0xdwsc...b2c1",
-    chain: "DWSC",
-    healthScore: 100,
-    status: "active",
-    lastChecked: "5 mins ago"
-  },
-  {
-    id: "asset-003",
-    name: "LP Pool v2",
-    type: "pool",
-    address: "0xdwsc...9e4d",
-    chain: "DWSC",
-    healthScore: 85,
-    status: "warning",
-    lastChecked: "1 min ago"
-  }
-];
-
-const MOCK_INCIDENTS = [
-  {
-    id: "inc-001",
-    title: "Unusual Gas Spike Detected",
-    severity: "medium",
-    type: "unusual_activity",
-    asset: "DEX Router Contract",
-    status: "investigating",
-    createdAt: "10 mins ago"
-  },
-  {
-    id: "inc-002",
-    title: "Large Withdrawal Alert",
-    severity: "info",
-    type: "whale_movement",
-    asset: "Treasury Wallet",
-    status: "resolved",
-    createdAt: "2 hours ago"
-  }
-];
-
-const MOCK_STAMPS = [
-  {
-    id: "stamp-001",
-    type: "certification",
-    description: "Guardian Premier Certification Issued",
-    txHash: "0xdwsc4a8b...c2f1",
-    blockNumber: 1847293,
-    timestamp: "2025-01-15 14:32:08"
-  },
-  {
-    id: "stamp-002",
-    type: "incident",
-    description: "Security Incident Recorded",
-    txHash: "0xdwsc9f2c...a1e8",
-    blockNumber: 1847102,
-    timestamp: "2025-01-15 12:18:45"
-  },
-  {
-    id: "stamp-003",
-    type: "payment",
-    description: "Audit Payment Confirmed",
-    txHash: "0xdwsc3b7e...d4f2",
-    blockNumber: 1846891,
-    timestamp: "2025-01-14 09:45:22"
-  }
-];
+import { useAuth } from "@/hooks/use-auth";
+import { toast } from "sonner";
 
 function getTierInfo(tier: string) {
   switch (tier) {
@@ -179,7 +79,40 @@ function StatsCard({ icon: Icon, label, value, trend, color }: { icon: any; labe
 
 export default function GuardianPortal() {
   usePageAnalytics();
-  const [activeTab, setActiveTab] = useState<"overview" | "assets" | "incidents" | "stamps">("overview");
+  const { user } = useAuth();
+  const [activeTab, setActiveTab] = useState<"overview" | "assets" | "incidents" | "stamps" | "shield">("overview");
+
+  const { data: certifications = [], isLoading: certsLoading } = useQuery({
+    queryKey: ["guardian-certifications", user?.id],
+    queryFn: () => axios.get("/api/guardian/certifications").then(r => r.data.certifications),
+    enabled: !!user?.id
+  });
+
+  const { data: assets = [], isLoading: assetsLoading } = useQuery({
+    queryKey: ["guardian-assets", user?.id],
+    queryFn: () => axios.get("/api/guardian/assets").then(r => r.data.assets),
+    enabled: !!user?.id
+  });
+
+  const { data: incidents = [], isLoading: incidentsLoading } = useQuery({
+    queryKey: ["guardian-incidents", user?.id],
+    queryFn: () => axios.get("/api/guardian/incidents").then(r => r.data.incidents),
+    enabled: !!user?.id
+  });
+
+  const { data: stamps = [], isLoading: stampsLoading } = useQuery({
+    queryKey: ["guardian-stamps"],
+    queryFn: () => axios.get("/api/guardian/stamps").then(r => r.data.stamps)
+  });
+
+  const handleCompleteCertification = async (certId: string, score: number) => {
+    try {
+      await axios.patch(`/api/guardian/certifications/${certId}`, { status: "completed", score });
+      toast.success("Certification marked as complete");
+    } catch (error) {
+      toast.error("Failed to update certification");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-950">
@@ -238,7 +171,7 @@ export default function GuardianPortal() {
         </motion.div>
 
         <div className="flex flex-wrap gap-2 mb-6 border-b border-white/10 pb-4">
-          {["overview", "assets", "incidents", "stamps"].map((tab) => (
+          {["overview", "assets", "incidents", "stamps", "shield"].map((tab) => (
             <Button
               key={tab}
               variant="ghost"
@@ -247,6 +180,7 @@ export default function GuardianPortal() {
               className={`capitalize ${activeTab === tab ? "bg-white/10 text-white" : "text-white/60 hover:text-white"}`}
               data-testid={`tab-${tab}`}
             >
+              {tab === "shield" && <Badge className="ml-2 bg-amber-500/20 text-amber-400 text-xs">Coming Soon</Badge>}
               {tab}
             </Button>
           ))}
@@ -273,41 +207,59 @@ export default function GuardianPortal() {
                   </Link>
                 </div>
                 <div className="space-y-4">
-                  {MOCK_CERTIFICATIONS.map((cert) => {
-                    const tierInfo = getTierInfo(cert.tier);
-                    const TierIcon = tierInfo.icon;
-                    return (
-                      <div
-                        key={cert.id}
-                        className="flex items-center gap-4 p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors"
-                        data-testid={`certification-${cert.id}`}
-                      >
-                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tierInfo.gradientClass} flex items-center justify-center`}>
-                          <TierIcon className="w-6 h-6 text-white" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-white truncate">{cert.projectName}</h3>
-                          <div className="flex items-center gap-2 mt-1">
-                            <Badge variant="outline" className="text-xs">{tierInfo.name}</Badge>
-                            <span className={`text-xs capitalize ${getStatusColor(cert.status)}`}>
-                              {cert.status.replace("_", " ")}
-                            </span>
+                  {certsLoading ? (
+                    <div className="flex items-center justify-center py-8">
+                      <Loader className="w-5 h-5 animate-spin text-white/60" />
+                    </div>
+                  ) : certifications.length === 0 ? (
+                    <p className="text-white/60 text-sm py-4">No certifications yet. Start your first audit.</p>
+                  ) : (
+                    certifications.map((cert: any) => {
+                      const tierInfo = getTierInfo(cert.tier);
+                      const TierIcon = tierInfo.icon;
+                      return (
+                        <div
+                          key={cert.id}
+                          className="flex items-center gap-4 p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors"
+                          data-testid={`certification-${cert.id}`}
+                        >
+                          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tierInfo.gradientClass} flex items-center justify-center`}>
+                            <TierIcon className="w-6 h-6 text-white" />
                           </div>
-                        </div>
-                        {cert.score && (
-                          <div className="text-right">
-                            <div className="text-2xl font-bold text-emerald-400">{cert.score}</div>
-                            <div className="text-xs text-white/60">Score</div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-white truncate">{cert.projectName}</h3>
+                            <div className="flex items-center gap-2 mt-1">
+                              <Badge variant="outline" className="text-xs">{tierInfo.name}</Badge>
+                              <span className={`text-xs capitalize ${getStatusColor(cert.status)}`}>
+                                {cert.status.replace("_", " ")}
+                              </span>
+                            </div>
                           </div>
-                        )}
-                        {cert.nftTokenId && (
-                          <Badge className="bg-purple-500/20 text-purple-400">
-                            NFT #{cert.nftTokenId}
-                          </Badge>
-                        )}
-                      </div>
-                    );
-                  })}
+                          {cert.score && (
+                            <div className="text-right">
+                              <div className="text-2xl font-bold text-emerald-400">{cert.score}</div>
+                              <div className="text-xs text-white/60">Score</div>
+                            </div>
+                          )}
+                          {cert.nftTokenId && (
+                            <Badge className="bg-purple-500/20 text-purple-400">
+                              NFT #{cert.nftTokenId}
+                            </Badge>
+                          )}
+                          {cert.status === "in_progress" && (
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              className="text-emerald-400 border-emerald-500/30"
+                              onClick={() => handleCompleteCertification(cert.id, 85)}
+                            >
+                              Mark Complete
+                            </Button>
+                          )}
+                        </div>
+                      );
+                    })
+                  )}
                 </div>
               </GlassCard>
             </motion.div>
@@ -328,30 +280,38 @@ export default function GuardianPortal() {
                   </Button>
                 </div>
                 <div className="space-y-3">
-                  {MOCK_INCIDENTS.map((incident) => (
-                    <div
-                      key={incident.id}
-                      className="p-3 rounded-lg border border-white/10 bg-white/5"
-                      data-testid={`incident-${incident.id}`}
-                    >
-                      <div className="flex items-start justify-between gap-2 mb-2">
-                        <h4 className="text-sm font-medium text-white">{incident.title}</h4>
-                        <Badge className={`text-[10px] ${getSeverityColor(incident.severity)}`}>
-                          {incident.severity}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-white/60">
-                        <span>{incident.asset}</span>
-                        <span>•</span>
-                        <span>{incident.createdAt}</span>
-                      </div>
-                      <div className="mt-2">
-                        <span className={`text-xs capitalize ${incident.status === "resolved" ? "text-emerald-400" : "text-amber-400"}`}>
-                          {incident.status}
-                        </span>
-                      </div>
+                  {incidentsLoading ? (
+                    <div className="flex items-center justify-center py-6">
+                      <Loader className="w-4 h-4 animate-spin text-white/60" />
                     </div>
-                  ))}
+                  ) : incidents.length === 0 ? (
+                    <p className="text-white/60 text-sm py-4">No incidents recorded.</p>
+                  ) : (
+                    incidents.map((incident: any) => (
+                      <div
+                        key={incident.id}
+                        className="p-3 rounded-lg border border-white/10 bg-white/5"
+                        data-testid={`incident-${incident.id}`}
+                      >
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                          <h4 className="text-sm font-medium text-white">{incident.title}</h4>
+                          <Badge className={`text-[10px] ${getSeverityColor(incident.severity)}`}>
+                            {incident.severity}
+                          </Badge>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-white/60">
+                          <span>{incident.assetId || "Unknown"}</span>
+                          <span>•</span>
+                          <span>{new Date(incident.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        <div className="mt-2">
+                          <span className={`text-xs capitalize ${incident.status === "resolved" ? "text-emerald-400" : "text-amber-400"}`}>
+                            {incident.status}
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </GlassCard>
             </motion.div>
@@ -388,47 +348,59 @@ export default function GuardianPortal() {
                     </tr>
                   </thead>
                   <tbody>
-                    {MOCK_ASSETS.map((asset) => (
-                      <tr key={asset.id} className="border-b border-white/5 hover:bg-white/5" data-testid={`asset-row-${asset.id}`}>
-                        <td className="py-4 px-4">
-                          <div>
-                            <div className="font-medium text-white">{asset.name}</div>
-                            <div className="text-xs text-white/60 font-mono">{asset.address}</div>
-                          </div>
-                        </td>
-                        <td className="py-4 px-4">
-                          <Badge variant="outline" className="capitalize text-xs">{asset.type}</Badge>
-                        </td>
-                        <td className="py-4 px-4">
-                          <span className="text-sm text-white">{asset.chain}</span>
-                        </td>
-                        <td className="py-4 px-4">
-                          <span className={`text-lg font-bold ${getHealthColor(asset.healthScore)}`}>
-                            {asset.healthScore}
-                          </span>
-                        </td>
-                        <td className="py-4 px-4">
-                          <div className="flex items-center gap-2">
-                            {asset.status === "active" ? (
-                              <CheckCircle className="w-4 h-4 text-emerald-400" />
-                            ) : (
-                              <AlertTriangle className="w-4 h-4 text-amber-400" />
-                            )}
-                            <span className={`text-sm capitalize ${asset.status === "active" ? "text-emerald-400" : "text-amber-400"}`}>
-                              {asset.status}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-4 px-4">
-                          <span className="text-sm text-white/60">{asset.lastChecked}</span>
-                        </td>
-                        <td className="py-4 px-4 text-right">
-                          <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-white/10">
-                            <Settings className="w-4 h-4" />
-                          </Button>
+                    {assetsLoading ? (
+                      <tr>
+                        <td colSpan={7} className="py-8 text-center">
+                          <Loader className="w-4 h-4 animate-spin inline text-white/60" />
                         </td>
                       </tr>
-                    ))}
+                    ) : assets.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="py-8 text-center text-white/60">No assets monitored yet.</td>
+                      </tr>
+                    ) : (
+                      assets.map((asset: any) => (
+                        <tr key={asset.id} className="border-b border-white/5 hover:bg-white/5" data-testid={`asset-row-${asset.id}`}>
+                          <td className="py-4 px-4">
+                            <div>
+                              <div className="font-medium text-white">{asset.assetName || asset.assetAddress.slice(0, 16)}</div>
+                              <div className="text-xs text-white/60 font-mono">{asset.assetAddress}</div>
+                            </div>
+                          </td>
+                          <td className="py-4 px-4">
+                            <Badge variant="outline" className="capitalize text-xs">{asset.assetType}</Badge>
+                          </td>
+                          <td className="py-4 px-4">
+                            <span className="text-sm text-white">{asset.chainId}</span>
+                          </td>
+                          <td className="py-4 px-4">
+                            <span className={`text-lg font-bold ${getHealthColor(asset.healthScore || 75)}`}>
+                              {asset.healthScore || 75}
+                            </span>
+                          </td>
+                          <td className="py-4 px-4">
+                            <div className="flex items-center gap-2">
+                              {(asset.healthScore || 75) >= 80 ? (
+                                <CheckCircle className="w-4 h-4 text-emerald-400" />
+                              ) : (
+                                <AlertTriangle className="w-4 h-4 text-amber-400" />
+                              )}
+                              <span className={`text-sm ${(asset.healthScore || 75) >= 80 ? "text-emerald-400" : "text-amber-400"}`}>
+                                {(asset.healthScore || 75) >= 80 ? "Healthy" : "Monitor"}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="py-4 px-4">
+                            <span className="text-sm text-white/60">{asset.lastCheckedAt ? new Date(asset.lastCheckedAt).toLocaleDateString() : "Never"}</span>
+                          </td>
+                          <td className="py-4 px-4 text-right">
+                            <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-white/10">
+                              <Settings className="w-4 h-4" />
+                            </Button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -455,44 +427,143 @@ export default function GuardianPortal() {
                 </div>
               </div>
               <div className="space-y-4">
-                {MOCK_INCIDENTS.map((incident) => (
-                  <div
-                    key={incident.id}
-                    className="p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors"
-                    data-testid={`incident-detail-${incident.id}`}
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Badge className={`${getSeverityColor(incident.severity)}`}>
-                            {incident.severity.toUpperCase()}
-                          </Badge>
-                          <Badge variant="outline" className="text-xs capitalize">{incident.type.replace("_", " ")}</Badge>
-                        </div>
-                        <h3 className="text-lg font-semibold text-white mb-1">{incident.title}</h3>
-                        <p className="text-sm text-white/60">Affected Asset: {incident.asset}</p>
-                      </div>
-                      <div className="text-right">
-                        <div className={`text-sm capitalize font-medium ${incident.status === "resolved" ? "text-emerald-400" : "text-amber-400"}`}>
-                          {incident.status}
-                        </div>
-                        <div className="text-xs text-white/60 mt-1">{incident.createdAt}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 mt-4 pt-4 border-t border-white/10">
-                      <Button variant="outline" size="sm" className="border-white/20">
-                        <Eye className="w-4 h-4 mr-1" />
-                        View Details
-                      </Button>
-                      {incident.status !== "resolved" && (
-                        <Button variant="outline" size="sm" className="border-white/20 text-emerald-400">
-                          <CheckCircle className="w-4 h-4 mr-1" />
-                          Mark Resolved
-                        </Button>
-                      )}
-                    </div>
+                {incidentsLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader className="w-5 h-5 animate-spin text-white/60" />
                   </div>
-                ))}
+                ) : incidents.length === 0 ? (
+                  <p className="text-white/60 text-sm py-4">No security incidents detected.</p>
+                ) : (
+                  incidents.map((incident: any) => (
+                    <div
+                      key={incident.id}
+                      className="p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors"
+                      data-testid={`incident-detail-${incident.id}`}
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge className={`${getSeverityColor(incident.severity)}`}>
+                              {incident.severity.toUpperCase()}
+                            </Badge>
+                            <Badge variant="outline" className="text-xs capitalize">{incident.incidentType.replace("_", " ")}</Badge>
+                          </div>
+                          <h3 className="text-lg font-semibold text-white mb-1">{incident.title}</h3>
+                          <p className="text-sm text-white/60">Asset ID: {incident.assetId}</p>
+                        </div>
+                        <div className="text-right">
+                          <div className={`text-sm capitalize font-medium ${incident.status === "resolved" ? "text-emerald-400" : "text-amber-400"}`}>
+                            {incident.status}
+                          </div>
+                          <div className="text-xs text-white/60 mt-1">{new Date(incident.createdAt).toLocaleDateString()}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 mt-4 pt-4 border-t border-white/10">
+                        <Button variant="outline" size="sm" className="border-white/20">
+                          <Eye className="w-4 h-4 mr-1" />
+                          View Details
+                        </Button>
+                        {incident.status !== "resolved" && (
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="border-white/20 text-emerald-400"
+                            onClick={() => axios.post(`/api/guardian/incidents/${incident.id}/resolve`)}
+                          >
+                            <CheckCircle className="w-4 h-4 mr-1" />
+                            Mark Resolved
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </GlassCard>
+          </motion.div>
+        )}
+
+        {activeTab === "shield" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <GlassCard className="p-8 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-transparent">
+              <div className="text-center mb-8">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mx-auto mb-4">
+                  <Shield className="w-8 h-8 text-white" />
+                </div>
+                <h2 className="text-3xl font-bold text-white mb-2">Guardian Shield</h2>
+                <p className="text-lg text-white/60">24/7 Blockchain Security Monitoring</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <GlassCard className="p-6 border-amber-500/20">
+                  <h3 className="text-lg font-semibold text-white mb-2">Guardian Watch</h3>
+                  <div className="text-3xl font-bold text-amber-400 mb-4">$299<span className="text-lg text-white/60">/mo</span></div>
+                  <ul className="space-y-2 text-sm text-white/70">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-emerald-400" />
+                      Real-time monitoring
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-emerald-400" />
+                      Threat detection
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-emerald-400" />
+                      Email alerts
+                    </li>
+                  </ul>
+                </GlassCard>
+
+                <GlassCard className="p-6 border-purple-500/20 ring-1 ring-purple-500/30">
+                  <Badge className="bg-purple-500/20 text-purple-400 mb-2">Most Popular</Badge>
+                  <h3 className="text-lg font-semibold text-white mb-2">Guardian Shield</h3>
+                  <div className="text-3xl font-bold text-purple-400 mb-4">$999<span className="text-lg text-white/60">/mo</span></div>
+                  <ul className="space-y-2 text-sm text-white/70">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-emerald-400" />
+                      All Watch features
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-emerald-400" />
+                      Governance monitoring
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-emerald-400" />
+                      Rug pull detection
+                    </li>
+                  </ul>
+                </GlassCard>
+
+                <GlassCard className="p-6 border-pink-500/20">
+                  <h3 className="text-lg font-semibold text-white mb-2">Guardian Command</h3>
+                  <div className="text-3xl font-bold text-pink-400 mb-4">$2,999<span className="text-lg text-white/60">/mo</span></div>
+                  <ul className="space-y-2 text-sm text-white/70">
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-emerald-400" />
+                      All Shield features
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-emerald-400" />
+                      SOC operations
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-emerald-400" />
+                      Multi-chain coverage
+                    </li>
+                  </ul>
+                </GlassCard>
+              </div>
+
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-6 text-center">
+                <Badge className="bg-amber-500/20 text-amber-400 mb-4">Coming Soon</Badge>
+                <p className="text-white/80 mb-4">Guardian Shield is launching in Q3 2025 with advanced anomaly detection and 24/7 SOC operations for your blockchain assets.</p>
+                <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700">
+                  <Bell className="w-4 h-4 mr-2" />
+                  Join Waitlist
+                </Button>
               </div>
             </GlassCard>
           </motion.div>
@@ -517,36 +588,46 @@ export default function GuardianPortal() {
                 Every Guardian activity is immutably stamped on the DarkWave Smart Chain for complete transparency and auditability.
               </p>
               <div className="space-y-3">
-                {MOCK_STAMPS.map((stamp) => (
-                  <div
-                    key={stamp.id}
-                    className="flex items-center gap-4 p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors"
-                    data-testid={`stamp-${stamp.id}`}
-                  >
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                      stamp.type === "certification" ? "bg-cyan-500/20" :
-                      stamp.type === "incident" ? "bg-amber-500/20" : "bg-purple-500/20"
-                    }`}>
-                      {stamp.type === "certification" ? <Award className="w-5 h-5 text-cyan-400" /> :
-                       stamp.type === "incident" ? <AlertTriangle className="w-5 h-5 text-amber-400" /> :
-                       <Wallet className="w-5 h-5 text-purple-400" />}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium text-white">{stamp.description}</div>
-                      <div className="flex items-center gap-3 mt-1 text-xs text-white/60">
-                        <span className="font-mono">{stamp.txHash}</span>
-                        <span>Block #{stamp.blockNumber.toLocaleString()}</span>
+                {stampsLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Loader className="w-5 h-5 animate-spin text-white/60" />
+                  </div>
+                ) : stamps.length === 0 ? (
+                  <p className="text-white/60 text-sm py-4">No blockchain stamps yet.</p>
+                ) : (
+                  stamps.map((stamp: any) => (
+                    <div
+                      key={stamp.id}
+                      className="flex items-center gap-4 p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors"
+                      data-testid={`stamp-${stamp.id}`}
+                    >
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                        stamp.stampType === "certification" ? "bg-cyan-500/20" :
+                        stamp.stampType === "incident" ? "bg-amber-500/20" : "bg-purple-500/20"
+                      }`}>
+                        {stamp.stampType === "certification" ? <Award className="w-5 h-5 text-cyan-400" /> :
+                         stamp.stampType === "incident" ? <AlertTriangle className="w-5 h-5 text-amber-400" /> :
+                         <Wallet className="w-5 h-5 text-purple-400" />}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-white">{stamp.stampType.replace("_", " ").charAt(0).toUpperCase() + stamp.stampType.slice(1)} • {stamp.status}</div>
+                        <div className="flex items-center gap-3 mt-1 text-xs text-white/60">
+                          <span className="font-mono">{stamp.dataHash.slice(0, 20)}...</span>
+                          {stamp.blockNumber && <span>Block #{stamp.blockNumber.toLocaleString()}</span>}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-xs text-white/60">{new Date(stamp.createdAt).toLocaleDateString()}</div>
+                        {stamp.transactionHash && (
+                          <Button variant="ghost" size="sm" className="mt-1 h-7 text-xs text-cyan-400 hover:text-cyan-300">
+                            <ExternalLink className="w-3 h-3 mr-1" />
+                            View on Explorer
+                          </Button>
+                        )}
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-xs text-white/60">{stamp.timestamp}</div>
-                      <Button variant="ghost" size="sm" className="mt-1 h-7 text-xs text-cyan-400 hover:text-cyan-300">
-                        <ExternalLink className="w-3 h-3 mr-1" />
-                        View on Explorer
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </GlassCard>
           </motion.div>
