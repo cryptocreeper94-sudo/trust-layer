@@ -92,9 +92,26 @@ We control the full user experience from infrastructure to entertainment.
 |-----------|------|
 | Guardian Certification Launch | Q1 2025 |
 | Guardian Shield Monitoring | Q3 2025 |
+| ChronoChat Communities | Q4 2025 |
 | Token Launch | February 14, 2026 |
 | Chronicles Public Beta | July 4, 2026 |
+| DarkWave Script (Custom Language) | 2027+ |
 | Enterprise Apps | Live and operational |
+
+---
+
+## Long-Term Vision: DarkWave Script
+
+**The ultimate competitive moat: our own programming language.**
+
+Just as Move (Aptos/Sui), Cairo (StarkNet), and Cadence (Flow) created developer ecosystems around their chains, **DarkWave Script** will be purpose-built for:
+
+- Gaming state management (Chronicles)
+- Native DWC token operations
+- Security-first smart contract patterns
+- Optimized DWSC execution
+
+Developers who learn DarkWave Script become part of OUR ecosystem permanently.
 
 ---
 
