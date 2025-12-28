@@ -3592,3 +3592,120 @@ export type MessageAttachment = typeof messageAttachments.$inferSelect;
 export type InsertAttachment = z.infer<typeof insertAttachmentSchema>;
 export type MemberTip = typeof memberTips.$inferSelect;
 export type InsertTip = z.infer<typeof insertTipSchema>;
+
+// ============================================
+// GUARDIAN SECURITY PLATFORM TABLES
+// ============================================
+
+// Guardian Certifications - tracks audit certifications for projects
+export const guardianCertifications = pgTable("guardian_certifications", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectName: text("project_name").notNull(),
+  projectUrl: text("project_url"),
+  contactEmail: text("contact_email").notNull(),
+  tier: text("tier").notNull(), // 'self_cert', 'assurance_lite', 'guardian_premier'
+  status: text("status").notNull().default("pending"), // 'pending', 'in_progress', 'completed', 'revoked'
+  score: integer("score"), // 0-100 security score
+  findings: text("findings"), // JSON string of findings
+  reportHash: text("report_hash"), // SHA-256 hash of full report
+  nftTokenId: text("nft_token_id"), // Token ID if minted as NFT
+  blockchainTxHash: text("blockchain_tx_hash"), // Transaction hash of on-chain stamp
+  stripePaymentId: text("stripe_payment_id"),
+  userId: text("user_id"), // Owner's user ID
+  validFrom: timestamp("valid_from"),
+  validUntil: timestamp("valid_until"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Guardian Monitored Assets - contracts/wallets being monitored via Shield
+export const guardianMonitoredAssets = pgTable("guardian_monitored_assets", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  assetType: text("asset_type").notNull(), // 'contract', 'wallet', 'validator', 'bridge', 'pool'
+  assetAddress: text("asset_address").notNull(),
+  assetName: text("asset_name"),
+  chainId: text("chain_id").notNull(), // 'dwsc', 'ethereum', 'solana', etc.
+  status: text("status").notNull().default("active"), // 'active', 'paused', 'removed'
+  alertChannels: text("alert_channels"), // JSON: { email: true, discord: '...', slack: '...' }
+  monitoringTier: text("monitoring_tier").notNull(), // 'watch', 'shield', 'command'
+  lastCheckedAt: timestamp("last_checked_at"),
+  healthScore: integer("health_score"), // 0-100
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Guardian Incidents - security alerts and incidents detected
+export const guardianIncidents = pgTable("guardian_incidents", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  assetId: varchar("asset_id").references(() => guardianMonitoredAssets.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull(),
+  severity: text("severity").notNull(), // 'critical', 'high', 'medium', 'low', 'info'
+  incidentType: text("incident_type").notNull(), // 'rug_pull', 'governance_attack', 'unusual_activity', 'whale_movement', etc.
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  evidence: text("evidence"), // JSON: { txHashes: [], screenshots: [], merkleProof: '' }
+  status: text("status").notNull().default("open"), // 'open', 'acknowledged', 'investigating', 'resolved', 'false_positive'
+  blockchainTxHash: text("blockchain_tx_hash"), // On-chain stamp of incident
+  resolvedAt: timestamp("resolved_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Guardian Blockchain Stamps - immutable on-chain records of all Guardian activities
+export const guardianBlockchainStamps = pgTable("guardian_blockchain_stamps", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  stampType: text("stamp_type").notNull(), // 'certification', 'payment', 'incident', 'report', 'nft_mint'
+  referenceId: text("reference_id").notNull(), // ID of the related record
+  referenceType: text("reference_type").notNull(), // 'certification', 'incident', 'asset', 'payment'
+  dataHash: text("data_hash").notNull(), // SHA-256 hash of the stamped data
+  merkleRoot: text("merkle_root"), // Merkle root if batched
+  blockNumber: integer("block_number"),
+  transactionHash: text("transaction_hash"),
+  chainId: text("chain_id").notNull().default("dwsc"),
+  status: text("status").notNull().default("pending"), // 'pending', 'confirmed', 'failed'
+  metadata: text("metadata"), // JSON additional metadata
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  confirmedAt: timestamp("confirmed_at"),
+});
+
+// Guardian Subscriptions - Shield monitoring subscriptions
+export const guardianSubscriptions = pgTable("guardian_subscriptions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  tier: text("tier").notNull(), // 'watch', 'shield', 'command'
+  status: text("status").notNull().default("active"), // 'active', 'paused', 'cancelled', 'expired'
+  stripeSubscriptionId: text("stripe_subscription_id"),
+  assetLimit: integer("asset_limit").notNull().default(5),
+  currentAssetCount: integer("current_asset_count").notNull().default(0),
+  startedAt: timestamp("started_at").defaultNow().notNull(),
+  expiresAt: timestamp("expires_at"),
+  cancelledAt: timestamp("cancelled_at"),
+});
+
+// Insert schemas
+export const insertGuardianCertificationSchema = createInsertSchema(guardianCertifications).omit({
+  id: true, createdAt: true, updatedAt: true
+});
+export const insertGuardianMonitoredAssetSchema = createInsertSchema(guardianMonitoredAssets).omit({
+  id: true, createdAt: true, lastCheckedAt: true
+});
+export const insertGuardianIncidentSchema = createInsertSchema(guardianIncidents).omit({
+  id: true, createdAt: true, resolvedAt: true
+});
+export const insertGuardianBlockchainStampSchema = createInsertSchema(guardianBlockchainStamps).omit({
+  id: true, createdAt: true, confirmedAt: true
+});
+export const insertGuardianSubscriptionSchema = createInsertSchema(guardianSubscriptions).omit({
+  id: true, startedAt: true
+});
+
+// Types
+export type GuardianCertification = typeof guardianCertifications.$inferSelect;
+export type InsertGuardianCertification = z.infer<typeof insertGuardianCertificationSchema>;
+export type GuardianMonitoredAsset = typeof guardianMonitoredAssets.$inferSelect;
+export type InsertGuardianMonitoredAsset = z.infer<typeof insertGuardianMonitoredAssetSchema>;
+export type GuardianIncident = typeof guardianIncidents.$inferSelect;
+export type InsertGuardianIncident = z.infer<typeof insertGuardianIncidentSchema>;
+export type GuardianBlockchainStamp = typeof guardianBlockchainStamps.$inferSelect;
+export type InsertGuardianBlockchainStamp = z.infer<typeof insertGuardianBlockchainStampSchema>;
+export type GuardianSubscription = typeof guardianSubscriptions.$inferSelect;
+export type InsertGuardianSubscription = z.infer<typeof insertGuardianSubscriptionSchema>;

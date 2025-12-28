@@ -98,6 +98,15 @@ const navCategories = [
     ]
   },
   {
+    label: "Security",
+    icon: Shield,
+    items: [
+      { href: "/security", label: "Overview", icon: Shield },
+      { href: "/guardian-certification", label: "Guardian Certification", icon: Shield, badge: "New" },
+      { href: "/guardian-portal", label: "Guardian Portal", icon: Shield },
+    ]
+  },
+  {
     label: "About",
     icon: Star,
     items: [
