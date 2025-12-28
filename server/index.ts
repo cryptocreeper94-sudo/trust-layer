@@ -8,23 +8,43 @@ import { startScheduler } from "./marketing-scheduler";
 const app = express();
 const httpServer = createServer(app);
 
-// Security headers via Helmet
+// Security headers via Helmet - stricter in production
+const isProduction = process.env.NODE_ENV === "production";
+
+const cspDirectives = {
+  defaultSrc: ["'self'"],
+  scriptSrc: isProduction 
+    ? ["'self'", "https://js.stripe.com", "https://www.googletagmanager.com"]
+    : ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+  styleSrc: isProduction
+    ? ["'self'", "https://fonts.googleapis.com"]
+    : ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+  fontSrc: ["'self'", "https://fonts.gstatic.com"],
+  imgSrc: ["'self'", "data:", "blob:", "https:"],
+  connectSrc: ["'self'", "wss:", "https:"],
+  frameSrc: ["'self'", "https://js.stripe.com"],
+  objectSrc: ["'none'"],
+  baseUri: ["'self'"],
+  formAction: ["'self'"],
+  frameAncestors: ["'none'"],
+  upgradeInsecureRequests: isProduction ? [] : null,
+};
+
+// Remove null values for development
+Object.keys(cspDirectives).forEach(key => {
+  if (cspDirectives[key as keyof typeof cspDirectives] === null) {
+    delete cspDirectives[key as keyof typeof cspDirectives];
+  }
+});
+
 app.use(helmet({
   contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      imgSrc: ["'self'", "data:", "blob:", "https:"],
-      connectSrc: ["'self'", "wss:", "https:"],
-      frameSrc: ["'self'", "https://js.stripe.com"],
-      objectSrc: ["'none'"],
-      upgradeInsecureRequests: [],
-    },
+    directives: cspDirectives,
   },
   crossOriginEmbedderPolicy: false,
   crossOriginResourcePolicy: { policy: "cross-origin" },
+  referrerPolicy: { policy: "strict-origin-when-cross-origin" },
+  hsts: isProduction ? { maxAge: 31536000, includeSubDomains: true, preload: true } : false,
 }));
 
 // CORS headers for API access with strict origin allowlist

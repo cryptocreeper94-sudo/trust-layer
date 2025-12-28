@@ -9,9 +9,9 @@ import { GlassCard } from "@/components/glass-card";
 import { HeaderTools } from "@/components/header-tools";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 
-const SECURITY_SCORE = 73;
-const AUDIT_DATE = "December 27, 2024";
-const AUDIT_VERSION = "1.0.0";
+const SECURITY_SCORE = 78;
+const AUDIT_DATE = "December 28, 2024";
+const AUDIT_VERSION = "1.1.0";
 
 const SECURITY_FEATURES = [
   {
@@ -58,7 +58,7 @@ const AUDIT_CATEGORIES = [
   { name: "Input Validation", score: 75, status: "good" },
   { name: "Rate Limiting", score: 80, status: "strong" },
   { name: "Secret Management", score: 90, status: "excellent" },
-  { name: "Security Headers", score: 85, status: "strong" }
+  { name: "Security Headers", score: 90, status: "excellent" }
 ];
 
 const TRANSPARENCY_NOTES = [
