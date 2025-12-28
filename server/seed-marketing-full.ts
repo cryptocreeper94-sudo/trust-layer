@@ -107,6 +107,29 @@ const TWITTER_POSTS = [
   { content: `Daily updates. Weekly AMAs. Constant progress.\n\nStay connected with DarkWave.\n\nFollow for more ⚡`, category: 'community' },
   { content: `Your voice matters here.\n\nJoin DarkWave Discord and shape the future.\n\nLink in bio 💬`, category: 'community' },
   { content: `Growing together. Building together. Winning together.\n\nDarkWave community for life.\n\n#WAGMI 🚀`, category: 'community' },
+
+  // Guardian Certification (5 posts)
+  { content: `🛡️ Guardian Certification is LIVE.\n\nBlockchain security audits at 70% less than CertiK.\n\nProtect your project: dwsc.io/guardian`, category: 'security' },
+  { content: `Why pay $50K+ for audits?\n\nGuardian Certification: $5,999 - $14,999\nSame rigor. Faster turnaround. Real results.\n\ndwsc.io/guardian 🔒`, category: 'security' },
+  { content: `6-pillar security methodology:\n\n• Threat Modeling\n• Static Analysis\n• Dynamic Testing\n• Infrastructure Audit\n• Crypto Review\n• Compliance Mapping\n\ndwsc.io/guardian 🛡️`, category: 'security' },
+  { content: `Enterprise security for startups.\n\nGuardian Certification makes blockchain audits accessible.\n\n2-week turnaround. Real protection. 🔐`, category: 'security' },
+  { content: `Certified. Verified. Protected.\n\nGuardian Certification stamps your project on-chain forever.\n\ndwsc.io/guardian 💎`, category: 'security' },
+
+  // Guardian Shield Coming Soon (3 posts)
+  { content: `🔮 COMING SOON: Guardian Shield\n\nNorton meets blockchain.\n\n24/7 smart contract monitoring. Real-time threat detection.\n\nJoin the waitlist: dwsc.io/guardian`, category: 'security' },
+  { content: `Guardian Shield: $299-$2,999/month\n\n• 24/7 monitoring\n• Instant alerts\n• Multi-chain coverage\n• SOC operations\n\nQ3 2025 launch 🛡️`, category: 'security' },
+  { content: `Sleep well knowing your contracts are protected.\n\nGuardian Shield continuous monitoring coming Q3 2025.\n\ndwsc.io/guardian 🌙`, category: 'security' },
+
+  // ChronoChat Community Platform (4 posts)
+  { content: `💬 ChronoChat: Connect across timelines.\n\nCommunity platform for the DarkWave ecosystem.\n\nReal-time messaging. Orbs integration. Coming Q4 2025.\n\nchronochat.io`, category: 'community' },
+  { content: `Discord alternative built for blockchain communities.\n\nChronoChat. Decentralized. Community-first.\n\nchronochat.io 🌊`, category: 'community' },
+  { content: `Channels. Reactions. File sharing. Bot framework.\n\nChronoChat has it all—and it's built on DWSC.\n\nQ4 2025 launch 💬`, category: 'community' },
+  { content: `Your community deserves better.\n\nChronoChat: Premium community platform. Orbs rewards. No middlemen.\n\nchronochat.io ⚡`, category: 'community' },
+
+  // Orbs Economy (3 posts)
+  { content: `🔮 Orbs: The DarkWave economy.\n\nEarn Orbs → Convert to DWC at launch.\n\nDaily login: 5 Orbs\nReferral signup: 50 Orbs\n\nStart earning now 💎`, category: 'economy' },
+  { content: `Orbs packages available:\n\n• Starter: 100 for $4.99\n• Popular: 500 for $19.99\n• Premium: 1,200 for $39.99\n• Ultimate: 3,000 for $79.99\n\ndwsc.io 🔮`, category: 'economy' },
+  { content: `Convert Orbs to DWC tokens at launch.\n\nEarn now. Redeem later. Build wealth.\n\n#Orbs #DWC ⚡`, category: 'economy' },
 ];
 
 // ============================================
@@ -715,6 +738,114 @@ Support each other. Grow together. Win together.
 Join us: Discord, Telegram, X
 
 #DarkWave #WAGMI 🌊`, category: 'community' },
+
+  // Guardian Certification (3 posts)
+  { content: `🛡️ Guardian Certification Program - LIVE NOW
+
+Enterprise-grade blockchain security audits at 70% less than traditional firms.
+
+Why Guardian?
+• 6-pillar security methodology
+• 2-week turnaround
+• On-chain certification stamps
+• Public registry verification
+• $5,999 - $14,999 pricing
+
+Protect your project. Build trust.
+
+Learn more: dwsc.io/guardian`, category: 'security' },
+  { content: `Blockchain security shouldn't cost $50,000+.
+
+Guardian Certification brings enterprise-grade audits to startups and growing projects:
+
+🔒 Threat Modeling
+🔍 Static & Dynamic Analysis  
+🏗️ Infrastructure Audit
+🔐 Cryptographic Review
+📋 Compliance Mapping
+
+Real protection. Real affordability.
+
+dwsc.io/guardian 🛡️`, category: 'security' },
+  { content: `Every Guardian Certification is stamped on DWSC blockchain forever.
+
+✅ Immutable proof of audit
+✅ Public registry listing
+✅ Verifiable badge
+✅ Real credibility
+
+Your investors and users deserve confidence.
+
+Get certified: dwsc.io/guardian`, category: 'security' },
+
+  // Guardian Shield Coming Soon (2 posts)
+  { content: `🔮 COMING Q3 2025: Guardian Shield
+
+Norton meets blockchain. 24/7 smart contract monitoring.
+
+Guardian Shield Tiers:
+• Watch ($299/mo) - Basic monitoring
+• Shield ($999/mo) - Advanced detection
+• Command ($2,999/mo) - Full SOC operations
+
+Real-time alerts. Multi-chain coverage. Sleep well.
+
+Join the waitlist: dwsc.io/guardian`, category: 'security' },
+  { content: `Your smart contracts don't sleep. Neither does Guardian Shield.
+
+24/7 monitoring catching threats before they become disasters.
+
+Coming Q3 2025. Continuous protection for continuous peace of mind.
+
+dwsc.io/guardian 🛡️`, category: 'security' },
+
+  // ChronoChat (2 posts)
+  { content: `💬 ChronoChat - Connect Across Timelines
+
+The community platform built for the DarkWave ecosystem.
+
+Features:
+• Real-time messaging
+• Community channels
+• Orbs integration
+• Bot framework
+• File sharing
+
+Discord alternative, blockchain-native.
+
+Coming Q4 2025: chronochat.io`, category: 'community' },
+  { content: `Your community deserves a platform that rewards engagement.
+
+ChronoChat integrates Orbs economy—earn while you participate.
+
+No middlemen. No censorship. Pure community.
+
+chronochat.io 🌊`, category: 'community' },
+
+  // Orbs Economy (2 posts)
+  { content: `🔮 The Orbs Economy - Earn Before Launch
+
+Orbs = DarkWave's internal currency pre-token launch.
+
+Earn Orbs:
+• Daily login: 5 Orbs
+• Send message: 1 Orb
+• Receive reaction: 2 Orbs
+• Referral signup: 50 Orbs
+
+All Orbs convert to DWC tokens at launch!
+
+Start earning: dwsc.io`, category: 'economy' },
+  { content: `Need Orbs faster? Packages available:
+
+💎 Starter: 100 Orbs / $4.99
+💎 Popular: 500 Orbs / $19.99  
+💎 Premium: 1,200 Orbs / $39.99
+💎 Ultimate: 3,000 Orbs / $79.99
+
+Convert to DWC at token launch. Build your wallet now.
+
+dwsc.io 🔮`, category: 'economy' },
 ];
 
 // ============================================
