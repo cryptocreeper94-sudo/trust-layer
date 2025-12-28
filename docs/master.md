@@ -1,7 +1,7 @@
 # DarkWave Chain - Master Integration Guide
 
-**Version**: 1.0.0  
-**Last Updated**: December 21, 2025  
+**Version**: 1.1.0  
+**Last Updated**: December 28, 2025  
 **Maintainer**: DarkWave Studios  
 
 ---
@@ -24,8 +24,12 @@ DarkWave Chain is a next-generation Layer 1 blockchain ecosystem designed for sp
 | Finality | Sub-second |
 
 ### Official Domains
-- **Primary**: darkwavechain.io
-- **Secondary**: darkwavechain.com
+- **Primary**: dwsc.io
+- **Blockchain**: darkwavechain.io / darkwavechain.com
+- **Gaming**: darkwavegames.io
+- **Studios**: darkwavestudios.io
+- **Chronicles**: yourlegacy.io
+- **Community**: chronochat.io
 
 ---
 

@@ -31,6 +31,8 @@ A Layer 1 Proof-of-Authority blockchain designed for real-world performance:
 | Gaming | DarkWave Chronicles - AI-powered adventure with voice cloning |
 | Enterprise | Orbit Staffing, GarageBot, PaintPros, LotOpsPro, Brew & Board |
 | Intelligence | DarkWave Pulse, Strike Agent - AI trading and analytics |
+| Security | Guardian Certification - blockchain security audits at 70% less cost |
+| Community | ChronoChat - community platform with real-time messaging |
 
 ---
 
@@ -88,9 +90,24 @@ We control the full user experience from infrastructure to entertainment.
 
 | Milestone | Date |
 |-----------|------|
+| Guardian Certification Launch | Q1 2025 |
+| Guardian Shield Monitoring | Q3 2025 |
 | Token Launch | February 14, 2026 |
 | Chronicles Public Beta | July 4, 2026 |
 | Enterprise Apps | Live and operational |
+
+---
+
+## Revenue Streams
+
+| Stream | Type | Revenue Potential |
+|--------|------|-------------------|
+| Guardian Certification | One-time | $5,999-$14,999 per audit |
+| Guardian Shield | Recurring | $299-$2,999/month |
+| Subscriptions (Pulse, StrikeAgent) | Recurring | $14.99-$39.99/month |
+| Orbs Economy | Transactional | $4.99-$79.99 packages |
+| Domain Registration | Recurring | $12-$350/year |
+| Protocol Fees (DEX, NFT, Bridge) | Transaction | Variable |
 
 ---
 
@@ -106,5 +123,5 @@ We're building the pipes, the water company, AND the appliances that use the wat
 
 ---
 
-*Contact: [Your Contact Information]*
-*Website: dwsc.io | yourlegacy.io | darkwavestudios.io | darkwavegames.io*
+*Contact: cryptocreeper94@gmail.com*
+*Website: dwsc.io | yourlegacy.io | darkwavestudios.io | darkwavegames.io | chronochat.io*
