@@ -2,7 +2,7 @@ import express, { type Express, Request, Response, NextFunction } from "express"
 import fs from "fs";
 import path from "path";
 
-type AppDomain = "dwsc" | "games" | "studios";
+type AppDomain = "dwsc" | "games" | "studios" | "chronicles";
 
 function getAppFromHost(hostname: string): AppDomain {
   const host = hostname.toLowerCase();
@@ -12,6 +12,9 @@ function getAppFromHost(hostname: string): AppDomain {
   }
   if (host.includes("darkwavestudios") || host.includes("studios.")) {
     return "studios";
+  }
+  if (host.includes("yourlegacy") || host.includes("chrono.") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
+    return "chronicles";
   }
   return "dwsc";
 }
@@ -25,7 +28,7 @@ const APP_CONFIG: Record<AppDomain, {
 }> = {
   dwsc: {
     manifest: "/manifest-dwsc.webmanifest",
-    themeColor: "#8b5cf6",
+    themeColor: "#00ffff",
     title: "DarkWave Smart Chain",
     description: "The next-generation Layer 1 blockchain. DeFi, staking, NFTs, and developer tools.",
     icon: "/icons/dwsc-512x512.png",
@@ -43,6 +46,13 @@ const APP_CONFIG: Record<AppDomain, {
     title: "DarkWave Studios",
     description: "Building the future of blockchain technology. DarkWave Studios, LLC.",
     icon: "/icons/studios-512x512.png",
+  },
+  chronicles: {
+    manifest: "/manifest-chrono.webmanifest",
+    themeColor: "#a855f7",
+    title: "DarkWave Chronicles",
+    description: "Not a game. A life. Live your legacy across 70+ historical eras in the ChronoVerse.",
+    icon: "/marketing/darkwave_games_app_icon.png",
   },
 };
 
