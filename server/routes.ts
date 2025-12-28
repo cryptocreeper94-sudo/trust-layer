@@ -3176,6 +3176,91 @@ export async function registerRoutes(
     }
   });
 
+  // === GUARDIAN CERTIFICATION CHECKOUT ROUTES ===
+  const GUARDIAN_TIERS = {
+    assurance_lite: {
+      name: "Guardian Assurance Lite",
+      description: "Standard security audit with comprehensive smart contract analysis",
+      price: 599900, // $5,999 in cents
+    },
+    guardian_premier: {
+      name: "Guardian Premier",
+      description: "Enterprise-grade security certification with penetration testing and full audit",
+      price: 1499900, // $14,999 in cents
+    },
+  };
+
+  const GuardianCheckoutSchema = z.object({
+    tier: z.enum(["assurance_lite", "guardian_premier"]),
+    projectName: z.string().min(1).max(200),
+    projectUrl: z.string().url().optional(),
+    contactEmail: z.string().email(),
+    contractCount: z.number().min(1).max(50).optional(),
+  });
+
+  app.post("/api/guardian/checkout", async (req, res) => {
+    try {
+      const data = GuardianCheckoutSchema.parse(req.body);
+      const tierInfo = GUARDIAN_TIERS[data.tier];
+      
+      if (!tierInfo) {
+        return res.status(400).json({ error: "Invalid tier" });
+      }
+
+      const stripe = await import("stripe");
+      const stripeClient = new stripe.default(process.env.STRIPE_SECRET_KEY || "", {
+        apiVersion: "2025-11-17.clover",
+      });
+
+      const session = await stripeClient.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [{
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: tierInfo.name,
+              description: tierInfo.description,
+            },
+            unit_amount: tierInfo.price,
+          },
+          quantity: 1,
+        }],
+        mode: "payment",
+        customer_email: data.contactEmail,
+        success_url: `${req.headers.origin || 'https://dwsc.io'}/guardian?success=true&tier=${data.tier}`,
+        cancel_url: `${req.headers.origin || 'https://dwsc.io'}/guardian?canceled=true`,
+        metadata: {
+          type: "guardian_certification",
+          tier: data.tier,
+          projectName: data.projectName,
+          projectUrl: data.projectUrl || "",
+          contactEmail: data.contactEmail,
+          contractCount: String(data.contractCount || 1),
+        },
+      });
+
+      res.json({ url: session.url });
+    } catch (error) {
+      console.error("Guardian checkout error:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: "Invalid request data", details: error.errors });
+      }
+      res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  app.get("/api/guardian/tiers", (_req, res) => {
+    res.json({
+      tiers: Object.entries(GUARDIAN_TIERS).map(([id, tier]) => ({
+        id,
+        name: tier.name,
+        description: tier.description,
+        priceFormatted: `$${(tier.price / 100).toLocaleString()}`,
+        priceCents: tier.price,
+      })),
+    });
+  });
+
   // === BLOCKCHAIN DOMAIN SERVICE ROUTES ===
   const DomainSearchSchema = z.object({
     name: z.string().min(1).max(63),
