@@ -432,6 +432,7 @@ const primaryNavItems = [
   { href: "/token", label: "Coin", icon: Coins },
   { href: "/explorer", label: "Explorer", icon: SearchIcon },
   { href: "/staking", label: "Staking", icon: TrendingUp },
+  { href: "/security", label: "Security", icon: Shield },
   { href: "/developers", label: "Developers", icon: Code },
 ];
 
