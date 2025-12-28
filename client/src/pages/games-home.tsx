@@ -140,7 +140,7 @@ function SparkleEffect() {
 export default function GamesHome() {
   const [jackpot, setJackpot] = useState(125847);
   const [playersOnline, setPlayersOnline] = useState(247);
-  const [showGamesModal, setShowGamesModal] = useState(false);
+  const [showGamesModal, setShowGamesModal] = useState(true);
   
   useEffect(() => {
     const interval = setInterval(() => {
