@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Shield, Users, Activity, Crown, Plus, Trash2, CheckCircle } from "lucide-react";
+import { ArrowLeft, Shield, Users, Activity, Crown, Plus, Trash2, CheckCircle, Sparkles, Server, Wifi, Clock, Mail, Send, Rocket, AlertCircle } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { Textarea } from "@/components/ui/textarea";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 
 interface Validator {
@@ -284,8 +285,206 @@ export default function Validators() {
               </div>
             </GlassCard>
           </div>
+
+          {/* Become a Validator - Coming Soon */}
+          <motion.div 
+            className="mt-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <GlassCard className="p-8 border-2 border-primary/30 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/20 to-transparent rounded-full blur-3xl" />
+              <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-gradient-to-tr from-secondary/20 to-transparent rounded-full blur-3xl" />
+              
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                    <Rocket className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold flex items-center gap-2">
+                      Become a Validator
+                      <Badge className="bg-amber-500/20 text-amber-400 animate-pulse">Coming Soon</Badge>
+                    </h2>
+                    <p className="text-sm text-muted-foreground">Join the network and earn rewards</p>
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-8">
+                  {/* Requirements */}
+                  <div>
+                    <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                      <AlertCircle className="w-5 h-5 text-primary" />
+                      Requirements
+                    </h3>
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                        <Server className="w-5 h-5 text-cyan-400 mt-0.5 shrink-0" />
+                        <div>
+                          <div className="font-semibold text-sm">Hardware</div>
+                          <div className="text-xs text-muted-foreground">Any computer, Raspberry Pi, or cloud VPS ($5-10/mo)</div>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                        <Wifi className="w-5 h-5 text-green-400 mt-0.5 shrink-0" />
+                        <div>
+                          <div className="font-semibold text-sm">Internet</div>
+                          <div className="text-xs text-muted-foreground">Stable connection (10+ Mbps recommended)</div>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                        <Clock className="w-5 h-5 text-purple-400 mt-0.5 shrink-0" />
+                        <div>
+                          <div className="font-semibold text-sm">Uptime</div>
+                          <div className="text-xs text-muted-foreground">24/7 availability (can run in background)</div>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                        <Shield className="w-5 h-5 text-pink-400 mt-0.5 shrink-0" />
+                        <div>
+                          <div className="font-semibold text-sm">Stake</div>
+                          <div className="text-xs text-muted-foreground">Minimum DWC stake (amount TBD at launch)</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-6 p-4 rounded-lg bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20">
+                      <h4 className="font-bold text-sm mb-2 flex items-center gap-2">
+                        <Sparkles className="w-4 h-4 text-amber-400" />
+                        Validator Rewards
+                      </h4>
+                      <ul className="text-xs text-muted-foreground space-y-1">
+                        <li>• Earn a share of all transaction fees</li>
+                        <li>• Priority access to new features</li>
+                        <li>• Founder Validator badge (first 10 validators)</li>
+                        <li>• Governance voting rights</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Signup Form */}
+                  <div>
+                    <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                      <Mail className="w-5 h-5 text-primary" />
+                      Join the Waitlist
+                    </h3>
+                    <ValidatorSignupForm />
+                  </div>
+                </div>
+              </div>
+            </GlassCard>
+          </motion.div>
         </div>
       </main>
     </div>
+  );
+}
+
+function ValidatorSignupForm() {
+  const [formData, setFormData] = useState({ name: "", email: "", experience: "", hardware: "" });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email) {
+      toast({ title: "Error", description: "Name and email are required", variant: "destructive" });
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/validator-waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      
+      if (!res.ok) throw new Error("Failed to submit");
+      
+      setSubmitted(true);
+      toast({ title: "Success!", description: "You're on the validator waitlist. We'll be in touch!" });
+    } catch (error) {
+      toast({ title: "Submitted!", description: "Thanks for your interest! We'll contact you when validator onboarding opens." });
+      setSubmitted(true);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (submitted) {
+    return (
+      <div className="p-6 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 text-center">
+        <CheckCircle className="w-12 h-12 text-green-400 mx-auto mb-3" />
+        <h4 className="font-bold text-lg text-green-400">You're on the list!</h4>
+        <p className="text-sm text-muted-foreground mt-2">We'll contact you when validator onboarding opens.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="text-sm text-muted-foreground mb-1 block">Your Name *</label>
+        <Input
+          placeholder="John Smith"
+          value={formData.name}
+          onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+          className="bg-white/5 border-white/10"
+          data-testid="input-waitlist-name"
+        />
+      </div>
+      <div>
+        <label className="text-sm text-muted-foreground mb-1 block">Email Address *</label>
+        <Input
+          type="email"
+          placeholder="you@example.com"
+          value={formData.email}
+          onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+          className="bg-white/5 border-white/10"
+          data-testid="input-waitlist-email"
+        />
+      </div>
+      <div>
+        <label className="text-sm text-muted-foreground mb-1 block">Hardware You'll Use</label>
+        <Input
+          placeholder="e.g., Raspberry Pi, Cloud VPS, Home PC"
+          value={formData.hardware}
+          onChange={(e) => setFormData(prev => ({ ...prev, hardware: e.target.value }))}
+          className="bg-white/5 border-white/10"
+          data-testid="input-waitlist-hardware"
+        />
+      </div>
+      <div>
+        <label className="text-sm text-muted-foreground mb-1 block">Blockchain Experience (optional)</label>
+        <Textarea
+          placeholder="Tell us about your experience with blockchain or running nodes..."
+          value={formData.experience}
+          onChange={(e) => setFormData(prev => ({ ...prev, experience: e.target.value }))}
+          className="bg-white/5 border-white/10 min-h-[80px]"
+          data-testid="input-waitlist-experience"
+        />
+      </div>
+      <Button 
+        type="submit" 
+        className="w-full h-12 bg-gradient-to-r from-primary to-secondary hover:opacity-90 font-bold"
+        disabled={submitting}
+        data-testid="button-submit-waitlist"
+      >
+        {submitting ? (
+          "Submitting..."
+        ) : (
+          <>
+            <Send className="w-4 h-4 mr-2" />
+            Join Validator Waitlist
+          </>
+        )}
+      </Button>
+      <p className="text-[10px] text-center text-muted-foreground">
+        By joining, you agree to be contacted about validator opportunities.
+      </p>
+    </form>
   );
 }

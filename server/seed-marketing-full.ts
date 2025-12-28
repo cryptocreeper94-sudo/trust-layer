@@ -130,6 +130,12 @@ const TWITTER_POSTS = [
   { content: `🔮 Orbs: The DarkWave economy.\n\nEarn Orbs → Convert to DWC at launch.\n\nDaily login: 5 Orbs\nReferral signup: 50 Orbs\n\nStart earning now 💎`, category: 'economy' },
   { content: `Orbs packages available:\n\n• Starter: 100 for $4.99\n• Popular: 500 for $19.99\n• Premium: 1,200 for $39.99\n• Ultimate: 3,000 for $79.99\n\ndwsc.io 🔮`, category: 'economy' },
   { content: `Convert Orbs to DWC tokens at launch.\n\nEarn now. Redeem later. Build wealth.\n\n#Orbs #DWC ⚡`, category: 'economy' },
+
+  // Validator Program (4 posts)
+  { content: `🖥️ Become a DWSC Validator!\n\nEarn rewards. Secure the network. Build the future.\n\nJoin the waitlist: dwsc.io/validators 🚀`, category: 'validator' },
+  { content: `Validator Program coming soon:\n\n• Raspberry Pi or old laptop = enough\n• Earn share of transaction fees\n• First 10 get Founder Validator badge\n\ndwsc.io/validators 🛡️`, category: 'validator' },
+  { content: `Want to secure DarkWave Chain?\n\nValidators run lightweight software. Earn rewards 24/7.\n\nNo expensive hardware needed.\n\nJoin waitlist: dwsc.io/validators ⚡`, category: 'validator' },
+  { content: `🔥 First 10 validators get FOUNDER status.\n\nPermanent recognition. Priority rewards. Governance rights.\n\nSign up before spots fill.\n\ndwsc.io/validators`, category: 'validator' },
 ];
 
 // ============================================
@@ -846,6 +852,39 @@ Start earning: dwsc.io`, category: 'economy' },
 Convert to DWC at token launch. Build your wallet now.
 
 dwsc.io 🔮`, category: 'economy' },
+
+  // Validator Program (2 posts)
+  { content: `🖥️ Become a DWSC Validator - Coming Soon!
+
+Want to help secure DarkWave Chain and earn rewards?
+
+What You'll Need:
+• Any computer, Raspberry Pi, or cloud VPS
+• Stable internet connection
+• 24/7 uptime (runs in background)
+
+What You'll Get:
+• Share of all transaction fees
+• Founder Validator badge (first 10 only)
+• Priority access to new features
+• Governance voting rights
+
+No expensive hardware. Real rewards.
+
+Join the waitlist: dwsc.io/validators`, category: 'validator' },
+  { content: `🔥 First 10 Validators Get FOUNDER Status
+
+We're opening the Validator Program soon.
+
+The first 10 approved validators will receive:
+✅ Permanent "Founder Validator" badge
+✅ Priority rewards distribution
+✅ Direct communication with core team
+✅ Recognition in all ecosystem materials
+
+Lightweight software. Background operation. Real earnings.
+
+Sign up before spots fill: dwsc.io/validators`, category: 'validator' },
 ];
 
 // ============================================
