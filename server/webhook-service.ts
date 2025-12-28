@@ -3,7 +3,7 @@ import { db } from './db';
 import { webhooks } from '@shared/schema';
 import { eq } from 'drizzle-orm';
 
-const PULSE_WEBHOOK_URL = process.env.PULSE_WEBHOOK_URL || 'https://darkwave-pulse.replit.app/api/chain-events';
+const PULSE_WEBHOOK_URL = process.env.PULSE_WEBHOOK_URL || '';
 const PULSE_WEBHOOK_SECRET = process.env.PULSE_WEBHOOK_SECRET || '';
 
 type WebhookEventType = 
