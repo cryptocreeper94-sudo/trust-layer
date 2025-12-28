@@ -124,17 +124,17 @@ Flagship gaming application demonstrating chain capabilities:
 
 ## 6. Roadmap
 
-### Phase 1: Foundation (Q1 2025)
+### Phase 1: Foundation (Q1 2026)
 - Testnet launch
 - Core smart contract deployment
 - Developer SDK release
 
-### Phase 2: Growth (Q2-Q3 2025)
+### Phase 2: Growth (Q2-Q3 2026)
 - Token Generation Event (Feb 14, 2026)
 - DEX and staking launch
 - Bridge deployment
 
-### Phase 3: Expansion (Q4 2025+)
+### Phase 3: Expansion (Q4 2026+)
 - Chronicles public beta (July 4, 2026)
 - Third-party developer onboarding
 - Cross-chain integrations

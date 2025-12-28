@@ -256,7 +256,7 @@ export default function Treasury() {
                 <PieChart className="w-5 h-5 text-secondary" />
                 Treasury Allocation
               </h2>
-              <Badge variant="outline" className="text-[10px]">Updated Dec 2025</Badge>
+              <Badge variant="outline" className="text-[10px]">Updated Dec 2026</Badge>
             </div>
             
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">

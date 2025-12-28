@@ -20,7 +20,7 @@ const ROADMAP_PHASES = [
   {
     phase: "Phase 0",
     title: "Foundation",
-    timeline: "Q1-Q2 2025",
+    timeline: "Q1-Q2 2026",
     status: "in_progress",
     progress: 35,
     description: "Core infrastructure, community building, database schema, single-era sandbox.",
@@ -38,7 +38,7 @@ const ROADMAP_PHASES = [
   {
     phase: "Phase 1",
     title: "Economy & Property",
-    timeline: "Q3-Q4 2025",
+    timeline: "Q3-Q4 2026",
     status: "planned",
     progress: 0,
     description: "Property ownership, storefront infrastructure, economy systems, business partnerships.",

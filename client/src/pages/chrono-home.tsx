@@ -427,7 +427,7 @@ export default function ChronoHome() {
               {
                 icon: Store,
                 title: "Storefront Sponsorships",
-                timeline: "Phase 1-2 (2025-2026)",
+                timeline: "Phase 1-2 (2026-2026)",
                 desc: "Businesses sponsor in-game locations. Premium real estate in every era. Location-based advertising with real ROI.",
                 cta: "Pre-Register Business",
                 href: "/creators#business",

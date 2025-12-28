@@ -57,7 +57,7 @@ const mockReserves: ReserveAsset[] = [
 const mockAudits: AuditRecord[] = [
   {
     id: "a1",
-    date: "Dec 15, 2025",
+    date: "Dec 15, 2026",
     auditor: "Trail of Bits",
     result: "passed",
     findings: 0,
@@ -65,7 +65,7 @@ const mockAudits: AuditRecord[] = [
   },
   {
     id: "a2",
-    date: "Nov 1, 2025",
+    date: "Nov 1, 2026",
     auditor: "OpenZeppelin",
     result: "passed",
     findings: 2,
@@ -73,7 +73,7 @@ const mockAudits: AuditRecord[] = [
   },
   {
     id: "a3",
-    date: "Oct 1, 2025",
+    date: "Oct 1, 2026",
     auditor: "Quantstamp",
     result: "warning",
     findings: 4,

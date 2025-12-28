@@ -7066,7 +7066,7 @@ DarkWave Smart Chain is a Layer 1 blockchain with:
 - 200,000+ TPS capacity  
 - Proof-of-Authority consensus with the Founders Validator
 - Native DWC token (100 million total supply, 18 decimals)
-- Genesis block: February 14, 2025
+- Genesis block: February 14, 2026
 - Public launch: February 14, 2026
 
 Key features available:

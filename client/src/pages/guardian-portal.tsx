@@ -559,7 +559,7 @@ export default function GuardianPortal() {
 
               <div className="bg-white/5 border border-white/10 rounded-2xl p-6 text-center">
                 <Badge className="bg-amber-500/20 text-amber-400 mb-4">Coming Soon</Badge>
-                <p className="text-white/80 mb-4">Guardian Shield is launching in Q3 2025 with advanced anomaly detection and 24/7 SOC operations for your blockchain assets.</p>
+                <p className="text-white/80 mb-4">Guardian Shield is launching in Q3 2026 with advanced anomaly detection and 24/7 SOC operations for your blockchain assets.</p>
                 <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700">
                   <Bell className="w-4 h-4 mr-2" />
                   Join Waitlist

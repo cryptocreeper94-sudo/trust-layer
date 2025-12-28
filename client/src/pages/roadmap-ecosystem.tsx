@@ -40,7 +40,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
     name: "Foundations",
     description: "Core blockchain infrastructure and portal development",
     status: "in_progress",
-    targetDate: "Q1-Q2 2025",
+    targetDate: "Q1-Q2 2026",
     icon: <Layers className="w-6 h-6" />,
     image: blockchainBg,
     milestones: [
@@ -57,7 +57,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
     name: "Ecosystem Build",
     description: "DeFi features, NFT marketplace, and developer tools",
     status: "in_progress",
-    targetDate: "Q3-Q4 2025",
+    targetDate: "Q3-Q4 2026",
     icon: <Coins className="w-6 h-6" />,
     image: dashboardImg,
     milestones: [
@@ -76,7 +76,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
     name: "ChronoChat Platform",
     description: "Community hub with tiered product offerings",
     status: "in_progress",
-    targetDate: "Q4 2025 - Q2 2026",
+    targetDate: "Q4 2026 - Q2 2026",
     icon: <MessageCircle className="w-6 h-6" />,
     image: cyberpunkCity,
     milestones: [

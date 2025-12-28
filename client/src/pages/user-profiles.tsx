@@ -20,7 +20,7 @@ const USER_PROFILE = {
   address: "0x7a23...f8d1",
   avatar: "🐋",
   bio: "Early adopter. DeFi enthusiast. Building on DarkWave.",
-  joinDate: "Jan 2025",
+  joinDate: "Jan 2026",
   level: 42,
   xp: 8500,
   xpToNext: 10000,

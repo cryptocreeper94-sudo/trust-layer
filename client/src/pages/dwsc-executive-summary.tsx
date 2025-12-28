@@ -510,7 +510,7 @@ export default function DWSCExecutiveSummary() {
                 {
                   phase: "Phase 0",
                   title: "Foundation",
-                  date: "Q1-Q2 2025",
+                  date: "Q1-Q2 2026",
                   status: "in_progress",
                   blockchain: ["Testnet live", "Token presale", "Bridge development"],
                   chronicles: ["Website launch", "Community building", "Single-era sandbox"]
@@ -518,7 +518,7 @@ export default function DWSCExecutiveSummary() {
                 {
                   phase: "Phase 1",
                   title: "Infrastructure",
-                  date: "Q3-Q4 2025",
+                  date: "Q3-Q4 2026",
                   status: "upcoming",
                   blockchain: ["Mainnet preparation", "Validator onboarding", "DeFi launch"],
                   chronicles: ["Property registry", "Storefront system", "Creator licensing"]

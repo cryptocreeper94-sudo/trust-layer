@@ -31,9 +31,9 @@ const TECH_STACK = [
 ];
 
 const MILESTONES = [
-  { phase: "Phase 0", name: "Foundation", period: "Q1-Q2 2025", status: "current", items: ["Core infrastructure", "Community building", "Crowdfunding"] },
-  { phase: "Phase 1", name: "Prototype", period: "Q2-Q3 2025", status: "upcoming", items: ["Single-era sandbox", "AI character system", "200 NPCs active"] },
-  { phase: "Phase 2", name: "Expansion", period: "Q4 2025", status: "upcoming", items: ["5+ eras live", "Cross-era mechanics", "Property system"] },
+  { phase: "Phase 0", name: "Foundation", period: "Q1-Q2 2026", status: "current", items: ["Core infrastructure", "Community building", "Crowdfunding"] },
+  { phase: "Phase 1", name: "Prototype", period: "Q2-Q3 2026", status: "upcoming", items: ["Single-era sandbox", "AI character system", "200 NPCs active"] },
+  { phase: "Phase 2", name: "Expansion", period: "Q4 2026", status: "upcoming", items: ["5+ eras live", "Cross-era mechanics", "Property system"] },
   { phase: "Phase 3", name: "Public Beta", period: "July 4, 2026", status: "target", items: ["20+ eras", "Full economy", "Mobile companion"] },
 ];
 

@@ -347,7 +347,7 @@ function BusinessPlanSection() {
                   <div className="absolute -left-[21px] w-4 h-4 rounded-full bg-primary border-2 border-background animate-pulse" />
                   <div>
                     <Badge className="bg-primary/20 text-primary mb-2">In Progress</Badge>
-                    <h5 className="font-semibold text-white">Q1 2025 - Launch</h5>
+                    <h5 className="font-semibold text-white">Q1 2026 - Launch</h5>
                     <p className="text-xs text-muted-foreground">Mainnet launch, bridge deployment, founder program</p>
                   </div>
                 </div>
@@ -355,7 +355,7 @@ function BusinessPlanSection() {
                   <div className="absolute -left-[21px] w-4 h-4 rounded-full bg-white/20 border-2 border-background" />
                   <div>
                     <Badge variant="outline" className="mb-2">Planned</Badge>
-                    <h5 className="font-semibold text-white">Q2 2025 - Growth</h5>
+                    <h5 className="font-semibold text-white">Q2 2026 - Growth</h5>
                     <p className="text-xs text-muted-foreground">Mobile wallet, governance DAO, enterprise partnerships</p>
                   </div>
                 </div>
@@ -363,7 +363,7 @@ function BusinessPlanSection() {
                   <div className="absolute -left-[21px] w-4 h-4 rounded-full bg-white/20 border-2 border-background" />
                   <div>
                     <Badge variant="outline" className="mb-2">Planned</Badge>
-                    <h5 className="font-semibold text-white">Q3-Q4 2025 - Scale</h5>
+                    <h5 className="font-semibold text-white">Q3-Q4 2026 - Scale</h5>
                     <p className="text-xs text-muted-foreground">Cross-chain expansion, DEX aggregation, institutional tools</p>
                   </div>
                 </div>

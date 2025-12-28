@@ -508,7 +508,7 @@ export default function ChronoCreators() {
             <div className="flex items-start gap-3">
               <Shield className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
               <div>
-                <h4 className="font-semibold text-white mb-1">Coming Phase 1-2 (Q3 2025 - Q2 2026)</h4>
+                <h4 className="font-semibold text-white mb-1">Coming Phase 1-2 (Q3 2026 - Q2 2026)</h4>
                 <p className="text-sm text-white/60">
                   Storefront sponsorships are part of our roadmap. Property registry, licensing system, 
                   and business partner portal are scheduled for Phase 1. Full marketplace launch in Phase 2.

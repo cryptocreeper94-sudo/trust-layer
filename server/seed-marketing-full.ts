@@ -117,13 +117,13 @@ const TWITTER_POSTS = [
 
   // Guardian Shield Coming Soon (3 posts)
   { content: `🔮 COMING SOON: Guardian Shield\n\nNorton meets blockchain.\n\n24/7 smart contract monitoring. Real-time threat detection.\n\nJoin the waitlist: dwsc.io/guardian`, category: 'security' },
-  { content: `Guardian Shield: $299-$2,999/month\n\n• 24/7 monitoring\n• Instant alerts\n• Multi-chain coverage\n• SOC operations\n\nQ3 2025 launch 🛡️`, category: 'security' },
-  { content: `Sleep well knowing your contracts are protected.\n\nGuardian Shield continuous monitoring coming Q3 2025.\n\ndwsc.io/guardian 🌙`, category: 'security' },
+  { content: `Guardian Shield: $299-$2,999/month\n\n• 24/7 monitoring\n• Instant alerts\n• Multi-chain coverage\n• SOC operations\n\nQ3 2026 launch 🛡️`, category: 'security' },
+  { content: `Sleep well knowing your contracts are protected.\n\nGuardian Shield continuous monitoring coming Q3 2026.\n\ndwsc.io/guardian 🌙`, category: 'security' },
 
   // ChronoChat Community Platform (4 posts)
-  { content: `💬 ChronoChat: Connect across timelines.\n\nCommunity platform for the DarkWave ecosystem.\n\nReal-time messaging. Orbs integration. Coming Q4 2025.\n\nchronochat.io`, category: 'community' },
+  { content: `💬 ChronoChat: Connect across timelines.\n\nCommunity platform for the DarkWave ecosystem.\n\nReal-time messaging. Orbs integration. Coming Q4 2026.\n\nchronochat.io`, category: 'community' },
   { content: `Discord alternative built for blockchain communities.\n\nChronoChat. Decentralized. Community-first.\n\nchronochat.io 🌊`, category: 'community' },
-  { content: `Channels. Reactions. File sharing. Bot framework.\n\nChronoChat has it all—and it's built on DWSC.\n\nQ4 2025 launch 💬`, category: 'community' },
+  { content: `Channels. Reactions. File sharing. Bot framework.\n\nChronoChat has it all—and it's built on DWSC.\n\nQ4 2026 launch 💬`, category: 'community' },
   { content: `Your community deserves better.\n\nChronoChat: Premium community platform. Orbs rewards. No middlemen.\n\nchronochat.io ⚡`, category: 'community' },
 
   // Orbs Economy (3 posts)
@@ -785,7 +785,7 @@ Your investors and users deserve confidence.
 Get certified: dwsc.io/guardian`, category: 'security' },
 
   // Guardian Shield Coming Soon (2 posts)
-  { content: `🔮 COMING Q3 2025: Guardian Shield
+  { content: `🔮 COMING Q3 2026: Guardian Shield
 
 Norton meets blockchain. 24/7 smart contract monitoring.
 
@@ -801,7 +801,7 @@ Join the waitlist: dwsc.io/guardian`, category: 'security' },
 
 24/7 monitoring catching threats before they become disasters.
 
-Coming Q3 2025. Continuous protection for continuous peace of mind.
+Coming Q3 2026. Continuous protection for continuous peace of mind.
 
 dwsc.io/guardian 🛡️`, category: 'security' },
 
@@ -819,7 +819,7 @@ Features:
 
 Discord alternative, blockchain-native.
 
-Coming Q4 2025: chronochat.io`, category: 'community' },
+Coming Q4 2026: chronochat.io`, category: 'community' },
   { content: `Your community deserves a platform that rewards engagement.
 
 ChronoChat integrates Orbs economy—earn while you participate.
@@ -2045,7 +2045,7 @@ Every Guardian Certification creates an **immutable blockchain record**.
 👉 dwsc.io/guardian`, category: 'security' },
 
   // Guardian Shield Coming Soon (2 posts)
-  { content: `🔮 **COMING Q3 2025: Guardian Shield**
+  { content: `🔮 **COMING Q3 2026: Guardian Shield**
 
 **Norton meets blockchain. 24/7 smart contract monitoring.**
 
@@ -2078,7 +2078,7 @@ Join the waitlist: dwsc.io/guardian`, category: 'security' },
 
 **Guardian Shield catches threats before they become disasters.**
 
-Coming Q3 2025. Sleep well knowing we're watching.
+Coming Q3 2026. Sleep well knowing we're watching.
 
 👉 dwsc.io/guardian`, category: 'security' },
 
@@ -2095,7 +2095,7 @@ The community platform built for the DarkWave ecosystem.
 • 💬 Real-time messaging
 
 **Product Tiers Coming:**
-1. ChronoChat for Communities (Q4 2025)
+1. ChronoChat for Communities (Q4 2026)
 2. ChronoChat Cloud (Q1 2026)
 3. ChronoChat for Gaming (Q2-Q3 2026)
 
@@ -2116,7 +2116,7 @@ What if participating in your community EARNED you rewards?
 
 **No middlemen. No censorship. Pure community.**
 
-Coming Q4 2025.
+Coming Q4 2026.
 
 👉 chronochat.io`, category: 'community' },
 
@@ -3813,7 +3813,7 @@ Interested? Contact: guardian@dwsc.io
 👉 dwsc.io/guardian`, category: 'security' },
 
   // Guardian Shield Coming Soon (2 posts)
-  { content: `🔮 <b>COMING Q3 2025: Guardian Shield</b>
+  { content: `🔮 <b>COMING Q3 2026: Guardian Shield</b>
 
 <b>Norton meets blockchain. 24/7 smart contract monitoring.</b>
 
@@ -3871,7 +3871,7 @@ Guardian Shield provides continuous monitoring so you can focus on building.
 <b>Early Warning = Early Action</b>
 Catch threats before they become disasters. Get alerts before funds drain.
 
-<b>Coming Q3 2025.</b>
+<b>Coming Q3 2026.</b>
 
 Be ready when it launches.
 
@@ -3899,7 +3899,7 @@ Discord alternative, blockchain-native, rewards-integrated.
 🔐 Decentralized infrastructure
 
 <b>Product Roadmap:</b>
-1. ChronoChat for Communities (Q4 2025) - Core platform
+1. ChronoChat for Communities (Q4 2026) - Core platform
 2. ChronoChat Cloud (Q1 2026) - SaaS hosting
 3. ChronoChat for Gaming (Q2-Q3 2026) - Gaming overlays
 
@@ -3925,7 +3925,7 @@ This means your community engagement today = token holdings tomorrow.
 
 <b>No ads. No selling your data. Just community + rewards.</b>
 
-Coming Q4 2025.
+Coming Q4 2026.
 
 👉 chronochat.io`, category: 'community' },
 

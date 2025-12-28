@@ -31,7 +31,7 @@ const PHASES: Phase[] = [
   {
     id: "foundation",
     name: "Foundation",
-    period: "Q4 2024 - Q1 2025",
+    period: "Q4 2024 - Q1 2026",
     status: "current",
     description: "Building the core infrastructure, community, and vision documentation.",
     milestones: [
@@ -47,7 +47,7 @@ const PHASES: Phase[] = [
   {
     id: "prototype",
     name: "Prototype",
-    period: "Q2 - Q3 2025",
+    period: "Q2 - Q3 2026",
     status: "upcoming",
     description: "Building the first playable prototype with core systems.",
     milestones: [
@@ -63,7 +63,7 @@ const PHASES: Phase[] = [
   {
     id: "expansion",
     name: "Era Expansion",
-    period: "Q4 2025 - Q1 2026",
+    period: "Q4 2026 - Q1 2026",
     status: "upcoming",
     description: "Adding more eras and expanding the ChronoVerse.",
     milestones: [

@@ -814,7 +814,7 @@ console.log('All successful:', result.allSuccessful);`}
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="phase1" className="border-white/10">
                 <AccordionTrigger className="text-sm font-medium hover:text-primary">
-                  Phase 1: Foundation (December 2025)
+                  Phase 1: Foundation (December 2026)
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
                   <div className="space-y-4">
@@ -1044,7 +1044,7 @@ console.log('All successful:', result.allSuccessful);`}
                 <AccordionContent className="text-muted-foreground">
                   <div className="space-y-4">
                     <div>
-                      <h4 className="font-semibold text-white mb-2">Pre-Launch (Dec 2025 - Feb 7, 2026)</h4>
+                      <h4 className="font-semibold text-white mb-2">Pre-Launch (Dec 2026 - Feb 7, 2026)</h4>
                       <ul className="list-disc list-inside space-y-1 text-sm">
                         <li>Brand Awareness: Position as next-gen L1 solution</li>
                         <li>Developer Focus: Technical content marketing</li>

@@ -40,7 +40,7 @@ const mockValidators: Validator[] = [
     status: "active",
     votes: 156,
     lastActive: "2 minutes ago",
-    addedAt: "Feb 14, 2025"
+    addedAt: "Feb 14, 2026"
   },
   {
     id: "v2",
@@ -49,7 +49,7 @@ const mockValidators: Validator[] = [
     status: "active",
     votes: 89,
     lastActive: "15 minutes ago",
-    addedAt: "Mar 1, 2025"
+    addedAt: "Mar 1, 2026"
   },
   {
     id: "v3",
@@ -58,7 +58,7 @@ const mockValidators: Validator[] = [
     status: "active",
     votes: 67,
     lastActive: "1 hour ago",
-    addedAt: "Mar 15, 2025"
+    addedAt: "Mar 15, 2026"
   },
   {
     id: "v4",

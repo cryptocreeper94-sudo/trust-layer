@@ -242,7 +242,7 @@ export default function Charts() {
                 <Clock className="w-5 h-5 text-red-400 mx-auto mb-2" />
                 <div className="text-sm font-bold">All-Time Low</div>
                 <div className="text-lg font-bold text-red-400">$0.000045</div>
-                <div className="text-[10px] text-muted-foreground">Feb 14, 2025</div>
+                <div className="text-[10px] text-muted-foreground">Feb 14, 2026</div>
               </div>
             </GlassCard>
             <GlassCard>

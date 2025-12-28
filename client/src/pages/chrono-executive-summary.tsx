@@ -403,7 +403,7 @@ export default function ChronoExecutiveSummary() {
                   {
                     phase: "Phase 0",
                     title: "Foundation",
-                    date: "Q1-Q2 2025 (Now - June)",
+                    date: "Q1-Q2 2026 (Now - June)",
                     status: "in_progress",
                     items: [
                       "Website & branding launch ✓",
@@ -417,7 +417,7 @@ export default function ChronoExecutiveSummary() {
                   {
                     phase: "Phase 1",
                     title: "Economy & Property Systems",
-                    date: "Q3-Q4 2025 (July - December)",
+                    date: "Q3-Q4 2026 (July - December)",
                     status: "upcoming",
                     items: [
                       "Blockchain-backed property registry",
@@ -561,7 +561,7 @@ export default function ChronoExecutiveSummary() {
                 className="bg-slate-800/50 border border-white/10 rounded-xl p-6 text-center"
               >
                 <div className="text-3xl font-bold text-amber-400 mb-2">$40B+</div>
-                <div className="text-sm text-white/60">In-Game Advertising (2025 Est.)</div>
+                <div className="text-sm text-white/60">In-Game Advertising (2026 Est.)</div>
               </motion.div>
             </div>
 

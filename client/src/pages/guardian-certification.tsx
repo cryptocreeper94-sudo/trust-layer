@@ -141,8 +141,8 @@ const WHY_GUARDIAN = [
 
 const CERTIFIED_PROJECTS = [
   { name: "DarkWave Smart Chain", status: "Certified", score: 78, date: "Dec 2024" },
-  { name: "ChronoChat Platform", status: "In Progress", score: null, date: "Q1 2025" },
-  { name: "DarkWave Chronicles", status: "Scheduled", score: null, date: "Q2 2025" }
+  { name: "ChronoChat Platform", status: "In Progress", score: null, date: "Q1 2026" },
+  { name: "DarkWave Chronicles", status: "Scheduled", score: null, date: "Q2 2026" }
 ];
 
 const TRUST_CENTER_DOCS = [
@@ -188,28 +188,28 @@ const ROADMAP_MILESTONES = [
   {
     phase: "Phase 0",
     title: "Internal Readiness",
-    date: "Jan - Feb 2025",
+    date: "Jan - Feb 2026",
     status: "completed",
     items: ["DWSC self-audit complete", "Stripe pricing configured", "Trust Center launched", "Intake workflow ready"]
   },
   {
     phase: "Phase 1", 
     title: "Credibility Foundation",
-    date: "Feb - Apr 2025",
+    date: "Feb - Apr 2026",
     status: "in_progress",
     items: ["Advisory board formation", "Verifiable badge metadata", "Sample reports published", "Community outreach"]
   },
   {
     phase: "Phase 2",
     title: "External Validation",
-    date: "May - Aug 2025",
+    date: "May - Aug 2026",
     status: "upcoming",
     items: ["Third-party review", "Bug bounty program", "Security consortium listing", "Partner webinars"]
   },
   {
     phase: "Phase 3",
     title: "Customer Acquisition",
-    date: "Sep - Dec 2025",
+    date: "Sep - Dec 2026",
     status: "upcoming",
     items: ["Pioneer cohort (5 audits)", "Case study publications", "Guardian Clinics launch", "Referral program"]
   },
@@ -1048,7 +1048,7 @@ export default function GuardianCertificationPage() {
                   </div>
                   <div className="flex-grow text-center md:text-left">
                     <h3 className="text-xl font-bold text-white mb-2">Bug Bounty Program</h3>
-                    <p className="text-white/60 mb-4">Coming Q2 2025 - We're launching a public bug bounty through Immunefi to strengthen our security posture and demonstrate commitment to transparency.</p>
+                    <p className="text-white/60 mb-4">Coming Q2 2026 - We're launching a public bug bounty through Immunefi to strengthen our security posture and demonstrate commitment to transparency.</p>
                     <div className="flex flex-wrap gap-3 justify-center md:justify-start">
                       <span className="px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full text-sm border border-amber-500/30">Coming Soon</span>
                       <span className="px-3 py-1 bg-white/5 text-white/50 rounded-full text-sm">Up to $50,000 rewards</span>
@@ -1076,7 +1076,7 @@ export default function GuardianCertificationPage() {
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-violet-500/10 border border-violet-500/30 rounded-full mb-6">
                 <Shield className="w-4 h-4 text-violet-400" />
-                <span className="text-violet-400 text-sm font-medium">Coming Q3 2025</span>
+                <span className="text-violet-400 text-sm font-medium">Coming Q3 2026</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <span className="bg-gradient-to-r from-violet-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
