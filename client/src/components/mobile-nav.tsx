@@ -25,7 +25,7 @@ const navCategories = [
       { href: "/", label: "Home", icon: Home },
       { href: "/wallet", label: "Wallet", icon: Coins },
       { href: "/ecosystem", label: "Ecosystem", icon: Box },
-      { href: "/arcade", label: "Games", icon: Rocket, badge: "Hot" },
+      { href: "/arcade", label: "Games", icon: Rocket, badge: "Soon", comingSoon: true },
     ]
   },
   {
@@ -117,10 +117,11 @@ const navCategories = [
   },
 ];
 
-function NavCategory({ category, location, onClose }: { 
+function NavCategory({ category, location, onClose, onShowComingSoon }: { 
   category: typeof navCategories[0]; 
   location: string; 
   onClose: () => void;
+  onShowComingSoon: (title: string) => void;
 }) {
   const [isOpen, setIsOpen] = useState(category.defaultOpen || false);
   const Icon = category.icon;
@@ -159,6 +160,35 @@ function NavCategory({ category, location, onClose }: {
           {category.items.map((item) => {
             const ItemIcon = item.icon;
             const isActive = location === item.href;
+            const isComingSoon = 'comingSoon' in item && (item as any).comingSoon;
+            
+            if (isComingSoon) {
+              return (
+                <div
+                  key={item.href}
+                  onClick={() => onShowComingSoon(item.label)}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    backgroundColor: 'transparent',
+                    color: '#a1a1aa',
+                    cursor: 'pointer',
+                  }}
+                  data-testid={`nav-item-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  <ItemIcon style={{ width: '16px', height: '16px', flexShrink: 0 }} />
+                  <span style={{ fontWeight: 500, flex: 1, fontSize: '13px', fontFamily: 'Inter, sans-serif' }}>{item.label}</span>
+                  {'badge' in item && (item as any).badge && (
+                    <Badge className="text-[9px] bg-amber-500/20 text-amber-400 px-1.5 py-0">
+                      {(item as any).badge}
+                    </Badge>
+                  )}
+                </div>
+              );
+            }
             
             return (
               <Link key={item.href} href={item.href} style={{ textDecoration: 'none' }}>
@@ -193,8 +223,135 @@ function NavCategory({ category, location, onClose }: {
   );
 }
 
+const ARCADE_GAMES = [
+  { name: "Minesweeper", icon: "💣", desc: "Classic puzzle game" },
+  { name: "Solitaire", icon: "🃏", desc: "Card game classic" },
+  { name: "Spades", icon: "♠️", desc: "Trick-taking card game" },
+  { name: "Crash", icon: "📈", desc: "Provably fair betting" },
+  { name: "Slots", icon: "🎰", desc: "Spin to win" },
+  { name: "Coin Flip", icon: "🪙", desc: "50/50 chance" },
+  { name: "Dice", icon: "🎲", desc: "Roll the dice" },
+  { name: "Blackjack", icon: "🂡", desc: "Beat the dealer" },
+];
+
+function GamesComingSoonModal({ onClose }: { onClose: () => void }) {
+  return createPortal(
+    <>
+      <div 
+        onClick={onClose}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.9)',
+          backdropFilter: 'blur(8px)',
+          zIndex: 10001,
+        }}
+      />
+      <div
+        style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '90%',
+          maxWidth: '400px',
+          maxHeight: '80vh',
+          overflowY: 'auto',
+          backgroundColor: '#0f172a',
+          borderRadius: '20px',
+          border: '1px solid rgba(168, 85, 247, 0.3)',
+          boxShadow: '0 0 60px rgba(168, 85, 247, 0.2), 0 0 100px rgba(6, 182, 212, 0.1)',
+          zIndex: 10002,
+          padding: '24px',
+        }}
+      >
+        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+          <div style={{ fontSize: '48px', marginBottom: '12px' }}>🎮</div>
+          <h2 style={{ 
+            fontSize: '24px', 
+            fontWeight: 700, 
+            background: 'linear-gradient(135deg, #a855f7, #06b6d4)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            marginBottom: '8px',
+            fontFamily: 'Space Grotesk, sans-serif'
+          }}>
+            DarkWave Arcade
+          </h2>
+          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '14px' }}>
+            Classic & Casino Games Coming Soon
+          </p>
+        </div>
+
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(2, 1fr)', 
+          gap: '10px',
+          marginBottom: '20px'
+        }}>
+          {ARCADE_GAMES.map((game) => (
+            <div
+              key={game.name}
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.05)',
+                borderRadius: '12px',
+                padding: '12px',
+                border: '1px solid rgba(255,255,255,0.1)',
+                textAlign: 'center',
+              }}
+            >
+              <div style={{ fontSize: '24px', marginBottom: '6px' }}>{game.icon}</div>
+              <div style={{ fontSize: '13px', fontWeight: 600, color: '#fff', marginBottom: '2px' }}>{game.name}</div>
+              <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)' }}>{game.desc}</div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{
+          backgroundColor: 'rgba(168, 85, 247, 0.1)',
+          borderRadius: '12px',
+          padding: '16px',
+          textAlign: 'center',
+          border: '1px solid rgba(168, 85, 247, 0.2)',
+          marginBottom: '16px'
+        }}>
+          <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', marginBottom: '4px' }}>
+            Play with DWC Coins or Orbs
+          </p>
+          <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>
+            Provably fair • Instant payouts • Low house edge
+          </p>
+        </div>
+
+        <button
+          onClick={onClose}
+          style={{
+            width: '100%',
+            padding: '14px',
+            borderRadius: '12px',
+            border: 'none',
+            background: 'linear-gradient(135deg, #a855f7, #06b6d4)',
+            color: '#fff',
+            fontSize: '14px',
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+          data-testid="close-games-modal"
+        >
+          Got it!
+        </button>
+      </div>
+    </>,
+    document.body
+  );
+}
+
 function MenuPanel({ onClose }: { onClose: () => void }) {
   const [location] = useLocation();
+  const [showGamesModal, setShowGamesModal] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -203,8 +360,15 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
     };
   }, []);
 
+  const handleShowComingSoon = (title: string) => {
+    if (title === "Games") {
+      setShowGamesModal(true);
+    }
+  };
+
   return createPortal(
     <>
+      {showGamesModal && <GamesComingSoonModal onClose={() => setShowGamesModal(false)} />}
       {/* Backdrop */}
       <div 
         onClick={onClose}
@@ -404,7 +568,8 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
               key={category.label} 
               category={category} 
               location={location} 
-              onClose={onClose} 
+              onClose={onClose}
+              onShowComingSoon={handleShowComingSoon}
             />
           ))}
         </nav>
