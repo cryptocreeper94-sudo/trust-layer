@@ -371,6 +371,46 @@ export default function Validators() {
                       <p className="text-[10px] text-muted-foreground mt-2">* Airdrop at DWC token launch + ongoing transaction fee share</p>
                     </div>
 
+                    <div className="mt-4 p-4 rounded-lg bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30">
+                      <h4 className="font-bold text-sm mb-2 flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-green-400" />
+                        Longevity Bonuses
+                      </h4>
+                      <div className="space-y-1.5 text-xs">
+                        <div className="flex justify-between items-center">
+                          <span className="text-muted-foreground">30 days active</span>
+                          <span className="text-green-400 font-semibold">+500 DWC</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-muted-foreground">90 days (3 months)</span>
+                          <span className="text-green-400 font-semibold">+1,500 DWC</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-muted-foreground">180 days (6 months)</span>
+                          <span className="text-green-400 font-semibold">+3,000 DWC</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-muted-foreground">365 days (1 year)</span>
+                          <span className="text-green-400 font-semibold">+5,000 DWC</span>
+                        </div>
+                      </div>
+                      <p className="text-[10px] text-muted-foreground mt-2">* Stay active, earn more. Milestones stack!</p>
+                    </div>
+
+                    <div className="mt-4 p-4 rounded-lg bg-gradient-to-r from-pink-500/10 to-rose-500/10 border border-pink-500/30">
+                      <h4 className="font-bold text-sm mb-2 flex items-center gap-2">
+                        <Users className="w-4 h-4 text-pink-400" />
+                        Referral Bonus
+                      </h4>
+                      <p className="text-xs text-muted-foreground mb-2">
+                        Refer a friend who becomes a validator and stays 30+ days:
+                      </p>
+                      <div className="text-center p-2 rounded bg-white/5">
+                        <span className="text-pink-400 font-bold text-lg">+1,000 DWC</span>
+                        <span className="text-xs text-muted-foreground ml-2">per referral</span>
+                      </div>
+                    </div>
+
                     <div className="mt-4 p-4 rounded-lg bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20">
                       <h4 className="font-bold text-sm mb-2 flex items-center gap-2">
                         <Shield className="w-4 h-4 text-cyan-400" />
