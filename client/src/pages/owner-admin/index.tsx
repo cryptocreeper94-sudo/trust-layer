@@ -334,7 +334,7 @@ function OwnerDashboard() {
     queryKey: ["/api/marketing/stats"],
     queryFn: async () => {
       const res = await fetch("/api/marketing/stats", { credentials: "include" });
-      if (!res.ok) return { totalPosts: 312, deployed: 0, pending: 312 };
+      if (!res.ok) return { totalPosts: 0, deployed: 0, pending: 0 };
       return res.json();
     },
   });
@@ -342,7 +342,7 @@ function OwnerDashboard() {
   const quickStats = [
     { label: "Page Views (24h)", value: analyticsStats?.pageViews || 0, icon: <Eye className="w-5 h-5 text-cyan-400" />, trend: "up" },
     { label: "Unique Visitors", value: analyticsStats?.uniqueVisitors || 0, icon: <Users className="w-5 h-5 text-purple-400" />, trend: "up" },
-    { label: "Marketing Posts", value: marketingStats?.totalPosts || 312, icon: <Megaphone className="w-5 h-5 text-pink-400" />, trend: "neutral" },
+    { label: "Marketing Posts", value: marketingStats?.totalPosts || 0, icon: <Megaphone className="w-5 h-5 text-pink-400" />, trend: "neutral" },
     { label: "Posts Deployed", value: marketingStats?.deployed || 0, icon: <CheckCircle2 className="w-5 h-5 text-green-400" />, trend: "up" },
   ];
 
@@ -350,7 +350,7 @@ function OwnerDashboard() {
     { id: "analytics", title: "Analytics Dashboard", description: "Real visitor data, traffic sources, geographic insights", icon: <BarChart3 className="w-6 h-6" />, href: "/owner-admin/analytics", glow: "cyan" as const },
     { id: "seo", title: "SEO Manager", description: "Meta tags, OpenGraph, structured data per route", icon: <Search className="w-6 h-6" />, href: "/owner-admin/seo", glow: "purple" as const },
     { id: "referrals", title: "Referral Dashboard", description: "Affiliate management, fraud detection, payouts", icon: <Users className="w-6 h-6" />, href: "/owner-admin/referrals", glow: "pink" as const },
-    { id: "marketing", title: "Marketing Automation", description: "312 branded posts, auto-deployment", icon: <Megaphone className="w-6 h-6" />, href: "/admin/marketing", glow: "amber" as const },
+    { id: "marketing", title: "Marketing Automation", description: `${marketingStats?.totalPosts || 0} branded posts, auto-deployment`, icon: <Megaphone className="w-6 h-6" />, href: "/admin/marketing", glow: "amber" as const },
   ];
 
   const hosts = [

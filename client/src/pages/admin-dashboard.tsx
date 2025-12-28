@@ -100,7 +100,7 @@ export default function AdminDashboard() {
     queryKey: ["/api/marketing/stats"],
     queryFn: async () => {
       const res = await fetch("/api/marketing/stats", { credentials: "include" });
-      if (!res.ok) return { totalPosts: 264, deployed: 0, pending: 264 };
+      if (!res.ok) return { totalPosts: 0, deployed: 0, pending: 0 };
       return res.json();
     },
   });
@@ -127,11 +127,11 @@ export default function AdminDashboard() {
     { label: "Total Raised", value: `$${((presaleStats?.totalRaisedUsd || 0) + (crowdfundStats?.totalRaised || 0)).toLocaleString()}`, icon: <DollarSign className="w-5 h-5 text-green-400" /> },
     { label: "Token Holders", value: presaleStats?.uniqueHolders || 0, icon: <Users className="w-5 h-5 text-cyan-400" /> },
     { label: "Tokens Sold", value: (presaleStats?.tokensSold || 0).toLocaleString(), icon: <Zap className="w-5 h-5 text-yellow-400" /> },
-    { label: "Marketing Posts", value: marketingStats?.totalPosts || 264, icon: <Megaphone className="w-5 h-5 text-purple-400" /> },
+    { label: "Marketing Posts", value: marketingStats?.totalPosts || 0, icon: <Megaphone className="w-5 h-5 text-purple-400" /> },
   ];
 
   const adminModules = [
-    { id: "marketing", title: "Marketing Automation", description: "264 posts ready • Auto-deployment system", icon: <Megaphone className="w-6 h-6" />, href: "/admin/marketing", glow: "purple" as const, status: "ready" },
+    { id: "marketing", title: "Marketing Automation", description: `${marketingStats?.totalPosts || 0} posts ready • Auto-deployment system`, icon: <Megaphone className="w-6 h-6" />, href: "/admin/marketing", glow: "purple" as const, status: "ready" },
     { id: "analytics", title: "Analytics Dashboard", description: "Traffic, engagement, conversions", icon: <BarChart3 className="w-6 h-6" />, href: "/admin/analytics", glow: "cyan" as const, status: "active" },
     { id: "rewards", title: "Rewards Management", description: "Early Adopter program, token allocations", icon: <Gift className="w-6 h-6" />, href: "/admin/rewards", glow: "pink" as const, status: "active" },
     { id: "partners", title: "Partner Requests", description: "Studio applications, NDA approvals", icon: <Handshake className="w-6 h-6" />, href: "/admin/partner-requests", glow: "amber" as const, status: "active" },
