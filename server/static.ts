@@ -2,7 +2,7 @@ import express, { type Express, Request, Response, NextFunction } from "express"
 import fs from "fs";
 import path from "path";
 
-type AppDomain = "dwsc" | "games" | "studios" | "chronicles";
+type AppDomain = "dwsc" | "games" | "studios" | "chronicles" | "chronochat";
 
 function getAppFromHost(hostname: string): AppDomain {
   const host = hostname.toLowerCase();
@@ -13,8 +13,11 @@ function getAppFromHost(hostname: string): AppDomain {
   if (host.includes("darkwavestudios") || host.includes("studios.")) {
     return "studios";
   }
-  if (host.includes("yourlegacy") || host.includes("chrono.") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
+  if (host.includes("yourlegacy") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
     return "chronicles";
+  }
+  if (host.includes("chronochat") || host === "chronochat.io" || host === "www.chronochat.io") {
+    return "chronochat";
   }
   return "dwsc";
 }
@@ -53,6 +56,13 @@ const APP_CONFIG: Record<AppDomain, {
     title: "DarkWave Chronicles",
     description: "Not a game. A life. Live your legacy across 70+ historical eras in the ChronoVerse.",
     icon: "/marketing/darkwave_games_app_icon.png",
+  },
+  chronochat: {
+    manifest: "/manifest-chronochat.webmanifest",
+    themeColor: "#06b6d4",
+    title: "ChronoChat",
+    description: "Connect across timelines. Chat beyond eras. The community hub for DarkWave ecosystem.",
+    icon: "/icons/icon-512x512.png",
   },
 };
 

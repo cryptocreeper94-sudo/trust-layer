@@ -10,8 +10,11 @@ function getManifestForDomain(): string {
   if (host.includes("darkwavestudios") || host.includes("studios.")) {
     return "/manifest-studios.webmanifest";
   }
-  if (host.includes("yourlegacy") || host.includes("chrono.") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
+  if (host.includes("yourlegacy") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
     return "/manifest-chrono.webmanifest";
+  }
+  if (host.includes("chronochat") || host === "chronochat.io" || host === "www.chronochat.io") {
+    return "/manifest-chronochat.webmanifest";
   }
   return "/manifest-dwsc.webmanifest";
 }
@@ -24,10 +27,13 @@ function getThemeColorForDomain(): string {
   if (host.includes("darkwavestudios") || host.includes("studios.")) {
     return "#06b6d4";
   }
-  if (host.includes("yourlegacy") || host.includes("chrono.") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
+  if (host.includes("yourlegacy") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
     return "#a855f7";
   }
-  return "#8b5cf6";
+  if (host.includes("chronochat") || host === "chronochat.io" || host === "www.chronochat.io") {
+    return "#06b6d4";
+  }
+  return "#00ffff";
 }
 
 const manifestLink = document.querySelector('link[rel="manifest"]');
