@@ -235,7 +235,7 @@ export default function DomainsPage() {
             <div className="relative">
               <Input
                 type="text"
-                placeholder="Search for your domain..."
+                placeholder="Domain search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -486,10 +486,11 @@ export default function DomainsPage() {
 
         {myDomains && myDomains.length > 0 && (
           <motion.div
+            id="my-domains"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="mb-12"
+            className="mb-12 scroll-mt-24"
           >
             <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
               <Wallet className="w-6 h-6 text-cyan-400" />

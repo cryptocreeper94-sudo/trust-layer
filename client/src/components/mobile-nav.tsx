@@ -32,7 +32,8 @@ const navCategories = [
     label: "Domains",
     icon: Globe,
     items: [
-      { href: "/domains", label: "Domain Search", icon: SearchIcon, badge: "New" },
+      { href: "/domains", label: "Search & Register", icon: SearchIcon, badge: "New" },
+      { href: "/domains#my-domains", label: "Manage DNS", icon: Globe },
     ]
   },
   {
