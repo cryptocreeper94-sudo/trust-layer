@@ -2294,9 +2294,11 @@ export type InsertBlockchainDomain = z.infer<typeof insertBlockchainDomainSchema
 export const domainRecords = pgTable("domain_records", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   domainId: varchar("domain_id").notNull().references(() => blockchainDomains.id, { onDelete: "cascade" }),
-  recordType: text("record_type").notNull(), // WALLET, TEXT, URL, CONTENT_HASH
-  key: text("key").notNull(), // e.g., "eth", "sol", "btc", "avatar", "url"
+  recordType: text("record_type").notNull(), // DNS: A, AAAA, CNAME, MX, TXT, URL, NS, SRV | Crypto: WALLET | Web3: CONTENT_HASH
+  key: text("key").notNull(), // e.g., "@" for root, "www", "mail", or wallet types "eth", "sol", "btc"
   value: text("value").notNull(),
+  ttl: integer("ttl").default(3600), // Time to live in seconds (default 1 hour)
+  priority: integer("priority"), // For MX and SRV records
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
