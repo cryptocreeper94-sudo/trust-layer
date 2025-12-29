@@ -9792,6 +9792,8 @@ const APP_URL_MAP: Record<string, string> = {
   "paintpros": "https://paintpros.io",
   "strikeagent": "https://strikeagent.io",
   "strike-agent": "https://strikeagent.io",
+  "vedasolus": "https://DarkWaveHealth.replit.app",
+  "veda-solus": "https://DarkWaveHealth.replit.app",
 };
 
 async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
@@ -9955,6 +9957,18 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       verified: true,
       users: "DarkWave Verified",
       url: "https://strikeagent.io",
+    },
+    {
+      id: "veda-solus",
+      name: "VedaSolus",
+      category: "Health & Wellness",
+      description: "Holistic health platform blending Ayurveda & TCM with modern science. Features AI wellness coach, health passport, practitioner marketplace, and voice-enabled guidance.",
+      hook: "Ancient wisdom meets modern wellness",
+      tags: ["Health", "Wellness", "Ayurveda", "TCM", "AI"],
+      gradient: "from-emerald-500 to-teal-600",
+      verified: true,
+      users: "DarkWave Verified",
+      url: "https://DarkWaveHealth.replit.app",
     },
   ];
 }
