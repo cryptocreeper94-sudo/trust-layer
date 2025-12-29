@@ -109,6 +109,8 @@ export default function DomainsPage() {
   const [showRegisterDialog, setShowRegisterDialog] = useState(false);
   const [selectedYears, setSelectedYears] = useState(1);
   const [ownershipType, setOwnershipType] = useState<"term" | "lifetime">("term");
+  const [ownerCode, setOwnerCode] = useState("");
+  const [isOwnerMode, setIsOwnerMode] = useState(false);
 
   const { data: stats } = useQuery<DomainStats>({
     queryKey: ["/api/domains/stats"],
@@ -124,7 +126,7 @@ export default function DomainsPage() {
   });
 
   const registerMutation = useMutation({
-    mutationFn: async (data: { name: string; ownerAddress: string; ownershipType: "term" | "lifetime"; years?: number }) => {
+    mutationFn: async (data: { name: string; ownerAddress: string; ownershipType: "term" | "lifetime"; years?: number; ownerCode?: string }) => {
       const res = await apiRequest("POST", "/api/domains/register", data);
       return res.json();
     },
@@ -171,6 +173,7 @@ export default function DomainsPage() {
       ownerAddress: walletAddress,
       ownershipType,
       years: ownershipType === "term" ? selectedYears : undefined,
+      ownerCode: isOwnerMode && ownerCode ? ownerCode : undefined,
     });
   };
 
@@ -259,6 +262,37 @@ export default function DomainsPage() {
                 </Button>
               </div>
             </div>
+          </div>
+
+          {/* Owner Access Code Toggle */}
+          <div className="mt-4 text-center">
+            <button
+              onClick={() => setIsOwnerMode(!isOwnerMode)}
+              className="text-xs text-white/30 hover:text-white/50 transition-colors"
+              data-testid="button-toggle-owner-mode"
+            >
+              {isOwnerMode ? "Hide owner access" : "Owner access"}
+            </button>
+            {isOwnerMode && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mt-2"
+              >
+                <Input
+                  type="password"
+                  placeholder="Enter owner access code..."
+                  value={ownerCode}
+                  onChange={(e) => setOwnerCode(e.target.value)}
+                  className="max-w-xs mx-auto bg-white/5 border-amber-500/30 text-white text-center"
+                  data-testid="input-owner-code"
+                />
+                {ownerCode && (
+                  <p className="text-xs text-amber-400 mt-1">Owner mode active - free lifetime registration</p>
+                )}
+              </motion.div>
+            )}
           </div>
         </motion.div>
 

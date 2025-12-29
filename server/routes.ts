@@ -3472,7 +3472,7 @@ export async function registerRoutes(
   }
 
   const DomainRegisterSchema = z.object({
-    name: z.string().min(3).max(63),
+    name: z.string().min(1).max(63), // min 1 to allow owner bypass for reserved domains
     ownerAddress: z.string().min(10),
     ownershipType: z.enum(["term", "lifetime"]).default("term"),
     years: z.number().min(1).max(10).default(1), // only used for term ownership
@@ -3483,6 +3483,7 @@ export async function registerRoutes(
     twitter: z.string().optional(),
     discord: z.string().optional(),
     telegram: z.string().optional(),
+    ownerCode: z.string().optional(), // Owner bypass code for free registration
   });
 
   const DomainRecordSchema = z.object({
@@ -3593,22 +3594,27 @@ export async function registerRoutes(
     try {
       const data = DomainRegisterSchema.parse(req.body);
       
+      // Owner bypass code validation - allows registering reserved domains for free
+      // Uses OWNER_DOMAIN_ACCESS secret for validation
+      const OWNER_BYPASS_CODE = process.env.OWNER_DOMAIN_ACCESS;
+      const isOwnerBypass = !!(data.ownerCode && OWNER_BYPASS_CODE && data.ownerCode === OWNER_BYPASS_CODE);
+      
       const pricing = getDomainPricing(data.name.length);
       
-      // Block reserved domains (1-2 characters)
-      if (pricing.isReserved) {
+      // Block reserved domains (1-2 characters) - unless owner bypass
+      if (pricing.isReserved && !isOwnerBypass) {
         return res.status(400).json({ 
           error: "Reserved domain", 
           message: "1-2 character domains are reserved for special release. Contact us for enterprise availability." 
         });
       }
       
-      // Block DarkWave ecosystem reserved domains
+      // Block DarkWave ecosystem reserved domains - unless owner bypass
       const normalizedName = data.name.toLowerCase();
       const RESERVED_PREFIXES = ["darkwave", "dw", "dwsc", "chronochat", "chrono"];
       const isEcosystemReserved = RESERVED_PREFIXES.some(prefix => normalizedName.startsWith(prefix));
       
-      if (isEcosystemReserved) {
+      if (isEcosystemReserved && !isOwnerBypass) {
         return res.status(400).json({ 
           error: "Reserved domain", 
           message: "This domain is reserved for the DarkWave ecosystem. Contact team@dwsc.io for partnership inquiries." 
@@ -3625,12 +3631,16 @@ export async function registerRoutes(
       const now = new Date();
       const isEarlyAdopterPeriod = now < EARLY_ADOPTER_END_DATE && stats.totalDomains < EARLY_ADOPTER_MAX_REGISTRATIONS;
       
-      const isLifetime = data.ownershipType === "lifetime";
+      const isLifetime = data.ownershipType === "lifetime" || isOwnerBypass;
       
       let totalPrice: number;
       let expiresAt: Date | null;
       
-      if (isLifetime) {
+      if (isOwnerBypass) {
+        // Owner bypass - free lifetime registration
+        totalPrice = 0;
+        expiresAt = null;
+      } else if (isLifetime) {
         // Lifetime purchases don't get early adopter discount (preserves long-term value)
         totalPrice = pricing.lifetime;
         expiresAt = null;
@@ -3652,7 +3662,7 @@ export async function registerRoutes(
         ownerAddress: data.ownerAddress,
         registrationTxHash: txHash,
         expiresAt,
-        ownershipType: data.ownershipType || "term",
+        ownershipType: isOwnerBypass ? "lifetime" : (data.ownershipType || "term"),
         isPremium: pricing.isPremium,
         isProtected: false,
         primaryWallet: data.primaryWallet || data.ownerAddress,
