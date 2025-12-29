@@ -289,7 +289,7 @@ export default function DomainsPage() {
                   data-testid="input-owner-code"
                 />
                 {ownerCode && (
-                  <p className="text-xs text-amber-400 mt-1">Owner mode active - free lifetime registration</p>
+                  <p className="text-xs text-white/40 mt-1">Code will be validated on registration</p>
                 )}
               </motion.div>
             )}
