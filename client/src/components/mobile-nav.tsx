@@ -29,6 +29,13 @@ const navCategories = [
     ]
   },
   {
+    label: "Domains",
+    icon: Globe,
+    items: [
+      { href: "/domains", label: "Domain Search", icon: SearchIcon, badge: "New" },
+    ]
+  },
+  {
     label: "DeFi",
     icon: TrendingUp,
     items: [
@@ -87,7 +94,6 @@ const navCategories = [
       { href: "/validators", label: "Become a Validator", icon: Shield, badge: "Earn" },
       { href: "/quests", label: "Quests", icon: Rocket },
       { href: "/airdrop", label: "Airdrop", icon: Coins },
-      { href: "/domains", label: "Domains", icon: Globe, badge: "New" },
     ]
   },
   {
