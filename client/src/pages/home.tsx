@@ -972,7 +972,7 @@ function AppCard({ id, name, category, desc, gradient, showFavorite, url }: { id
           {/* Content overlay at bottom */}
           <div className="absolute bottom-0 left-0 right-0 p-3">
             <div className="flex items-center gap-2 mb-1">
-              <h3 className="text-sm font-bold text-white truncate flex-1">{name}</h3>
+              <h3 className="text-sm font-bold text-white truncate flex-1" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.9)' }}>{name}</h3>
               <Badge variant="secondary" className="text-[8px] uppercase bg-white/10 text-white/60 shrink-0 px-1.5 py-0">
                 {category}
               </Badge>

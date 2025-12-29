@@ -156,7 +156,7 @@ function AppCard({ src, alt, gradient, name, category, verified, tags, url }: {
           {/* Content overlay at bottom */}
           <div className="absolute bottom-0 left-0 right-0 p-3">
             <div className="flex items-center gap-2 mb-1">
-              <h3 className="text-sm font-bold text-white truncate flex-1">{name}</h3>
+              <h3 className="text-sm font-bold text-white truncate flex-1" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.9)' }}>{name}</h3>
               {verified && <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />}
             </div>
             <p className="text-[10px] text-white/60 mb-3">{category}</p>
