@@ -121,6 +121,40 @@ export async function registerRoutes(
   registerObjectStorageRoutes(app);
 
   // =====================================================
+  // DWSC GATEWAY - Handle *.dwsc.io subdomain routing
+  // =====================================================
+  app.get("*", async (req: Request, res: Response, next: NextFunction) => {
+    const host = req.hostname;
+    
+    // Check if this is a request to a *.dwsc.io subdomain
+    if (host && host.endsWith(".dwsc.io") && host !== "dwsc.io" && !host.startsWith("www.")) {
+      // Extract domain name (e.g., "alice" from "alice.dwsc.io")
+      const domainName = host.split(".")[0];
+      
+      try {
+        // Look up the domain in the database
+        const domain = await storage.getDomain(domainName);
+        
+        if (domain && domain.website) {
+          // Domain found with website URL - redirect to it
+          return res.redirect(301, domain.website);
+        }
+        
+        // Domain not found or no website configured - let React handle the error page
+        // Add header so React can detect this is a gateway request
+        res.setHeader("X-Gateway-Domain", domainName);
+        res.setHeader("X-Gateway-Found", domain ? "true" : "false");
+      } catch (error) {
+        console.error("Gateway error:", error);
+        // Continue to React app on error
+      }
+    }
+    
+    // Not a gateway request, or gateway request without redirect - continue to React
+    next();
+  });
+
+  // =====================================================
   // STRIPE WEBHOOK - Must be early for raw body access
   // =====================================================
   app.post("/api/stripe/webhook", async (req: any, res) => {

@@ -139,6 +139,7 @@ import OwnerAdminPortal from "@/pages/owner-admin";
 import OwnerAnalytics from "@/pages/owner-admin/analytics";
 import OwnerSeoManager from "@/pages/owner-admin/seo";
 import OwnerReferrals from "@/pages/owner-admin/referrals";
+import GatewayError from "@/pages/gateway-error";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
 
 function ScrollToTop() {
@@ -365,6 +366,7 @@ function DWSCRouter() {
         <Route path="/sweepstakes-rules" component={SweepstakesRules} />
         <Route path="/coin-store" component={CoinStore} />
         <Route path="/daily-bonus" component={DailyBonus} />
+        <Route path="/gateway-error" component={GatewayError} />
         <Route component={NotFound} />
       </Switch>
     </>
