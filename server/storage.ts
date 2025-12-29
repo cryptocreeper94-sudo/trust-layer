@@ -197,6 +197,7 @@ export interface IStorage {
   transferDomain(domainId: string, fromAddress: string, toAddress: string, txHash?: string): Promise<boolean>;
   getDomainRecords(domainId: string): Promise<DomainRecord[]>;
   setDomainRecord(data: InsertDomainRecord): Promise<DomainRecord>;
+  updateDomainRecord(id: string, updates: { value?: string; ttl?: number; priority?: number }): Promise<DomainRecord | undefined>;
   deleteDomainRecord(id: string): Promise<boolean>;
   getDomainTransferHistory(domainId: string): Promise<DomainTransfer[]>;
   getRecentDomains(limit?: number): Promise<BlockchainDomain[]>;
@@ -1605,6 +1606,14 @@ export class DatabaseStorage implements IStorage {
     }
     
     const [record] = await db.insert(domainRecords).values(data).returning();
+    return record;
+  }
+
+  async updateDomainRecord(id: string, updates: { value?: string; ttl?: number; priority?: number }): Promise<DomainRecord | undefined> {
+    const [record] = await db.update(domainRecords)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(domainRecords.id, id))
+      .returning();
     return record;
   }
 

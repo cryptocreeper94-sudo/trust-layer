@@ -105,14 +105,14 @@ function RecordRow({
   };
 
   return (
-    <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10">
+    <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10" data-testid={`row-record-${record.id}`}>
       <div className="flex-shrink-0">
-        <Badge variant="outline" className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+        <Badge variant="outline" className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30" data-testid={`badge-record-type-${record.id}`}>
           {record.recordType}
         </Badge>
       </div>
       <div className="flex-shrink-0 min-w-[80px]">
-        <span className="text-white/60 text-sm font-mono">{record.key}</span>
+        <span className="text-white/60 text-sm font-mono" data-testid={`text-record-key-${record.id}`}>{record.key}</span>
       </div>
       <div className="flex-1">
         {isEditing ? (
@@ -120,32 +120,33 @@ function RecordRow({
             value={editValue}
             onChange={(e) => setEditValue(e.target.value)}
             className="bg-white/5 border-white/20 text-white h-8"
+            data-testid={`input-record-value-${record.id}`}
           />
         ) : (
-          <span className="text-white font-mono text-sm break-all">{record.value}</span>
+          <span className="text-white font-mono text-sm break-all" data-testid={`text-record-value-${record.id}`}>{record.value}</span>
         )}
       </div>
       {record.ttl && (
-        <div className="flex-shrink-0 text-white/40 text-xs">
+        <div className="flex-shrink-0 text-white/40 text-xs" data-testid={`text-record-ttl-${record.id}`}>
           TTL: {record.ttl}s
         </div>
       )}
       <div className="flex-shrink-0 flex items-center gap-1">
         {isEditing ? (
           <>
-            <Button size="sm" variant="ghost" onClick={handleSave} className="h-7 w-7 p-0 text-green-400">
+            <Button size="sm" variant="ghost" onClick={handleSave} className="h-7 w-7 p-0 text-green-400" data-testid={`button-save-record-${record.id}`}>
               <Check className="w-4 h-4" />
             </Button>
-            <Button size="sm" variant="ghost" onClick={() => setIsEditing(false)} className="h-7 w-7 p-0 text-white/60">
+            <Button size="sm" variant="ghost" onClick={() => setIsEditing(false)} className="h-7 w-7 p-0 text-white/60" data-testid={`button-cancel-edit-${record.id}`}>
               <AlertCircle className="w-4 h-4" />
             </Button>
           </>
         ) : (
           <>
-            <Button size="sm" variant="ghost" onClick={() => setIsEditing(true)} className="h-7 w-7 p-0 text-white/60 hover:text-white">
+            <Button size="sm" variant="ghost" onClick={() => setIsEditing(true)} className="h-7 w-7 p-0 text-white/60 hover:text-white" data-testid={`button-edit-record-${record.id}`}>
               <Settings className="w-4 h-4" />
             </Button>
-            <Button size="sm" variant="ghost" onClick={onDelete} className="h-7 w-7 p-0 text-red-400 hover:text-red-300">
+            <Button size="sm" variant="ghost" onClick={onDelete} className="h-7 w-7 p-0 text-red-400 hover:text-red-300" data-testid={`button-delete-record-${record.id}`}>
               <Trash2 className="w-4 h-4" />
             </Button>
           </>
@@ -206,6 +207,20 @@ export default function DomainManager() {
     },
     onError: (error: any) => {
       toast.error(error.message || "Failed to delete record");
+    },
+  });
+
+  const updateRecordMutation = useMutation({
+    mutationFn: async ({ recordId, updates }: { recordId: string; updates: { value?: string; ttl?: number; priority?: number } }) => {
+      const res = await apiRequest("PATCH", `/api/domains/${domain?.id}/records/${recordId}`, updates);
+      return res.json();
+    },
+    onSuccess: () => {
+      toast.success("Record updated!");
+      queryClient.invalidateQueries({ queryKey: ["/api/domains", name] });
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to update record");
     },
   });
 
@@ -347,13 +362,13 @@ export default function DomainManager() {
 
         <Tabs defaultValue="dns" className="space-y-6">
           <TabsList className="bg-white/5 border border-white/10">
-            <TabsTrigger value="dns" className="data-[state=active]:bg-cyan-500/20">
+            <TabsTrigger value="dns" className="data-[state=active]:bg-cyan-500/20" data-testid="tab-dns">
               <Server className="w-4 h-4 mr-2" /> DNS Records
             </TabsTrigger>
-            <TabsTrigger value="wallets" className="data-[state=active]:bg-cyan-500/20">
+            <TabsTrigger value="wallets" className="data-[state=active]:bg-cyan-500/20" data-testid="tab-wallets">
               <Wallet className="w-4 h-4 mr-2" /> Wallet Links
             </TabsTrigger>
-            <TabsTrigger value="profile" className="data-[state=active]:bg-cyan-500/20">
+            <TabsTrigger value="profile" className="data-[state=active]:bg-cyan-500/20" data-testid="tab-profile">
               <Settings className="w-4 h-4 mr-2" /> Profile
             </TabsTrigger>
           </TabsList>
@@ -366,7 +381,7 @@ export default function DomainManager() {
                   <p className="text-white/60 text-sm">Configure A, AAAA, CNAME, MX, TXT records and URL redirects</p>
                 </div>
                 {isOwner && (
-                  <Button onClick={() => setShowAddRecord(true)} className="gap-2">
+                  <Button onClick={() => setShowAddRecord(true)} className="gap-2" data-testid="button-add-record">
                     <Plus className="w-4 h-4" /> Add Record
                   </Button>
                 )}
@@ -390,7 +405,7 @@ export default function DomainManager() {
                       record={record}
                       onDelete={() => deleteRecordMutation.mutate(record.id)}
                       onUpdate={(updates) => {
-                        toast.info("Update functionality coming soon");
+                        updateRecordMutation.mutate({ recordId: record.id, updates });
                       }}
                     />
                   ))}

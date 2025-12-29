@@ -3724,6 +3724,22 @@ export async function registerRoutes(
     }
   });
 
+  app.patch("/api/domains/:domainId/records/:recordId", async (req, res) => {
+    try {
+      const { recordId } = req.params;
+      const { value, ttl, priority } = req.body;
+      
+      const record = await storage.updateDomainRecord(recordId, { value, ttl, priority });
+      if (!record) {
+        return res.status(404).json({ error: "Record not found" });
+      }
+      res.json(record);
+    } catch (error) {
+      console.error("Update domain record error:", error);
+      res.status(500).json({ error: "Failed to update record" });
+    }
+  });
+
   app.delete("/api/domains/:domainId/records/:recordId", async (req, res) => {
     try {
       const { recordId } = req.params;
