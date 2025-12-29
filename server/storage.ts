@@ -2212,3 +2212,226 @@ export class DatabaseStorage implements IStorage {
 }
 
 export const storage = new DatabaseStorage();
+
+// Core documents to seed on startup
+const SEED_DOCUMENTS = [
+  {
+    title: "Welcome to DarkWave Chain",
+    content: `# Welcome to DarkWave Chain
+
+DarkWave Chain is a next-generation Layer 1 blockchain designed for speed, security, and scalability. Our Proof-of-Authority consensus mechanism delivers 200,000+ transactions per second with sub-second finality.
+
+## Key Features
+
+- **Ultra-Fast Transactions**: 200K+ TPS with 400ms finality
+- **Low Cost**: Average transaction cost of $0.0001
+- **Developer Friendly**: Comprehensive SDKs and APIs
+- **Enterprise Ready**: Built for real-world applications
+
+## Getting Started
+
+1. Create a wallet at our portal
+2. Get testnet tokens from the faucet
+3. Start building with our SDK
+
+Visit our developer documentation to learn more.`,
+    category: "general",
+    isPublic: true,
+  },
+  {
+    title: "DarkWave Smart Chain - Technical Whitepaper",
+    content: `# DarkWave Smart Chain Technical Whitepaper
+
+## Abstract
+
+DarkWave Smart Chain (DWSC) is a purpose-built Layer 1 blockchain optimized for high-performance gaming, digital asset ownership, and decentralized applications.
+
+## Key Specifications
+
+- **Consensus**: Proof-of-Authority (PoA) with Founders Validator
+- **Block Time**: 400ms
+- **TPS**: 200,000+
+- **Finality**: Instant upon block inclusion
+
+## Token Economics
+
+- **Native Token**: DWC
+- **Total Supply**: 100,000,000 (fixed)
+- **Decimals**: 18
+
+## Roadmap
+
+- Q1 2025: Testnet Launch
+- Feb 14, 2026: Token Generation Event
+- July 4, 2026: DarkWave Chronicles Public Beta`,
+    category: "general",
+    isPublic: true,
+  },
+  {
+    title: "API Reference - Getting Started",
+    content: `# DarkWave API Reference
+
+## Base URL
+
+\`\`\`
+Production: https://api.dwsc.io/v1
+Testnet: https://testnet-api.dwsc.io/v1
+\`\`\`
+
+## Authentication
+
+All API requests require an API key:
+
+\`\`\`
+X-API-Key: your_api_key_here
+\`\`\`
+
+## Core Endpoints
+
+### Blocks
+- GET /blocks/latest
+- GET /blocks/:height
+
+### Transactions
+- GET /transactions/:hash
+- POST /transactions/submit
+
+### Accounts
+- GET /accounts/:address
+- GET /accounts/:address/balance`,
+    category: "api-specs",
+    isPublic: true,
+  },
+  {
+    title: "JavaScript SDK",
+    content: `# JavaScript SDK
+
+Official JavaScript/TypeScript SDK for DarkWave Chain.
+
+## Installation
+
+\`\`\`bash
+npm install @darkwave/sdk
+\`\`\`
+
+## Quick Start
+
+\`\`\`typescript
+import { DarkWaveSDK } from '@darkwave/sdk';
+
+const sdk = new DarkWaveSDK({
+  network: 'mainnet',
+  apiKey: 'your-api-key'
+});
+
+// Create wallet
+const wallet = await sdk.createWallet();
+
+// Check balance
+const balance = await sdk.getBalance(wallet.address);
+\`\`\``,
+    category: "integration",
+    isPublic: true,
+  },
+  {
+    title: "Wallet Integration Guide",
+    content: `# Wallet Integration Guide
+
+Integrate DarkWave wallets into your application.
+
+## Web Applications
+
+### Using DarkWave Connect
+
+\`\`\`javascript
+const connect = new DarkWaveConnect();
+
+// Connect wallet
+const wallet = await connect.connect();
+console.log('Connected:', wallet.address);
+
+// Sign message
+const signature = await connect.signMessage('Hello DarkWave!');
+
+// Send transaction
+const tx = await connect.sendTransaction({
+  to: '0xrecipient...',
+  amount: '1.0'
+});
+\`\`\``,
+    category: "integration",
+    isPublic: true,
+  },
+  {
+    title: "Ecosystem Apps Overview",
+    content: `# Ecosystem Apps Overview
+
+DarkWave Chain powers a growing ecosystem of applications.
+
+## Verified Apps
+
+### DarkWave Pulse
+AI-powered predictive market intelligence and auto-trading platform.
+
+### Orbit Staffing
+Enterprise workforce management with blockchain-verified credentials.
+
+### VedaSolus
+Holistic health platform blending Ayurveda & TCM with modern science.
+
+### GarageBot
+IoT-powered garage and vehicle management.
+
+### Brew & Board
+Community platform for coffee shops with rewards.
+
+## Becoming a Verified App
+
+1. Submit your application for review
+2. Complete security audit
+3. Integrate with DarkWave APIs
+4. Receive verification badge`,
+    category: "app-metadata",
+    isPublic: true,
+  },
+  {
+    title: "Changelog - December 2024",
+    content: `# Changelog - December 2024
+
+## Version 2.0.0 - Portal Launch
+
+### New Features
+
+- **DarkWave Portal**: Complete ecosystem interface
+- **Block Explorer**: Real-time blockchain data
+- **DEX & Token Swaps**: AMM-style trading
+- **NFT Marketplace**: Digital asset trading
+- **Staking**: Earn rewards with liquid staking
+
+### Improvements
+
+- 20% faster transaction processing
+- Reduced API latency
+- Improved mobile experience`,
+    category: "changelog",
+    isPublic: true,
+  },
+];
+
+export async function seedDocuments(): Promise<void> {
+  try {
+    const existingDocs = await storage.getDocuments();
+    if (existingDocs.length > 0) {
+      console.log(`[seed] ${existingDocs.length} documents already exist, skipping seed`);
+      return;
+    }
+    
+    console.log("[seed] Seeding core documents...");
+    for (const doc of SEED_DOCUMENTS) {
+      await storage.createDocument(doc as InsertDocument);
+    }
+    console.log(`[seed] Successfully seeded ${SEED_DOCUMENTS.length} documents`);
+  } catch (error) {
+    console.error("[seed] Failed to seed documents:", error);
+  }
+}
