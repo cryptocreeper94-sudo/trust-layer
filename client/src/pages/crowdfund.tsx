@@ -639,12 +639,12 @@ export default function CrowdfundPage() {
                 </Badge>
               </div>
 
-              <div className="relative">
+              <div className="relative min-h-[280px]">
                 <div className="absolute inset-0 bg-gray-900/60 backdrop-blur-sm rounded-lg z-10 flex items-center justify-center">
-                  <div className="text-center p-6">
-                    <Lock className="w-12 h-12 text-amber-400 mx-auto mb-4" />
-                    <h4 className="text-lg font-semibold text-white mb-2">Voting Unlocks with Funding</h4>
-                    <p className="text-gray-400 text-sm mb-4">
+                  <div className="text-center p-4">
+                    <Lock className="w-10 h-10 text-amber-400 mx-auto mb-3" />
+                    <h4 className="text-base font-semibold text-white mb-2">Voting Unlocks with Funding</h4>
+                    <p className="text-gray-400 text-xs mb-3">
                       Community voting will be enabled once we reach our initial funding milestone. 
                       Contributors will have weighted voting power.
                     </p>
