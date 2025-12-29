@@ -127,6 +127,7 @@ import PriceAlerts from "@/pages/price-alerts";
 import PaperTrading from "@/pages/paper-trading";
 import Achievements from "@/pages/achievements";
 import Domains from "@/pages/domains";
+import DomainManager from "@/pages/domain-manager";
 import PartnerPortal from "@/pages/partner-portal";
 import Tokenomics from "@/pages/tokenomics";
 import FAQ from "@/pages/faq";
@@ -335,6 +336,7 @@ function DWSCRouter() {
         <Route path="/paper-trading" component={PaperTrading} />
         <Route path="/achievements" component={Achievements} />
         <Route path="/domains" component={Domains} />
+        <Route path="/domain/:name" component={DomainManager} />
         <Route path="/partners" component={PartnerPortal} />
         <Route path="/game-developer" component={GameDeveloper} />
         <Route path="/slots" component={Slots} />
