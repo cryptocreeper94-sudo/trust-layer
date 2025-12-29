@@ -91,6 +91,8 @@ const ecosystemImages: Record<string, string> = {
   "orby": "/ecosystem/orby.jpg",
   "strike-agent": "/ecosystem/strike-agent.jpg",
   "darkwave-chain": "/ecosystem/darkwave-chain.png",
+  "veda-solus": "/ecosystem/veda-solus.jpg",
+  "vedasolus": "/ecosystem/veda-solus.jpg",
 };
 
 function getAppImage(appId: string): string {

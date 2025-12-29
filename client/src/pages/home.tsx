@@ -108,6 +108,8 @@ const ecosystemImages: Record<string, string> = {
   "paintpros": "/ecosystem/paintpros.jpg",
   "orby": "/ecosystem/orby.jpg",
   "strike-agent": "/ecosystem/strike-agent.jpg",
+  "veda-solus": "/ecosystem/veda-solus.jpg",
+  "vedasolus": "/ecosystem/veda-solus.jpg",
 };
 
 const CHRONICLES_ERAS = [
