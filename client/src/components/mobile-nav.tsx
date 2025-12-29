@@ -36,6 +36,13 @@ const navCategories = [
     ]
   },
   {
+    label: "ChronoChat",
+    icon: Users,
+    items: [
+      { href: "/community", label: "Community Hub", icon: Users, badge: "New" },
+    ]
+  },
+  {
     label: "DeFi",
     icon: TrendingUp,
     items: [
@@ -97,11 +104,10 @@ const navCategories = [
     ]
   },
   {
-    label: "Community",
-    icon: Users,
+    label: "Referrals",
+    icon: Gift,
     items: [
-      { href: "/community", label: "Hub", icon: Users, badge: "Soon" },
-      { href: "/referrals", label: "Referrals", icon: Gift },
+      { href: "/referrals", label: "Refer & Earn", icon: Gift },
     ]
   },
   {
