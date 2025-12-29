@@ -7161,7 +7161,7 @@ Key features available:
 - Bridge: Transfer DWC to Ethereum (wDWC) or Solana
 - DarkWave Studio: Full-featured web IDE
 
-Keep responses concise (2-3 sentences max), friendly, and helpful. If asked about prices, balances, or specific data, explain that you can guide them to the relevant page. Use casual, warm language like you're a helpful friend.`;
+Keep responses concise (2-3 sentences max), friendly, and helpful. If asked about prices, balances, or specific data, explain that you can guide them to the relevant page. Use casual, warm language like you're a helpful friend. Do not use emojis or describe emojis in text form (like ":)" or "smile emoji"). Just communicate naturally without any emoji references.`;
 
       const completion = await openai.chat.completions.create({
         model: "gpt-4o-mini",
