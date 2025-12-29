@@ -3496,13 +3496,19 @@ export async function registerRoutes(
     toAddress: z.string().min(10),
   });
 
+  // Reserved ecosystem prefixes - these domains are not for public sale
+  const RESERVED_ECOSYSTEM_PREFIXES = ["darkwave", "dw", "dwsc", "chronochat", "chrono"];
+
   app.get("/api/domains/search/:name", async (req, res) => {
     try {
       const { name } = req.params;
       const result = await storage.searchDomain(name);
       
-      const normalizedName = name.replace(/\.dwsc$/, '');
+      const normalizedName = name.replace(/\.dwsc$/, '').toLowerCase();
       const pricing = getDomainPricing(normalizedName.length);
+      
+      // Check if this is a reserved ecosystem domain
+      const isEcosystemReserved = RESERVED_ECOSYSTEM_PREFIXES.some(prefix => normalizedName.startsWith(prefix));
       
       // Check early adopter eligibility
       const stats = await storage.getDomainStats();
@@ -3516,6 +3522,7 @@ export async function registerRoutes(
       
       res.json({
         ...result,
+        available: isEcosystemReserved ? false : result.available,
         name: normalizedName,
         tld: "dwsc",
         pricePerYearCents: pricing.yearly,
@@ -3523,7 +3530,9 @@ export async function registerRoutes(
         earlyAdopterPriceCents: earlyAdopterYearly,
         isPremium: pricing.isPremium,
         tier: pricing.tier,
-        isReserved: pricing.isReserved,
+        isReserved: pricing.isReserved || isEcosystemReserved,
+        isEcosystemReserved,
+        reservedMessage: isEcosystemReserved ? "Reserved for DarkWave ecosystem" : null,
         isEarlyAdopterPeriod,
         earlyAdopterDiscount: isEarlyAdopterPeriod ? EARLY_ADOPTER_DISCOUNT : 0,
       });
@@ -3591,6 +3600,18 @@ export async function registerRoutes(
         return res.status(400).json({ 
           error: "Reserved domain", 
           message: "1-2 character domains are reserved for special release. Contact us for enterprise availability." 
+        });
+      }
+      
+      // Block DarkWave ecosystem reserved domains
+      const normalizedName = data.name.toLowerCase();
+      const RESERVED_PREFIXES = ["darkwave", "dw", "dwsc", "chronochat", "chrono"];
+      const isEcosystemReserved = RESERVED_PREFIXES.some(prefix => normalizedName.startsWith(prefix));
+      
+      if (isEcosystemReserved) {
+        return res.status(400).json({ 
+          error: "Reserved domain", 
+          message: "This domain is reserved for the DarkWave ecosystem. Contact team@dwsc.io for partnership inquiries." 
         });
       }
       
