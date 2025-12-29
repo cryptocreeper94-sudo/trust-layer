@@ -198,6 +198,130 @@ function ChroniclesCarousel() {
   );
 }
 
+interface EcosystemApp {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  gradient: string;
+  url?: string;
+}
+
+function EcosystemCarousel({ apps }: { apps: EcosystemApp[] }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = scrollRef.current.clientWidth;
+      scrollRef.current.scrollBy({ 
+        left: direction === 'left' ? -scrollAmount : scrollAmount, 
+        behavior: 'smooth' 
+      });
+    }
+  };
+
+  const colors: Record<string, { from: string; to: string }> = {
+    "from-gray-500 to-gray-700": { from: "#6b7280", to: "#374151" },
+    "from-indigo-600 to-violet-800": { from: "#4f46e5", to: "#5b21b6" },
+    "from-cyan-400 to-blue-500": { from: "#22d3ee", to: "#3b82f6" },
+    "from-slate-600 to-zinc-800": { from: "#475569", to: "#27272a" },
+    "from-emerald-600 to-teal-800": { from: "#059669", to: "#115e59" },
+    "from-emerald-500 to-teal-600": { from: "#10b981", to: "#0d9488" },
+    "from-amber-600 to-yellow-800": { from: "#d97706", to: "#854d0e" },
+    "from-cyan-600 to-blue-700": { from: "#0891b2", to: "#1d4ed8" },
+    "from-cyan-500 to-blue-600": { from: "#06b6d4", to: "#2563eb" },
+    "from-orange-500 to-red-600": { from: "#f97316", to: "#dc2626" },
+    "from-red-600 to-rose-700": { from: "#dc2626", to: "#be123c" },
+  };
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => scroll('left')}
+        className={`absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-black/80 backdrop-blur-xl border border-white/20 flex items-center justify-center transition-all ${canScrollLeft ? 'opacity-100 hover:bg-white/10 hover:border-primary/50' : 'opacity-30 cursor-not-allowed'}`}
+        disabled={!canScrollLeft}
+        data-testid="button-ecosystem-carousel-left"
+      >
+        <ChevronLeft className="w-6 h-6 text-white" />
+      </button>
+      
+      <button
+        onClick={() => scroll('right')}
+        className={`absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-black/80 backdrop-blur-xl border border-white/20 flex items-center justify-center transition-all ${canScrollRight ? 'opacity-100 hover:bg-white/10 hover:border-primary/50' : 'opacity-30 cursor-not-allowed'}`}
+        disabled={!canScrollRight}
+        data-testid="button-ecosystem-carousel-right"
+      >
+        <ChevronRight className="w-6 h-6 text-white" />
+      </button>
+
+      <div 
+        ref={scrollRef}
+        onScroll={checkScroll}
+        className="flex gap-4 overflow-x-auto scrollbar-hide py-2 snap-x snap-mandatory"
+      >
+        {apps.map((app, i) => {
+          const imageSrc = ecosystemImages[app.id] || "";
+          const gradientColors = colors[app.gradient] || { from: "#0891b2", to: "#1d4ed8" };
+          
+          return (
+            <motion.div
+              key={app.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.05 }}
+              className="shrink-0 w-[calc(50%-8px)] snap-start"
+              data-testid={`card-ecosystem-${app.id}`}
+            >
+              <GlassCard className="h-full overflow-hidden hover:border-primary/30 transition-all duration-300">
+                <div className="flex flex-col h-full">
+                  <div className="aspect-[4/3] relative overflow-hidden bg-black">
+                    {imageSrc ? (
+                      <img 
+                        src={imageSrc} 
+                        alt={app.name}
+                        className="w-full h-full object-contain"
+                      />
+                    ) : (
+                      <div 
+                        className="w-full h-full flex items-center justify-center"
+                        style={{ background: `linear-gradient(to bottom right, ${gradientColors.from}, ${gradientColors.to})` }}
+                      >
+                        <span className="text-5xl font-bold text-white/80">{app.name.charAt(0)}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-4 flex-1 flex flex-col">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <h3 className="text-lg font-bold text-white leading-tight">{app.name}</h3>
+                      <FavoriteButton appId={app.id} />
+                    </div>
+                    <Badge variant="secondary" className="w-fit text-[10px] uppercase bg-primary/20 text-primary mb-2">
+                      {app.category}
+                    </Badge>
+                    <p className="text-xs text-white/60 line-clamp-2 mb-4 flex-1">{app.description}</p>
+                    <ExploreButton url={app.url} appName={app.name} />
+                  </div>
+                </div>
+              </GlassCard>
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const { preferences } = usePreferences();
   const { user, loading: authLoading, isAuthenticated, displayName, signOut } = useFirebaseAuth();
@@ -827,41 +951,22 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {appsLoading ? (
-              <>
-                <SkeletonCard />
-                <SkeletonCard />
-                <SkeletonCard />
-                <SkeletonCard />
-              </>
-            ) : (
-              <>
-                {apps.map((app) => (
-                  <AppCard 
-                    key={app.id}
-                    id={app.id}
-                    name={app.name} 
-                    category={app.category} 
-                    desc={app.description} 
-                    gradient={app.gradient}
-                    url={app.url}
-                    showFavorite
-                  />
-                ))}
-                <Link href="/developers">
-                  <GlassCard className="h-full min-h-[180px]">
-                    <div className="p-4 h-full flex flex-col items-center justify-center text-center">
-                      <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
-                        <Code className="w-5 h-5 text-muted-foreground group-hover:text-primary" />
-                      </div>
-                      <h3 className="text-sm font-bold text-white/70">Submit Your App</h3>
-                      <p className="text-[10px] text-white/40 mt-1">Join the ecosystem</p>
-                    </div>
-                  </GlassCard>
-                </Link>
-              </>
-            )}
+          {appsLoading ? (
+            <div className="grid grid-cols-2 gap-4">
+              <SkeletonCard />
+              <SkeletonCard />
+            </div>
+          ) : (
+            <EcosystemCarousel apps={apps} />
+          )}
+          
+          <div className="mt-6 flex justify-center">
+            <Link href="/developers">
+              <Button variant="outline" className="border-primary/30 hover:bg-primary/10 gap-2">
+                <Code className="w-4 h-4" />
+                Submit Your App
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
