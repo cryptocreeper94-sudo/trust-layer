@@ -1,24 +1,7 @@
 # DarkWave Smart Chain - Replit Agent Guide
 
 ## Overview
-DarkWave Smart Chain (DSC) is a blockchain ecosystem by DarkWave Studios, designed as a high-performance alternative to existing blockchains. It features a Layer 1 Proof-of-Authority (PoA) blockchain and the DarkWave Portal, a React web application that serves as an ecosystem interface, block explorer, and developer hub. The project also includes "DarkWave Chronicles," a fantasy-themed game with a living political simulation and community-driven content. The ecosystem spans five key domains: dwsc.io (main blockchain portal), darkwavegames.io (gaming), darkwavestudios.io (parent company site), yourlegacy.io (Chronicles standalone), and chronochat.io (community hub). The overarching goal is to deliver a comprehensive, high-speed, and feature-rich blockchain environment with a premium user experience and innovative gaming.
-
-## Domain Strategy (5 Required Domains)
-| Domain | Purpose | Priority |
-|--------|---------|----------|
-| **dwsc.io** | Main blockchain portal, DeFi, explorer | Critical |
-| **darkwavegames.io** | Gaming portal, arcade | High |
-| **darkwavestudios.io** | Parent company, investors | High |
-| **yourlegacy.io** | Chronicles standalone | High |
-| **chronochat.io** | Community hub | Medium |
-
-## Payment Systems Quick Reference
-- **Subscriptions**: pulse_pro ($14.99/mo), strike_agent ($30/mo), complete_bundle ($39.99/mo), founder ($24 one-time)
-- **Orbs**: starter (100/$4.99), popular (500/$19.99), premium (1200/$39.99), ultimate (3000/$79.99)
-- **Guardian Cert**: self_cert (free), assurance_lite ($5,999), guardian_premier ($14,999)
-- **Guardian Shield**: watch ($299/mo), shield ($999/mo), command ($2,999/mo) - COMING SOON
-- **Domains**: $12-350/yr based on length, 30% early adopter discount
-- **Full details**: See `docs/SYSTEMS-INVENTORY.md`
+DarkWave Smart Chain (DSC) is a high-performance Layer 1 Proof-of-Authority (PoA) blockchain ecosystem developed by DarkWave Studios. It features the DarkWave Portal, a comprehensive React web application functioning as an ecosystem interface, block explorer, and developer hub. The project also includes "DarkWave Chronicles," a fantasy-themed game focused on a living political simulation and community-driven content. The ecosystem is supported by five key domains: dwsc.io, darkwavegames.io, darkwavestudios.io, yourlegacy.io, and chronochat.io. The primary objective is to deliver a fast, feature-rich blockchain environment with a premium user experience and innovative gaming.
 
 ## User Preferences
 - Preferred communication style: Simple, everyday language
@@ -31,65 +14,37 @@ DarkWave Smart Chain (DSC) is a blockchain ecosystem by DarkWave Studios, design
 ## System Architecture
 
 ### UI/UX Decisions
-The design adheres to a "Premium UI Protocol" featuring:
-- **Visuals**: Glassmorphism, holographic borders with glow, gradient overlays, and floating ambient glow orbs.
-- **Interactivity**: Framer Motion for entrance animations, staggered delays, scale on hover, and icon animations. Hover effects on all clickable elements.
-- **Layout**: Bento grids, full-width hero sections with photorealistic backgrounds, and diverse card styles.
-- **Mobile-First**: Touch targets ≥48px, self-contained horizontal carousels, accordions, and testing for 375px viewport width.
-- **Typography & Branding**: Gradient text for headlines, premium badges, uppercase tracking for labels.
-- **Color Palette**: Cyan, Purple, and Pink for accents and gradients, with `slate-950`, `slate-900`, `slate-800` for backgrounds, and white/gray for text.
+The design adheres to a "Premium UI Protocol" emphasizing:
+- **Visuals**: Glassmorphism, holographic borders with glow, gradient overlays, floating ambient glow orbs.
+- **Interactivity**: Framer Motion for animations (entrance, staggered delays, scale on hover, icon animations).
+- **Layout**: Bento grids, full-width hero sections with photorealistic backgrounds, diverse card styles.
+- **Mobile-First**: Touch targets ≥48px, horizontal carousels, accordions, optimized for 375px viewport.
+- **Typography & Branding**: Gradient text for headlines, premium badges, uppercase tracking.
+- **Color Palette**: Cyan, Purple, Pink accents; `slate-950`, `slate-900`, `slate-800` backgrounds; white/gray text.
 
 ### Technical Implementations
-- **Blockchain**: Proof-of-Authority (PoA) with Founders Validator, PostgreSQL for data, SHA-256/Merkle trees/HMAC-SHA256 cryptography, 400ms block time, and 200K+ TPS. Native token DWC (100M supply, 18 decimals, no burn). Revenue from protocol fees (DEX 0.3%, NFT marketplace 2.5%, bridge 0.1%, launchpad listings).
+- **Blockchain**: Proof-of-Authority (PoA) with Founders Validator, PostgreSQL, SHA-256/Merkle trees/HMAC-SHA256, 400ms block time, 200K+ TPS. Native token DWC (100M supply, 18 decimals, no burn). Revenue from protocol fees.
 - **Web Portal (Frontend)**: React 18, TypeScript, Vite, Wouter, TanStack Query, Tailwind CSS v4, Framer Motion.
 - **Web Portal (Backend)**: Node.js, Express.js, TypeScript, Drizzle ORM, PostgreSQL.
 - **Authentication**: Replit Auth (OAuth 2.0), WebAuthn/Passkeys.
 - **Payments**: Stripe, Coinbase Commerce.
-- **Multi-PWA**: Host-based routing for various ecosystem domains.
+- **Multi-PWA**: Host-based routing for ecosystem domains.
 - **DeFi Features**: Testnet Faucet, AMM-style DEX/Token Swap, NFT Marketplace & Gallery, Portfolio Dashboard, Transaction History, Token Launchpad, Liquidity Pools, NFT Creator Tool, Price Charts (Recharts), Webhook/Events API, Liquid Staking (stDWC).
-- **Cross-Chain Bridge**: Lock & mint mechanism (DWC ↔ wDWC) for Ethereum Sepolia and Solana Devnet, utilizing UUPS Proxy for Ethereum and BPF Loader for Solana.
-- **DarkWave Chronicles (Parallel Life Experience)**: NOT a traditional RPG. A revolutionary social experiment and parallel life simulation where you experience yourself as YOU in different eras of history and beyond. Core philosophy:
-  - **Parallel Self Mirror**: Chronicles holds a mirror to who you truly are. Your choices reveal your character - bad choices lead to hardship, good choices to prosperity (but not always, just like real life).
-  - **Quantum Leap Freedom**: Start in ANY era you choose. No forced progression, no unlocking. Time-warp between eras based on achievements, permanently or temporarily.
-  - **Living Persistent World**: The world continues 24/7 whether you're there or not. Other players affect the same world. Your actions ripple through time.
-  - **Belief System Integration**: Your faith, deities, atheism, agnosticism - whatever shapes you in real life shapes your experience. No moral labels, no "good vs evil" paths.
-  - **Emotion-Driven AI**: The world and its inhabitants react based on genuine human emotion patterns, not scripted responses. The AI learns from your choices, beliefs, and emotional responses.
-  - **"The Veil is Lifting" Theme**: Truth revelation, self-discovery. Missions may involve awakening others, uncovering hidden truths, seeing reality clearly.
-  - **NEVER Use**: Levels, XP, skill trees, quests, character classes as fixed paths, "journey begins here," unlock requirements, linear progression language.
-  - **TRIGGER PHRASE**: "Let's revisit Chronicles" = Review all Chronicles philosophy and messaging to ensure alignment.
-- **Chronicles Personality AI System**: Proprietary "Parallel Self" system learning from player choices, beliefs, and emotional responses. Features a 5-Axis Emotion System (Courage/Fear, Hope/Despair, Trust/Suspicion, Passion/Apathy, Wisdom/Recklessness). NO moral alignment, NO archetypes, NO predetermined categories. You are always YOU.
+- **Cross-Chain Bridge**: Lock & mint (DWC ↔ wDWC) for Ethereum Sepolia and Solana Devnet (UUPS Proxy for ETH, BPF Loader for SOL).
+- **DarkWave Chronicles (Parallel Life Experience)**: A social experiment and parallel life simulation focused on self-discovery across eras. Features a persistent world, belief system integration, and emotion-driven AI. Avoids traditional RPG elements like levels, XP, skill trees, and linear progression. The "Parallel Self" AI system uses a 5-Axis Emotion System (Courage/Fear, Hope/Despair, Trust/Suspicion, Passion/Apathy, Wisdom/Recklessness).
 - **Credits System**: Manages costs for AI chat, scenario generation, voice cloning, and personality summaries.
-- **Voice Cloning Technology**: Allows players' parallel selves to speak with their actual voice. Uses Web Audio API for recording and integrates with external APIs for synthesis.
-- **Owner Admin Portal**: Secure portal (`/owner-admin`) for system administrators with `OWNER_SECRET` authentication, rate limiting, and lockout mechanisms.
-- **Marketing Automation System**: Proprietary auto-deployment system for social media (Twitter/X, Facebook, Discord, Telegram) with scheduled posts and category rotation.
-- **Payment Infrastructure**: Handles crowdfund donations and token presales with Stripe integration and webhook processing.
-- **Pre-Launch Airdrop System**: Manages affiliate commissions for pre-launch, distributed as DWC tokens at launch, using a dual-ledger design.
-- **ChronoChat Platform (Community Hub)**: Standalone community platform at chronochat.io with tiered product offerings. Tagline: "Connect across timelines. Chat beyond eras." Features cyan-to-purple gradient branding.
-  - **Product Tiers (in order of priority)**:
-    1. **ChronoChat for Communities** (Priority #1, Q4 2025): Core platform with channels, reactions, Orbs integration, moderation tools. Pricing: Free / $19 / $49 / $99 monthly tiers.
-    2. **ChronoChat Cloud** (Priority #2, Q1 2026): SaaS hosting for partner communities. Multi-tenant provisioning, billing integration. Pricing: $149+/month.
-    3. **ChronoChat for Gaming** (Priority #3, Q2-Q3 2026): Gaming overlays with matchmaking lobbies, game telemetry hooks, Orbs rewards. Launches alongside Chronicles beta.
-    4. **ChronoChat for Teams** (Deferred, Late 2026+): Enterprise collaboration (tasks, docs, compliance). Wait for demand validation.
-    5. **ChronoChat API** (Deferred, Late 2026+): Developer API with rate limits, keys, documentation. Open after public beta stability.
-  - **Core Features**: Community creation, channels, real-time WebSocket messaging, reactions, replies, file uploads, member management, bot framework.
-- **Orbs Economy System**: Internal virtual currency for the ecosystem pre-DWC launch. Users earn Orbs through engagement, purchase via Stripe, tip other users, and unlock premium features. At DWC token launch, Orbs convert to DWC tokens. Features atomic transaction handling for tipping to prevent double-spending. Tables: orb_wallets, orb_transactions, orb_conversion_snapshots. Earn rates: daily_login (5), send_message (1), receive_reaction (2), join_community (10), referral_signup (50). Packages: Starter (100/$4.99), Popular (500/$19.99), Premium (1200/$39.99), Ultimate (3000/$79.99).
-- **Subscription System**: Unified subscription management synced with main Pulse app. Tiers: Pulse Pro ($14.99/mo, $149.99/yr), StrikeAgent Elite ($30/mo, $300/yr), DarkWave Complete ($39.99/mo, $399.99/yr). Features 2-day free trials, webhook handlers for lifecycle events (renewals, cancellations, payment failures), whitelist support for team/partners, and cross-app entitlement checking via /api/subscription/status. Tables: subscriptions, whitelisted_users. Plan IDs: pulse_pro, strike_agent, complete_bundle, founder, rm_monthly, rm_annual.
-- **Guardian Certification Program**: In-house blockchain security audit service offering enterprise-grade audits at 70% less than traditional firms like CertiK.
-  - **Tiers**: Self-Cert (Free, quarterly for ecosystem projects), Assurance Lite ($5,999), Guardian Premier ($14,999)
-  - **Methodology**: 6-pillar approach (Threat Modeling, Static Analysis, Dynamic Testing, Infrastructure Audit, Cryptographic Review, Compliance Mapping)
-  - **Process**: 6-step certification (Engagement → Discovery → Assessment → Findings → Remediation → Certification)
-  - **Registry**: Public listing of certified projects with scores and status
-  - **Revenue Stream**: New services revenue from external project audits
-  - **Pages**: /security (transparency report, 78/100 score), /guardian (certification program)
-  - **Trust Center**: Downloadable methodology docs, sample findings reports, DWSC self-audit report
-  - **Pioneer Program**: First 5 audits with 50% deposit model and exclusive benefits
-  - **Validation Roadmap**: 5-phase journey to credibility (Phase 0-4, ending Feb 2026)
-- **Guardian Shield (Coming Q3 2025)**: Continuous blockchain security monitoring service - "Norton for blockchain"
-  - **Tiers**: Guardian Watch ($299/mo), Guardian Shield ($999/mo), Guardian Command ($2,999/mo)
-  - **Features**: 24/7 smart contract monitoring, threat detection, multi-chain coverage, instant alerts
-  - **Capabilities**: Real-time anomaly detection, governance attack detection, rug pull early warning, SOC operations
-  - **Status**: Coming Soon with waitlist signup
-- **Security Infrastructure**: Helmet.js security headers with environment-aware CSP (strict in production), CORS with strict origin allowlist (5 ecosystem domains only), 10+ rate limiting categories, AES-256-GCM encryption, HMAC-SHA256 signatures, parameterized SQL via Drizzle ORM. Internal security score: 78/100 (50% above industry average).
+- **Voice Cloning Technology**: Integrates Web Audio API for recording and external APIs for synthesis to allow players' parallel selves to speak with their actual voice.
+- **Owner Admin Portal**: Secure portal (`/owner-admin`) with `OWNER_SECRET` authentication, rate limiting, and lockout.
+- **Marketing Automation System**: Proprietary auto-deployment system for social media (Twitter/X, Facebook, Discord, Telegram).
+- **Payment Infrastructure**: Handles crowdfund donations and token presales with Stripe integration.
+- **Pre-Launch Airdrop System**: Manages affiliate commissions for pre-launch, distributed as DWC tokens, using a dual-ledger design.
+- **ChronoChat Platform (Community Hub)**: Standalone community platform at chronochat.io. Features community creation, channels, real-time WebSocket messaging, reactions, replies, file uploads, member management, and bot framework. Product tiers prioritize "ChronoChat for Communities" (Q4 2025), followed by "ChronoChat Cloud" (Q1 2026) and "ChronoChat for Gaming" (Q2-Q3 2026).
+- **Orbs Economy System**: Internal virtual currency for the ecosystem pre-DWC launch, convertible to DWC tokens. Earned through engagement, purchased via Stripe, and used for tipping or premium features. Features atomic transaction handling.
+- **Subscription System**: Unified subscription management synced with the main Pulse app. Tiers include Pulse Pro, StrikeAgent Elite, and DarkWave Complete. Features 2-day free trials, webhook handlers, and cross-app entitlement checking.
+- **Guardian Certification Program**: In-house blockchain security audit service with tiers: Self-Cert (Free), Assurance Lite ($5,999), Guardian Premier ($14,999). Uses a 6-pillar methodology and a 6-step certification process. Includes a public registry of certified projects.
+- **Guardian Shield**: Continuous blockchain security monitoring service. Tiers include Guardian Watch ($299/mo), Guardian Shield ($999/mo), and Guardian Command ($2,999/mo). Offers 24/7 smart contract monitoring, threat detection, multi-chain coverage, and instant alerts.
+- **Security Infrastructure**: Helmet.js security headers with environment-aware CSP, CORS with strict origin allowlist, rate limiting, AES-256-GCM encryption, HMAC-SHA256 signatures, and parameterized SQL via Drizzle ORM.
+- **Domain Service Roadmap**: Plans for .dwsc gateway (Q1 2025), browser extension (Q2-Q3 2025), traditional TLD reseller (Q3-Q4 2025), and potential ICANN exploration (2026+).
 
 ## External Dependencies
 - **Database**: PostgreSQL
@@ -97,26 +52,3 @@ The design adheres to a "Premium UI Protocol" featuring:
 - **Payments**: Stripe, Coinbase Commerce
 - **Hub API**: https://orbitstaffing.io
 - **AI**: OpenAI (via Replit AI Integrations)
-
-## Completion Roadmap (Next 1-2 Weeks)
-**READY TO LAUNCH:**
-- Guardian Certification Program (fully built with Stripe checkout, blockchain stamping, NFT minting)
-- Guardian Portal (live with authenticated user data, real-time incident tracking, blockchain stamps)
-- API routes (all secured with authentication, full CRUD for certifications/assets/incidents)
-
-**FINAL STEPS TO REVENUE ($5,999-$14,999 per audit):**
-1. **Admin Tools** (~1 hour) - Create admin dashboard to mark certifications "completed", enter scores, upload PDF reports
-2. **Payment Webhook Handler** (~30 min) - Sync Stripe checkout confirmations to certification creation
-3. **Certificate PDF Generator** (~1 hour) - Generate downloadable PDF with score, methodology, recommendations
-4. **Public Registry Page** (~1 hour) - Standalone page showing all certified projects with scores (build trust/credibility)
-5. **Launch & First Customer** (~30 min) - Deploy, test with real payment, deliver first audit
-
-**THEN BUILD RECURRING REVENUE (Guardian Shield):**
-- Guardian Shield Monitoring Service ($299-$2,999/month)
-- Real-time health monitoring scheduler
-- Alert system with escalation rules
-- SOC operations dashboard (optional: AI-powered threat analysis)
-
-**TIMELINE:**
-- This week: Steps 1-5 (take first $5,999 payment)
-- Week 2: Guardian Shield MVP launch (waitlist signup + basic monitoring)
