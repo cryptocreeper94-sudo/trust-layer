@@ -293,9 +293,7 @@ export default function Home() {
               </Button>
             )}
             <WalletButton />
-            <div className="lg:hidden">
-              <MobileNav />
-            </div>
+            <MobileNav />
           </div>
         </div>
       </nav>
