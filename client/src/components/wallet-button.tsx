@@ -189,18 +189,18 @@ export function WalletButton() {
               style={{
                 position: 'fixed',
                 left: '50%',
-                top: 'calc(50% + 235px)',
+                top: '50%',
                 transform: 'translate(-50%, -50%)',
                 width: 'calc(100% - 32px)',
                 maxWidth: '380px',
-                maxHeight: '70vh',
+                maxHeight: '80vh',
                 overflowY: 'auto',
-                backgroundColor: '#0c1224',
-                border: '1px solid rgba(255,255,255,0.1)',
+                background: '#0a0f1e',
+                border: '1px solid rgba(100,200,255,0.3)',
                 borderRadius: '16px',
-                padding: '16px',
+                padding: '20px',
                 zIndex: 9999,
-                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
+                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.9), 0 0 0 1px rgba(0,0,0,1)',
               }}
             >
                 <div className="flex items-center justify-between mb-4">
@@ -226,7 +226,7 @@ export function WalletButton() {
                 <Link href="/wallet" onClick={() => setShowModal(false)}>
                   <Button
                     variant="outline"
-                    className="w-full h-12 bg-gradient-to-r from-primary/20 to-secondary/20 border-primary/30 hover:border-primary/50 justify-start gap-3 text-white"
+                    className="w-full h-12 bg-gradient-to-r from-cyan-900/80 to-purple-900/80 border-primary/30 hover:border-primary/50 justify-start gap-3 text-white"
                     data-testid="button-darkwave-wallet"
                   >
                     <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7 flex-shrink-0" />
@@ -248,7 +248,7 @@ export function WalletButton() {
 
                 <Button
                   variant="outline"
-                  className="w-full h-12 bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 justify-start gap-3 text-white"
+                  className="w-full h-12 bg-slate-800/90 border-white/10 hover:bg-slate-700/90 hover:border-white/20 justify-start gap-3 text-white"
                   onClick={async () => {
                     await connectEVM();
                     if (!error) setShowModal(false);
@@ -265,7 +265,7 @@ export function WalletButton() {
 
                 <Button
                   variant="outline"
-                  className="w-full h-12 bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 justify-start gap-3 text-white"
+                  className="w-full h-12 bg-slate-800/90 border-white/10 hover:bg-slate-700/90 hover:border-white/20 justify-start gap-3 text-white"
                   onClick={async () => {
                     await connectSolana();
                     if (!error) setShowModal(false);
