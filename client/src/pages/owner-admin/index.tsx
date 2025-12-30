@@ -313,6 +313,9 @@ function BentoCard({
 
 function OwnerDashboard() {
   const [selectedHost, setSelectedHost] = useState<"dwsc.io" | "yourlegacy.io">("dwsc.io");
+  const [showValidatorReminder, setShowValidatorReminder] = useState(() => {
+    return !sessionStorage.getItem("validatorReminderDismissed");
+  });
 
   const getOwnerHeaders = () => ({
     "x-owner-token": sessionStorage.getItem("ownerToken") || "",
@@ -359,11 +362,79 @@ function OwnerDashboard() {
     { id: "yourlegacy.io", label: "YourLegacy.io", icon: <Crown className="w-4 h-4" />, description: "Chronicles Standalone" },
   ];
 
+  const dismissReminder = () => {
+    sessionStorage.setItem("validatorReminderDismissed", "true");
+    setShowValidatorReminder(false);
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 text-white relative overflow-hidden">
       <GlowOrb color="linear-gradient(135deg, #06b6d4, #8b5cf6)" size={600} top="-10%" left="-10%" />
       <GlowOrb color="linear-gradient(135deg, #ec4899, #8b5cf6)" size={500} top="50%" left="70%" delay={2} />
       <GlowOrb color="linear-gradient(135deg, #f59e0b, #ef4444)" size={400} top="80%" left="20%" delay={4} />
+
+      <AnimatePresence>
+        {showValidatorReminder && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-slate-900 border border-cyan-500/30 rounded-2xl p-6 max-w-md w-full shadow-2xl"
+              style={{ boxShadow: "0 0 60px rgba(0,200,255,0.2)" }}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
+                  <Globe className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg text-white">Validator Nodes Reminder</h3>
+                  <p className="text-sm text-gray-400">Action needed for decentralization</p>
+                </div>
+              </div>
+              <div className="bg-slate-800/50 rounded-xl p-4 mb-4 border border-white/5">
+                <p className="text-sm text-gray-300 mb-3">
+                  Sign up for <span className="text-cyan-400 font-semibold">DigitalOcean</span> or <span className="text-cyan-400 font-semibold">Vultr</span> to run 3 validator nodes (~$15/month total).
+                </p>
+                <div className="flex flex-col gap-2 text-xs">
+                  <a 
+                    href="https://digitalocean.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors"
+                  >
+                    <ArrowRight className="w-3 h-3" /> digitalocean.com
+                  </a>
+                  <a 
+                    href="https://vultr.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors"
+                  >
+                    <ArrowRight className="w-3 h-3" /> vultr.com
+                  </a>
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={dismissReminder}
+                  className="flex-1 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl text-white font-semibold text-sm"
+                  data-testid="button-dismiss-validator-reminder"
+                >
+                  Got it, dismiss
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <MobileNav />
 
