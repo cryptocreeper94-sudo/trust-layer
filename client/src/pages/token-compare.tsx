@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowLeftRight, TrendingUp, TrendingDown, Plus, X, BarChart3 } from "lucide-react";
+import { ArrowLeftRight, TrendingUp, TrendingDown, Plus, X, BarChart3 } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { GlassCard } from "@/components/glass-card";
 import { Footer } from "@/components/footer";
@@ -66,12 +67,7 @@ export default function TokenCompare() {
             <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
             <span className="font-display font-bold text-lg hidden sm:inline">DarkWave</span>
           </Link>
-          <Link href="/">
-            <Button variant="ghost" size="sm" data-testid="button-back">
-              <ArrowLeft className="w-4 h-4 mr-1" />
-              Back
-            </Button>
-          </Link>
+          <BackButton />
         </div>
       </nav>
 

@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { 
-  ArrowLeft, Lock, Eye, Users, TrendingUp, Globe, Code, 
+  Lock, Eye, Users, TrendingUp, Globe, Code, 
   ChevronDown, ChevronRight, BarChart3, Activity, Layers, 
   Zap, Database, Shield, Terminal, FileCode, BookOpen,
   ExternalLink, Copy, Check, RefreshCw, Key, AlertTriangle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -403,11 +404,7 @@ console.log({
             >
               <RefreshCw className={`w-3 h-3 ${isLoading ? 'animate-spin' : ''}`} />
             </Button>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5">
-                <ArrowLeft className="w-3 h-3" /> Back
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

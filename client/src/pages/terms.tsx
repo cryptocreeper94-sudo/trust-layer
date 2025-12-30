@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, FileText, Shield, Scale, AlertCircle } from "lucide-react";
+import { FileText, Shield, Scale, AlertCircle } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/glass-card";
@@ -75,11 +76,7 @@ export default function Terms() {
           className="space-y-8"
         >
           <div className="flex items-center gap-4">
-            <Link href="/">
-              <Button variant="ghost" size="icon" data-testid="button-back">
-                <ArrowLeft className="w-5 h-5" />
-              </Button>
-            </Link>
+            <BackButton />
             <div>
               <h1 className="text-3xl font-display font-bold flex items-center gap-3" data-testid="text-terms-title">
                 <FileText className="w-8 h-8 text-primary" />

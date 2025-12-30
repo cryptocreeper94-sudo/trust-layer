@@ -1,5 +1,6 @@
 import { Link } from "wouter";
-import { Home, AlertCircle, ArrowLeft, Search } from "lucide-react";
+import { Home, AlertCircle, Search } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
@@ -42,15 +43,7 @@ export default function NotFound() {
               Back to Home
             </Button>
           </Link>
-          <Button 
-            variant="outline" 
-            onClick={() => window.history.back()}
-            className="gap-2"
-            data-testid="button-go-back"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Go Back
-          </Button>
+          <BackButton />
           <Link href="/explorer">
             <Button variant="ghost" className="gap-2" data-testid="button-explore">
               <Search className="w-4 h-4" />

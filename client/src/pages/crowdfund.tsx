@@ -3,9 +3,10 @@ import { motion } from "framer-motion";
 import { Link, useSearch } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { 
-  ArrowLeft, Heart, Zap, Target, Shield, Users, Clock, 
+  Heart, Zap, Target, Shield, Users, Clock, 
   ExternalLink, Sparkles, TrendingUp, Lock, Gift, Award
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -446,12 +447,7 @@ export default function CrowdfundPage() {
       </div>
 
       <div className="relative z-10 container mx-auto px-4 py-8">
-        <Link href="/">
-          <Button variant="ghost" className="mb-6 text-gray-400 hover:text-white" data-testid="link-back">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
-          </Button>
-        </Link>
+        <BackButton />
 
         {showSuccess && (
           <motion.div

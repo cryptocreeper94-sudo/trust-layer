@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Zap, Clock, Shield, Coins, Users, Code, TrendingUp, CheckCircle, XCircle, Minus, BarChart3 } from "lucide-react";
+import { Zap, Clock, Shield, Coins, Users, Code, TrendingUp, CheckCircle, XCircle, Minus, BarChart3 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -165,12 +166,7 @@ export default function CompetitiveAnalysis() {
             <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 bg-cyan-500/10 text-[10px] sm:text-xs whitespace-nowrap">
               <BarChart3 className="w-3 h-3 mr-1" /> Analysis
             </Badge>
-            <Link href="/executive-summary">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

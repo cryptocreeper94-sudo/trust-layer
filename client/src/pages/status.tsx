@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, CheckCircle2, XCircle, AlertCircle, Clock, RefreshCw } from "lucide-react";
+import { CheckCircle2, XCircle, AlertCircle, Clock, RefreshCw } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -90,12 +91,7 @@ export default function Status() {
               <div className={`w-1.5 h-1.5 rounded-full ${allOperational ? 'bg-green-400' : 'bg-yellow-400'} mr-1.5 animate-pulse`} />
               {allOperational ? "All Systems Operational" : "Some Issues Detected"}
             </Badge>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2" data-testid="button-back">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, TrendingUp, Users, Coins, Activity, BarChart3, PieChart, DollarSign, ArrowUpRight, ArrowDownRight, Wallet } from "lucide-react";
+import { TrendingUp, Users, Coins, Activity, BarChart3, PieChart, DollarSign, ArrowUpRight, ArrowDownRight, Wallet } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -127,12 +128,7 @@ export default function AdminAnalytics() {
                 Rewards
               </Button>
             </Link>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2" data-testid="button-back">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

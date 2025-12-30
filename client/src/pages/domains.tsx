@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Search, Globe, Shield, Zap, Check, X, ArrowRight, Crown, Clock, Users, Sparkles, ExternalLink, Copy, Wallet, Infinity as InfinityIcon } from "lucide-react";
+import { Search, Globe, Shield, Zap, Check, X, ArrowRight, Crown, Clock, Users, Sparkles, ExternalLink, Copy, Wallet, Infinity as InfinityIcon } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -197,12 +198,7 @@ export default function DomainsPage() {
 
       <header className="relative z-10 border-b border-white/10 backdrop-blur-xl bg-black/20">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/">
-            <Button variant="ghost" size="sm" className="gap-2 text-white/70 hover:text-white">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Portal
-            </Button>
-          </Link>
+          <BackButton />
           <div className="flex items-center gap-3">
             <WalletButton />
           </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, RotateCcw, Play, Trophy, Heart, Zap, Shield, Target, Pause } from "lucide-react";
+import { RotateCcw, Play, Trophy, Heart, Zap, Shield, Target, Pause } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -594,9 +595,7 @@ export default function Galaga() {
       <div className="bg-black/30 backdrop-blur-sm px-4 py-2 sticky top-0 z-50">
         <div className="flex items-center justify-between max-w-md mx-auto">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/arcade")} className="hover:bg-white/10">
-              <ArrowLeft className="w-4 h-4" />
-            </Button>
+            <BackButton />
             <h1 className="font-bold">Space Blaster</h1>
           </div>
           {gameState.status === "playing" && (

@@ -2,10 +2,11 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { 
   Shield, Lock, Key, Server, Eye, CheckCircle, AlertTriangle,
-  FileText, ExternalLink, Zap, Database, Globe, ArrowLeft,
+  FileText, ExternalLink, Zap, Database, Globe,
   ShieldCheck, Fingerprint, Ban, Activity, Award, TrendingUp,
   Users, Clock, Sparkles
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { HeaderTools } from "@/components/header-tools";
@@ -216,10 +217,9 @@ export default function SecurityPage() {
       <main className="pt-20 relative">
         <section className="py-20 px-4 relative">
           <div className="container mx-auto max-w-6xl">
-            <Link href="/" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 mb-12 transition-colors" data-testid="link-back-home">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Home
-            </Link>
+            <div className="mb-12">
+              <BackButton />
+            </div>
 
             <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
               <motion.div

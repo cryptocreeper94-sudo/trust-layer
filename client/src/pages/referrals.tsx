@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowLeft, Users, Coins } from "lucide-react";
+import { Users, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { ReferralTracker } from "@/components/referral-tracker";
 import { AirdropDashboard } from "@/components/airdrop-dashboard";
@@ -18,12 +19,7 @@ export default function Referrals() {
             <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
           <div className="ml-auto">
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs" data-testid="button-back">
-                <ArrowLeft className="w-3 h-3 mr-1" />
-                Back
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

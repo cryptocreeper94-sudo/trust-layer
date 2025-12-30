@@ -3,12 +3,13 @@ import { Link } from "wouter";
 import { useState, useEffect, type FormEvent } from "react";
 import { 
   Shield, ShieldCheck, Award, CheckCircle, Star, Zap, FileText,
-  ArrowLeft, ExternalLink, Clock, Users, Target, Lock, Eye,
+  ExternalLink, Clock, Users, Target, Lock, Eye,
   Sparkles, TrendingUp, Building, Code, Server, Database,
   BadgeCheck, Layers, Activity, FileCheck, AlertTriangle,
   Download, Calendar, Rocket, UserCheck, Mail, Send, ChevronRight,
   Trophy, Gift, Percent, FileSearch, Globe, Bug, Handshake
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { HeaderTools } from "@/components/header-tools";
@@ -817,10 +818,9 @@ export default function GuardianCertificationPage() {
       <main className="pt-20 relative">
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-6xl">
-            <Link href="/security" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 mb-12 transition-colors" data-testid="link-back-security">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Security
-            </Link>
+            <div className="mb-12">
+              <BackButton />
+            </div>
 
             <div className="text-center mb-16">
               <motion.div

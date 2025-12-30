@@ -2,9 +2,10 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
-  ArrowLeft, Bot, Play, Pause, Settings, TrendingUp, Clock,
+  Bot, Play, Pause, Settings, TrendingUp, Clock,
   Calendar, DollarSign, Target, Repeat, ChevronDown, Plus, Trash2
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -194,14 +195,7 @@ export default function DCABot() {
             <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
-          <div className="flex items-center gap-2">
-            <Link href="/dashboard-pro">
-              <Button variant="ghost" size="sm" className="h-8 text-xs px-2">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline ml-1">Dashboard</span>
-              </Button>
-            </Link>
-          </div>
+          <BackButton />
         </div>
       </nav>
 

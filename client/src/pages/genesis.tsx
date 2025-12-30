@@ -2,10 +2,11 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { 
-  ArrowLeft, Sparkles, Users, MapPin, Palette, Scroll, Crown, 
+  Sparkles, Users, MapPin, Palette, Scroll, Crown, 
   ChevronRight, Zap, Globe, Heart, Star, Lock, Mail, Wallet,
   Swords, Wand2, Target, Shield
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";

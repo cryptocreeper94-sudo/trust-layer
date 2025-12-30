@@ -7,8 +7,9 @@ import {
   Shield, ShieldCheck, Award, Activity, AlertTriangle, Clock,
   CheckCircle, XCircle, Eye, ExternalLink, Plus, Settings,
   Wallet, ChevronRight, Zap, Lock, Server, Database, Globe,
-  Bell, TrendingUp, ArrowLeft, BarChart3, FileText, RefreshCw, Loader
+  Bell, TrendingUp, BarChart3, FileText, RefreshCw, Loader
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { HeaderTools } from "@/components/header-tools";
@@ -119,11 +120,7 @@ export default function GuardianPortal() {
       <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/security">
-              <Button variant="ghost" size="icon" className="hover:bg-white/5" data-testid="button-back">
-                <ArrowLeft className="w-5 h-5" />
-              </Button>
-            </Link>
+            <BackButton />
             <div>
               <h1 className="text-xl font-bold text-white flex items-center gap-2">
                 <Shield className="w-6 h-6 text-cyan-400" />

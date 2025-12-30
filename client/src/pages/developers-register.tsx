@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowLeft, Key, Copy, Check, Shield, Zap, Code, ExternalLink } from "lucide-react";
+import { Key, Copy, Check, Shield, Zap, Code, ExternalLink } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -70,12 +71,9 @@ export default function DevelopersRegister() {
 
       <main className="pt-24 pb-12 px-4">
         <div className="container max-w-lg mx-auto">
-          <Link href="/developers">
-            <Button variant="ghost" size="sm" className="mb-6 gap-2 text-muted-foreground hover:text-white" data-testid="link-back-developers">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Developers
-            </Button>
-          </Link>
+          <div className="mb-6">
+            <BackButton />
+          </div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}

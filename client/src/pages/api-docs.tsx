@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Code2, Key, Zap, Shield, Globe, Copy, Check, ChevronDown, ChevronRight } from "lucide-react";
+import { Code2, Key, Zap, Shield, Globe, Copy, Check, ChevronDown, ChevronRight } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -90,12 +91,7 @@ export default function ApiDocs() {
                 <span className="hidden sm:inline">Get API Key</span>
               </Button>
             </Link>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2" data-testid="button-back">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

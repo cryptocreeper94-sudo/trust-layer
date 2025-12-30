@@ -2,11 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import {
-  ArrowLeft, Gamepad2, Dice1, TrendingUp, Coins, Trophy,
+  Gamepad2, Dice1, TrendingUp, Coins, Trophy,
   Zap, RefreshCw, History, Users, Star, Flame, Target, Wallet, Lock, Play,
   Cherry, Gem, Crown, Diamond, Sparkles, Volume2, VolumeX, Rocket, BarChart3,
   ChevronLeft, ChevronRight
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -634,12 +635,7 @@ export default function Arcade() {
                 </Button>
               </Link>
             )}
-            <Link href="/dashboard-pro">
-              <Button variant="ghost" size="sm" className="h-7 sm:h-8 text-[10px] sm:text-xs px-2">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline ml-1">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

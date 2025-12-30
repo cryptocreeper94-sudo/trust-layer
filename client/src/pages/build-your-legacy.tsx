@@ -3,10 +3,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
 import { 
-  Mic, MicOff, Play, Pause, RotateCcw, Check, X, ArrowLeft,
+  Mic, MicOff, Play, Pause, RotateCcw, Check, X,
   Sparkles, Brain, Volume2, VolumeX, Coins, Zap, Eye, Shield,
   ChevronRight, Crown, User, Settings, CreditCard
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -228,12 +229,7 @@ export default function BuildYourLegacy() {
 
       <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between gap-2">
-          <Link href="/chronicles">
-            <Button variant="ghost" className="text-slate-400 hover:text-white text-sm sm:text-base px-2 sm:px-4" data-testid="link-back">
-              <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2 flex-shrink-0" />
-              <span className="hidden xs:inline">Back to </span>Chronicles
-            </Button>
-          </Link>
+          <BackButton />
           
           <div className="flex items-center">
             {creditsData && (

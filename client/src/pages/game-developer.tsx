@@ -2,11 +2,12 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
-  ArrowLeft, Code2, Upload, CheckCircle2, XCircle, Clock, Sparkles,
+  Code2, Upload, CheckCircle2, XCircle, Clock, Sparkles,
   Shield, Zap, FileCode, Github, ExternalLink, Bot, AlertTriangle,
   Trophy, Users, Coins, Play, ChevronRight, Lock, Rocket
 } from "lucide-react";
 import { Footer } from "@/components/footer";
+import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -69,12 +70,12 @@ export default function GameDeveloper() {
   const [gameDescription, setGameDescription] = useState("");
   const [repoUrl, setRepoUrl] = useState("");
 
-  const { data: recentSubmissions } = useQuery({
+  const { data: recentSubmissions } = useQuery<{ submissions: any[] }>({
     queryKey: ["/api/games/recent-submissions"],
     refetchInterval: 10000,
   });
 
-  const { data: mySubmissions } = useQuery({
+  const { data: mySubmissions } = useQuery<{ submissions: any[] }>({
     queryKey: ["/api/games/submissions"],
     enabled: !!user,
     refetchInterval: 5000,
@@ -133,12 +134,7 @@ export default function GameDeveloper() {
               DarkWave <span className="text-pink-400">Games</span>
             </span>
           </Link>
-          <Link href="/">
-            <Button variant="ghost" size="sm" className="h-8 text-xs">
-              <ArrowLeft className="w-3 h-3 mr-1" />
-              Back to Games
-            </Button>
-          </Link>
+          <BackButton />
         </div>
       </nav>
 

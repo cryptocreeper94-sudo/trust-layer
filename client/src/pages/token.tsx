@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRightLeft, Coins, BarChart3, Lock, Globe, ShieldCheck, Zap, Sparkles, Crown, Star, Gift, Users, TrendingUp, Percent, PieChart, Code, Megaphone, Settings, Shield, ExternalLink } from "lucide-react";
+import { ArrowRightLeft, Coins, BarChart3, Lock, Globe, ShieldCheck, Zap, Sparkles, Crown, Star, Gift, Users, TrendingUp, Percent, PieChart, Code, Megaphone, Settings, Shield, ExternalLink } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import tokenBg from "@assets/generated_images/platinum_darkwave_token_holographic_fill.png";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
@@ -29,12 +30,7 @@ export default function Token() {
             <Badge variant="outline" className="border-amber-500/50 text-amber-400 bg-amber-500/10 text-[10px] sm:text-xs whitespace-nowrap">
               <Lock className="w-3 h-3 mr-1 hidden sm:inline" /> Feb 14, 2026
             </Badge>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

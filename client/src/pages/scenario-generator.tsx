@@ -2,9 +2,10 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { 
-  ArrowLeft, Sparkles, Brain, Users, Zap, AlertTriangle, 
+  Sparkles, Brain, Users, Zap, AlertTriangle, 
   ChevronRight, RefreshCw, Play, Heart, Shield, Flame, Crown, Target
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
@@ -291,10 +292,7 @@ export default function ScenarioGenerator() {
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5">
         <div className="container mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-2">
-          <Link href="/era-codex" className="flex items-center gap-1 sm:gap-2 text-gray-400 hover:text-white transition-colors shrink-0">
-            <ArrowLeft className="w-4 h-4" />
-            <span className="text-xs sm:text-sm hidden sm:inline">Era Codex</span>
-          </Link>
+          <BackButton />
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
             <img src={darkwaveLogo} alt="DarkWave" className="w-5 h-5 sm:w-6 sm:h-6" />
             <span className="font-display font-bold text-sm sm:text-base truncate max-w-[120px] sm:max-w-none">Scenario Generator</span>

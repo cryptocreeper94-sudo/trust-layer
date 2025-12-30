@@ -2,10 +2,11 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
-  ArrowLeft, Users, Trophy, TrendingUp, TrendingDown, Star,
+  Users, Trophy, TrendingUp, TrendingDown, Star,
   Copy, Settings, Bell, Shield, Zap, Target, BarChart3,
   Play, Pause, DollarSign, Percent, Activity
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -243,12 +244,7 @@ export default function CopyTrading() {
           </Link>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="border-purple-500/50 text-purple-400 text-[10px]">Copy Trading</Badge>
-            <Link href="/dashboard-pro">
-              <Button variant="ghost" size="sm" className="h-8 text-xs px-2">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline ml-1">Dashboard</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

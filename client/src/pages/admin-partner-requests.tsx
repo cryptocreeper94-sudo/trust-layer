@@ -3,9 +3,10 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { 
-  ArrowLeft, Users, CheckCircle, XCircle, Clock, 
+  Users, CheckCircle, XCircle, Clock, 
   Mail, Building2, User, Globe, FileText, Shield
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -102,11 +103,7 @@ export default function AdminPartnerRequests() {
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white p-6">
       <div className="container mx-auto max-w-6xl">
         <div className="flex items-center gap-4 mb-8">
-          <Link href="/admin/analytics">
-            <Button variant="outline" size="icon" className="border-white/10 text-white/60 hover:text-white">
-              <ArrowLeft className="w-4 h-4" />
-            </Button>
-          </Link>
+          <BackButton />
           <div>
             <h1 className="text-3xl font-display font-bold text-white flex items-center gap-3">
               <Shield className="w-8 h-8 text-cyan-400" />

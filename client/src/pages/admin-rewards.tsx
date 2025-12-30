@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Users, Gift, Coins, Plus, Trash2, Edit2, Check, X, Crown, Star, Sparkles, Award } from "lucide-react";
+import { Users, Gift, Coins, Plus, Trash2, Edit2, Check, X, Crown, Star, Sparkles, Award } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -131,12 +132,7 @@ export default function AdminRewards() {
             <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10">
               <Crown className="w-3 h-3 mr-1" /> Admin
             </Badge>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2" data-testid="button-back">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

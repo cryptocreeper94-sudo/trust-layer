@@ -2,9 +2,10 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
-  ArrowLeft, Diamond, Search, TrendingUp, TrendingDown, Star,
+  Diamond, Search, TrendingUp, TrendingDown, Star,
   BarChart3, Info, ExternalLink, Filter, ChevronDown
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, Cell } from "recharts";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -65,12 +66,7 @@ export default function RarityAnalyzer() {
             <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
-          <Link href="/nft">
-            <Button variant="ghost" size="sm" className="h-8 text-xs">
-              <ArrowLeft className="w-3 h-3 mr-1" />
-              NFT Market
-            </Button>
-          </Link>
+          <BackButton />
         </div>
       </nav>
 

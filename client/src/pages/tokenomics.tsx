@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Coins, Lock, Users, Building, Rocket, Gift, BarChart3, Calendar, CheckCircle, Clock, Sparkles, Shield, TrendingUp } from "lucide-react";
+import { Coins, Lock, Users, Building, Rocket, Gift, BarChart3, Calendar, CheckCircle, Clock, Sparkles, Shield, TrendingUp } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { Footer } from "@/components/footer";
@@ -50,12 +51,7 @@ export default function Tokenomics() {
             <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10 text-[10px] sm:text-xs whitespace-nowrap">
               <Coins className="w-3 h-3 mr-1" /> Tokenomics
             </Badge>
-            <Link href="/token">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

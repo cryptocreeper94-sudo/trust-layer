@@ -2,10 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Clock, Users, Brain, Shield, Crown, Sparkles, Heart, Eye, Map, Coins, 
-  ChevronRight, ChevronLeft, ArrowLeft, Star, Flame, Target, Compass,
+  ChevronRight, ChevronLeft, Star, Flame, Target, Compass,
   Globe, Zap, History, Theater, Sword, BookOpen, Building, Rocket,
   Info, X, Play, Volume2, VolumeX
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -590,12 +591,7 @@ export default function Chronicles() {
             <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10 text-[10px] sm:text-xs whitespace-nowrap animate-pulse">
               <Sparkles className="w-3 h-3 mr-1" /> Coming 2026
             </Badge>
-            <Link href="/" data-testid="link-back">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

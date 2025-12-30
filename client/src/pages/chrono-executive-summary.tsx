@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { 
-  ArrowLeft, 
   Globe, 
   Users, 
   Coins, 
@@ -22,6 +21,7 @@ import {
   BarChart3
 } from "lucide-react";
 import { ChronoLayout } from "@/components/chrono-ui";
+import { BackButton } from "@/components/page-nav";
 
 export default function ChronoExecutiveSummary() {
   return (
@@ -31,10 +31,9 @@ export default function ChronoExecutiveSummary() {
         <section className="py-16 px-4 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 via-purple-500/5 to-cyan-500/5" />
           <div className="container mx-auto max-w-5xl relative">
-            <Link href="/" className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-8 transition-colors" data-testid="back-home-link">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Home
-            </Link>
+            <div className="mb-8">
+              <BackButton />
+            </div>
             
             <motion.div
               initial={{ opacity: 0, y: 20 }}

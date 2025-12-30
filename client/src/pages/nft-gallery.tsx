@@ -3,9 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
-  ImageIcon, ArrowLeft, Search, Filter, Grid3X3, List,
+  ImageIcon, Search, Filter, Grid3X3, List,
   ChevronDown, ExternalLink, User, Wallet
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -95,12 +96,7 @@ export default function NftGallery() {
           </Link>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="border-purple-500/50 text-purple-400 text-[10px]">Gallery</Badge>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs px-2 hover:bg-white/5">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline ml-1">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

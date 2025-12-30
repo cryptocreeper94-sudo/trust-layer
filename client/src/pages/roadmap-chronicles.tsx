@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, Circle, Clock, Sparkles, Brain, Users, Globe, Zap, Crown, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
+import { Check, Circle, Clock, Sparkles, Brain, Users, Globe, Zap, Crown, ChevronDown, ChevronUp } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 
 import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
@@ -272,10 +273,9 @@ export default function RoadmapChronicles() {
         </div>
         
         <div className="relative z-10 max-w-5xl mx-auto px-4 py-12">
-          <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors" data-testid="link-back-home">
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to Home</span>
-          </Link>
+          <div className="mb-8">
+            <BackButton />
+          </div>
 
           <div className="text-center mb-12">
             <motion.div

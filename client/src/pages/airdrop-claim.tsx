@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { ArrowLeft, Gift, Sparkles, Check, AlertCircle, Wallet, Mail, Crown, Star, Users, ExternalLink } from "lucide-react";
+import { Gift, Sparkles, Check, AlertCircle, Wallet, Mail, Crown, Star, Users, ExternalLink } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
@@ -70,12 +71,7 @@ export default function AirdropClaim() {
             <Badge variant="outline" className="border-primary/50 text-primary bg-primary/10 text-[10px] sm:text-xs">
               <Gift className="w-3 h-3 mr-1" /> Airdrop
             </Badge>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2" data-testid="button-back">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

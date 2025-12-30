@@ -2,9 +2,10 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
-  ArrowLeft, Bell, Plus, Trash2, TrendingUp, TrendingDown,
+  Bell, Plus, Trash2, TrendingUp, TrendingDown,
   Volume2, Mail, MessageSquare, Smartphone, CheckCircle2, Clock, Lock, Wallet
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -72,12 +73,7 @@ export default function PriceAlerts() {
               <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
               <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
             </Link>
-            <Link href="/dashboard-pro">
-              <Button variant="ghost" size="sm" className="h-8 text-xs">
-                <ArrowLeft className="w-3 h-3 mr-1" />
-                Dashboard
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </nav>
 
@@ -110,12 +106,7 @@ export default function PriceAlerts() {
             <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
-          <Link href="/dashboard-pro">
-            <Button variant="ghost" size="sm" className="h-8 text-xs">
-              <ArrowLeft className="w-3 h-3 mr-1" />
-              Dashboard
-            </Button>
-          </Link>
+          <BackButton />
         </div>
       </nav>
 

@@ -2,9 +2,10 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
-  ArrowLeft, Trophy, Medal, Crown, TrendingUp, TrendingDown,
+  Trophy, Medal, Crown, TrendingUp, TrendingDown,
   Star, Users, Activity, Flame, Target, Award, ChevronDown
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -159,12 +160,7 @@ export default function Leaderboard() {
             <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
-          <Link href="/dashboard-pro">
-            <Button variant="ghost" size="sm" className="h-8 text-xs">
-              <ArrowLeft className="w-3 h-3 mr-1" />
-              Dashboard
-            </Button>
-          </Link>
+          <BackButton />
         </div>
       </nav>
 

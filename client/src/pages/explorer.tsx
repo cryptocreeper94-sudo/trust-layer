@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Box, Clock, QrCode, AlertCircle, CheckCircle2, Search, Zap, Activity, Database, Server, Hash } from "lucide-react";
+import { Home, Box, Clock, QrCode, AlertCircle, CheckCircle2, Search, Zap, Activity, Database, Server, Hash } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
@@ -171,10 +172,11 @@ export default function Explorer() {
               <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
               <span className="text-[10px] font-mono text-green-400 font-medium">MAINNET</span>
             </div>
+            <BackButton />
             <Link href="/">
               <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5">
-                <ArrowLeft className="w-3 h-3" />
-                Back
+                <Home className="w-3 h-3" />
+                Home
               </Button>
             </Link>
           </div>

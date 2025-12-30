@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Coins, Lock, Unlock, TrendingUp, Trophy, Zap, Gift, Clock, ChevronRight, Sparkles, Shield, Star, LogIn, Crown, Medal, Award, Flame, Wallet, ArrowUpRight } from "lucide-react";
+import { Coins, Lock, Unlock, TrendingUp, Trophy, Zap, Gift, Clock, ChevronRight, Sparkles, Shield, Star, LogIn, Crown, Medal, Award, Flame, Wallet, ArrowUpRight } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -252,12 +253,7 @@ export default function Staking() {
             <Badge variant="outline" className="border-emerald-500/50 text-emerald-400 bg-emerald-500/10 text-[10px] sm:text-xs whitespace-nowrap animate-pulse">
               <Sparkles className="w-3 h-3 mr-1" /> Staking Live
             </Badge>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

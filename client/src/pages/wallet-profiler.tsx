@@ -2,10 +2,11 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
-  ArrowLeft, Wallet, Search, TrendingUp, TrendingDown, Activity,
+  Wallet, Search, TrendingUp, TrendingDown, Activity,
   Clock, ExternalLink, Copy, Shield, AlertTriangle, Star, PieChart,
   BarChart3, ArrowUpRight, ArrowDownRight, Filter
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { 
   AreaChart, Area, PieChart as RePieChart, Pie, Cell,
   ResponsiveContainer, XAxis, YAxis, Tooltip, BarChart, Bar
@@ -79,12 +80,7 @@ export default function WalletProfiler() {
             <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
-          <Link href="/dashboard-pro">
-            <Button variant="ghost" size="sm" className="h-8 text-xs">
-              <ArrowLeft className="w-3 h-3 mr-1" />
-              Dashboard
-            </Button>
-          </Link>
+          <BackButton />
         </div>
       </nav>
 

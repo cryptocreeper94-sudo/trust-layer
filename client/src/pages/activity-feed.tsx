@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import {
-  ArrowLeft, Activity, ArrowUpRight, ArrowDownRight, Lock,
+  Activity, ArrowUpRight, ArrowDownRight, Lock,
   Gift, Sparkles, Users, Repeat, Filter, Bell, Pause, Play,
   ExternalLink, TrendingUp, Zap
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -183,12 +184,7 @@ export default function ActivityFeed() {
             <Badge variant="outline" className={`text-[10px] ${isLive ? 'border-green-500/50 text-green-400 animate-pulse' : 'border-gray-500/50 text-gray-400'}`}>
               {isLive ? 'Live' : 'Paused'}
             </Badge>
-            <Link href="/dashboard-pro">
-              <Button variant="ghost" size="sm" className="h-8 text-xs">
-                <ArrowLeft className="w-3 h-3 mr-1" />
-                Dashboard
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

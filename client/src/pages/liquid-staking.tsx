@@ -3,9 +3,10 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { 
-  Droplets, ArrowLeft, Wallet, TrendingUp, Info, Loader2,
+  Droplets, Wallet, TrendingUp, Info, Loader2,
   ArrowRightLeft, Sparkles, ChevronDown, Clock, CheckCircle
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -131,12 +132,7 @@ export default function LiquidStaking() {
           </Link>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 text-[10px]">Liquid Staking</Badge>
-            <Link href="/staking">
-              <Button variant="ghost" size="sm" className="h-8 text-xs px-2 hover:bg-white/5" data-testid="button-back">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline ml-1">Staking</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

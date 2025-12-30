@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Search, LayoutGrid, Rocket, ShieldCheck, CheckCircle2, ExternalLink } from "lucide-react";
+import { Search, LayoutGrid, Rocket, ShieldCheck, CheckCircle2, ExternalLink } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
@@ -203,12 +204,7 @@ export default function Ecosystem() {
             <Button size="sm" className="h-8 text-[10px] sm:text-xs bg-primary text-background hover:bg-primary/90 font-semibold px-2 sm:px-3">
               <Rocket className="w-3 h-3 sm:mr-1.5" /> <span className="hidden sm:inline">Submit App</span>
             </Button>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5 px-2 sm:px-3">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Box, Check, Code, Cpu, Database, FileCode, Layers, Terminal, BookOpen, Play } from "lucide-react";
+import { Box, Check, Code, Cpu, Database, FileCode, Layers, Terminal, BookOpen, Play } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import dagViz from "@assets/generated_images/abstract_visualization_of_directed_acyclic_graph_blockchain_consensus.png";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
@@ -35,12 +36,7 @@ export default function Developers() {
               </Button>
             </Link>
             <Badge variant="outline" className="hidden md:flex border-primary/20 text-primary bg-primary/5 font-mono text-[10px]">v1.0.0-beta</Badge>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-7 sm:h-8 text-[10px] sm:text-xs gap-1 sm:gap-1.5 hover:bg-white/5 px-2 sm:px-3">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Users, Trophy, Settings, RotateCcw, Play, Info, Volume2, VolumeX, Star, Crown } from "lucide-react";
+import { Users, Trophy, Settings, RotateCcw, Play, Info, Volume2, VolumeX, Star, Crown } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -445,9 +446,7 @@ export default function Spades() {
       <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-emerald-900 text-white">
         <div className="container mx-auto px-4 py-8 max-w-2xl">
           <div className="flex items-center gap-4 mb-8">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/arcade")} className="hover:bg-white/10">
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
+            <BackButton />
             <h1 className="text-3xl font-bold">Spades</h1>
           </div>
 
@@ -505,9 +504,7 @@ export default function Spades() {
       <div className="absolute top-0 left-0 right-0 z-30 bg-black/30 backdrop-blur-sm px-4 py-2">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/arcade")} className="hover:bg-white/10">
-              <ArrowLeft className="w-4 h-4" />
-            </Button>
+            <BackButton />
             <div>
               <h1 className="font-bold">Spades</h1>
               <p className="text-xs text-gray-300">Round {gameState.currentRound} • Trick {gameState.trickNumber}/13</p>

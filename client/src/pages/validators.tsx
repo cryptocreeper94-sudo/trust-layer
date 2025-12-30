@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Shield, Users, Activity, Crown, Plus, Trash2, CheckCircle, Sparkles, Server, Wifi, Clock, Mail, Send, Rocket, AlertCircle } from "lucide-react";
+import { Shield, Users, Activity, Crown, Plus, Trash2, CheckCircle, Sparkles, Server, Wifi, Clock, Mail, Send, Rocket, AlertCircle } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -94,12 +95,7 @@ export default function Validators() {
             <Badge variant="outline" className="border-green-500/50 text-green-400 bg-green-500/10 text-[10px] sm:text-xs animate-pulse">
               <div className="w-1.5 h-1.5 rounded-full bg-green-400 mr-1.5" /> Mainnet Live
             </Badge>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2" data-testid="button-back">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

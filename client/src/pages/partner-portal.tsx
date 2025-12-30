@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { 
-  ArrowLeft, ArrowRight, Lock, Eye, EyeOff, Shield, Target, Zap, Globe, Brain, 
+  ArrowRight, Lock, Eye, EyeOff, Shield, Target, Zap, Globe, Brain, 
   Layers, Rocket, Users, User, Calendar, TrendingUp, Code, Database,
   Download, FileText, Mail, CheckCircle, Building, Coins, Sparkles,
-  ChevronRight, ExternalLink, Play, Server, Cpu, Network, Activity, X
+  ChevronRight, ExternalLink, Play, Server, Cpu, Network, Activity, X, ArrowLeft
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -529,13 +530,9 @@ function AccessRequestForm({ onBack }: { onBack: () => void }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <button
-            onClick={onBack}
-            className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-8 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to login
-          </button>
+          <div className="mb-8">
+            <BackButton />
+          </div>
 
           <div className="text-center mb-8">
             <h1 className="text-3xl font-display font-bold text-white mb-2">Request Partner Access</h1>
@@ -857,10 +854,7 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
           transition={{ delay: 0.5 }}
           className="mt-8 text-center"
         >
-          <Link href="/" className="inline-flex items-center gap-2 text-white/40 hover:text-white/60 text-sm transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Return to main site
-          </Link>
+          <BackButton />
         </motion.div>
       </motion.div>
     </div>

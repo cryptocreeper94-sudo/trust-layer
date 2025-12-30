@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Plus, FileText, Search, Edit3, Trash2, Save, X, BookOpen } from "lucide-react";
+import { Plus, FileText, Search, Edit3, Trash2, Save, X, BookOpen } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -107,12 +108,7 @@ export default function DocHub() {
             <Badge variant="outline" className="border-primary/20 text-primary bg-primary/5 text-[10px]">
               <BookOpen className="w-3 h-3 mr-1" /> Doc Hub
             </Badge>
-            <Link href="/developers">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5">
-                <ArrowLeft className="w-3 h-3" />
-                Back
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

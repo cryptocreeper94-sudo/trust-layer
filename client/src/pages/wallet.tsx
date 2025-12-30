@@ -24,9 +24,9 @@ import {
   Settings,
   History,
   TrendingUp,
-  ArrowLeft,
   Home
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import { Button } from "@/components/ui/button";

@@ -2,9 +2,10 @@ import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { 
-  ArrowLeft, Calculator, TrendingUp, Coins, Target, Rocket, 
+  Calculator, TrendingUp, Coins, Target, Rocket, 
   Sparkles, DollarSign, Calendar, BarChart3, Info
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -102,10 +103,9 @@ export default function InvestmentSimulator() {
       </div>
 
       <div className="relative max-w-6xl mx-auto px-4 py-12">
-        <Link href="/presale" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors" data-testid="link-back-presale">
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Presale</span>
-        </Link>
+        <div className="mb-8">
+          <BackButton />
+        </div>
 
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

@@ -7,6 +7,7 @@ import {
   ArrowRight, Clock, CheckCircle, Copy, ExternalLink, Wallet,
   Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -471,10 +472,7 @@ export default function Presale() {
       />
       
       <div className="relative max-w-7xl mx-auto px-4 py-12">
-        <Link href="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors" data-testid="link-back-home">
-          <ArrowRight className="w-4 h-4 rotate-180" />
-          <span>Back to Home</span>
-        </Link>
+        <BackButton />
 
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

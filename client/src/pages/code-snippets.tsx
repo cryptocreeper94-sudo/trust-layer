@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Code, Copy, Check, Search, Filter, Terminal, Globe, Database, Coins, Image } from "lucide-react";
+import { Code, Copy, Check, Search, Filter, Terminal, Globe, Database, Coins, Image } from "lucide-react";
 import { Link } from "wouter";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -235,12 +236,7 @@ export default function CodeSnippets() {
             <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
             <span className="font-display font-bold text-lg hidden sm:inline">DarkWave</span>
           </Link>
-          <Link href="/developer-portal">
-            <Button variant="ghost" size="sm" data-testid="button-back">
-              <ArrowLeft className="w-4 h-4 mr-1" />
-              Developer Portal
-            </Button>
-          </Link>
+          <BackButton />
         </div>
       </nav>
 

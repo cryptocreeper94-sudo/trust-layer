@@ -6,10 +6,11 @@ import {
   MessageCircle, Users, Bot, Hash, Bell, Settings, Search,
   Plus, ChevronRight, ChevronDown, Sparkles, Crown, Shield,
   Zap, Star, Heart, Send, Smile, Image, Mic, MoreHorizontal,
-  Home, Compass, Radio, Lock, Globe, ArrowLeft, Menu, X, Loader2,
+  Home, Compass, Radio, Lock, Globe, Menu, X, Loader2,
   Activity, TrendingUp, Reply, Edit2, Trash2, Coins, Paperclip, ImageIcon,
   Pin, Mail, BarChart2, Clock, Forward, MessageSquare, BellOff, Calendar
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { useUpload } from "@/hooks/use-upload";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -694,12 +695,7 @@ export default function CommunityHub() {
                 </Button>
               </a>
             )}
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs px-2 hover:bg-white/5">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline ml-1">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

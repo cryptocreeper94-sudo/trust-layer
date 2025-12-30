@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Wallet, Send, RefreshCw, Copy, Check, AlertCircle, Coins, Code, Megaphone, TrendingUp, Users, Settings, Shield, PieChart, ArrowRightLeft, Sparkles, ExternalLink } from "lucide-react";
+import { Wallet, Send, RefreshCw, Copy, Check, AlertCircle, Coins, Code, Megaphone, TrendingUp, Users, Settings, Shield, PieChart, ArrowRightLeft, Sparkles, ExternalLink } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
@@ -149,12 +150,7 @@ export default function Treasury() {
             <Badge variant="outline" className="border-primary/50 text-primary bg-primary/10 text-[10px]">
               <PieChart className="w-3 h-3 mr-1" /> Transparency
             </Badge>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

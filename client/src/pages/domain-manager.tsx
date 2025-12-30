@@ -3,10 +3,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useParams, Link } from "wouter";
 import { 
-  ArrowLeft, Globe, Shield, Settings, Server, Mail, Link2, Wallet, 
+  Globe, Shield, Settings, Server, Mail, Link2, Wallet, 
   Plus, Trash2, Save, RefreshCw, Copy, ExternalLink, Clock, 
   Crown, Infinity as InfinityIcon, AlertCircle, Check, ChevronDown
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -290,12 +291,7 @@ export default function DomainManager() {
     <div className="min-h-screen bg-slate-950 text-white">
       <header className="border-b border-white/10 backdrop-blur-xl bg-black/20">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/domains">
-            <Button variant="ghost" size="sm" className="gap-2 text-white/70 hover:text-white">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Domains
-            </Button>
-          </Link>
+          <BackButton />
           <WalletButton />
         </div>
       </header>

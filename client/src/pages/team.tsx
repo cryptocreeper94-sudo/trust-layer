@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  ArrowLeft, Settings, Users, Shield, Database, Code, Rocket, 
+  Settings, Users, Shield, Database, Code, Rocket, 
   FileText, TrendingUp, DollarSign, BarChart3, Briefcase, Lock,
   ChevronDown, ChevronRight, Copy, Check, ExternalLink, Calculator,
   PieChart, Target, Zap, Layers, Globe
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -516,11 +517,7 @@ export default function Team() {
             <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
-          <Link href="/">
-            <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-white">
-              <ArrowLeft className="w-4 h-4" /> Home
-            </Button>
-          </Link>
+          <BackButton />
         </div>
       </nav>
 

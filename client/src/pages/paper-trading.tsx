@@ -2,9 +2,10 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
-  ArrowLeft, PlayCircle, TrendingUp, TrendingDown, BarChart3,
+  PlayCircle, TrendingUp, TrendingDown, BarChart3,
   Wallet, RefreshCw, Award, History, Target, Sparkles
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -123,12 +124,7 @@ export default function PaperTrading() {
             <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
-          <Link href="/dashboard-pro">
-            <Button variant="ghost" size="sm" className="h-8 text-xs">
-              <ArrowLeft className="w-3 h-3 mr-1" />
-              Dashboard
-            </Button>
-          </Link>
+          <BackButton />
         </div>
       </nav>
 

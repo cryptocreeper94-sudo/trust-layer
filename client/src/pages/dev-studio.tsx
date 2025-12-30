@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { 
-  ArrowLeft, Lock, Sparkles, Code2, Terminal, Eye, Zap, 
+  Lock, Sparkles, Code2, Terminal, Eye, Zap, 
   Brain, Rocket, Layers, Shield, Bell, Cpu, Database, 
   GitBranch, ChevronLeft, ChevronRight, Activity, Server,
   Cloud, Workflow, CheckCircle2
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Footer } from "@/components/footer";
@@ -223,12 +224,7 @@ export default function DevStudio() {
               <Sparkles className="w-2.5 h-2.5 mr-1" />
               Q2 2026
             </Badge>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5">
-                <ArrowLeft className="w-3 h-3" />
-                Back
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </header>

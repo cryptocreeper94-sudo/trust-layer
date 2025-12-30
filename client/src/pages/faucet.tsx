@@ -3,9 +3,10 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { 
-  Droplets, ArrowLeft, Wallet, CheckCircle, Clock, AlertCircle,
+  Droplets, Home, Wallet, CheckCircle, Clock, AlertCircle,
   Sparkles, Zap, Copy, ExternalLink, Loader2, ChevronDown
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -103,10 +104,11 @@ export default function Faucet() {
           </Link>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="border-green-500/50 text-green-400 text-[10px]">Testnet</Badge>
+            <BackButton />
             <Link href="/">
               <Button variant="ghost" size="sm" className="h-8 text-xs px-2 hover:bg-white/5">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline ml-1">Back</span>
+                <Home className="w-3 h-3" />
+                <span className="hidden sm:inline ml-1">Home</span>
               </Button>
             </Link>
           </div>

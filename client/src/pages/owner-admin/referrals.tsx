@@ -3,10 +3,11 @@ import { motion } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { 
-  Users, ArrowLeft, TrendingUp, Gift, DollarSign,
+  Users, TrendingUp, Gift, DollarSign,
   AlertTriangle, CheckCircle, XCircle, UserCheck,
   RefreshCw, Filter, Eye, Trophy
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { MobileNav } from "@/components/mobile-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -179,16 +180,7 @@ export default function OwnerReferrals() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-8 pt-20">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div className="flex items-center gap-4">
-            <Link href="/owner-admin">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-2 bg-slate-800/50 rounded-xl border border-white/10 hover:border-cyan-500/50"
-                data-testid="button-back"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </motion.button>
-            </Link>
+            <BackButton />
             <div>
               <h1 className="text-3xl md:text-4xl font-bold">
                 <span className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">

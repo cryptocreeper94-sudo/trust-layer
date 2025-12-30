@@ -19,7 +19,6 @@ import {
   Layers,
   ArrowRightLeft,
   Mail,
-  ArrowLeft,
   Shield,
   MessageSquare,
   Zap,
@@ -33,6 +32,7 @@ import {
   BadgeCheck
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import { Footer } from "@/components/footer";
 import { GamesComingSoonModal } from "@/components/games-coming-soon-modal";
@@ -60,12 +60,7 @@ export default function DWSCExecutiveSummary() {
                 Whitepaper
               </Button>
             </Link>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

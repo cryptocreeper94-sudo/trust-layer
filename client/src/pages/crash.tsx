@@ -2,11 +2,12 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import {
-  ArrowLeft, TrendingUp, Users, MessageCircle, Shield, Gift, Coins,
+  TrendingUp, Users, MessageCircle, Shield, Gift, Coins,
   Send, Zap, Clock, AlertTriangle, ChevronDown, ChevronUp, Trophy,
   Info, ExternalLink, Wallet, Volume2, VolumeX, Settings, History, Rocket,
   Target, Percent, Layers, Lock, Unlock, BarChart3, Sparkles, Crown
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -1071,12 +1072,7 @@ export default function CrashGame() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link href="/arcade">
-              <Button variant="ghost" size="sm" className="h-8 text-xs">
-                <ArrowLeft className="w-3 h-3 mr-1" />
-                Arcade
-              </Button>
-            </Link>
+            <BackButton />
             <div className="flex items-center gap-2">
               <img src={darkwaveLogo} alt="DarkWave" className="w-6 h-6" />
               <span className="font-display font-bold">Crash</span>

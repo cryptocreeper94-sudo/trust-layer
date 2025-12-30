@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, RotateCcw, Play, Trophy, Pause, ArrowUp, ArrowDown, ArrowLeftIcon, ArrowRight } from "lucide-react";
+import { RotateCcw, Play, Trophy, Pause, ArrowUp, ArrowDown, ArrowLeftIcon, ArrowRight } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -216,9 +217,7 @@ export default function Snake() {
       <div className="min-h-screen bg-gradient-to-br from-green-900 via-emerald-900 to-teal-900 text-white">
         <div className="container mx-auto px-4 py-8 max-w-2xl">
           <div className="flex items-center gap-4 mb-8">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/arcade")} className="hover:bg-white/10">
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
+            <BackButton />
             <h1 className="text-3xl font-bold">Snake</h1>
           </div>
 
@@ -262,9 +261,7 @@ export default function Snake() {
       <div className="bg-black/30 backdrop-blur-sm px-4 py-2 sticky top-0 z-50">
         <div className="flex items-center justify-between max-w-md mx-auto">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/arcade")} className="hover:bg-white/10">
-              <ArrowLeft className="w-4 h-4" />
-            </Button>
+            <BackButton />
             <div>
               <h1 className="font-bold">Snake</h1>
               <p className="text-xs text-gray-400">Score: {gameState.score}</p>

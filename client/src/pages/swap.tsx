@@ -3,9 +3,10 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { 
-  ArrowUpDown, ArrowLeft, Wallet, Settings, ChevronDown, Loader2,
+  ArrowUpDown, Wallet, Settings, ChevronDown, Loader2,
   Sparkles, Zap, TrendingUp, RefreshCw, Info, AlertCircle, Target, Clock
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -169,12 +170,7 @@ export default function Swap() {
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="border-primary/50 text-primary text-[10px] hidden sm:flex">DEX</Badge>
             <WalletButton />
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs px-2 hover:bg-white/5">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline ml-1">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

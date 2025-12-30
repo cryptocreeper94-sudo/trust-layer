@@ -2,9 +2,10 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import {
-  ArrowLeft, Sparkles, Wand2, Image, Palette, Layers, Download,
+  Sparkles, Wand2, Image, Palette, Layers, Download,
   RefreshCw, Zap, Star, Heart, Share2, Settings, ChevronRight
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -89,12 +90,7 @@ export default function AINFTGenerator() {
             <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
-          <Link href="/nft">
-            <Button variant="ghost" size="sm" className="h-8 text-xs">
-              <ArrowLeft className="w-3 h-3 mr-1" />
-              NFT Market
-            </Button>
-          </Link>
+          <BackButton />
         </div>
       </nav>
 

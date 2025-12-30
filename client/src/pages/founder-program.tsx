@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { 
-  ArrowLeft, Crown, Sparkles, Check, Wallet, CreditCard, 
+  Crown, Sparkles, Check, Wallet, CreditCard, 
   Clock, Users, Gift, Shield, Zap, Star, Bitcoin
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -120,11 +121,7 @@ export default function FounderProgram() {
       </nav>
 
       <main className="container mx-auto px-4 pt-24 pb-12">
-        <Link href="/">
-          <Button variant="ghost" size="sm" className="mb-6 gap-2" data-testid="button-back">
-            <ArrowLeft className="w-4 h-4" /> Back
-          </Button>
-        </Link>
+        <BackButton />
 
         <div className="text-center mb-12">
           <motion.div

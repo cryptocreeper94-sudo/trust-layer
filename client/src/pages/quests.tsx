@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Star, Zap, Trophy, Gift, Target, Flame, TrendingUp, CheckCircle2, Clock, Crown, Sparkles, ChevronRight } from "lucide-react";
+import { Star, Zap, Trophy, Gift, Target, Flame, TrendingUp, CheckCircle2, Clock, Crown, Sparkles, ChevronRight } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -73,12 +74,7 @@ export default function Quests() {
             <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10 text-[10px] sm:text-xs">
               <Zap className="w-3 h-3 mr-1" /> {userXp.toLocaleString()} XP
             </Badge>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2" data-testid="button-back">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

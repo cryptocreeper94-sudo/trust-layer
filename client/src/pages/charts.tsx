@@ -3,10 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
-  LineChart, ArrowLeft, TrendingUp, TrendingDown, DollarSign,
+  LineChart, TrendingUp, TrendingDown, DollarSign,
   BarChart3, Clock, ChevronDown, RefreshCw
 } from "lucide-react";
 import { Footer } from "@/components/footer";
+import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -66,12 +67,7 @@ export default function Charts() {
           </Link>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="border-blue-500/50 text-blue-400 text-[10px]">Charts</Badge>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs px-2 hover:bg-white/5">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline ml-1">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

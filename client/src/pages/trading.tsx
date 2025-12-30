@@ -2,10 +2,11 @@ import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import {
-  ArrowLeft, TrendingUp, TrendingDown, Activity, BarChart3, Layers,
+  TrendingUp, TrendingDown, Activity, BarChart3, Layers,
   Settings, Bell, Star, Maximize2, ChevronDown, Clock, Zap, Target,
   ArrowUpRight, ArrowDownRight, Minus, Plus, RefreshCw
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, ComposedChart, Line } from "recharts";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -300,12 +301,7 @@ export default function Trading() {
           </Link>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="border-green-500/50 text-green-400 text-[10px]">Live</Badge>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs px-2">
-                <ArrowLeft className="w-3 h-3" />
-                <span className="hidden sm:inline ml-1">Back</span>
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

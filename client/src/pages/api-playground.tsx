@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
-import { ArrowLeft, Play, Copy, Check, Wallet, Droplets, Send, Activity, RefreshCw } from "lucide-react";
+import { Play, Copy, Check, Wallet, Droplets, Send, Activity, RefreshCw } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -151,12 +152,7 @@ export default function ApiPlayground() {
                 {devnetStatus.status}
               </Badge>
             )}
-            <Link href="/developers">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5">
-                <ArrowLeft className="w-3 h-3" />
-                Back
-              </Button>
-            </Link>
+            <BackButton />
           </div>
         </div>
       </nav>

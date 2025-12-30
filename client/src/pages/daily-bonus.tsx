@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
-import { Gift, Coins, Sparkles, Star, Clock, Flame, Zap, Crown, Trophy, ChevronRight, ArrowLeft } from "lucide-react";
+import { Gift, Coins, Sparkles, Star, Clock, Flame, Zap, Crown, Trophy, ChevronRight } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
@@ -182,15 +183,7 @@ export default function DailyBonus() {
       <div className="relative z-10 container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={() => navigate("/arcade")}
-            className="hover:bg-white/10"
-            data-testid="back-button"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
+          <BackButton />
           <div>
             <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-200 bg-clip-text text-transparent flex items-center gap-3" data-testid="page-title">
               <Gift className="w-10 h-10 text-yellow-400" />
