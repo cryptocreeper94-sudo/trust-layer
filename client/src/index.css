@@ -108,6 +108,13 @@
     font-family: var(--font-tech);
   }
   
+  /* Wallet Modal - Force solid background */
+  .wallet-modal-card {
+    background-color: rgb(10, 15, 30) !important;
+    opacity: 1 !important;
+    backdrop-filter: none !important;
+  }
+
   /* Glassmorphism Utilities */
   .glass-panel {
     @apply bg-black/40 backdrop-blur-xl border border-white/10 shadow-xl;

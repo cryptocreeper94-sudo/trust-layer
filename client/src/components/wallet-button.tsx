@@ -186,6 +186,7 @@ export function WalletButton() {
               onClick={() => setShowModal(false)}
             />
             <div 
+              className="wallet-modal-card"
               style={{
                 position: 'fixed',
                 left: '50%',
@@ -195,12 +196,13 @@ export function WalletButton() {
                 maxWidth: '380px',
                 maxHeight: 'calc(100vh - 150px)',
                 overflowY: 'auto',
-                background: '#0a0f1e',
-                border: '1px solid rgba(100,200,255,0.3)',
+                backgroundColor: 'rgb(10, 15, 30)',
+                opacity: 1,
+                border: '2px solid rgb(6, 182, 212)',
                 borderRadius: '16px',
                 padding: '20px',
                 zIndex: 9999,
-                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.9), 0 0 0 1px rgba(0,0,0,1)',
+                boxShadow: '0 0 0 4px rgba(0,0,0,1), 0 25px 50px -12px rgba(0,0,0,0.9)',
               }}
             >
                 <div className="flex items-center justify-between mb-4">
