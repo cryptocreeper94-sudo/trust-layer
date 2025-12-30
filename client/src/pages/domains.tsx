@@ -112,6 +112,46 @@ export default function DomainsPage() {
   const [ownershipType, setOwnershipType] = useState<"term" | "lifetime">("term");
   const [ownerCode, setOwnerCode] = useState("");
   const [isOwnerMode, setIsOwnerMode] = useState(false);
+  const [isOwnerAuthenticated, setIsOwnerAuthenticated] = useState(() => {
+    return sessionStorage.getItem("ownerDomainAuth") === "true";
+  });
+  const [ownerAuthLoading, setOwnerAuthLoading] = useState(false);
+
+  const handleOwnerAuth = async () => {
+    if (!ownerCode || ownerCode.length < 16) {
+      toast.error("Owner code must be at least 16 characters");
+      return;
+    }
+    setOwnerAuthLoading(true);
+    try {
+      const res = await fetch("/api/owner/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ secret: ownerCode }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        sessionStorage.setItem("ownerDomainAuth", "true");
+        sessionStorage.setItem("ownerToken", data.token);
+        setIsOwnerAuthenticated(true);
+        setOwnerCode("");
+        toast.success("Owner access granted!");
+      } else {
+        toast.error("Invalid owner code");
+      }
+    } catch {
+      toast.error("Authentication failed");
+    } finally {
+      setOwnerAuthLoading(false);
+    }
+  };
+
+  const handleOwnerLogout = () => {
+    sessionStorage.removeItem("ownerDomainAuth");
+    sessionStorage.removeItem("ownerToken");
+    setIsOwnerAuthenticated(false);
+    toast.success("Logged out of owner mode");
+  };
 
   const { data: stats } = useQuery<DomainStats>({
     queryKey: ["/api/domains/stats"],
@@ -167,14 +207,24 @@ export default function DomainsPage() {
   };
 
   const handleRegister = () => {
-    if (!walletAddress || !searchResult) return;
+    if (!searchResult) return;
+    
+    // Owner mode: use special owner address, no wallet needed
+    const ownerAddress = isOwnerAuthenticated 
+      ? "owner:" + sessionStorage.getItem("ownerToken")?.slice(0, 16)
+      : walletAddress;
+    
+    if (!ownerAddress) {
+      toast.error("Please connect a wallet or login as owner");
+      return;
+    }
     
     registerMutation.mutate({
       name: searchResult.name,
-      ownerAddress: walletAddress,
+      ownerAddress,
       ownershipType,
       years: ownershipType === "term" ? selectedYears : undefined,
-      ownerCode: isOwnerMode && ownerCode ? ownerCode : undefined,
+      ownerCode: isOwnerAuthenticated ? sessionStorage.getItem("ownerToken") : undefined,
     });
   };
 
@@ -262,32 +312,54 @@ export default function DomainsPage() {
 
           {/* Owner Access Code Toggle */}
           <div className="mt-4 text-center">
-            <button
-              onClick={() => setIsOwnerMode(!isOwnerMode)}
-              className="text-xs text-white/30 hover:text-white/50 transition-colors"
-              data-testid="button-toggle-owner-mode"
-            >
-              {isOwnerMode ? "Hide owner access" : "Owner access"}
-            </button>
-            {isOwnerMode && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mt-2"
-              >
-                <Input
-                  type="password"
-                  placeholder="Enter owner access code..."
-                  value={ownerCode}
-                  onChange={(e) => setOwnerCode(e.target.value)}
-                  className="max-w-xs mx-auto bg-white/5 border-amber-500/30 text-white text-center"
-                  data-testid="input-owner-code"
-                />
-                {ownerCode && (
-                  <p className="text-xs text-white/40 mt-1">Code will be validated on registration</p>
+            {isOwnerAuthenticated ? (
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-500/20 border border-amber-500/30">
+                <Crown className="w-4 h-4 text-amber-400" />
+                <span className="text-sm text-amber-400 font-medium">Owner Mode Active</span>
+                <button
+                  onClick={handleOwnerLogout}
+                  className="ml-2 text-xs text-white/50 hover:text-white transition-colors underline"
+                  data-testid="button-owner-logout"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <>
+                <button
+                  onClick={() => setIsOwnerMode(!isOwnerMode)}
+                  className="text-xs text-white/30 hover:text-white/50 transition-colors"
+                  data-testid="button-toggle-owner-mode"
+                >
+                  {isOwnerMode ? "Hide owner access" : "Owner access"}
+                </button>
+                {isOwnerMode && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mt-2 flex flex-col items-center gap-2"
+                  >
+                    <Input
+                      type="password"
+                      placeholder="Enter owner access code..."
+                      value={ownerCode}
+                      onChange={(e) => setOwnerCode(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && handleOwnerAuth()}
+                      className="max-w-xs bg-white/5 border-amber-500/30 text-white text-center"
+                      data-testid="input-owner-code"
+                    />
+                    <Button
+                      onClick={handleOwnerAuth}
+                      disabled={ownerAuthLoading || !ownerCode}
+                      className="bg-amber-500 hover:bg-amber-600 text-black font-medium"
+                      data-testid="button-submit-owner-code"
+                    >
+                      {ownerAuthLoading ? "Authenticating..." : "Submit"}
+                    </Button>
+                  </motion.div>
                 )}
-              </motion.div>
+              </>
             )}
           </div>
         </motion.div>
@@ -380,11 +452,20 @@ export default function DomainsPage() {
                       </p>
                       <Button
                         onClick={() => setShowRegisterDialog(true)}
-                        disabled={!isConnected}
-                        className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"
+                        disabled={!isConnected && !isOwnerAuthenticated}
+                        className={`w-full ${isOwnerAuthenticated ? "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600" : "bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"}`}
                         data-testid="button-register-domain"
                       >
-                        {isConnected ? "Register Now" : "Connect Wallet to Register"}
+                        {isOwnerAuthenticated ? (
+                          <>
+                            <Crown className="w-4 h-4 mr-2" />
+                            Register as Owner (Free)
+                          </>
+                        ) : isConnected ? (
+                          <>Register Now</>
+                        ) : (
+                          <>Connect Wallet to Register</>
+                        )}
                         <ArrowRight className="w-4 h-4 ml-2" />
                       </Button>
                     </div>
@@ -661,53 +742,69 @@ export default function DomainsPage() {
                 </div>
               )}
 
-              <div className="p-4 rounded-lg bg-white/5 border border-white/10">
-                {ownershipType === "term" ? (
-                  <>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-white/60">Price per year</span>
-                      {searchResult.isEarlyAdopterPeriod ? (
-                        <div className="text-right">
-                          <span className="text-sm text-white/40 line-through mr-2">
-                            {formatPrice(searchResult.pricePerYearCents)}
-                          </span>
-                          <span className="text-emerald-400">
-                            {formatPrice(searchResult.earlyAdopterPriceCents)}
-                          </span>
-                        </div>
-                      ) : (
-                        <span className="text-white">{formatPrice(searchResult.pricePerYearCents)}</span>
-                      )}
-                    </div>
-                    {searchResult.isEarlyAdopterPeriod && (
+              {isOwnerAuthenticated ? (
+                <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/30">
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <Crown className="w-5 h-5 text-amber-400" />
+                    <span className="text-amber-400 font-bold">Owner Mode Active</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-white/60">Owner Price</span>
+                    <span className="text-xl font-bold text-emerald-400">FREE</span>
+                  </div>
+                  <p className="text-xs text-amber-400/70 text-center mt-2">
+                    Domains registered as owner are free with lifetime ownership
+                  </p>
+                </div>
+              ) : (
+                <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+                  {ownershipType === "term" ? (
+                    <>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-emerald-400 text-sm">Early Adopter Discount</span>
-                        <span className="text-emerald-400 text-sm">-30%</span>
+                        <span className="text-white/60">Price per year</span>
+                        {searchResult.isEarlyAdopterPeriod ? (
+                          <div className="text-right">
+                            <span className="text-sm text-white/40 line-through mr-2">
+                              {formatPrice(searchResult.pricePerYearCents)}
+                            </span>
+                            <span className="text-emerald-400">
+                              {formatPrice(searchResult.earlyAdopterPriceCents)}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-white">{formatPrice(searchResult.pricePerYearCents)}</span>
+                        )}
                       </div>
-                    )}
-                    <div className="flex items-center justify-between pt-2 border-t border-white/10">
-                      <span className="text-white/60">Total ({selectedYears} {selectedYears === 1 ? "year" : "years"})</span>
-                      <span className="text-xl font-bold text-cyan-400">
-                        {formatPrice((searchResult.isEarlyAdopterPeriod ? searchResult.earlyAdopterPriceCents : searchResult.pricePerYearCents) * selectedYears)}
-                      </span>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-white/60 flex items-center gap-1">
-                        <InfinityIcon className="w-3 h-3" /> Lifetime Ownership
-                      </span>
-                      <span className="text-xl font-bold text-cyan-400">
-                        {formatPrice(searchResult.priceLifetimeCents)}
-                      </span>
-                    </div>
-                    <p className="text-xs text-white/40">
-                      One-time payment. Never pay renewal fees again.
-                    </p>
-                  </>
-                )}
-              </div>
+                      {searchResult.isEarlyAdopterPeriod && (
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-emerald-400 text-sm">Early Adopter Discount</span>
+                          <span className="text-emerald-400 text-sm">-30%</span>
+                        </div>
+                      )}
+                      <div className="flex items-center justify-between pt-2 border-t border-white/10">
+                        <span className="text-white/60">Total ({selectedYears} {selectedYears === 1 ? "year" : "years"})</span>
+                        <span className="text-xl font-bold text-cyan-400">
+                          {formatPrice((searchResult.isEarlyAdopterPeriod ? searchResult.earlyAdopterPriceCents : searchResult.pricePerYearCents) * selectedYears)}
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-white/60 flex items-center gap-1">
+                          <InfinityIcon className="w-3 h-3" /> Lifetime Ownership
+                        </span>
+                        <span className="text-xl font-bold text-cyan-400">
+                          {formatPrice(searchResult.priceLifetimeCents)}
+                        </span>
+                      </div>
+                      <p className="text-xs text-white/40">
+                        One-time payment. Never pay renewal fees again.
+                      </p>
+                    </>
+                  )}
+                </div>
+              )}
 
               {searchResult.isEarlyAdopterPeriod && ownershipType === "term" && (
                 <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
@@ -720,10 +817,19 @@ export default function DomainsPage() {
               <Button
                 onClick={handleRegister}
                 disabled={registerMutation.isPending}
-                className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"
+                className={`w-full ${isOwnerAuthenticated ? "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600" : "bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"}`}
                 data-testid="button-confirm-register"
               >
-                {registerMutation.isPending ? "Registering..." : "Confirm Registration"}
+                {registerMutation.isPending ? "Registering..." : (
+                  isOwnerAuthenticated ? (
+                    <>
+                      <Crown className="w-4 h-4 mr-2" />
+                      Register as Owner (Free)
+                    </>
+                  ) : (
+                    "Confirm Registration"
+                  )
+                )}
               </Button>
             </div>
           )}
