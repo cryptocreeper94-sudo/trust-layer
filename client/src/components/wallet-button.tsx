@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Wallet, X, ExternalLink, Copy, Check, LogOut, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -170,7 +171,7 @@ export function WalletButton() {
         </span>
       </Button>
 
-      {showModal && (
+      {showModal && createPortal(
           <>
             <div 
               style={{
@@ -179,14 +180,12 @@ export function WalletButton() {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                backgroundColor: 'rgba(0,0,0,0.7)',
-                backdropFilter: 'blur(4px)',
-                zIndex: 9998,
+                backgroundColor: 'rgba(0,0,0,0.85)',
+                zIndex: 99998,
               }}
               onClick={() => setShowModal(false)}
             />
             <div 
-              className="wallet-modal-card"
               style={{
                 position: 'fixed',
                 left: '50%',
@@ -196,13 +195,13 @@ export function WalletButton() {
                 maxWidth: '380px',
                 maxHeight: 'calc(100vh - 150px)',
                 overflowY: 'auto',
-                backgroundColor: 'rgb(10, 15, 30)',
-                opacity: 1,
-                border: '2px solid rgb(6, 182, 212)',
+                backgroundColor: '#0a0f1e',
+                border: '2px solid #06b6d4',
                 borderRadius: '16px',
                 padding: '20px',
-                zIndex: 9999,
-                boxShadow: '0 0 0 4px rgba(0,0,0,1), 0 25px 50px -12px rgba(0,0,0,0.9)',
+                zIndex: 99999,
+                boxShadow: '0 0 0 4px #000, 0 25px 50px -12px rgba(0,0,0,0.9)',
+                isolation: 'isolate',
               }}
             >
                 <div className="flex items-center justify-between mb-4">
@@ -293,7 +292,8 @@ export function WalletButton() {
                 </div>
               </div>
             </div>
-          </>
+          </>,
+          document.body
         )}
     </>
   );
