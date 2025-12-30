@@ -347,10 +347,11 @@ function OwnerDashboard() {
   ];
 
   const portalModules = [
-    { id: "analytics", title: "Analytics Dashboard", description: "Real visitor data, traffic sources, geographic insights", icon: <BarChart3 className="w-6 h-6" />, href: "/owner-admin/analytics", glow: "cyan" as const },
-    { id: "seo", title: "SEO Manager", description: "Meta tags, OpenGraph, structured data per route", icon: <Search className="w-6 h-6" />, href: "/owner-admin/seo", glow: "purple" as const },
-    { id: "referrals", title: "Referral Dashboard", description: "Affiliate management, fraud detection, payouts", icon: <Users className="w-6 h-6" />, href: "/owner-admin/referrals", glow: "pink" as const },
-    { id: "marketing", title: "Marketing Automation", description: `${marketingStats?.totalPosts || 0} branded posts, auto-deployment`, icon: <Megaphone className="w-6 h-6" />, href: "/admin/marketing", glow: "amber" as const },
+    { id: "users", title: "User Management", description: "Waitlist, beta testers, whitelist, payments", icon: <Users className="w-6 h-6" />, href: "/owner-admin/users", glow: "cyan" as const },
+    { id: "analytics", title: "Analytics Dashboard", description: "Real visitor data, traffic sources, geographic insights", icon: <BarChart3 className="w-6 h-6" />, href: "/owner-admin/analytics", glow: "purple" as const },
+    { id: "seo", title: "SEO Manager", description: "Meta tags, OpenGraph, structured data per route", icon: <Search className="w-6 h-6" />, href: "/owner-admin/seo", glow: "pink" as const },
+    { id: "referrals", title: "Referral Dashboard", description: "Affiliate management, fraud detection, payouts", icon: <Crown className="w-6 h-6" />, href: "/owner-admin/referrals", glow: "amber" as const },
+    { id: "marketing", title: "Marketing Automation", description: `${marketingStats?.totalPosts || 0} branded posts, auto-deployment`, icon: <Megaphone className="w-6 h-6" />, href: "/admin/marketing", glow: "cyan" as const },
   ];
 
   const hosts = [

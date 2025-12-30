@@ -7,10 +7,10 @@ import { setupCommunityWebSocket } from "./community-ws";
 import { z } from "zod";
 import { storage } from "./storage";
 import { db } from "./db";
-import { sql, eq } from "drizzle-orm";
+import { sql, eq, desc } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, waitlist, betaTesters, whitelistedUsers } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -8556,6 +8556,43 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   startPayoutScheduler(24);
+
+  // ============================================
+  // OWNER USER MANAGEMENT
+  // ============================================
+
+  app.get("/api/owner/users/all", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const [waitlistData, betaTestersData, whitelistedUsersData, earlyAdoptersData, presaleOrdersData] = await Promise.all([
+        db.select().from(waitlist).orderBy(desc(waitlist.createdAt)),
+        db.select().from(betaTesters).orderBy(desc(betaTesters.createdAt)),
+        db.select().from(whitelistedUsers).orderBy(desc(whitelistedUsers.createdAt)),
+        db.execute(sql`SELECT * FROM early_adopter_program ORDER BY registered_at DESC`),
+        db.execute(sql`SELECT * FROM presale_orders ORDER BY created_at DESC`),
+      ]);
+
+      const totalRevenue = presaleOrdersData.rows?.reduce((sum: number, o: any) => sum + (parseInt(o.amount) || 0), 0) || 0;
+
+      res.json({
+        waitlist: waitlistData,
+        betaTesters: betaTestersData,
+        whitelistedUsers: whitelistedUsersData,
+        earlyAdopters: earlyAdoptersData.rows || [],
+        presaleOrders: presaleOrdersData.rows || [],
+        stats: {
+          totalWaitlist: waitlistData.length,
+          totalBetaTesters: betaTestersData.length,
+          totalWhitelisted: whitelistedUsersData.length,
+          totalEarlyAdopters: earlyAdoptersData.rows?.length || 0,
+          totalPresaleOrders: presaleOrdersData.rows?.length || 0,
+          totalRevenue,
+        },
+      });
+    } catch (error) {
+      console.error("Get all users error:", error);
+      res.status(500).json({ error: "Failed to get user data" });
+    }
+  });
 
   // ============================================
   // COMMUNITY HUB API
