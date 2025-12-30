@@ -190,7 +190,7 @@ export function WalletButton() {
                 position: 'fixed',
                 left: '50%',
                 top: '50%',
-                transform: 'translate(-50%, -40%)',
+                transform: 'translate(-50%, -30%)',
                 width: 'calc(100% - 32px)',
                 maxWidth: '380px',
                 maxHeight: '70vh',
