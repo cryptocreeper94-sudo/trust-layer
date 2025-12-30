@@ -207,8 +207,14 @@ export function WalletButton() {
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-bold text-white">Connect Wallet</h2>
                   <button
-                    onClick={() => setShowModal(false)}
-                    className="p-2 -mr-2 text-muted-foreground hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setShowModal(false);
+                    }}
+                    className="p-2 text-white/60 hover:text-white hover:bg-white/20 rounded-lg transition-colors cursor-pointer"
+                    style={{ pointerEvents: 'auto', zIndex: 100000 }}
                     data-testid="button-close-wallet-modal"
                   >
                     <X className="w-5 h-5" />
