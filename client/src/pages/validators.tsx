@@ -282,6 +282,65 @@ export default function Validators() {
             </GlassCard>
           </div>
 
+          {/* Decentralization Roadmap */}
+          <motion.div 
+            className="mt-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <GlassCard className="p-6 border border-cyan-500/20">
+              <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
+                <Activity className="w-5 h-5 text-cyan-400" />
+                Decentralization Roadmap
+              </h3>
+              <div className="relative">
+                <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-amber-500 via-cyan-500 to-purple-500 hidden md:block" />
+                <div className="space-y-6">
+                  <div className="flex gap-4">
+                    <div className="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center shrink-0 z-10">
+                      <Crown className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="flex-1 pb-4">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-bold text-amber-400">Phase 1: Genesis</span>
+                        <Badge className="bg-green-500/20 text-green-400 text-[10px]">Current</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">Founders Validators secure the network during launch. Core team operates trusted nodes to ensure stability while the ecosystem grows.</p>
+                      <div className="mt-2 text-xs text-white/60">Target: 3-5 Founders Validators</div>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="w-8 h-8 rounded-full bg-cyan-500/30 border-2 border-cyan-500 flex items-center justify-center shrink-0 z-10">
+                      <Users className="w-4 h-4 text-cyan-400" />
+                    </div>
+                    <div className="flex-1 pb-4">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-bold text-cyan-400">Phase 2: Community Validators</span>
+                        <Badge className="bg-cyan-500/20 text-cyan-400 text-[10px]">Q3 2026</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">Open applications for community validators. Approved members run nodes and stake DWC. On-chain governance for validator approval.</p>
+                      <div className="mt-2 text-xs text-white/60">Target: 15-25 Active Validators</div>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="w-8 h-8 rounded-full bg-purple-500/30 border-2 border-purple-500 flex items-center justify-center shrink-0 z-10">
+                      <Shield className="w-4 h-4 text-purple-400" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-bold text-purple-400">Phase 3: PoSA Hybrid</span>
+                        <Badge className="bg-purple-500/20 text-purple-400 text-[10px]">2027</Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">Transition to Proof of Staked Authority. Any DWC holder can stake to become a validator candidate. Community votes on validator set.</p>
+                      <div className="mt-2 text-xs text-white/60">Target: 50+ Decentralized Validators</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </GlassCard>
+          </motion.div>
+
           {/* Become a Validator - Coming Soon */}
           <motion.div 
             className="mt-12"
