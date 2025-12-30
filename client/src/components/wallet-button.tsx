@@ -242,7 +242,7 @@ export function WalletButton() {
                     <div className="w-full border-t border-white/10" />
                   </div>
                   <div className="relative flex justify-center text-[10px]">
-                    <span className="bg-background px-2 text-muted-foreground">or connect external</span>
+                    <span className="bg-[#0c1224] px-2 text-muted-foreground">or connect external</span>
                   </div>
                 </div>
 
