@@ -1,0 +1,580 @@
+Copilot said: // server/storage.ts import { db } from './db'; import
+// server/storage.ts import { db } from './db'; import { communities, channels, messages, reactions, members, roles, invites } from '../shared/chat-schema'; import { InsertResult } from 'drizzle-orm'; import { eq, and, lt, gte, sql } from 'drizzle-orm'; import type { Community as TCommunity, Channel as TChannel, Message as TMessage, Reaction as TReaction, Member as TMember, Role as TRole, Invite as TInvite } from '../shared/chat-types'; import crypto from 'crypto';
+
+/**
+
+NOTE:
+This file provides a DatabaseStorage implementation that follows the IStorage
+interface used by server routes. Methods are implemented using Drizzle ORM
+against the tables exported by shared/chat-schema.ts.
+TODO: Replit agent - add transactions, error handling policies, and permission checks. */
+/* --- Insert types --- */ export type InsertCommunity = { id?: string; name: string; description?: string | null; ownerId: string; privacy?: 'public' | 'private' | 'invite-only'; };
+
+export type InsertChannel = { id?: string; communityId: string; name: string; description?: string | null; category?: string | null; type?: string; position?: number; };
+
+export type InsertMessage = { id?: string; channelId: string; authorId: string; content?: string | null; replyToId?: string | null; };
+
+export type InsertReaction = { id?: string; messageId: string; userId: string; emoji: string; };
+
+export type InsertMember = { id?: string; communityId: string; userId: string; roleId?: string | null; };
+
+export type InsertRole = { id?: string; communityId: string; name: string; color?: string; permissions?: any; };
+
+export type InsertInvite = { id?: string; communityId: string; code?: string; expiresAt?: Date | null; maxUses?: number | null; };
+
+/* --- IStorage interface --- */ export interface IStorage { // Communities createCommunity(data: InsertCommunity): Promise<TCommunity>; getCommunity(id: string): Promise<TCommunity | null>; getUserCommunities(userId: string): Promise<TCommunity[]>; updateCommunity(id: string, data: Partial<TCommunity>): Promise<TCommunity>; deleteCommunity(id: string): Promise<void>; // Channels createChannel(data: InsertChannel): Promise<TChannel>; getChannelsByCommunity(communityId: string): Promise<TChannel[]>; updateChannel(id: string, data: Partial<TChannel>): Promise<TChannel>; deleteChannel(id: string): Promise<void>; // Messages createMessage(data: InsertMessage): Promise<TMessage>; getMessagesByChannel(channelId: string, limit?: number, before?: string): Promise<TMessage[]>; updateMessage(id: string, content: string): Promise<TMessage>; deleteMessage(id: string): Promise<void>; // Reactions addReaction(messageId: string, userId: string, emoji: string): Promise<TReaction>; removeReaction(messageId: string, userId: string, emoji: string): Promise<void>; getReactionsByMessage(messageId: string): Promise<TReaction[]>; // Members addMember(communityId: string, userId: string, roleId?: string): Promise<TMember>; removeMember(communityId: string, userId: string): Promise<void>; getMembersByCommunity(communityId: string): Promise<TMember[]>; updateMemberRole(communityId: string, userId: string, roleId: string): Promise<TMember>; // Roles createRole(data: InsertRole): Promise<TRole>; getRolesByCommunity(communityId: string): Promise<TRole[]>; updateRole(id: string, data: Partial<TRole>): Promise<TRole>; deleteRole(id: string): Promise<void>; // Invites createInvite(communityId: string, expiresAt?: Date | null, maxUses?: number | null): Promise<TInvite>; getInviteByCode(code: string): Promise<TInvite | null>; useInvite(code: string): Promise<void>; revokeInvite(id: string): Promise<void>; }
+
+/* --- DatabaseStorage implementation --- */ export class DatabaseStorage implements IStorage { // Communities async createCommunity(data: InsertCommunity) { const id = data.id ?? com-${crypto.randomBytes(8).toString('hex')}; const [created] = await db.insert(communities).values({ id, name: data.name, description: data.description ?? null, ownerId: data.ownerId, privacy: data.privacy ?? 'public' }).returning(); return created as unknown as TCommunity; }
+
+async getCommunity(id: string) { const [c] = await db.select().from(communities).where(eq(communities.id, id)).limit(1); return (c ?? null) as TCommunity | null; }
+
+async getUserCommunities(userId: string) { // communities owned by user or where user is a member (simple approach) const owned = await db.select().from(communities).where(eq(communities.ownerId, userId)); // TODO: Replit agent - join with members table to include non-owner memberships return owned as TCommunity[]; }
+
+async updateCommunity(id: string, data: Partial<TCommunity>) { await db.update(communities).set({ name: data.name as any, description: (data as any).description as any, privacy: (data as any).privacy as any }).where(eq(communities.id, id)); const updated = await this.getCommunity(id); if (!updated) throw new Error('Community not found'); return updated; }
+
+async deleteCommunity(id: string) { await db.delete(communities).where(eq(communities.id, id)); }
+
+// Channels async createChannel(data: InsertChannel) { const id = data.id ?? ch-${crypto.randomBytes(8).toString('hex')}; const [created] = await db.insert(channels).values({ id, communityId: data.communityId, name: data.name, description: data.description ?? null, category: data.category ?? null, type: data.type ?? 'text', position: data.position ?? 0 }).returning(); return created as unknown as TChannel; }
+
+async getChannelsByCommunity(communityId: string) { const list = await db.select().from(channels).where(eq(channels.communityId, communityId)).orderBy(channels.position); return list as TChannel[]; }
+
+async updateChannel(id: string, data: Partial<TChannel>) { await db.update(channels).set({ name: (data as any).name, description: (data as any).description, category: (data as any).category, type: (data as any).type, position: (data as any).position }).where(eq(channels.id, id)); const [c] = await db.select().from(channels).where(eq(channels.id, id)).limit(1); if (!c) throw new Error('Channel not found'); return c as TChannel; }
+
+async deleteChannel(id: string) { await db.delete(channels).where(eq(channels.id, id)); }
+
+// Messages async createMessage(data: InsertMessage) { const id = data.id ?? msg-${crypto.randomBytes(8).toString('hex')}; const [created] = await db.insert(messages).values({ id, channelId: data.channelId, authorId: data.authorId, content: data.content ?? null, replyToId: data.replyToId ?? null }).returning(); return created as unknown as TMessage; }
+
+async getMessagesByChannel(channelId: string, limit = 50, before?: string) { // before is ISO timestamp string - return messages created before that time if (before) { return (await db.select().from(messages).where(and(eq(messages.channelId, channelId), lt(messages.createdAt, new Date(before)))).orderBy(messages.createdAt).limit(limit)) as TMessage[]; } return (await db.select().from(messages).where(eq(messages.channelId, channelId)).orderBy(messages.createdAt).limit(limit)) as TMessage[]; }
+
+async updateMessage(id: string, content: string) { await db.update(messages).set({ content, editedAt: new Date() }).where(eq(messages.id, id)); const [m] = await db.select().from(messages).where(eq(messages.id, id)).limit(1); if (!m) throw new Error('Message not found'); return m as TMessage; }
+
+async deleteMessage(id: string) { await db.delete(messages).where(eq(messages.id, id)); }
+
+// Reactions async addReaction(messageId: string, userId: string, emoji: string) { const id = react-${crypto.randomBytes(8).toString('hex')}; const [created] = await db.insert(reactions).values({ id, messageId, userId, emoji }).returning(); return created as unknown as TReaction; }
+
+async removeReaction(messageId: string, userId: string, emoji: string) { await db.delete(reactions).where(and(eq(reactions.messageId, messageId), eq(reactions.userId, userId), eq(reactions.emoji, emoji))); }
+
+async getReactionsByMessage(messageId: string) { const list = await db.select().from(reactions).where(eq(reactions.messageId, messageId)); return list as TReaction[]; }
+
+// Members async addMember(communityId: string, userId: string, roleId?: string) { const id = mem-${crypto.randomBytes(8).toString('hex')}; const [created] = await db.insert(members).values({ id, communityId, userId, roleId: roleId ?? null }).returning(); return created as unknown as TMember; }
+
+async removeMember(communityId: string, userId: string) { await db.delete(members).where(and(eq(members.communityId, communityId), eq(members.userId, userId))); }
+
+async getMembersByCommunity(communityId: string) { const list = await db.select().from(members).where(eq(members.communityId, communityId)); return list as TMember[]; }
+
+async updateMemberRole(communityId: string, userId: string, roleId: string) { await db.update(members).set({ roleId }).where(and(eq(members.communityId, communityId), eq(members.userId, userId))); const [m] = await db.select().from(members).where(and(eq(members.communityId, communityId), eq(members.userId, userId))).limit(1); if (!m) throw new Error('Member not found'); return m as TMember; }
+
+// Roles async createRole(data: InsertRole) { const id = data.id ?? role-${crypto.randomBytes(8).toString('hex')}; const [created] = await db.insert(roles).values({ id, communityId: data.communityId, name: data.name, color: data.color ?? '#7c3aed', permissions: (data.permissions ?? {}) as any }).returning(); return created as unknown as TRole; }
+
+async getRolesByCommunity(communityId: string) { const list = await db.select().from(roles).where(eq(roles.communityId, communityId)); return list as TRole[]; }
+
+async updateRole(id: string, data: Partial<TRole>) { await db.update(roles).set({ name: (data as any).name, color: (data as any).color, permissions: (data as any).permissions }).where(eq(roles.id, id)); const [r] = await db.select().from(roles).where(eq(roles.id, id)).limit(1); if (!r) throw new Error('Role not found'); return r as TRole; }
+
+async deleteRole(id: string) { await db.delete(roles).where(eq(roles.id, id)); }
+
+// Invites async createInvite(communityId: string, expiresAt?: Date | null, maxUses?: number | null) { const id = inv-${crypto.randomBytes(8).toString('hex')}; const code = crypto.randomBytes(6).toString('hex'); const [created] = await db.insert(invites).values({ id, communityId, code, expiresAt: expiresAt ?? null, maxUses: maxUses ?? null, uses: 0 }).returning(); return created as unknown as TInvite; }
+
+async getInviteByCode(code: string) { const [inv] = await db.select().from(invites).where(eq(invites.code, code)).limit(1); return (inv ?? null) as TInvite | null; }
+
+async useInvite(code: string) { // increment uses atomically if within maxUses/expiry // NOTE: This is a simplified pattern; Replit agent should wrap in a DB transaction const inv = await this.getInviteByCode(code); if (!inv) throw new Error('Invite not found'); if (inv.expiresAt && new Date(inv.expiresAt).getTime() < Date.now()) throw new Error('Invite expired'); if (inv.maxUses !== null && (inv.uses ?? 0) >= (inv.maxUses ?? 0)) throw new Error('Invite exhausted'); await db.update(invites).set({ uses: (inv.uses ?? 0) + 1 }).where(eq(invites.id, inv.id)); }
+
+async revokeInvite(id: string) { await db.delete(invites).where(eq(invites.id, id)); } }
+
+/* default export instance for convenience in routes */ export const storage: IStorage = new DatabaseStorage();
+
+export default storage;
+
+Code
+
+```typescript
+// server/chat-routes.ts
+import { Router, Request, Response } from 'express';
+import { z } from 'zod';
+import crypto from 'crypto';
+import storage from './storage';
+import type { IStorage } from './storage';
+import type { Community, Channel, Message, Reaction, Member, Role, Invite } from '../shared/chat-types';
+
+// TODO: Replit agent - add isAuthenticated middleware import and use on protected routes
+const router = Router();
+
+/* ----------------------
+   Validation schemas
+   ---------------------- */
+const CreateCommunitySchema = z.object({
+  name: z.string().min(1).max(255),
+  description: z.string().optional().nullable(),
+  privacy: z.enum(['public', 'private', 'invite-only']).optional().default('public'),
+});
+
+const UpdateCommunitySchema = z.object({
+  name: z.string().min(1).max(255).optional(),
+  description: z.string().optional().nullable(),
+  privacy: z.enum(['public', 'private', 'invite-only']).optional(),
+});
+
+const CreateChannelSchema = z.object({
+  name: z.string().min(1).max(255),
+  description: z.string().optional().nullable(),
+  category: z.string().optional().nullable(),
+  type: z.enum(['text', 'voice', 'announcement']).optional().default('text'),
+});
+
+const UpdateChannelSchema = z.object({
+  name: z.string().min(1).max(255).optional(),
+  description: z.string().optional().nullable(),
+  category: z.string().optional().nullable(),
+  type: z.enum(['text', 'voice', 'announcement']).optional(),
+});
+
+const SendMessageSchema = z.object({
+  content: z.string().min(0).optional(),
+  replyToId: z.string().optional().nullable(),
+});
+
+const EditMessageSchema = z.object({
+  content: z.string().min(1),
+});
+
+const AddReactionSchema = z.object({
+  emoji: z.string().min(1)
+});
+
+/* ----------------------
+   Utilities
+   ---------------------- */
+function getUserIdFromReq(req: Request): string | null {
+  // TODO: Replit agent - wire real auth. For now use req.user if present
+  return (req as any).user?.id ?? null;
+}
+
+/* ======================
+   Communities CRUD
+   ====================== */
+
+// POST /api/chat/communities - Create community
+router.post('/communities', async (req: Request, res: Response) => {
+  try {
+    const body = CreateCommunitySchema.parse(req.body);
+    const userId = getUserIdFromReq(req);
+    if (!userId) return res.status(401).json({ error: 'unauthenticated' });
+
+    const community = await storage.createCommunity({
+      name: body.name,
+      description: body.description ?? null,
+      ownerId: userId,
+      privacy: body.privacy
+    });
+
+    // Add creator as member
+    await storage.addMember(community.id, userId, undefined);
+
+    res.json({ success: true, community });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// GET /api/chat/communities - List user's communities
+router.get('/communities', async (req: Request, res: Response) => {
+  try {
+    const userId = getUserIdFromReq(req);
+    if (!userId) return res.status(401).json({ error: 'unauthenticated' });
+
+    const list = await storage.getUserCommunities(userId);
+    res.json({ success: true, communities: list });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// GET /api/chat/communities/:id - Get community details
+router.get('/communities/:id', async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const community = await storage.getCommunity(id);
+    if (!community) return res.status(404).json({ error: 'not_found' });
+    res.json({ success: true, community });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PATCH /api/chat/communities/:id - Update community
+router.patch('/communities/:id', async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const body = UpdateCommunitySchema.parse(req.body);
+    const userId = getUserIdFromReq(req);
+    if (!userId) return res.status(401).json({ error: 'unauthenticated' });
+
+    const community = await storage.getCommunity(id);
+    if (!community) return res.status(404).json({ error: 'not_found' });
+
+    // TODO: Replit agent - permission check (owner/admin)
+    if (community.ownerId !== userId) return res.status(403).json({ error: 'forbidden' });
+
+    const updated = await storage.updateCommunity(id, body as any);
+    res.json({ success: true, community: updated });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// DELETE /api/chat/communities/:id - Delete community
+router.delete('/communities/:id', async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const userId = getUserIdFromReq(req);
+    if (!userId) return res.status(401).json({ error: 'unauthenticated' });
+
+    const community = await storage.getCommunity(id);
+    if (!community) return res.status(404).json({ error: 'not_found' });
+    if (community.ownerId !== userId) return res.status(403).json({ error: 'forbidden' });
+
+    await storage.deleteCommunity(id);
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* ======================
+   Channels
+   ====================== */
+
+// POST /api/chat/communities/:communityId/channels - Create channel
+router.post('/communities/:communityId/channels', async (req: Request, res: Response) => {
+  try {
+    const communityId = req.params.communityId;
+    const body = CreateChannelSchema.parse(req.body);
+    const userId = getUserIdFromReq(req);
+    if (!userId) return res.status(401).json({ error: 'unauthenticated' });
+
+    // TODO: Replit agent - permission check (who can create channels)
+    const ch = await storage.createChannel({
+      communityId,
+      name: body.name,
+      description: body.description ?? null,
+      category: body.category ?? null,
+      type: body.type ?? 'text'
+    });
+    res.json({ success: true, channel: ch });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// GET /api/chat/communities/:communityId/channels - List channels
+router.get('/communities/:communityId/channels', async (req: Request, res: Response) => {
+  try {
+    const communityId = req.params.communityId;
+    const list = await storage.getChannelsByCommunity(communityId);
+    res.json({ success: true, channels: list });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PATCH /api/chat/channels/:id - Update channel
+router.patch('/channels/:id', async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const body = UpdateChannelSchema.parse(req.body);
+    const updated = await storage.updateChannel(id, body as any);
+    res.json({ success: true, channel: updated });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// DELETE /api/chat/channels/:id - Delete channel
+router.delete('/channels/:id', async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    // TODO: Replit agent - permission checks
+    await storage.deleteChannel(id);
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* ======================
+   Messages
+   ====================== */
+
+// POST /api/chat/channels/:channelId/messages - Send message
+router.post('/channels/:channelId/messages', async (req: Request, res: Response) => {
+  try {
+    const channelId = req.params.channelId;
+    const body = SendMessageSchema.parse(req.body);
+    const userId = getUserIdFromReq(req);
+    if (!userId) return res.status(401).json({ error: 'unauthenticated' });
+
+    const msg = await storage.createMessage({
+      channelId,
+      authorId: userId,
+      content: body.content ?? '',
+      replyToId: body.replyToId ?? null
+    });
+
+    // TODO: Replit agent - broadcast via WebSocket (chat events)
+    res.json({ success: true, message: msg });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// GET /api/chat/channels/:channelId/messages - Get messages (paginated)
+router.get('/channels/:channelId/messages', async (req: Request, res: Response) => {
+  try {
+    const channelId = req.params.channelId;
+    const limit = Math.min(100, Number(req.query.limit ?? 50));
+    const before = req.query.before as string | undefined;
+    const msgs = await storage.getMessagesByChannel(channelId, limit, before);
+    res.json({ success: true, messages: msgs });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PATCH /api/chat/messages/:id - Edit message
+router.patch('/messages/:id', async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const body = EditMessageSchema.parse(req.body);
+    const userId = getUserIdFromReq(req);
+    if (!userId) return res.status(401).json({ error: 'unauthenticated' });
+
+    // TODO: Replit agent - verify author or moderator privilege
+    const updated = await storage.updateMessage(id, body.content);
+    res.json({ success: true, message: updated });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// DELETE /api/chat/messages/:id - Delete message
+router.delete('/messages/:id', async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    // TODO: Replit agent - verify permission (author/mod)
+    await storage.deleteMessage(id);
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* ======================
+   Reactions
+   ====================== */
+
+// POST /api/chat/messages/:messageId/reactions - Add reaction
+router.post('/messages/:messageId/reactions', async (req: Request, res: Response) => {
+  try {
+    const messageId = req.params.messageId;
+    const body = AddReactionSchema.parse(req.body);
+    const userId = getUserIdFromReq(req);
+    if (!userId) return res.status(401).json({ error: 'unauthenticated' });
+
+    const reaction = await storage.addReaction(messageId, userId, body.emoji);
+    // TODO: Replit agent - broadcast reaction add via WS
+    res.json({ success: true, reaction });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// DELETE /api/chat/messages/:messageId/reactions/:emoji - Remove reaction
+router.delete('/messages/:messageId/reactions/:emoji', async (req: Request, res: Response) => {
+  try {
+    const messageId = req.params.messageId;
+    const emoji = decodeURIComponent(req.params.emoji);
+    const userId = getUserIdFromReq(req);
+    if (!userId) return res.status(401).json({ error: 'unauthenticated' });
+
+    await storage.removeReaction(messageId, userId, emoji);
+    // TODO: Replit agent - broadcast reaction remove via WS
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* ======================
+   Members
+   ====================== */
+
+// GET /api/chat/communities/:communityId/members - List members
+router.get('/communities/:communityId/members', async (req: Request, res: Response) => {
+  try {
+    const communityId = req.params.communityId;
+    const list = await storage.getMembersByCommunity(communityId);
+    res.json({ success: true, members: list });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/chat/communities/:communityId/members - Add member
+router.post('/communities/:communityId/members', async (req: Request, res: Response) => {
+  try {
+    const communityId = req.params.communityId;
+    const { userId, roleId } = req.body;
+    // TODO: Replit agent - validate body with Zod, check permissions
+    const member = await storage.addMember(communityId, userId, roleId);
+    res.json({ success: true, member });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// DELETE /api/chat/communities/:communityId/members/:userId - Remove member
+router.delete('/communities/:communityId/members/:userId', async (req: Request, res: Response) => {
+  try {
+    const communityId = req.params.communityId;
+    const userId = req.params.userId;
+    // TODO: Replit agent - permission checks
+    await storage.removeMember(communityId, userId);
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PATCH /api/chat/communities/:communityId/members/:userId - Update member role
+router.patch('/communities/:communityId/members/:userId', async (req: Request, res: Response) => {
+  try {
+    const communityId = req.params.communityId;
+    const userId = req.params.userId;
+    const { roleId } = req.body;
+    // TODO: Replit agent - validate and permission check
+    const updated = await storage.updateMemberRole(communityId, userId, roleId);
+    res.json({ success: true, member: updated });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+/* ======================
+   Roles
+   ====================== */
+
+// POST /api/chat/communities/:communityId/roles - Create role
+router.post('/communities/:communityId/roles', async (req: Request, res: Response) => {
+  try {
+    const communityId = req.params.communityId;
+    const { name, color, permissions } = req.body;
+    // TODO: Replit agent - validate input with Zod & permission check
+    const role = await storage.createRole({
+      communityId,
+      name,
+      color,
+      permissions
+    });
+    res.json({ success: true, role });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// GET /api/chat/communities/:communityId/roles - List roles
+router.get('/communities/:communityId/roles', async (req: Request, res: Response) => {
+  try {
+    const communityId = req.params.communityId;
+    const list = await storage.getRolesByCommunity(communityId);
+    res.json({ success: true, roles: list });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PATCH /api/chat/roles/:id - Update role
+router.patch('/roles/:id', async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    const { name, color, permissions } = req.body;
+    const updated = await storage.updateRole(id, { name, color, permissions } as any);
+    res.json({ success: true, role: updated });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// DELETE /api/chat/roles/:id - Delete role
+router.delete('/roles/:id', async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    await storage.deleteRole(id);
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/* ======================
+   Invites
+   ====================== */
+
+// POST /api/chat/communities/:communityId/invites - Generate invite
+router.post('/communities/:communityId/invites', async (req: Request, res: Response) => {
+  try {
+    const communityId = req.params.communityId;
+    const { expiresAt, maxUses } = req.body;
+    const invite = await storage.createInvite(communityId, expiresAt ? new Date(expiresAt) : null, maxUses ?? null);
+    res.json({ success: true, invite });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// GET /api/chat/invites/:code - Get invite info (public)
+router.get('/invites/:code', async (req: Request, res: Response) => {
+  try {
+    const code = req.params.code;
+    const inv = await storage.getInviteByCode(code);
+    if (!inv) return res.status(404).json({ error: 'not_found' });
+    res.json({ success: true, invite: inv });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// POST /api/chat/invites/:code/join - Join via invite
+router.post('/invites/:code/join', async (req: Request, res: Response) => {
+  try {
+    const code = req.params.code;
+    const userId = getUserIdFromReq(req);
+    if (!userId) return res.status(401).json({ error: 'unauthenticated' });
+
+    const inv = await storage.getInviteByCode(code);
+    if (!inv) return res.status(404).json({ error: 'invalid_invite' });
+    // validate expiry / uses
+    if (inv.expiresAt && new Date(inv.expiresAt).getTime() < Date.now()) return res.status(400).json({ error: 'expired' });
+    if (inv.maxUses !== null && (inv.uses ?? 0) >= (inv.maxUses ?? 0)) return res.status(400).json({ error: 'exhausted' });
+
+    // add member and increment usage
+    await storage.addMember(inv.communityId, userId, undefined);
+    await storage.useInvite(code);
+
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// DELETE /api/chat/invites/:id - Revoke invite
+router.delete('/invites/:id', async (req: Request, res: Response) => {
+  try {
+    const id = req.params.id;
+    // TODO: Replit agent - permission check (owner/admin)
+    await storage.revokeInvite(id);
+    res.json({ success: true });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+export default router;
