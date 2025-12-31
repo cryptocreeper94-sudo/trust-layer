@@ -1,0 +1,77 @@
+// client/src/pages/guardian-certification.tsx
+import React from 'react';
+import { CertificationBadge } from '../components/guardian/CertificationBadge';
+import { motion } from 'framer-motion';
+
+export default function GuardianCertificationPage() {
+  return (
+    <main className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 p-4 text-white" data-testid="guardian-certification-page">
+      <section className="max-w-4xl mx-auto py-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold">Guardian Certification</h1>
+            <p className="text-slate-400 mt-2 max-w-lg">Security-first certification for DarkWave projects. Independent audits, monitoring, and guarantees.</p>
+            <div className="mt-4 flex gap-2">
+              <CertificationBadge tier="Free" />
+              <CertificationBadge tier="Lite" />
+              <CertificationBadge tier="Premier" />
+            </div>
+          </div>
+
+          <div className="w-full sm:w-1/3">
+            <div className="p-4 rounded-xl bg-slate-900/40 border border-slate-800/40">
+              <div className="text-sm text-slate-300">Get started</div>
+              <div className="mt-2">
+                <button className="w-full py-3 rounded-md bg-gradient-to-r from-cyan-500 to-purple-500 text-black" data-testid="cert-cta">Apply for review</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <motion.div className="mt-8 grid gap-4">
+          <div className="grid sm:grid-cols-3 gap-4">
+            <div className="p-4 rounded-lg bg-slate-950/30 border border-slate-800/40">
+              <h3 className="text-sm font-semibold text-white">Self-Cert Free</h3>
+              <div className="text-slate-400 text-xs mt-2">Self-paced security checklist.</div>
+              <div className="mt-4 text-white font-bold">$0</div>
+            </div>
+            <div className="p-4 rounded-lg bg-slate-950/30 border border-slate-800/40">
+              <h3 className="text-sm font-semibold text-white">Assurance Lite</h3>
+              <div className="text-slate-400 text-xs mt-2">Manual review + basic monitoring.</div>
+              <div className="mt-4 text-white font-bold">$5,999</div>
+            </div>
+            <div className="p-4 rounded-lg bg-slate-950/30 border border-slate-800/40">
+              <h3 className="text-sm font-semibold text-white">Guardian Premier</h3>
+              <div className="text-slate-400 text-xs mt-2">Full audit, monitoring and incident response.</div>
+              <div className="mt-4 text-white font-bold">$14,999</div>
+            </div>
+          </div>
+
+          <div className="mt-6 p-4 rounded-lg bg-slate-950/30 border border-slate-800/40">
+            <h3 className="text-lg font-semibold">6-Pillar Methodology</h3>
+            <ul className="mt-3 text-slate-400 list-inside list-disc">
+              <li>Code Review</li>
+              <li>Dependency Analysis</li>
+              <li>Design & Threat Modeling</li>
+              <li>Fuzzing & Dynamic Testing</li>
+              <li>Monitoring & Incident Response</li>
+              <li>Certification & Reporting</li>
+            </ul>
+          </div>
+
+          <div className="mt-6 p-4 rounded-lg bg-slate-950/30 border border-slate-800/40">
+            <h3 className="text-lg font-semibold">Process Timeline</h3>
+            <ol className="mt-3 text-slate-400 list-decimal list-inside space-y-2">
+              <li>Initial Intake</li>
+              <li>Scope & Assets</li>
+              <li>Audit & Testing</li>
+              <li>Remediation</li>
+              <li>Monitoring Setup</li>
+              <li>Certification Issued</li>
+            </ol>
+          </div>
+        </motion.div>
+      </section>
+    </main>
+  );
+}

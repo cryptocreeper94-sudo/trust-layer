@@ -1,0 +1,61 @@
+// client/src/pages/guardian-shield.tsx
+import React from 'react';
+import { CertificationBadge } from '../components/guardian/CertificationBadge';
+
+export default function GuardianShieldPage() {
+  return (
+    <main className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 p-4" data-testid="guardian-shield-page">
+      <section className="max-w-6xl mx-auto py-8 text-white">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Guardian Shield — Monitoring & Response</h1>
+            <p className="text-slate-400 mt-2">Continuous security monitoring and alerting for your smart contracts and infrastructure.</p>
+          </div>
+          <div>
+            <CertificationBadge tier="Premier" />
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-4">
+          <div className="p-4 rounded-xl bg-slate-950/30 border border-slate-800/40">
+            <h3 className="text-lg font-semibold">Tier Comparison</h3>
+            <div className="mt-4 overflow-auto">
+              <table className="w-full text-left text-sm">
+                <thead>
+                  <tr className="text-slate-400">
+                    <th className="p-2">Feature</th>
+                    <th className="p-2">Watch $299</th>
+                    <th className="p-2">Shield $999</th>
+                    <th className="p-2">Command $2,999</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td className="p-2">Alerts</td><td className="p-2">Basic</td><td className="p-2">Advanced</td><td className="p-2">Enterprise</td></tr>
+                  <tr><td className="p-2">Incident Response</td><td className="p-2">—</td><td className="p-2">Included</td><td className="p-2">24/7</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-950/30 border border-slate-800/40">
+            <h3 className="text-lg font-semibold">Feature Grid</h3>
+            <div className="mt-3 grid sm:grid-cols-3 gap-3">
+              <div className="p-3 rounded-md bg-slate-900/40">Real-time Alerts</div>
+              <div className="p-3 rounded-md bg-slate-900/40">Anomaly Detection</div>
+              <div className="p-3 rounded-md bg-slate-900/40">On-call Response</div>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-950/30 border border-slate-800/40">
+            <h3 className="text-lg font-semibold">Live Stats</h3>
+            <div className="mt-3 text-slate-400">Uptime: <span className="text-cyan-300">99.99%</span></div>
+            <div className="mt-2 text-slate-400">Active Alerts: <span className="text-pink-400">0</span></div>
+            <div className="mt-4">
+              <button className="py-2 px-3 rounded-md bg-cyan-500 text-black">Subscribe</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
