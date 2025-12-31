@@ -4,7 +4,7 @@ import {
   Clock, Users, Brain, Shield, Crown, Sparkles, Heart, Eye, Map, Coins, 
   ChevronRight, ChevronLeft, Star, Flame, Target, Compass,
   Globe, Zap, History, Theater, Sword, BookOpen, Building, Rocket,
-  Info, X, Play, Volume2, VolumeX
+  Info, X, Play, Volume2, VolumeX, ArrowLeft
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
@@ -588,10 +588,18 @@ export default function Chronicles() {
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10 text-[10px] sm:text-xs whitespace-nowrap animate-pulse">
+            <a 
+              href="https://dwsc.io" 
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-500 text-black font-bold hover:bg-cyan-400 transition-all text-xs shadow-lg shadow-cyan-500/30"
+              data-testid="button-back-to-portal"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Portal</span>
+            </a>
+            <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10 text-[10px] sm:text-xs whitespace-nowrap animate-pulse hidden sm:flex">
               <Sparkles className="w-3 h-3 mr-1" /> Coming 2026
             </Badge>
-            <BackButton />
+            <BackButton className="hidden sm:flex" />
           </div>
         </div>
       </nav>
