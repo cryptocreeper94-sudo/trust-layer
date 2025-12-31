@@ -7,10 +7,10 @@ import { setupCommunityWebSocket } from "./community-ws";
 import { z } from "zod";
 import { storage } from "./storage";
 import { db } from "./db";
-import { sql, eq, desc } from "drizzle-orm";
+import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, waitlist, betaTesters, whitelistedUsers } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, waitlist, betaTesters, whitelistedUsers, blockchainDomains } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -8604,6 +8604,69 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   startPayoutScheduler(24);
+
+  // ============================================
+  // OWNER DOMAIN MANAGEMENT (NO WALLET REQUIRED)
+  // ============================================
+
+  app.get("/api/owner/domains", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const domains = await db.select().from(blockchainDomains).orderBy(desc(blockchainDomains.registeredAt));
+      res.json(domains);
+    } catch (error) {
+      console.error("Get owner domains error:", error);
+      res.status(500).json({ error: "Failed to get domains" });
+    }
+  });
+
+  app.post("/api/owner/domains", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { name, tld } = req.body;
+      if (!name || !tld) {
+        return res.status(400).json({ error: "Domain name and TLD required" });
+      }
+
+      const cleanName = name.toLowerCase().replace(/[^a-z0-9-]/g, '');
+      if (cleanName.length < 1 || cleanName.length > 63) {
+        return res.status(400).json({ error: "Domain name must be 1-63 characters" });
+      }
+
+      const existing = await db.select().from(blockchainDomains)
+        .where(and(eq(blockchainDomains.name, cleanName), eq(blockchainDomains.tld, tld)))
+        .limit(1);
+
+      if (existing.length > 0) {
+        return res.status(400).json({ error: "Domain already registered" });
+      }
+
+      const [domain] = await db.insert(blockchainDomains).values({
+        name: cleanName,
+        tld,
+        ownerAddress: "OWNER_MANAGED",
+        registeredAt: new Date(),
+        expiresAt: null,
+        ownershipType: "lifetime",
+        isPremium: false,
+        isProtected: true,
+      }).returning();
+
+      res.json(domain);
+    } catch (error) {
+      console.error("Add owner domain error:", error);
+      res.status(500).json({ error: "Failed to add domain" });
+    }
+  });
+
+  app.delete("/api/owner/domains/:id", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { id } = req.params;
+      await db.delete(blockchainDomains).where(eq(blockchainDomains.id, id));
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Delete owner domain error:", error);
+      res.status(500).json({ error: "Failed to delete domain" });
+    }
+  });
 
   // ============================================
   // OWNER USER MANAGEMENT
