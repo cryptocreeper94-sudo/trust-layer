@@ -24,10 +24,12 @@ import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.pn
 import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
 import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
-import deepSpace from "@assets/generated_images/deep_space_station.png";
-import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
-import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
+import bridgeVisual from "@assets/generated_images/darkwave_bridge_visual.png";
+import nftGallery from "@assets/generated_images/darkwave_nft_gallery_visual.png";
+import communityVisual from "@assets/generated_images/darkwave_community_visual.png";
 import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
+import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
+import deepSpace from "@assets/generated_images/deep_space_station.png";
 
 const TOKEN_PRICE = 0.005;
 const PRESALE_ALLOCATION = 15000000;
@@ -57,6 +59,8 @@ const ECOSYSTEM_FEATURES = [
     icon: Zap,
     image: blockchainBg,
     gradient: "from-cyan-500/20 to-blue-600/20",
+    fullDescription: "DarkWave Smart Chain is a high-performance Layer 1 blockchain built for speed and scalability. With 400ms block times and over 200,000 transactions per second, it's designed for real-world applications that demand instant finality.",
+    features: ["Ultra-fast 400ms block confirmation", "200,000+ TPS capacity", "Proof-of-Authority consensus for reliability", "EVM-compatible smart contracts", "Low transaction fees"],
   },
   {
     title: "DeFi Ecosystem",
@@ -64,6 +68,8 @@ const ECOSYSTEM_FEATURES = [
     icon: TrendingUp,
     image: dashboardImg,
     gradient: "from-green-500/20 to-emerald-600/20",
+    fullDescription: "Access a complete suite of decentralized finance tools built natively on DarkWave. Trade, stake, and earn rewards all within our integrated ecosystem.",
+    features: ["Decentralized Exchange (DEX) with low slippage", "Flexible staking with competitive APY", "Liquidity pool participation rewards", "Yield farming strategies", "Portfolio dashboard and analytics"],
   },
   {
     title: "DarkWave Chronicles",
@@ -71,27 +77,35 @@ const ECOSYSTEM_FEATURES = [
     icon: Sparkles,
     image: fantasyWorld,
     gradient: "from-purple-500/20 to-pink-600/20",
+    fullDescription: "DarkWave Chronicles is a revolutionary parallel life experience where your choices shape history. Explore different eras, build relationships, and discover who you could become in another time.",
+    features: ["AI-driven narrative that adapts to you", "Multiple historical eras to explore", "Persistent world that remembers your choices", "Community-driven content creation", "Earn rewards through gameplay"],
   },
   {
     title: "Cross-Chain Bridge",
     description: "Seamless transfers to Ethereum and Solana",
     icon: Globe,
-    image: deepSpace,
+    image: bridgeVisual,
     gradient: "from-orange-500/20 to-red-600/20",
+    fullDescription: "Move assets freely between DarkWave, Ethereum, and Solana with our secure cross-chain bridge. Lock and mint technology ensures your assets are always backed 1:1.",
+    features: ["Bridge to Ethereum and Solana", "Secure lock-and-mint mechanism", "Fast transfer times", "Low bridging fees", "Wrapped token support (wDWC)"],
   },
   {
     title: "NFT Marketplace",
     description: "Create, trade, and stake digital collectibles",
     icon: Award,
-    image: cyberpunkCity,
+    image: nftGallery,
     gradient: "from-pink-500/20 to-rose-600/20",
+    fullDescription: "Create, discover, and trade unique digital collectibles on our NFT marketplace. From art to in-game items, the DarkWave NFT ecosystem connects creators with collectors.",
+    features: ["Mint NFTs with low gas fees", "Royalty support for creators", "Stake NFTs for rewards", "Integration with DarkWave Chronicles", "Rarity analysis tools"],
   },
   {
     title: "Governance DAO",
     description: "Community-driven protocol decisions",
     icon: Users,
-    image: medievalKingdom,
+    image: communityVisual,
     gradient: "from-amber-500/20 to-orange-600/20",
+    fullDescription: "Your voice matters in DarkWave. Token holders participate in governance decisions that shape the future of the ecosystem through our decentralized autonomous organization.",
+    features: ["Vote on protocol upgrades", "Propose new features", "Treasury allocation decisions", "Transparent on-chain governance", "Voting power based on token holdings"],
   },
 ];
 
@@ -482,48 +496,100 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
 }
 
 function EcosystemCard({ feature, index }: { feature: typeof ECOSYSTEM_FEATURES[0]; index: number }) {
+  const [showModal, setShowModal] = useState(false);
   const Icon = feature.icon;
   const isLarge = index === 0 || index === 2;
   
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: index * 0.1 }}
-      className={isLarge ? "md:col-span-2" : ""}
-      data-testid={`card-ecosystem-${index}`}
-    >
-      <HolographicCard className="h-full overflow-hidden group">
-        <div className="relative h-48 overflow-hidden">
-          <img 
-            src={feature.image} 
-            alt={feature.title}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          />
-          <div className={`absolute inset-0 bg-gradient-to-t ${feature.gradient} to-transparent`} />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-          <div className="absolute bottom-4 left-4 right-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                <Icon className="w-5 h-5 text-white" />
+    <>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: index * 0.1 }}
+        className={isLarge ? "md:col-span-2" : ""}
+        data-testid={`card-ecosystem-${index}`}
+      >
+        <HolographicCard className="h-full overflow-hidden group">
+          <div className="relative h-48 overflow-hidden">
+            <img 
+              src={feature.image} 
+              alt={feature.title}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+            <div className={`absolute inset-0 bg-gradient-to-t ${feature.gradient} to-transparent`} />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            <div className="absolute bottom-4 left-4 right-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                  <Icon className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-white">{feature.title}</h3>
               </div>
-              <h3 className="text-xl font-bold text-white">{feature.title}</h3>
             </div>
           </div>
-        </div>
-        <div className="p-4">
-          <p className="text-gray-400 mb-3">{feature.description}</p>
+          <div className="p-4">
+            <p className="text-gray-400 mb-3">{feature.description}</p>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="w-full border-white/10 hover:bg-white/5"
+              onClick={() => setShowModal(true)}
+              data-testid={`button-learn-more-${index}`}
+            >
+              Learn More <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
+        </HolographicCard>
+      </motion.div>
+
+      <Dialog open={showModal} onOpenChange={setShowModal}>
+        <DialogContent className="bg-slate-900 border-white/10 max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-3 text-2xl">
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center`}>
+                <Icon className="w-6 h-6 text-white" />
+              </div>
+              <span className="text-white">{feature.title}</span>
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="relative h-48 rounded-xl overflow-hidden my-4">
+            <img 
+              src={feature.image} 
+              alt={feature.title}
+              className="w-full h-full object-cover"
+            />
+            <div className={`absolute inset-0 bg-gradient-to-t ${feature.gradient} to-transparent opacity-50`} />
+          </div>
+
+          <DialogDescription className="text-gray-300 text-base leading-relaxed">
+            {feature.fullDescription}
+          </DialogDescription>
+          
+          <div className="mt-4">
+            <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
+              <CheckCircle className="w-5 h-5 text-green-400" />
+              Key Features
+            </h4>
+            <ul className="space-y-2">
+              {feature.features.map((feat, i) => (
+                <li key={i} className="flex items-start gap-2 text-gray-300">
+                  <Sparkles className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                  {feat}
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <Button 
-            variant="outline" 
-            size="sm" 
-            className="w-full border-white/10 hover:bg-white/5"
-            data-testid={`button-learn-more-${index}`}
+            onClick={() => setShowModal(false)}
+            className="w-full mt-4 bg-gradient-to-r from-cyan-600 to-purple-600 hover:opacity-90"
           >
-            Learn More <ArrowRight className="w-4 h-4 ml-2" />
+            Got It
           </Button>
-        </div>
-      </HolographicCard>
-    </motion.div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 
