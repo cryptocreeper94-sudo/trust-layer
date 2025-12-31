@@ -27,7 +27,7 @@ export default function Developers() {
           <div className="flex items-center gap-1 sm:gap-2">
             <Link href="/api-playground">
               <Button variant="outline" size="sm" className="h-7 sm:h-8 text-[10px] sm:text-xs px-2 sm:px-3 border-green-500/30 hover:bg-green-500/10 text-green-400" data-testid="button-api-playground">
-                <Play className="w-3 h-3 sm:mr-1.5" /> <span className="hidden sm:inline">API Playground</span>
+                <Play className="w-3 h-3 sm:mr-1.5" /> <span className="hidden sm:inline">Devnet Sandbox</span>
               </Button>
             </Link>
             <Link href="/doc-hub">
@@ -230,6 +230,61 @@ export default function Developers() {
               </GlassCard>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="py-10 px-4 border-t border-white/5">
+        <div className="container mx-auto max-w-6xl">
+          <GlassCard glow>
+            <div className="p-6 md:p-8">
+              <div className="flex flex-col md:flex-row md:items-center gap-6">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="p-2 rounded-lg bg-green-500/20">
+                      <Play className="w-5 h-5 text-green-400" />
+                    </div>
+                    <h2 className="text-lg font-display font-bold">Devnet Sandbox</h2>
+                    <Badge className="bg-green-500/20 text-green-400 text-[10px]">Free</Badge>
+                  </div>
+                  <p className="text-sm text-white/70 mb-4">
+                    The Devnet Sandbox is your <span className="text-white font-medium">risk-free playground</span> for testing 
+                    DarkWave Smart Chain. Create test wallets, request free test coins, and send transactions - 
+                    all without spending real money. Perfect for learning, experimenting, and building your apps.
+                  </p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                    <div className="text-center p-3 rounded-lg bg-black/30 border border-white/10">
+                      <div className="text-xs font-bold text-primary">1. Create Wallet</div>
+                      <div className="text-[10px] text-white/50">Instant test wallet</div>
+                    </div>
+                    <div className="text-center p-3 rounded-lg bg-black/30 border border-white/10">
+                      <div className="text-xs font-bold text-cyan-400">2. Get Test DWC</div>
+                      <div className="text-[10px] text-white/50">Free from faucet</div>
+                    </div>
+                    <div className="text-center p-3 rounded-lg bg-black/30 border border-white/10">
+                      <div className="text-xs font-bold text-secondary">3. Send Transactions</div>
+                      <div className="text-[10px] text-white/50">Test transfers</div>
+                    </div>
+                    <div className="text-center p-3 rounded-lg bg-black/30 border border-white/10">
+                      <div className="text-xs font-bold text-purple-400">4. View Responses</div>
+                      <div className="text-[10px] text-white/50">Real API data</div>
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-yellow-400 bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                    <span className="font-bold">Note:</span> All coins and transactions in the Sandbox are for testing only - they have no real value. 
+                    When you're ready for production, you'll use the Mainnet.
+                  </p>
+                </div>
+                <div className="md:w-48 shrink-0">
+                  <Link href="/api-playground">
+                    <Button className="w-full h-12 bg-green-500 hover:bg-green-400 text-black font-bold text-sm" data-testid="button-open-sandbox">
+                      <Play className="w-4 h-4 mr-2" /> Open Sandbox
+                    </Button>
+                  </Link>
+                  <p className="text-[10px] text-center text-white/40 mt-2">No sign-up required</p>
+                </div>
+              </div>
+            </div>
+          </GlassCard>
         </div>
       </section>
 

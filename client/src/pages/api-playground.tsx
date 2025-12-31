@@ -161,7 +161,46 @@ export default function ApiPlayground() {
         <div className="container mx-auto max-w-6xl">
           <section className="mb-8">
             <h1 className="text-2xl md:text-3xl font-display font-bold mb-2">Devnet Sandbox</h1>
-            <p className="text-sm text-muted-foreground">Test DarkWave Smart Chain features in a safe environment</p>
+            <p className="text-sm text-muted-foreground mb-4">Test DarkWave Smart Chain features in a safe environment</p>
+            
+            <GlassCard className="mb-6">
+              <div className="p-5">
+                <h2 className="text-sm font-bold text-primary mb-3">What is the Devnet Sandbox?</h2>
+                <p className="text-xs text-white/70 mb-4">
+                  The Devnet Sandbox is a <span className="text-white font-medium">risk-free testing environment</span> for developers. 
+                  It's a complete replica of DarkWave Smart Chain where you can experiment with wallets, transactions, 
+                  and blockchain features using <span className="text-cyan-400">test coins that have no real value</span>.
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div className="p-3 rounded-lg bg-black/30 border border-white/10">
+                    <h3 className="text-xs font-bold text-white mb-2">Why Use the Sandbox?</h3>
+                    <ul className="text-[11px] text-white/60 space-y-1.5">
+                      <li>• <span className="text-green-400">No risk</span> - Test coins are free and worthless</li>
+                      <li>• <span className="text-green-400">Learn safely</span> - Make mistakes without consequences</li>
+                      <li>• <span className="text-green-400">Test your app</span> - Build and debug before going live</li>
+                      <li>• <span className="text-green-400">Instant access</span> - No sign-up required</li>
+                    </ul>
+                  </div>
+                  <div className="p-3 rounded-lg bg-black/30 border border-white/10">
+                    <h3 className="text-xs font-bold text-white mb-2">How to Use It</h3>
+                    <ol className="text-[11px] text-white/60 space-y-1.5">
+                      <li><span className="text-primary font-bold">1.</span> Create a Test Wallet (click the button below)</li>
+                      <li><span className="text-primary font-bold">2.</span> Request free test DWC from the Faucet</li>
+                      <li><span className="text-primary font-bold">3.</span> Send test transactions to any address</li>
+                      <li><span className="text-primary font-bold">4.</span> View the API response on the right</li>
+                    </ol>
+                  </div>
+                </div>
+                
+                <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
+                  <p className="text-[11px] text-yellow-400">
+                    <span className="font-bold">Important:</span> This is a test network. All coins, wallets, and transactions here are for 
+                    testing only and have no monetary value. When you're ready to use real DWC, you'll use the Mainnet instead.
+                  </p>
+                </div>
+              </div>
+            </GlassCard>
           </section>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
