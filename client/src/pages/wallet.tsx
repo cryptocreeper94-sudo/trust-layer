@@ -171,15 +171,30 @@ export default function WalletPage() {
     
     setIsCreating(true);
     try {
-      const walletData: StoredWallet = JSON.parse(savedWallet);
-      await unlockWallet(walletData, loginPassword);
+      const walletData = JSON.parse(savedWallet);
+      
+      // Check if this is the new encrypted format
+      if (!walletData.encryptedSeed || !walletData.salt || !walletData.iv) {
+        // Old format detected - prompt user to create new wallet
+        toast({ 
+          title: "Wallet Upgrade Required", 
+          description: "Your old wallet format needs to be upgraded. Please create a new wallet or import your recovery phrase.",
+          variant: "destructive" 
+        });
+        localStorage.removeItem('darkwave_wallet');
+        setShowLogin(false);
+        setIsCreating(false);
+        return;
+      }
+      
+      await unlockWallet(walletData as StoredWallet, loginPassword);
       
       setWalletCreated(true);
       setShowLogin(false);
       setLoginPassword("");
       toast({ title: "Welcome Back", description: "Wallet unlocked successfully" });
     } catch (error: any) {
-      toast({ title: "Error", description: "Incorrect password", variant: "destructive" });
+      toast({ title: "Error", description: "Incorrect password. Please try again.", variant: "destructive" });
     } finally {
       setIsCreating(false);
     }
