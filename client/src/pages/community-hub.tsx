@@ -8,10 +8,12 @@ import {
   Zap, Star, Heart, Send, Smile, Image, Mic, MoreHorizontal,
   Home, Compass, Radio, Lock, Globe, Menu, X, Loader2,
   Activity, TrendingUp, Reply, Edit2, Trash2, Coins, Paperclip, ImageIcon,
-  Pin, Mail, BarChart2, Clock, Forward, MessageSquare, BellOff, Calendar
+  Pin, Mail, BarChart2, Clock, Forward, MessageSquare, BellOff, Calendar, LogOut
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { useUpload } from "@/hooks/use-upload";
+import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
+import { signInWithGoogle, signOut } from "@/lib/firebase";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -414,14 +416,18 @@ export default function CommunityHub() {
     }
   };
 
-  const { data: user } = useQuery({
-    queryKey: ["/api/auth/user"],
-    retry: false,
-  });
+  const { user, loading: authLoading, isAuthenticated } = useFirebaseAuth();
+  
+  const firebaseUser = user ? {
+    id: user.uid,
+    claims: { sub: user.uid },
+    firstName: user.displayName || user.email?.split('@')[0] || 'User',
+    photoURL: user.photoURL,
+  } : null;
 
   const { data: orbsData, refetch: refetchOrbs } = useQuery<{ balance: number; lockedBalance: number }>({
     queryKey: ["/api/orbs/balance"],
-    enabled: !!user,
+    enabled: isAuthenticated,
   });
 
   const tipMutation = useMutation({
@@ -439,7 +445,7 @@ export default function CommunityHub() {
     },
   });
 
-  const wsHook = useWebSocket(selectedChannelId, selectedCommunityId, user);
+  const wsHook = useWebSocket(selectedChannelId, selectedCommunityId, firebaseUser);
   const { messages: wsMessages, setMessages: setWsMessages, typingUsers, sendMessage: wsSendMessage, addReaction, deleteMessage: wsDeleteMessage, sendTyping } = wsHook;
 
   const { data: communitiesData, isLoading: loadingCommunities } = useQuery<{ communities: any[] }>({
@@ -448,7 +454,7 @@ export default function CommunityHub() {
 
   const { data: myCommunities } = useQuery<{ communities: any[] }>({
     queryKey: ["/api/community/my-communities"],
-    enabled: !!user,
+    enabled: isAuthenticated,
   });
 
   const selectedCommunity = communitiesData?.communities?.find((c: any) => c.id === selectedCommunityId);
@@ -504,7 +510,7 @@ export default function CommunityHub() {
       const res = await fetch("/api/dm/conversations");
       return res.json();
     },
-    enabled: !!user,
+    enabled: isAuthenticated,
   });
 
   const { data: searchResults } = useQuery<{ messages: any[] }>({
@@ -663,7 +669,7 @@ export default function CommunityHub() {
     setTipTarget(null);
   };
 
-  const currentUserId = (user as any)?.claims?.sub || (user as any)?.id;
+  const currentUserId = firebaseUser?.id;
 
   const selectedChannel = channelsData?.channels?.find((c: any) => c.id === selectedChannelId);
   const isMember = myCommunities?.communities?.some((c: any) => c.id === selectedCommunityId);
@@ -688,12 +694,25 @@ export default function CommunityHub() {
             </Link>
           </div>
           <div className="flex items-center gap-2">
-            {!user && (
-              <a href="/api/login">
-                <Button size="sm" className="bg-cyan-500 hover:bg-cyan-600">
-                  Sign In to Chat
-                </Button>
-              </a>
+            {!isAuthenticated ? (
+              <Button 
+                size="sm" 
+                className="bg-cyan-500 hover:bg-cyan-600"
+                onClick={() => signInWithGoogle()}
+                disabled={authLoading}
+              >
+                {authLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Sign In with Google"}
+              </Button>
+            ) : (
+              <Button 
+                size="sm" 
+                variant="ghost"
+                className="text-gray-400 hover:text-white"
+                onClick={() => signOut()}
+              >
+                <LogOut className="w-4 h-4 mr-1" />
+                Sign Out
+              </Button>
             )}
             <BackButton />
           </div>
@@ -783,13 +802,13 @@ export default function CommunityHub() {
                       </div>
                       <Button 
                         onClick={() => createCommunity.mutate({ name: newCommunityName, description: newCommunityDesc })}
-                        disabled={!newCommunityName.trim() || createCommunity.isPending || !user}
+                        disabled={!newCommunityName.trim() || createCommunity.isPending || !isAuthenticated}
                         className="w-full bg-cyan-500 hover:bg-cyan-600"
                         data-testid="submit-create-community"
                       >
                         {createCommunity.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Create Community"}
                       </Button>
-                      {!user && <p className="text-xs text-amber-400 text-center">Sign in to create communities</p>}
+                      {!isAuthenticated && <p className="text-xs text-amber-400 text-center">Sign in to create communities</p>}
                     </div>
                   </DialogContent>
                 </Dialog>
@@ -885,14 +904,14 @@ export default function CommunityHub() {
                   <div className="flex items-center gap-2">
                     <Avatar className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-cyan-500 to-purple-500 flex-shrink-0">
                       <AvatarFallback className="text-[10px] sm:text-xs">
-                        {user ? (user as any).username?.slice(0, 2).toUpperCase() || "ME" : "??"}
+                        {firebaseUser ? firebaseUser.firstName?.slice(0, 2).toUpperCase() || "ME" : "??"}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs sm:text-sm font-medium text-white truncate">
-                        {user ? (user as any).username || "You" : "Guest"}
+                        {firebaseUser ? firebaseUser.firstName || "You" : "Guest"}
                       </p>
-                      <p className="text-[9px] sm:text-[10px] text-emerald-400">{user ? "Online" : "Sign in"}</p>
+                      <p className="text-[9px] sm:text-[10px] text-emerald-400">{isAuthenticated ? "Online" : "Sign in"}</p>
                     </div>
                     <button className="p-1 sm:p-1.5 hover:bg-white/10 rounded-lg flex-shrink-0">
                       <Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400" />
@@ -917,7 +936,7 @@ export default function CommunityHub() {
                   <span className="font-medium text-white text-sm sm:text-base truncate max-w-[120px] sm:max-w-none">{selectedChannel?.name || "Select a channel"}</span>
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-                  {!!user && (
+                  {isAuthenticated && (
                     <div className="flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full flex-shrink-0">
                       <Coins className="w-3 h-3 sm:w-4 sm:h-4 text-amber-400" />
                       <span className="text-xs sm:text-sm font-medium text-amber-400" data-testid="orbs-balance">
@@ -1153,9 +1172,9 @@ export default function CommunityHub() {
                         onReply={setReplyingTo}
                         onReaction={handleReaction}
                         onDelete={wsDeleteMessage}
-                        onTip={user ? handleTip : undefined}
-                        onPin={user ? (msgId: string) => pinMessage.mutate(msgId) : undefined}
-                        onStartDm={user ? (userId: string, username: string) => startDm.mutate({ targetUserId: userId, targetUsername: username }) : undefined}
+                        onTip={isAuthenticated ? handleTip : undefined}
+                        onPin={isAuthenticated ? (msgId: string) => pinMessage.mutate(msgId) : undefined}
+                        onStartDm={isAuthenticated ? (userId: string, username: string) => startDm.mutate({ targetUserId: userId, targetUsername: username }) : undefined}
                       />
                     ))}
                     <div ref={messagesEndRef} />
@@ -1227,7 +1246,7 @@ export default function CommunityHub() {
                   <button 
                     onClick={() => fileInputRef.current?.click()}
                     className="p-1.5 sm:p-2 hover:bg-white/10 rounded-lg disabled:opacity-50 flex-shrink-0"
-                    disabled={!user || isUploading}
+                    disabled={!isAuthenticated || isUploading}
                     data-testid="btn-attach-file"
                   >
                     <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
@@ -1237,9 +1256,9 @@ export default function CommunityHub() {
                       value={messageInput}
                       onChange={handleInputChange}
                       onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSendMessage()}
-                      placeholder={user ? `Message #${selectedChannel?.name || "channel"}` : "Sign in to chat"}
+                      placeholder={isAuthenticated ? `Message #${selectedChannel?.name || "channel"}` : "Sign in to chat"}
                       className="bg-white/5 border-white/10 pr-16 sm:pr-24 text-sm"
-                      disabled={!user || !selectedChannelId}
+                      disabled={!isAuthenticated || !selectedChannelId}
                       data-testid="input-message"
                     />
                     <div className="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 flex items-center gap-0.5 sm:gap-1">
@@ -1251,7 +1270,7 @@ export default function CommunityHub() {
                     size="icon" 
                     className="bg-cyan-500 hover:bg-cyan-600 h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0"
                     onClick={handleSendMessage}
-                    disabled={(!messageInput.trim() && !pendingAttachment) || !user || isUploading}
+                    disabled={(!messageInput.trim() && !pendingAttachment) || !isAuthenticated || isUploading}
                     data-testid="send-message-btn"
                   >
                     <Send className="w-4 h-4" />
