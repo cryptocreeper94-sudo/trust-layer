@@ -211,7 +211,7 @@ export default function Liquidity() {
       return res.json();
     },
     onSuccess: () => {
-      toast({ title: "Liquidity Added!", description: "You've received LP tokens" });
+      toast({ title: "Liquidity Added!", description: `You've received ${selectedPool?.tokenA}-${selectedPool?.tokenB} LP tokens` });
       queryClient.invalidateQueries({ queryKey: ["/api/liquidity"] });
       setAddOpen(false);
       setAmountA("");
