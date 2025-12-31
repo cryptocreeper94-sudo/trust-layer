@@ -1,0 +1,51 @@
+// client/src/components/chat/ChannelSettings.tsx
+import React, { useState } from 'react';
+import type { Channel } from '../../../shared/chat-types';
+
+export const ChannelSettings: React.FC<{ channel: Channel; onSave: (c: Partial<Channel>) => Promise<void>; onDelete: (id: string) => Promise<void> }> = ({ channel, onSave, onDelete }) => {
+  const [name, setName] = useState(channel.name);
+  const [description, setDescription] = useState(channel.description ?? '');
+  const [category, setCategory] = useState(channel.category ?? '');
+  const [canPost, setCanPost] = useState<'everyone' | 'members' | 'admins'>('everyone');
+  const [saving, setSaving] = useState(false);
+
+  const save = async () => {
+    setSaving(true);
+    try {
+      // TODO: Replit agent - integrate with API to update channel
+      await onSave({ name, description, category } as Partial<Channel>);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const destroy = async () => {
+    if (!confirm(`Delete channel ${channel.name}?`)) return;
+    await onDelete(channel.id);
+  };
+
+  return (
+    <div className="p-3 rounded-lg bg-slate-950/30 border border-slate-800/40" data-testid="channel-settings">
+      <h4 className="text-sm font-semibold text-white mb-2">Channel Settings</h4>
+      <div className="grid gap-2">
+        <input value={name} onChange={(e) => setName(e.target.value)} className="p-2 rounded-md bg-slate-900/40 text-white" data-testid="channel-name" />
+        <input value={description} onChange={(e) => setDescription(e.target.value)} className="p-2 rounded-md bg-slate-900/40 text-white" placeholder="Description" data-testid="channel-desc" />
+        <input value={category} onChange={(e) => setCategory(e.target.value)} className="p-2 rounded-md bg-slate-900/40 text-white" placeholder="Category" data-testid="channel-category" />
+
+        <div>
+          <label className="text-xs text-slate-400">Posting permissions</label>
+          <select value={canPost} onChange={(e) => setCanPost(e.target.value as any)} className="w-full p-2 rounded-md bg-slate-800/40 text-white" data-testid="channel-perms">
+            <option value="everyone">Everyone</option>
+            <option value="members">Members</option>
+            <option value="admins">Admins</option>
+          </select>
+        </div>
+
+        <div className="flex gap-2">
+          <button onClick={save} disabled={saving} className="py-2 px-4 rounded-md bg-cyan-500 text-black">Save</button>
+          <button onClick={destroy} className="py-2 px-4 rounded-md bg-red-600 text-white">Delete</button>
+        </div>
+      </div>
+    </div>
+  );
+};
