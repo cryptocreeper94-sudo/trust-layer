@@ -202,22 +202,75 @@ function PresaleProgress() {
         </div>
       )}
 
-      <Link href="#tiers">
-        <Button 
-          className="w-full py-6 text-lg font-bold bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:opacity-90"
-          data-testid="button-buy-tokens"
-        >
-          <Wallet className="w-5 h-5 mr-2" />
-          {uniqueHolders === 0 ? "Be the First to Buy" : "Buy DWC Tokens"}
-        </Button>
-      </Link>
+      <Button 
+        onClick={() => {
+          const tiersSection = document.getElementById('tiers');
+          if (tiersSection) {
+            tiersSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }}
+        className="w-full py-6 text-lg font-bold bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:opacity-90"
+        data-testid="button-buy-tokens"
+      >
+        <Wallet className="w-5 h-5 mr-2" />
+        {uniqueHolders === 0 ? "Be the First to Buy" : "Buy DWC Tokens"}
+      </Button>
     </HolographicCard>
   );
 }
 
+const TIER_DETAILS: Record<string, { benefits: string[]; description: string }> = {
+  genesis: {
+    description: "The Genesis tier is our most exclusive offering, reserved for visionary investors who want maximum impact. As a Genesis holder, you'll receive the highest bonus allocation and priority access to all future DarkWave ecosystem features.",
+    benefits: [
+      "50% bonus tokens on your purchase",
+      "Exclusive Genesis NFT badge (tradeable)",
+      "Priority access to DarkWave Chronicles beta",
+      "Direct Discord channel with founding team",
+      "First access to staking pools with boosted APY",
+      "Governance voting power multiplier (2x)",
+      "Airdrop eligibility for partner tokens",
+    ],
+  },
+  founder: {
+    description: "The Founder tier recognizes early believers in the DarkWave vision. Founders receive substantial bonuses and special recognition throughout the ecosystem.",
+    benefits: [
+      "35% bonus tokens on your purchase",
+      "Founder NFT badge with special perks",
+      "Early access to new features and products",
+      "Dedicated support channel",
+      "Enhanced staking rewards",
+      "Governance voting rights",
+      "Exclusive community events",
+    ],
+  },
+  pioneer: {
+    description: "Pioneers are the adventurers of DarkWave, joining early to explore the ecosystem's potential. This tier offers great value with meaningful bonuses.",
+    benefits: [
+      "25% bonus tokens on your purchase",
+      "Pioneer badge in your profile",
+      "Access to exclusive Discord channels",
+      "Priority customer support",
+      "Early notifications for new features",
+      "Standard governance voting rights",
+    ],
+  },
+  early_bird: {
+    description: "The Early Bird tier is perfect for those who want to get started with DarkWave at an accessible price point while still receiving bonus tokens.",
+    benefits: [
+      "15% bonus tokens on your purchase",
+      "Early Bird community badge",
+      "Access to public Discord channels",
+      "Standard support access",
+      "Newsletter with ecosystem updates",
+    ],
+  },
+};
+
 function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
   const { toast } = useToast();
   const [email, setEmail] = useState("");
+  const [showModal, setShowModal] = useState(false);
   const tierImages = [quantumRealm, deepSpace, cyberpunkCity, fantasyWorld];
   const tierColors: Record<string, string> = {
     genesis: "from-yellow-400 to-amber-500",
@@ -225,6 +278,7 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
     pioneer: "from-cyan-400 to-blue-500",
     early_bird: "from-green-400 to-emerald-500",
   };
+  const tierDetails = TIER_DETAILS[tier.tier] || { benefits: [], description: "" };
   
   const isValidEmail = email.includes("@") && email.includes(".");
   
@@ -333,19 +387,96 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
             )}
           </div>
           
-          <Button 
-            onClick={handleBuyClick}
-            disabled={checkoutMutation.isPending || !isValidEmail}
-            className={`w-full mt-4 bg-gradient-to-r ${color} hover:opacity-90 border-0 disabled:opacity-50`}
-            data-testid={`button-select-tier-${tier.tier}`}
-          >
-            {checkoutMutation.isPending ? (
-              <Loader2 className="w-4 h-4 animate-spin mr-2" />
-            ) : null}
-            Buy {tier.name}
-          </Button>
+          <div className="flex gap-2 mt-4">
+            <Button 
+              variant="outline"
+              onClick={() => setShowModal(true)}
+              className="flex-1 border-white/20 hover:bg-white/10"
+              data-testid={`button-details-${tier.tier}`}
+            >
+              Details
+            </Button>
+            <Button 
+              onClick={handleBuyClick}
+              disabled={checkoutMutation.isPending || !isValidEmail}
+              className={`flex-1 bg-gradient-to-r ${color} hover:opacity-90 border-0 disabled:opacity-50`}
+              data-testid={`button-select-tier-${tier.tier}`}
+            >
+              {checkoutMutation.isPending ? (
+                <Loader2 className="w-4 h-4 animate-spin mr-2" />
+              ) : null}
+              Buy
+            </Button>
+          </div>
         </div>
       </div>
+
+      <Dialog open={showModal} onOpenChange={setShowModal}>
+        <DialogContent className="bg-slate-900 border-white/10 max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-3 text-2xl">
+              {tier.tier === "genesis" && <Crown className="w-8 h-8 text-yellow-400" />}
+              {tier.tier === "founder" && <Star className="w-8 h-8 text-purple-400" />}
+              {tier.tier === "pioneer" && <Rocket className="w-8 h-8 text-cyan-400" />}
+              {tier.tier === "early_bird" && <Gift className="w-8 h-8 text-green-400" />}
+              <span className={`bg-gradient-to-r ${color} bg-clip-text text-transparent`}>
+                {tier.name}
+              </span>
+            </DialogTitle>
+            <DialogDescription className="text-gray-300 pt-2">
+              {tierDetails.description}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 mt-4">
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-gray-400">Investment</span>
+                <span className="text-2xl font-bold text-white">${(tier.amount / 100).toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-gray-400">Base Tokens</span>
+                <span className="text-lg text-white">{tokenAmount.toLocaleString()} DWC</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-400">Bonus ({tier.bonus}%)</span>
+                <span className={`text-lg bg-gradient-to-r ${color} bg-clip-text text-transparent font-semibold`}>
+                  +{bonusTokens.toLocaleString()} DWC
+                </span>
+              </div>
+              <div className="border-t border-white/10 mt-3 pt-3 flex justify-between items-center">
+                <span className="text-white font-semibold">Total Tokens</span>
+                <span className="text-xl font-bold text-cyan-400">{(tokenAmount + bonusTokens).toLocaleString()} DWC</span>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-green-400" />
+                Benefits Included
+              </h4>
+              <ul className="space-y-2">
+                {tierDetails.benefits.map((benefit, i) => (
+                  <li key={i} className="flex items-start gap-2 text-gray-300">
+                    <Sparkles className="w-4 h-4 text-purple-400 mt-0.5 flex-shrink-0" />
+                    {benefit}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <Button 
+              onClick={() => {
+                setShowModal(false);
+                document.getElementById(`input-email-${tier.tier}`)?.focus();
+              }}
+              className={`w-full bg-gradient-to-r ${color} hover:opacity-90`}
+            >
+              Select This Tier
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 }
