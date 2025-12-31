@@ -52,3 +52,49 @@ The design adheres to a "Premium UI Protocol" emphasizing:
 - **Payments**: Stripe, Coinbase Commerce
 - **Hub API**: https://orbitstaffing.io
 - **AI**: OpenAI (via Replit AI Integrations)
+
+## GitHub Agent Collaboration (Cost Reduction Strategy)
+To reduce Replit costs ($100-400/day), boilerplate generation has been moved to GitHub Copilot ($10/month).
+
+**Workflow:**
+1. GitHub agent generates scaffolds on feature branches
+2. User sends handoff files to Replit agent
+3. Replit agent audits, integrates, tests, and merges
+
+**Files Received from GitHub Agent (Dec 2024):**
+- **Wallet**: `use-ethereum-wallet.tsx`, `use-solana-wallet.tsx`, `WalletConnectModal.tsx`, `wallet-types.ts`
+- **DEX**: `SwapInterface.tsx`, `LiquidityPanel.tsx`, `PriceChart.tsx`, `dex-types.ts`
+- **Bridge**: `BridgeInterface.tsx`, `BridgeHistory.tsx`, `bridge-types.ts`
+- **NFT**: `NFTCard.tsx`, `NFTGallery.tsx`, `NFTMintForm.tsx`, `nft-types.ts`
+- **Chat**: `ChatContainer.tsx`, `ChannelList.tsx`, `MessageItem.tsx`, `chat-handlers.ts`, `chat-types.ts`
+- **Guardian**: `guardian-shield.tsx`, `CertificationBadge.tsx`
+- **Studio**: `studio-executor.ts` (Docker container orchestration)
+
+**Status:** Files placed but not yet wired into routes/App.tsx.
+
+## Backend IDE / Studio Executor (Self-Hosted)
+The `server/studio-executor.ts` provides Docker container orchestration for a code execution backend. **Not runnable on Replit** (no Docker-in-Docker). Designed for self-hosted deployment.
+
+**Implementation Requirements (TODO for self-hosted):**
+| Requirement | Status |
+|-------------|--------|
+| JWT auth before container creation | TODO |
+| Sandboxing (seccomp/gVisor) | TODO |
+| Network policies | Scaffold done (`NetworkMode: 'none'`) |
+| Curated images only | Scaffold done |
+| Memory/CPU enforcement | Scaffold done |
+| Per-user quotas & accounting (persistent DB) | TODO |
+| WebSocket log streaming (large output) | TODO |
+| STUDIO_STORAGE_PATH writable permissions | Runtime config |
+| Docker socket access for process | Runtime config |
+
+**Environment Variables:**
+```
+DOCKER_HOST=unix:///var/run/docker.sock
+STUDIO_STORAGE_PATH=/var/studio/workspaces
+STUDIO_MAX_CONTAINERS=50
+STUDIO_CONTAINER_MEMORY=512m
+STUDIO_CONTAINER_CPU=0.5
+STUDIO_NODE_IMAGE=node:20-alpine
+STUDIO_INSTALL_TIMEOUT_MS=300000
+```
