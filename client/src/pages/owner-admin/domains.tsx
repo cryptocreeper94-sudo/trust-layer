@@ -151,12 +151,11 @@ function SecretEntry({ onSuccess }: { onSuccess: () => void }) {
             )}
           </AnimatePresence>
 
-          <motion.button
-            whileHover={{ scale: 1.02, boxShadow: "0 0 30px rgba(6,182,212,0.4)" }}
-            whileTap={{ scale: 0.98 }}
-            onClick={handleSubmit}
+          <button
+            type="button"
+            onClick={() => handleSubmit()}
             disabled={loading || secret.length < 16}
-            className="w-full py-4 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-xl text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-all relative overflow-hidden group"
+            className="w-full py-4 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-xl text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-all relative overflow-hidden group hover:scale-[1.02] active:scale-[0.98]"
             data-testid="button-owner-domain-auth"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -173,7 +172,7 @@ function SecretEntry({ onSuccess }: { onSuccess: () => void }) {
                 </>
               )}
             </span>
-          </motion.button>
+          </button>
         </div>
       </motion.div>
     </div>
