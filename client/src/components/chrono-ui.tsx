@@ -67,6 +67,15 @@ export function ChronoLayout({
           </div>
           
           <div className="flex items-center gap-2">
+            <a 
+              href="https://dwsc.io" 
+              className="flex items-center gap-1 px-2 py-1 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 hover:bg-cyan-500/20 transition-all text-xs md:hidden"
+              data-testid="button-back-to-dwsc"
+            >
+              <ArrowLeft className="w-3 h-3" />
+              <span>DWSC</span>
+            </a>
+            
             <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10 text-[10px] whitespace-nowrap animate-pulse hidden sm:flex">
               <Sparkles className="w-3 h-3 mr-1" /> Coming 2026
             </Badge>
