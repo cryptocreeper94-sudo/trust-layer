@@ -5,8 +5,10 @@ import { Link } from "wouter";
 import { 
   ArrowRight, ArrowLeftRight, AlertTriangle, CheckCircle, Clock, Loader2,
   Lock, Unlock, Flame, ChevronLeft, ChevronRight, Sparkles, Zap, Shield, ExternalLink,
-  ChevronDown, Info
+  ChevronDown, Info, HelpCircle, BookOpen, X
 } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -92,6 +94,47 @@ export default function Bridge() {
   const [releaseAddress, setReleaseAddress] = useState("");
   const [burnTxHash, setBurnTxHash] = useState("");
   const carouselRef = useRef<HTMLDivElement>(null);
+  const [tutorialOpen, setTutorialOpen] = useState(false);
+  const [tutorialSlide, setTutorialSlide] = useState(0);
+
+  const tutorialSlides = [
+    {
+      title: "What is a Bridge?",
+      icon: <ArrowLeftRight className="w-8 h-8 text-primary" />,
+      content: "A blockchain bridge lets you move your coins between different networks. Think of it like exchanging currency when traveling to another country — your money works in both places, just in different forms.",
+      color: "from-primary/20 to-cyan-500/20",
+    },
+    {
+      title: "Step 1: Lock Your DWC",
+      icon: <Lock className="w-8 h-8 text-cyan-400" />,
+      content: "When you want to use DWC on another chain (like Ethereum), you first 'lock' your coins in a secure vault on DarkWave. This proves you own them and keeps them safe while you use them elsewhere.",
+      color: "from-cyan-500/20 to-blue-500/20",
+    },
+    {
+      title: "Step 2: Receive Wrapped Coins (wDWC)",
+      icon: <Sparkles className="w-8 h-8 text-purple-400" />,
+      content: "Once locked, you receive 'wrapped' coins (wDWC) on the other chain. These are IOUs that represent your locked DWC — same value, just usable on Ethereum, Solana, etc. Think of it like a casino chip for your money.",
+      color: "from-purple-500/20 to-pink-500/20",
+    },
+    {
+      title: "Step 3: Use wDWC Anywhere",
+      icon: <Zap className="w-8 h-8 text-amber-400" />,
+      content: "Your wDWC works just like any other coin on that network. Trade it, stake it, use it in DeFi apps — it's fully functional. The value stays 1:1 with your locked DWC back home.",
+      color: "from-amber-500/20 to-orange-500/20",
+    },
+    {
+      title: "Coming Back: Burn & Release",
+      icon: <Flame className="w-8 h-8 text-orange-400" />,
+      content: "Want your original DWC back? Simply 'burn' (destroy) your wDWC on the other chain. This proves you're done using them, and your original DWC gets 'released' back to your DarkWave wallet. Full circle!",
+      color: "from-orange-500/20 to-red-500/20",
+    },
+    {
+      title: "Why It's Safe",
+      icon: <Shield className="w-8 h-8 text-green-400" />,
+      content: "Your locked DWC never leaves DarkWave — they're held by trusted validators. The bridge only creates wrapped coins when real coins are locked, and destroys wrapped coins when real coins are released. 1:1, always.",
+      color: "from-green-500/20 to-emerald-500/20",
+    },
+  ];
 
   const { data: bridgeInfo, isLoading: infoLoading } = useQuery<BridgeInfo>({
     queryKey: ["/api/bridge/info"],
@@ -235,6 +278,7 @@ export default function Bridge() {
   };
 
   return (
+    <TooltipProvider>
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
       {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
@@ -267,9 +311,97 @@ export default function Bridge() {
                 Cross-Chain Bridge
               </h1>
             </div>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground mb-3">
               Transfer DWC between DarkWave and other networks
             </p>
+            <Dialog open={tutorialOpen} onOpenChange={(open) => {
+              setTutorialOpen(open);
+              if (open) setTutorialSlide(0);
+            }}>
+              <DialogTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="bg-primary/10 border-primary/30 hover:bg-primary/20 text-primary"
+                  data-testid="button-learn-bridging"
+                >
+                  <BookOpen className="w-4 h-4 mr-2" />
+                  Learn How Bridging Works
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md bg-slate-950/95 backdrop-blur-xl border-white/10">
+                <DialogHeader>
+                  <DialogTitle className="text-center text-lg font-display">Bridge Tutorial</DialogTitle>
+                </DialogHeader>
+                <div className="relative">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={tutorialSlide}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ duration: 0.2 }}
+                      className="p-4"
+                    >
+                      <div className={`mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br ${tutorialSlides[tutorialSlide].color} flex items-center justify-center mb-4`}>
+                        {tutorialSlides[tutorialSlide].icon}
+                      </div>
+                      <h3 className="text-lg font-bold text-center mb-3">
+                        {tutorialSlides[tutorialSlide].title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground text-center leading-relaxed">
+                        {tutorialSlides[tutorialSlide].content}
+                      </p>
+                    </motion.div>
+                  </AnimatePresence>
+                  
+                  <div className="flex items-center justify-center gap-1.5 mt-2 mb-4">
+                    {tutorialSlides.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setTutorialSlide(i)}
+                        className={`w-2 h-2 rounded-full transition-all ${
+                          i === tutorialSlide ? "bg-primary w-4" : "bg-white/20 hover:bg-white/40"
+                        }`}
+                        data-testid={`button-slide-${i}`}
+                      />
+                    ))}
+                  </div>
+                  
+                  <div className="flex justify-between gap-2 px-4 pb-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setTutorialSlide(Math.max(0, tutorialSlide - 1))}
+                      disabled={tutorialSlide === 0}
+                      className="text-muted-foreground"
+                      data-testid="button-tutorial-prev"
+                    >
+                      <ChevronLeft className="w-4 h-4 mr-1" /> Previous
+                    </Button>
+                    {tutorialSlide === tutorialSlides.length - 1 ? (
+                      <Button
+                        size="sm"
+                        onClick={() => setTutorialOpen(false)}
+                        className="bg-primary text-black"
+                        data-testid="button-tutorial-done"
+                      >
+                        Got It!
+                      </Button>
+                    ) : (
+                      <Button
+                        size="sm"
+                        onClick={() => setTutorialSlide(tutorialSlide + 1)}
+                        className="bg-primary text-black"
+                        data-testid="button-tutorial-next"
+                      >
+                        Next <ChevronRight className="w-4 h-4 ml-1" />
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           </motion.div>
 
           {/* Warning Banner - Collapsible on mobile */}
@@ -467,15 +599,36 @@ export default function Bridge() {
                         <div className="p-2 rounded-lg bg-cyan-500/20">
                           <Lock className="w-4 h-4 text-cyan-400" />
                         </div>
-                        <div>
-                          <h2 className="font-bold text-sm">Lock & Mint</h2>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-1.5">
+                            <h2 className="font-bold text-sm">Lock & Mint</h2>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <HelpCircle className="w-3.5 h-3.5 text-muted-foreground cursor-help" />
+                              </TooltipTrigger>
+                              <TooltipContent side="top" className="max-w-[250px] text-xs">
+                                <p><strong>Lock:</strong> Your DWC coins are securely held in a vault on DarkWave.</p>
+                                <p className="mt-1"><strong>Mint:</strong> New wrapped coins (wDWC) are created on the target chain, representing your locked coins.</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </div>
                           <p className="text-[10px] text-muted-foreground">Lock DWC → Receive wDWC</p>
                         </div>
                       </div>
 
                       <div className="space-y-3">
                         <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 block">Target Chain</Label>
+                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
+                            Target Chain
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <HelpCircle className="w-3 h-3 cursor-help" />
+                              </TooltipTrigger>
+                              <TooltipContent side="right" className="max-w-[200px] text-xs">
+                                The blockchain where you want to use your wrapped DWC (wDWC) coins.
+                              </TooltipContent>
+                            </Tooltip>
+                          </Label>
                           <Select value={targetChain} onValueChange={setTargetChain}>
                             <SelectTrigger 
                               data-testid="select-target-chain"
@@ -497,7 +650,17 @@ export default function Bridge() {
                         </div>
 
                         <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 block">Your DarkWave Address</Label>
+                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
+                            Your DarkWave Address
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <HelpCircle className="w-3 h-3 cursor-help" />
+                              </TooltipTrigger>
+                              <TooltipContent side="right" className="max-w-[200px] text-xs">
+                                Your wallet address on DarkWave where your DWC coins are currently held.
+                              </TooltipContent>
+                            </Tooltip>
+                          </Label>
                           <Input
                             value={fromAddress}
                             onChange={(e) => setFromAddress(e.target.value)}
@@ -508,7 +671,17 @@ export default function Bridge() {
                         </div>
 
                         <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 block">Destination Address</Label>
+                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
+                            Destination Address
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <HelpCircle className="w-3 h-3 cursor-help" />
+                              </TooltipTrigger>
+                              <TooltipContent side="right" className="max-w-[200px] text-xs">
+                                Your wallet address on the target chain where you'll receive the wrapped wDWC coins.
+                              </TooltipContent>
+                            </Tooltip>
+                          </Label>
                           <Input
                             value={targetAddress}
                             onChange={(e) => setTargetAddress(e.target.value)}
@@ -519,7 +692,17 @@ export default function Bridge() {
                         </div>
 
                         <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 block">Amount (DWC)</Label>
+                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
+                            Amount (DWC)
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <HelpCircle className="w-3 h-3 cursor-help" />
+                              </TooltipTrigger>
+                              <TooltipContent side="right" className="max-w-[200px] text-xs">
+                                How many DWC coins to lock. You'll receive the same amount as wDWC on the target chain.
+                              </TooltipContent>
+                            </Tooltip>
+                          </Label>
                           <div className="relative">
                             <Input
                               type="number"
@@ -567,15 +750,36 @@ export default function Bridge() {
                         <div className="p-2 rounded-lg bg-orange-500/20">
                           <Flame className="w-4 h-4 text-orange-400" />
                         </div>
-                        <div>
-                          <h2 className="font-bold text-sm">Burn & Release</h2>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-1.5">
+                            <h2 className="font-bold text-sm">Burn & Release</h2>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <HelpCircle className="w-3.5 h-3.5 text-muted-foreground cursor-help" />
+                              </TooltipTrigger>
+                              <TooltipContent side="top" className="max-w-[250px] text-xs">
+                                <p><strong>Burn:</strong> Destroy your wrapped coins (wDWC) on the other chain.</p>
+                                <p className="mt-1"><strong>Release:</strong> Your original DWC coins are unlocked and sent back to your DarkWave wallet.</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </div>
                           <p className="text-[10px] text-muted-foreground">Burn wDWC → Release DWC</p>
                         </div>
                       </div>
 
                       <div className="space-y-3">
                         <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 block">Source Chain</Label>
+                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
+                            Source Chain
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <HelpCircle className="w-3 h-3 cursor-help" />
+                              </TooltipTrigger>
+                              <TooltipContent side="right" className="max-w-[200px] text-xs">
+                                The blockchain where your wrapped wDWC coins currently are (where you'll burn them).
+                              </TooltipContent>
+                            </Tooltip>
+                          </Label>
                           <Select value={sourceChain} onValueChange={setSourceChain}>
                             <SelectTrigger data-testid="select-source-chain" className="bg-white/5 border-white/10 h-10 text-sm">
                               <SelectValue placeholder="Select chain" />
@@ -594,7 +798,17 @@ export default function Bridge() {
                         </div>
 
                         <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 block">Burn Transaction Hash</Label>
+                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
+                            Burn Transaction Hash
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <HelpCircle className="w-3 h-3 cursor-help" />
+                              </TooltipTrigger>
+                              <TooltipContent side="right" className="max-w-[200px] text-xs">
+                                The transaction ID from when you burned wDWC on the other chain. This proves the burn happened.
+                              </TooltipContent>
+                            </Tooltip>
+                          </Label>
                           <Input
                             value={burnTxHash}
                             onChange={(e) => setBurnTxHash(e.target.value)}
@@ -605,7 +819,17 @@ export default function Bridge() {
                         </div>
 
                         <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 block">Release To (DarkWave)</Label>
+                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
+                            Release To (DarkWave)
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <HelpCircle className="w-3 h-3 cursor-help" />
+                              </TooltipTrigger>
+                              <TooltipContent side="right" className="max-w-[200px] text-xs">
+                                Your DarkWave wallet address where you want to receive your original DWC coins back.
+                              </TooltipContent>
+                            </Tooltip>
+                          </Label>
                           <Input
                             value={releaseAddress}
                             onChange={(e) => setReleaseAddress(e.target.value)}
@@ -616,7 +840,17 @@ export default function Bridge() {
                         </div>
 
                         <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 block">Amount (wDWC)</Label>
+                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
+                            Amount (wDWC)
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <HelpCircle className="w-3 h-3 cursor-help" />
+                              </TooltipTrigger>
+                              <TooltipContent side="right" className="max-w-[200px] text-xs">
+                                How many wrapped wDWC coins you're burning. You'll get the same amount as DWC on DarkWave.
+                              </TooltipContent>
+                            </Tooltip>
+                          </Label>
                           <div className="relative">
                             <Input
                               type="number"
@@ -798,5 +1032,6 @@ export default function Bridge() {
 
       <Footer />
     </div>
+    </TooltipProvider>
   );
 }
