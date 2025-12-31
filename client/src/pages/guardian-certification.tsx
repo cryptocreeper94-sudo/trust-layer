@@ -7,13 +7,18 @@ import {
   Sparkles, TrendingUp, Building, Code, Server, Database,
   BadgeCheck, Layers, Activity, FileCheck, AlertTriangle,
   Download, Calendar, Rocket, UserCheck, Mail, Send, ChevronRight,
-  Trophy, Gift, Percent, FileSearch, Globe, Bug, Handshake
+  Trophy, Gift, Percent, FileSearch, Globe, Bug, Handshake, Copy, Check
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { HeaderTools } from "@/components/header-tools";
 import { usePageAnalytics } from "@/hooks/use-analytics";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
 const CERTIFICATION_TIERS = [
   {
@@ -737,13 +742,17 @@ function TierCard({ tier, index }: { tier: typeof CERTIFICATION_TIERS[0]; index:
                 Get Started
               </button>
             ) : (
-              <a
-                href="mailto:guardian@dwsc.io?subject=Guardian%20Self-Cert%20Inquiry"
-                className="w-full py-3 rounded-lg font-semibold text-center transition-all bg-white/10 hover:bg-white/20 text-white border border-white/10 block"
-                data-testid={`link-tier-${tier.name.toLowerCase().replace(/\s+/g, '-')}`}
-              >
-                Contact Us
-              </a>
+              <ContactDialog
+                subject="Guardian Self-Cert Inquiry"
+                trigger={
+                  <button
+                    className="w-full py-3 rounded-lg font-semibold text-center transition-all bg-white/10 hover:bg-white/20 text-white border border-white/10"
+                    data-testid={`link-tier-${tier.name.toLowerCase().replace(/\s+/g, '-')}`}
+                  >
+                    Contact Us
+                  </button>
+                }
+              />
             )}
           </div>
         </div>
@@ -798,6 +807,130 @@ function PaymentSuccessBanner() {
         </div>
       </div>
     </motion.div>
+  );
+}
+
+function ContactDialog({ 
+  trigger, 
+  subject = "Guardian Certification Inquiry",
+  email = "guardian@dwsc.io"
+}: { 
+  trigger: React.ReactNode; 
+  subject?: string;
+  email?: string;
+}) {
+  const [copied, setCopied] = useState(false);
+  const [name, setName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [sending, setSending] = useState(false);
+  const { toast } = useToast();
+
+  const copyEmail = async () => {
+    await navigator.clipboard.writeText(email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setSending(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email: userEmail, subject, message }),
+      });
+      if (res.ok) {
+        toast({ title: "Message sent!", description: "We'll get back to you soon." });
+        setName("");
+        setUserEmail("");
+        setMessage("");
+      } else {
+        throw new Error("Failed to send");
+      }
+    } catch {
+      toast({ title: "Error", description: "Failed to send message. Please try again.", variant: "destructive" });
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        {trigger}
+      </DialogTrigger>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Mail className="w-5 h-5 text-cyan-400" />
+            Contact Guardian Team
+          </DialogTitle>
+          <DialogDescription>
+            Send us a message or copy our email to reach out directly.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4 py-2">
+          <div className="flex items-center gap-2 p-3 rounded-lg bg-slate-800/50 border border-white/10">
+            <Mail className="w-4 h-4 text-cyan-400" />
+            <span className="flex-1 font-mono text-sm">{email}</span>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={copyEmail}
+              className="h-8 px-2"
+              data-testid="button-copy-email"
+            >
+              {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+            </Button>
+          </div>
+          
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-white/10" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">Or send a message</span>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <Input
+              placeholder="Your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              data-testid="input-contact-name"
+            />
+            <Input
+              type="email"
+              placeholder="Your email"
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
+              required
+              data-testid="input-contact-email"
+            />
+            <Textarea
+              placeholder="Tell us about your project and certification needs..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              required
+              rows={4}
+              data-testid="input-contact-message"
+            />
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={sending}
+              data-testid="button-send-message"
+            >
+              {sending ? "Sending..." : "Send Message"}
+            </Button>
+          </form>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -1167,14 +1300,18 @@ export default function GuardianCertificationPage() {
                           ))}
                         </ul>
                         
-                        <a
-                          href="mailto:guardian@dwsc.io?subject=Guardian%20Shield%20Waitlist%20-%20Interest"
-                          className="w-full py-3 rounded-lg font-semibold text-center transition-all bg-white/10 hover:bg-white/20 text-white/70 border border-white/10 flex items-center justify-center gap-2"
-                          data-testid={`link-shield-waitlist-${index}`}
-                        >
-                          <Mail className="w-4 h-4" />
-                          Join Waitlist
-                        </a>
+                        <ContactDialog
+                          subject="Guardian Shield Waitlist - Interest"
+                          trigger={
+                            <button
+                              className="w-full py-3 rounded-lg font-semibold text-center transition-all bg-white/10 hover:bg-white/20 text-white/70 border border-white/10 flex items-center justify-center gap-2"
+                              data-testid={`link-shield-waitlist-${index}`}
+                            >
+                              <Mail className="w-4 h-4" />
+                              Join Waitlist
+                            </button>
+                          }
+                        />
                       </div>
                     </div>
                   </motion.div>
@@ -1321,14 +1458,18 @@ export default function GuardianCertificationPage() {
                   </div>
                   
                   <div className="flex flex-col sm:flex-row gap-4 items-center">
-                    <a
-                      href="mailto:guardian@dwsc.io?subject=Pioneer%20Program%20Application"
-                      className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 rounded-xl text-white font-semibold text-lg transition-all hover:scale-105 shadow-lg shadow-amber-500/25"
-                      data-testid="link-apply-pioneer"
-                    >
-                      <Rocket className="w-5 h-5" />
-                      Apply for Pioneer Program
-                    </a>
+                    <ContactDialog
+                      subject="Pioneer Program Application"
+                      trigger={
+                        <button
+                          className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 rounded-xl text-white font-semibold text-lg transition-all hover:scale-105 shadow-lg shadow-amber-500/25"
+                          data-testid="link-apply-pioneer"
+                        >
+                          <Rocket className="w-5 h-5" />
+                          Apply for Pioneer Program
+                        </button>
+                      }
+                    />
                     <span className="text-white/40 text-sm">
                       <span className="text-amber-400 font-bold">3 of 5</span> spots remaining
                     </span>
@@ -1384,15 +1525,19 @@ export default function GuardianCertificationPage() {
             </div>
 
             <div className="text-center">
-              <a
-                href="mailto:guardian@dwsc.io?subject=Advisory%20Board%20Interest"
-                className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors"
-                data-testid="link-join-advisory"
-              >
-                <Handshake className="w-5 h-5" />
-                Interested in joining? Contact us
-                <ChevronRight className="w-4 h-4" />
-              </a>
+              <ContactDialog
+                subject="Advisory Board Interest"
+                trigger={
+                  <button
+                    className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors"
+                    data-testid="link-join-advisory"
+                  >
+                    <Handshake className="w-5 h-5" />
+                    Interested in joining? Contact us
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                }
+              />
             </div>
           </div>
         </section>
@@ -1492,14 +1637,18 @@ export default function GuardianCertificationPage() {
                     to validate their security posture.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a
-                      href="mailto:guardian@dwsc.io?subject=Guardian%20Certification%20Inquiry"
-                      className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-500 hover:via-purple-500 hover:to-pink-500 rounded-xl text-white font-semibold text-lg transition-all hover:scale-105 shadow-lg shadow-purple-500/25"
-                      data-testid="link-contact-guardian"
-                    >
-                      <Award className="w-6 h-6" />
-                      Request Certification
-                    </a>
+                    <ContactDialog
+                      subject="Guardian Certification Inquiry"
+                      trigger={
+                        <button
+                          className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-500 hover:via-purple-500 hover:to-pink-500 rounded-xl text-white font-semibold text-lg transition-all hover:scale-105 shadow-lg shadow-purple-500/25"
+                          data-testid="link-contact-guardian"
+                        >
+                          <Award className="w-6 h-6" />
+                          Request Certification
+                        </button>
+                      }
+                    />
                     <Link
                       href="/security"
                       className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-semibold transition-all"
@@ -1509,9 +1658,6 @@ export default function GuardianCertificationPage() {
                       View Our Security
                     </Link>
                   </div>
-                  <p className="text-white/30 text-sm mt-6">
-                    guardian@dwsc.io
-                  </p>
                 </div>
               </GlassCard>
             </motion.div>

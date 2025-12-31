@@ -639,6 +639,44 @@ export async function registerRoutes(
     res.json({ emotions, description });
   });
 
+  // Contact form endpoint
+  app.post("/api/contact", rateLimit("contact", 5, 60000), async (req: Request, res: Response) => {
+    try {
+      const { name, email, subject, message } = req.body;
+      
+      if (!name || !email || !message) {
+        return res.status(400).json({ error: "Name, email, and message are required" });
+      }
+      
+      // Log the contact submission
+      console.log(`[Contact Form] New submission from ${name} (${email}): ${subject}`);
+      
+      // Send email notification
+      try {
+        await sendEmail({
+          to: "guardian@dwsc.io",
+          subject: `[Contact Form] ${subject || "New Inquiry"}`,
+          html: `
+            <h2>New Contact Form Submission</h2>
+            <p><strong>From:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Subject:</strong> ${subject || "Not specified"}</p>
+            <hr>
+            <p><strong>Message:</strong></p>
+            <p>${message.replace(/\n/g, "<br>")}</p>
+          `,
+        });
+      } catch (emailErr) {
+        console.error("Failed to send contact form email:", emailErr);
+      }
+      
+      res.json({ success: true, message: "Message received" });
+    } catch (error) {
+      console.error("Contact form error:", error);
+      res.status(500).json({ error: "Failed to send message" });
+    }
+  });
+
   const wss = new WebSocketServer({ server: httpServer, path: "/ws/studio" });
   
   wss.on("connection", (ws: WebSocket) => {
