@@ -8217,8 +8217,14 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   };
 
   const ownerAuthMiddleware = (req: any, res: any, next: any) => {
-    const authHeader = req.headers["x-owner-token"];
-    if (!authHeader || !isTokenValid(authHeader)) {
+    let token = req.headers["x-owner-token"];
+    if (!token) {
+      const authHeader = req.headers["authorization"];
+      if (authHeader && authHeader.startsWith("Bearer ")) {
+        token = authHeader.slice(7);
+      }
+    }
+    if (!token || !isTokenValid(token)) {
       return res.status(401).json({ error: "Unauthorized: Invalid or expired token" });
     }
     next();
