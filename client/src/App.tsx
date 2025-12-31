@@ -100,6 +100,7 @@ import Tetris from "@/pages/tetris";
 import Snake from "@/pages/snake";
 import Pacman from "@/pages/pacman";
 import Genesis from "@/pages/genesis";
+import CreatorProgram from "@/pages/creator-program";
 import EraCodex from "@/pages/era-codex";
 import ScenarioGenerator from "@/pages/scenario-generator";
 import Crowdfund from "@/pages/crowdfund";
@@ -175,6 +176,7 @@ function GamesRouter() {
         <Route path="/snake" component={Snake} />
         <Route path="/pacman" component={Pacman} />
         <Route path="/genesis" component={Genesis} />
+        <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/scenario-generator" component={ScenarioGenerator} />
         <Route path="/crowdfund" component={Crowdfund} />
@@ -231,6 +233,7 @@ function ChronoRouter() {
         <Route path="/executive-summary" component={ChronoExecutiveSummary} />
         <Route path="/roadmap" component={ChronoRoadmap} />
         <Route path="/genesis" component={Genesis} />
+        <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/crowdfund" component={Crowdfund} />
         <Route path="/presale" component={Presale} />
@@ -352,6 +355,7 @@ function DWSCRouter() {
         <Route path="/snake" component={Snake} />
         <Route path="/pacman" component={Pacman} />
         <Route path="/genesis" component={Genesis} />
+        <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/scenario-generator" component={ScenarioGenerator} />
         <Route path="/crowdfund" component={Crowdfund} />

@@ -530,7 +530,7 @@ export default function EraCodex() {
                   <p className="text-xs text-gray-500">Unique Powers</p>
                 </div>
               </div>
-              <Link href="/genesis">
+              <Link href="/creator-program">
                 <Button className="bg-gradient-to-r from-purple-600 to-pink-600">
                   <Sparkles className="w-4 h-4 mr-2" />
                   Become a Founding Creator

@@ -608,7 +608,7 @@ export default function Home() {
                 Explore All Eras
               </Button>
             </Link>
-            <Link href="/genesis">
+            <Link href="/creator-program">
               <Button variant="outline" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10" data-testid="button-genesis-page">
                 Learn About Genesis
               </Button>
