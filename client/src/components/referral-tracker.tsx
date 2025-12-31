@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Users, Gift, Trophy, Copy, Check, Share2, ArrowRight, Loader2, MousePointerClick, UserPlus, DollarSign } from "lucide-react";
+import { Users, Gift, Trophy, Copy, Check, Share2, ArrowRight, Loader2, MousePointerClick, UserPlus, DollarSign, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/glass-card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -306,18 +307,77 @@ export function ReferralTracker() {
         </div>
       </GlassCard>
 
-      <div className="p-3 rounded-xl bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
-        <div className="flex items-center gap-3">
-          <div className="text-2xl">💰</div>
-          <div className="flex-1">
-            <h4 className="font-bold text-sm">How It Works</h4>
-            <p className="text-[10px] text-muted-foreground">
-              Earn {currentTier?.referrerRewardCredits || 250} credits per signup + {currentTier?.commissionPercent || 10}% commission on purchases
-            </p>
+      <Dialog>
+        <DialogTrigger asChild>
+          <button 
+            className="w-full p-3 rounded-xl bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 hover:from-cyan-500/20 hover:to-purple-500/20 transition-all cursor-pointer text-left"
+            data-testid="button-how-it-works"
+          >
+            <div className="flex items-center gap-3">
+              <div className="text-2xl">💰</div>
+              <div className="flex-1">
+                <h4 className="font-bold text-sm">How It Works</h4>
+                <p className="text-[10px] text-muted-foreground">
+                  Earn {currentTier?.referrerRewardCredits || 250} credits per signup + {currentTier?.commissionPercent || 10}% commission on purchases
+                </p>
+              </div>
+              <ArrowRight className="w-4 h-4 text-cyan-400" />
+            </div>
+          </button>
+        </DialogTrigger>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <HelpCircle className="w-5 h-5 text-cyan-400" />
+              How the Referral Program Works
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center shrink-0">
+                <Share2 className="w-4 h-4 text-cyan-400" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-sm">1. Share Your Link</h4>
+                <p className="text-xs text-muted-foreground">Copy your unique referral link and share it with friends, family, or your community.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
+                <UserPlus className="w-4 h-4 text-purple-400" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-sm">2. They Sign Up</h4>
+                <p className="text-xs text-muted-foreground">When someone clicks your link and creates an account, you both earn bonus credits.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
+                <DollarSign className="w-4 h-4 text-green-400" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-sm">3. Earn Commission</h4>
+                <p className="text-xs text-muted-foreground">Get {currentTier?.commissionPercent || 10}% commission on every purchase your referrals make. Forever.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0">
+                <Trophy className="w-4 h-4 text-amber-400" />
+              </div>
+              <div>
+                <h4 className="font-semibold text-sm">4. Level Up</h4>
+                <p className="text-xs text-muted-foreground">The more referrals you bring, the higher your tier and rewards. Reach Oracle status for maximum benefits!</p>
+              </div>
+            </div>
+            <div className="mt-4 p-3 rounded-lg bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
+              <p className="text-xs text-center">
+                <span className="font-bold text-cyan-400">{currentTier?.referrerRewardCredits || 250} credits</span> per signup + 
+                <span className="font-bold text-purple-400"> {currentTier?.commissionPercent || 10}%</span> lifetime commission
+              </p>
+            </div>
           </div>
-          <ArrowRight className="w-4 h-4 text-cyan-400" />
-        </div>
-      </div>
+        </DialogContent>
+      </Dialog>
 
       {tiers.length > 0 && (
         <GlassCard className="p-3">
