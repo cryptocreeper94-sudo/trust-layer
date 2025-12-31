@@ -18,7 +18,8 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GlassCard } from "@/components/glass-card";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
-import { useAuth } from "@/hooks/use-auth";
+import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
+import { FirebaseLoginModal } from "@/components/firebase-login";
 
 interface Commit {
   id: string;
@@ -427,7 +428,8 @@ const getLanguage = (filename: string): string => {
 };
 
 export default function Studio() {
-  const { user } = useAuth();
+  const { user, loading: authLoading, isAuthenticated } = useFirebaseAuth();
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [projectId, setProjectId] = useState<string | null>(null);
   const [projectName, setProjectName] = useState("Untitled Project");
   const [files, setFiles] = useState<FileNode[]>([]);
@@ -1606,8 +1608,8 @@ export default function Studio() {
       ws.send(JSON.stringify({
         type: "join",
         projectId,
-        userId: user.id,
-        userName: user.firstName || user.email || "User",
+        userId: user?.uid,
+        userName: user?.displayName || user?.email || "User",
       }));
       setTimeout(() => {
         if (ws.readyState === WebSocket.OPEN && activeFileRef.current) {
@@ -1625,7 +1627,7 @@ export default function Studio() {
       try {
         const data = JSON.parse(event.data);
         if (data.type === "presence") {
-          setPresence(data.users.filter((u: PresenceUser) => u.id !== user.id));
+          setPresence(data.users.filter((u: PresenceUser) => u.id !== user?.uid));
         }
       } catch {}
     };
@@ -1699,13 +1701,17 @@ export default function Studio() {
           <h1 className="text-2xl font-bold mb-2">DarkWave Studio</h1>
           <p className="text-muted-foreground mb-6">Sign in to create and manage your projects</p>
           <Button
-            onClick={() => window.location.href = "/api/login"}
+            onClick={() => setShowLoginModal(true)}
             className="bg-primary text-background hover:bg-primary/90"
             data-testid="button-login"
           >
             Sign In to Continue
           </Button>
         </GlassCard>
+        <FirebaseLoginModal 
+          isOpen={showLoginModal} 
+          onClose={() => setShowLoginModal(false)} 
+        />
       </div>
     );
   }

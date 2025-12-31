@@ -12,7 +12,8 @@ import { Plus, FolderOpen, Trash2, Clock, GitBranch, Code2, FileCode, Globe, Box
 import { BackButton } from "@/components/page-nav";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
-import { useAuth } from "@/hooks/use-auth";
+import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
+import { FirebaseLoginModal } from "@/components/firebase-login";
 
 interface Project {
   id: string;
@@ -40,7 +41,8 @@ const languageColors: Record<string, string> = {
 };
 
 export default function StudioProjects() {
-  const { user, isLoading: authLoading } = useAuth();
+  const { user, loading: authLoading, isAuthenticated } = useFirebaseAuth();
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [, setLocation] = useLocation();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -123,7 +125,25 @@ export default function StudioProjects() {
   }
 
   if (!user) {
-    return null;
+    return (
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-6">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-white mb-2">DarkWave Studio</h1>
+          <p className="text-muted-foreground">Sign in to access your projects</p>
+        </div>
+        <Button 
+          onClick={() => setShowLoginModal(true)}
+          className="bg-cyan-500 hover:bg-cyan-600 text-black"
+          data-testid="button-sign-in"
+        >
+          Sign In
+        </Button>
+        <FirebaseLoginModal 
+          isOpen={showLoginModal} 
+          onClose={() => setShowLoginModal(false)} 
+        />
+      </div>
+    );
   }
 
   return (
@@ -135,7 +155,7 @@ export default function StudioProjects() {
             DarkWave Studio
           </Link>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-muted-foreground">{user?.firstName || user?.email}</span>
+            <span className="text-sm text-muted-foreground">{user?.displayName || user?.email}</span>
             <Link href="/dashboard">
               <Button variant="ghost" size="sm" data-testid="link-dashboard">Dashboard</Button>
             </Link>
