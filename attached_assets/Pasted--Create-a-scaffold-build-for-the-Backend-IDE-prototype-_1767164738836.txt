@@ -1,0 +1,393 @@
+# Create a scaffold build for the Backend IDE prototype
+# Usage: Open PowerShell in a folder and run: .\create_build.ps1
+# This script will create a directory named "darkwave-studio-build" with all files.
+
+$root = Join-Path (Get-Location) "darkwave-studio-build"
+
+if (Test-Path $root) {
+    Write-Host "Directory '$root' already exists. Aborting to avoid overwrite." -ForegroundColor Yellow
+    exit 1
+}
+
+New-Item -Path $root -ItemType Directory | Out-Null
+
+function Write-File($path, $content) {
+    $full = Join-Path $root $path
+    $dir = Split-Path $full -Parent
+    if (-not (Test-Path $dir)) { New-Item -Path $dir -ItemType Directory -Force | Out-Null }
+    $content | Out-File -FilePath $full -Encoding utf8
+    Write-Host "Wrote $path"
+}
+
+# Files
+Write-File ".env.example" @"
+# Database
+DATABASE_URL=postgresql://user:pass@localhost:5432/darkwave
+
+# Studio execution / Docker
+DOCKER_HOST=unix:///var/run/docker.sock
+STUDIO_STORAGE_PATH=/var/studio/workspaces
+STUDIO_MAX_CONTAINERS=50
+STUDIO_CONTAINER_MEMORY=512m
+STUDIO_CONTAINER_CPU=0.5
+"@
+
+Write-File "package.json" @"
+{
+  "name": "darkwave-studio-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only server/index.ts",
+    "build": "tsc -p .",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "dockerode": "^3.4.0",
+    "node-pty": "^0.11.0",
+    "ws": "^8.13.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.5.6",
+    "@types/express": "^4.17.21",
+    "@types/ws": "^8.5.4"
+  }
+}
+"@
+
+Write-File "tsconfig.json" @"
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "outDir": "dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "sourceMap": true
+  },
+  "include": ["server/**/*", "shared/**/*"]
+}
+"@
+
+Write-File "server/index.ts" @"
+import express from 'express';
+import http from 'http';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import { setupStudioRoutes } from './routes';
+import { setupTerminalWebSocket } from './studio-terminal';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+
+setupStudioRoutes(app);
+
+const server = http.createServer(app);
+
+// Start WebSocket terminal server
+setupTerminalWebSocket(server);
+
+const PORT = process.env.PORT || 4000;
+server.listen(PORT, () => {
+  console.log(`Studio prototype server listening on http://localhost:${PORT}`);
+});
+"@
+
+Write-File "server/routes.ts" @"
+import { Express, Request, Response } from 'express';
+import path from 'path';
+import { ensureWorkspacePath, writeFileToWorkspace, listFilesInWorkspace } from './studio-files';
+import { spawnInstall } from './studio-executor';
+
+export function setupStudioRoutes(app: Express) {
+  app.get('/api/health', (_req: Request, res: Response) => res.json({ ok: true }));
+
+  // Simple file API
+  app.post('/api/studio/files', async (req: Request, res: Response) => {
+    // expects { userId, projectId, path, content }
+    try {
+      const { userId, projectId, filePath, content } = req.body;
+      if (!userId || !projectId || !filePath) return res.status(400).json({ error: 'missing params' });
+      const absolute = ensureWorkspacePath(userId, projectId, filePath);
+      await writeFileToWorkspace(absolute, content || '');
+      return res.json({ ok: true, path: absolute });
+    } catch (err: any) {
+      console.error(err);
+      return res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get('/api/studio/files/:userId/:projectId', async (req: Request, res: Response) => {
+    try {
+      const { userId, projectId } = req.params;
+      const files = await listFilesInWorkspace(userId, projectId);
+      return res.json({ ok: true, files });
+    } catch (err: any) {
+      console.error(err);
+      return res.status(500).json({ error: err.message });
+    }
+  });
+
+  // Install endpoint (spawns container to run install) - simple log streaming
+  app.post('/api/studio/install', async (req: Request, res: Response) => {
+    // expects { userId, projectId, pkgManager } - returns a runId
+    try {
+      const { userId, projectId, pkgManager } = req.body;
+      if (!userId || !projectId) return res.status(400).json({ error: 'missing params' });
+      const run = await spawnInstall(userId, projectId, pkgManager || 'npm');
+      return res.json({ ok: true, runId: run.id, logs: run.logs });
+    } catch (err: any) {
+      console.error(err);
+      return res.status(500).json({ error: err.message });
+    }
+  });
+
+  // Minimal status endpoint
+  app.get('/api/studio/status/:projectId', (_req, res) => {
+    // TODO: integrate real status from executor
+    res.json({ ok: true, projectId: _req.params.projectId, running: false });
+  });
+}
+"@
+
+Write-File "server/studio-files.ts" @"
+import fs from 'fs/promises';
+import path from 'path';
+import { existsSync } from 'fs';
+
+const BASE = process.env.STUDIO_STORAGE_PATH || '/tmp/darkwave-studio/workspaces';
+
+// Ensure path is inside workspace and return absolute path
+export function ensureWorkspacePath(userId: string, projectId: string, filePath: string) {
+  const safePath = path.normalize(filePath).replace(/^(\.\.(\/|\\|$))+/, '');
+  const dir = path.join(BASE, userId, projectId);
+  // create dirs as needed
+  const absolute = path.join(dir, safePath);
+  return absolute;
+}
+
+export async function writeFileToWorkspace(absolutePath: string, content: string) {
+  const dir = path.dirname(absolutePath);
+  await fs.mkdir(dir, { recursive: true });
+  await fs.writeFile(absolutePath, content, { encoding: 'utf8' });
+  return absolutePath;
+}
+
+export async function listFilesInWorkspace(userId: string, projectId: string) {
+  const dir = path.join(BASE, userId, projectId);
+  if (!existsSync(dir)) return [];
+  // simple recursive list
+  async function walk(dirPath: string) {
+    const entries = await fs.readdir(dirPath, { withFileTypes: true });
+    const out: string[] = [];
+    for (const e of entries) {
+      const full = path.join(dirPath, e.name);
+      if (e.isDirectory()) {
+        const sub = await walk(full);
+        out.push(...sub.map(s => path.relative(path.join(BASE, userId, projectId), s)));
+      } else {
+        out.push(path.relative(path.join(BASE, userId, projectId), full));
+      }
+    }
+    return out;
+  }
+  return await walk(dir);
+}
+"@
+
+Write-File "server/studio-executor.ts" @"
+/**
+ * Minimal executor stub using dockerode.
+ * - Creates container from node image
+ * - Mounts workspace directory
+ * - Runs simple commands (used by /api/studio/install)
+ *
+ * NOTE: This is a safe scaffold. The Replit agent should enhance:
+ * - proper per-user namespaces
+ * - authentication & JWT validation
+ * - container lifecycle & resource limits
+ * - network policies & seccomp
+ */
+
+import Docker from 'dockerode';
+import path from 'path';
+import { ensureWorkspacePath } from './studio-files';
+import fs from 'fs';
+
+const docker = new Docker({ socketPath: process.env.DOCKER_HOST || '/var/run/docker.sock' });
+
+export async function spawnInstall(userId: string, projectId: string, pkgManager: string = 'npm') {
+  const workdir = path.join(process.env.STUDIO_STORAGE_PATH || '/tmp/darkwave-studio/workspaces', userId, projectId);
+  // ensure workspace exists
+  fs.mkdirSync(workdir, { recursive: true });
+
+  const image = 'node:20-alpine';
+  // Pull image if not present (dockerode handles pull)
+  // Create and start container with mounting the workspace
+  const container = await docker.createContainer({
+    Image: image,
+    Cmd: ['/bin/sh', '-lc', pkgManager === 'yarn' ? 'yarn install' : 'npm install'],
+    Tty: false,
+    HostConfig: {
+      Binds: [`${workdir}:/workspace:rw,noexec`],
+      Memory: parseMemory(process.env.STUDIO_CONTAINER_MEMORY || '512m'),
+      NanoCPUs: parseCpu(process.env.STUDIO_CONTAINER_CPU || '0.5')
+    },
+    WorkingDir: '/workspace'
+  });
+
+  await container.start();
+
+  // wait for completion with a timeout
+  const timeoutMs = 1000 * 60 * 5; // 5m
+  let logs = '';
+  try {
+    const stream = await container.logs({ follow: true, stdout: true, stderr: true });
+    stream.on('data', (chunk: Buffer) => {
+      logs += chunk.toString('utf8');
+    });
+
+    // wait until exit
+    const status = await container.wait({ condition: 'not-running' });
+    logs += `\nExited with ${JSON.stringify(status)}`;
+  } catch (err: any) {
+    logs += `\nError: ${err.message}`;
+  } finally {
+    try { await container.remove({ force: true }); } catch {}
+  }
+
+  return { id: `${userId}-${projectId}-${Date.now()}`, logs };
+}
+
+function parseMemory(m: string) {
+  // dockerode expects bytes, but when setting Memory in HostConfig it accepts integer bytes
+  // For the scaffold we leave Memory undefined and rely on HostConfig limited by NanoCPUs instead.
+  return undefined;
+}
+function parseCpu(c: string) {
+  // docker HostConfig.NanoCPUs requires integer value for number of CPUs: e.g., 0.5 => 500000000
+  const v = parseFloat(c);
+  if (isNaN(v)) return undefined;
+  return Math.round(v * 1e9);
+}
+"@
+
+Write-File "server/studio-terminal.ts" @"
+/**
+ * WebSocket PTY terminal scaffold.
+ * - Uses ws to accept connections
+ * - Spawns a local pty (node-pty) as a placeholder
+ * - Replit agent should update to attach to container exec PTY instead
+ *
+ * Connection:
+ *  - ws://host/studio-terminal?userId=...&projectId=...&token=...
+ *  - Must authenticate the token (TODO)
+ */
+
+import { Server as HttpServer } from 'http';
+import WebSocket, { WebSocketServer } from 'ws';
+import pty from 'node-pty';
+import url from 'url';
+
+export function setupTerminalWebSocket(server: HttpServer) {
+  const wss = new WebSocketServer({ noServer: true });
+
+  server.on('upgrade', (req, socket, head) => {
+    const pathname = url.parse(req.url || '').pathname || '';
+    if (pathname === '/studio-terminal') {
+      wss.handleUpgrade(req, socket, head, (ws) => {
+        wss.emit('connection', ws, req);
+      });
+    } else {
+      socket.destroy();
+    }
+  });
+
+  wss.on('connection', (ws: WebSocket, req) => {
+    // TODO: validate JWT from query string
+    const query = url.parse(req.url || '', true).query;
+    const userId = query.userId as string || 'anon';
+    const projectId = query.projectId as string || 'default';
+
+    // For prototype, spawn a local shell attached to a pty
+    const shell = process.env.SHELL || (process.platform === 'win32' ? 'powershell.exe' : 'bash');
+    const p = pty.spawn(shell, [], {
+      name: 'xterm-color',
+      cols: 80,
+      rows: 24
+    });
+
+    ws.on('message', (data) => {
+      // expecting JSON { type: 'input'|'resize', data: '...' }
+      try {
+        const msg = JSON.parse(data.toString());
+        if (msg.type === 'input') {
+          p.write(msg.data);
+        } else if (msg.type === 'resize') {
+          p.resize(msg.cols || 80, msg.rows || 24);
+        }
+      } catch (e) {
+        // not JSON, write raw
+        p.write(data.toString());
+      }
+    });
+
+    p.on('data', (d) => {
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'output', data: d }));
+      }
+    });
+
+    ws.on('close', () => {
+      try { p.kill(); } catch {}
+    });
+  });
+
+  console.log('Studio terminal WebSocket mounted at /studio-terminal');
+}
+"@
+
+```sql name=shared/schema.sql
+-- Migration: create studio tables
+CREATE TABLE IF NOT EXISTS studio_projects (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL,
+  name TEXT NOT NULL,
+  language TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS studio_files (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  project_id UUID NOT NULL REFERENCES studio_projects(id) ON DELETE CASCADE,
+  path TEXT NOT NULL,
+  content TEXT,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS studio_snapshots (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  project_id UUID NOT NULL REFERENCES studio_projects(id),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+  snapshot_key TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS studio_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  project_id UUID NOT NULL,
+  user_id UUID,
+  message TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
