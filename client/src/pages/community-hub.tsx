@@ -389,6 +389,7 @@ export default function CommunityHub() {
   const [newPollQuestion, setNewPollQuestion] = useState("");
   const [newPollOptions, setNewPollOptions] = useState(["", ""]);
   const [createPollOpen, setCreatePollOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -913,7 +914,11 @@ export default function CommunityHub() {
                       </p>
                       <p className="text-[9px] sm:text-[10px] text-emerald-400">{isAuthenticated ? "Online" : "Sign in"}</p>
                     </div>
-                    <button className="p-1 sm:p-1.5 hover:bg-white/10 rounded-lg flex-shrink-0">
+                    <button 
+                      onClick={() => setSettingsOpen(true)}
+                      className="p-1 sm:p-1.5 hover:bg-white/10 rounded-lg flex-shrink-0"
+                      data-testid="btn-settings"
+                    >
                       <Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400" />
                     </button>
                   </div>
@@ -1372,6 +1377,57 @@ export default function CommunityHub() {
             {parseInt(tipAmount) > (orbsData?.balance || 0) && (
               <p className="text-xs text-red-400 text-center">Insufficient Orbs balance</p>
             )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
+        <DialogContent className="bg-gray-900 border-white/10 w-[95vw] max-w-md p-4 sm:p-6">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Settings className="w-5 h-5 text-cyan-400" />
+              Settings
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+              <h4 className="text-sm font-medium text-white mb-2">Account</h4>
+              {isAuthenticated ? (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-400">Signed in as</span>
+                    <span className="text-white">{firebaseUser?.firstName}</span>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full border-red-500/30 text-red-400 hover:bg-red-500/10"
+                    onClick={() => { signOut(); setSettingsOpen(false); }}
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </Button>
+                </div>
+              ) : (
+                <Button 
+                  size="sm" 
+                  className="w-full bg-cyan-500 hover:bg-cyan-600"
+                  onClick={() => { signInWithGoogle(); setSettingsOpen(false); }}
+                >
+                  Sign In with Google
+                </Button>
+              )}
+            </div>
+            
+            <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+              <h4 className="text-sm font-medium text-white mb-2">Notifications</h4>
+              <p className="text-xs text-gray-400">Notification settings coming soon</p>
+            </div>
+            
+            <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+              <h4 className="text-sm font-medium text-white mb-2">Appearance</h4>
+              <p className="text-xs text-gray-400">Theme settings coming soon</p>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
