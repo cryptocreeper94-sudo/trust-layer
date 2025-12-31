@@ -34,30 +34,6 @@ const TOKENS: TokenInfo[] = [
   { symbol: "USDT", name: "Tether", icon: "💲" },
 ];
 
-const MOCK_ORDERS: LimitOrder[] = [
-  {
-    id: "1",
-    tokenIn: TOKENS[0],
-    tokenOut: TOKENS[3],
-    amountIn: "1000",
-    targetPrice: 0.12,
-    currentPrice: 0.10,
-    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    status: "open",
-    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
-  },
-  {
-    id: "2",
-    tokenIn: TOKENS[3],
-    tokenOut: TOKENS[0],
-    amountIn: "500",
-    targetPrice: 0.08,
-    currentPrice: 0.10,
-    expiresAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-    status: "open",
-    createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
-  },
-];
 
 interface LimitOrderFormProps {
   tokenIn: TokenInfo;
@@ -190,7 +166,7 @@ export function LimitOrderForm({ tokenIn, tokenOut, onTokenInClick, onTokenOutCl
 
 export function LimitOrdersList() {
   const { toast } = useToast();
-  const [orders, setOrders] = useState<LimitOrder[]>(MOCK_ORDERS);
+  const [orders, setOrders] = useState<LimitOrder[]>([]);
   const [filter, setFilter] = useState<"all" | "open" | "filled">("all");
 
   const cancelOrder = (id: string) => {
