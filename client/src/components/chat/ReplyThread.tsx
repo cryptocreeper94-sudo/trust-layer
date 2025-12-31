@@ -32,7 +32,7 @@ export const ReplyThread: React.FC<{ replies?: Reply[]; onReply: (text: string) 
           <div className="mt-2 flex gap-2">
             <input value={text} onChange={(e) => setText(e.target.value)} placeholder="Reply…" className="flex-1 p-2 rounded-md bg-slate-900/40 text-white" data-testid="reply-input" />
             <button onClick={submit} className="py-2 px-3 rounded-md bg-cyan-500 text-black" data-testid="reply-submit">Reply</button>
-          </button>
+          </div>
         </>
       )}
     </div>
