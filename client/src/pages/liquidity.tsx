@@ -316,7 +316,15 @@ export default function Liquidity() {
                     <Droplets className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
                     <h3 className="font-bold text-white mb-2">No Positions Yet</h3>
                     <p className="text-sm text-muted-foreground mb-4">Add liquidity to a pool to start earning fees</p>
-                    <Button className="bg-green-500 hover:bg-green-600">
+                    <Button 
+                      className="bg-green-500 hover:bg-green-600"
+                      onClick={() => {
+                        if (pools.length > 0) {
+                          openAddLiquidity(pools[0]);
+                        }
+                      }}
+                      data-testid="button-add-liquidity-empty"
+                    >
                       <Plus className="w-4 h-4 mr-2" /> Add Liquidity
                     </Button>
                   </div>
