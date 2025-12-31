@@ -732,23 +732,23 @@ export default function CommunityHub() {
               <div className="w-[72px] bg-gray-900/80 backdrop-blur-xl border-r border-white/5 flex flex-col items-center py-4 gap-3">
                 <button 
                   onClick={() => setActiveView("chat")}
-                  className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${activeView === "chat" ? "bg-cyan-500/20 text-cyan-400 ring-2 ring-cyan-500/30" : "bg-white/10 text-gray-400 hover:text-white hover:bg-white/20"}`}
+                  className={`w-12 h-12 rounded-2xl flex flex-col items-center justify-center transition-all group relative ${activeView === "chat" ? "bg-cyan-500/20 text-cyan-400 ring-2 ring-cyan-500/30" : "bg-white/10 text-gray-400 hover:text-white hover:bg-white/20"}`}
                   data-testid="toggle-chat-view"
                 >
                   <MessageCircle className="w-5 h-5" />
+                  <span className="text-[8px] mt-0.5 font-medium">Chat</span>
                 </button>
                 <button 
                   onClick={() => setActiveView("pulse")}
-                  className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all group relative ${activeView === "pulse" ? "bg-gradient-to-br from-cyan-500 to-purple-500 text-white ring-2 ring-cyan-500/30" : "bg-white/5 text-gray-400 hover:text-white hover:bg-white/10"}`}
+                  className={`w-12 h-12 rounded-2xl flex flex-col items-center justify-center transition-all group relative ${activeView === "pulse" ? "bg-gradient-to-br from-cyan-500 to-purple-500 text-white ring-2 ring-cyan-500/30" : "bg-white/5 text-gray-400 hover:text-white hover:bg-white/10"}`}
                   data-testid="toggle-pulse-view"
                 >
                   <Activity className="w-5 h-5" />
-                  <div className="absolute left-full ml-3 px-2 py-1 bg-gray-900 rounded text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                    Pulse Trading
-                  </div>
+                  <span className="text-[8px] mt-0.5 font-medium">Pulse</span>
                 </button>
-                <button className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all">
+                <button className="w-12 h-12 rounded-2xl bg-white/5 flex flex-col items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all group relative">
                   <Compass className="w-5 h-5" />
+                  <span className="text-[8px] mt-0.5 font-medium">Explore</span>
                 </button>
                 <div className="w-8 h-px bg-white/10 my-2" />
                 {loadingCommunities ? (
@@ -770,10 +770,11 @@ export default function CommunityHub() {
                 <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
                   <DialogTrigger asChild>
                     <button 
-                      className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 hover:bg-emerald-500/30 transition-all"
+                      className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex flex-col items-center justify-center text-emerald-400 hover:bg-emerald-500/30 transition-all"
                       data-testid="create-community-btn"
                     >
                       <Plus className="w-5 h-5" />
+                      <span className="text-[8px] mt-0.5 font-medium">New</span>
                     </button>
                   </DialogTrigger>
                   <DialogContent className="bg-gray-900 border-white/10">
