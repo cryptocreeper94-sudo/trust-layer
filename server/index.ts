@@ -15,10 +15,10 @@ const isProduction = process.env.NODE_ENV === "production";
 const cspDirectives = {
   defaultSrc: ["'self'"],
   scriptSrc: isProduction 
-    ? ["'self'", "https://js.stripe.com", "https://www.googletagmanager.com"]
+    ? ["'self'", "'unsafe-eval'", "https://js.stripe.com", "https://www.googletagmanager.com"]
     : ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
   styleSrc: isProduction
-    ? ["'self'", "https://fonts.googleapis.com"]
+    ? ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"]
     : ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
   fontSrc: ["'self'", "https://fonts.gstatic.com"],
   imgSrc: ["'self'", "data:", "blob:", "https:"],
