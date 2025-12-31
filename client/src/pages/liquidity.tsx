@@ -164,6 +164,32 @@ export default function Liquidity() {
   const [amountA, setAmountA] = useState("");
   const [amountB, setAmountB] = useState("");
 
+  const handleAmountAChange = (value: string) => {
+    setAmountA(value);
+    if (selectedPool && value && parseFloat(value) > 0) {
+      const reserveA = parseFloat(selectedPool.reserveA) || 1;
+      const reserveB = parseFloat(selectedPool.reserveB) || 1;
+      const ratio = reserveB / reserveA;
+      const calculatedB = (parseFloat(value) * ratio).toFixed(6);
+      setAmountB(calculatedB);
+    } else if (!value) {
+      setAmountB("");
+    }
+  };
+
+  const handleAmountBChange = (value: string) => {
+    setAmountB(value);
+    if (selectedPool && value && parseFloat(value) > 0) {
+      const reserveA = parseFloat(selectedPool.reserveA) || 1;
+      const reserveB = parseFloat(selectedPool.reserveB) || 1;
+      const ratio = reserveA / reserveB;
+      const calculatedA = (parseFloat(value) * ratio).toFixed(6);
+      setAmountA(calculatedA);
+    } else if (!value) {
+      setAmountA("");
+    }
+  };
+
   const { data: poolsData, isLoading: poolsLoading } = useQuery<{ pools: LiquidityPool[] }>({
     queryKey: ["/api/liquidity/pools"],
   });
@@ -318,12 +344,12 @@ export default function Liquidity() {
               
               <div>
                 <Label className="text-xs">{selectedPool.tokenA} Amount</Label>
-                <Input type="number" placeholder="0.0" value={amountA} onChange={(e) => setAmountA(e.target.value)} className="bg-white/5 border-white/10" data-testid="input-amount-a" />
+                <Input type="number" placeholder="0.0" value={amountA} onChange={(e) => handleAmountAChange(e.target.value)} className="bg-white/5 border-white/10" data-testid="input-amount-a" />
               </div>
               
               <div>
                 <Label className="text-xs">{selectedPool.tokenB} Amount</Label>
-                <Input type="number" placeholder="0.0" value={amountB} onChange={(e) => setAmountB(e.target.value)} className="bg-white/5 border-white/10" data-testid="input-amount-b" />
+                <Input type="number" placeholder="0.0" value={amountB} onChange={(e) => handleAmountBChange(e.target.value)} className="bg-white/5 border-white/10" data-testid="input-amount-b" />
               </div>
               
               <div className="p-3 rounded-lg bg-white/5 text-xs space-y-1">
