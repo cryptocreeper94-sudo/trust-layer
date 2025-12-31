@@ -1,0 +1,58 @@
+// client/src/components/chat/CommunitySettings.tsx
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import type { Community } from '../../../shared/chat-types';
+
+export const CommunitySettings: React.FC<{ community: Community; onSave: (c: Partial<Community>) => Promise<void>; onDelete: (id: string) => Promise<void> }> = ({ community, onSave, onDelete }) => {
+  const [name, setName] = useState(community.name);
+  const [description, setDescription] = useState(community.description ?? '');
+  const [privacy, setPrivacy] = useState<'public' | 'private' | 'invite-only'>(community.privacy ?? 'public');
+  const [loading, setLoading] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const save = async () => {
+    setLoading(true);
+    try {
+      // TODO: Replit agent - integrate with API to save community settings
+      await onSave({ name, description } as Partial<Community>);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const confirmDelete = async () => {
+    if (!confirm(`Delete community "${community.name}"? This action is irreversible.`)) return;
+    setDeleting(true);
+    try {
+      // TODO: Replit agent - integrate with API to delete community
+      await onDelete(community.id);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  return (
+    <motion.div className="p-4 rounded-lg bg-slate-950/30 border border-slate-800/40" data-testid="community-settings">
+      <h4 className="text-sm font-semibold text-white mb-2">Community Settings</h4>
+
+      <div className="grid gap-3">
+        <input value={name} onChange={(e) => setName(e.target.value)} className="p-2 rounded-md bg-slate-900/40 text-white" placeholder="Community name" data-testid="community-name" />
+        <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="p-2 rounded-md bg-slate-900/40 text-white" placeholder="Description" rows={3} data-testid="community-description" />
+
+        <div>
+          <label className="text-xs text-slate-400">Privacy</label>
+          <select value={privacy} onChange={(e) => setPrivacy(e.target.value as any)} className="w-full p-2 rounded-md bg-slate-800/40 text-white" data-testid="community-privacy">
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+            <option value="invite-only">Invite Only</option>
+          </select>
+        </div>
+
+        <div className="flex gap-2">
+          <button onClick={save} disabled={loading} className="py-2 px-4 rounded-md bg-cyan-500 text-black" data-testid="community-save">{loading ? 'Saving…' : 'Save'}</button>
+          <button onClick={confirmDelete} disabled={deleting} className="py-2 px-4 rounded-md bg-red-600 text-white" data-testid="community-delete">{deleting ? 'Deleting…' : 'Delete'}</button>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
