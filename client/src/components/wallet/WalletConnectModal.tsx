@@ -1,0 +1,83 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { useEthereumWallet } from '../../hooks/use-ethereum-wallet';
+import { useSolanaWallet } from '../../hooks/use-solana-wallet';
+
+export const WalletConnectModal: React.FC<{ open: boolean; onClose: () => void }> = ({ open, onClose }) => {
+  const eth = useEthereumWallet();
+  const sol = useSolanaWallet();
+
+  if (!open) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center"
+    >
+      <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm" onClick={onClose} />
+      <motion.div
+        initial={{ y: 60, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 60, opacity: 0 }}
+        className="relative w-full max-w-md mx-4 sm:mx-0 bg-slate-950 rounded-xl p-4 shadow-lg border border-slate-800/40"
+        role="dialog"
+        aria-modal="true"
+        data-testid="wallet-connect-modal"
+      >
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-semibold text-white">Connect Wallet</h3>
+          <button onClick={onClose} aria-label="Close" className="p-2 rounded" data-testid="wallet-modal-close">
+            ✕
+          </button>
+        </div>
+
+        <div className="grid gap-3">
+          <div className="rounded-lg p-3 bg-gradient-to-r from-slate-900/40 to-slate-800/30 border border-slate-700/60 flex flex-col">
+            <div className="text-sm text-slate-300 mb-2">Ethereum</div>
+            <div className="flex gap-2">
+              <button
+                data-testid="connect-metamask"
+                onClick={async () => { try { await eth.connectMetaMask(); onClose(); } catch (e) { console.error(e); } }}
+                className="flex-1 bg-slate-900/40 hover:bg-slate-900/60 text-white py-3 rounded-md min-h-[48px]"
+              >
+                MetaMask
+              </button>
+              <button
+                data-testid="connect-walletconnect"
+                onClick={() => { }}
+                className="flex-1 bg-slate-900/40 hover:bg-slate-900/60 text-white py-3 rounded-md min-h-[48px]"
+              >
+                WalletConnect
+              </button>
+            </div>
+            <div className="text-xs text-slate-400 mt-2">Status: <span className="text-cyan-300">{eth.wallet?.address ? 'Connected' : 'Not Connected'}</span></div>
+          </div>
+
+          <div className="rounded-lg p-3 bg-gradient-to-r from-slate-900/40 to-slate-800/30 border border-slate-700/60">
+            <div className="text-sm text-slate-300 mb-2">Solana</div>
+            <div className="flex gap-2">
+              <button
+                data-testid="connect-phantom"
+                onClick={async () => { try { await sol.connectPhantom(); onClose(); } catch (e) { console.error(e); } }}
+                className="flex-1 bg-slate-900/40 hover:bg-slate-900/60 text-white py-3 rounded-md min-h-[48px]"
+              >
+                Phantom
+              </button>
+              <button
+                data-testid="connect-solflare"
+                onClick={() => { }}
+                className="flex-1 bg-slate-900/40 hover:bg-slate-900/60 text-white py-3 rounded-md min-h-[48px]"
+              >
+                Solflare
+              </button>
+            </div>
+            <div className="text-xs text-slate-400 mt-2">Status: <span className="text-cyan-300">{sol.wallet?.publicKey ? 'Connected' : 'Not Connected'}</span></div>
+          </div>
+
+          <div className="flex justify-end">
+            <button onClick={onClose} className="px-4 py-2 rounded-md bg-slate-800 hover:bg-slate-700 text-white" data-testid="wallet-modal-done">Done</button>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+};

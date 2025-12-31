@@ -1,0 +1,359 @@
+// server/studio-executor.ts
+/**
+ * studio-executor.ts
+ *
+ * Improved, safe scaffold for spawning short-lived containers to run package installs
+ * or simple build commands for a workspace. This replaces the earlier truncated/corrupted file.
+ *
+ * NOTES / WARNINGS:
+ * - This scaffold is intentionally minimal and NOT production-ready.
+ * - Do NOT expose the Docker socket to untrusted clients. Use a mediator daemon
+ *   or a trusted backend service that authenticates/authorizes requests before
+ *   creating containers.
+ * - The Replit agent MUST harden the executor:
+ *    * Add per-user quotas & accounting (persistent store)
+ *    * Use seccomp / gVisor / sandboxing
+ *    * Enforce network policies (eg. disable outbound networking if desired)
+ *    * Avoid running untrusted images; use curated images only
+ *    * Add strong authentication & input validation
+ *
+ * TODO: Replit agent - integrate with JWT auth middleware and real container registry policy
+ */
+
+import Docker from 'dockerode';
+import path from 'path';
+import fs from 'fs/promises';
+import fsSync from 'fs';
+import crypto from 'crypto';
+import stream from 'stream';
+
+const DOCKER_SOCKET = process.env.DOCKER_HOST || '/var/run/docker.sock';
+const docker = new Docker({ socketPath: DOCKER_SOCKET });
+
+const WORKSPACE_BASE = process.env.STUDIO_STORAGE_PATH || '/tmp/darkwave-studio/workspaces';
+const DEFAULT_IMAGE = process.env.STUDIO_NODE_IMAGE || 'node:20-alpine';
+const DEFAULT_TIMEOUT_MS = Number(process.env.STUDIO_INSTALL_TIMEOUT_MS || 5 * 60 * 1000); // 5 minutes
+
+export interface RunResult {
+  id: string;
+  userId: string;
+  projectId: string;
+  startedAt: string;
+  finishedAt?: string;
+  exitCode?: number;
+  logs: string;
+  error?: string;
+  durationMs?: number;
+}
+
+type RunningEntry = {
+  id: string;
+  container: Docker.Container;
+  startedAt: number;
+  timeoutHandle?: NodeJS.Timeout;
+};
+
+const runningMap = new Map<string, RunningEntry>();
+
+/**
+ * Ensure the workspace directory exists.
+ */
+async function ensureWorkdir(userId: string, projectId: string) {
+  const dir = path.join(WORKSPACE_BASE, userId, projectId);
+  await fs.mkdir(dir, { recursive: true });
+  return dir;
+}
+
+/**
+ * Convert memory strings like "512m", "1g" into bytes (integer).
+ * Returns undefined if parsing fails (Docker will use defaults).
+ */
+function parseMemoryToBytes(m?: string): number | undefined {
+  if (!m) return undefined;
+  const r = m.trim().toLowerCase();
+  try {
+    if (r.endsWith('g')) return Math.round(parseFloat(r.slice(0, -1)) * 1024 ** 3);
+    if (r.endsWith('m')) return Math.round(parseFloat(r.slice(0, -1)) * 1024 ** 2);
+    if (r.endsWith('k')) return Math.round(parseFloat(r.slice(0, -1)) * 1024);
+    const v = parseInt(r, 10);
+    if (!isNaN(v)) return v;
+  } catch (e) {
+    // ignore
+  }
+  return undefined;
+}
+
+/**
+ * Convert CPU value like "0.5" to NanoCPUs (Docker HostConfig.NanoCPUs)
+ */
+function parseCpuToNano(c?: string): number | undefined {
+  if (!c) return undefined;
+  const v = parseFloat(c);
+  if (isNaN(v)) return undefined;
+  return Math.round(v * 1e9);
+}
+
+/**
+ * Helper to pull an image (if not present). Streams progress to the provided appendLog function.
+ */
+async function ensureImage(image: string, appendLog: (s: string) => void) {
+  try {
+    // Check if image exists locally
+    const images = await docker.listImages({ filters: { reference: [image] } });
+    if (images.length > 0) {
+      appendLog(`[executor] image ${image} already present locally\n`);
+      return;
+    }
+
+    appendLog(`[executor] pulling image ${image} ...\n`);
+    await new Promise<void>((resolve, reject) => {
+      docker.pull(image, (err, stream_) => {
+        if (err) return reject(err);
+        if (!stream_) return resolve();
+        docker.modem.followProgress(
+          stream_,
+          (err2: any) => {
+            if (err2) return reject(err2);
+            resolve();
+          },
+          (event: any) => {
+            // emit some progress messages
+            if (event.status) {
+              const detail = event.progress ? ` ${event.progress}` : '';
+              appendLog(`[pull] ${event.status}${detail}\n`);
+            }
+          }
+        );
+      });
+    });
+    appendLog(`[executor] pull completed: ${image}\n`);
+  } catch (err: any) {
+    appendLog(`[executor] image pull error: ${String(err)}\n`);
+    throw err;
+  }
+}
+
+/**
+ * Spawn a short-lived container to run an install command (npm/yarn/pip).
+ * Returns full logs and exit status.
+ *
+ * This function:
+ *  - ensures workspace exists
+ *  - ensures image is pulled (best-effort)
+ *  - creates container with only the workspace bind mounted
+ *  - attaches to stdout/stderr and collects logs
+ *  - enforces a timeout (kills container on timeout)
+ *
+ * TODO: Replit agent - stream logs to websocket instead of returning full string for large outputs.
+ */
+export async function spawnInstall(userId: string, projectId: string, pkgManager: 'npm' | 'yarn' | 'pip' = 'npm'): Promise<RunResult> {
+  const runId = `${userId}-${projectId}-${Date.now()}-${crypto.randomBytes(6).toString('hex')}`;
+  const startedAt = Date.now();
+  const startedAtIso = new Date(startedAt).toISOString();
+  let logs = '';
+  const appendLog = (s: string) => { logs += s; };
+
+  // Determine workdir & command
+  const workdir = await ensureWorkdir(userId, projectId);
+  const containerWorkdir = '/workspace';
+  const cmd = pkgManager === 'yarn' ? 'yarn install --frozen-lockfile' : (pkgManager === 'pip' ? 'pip install -r requirements.txt' : 'npm install --no-audit --prefer-offline');
+
+  // Security note: only bind the workspace directory. Do NOT mount host root or other sensitive paths.
+  const bind = `${workdir}:${containerWorkdir}:rw`;
+
+  // Prepare resource limits
+  const memBytes = parseMemoryToBytes(process.env.STUDIO_CONTAINER_MEMORY || process.env.STUDIO_CONTAINER_MEMORY || '512m');
+  const nanoCPUs = parseCpuToNano(process.env.STUDIO_CONTAINER_CPU || '0.5');
+
+  // Ensure image present (best-effort)
+  try {
+    await ensureImage(DEFAULT_IMAGE, appendLog);
+  } catch (err) {
+    // proceed - docker may still try to pull during create/start
+  }
+
+  // Create container
+  let container: Docker.Container | null = null;
+  try {
+    container = await docker.createContainer({
+      Image: DEFAULT_IMAGE,
+      Cmd: ['/bin/sh', '-lc', `cd ${containerWorkdir} && ${cmd}`],
+      Tty: false,
+      WorkingDir: containerWorkdir,
+      Env: [
+        // limit env exposure - you can add envs here if needed
+      ],
+      HostConfig: {
+        Binds: [bind],
+        // Memory in bytes
+        Memory: memBytes ?? undefined,
+        NanoCPUs: nanoCPUs ?? undefined,
+        ReadonlyRootfs: false, // keep false for install operations, Replit agent may set to true in other contexts
+        NetworkMode: 'none' // default to no network; Replit agent may choose to enable based on policy
+      }
+    });
+
+    appendLog(`[executor] created container ${container.id}\n`);
+  } catch (err: any) {
+    const errorMsg = `[executor] createContainer failed: ${String(err)}\n`;
+    appendLog(errorMsg);
+    return {
+      id: runId,
+      userId,
+      projectId,
+      startedAt: startedAtIso,
+      finishedAt: new Date().toISOString(),
+      exitCode: -1,
+      logs,
+      error: errorMsg,
+      durationMs: Date.now() - startedAt
+    };
+  }
+
+  // Attach & capture logs
+  try {
+    // Attach returns a multiplexed stream (stdout/stderr combined); demux into a PassThrough
+    const attachStream = await container.attach({ stream: true, stdout: true, stderr: true });
+    const outStream = new stream.PassThrough();
+    const errStream = new stream.PassThrough();
+
+    // docker.modem.demuxStream will split the multiplexed stream into outStream and errStream
+    // @ts-ignore dockerode types: modem is available on docker object
+    docker.modem.demuxStream(attachStream, outStream, errStream);
+
+    outStream.on('data', (chunk: Buffer) => appendLog(chunk.toString('utf8')));
+    errStream.on('data', (chunk: Buffer) => appendLog(chunk.toString('utf8')));
+
+    // Start container
+    await container.start();
+    appendLog(`[executor] started container ${container.id} for run ${runId}\n`);
+
+    // Track running container
+    const timeoutHandle = setTimeout(async () => {
+      appendLog(`[executor] timeout hit (${DEFAULT_TIMEOUT_MS}ms). Killing container ${container?.id}\n`);
+      try {
+        await container?.kill();
+      } catch (e) {
+        // ignore
+      }
+    }, DEFAULT_TIMEOUT_MS);
+
+    runningMap.set(runId, { id: runId, container, startedAt, timeoutHandle });
+
+    // Wait for container to exit
+    const waitRes = await container.wait();
+    const exitCode = (waitRes as any).StatusCode ?? (waitRes as any).statusCode ?? 0;
+
+    // Read any remaining logs via logs API (best-effort)
+    try {
+      const logsStream = await container.logs({ stdout: true, stderr: true, timestamps: false });
+      // logsStream can be a buffer or stream; handle both
+      if (logsStream instanceof Buffer) {
+        appendLog(logsStream.toString('utf8'));
+      } else {
+        // stream
+        await new Promise<void>((resolve, reject) => {
+          const chunks: Buffer[] = [];
+          logsStream.on('data', (c: Buffer) => chunks.push(c));
+          logsStream.on('end', () => { appendLog(Buffer.concat(chunks).toString('utf8')); resolve(); });
+          logsStream.on('error', reject);
+        });
+      }
+    } catch (e) {
+      // ignore logs read failure
+    }
+
+    // Cleanup: stop timeout and remove running map entry
+    const entry = runningMap.get(runId);
+    if (entry?.timeoutHandle) clearTimeout(entry.timeoutHandle);
+    runningMap.delete(runId);
+
+    // Remove container to avoid dangling containers
+    try {
+      await container.remove({ force: true });
+      appendLog(`[executor] removed container ${container.id}\n`);
+    } catch (e) {
+      appendLog(`[executor] failed to remove container: ${String(e)}\n`);
+    }
+
+    const finishedAt = Date.now();
+    return {
+      id: runId,
+      userId,
+      projectId,
+      startedAt: startedAtIso,
+      finishedAt: new Date(finishedAt).toISOString(),
+      exitCode,
+      logs,
+      durationMs: finishedAt - startedAt
+    };
+  } catch (err: any) {
+    const errorMsg = `[executor] run error: ${String(err)}\n`;
+    appendLog(errorMsg);
+
+    // Try to cleanup container
+    try {
+      await container?.remove({ force: true });
+    } catch (e) {
+      // ignore
+    }
+
+    runningMap.delete(runId);
+    return {
+      id: runId,
+      userId,
+      projectId,
+      startedAt: startedAtIso,
+      finishedAt: new Date().toISOString(),
+      exitCode: -1,
+      logs,
+      error: errorMsg,
+      durationMs: Date.now() - startedAt
+    };
+  }
+}
+
+/**
+ * Get status of a run by id. Returns basic info and partial logs (full logs stored on caller).
+ * NOTE: For large logs, stream to persistence or websockets instead of returning full logs.
+ */
+export async function getRunStatus(runId: string): Promise<{ running: boolean; startedAt?: string; uptimeMs?: number }> {
+  const entry = runningMap.get(runId);
+  if (!entry) return { running: false };
+  return { running: true, startedAt: new Date(entry.startedAt).toISOString(), uptimeMs: Date.now() - entry.startedAt };
+}
+
+/**
+ * Force-kill a running run by id.
+ */
+export async function killRun(runId: string): Promise<boolean> {
+  const entry = runningMap.get(runId);
+  if (!entry) return false;
+  try {
+    if (entry.timeoutHandle) clearTimeout(entry.timeoutHandle);
+    await entry.container.kill();
+    await entry.container.remove({ force: true });
+  } catch (e) {
+    // ignore
+  }
+  runningMap.delete(runId);
+  return true;
+}
+
+/**
+ * Expose a simple list of active runs (for debugging / admin purposes).
+ */
+export function listActiveRuns() {
+  const out: { id: string; containerId: string; startedAt: string }[] = [];
+  for (const [id, entry] of runningMap.entries()) {
+    out.push({ id, containerId: entry.container.id, startedAt: new Date(entry.startedAt).toISOString() });
+  }
+  return out;
+}
+
+export default {
+  spawnInstall,
+  getRunStatus,
+  killRun,
+  listActiveRuns
+};
