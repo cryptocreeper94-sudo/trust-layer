@@ -426,53 +426,53 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
       </div>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="bg-slate-900 border-white/10 max-w-lg">
+        <DialogContent className="bg-slate-900 border-white/10 w-[95vw] max-w-lg max-h-[85vh] overflow-y-auto p-4 sm:p-6 rounded-xl">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-3 text-2xl">
-              {tier.tier === "genesis" && <Crown className="w-8 h-8 text-yellow-400" />}
-              {tier.tier === "founder" && <Star className="w-8 h-8 text-purple-400" />}
-              {tier.tier === "pioneer" && <Rocket className="w-8 h-8 text-cyan-400" />}
-              {tier.tier === "early_bird" && <Gift className="w-8 h-8 text-green-400" />}
+            <DialogTitle className="flex items-center gap-2 sm:gap-3 text-lg sm:text-2xl">
+              {tier.tier === "genesis" && <Crown className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400 flex-shrink-0" />}
+              {tier.tier === "founder" && <Star className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400 flex-shrink-0" />}
+              {tier.tier === "pioneer" && <Rocket className="w-6 h-6 sm:w-8 sm:h-8 text-cyan-400 flex-shrink-0" />}
+              {tier.tier === "early_bird" && <Gift className="w-6 h-6 sm:w-8 sm:h-8 text-green-400 flex-shrink-0" />}
               <span className={`bg-gradient-to-r ${color} bg-clip-text text-transparent`}>
                 {tier.name}
               </span>
             </DialogTitle>
-            <DialogDescription className="text-gray-300 pt-2">
+            <DialogDescription className="text-gray-300 pt-2 text-sm sm:text-base">
               {tierDetails.description}
             </DialogDescription>
           </DialogHeader>
           
-          <div className="space-y-4 mt-4">
-            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+          <div className="space-y-3 sm:space-y-4 mt-3 sm:mt-4">
+            <div className="p-3 sm:p-4 rounded-xl bg-white/5 border border-white/10">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-400">Investment</span>
-                <span className="text-2xl font-bold text-white">${(tier.amount / 100).toLocaleString()}</span>
+                <span className="text-gray-400 text-sm">Investment</span>
+                <span className="text-xl sm:text-2xl font-bold text-white">${(tier.amount / 100).toLocaleString()}</span>
               </div>
               <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-400">Base Tokens</span>
-                <span className="text-lg text-white">{tokenAmount.toLocaleString()} DWC</span>
+                <span className="text-gray-400 text-sm">Base Tokens</span>
+                <span className="text-base sm:text-lg text-white">{tokenAmount.toLocaleString()} DWC</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-gray-400">Bonus ({tier.bonus}%)</span>
-                <span className={`text-lg bg-gradient-to-r ${color} bg-clip-text text-transparent font-semibold`}>
+                <span className="text-gray-400 text-sm">Bonus ({tier.bonus}%)</span>
+                <span className={`text-base sm:text-lg bg-gradient-to-r ${color} bg-clip-text text-transparent font-semibold`}>
                   +{bonusTokens.toLocaleString()} DWC
                 </span>
               </div>
               <div className="border-t border-white/10 mt-3 pt-3 flex justify-between items-center">
-                <span className="text-white font-semibold">Total Tokens</span>
-                <span className="text-xl font-bold text-cyan-400">{(tokenAmount + bonusTokens).toLocaleString()} DWC</span>
+                <span className="text-white font-semibold text-sm">Total Tokens</span>
+                <span className="text-lg sm:text-xl font-bold text-cyan-400">{(tokenAmount + bonusTokens).toLocaleString()} DWC</span>
               </div>
             </div>
 
             <div>
-              <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-green-400" />
+              <h4 className="text-white font-semibold mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" />
                 Benefits Included
               </h4>
-              <ul className="space-y-2">
+              <ul className="space-y-1.5 sm:space-y-2">
                 {tierDetails.benefits.map((benefit, i) => (
-                  <li key={i} className="flex items-start gap-2 text-gray-300">
-                    <Sparkles className="w-4 h-4 text-purple-400 mt-0.5 flex-shrink-0" />
+                  <li key={i} className="flex items-start gap-2 text-gray-300 text-sm sm:text-base">
+                    <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-400 mt-0.5 flex-shrink-0" />
                     {benefit}
                   </li>
                 ))}
@@ -484,7 +484,7 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
                 setShowModal(false);
                 document.getElementById(`input-email-${tier.tier}`)?.focus();
               }}
-              className={`w-full bg-gradient-to-r ${color} hover:opacity-90`}
+              className={`w-full bg-gradient-to-r ${color} hover:opacity-90 py-3`}
             >
               Select This Tier
             </Button>
@@ -543,17 +543,17 @@ function EcosystemCard({ feature, index }: { feature: typeof ECOSYSTEM_FEATURES[
       </motion.div>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="bg-slate-900 border-white/10 max-w-lg max-h-[90vh] overflow-y-auto">
+        <DialogContent className="bg-slate-900 border-white/10 w-[95vw] max-w-lg max-h-[85vh] overflow-y-auto p-4 sm:p-6 rounded-xl">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-3 text-2xl">
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center`}>
-                <Icon className="w-6 h-6 text-white" />
+            <DialogTitle className="flex items-center gap-2 sm:gap-3 text-lg sm:text-2xl">
+              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center flex-shrink-0`}>
+                <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <span className="text-white">{feature.title}</span>
             </DialogTitle>
           </DialogHeader>
           
-          <div className="relative h-48 rounded-xl overflow-hidden my-4">
+          <div className="relative h-36 sm:h-48 rounded-xl overflow-hidden my-3 sm:my-4">
             <img 
               src={feature.image} 
               alt={feature.title}
@@ -562,19 +562,19 @@ function EcosystemCard({ feature, index }: { feature: typeof ECOSYSTEM_FEATURES[
             <div className={`absolute inset-0 bg-gradient-to-t ${feature.gradient} to-transparent opacity-50`} />
           </div>
 
-          <DialogDescription className="text-gray-300 text-base leading-relaxed">
+          <DialogDescription className="text-gray-300 text-sm sm:text-base leading-relaxed">
             {feature.fullDescription}
           </DialogDescription>
           
-          <div className="mt-4">
-            <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-green-400" />
+          <div className="mt-3 sm:mt-4">
+            <h4 className="text-white font-semibold mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" />
               Key Features
             </h4>
-            <ul className="space-y-2">
+            <ul className="space-y-1.5 sm:space-y-2">
               {feature.features.map((feat, i) => (
-                <li key={i} className="flex items-start gap-2 text-gray-300">
-                  <Sparkles className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                <li key={i} className="flex items-start gap-2 text-gray-300 text-sm sm:text-base">
+                  <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
                   {feat}
                 </li>
               ))}
@@ -583,7 +583,7 @@ function EcosystemCard({ feature, index }: { feature: typeof ECOSYSTEM_FEATURES[
 
           <Button 
             onClick={() => setShowModal(false)}
-            className="w-full mt-4 bg-gradient-to-r from-cyan-600 to-purple-600 hover:opacity-90"
+            className="w-full mt-3 sm:mt-4 bg-gradient-to-r from-cyan-600 to-purple-600 hover:opacity-90 py-3"
           >
             Got It
           </Button>
