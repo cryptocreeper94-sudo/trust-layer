@@ -8244,7 +8244,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   };
 
   app.post("/api/owner/auth", rateLimit("owner-auth", 5, 5 * 60 * 1000), (req, res) => {
-    if (!OWNER_SECRET || OWNER_SECRET.length < 16) {
+    if (!OWNER_SECRET || OWNER_SECRET.length < 4) {
       return res.status(503).json({ error: "Owner portal not configured. Contact administrator." });
     }
 

@@ -46,8 +46,8 @@ function SecretEntry({ onSuccess }: { onSuccess: () => void }) {
   const [showSecret, setShowSecret] = useState(false);
 
   const handleSubmit = async () => {
-    if (secret.length < 16) {
-      setError("Secret must be at least 16 characters");
+    if (secret.length < 4) {
+      setError("Secret must be at least 4 characters");
       return;
     }
     
@@ -154,7 +154,7 @@ function SecretEntry({ onSuccess }: { onSuccess: () => void }) {
           <button
             type="button"
             onClick={() => handleSubmit()}
-            disabled={loading || secret.length < 16}
+            disabled={loading || secret.length < 4}
             className="w-full py-4 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-xl text-white font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-all relative overflow-hidden group hover:scale-[1.02] active:scale-[0.98]"
             data-testid="button-owner-domain-auth"
           >
