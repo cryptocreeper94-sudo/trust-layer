@@ -180,7 +180,8 @@ function ChroniclesCarousel() {
             <img 
               src={item.img} 
               alt={item.era}
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
+              style={{ objectPosition: item.era === "Age of Crowns" ? 'center 60%' : 'center' }}
             />
             <div className={`absolute inset-0 bg-gradient-to-t ${item.color}`} />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
