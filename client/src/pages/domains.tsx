@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Globe, Shield, Zap, Check, X, ArrowRight, Crown, Clock, Users, Sparkles, ExternalLink, Copy, Wallet, Infinity as InfinityIcon } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
@@ -103,6 +103,7 @@ export default function DomainsPage() {
   usePageAnalytics();
   const queryClient = useQueryClient();
   const { evmAddress, solanaAddress, isConnected } = useWallet();
+  const [, setLocation] = useLocation();
   const walletAddress = evmAddress || solanaAddress;
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResult, setSearchResult] = useState<DomainSearchResult | null>(null);
@@ -451,8 +452,13 @@ export default function DomainsPage() {
                         {searchResult.tier} tier domain
                       </p>
                       <Button
-                        onClick={() => setShowRegisterDialog(true)}
-                        disabled={!isConnected && !isOwnerAuthenticated}
+                        onClick={() => {
+                          if (!isConnected && !isOwnerAuthenticated) {
+                            setLocation("/wallet");
+                          } else {
+                            setShowRegisterDialog(true);
+                          }
+                        }}
                         className={`w-full ${isOwnerAuthenticated ? "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600" : "bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"}`}
                         data-testid="button-register-domain"
                       >
@@ -464,7 +470,10 @@ export default function DomainsPage() {
                         ) : isConnected ? (
                           <>Register Now</>
                         ) : (
-                          <>Connect Wallet to Register</>
+                          <>
+                            <Wallet className="w-4 h-4 mr-2" />
+                            Connect Wallet to Register
+                          </>
                         )}
                         <ArrowRight className="w-4 h-4 ml-2" />
                       </Button>
