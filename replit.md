@@ -76,14 +76,50 @@ To reduce Replit costs ($100-400/day), boilerplate generation has been moved to 
 - **Backend**: `chat-presence.ts` (WebSocket presence), `chat-bot-framework.ts` (bot framework)
 - **Pages**: `chronochat.tsx` (main), `chronochat-invite.tsx` (invite landing)
 
-**Status:** Files placed but not yet wired into routes/App.tsx.
+**Status:** All scaffolds placed. NOT YET WIRED. Scheduled for integration week of Jan 6, 2025.
 
-**ChronoChat Integration TODOs:**
-- REST/GraphQL endpoints for communities, channels, messages
-- WebSocket message persistence & event broadcasting via `chat-events.ts`
-- JWT + permission checks on all endpoints
-- File storage integration for uploads (use Object Storage)
-- Bot sandboxing & security in `chat-bot-framework.ts`
+---
+
+## Wiring Guide (When Ready)
+
+### Wallet/DeFi Wiring (~2-4 hours)
+| Step | File(s) | Action |
+|------|---------|--------|
+| 1 | `client/src/App.tsx` | Add routes for wallet, swap, bridge pages |
+| 2 | `client/src/hooks/use-wallet.tsx` | Wire to WalletConnectModal |
+| 3 | `client/src/pages/swap.tsx` | Import SwapInterface, LiquidityPanel, PriceChart |
+| 4 | `client/src/pages/bridge.tsx` | Import BridgeInterface, BridgeHistory |
+| 5 | Test | Mock wallet connections on testnet |
+
+**File Locations:**
+- Hooks: `client/src/hooks/use-ethereum-wallet.tsx`, `use-solana-wallet.tsx`, `use-wallet.tsx`
+- Components: `client/src/components/wallet/`, `dex/`, `bridge/`
+- Types: `shared/wallet-types.ts`, `dex-types.ts`, `bridge-types.ts`
+
+### ChronoChat Wiring (~6-10 hours)
+| Step | File(s) | Action |
+|------|---------|--------|
+| 1 | `shared/chat-types.ts` | Add `Member`, `Reply` types with missing fields (username, avatarUrl, roles, online, joinedAt) |
+| 2 | `client/src/App.tsx` | Add routes: `/chronochat`, `/chronochat/invite` |
+| 3 | `server/routes.ts` | Add REST endpoints for communities, channels, messages, members, invites |
+| 4 | `drizzle.config.ts` + migrate | Push `shared/chat-schema.ts` tables to DB |
+| 5 | `server/index.ts` | Import and call `setupPresence(server)` from `chat-presence.ts` |
+| 6 | `client/src/pages/chronochat.tsx` | Replace mock useQuery calls with real API fetches |
+| 7 | Object Storage | Wire FileUploadZone to existing Object Storage bucket |
+| 8 | Test | Full flow: create community → channel → send message |
+
+**File Locations:**
+- Components (18): `client/src/components/chat/*.tsx`
+- Pages: `client/src/pages/chronochat.tsx`, `chronochat-invite.tsx`
+- Backend: `server/chat-handlers.ts`, `chat-presence.ts`, `chat-bot-framework.ts`
+- Types/Schema: `shared/chat-types.ts`, `chat-events.ts`, `chat-schema.ts`, `bot-types.ts`
+
+**Known LSP Errors (will resolve during wiring):**
+- `shared/chat-types.ts` missing `Member` type fields
+- `shared/chat-types.ts` missing `Reply` type
+- WebSocket types in `chat-presence.ts`
+
+---
 
 ## Backend IDE / Studio Executor (Self-Hosted)
 The `server/studio-executor.ts` provides Docker container orchestration for a code execution backend. **Not runnable on Replit** (no Docker-in-Docker). Designed for self-hosted deployment.
