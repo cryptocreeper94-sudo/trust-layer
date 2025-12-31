@@ -1,0 +1,68 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+
+interface EmotionAxis {
+  id: string;
+  positive: string;
+  negative: string;
+}
+
+interface EmotionAxesProps {
+  axes: EmotionAxis[];
+  values: Record<string, number>;
+  onChange: (axisId: string, value: number) => void;
+  readonly?: boolean;
+}
+
+export const EmotionAxes: React.FC<EmotionAxesProps> = ({ axes, values, onChange, readonly }) => {
+  return (
+    <div className="space-y-6" data-testid="emotion-axes">
+      {axes.map((axis, index) => {
+        const value = values[axis.id] ?? 50;
+        const isNegative = value < 50;
+        const intensity = Math.abs(value - 50) / 50;
+
+        return (
+          <motion.div
+            key={axis.id}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="space-y-2"
+            data-testid={`axis-container-${axis.id}`}
+          >
+            <div className="flex justify-between text-sm">
+              <span className={`${isNegative ? 'text-red-400 font-medium' : 'text-slate-500'}`}>
+                {axis.negative}
+              </span>
+              <span className={`${!isNegative ? 'text-green-400 font-medium' : 'text-slate-500'}`}>
+                {axis.positive}
+              </span>
+            </div>
+            <div className="relative">
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={value}
+                onChange={(e) => onChange(axis.id, parseInt(e.target.value))}
+                disabled={readonly}
+                className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                data-testid={`axis-slider-${axis.id}`}
+              />
+              <div
+                className="absolute top-1/2 -translate-y-1/2 w-1 h-4 bg-slate-500"
+                style={{ left: '50%' }}
+              />
+            </div>
+            <div className="text-center text-xs text-slate-400">
+              {value < 50 ? axis.negative : axis.positive}: {Math.round(intensity * 100)}%
+            </div>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+};
+
+export default EmotionAxes;
