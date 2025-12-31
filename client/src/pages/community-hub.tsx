@@ -826,7 +826,6 @@ export default function CommunityHub() {
                           <h2 className="font-bold text-white text-sm sm:text-base truncate">{selectedCommunity.name}</h2>
                           {selectedCommunity.isVerified && <Shield className="w-3 h-3 sm:w-4 sm:h-4 text-cyan-400 flex-shrink-0" />}
                         </div>
-                        <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0" />
                       </div>
                       <div className="flex items-center gap-2 sm:gap-3 mt-2 text-[10px] sm:text-xs text-gray-400">
                         <span className="flex items-center gap-1">
