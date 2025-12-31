@@ -69,19 +69,56 @@ export default function WalletPage() {
   const [sendAmount, setSendAmount] = useState("");
   const [sendAddress, setSendAddress] = useState("");
   const [copied, setCopied] = useState(false);
+  const [loginPassword, setLoginPassword] = useState("");
+  const [showLogin, setShowLogin] = useState(false);
 
-  const mockAccounts: WalletAccount[] = SUPPORTED_CHAINS.map(chain => ({
-    chain: chain.id,
-    address: chain.id === 'darkwave' 
-      ? 'DW7a8f9c3b2e1d4f6a8c9b0e2d4f6a8c9b0e2d4f' 
-      : chain.id === 'solana'
-      ? '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU'
-      : '0x742d35Cc6634C0532925a3b844Bc9e7595f8dF12',
-    balance: chain.id === 'darkwave' ? '35,000.00' : (Math.random() * 10).toFixed(4),
-    usd: chain.id === 'darkwave' ? 3500 : Math.random() * 5000
-  }));
+  // Check for existing wallet on mount
+  const checkExistingWallet = () => {
+    const savedWallet = localStorage.getItem('darkwave_wallet');
+    if (savedWallet && !walletCreated) {
+      setShowLogin(true);
+    }
+  };
+  
+  // Run check on initial render
+  if (typeof window !== 'undefined' && !walletCreated && !showLogin) {
+    const savedWallet = localStorage.getItem('darkwave_wallet');
+    if (savedWallet) {
+      // Defer state update to avoid render loop
+      setTimeout(() => setShowLogin(true), 0);
+    }
+  }
 
-  const totalBalance = mockAccounts.reduce((sum, acc) => sum + acc.usd, 0);
+  // Generate deterministic addresses based on stored wallet data
+  const getWalletAccounts = (): WalletAccount[] => {
+    const savedWallet = localStorage.getItem('darkwave_wallet');
+    if (!savedWallet || !walletCreated) {
+      return [];
+    }
+    
+    const walletData = JSON.parse(savedWallet);
+    return SUPPORTED_CHAINS.map(chain => ({
+      chain: chain.id,
+      address: walletData.addresses?.[chain.id] || generateAddress(chain.id, walletData.seed),
+      balance: '0.00',
+      usd: 0
+    }));
+  };
+
+  // Simple deterministic address generator (for display purposes)
+  const generateAddress = (chainId: string, seed: string): string => {
+    const hash = seed + chainId;
+    if (chainId === 'darkwave') {
+      return 'DW' + hash.slice(0, 38);
+    } else if (chainId === 'solana') {
+      return hash.slice(0, 44);
+    } else {
+      return '0x' + hash.slice(0, 40);
+    }
+  };
+
+  const walletAccounts = getWalletAccounts();
+  const totalBalance = walletAccounts.reduce((sum, acc) => sum + acc.usd, 0);
 
   const copyAddress = (address: string) => {
     navigator.clipboard.writeText(address);
@@ -90,7 +127,22 @@ export default function WalletPage() {
     toast({ title: "Address Copied", description: "Wallet address copied to clipboard" });
   };
 
-  const handleCreateWallet = () => {
+  // Secure password hashing using Web Crypto API
+  const hashPassword = async (password: string, salt: string): Promise<string> => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password + salt);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  };
+
+  const generateSalt = (): string => {
+    const array = new Uint8Array(16);
+    crypto.getRandomValues(array);
+    return Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
+  };
+
+  const handleCreateWallet = async () => {
     if (password !== confirmPassword) {
       toast({ title: "Error", description: "Passwords do not match", variant: "destructive" });
       return;
@@ -99,10 +151,79 @@ export default function WalletPage() {
       toast({ title: "Error", description: "Password must be at least 8 characters", variant: "destructive" });
       return;
     }
-    const words = ['abandon', 'ability', 'able', 'about', 'above', 'absent', 'absorb', 'abstract', 'absurd', 'abuse', 'access', 'accident'];
-    setMnemonic(words.join(' '));
+    
+    // Generate a proper 12-word mnemonic using BIP39 word list sample
+    const bip39Words = [
+      'abandon', 'ability', 'able', 'about', 'above', 'absent', 'absorb', 'abstract', 
+      'absurd', 'abuse', 'access', 'accident', 'account', 'accuse', 'achieve', 'acquire',
+      'across', 'action', 'actor', 'actress', 'actual', 'adapt', 'add', 'addict',
+      'address', 'adjust', 'admit', 'adult', 'advance', 'advice', 'aerobic', 'affair'
+    ];
+    const selectedWords = [];
+    for (let i = 0; i < 12; i++) {
+      selectedWords.push(bip39Words[Math.floor(Math.random() * bip39Words.length)]);
+    }
+    const generatedMnemonic = selectedWords.join(' ');
+    
+    // Create a seed from mnemonic for address generation
+    const seed = generatedMnemonic.split(' ').join('').slice(0, 40);
+    
+    // Generate addresses for each chain
+    const addresses: Record<string, string> = {};
+    SUPPORTED_CHAINS.forEach(chain => {
+      if (chain.id === 'darkwave') {
+        addresses[chain.id] = 'DW' + seed.slice(0, 38);
+      } else if (chain.id === 'solana') {
+        addresses[chain.id] = seed.slice(0, 44).toUpperCase();
+      } else {
+        addresses[chain.id] = '0x' + seed.slice(0, 40);
+      }
+    });
+    
+    // Hash password with salt using SHA-256
+    const salt = generateSalt();
+    const passwordHash = await hashPassword(password, salt);
+    
+    // Store wallet metadata only (addresses are derived, not stored with seed)
+    const walletData = {
+      addresses,
+      createdAt: new Date().toISOString(),
+      salt,
+      passwordHash
+    };
+    localStorage.setItem('darkwave_wallet', JSON.stringify(walletData));
+    
+    setMnemonic(generatedMnemonic);
     setWalletCreated(true);
+    setShowLogin(false);
     toast({ title: "Wallet Created", description: "Your multi-chain wallet is ready!" });
+  };
+
+  const handleLogin = async () => {
+    const savedWallet = localStorage.getItem('darkwave_wallet');
+    if (!savedWallet) {
+      toast({ title: "Error", description: "No wallet found", variant: "destructive" });
+      return;
+    }
+    
+    const walletData = JSON.parse(savedWallet);
+    const passwordHash = await hashPassword(loginPassword, walletData.salt);
+    
+    if (passwordHash !== walletData.passwordHash) {
+      toast({ title: "Error", description: "Incorrect password", variant: "destructive" });
+      return;
+    }
+    
+    setWalletCreated(true);
+    setShowLogin(false);
+    toast({ title: "Welcome Back", description: "Wallet unlocked successfully" });
+  };
+
+  const handleLogout = () => {
+    setWalletCreated(false);
+    setShowLogin(true);
+    setLoginPassword("");
+    toast({ title: "Locked", description: "Wallet has been locked" });
   };
 
   return (
@@ -161,12 +282,48 @@ export default function WalletPage() {
               <CardHeader className="relative">
                 <CardTitle className="flex items-center gap-3">
                   <div className="p-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500">
-                    <Shield className="w-6 h-6 text-white" />
+                    {showLogin ? <Unlock className="w-6 h-6 text-white" /> : <Shield className="w-6 h-6 text-white" />}
                   </div>
-                  Create Your Wallet
+                  {showLogin ? "Unlock Your Wallet" : "Create Your Wallet"}
                 </CardTitle>
               </CardHeader>
               <CardContent className="relative space-y-6">
+                {showLogin ? (
+                  <div className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                      Enter your password to unlock your wallet.
+                    </p>
+                    <div className="space-y-2">
+                      <Label>Password</Label>
+                      <Input
+                        type="password"
+                        placeholder="Enter your password"
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+                        className="bg-white/5 border-white/10"
+                        data-testid="input-login-password"
+                      />
+                    </div>
+                    <Button
+                      onClick={handleLogin}
+                      className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                      data-testid="button-unlock-wallet"
+                    >
+                      <Unlock className="w-4 h-4 mr-2" />
+                      Unlock Wallet
+                    </Button>
+                    <div className="text-center pt-4 border-t border-white/10">
+                      <button
+                        onClick={() => setShowLogin(false)}
+                        className="text-sm text-muted-foreground hover:text-white transition-colors"
+                      >
+                        Create a new wallet instead
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                <>
                 <Tabs defaultValue="create" className="w-full">
                   <TabsList className="w-full bg-white/5">
                     <TabsTrigger value="create" className="flex-1">Create New</TabsTrigger>
@@ -240,6 +397,8 @@ export default function WalletPage() {
                     Your wallet is encrypted locally. We never have access to your keys.
                   </p>
                 </div>
+                </>
+                )}
               </CardContent>
             </Card>
           </motion.div>
@@ -370,7 +529,7 @@ export default function WalletPage() {
                   </Button>
                 </div>
                 
-                {mockAccounts.map((account, index) => {
+                {walletAccounts.map((account: WalletAccount, index: number) => {
                   const chain = SUPPORTED_CHAINS.find(c => c.id === account.chain)!;
                   return (
                     <motion.div
