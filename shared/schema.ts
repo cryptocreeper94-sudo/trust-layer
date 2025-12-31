@@ -3371,10 +3371,10 @@ export const insertTipSchema = createInsertSchema(memberTips).omit({
 });
 
 // =====================================================
-// ORBS ECONOMY SYSTEM
+// SHELLS ECONOMY SYSTEM (formerly "Orbs" - renamed for brand distinction)
 // =====================================================
 
-export const orbWallets = pgTable("orb_wallets", {
+export const shellWallets = pgTable("orb_wallets", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: text("user_id").notNull().unique(),
   username: text("username").notNull(),
@@ -3386,9 +3386,9 @@ export const orbWallets = pgTable("orb_wallets", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-export const orbTransactions = pgTable("orb_transactions", {
+export const shellTransactions = pgTable("orb_transactions", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  walletId: varchar("wallet_id").notNull().references(() => orbWallets.id, { onDelete: "cascade" }),
+  walletId: varchar("wallet_id").notNull().references(() => shellWallets.id, { onDelete: "cascade" }),
   userId: text("user_id").notNull(),
   type: text("type").notNull(), // 'earn', 'spend', 'tip_sent', 'tip_received', 'purchase', 'refund', 'conversion'
   amount: integer("amount").notNull(),
@@ -3400,11 +3400,11 @@ export const orbTransactions = pgTable("orb_transactions", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const orbConversionSnapshots = pgTable("orb_conversion_snapshots", {
+export const shellConversionSnapshots = pgTable("orb_conversion_snapshots", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: text("user_id").notNull(),
-  walletId: varchar("wallet_id").notNull().references(() => orbWallets.id),
-  orbBalance: integer("orb_balance").notNull(),
+  walletId: varchar("wallet_id").notNull().references(() => shellWallets.id),
+  shellBalance: integer("orb_balance").notNull(),
   dwcAmount: text("dwc_amount").notNull(), // Conversion amount in DWC
   conversionRate: text("conversion_rate").notNull(),
   status: text("status").notNull().default("pending"), // 'pending', 'converted', 'claimed'
@@ -3412,7 +3412,7 @@ export const orbConversionSnapshots = pgTable("orb_conversion_snapshots", {
   convertedAt: timestamp("converted_at"),
 });
 
-export const insertOrbWalletSchema = createInsertSchema(orbWallets).omit({
+export const insertShellWalletSchema = createInsertSchema(shellWallets).omit({
   id: true,
   balance: true,
   lockedBalance: true,
@@ -3422,16 +3422,24 @@ export const insertOrbWalletSchema = createInsertSchema(orbWallets).omit({
   updatedAt: true,
 });
 
-export const insertOrbTransactionSchema = createInsertSchema(orbTransactions).omit({
+export const insertShellTransactionSchema = createInsertSchema(shellTransactions).omit({
   id: true,
   createdAt: true,
 });
 
-export type OrbWallet = typeof orbWallets.$inferSelect;
-export type InsertOrbWallet = z.infer<typeof insertOrbWalletSchema>;
-export type OrbTransaction = typeof orbTransactions.$inferSelect;
-export type InsertOrbTransaction = z.infer<typeof insertOrbTransactionSchema>;
-export type OrbConversionSnapshot = typeof orbConversionSnapshots.$inferSelect;
+export type ShellWallet = typeof shellWallets.$inferSelect;
+export type InsertShellWallet = z.infer<typeof insertShellWalletSchema>;
+export type ShellTransaction = typeof shellTransactions.$inferSelect;
+export type InsertShellTransaction = z.infer<typeof insertShellTransactionSchema>;
+export type ShellConversionSnapshot = typeof shellConversionSnapshots.$inferSelect;
+
+// Legacy aliases for backward compatibility
+export const orbWallets = shellWallets;
+export const orbTransactions = shellTransactions;
+export const orbConversionSnapshots = shellConversionSnapshots;
+export type OrbWallet = ShellWallet;
+export type OrbTransaction = ShellTransaction;
+export type OrbConversionSnapshot = ShellConversionSnapshot;
 
 // =====================================================
 // CHRONOCHAT ENHANCED FEATURES

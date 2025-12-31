@@ -32,7 +32,7 @@ import { communityHubService } from "./community-hub-service";
 import { walletBotService } from "./wallet-bot-service";
 import { pulseClient } from "./pulse-client";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
-import { orbsService, ORB_PACKAGES, ORB_EARN_RATES, ORB_COSTS } from "./orbs-service";
+import { shellsService, SHELL_PACKAGES, SHELL_EARN_RATES, SHELL_COSTS } from "./shells-service";
 import { subscriptionService, SUBSCRIPTION_PLANS } from "./subscription-service";
 import { guardianService, generateDataHash as guardianHash, generateMerkleRoot } from "./guardian-service";
 
@@ -9201,16 +9201,16 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   // ============================================
-  // ORBS ECONOMY API
+  // SHELLS ECONOMY API
   // ============================================
 
-  app.get("/api/orbs/wallet", isAuthenticated, async (req: any, res) => {
+  app.get("/api/shells/wallet", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       const username = req.user?.claims?.firstName || req.user?.firstName || "User";
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       
-      const wallet = await orbsService.getOrCreateWallet(userId, username);
+      const wallet = await shellsService.getOrCreateWallet(userId, username);
       res.json({ wallet });
     } catch (error) {
       console.error("Get wallet error:", error);
@@ -9218,12 +9218,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.get("/api/orbs/balance", isAuthenticated, async (req: any, res) => {
+  app.get("/api/shells/balance", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       
-      const balance = await orbsService.getBalance(userId);
+      const balance = await shellsService.getBalance(userId);
       res.json(balance);
     } catch (error) {
       console.error("Get balance error:", error);
@@ -9231,13 +9231,13 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.get("/api/orbs/transactions", isAuthenticated, async (req: any, res) => {
+  app.get("/api/shells/transactions", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       
       const limit = parseInt(req.query.limit as string) || 50;
-      const transactions = await orbsService.getTransactions(userId, limit);
+      const transactions = await shellsService.getTransactions(userId, limit);
       res.json({ transactions });
     } catch (error) {
       console.error("Get transactions error:", error);
@@ -9245,7 +9245,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.post("/api/orbs/tip", isAuthenticated, async (req: any, res) => {
+  app.post("/api/shells/tip", isAuthenticated, async (req: any, res) => {
     try {
       const fromUserId = req.user?.claims?.sub || req.user?.id;
       const fromUsername = req.user?.claims?.firstName || req.user?.firstName || "User";
@@ -9260,9 +9260,9 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(400).json({ error: "Cannot tip yourself" });
       }
       
-      const result = await orbsService.tipUser(fromUserId, fromUsername, toUserId, toUsername, amount, messageId);
+      const result = await shellsService.tipUser(fromUserId, fromUsername, toUserId, toUsername, amount, messageId);
       if (!result) {
-        return res.status(400).json({ error: "Insufficient Orbs balance" });
+        return res.status(400).json({ error: "Insufficient Shells balance" });
       }
       
       res.json({ success: true, sent: result.sent, received: result.received });
@@ -9272,9 +9272,9 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.get("/api/orbs/packages", async (req, res) => {
+  app.get("/api/shells/packages", async (req, res) => {
     try {
-      const packages = Object.entries(ORB_PACKAGES).map(([key, pkg]) => ({
+      const packages = Object.entries(SHELL_PACKAGES).map(([key, pkg]) => ({
         id: key,
         ...pkg,
         formattedPrice: `$${(pkg.price / 100).toFixed(2)}`,
@@ -9286,26 +9286,26 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.get("/api/orbs/earn-rates", async (req, res) => {
+  app.get("/api/shells/earn-rates", async (req, res) => {
     try {
-      res.json({ rates: ORB_EARN_RATES });
+      res.json({ rates: SHELL_EARN_RATES });
     } catch (error) {
       res.status(500).json({ error: "Failed to get earn rates" });
     }
   });
 
-  app.get("/api/orbs/costs", async (req, res) => {
+  app.get("/api/shells/costs", async (req, res) => {
     try {
-      res.json({ costs: ORB_COSTS });
+      res.json({ costs: SHELL_COSTS });
     } catch (error) {
       res.status(500).json({ error: "Failed to get costs" });
     }
   });
 
-  app.get("/api/orbs/leaderboard", async (req, res) => {
+  app.get("/api/shells/leaderboard", async (req, res) => {
     try {
       const limit = parseInt(req.query.limit as string) || 10;
-      const leaderboard = await orbsService.getLeaderboard(limit);
+      const leaderboard = await shellsService.getLeaderboard(limit);
       res.json({ leaderboard });
     } catch (error) {
       console.error("Get leaderboard error:", error);
@@ -9313,9 +9313,9 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.get("/api/orbs/stats", async (req, res) => {
+  app.get("/api/shells/stats", async (req, res) => {
     try {
-      const stats = await orbsService.getTotalStats();
+      const stats = await shellsService.getTotalStats();
       res.json(stats);
     } catch (error) {
       console.error("Get stats error:", error);
@@ -9323,40 +9323,40 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.post("/api/orbs/earn", isAuthenticated, async (req: any, res) => {
+  app.post("/api/shells/earn", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       const username = req.user?.claims?.firstName || req.user?.firstName || "User";
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       
       const { action } = req.body;
-      if (!action || !ORB_EARN_RATES[action as keyof typeof ORB_EARN_RATES]) {
+      if (!action || !SHELL_EARN_RATES[action as keyof typeof SHELL_EARN_RATES]) {
         return res.status(400).json({ error: "Invalid action" });
       }
       
-      const transaction = await orbsService.awardEngagementOrbs(userId, username, action as keyof typeof ORB_EARN_RATES);
-      const balance = await orbsService.getBalance(userId);
+      const transaction = await shellsService.awardEngagementOrbs(userId, username, action as keyof typeof SHELL_EARN_RATES);
+      const balance = await shellsService.getBalance(userId);
       
       res.json({ success: true, transaction, balance });
     } catch (error) {
-      console.error("Earn orbs error:", error);
-      res.status(500).json({ error: "Failed to earn orbs" });
+      console.error("Earn shells error:", error);
+      res.status(500).json({ error: "Failed to earn shells" });
     }
   });
 
   // Stripe checkout for Orb packages
-  app.post("/api/orbs/checkout", isAuthenticated, async (req: any, res) => {
+  app.post("/api/shells/checkout", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       const username = req.user?.claims?.firstName || req.user?.firstName || "User";
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       
       const { packageKey } = req.body;
-      if (!packageKey || !ORB_PACKAGES[packageKey as keyof typeof ORB_PACKAGES]) {
+      if (!packageKey || !SHELL_PACKAGES[packageKey as keyof typeof SHELL_PACKAGES]) {
         return res.status(400).json({ error: "Invalid package" });
       }
       
-      const pkg = ORB_PACKAGES[packageKey as keyof typeof ORB_PACKAGES];
+      const pkg = SHELL_PACKAGES[packageKey as keyof typeof SHELL_PACKAGES];
       
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
@@ -9368,33 +9368,33 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
             currency: "usd",
             product_data: {
               name: pkg.name,
-              description: `${pkg.amount.toLocaleString()} Orbs for the DarkWave ecosystem`,
+              description: `${pkg.amount.toLocaleString()} Shells for the DarkWave ecosystem`,
             },
             unit_amount: pkg.price,
           },
           quantity: 1,
         }],
         mode: "payment",
-        success_url: `${req.headers.origin}/community-hub?orbs_success=true&session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${req.headers.origin}/community-hub?orbs_cancelled=true`,
+        success_url: `${req.headers.origin}/community-hub?shells_success=true&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${req.headers.origin}/community-hub?shells_cancelled=true`,
         metadata: {
           userId,
           username,
           packageKey,
-          orbAmount: pkg.amount.toString(),
-          type: "orb_purchase",
+          shellAmount: pkg.amount.toString(),
+          type: "shell_purchase",
         },
       });
       
       res.json({ url: session.url, sessionId: session.id });
     } catch (error) {
-      console.error("Orbs checkout error:", error);
+      console.error("Shells checkout error:", error);
       res.status(500).json({ error: "Failed to create checkout session" });
     }
   });
 
-  // Verify Orb purchase and credit Orbs (idempotent - prevents replay attacks)
-  app.post("/api/orbs/verify-purchase", isAuthenticated, async (req: any, res) => {
+  // Verify Shell purchase and credit Orbs (idempotent - prevents replay attacks)
+  app.post("/api/shells/verify-purchase", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       const username = req.user?.claims?.firstName || req.user?.firstName || "User";
@@ -9404,10 +9404,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!sessionId) return res.status(400).json({ error: "Session ID required" });
       
       // Check if this session has already been processed (idempotency guard)
-      const existingTx = await orbsService.getTransactionByReference(sessionId, "stripe_payment");
+      const existingTx = await shellsService.getTransactionByReference(sessionId, "stripe_payment");
       if (existingTx) {
         // Already processed - return success without double-crediting
-        const balance = await orbsService.getBalance(userId);
+        const balance = await shellsService.getBalance(userId);
         return res.json({ 
           success: true, 
           alreadyProcessed: true, 
@@ -9429,22 +9429,22 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(403).json({ error: "Session does not belong to this user" });
       }
       
-      if (session.metadata?.type !== "orb_purchase") {
+      if (session.metadata?.type !== "shell_purchase") {
         return res.status(400).json({ error: "Invalid session type" });
       }
       
-      const packageKey = session.metadata?.packageKey as keyof typeof ORB_PACKAGES;
-      const orbAmount = parseInt(session.metadata?.orbAmount || "0");
+      const packageKey = session.metadata?.packageKey as keyof typeof SHELL_PACKAGES;
+      const shellAmount = parseInt(session.metadata?.shellAmount || "0");
       
-      if (!packageKey || !orbAmount) {
+      if (!packageKey || !shellAmount) {
         return res.status(400).json({ error: "Invalid package data" });
       }
       
       // Credit the Orbs (uses sessionId as referenceId for idempotency)
-      const transaction = await orbsService.purchaseOrbs(userId, username, packageKey, session.id);
-      const balance = await orbsService.getBalance(userId);
+      const transaction = await shellsService.purchaseOrbs(userId, username, packageKey, session.id);
+      const balance = await shellsService.getBalance(userId);
       
-      res.json({ success: true, transaction, balance, orbsAdded: orbAmount });
+      res.json({ success: true, transaction, balance, orbsAdded: shellAmount });
     } catch (error) {
       console.error("Verify orbs purchase error:", error);
       res.status(500).json({ error: "Failed to verify purchase" });
