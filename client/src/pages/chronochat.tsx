@@ -1,0 +1,69 @@
+import React, { useEffect, useMemo, useState } from 'react';
+import { CommunityList } from '../components/chat/CommunityList';
+import { ChannelList } from '../components/chat/ChannelList';
+import { ChatContainer } from '../components/chat/ChatContainer';
+import { MemberList } from '../components/chat/MemberList';
+import { CreateCommunityModal } from '../components/chat/CreateCommunityModal';
+import { CreateChannelModal } from '../components/chat/CreateChannelModal';
+import { useQuery } from '@tanstack/react-query';
+import type { Community, Channel, Member } from '../../shared/chat-types';
+
+export default function ChronoChatPage() {
+  const [activeCommunity, setActiveCommunity] = useState<string | null>(null);
+  const [activeChannel, setActiveChannel] = useState<string | null>(null);
+  const [createCommunityOpen, setCreateCommunityOpen] = useState(false);
+  const [createChannelOpen, setCreateChannelOpen] = useState(false);
+
+  const { data: communities = [] } = useQuery<Community[]>(['communities'], async () => {
+    return [{ id: 'c-general', name: 'General', description: 'General community', ownerId: 'u1', privacy: 'public', createdAt: new Date().toISOString() }];
+  });
+
+  const { data: channels = [] } = useQuery<Channel[]>(['channels', activeCommunity], async () => {
+    if (!activeCommunity) return [];
+    return [{ id: 'ch-1', communityId: activeCommunity, name: 'general', description: '', category: 'Text', type: 'text', position: 0 }];
+  }, { enabled: !!activeCommunity });
+
+  const { data: members = [] } = useQuery<Member[]>(['members', activeCommunity], async () => {
+    return [{ id: 'm-1', userId: 'u1', username: 'alice', avatarUrl: '', roles: ['admin'], online: true, joinedAt: new Date().toISOString() } as any];
+  }, { enabled: !!activeCommunity });
+
+  useEffect(() => {
+    if (!activeCommunity && communities.length > 0) {
+      setActiveCommunity(communities[0].id);
+    }
+  }, [communities, activeCommunity]);
+
+  useEffect(() => {
+    if (!activeChannel && channels.length > 0) {
+      setActiveChannel(channels[0].id);
+    }
+  }, [channels, activeChannel]);
+
+  return (
+    <main className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 p-2 text-white">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-[240px,1fr,280px] gap-3">
+        <div className="col-span-1">
+          <CommunityList communities={communities} activeCommunityId={activeCommunity} onSelect={(id) => setActiveCommunity(id)} onCreate={() => setCreateCommunityOpen(true)} />
+        </div>
+
+        <div className="col-span-1 md:col-span-1">
+          <div className="grid grid-cols-1 md:grid-cols-[200px,1fr] gap-3">
+            <div>
+              <ChannelList channels={channels} onSelect={(id) => setActiveChannel(id)} onCreate={() => setCreateChannelOpen(true)} />
+            </div>
+            <div className="bg-slate-950/20 rounded-lg p-2">
+              {activeChannel ? <ChatContainer channelId={activeChannel} /> : <div className="text-slate-400">Select a channel</div>}
+            </div>
+          </div>
+        </div>
+
+        <div className="col-span-1 md:col-span-1">
+          <MemberList members={members as any} onView={(id) => console.log('view member', id)} />
+        </div>
+      </div>
+
+      <CreateCommunityModal open={createCommunityOpen} onClose={() => setCreateCommunityOpen(false)} onCreate={async (p) => { }} />
+      <CreateChannelModal open={createChannelOpen} categories={['General']} onClose={() => setCreateChannelOpen(false)} onCreate={async (p) => { }} />
+    </main>
+  );
+}
