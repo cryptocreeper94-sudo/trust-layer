@@ -26,7 +26,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { WalletButton } from "@/components/wallet-button";
 import { HeaderTools } from "@/components/header-tools";
 import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.png";
-import medievalImg from "@assets/generated_images/medieval_fantasy_kingdom.png";
+import medievalImg from "@assets/generated_images/medieval_castle_vertical_portrait.png";
 import cyberpunkImg from "@assets/generated_images/cyberpunk_neon_city.png";
 import spaceImg from "@assets/generated_images/deep_space_station.png";
 import tradingImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
@@ -180,8 +180,7 @@ function ChroniclesCarousel() {
             <img 
               src={item.img} 
               alt={item.era}
-              className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
-              style={{ objectPosition: item.era === "Age of Crowns" ? 'center 60%' : 'center' }}
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
             />
             <div className={`absolute inset-0 bg-gradient-to-t ${item.color}`} />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
