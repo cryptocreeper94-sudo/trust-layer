@@ -5,7 +5,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { 
   Zap, Shield, TrendingUp, Users, Gift, Award, Crown, Sparkles,
   ArrowRight, Clock, CheckCircle, Copy, ExternalLink, Wallet,
-  Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator
+  Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator, X
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,13 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { GlassCard } from "@/components/glass-card";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
