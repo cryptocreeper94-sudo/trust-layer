@@ -122,12 +122,21 @@ export default function Portfolio() {
                 <div className="text-center">
                   <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Total Portfolio Value</p>
                   <div className="flex items-center justify-center gap-2">
-                    <span className="text-3xl font-bold">{formatUsd(portfolio.totalValue)}</span>
-                    <Badge className={`${portfolio.change24h >= 0 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'} text-xs`}>
-                      {portfolio.change24h >= 0 ? <TrendingUp className="w-3 h-3 mr-1" /> : <TrendingDown className="w-3 h-3 mr-1" />}
-                      {Math.abs(portfolio.change24h)}%
-                    </Badge>
+                    {portfolio.totalValue > 0 ? (
+                      <>
+                        <span className="text-3xl font-bold">{formatUsd(portfolio.totalValue)}</span>
+                        <Badge className={`${portfolio.change24h >= 0 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'} text-xs`}>
+                          {portfolio.change24h >= 0 ? <TrendingUp className="w-3 h-3 mr-1" /> : <TrendingDown className="w-3 h-3 mr-1" />}
+                          {Math.abs(portfolio.change24h)}%
+                        </Badge>
+                      </>
+                    ) : (
+                      <span className="text-3xl font-bold text-muted-foreground">--</span>
+                    )}
                   </div>
+                  {portfolio.totalValue === 0 && (
+                    <p className="text-[10px] text-muted-foreground mt-2">Connect wallet to view balance</p>
+                  )}
                 </div>
               </div>
             </GlassCard>
@@ -141,17 +150,17 @@ export default function Portfolio() {
           >
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
               <Coins className="w-4 h-4 text-primary mx-auto mb-1" />
-              <div className="text-sm font-bold">{portfolio.tokens.length}</div>
+              <div className="text-sm font-bold text-muted-foreground">{portfolio.tokens.length > 0 ? portfolio.tokens.length : "--"}</div>
               <div className="text-[10px] text-muted-foreground">Tokens</div>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
               <Lock className="w-4 h-4 text-amber-400 mx-auto mb-1" />
-              <div className="text-sm font-bold">{formatUsd(portfolio.staking.stakedValue)}</div>
+              <div className="text-sm font-bold text-muted-foreground">{portfolio.staking.stakedValue > 0 ? formatUsd(portfolio.staking.stakedValue) : "--"}</div>
               <div className="text-[10px] text-muted-foreground">Staked</div>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
               <Gift className="w-4 h-4 text-green-400 mx-auto mb-1" />
-              <div className="text-sm font-bold">{formatAmount(portfolio.staking.pendingRewards)}</div>
+              <div className="text-sm font-bold text-muted-foreground">{parseFloat(portfolio.staking.pendingRewards) > 0 ? formatAmount(portfolio.staking.pendingRewards) : "--"}</div>
               <div className="text-[10px] text-muted-foreground">Rewards</div>
             </div>
           </motion.div>
@@ -173,38 +182,54 @@ export default function Portfolio() {
                 animate={{ opacity: 1 }}
                 className="space-y-2"
               >
-                {portfolio.tokens.map((token, index) => (
-                  <motion.div
-                    key={token.symbol}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    <GlassCard glow className="p-3" data-testid={`token-row-${token.symbol}`}>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-xl">
-                            {token.icon}
+                {portfolio.tokens.length > 0 ? (
+                  portfolio.tokens.map((token, index) => (
+                    <motion.div
+                      key={token.symbol}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                    >
+                      <GlassCard glow className="p-3" data-testid={`token-row-${token.symbol}`}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-xl">
+                              {token.icon}
+                            </div>
+                            <div>
+                              <div className="font-bold text-sm">{token.symbol}</div>
+                              <div className="text-[10px] text-muted-foreground">{token.name}</div>
+                            </div>
                           </div>
-                          <div>
-                            <div className="font-bold text-sm">{token.symbol}</div>
-                            <div className="text-[10px] text-muted-foreground">{token.name}</div>
+                          <div className="text-right">
+                            <div className="font-bold text-sm">{formatUsd(token.value)}</div>
+                            <div className={`text-[10px] flex items-center justify-end ${token.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                              {token.change >= 0 ? <TrendingUp className="w-2 h-2 mr-1" /> : <TrendingDown className="w-2 h-2 mr-1" />}
+                              {Math.abs(token.change)}%
+                            </div>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <div className="font-bold text-sm">{formatUsd(token.value)}</div>
-                          <div className={`text-[10px] flex items-center justify-end ${token.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                            {token.change >= 0 ? <TrendingUp className="w-2 h-2 mr-1" /> : <TrendingDown className="w-2 h-2 mr-1" />}
-                            {Math.abs(token.change)}%
-                          </div>
+                        <div className="mt-2 pt-2 border-t border-white/5 text-[10px] text-muted-foreground">
+                          Balance: {(token as any).displayBalance || formatAmount(token.balance)} {token.symbol}
                         </div>
-                      </div>
-                      <div className="mt-2 pt-2 border-t border-white/5 text-[10px] text-muted-foreground">
-                        Balance: {(token as any).displayBalance || formatAmount(token.balance)} {token.symbol}
-                      </div>
-                    </GlassCard>
-                  </motion.div>
-                ))}
+                      </GlassCard>
+                    </motion.div>
+                  ))
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mx-auto mb-3">
+                      <Coins className="w-6 h-6 text-white/20" />
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-1">No tokens yet</p>
+                    <p className="text-[10px] text-muted-foreground mb-3">Connect your wallet to view token balances</p>
+                    <Link href="/wallet">
+                      <Button size="sm" className="bg-gradient-to-r from-cyan-500 to-blue-500">
+                        <Wallet className="w-3 h-3 mr-1" />
+                        Connect Wallet
+                      </Button>
+                    </Link>
+                  </div>
+                )}
               </motion.div>
             </TabsContent>
 
@@ -217,36 +242,46 @@ export default function Portfolio() {
                 <GlassCard glow className="p-4">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-sm font-bold">Staking Overview</span>
-                    <Badge className="bg-amber-500/20 text-amber-400 text-[10px]">{portfolio.staking.apy}% APY</Badge>
+                    <Badge className="bg-amber-500/20 text-amber-400 text-[10px]">{portfolio.staking.apy > 0 ? `${portfolio.staking.apy}% APY` : 'Up to 12% APY'}</Badge>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div className="p-2 rounded-lg bg-white/5">
                       <div className="text-[10px] text-muted-foreground">Total Staked</div>
-                      <div className="font-bold text-sm">{parseFloat(portfolio.staking.totalStaked).toLocaleString()} DWC</div>
+                      <div className="font-bold text-sm text-muted-foreground">
+                        {parseFloat(portfolio.staking.totalStaked) > 0 ? `${parseFloat(portfolio.staking.totalStaked).toLocaleString()} DWC` : '--'}
+                      </div>
                     </div>
                     <div className="p-2 rounded-lg bg-white/5">
                       <div className="text-[10px] text-muted-foreground">Pending Rewards</div>
-                      <div className="font-bold text-sm text-green-400">{parseFloat(portfolio.staking.pendingRewards || "0").toFixed(4)} DWC</div>
+                      <div className={`font-bold text-sm ${parseFloat(portfolio.staking.pendingRewards) > 0 ? 'text-green-400' : 'text-muted-foreground'}`}>
+                        {parseFloat(portfolio.staking.pendingRewards) > 0 ? `${parseFloat(portfolio.staking.pendingRewards).toFixed(4)} DWC` : '--'}
+                      </div>
                     </div>
                   </div>
                 </GlassCard>
 
-                {portfolio.staking.positions.map((position, index) => (
-                  <GlassCard glow key={index} className="p-3" data-testid={`staking-position-${index}`}>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium text-sm">{position.pool}</span>
-                      <Badge variant="outline" className="text-[10px]">{position.apy}% APY</Badge>
-                    </div>
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground">Staked: {formatAmount(position.amount)} DWC</span>
-                      <span className="text-green-400">+{formatAmount(position.rewards)} DWC</span>
-                    </div>
-                  </GlassCard>
-                ))}
+                {portfolio.staking.positions.length > 0 ? (
+                  portfolio.staking.positions.map((position, index) => (
+                    <GlassCard glow key={index} className="p-3" data-testid={`staking-position-${index}`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-medium text-sm">{position.pool}</span>
+                        <Badge variant="outline" className="text-[10px]">{position.apy}% APY</Badge>
+                      </div>
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground">Staked: {formatAmount(position.amount)} DWC</span>
+                        <span className="text-green-400">+{formatAmount(position.rewards)} DWC</span>
+                      </div>
+                    </GlassCard>
+                  ))
+                ) : (
+                  <div className="text-center py-4">
+                    <p className="text-[10px] text-muted-foreground mb-3">No active staking positions</p>
+                  </div>
+                )}
 
                 <Link href="/staking">
                   <Button className="w-full h-10 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-bold">
-                    Manage Staking
+                    {portfolio.staking.positions.length > 0 ? 'Manage Staking' : 'Start Staking'}
                     <ExternalLink className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
@@ -304,7 +339,7 @@ export default function Portfolio() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >
-                <PortfolioAnalytics />
+                <PortfolioAnalytics hasData={portfolio.tokens.length > 0 || portfolio.totalValue > 0} />
               </motion.div>
             </TabsContent>
           </Tabs>
@@ -314,11 +349,11 @@ export default function Portfolio() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20">
+            <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20">
               <div className="flex items-start gap-2">
-                <RefreshCw className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
-                <p className="text-[10px] text-blue-200">
-                  <strong className="text-blue-300">Auto-refresh:</strong> Portfolio data updates automatically every 30 seconds.
+                <Wallet className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+                <p className="text-[10px] text-purple-200">
+                  <strong className="text-purple-300">Testnet:</strong> Portfolio tracking will connect to your wallet once multi-chain interoperability is enabled.
                 </p>
               </div>
             </div>
