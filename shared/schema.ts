@@ -3404,7 +3404,7 @@ export const shellConversionSnapshots = pgTable("orb_conversion_snapshots", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: text("user_id").notNull(),
   walletId: varchar("wallet_id").notNull().references(() => shellWallets.id),
-  shellBalance: integer("orb_balance").notNull(),
+  orbBalance: integer("orb_balance").notNull(),
   dwcAmount: text("dwc_amount").notNull(), // Conversion amount in DWC
   conversionRate: text("conversion_rate").notNull(),
   status: text("status").notNull().default("pending"), // 'pending', 'converted', 'claimed'

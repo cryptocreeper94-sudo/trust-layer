@@ -311,7 +311,7 @@ class ShellsService {
       .values({
         userId,
         walletId: wallet.id,
-        shellBalance: wallet.balance,
+        orbBalance: wallet.balance,
         dwcAmount,
         conversionRate,
       })

@@ -325,7 +325,7 @@ function MessageBubble({ message, currentUserId, onReply, onReaction, onDelete, 
             onClick={() => onTip(message.userId, message.username, message.id)}
             className="p-1.5 hover:bg-amber-500/20 rounded-lg transition-colors"
             data-testid={`btn-tip-${message.id}`}
-            title="Tip Orbs"
+            title="Tip Shells"
           >
             <Coins className="w-4 h-4 text-gray-400 hover:text-amber-400" />
           </button>
@@ -427,14 +427,14 @@ export default function CommunityHub() {
     photoURL: user.photoURL,
   } : null;
 
-  const { data: orbsData, refetch: refetchOrbs } = useQuery<{ balance: number; lockedBalance: number }>({
-    queryKey: ["/api/orbs/balance"],
+  const { data: shellsData, refetch: refetchShells } = useQuery<{ balance: number; lockedBalance: number }>({
+    queryKey: ["/api/shells/balance"],
     enabled: isAuthenticated,
   });
 
   const tipMutation = useMutation({
     mutationFn: async (data: { toUserId: string; toUsername: string; amount: number; messageId?: string }) => {
-      const res = await fetch("/api/orbs/tip", {
+      const res = await fetch("/api/shells/tip", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -443,7 +443,7 @@ export default function CommunityHub() {
       return res.json();
     },
     onSuccess: () => {
-      refetchOrbs();
+      refetchShells();
     },
   });
 
@@ -949,8 +949,8 @@ export default function CommunityHub() {
                   {isAuthenticated && (
                     <div className="flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full flex-shrink-0">
                       <Coins className="w-3 h-3 sm:w-4 sm:h-4 text-amber-400" />
-                      <span className="text-xs sm:text-sm font-medium text-amber-400" data-testid="orbs-balance">
-                        {orbsData?.balance?.toLocaleString() || 0}
+                      <span className="text-xs sm:text-sm font-medium text-amber-400" data-testid="shells-balance">
+                        {shellsData?.balance?.toLocaleString() || 0}
                       </span>
                     </div>
                   )}
@@ -1329,12 +1329,12 @@ export default function CommunityHub() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Coins className="w-5 h-5 text-amber-400" />
-              Tip Orbs
+              Tip Shells
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <p className="text-sm text-gray-400">
-              Send Orbs to <span className="text-white font-medium">{tipTarget?.username}</span>
+              Send Shells to <span className="text-white font-medium">{tipTarget?.username}</span>
             </p>
             <div>
               <Label>Amount</Label>
@@ -1365,22 +1365,22 @@ export default function CommunityHub() {
             </div>
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-400">Your balance:</span>
-              <span className="text-amber-400 font-medium">{orbsData?.balance?.toLocaleString() || 0} Orbs</span>
+              <span className="text-amber-400 font-medium">{shellsData?.balance?.toLocaleString() || 0} Shells</span>
             </div>
             <Button
               onClick={submitTip}
-              disabled={!tipAmount || parseInt(tipAmount) <= 0 || parseInt(tipAmount) > (orbsData?.balance || 0) || tipMutation.isPending}
+              disabled={!tipAmount || parseInt(tipAmount) <= 0 || parseInt(tipAmount) > (shellsData?.balance || 0) || tipMutation.isPending}
               className="w-full bg-amber-500 hover:bg-amber-600"
               data-testid="submit-tip"
             >
               {tipMutation.isPending ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                <>Send {tipAmount} Orbs</>
+                <>Send {tipAmount} Shells</>
               )}
             </Button>
-            {parseInt(tipAmount) > (orbsData?.balance || 0) && (
-              <p className="text-xs text-red-400 text-center">Insufficient Orbs balance</p>
+            {parseInt(tipAmount) > (shellsData?.balance || 0) && (
+              <p className="text-xs text-red-400 text-center">Insufficient Shells balance</p>
             )}
           </div>
         </DialogContent>
@@ -1468,7 +1468,7 @@ export default function CommunityHub() {
                 </li>
                 <li className="flex items-center gap-2">
                   <Coins className="w-3 h-3 text-amber-400" />
-                  Orbs tipping & rewards
+                  Shells tipping & rewards
                 </li>
                 <li className="flex items-center gap-2">
                   <Globe className="w-3 h-3 text-green-400" />
