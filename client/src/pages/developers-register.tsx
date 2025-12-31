@@ -14,12 +14,25 @@ import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_lo
 export default function DevelopersRegister() {
   const { user, isAuthenticated, isLoading } = useAuth();
   const [appName, setAppName] = useState("");
+  const [devName, setDevName] = useState("");
+  const [devEmail, setDevEmail] = useState("");
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const handleRegister = async () => {
+    const finalName = devName.trim() || (user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}`.trim() : "");
+    const finalEmail = devEmail.trim() || user?.email || "";
+    
+    if (!finalName) {
+      setError("Please enter your name");
+      return;
+    }
+    if (!finalEmail) {
+      setError("Please enter your email");
+      return;
+    }
     if (!appName.trim()) {
       setError("Please enter your application name");
       return;
@@ -33,7 +46,11 @@ export default function DevelopersRegister() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ appName: appName.trim() }),
+        body: JSON.stringify({ 
+          name: finalName,
+          email: finalEmail,
+          appName: appName.trim() 
+        }),
       });
 
       const data = await response.json();
@@ -179,6 +196,37 @@ export default function DevelopersRegister() {
                     <p className="text-sm">
                       <span className="text-muted-foreground">Signed in as:</span>{" "}
                       <span className="font-medium">{user?.email}</span>
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="devName" className="text-sm">Your Name</Label>
+                    <Input
+                      id="devName"
+                      placeholder="John Doe"
+                      value={devName}
+                      onChange={(e) => setDevName(e.target.value)}
+                      className="bg-black/30 border-white/10"
+                      data-testid="input-dev-name"
+                    />
+                    <p className="text-[10px] text-muted-foreground">
+                      {user?.firstName ? `Pre-filled from your account: ${user.firstName} ${user.lastName || ''}` : 'Required for API key registration'}
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="devEmail" className="text-sm">Contact Email</Label>
+                    <Input
+                      id="devEmail"
+                      type="email"
+                      placeholder="developer@example.com"
+                      value={devEmail || user?.email || ""}
+                      onChange={(e) => setDevEmail(e.target.value)}
+                      className="bg-black/30 border-white/10"
+                      data-testid="input-dev-email"
+                    />
+                    <p className="text-[10px] text-muted-foreground">
+                      {user?.email ? `Pre-filled from your account` : 'Required for API key registration'}
                     </p>
                   </div>
 
