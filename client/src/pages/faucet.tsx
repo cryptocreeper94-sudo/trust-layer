@@ -18,6 +18,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { WalletButton } from "@/components/wallet-button";
+import { useWallet } from "@/hooks/use-wallet";
 
 interface FaucetInfo {
   dailyLimit: string;
@@ -39,8 +40,12 @@ interface FaucetClaim {
 export default function Faucet() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [walletAddress, setWalletAddress] = useState("");
+  const { evmAddress, solanaAddress, isConnected } = useWallet();
+  const [manualAddress, setManualAddress] = useState("");
   const [historyOpen, setHistoryOpen] = useState(false);
+  
+  const connectedAddress = evmAddress || solanaAddress || "";
+  const walletAddress = connectedAddress || manualAddress;
 
   const { data: faucetInfo, isLoading: infoLoading } = useQuery<FaucetInfo>({
     queryKey: ["/api/faucet/info"],
@@ -68,7 +73,7 @@ export default function Faucet() {
       });
       queryClient.invalidateQueries({ queryKey: ["/api/faucet/info"] });
       queryClient.invalidateQueries({ queryKey: ["/api/faucet/claims"] });
-      setWalletAddress("");
+      setManualAddress("");
     },
     onError: (error: any) => {
       toast({
@@ -186,18 +191,35 @@ export default function Faucet() {
                 </div>
 
                 <div className="space-y-4">
-                  <div>
-                    <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 block">
+                  <div className="flex items-center justify-between mb-2">
+                    <Label className="text-[10px] uppercase tracking-wider text-muted-foreground">
                       Your Wallet Address
                     </Label>
-                    <Input
-                      value={walletAddress}
-                      onChange={(e) => setWalletAddress(e.target.value)}
-                      placeholder="0x..."
-                      data-testid="input-wallet-address"
-                      className="bg-white/5 border-white/10 h-11 text-sm font-mono"
-                    />
+                    <WalletButton />
                   </div>
+                  
+                  {isConnected && connectedAddress ? (
+                    <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                        <span className="text-[10px] text-green-400 font-medium">Wallet Connected</span>
+                      </div>
+                      <code className="text-xs font-mono text-white/80 break-all">{connectedAddress}</code>
+                    </div>
+                  ) : (
+                    <div>
+                      <Input
+                        value={manualAddress}
+                        onChange={(e) => setManualAddress(e.target.value)}
+                        placeholder="0x... or connect wallet above"
+                        data-testid="input-wallet-address"
+                        className="bg-white/5 border-white/10 h-11 text-sm font-mono"
+                      />
+                      <p className="text-[10px] text-muted-foreground mt-1">
+                        Connect your wallet or enter address manually
+                      </p>
+                    </div>
+                  )}
 
                   <div className="p-3 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
                     <div className="flex items-center justify-between text-xs">
