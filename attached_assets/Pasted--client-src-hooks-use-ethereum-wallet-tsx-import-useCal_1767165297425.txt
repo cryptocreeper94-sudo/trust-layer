@@ -1,0 +1,108 @@
+// client/src/hooks/use-ethereum-wallet.tsx
+import { useCallback, useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import type { EthereumWallet, TokenBalance, EthTransaction } from '../../../shared/wallet-types';
+import { ethers } from 'ethers';
+
+type ProviderName = 'MetaMask' | 'WalletConnect' | 'Unknown';
+
+export function useEthereumWallet() {
+  const [wallet, setWallet] = useState<EthereumWallet | null>(null);
+  const [providerName, setProviderName] = useState<ProviderName>('Unknown');
+  const queryClient = useQueryClient();
+
+  const connectMetaMask = useCallback(async () => {
+    // TODO: Replit agent - integrate with real provider detection + auth flows
+    if ((window as any).ethereum) {
+      try {
+        const provider = new ethers.providers.Web3Provider((window as any).ethereum, 'any');
+        await provider.send('eth_requestAccounts', []);
+        const signer = provider.getSigner();
+        const address = await signer.getAddress();
+        const network = await provider.getNetwork();
+        const pw: EthereumWallet = {
+          address,
+          chainId: network.chainId,
+          providerName: 'MetaMask',
+          connectedAt: new Date().toISOString()
+        };
+        setProviderName('MetaMask');
+        setWallet(pw);
+        // invalidate balances
+        queryClient.invalidateQueries(['eth-balances', address]);
+      } catch (err) {
+        console.error('MetaMask connect error', err);
+        throw err;
+      }
+    } else {
+      throw new Error('MetaMask not found');
+    }
+  }, [queryClient]);
+
+  const disconnect = useCallback(() => {
+    setWallet(null);
+    setProviderName('Unknown');
+    // TODO: Replit agent - revoke session / notify backend
+  }, []);
+
+  const switchNetwork = useCallback(async (chainId: number) => {
+    // TODO: Replit agent - request network switch via provider RPC
+    if ((window as any).ethereum) {
+      try {
+        await (window as any).ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: ethers.utils.hexValue(chainId) }]
+        });
+      } catch (err) {
+        console.warn('Network switch request failed', err);
+        throw err;
+      }
+    } else {
+      throw new Error('No ethereum provider');
+    }
+  }, []);
+
+  const fetchEthBalances = useCallback(async (address: string): Promise<TokenBalance[]> => {
+    // TODO: Replit agent - integrate with backend or on-chain RPCs to fetch ERC20 balances
+    // Placeholder uses ethers provider with no external calls (must be implemented)
+    return [
+      {
+        tokenAddress: null,
+        symbol: 'ETH',
+        decimals: 18,
+        amountRaw: '0',
+        amount: '0'
+      }
+    ];
+  }, []);
+
+  const { data: balances, isLoading: balancesLoading } = useQuery(
+    wallet ? ['eth-balances', wallet.address] : ['eth-balances', 'none'],
+    () => fetchEthBalances(wallet!.address),
+    { enabled: !!wallet?.address, staleTime: 30_000 }
+  );
+
+  const signTransaction = useCallback(async (tx: Omit<EthTransaction, 'signedRaw'>) => {
+    // TODO: Replit agent - implement sign flow using ethers signer
+    if (!wallet) throw new Error('not connected');
+    // This scaffold demonstrates shape only.
+    return { ...tx, signedRaw: 'TODO_SIGNED_RAW' } as EthTransaction;
+  }, [wallet]);
+
+  useEffect(() => {
+    // TODO: Replit agent - listen for provider events (accountsChanged, chainChanged)
+    // and update wallet state accordingly.
+  }, []);
+
+  return {
+    wallet,
+    providerName,
+    connectMetaMask,
+    disconnect,
+    switchNetwork,
+    balances,
+    balancesLoading,
+    signTransaction,
+    queryClient
+  };
+}
