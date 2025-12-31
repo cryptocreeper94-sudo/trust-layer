@@ -1,0 +1,73 @@
+// client/src/hooks/use-solana-wallet.tsx
+import { useCallback, useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import type { SolanaWallet, TokenBalance, SolanaTransaction } from '../../../shared/wallet-types';
+import { Connection, PublicKey } from '@solana/web3.js';
+
+export function useSolanaWallet() {
+  const [wallet, setWallet] = useState<SolanaWallet | null>(null);
+  const queryClient = useQueryClient();
+
+  const connectPhantom = useCallback(async () => {
+    // TODO: Replit agent - integrate with Phantom provider / in-page adapter
+    const provider = (window as any).solana;
+    if (provider && provider.isPhantom) {
+      try {
+        const resp = await provider.connect();
+        const w: SolanaWallet = { publicKey: resp.publicKey.toString(), cluster: 'devnet', providerName: 'Phantom', connectedAt: new Date().toISOString() };
+        setWallet(w);
+        queryClient.invalidateQueries(['sol-balances', w.publicKey]);
+      } catch (err) {
+        console.error('Phantom connect error', err);
+        throw err;
+      }
+    } else {
+      throw new Error('Phantom not available');
+    }
+  }, [queryClient]);
+
+  const disconnect = useCallback(async () => {
+    // TODO: Replit agent - call provider.disconnect() if available and clear session on backend
+    setWallet(null);
+  }, []);
+
+  const switchCluster = useCallback(async (cluster: 'mainnet-beta' | 'devnet') => {
+    // TODO: Replit agent - adjust RPC endpoints or instruct wallet to switch clusters
+    setWallet((prev) => prev ? { ...prev, cluster } : prev);
+    queryClient.invalidateQueries(['sol-balances', prev?.publicKey]);
+  }, [queryClient]);
+
+  const fetchSolBalances = useCallback(async (publicKey: string): Promise<TokenBalance[]> => {
+    // TODO: Replit agent - use Solana RPC / backend to fetch SOL and SPL token balances
+    return [
+      { tokenAddress: null, symbol: 'SOL', decimals: 9, amountRaw: '0', amount: '0' }
+    ];
+  }, []);
+
+  const { data: balances, isLoading: balancesLoading } = useQuery(
+    wallet ? ['sol-balances', wallet.publicKey] : ['sol-balances', 'none'],
+    () => fetchSolBalances(wallet!.publicKey),
+    { enabled: !!wallet?.publicKey, staleTime: 30_000 }
+  );
+
+  const signTransaction = useCallback(async (tx: Partial<SolanaTransaction>) => {
+    // TODO: Replit agent - implement signing with Solana provider
+    if (!wallet) throw new Error('not connected');
+    return { ...tx, signature: 'TODO_SIGNATURE' } as SolanaTransaction;
+  }, [wallet]);
+
+  useEffect(() => {
+    // TODO: Replit agent - hook into provider events for account/connection changes
+  }, []);
+
+  return {
+    wallet,
+    connectPhantom,
+    disconnect,
+    switchCluster,
+    balances,
+    balancesLoading,
+    signTransaction,
+    queryClient
+  };
+}
