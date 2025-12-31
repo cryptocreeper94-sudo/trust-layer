@@ -66,11 +66,24 @@ To reduce Replit costs ($100-400/day), boilerplate generation has been moved to 
 - **DEX**: `SwapInterface.tsx`, `LiquidityPanel.tsx`, `PriceChart.tsx`, `dex-types.ts`
 - **Bridge**: `BridgeInterface.tsx`, `BridgeHistory.tsx`, `bridge-types.ts`
 - **NFT**: `NFTCard.tsx`, `NFTGallery.tsx`, `NFTMintForm.tsx`, `nft-types.ts`
-- **Chat**: `ChatContainer.tsx`, `ChannelList.tsx`, `MessageItem.tsx`, `chat-handlers.ts`, `chat-types.ts`
+- **Chat (Core)**: `ChatContainer.tsx`, `ChannelList.tsx`, `MessageItem.tsx`, `chat-handlers.ts`, `chat-types.ts`
 - **Guardian**: `guardian-shield.tsx`, `CertificationBadge.tsx`
 - **Studio**: `studio-executor.ts` (Docker container orchestration)
 
+**ChronoChat Full Platform (Dec 31, 2024):**
+- **Components**: `ReactionPicker.tsx`, `ReplyThread.tsx`, `MessageActions.tsx`, `TypingIndicator.tsx`, `MemberList.tsx`, `MemberProfile.tsx`, `RoleManager.tsx`, `InviteModal.tsx`, `FileUploadZone.tsx`, `FilePreview.tsx`, `PresenceIndicator.tsx`, `NotificationSettings.tsx`, `CommunityList.tsx`, `CreateCommunityModal.tsx`, `CreateChannelModal.tsx`
+- **Schema/Types**: `chat-schema.ts` (Drizzle ORM), `chat-events.ts`, `bot-types.ts`
+- **Backend**: `chat-presence.ts` (WebSocket presence), `chat-bot-framework.ts` (bot framework)
+- **Pages**: `chronochat.tsx` (main), `chronochat-invite.tsx` (invite landing)
+
 **Status:** Files placed but not yet wired into routes/App.tsx.
+
+**ChronoChat Integration TODOs:**
+- REST/GraphQL endpoints for communities, channels, messages
+- WebSocket message persistence & event broadcasting via `chat-events.ts`
+- JWT + permission checks on all endpoints
+- File storage integration for uploads (use Object Storage)
+- Bot sandboxing & security in `chat-bot-framework.ts`
 
 ## Backend IDE / Studio Executor (Self-Hosted)
 The `server/studio-executor.ts` provides Docker container orchestration for a code execution backend. **Not runnable on Replit** (no Docker-in-Docker). Designed for self-hosted deployment.
