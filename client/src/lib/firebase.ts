@@ -31,8 +31,10 @@ const appleProvider = new OAuthProvider('apple.com');
 
 export async function signInWithGoogle() {
   try {
+    localStorage.setItem('auth_redirect_path', window.location.pathname);
     const result = await signInWithPopup(auth, googleProvider);
     await syncUserToBackend(result.user);
+    localStorage.removeItem('auth_redirect_path');
     return result.user;
   } catch (error: any) {
     if (error.code === 'auth/popup-blocked') {
@@ -44,8 +46,10 @@ export async function signInWithGoogle() {
 
 export async function signInWithGithub() {
   try {
+    localStorage.setItem('auth_redirect_path', window.location.pathname);
     const result = await signInWithPopup(auth, githubProvider);
     await syncUserToBackend(result.user);
+    localStorage.removeItem('auth_redirect_path');
     return result.user;
   } catch (error: any) {
     if (error.code === 'auth/popup-blocked') {
@@ -57,8 +61,10 @@ export async function signInWithGithub() {
 
 export async function signInWithApple() {
   try {
+    localStorage.setItem('auth_redirect_path', window.location.pathname);
     const result = await signInWithPopup(auth, appleProvider);
     await syncUserToBackend(result.user);
+    localStorage.removeItem('auth_redirect_path');
     return result.user;
   } catch (error: any) {
     if (error.code === 'auth/popup-blocked') {
@@ -82,6 +88,11 @@ export async function checkRedirectResult() {
     const result = await getRedirectResult(auth);
     if (result?.user) {
       await syncUserToBackend(result.user);
+      const savedPath = localStorage.getItem('auth_redirect_path');
+      localStorage.removeItem('auth_redirect_path');
+      if (savedPath && savedPath !== '/' && window.location.pathname === '/') {
+        window.location.href = savedPath;
+      }
     }
     return result;
   } catch (error) {
