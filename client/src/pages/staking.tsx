@@ -16,12 +16,13 @@ import { useAuth } from "@/hooks/use-auth";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
-import spaceImg from "@assets/generated_images/deep_space_station.png";
-import cyberpunkImg from "@assets/generated_images/cyberpunk_neon_city.png";
+import stakingImg from "@assets/generated_images/darkwave_staking_rewards_visual.png";
+import defiImg from "@assets/generated_images/darkwave_defi_trading_visual.png";
+import networkImg from "@assets/generated_images/darkwave_blockchain_network_visual.png";
 import { WalletButton } from "@/components/wallet-button";
 
-const poolBackgrounds = [blockchainImg, dashboardImg, spaceImg, cyberpunkImg];
-const featureBackgrounds = [blockchainImg, spaceImg, cyberpunkImg];
+const poolBackgrounds = [stakingImg, defiImg, networkImg, blockchainImg];
+const featureBackgrounds = [stakingImg, networkImg, dashboardImg];
 
 interface StakingPool {
   id: string;
@@ -294,7 +295,7 @@ export default function Staking() {
               </span>
             </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto text-sm md:text-base mb-4">
-              Lock your DWC tokens to earn premium rewards, unlock exclusive perks, complete quests, and climb the global leaderboard.
+              Lock your DWC coins to earn premium rewards, unlock exclusive perks, complete quests, and climb the global leaderboard.
             </p>
             <Link href="/liquid-staking">
               <Button variant="outline" size="sm" className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10" data-testid="button-liquid-staking">
@@ -696,7 +697,7 @@ export default function Staking() {
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { icon: Shield, color: "text-primary", bg: "bg-primary/10", title: "Secure Staking", desc: "Your tokens are protected by the Founders Validator with enterprise-grade security." },
+              { icon: Shield, color: "text-primary", bg: "bg-primary/10", title: "Secure Staking", desc: "Your coins are protected by the Founders Validator with enterprise-grade security." },
               { icon: Zap, color: "text-amber-400", bg: "bg-amber-500/10", title: "Instant Rewards", desc: "Rewards accrue every block. Claim anytime with instant settlement." },
               { icon: TrendingUp, color: "text-emerald-400", bg: "bg-emerald-500/10", title: "Compound Growth", desc: "Auto-compound your rewards or reinvest for maximum returns." },
             ].map((feature, i) => (
@@ -775,14 +776,14 @@ export default function Staking() {
               <div className="flex items-center gap-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
                 <Lock className="w-5 h-5 text-amber-400 shrink-0" />
                 <p className="text-xs text-amber-200">
-                  Your tokens will be locked for <strong>{selectedPool.lockDays} days</strong>. Early withdrawal is not available.
+                  Your coins will be locked for <strong>{selectedPool.lockDays} days</strong>. Early withdrawal is not available.
                 </p>
               </div>
             ) : (
               <div className="flex items-center gap-3 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
                 <Unlock className="w-5 h-5 text-emerald-400 shrink-0" />
                 <p className="text-xs text-emerald-200">
-                  <strong>Flexible staking</strong> - withdraw your tokens anytime without penalties.
+                  <strong>Flexible staking</strong> - withdraw your coins anytime without penalties.
                 </p>
               </div>
             )}
