@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { 
-  Sparkles, Grid, Search, Filter, ChevronDown, 
+  Sparkles, Grid, Search, Filter, ChevronDown, ChevronLeft, ChevronRight,
   Heart, Eye, Tag, Plus, ImageIcon, Loader2, CheckCircle2, X
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
@@ -64,6 +64,10 @@ export default function NftMarketplace() {
 
   const { data: listings } = useQuery<{ listings: any[] }>({
     queryKey: ["/api/nft/listings"],
+  });
+
+  const { data: allNfts } = useQuery<{ nfts: any[] }>({
+    queryKey: ["/api/nft/all"],
   });
 
   const { data: stats } = useQuery<{ totalVolume: string; totalNfts: number; totalCollections: number }>({
@@ -301,36 +305,83 @@ export default function NftMarketplace() {
               )}
             </TabsContent>
 
-            <TabsContent value="collections" className="mt-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {displayCollections.map((collection: any, index: number) => (
+            <TabsContent value="collections" className="mt-4 space-y-6">
+              {displayCollections.map((collection: any, index: number) => {
+                const collectionNfts = allNfts?.nfts?.filter((nft: any) => nft.collectionId === collection.id) || [];
+                return (
                   <motion.div
                     key={collection.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="space-y-3"
                   >
-                    <GlassCard className="overflow-hidden cursor-pointer hover:border-purple-500/30 transition-colors" data-testid={`collection-card-${collection.id}`}>
-                      <div className="h-20 bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-blue-500/20" />
-                      <div className="p-4 -mt-6">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center border-2 border-background">
-                          <span className="text-lg">{collection.symbol.slice(0, 2)}</span>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-purple-500 flex items-center justify-center">
+                          <span className="text-sm font-bold">{collection.symbol?.slice(0, 2) || "??"}</span>
                         </div>
-                        <div className="mt-2 flex items-center gap-1">
-                          <span className="font-bold text-sm">{collection.name}</span>
-                          {collection.isVerified && (
-                            <CheckCircle2 className="w-3 h-3 text-primary" />
-                          )}
-                        </div>
-                        <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-                          <span>Items: {collection.itemCount}</span>
-                          <span>Floor: {formatPrice(collection.floorPrice)} DWC</span>
+                        <div>
+                          <div className="flex items-center gap-1">
+                            <span className="font-bold text-sm">{collection.name}</span>
+                            {collection.isVerified && (
+                              <CheckCircle2 className="w-3 h-3 text-primary" />
+                            )}
+                          </div>
+                          <p className="text-[10px] text-muted-foreground line-clamp-1">{collection.description}</p>
                         </div>
                       </div>
-                    </GlassCard>
+                      <div className="text-right">
+                        <div className="text-xs text-muted-foreground">{collectionNfts.length} items</div>
+                      </div>
+                    </div>
+                    
+                    <div className="relative">
+                      <div 
+                        className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory"
+                        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                      >
+                        {collectionNfts.length > 0 ? collectionNfts.map((nft: any) => (
+                          <div 
+                            key={nft.id} 
+                            className="flex-shrink-0 w-[140px] snap-start"
+                            data-testid={`nft-carousel-card-${nft.id}`}
+                          >
+                            <GlassCard className="overflow-hidden group cursor-pointer hover:border-pink-500/30 transition-colors">
+                              <div className="aspect-square bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center relative">
+                                {nft.imageUrl ? (
+                                  <img src={nft.imageUrl} alt={nft.name} className="w-full h-full object-cover" />
+                                ) : (
+                                  <ImageIcon className="w-8 h-8 text-white/20" />
+                                )}
+                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                  <Button size="sm" className="h-7 text-[10px] bg-pink-500 hover:bg-pink-600">
+                                    View
+                                  </Button>
+                                </div>
+                              </div>
+                              <div className="p-2">
+                                <div className="text-[11px] font-medium truncate">{nft.name}</div>
+                                <div className="text-[9px] text-muted-foreground truncate mt-0.5">{nft.description}</div>
+                              </div>
+                            </GlassCard>
+                          </div>
+                        )) : (
+                          <div className="flex-shrink-0 w-full py-6 text-center">
+                            <ImageIcon className="w-8 h-8 text-white/20 mx-auto mb-2" />
+                            <p className="text-xs text-muted-foreground">No NFTs in this collection yet</p>
+                          </div>
+                        )}
+                      </div>
+                      {collectionNfts.length > 2 && (
+                        <div className="absolute right-0 top-0 bottom-2 w-12 bg-gradient-to-l from-background to-transparent pointer-events-none flex items-center justify-end pr-1">
+                          <ChevronRight className="w-4 h-4 text-muted-foreground animate-pulse" />
+                        </div>
+                      )}
+                    </div>
                   </motion.div>
-                ))}
-              </div>
+                );
+              })}
             </TabsContent>
 
             <TabsContent value="activity" className="mt-4">

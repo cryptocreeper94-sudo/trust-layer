@@ -5658,6 +5658,16 @@ Current context:
     }
   });
 
+  app.get("/api/nft/all", async (req, res) => {
+    try {
+      const nftsData = await db.select().from(nfts).orderBy(desc(nfts.createdAt));
+      res.json({ nfts: nftsData });
+    } catch (error) {
+      console.error("NFT all error:", error);
+      res.json({ nfts: [] });
+    }
+  });
+
   app.post("/api/nft/mint", isAuthenticated, nftMintRateLimit, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
@@ -9334,7 +9344,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(400).json({ error: "Invalid action" });
       }
       
-      const transaction = await shellsService.awardEngagementOrbs(userId, username, action as keyof typeof SHELL_EARN_RATES);
+      const transaction = await shellsService.awardEngagementShells(userId, username, action as keyof typeof SHELL_EARN_RATES);
       const balance = await shellsService.getBalance(userId);
       
       res.json({ success: true, transaction, balance });
@@ -9441,7 +9451,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       }
       
       // Credit the Orbs (uses sessionId as referenceId for idempotency)
-      const transaction = await shellsService.purchaseOrbs(userId, username, packageKey, session.id);
+      const transaction = await shellsService.purchaseShells(userId, username, packageKey, session.id);
       const balance = await shellsService.getBalance(userId);
       
       res.json({ success: true, transaction, balance, orbsAdded: shellAmount });
