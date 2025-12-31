@@ -69,7 +69,7 @@ export function ChronoLayout({
           <div className="flex items-center gap-2">
             <a 
               href="https://dwsc.io" 
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-500 text-black font-bold hover:bg-cyan-400 transition-all text-xs md:hidden shadow-lg shadow-cyan-500/30"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-500 text-black font-bold hover:bg-cyan-400 transition-all text-xs shadow-lg shadow-cyan-500/30"
               data-testid="button-back-to-dwsc"
             >
               <ArrowLeft className="w-4 h-4" />
