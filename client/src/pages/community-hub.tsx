@@ -390,6 +390,7 @@ export default function CommunityHub() {
   const [newPollOptions, setNewPollOptions] = useState(["", ""]);
   const [createPollOpen, setCreatePollOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -687,12 +688,16 @@ export default function CommunityHub() {
             >
               {showSidebar ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
-            <div className="flex items-center gap-2 shrink-0">
+            <button 
+              onClick={() => setAboutOpen(true)}
+              className="flex items-center gap-2 shrink-0 hover:opacity-80 transition-opacity"
+              data-testid="button-about-chronochat"
+            >
               <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center">
                 <MessageCircle className="w-4 h-4 text-white" />
               </div>
               <span className="font-display font-bold text-lg tracking-tight hidden sm:inline bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Chronochat</span>
-            </div>
+            </button>
           </div>
           <div className="flex items-center gap-2">
             {!isAuthenticated ? (
@@ -1428,6 +1433,63 @@ export default function CommunityHub() {
               <h4 className="text-sm font-medium text-white mb-2">Appearance</h4>
               <p className="text-xs text-gray-400">Theme settings coming soon</p>
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={aboutOpen} onOpenChange={setAboutOpen}>
+        <DialogContent className="bg-gray-900 border-white/10 w-[95vw] max-w-md p-4 sm:p-6 max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center">
+                <MessageCircle className="w-5 h-5 text-white" />
+              </div>
+              About ChronoChat
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 mt-4 text-sm sm:text-base">
+            <p className="text-gray-300 leading-relaxed">
+              ChronoChat is the community hub for the DarkWave ecosystem. Connect with fellow community members, share ideas, and stay updated on the latest developments.
+            </p>
+            
+            <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+              <h4 className="font-medium text-white mb-2 flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-cyan-400" />
+                Features
+              </h4>
+              <ul className="space-y-1.5 text-gray-400 text-xs sm:text-sm">
+                <li className="flex items-center gap-2">
+                  <Hash className="w-3 h-3 text-purple-400" />
+                  Community channels & discussions
+                </li>
+                <li className="flex items-center gap-2">
+                  <Activity className="w-3 h-3 text-cyan-400" />
+                  Pulse - Social feed & updates
+                </li>
+                <li className="flex items-center gap-2">
+                  <Coins className="w-3 h-3 text-amber-400" />
+                  Orbs tipping & rewards
+                </li>
+                <li className="flex items-center gap-2">
+                  <Globe className="w-3 h-3 text-green-400" />
+                  Explore communities
+                </li>
+              </ul>
+            </div>
+            
+            <div className="p-3 rounded-lg bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
+              <p className="text-xs sm:text-sm text-gray-300">
+                Part of the <span className="text-cyan-400 font-medium">DarkWave Smart Chain</span> ecosystem
+              </p>
+            </div>
+            
+            <Button 
+              onClick={() => setAboutOpen(false)} 
+              className="w-full bg-cyan-500 hover:bg-cyan-600 h-11"
+              data-testid="button-close-about"
+            >
+              Got it
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
