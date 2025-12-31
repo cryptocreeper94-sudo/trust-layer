@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { 
@@ -24,7 +24,10 @@ import {
   Settings,
   History,
   TrendingUp,
-  Home
+  Home,
+  Download,
+  Upload,
+  AlertTriangle
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
@@ -35,6 +38,13 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { 
+  createWallet, 
+  unlockWallet, 
+  importWallet, 
+  validateMnemonic,
+  type StoredWallet 
+} from "@/lib/wallet-crypto";
 
 const SUPPORTED_CHAINS = [
   { id: 'darkwave', name: 'DarkWave Smart Chain', symbol: 'DWC', icon: '⚡', color: 'from-purple-500 to-pink-500', explorer: '/explorer' },
@@ -89,32 +99,24 @@ export default function WalletPage() {
     }
   }
 
-  // Generate deterministic addresses based on stored wallet data
+  const [isCreating, setIsCreating] = useState(false);
+  const [importMnemonic, setImportMnemonic] = useState("");
+  const [importPassword, setImportPassword] = useState("");
+
+  // Get wallet accounts from stored data
   const getWalletAccounts = (): WalletAccount[] => {
     const savedWallet = localStorage.getItem('darkwave_wallet');
     if (!savedWallet || !walletCreated) {
       return [];
     }
     
-    const walletData = JSON.parse(savedWallet);
+    const walletData: StoredWallet = JSON.parse(savedWallet);
     return SUPPORTED_CHAINS.map(chain => ({
       chain: chain.id,
-      address: walletData.addresses?.[chain.id] || generateAddress(chain.id, walletData.seed),
+      address: walletData.addresses?.[chain.id] || '',
       balance: '0.00',
       usd: 0
     }));
-  };
-
-  // Simple deterministic address generator (for display purposes)
-  const generateAddress = (chainId: string, seed: string): string => {
-    const hash = seed + chainId;
-    if (chainId === 'darkwave') {
-      return 'DW' + hash.slice(0, 38);
-    } else if (chainId === 'solana') {
-      return hash.slice(0, 44);
-    } else {
-      return '0x' + hash.slice(0, 40);
-    }
   };
 
   const walletAccounts = getWalletAccounts();
@@ -127,21 +129,7 @@ export default function WalletPage() {
     toast({ title: "Address Copied", description: "Wallet address copied to clipboard" });
   };
 
-  // Secure password hashing using Web Crypto API
-  const hashPassword = async (password: string, salt: string): Promise<string> => {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password + salt);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  };
-
-  const generateSalt = (): string => {
-    const array = new Uint8Array(16);
-    crypto.getRandomValues(array);
-    return Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
-  };
-
+  // Create wallet using proper BIP39 mnemonic generation
   const handleCreateWallet = async () => {
     if (password !== confirmPassword) {
       toast({ title: "Error", description: "Passwords do not match", variant: "destructive" });
@@ -152,53 +140,28 @@ export default function WalletPage() {
       return;
     }
     
-    // Generate a proper 12-word mnemonic using BIP39 word list sample
-    const bip39Words = [
-      'abandon', 'ability', 'able', 'about', 'above', 'absent', 'absorb', 'abstract', 
-      'absurd', 'abuse', 'access', 'accident', 'account', 'accuse', 'achieve', 'acquire',
-      'across', 'action', 'actor', 'actress', 'actual', 'adapt', 'add', 'addict',
-      'address', 'adjust', 'admit', 'adult', 'advance', 'advice', 'aerobic', 'affair'
-    ];
-    const selectedWords = [];
-    for (let i = 0; i < 12; i++) {
-      selectedWords.push(bip39Words[Math.floor(Math.random() * bip39Words.length)]);
+    setIsCreating(true);
+    try {
+      // Use real BIP39 mnemonic generation and PBKDF2 encryption
+      const { mnemonic: generatedMnemonic, storedWallet } = await createWallet(password);
+      
+      // Store encrypted wallet data
+      localStorage.setItem('darkwave_wallet', JSON.stringify(storedWallet));
+      
+      setMnemonic(generatedMnemonic);
+      setWalletCreated(true);
+      setShowLogin(false);
+      setPassword("");
+      setConfirmPassword("");
+      toast({ title: "Wallet Created", description: "Your BIP39 multi-chain wallet is ready!" });
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message || "Failed to create wallet", variant: "destructive" });
+    } finally {
+      setIsCreating(false);
     }
-    const generatedMnemonic = selectedWords.join(' ');
-    
-    // Create a seed from mnemonic for address generation
-    const seed = generatedMnemonic.split(' ').join('').slice(0, 40);
-    
-    // Generate addresses for each chain
-    const addresses: Record<string, string> = {};
-    SUPPORTED_CHAINS.forEach(chain => {
-      if (chain.id === 'darkwave') {
-        addresses[chain.id] = 'DW' + seed.slice(0, 38);
-      } else if (chain.id === 'solana') {
-        addresses[chain.id] = seed.slice(0, 44).toUpperCase();
-      } else {
-        addresses[chain.id] = '0x' + seed.slice(0, 40);
-      }
-    });
-    
-    // Hash password with salt using SHA-256
-    const salt = generateSalt();
-    const passwordHash = await hashPassword(password, salt);
-    
-    // Store wallet metadata only (addresses are derived, not stored with seed)
-    const walletData = {
-      addresses,
-      createdAt: new Date().toISOString(),
-      salt,
-      passwordHash
-    };
-    localStorage.setItem('darkwave_wallet', JSON.stringify(walletData));
-    
-    setMnemonic(generatedMnemonic);
-    setWalletCreated(true);
-    setShowLogin(false);
-    toast({ title: "Wallet Created", description: "Your multi-chain wallet is ready!" });
   };
 
+  // Unlock existing wallet with password
   const handleLogin = async () => {
     const savedWallet = localStorage.getItem('darkwave_wallet');
     if (!savedWallet) {
@@ -206,17 +169,63 @@ export default function WalletPage() {
       return;
     }
     
-    const walletData = JSON.parse(savedWallet);
-    const passwordHash = await hashPassword(loginPassword, walletData.salt);
-    
-    if (passwordHash !== walletData.passwordHash) {
+    setIsCreating(true);
+    try {
+      const walletData: StoredWallet = JSON.parse(savedWallet);
+      await unlockWallet(walletData, loginPassword);
+      
+      setWalletCreated(true);
+      setShowLogin(false);
+      setLoginPassword("");
+      toast({ title: "Welcome Back", description: "Wallet unlocked successfully" });
+    } catch (error: any) {
       toast({ title: "Error", description: "Incorrect password", variant: "destructive" });
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  // Import wallet from recovery phrase
+  const handleImportWallet = async () => {
+    if (!validateMnemonic(importMnemonic.trim())) {
+      toast({ title: "Error", description: "Invalid recovery phrase. Must be 12 valid BIP39 words.", variant: "destructive" });
+      return;
+    }
+    if (importPassword.length < 8) {
+      toast({ title: "Error", description: "Password must be at least 8 characters", variant: "destructive" });
       return;
     }
     
-    setWalletCreated(true);
-    setShowLogin(false);
-    toast({ title: "Welcome Back", description: "Wallet unlocked successfully" });
+    setIsCreating(true);
+    try {
+      const storedWallet = await importWallet(importMnemonic.trim(), importPassword);
+      localStorage.setItem('darkwave_wallet', JSON.stringify(storedWallet));
+      
+      setWalletCreated(true);
+      setShowLogin(false);
+      setImportMnemonic("");
+      setImportPassword("");
+      toast({ title: "Wallet Imported", description: "Your wallet has been restored successfully!" });
+    } catch (error: any) {
+      toast({ title: "Error", description: error.message || "Failed to import wallet", variant: "destructive" });
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  // Export wallet backup
+  const handleExportWallet = () => {
+    const savedWallet = localStorage.getItem('darkwave_wallet');
+    if (!savedWallet) return;
+    
+    const blob = new Blob([savedWallet], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `darkwave-wallet-backup-${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast({ title: "Backup Downloaded", description: "Keep this file safe!" });
   };
 
   const handleLogout = () => {
@@ -307,11 +316,16 @@ export default function WalletPage() {
                     </div>
                     <Button
                       onClick={handleLogin}
+                      disabled={isCreating || !loginPassword}
                       className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
                       data-testid="button-unlock-wallet"
                     >
-                      <Unlock className="w-4 h-4 mr-2" />
-                      Unlock Wallet
+                      {isCreating ? (
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                      ) : (
+                        <Unlock className="w-4 h-4 mr-2" />
+                      )}
+                      {isCreating ? "Unlocking..." : "Unlock Wallet"}
                     </Button>
                     <div className="text-center pt-4 border-t border-white/10">
                       <button
@@ -355,11 +369,16 @@ export default function WalletPage() {
                     </div>
                     <Button
                       onClick={handleCreateWallet}
+                      disabled={isCreating || password.length < 8 || password !== confirmPassword}
                       className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
                       data-testid="button-create-wallet"
                     >
-                      <Plus className="w-4 h-4 mr-2" />
-                      Create Wallet
+                      {isCreating ? (
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                      ) : (
+                        <Plus className="w-4 h-4 mr-2" />
+                      )}
+                      {isCreating ? "Creating..." : "Create Wallet"}
                     </Button>
                   </TabsContent>
                   
@@ -367,26 +386,36 @@ export default function WalletPage() {
                     <div className="space-y-2">
                       <Label>Recovery Phrase</Label>
                       <textarea
-                        placeholder="Enter your 12 or 24 word recovery phrase..."
+                        placeholder="Enter your 12-word BIP39 recovery phrase..."
+                        value={importMnemonic}
+                        onChange={(e) => setImportMnemonic(e.target.value)}
                         className="w-full h-24 px-3 py-2 bg-white/5 border border-white/10 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
                         data-testid="input-import-mnemonic"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Password</Label>
+                      <Label>Password (min 8 characters)</Label>
                       <Input
                         type="password"
-                        placeholder="Create a password"
+                        placeholder="Create a password to encrypt your wallet"
+                        value={importPassword}
+                        onChange={(e) => setImportPassword(e.target.value)}
                         className="bg-white/5 border-white/10"
                         data-testid="input-import-password"
                       />
                     </div>
                     <Button
+                      onClick={handleImportWallet}
+                      disabled={isCreating || !importMnemonic || importPassword.length < 8}
                       className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600"
                       data-testid="button-import-wallet"
                     >
-                      <Key className="w-4 h-4 mr-2" />
-                      Import Wallet
+                      {isCreating ? (
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                      ) : (
+                        <Upload className="w-4 h-4 mr-2" />
+                      )}
+                      {isCreating ? "Importing..." : "Import Wallet"}
                     </Button>
                   </TabsContent>
                 </Tabs>
