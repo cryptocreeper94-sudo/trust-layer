@@ -123,6 +123,15 @@ export function ChronoLayout({
                 </button>
               </div>
               
+              <a 
+                href="https://dwsc.io"
+                className="flex items-center gap-3 p-4 mb-4 rounded-xl bg-cyan-500 text-black font-bold text-lg shadow-lg shadow-cyan-500/30"
+                data-testid="mobile-back-to-portal"
+              >
+                <ArrowLeft className="w-5 h-5" />
+                <span>Back to Portal</span>
+              </a>
+              
               <div className="space-y-2">
                 {NAV_LINKS.map((link, i) => (
                   <motion.div
