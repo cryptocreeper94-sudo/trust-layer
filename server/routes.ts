@@ -8237,10 +8237,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   const ownerAuthLockouts = new Map<string, { attempts: number; lockedUntil: number }>();
 
   const timingSafeEqual = (a: string, b: string): boolean => {
-    if (a.length !== b.length) return false;
-    const bufA = Buffer.from(a);
-    const bufB = Buffer.from(b);
-    return crypto.timingSafeEqual(bufA, bufB);
+    const maxLen = Math.max(a.length, b.length);
+    const bufA = Buffer.alloc(maxLen);
+    const bufB = Buffer.alloc(maxLen);
+    bufA.write(a);
+    bufB.write(b);
+    return a.length === b.length && crypto.timingSafeEqual(bufA, bufB);
   };
 
   app.post("/api/owner/auth", rateLimit("owner-auth", 5, 5 * 60 * 1000), (req, res) => {
