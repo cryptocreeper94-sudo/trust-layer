@@ -9,6 +9,10 @@ import {
   OAuthProvider,
   signOut as firebaseSignOut,
   onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  updateProfile,
   type User
 } from "firebase/auth";
 
@@ -72,6 +76,25 @@ export async function signInWithApple() {
     }
     throw error;
   }
+}
+
+export async function signUpWithEmail(email: string, password: string, displayName?: string) {
+  const result = await createUserWithEmailAndPassword(auth, email, password);
+  if (displayName) {
+    await updateProfile(result.user, { displayName });
+  }
+  await syncUserToBackend(result.user);
+  return result.user;
+}
+
+export async function signInWithEmail(email: string, password: string) {
+  const result = await signInWithEmailAndPassword(auth, email, password);
+  await syncUserToBackend(result.user);
+  return result.user;
+}
+
+export async function resetPassword(email: string) {
+  await sendPasswordResetEmail(auth, email);
 }
 
 export async function signOut() {
