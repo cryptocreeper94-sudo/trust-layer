@@ -1,7 +1,7 @@
 # DarkWave Smart Chain - Replit Agent Guide
 
 ## Overview
-DarkWave Smart Chain (DSC) is a high-performance Layer 1 Proof-of-Authority (PoA) blockchain ecosystem developed by DarkWave Studios. It features the DarkWave Portal, a comprehensive React web application functioning as an ecosystem interface, block explorer, and developer hub. The project also includes "DarkWave Chronicles," a fantasy-themed game focused on a living political simulation and community-driven content. The ecosystem is supported by five key domains: dwsc.io, darkwavegames.io, darkwavestudios.io, yourlegacy.io, and chronochat.io. The primary objective is to deliver a fast, feature-rich blockchain environment with a premium user experience and innovative gaming.
+DarkWave Smart Chain (DSC) is a high-performance Layer 1 Proof-of-Authority (PoA) blockchain ecosystem developed by DarkWave Studios. It features the DarkWave Portal, a comprehensive React web application functioning as an ecosystem interface, block explorer, and developer hub. The project also includes "DarkWave Chronicles," a fantasy-themed game focused on a living political simulation and community-driven content. The ecosystem is supported by four key domains: dwsc.io, darkwavegames.io, darkwavestudios.io, and yourlegacy.io. The primary objective is to deliver a fast, feature-rich blockchain environment with a premium user experience and innovative gaming.
 
 ## User Preferences
 - Preferred communication style: Simple, everyday language
