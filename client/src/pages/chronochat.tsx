@@ -16,9 +16,11 @@ export default function ChronoChatPage() {
   const [createCommunityOpen, setCreateCommunityOpen] = useState(false);
   const [createChannelOpen, setCreateChannelOpen] = useState(false);
 
-  const { data: communities = [] } = useQuery<Community[]>({
+  const { data: communitiesData } = useQuery<{ communities: Community[] }>({
     queryKey: ['/api/community/list'],
+    queryFn: () => apiRequest('GET', '/api/community/list').then(r => r.json()),
   });
+  const communities = communitiesData?.communities || [];
 
   const { data: channelsData } = useQuery<{ channels: Channel[] }>({
     queryKey: ['/api/community', activeCommunity, 'channels'],

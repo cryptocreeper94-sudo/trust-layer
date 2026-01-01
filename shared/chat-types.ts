@@ -41,5 +41,6 @@ export interface Channel {
 export interface Community {
   id: string;
   name: string;
-  channels: Channel[];
+  description?: string;
+  unreadCount?: number;
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import type { Community } from '../../../shared/chat-types';
+import type { Community } from '@shared/chat-types';
 
 type Props = {
   communities: Community[];
