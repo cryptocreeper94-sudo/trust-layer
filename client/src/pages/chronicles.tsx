@@ -147,12 +147,15 @@ const CORE_FEATURES = [
 const EPOCHS = [
   {
     id: "prehistoric",
-    name: "Prehistoric",
+    name: "Dawn Age",
     period: "Before Written History",
     image: stoneAgeVillage,
     eras: ["Time of Dinosaurs", "Stone Age", "Bronze Age", "Iron Age", "Cro-Magnon"],
     incentive: "Pristine resources, untouched elements",
-    color: "from-amber-600 to-orange-700"
+    color: "from-amber-600 to-orange-700",
+    lore: "In the beginning, before words carved meaning into stone, humanity walked among giants. The Dawn Age is a time of primal survival where your instincts are your greatest weapon. Hunt mammoths across frozen tundras, discover fire's secrets, and forge the first tools that would shape civilization. Here, legends are born not from books, but from the stories whispered around campfires.",
+    highlights: ["Tame prehistoric beasts", "Discover ancient cave systems", "Lead your tribe to dominance", "Unlock primal crafting recipes"],
+    factions: ["The Bone Carvers", "Fire Keepers", "Beast Tamers", "Star Watchers"]
   },
   {
     id: "ancient",
@@ -161,7 +164,10 @@ const EPOCHS = [
     image: egyptianKingdom,
     eras: ["Egyptian Dynasties", "Greek Golden Age", "Roman Empire", "Persian Empire", "Han Dynasty"],
     incentive: "Lost knowledge, mystical artifacts",
-    color: "from-yellow-500 to-amber-600"
+    color: "from-yellow-500 to-amber-600",
+    lore: "The pyramids rise against the desert sun. Pharaohs speak with gods, and empires stretch across continents. In the Ancient World, you walk among the architects of civilization itself. Decode hieroglyphics, navigate the political courts of mighty empires, and uncover artifacts that hold power beyond mortal understanding.",
+    highlights: ["Serve pharaohs or become one", "Explore legendary tombs", "Master ancient technologies", "Trade along the Silk Road"],
+    factions: ["Temple of Ra", "Senate of Rome", "Persian Immortals", "Han Dynasty Court"]
   },
   {
     id: "classical",
@@ -170,7 +176,10 @@ const EPOCHS = [
     image: greekAthens,
     eras: ["Athenian Democracy", "Spartan Warriors", "Alexander's Conquest", "Roman Republic"],
     incentive: "Philosophy, democracy, military might",
-    color: "from-blue-400 to-cyan-500"
+    color: "from-blue-400 to-cyan-500",
+    lore: "Where democracy was born and philosophy awakened the mind. The Classical Era shines with the brilliance of Athens, the discipline of Sparta, and the ambition of Alexander. Debate in marble halls, train in legendary gymnasiums, and march with armies that conquered the known world. This is where heroes become myths.",
+    highlights: ["Compete in Olympic games", "Study under Socrates", "Command Spartan phalanxes", "Conquer with Alexander"],
+    factions: ["Athenian Assembly", "Spartan Agoge", "Macedonian Companions", "Oracle of Delphi"]
   },
   {
     id: "roman",
@@ -179,7 +188,10 @@ const EPOCHS = [
     image: romanColosseum,
     eras: ["Republic Era", "Imperial Glory", "Gladiatorial Games", "Fall of Rome"],
     incentive: "Engineering, conquest, political power",
-    color: "from-red-600 to-rose-700"
+    color: "from-red-600 to-rose-700",
+    lore: "All roads lead to Rome - the eternal city that ruled the world. In this era of unprecedented power, you can rise from slave to senator, from gladiator to legend. The Colosseum roars with crowds, legions march across continents, and in the Senate, words cut deeper than swords. Glory awaits those bold enough to seize it.",
+    highlights: ["Fight in the Colosseum", "Command Roman legions", "Navigate Senate politics", "Build engineering marvels"],
+    factions: ["Praetorian Guard", "Gladiator Guilds", "Senate Patricians", "Legion Commanders"]
   },
   {
     id: "viking",
@@ -188,25 +200,34 @@ const EPOCHS = [
     image: vikingFjord,
     eras: ["Fjord Settlements", "Raider Voyages", "Valhalla Legends", "Norse Exploration"],
     incentive: "Exploration, combat, mythology",
-    color: "from-slate-500 to-gray-700"
+    color: "from-slate-500 to-gray-700",
+    lore: "From frozen fjords, the dragon ships emerge. The Viking Age calls to those who hear the thunder of Thor and dream of Valhalla's halls. Raid distant shores, explore uncharted waters, and forge sagas that will be sung for a thousand years. The gods watch, and only the bold earn their place among legends.",
+    highlights: ["Command longship raids", "Discover new continents", "Earn passage to Valhalla", "Forge legendary weapons"],
+    factions: ["Odin's Ravens", "Shieldmaiden Sisterhood", "Berserker Lodge", "Seafarer Guild"]
   },
   {
     id: "medieval",
-    name: "Medieval",
+    name: "Age of Crowns",
     period: "500 CE - 1500 CE",
     image: medievalKingdom,
-    eras: ["Dark Ages", "Crusades", "High Medieval", "Black Death", "Feudal Japan"],
+    eras: ["Dark Ages", "Crusades", "High Medieval", "Black Death", "Feudal Systems"],
     incentive: "Political power, land ownership",
-    color: "from-stone-500 to-stone-700"
+    color: "from-stone-500 to-stone-700",
+    lore: "Castles pierce the clouds, and knights ride for glory. The Medieval era is a time of chivalry and treachery, of crusades and courtly love. Swear fealty to kings, join holy orders, or carve your own kingdom from the chaos. Every alliance shifts, every dagger gleams in candlelight, and crowns rest heavy on those who dare to wear them.",
+    highlights: ["Build and defend castles", "Join the Crusades", "Navigate feudal politics", "Survive the Black Death"],
+    factions: ["Knights Templar", "Royal Courts", "Merchant Guilds", "Shadow Assassins"]
   },
   {
     id: "feudaljapan",
-    name: "Feudal Japan",
-    period: "Way of the Samurai",
+    name: "Way of the Samurai",
+    period: "Feudal Japan",
     image: feudalJapan,
     eras: ["Samurai Era", "Shogunate Rule", "Ninja Clans", "Edo Period"],
     incentive: "Honor, martial arts, tradition",
-    color: "from-rose-400 to-pink-600"
+    color: "from-rose-400 to-pink-600",
+    lore: "Cherry blossoms fall like snow, and steel sings in the moonlight. Feudal Japan is a land of rigid honor and deadly shadows. Walk the path of the samurai, master the katana's deadly dance, or slip into darkness as a shinobi. Here, a single moment of weakness brings disgrace, and legends are forged in the space between heartbeats.",
+    highlights: ["Master the way of bushido", "Serve daimyo lords", "Train in ninja arts", "Forge legendary katanas"],
+    factions: ["Shogunate Elite", "Ronin Brotherhood", "Iga Ninja Clan", "Temple Monks"]
   },
   {
     id: "renaissance",
@@ -215,7 +236,10 @@ const EPOCHS = [
     image: renaissanceFlorence,
     eras: ["Medici Florence", "Da Vinci Era", "Artistic Revolution", "Scientific Dawn"],
     incentive: "Art, innovation, cultural influence",
-    color: "from-amber-400 to-yellow-500"
+    color: "from-amber-400 to-yellow-500",
+    lore: "After centuries of darkness, light returns to Europe. The Renaissance explodes with creativity, ambition, and intrigue. Walk the streets where Da Vinci sketches flying machines, where Machiavelli plots in shadows, and where art rivals religion in its power to move souls. Patron the arts, unlock secrets of science, or play the deadly game of Italian politics.",
+    highlights: ["Commission masterpiece art", "Unlock scientific discoveries", "Navigate Medici politics", "Sponsor great inventors"],
+    factions: ["Medici Bank", "Artist Guilds", "Vatican Spies", "Inventor Circles"]
   },
   {
     id: "victorian",
@@ -224,7 +248,10 @@ const EPOCHS = [
     image: victorianLondon,
     eras: ["Sherlock Holmes London", "Jack the Ripper", "Industrial Revolution", "British Empire"],
     incentive: "Manufacturing, wealth, technology",
-    color: "from-gray-600 to-slate-800"
+    color: "from-gray-600 to-slate-800",
+    lore: "Gas lamps flicker through London fog, and the empire spans the globe. The Victorian Era is a time of stark contrasts - glittering ballrooms above cobblestone streets where shadows hold darker secrets. Solve mysteries in fog-shrouded alleys, build industrial empires, or explore the furthest corners of the colonial world. Progress marches forward, but at what cost?",
+    highlights: ["Solve criminal mysteries", "Build industrial empires", "Navigate high society", "Explore colonial frontiers"],
+    factions: ["Scotland Yard", "Industrial Barons", "Gentlemen's Clubs", "Underground Networks"]
   },
   {
     id: "wildwest",
@@ -233,7 +260,10 @@ const EPOCHS = [
     image: wildWest,
     eras: ["Gold Rush", "Cowboy Era", "Outlaw Days", "Railroad Expansion"],
     incentive: "Freedom, adventure, frontier justice",
-    color: "from-orange-500 to-amber-700"
+    color: "from-orange-500 to-amber-700",
+    lore: "Where the law ends and legends begin. The Wild West is untamed territory where every sunrise brings new opportunity and every sunset might be your last. Stake your claim in gold-rich hills, ride with outlaws or hunt them, and carve your name into a land that answers to no one. The frontier rewards the bold and buries the weak.",
+    highlights: ["Strike it rich in gold mines", "Build your outlaw gang", "Become a legendary sheriff", "Expand the railroad"],
+    factions: ["Lawmen's Alliance", "Outlaw Gangs", "Railroad Tycoons", "Native Nations"]
   },
   {
     id: "industrial",
@@ -242,7 +272,10 @@ const EPOCHS = [
     image: industrialCity,
     eras: ["Factory Era", "Gilded Age", "Steam Power", "Urban Revolution"],
     incentive: "Manufacturing, wealth accumulation",
-    color: "from-zinc-500 to-zinc-700"
+    color: "from-zinc-500 to-zinc-700",
+    lore: "Steel and steam reshape the world. The Industrial Age roars with machinery, ambition, and revolution. Rise from factory floors to boardrooms, navigate the brutal politics of labor and capital, or tinker with inventions that will change humanity forever. Fortunes are made and lost in a single day, and the future belongs to those who build it.",
+    highlights: ["Build factory empires", "Invent new technologies", "Lead worker movements", "Control vital industries"],
+    factions: ["Steel Barons", "Labor Unions", "Inventor Society", "Railway Magnates"]
   },
   {
     id: "modern",
@@ -251,16 +284,22 @@ const EPOCHS = [
     image: cyberpunkCity,
     eras: ["Roaring Twenties", "Civil Rights", "Hippie Era", "Cold War"],
     incentive: "Social change, technology access",
-    color: "from-purple-500 to-violet-700"
+    color: "from-purple-500 to-violet-700",
+    lore: "The century that changed everything. From jazz-filled speakeasies to moon landings, from civil rights marches to the fall of walls. The Modern era moves at breakneck speed through revolution after revolution. Stand at the crossroads of history, where your choices echo through generations and the future is written by those brave enough to dream it.",
+    highlights: ["Shape cultural revolutions", "Navigate Cold War intrigue", "Witness space exploration", "Lead social movements"],
+    factions: ["Intelligence Agencies", "Cultural Revolutionaries", "Space Programs", "Media Empires"]
   },
   {
     id: "future",
-    name: "Future & Beyond",
+    name: "Neon Dominion",
     period: "Tomorrow's World",
     image: quantumRealm,
     eras: ["Cyberpunk Cities", "Space Colonies", "AI Revolution", "Interstellar Age"],
     incentive: "Ultimate technology, space travel",
-    color: "from-cyan-400 to-blue-600"
+    color: "from-cyan-400 to-blue-600",
+    lore: "Humanity reaches for the stars. The Neon Dominion blazes with holographic cities, artificial minds, and colonies scattered across the solar system. In this era of ultimate technology, the line between human and machine blurs, corporations rival nations, and the next frontier lies beyond the edge of known space. The future is here - and it's more beautiful and dangerous than anyone imagined.",
+    highlights: ["Hack megacorporations", "Colonize distant worlds", "Augment your abilities", "Navigate AI politics"],
+    factions: ["Megacorp Executives", "Cyberpunk Hackers", "Space Pioneers", "AI Collective"]
   }
 ];
 
@@ -448,7 +487,7 @@ function FeatureCard({ feature, index }: { feature: typeof CORE_FEATURES[0]; ind
   );
 }
 
-function EpochCard({ epoch, index }: { epoch: typeof EPOCHS[0]; index: number }) {
+function EpochCard({ epoch, index, onClick }: { epoch: typeof EPOCHS[0]; index: number; onClick?: () => void }) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -456,7 +495,9 @@ function EpochCard({ epoch, index }: { epoch: typeof EPOCHS[0]; index: number })
       viewport={{ once: true }}
       transition={{ delay: index * 0.05 }}
       whileHover={{ scale: 1.03, y: -8 }}
-      className="relative overflow-hidden rounded-2xl border border-white/10 group cursor-pointer flex-shrink-0 w-[280px] h-[380px]"
+      whileTap={{ scale: 0.98 }}
+      onClick={onClick}
+      className="relative overflow-hidden rounded-2xl border border-white/10 group cursor-pointer flex-shrink-0 w-[280px] h-[380px] active:scale-95 transition-transform"
       style={{ boxShadow: '0 0 40px rgba(0,0,0,0.5)' }}
       data-testid={`card-epoch-${epoch.id}`}
     >
@@ -501,6 +542,158 @@ function EpochCard({ epoch, index }: { epoch: typeof EPOCHS[0]; index: number })
   );
 }
 
+function EpochDetailDrawer({ epoch, isOpen, onClose }: { epoch: typeof EPOCHS[0] | null; isOpen: boolean; onClose: () => void }) {
+  if (!epoch) return null;
+  
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100]"
+            onClick={onClose}
+          />
+          <motion.div
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            className="fixed inset-x-0 bottom-0 z-[101] max-h-[90vh] overflow-hidden rounded-t-3xl"
+            style={{
+              background: 'linear-gradient(180deg, rgba(15,15,25,0.98) 0%, rgba(10,10,18,0.99) 100%)',
+              boxShadow: '0 -10px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1)',
+            }}
+          >
+            <div className="absolute top-0 left-0 right-0 h-[2px]"
+              style={{ background: `linear-gradient(90deg, transparent, rgba(168,85,247,0.6), rgba(6,182,212,0.6), transparent)` }}
+            />
+            
+            <div className="flex justify-center pt-3 pb-2">
+              <div className="w-12 h-1.5 rounded-full bg-white/20" />
+            </div>
+            
+            <div className="overflow-y-auto max-h-[calc(90vh-40px)] overscroll-contain">
+              <div className="relative h-48 sm:h-64 overflow-hidden">
+                <img 
+                  src={epoch.image} 
+                  alt={epoch.name}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a12] via-black/60 to-transparent" />
+                
+                <button
+                  onClick={onClose}
+                  className="absolute top-4 right-4 w-12 h-12 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/80 hover:text-white hover:bg-black/70 transition-all active:scale-95"
+                  data-testid="button-close-epoch-detail"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+                
+                <div className="absolute bottom-4 left-4 right-4">
+                  <Badge className={`mb-2 bg-gradient-to-r ${epoch.color} text-white border-0 shadow-lg`}>
+                    {epoch.period}
+                  </Badge>
+                  <h2 className="text-3xl sm:text-4xl font-bold text-white drop-shadow-lg">{epoch.name}</h2>
+                </div>
+              </div>
+              
+              <div className="p-6 space-y-6">
+                <div 
+                  className="p-5 rounded-2xl border border-white/10"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(168,85,247,0.05) 0%, rgba(6,182,212,0.05) 100%)',
+                    boxShadow: 'inset 0 0 30px rgba(168,85,247,0.05)',
+                  }}
+                >
+                  <p className="text-white/80 leading-relaxed text-base sm:text-lg">
+                    {epoch.lore}
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-purple-400" />
+                    What Awaits You
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {epoch.highlights.map((highlight, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5"
+                      >
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500/20 to-cyan-500/20 flex items-center justify-center flex-shrink-0">
+                          <ChevronRight className="w-4 h-4 text-purple-400" />
+                        </div>
+                        <span className="text-white/80 text-sm">{highlight}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                    <Users className="w-5 h-5 text-cyan-400" />
+                    Factions
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {epoch.factions.map((faction, i) => (
+                      <motion.span
+                        key={i}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.3 + i * 0.05 }}
+                        className="px-4 py-2 rounded-full bg-gradient-to-r from-white/5 to-white/10 border border-white/10 text-white/80 text-sm"
+                      >
+                        {faction}
+                      </motion.span>
+                    ))}
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                    <History className="w-5 h-5 text-amber-400" />
+                    Available Eras
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {epoch.eras.map((era, i) => (
+                      <span
+                        key={i}
+                        className="px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm"
+                      >
+                        {era}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="pt-4 pb-8">
+                  <Link href="/legacy">
+                    <Button 
+                      size="lg" 
+                      className="w-full h-14 rounded-2xl gap-2 bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 hover:from-purple-500 hover:via-pink-500 hover:to-cyan-500 text-white font-bold text-lg shadow-xl"
+                      data-testid="button-explore-epoch"
+                    >
+                      <Rocket className="w-5 h-5" />
+                      Begin Your Journey
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
+
 export default function Chronicles() {
   usePageAnalytics();
   const [epochScrollPos, setEpochScrollPos] = useState(0);
@@ -508,6 +701,7 @@ export default function Chronicles() {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [nextVideoIndex, setNextVideoIndex] = useState(1);
   const [isVideoTransitioning, setIsVideoTransitioning] = useState(false);
+  const [selectedEpoch, setSelectedEpoch] = useState<typeof EPOCHS[0] | null>(null);
   const currentVideoRef = useRef<HTMLVideoElement>(null);
   const nextVideoRef = useRef<HTMLVideoElement>(null);
   
@@ -846,7 +1040,7 @@ export default function Chronicles() {
             >
               {EPOCHS.map((epoch, i) => (
                 <div key={epoch.id} className="snap-center">
-                  <EpochCard epoch={epoch} index={i} />
+                  <EpochCard epoch={epoch} index={i} onClick={() => setSelectedEpoch(epoch)} />
                 </div>
               ))}
             </div>
@@ -1249,6 +1443,12 @@ export default function Chronicles() {
       </section>
 
       <Footer />
+      
+      <EpochDetailDrawer 
+        epoch={selectedEpoch} 
+        isOpen={!!selectedEpoch} 
+        onClose={() => setSelectedEpoch(null)} 
+      />
       
       <style>{`
         @keyframes shimmer {
