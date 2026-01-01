@@ -543,11 +543,9 @@ function EpochCard({ epoch, index, onClick }: { epoch: typeof EPOCHS[0]; index: 
 }
 
 function EpochDetailDrawer({ epoch, isOpen, onClose }: { epoch: typeof EPOCHS[0] | null; isOpen: boolean; onClose: () => void }) {
-  if (!epoch) return null;
-  
   return (
     <AnimatePresence>
-      {isOpen && (
+      {isOpen && epoch && (
         <>
           <motion.div
             initial={{ opacity: 0 }}
