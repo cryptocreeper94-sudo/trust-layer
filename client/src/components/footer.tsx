@@ -129,6 +129,21 @@ export function Footer() {
             >
               Admin
             </Link>
+            <span className="text-white/20">|</span>
+            <Link 
+              href="/privacy"
+              className="text-white/40 hover:text-cyan-400 transition-colors"
+              data-testid="link-privacy"
+            >
+              Privacy Policy
+            </Link>
+            <Link 
+              href="/terms"
+              className="text-white/40 hover:text-cyan-400 transition-colors"
+              data-testid="link-terms"
+            >
+              Terms of Service
+            </Link>
           </div>
         </div>
       </footer>
