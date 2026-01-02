@@ -54,6 +54,9 @@ The design adheres to a "Premium UI Protocol" emphasizing:
 - **Hub API**: https://orbitstaffing.io
 - **AI**: OpenAI (via Replit AI Integrations)
 
+## TODO - Next Session
+- **Firebase Admin SDK**: Fix FIREBASE_SERVICE_ACCOUNT secret formatting - the JSON needs to be properly formatted. Current workaround: app uses fallback token verification without revocation checking.
+
 ## GitHub Agent Collaboration (Cost Reduction Strategy)
 To reduce Replit costs ($100-400/day), boilerplate generation has been moved to GitHub Copilot ($10/month).
 
