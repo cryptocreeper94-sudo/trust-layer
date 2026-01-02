@@ -167,11 +167,15 @@ export default function Developers() {
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                      <Button variant="outline" size="sm" className="h-8 text-[10px] border-white/10 hover:border-primary/50 justify-start">
-                        <Box className="w-3 h-3 mr-1.5" /> My Projects
+                      <Button variant="outline" size="sm" className="h-8 text-[10px] border-white/10 hover:border-primary/50 justify-start" asChild>
+                        <Link href="/doc-hub">
+                          <Box className="w-3 h-3 mr-1.5" /> Doc Hub
+                        </Link>
                       </Button>
-                      <Button variant="outline" size="sm" className="h-8 text-[10px] border-white/10 hover:border-secondary/50 justify-start">
-                        <Database className="w-3 h-3 mr-1.5" /> Shared Data
+                      <Button variant="outline" size="sm" className="h-8 text-[10px] border-white/10 hover:border-secondary/50 justify-start" asChild>
+                        <Link href="/ecosystem">
+                          <Database className="w-3 h-3 mr-1.5" /> Ecosystem
+                        </Link>
                       </Button>
                     </div>
                   </div>
