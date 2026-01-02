@@ -52,9 +52,6 @@ const EVENT_TYPES = [
   { id: "staking.withdraw", label: "Staking Withdrawal", desc: "When staked tokens are withdrawn" },
 ];
 
-const SAMPLE_WEBHOOKS: WebhookData[] = [
-  { id: "1", url: "https://myapp.com/webhook/darkwave", secret: "whsec_abc123xyz", events: ["transaction.confirmed", "token.transfer"], isActive: true, failureCount: 0, lastTriggeredAt: new Date().toISOString(), createdAt: new Date().toISOString() },
-];
 
 const SAMPLE_LOGS: WebhookLog[] = [
   { id: "1", event: "transaction.confirmed", success: true, responseStatus: 200, createdAt: new Date().toISOString() },
@@ -175,7 +172,7 @@ export default function Webhooks() {
     queryKey: ["/api/webhooks"],
   });
 
-  const webhooks = webhooksData?.webhooks?.length ? webhooksData.webhooks : SAMPLE_WEBHOOKS;
+  const webhooks = webhooksData?.webhooks || [];
 
   const createMutation = useMutation({
     mutationFn: async () => {
@@ -340,19 +337,34 @@ export default function Webhooks() {
           </div>
 
           <div className="space-y-4">
-            {webhooks.map(webhook => (
-              <WebhookCard
-                key={webhook.id}
-                webhook={webhook}
-                onEdit={() => toast({ title: "Edit webhook", description: "Edit functionality coming in next update" })}
-                onDelete={() => {
-                  if (confirm("Are you sure you want to delete this webhook?")) {
-                    deleteMutation.mutate(webhook.id);
-                  }
-                }}
-                onToggle={() => toggleMutation.mutate({ id: webhook.id, isActive: !webhook.isActive })}
-              />
-            ))}
+            {webhooks.length === 0 && !isLoading ? (
+              <GlassCard>
+                <div className="p-8 text-center">
+                  <Webhook className="w-12 h-12 text-muted-foreground/50 mx-auto mb-3" />
+                  <h3 className="text-lg font-semibold mb-2">No webhooks configured</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Create your first webhook to receive real-time blockchain event notifications.
+                  </p>
+                  <Button onClick={() => setCreateOpen(true)} className="bg-yellow-500 hover:bg-yellow-600 text-black">
+                    <Plus className="w-4 h-4 mr-2" /> Create Your First Webhook
+                  </Button>
+                </div>
+              </GlassCard>
+            ) : (
+              webhooks.map(webhook => (
+                <WebhookCard
+                  key={webhook.id}
+                  webhook={webhook}
+                  onEdit={() => toast({ title: "Edit webhook", description: "Edit functionality coming in next update" })}
+                  onDelete={() => {
+                    if (confirm("Are you sure you want to delete this webhook?")) {
+                      deleteMutation.mutate(webhook.id);
+                    }
+                  }}
+                  onToggle={() => toggleMutation.mutate({ id: webhook.id, isActive: !webhook.isActive })}
+                />
+              ))
+            )}
           </div>
 
           <GlassCard className="mt-8" glow>
