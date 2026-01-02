@@ -83,7 +83,7 @@ export function Footer() {
             </div>
             <span className="text-white/20">|</span>
             <span className="font-semibold text-white">DarkWave Studios, LLC</span>
-            <span>© 2025</span>
+            <span>© 2025-2026</span>
             <span className="px-2 py-0.5 rounded bg-white/5 font-mono">v{APP_VERSION}</span>
             <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-white/10">
               <svg viewBox="0 0 24 24" className="w-3 h-3 text-white/50" fill="currentColor">

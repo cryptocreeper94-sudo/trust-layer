@@ -54,6 +54,19 @@ The design adheres to a "Premium UI Protocol" emphasizing:
 - **Hub API**: https://orbitstaffing.io
 - **AI**: OpenAI (via Replit AI Integrations)
 
+## Recent Changes (Changelog)
+
+### v1.2.3 (January 2026)
+- **Firebase Admin SDK Integration**: Added server-side token verification with revocation checking
+- **Pre-publish sweep completed**: LSP errors cleared, API endpoints verified, mobile responsiveness checked
+- **Copyright updated**: 2025-2026
+
+### v1.2.0 (December 2025)
+- **Authentication overhaul**: Migrated from Replit Auth to Firebase Auth only
+- **PIN quick login**: 4-6 digit PIN for returning users with SHA256 hashing
+- **Early Adopter Rewards**: Signup position tracking, tiered crowdfund bonuses
+- **Guardian Shield**: Continuous security monitoring service launched
+
 ## TODO - Next Session
 - **Firebase Admin SDK**: Fix FIREBASE_SERVICE_ACCOUNT secret formatting - the JSON needs to be properly formatted. Current workaround: app uses fallback token verification without revocation checking.
 
@@ -80,7 +93,7 @@ To reduce Replit costs ($100-400/day), boilerplate generation has been moved to 
 - **Backend**: `chat-presence.ts` (WebSocket presence), `chat-bot-framework.ts` (bot framework)
 - **Pages**: `chronochat.tsx` (main), `chronochat-invite.tsx` (invite landing)
 
-**Status:** All scaffolds placed. NOT YET WIRED. Scheduled for integration week of Jan 6, 2025.
+**Status:** All scaffolds placed. NOT YET WIRED. Scheduled for integration week of Jan 6, 2026.
 
 ---
 
