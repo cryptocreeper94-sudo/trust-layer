@@ -11,14 +11,12 @@ const app = express();
 
 // Firebase Auth reverse proxy - must be before other middleware
 // This allows Google Sign-In to work with custom domain by avoiding third-party cookie issues
-const firebaseProxyOptions = {
+app.use(["/__/auth", "/__/firebase"], createProxyMiddleware({
   target: "https://darkwave-auth.firebaseapp.com",
   changeOrigin: true,
   secure: true,
-  pathFilter: ["/__/auth", "/__/firebase"],
-};
-
-app.use("/__", createProxyMiddleware(firebaseProxyOptions));
+  pathRewrite: (_path: string, req: any) => `${req.baseUrl}${req.url}`,
+}));
 const httpServer = createServer(app);
 
 // Security headers via Helmet - stricter in production
