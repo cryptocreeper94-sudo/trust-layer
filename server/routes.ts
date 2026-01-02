@@ -138,6 +138,9 @@ const documentRateLimit = rateLimit("document", 50, 60 * 1000);
 const developerRateLimit = rateLimit("developer", 30, 60 * 1000);
 const hashSubmitRateLimit = rateLimit("hash-submit", 20, 60 * 1000);
 const ecosystemRateLimit = rateLimit("ecosystem", 60, 60 * 1000);
+const stakingRateLimit = rateLimit("staking", 10, 60 * 1000);
+const liquidityRateLimit = rateLimit("liquidity", 10, 60 * 1000);
+const bridgeRateLimit = rateLimit("bridge", 5, 60 * 1000);
 
 interface PresenceUser {
   id: string;
@@ -2472,7 +2475,7 @@ export async function registerRoutes(
   });
 
   // Verify an external chain transaction
-  app.post("/api/bridge/verify-tx", async (req, res) => {
+  app.post("/api/bridge/verify-tx", bridgeRateLimit, async (req, res) => {
     try {
       const { chain, txHash, amount } = req.body;
       
@@ -2492,7 +2495,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/bridge/lock", async (req, res) => {
+  app.post("/api/bridge/lock", bridgeRateLimit, async (req, res) => {
     try {
       const { fromAddress, amount, targetChain, targetAddress } = req.body;
       
@@ -2522,7 +2525,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/bridge/burn", async (req, res) => {
+  app.post("/api/bridge/burn", bridgeRateLimit, async (req, res) => {
     try {
       const { sourceChain, sourceAddress, amount, targetAddress, sourceTxHash } = req.body;
       
@@ -2652,7 +2655,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/staking/stake", isAuthenticated, async (req, res) => {
+  app.post("/api/staking/stake", stakingRateLimit, isAuthenticated, async (req, res) => {
     try {
       const userId = (req.user as any)?.claims?.sub;
       const { poolId, amount } = req.body;
@@ -2682,7 +2685,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/staking/unstake", isAuthenticated, async (req, res) => {
+  app.post("/api/staking/unstake", stakingRateLimit, isAuthenticated, async (req, res) => {
     try {
       const userId = (req.user as any)?.claims?.sub;
       const { stakeId, amount } = req.body;
@@ -2714,7 +2717,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/staking/claim", isAuthenticated, async (req, res) => {
+  app.post("/api/staking/claim", stakingRateLimit, isAuthenticated, async (req, res) => {
     try {
       const userId = (req.user as any)?.claims?.sub;
       const { stakeId } = req.body;
@@ -2838,7 +2841,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/liquid-staking/stake", isAuthenticated, async (req: any, res) => {
+  app.post("/api/liquid-staking/stake", stakingRateLimit, isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Not authenticated" });
@@ -2889,7 +2892,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/liquid-staking/unstake", isAuthenticated, async (req: any, res) => {
+  app.post("/api/liquid-staking/unstake", stakingRateLimit, isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Not authenticated" });
@@ -6994,7 +6997,7 @@ Current context:
     }
   });
 
-  app.post("/api/liquidity/add", isAuthenticated, async (req: any, res) => {
+  app.post("/api/liquidity/add", liquidityRateLimit, isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const { poolId, amountA, amountB } = req.body;
