@@ -91,8 +91,8 @@ export default function NftMarketplace() {
     },
   });
 
-  const displayCollections = collections?.collections?.length ? collections.collections : SAMPLE_COLLECTIONS;
-  const displayListings = listings?.listings?.length ? listings.listings : SAMPLE_NFTS;
+  const displayCollections = collections?.collections || [];
+  const displayListings = listings?.listings || [];
 
   const filteredNfts = displayListings.filter((nft: any) => 
     nft.name.toLowerCase().includes(searchQuery.toLowerCase())

@@ -65,7 +65,7 @@ export default function Transactions() {
     refetchInterval: 30000,
   });
 
-  const transactions = txData?.transactions?.length ? txData.transactions : SAMPLE_TRANSACTIONS;
+  const transactions = txData?.transactions || [];
 
   const filteredTxs = transactions.filter((tx: any) => {
     const matchesSearch = !searchQuery || 

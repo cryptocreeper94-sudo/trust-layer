@@ -120,8 +120,8 @@ export default function GameDeveloper() {
     submitMutation.mutate({ gameName, description: gameDescription, repoUrl });
   };
   
-  const displaySubmissions = mySubmissions?.submissions?.length > 0 
-    ? mySubmissions.submissions 
+  const displaySubmissions = (mySubmissions?.submissions?.length ?? 0) > 0 
+    ? mySubmissions?.submissions ?? []
     : recentSubmissions?.submissions || [];
 
   return (
@@ -409,18 +409,18 @@ export default function GameDeveloper() {
                 </h3>
                 
                 <div className="space-y-2">
-                  <a href="#" className="flex items-center justify-between p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+                  <Link href="/docs" className="flex items-center justify-between p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
                     <span className="text-sm">SDK Documentation</span>
                     <ExternalLink className="w-4 h-4 text-muted-foreground" />
-                  </a>
-                  <a href="#" className="flex items-center justify-between p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
-                    <span className="text-sm">Example Games (GitHub)</span>
+                  </Link>
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-white/5 opacity-50 cursor-not-allowed">
+                    <span className="text-sm">Example Games (Coming Soon)</span>
                     <ExternalLink className="w-4 h-4 text-muted-foreground" />
-                  </a>
-                  <a href="#" className="flex items-center justify-between p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+                  </div>
+                  <Link href="/docs#security" className="flex items-center justify-between p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
                     <span className="text-sm">RNG Best Practices</span>
                     <ExternalLink className="w-4 h-4 text-muted-foreground" />
-                  </a>
+                  </Link>
                 </div>
               </GlassCard>
             </div>

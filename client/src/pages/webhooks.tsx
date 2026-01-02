@@ -63,6 +63,17 @@ function WebhookCard({ webhook, onEdit, onDelete, onToggle }: { webhook: Webhook
   const [showSecret, setShowSecret] = useState(false);
   const [logsOpen, setLogsOpen] = useState(false);
   const { toast } = useToast();
+  
+  const { data: logsData } = useQuery<{ logs: WebhookLog[] }>({
+    queryKey: ["/api/webhooks", webhook.id, "logs"],
+    queryFn: async () => {
+      const res = await fetch(`/api/webhooks/${webhook.id}/logs`);
+      if (!res.ok) return { logs: [] };
+      return res.json();
+    },
+    enabled: logsOpen,
+  });
+  const webhookLogs = logsData?.logs || [];
 
   const copySecret = () => {
     navigator.clipboard.writeText(webhook.secret);
@@ -136,7 +147,9 @@ function WebhookCard({ webhook, onEdit, onDelete, onToggle }: { webhook: Webhook
           <div className="px-4 pb-4 border-t border-white/5 pt-3">
             <h4 className="text-xs font-bold mb-2">Recent Deliveries</h4>
             <div className="space-y-2">
-              {SAMPLE_LOGS.map(log => (
+              {webhookLogs.length === 0 ? (
+                <div className="text-xs text-muted-foreground p-2">No delivery logs yet</div>
+              ) : webhookLogs.map(log => (
                 <div key={log.id} className="flex items-center justify-between p-2 rounded bg-white/5 text-xs">
                   <div className="flex items-center gap-2">
                     {log.success ? (

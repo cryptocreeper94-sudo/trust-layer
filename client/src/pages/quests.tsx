@@ -200,8 +200,15 @@ export default function Quests() {
             </TabsList>
 
             <TabsContent value="quests">
+              {quests.length === 0 ? (
+                <div className="text-center py-12">
+                  <Target className="w-12 h-12 text-white/20 mx-auto mb-3" />
+                  <p className="text-sm text-muted-foreground mb-2">No quests available</p>
+                  <p className="text-xs text-muted-foreground">New quests are released regularly. Check back soon!</p>
+                </div>
+              ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {SAMPLE_QUESTS.map((quest) => (
+                {quests.map((quest) => (
                   <GlassCard key={quest.id} className={quest.completed ? "opacity-60" : ""} data-testid={`card-quest-${quest.id}`}>
                     <div className="p-5">
                       <div className="flex items-start justify-between mb-3">
@@ -252,6 +259,7 @@ export default function Quests() {
                   </GlassCard>
                 ))}
               </div>
+              )}
             </TabsContent>
 
             <TabsContent value="missions">
@@ -266,7 +274,13 @@ export default function Quests() {
                   />
                 </div>
                 
-                {SAMPLE_MISSIONS.map((mission) => (
+                {missions.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Sparkles className="w-12 h-12 text-white/20 mx-auto mb-3" />
+                    <p className="text-sm text-muted-foreground mb-2">No active missions</p>
+                    <p className="text-xs text-muted-foreground">Protocol missions are released periodically. Check back soon!</p>
+                  </div>
+                ) : missions.map((mission) => (
                   <GlassCard key={mission.id} glow data-testid={`card-mission-${mission.id}`}>
                     <div className="p-6">
                       <div className="flex items-start justify-between mb-4">

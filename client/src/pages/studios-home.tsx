@@ -331,15 +331,15 @@ export default function StudiosHome() {
               </div>
 
               <div className="flex items-center justify-center gap-4">
-                <a href="#" className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+                <a href="https://twitter.com/DarkWaveChain" target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
                   <Twitter className="w-5 h-5 text-muted-foreground hover:text-cyan-400" />
                 </a>
-                <a href="#" className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
-                  <Github className="w-5 h-5 text-muted-foreground hover:text-cyan-400" />
-                </a>
-                <a href="#" className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
-                  <Linkedin className="w-5 h-5 text-muted-foreground hover:text-cyan-400" />
-                </a>
+                <span className="p-2 rounded-lg bg-white/5 opacity-50 cursor-not-allowed" title="Coming Soon">
+                  <Github className="w-5 h-5 text-muted-foreground" />
+                </span>
+                <span className="p-2 rounded-lg bg-white/5 opacity-50 cursor-not-allowed" title="Coming Soon">
+                  <Linkedin className="w-5 h-5 text-muted-foreground" />
+                </span>
               </div>
             </GlassCard>
           </div>

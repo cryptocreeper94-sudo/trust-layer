@@ -116,7 +116,7 @@ export default function Launchpad() {
     queryKey: ["/api/launchpad/tokens"],
   });
 
-  const tokens = tokensData?.tokens?.length ? tokensData.tokens : SAMPLE_TOKENS;
+  const tokens = tokensData?.tokens || [];
   const filteredTokens = tokens.filter(t => 
     t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     t.symbol.toLowerCase().includes(searchQuery.toLowerCase())
@@ -358,6 +358,14 @@ export default function Launchpad() {
                   {[1,2,3].map(i => (
                     <div key={i} className="h-48 rounded-xl bg-white/5 animate-pulse" />
                   ))}
+                </div>
+              ) : filteredTokens.length === 0 ? (
+                <div className="text-center py-12">
+                  <Rocket className="w-12 h-12 text-white/20 mx-auto mb-3" />
+                  <p className="text-sm text-muted-foreground mb-4">No tokens launched yet</p>
+                  <Button onClick={() => setCreateOpen(true)} className="bg-pink-500 hover:bg-pink-600">
+                    <Plus className="w-4 h-4 mr-2" /> Be the First to Launch
+                  </Button>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

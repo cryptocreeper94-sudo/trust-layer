@@ -14,7 +14,22 @@ export const BridgeHistory: React.FC<{ items?: BridgeTransaction[] }> = ({ items
             </div>
             <div className="flex flex-col items-end">
               <div className={`text-xs px-2 py-1 rounded ${tx.status === 'completed' ? 'bg-green-600 text-black' : tx.status === 'failed' ? 'bg-red-600' : 'bg-yellow-500 text-black'}`}>{tx.status}</div>
-              {tx.txHash && <a className="text-xs text-cyan-300 mt-1" href="#" onClick={(e) => e.preventDefault()}>Explorer</a>}
+              {tx.txHash && (
+                <a 
+                  className="text-xs text-cyan-300 mt-1 hover:underline" 
+                  href={
+                    tx.toChain.toLowerCase().includes('ethereum') || tx.toChain.toLowerCase().includes('sepolia') 
+                      ? `https://sepolia.etherscan.io/tx/${tx.txHash}` 
+                      : tx.toChain.toLowerCase().includes('solana') || tx.toChain.toLowerCase().includes('devnet')
+                        ? `https://explorer.solana.com/tx/${tx.txHash}?cluster=devnet` 
+                        : tx.toChain.toLowerCase().includes('darkwave') || tx.toChain.toLowerCase().includes('dwsc')
+                          ? `/explorer/tx/${tx.txHash}`
+                          : `/explorer/tx/${tx.txHash}`
+                  }
+                  target={tx.toChain.toLowerCase().includes('darkwave') ? '_self' : '_blank'}
+                  rel="noopener noreferrer"
+                >Explorer</a>
+              )}
             </div>
           </div>
         ))}

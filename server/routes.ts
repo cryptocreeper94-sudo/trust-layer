@@ -7170,6 +7170,16 @@ Current context:
     }
   });
 
+  app.get("/api/webhooks/:id/logs", isAuthenticated, async (req: any, res) => {
+    try {
+      const logs = await storage.getWebhookLogs(req.params.id);
+      res.json({ logs });
+    } catch (error) {
+      console.error("Webhook logs error:", error);
+      res.json({ logs: [] });
+    }
+  });
+
   // =====================================================
   // STUDIO AI CREDITS - For expensive AI coding features
   // Basic AI Assistant is FREE (just requires login)

@@ -78,7 +78,7 @@ export default function NftGallery() {
     enabled: !!walletAddress,
   });
 
-  const displayNfts = nftsData?.nfts?.length ? nftsData.nfts : (walletAddress ? [] : SAMPLE_NFTS);
+  const displayNfts = nftsData?.nfts || [];
   const filteredNfts = displayNfts.filter(nft =>
     nft.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     nft.collectionName.toLowerCase().includes(searchQuery.toLowerCase())

@@ -296,24 +296,21 @@ export default function ChronoCommunity() {
           </motion.div>
           
           <div className="grid sm:grid-cols-3 gap-6">
-            <a 
-              href="https://discord.gg" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="group"
+            <div 
+              className="group opacity-70"
               data-testid="link-discord"
             >
               <HoloCard className="p-6 text-center h-full" glow="purple">
-                <div className="w-16 h-16 rounded-full bg-[#5865F2]/20 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-16 h-16 rounded-full bg-[#5865F2]/20 flex items-center justify-center mx-auto mb-4">
                   <MessageCircle className="w-8 h-8 text-[#5865F2]" />
                 </div>
                 <h3 className="text-lg font-bold text-white mb-1">Discord</h3>
-                <p className="text-white/60 text-sm">Join the community</p>
+                <p className="text-white/60 text-sm">Coming Soon</p>
               </HoloCard>
-            </a>
+            </div>
             
             <a 
-              href="https://twitter.com" 
+              href="https://twitter.com/DarkWaveChain" 
               target="_blank" 
               rel="noopener noreferrer"
               className="group"
@@ -328,11 +325,8 @@ export default function ChronoCommunity() {
               </HoloCard>
             </a>
             
-            <a 
-              href="https://github.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="group"
+            <div 
+              className="group cursor-pointer"
               data-testid="link-github"
             >
               <HoloCard className="p-6 text-center h-full" glow="none">
@@ -340,9 +334,9 @@ export default function ChronoCommunity() {
                   <Github className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-lg font-bold text-white mb-1">GitHub</h3>
-                <p className="text-white/60 text-sm">Contribute code</p>
+                <p className="text-white/60 text-sm">Coming Soon</p>
               </HoloCard>
-            </a>
+            </div>
           </div>
         </div>
       </section>
