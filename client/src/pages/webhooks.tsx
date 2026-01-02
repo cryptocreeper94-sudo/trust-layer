@@ -196,6 +196,34 @@ export default function Webhooks() {
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await apiRequest("DELETE", `/api/webhooks/${id}`);
+      return res.json();
+    },
+    onSuccess: () => {
+      toast({ title: "Webhook Deleted", description: "Webhook has been removed" });
+      queryClient.invalidateQueries({ queryKey: ["/api/webhooks"] });
+    },
+    onError: (error: any) => {
+      toast({ title: "Delete Failed", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const toggleMutation = useMutation({
+    mutationFn: async ({ id, isActive }: { id: string; isActive: boolean }) => {
+      const res = await apiRequest("PATCH", `/api/webhooks/${id}`, { isActive });
+      return res.json();
+    },
+    onSuccess: (_, variables) => {
+      toast({ title: variables.isActive ? "Webhook Activated" : "Webhook Paused" });
+      queryClient.invalidateQueries({ queryKey: ["/api/webhooks"] });
+    },
+    onError: (error: any) => {
+      toast({ title: "Toggle Failed", description: error.message, variant: "destructive" });
+    },
+  });
+
   const toggleEvent = (eventId: string) => {
     setFormData(prev => ({
       ...prev,
@@ -316,9 +344,13 @@ export default function Webhooks() {
               <WebhookCard
                 key={webhook.id}
                 webhook={webhook}
-                onEdit={() => toast({ title: "Edit coming soon" })}
-                onDelete={() => toast({ title: "Delete coming soon" })}
-                onToggle={() => toast({ title: "Toggle coming soon" })}
+                onEdit={() => toast({ title: "Edit webhook", description: "Edit functionality coming in next update" })}
+                onDelete={() => {
+                  if (confirm("Are you sure you want to delete this webhook?")) {
+                    deleteMutation.mutate(webhook.id);
+                  }
+                }}
+                onToggle={() => toggleMutation.mutate({ id: webhook.id, isActive: !webhook.isActive })}
               />
             ))}
           </div>

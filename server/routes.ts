@@ -7052,6 +7052,22 @@ Current context:
     }
   });
   
+  app.patch("/api/webhooks/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const { url, events, isActive } = req.body;
+      const updateData: any = {};
+      if (url !== undefined) updateData.url = url;
+      if (events !== undefined) updateData.events = JSON.stringify(events);
+      if (isActive !== undefined) updateData.isActive = isActive;
+      
+      const webhook = await storage.updateWebhook(req.params.id, updateData);
+      res.json({ success: true, webhook });
+    } catch (error: any) {
+      console.error("Update webhook error:", error);
+      res.status(500).json({ error: error.message || "Failed to update webhook" });
+    }
+  });
+
   app.delete("/api/webhooks/:id", isAuthenticated, async (req: any, res) => {
     try {
       await storage.deleteWebhook(req.params.id);
