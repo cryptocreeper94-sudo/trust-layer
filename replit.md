@@ -56,7 +56,8 @@ The design adheres to a "Premium UI Protocol" emphasizing:
 
 ## Recent Changes (Changelog)
 
-### v1.2.3 (January 2026)
+### v1.2.3 (January 2, 2026)
+- **ChronoChat wired**: Real-time typing indicators, connection status, WebSocket presence
 - **Firebase Admin SDK Integration**: Added server-side token verification with revocation checking
 - **Pre-publish sweep completed**: LSP errors cleared, API endpoints verified, mobile responsiveness checked
 - **Copyright updated**: 2025-2026
@@ -93,7 +94,7 @@ To reduce Replit costs ($100-400/day), boilerplate generation has been moved to 
 - **Backend**: `chat-presence.ts` (WebSocket presence), `chat-bot-framework.ts` (bot framework)
 - **Pages**: `chronochat.tsx` (main), `chronochat-invite.tsx` (invite landing)
 
-**Status:** All scaffolds placed. NOT YET WIRED. Scheduled for integration week of Jan 6, 2026.
+**Status:** WIRED AND FUNCTIONAL (Jan 2, 2026). Real-time typing indicators and connection status implemented.
 
 ---
 
