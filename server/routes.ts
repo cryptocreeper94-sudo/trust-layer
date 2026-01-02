@@ -9069,6 +9069,69 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // === OWNER KYC MANAGEMENT ROUTES ===
+  app.get("/api/owner/kyc", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const allKyc = await db.select()
+        .from(kycVerifications)
+        .orderBy(desc(kycVerifications.createdAt));
+      
+      res.json(allKyc);
+    } catch (error) {
+      console.error("Get KYC list error:", error);
+      res.status(500).json({ error: "Failed to get KYC list" });
+    }
+  });
+
+  app.post("/api/owner/kyc/:id/approve", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      const [updated] = await db.update(kycVerifications)
+        .set({ 
+          status: "approved",
+          verifiedAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .where(eq(kycVerifications.id, id))
+        .returning();
+      
+      if (!updated) {
+        return res.status(404).json({ error: "KYC record not found" });
+      }
+      
+      res.json({ success: true, kyc: updated });
+    } catch (error) {
+      console.error("Approve KYC error:", error);
+      res.status(500).json({ error: "Failed to approve KYC" });
+    }
+  });
+
+  app.post("/api/owner/kyc/:id/reject", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { reason } = req.body;
+      
+      const [updated] = await db.update(kycVerifications)
+        .set({ 
+          status: "rejected",
+          rejectionReason: reason || "Verification failed",
+          updatedAt: new Date(),
+        })
+        .where(eq(kycVerifications.id, id))
+        .returning();
+      
+      if (!updated) {
+        return res.status(404).json({ error: "KYC record not found" });
+      }
+      
+      res.json({ success: true, kyc: updated });
+    } catch (error) {
+      console.error("Reject KYC error:", error);
+      res.status(500).json({ error: "Failed to reject KYC" });
+    }
+  });
+
   app.get("/api/owner/airdrop/summary", ownerAuthMiddleware, async (req, res) => {
     try {
       const summary = await payoutService.getAirdropSummary();

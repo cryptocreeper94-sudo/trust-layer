@@ -144,6 +144,7 @@ import OwnerReferrals from "@/pages/owner-admin/referrals";
 import OwnerUsers from "@/pages/owner-admin/users";
 import OwnerDomains from "@/pages/owner-admin/domains";
 import OwnerFaucet from "@/pages/owner-admin/faucet";
+import OwnerKyc from "@/pages/owner-admin/kyc";
 import GatewayError from "@/pages/gateway-error";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
 
@@ -315,6 +316,7 @@ function DWSCRouter() {
         <Route path="/owner-admin/users" component={OwnerUsers} />
         <Route path="/owner-admin/domains" component={OwnerDomains} />
         <Route path="/owner-admin/faucet" component={OwnerFaucet} />
+        <Route path="/owner-admin/kyc" component={OwnerKyc} />
         <Route path="/terms" component={Terms} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/error" component={ErrorPage} />

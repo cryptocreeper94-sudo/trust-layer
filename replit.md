@@ -122,6 +122,26 @@ To reduce Replit costs ($100-400/day), boilerplate generation has been moved to 
 
 ---
 
+## Compliance Roadmap
+
+### KYC Verification System
+**Current Status:** Manual admin approval (development placeholder)
+**Location:** `/owner-admin/kyc` for admin review, `/api/kyc/*` for user endpoints
+
+**Production Roadmap (Q2 2026):**
+1. Integrate third-party KYC provider (Sumsub, Jumio, or Onfido)
+2. Add document verification (passport, ID, proof of address)
+3. Implement biometric liveness detection
+4. Add sanctions/PEP screening (OFAC, EU, UK lists)
+5. Set up wallet risk scoring with blockchain analytics
+
+**Legal Requirements:**
+- Document + biometric verification required for token launches
+- Sanctions screening mandatory
+- Travel Rule compliance for transfers >$1,000
+
+---
+
 ## Backend IDE / Studio Executor (Self-Hosted)
 The `server/studio-executor.ts` provides Docker container orchestration for a code execution backend. **Not runnable on Replit** (no Docker-in-Docker). Designed for self-hosted deployment.
 
