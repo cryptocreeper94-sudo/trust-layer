@@ -18,7 +18,7 @@ import {
 
 const firebaseConfig = {
   apiKey: "AIzaSyByHm_Zwo9NGZ3DyHtZ5_wCtHlLXcat23Q",
-  authDomain: "darkwave-auth.firebaseapp.com",
+  authDomain: window.location.hostname === "localhost" ? "darkwave-auth.firebaseapp.com" : "dwsc.io",
   projectId: "darkwave-auth",
   storageBucket: "darkwave-auth.firebasestorage.app",
   messagingSenderId: "413074069912",
