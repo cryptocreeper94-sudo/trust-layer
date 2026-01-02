@@ -358,7 +358,7 @@ export default function Home() {
           <Link href="/" className="flex items-center flex-shrink-0">
             <span className="font-display font-bold text-xl tracking-tight">DarkWave</span>
           </Link>
-          <div className="hidden lg:flex items-center gap-4 text-xs font-medium text-muted-foreground mr-4">
+          <div className="hidden lg:flex items-center gap-4 text-xs font-medium text-muted-foreground mr-4 ml-6">
             <Link href="/rewards" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
               Rewards
               <Badge variant="outline" className="text-[9px] border-purple-500/50 text-purple-400 px-1 py-0">Hot</Badge>
