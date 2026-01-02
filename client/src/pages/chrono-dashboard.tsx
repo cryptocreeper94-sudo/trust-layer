@@ -9,11 +9,13 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ChronoLayout, HoloCard, chronoStyles } from "@/components/chrono-ui";
 import { usePageAnalytics } from "@/hooks/use-analytics";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/hooks/use-auth";
 
 import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
 import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
 
-const MOCK_STATS = {
+const DEFAULT_STATS = {
   era: "Age of Crowns",
   eraYear: "1247 CE",
   daysLived: 127,
@@ -75,6 +77,14 @@ const RECENT_ACTIVITY = [
 
 export default function ChronoDashboard() {
   usePageAnalytics();
+  const { user } = useAuth();
+  
+  const { data: userStats } = useQuery<typeof DEFAULT_STATS>({
+    queryKey: ['/api/chronicles/stats'],
+    enabled: !!user,
+  });
+  
+  const MOCK_STATS = userStats || DEFAULT_STATS;
   
   return (
     <ChronoLayout currentPage="/dashboard">

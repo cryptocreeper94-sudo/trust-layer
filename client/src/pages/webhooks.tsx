@@ -166,7 +166,10 @@ export default function Webhooks() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [createOpen, setCreateOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editingWebhook, setEditingWebhook] = useState<WebhookData | null>(null);
   const [formData, setFormData] = useState({ url: "", events: [] as string[] });
+  const [editFormData, setEditFormData] = useState({ url: "", events: [] as string[] });
 
   const { data: webhooksData, isLoading } = useQuery<{ webhooks: WebhookData[] }>({
     queryKey: ["/api/webhooks"],
@@ -220,6 +223,37 @@ export default function Webhooks() {
       toast({ title: "Toggle Failed", description: error.message, variant: "destructive" });
     },
   });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, url, events }: { id: string; url: string; events: string[] }) => {
+      const res = await apiRequest("PATCH", `/api/webhooks/${id}`, { url, events });
+      return res.json();
+    },
+    onSuccess: () => {
+      toast({ title: "Webhook Updated!", description: "Changes have been saved" });
+      queryClient.invalidateQueries({ queryKey: ["/api/webhooks"] });
+      setEditOpen(false);
+      setEditingWebhook(null);
+    },
+    onError: (error: any) => {
+      toast({ title: "Update Failed", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const openEditModal = (webhook: WebhookData) => {
+    setEditingWebhook(webhook);
+    setEditFormData({ url: webhook.url, events: [...webhook.events] });
+    setEditOpen(true);
+  };
+
+  const toggleEditEvent = (eventId: string) => {
+    setEditFormData(prev => ({
+      ...prev,
+      events: prev.events.includes(eventId)
+        ? prev.events.filter(e => e !== eventId)
+        : [...prev.events, eventId]
+    }));
+  };
 
   const toggleEvent = (eventId: string) => {
     setFormData(prev => ({
@@ -355,7 +389,7 @@ export default function Webhooks() {
                 <WebhookCard
                   key={webhook.id}
                   webhook={webhook}
-                  onEdit={() => toast({ title: "Edit webhook", description: "Edit functionality coming in next update" })}
+                  onEdit={() => openEditModal(webhook)}
                   onDelete={() => {
                     if (confirm("Are you sure you want to delete this webhook?")) {
                       deleteMutation.mutate(webhook.id);
@@ -393,6 +427,60 @@ export default function Webhooks() {
           </GlassCard>
         </div>
       </main>
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto bg-background border-white/10">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Edit2 className="w-5 h-5 text-yellow-400" /> Edit Webhook
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div>
+              <Label className="text-xs">Endpoint URL</Label>
+              <Input 
+                placeholder="https://your-app.com/webhook" 
+                value={editFormData.url} 
+                onChange={(e) => setEditFormData({...editFormData, url: e.target.value})} 
+                className="bg-white/5 border-white/10 font-mono text-sm" 
+                data-testid="input-edit-webhook-url" 
+              />
+            </div>
+            
+            <div>
+              <Label className="text-xs mb-2 block">Events to Subscribe</Label>
+              <div className="space-y-2 max-h-[250px] overflow-y-auto pr-2">
+                {EVENT_TYPES.map(event => (
+                  <label key={event.id} className="flex items-start gap-3 p-2 rounded-lg hover:bg-white/5 cursor-pointer">
+                    <Checkbox 
+                      checked={editFormData.events.includes(event.id)} 
+                      onCheckedChange={() => toggleEditEvent(event.id)} 
+                      className="mt-0.5" 
+                    />
+                    <div>
+                      <p className="text-sm font-medium">{event.label}</p>
+                      <p className="text-[10px] text-muted-foreground">{event.desc}</p>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+            
+            <Button 
+              className="w-full bg-yellow-500 hover:bg-yellow-600 text-black" 
+              onClick={() => editingWebhook && updateMutation.mutate({ 
+                id: editingWebhook.id, 
+                url: editFormData.url, 
+                events: editFormData.events 
+              })} 
+              disabled={updateMutation.isPending || !editFormData.url || editFormData.events.length === 0}
+              data-testid="button-save-webhook"
+            >
+              {updateMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <CheckCircle className="w-4 h-4 mr-2" />}
+              Save Changes
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
       <Footer />
     </div>
   );

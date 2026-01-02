@@ -39,11 +39,27 @@ export default function Quests() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("quests");
 
-  const userXp = 2450;
-  const currentLevel = 12;
-  const currentLevelXp = 450;
+  const { data: questsData } = useQuery<{ quests: typeof SAMPLE_QUESTS }>({
+    queryKey: ['/api/quests'],
+  });
+
+  const { data: missionsData } = useQuery<{ missions: typeof SAMPLE_MISSIONS }>({
+    queryKey: ['/api/quests/missions'],
+  });
+
+  const { data: userStats } = useQuery<{ xp: number; level: number; streak: number }>({
+    queryKey: ['/api/user/quest-stats'],
+    enabled: !!user,
+  });
+
+  const quests = questsData?.quests || SAMPLE_QUESTS;
+  const missions = missionsData?.missions || SAMPLE_MISSIONS;
+
+  const userXp = userStats?.xp || 2450;
+  const currentLevel = userStats?.level || 12;
+  const currentLevelXp = userXp % 500;
   const nextLevelXp = 500;
-  const streakDays = 4;
+  const streakDays = userStats?.streak || 4;
   const currentTier = TIERS.find((t, i) => userXp >= t.minXp && (TIERS[i + 1] ? userXp < TIERS[i + 1].minXp : true)) || TIERS[0];
 
   const getDifficultyColor = (difficulty: string) => {

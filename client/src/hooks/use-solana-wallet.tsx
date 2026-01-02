@@ -40,10 +40,39 @@ export function useSolanaWallet() {
   }, [queryClient, wallet?.publicKey]);
 
   const fetchSolBalances = useCallback(async (publicKey: string): Promise<TokenBalance[]> => {
-    return [
-      { tokenAddress: null, symbol: 'SOL', decimals: 9, amountRaw: '0', amount: '0' }
-    ];
-  }, []);
+    try {
+      const cluster = wallet?.cluster || 'devnet';
+      const endpoint = cluster === 'mainnet-beta' 
+        ? 'https://api.mainnet-beta.solana.com'
+        : 'https://api.devnet.solana.com';
+      
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'getBalance',
+          params: [publicKey],
+        }),
+      });
+      
+      const data = await response.json();
+      const lamports = data.result?.value || 0;
+      const solBalance = lamports / (10 ** 9);
+      
+      return [{
+        tokenAddress: null,
+        symbol: 'SOL',
+        decimals: 9,
+        amountRaw: lamports.toString(),
+        amount: solBalance.toFixed(6)
+      }];
+    } catch (err) {
+      console.error('Failed to fetch SOL balance:', err);
+      return [{ tokenAddress: null, symbol: 'SOL', decimals: 9, amountRaw: '0', amount: '0' }];
+    }
+  }, [wallet?.cluster]);
 
   const { data: balances, isLoading: balancesLoading } = useQuery({
     queryKey: wallet ? ['sol-balances', wallet.publicKey] : ['sol-balances', 'none'],
@@ -52,9 +81,37 @@ export function useSolanaWallet() {
     staleTime: 30_000
   });
 
-  const signTransaction = useCallback(async (tx: Partial<SolanaTransaction>) => {
-    if (!wallet) throw new Error('not connected');
-    return { ...tx, signature: 'TODO_SIGNATURE' } as SolanaTransaction;
+  const signTransaction = useCallback(async (tx: Partial<SolanaTransaction> & { rawTransaction?: any }) => {
+    if (!wallet) throw new Error('Wallet not connected');
+    const provider = (window as any).solana;
+    if (!provider || !provider.isPhantom) throw new Error('Phantom wallet not found');
+    
+    try {
+      if (tx.rawTransaction) {
+        const signedTx = await provider.signTransaction(tx.rawTransaction);
+        return { ...tx, signature: signedTx.signature?.toString() || 'signed', status: 'confirmed' as const } as SolanaTransaction;
+      }
+      return { ...tx, signature: 'pending', status: 'pending' as const } as SolanaTransaction;
+    } catch (err: any) {
+      console.error('Solana transaction signing failed:', err);
+      throw new Error(err.message || 'Failed to sign transaction');
+    }
+  }, [wallet]);
+
+  const signMessage = useCallback(async (message: string): Promise<string> => {
+    if (!wallet) throw new Error('Wallet not connected');
+    const provider = (window as any).solana;
+    if (!provider || !provider.isPhantom) throw new Error('Phantom wallet not found');
+    
+    try {
+      const encodedMessage = new TextEncoder().encode(message);
+      const signedMessage = await provider.signMessage(encodedMessage, 'utf8');
+      const bytes = new Uint8Array(signedMessage.signature);
+      const base64 = btoa(String.fromCharCode(...bytes));
+      return base64;
+    } catch (err: any) {
+      throw new Error(err.message || 'Failed to sign message');
+    }
   }, [wallet]);
 
   useEffect(() => {
@@ -68,6 +125,7 @@ export function useSolanaWallet() {
     balances,
     balancesLoading,
     signTransaction,
+    signMessage,
     queryClient
   };
 }

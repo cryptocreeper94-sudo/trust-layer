@@ -41,10 +41,16 @@ const MOCK_USAGE: UsageData = {
 export default function ApiUsage() {
   const [timeRange, setTimeRange] = useState<"today" | "week" | "month">("today");
 
-  const dailyPercent = (MOCK_USAGE.requestsToday / MOCK_USAGE.dailyLimit) * 100;
-  const monthlyPercent = (MOCK_USAGE.requestsThisMonth / MOCK_USAGE.monthlyLimit) * 100;
+  const { data: usageData } = useQuery<UsageData>({
+    queryKey: ['/api/developer/usage'],
+  });
 
-  const maxEndpointCount = Math.max(...MOCK_USAGE.endpoints.map(e => e.count));
+  const usage = usageData || MOCK_USAGE;
+
+  const dailyPercent = (usage.requestsToday / usage.dailyLimit) * 100;
+  const monthlyPercent = (usage.requestsThisMonth / usage.monthlyLimit) * 100;
+
+  const maxEndpointCount = Math.max(...usage.endpoints.map(e => e.count));
 
   return (
     <div className="min-h-screen flex flex-col bg-background">

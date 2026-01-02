@@ -712,7 +712,25 @@ export default function DomainManager() {
             <Button variant="outline" onClick={() => setShowRenewDialog(false)}>
               Cancel
             </Button>
-            <Button onClick={() => toast.info("Renewal feature coming soon!")}>
+            <Button onClick={async () => {
+              try {
+                const res = await fetch(`/api/domains/${domain.id}/renew`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ years: renewYears }),
+                });
+                if (res.ok) {
+                  toast.success(`Domain renewed for ${renewYears} year${renewYears > 1 ? 's' : ''}!`);
+                  setShowRenewDialog(false);
+                  queryClient.invalidateQueries({ queryKey: ['/api/domains'] });
+                } else {
+                  const err = await res.json();
+                  toast.error(err.error || 'Renewal failed');
+                }
+              } catch (err: any) {
+                toast.error(err.message || 'Renewal failed');
+              }
+            }}>
               Renew Domain
             </Button>
           </DialogFooter>

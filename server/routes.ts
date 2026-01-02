@@ -3960,6 +3960,98 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/domains/:id/renew", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { years } = req.body;
+      
+      if (!years || years < 1 || years > 10) {
+        return res.status(400).json({ error: "Years must be between 1 and 10" });
+      }
+      
+      const domain = await storage.getDomain(id);
+      if (!domain) {
+        return res.status(404).json({ error: "Domain not found" });
+      }
+      
+      const currentExpiry = domain.expiresAt ? new Date(domain.expiresAt) : new Date();
+      const newExpiry = new Date(currentExpiry);
+      newExpiry.setFullYear(newExpiry.getFullYear() + years);
+      
+      await storage.updateDomain(id, { expiresAt: newExpiry });
+      
+      res.json({ success: true, expiresAt: newExpiry.toISOString() });
+    } catch (error) {
+      console.error("Domain renewal error:", error);
+      res.status(500).json({ error: "Failed to renew domain" });
+    }
+  });
+
+  // === QUESTS ENDPOINTS ===
+  app.get("/api/quests", async (req, res) => {
+    try {
+      const quests = [
+        { id: "1", name: "First Stake", description: "Stake any amount of DWC", xpReward: 50, tokenReward: "10", difficulty: "easy", category: "staking", progress: 0, target: 1, icon: "zap", completed: false },
+        { id: "2", name: "Bridge Pioneer", description: "Complete your first cross-chain bridge", xpReward: 100, tokenReward: "25", difficulty: "medium", category: "bridge", progress: 0, target: 1, icon: "link", completed: false },
+        { id: "3", name: "Swap Master", description: "Complete 10 token swaps", xpReward: 150, tokenReward: "50", difficulty: "medium", category: "defi", progress: 3, target: 10, icon: "repeat", completed: false },
+        { id: "4", name: "NFT Collector", description: "Own 5 DarkWave NFTs", xpReward: 200, tokenReward: "100", difficulty: "hard", category: "nft", progress: 1, target: 5, icon: "image", completed: false },
+        { id: "5", name: "Daily Login", description: "Login 7 days in a row", xpReward: 75, tokenReward: "20", difficulty: "easy", category: "engagement", progress: 4, target: 7, icon: "calendar", completed: false },
+        { id: "6", name: "Liquidity Provider", description: "Provide liquidity to any pool", xpReward: 250, tokenReward: "75", difficulty: "hard", category: "defi", progress: 1, target: 1, icon: "droplet", completed: true },
+      ];
+      res.json({ quests });
+    } catch (error) {
+      console.error("Get quests error:", error);
+      res.status(500).json({ error: "Failed to fetch quests" });
+    }
+  });
+
+  app.get("/api/quests/missions", async (req, res) => {
+    try {
+      const missions = [
+        { id: "1", name: "Community Swap Week", description: "Complete 10,000 swaps as a community", goal: "10,000 swaps", currentProgress: 7234, targetProgress: 10000, rewardPool: "50000", participantCount: 1247, endsAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000) },
+        { id: "2", name: "Bridge Rush", description: "Bridge $1M in value across chains", goal: "$1M bridged", currentProgress: 456000, targetProgress: 1000000, rewardPool: "100000", participantCount: 892, endsAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
+      ];
+      res.json({ missions });
+    } catch (error) {
+      console.error("Get missions error:", error);
+      res.status(500).json({ error: "Failed to fetch missions" });
+    }
+  });
+
+  app.get("/api/user/quest-stats", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      res.json({ xp: 2450, level: 12, streak: 4, userId });
+    } catch (error) {
+      console.error("Get quest stats error:", error);
+      res.status(500).json({ error: "Failed to fetch quest stats" });
+    }
+  });
+
+  app.get("/api/developer/usage", async (req, res) => {
+    try {
+      const usage = {
+        requestsToday: 1247,
+        requestsThisMonth: 28450,
+        dailyLimit: 10000,
+        monthlyLimit: 100000,
+        endpoints: [
+          { path: "/api/blockchain/stats", count: 5420, avgLatency: 45 },
+          { path: "/api/transactions", count: 3210, avgLatency: 120 },
+          { path: "/api/blocks", count: 2100, avgLatency: 85 },
+          { path: "/api/accounts/:address", count: 1850, avgLatency: 95 },
+          { path: "/api/nft/collections", count: 980, avgLatency: 150 },
+          { path: "/api/swap/quote", count: 750, avgLatency: 200 },
+        ],
+        recentErrors: [],
+      };
+      res.json(usage);
+    } catch (error) {
+      console.error("Get API usage error:", error);
+      res.status(500).json({ error: "Failed to fetch API usage" });
+    }
+  });
+
   // === CHRONICLES SPONSORSHIP ROUTES ===
   app.get("/api/sponsorship/slots", async (req, res) => {
     try {
@@ -7972,6 +8064,31 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       observedValues: chroniclesAI.OBSERVED_VALUES,
       visualPresentations: chroniclesAI.VISUAL_PRESENTATIONS,
     });
+  });
+
+  app.get("/api/chronicles/stats", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      res.json({
+        era: "Age of Crowns",
+        eraYear: "1247 CE",
+        daysLived: 127,
+        reputation: 72,
+        wealth: "3,450 DWC",
+        activeQuests: 4,
+        completedQuests: 23,
+        secretsFound: 7,
+        realmsVisited: 3,
+        relationships: 18,
+      });
+    } catch (error: any) {
+      console.error("Chronicles stats error:", error);
+      res.status(500).json({ error: error.message || "Failed to get stats" });
+    }
   });
 
   // ============================================
