@@ -130,8 +130,8 @@ class WalletBotService {
     }
   }
 
-  async sendBotMessage(channelId: string, content: string): Promise<void> {
-    await communityHubService.sendMessage({
+  async sendBotMessage(channelId: string, content: string): Promise<any> {
+    const message = await communityHubService.sendMessage({
       channelId,
       userId: BOT_USER_ID,
       username: BOT_NAME,
@@ -139,6 +139,7 @@ class WalletBotService {
       isBot: true,
       replyToId: null,
     });
+    return message;
   }
 
   private async handleSignals(args: string[], userId: string): Promise<string> {
