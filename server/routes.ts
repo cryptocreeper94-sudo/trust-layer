@@ -5,12 +5,53 @@ import QRCode from "qrcode";
 import { WebSocketServer, WebSocket } from "ws";
 import { setupCommunityWebSocket } from "./community-ws";
 import { z } from "zod";
+import { OAuth2Client } from "google-auth-library";
 import { storage } from "./storage";
 import { db } from "./db";
+
+const FIREBASE_PROJECT_ID = "darkwave-auth";
+
+interface FirebaseAuthRequest extends Request {
+  firebaseUser?: { uid: string; email?: string };
+}
+
+async function verifyFirebaseToken(req: FirebaseAuthRequest, res: Response, next: NextFunction) {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader?.startsWith('Bearer ')) {
+      return res.status(401).json({ error: "Authorization required" });
+    }
+    
+    const idToken = authHeader.substring(7);
+    
+    const oauth2Client = new OAuth2Client();
+    const ticket = await oauth2Client.verifyIdToken({
+      idToken,
+      audience: FIREBASE_PROJECT_ID,
+    });
+    
+    const payload = ticket.getPayload();
+    if (!payload) {
+      return res.status(401).json({ error: "Invalid token" });
+    }
+    
+    const expectedIssuer = `https://securetoken.google.com/${FIREBASE_PROJECT_ID}`;
+    if (payload.iss !== expectedIssuer) {
+      console.error("Firebase token issuer mismatch:", payload.iss);
+      return res.status(401).json({ error: "Invalid token issuer" });
+    }
+    
+    req.firebaseUser = { uid: payload.sub!, email: payload.email };
+    next();
+  } catch (error) {
+    console.error("Firebase token verification failed:", error);
+    return res.status(401).json({ error: "Invalid or expired token" });
+  }
+}
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, waitlist, betaTesters, whitelistedUsers, blockchainDomains } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -748,25 +789,77 @@ export async function registerRoutes(
   // Firebase auth sync - syncs Firebase users to our database
   app.post("/api/auth/firebase-sync", authRateLimit, async (req, res) => {
     try {
-      const { uid, email, displayName, photoURL } = req.body;
+      const { uid, email, displayName, photoURL, username } = req.body;
       
       if (!uid) {
         return res.status(400).json({ error: "Missing user ID" });
+      }
+
+      // Check if this is a new user (for signup position tracking)
+      const existingUser = await storage.getFirebaseUser(uid);
+      let signupPosition = existingUser?.signupPosition || null;
+
+      // If new user, assign signup position for early adopter tracking
+      if (!existingUser) {
+        signupPosition = await storage.getNextSignupPosition();
       }
 
       // Upsert user in our database
       await storage.upsertFirebaseUser({
         id: uid,
         email: email || null,
+        username: username || existingUser?.username || null,
+        displayName: displayName || null,
         firstName: displayName?.split(' ')[0] || null,
         lastName: displayName?.split(' ').slice(1).join(' ') || null,
         profileImageUrl: photoURL || null,
+        signupPosition: signupPosition,
       });
 
-      res.json({ success: true });
+      res.json({ success: true, signupPosition });
     } catch (error) {
       console.error("Firebase sync error:", error);
       res.status(500).json({ error: "Failed to sync user" });
+    }
+  });
+
+  // Early adopter stats for logged-in user
+  app.get("/api/user/early-adopter-stats", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
+    try {
+      const userId = req.firebaseUser?.uid;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      const user = await storage.getFirebaseUser(userId);
+      if (!user) {
+        return res.json({
+          signupPosition: null,
+          crowdfundTotalCents: 0,
+          tokenPurchasePosition: null,
+        });
+      }
+      res.json({
+        signupPosition: user.signupPosition ? Number(user.signupPosition) : null,
+        crowdfundTotalCents: 0,
+        tokenPurchasePosition: null,
+      });
+    } catch (error) {
+      console.error("Early adopter stats error:", error);
+      res.status(500).json({ error: "Failed to get stats" });
+    }
+  });
+
+  // Public early adopter counters (spots remaining, etc)
+  app.get("/api/early-adopter/counters", async (req, res) => {
+    try {
+      const [counter] = await db.select().from(signupCounter).where(eq(signupCounter.id, 'global'));
+      res.json({
+        signupPosition: counter?.currentPosition || "0",
+        tokenPurchasePosition: counter?.tokenPurchasePosition || "0",
+      });
+    } catch (error) {
+      console.error("Counters error:", error);
+      res.json({ signupPosition: "0", tokenPurchasePosition: "0" });
     }
   });
 

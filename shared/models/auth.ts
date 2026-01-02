@@ -18,12 +18,36 @@ export const sessions = pgTable(
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: varchar("email").unique(),
+  username: varchar("username").unique(),
+  displayName: varchar("display_name"),
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
+  signupPosition: varchar("signup_position"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
+
+// Early Adopter Tracking - cumulative purchases and donations
+export const earlyAdopterStats = pgTable("early_adopter_stats", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id).unique(),
+  tokenPurchasePosition: varchar("token_purchase_position"),
+  totalTokenPurchaseCents: varchar("total_token_purchase_cents").notNull().default("0"),
+  crowdfundTotalCents: varchar("crowdfund_total_cents").notNull().default("0"),
+  crowdfundTier: varchar("crowdfund_tier").default("none"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Signup counter for tracking early adopter positions
+export const signupCounter = pgTable("signup_counter", {
+  id: varchar("id").primaryKey().default("global"),
+  currentPosition: varchar("current_position").notNull().default("0"),
+  tokenPurchasePosition: varchar("token_purchase_position").notNull().default("0"),
+});
+
+export type EarlyAdopterStats = typeof earlyAdopterStats.$inferSelect;
 
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;

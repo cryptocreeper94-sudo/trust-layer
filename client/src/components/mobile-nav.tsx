@@ -97,7 +97,9 @@ const navCategories = [
   {
     label: "Rewards",
     icon: Gift,
+    defaultOpen: true,
     items: [
+      { href: "/rewards", label: "Early Adopter Rewards", icon: Gift, badge: "Hot" },
       { href: "/founder-program", label: "Founders", icon: Sparkles, badge: "VIP" },
       { href: "/validators", label: "Become a Validator", icon: Shield, badge: "Earn" },
       { href: "/quests", label: "Quests", icon: Rocket },

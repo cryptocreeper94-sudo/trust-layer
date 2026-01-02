@@ -26,7 +26,7 @@ The design adheres to a "Premium UI Protocol" emphasizing:
 - **Blockchain**: Proof-of-Authority (PoA) with Founders Validator, PostgreSQL, SHA-256/Merkle trees/HMAC-SHA256, 400ms block time, 200K+ TPS. Native token DWC (100M supply, 18 decimals, no burn). Revenue from protocol fees.
 - **Web Portal (Frontend)**: React 18, TypeScript, Vite, Wouter, TanStack Query, Tailwind CSS v4, Framer Motion.
 - **Web Portal (Backend)**: Node.js, Express.js, TypeScript, Drizzle ORM, PostgreSQL.
-- **Authentication**: Replit Auth (OAuth 2.0), WebAuthn/Passkeys.
+- **Authentication**: Firebase Auth (email/password, Google, GitHub), WebAuthn/Passkeys. Server-side Firebase token verification using google-auth-library OAuth2Client.
 - **Payments**: Stripe, Coinbase Commerce.
 - **Multi-PWA**: Host-based routing for ecosystem domains.
 - **DeFi Features**: Testnet Faucet, AMM-style DEX/Token Swap, NFT Marketplace & Gallery, Portfolio Dashboard, Transaction History, Token Launchpad, Liquidity Pools, NFT Creator Tool, Price Charts (Recharts), Webhook/Events API, Liquid Staking (stDWC).
@@ -45,10 +45,11 @@ The design adheres to a "Premium UI Protocol" emphasizing:
 - **Guardian Shield**: Continuous blockchain security monitoring service. Tiers include Guardian Watch ($299/mo), Guardian Shield ($999/mo), and Guardian Command ($2,999/mo). Offers 24/7 smart contract monitoring, threat detection, multi-chain coverage, and instant alerts.
 - **Security Infrastructure**: Helmet.js security headers with environment-aware CSP, CORS with strict origin allowlist, rate limiting, AES-256-GCM encryption, HMAC-SHA256 signatures, and parameterized SQL via Drizzle ORM.
 - **Domain Service Roadmap**: Plans for .dwsc gateway (Q1 2025), browser extension (Q2-Q3 2025), traditional TLD reseller (Q3-Q4 2025), and potential ICANN exploration (2026+).
+- **Early Adopter Rewards System**: Tracks signup positions for first 500 users (2,000 DWC airdrop), first 200 token purchasers (50% bonus), and crowdfund donors with tiered bonuses: Supporter ($25-99, 10%), Backer ($100-499, 25%), Advocate ($500-1999, 40%), Founder ($2000+, 60%). All bonuses distributed at Token Generation Event (February 14, 2026). Database tables: `signup_counter`, `early_adopter_stats`. API: `/api/user/early-adopter-stats` (authenticated), `/api/early-adopter/counters` (public). Rewards page at `/rewards`.
 
 ## External Dependencies
 - **Database**: PostgreSQL
-- **Authentication**: Replit Auth, WebAuthn
+- **Authentication**: Firebase Auth, WebAuthn
 - **Payments**: Stripe, Coinbase Commerce
 - **Hub API**: https://orbitstaffing.io
 - **AI**: OpenAI (via Replit AI Integrations)

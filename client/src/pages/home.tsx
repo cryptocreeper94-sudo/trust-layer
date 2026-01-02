@@ -359,6 +359,10 @@ export default function Home() {
             <span className="font-display font-bold text-xl tracking-tight">DarkWave</span>
           </Link>
           <div className="hidden lg:flex items-center gap-4 text-xs font-medium text-muted-foreground mr-4">
+            <Link href="/rewards" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
+              Rewards
+              <Badge variant="outline" className="text-[9px] border-purple-500/50 text-purple-400 px-1 py-0">Hot</Badge>
+            </Link>
             <button onClick={() => setShowGamesModal(true)} className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap bg-transparent border-none cursor-pointer text-muted-foreground text-xs font-medium">
               Games
               <Badge variant="outline" className="text-[9px] border-amber-500/50 text-amber-400 px-1 py-0">Soon</Badge>

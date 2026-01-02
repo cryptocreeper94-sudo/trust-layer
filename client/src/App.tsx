@@ -104,6 +104,7 @@ import CreatorProgram from "@/pages/creator-program";
 import EraCodex from "@/pages/era-codex";
 import ScenarioGenerator from "@/pages/scenario-generator";
 import Crowdfund from "@/pages/crowdfund";
+import Rewards from "@/pages/rewards";
 import CommunityHub from "@/pages/community-hub";
 import Presale from "@/pages/presale";
 import PresaleSuccess from "@/pages/presale-success";
@@ -253,6 +254,7 @@ function DWSCRouter() {
       <ScrollToTop />
       <Switch>
         <Route path="/" component={Home} />
+        <Route path="/rewards" component={Rewards} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/developers" component={Developers} />
         <Route path="/developers/register" component={DevelopersRegister} />

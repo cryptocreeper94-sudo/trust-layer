@@ -78,12 +78,12 @@ export async function signInWithApple() {
   }
 }
 
-export async function signUpWithEmail(email: string, password: string, displayName?: string) {
+export async function signUpWithEmail(email: string, password: string, displayName?: string, username?: string) {
   const result = await createUserWithEmailAndPassword(auth, email, password);
   if (displayName) {
     await updateProfile(result.user, { displayName });
   }
-  await syncUserToBackend(result.user);
+  await syncUserToBackend(result.user, username);
   return result.user;
 }
 
@@ -124,7 +124,7 @@ export async function checkRedirectResult() {
   }
 }
 
-async function syncUserToBackend(user: User) {
+async function syncUserToBackend(user: User, username?: string) {
   try {
     const idToken = await user.getIdToken();
     await fetch('/api/auth/firebase-sync', {
@@ -138,6 +138,7 @@ async function syncUserToBackend(user: User) {
         email: user.email,
         displayName: user.displayName,
         photoURL: user.photoURL,
+        username: username,
       })
     });
   } catch (error) {
