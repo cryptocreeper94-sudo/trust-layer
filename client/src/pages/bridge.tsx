@@ -1,1037 +1,591 @@
 import { useState, useRef } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { 
-  ArrowRight, ArrowLeftRight, AlertTriangle, CheckCircle, Clock, Loader2,
-  Lock, Unlock, Flame, ChevronLeft, ChevronRight, Sparkles, Zap, Shield, ExternalLink,
-  ChevronDown, Info, HelpCircle, BookOpen, X
+  ArrowLeftRight, Lock, Sparkles, Zap, Shield, 
+  ChevronDown, ChevronLeft, ChevronRight, Clock, Flame,
+  BookOpen, ExternalLink, Bell, HelpCircle
 } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
-import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
-import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
-import spaceImg from "@assets/generated_images/deep_space_station.png";
-import cyberpunkImg from "@assets/generated_images/cyberpunk_neon_city.png";
 import { WalletButton } from "@/components/wallet-button";
 
-interface BridgeInfo {
-  custodyAddress: string;
-  supportedChains: { id: string; name: string; network: string; status: string; contractDeployed?: boolean }[];
-  phase: string;
-  status: string;
-  operator: string;
-  custodyBalance: string;
-  disclaimer: string;
-  mode?: "mock" | "live";
-  contracts?: {
-    ethereum: { deployed: boolean; address: string };
-    solana: { deployed: boolean; address: string };
-  };
-}
+import ethereumImg from "@assets/generated_images/ethereum_smart_city_network.png";
+import solanaImg from "@assets/generated_images/solana_speed_lightning_tunnel.png";
+import polygonImg from "@assets/generated_images/polygon_geometric_crystal_network.png";
+import arbitrumImg from "@assets/generated_images/arbitrum_orbital_bridge_network.png";
+import optimismImg from "@assets/generated_images/optimism_sunrise_city_hope.png";
+import baseImg from "@assets/generated_images/base_blockchain_foundation_platform.png";
+import bnbImg from "@assets/generated_images/bnb_chain_golden_temple.png";
+import avalancheImg from "@assets/generated_images/avalanche_mountain_speed_network.png";
+import zksyncImg from "@assets/generated_images/zksync_zero_knowledge_tunnel.png";
+import cosmosImg from "@assets/generated_images/cosmos_interchain_galaxy_hub.png";
+import bitcoinImg from "@assets/generated_images/bitcoin_digital_gold_vault.png";
+import lineaImg from "@assets/generated_images/linea_data_highway_concept.png";
+import polkadotImg from "@assets/generated_images/polkadot_parachain_spheres_network.png";
+import nearImg from "@assets/generated_images/near_aurora_blockchain_landscape.png";
+import genericChainImg from "@assets/generated_images/generic_blockchain_network_nodes.png";
 
-interface BridgeTransfer {
+type ChainCategory = "evm-l2" | "evm-l1" | "non-evm" | "rollups";
+type ReadinessStatus = "available-soon" | "in-diligence" | "researching";
+
+interface ChainInfo {
   id: string;
-  type: "lock" | "mint" | "burn" | "release";
-  amount: string;
-  status: string;
-  targetChain?: string;
-  fromAddress?: string;
-  toAddress?: string;
-  txHash?: string;
-  createdAt: string;
+  name: string;
+  symbol: string;
+  category: ChainCategory;
+  status: ReadinessStatus;
+  image: string;
+  color: string;
+  latencyTarget?: string;
 }
 
-interface ChainStatus {
-  chain: string;
-  connected: boolean;
-  blockHeight?: number;
-  latency?: number;
-  error?: string;
-}
+const allChains: ChainInfo[] = [
+  { id: "ethereum", name: "Ethereum", symbol: "ETH", category: "evm-l1", status: "available-soon", image: ethereumImg, color: "from-blue-500 to-purple-500", latencyTarget: "~12s" },
+  { id: "polygon", name: "Polygon", symbol: "MATIC", category: "evm-l2", status: "available-soon", image: polygonImg, color: "from-purple-500 to-purple-700", latencyTarget: "~2s" },
+  { id: "arbitrum", name: "Arbitrum", symbol: "ARB", category: "evm-l2", status: "available-soon", image: arbitrumImg, color: "from-blue-400 to-blue-600", latencyTarget: "~250ms" },
+  { id: "optimism", name: "Optimism", symbol: "OP", category: "evm-l2", status: "available-soon", image: optimismImg, color: "from-red-500 to-red-700", latencyTarget: "~2s" },
+  { id: "base", name: "Base", symbol: "BASE", category: "evm-l2", status: "in-diligence", image: baseImg, color: "from-blue-500 to-blue-700", latencyTarget: "~2s" },
+  { id: "zksync", name: "zkSync Era", symbol: "ZK", category: "evm-l2", status: "in-diligence", image: zksyncImg, color: "from-violet-500 to-indigo-600", latencyTarget: "~1s" },
+  { id: "linea", name: "Linea", symbol: "LINEA", category: "evm-l2", status: "in-diligence", image: lineaImg, color: "from-cyan-500 to-blue-500", latencyTarget: "~3s" },
+  { id: "scroll", name: "Scroll", symbol: "SCR", category: "evm-l2", status: "researching", image: genericChainImg, color: "from-amber-500 to-orange-500", latencyTarget: "~3s" },
+  { id: "bnb", name: "BNB Chain", symbol: "BNB", category: "evm-l1", status: "available-soon", image: bnbImg, color: "from-yellow-500 to-yellow-600", latencyTarget: "~3s" },
+  { id: "avalanche", name: "Avalanche", symbol: "AVAX", category: "evm-l1", status: "in-diligence", image: avalancheImg, color: "from-red-500 to-red-600", latencyTarget: "~2s" },
+  { id: "fantom", name: "Fantom", symbol: "FTM", category: "evm-l1", status: "researching", image: genericChainImg, color: "from-blue-400 to-cyan-500", latencyTarget: "~1s" },
+  { id: "solana", name: "Solana", symbol: "SOL", category: "non-evm", status: "available-soon", image: solanaImg, color: "from-purple-500 to-green-400", latencyTarget: "~400ms" },
+  { id: "cosmos", name: "Cosmos Hub", symbol: "ATOM", category: "non-evm", status: "in-diligence", image: cosmosImg, color: "from-indigo-500 to-purple-600", latencyTarget: "~6s" },
+  { id: "polkadot", name: "Polkadot", symbol: "DOT", category: "non-evm", status: "researching", image: polkadotImg, color: "from-pink-500 to-pink-700", latencyTarget: "~6s" },
+  { id: "near", name: "NEAR", symbol: "NEAR", category: "non-evm", status: "researching", image: nearImg, color: "from-green-400 to-teal-500", latencyTarget: "~1s" },
+  { id: "aptos", name: "Aptos", symbol: "APT", category: "non-evm", status: "researching", image: genericChainImg, color: "from-teal-400 to-green-500", latencyTarget: "~400ms" },
+  { id: "sui", name: "Sui", symbol: "SUI", category: "non-evm", status: "researching", image: genericChainImg, color: "from-cyan-400 to-blue-500", latencyTarget: "~400ms" },
+  { id: "ton", name: "TON", symbol: "TON", category: "non-evm", status: "researching", image: genericChainImg, color: "from-blue-500 to-cyan-400", latencyTarget: "~5s" },
+  { id: "bitcoin", name: "Bitcoin", symbol: "BTC", category: "non-evm", status: "researching", image: bitcoinImg, color: "from-orange-500 to-amber-500", latencyTarget: "~10m" },
+  { id: "starknet", name: "Starknet", symbol: "STRK", category: "rollups", status: "in-diligence", image: genericChainImg, color: "from-indigo-500 to-violet-600", latencyTarget: "~2s" },
+  { id: "celestia", name: "Celestia", symbol: "TIA", category: "rollups", status: "researching", image: genericChainImg, color: "from-purple-500 to-pink-500", latencyTarget: "~12s" },
+];
 
-const chainIcons: Record<string, string> = {
-  ethereum: "⟠",
-  solana: "◎",
-  polygon: "⬡",
-  arbitrum: "🔷",
-  optimism: "🔴",
+const categoryInfo: Record<ChainCategory, { label: string; description: string; icon: React.ReactNode }> = {
+  "evm-l2": { label: "EVM Layer 2s", description: "Ethereum scaling solutions with low fees", icon: <Zap className="w-4 h-4" /> },
+  "evm-l1": { label: "EVM Layer 1s", description: "EVM-compatible alternative blockchains", icon: <Shield className="w-4 h-4" /> },
+  "non-evm": { label: "Non-EVM Chains", description: "Alternative smart contract platforms", icon: <Sparkles className="w-4 h-4" /> },
+  "rollups": { label: "Settlement & Rollups", description: "Data availability and ZK solutions", icon: <Lock className="w-4 h-4" /> },
 };
 
-export default function Bridge() {
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-  const [direction, setDirectionState] = useState<"to" | "from">("to");
-  const [statusOpen, setStatusOpen] = useState(false);
-  const [transfersOpen, setTransfersOpen] = useState(false);
-  
-  const setDirection = (newDirection: "to" | "from") => {
-    if (newDirection !== direction) {
-      setAmount("");
-      setFromAddress("");
-      setTargetAddress("");
-      setReleaseAddress("");
-      setBurnTxHash("");
-    }
-    setDirectionState(newDirection);
-  };
-  const [amount, setAmount] = useState("");
-  const [targetChain, setTargetChain] = useState("ethereum");
-  const [sourceChain, setSourceChain] = useState("ethereum");
-  const [fromAddress, setFromAddress] = useState("");
-  const [targetAddress, setTargetAddress] = useState("");
-  const [releaseAddress, setReleaseAddress] = useState("");
-  const [burnTxHash, setBurnTxHash] = useState("");
+const statusInfo: Record<ReadinessStatus, { label: string; color: string; bgColor: string }> = {
+  "available-soon": { label: "Available Soon", color: "text-green-400", bgColor: "bg-green-500/20 border-green-500/30" },
+  "in-diligence": { label: "In Diligence", color: "text-amber-400", bgColor: "bg-amber-500/20 border-amber-500/30" },
+  "researching": { label: "Researching", color: "text-purple-400", bgColor: "bg-purple-500/20 border-purple-500/30" },
+};
+
+const faqItems = [
+  {
+    q: "What is the DarkWave Bridge?",
+    a: "The DarkWave Bridge enables seamless transfer of DWC tokens between DarkWave Smart Chain and other major blockchains. Lock DWC on our chain to receive wrapped tokens (wDWC) on external networks."
+  },
+  {
+    q: "How does the lock-and-mint mechanism work?",
+    a: "When you bridge DWC out, your tokens are securely locked in a custody contract on DarkWave. Wrapped tokens (wDWC) are then minted 1:1 on the destination chain. To bridge back, burn the wrapped tokens to release your original DWC."
+  },
+  {
+    q: "What are the bridge fees?",
+    a: "Bridge fees are 0.1% of the transferred amount, with a minimum fee of 1 DWC. Network gas fees on the destination chain are paid separately in that chain's native token."
+  },
+  {
+    q: "How long do bridge transfers take?",
+    a: "Transfer times vary by destination chain. EVM L2s typically complete in 2-15 minutes. Non-EVM chains may take 15-30 minutes depending on finality requirements."
+  },
+  {
+    q: "Is the bridge audited?",
+    a: "The bridge smart contracts undergo Guardian Certification audits before mainnet launch. All bridge operations are monitored 24/7 by our Guardian Shield security system."
+  },
+];
+
+function ChainCarousel({ chains, category }: { chains: ChainInfo[]; category: ChainCategory }) {
   const carouselRef = useRef<HTMLDivElement>(null);
-  const [tutorialOpen, setTutorialOpen] = useState(false);
-  const [tutorialSlide, setTutorialSlide] = useState(0);
-
-  const tutorialSlides = [
-    {
-      title: "What is a Bridge?",
-      icon: <ArrowLeftRight className="w-8 h-8 text-primary" />,
-      content: "A blockchain bridge lets you move your coins between different networks. Think of it like exchanging currency when traveling to another country — your money works in both places, just in different forms.",
-      color: "from-primary/20 to-cyan-500/20",
-    },
-    {
-      title: "Step 1: Lock Your DWC",
-      icon: <Lock className="w-8 h-8 text-cyan-400" />,
-      content: "When you want to use DWC on another chain (like Ethereum), you first 'lock' your coins in a secure vault on DarkWave. This proves you own them and keeps them safe while you use them elsewhere.",
-      color: "from-cyan-500/20 to-blue-500/20",
-    },
-    {
-      title: "Step 2: Receive Wrapped Coins (wDWC)",
-      icon: <Sparkles className="w-8 h-8 text-purple-400" />,
-      content: "Once locked, you receive 'wrapped' coins (wDWC) on the other chain. These are IOUs that represent your locked DWC — same value, just usable on Ethereum, Solana, etc. Think of it like a casino chip for your money.",
-      color: "from-purple-500/20 to-pink-500/20",
-    },
-    {
-      title: "Step 3: Use wDWC Anywhere",
-      icon: <Zap className="w-8 h-8 text-amber-400" />,
-      content: "Your wDWC works just like any other coin on that network. Trade it, stake it, use it in DeFi apps — it's fully functional. The value stays 1:1 with your locked DWC back home.",
-      color: "from-amber-500/20 to-orange-500/20",
-    },
-    {
-      title: "Coming Back: Burn & Release",
-      icon: <Flame className="w-8 h-8 text-orange-400" />,
-      content: "Want your original DWC back? Simply 'burn' (destroy) your wDWC on the other chain. This proves you're done using them, and your original DWC gets 'released' back to your DarkWave wallet. Full circle!",
-      color: "from-orange-500/20 to-red-500/20",
-    },
-    {
-      title: "Why It's Safe",
-      icon: <Shield className="w-8 h-8 text-green-400" />,
-      content: "Your locked DWC never leaves DarkWave — they're held by trusted validators. The bridge only creates wrapped coins when real coins are locked, and destroys wrapped coins when real coins are released. 1:1, always.",
-      color: "from-green-500/20 to-emerald-500/20",
-    },
-  ];
-
-  const { data: bridgeInfo, isLoading: infoLoading } = useQuery<BridgeInfo>({
-    queryKey: ["/api/bridge/info"],
-  });
-
-  const { data: transfersData } = useQuery<{ transfers: BridgeTransfer[] }>({
-    queryKey: ["/api/bridge/transfers"],
-    refetchInterval: 5000,
-  });
-
-  const { data: chainStatusData } = useQuery<{ statuses: ChainStatus[]; timestamp: string }>({
-    queryKey: ["/api/bridge/chains/status"],
-    refetchInterval: 10000,
-  });
-
-  const getChainStatus = (chainId: string): ChainStatus | undefined => {
-    return chainStatusData?.statuses?.find(s => s.chain === chainId);
-  };
-
-  const convertToSmallestUnit = (amt: string) => {
-    if (!amt || amt.trim() === "" || parseFloat(amt) <= 0) {
-      return null;
-    }
-    const parts = amt.split(".");
-    const wholePart = parts[0] || "0";
-    const decimalPart = (parts[1] || "").padEnd(18, "0").slice(0, 18);
-    return (wholePart + decimalPart).replace(/^0+/, "") || "0";
-  };
-
-  const isValidAmount = (amt: string) => {
-    if (!amt || amt.trim() === "") return false;
-    const num = parseFloat(amt);
-    return !isNaN(num) && num > 0;
-  };
-
-  const lockMutation = useMutation({
-    mutationFn: async () => {
-      const amountInUnits = convertToSmallestUnit(amount);
-      if (!amountInUnits) throw new Error("Invalid amount");
-      const res = await apiRequest("POST", "/api/bridge/lock", {
-        fromAddress,
-        amount: amountInUnits,
-        targetChain,
-        targetAddress,
-      });
-      return res.json();
-    },
-    onSuccess: (data: any) => {
-      toast({
-        title: "Lock Initiated",
-        description: `Transaction ${data.txHash?.slice(0, 18)}... submitted`,
-      });
-      queryClient.invalidateQueries({ queryKey: ["/api/bridge/transfers"] });
-      setAmount("");
-      setFromAddress("");
-      setTargetAddress("");
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Lock Failed",
-        description: error.message || "Failed to lock tokens",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const burnMutation = useMutation({
-    mutationFn: async () => {
-      const amountInUnits = convertToSmallestUnit(amount);
-      if (!amountInUnits) throw new Error("Invalid amount");
-      const res = await apiRequest("POST", "/api/bridge/burn", {
-        sourceChain,
-        burnTxHash,
-        amount: amountInUnits,
-        targetAddress: releaseAddress,
-      });
-      return res.json();
-    },
-    onSuccess: (data: any) => {
-      toast({
-        title: "Burn Submitted",
-        description: `Release pending for ${data.burnId}`,
-      });
-      queryClient.invalidateQueries({ queryKey: ["/api/bridge/transfers"] });
-      setAmount("");
-      setReleaseAddress("");
-      setBurnTxHash("");
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Burn Failed",
-        description: error.message || "Failed to process burn",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const formatAmount = (amount: string) => {
-    try {
-      const num = BigInt(amount);
-      const divisor = BigInt("1000000000000000000");
-      return (Number(num) / Number(divisor)).toFixed(4);
-    } catch {
-      return "0";
-    }
-  };
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "confirmed":
-      case "completed":
-        return <CheckCircle className="w-3 h-3 text-green-400" />;
-      case "pending":
-        return <Clock className="w-3 h-3 text-amber-400 animate-pulse" />;
-      default:
-        return <Loader2 className="w-3 h-3 text-white/50 animate-spin" />;
-    }
-  };
-
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case "lock":
-        return <Lock className="w-3 h-3 text-cyan-400" />;
-      case "unlock":
-      case "release":
-        return <Unlock className="w-3 h-3 text-green-400" />;
-      case "burn":
-        return <Flame className="w-3 h-3 text-orange-400" />;
-      case "mint":
-        return <Sparkles className="w-3 h-3 text-purple-400" />;
-      default:
-        return <Zap className="w-3 h-3 text-primary" />;
-    }
-  };
-
-  const scrollCarousel = (dir: "left" | "right") => {
+  
+  const scroll = (dir: "left" | "right") => {
     if (carouselRef.current) {
-      const scrollAmount = dir === "left" ? -200 : 200;
+      const scrollAmount = dir === "left" ? -220 : 220;
       carouselRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
 
   return (
-    <TooltipProvider>
-    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
-      {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
-            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="border-amber-500/50 text-amber-400 text-[10px] animate-pulse hidden sm:flex">Beta</Badge>
-            <WalletButton />
-            <BackButton />
-          </div>
-        </div>
-      </nav>
-
-      <main className="flex-1 pt-16 pb-8 px-4">
-        <div className="container mx-auto max-w-lg">
-          {/* Header */}
+    <div className="relative group">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-slate-900/90 border border-white/20 shadow-lg shadow-black/50 opacity-70 hover:opacity-100 transition-opacity hover:bg-slate-800"
+        onClick={() => scroll("left")}
+        data-testid={`button-carousel-left-${category}`}
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </Button>
+      
+      <div
+        ref={carouselRef}
+        className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory scrollbar-hide px-12"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {chains.map((chain, i) => (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-6"
+            key={chain.id}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ delay: 0.05 * i, type: "spring", stiffness: 200 }}
+            whileHover={{ 
+              scale: 1.03, 
+              y: -8,
+              transition: { duration: 0.3 }
+            }}
+            className="snap-start shrink-0"
           >
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <div className="p-2 rounded-xl bg-primary/10 border border-primary/30">
-                <ArrowLeftRight className="w-5 h-5 text-primary" />
-              </div>
-              <h1 className="text-2xl md:text-3xl font-display font-bold">
-                Cross-Chain Bridge
-              </h1>
-            </div>
-            <p className="text-xs text-muted-foreground mb-3">
-              Transfer DWC between DarkWave and other networks
-            </p>
-            <Dialog open={tutorialOpen} onOpenChange={(open) => {
-              setTutorialOpen(open);
-              if (open) setTutorialSlide(0);
-            }}>
-              <DialogTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="bg-primary/10 border-primary/30 hover:bg-primary/20 text-primary"
-                  data-testid="button-learn-bridging"
-                >
-                  <BookOpen className="w-4 h-4 mr-2" />
-                  Learn How Bridging Works
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-md bg-slate-950/95 backdrop-blur-xl border-white/10">
-                <DialogHeader>
-                  <DialogTitle className="text-center text-lg font-display">Bridge Tutorial</DialogTitle>
-                </DialogHeader>
-                <div className="relative">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={tutorialSlide}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{ duration: 0.2 }}
-                      className="p-4"
-                    >
-                      <div className={`mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br ${tutorialSlides[tutorialSlide].color} flex items-center justify-center mb-4`}>
-                        {tutorialSlides[tutorialSlide].icon}
-                      </div>
-                      <h3 className="text-lg font-bold text-center mb-3">
-                        {tutorialSlides[tutorialSlide].title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground text-center leading-relaxed">
-                        {tutorialSlides[tutorialSlide].content}
-                      </p>
-                    </motion.div>
-                  </AnimatePresence>
-                  
-                  <div className="flex items-center justify-center gap-1.5 mt-2 mb-4">
-                    {tutorialSlides.map((_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setTutorialSlide(i)}
-                        className={`w-2 h-2 rounded-full transition-all ${
-                          i === tutorialSlide ? "bg-primary w-4" : "bg-white/20 hover:bg-white/40"
-                        }`}
-                        data-testid={`button-slide-${i}`}
-                      />
-                    ))}
-                  </div>
-                  
-                  <div className="flex justify-between gap-2 px-4 pb-2">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setTutorialSlide(Math.max(0, tutorialSlide - 1))}
-                      disabled={tutorialSlide === 0}
-                      className="text-muted-foreground"
-                      data-testid="button-tutorial-prev"
-                    >
-                      <ChevronLeft className="w-4 h-4 mr-1" /> Previous
-                    </Button>
-                    {tutorialSlide === tutorialSlides.length - 1 ? (
-                      <Button
-                        size="sm"
-                        onClick={() => setTutorialOpen(false)}
-                        className="bg-primary text-black"
-                        data-testid="button-tutorial-done"
-                      >
-                        Got It!
-                      </Button>
-                    ) : (
-                      <Button
-                        size="sm"
-                        onClick={() => setTutorialSlide(tutorialSlide + 1)}
-                        className="bg-primary text-black"
-                        data-testid="button-tutorial-next"
-                      >
-                        Next <ChevronRight className="w-4 h-4 ml-1" />
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </motion.div>
-
-          {/* Warning Banner - Collapsible on mobile */}
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mb-4"
-          >
-            <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3">
-              <div className="flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                <div className="text-xs text-amber-200 leading-relaxed">
-                  <strong className="text-amber-300">
-                    {bridgeInfo?.mode === "mock" ? "Development Mode" : "Beta"}:
-                  </strong>{" "}
-                  {bridgeInfo?.mode === "mock" 
-                    ? "Simulated transactions for testing."
-                    : "Testnets only (Sepolia, Devnet)."}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Supported Chains Carousel */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="mb-6"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-bold text-sm flex items-center gap-2">
-                <Shield className="w-4 h-4 text-primary" />
-                Supported Chains
-              </h3>
-              <div className="flex gap-1">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-7 w-7 rounded-full bg-white/5 hover:bg-white/10"
-                  onClick={() => scrollCarousel("left")}
-                  data-testid="button-carousel-left"
-                >
-                  <ChevronLeft className="w-3 h-3" />
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-7 w-7 rounded-full bg-white/5 hover:bg-white/10"
-                  onClick={() => scrollCarousel("right")}
-                  data-testid="button-carousel-right"
-                >
-                  <ChevronRight className="w-3 h-3" />
-                </Button>
-              </div>
-            </div>
             <div 
-              ref={carouselRef}
-              className="flex gap-2 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              className="
+                relative w-[200px] h-[260px] rounded-2xl overflow-hidden
+                border border-white/10 hover:border-white/30
+                shadow-xl hover:shadow-2xl hover:shadow-primary/20
+                transition-all duration-500 cursor-pointer
+                group/card
+              "
+              style={{
+                transformStyle: "preserve-3d",
+                perspective: "1000px",
+              }}
+              data-testid={`chain-card-${chain.id}`}
             >
-              {bridgeInfo?.supportedChains?.map((chain, i) => {
-                const liveStatus = getChainStatus(chain.id);
-                return (
-                  <motion.div
-                    key={chain.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.05 * i }}
-                    className="snap-start shrink-0"
-                  >
-                    <div 
-                      className={`w-[140px] p-3 bg-white/5 backdrop-blur border rounded-xl ${
-                        liveStatus?.connected ? "border-green-500/30" : "border-white/10"
-                      }`}
-                      data-testid={`chain-card-${chain.id}`}
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xl">{chainIcons[chain.id] || "🔗"}</span>
-                        <Badge 
-                          variant="outline" 
-                          className={`text-[8px] px-1.5 py-0 ${
-                            liveStatus?.connected ? "border-green-500/50 text-green-400" : "border-red-500/50 text-red-400"
-                          }`}
-                        >
-                          {liveStatus?.connected ? "LIVE" : "OFF"}
-                        </Badge>
-                      </div>
-                      <div className="font-bold text-xs truncate">{chain.name}</div>
-                      <div className="text-[10px] text-muted-foreground truncate">{chain.network}</div>
-                      {liveStatus?.connected && liveStatus.blockHeight && (
-                        <div className="text-[9px] text-green-400/70 mt-1 font-mono truncate">
-                          #{liveStatus.blockHeight.toLocaleString()}
-                        </div>
-                      )}
-                    </div>
-                  </motion.div>
-                );
-              })}
-              {[
-                { id: "polygon", name: "Polygon", icon: "⬡" },
-                { id: "arbitrum", name: "Arbitrum", icon: "🔷" },
-                { id: "optimism", name: "Optimism", icon: "🔴" },
-                { id: "base", name: "Base", icon: "🔵" },
-                { id: "avalanche", name: "Avalanche", icon: "🔺" },
-              ].map((chain, i) => (
-                <motion.div
-                  key={chain.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.1 + 0.05 * i }}
-                  className="snap-start shrink-0"
+              <div 
+                className="absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: `url(${chain.image})` }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-primary/10 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" />
+              
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity" />
+              <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity" />
+              
+              <div className="absolute top-3 right-3 z-10">
+                <Badge 
+                  variant="outline" 
+                  className={`text-[9px] px-2 py-0.5 backdrop-blur-md ${statusInfo[chain.status].bgColor} ${statusInfo[chain.status].color} border shadow-lg`}
                 >
-                  <div 
-                    className="w-[140px] p-3 bg-white/5 backdrop-blur border border-white/10 rounded-xl opacity-60"
-                    data-testid={`chain-card-${chain.id}`}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xl">{chain.icon}</span>
-                      <Badge 
-                        variant="outline" 
-                        className="text-[8px] px-1.5 py-0 border-purple-500/50 text-purple-400"
-                      >
-                        SOON
+                  {statusInfo[chain.status].label}
+                </Badge>
+              </div>
+              
+              <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+                <h4 className="font-display font-bold text-lg text-white mb-0.5 drop-shadow-lg">{chain.name}</h4>
+                <p className="text-xs text-white/70 font-mono mb-2">{chain.symbol}</p>
+                
+                {chain.latencyTarget && (
+                  <div className="flex items-center gap-1.5 text-[11px] text-cyan-300/90">
+                    <Clock className="w-3 h-3" />
+                    <span>{chain.latencyTarget} finality</span>
+                  </div>
+                )}
+              </div>
+              
+              <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 group-hover/card:ring-primary/30 transition-all" />
+            </div>
+          </motion.div>
+        ))}
+      </div>
+      
+      <Button
+        variant="ghost"
+        size="icon"
+        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 h-10 w-10 rounded-full bg-slate-900/90 border border-white/20 shadow-lg shadow-black/50 opacity-70 hover:opacity-100 transition-opacity hover:bg-slate-800"
+        onClick={() => scroll("right")}
+        data-testid={`button-carousel-right-${category}`}
+      >
+        <ChevronRight className="w-5 h-5" />
+      </Button>
+    </div>
+  );
+}
+
+export default function Bridge() {
+  const [openCategories, setOpenCategories] = useState<ChainCategory[]>(["evm-l2", "evm-l1"]);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const toggleCategory = (cat: ChainCategory) => {
+    setOpenCategories(prev => 
+      prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
+    );
+  };
+
+  const chainsByCategory = (category: ChainCategory) => 
+    allChains.filter(c => c.category === category);
+
+  return (
+    <TooltipProvider>
+      <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+        <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+          <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2 shrink-0">
+              <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+              <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
+            </Link>
+            <div className="flex items-center gap-2">
+              <WalletButton />
+              <BackButton />
+            </div>
+          </div>
+        </nav>
+
+        <main className="flex-1 pt-20 pb-12 px-4">
+          <div className="container mx-auto max-w-6xl">
+            
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="relative mb-8"
+            >
+              <div 
+                className="
+                  relative overflow-hidden rounded-3xl p-8 md:p-12
+                  bg-gradient-to-br from-slate-900/90 via-slate-950/95 to-slate-900/90
+                  border border-white/10 backdrop-blur-xl
+                  shadow-2xl shadow-primary/5
+                "
+              >
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-purple-500/5" />
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+                <div className="absolute -top-32 -right-32 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
+                <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl" />
+                
+                <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="p-3 rounded-2xl bg-gradient-to-br from-primary/20 to-cyan-500/20 border border-primary/30 shadow-lg shadow-primary/20">
+                        <ArrowLeftRight className="w-6 h-6 text-primary" />
+                      </div>
+                      <div>
+                        <h1 className="text-2xl md:text-4xl font-display font-bold bg-gradient-to-r from-white via-white to-white/70 bg-clip-text text-transparent">
+                          Cross-Chain Bridge
+                        </h1>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Transfer DWC across 21+ blockchain networks
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-wrap items-center gap-3 mt-4">
+                      <Badge className="bg-gradient-to-r from-amber-500/20 to-orange-500/20 border-amber-500/40 text-amber-300 px-3 py-1.5 text-xs font-medium animate-pulse">
+                        <Clock className="w-3 h-3 mr-1.5" />
+                        Coming Soon
+                      </Badge>
+                      <Badge variant="outline" className="border-cyan-500/30 text-cyan-400 text-xs">
+                        <Lock className="w-3 h-3 mr-1.5" />
+                        Lock & Mint
+                      </Badge>
+                      <Badge variant="outline" className="border-purple-500/30 text-purple-400 text-xs">
+                        <Shield className="w-3 h-3 mr-1.5" />
+                        Guardian Certified
                       </Badge>
                     </div>
-                    <div className="font-bold text-xs truncate">{chain.name}</div>
-                    <div className="text-[10px] text-muted-foreground">Coming Soon</div>
                   </div>
+                  
+                  <div className="flex flex-col gap-2 shrink-0">
+                    <Button 
+                      size="lg"
+                      disabled
+                      className="bg-gradient-to-r from-primary to-cyan-400 text-black font-bold opacity-50 cursor-not-allowed"
+                      data-testid="button-launch-bridge"
+                    >
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Launch Bridge
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-white/20 hover:bg-white/5"
+                      data-testid="button-notify-launch"
+                    >
+                      <Bell className="w-4 h-4 mr-2" />
+                      Notify Me at Launch
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8"
+            >
+              {[
+                { label: "Supported Chains", value: "21+", icon: <Zap className="w-4 h-4" />, color: "from-cyan-500/20 to-blue-500/20" },
+                { label: "Bridge Fee", value: "0.1%", icon: <Sparkles className="w-4 h-4" />, color: "from-purple-500/20 to-pink-500/20" },
+                { label: "Avg. Finality", value: "~2min", icon: <Clock className="w-4 h-4" />, color: "from-amber-500/20 to-orange-500/20" },
+                { label: "Security", value: "Guardian", icon: <Shield className="w-4 h-4" />, color: "from-green-500/20 to-emerald-500/20" },
+              ].map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ delay: 0.15 + i * 0.05 }}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  className={`
+                    relative p-4 rounded-2xl backdrop-blur-xl overflow-hidden
+                    bg-gradient-to-br ${stat.color}
+                    border border-white/10 hover:border-white/20
+                    transition-all duration-300
+                  `}
+                >
+                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                  <div className="flex items-center gap-2 text-white/70 mb-1">
+                    {stat.icon}
+                    <span className="text-[10px] uppercase tracking-wider">{stat.label}</span>
+                  </div>
+                  <div className="text-xl font-display font-bold">{stat.value}</div>
                 </motion.div>
               ))}
-            </div>
-          </motion.div>
+            </motion.div>
 
-          {/* Direction Toggle */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex justify-center mb-4"
-          >
-            <div className="relative inline-flex p-1 bg-white/5 rounded-full border border-white/10">
-              <div 
-                className="absolute inset-y-1 rounded-full bg-gradient-to-r from-primary to-cyan-400 transition-all duration-300"
-                style={{ 
-                  left: direction === "to" ? "4px" : "50%",
-                  width: "calc(50% - 4px)",
-                }}
-              />
-              <button
-                onClick={() => setDirection("to")}
-                className={`relative z-10 px-4 py-2 rounded-full text-xs font-medium transition-colors flex items-center gap-1.5 ${
-                  direction === "to" ? "text-black" : "text-white/70"
-                }`}
-                data-testid="button-direction-to"
-              >
-                <Lock className="w-3 h-3" />
-                Lock
-                <ArrowRight className="w-3 h-3" />
-              </button>
-              <button
-                onClick={() => setDirection("from")}
-                className={`relative z-10 px-4 py-2 rounded-full text-xs font-medium transition-colors flex items-center gap-1.5 ${
-                  direction === "from" ? "text-black" : "text-white/70"
-                }`}
-                data-testid="button-direction-from"
-              >
-                <Flame className="w-3 h-3" />
-                Burn
-                <ArrowRight className="w-3 h-3" />
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Bridge Form Card */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="mb-4"
-          >
-            <GlassCard>
-              <div className="p-4">
-                <AnimatePresence mode="wait">
-                  {direction === "to" ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="mb-8"
+            >
+              <h2 className="text-lg font-display font-bold mb-4 flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-primary/10 border border-primary/30">
+                  <Zap className="w-4 h-4 text-primary" />
+                </div>
+                Supported Networks
+              </h2>
+              
+              <div className="space-y-4">
+                {(Object.keys(categoryInfo) as ChainCategory[]).map((category, catIdx) => {
+                  const chains = chainsByCategory(category);
+                  const isOpen = openCategories.includes(category);
+                  
+                  return (
                     <motion.div
-                      key="lock-form"
+                      key={category}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.25 + catIdx * 0.05 }}
+                    >
+                      <Collapsible open={isOpen} onOpenChange={() => toggleCategory(category)}>
+                        <CollapsibleTrigger className="w-full">
+                          <div 
+                            className={`
+                              flex items-center justify-between p-4 rounded-2xl
+                              bg-gradient-to-r from-white/[0.05] to-white/[0.02]
+                              border border-white/10 hover:border-white/20
+                              backdrop-blur-xl transition-all duration-300
+                              ${isOpen ? "rounded-b-none border-b-0" : ""}
+                            `}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="p-2 rounded-xl bg-white/5 border border-white/10">
+                                {categoryInfo[category].icon}
+                              </div>
+                              <div className="text-left">
+                                <h3 className="font-bold text-sm">{categoryInfo[category].label}</h3>
+                                <p className="text-[10px] text-muted-foreground">{categoryInfo[category].description}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <Badge variant="outline" className="text-[10px] border-white/20">
+                                {chains.length} chains
+                              </Badge>
+                              <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+                            </div>
+                          </div>
+                        </CollapsibleTrigger>
+                        
+                        <CollapsibleContent>
+                          <div 
+                            className="
+                              p-4 rounded-b-2xl
+                              bg-gradient-to-b from-white/[0.02] to-transparent
+                              border border-t-0 border-white/10
+                            "
+                          >
+                            <ChainCarousel chains={chains} category={category} />
+                          </div>
+                        </CollapsibleContent>
+                      </Collapsible>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+                className="
+                  relative p-6 rounded-3xl overflow-hidden
+                  bg-gradient-to-br from-cyan-500/10 via-slate-900/50 to-blue-500/10
+                  border border-cyan-500/20 backdrop-blur-xl
+                "
+              >
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-cyan-500/20 rounded-full blur-3xl" />
+                
+                <h3 className="font-display font-bold text-lg mb-4 flex items-center gap-2">
+                  <Lock className="w-5 h-5 text-cyan-400" />
+                  Lock & Mint Flow
+                </h3>
+                
+                <div className="space-y-4">
+                  {[
+                    { step: "1", title: "Lock DWC", desc: "Securely lock tokens in DarkWave custody", icon: <Lock className="w-4 h-4" /> },
+                    { step: "2", title: "Verify Transaction", desc: "Bridge operators confirm the lock on-chain", icon: <Shield className="w-4 h-4" /> },
+                    { step: "3", title: "Receive wDWC", desc: "Wrapped tokens minted 1:1 on destination", icon: <Sparkles className="w-4 h-4" /> },
+                  ].map((item, i) => (
+                    <motion.div 
+                      key={i}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 10 }}
-                      className="space-y-4"
+                      transition={{ delay: 0.4 + i * 0.1 }}
+                      className="flex items-start gap-3"
                     >
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="p-2 rounded-lg bg-cyan-500/20">
-                          <Lock className="w-4 h-4 text-cyan-400" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-1.5">
-                            <h2 className="font-bold text-sm">Lock & Mint</h2>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <HelpCircle className="w-3.5 h-3.5 text-muted-foreground cursor-help" />
-                              </TooltipTrigger>
-                              <TooltipContent side="top" className="max-w-[250px] text-xs">
-                                <p><strong>Lock:</strong> Your DWC coins are securely held in a vault on DarkWave.</p>
-                                <p className="mt-1"><strong>Mint:</strong> New wrapped coins (wDWC) are created on the target chain, representing your locked coins.</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </div>
-                          <p className="text-[10px] text-muted-foreground">Lock DWC → Receive wDWC</p>
-                        </div>
+                      <div className="shrink-0 w-8 h-8 rounded-full bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-bold text-sm">
+                        {item.step}
                       </div>
-
-                      <div className="space-y-3">
-                        <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
-                            Target Chain
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <HelpCircle className="w-3 h-3 cursor-help" />
-                              </TooltipTrigger>
-                              <TooltipContent side="right" className="max-w-[200px] text-xs">
-                                The blockchain where you want to use your wrapped DWC (wDWC) coins.
-                              </TooltipContent>
-                            </Tooltip>
-                          </Label>
-                          <Select value={targetChain} onValueChange={setTargetChain}>
-                            <SelectTrigger 
-                              data-testid="select-target-chain"
-                              className="bg-white/5 border-white/10 h-10 text-sm"
-                            >
-                              <SelectValue placeholder="Select chain" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {bridgeInfo?.supportedChains?.map((chain) => (
-                                <SelectItem key={chain.id} value={chain.id}>
-                                  <span className="flex items-center gap-2">
-                                    <span>{chainIcons[chain.id] || "🔗"}</span>
-                                    {chain.name}
-                                  </span>
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                      <div>
+                        <div className="font-bold text-sm flex items-center gap-2">
+                          {item.icon}
+                          {item.title}
                         </div>
-
-                        <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
-                            Your DarkWave Address
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <HelpCircle className="w-3 h-3 cursor-help" />
-                              </TooltipTrigger>
-                              <TooltipContent side="right" className="max-w-[200px] text-xs">
-                                Your wallet address on DarkWave where your DWC coins are currently held.
-                              </TooltipContent>
-                            </Tooltip>
-                          </Label>
-                          <Input
-                            value={fromAddress}
-                            onChange={(e) => setFromAddress(e.target.value)}
-                            placeholder="0x..."
-                            data-testid="input-from-address"
-                            className="bg-white/5 border-white/10 h-10 text-sm font-mono"
-                          />
-                        </div>
-
-                        <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
-                            Destination Address
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <HelpCircle className="w-3 h-3 cursor-help" />
-                              </TooltipTrigger>
-                              <TooltipContent side="right" className="max-w-[200px] text-xs">
-                                Your wallet address on the target chain where you'll receive the wrapped wDWC coins.
-                              </TooltipContent>
-                            </Tooltip>
-                          </Label>
-                          <Input
-                            value={targetAddress}
-                            onChange={(e) => setTargetAddress(e.target.value)}
-                            placeholder={targetChain === "solana" ? "Solana address..." : "0x..."}
-                            data-testid="input-target-address"
-                            className="bg-white/5 border-white/10 h-10 text-sm font-mono"
-                          />
-                        </div>
-
-                        <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
-                            Amount (DWC)
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <HelpCircle className="w-3 h-3 cursor-help" />
-                              </TooltipTrigger>
-                              <TooltipContent side="right" className="max-w-[200px] text-xs">
-                                How many DWC coins to lock. You'll receive the same amount as wDWC on the target chain.
-                              </TooltipContent>
-                            </Tooltip>
-                          </Label>
-                          <div className="relative">
-                            <Input
-                              type="number"
-                              step="0.0001"
-                              value={amount}
-                              onChange={(e) => setAmount(e.target.value)}
-                              placeholder="0.0"
-                              data-testid="input-amount"
-                              className="bg-white/5 border-white/10 h-12 text-xl font-bold pr-16"
-                            />
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-primary font-bold">DWC</span>
-                          </div>
-                        </div>
-
-                        <Button
-                          className="w-full h-11 text-sm font-bold bg-gradient-to-r from-primary to-cyan-400 text-black"
-                          onClick={() => lockMutation.mutate()}
-                          disabled={lockMutation.isPending || !fromAddress || !targetAddress || !isValidAmount(amount)}
-                          data-testid="button-bridge"
-                        >
-                          {lockMutation.isPending ? (
-                            <span className="flex items-center gap-2">
-                              <Loader2 className="w-4 h-4 animate-spin" />
-                              Processing...
-                            </span>
-                          ) : (
-                            <span className="flex items-center gap-2">
-                              <Lock className="w-4 h-4" />
-                              Lock & Bridge
-                              <ArrowRight className="w-4 h-4" />
-                            </span>
-                          )}
-                        </Button>
+                        <p className="text-xs text-muted-foreground">{item.desc}</p>
                       </div>
                     </motion.div>
-                  ) : (
-                    <motion.div
-                      key="burn-form"
+                  ))}
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.35 }}
+                className="
+                  relative p-6 rounded-3xl overflow-hidden
+                  bg-gradient-to-br from-orange-500/10 via-slate-900/50 to-red-500/10
+                  border border-orange-500/20 backdrop-blur-xl
+                "
+              >
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent" />
+                <div className="absolute -top-20 -left-20 w-40 h-40 bg-orange-500/20 rounded-full blur-3xl" />
+                
+                <h3 className="font-display font-bold text-lg mb-4 flex items-center gap-2">
+                  <Flame className="w-5 h-5 text-orange-400" />
+                  Burn & Release Flow
+                </h3>
+                
+                <div className="space-y-4">
+                  {[
+                    { step: "1", title: "Burn wDWC", desc: "Destroy wrapped tokens on external chain", icon: <Flame className="w-4 h-4" /> },
+                    { step: "2", title: "Verify Burn", desc: "Bridge confirms burn transaction", icon: <Shield className="w-4 h-4" /> },
+                    { step: "3", title: "Release DWC", desc: "Original tokens unlocked on DarkWave", icon: <Zap className="w-4 h-4" /> },
+                  ].map((item, i) => (
+                    <motion.div 
+                      key={i}
                       initial={{ opacity: 0, x: 10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -10 }}
-                      className="space-y-4"
+                      transition={{ delay: 0.45 + i * 0.1 }}
+                      className="flex items-start gap-3"
                     >
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="p-2 rounded-lg bg-orange-500/20">
-                          <Flame className="w-4 h-4 text-orange-400" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-1.5">
-                            <h2 className="font-bold text-sm">Burn & Release</h2>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <HelpCircle className="w-3.5 h-3.5 text-muted-foreground cursor-help" />
-                              </TooltipTrigger>
-                              <TooltipContent side="top" className="max-w-[250px] text-xs">
-                                <p><strong>Burn:</strong> Destroy your wrapped coins (wDWC) on the other chain.</p>
-                                <p className="mt-1"><strong>Release:</strong> Your original DWC coins are unlocked and sent back to your DarkWave wallet.</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </div>
-                          <p className="text-[10px] text-muted-foreground">Burn wDWC → Release DWC</p>
-                        </div>
+                      <div className="shrink-0 w-8 h-8 rounded-full bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-orange-400 font-bold text-sm">
+                        {item.step}
                       </div>
-
-                      <div className="space-y-3">
-                        <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
-                            Source Chain
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <HelpCircle className="w-3 h-3 cursor-help" />
-                              </TooltipTrigger>
-                              <TooltipContent side="right" className="max-w-[200px] text-xs">
-                                The blockchain where your wrapped wDWC coins currently are (where you'll burn them).
-                              </TooltipContent>
-                            </Tooltip>
-                          </Label>
-                          <Select value={sourceChain} onValueChange={setSourceChain}>
-                            <SelectTrigger data-testid="select-source-chain" className="bg-white/5 border-white/10 h-10 text-sm">
-                              <SelectValue placeholder="Select chain" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {bridgeInfo?.supportedChains?.map((chain) => (
-                                <SelectItem key={chain.id} value={chain.id}>
-                                  <span className="flex items-center gap-2">
-                                    <span>{chainIcons[chain.id] || "🔗"}</span>
-                                    {chain.name}
-                                  </span>
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                      <div>
+                        <div className="font-bold text-sm flex items-center gap-2">
+                          {item.icon}
+                          {item.title}
                         </div>
-
-                        <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
-                            Burn Transaction Hash
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <HelpCircle className="w-3 h-3 cursor-help" />
-                              </TooltipTrigger>
-                              <TooltipContent side="right" className="max-w-[200px] text-xs">
-                                The transaction ID from when you burned wDWC on the other chain. This proves the burn happened.
-                              </TooltipContent>
-                            </Tooltip>
-                          </Label>
-                          <Input
-                            value={burnTxHash}
-                            onChange={(e) => setBurnTxHash(e.target.value)}
-                            placeholder="0x..."
-                            data-testid="input-burn-tx"
-                            className="bg-white/5 border-white/10 h-10 text-sm font-mono"
-                          />
-                        </div>
-
-                        <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
-                            Release To (DarkWave)
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <HelpCircle className="w-3 h-3 cursor-help" />
-                              </TooltipTrigger>
-                              <TooltipContent side="right" className="max-w-[200px] text-xs">
-                                Your DarkWave wallet address where you want to receive your original DWC coins back.
-                              </TooltipContent>
-                            </Tooltip>
-                          </Label>
-                          <Input
-                            value={releaseAddress}
-                            onChange={(e) => setReleaseAddress(e.target.value)}
-                            placeholder="0x..."
-                            data-testid="input-release-address"
-                            className="bg-white/5 border-white/10 h-10 text-sm font-mono"
-                          />
-                        </div>
-
-                        <div>
-                          <Label className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 flex items-center gap-1">
-                            Amount (wDWC)
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <HelpCircle className="w-3 h-3 cursor-help" />
-                              </TooltipTrigger>
-                              <TooltipContent side="right" className="max-w-[200px] text-xs">
-                                How many wrapped wDWC coins you're burning. You'll get the same amount as DWC on DarkWave.
-                              </TooltipContent>
-                            </Tooltip>
-                          </Label>
-                          <div className="relative">
-                            <Input
-                              type="number"
-                              step="0.0001"
-                              value={amount}
-                              onChange={(e) => setAmount(e.target.value)}
-                              placeholder="0.0"
-                              data-testid="input-burn-amount"
-                              className="bg-white/5 border-white/10 h-12 text-xl font-bold pr-20"
-                            />
-                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-orange-400 font-bold">wDWC</span>
-                          </div>
-                        </div>
-
-                        <Button
-                          className="w-full h-11 text-sm font-bold bg-gradient-to-r from-orange-500 to-amber-400 text-black"
-                          onClick={() => burnMutation.mutate()}
-                          disabled={burnMutation.isPending || !releaseAddress || !burnTxHash || !isValidAmount(amount)}
-                          data-testid="button-burn"
-                        >
-                          {burnMutation.isPending ? (
-                            <span className="flex items-center gap-2">
-                              <Loader2 className="w-4 h-4 animate-spin" />
-                              Processing...
-                            </span>
-                          ) : (
-                            <span className="flex items-center gap-2">
-                              <Flame className="w-4 h-4" />
-                              Burn & Release
-                              <Unlock className="w-4 h-4" />
-                            </span>
-                          )}
-                        </Button>
+                        <p className="text-xs text-muted-foreground">{item.desc}</p>
                       </div>
                     </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </GlassCard>
-          </motion.div>
-
-          {/* Collapsible Status Section */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="mb-3"
-          >
-            <Collapsible open={statusOpen} onOpenChange={setStatusOpen}>
-              <div className="relative overflow-hidden rounded-2xl">
-                <img src={blockchainImg} alt="Blockchain Network" className="absolute inset-0 w-full h-full object-cover opacity-40" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
-                <div className="relative z-10">
-                  <GlassCard className="bg-transparent border-0">
-                    <CollapsibleTrigger className="w-full p-3 flex items-center justify-between hover:bg-white/5 rounded-xl transition-colors">
-                      <div className="flex items-center gap-2">
-                        <Shield className="w-4 h-4 text-primary" />
-                        <span className="font-bold text-sm">Bridge Status</span>
-                        <Badge variant="outline" className="border-green-500/50 text-green-400 text-[10px] ml-1">
-                          {bridgeInfo?.status || "Active"}
-                        </Badge>
-                      </div>
-                      <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${statusOpen ? "rotate-180" : ""}`} />
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <div className="px-3 pb-3 pt-1 space-y-2 text-xs border-t border-white/5 mt-1">
-                        <div className="flex justify-between items-center p-2 rounded-lg bg-white/5">
-                          <span className="text-muted-foreground">Operator</span>
-                          <span className="font-medium truncate ml-2">{bridgeInfo?.operator || "Founders Validator"}</span>
-                        </div>
-                        <div className="flex justify-between items-center p-2 rounded-lg bg-white/5">
-                          <span className="text-muted-foreground">Custody Balance</span>
-                          <span className="font-bold text-primary">{formatAmount(bridgeInfo?.custodyBalance || "0")} DWC</span>
-                        </div>
-                        <div className="flex justify-between items-center p-2 rounded-lg bg-white/5">
-                          <span className="text-muted-foreground">Phase</span>
-                          <span>{bridgeInfo?.phase || "MVP"}</span>
-                        </div>
-                      </div>
-                    </CollapsibleContent>
-                  </GlassCard>
+                  ))}
                 </div>
-              </div>
-            </Collapsible>
-          </motion.div>
-
-          {/* Collapsible Transfers Section */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-          >
-            <Collapsible open={transfersOpen} onOpenChange={setTransfersOpen}>
-              <div className="relative overflow-hidden rounded-2xl">
-                <img src={spaceImg} alt="Space Station" className="absolute inset-0 w-full h-full object-cover opacity-40" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
-                <div className="relative z-10">
-                  <GlassCard className="bg-transparent border-0">
-                    <CollapsibleTrigger className="w-full p-3 flex items-center justify-between hover:bg-white/5 rounded-xl transition-colors">
-                      <div className="flex items-center gap-2">
-                        <Zap className="w-4 h-4 text-primary" />
-                        <span className="font-bold text-sm">Recent Transfers</span>
-                        <Badge variant="secondary" className="text-[10px] ml-1">
-                          {transfersData?.transfers?.length || 0}
-                        </Badge>
-                      </div>
-                      <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${transfersOpen ? "rotate-180" : ""}`} />
-                    </CollapsibleTrigger>
-                    <CollapsibleContent>
-                      <div className="px-3 pb-3 pt-1 border-t border-white/5 mt-1">
-                        {transfersData?.transfers?.length === 0 ? (
-                          <div className="text-center py-6">
-                            <ArrowLeftRight className="w-8 h-8 text-white/20 mx-auto mb-2" />
-                            <p className="text-xs text-muted-foreground">No transfers yet</p>
-                          </div>
-                        ) : (
-                          <div className="space-y-2 max-h-48 overflow-y-auto">
-                            {transfersData?.transfers?.slice(0, 5).map((transfer) => (
-                              <div
-                                key={transfer.id}
-                                className="flex items-center justify-between p-2 bg-white/5 rounded-lg text-xs"
-                                data-testid={`transfer-${transfer.id}`}
-                              >
-                                <div className="flex items-center gap-2">
-                                  <div className={`p-1.5 rounded ${
-                                    transfer.type === "burn" ? "bg-orange-500/20" :
-                                    transfer.type === "lock" ? "bg-cyan-500/20" :
-                                    "bg-green-500/20"
-                                  }`}>
-                                    {getTypeIcon(transfer.type)}
-                                  </div>
-                                  <div>
-                                    <div className="font-medium capitalize">{transfer.type}</div>
-                                    <div className="text-[10px] text-muted-foreground">
-                                      {formatAmount(transfer.amount)} DWC
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  {getStatusIcon(transfer.status)}
-                                  <Badge 
-                                    variant="outline" 
-                                    className={`text-[9px] ${
-                                      transfer.status === "completed" ? "border-green-500/50 text-green-400" :
-                                      "border-amber-500/50 text-amber-400"
-                                    }`}
-                                  >
-                                    {transfer.status}
-                                  </Badge>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </CollapsibleContent>
-                  </GlassCard>
-                </div>
-              </div>
-            </Collapsible>
-          </motion.div>
-
-          {/* Footer Info */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
-            className="mt-6 text-center"
-          >
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
-              <Info className="w-3 h-3 text-primary" />
-              <p className="text-[10px] text-muted-foreground">
-                Phase 1 MVP • Founders Validator relay
-              </p>
+              </motion.div>
             </div>
-          </motion.div>
-        </div>
-      </main>
 
-      <Footer />
-    </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="mb-8"
+            >
+              <h2 className="text-lg font-display font-bold mb-4 flex items-center gap-2">
+                <HelpCircle className="w-5 h-5 text-purple-400" />
+                Frequently Asked Questions
+              </h2>
+              
+              <div className="space-y-2">
+                {faqItems.map((item, i) => (
+                  <Collapsible 
+                    key={i}
+                    open={openFaq === i}
+                    onOpenChange={() => setOpenFaq(openFaq === i ? null : i)}
+                  >
+                    <CollapsibleTrigger className="w-full">
+                      <div 
+                        className={`
+                          flex items-center justify-between p-4 rounded-xl
+                          bg-white/[0.03] hover:bg-white/[0.05]
+                          border border-white/10 hover:border-white/20
+                          transition-all duration-300
+                          ${openFaq === i ? "rounded-b-none border-b-0" : ""}
+                        `}
+                      >
+                        <span className="font-medium text-sm text-left">{item.q}</span>
+                        <ChevronDown className={`w-4 h-4 shrink-0 ml-4 transition-transform ${openFaq === i ? "rotate-180" : ""}`} />
+                      </div>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <div className="p-4 rounded-b-xl bg-white/[0.02] border border-t-0 border-white/10 text-sm text-muted-foreground">
+                        {item.a}
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.55 }}
+              className="
+                relative p-6 rounded-3xl overflow-hidden text-center
+                bg-gradient-to-r from-primary/10 via-purple-500/10 to-pink-500/10
+                border border-primary/20 backdrop-blur-xl
+              "
+            >
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+              
+              <BookOpen className="w-8 h-8 text-primary mx-auto mb-3" />
+              <h3 className="font-display font-bold text-lg mb-2">Ready to Learn More?</h3>
+              <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
+                Explore our documentation to understand bridge security, fee structures, and integration guides.
+              </p>
+              <Button variant="outline" className="border-primary/30 hover:bg-primary/10">
+                <ExternalLink className="w-4 h-4 mr-2" />
+                View Documentation
+              </Button>
+            </motion.div>
+            
+          </div>
+        </main>
+
+        <Footer />
+      </div>
     </TooltipProvider>
   );
 }
