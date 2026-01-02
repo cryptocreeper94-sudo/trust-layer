@@ -8857,6 +8857,40 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  app.get("/api/owner/faucet/claims", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 100;
+      const claims = await storage.getFaucetClaims();
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const claimsToday = claims.filter(c => new Date(c.claimedAt) >= today).length;
+      
+      const completed = claims.filter(c => c.status === "completed").length;
+      const failed = claims.filter(c => c.status === "failed").length;
+      const pending = claims.filter(c => c.status === "pending").length;
+      
+      const totalDistributed = claims
+        .filter(c => c.status === "completed")
+        .reduce((sum, c) => sum + BigInt(c.amount), BigInt(0));
+      
+      res.json({
+        claims: claims.slice(0, limit),
+        stats: {
+          total: claims.length,
+          claimsToday,
+          completed,
+          failed,
+          pending,
+          totalDistributed: totalDistributed.toString(),
+        }
+      });
+    } catch (error) {
+      console.error("Get faucet claims error:", error);
+      res.status(500).json({ error: "Failed to get faucet claims" });
+    }
+  });
+
   app.get("/api/owner/airdrop/summary", ownerAuthMiddleware, async (req, res) => {
     try {
       const summary = await payoutService.getAirdropSummary();
