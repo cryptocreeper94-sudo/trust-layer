@@ -789,7 +789,7 @@ export default function Chronicles() {
               <span>Portal</span>
             </a>
             <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10 text-[10px] sm:text-xs whitespace-nowrap animate-pulse hidden sm:flex">
-              <Sparkles className="w-3 h-3 mr-1" /> Coming 2026
+              <Sparkles className="w-3 h-3 mr-1" /> Community-Driven
             </Badge>
             <BackButton className="hidden sm:flex" />
           </div>

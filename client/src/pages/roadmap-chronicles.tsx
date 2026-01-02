@@ -40,7 +40,7 @@ const CHRONICLES_PHASES: Phase[] = [
     name: "Phase 0: Foundation",
     description: "Build the core systems that power every AI life in the world",
     status: "in_progress",
-    targetDate: "Q3 2026",
+    targetDate: "TBD",
     icon: <Brain className="w-6 h-6" />,
     image: fantasyWorld,
     milestones: [
@@ -57,7 +57,7 @@ const CHRONICLES_PHASES: Phase[] = [
     name: "Phase 1: Political Simulation",
     description: "Factions rise and fall. Treaties are made and broken. Your actions ripple through society.",
     status: "upcoming",
-    targetDate: "Q1 2027",
+    targetDate: "TBD",
     icon: <Crown className="w-6 h-6" />,
     image: medievalKingdom,
     milestones: [
@@ -74,7 +74,7 @@ const CHRONICLES_PHASES: Phase[] = [
     name: "Phase 2: Living World",
     description: "The world breathes. Time flows. Your legacy echoes through generations.",
     status: "upcoming",
-    targetDate: "Q3 2027",
+    targetDate: "TBD",
     icon: <Globe className="w-6 h-6" />,
     image: quantumRealm,
     milestones: [
@@ -296,6 +296,10 @@ export default function RoadmapChronicles() {
               Follow our journey to create the most ambitious AI-powered adventure platform ever made. 
               Your character isn't an avatar—it's an extension of your psyche.
             </p>
+            <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/30">
+              <Users className="w-4 h-4 text-amber-400" />
+              <span className="text-amber-300 text-sm">Community-driven timeline — your involvement shapes when we launch</span>
+            </div>
           </div>
 
           {/* Overall Progress Card with photorealistic background */}

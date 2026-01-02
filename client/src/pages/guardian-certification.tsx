@@ -148,7 +148,7 @@ const WHY_GUARDIAN = [
 const CERTIFIED_PROJECTS = [
   { name: "DarkWave Smart Chain", status: "Certified", score: 78, date: "Dec 2024" },
   { name: "ChronoChat Platform", status: "In Progress", score: null, date: "Q1 2026" },
-  { name: "DarkWave Chronicles", status: "Scheduled", score: null, date: "Q2 2026" }
+  { name: "DarkWave Chronicles", status: "Community-Driven", score: null, date: "TBD" }
 ];
 
 const TRUST_CENTER_DOCS = [

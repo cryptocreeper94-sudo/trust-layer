@@ -40,7 +40,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       },
       {
         question: "When does the token launch?",
-        answer: "The DWC token is scheduled for launch on February 14, 2026 (Valentine's Day). The public beta of DarkWave Chronicles is targeted for July 4, 2026."
+        answer: "The DWC token is scheduled for launch on February 14, 2026 (Valentine's Day). DarkWave Chronicles is a community-driven project - the timeline depends on community involvement and support. Join us to help make it happen!"
       },
       {
         question: "What makes DWSC different from other blockchains?",
