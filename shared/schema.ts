@@ -3742,3 +3742,28 @@ export const insertArcadeLeaderboardSchema = createInsertSchema(arcadeLeaderboar
 
 export type ArcadeLeaderboardEntry = typeof arcadeLeaderboard.$inferSelect;
 export type InsertArcadeLeaderboardEntry = z.infer<typeof insertArcadeLeaderboardSchema>;
+
+// ============================================
+// WALLET CLOUD BACKUPS
+// ============================================
+
+export const walletBackups = pgTable("wallet_backups", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  backupName: text("backup_name").notNull().default("Primary Wallet"),
+  encryptedData: text("encrypted_data").notNull(), // AES-256-GCM encrypted mnemonic
+  walletAddresses: text("wallet_addresses"), // JSON of derived addresses for display
+  deviceId: text("device_id"), // Optional device identifier
+  isActive: boolean("is_active").notNull().default(true),
+  lastSyncedAt: timestamp("last_synced_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertWalletBackupSchema = createInsertSchema(walletBackups).omit({
+  id: true,
+  createdAt: true,
+  lastSyncedAt: true,
+});
+
+export type WalletBackup = typeof walletBackups.$inferSelect;
+export type InsertWalletBackup = z.infer<typeof insertWalletBackupSchema>;

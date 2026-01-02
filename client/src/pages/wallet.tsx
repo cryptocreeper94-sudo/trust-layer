@@ -27,11 +27,16 @@ import {
   Home,
   Download,
   Upload,
-  AlertTriangle
+  AlertTriangle,
+  Cloud,
+  CloudOff,
+  Loader
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
+import axios from "axios";
+import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -68,6 +73,7 @@ interface WalletAccount {
 export default function WalletPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedChain, setSelectedChain] = useState(SUPPORTED_CHAINS[0]);
   const [showChainSelector, setShowChainSelector] = useState(false);
@@ -81,6 +87,82 @@ export default function WalletPage() {
   const [copied, setCopied] = useState(false);
   const [loginPassword, setLoginPassword] = useState("");
   const [showLogin, setShowLogin] = useState(false);
+  const [isBackingUp, setIsBackingUp] = useState(false);
+  const [isRestoring, setIsRestoring] = useState(false);
+  
+  // Check if cloud backup exists
+  const { data: backupStatus } = useQuery({
+    queryKey: ["wallet-backup-status", user?.id],
+    queryFn: () => axios.get("/api/wallet/backup/exists").then(r => r.data),
+    enabled: !!user?.id && walletCreated,
+  });
+  
+  const handleCloudBackup = async () => {
+    if (!user?.id) {
+      toast({ title: "Sign in required", description: "Please sign in to enable cloud backup", variant: "destructive" });
+      return;
+    }
+    
+    const savedWallet = localStorage.getItem('darkwave_wallet');
+    if (!savedWallet) {
+      toast({ title: "No wallet found", description: "Create or import a wallet first", variant: "destructive" });
+      return;
+    }
+    
+    setIsBackingUp(true);
+    try {
+      const walletData: StoredWallet = JSON.parse(savedWallet);
+      await axios.post("/api/wallet/backup", {
+        encryptedData: JSON.stringify({ encryptedSeed: walletData.encryptedSeed, salt: walletData.salt, iv: walletData.iv }),
+        walletAddresses: JSON.stringify(walletData.addresses),
+        backupName: "Primary Wallet",
+      });
+      
+      queryClient.invalidateQueries({ queryKey: ["wallet-backup-status"] });
+      toast({ title: "Backup successful", description: "Your wallet is now backed up to the cloud" });
+    } catch (error) {
+      toast({ title: "Backup failed", description: "Could not save backup to cloud", variant: "destructive" });
+    } finally {
+      setIsBackingUp(false);
+    }
+  };
+  
+  const handleCloudRestore = async () => {
+    if (!user?.id) {
+      toast({ title: "Sign in required", description: "Please sign in to restore from cloud", variant: "destructive" });
+      return;
+    }
+    
+    setIsRestoring(true);
+    try {
+      const response = await axios.get("/api/wallet/backup");
+      if (!response.data.backup) {
+        toast({ title: "No backup found", description: "No cloud backup exists for your account", variant: "destructive" });
+        return;
+      }
+      
+      const backup = response.data.backup;
+      const addresses = backup.walletAddresses ? JSON.parse(backup.walletAddresses) : {};
+      const encryptedParts = JSON.parse(backup.encryptedData);
+      
+      // Create wallet data structure compatible with localStorage
+      const restoredWallet: StoredWallet = {
+        encryptedSeed: encryptedParts.encryptedSeed,
+        salt: encryptedParts.salt,
+        iv: encryptedParts.iv,
+        addresses,
+        createdAt: backup.createdAt,
+      };
+      
+      localStorage.setItem('darkwave_wallet', JSON.stringify(restoredWallet));
+      setShowLogin(true);
+      toast({ title: "Wallet restored", description: "Enter your password to unlock your wallet" });
+    } catch (error) {
+      toast({ title: "Restore failed", description: "Could not restore from cloud backup", variant: "destructive" });
+    } finally {
+      setIsRestoring(false);
+    }
+  };
 
   // Check for existing wallet on mount
   const checkExistingWallet = () => {
@@ -753,6 +835,57 @@ export default function WalletPage() {
                         <span className="text-sm">9 Chains Supported</span>
                       </div>
                       <Zap className="w-4 h-4 text-purple-400" />
+                    </div>
+                    
+                    <div className="pt-3 border-t border-white/10 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Cloud className="w-4 h-4 text-cyan-400" />
+                          <span className="text-sm font-medium">Cloud Backup</span>
+                        </div>
+                        {backupStatus?.exists ? (
+                          <span className="text-xs text-cyan-400">Synced</span>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">Not enabled</span>
+                        )}
+                      </div>
+                      
+                      {user?.id ? (
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={handleCloudBackup}
+                            disabled={isBackingUp}
+                            className="flex-1 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"
+                            data-testid="button-cloud-backup"
+                          >
+                            {isBackingUp ? (
+                              <Loader className="w-3 h-3 mr-1 animate-spin" />
+                            ) : (
+                              <Upload className="w-3 h-3 mr-1" />
+                            )}
+                            {isBackingUp ? "Backing up..." : "Backup"}
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={handleCloudRestore}
+                            disabled={isRestoring || !backupStatus?.exists}
+                            className="flex-1 border-purple-500/30 text-purple-400 hover:bg-purple-500/10"
+                            data-testid="button-cloud-restore"
+                          >
+                            {isRestoring ? (
+                              <Loader className="w-3 h-3 mr-1 animate-spin" />
+                            ) : (
+                              <Download className="w-3 h-3 mr-1" />
+                            )}
+                            {isRestoring ? "Restoring..." : "Restore"}
+                          </Button>
+                        </div>
+                      ) : (
+                        <p className="text-xs text-muted-foreground">Sign in to enable cloud backup</p>
+                      )}
                     </div>
                   </CardContent>
                 </Card>

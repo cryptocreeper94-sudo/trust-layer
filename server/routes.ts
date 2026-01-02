@@ -51,7 +51,7 @@ async function verifyFirebaseToken(req: FirebaseAuthRequest, res: Response, next
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -3666,6 +3666,116 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Error batch confirming stamps:", error);
       res.status(500).json({ error: "Failed to batch confirm stamps" });
+    }
+  });
+
+  // === WALLET CLOUD BACKUP ROUTES ===
+  
+  app.post("/api/wallet/backup", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const schema = z.object({
+        encryptedData: z.string().min(10),
+        walletAddresses: z.string().optional(),
+        backupName: z.string().max(100).optional(),
+        deviceId: z.string().max(100).optional(),
+      });
+      
+      const data = schema.parse(req.body);
+      
+      // Check if user already has a backup, update if so
+      const [existing] = await db.select()
+        .from(walletBackups)
+        .where(and(eq(walletBackups.userId, userId), eq(walletBackups.isActive, true)));
+      
+      if (existing) {
+        const [updated] = await db.update(walletBackups)
+          .set({ 
+            encryptedData: data.encryptedData,
+            walletAddresses: data.walletAddresses,
+            lastSyncedAt: new Date(),
+          })
+          .where(eq(walletBackups.id, existing.id))
+          .returning();
+        return res.json({ backup: updated, updated: true });
+      }
+      
+      const [backup] = await db.insert(walletBackups)
+        .values({
+          userId,
+          encryptedData: data.encryptedData,
+          walletAddresses: data.walletAddresses,
+          backupName: data.backupName || "Primary Wallet",
+          deviceId: data.deviceId,
+        })
+        .returning();
+      
+      res.json({ backup, created: true });
+    } catch (error: any) {
+      console.error("Error creating wallet backup:", error);
+      res.status(500).json({ error: error.message || "Failed to create backup" });
+    }
+  });
+
+  app.get("/api/wallet/backup", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const [backup] = await db.select()
+        .from(walletBackups)
+        .where(and(eq(walletBackups.userId, userId), eq(walletBackups.isActive, true)));
+      
+      if (!backup) {
+        return res.json({ backup: null });
+      }
+      
+      res.json({ backup });
+    } catch (error: any) {
+      console.error("Error fetching wallet backup:", error);
+      res.status(500).json({ error: "Failed to fetch backup" });
+    }
+  });
+
+  app.delete("/api/wallet/backup", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      await db.update(walletBackups)
+        .set({ isActive: false })
+        .where(and(eq(walletBackups.userId, userId), eq(walletBackups.isActive, true)));
+      
+      res.json({ success: true, message: "Backup removed" });
+    } catch (error: any) {
+      console.error("Error deleting wallet backup:", error);
+      res.status(500).json({ error: "Failed to delete backup" });
+    }
+  });
+
+  app.get("/api/wallet/backup/exists", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const [backup] = await db.select({ id: walletBackups.id, lastSyncedAt: walletBackups.lastSyncedAt })
+        .from(walletBackups)
+        .where(and(eq(walletBackups.userId, userId), eq(walletBackups.isActive, true)));
+      
+      res.json({ exists: !!backup, lastSyncedAt: backup?.lastSyncedAt });
+    } catch (error) {
+      console.error("Error checking backup:", error);
+      res.status(500).json({ error: "Failed to check backup status" });
     }
   });
 
