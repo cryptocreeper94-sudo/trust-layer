@@ -6,6 +6,7 @@ import { serveStatic } from "./static";
 import { createServer } from "http";
 import { startScheduler } from "./marketing-scheduler";
 import { seedDocuments } from "./storage";
+import { setupPresence } from "./chat-presence";
 
 const app = express();
 
@@ -179,6 +180,9 @@ app.use((req, res, next) => {
     },
     async () => {
       log(`serving on port ${port}`);
+      
+      // Setup ChronoChat WebSocket presence
+      setupPresence(httpServer);
       
       // Seed core documents if empty
       await seedDocuments();

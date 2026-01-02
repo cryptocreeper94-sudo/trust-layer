@@ -71,6 +71,7 @@ import { payoutService, startPayoutScheduler } from "./payout-service";
 import { voiceService, VOICE_SAMPLE_PROMPTS } from "./voice-service";
 import { communityHubService } from "./community-hub-service";
 import { walletBotService } from "./wallet-bot-service";
+import { broadcastToChannel } from "./chat-presence";
 import { pulseClient } from "./pulse-client";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { shellsService, SHELL_PACKAGES, SHELL_EARN_RATES, SHELL_COSTS } from "./shells-service";
@@ -3130,6 +3131,62 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Error fetching recent submissions:", error);
       res.status(500).json({ error: "Failed to fetch submissions" });
+    }
+  });
+
+  // ============================================
+  // ARCADE LEADERBOARDS
+  // ============================================
+
+  app.get("/api/arcade/leaderboard/:game", async (req, res) => {
+    try {
+      const game = req.params.game;
+      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const leaderboard = await storage.getArcadeLeaderboard(game, limit);
+      res.json({ leaderboard });
+    } catch (error) {
+      console.error("Error fetching arcade leaderboard:", error);
+      res.status(500).json({ error: "Failed to fetch leaderboard" });
+    }
+  });
+
+  app.post("/api/arcade/score", async (req, res) => {
+    try {
+      const { game, userId, username, score, level, metadata } = req.body;
+      
+      if (!game || !userId || score === undefined) {
+        return res.status(400).json({ error: "Missing required fields: game, userId, score" });
+      }
+      
+      const validGames = ["pacman", "galaga", "snake", "tetris", "minesweeper", "solitaire", "spades"];
+      if (!validGames.includes(game)) {
+        return res.status(400).json({ error: "Invalid game type" });
+      }
+      
+      const entry = await storage.submitArcadeScore({
+        game,
+        userId,
+        username: username || "Anonymous",
+        score: parseInt(score),
+        level: level ? parseInt(level) : undefined,
+        metadata: metadata ? JSON.stringify(metadata) : undefined,
+      });
+      
+      res.json({ success: true, entry });
+    } catch (error) {
+      console.error("Error submitting arcade score:", error);
+      res.status(500).json({ error: "Failed to submit score" });
+    }
+  });
+
+  app.get("/api/arcade/highscore/:game/:userId", async (req, res) => {
+    try {
+      const { game, userId } = req.params;
+      const highScore = await storage.getUserHighScore(game, userId);
+      res.json({ highScore: highScore?.score || 0, entry: highScore });
+    } catch (error) {
+      console.error("Error fetching user high score:", error);
+      res.status(500).json({ error: "Failed to fetch high score" });
     }
   });
 
@@ -9111,11 +9168,17 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         isBot: false,
       });
       
+      // Broadcast to WebSocket subscribers
+      broadcastToChannel(channelId, { type: 'NEW_MESSAGE', payload: message });
+      
       // Process bot commands if message starts with /
       if (content.startsWith("/")) {
         const botResponse = await walletBotService.processMessage(content, userId, channelId);
         if (botResponse) {
-          await walletBotService.sendBotMessage(channelId, botResponse);
+          const botMessage = await walletBotService.sendBotMessage(channelId, botResponse);
+          if (botMessage) {
+            broadcastToChannel(channelId, { type: 'NEW_MESSAGE', payload: botMessage });
+          }
         }
       }
       

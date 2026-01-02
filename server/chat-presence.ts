@@ -5,6 +5,7 @@ import url from 'url';
 type PresenceEntry = {
   userId: string;
   communityId: string;
+  channelId?: string;
   ws: WebSocket;
   lastSeen: number;
   typing?: boolean;
@@ -13,9 +14,23 @@ type PresenceEntry = {
 
 const PRESENCE_TTL = 60_000;
 
+let presencesRef: Map<string, Set<PresenceEntry>> | null = null;
+
+export function broadcastToChannel(channelId: string, payload: any) {
+  if (!presencesRef) return;
+  for (const [, set] of Array.from(presencesRef.entries())) {
+    for (const p of Array.from(set)) {
+      if (p.channelId === channelId && p.ws.readyState === WebSocket.OPEN) {
+        p.ws.send(JSON.stringify(payload));
+      }
+    }
+  }
+}
+
 export function setupPresence(server: HttpServer) {
   const wss = new WebSocketServer({ noServer: true });
   const presences = new Map<string, Set<PresenceEntry>>();
+  presencesRef = presences;
 
   server.on('upgrade', (req, socket, head) => {
     const pathname = url.parse(req.url || '').pathname || '';
@@ -31,7 +46,7 @@ export function setupPresence(server: HttpServer) {
   function broadcastToCommunity(communityId: string, payload: any) {
     const set = presences.get(communityId);
     if (!set) return;
-    for (const p of set) {
+    for (const p of Array.from(set)) {
       if (p.ws.readyState === WebSocket.OPEN) {
         p.ws.send(JSON.stringify(payload));
       }
@@ -41,9 +56,10 @@ export function setupPresence(server: HttpServer) {
   wss.on('connection', (ws: WebSocket, req) => {
     const query = url.parse(req.url || '', true).query;
     const communityId = (query.community as string) || 'general';
+    const channelId = (query.channel as string) || undefined;
     const userId = (query.user as string) || `anon-${Date.now()}`;
 
-    const entry: PresenceEntry = { userId, communityId, ws, lastSeen: Date.now(), status: 'online' };
+    const entry: PresenceEntry = { userId, communityId, channelId, ws, lastSeen: Date.now(), status: 'online' };
     if (!presences.has(communityId)) presences.set(communityId, new Set());
     presences.get(communityId)!.add(entry);
 
@@ -60,6 +76,8 @@ export function setupPresence(server: HttpServer) {
           broadcastToCommunity(communityId, { type: 'TYPING_STOP', payload: { userId } });
         } else if (msg.type === 'HEARTBEAT') {
           entry.lastSeen = Date.now();
+        } else if (msg.type === 'SUBSCRIBE_CHANNEL') {
+          entry.channelId = msg.payload?.channelId;
         }
       } catch (e) {
         // ignore
@@ -73,12 +91,12 @@ export function setupPresence(server: HttpServer) {
 
     const interval = setInterval(() => {
       const now = Date.now();
-      for (const [cid, set] of presences.entries()) {
-        for (const e of Array.from(set)) {
-          if (now - e.lastSeen > PRESENCE_TTL * 3) {
-            try { e.ws.terminate(); } catch {}
-            set.delete(e);
-            broadcastToCommunity(cid, { type: 'PRESENCE_UPDATE', payload: { userId: e.userId, status: 'offline' } });
+      for (const [cid, set] of Array.from(presences.entries())) {
+        for (const entry of Array.from(set)) {
+          if (now - entry.lastSeen > PRESENCE_TTL * 3) {
+            try { entry.ws.terminate(); } catch (err) { /* ignore */ }
+            set.delete(entry);
+            broadcastToCommunity(cid, { type: 'PRESENCE_UPDATE', payload: { userId: entry.userId, status: 'offline' } });
           }
         }
       }

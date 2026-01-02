@@ -3719,3 +3719,26 @@ export type GuardianBlockchainStamp = typeof guardianBlockchainStamps.$inferSele
 export type InsertGuardianBlockchainStamp = z.infer<typeof insertGuardianBlockchainStampSchema>;
 export type GuardianSubscription = typeof guardianSubscriptions.$inferSelect;
 export type InsertGuardianSubscription = z.infer<typeof insertGuardianSubscriptionSchema>;
+
+// ============================================
+// ARCADE GAME LEADERBOARDS
+// ============================================
+
+export const arcadeLeaderboard = pgTable("arcade_leaderboard", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  game: text("game").notNull(), // 'pacman', 'galaga', 'snake', 'tetris', 'minesweeper'
+  userId: text("user_id").notNull(),
+  username: text("username"),
+  score: integer("score").notNull(),
+  level: integer("level"),
+  metadata: text("metadata"), // JSON for game-specific data
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertArcadeLeaderboardSchema = createInsertSchema(arcadeLeaderboard).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type ArcadeLeaderboardEntry = typeof arcadeLeaderboard.$inferSelect;
+export type InsertArcadeLeaderboardEntry = z.infer<typeof insertArcadeLeaderboardSchema>;
