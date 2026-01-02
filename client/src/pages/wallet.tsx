@@ -50,6 +50,12 @@ import {
   validateMnemonic,
   type StoredWallet 
 } from "@/lib/wallet-crypto";
+import { 
+  fetchAllTestnetBalances, 
+  getTestnetFaucetUrl, 
+  getTestnetName,
+  type TestnetBalance 
+} from "@/lib/testnet-service";
 
 const SUPPORTED_CHAINS = [
   { id: 'darkwave', name: 'DarkWave Smart Chain', symbol: 'DWC', icon: '⚡', color: 'from-purple-500 to-pink-500', explorer: '/explorer' },
@@ -184,25 +190,87 @@ export default function WalletPage() {
   const [isCreating, setIsCreating] = useState(false);
   const [importMnemonic, setImportMnemonic] = useState("");
   const [importPassword, setImportPassword] = useState("");
+  const [isRefreshingBalances, setIsRefreshingBalances] = useState(false);
 
-  // Get wallet accounts from stored data
-  const getWalletAccounts = (): WalletAccount[] => {
+  // Get stored wallet addresses
+  const getStoredAddresses = (): Record<string, string> => {
     const savedWallet = localStorage.getItem('darkwave_wallet');
-    if (!savedWallet || !walletCreated) {
-      return [];
-    }
-    
+    if (!savedWallet || !walletCreated) return {};
     const walletData: StoredWallet = JSON.parse(savedWallet);
-    return SUPPORTED_CHAINS.map(chain => ({
-      chain: chain.id,
-      address: walletData.addresses?.[chain.id] || '',
-      balance: '0.00',
-      usd: 0
-    }));
+    return walletData.addresses || {};
+  };
+  
+  const storedAddresses = getStoredAddresses();
+  
+  // Fetch real testnet balances
+  const { data: testnetBalances, refetch: refetchBalances, isLoading: isLoadingBalances } = useQuery({
+    queryKey: ["testnet-balances", JSON.stringify(storedAddresses)],
+    queryFn: () => fetchAllTestnetBalances(storedAddresses),
+    enabled: walletCreated && Object.keys(storedAddresses).length > 0,
+    staleTime: 60_000,
+    refetchInterval: 120_000,
+  });
+
+  // Get wallet accounts with real balances
+  const getWalletAccounts = (): WalletAccount[] => {
+    if (!walletCreated) return [];
+    
+    return SUPPORTED_CHAINS.map(chain => {
+      const realBalance = testnetBalances?.find(b => b.chain === chain.id);
+      return {
+        chain: chain.id,
+        address: storedAddresses[chain.id] || '',
+        balance: realBalance?.balance || '0.0000',
+        usd: realBalance?.usdValue || 0
+      };
+    });
   };
 
   const walletAccounts = getWalletAccounts();
   const totalBalance = walletAccounts.reduce((sum, acc) => sum + acc.usd, 0);
+  
+  const handleRefreshBalances = async () => {
+    setIsRefreshingBalances(true);
+    await refetchBalances();
+    setIsRefreshingBalances(false);
+    toast({ title: "Balances Updated", description: "Fetched latest testnet balances" });
+  };
+  
+  const [isSending, setIsSending] = useState(false);
+  
+  const handleSendTransaction = async () => {
+    if (!sendAddress.trim()) {
+      toast({ title: "Missing Address", description: "Please enter a recipient address", variant: "destructive" });
+      return;
+    }
+    if (!sendAmount || parseFloat(sendAmount) <= 0) {
+      toast({ title: "Invalid Amount", description: "Please enter a valid amount to send", variant: "destructive" });
+      return;
+    }
+    
+    const currentBalance = testnetBalances?.find(b => b.chain === selectedChain.id);
+    if (!currentBalance || parseFloat(currentBalance.balance) < parseFloat(sendAmount)) {
+      toast({ 
+        title: "Insufficient Balance", 
+        description: `You don't have enough ${selectedChain.symbol}. Get test tokens from the faucet.`, 
+        variant: "destructive" 
+      });
+      return;
+    }
+    
+    setIsSending(true);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      toast({ 
+        title: "Transaction Simulation", 
+        description: `Sending ${sendAmount} ${selectedChain.symbol} on ${getTestnetName(selectedChain.id)} testnet. Full transaction broadcasting coming soon!` 
+      });
+      setSendAmount("");
+      setSendAddress("");
+    } finally {
+      setIsSending(false);
+    }
+  };
 
   const copyAddress = (address: string) => {
     navigator.clipboard.writeText(address);
@@ -547,18 +615,35 @@ export default function WalletPage() {
                 <CardContent className="relative p-6">
                   <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="text-center md:text-left">
-                      <p className="text-sm text-muted-foreground mb-1">Total Portfolio Value</p>
+                      <div className="flex items-center gap-2 mb-1">
+                        <p className="text-sm text-muted-foreground">Total Portfolio Value</p>
+                        <span className="px-2 py-0.5 text-xs bg-cyan-500/20 text-cyan-400 rounded-full border border-cyan-500/30">
+                          TESTNET
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={handleRefreshBalances}
+                          disabled={isRefreshingBalances || isLoadingBalances}
+                          className="h-6 w-6 p-0 hover:bg-white/10"
+                          data-testid="button-refresh-balances"
+                        >
+                          <RefreshCw className={`w-3 h-3 ${isRefreshingBalances || isLoadingBalances ? 'animate-spin' : ''}`} />
+                        </Button>
+                      </div>
                       <div className="flex items-baseline gap-2">
                         <span className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
                           ${totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
-                        <span className="text-green-400 text-sm flex items-center gap-1">
-                          <TrendingUp className="w-3 h-3" />
-                          +12.5%
-                        </span>
+                        {isLoadingBalances && (
+                          <span className="text-cyan-400 text-sm flex items-center gap-1">
+                            <Loader className="w-3 h-3 animate-spin" />
+                            Loading...
+                          </span>
+                        )}
                       </div>
                       <p className="text-sm text-muted-foreground mt-2">
-                        Across {SUPPORTED_CHAINS.length} chains
+                        Across {SUPPORTED_CHAINS.length} testnet chains
                       </p>
                     </div>
                     
@@ -681,6 +766,9 @@ export default function WalletPage() {
                               <div>
                                 <div className="flex items-center gap-2">
                                   <h3 className="font-semibold">{chain.name}</h3>
+                                  <span className="px-1.5 py-0.5 text-[10px] rounded bg-cyan-500/20 text-cyan-400 border border-cyan-500/20">
+                                    {getTestnetName(chain.id)}
+                                  </span>
                                   {chain.id === 'darkwave' && (
                                     <span className="px-2 py-0.5 text-xs rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
                                       Native
@@ -701,11 +789,18 @@ export default function WalletPage() {
                                 </div>
                               </div>
                             </div>
-                            <div className="text-right">
+                            <div className="text-right flex flex-col items-end gap-1">
                               <p className="font-semibold">{account.balance} {chain.symbol}</p>
-                              <p className="text-sm text-muted-foreground">
-                                ${account.usd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                              </p>
+                              <a 
+                                href={getTestnetFaucetUrl(chain.id)} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors"
+                                data-testid={`link-faucet-${chain.id}`}
+                              >
+                                <Zap className="w-3 h-3" />
+                                Get Test Tokens
+                              </a>
                             </div>
                           </div>
                         </CardContent>
@@ -800,10 +895,19 @@ export default function WalletPage() {
                     <Button
                       className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
                       data-testid="button-confirm-send"
+                      onClick={handleSendTransaction}
+                      disabled={isSending}
                     >
-                      <Send className="w-4 h-4 mr-2" />
-                      Send {selectedChain.symbol}
+                      {isSending ? (
+                        <Loader className="w-4 h-4 mr-2 animate-spin" />
+                      ) : (
+                        <Send className="w-4 h-4 mr-2" />
+                      )}
+                      {isSending ? "Sending..." : `Send ${selectedChain.symbol}`}
                     </Button>
+                    <p className="text-xs text-center text-muted-foreground mt-2">
+                      Testnet mode - use faucet to get test tokens
+                    </p>
                   </CardContent>
                 </Card>
 
