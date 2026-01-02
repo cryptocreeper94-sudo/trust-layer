@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { 
   Shield, ShieldCheck, Award, Activity, AlertTriangle, Clock,
   CheckCircle, XCircle, Eye, ExternalLink, Plus, Settings,
   Wallet, ChevronRight, Zap, Lock, Server, Database, Globe,
-  Bell, TrendingUp, BarChart3, FileText, RefreshCw, Loader
+  Bell, TrendingUp, BarChart3, FileText, RefreshCw, Loader, Sparkles
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
@@ -81,6 +81,7 @@ function StatsCard({ icon: Icon, label, value, trend, color }: { icon: any; labe
 export default function GuardianPortal() {
   usePageAnalytics();
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState<"overview" | "assets" | "incidents" | "stamps" | "shield">("overview");
 
   const { data: certifications = [], isLoading: certsLoading } = useQuery({
@@ -110,8 +111,26 @@ export default function GuardianPortal() {
     try {
       await axios.patch(`/api/guardian/certifications/${certId}`, { status: "completed", score });
       toast.success("Certification marked as complete");
+      queryClient.invalidateQueries({ queryKey: ["guardian-certifications", user?.id] });
     } catch (error) {
       toast.error("Failed to update certification");
+    }
+  };
+
+  const [mintingId, setMintingId] = useState<string | null>(null);
+  
+  const handleMintNFT = async (certId: string) => {
+    setMintingId(certId);
+    try {
+      const response = await axios.post(`/api/guardian/certifications/${certId}/mint-nft`);
+      if (response.data.tokenId) {
+        toast.success(`NFT minted successfully! Token ID: ${response.data.tokenId}`);
+        queryClient.invalidateQueries({ queryKey: ["guardian-certifications", user?.id] });
+      }
+    } catch (error) {
+      toast.error("Failed to mint NFT badge");
+    } finally {
+      setMintingId(null);
     }
   };
 
@@ -240,8 +259,24 @@ export default function GuardianPortal() {
                           )}
                           {cert.nftTokenId && (
                             <Badge className="bg-purple-500/20 text-purple-400">
-                              NFT #{cert.nftTokenId}
+                              NFT #{cert.nftTokenId.slice(-8)}
                             </Badge>
+                          )}
+                          {cert.status === "completed" && !cert.nftTokenId && (
+                            <Button 
+                              size="sm" 
+                              className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white"
+                              onClick={() => handleMintNFT(cert.id)}
+                              disabled={mintingId === cert.id}
+                              data-testid={`button-mint-nft-${cert.id}`}
+                            >
+                              {mintingId === cert.id ? (
+                                <Loader className="w-3 h-3 mr-1 animate-spin" />
+                              ) : (
+                                <Sparkles className="w-3 h-3 mr-1" />
+                              )}
+                              {mintingId === cert.id ? "Minting..." : "Mint NFT"}
+                            </Button>
                           )}
                           {cert.status === "in_progress" && (
                             <Button 
