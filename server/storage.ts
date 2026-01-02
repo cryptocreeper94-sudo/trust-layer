@@ -51,6 +51,8 @@ export interface IStorage {
   
   upsertFirebaseUser(data: { id: string; email: string | null; username?: string | null; displayName?: string | null; firstName: string | null; lastName: string | null; profileImageUrl: string | null; signupPosition?: string | null }): Promise<User>;
   getFirebaseUser(id: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
+  setUserPin(userId: string, pinHash: string): Promise<void>;
   getNextSignupPosition(): Promise<string>;
   
   // Faucet
@@ -766,6 +768,12 @@ export class DatabaseStorage implements IStorage {
 
   async getFirebaseUser(id: string): Promise<User | undefined> {
     return this.getUser(id);
+  }
+
+  async setUserPin(userId: string, pinHash: string): Promise<void> {
+    await db.update(users)
+      .set({ pinHash })
+      .where(eq(users.id, userId));
   }
 
   async getNextSignupPosition(): Promise<string> {

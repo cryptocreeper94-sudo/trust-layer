@@ -1,47 +1,69 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import type { User } from "@shared/models/auth";
+import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { type User as FirebaseUser } from "firebase/auth";
+import { onAuthChange, signOut as firebaseSignOut, auth } from "@/lib/firebase";
 
-async function fetchUser(): Promise<User | null> {
-  const response = await fetch("/api/auth/user", {
-    credentials: "include",
-  });
-
-  if (response.status === 401) {
-    return null;
-  }
-
-  if (!response.ok) {
-    throw new Error(`${response.status}: ${response.statusText}`);
-  }
-
-  return response.json();
+interface User {
+  id: string;
+  email: string | null;
+  displayName: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  profileImageUrl: string | null;
+  username: string | null;
 }
 
-async function logout(): Promise<void> {
-  window.location.href = "/api/logout";
+export async function getAuthToken(): Promise<string | null> {
+  const currentUser = auth.currentUser;
+  if (!currentUser) return null;
+  return currentUser.getIdToken();
 }
 
 export function useAuth() {
   const queryClient = useQueryClient();
-  const { data: user, isLoading } = useQuery<User | null>({
-    queryKey: ["/api/auth/user"],
-    queryFn: fetchUser,
-    retry: false,
-    staleTime: 1000 * 60 * 5, // 5 minutes
-  });
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const logoutMutation = useMutation({
-    mutationFn: logout,
-    onSuccess: () => {
-      queryClient.setQueryData(["/api/auth/user"], null);
-    },
-  });
+  useEffect(() => {
+    const unsubscribe = onAuthChange(async (firebaseUser: FirebaseUser | null) => {
+      if (firebaseUser) {
+        // Map Firebase user to our User type
+        setUser({
+          id: firebaseUser.uid,
+          email: firebaseUser.email,
+          displayName: firebaseUser.displayName,
+          firstName: firebaseUser.displayName?.split(' ')[0] || null,
+          lastName: firebaseUser.displayName?.split(' ').slice(1).join(' ') || null,
+          profileImageUrl: firebaseUser.photoURL,
+          username: firebaseUser.email?.split('@')[0] || null,
+        });
+      } else {
+        setUser(null);
+      }
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const logout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await firebaseSignOut();
+      queryClient.clear();
+      setUser(null);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   return {
     user,
     isLoading,
     isAuthenticated: !!user,
-    logout: logoutMutation.mutate,
-    isLoggingOut: logoutMutation.isPending,
+    logout,
+    isLoggingOut,
+    getAuthToken,
   };
 }

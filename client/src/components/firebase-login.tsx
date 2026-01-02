@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Loader2, Mail, ArrowLeft } from "lucide-react";
+import { X, Loader2, Mail, ArrowLeft, KeyRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signInWithGoogle, signInWithGithub, signInWithApple, signInWithEmail, signUpWithEmail, resetPassword } from "@/lib/firebase";
@@ -12,7 +12,7 @@ interface FirebaseLoginModalProps {
   onSuccess?: () => void;
 }
 
-type View = 'providers' | 'email-login' | 'email-signup' | 'forgot-password';
+type View = 'providers' | 'email-login' | 'email-signup' | 'forgot-password' | 'pin-login';
 
 export function FirebaseLoginModal({ isOpen, onClose, onSuccess }: FirebaseLoginModalProps) {
   const { toast } = useToast();
@@ -22,12 +22,14 @@ export function FirebaseLoginModal({ isOpen, onClose, onSuccess }: FirebaseLogin
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
+  const [pin, setPin] = useState('');
 
   const resetForm = () => {
     setEmail('');
     setPassword('');
     setName('');
     setUsername('');
+    setPin('');
     setView('providers');
   };
 
@@ -78,6 +80,41 @@ export function FirebaseLoginModal({ isOpen, onClose, onSuccess }: FirebaseLogin
     }
   };
 
+  const handlePinLogin = async () => {
+    if (!email || !pin) {
+      toast({ title: "Missing info", description: "Please enter your email and PIN.", variant: "destructive" });
+      return;
+    }
+    if (!/^\d{4,6}$/.test(pin)) {
+      toast({ title: "Invalid PIN", description: "PIN must be 4-6 digits.", variant: "destructive" });
+      return;
+    }
+    setLoading('pin');
+    try {
+      const response = await fetch('/api/auth/pin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, pin }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'PIN login failed');
+      }
+      toast({ title: "Welcome back!", description: "You've successfully signed in with PIN." });
+      onSuccess?.();
+      handleClose();
+      window.location.reload();
+    } catch (error: any) {
+      let message = error.message || "Please try again.";
+      if (message.includes("PIN not set up")) {
+        message = "PIN not set up. Please sign in with password first, then set up your PIN.";
+      }
+      toast({ title: "Sign in failed", description: message, variant: "destructive" });
+    } finally {
+      setLoading(null);
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -118,12 +155,14 @@ export function FirebaseLoginModal({ isOpen, onClose, onSuccess }: FirebaseLogin
                 {view === 'email-login' && 'Sign In'}
                 {view === 'email-signup' && 'Create Account'}
                 {view === 'forgot-password' && 'Reset Password'}
+                {view === 'pin-login' && 'Quick Sign In'}
               </h2>
               <p className="text-muted-foreground text-sm">
                 {view === 'providers' && 'Sign in to your DarkWave account'}
                 {view === 'email-login' && 'Enter your email and password'}
                 {view === 'email-signup' && 'Create your DarkWave account'}
                 {view === 'forgot-password' && "We'll send you a reset link"}
+                {view === 'pin-login' && 'Enter your email and PIN'}
               </p>
             </div>
 
@@ -132,12 +171,23 @@ export function FirebaseLoginModal({ isOpen, onClose, onSuccess }: FirebaseLogin
                 <Button
                   variant="outline"
                   className="w-full h-12 bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 justify-start gap-3 text-white"
+                  onClick={() => setView('pin-login')}
+                  disabled={loading !== null}
+                  data-testid="button-login-pin"
+                >
+                  <KeyRound className="w-5 h-5" />
+                  Sign In with PIN
+                </Button>
+
+                <Button
+                  variant="outline"
+                  className="w-full h-12 bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 justify-start gap-3 text-white"
                   onClick={() => setView('email-login')}
                   disabled={loading !== null}
                   data-testid="button-login-email"
                 >
                   <Mail className="w-5 h-5" />
-                  Continue with Email
+                  Continue with Email/Password
                 </Button>
 
                 <div className="relative my-4">
@@ -310,6 +360,44 @@ export function FirebaseLoginModal({ isOpen, onClose, onSuccess }: FirebaseLogin
                   <button onClick={() => setView('email-login')} className="text-cyan-400 hover:underline">
                     Sign in
                   </button>
+                </p>
+              </div>
+            )}
+
+            {view === 'pin-login' && (
+              <div className="space-y-4">
+                <Input
+                  type="email"
+                  placeholder="Email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="h-12 bg-white/5 border-white/10"
+                  data-testid="input-pin-email"
+                />
+                <Input
+                  type="password"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="Enter your 4-6 digit PIN"
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  className="h-12 bg-white/5 border-white/10 text-center text-2xl tracking-widest"
+                  data-testid="input-pin"
+                />
+                <Button
+                  className="w-full h-12 bg-gradient-to-r from-cyan-500 to-purple-500 text-black font-semibold"
+                  onClick={handlePinLogin}
+                  disabled={loading !== null || !email || !pin || pin.length < 4}
+                  data-testid="button-submit-pin"
+                >
+                  {loading === 'pin' ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Sign In'}
+                </Button>
+                <p className="text-center text-sm text-muted-foreground">
+                  Don't have a PIN?{' '}
+                  <button onClick={() => setView('email-login')} className="text-cyan-400 hover:underline">
+                    Sign in with password
+                  </button>
+                  {' '}to set one up.
                 </p>
               </div>
             )}

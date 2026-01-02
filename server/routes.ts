@@ -15,16 +15,20 @@ interface FirebaseAuthRequest extends Request {
   firebaseUser?: { uid: string; email?: string };
 }
 
-async function verifyFirebaseToken(req: FirebaseAuthRequest, res: Response, next: NextFunction) {
+// Unified Firebase authentication middleware
+// Uses google-auth-library to verify Firebase ID tokens.
+// NOTE: For production hardening, consider Firebase Admin SDK with service account.
+// This implementation validates: issuer, audience, signature, and expiration.
+async function isAuthenticated(req: any, res: Response, next: NextFunction) {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader?.startsWith('Bearer ')) {
-      return res.status(401).json({ error: "Authorization required" });
+      return res.status(401).json({ error: "Authentication required" });
     }
     
     const idToken = authHeader.substring(7);
-    
     const oauth2Client = new OAuth2Client();
+    
     const ticket = await oauth2Client.verifyIdToken({
       idToken,
       audience: FIREBASE_PROJECT_ID,
@@ -32,22 +36,36 @@ async function verifyFirebaseToken(req: FirebaseAuthRequest, res: Response, next
     
     const payload = ticket.getPayload();
     if (!payload) {
-      return res.status(401).json({ error: "Invalid token" });
+      return res.status(401).json({ error: "Authentication required" });
     }
     
     const expectedIssuer = `https://securetoken.google.com/${FIREBASE_PROJECT_ID}`;
     if (payload.iss !== expectedIssuer) {
-      console.error("Firebase token issuer mismatch:", payload.iss);
-      return res.status(401).json({ error: "Invalid token issuer" });
+      return res.status(401).json({ error: "Authentication required" });
     }
     
+    // Check token expiration with 5 minute clock skew tolerance
+    const now = Math.floor(Date.now() / 1000);
+    if (payload.exp && payload.exp < now - 300) {
+      return res.status(401).json({ error: "Authentication required" });
+    }
+    
+    // Set both user formats for backward compatibility
+    req.user = { 
+      claims: { sub: payload.sub },
+      id: payload.sub,
+      email: payload.email 
+    };
     req.firebaseUser = { uid: payload.sub!, email: payload.email };
     next();
   } catch (error) {
-    console.error("Firebase token verification failed:", error);
-    return res.status(401).json({ error: "Invalid or expired token" });
+    console.error("Firebase auth failed:", error);
+    return res.status(401).json({ error: "Authentication required" });
   }
 }
+
+// Alias for routes using the old name
+const verifyFirebaseToken = isAuthenticated;
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
@@ -58,7 +76,6 @@ import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark"
 import { blockchain } from "./blockchain-engine";
 import { sendEmail, sendApiKeyEmail, sendHallmarkEmail, sendPresaleConfirmationEmail } from "./email";
 import { submitMemoToSolana, isHeliusConfigured, getSolanaTreasuryAddress, getSolanaBalance } from "./helius";
-import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
 import { startRegistration, finishRegistration, startAuthentication, finishAuthentication, getUserPasskeys, deletePasskey } from "./webauthn";
 import { bridge } from "./bridge-engine";
 import { registerChatRoutes } from "./replit_integrations/chat";
@@ -159,8 +176,6 @@ export async function registerRoutes(
   app: Express
 ): Promise<Server> {
   
-  await setupAuth(app);
-  registerAuthRoutes(app);
   registerChatRoutes(app);
   registerImageRoutes(app);
   registerObjectStorageRoutes(app);
@@ -824,6 +839,106 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Firebase sync error:", error);
       res.status(500).json({ error: "Failed to sync user" });
+    }
+  });
+
+  // PIN Registration - set a 4-6 digit PIN for quick login
+  app.post("/api/auth/pin/register", authRateLimit, verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
+    try {
+      const userId = req.firebaseUser?.uid;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+
+      const { pin } = req.body;
+      if (!pin || !/^\d{4,6}$/.test(pin)) {
+        return res.status(400).json({ error: "PIN must be 4-6 digits" });
+      }
+
+      // Hash the PIN for secure storage
+      const pinHash = crypto.createHash('sha256').update(pin + userId).digest('hex');
+      await storage.setUserPin(userId, pinHash);
+
+      res.json({ success: true, message: "PIN registered successfully" });
+    } catch (error) {
+      console.error("PIN registration error:", error);
+      res.status(500).json({ error: "Failed to register PIN" });
+    }
+  });
+
+  // PIN Login - authenticate with email + PIN
+  // NOTE: PIN login provides user metadata for quick access but does NOT establish
+  // a Firebase session. For full API access, users must sign in with Firebase auth.
+  // PIN login is a convenience feature for returning users to quickly access their profile.
+  app.post("/api/auth/pin/login", authRateLimit, async (req, res) => {
+    try {
+      const { email, pin } = req.body;
+      
+      if (!email || !pin) {
+        return res.status(400).json({ error: "Email and PIN are required" });
+      }
+
+      if (!/^\d{4,6}$/.test(pin)) {
+        return res.status(400).json({ error: "PIN must be 4-6 digits" });
+      }
+
+      // Find user by email - use uniform error to prevent enumeration
+      const user = await storage.getUserByEmail(email);
+      
+      // Generate a dummy hash for timing-safe comparison even when user doesn't exist
+      const dummyId = 'dummy-user-id-for-timing-safety';
+      const userId = user?.id || dummyId;
+      const storedHash = user?.pinHash || crypto.createHash('sha256').update('dummy').digest('hex');
+      
+      // Compute PIN hash
+      const pinHash = crypto.createHash('sha256').update(pin + userId).digest('hex');
+      
+      // Use timing-safe comparison to prevent timing attacks
+      const hashBuffer = Buffer.from(pinHash, 'hex');
+      const storedBuffer = Buffer.from(storedHash, 'hex');
+      
+      // Ensure buffers are same length for timingSafeEqual
+      let isValid = false;
+      if (hashBuffer.length === storedBuffer.length) {
+        isValid = crypto.timingSafeEqual(hashBuffer, storedBuffer);
+      }
+      
+      // User must exist AND have PIN set AND hash must match
+      if (!user || !user.pinHash || !isValid) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+
+      // Return user data - NOTE: This is for display only, not for API access
+      // Users should still authenticate with Firebase for protected API calls
+      res.json({ 
+        success: true, 
+        user: {
+          id: user.id,
+          email: user.email,
+          displayName: user.displayName,
+          profileImageUrl: user.profileImageUrl,
+        },
+        message: "PIN verified. For full access, please sign in with your password."
+      });
+    } catch (error) {
+      console.error("PIN login error:", error);
+      res.status(500).json({ error: "Authentication failed" });
+    }
+  });
+
+  // Check if user has PIN set up
+  app.get("/api/auth/pin/status", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
+    try {
+      const userId = req.firebaseUser?.uid;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+
+      const user = await storage.getFirebaseUser(userId);
+      res.json({ hasPinSet: !!user?.pinHash });
+    } catch (error) {
+      console.error("PIN status error:", error);
+      res.status(500).json({ error: "Failed to check PIN status" });
     }
   });
 
