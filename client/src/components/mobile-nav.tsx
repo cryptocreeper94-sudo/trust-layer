@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart, Gamepad2, Star, Zap, Globe, ChevronDown, ChevronRight, Layers, Gift, Users } from "lucide-react";
+import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart, Gamepad2, Star, Zap, Globe, ChevronDown, ChevronRight, Layers, Gift, Users, LogIn, User } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
+import { FirebaseLoginModal } from "@/components/firebase-login";
 
 import chroniclesImg from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
 import crowdfundImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
@@ -364,9 +366,10 @@ function GamesComingSoonModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-function MenuPanel({ onClose }: { onClose: () => void }) {
+function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin: () => void }) {
   const [location] = useLocation();
   const [showGamesModal, setShowGamesModal] = useState(false);
+  const { user, isAuthenticated, displayName, signOut } = useFirebaseAuth();
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -436,6 +439,85 @@ function MenuPanel({ onClose }: { onClose: () => void }) {
           >
             <X style={{ width: '20px', height: '20px' }} />
           </button>
+        </div>
+
+        {/* Auth Section */}
+        <div style={{ 
+          marginBottom: '16px', 
+          padding: '12px', 
+          backgroundColor: 'rgba(168, 85, 247, 0.1)', 
+          borderRadius: '12px',
+          border: '1px solid rgba(168, 85, 247, 0.2)'
+        }}>
+          {isAuthenticated ? (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #a855f7, #06b6d4)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  <User style={{ width: '18px', height: '18px', color: '#fff' }} />
+                </div>
+                <div>
+                  <div style={{ fontSize: '13px', fontWeight: 600, color: '#fff' }}>
+                    {displayName || 'Welcome back!'}
+                  </div>
+                  <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>
+                    {user?.email || 'Logged in'}
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  signOut();
+                  onClose();
+                }}
+                style={{
+                  padding: '6px 12px',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  backgroundColor: 'transparent',
+                  color: 'rgba(255,255,255,0.7)',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                }}
+                data-testid="button-mobile-signout"
+              >
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => {
+                onClose();
+                onShowLogin();
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                width: '100%',
+                padding: '12px',
+                borderRadius: '10px',
+                border: 'none',
+                background: 'linear-gradient(135deg, #a855f7, #06b6d4)',
+                color: '#fff',
+                fontSize: '14px',
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+              data-testid="button-mobile-login"
+            >
+              <LogIn style={{ width: '18px', height: '18px' }} />
+              Log In / Sign Up
+            </button>
+          )}
         </div>
 
         {/* Social Links */}
@@ -647,6 +729,7 @@ export function DesktopNav() {
 export function MobileNav() {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -654,6 +737,10 @@ export function MobileNav() {
 
   return (
     <div>
+      <FirebaseLoginModal 
+        isOpen={showLoginModal} 
+        onClose={() => setShowLoginModal(false)} 
+      />
       <Button
         variant="ghost"
         size="icon"
@@ -664,7 +751,12 @@ export function MobileNav() {
         <Menu className="w-8 h-8" />
       </Button>
 
-      {mounted && isOpen && <MenuPanel onClose={() => setIsOpen(false)} />}
+      {mounted && isOpen && (
+        <MenuPanel 
+          onClose={() => setIsOpen(false)} 
+          onShowLogin={() => setShowLoginModal(true)}
+        />
+      )}
     </div>
   );
 }
