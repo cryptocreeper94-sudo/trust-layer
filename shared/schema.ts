@@ -3767,3 +3767,31 @@ export const insertWalletBackupSchema = createInsertSchema(walletBackups).omit({
 
 export type WalletBackup = typeof walletBackups.$inferSelect;
 export type InsertWalletBackup = z.infer<typeof insertWalletBackupSchema>;
+
+// ============================================
+// KYC VERIFICATION
+// ============================================
+
+export const kycVerifications = pgTable("kyc_verifications", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  status: text("status").notNull().default("not_started"), // not_started, pending, verified, rejected
+  fullName: text("full_name"),
+  country: text("country"),
+  verificationType: text("verification_type"), // basic, enhanced, institutional
+  verifiedAt: timestamp("verified_at"),
+  rejectionReason: text("rejection_reason"),
+  metadata: text("metadata"), // JSON for additional data
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertKycVerificationSchema = createInsertSchema(kycVerifications).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  verifiedAt: true,
+});
+
+export type KycVerification = typeof kycVerifications.$inferSelect;
+export type InsertKycVerification = z.infer<typeof insertKycVerificationSchema>;

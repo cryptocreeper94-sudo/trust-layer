@@ -5,7 +5,7 @@ import { Link } from "wouter";
 import {
   Rocket, Plus, TrendingUp, Users, DollarSign,
   Search, Filter, ChevronDown, Sparkles, Loader2, ExternalLink,
-  Twitter, Globe, Send, CheckCircle, Clock, Lock, Droplets, Info
+  Twitter, Globe, Send, CheckCircle, Clock, Lock, Droplets, Info, ShieldCheck, AlertTriangle
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
@@ -21,6 +21,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { useKyc } from "@/hooks/use-kyc";
+import { useAuth } from "@/hooks/use-auth";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 
 interface LaunchedToken {
@@ -100,9 +102,13 @@ function TokenCard({ token }: { token: LaunchedToken }) {
 export default function Launchpad() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const { kycStatus, isKycVerified, isKycPending, submitKyc } = useKyc();
   const [createOpen, setCreateOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showKycForm, setShowKycForm] = useState(false);
+  const [kycFormData, setKycFormData] = useState({ fullName: "", country: "" });
   const [formData, setFormData] = useState({
     name: "", symbol: "", description: "", totalSupply: "1000000000",
     initialPrice: "0.001", launchType: "fair", website: "", twitter: "", telegram: "",
@@ -204,7 +210,106 @@ export default function Launchpad() {
                       <Rocket className="w-5 h-5 text-pink-400" /> Launch Your Token
                     </DialogTitle>
                   </DialogHeader>
+                  
+                  {!user ? (
+                    <div className="py-8 text-center">
+                      <AlertTriangle className="w-12 h-12 text-amber-400 mx-auto mb-3" />
+                      <h3 className="font-semibold text-white mb-2">Sign In Required</h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Please sign in to launch a token on DarkWave.
+                      </p>
+                      <Button asChild className="bg-pink-500 hover:bg-pink-600">
+                        <Link href="/login">Sign In</Link>
+                      </Button>
+                    </div>
+                  ) : !isKycVerified ? (
+                    <div className="py-6">
+                      <div className="text-center mb-4">
+                        <ShieldCheck className="w-12 h-12 text-cyan-400 mx-auto mb-3" />
+                        <h3 className="font-semibold text-white mb-2">KYC Verification Required</h3>
+                        <p className="text-sm text-muted-foreground">
+                          {isKycPending 
+                            ? "Your verification is pending review. We'll notify you when approved."
+                            : "Complete identity verification to launch tokens on DarkWave."
+                          }
+                        </p>
+                      </div>
+                      
+                      {!isKycPending && (
+                        showKycForm ? (
+                          <div className="space-y-3">
+                            <div>
+                              <Label className="text-xs">Full Legal Name</Label>
+                              <Input 
+                                placeholder="John Smith" 
+                                value={kycFormData.fullName}
+                                onChange={(e) => setKycFormData({...kycFormData, fullName: e.target.value})}
+                                className="bg-white/5 border-white/10"
+                                data-testid="input-kyc-name"
+                              />
+                            </div>
+                            <div>
+                              <Label className="text-xs">Country of Residence</Label>
+                              <Select value={kycFormData.country} onValueChange={(v) => setKycFormData({...kycFormData, country: v})}>
+                                <SelectTrigger className="bg-white/5 border-white/10">
+                                  <SelectValue placeholder="Select country" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="US">United States</SelectItem>
+                                  <SelectItem value="GB">United Kingdom</SelectItem>
+                                  <SelectItem value="CA">Canada</SelectItem>
+                                  <SelectItem value="AU">Australia</SelectItem>
+                                  <SelectItem value="DE">Germany</SelectItem>
+                                  <SelectItem value="FR">France</SelectItem>
+                                  <SelectItem value="JP">Japan</SelectItem>
+                                  <SelectItem value="SG">Singapore</SelectItem>
+                                  <SelectItem value="OTHER">Other</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <Button 
+                              className="w-full bg-cyan-500 hover:bg-cyan-600"
+                              onClick={() => {
+                                submitKyc.mutate({ 
+                                  fullName: kycFormData.fullName, 
+                                  country: kycFormData.country,
+                                  verificationType: 'basic'
+                                });
+                                toast({ title: "KYC Submitted", description: "Your verification is now pending review" });
+                                setShowKycForm(false);
+                              }}
+                              disabled={!kycFormData.fullName || !kycFormData.country || submitKyc.isPending}
+                              data-testid="button-submit-kyc"
+                            >
+                              {submitKyc.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <ShieldCheck className="w-4 h-4 mr-2" />}
+                              Submit Verification
+                            </Button>
+                          </div>
+                        ) : (
+                          <Button 
+                            className="w-full bg-cyan-500 hover:bg-cyan-600"
+                            onClick={() => setShowKycForm(true)}
+                            data-testid="button-start-kyc"
+                          >
+                            <ShieldCheck className="w-4 h-4 mr-2" />
+                            Start Verification
+                          </Button>
+                        )
+                      )}
+                      
+                      {isKycPending && (
+                        <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-center">
+                          <Clock className="w-5 h-5 text-amber-400 mx-auto mb-1" />
+                          <p className="text-xs text-amber-400">Verification in progress (usually 24-48 hours)</p>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
                   <div className="space-y-4 mt-4">
+                    <div className="p-2 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center gap-2 mb-2">
+                      <ShieldCheck className="w-4 h-4 text-green-400" />
+                      <span className="text-xs text-green-400">KYC Verified</span>
+                    </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div>
                         <Label className="text-xs">Token Name</Label>
@@ -340,6 +445,7 @@ export default function Launchpad() {
                       Launch Token
                     </Button>
                   </div>
+                  )}
                 </DialogContent>
               </Dialog>
             </div>

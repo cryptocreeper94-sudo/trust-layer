@@ -51,7 +51,7 @@ async function verifyFirebaseToken(req: FirebaseAuthRequest, res: Response, next
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -3776,6 +3776,74 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Error checking backup:", error);
       res.status(500).json({ error: "Failed to check backup status" });
+    }
+  });
+
+  // === KYC VERIFICATION ROUTES ===
+  app.get("/api/kyc/status", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const [kyc] = await db.select()
+        .from(kycVerifications)
+        .where(eq(kycVerifications.userId, userId));
+      
+      res.json({ kyc: kyc || null });
+    } catch (error) {
+      console.error("Error fetching KYC status:", error);
+      res.status(500).json({ error: "Failed to fetch KYC status" });
+    }
+  });
+
+  app.post("/api/kyc/submit", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const { fullName, country, verificationType } = req.body;
+      
+      if (!fullName || !country) {
+        return res.status(400).json({ error: "Full name and country are required" });
+      }
+      
+      const [existing] = await db.select()
+        .from(kycVerifications)
+        .where(eq(kycVerifications.userId, userId));
+      
+      if (existing) {
+        const [updated] = await db.update(kycVerifications)
+          .set({ 
+            fullName, 
+            country, 
+            verificationType: verificationType || 'basic',
+            status: 'pending',
+            updatedAt: new Date(),
+          })
+          .where(eq(kycVerifications.userId, userId))
+          .returning();
+        
+        return res.json({ success: true, kyc: updated });
+      }
+      
+      const [kyc] = await db.insert(kycVerifications)
+        .values({
+          userId,
+          fullName,
+          country,
+          verificationType: verificationType || 'basic',
+          status: 'pending',
+        })
+        .returning();
+      
+      res.json({ success: true, kyc });
+    } catch (error: any) {
+      console.error("Error submitting KYC:", error);
+      res.status(500).json({ error: "Failed to submit KYC" });
     }
   });
 

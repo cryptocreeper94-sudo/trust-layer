@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { WalletButton } from "@/components/wallet-button";
+import { FeatureBadge } from "@/components/feature-badge";
 
 import ethereumImg from "@assets/generated_images/ethereum_smart_city_network.png";
 import solanaImg from "@assets/generated_images/solana_speed_lightning_tunnel.png";
@@ -276,10 +277,7 @@ export default function Bridge() {
                     </div>
                     
                     <div className="flex flex-wrap items-center gap-3 mt-4">
-                      <Badge className="bg-gradient-to-r from-amber-500/20 to-orange-500/20 border-amber-500/40 text-amber-300 px-3 py-1.5 text-xs font-medium animate-pulse">
-                        <Clock className="w-3 h-3 mr-1.5" />
-                        Coming Soon
-                      </Badge>
+                      <FeatureBadge featureId="bridge" showTimeline />
                       <Badge variant="outline" className="border-cyan-500/30 text-cyan-400 text-xs">
                         <Lock className="w-3 h-3 mr-1.5" />
                         Lock & Mint
