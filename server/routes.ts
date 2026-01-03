@@ -1290,6 +1290,22 @@ export async function registerRoutes(
     }
   });
 
+  // Standard health endpoint for load balancers and monitoring
+  app.get("/api/health", async (req, res) => {
+    try {
+      const chainInfo = blockchain.getChainInfo();
+      res.json({
+        status: "ok",
+        timestamp: new Date().toISOString(),
+        blockchain: chainInfo.blockHeight > 0 ? "operational" : "degraded",
+        blockHeight: chainInfo.blockHeight,
+        version: "1.2.5"
+      });
+    } catch (error) {
+      res.status(503).json({ status: "error", message: "Service unavailable" });
+    }
+  });
+
   app.get("/api/system/health", async (req, res) => {
     try {
       const services: Array<{
@@ -7280,6 +7296,28 @@ Current context:
     }
   });
 
+  app.get("/api/arcade/games", async (req, res) => {
+    try {
+      res.json({
+        games: [
+          { id: "crash", name: "Crash", description: "Multiplier game - cash out before crash", minBet: "10", maxBet: "10000", houseEdge: "1%", rtp: "99%", icon: "rocket" },
+          { id: "coinflip", name: "Coin Flip", description: "Classic heads or tails - 50/50 odds", minBet: "10", maxBet: "10000", houseEdge: "2%", rtp: "98%", icon: "coins" },
+          { id: "dice", name: "Dice Roll", description: "Roll under/over - variable odds", minBet: "10", maxBet: "5000", houseEdge: "1%", rtp: "99%", icon: "dice" },
+          { id: "slots", name: "Slots", description: "Classic slot machine with bonus rounds", minBet: "5", maxBet: "1000", houseEdge: "3%", rtp: "97%", icon: "cherry" },
+          { id: "roulette", name: "Roulette", description: "European roulette - single zero", minBet: "10", maxBet: "5000", houseEdge: "2.7%", rtp: "97.3%", icon: "target" },
+          { id: "blackjack", name: "Blackjack", description: "Classic 21 - beat the dealer", minBet: "25", maxBet: "10000", houseEdge: "0.5%", rtp: "99.5%", icon: "spade" },
+          { id: "lottery", name: "Daily Lottery", description: "Pick numbers for jackpot prizes", minBet: "1", maxBet: "100", houseEdge: "5%", rtp: "95%", icon: "ticket" },
+        ],
+        currency: "DWC",
+        provablyFair: true,
+        licenseInfo: "Games operate under DarkWave Studios provably fair system"
+      });
+    } catch (error) {
+      console.error("Arcade games list error:", error);
+      res.status(500).json({ error: "Failed to get games list" });
+    }
+  });
+
   // ============================================
   // TOKEN LAUNCHPAD
   // ============================================
@@ -10215,6 +10253,46 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // Orbs Economy - Virtual Currency System
+  app.get("/api/orbs/packages", async (req, res) => {
+    try {
+      res.json({
+        packages: [
+          { id: "starter", name: "Orb Starter", orbs: 1000, bonusOrbs: 0, priceUsd: 499, formattedPrice: "$4.99", popular: false },
+          { id: "value", name: "Orb Value Pack", orbs: 2500, bonusOrbs: 250, priceUsd: 999, formattedPrice: "$9.99", popular: false },
+          { id: "popular", name: "Orb Popular Pack", orbs: 6000, bonusOrbs: 1000, priceUsd: 1999, formattedPrice: "$19.99", popular: true },
+          { id: "mega", name: "Orb Mega Pack", orbs: 15000, bonusOrbs: 3500, priceUsd: 4999, formattedPrice: "$49.99", popular: false },
+          { id: "whale", name: "Orb Whale Pack", orbs: 35000, bonusOrbs: 10000, priceUsd: 9999, formattedPrice: "$99.99", popular: false },
+        ],
+        exchangeRate: "1 Orb = 1 DWC at TGE (Feb 14, 2026)",
+        currency: "Orbs",
+        conversionNote: "All Orbs convert to DWC tokens at Token Generation Event"
+      });
+    } catch (error) {
+      console.error("Get orbs packages error:", error);
+      res.status(500).json({ error: "Failed to get orbs packages" });
+    }
+  });
+
+  app.get("/api/orbs/balance", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.session?.userId;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      // Orbs balance stored in shell transactions or separate tracking
+      const shellBalance = await shellsService.getBalance(userId);
+      res.json({
+        balance: shellBalance || 0,
+        pendingConversion: shellBalance || 0,
+        conversionDate: "2026-02-14T00:00:00Z"
+      });
+    } catch (error) {
+      console.error("Get orbs balance error:", error);
+      res.status(500).json({ error: "Failed to get orbs balance" });
+    }
+  });
+
   app.get("/api/shells/earn-rates", async (req, res) => {
     try {
       res.json({ rates: SHELL_EARN_RATES });
@@ -10862,11 +10940,14 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const limit = parseInt(req.query.limit as string) || 50;
       const before = req.query.before as string | undefined;
       
-      let query = db.select().from(communityMessages).where(eq(communityMessages.channelId, req.params.channelId));
+      let conditions = [eq(communityMessages.channelId, req.params.channelId)];
       if (before) {
-        query = query.where(sql`${communityMessages.createdAt} < ${before}`);
+        conditions.push(sql`${communityMessages.createdAt} < ${before}`);
       }
-      const result = await query.orderBy(desc(communityMessages.createdAt)).limit(limit);
+      const result = await db.select().from(communityMessages)
+        .where(and(...conditions))
+        .orderBy(desc(communityMessages.createdAt))
+        .limit(limit);
       res.json(result.reverse());
     } catch (error) {
       console.error("Get messages error:", error);
