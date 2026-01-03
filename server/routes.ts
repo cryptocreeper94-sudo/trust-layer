@@ -10877,13 +10877,16 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   app.post("/api/channels/:channelId/messages", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
-      const data = insertCommunityMessageSchema.parse({
+      const messageData: any = {
         channelId: req.params.channelId,
         userId,
         username: req.body.username || "User",
         content: req.body.content,
-        replyToId: req.body.replyToId || null,
-      });
+      };
+      if (req.body.replyToId) {
+        messageData.replyToId = req.body.replyToId;
+      }
+      const data = insertCommunityMessageSchema.parse(messageData);
       const result = await db.insert(communityMessages).values(data).returning();
       
       const { broadcastToChannel } = await import("./chat-presence");
