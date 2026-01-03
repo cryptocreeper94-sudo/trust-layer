@@ -5,7 +5,7 @@ import QRCode from "qrcode";
 import { WebSocketServer, WebSocket } from "ws";
 import { setupCommunityWebSocket } from "./community-ws";
 import { z } from "zod";
-import * as admin from "firebase-admin";
+import admin from "firebase-admin";
 import { storage } from "./storage";
 import { db } from "./db";
 
@@ -15,21 +15,59 @@ function initializeFirebaseAdmin() {
   if (firebaseAdminInitialized) return;
   
   try {
-    const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT;
+    let serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT;
     if (!serviceAccountJson) {
       console.warn("[Firebase Admin] FIREBASE_SERVICE_ACCOUNT not set - token revocation checking disabled");
       return;
     }
     
-    const serviceAccount = JSON.parse(serviceAccountJson);
+    // Clean up common copy/paste issues
+    // Remove BOM if present
+    serviceAccountJson = serviceAccountJson.replace(/^\uFEFF/, '');
+    // Trim whitespace
+    serviceAccountJson = serviceAccountJson.trim();
+    // Handle if wrapped in extra quotes (double-encoded)
+    if (serviceAccountJson.startsWith('"') && serviceAccountJson.endsWith('"')) {
+      try {
+        serviceAccountJson = JSON.parse(serviceAccountJson);
+      } catch (e) {
+        // Not double-encoded, continue
+      }
+    }
+    // Handle escaped newlines in private key
+    if (typeof serviceAccountJson === 'string') {
+      serviceAccountJson = serviceAccountJson.replace(/\\\\n/g, '\\n');
+    }
+    // Handle missing opening brace (common copy/paste error)
+    if (typeof serviceAccountJson === 'string' && !serviceAccountJson.startsWith('{') && serviceAccountJson.includes('"type"')) {
+      serviceAccountJson = '{' + serviceAccountJson;
+    }
+    // Handle missing closing brace
+    if (typeof serviceAccountJson === 'string' && !serviceAccountJson.endsWith('}') && serviceAccountJson.includes('"type"')) {
+      serviceAccountJson = serviceAccountJson + '}';
+    }
+    
+    console.log("[Firebase Admin] Parsing service account, first 50 chars:", 
+      typeof serviceAccountJson === 'string' ? serviceAccountJson.substring(0, 50) : 'object');
+    
+    const serviceAccount = typeof serviceAccountJson === 'string' 
+      ? JSON.parse(serviceAccountJson) 
+      : serviceAccountJson;
+    
+    if (!serviceAccount.project_id || !serviceAccount.private_key) {
+      console.error("[Firebase Admin] Invalid service account - missing project_id or private_key");
+      return;
+    }
+    
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
     });
     
     firebaseAdminInitialized = true;
-    console.log("[Firebase Admin] Initialized with service account");
+    console.log("[Firebase Admin] Initialized with service account for project:", serviceAccount.project_id);
   } catch (error) {
     console.error("[Firebase Admin] Failed to initialize:", error);
+    console.error("[Firebase Admin] Check that FIREBASE_SERVICE_ACCOUNT contains valid JSON");
   }
 }
 

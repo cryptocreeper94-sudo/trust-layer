@@ -56,6 +56,10 @@ The design adheres to a "Premium UI Protocol" emphasizing:
 
 ## Recent Changes (Changelog)
 
+### v1.2.4 (January 3, 2026)
+- **Firebase Admin SDK Fixed**: Resolved JSON parsing issues with robust error handling for copy/paste errors
+- **Import fix**: Changed firebase-admin import to default import for proper credential initialization
+
 ### v1.2.3 (January 2, 2026)
 - **ChronoChat wired**: Real-time typing indicators, connection status, WebSocket presence
 - **Firebase Admin SDK Integration**: Added server-side token verification with revocation checking
@@ -69,7 +73,7 @@ The design adheres to a "Premium UI Protocol" emphasizing:
 - **Guardian Shield**: Continuous security monitoring service launched
 
 ## TODO - Next Session
-- **Firebase Admin SDK**: Fix FIREBASE_SERVICE_ACCOUNT secret formatting - the JSON needs to be properly formatted. Current workaround: app uses fallback token verification without revocation checking.
+- No outstanding issues
 
 ## GitHub Agent Collaboration (Cost Reduction Strategy)
 To reduce Replit costs ($100-400/day), boilerplate generation has been moved to GitHub Copilot ($10/month).
