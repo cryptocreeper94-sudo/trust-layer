@@ -7,6 +7,8 @@ import { createServer } from "http";
 import { startScheduler } from "./marketing-scheduler";
 import { seedDocuments } from "./storage";
 import { setupPresence } from "./chat-presence";
+import { runMigrations } from "stripe-replit-sync";
+import { getStripeSync } from "./stripeClient";
 
 const app = express();
 
@@ -147,6 +149,43 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Initialize Stripe managed webhooks
+  const databaseUrl = process.env.DATABASE_URL;
+  if (databaseUrl) {
+    try {
+      console.log('[Stripe] Initializing managed webhooks...');
+      await runMigrations({ databaseUrl });
+      
+      const stripeSync = await getStripeSync();
+      const domains = process.env.REPLIT_DOMAINS?.split(',') || [];
+      if (domains.length > 0) {
+        const webhookUrl = `https://${domains[0]}/api/stripe/webhook`;
+        const result = await stripeSync.findOrCreateManagedWebhook(webhookUrl);
+        
+        if (result && result.webhook) {
+          console.log(`[Stripe] Managed webhook configured: ${result.webhook.url}`);
+          // Store webhook secret for use in routes
+          (global as any).__stripeWebhookSecret = result.webhook.secret;
+        } else if (result && result.secret) {
+          // Alternative response format
+          console.log(`[Stripe] Managed webhook configured`);
+          (global as any).__stripeWebhookSecret = result.secret;
+        } else {
+          console.log(`[Stripe] Managed webhook initialized, result:`, JSON.stringify(result));
+        }
+      }
+      
+      // Sync existing Stripe data in background
+      stripeSync.syncBackfill().then(() => {
+        console.log('[Stripe] Data sync complete');
+      }).catch((err: Error) => {
+        console.error('[Stripe] Data sync error:', err.message);
+      });
+    } catch (err: any) {
+      console.warn('[Stripe] Initialization skipped:', err.message);
+    }
+  }
+
   await registerRoutes(httpServer, app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

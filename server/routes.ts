@@ -301,10 +301,10 @@ export async function registerRoutes(
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
       
-      // SECURITY: Require webhook secret - never process without signature verification
-      const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+      // SECURITY: Use managed webhook secret from stripe-replit-sync initialization
+      const webhookSecret = (global as any).__stripeWebhookSecret || process.env.STRIPE_WEBHOOK_SECRET;
       if (!webhookSecret) {
-        console.error("Stripe webhook: STRIPE_WEBHOOK_SECRET not configured - rejecting request");
+        console.error("Stripe webhook: Webhook secret not available - managed webhooks may not be initialized");
         return res.status(500).json({ error: "Webhook not configured" });
       }
       
