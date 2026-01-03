@@ -1138,6 +1138,53 @@ export async function registerRoutes(
     }
   });
 
+  // Team page PIN verification (server-side, secure)
+  const teamPinAttempts = new Map<string, { count: number; lastAttempt: number }>();
+  app.post("/api/team/verify-pin", rateLimit("team-pin", 5, 60000), async (req, res) => {
+    try {
+      const { pin } = req.body;
+      const clientIp = req.ip || req.connection.remoteAddress || "unknown";
+      
+      // Check for lockout
+      const attempts = teamPinAttempts.get(clientIp);
+      if (attempts && attempts.count >= 5) {
+        const lockoutDuration = 15 * 60 * 1000; // 15 minutes
+        if (Date.now() - attempts.lastAttempt < lockoutDuration) {
+          return res.status(429).json({ error: "Too many attempts. Try again later." });
+        }
+        teamPinAttempts.delete(clientIp);
+      }
+      
+      if (!pin || typeof pin !== "string" || pin.length < 4) {
+        return res.status(400).json({ error: "Invalid PIN format" });
+      }
+      
+      // Use environment variable for team PIN, fallback to default for development only
+      const teamPin = process.env.TEAM_ACCESS_PIN || (process.env.NODE_ENV === "development" ? "0424" : null);
+      if (!teamPin) {
+        return res.status(500).json({ error: "Team access not configured" });
+      }
+      
+      // Timing-safe comparison
+      const pinBuffer = Buffer.from(pin);
+      const teamPinBuffer = Buffer.from(teamPin);
+      const isValid = pinBuffer.length === teamPinBuffer.length && 
+                      crypto.timingSafeEqual(pinBuffer, teamPinBuffer);
+      
+      if (isValid) {
+        teamPinAttempts.delete(clientIp);
+        res.json({ success: true });
+      } else {
+        const current = teamPinAttempts.get(clientIp) || { count: 0, lastAttempt: 0 };
+        teamPinAttempts.set(clientIp, { count: current.count + 1, lastAttempt: Date.now() });
+        res.status(401).json({ error: "Invalid PIN" });
+      }
+    } catch (error) {
+      console.error("Team PIN verification error:", error);
+      res.status(500).json({ error: "Verification failed" });
+    }
+  });
+
   app.get("/api/ecosystem/hub/status", ecosystemRateLimit, async (req, res) => {
     try {
       if (!ecosystemClient.isConfigured()) {

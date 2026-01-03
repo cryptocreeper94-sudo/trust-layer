@@ -47,16 +47,34 @@ export function Footer() {
   const [error, setError] = useState(false);
   const [, setLocation] = useLocation();
 
-  const handlePinSubmit = (e: React.FormEvent) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handlePinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (pin === "0424") {
-      setShowPinModal(false);
-      setPin("");
-      setError(false);
-      setLocation("/team");
-    } else {
+    setIsLoading(true);
+    setError(false);
+    
+    try {
+      const response = await fetch("/api/team/verify-pin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin }),
+      });
+      
+      if (response.ok) {
+        setShowPinModal(false);
+        setPin("");
+        setError(false);
+        setLocation("/team");
+      } else {
+        setError(true);
+        setPin("");
+      }
+    } catch (err) {
       setError(true);
       setPin("");
+    } finally {
+      setIsLoading(false);
     }
   };
 
