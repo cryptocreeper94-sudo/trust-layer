@@ -135,6 +135,7 @@ import PartnerPortal from "@/pages/partner-portal";
 import Tokenomics from "@/pages/tokenomics";
 import FAQ from "@/pages/faq";
 import CompetitiveAnalysis from "@/pages/competitive-analysis";
+import InvestorPitch from "@/pages/investor-pitch";
 import SecurityPage from "@/pages/security";
 import GuardianCertification from "@/pages/guardian-certification";
 import GuardianPortal from "@/pages/guardian-portal";
@@ -322,6 +323,7 @@ function DWSCRouter() {
         <Route path="/privacy" component={Privacy} />
         <Route path="/error" component={ErrorPage} />
         <Route path="/token-compare" component={TokenCompare} />
+        <Route path="/investor-pitch" component={InvestorPitch} />
         <Route path="/code-snippets" component={CodeSnippets} />
         <Route path="/api-usage" component={ApiUsage} />
         <Route path="/referrals" component={Referrals} />

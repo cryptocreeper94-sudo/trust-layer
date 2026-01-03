@@ -220,7 +220,7 @@ export default function CompetitiveAnalysis() {
       
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/80 backdrop-blur-2xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 shrink-0 group">
+          <Link href="/" className="flex items-center gap-2 shrink-0 group" data-testid="link-home">
             <div className="relative">
               <Trophy className="w-6 h-6 text-cyan-400 group-hover:scale-110 transition-transform" />
               <div className="absolute inset-0 bg-cyan-400/30 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -276,16 +276,16 @@ export default function CompetitiveAnalysis() {
             </motion.div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} data-testid="stat-tps">
                 <StatCard value="200K+" label="TPS Capacity" icon={Zap} live />
               </motion.div>
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} data-testid="stat-finality">
                 <StatCard value="400ms" label="Finality" icon={Clock} live />
               </motion.div>
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} data-testid="stat-features">
                 <StatCard value="7" label="Unique Features" icon={Trophy} />
               </motion.div>
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} data-testid="stat-audits">
                 <StatCard value="$0" label="AI Security Audits" icon={Shield} />
               </motion.div>
             </div>

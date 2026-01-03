@@ -120,6 +120,27 @@ export function Footer() {
               Presale
             </Link>
             <Link 
+              href="/investor-pitch"
+              className="text-white/40 hover:text-amber-400 transition-colors"
+              data-testid="link-investors"
+            >
+              Investors
+            </Link>
+            <Link 
+              href="/token-compare"
+              className="text-white/40 hover:text-emerald-400 transition-colors"
+              data-testid="link-compare"
+            >
+              Why DarkWave
+            </Link>
+            <Link 
+              href="/innovation"
+              className="text-white/40 hover:text-purple-400 transition-colors"
+              data-testid="link-innovation"
+            >
+              Innovation
+            </Link>
+            <Link 
               href="/roadmap"
               className="text-white/40 hover:text-cyan-400 transition-colors"
               data-testid="link-roadmap"

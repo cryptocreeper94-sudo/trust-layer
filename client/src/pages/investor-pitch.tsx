@@ -121,7 +121,7 @@ export default function InvestorPitch() {
       
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/80 backdrop-blur-2xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 shrink-0 group">
+          <Link href="/" className="flex items-center gap-2 shrink-0 group" data-testid="link-home">
             <div className="relative">
               <Briefcase className="w-6 h-6 text-cyan-400 group-hover:scale-110 transition-transform" />
               <div className="absolute inset-0 bg-cyan-400/30 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -182,6 +182,7 @@ export default function InvestorPitch() {
                   initial={{ opacity: 0, y: 20 }} 
                   animate={{ opacity: 1, y: 0 }} 
                   transition={{ delay: 0.3 + i * 0.1 }}
+                  data-testid={`stat-${metric.label.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   <StatCard value={metric.value} label={metric.label} icon={metric.icon} live />
                 </motion.div>
@@ -275,6 +276,7 @@ export default function InvestorPitch() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
+                  data-testid={`tokenomics-${i}`}
                 >
                   <GlassCard hover>
                     <div className="p-5 flex items-center gap-4">
@@ -350,6 +352,7 @@ export default function InvestorPitch() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
+                  data-testid={`milestone-${i}`}
                 >
                   <GlassCard hover>
                     <div className="p-5">
