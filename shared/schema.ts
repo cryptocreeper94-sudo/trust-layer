@@ -4282,3 +4282,234 @@ export const insertCopilotMessageSchema = createInsertSchema(copilotMessages).om
 });
 export type CopilotMessage = typeof copilotMessages.$inferSelect;
 export type InsertCopilotMessage = z.infer<typeof insertCopilotMessageSchema>;
+
+// ============================================
+// AI AGENT MARKETPLACE - Deploy autonomous AI agents on-chain
+// ============================================
+
+export const aiAgents = pgTable("ai_agents", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  creatorId: text("creator_id").notNull(),
+  
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  category: text("category").notNull(), // 'trading', 'portfolio', 'quest', 'social', 'analytics', 'custom'
+  avatar: text("avatar"),
+  
+  baseModel: text("base_model").notNull().default("gpt-4o"), // AI model used
+  systemPrompt: text("system_prompt").notNull(),
+  capabilities: text("capabilities"), // JSON array: ['trade', 'analyze', 'execute_quests', 'social_post']
+  
+  pricePerExecution: text("price_per_execution").notNull().default("1000000000000000000"), // 1 DWC in wei
+  revenueShare: integer("revenue_share").notNull().default(80), // Creator gets 80%, platform 20%
+  
+  totalExecutions: integer("total_executions").notNull().default(0),
+  totalEarnings: text("total_earnings").notNull().default("0"),
+  rating: text("rating").default("0"),
+  ratingCount: integer("rating_count").notNull().default(0),
+  
+  verified: boolean("verified").notNull().default(false),
+  featured: boolean("featured").notNull().default(false),
+  status: text("status").notNull().default("active"), // 'draft', 'active', 'paused', 'suspended'
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertAiAgentSchema = createInsertSchema(aiAgents).omit({
+  id: true, createdAt: true, updatedAt: true, totalExecutions: true, totalEarnings: true, ratingCount: true
+});
+export type AiAgent = typeof aiAgents.$inferSelect;
+export type InsertAiAgent = z.infer<typeof insertAiAgentSchema>;
+
+export const aiAgentDeployments = pgTable("ai_agent_deployments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  agentId: varchar("agent_id").notNull().references(() => aiAgents.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull(),
+  
+  deploymentName: text("deployment_name").notNull(),
+  configuration: text("configuration"), // JSON: custom parameters
+  
+  walletAddress: text("wallet_address"), // Agent's dedicated wallet
+  allocatedBalance: text("allocated_balance").notNull().default("0"),
+  
+  autoExecute: boolean("auto_execute").notNull().default(false),
+  executionSchedule: text("execution_schedule"), // Cron expression
+  maxExecutionsPerDay: integer("max_executions_per_day").default(100),
+  
+  totalExecutions: integer("total_executions").notNull().default(0),
+  totalSpent: text("total_spent").notNull().default("0"),
+  
+  status: text("status").notNull().default("active"), // 'active', 'paused', 'terminated'
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertAiAgentDeploymentSchema = createInsertSchema(aiAgentDeployments).omit({
+  id: true, createdAt: true, updatedAt: true, totalExecutions: true, totalSpent: true
+});
+export type AiAgentDeployment = typeof aiAgentDeployments.$inferSelect;
+export type InsertAiAgentDeployment = z.infer<typeof insertAiAgentDeploymentSchema>;
+
+export const aiAgentExecutions = pgTable("ai_agent_executions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  agentId: varchar("agent_id").notNull().references(() => aiAgents.id),
+  deploymentId: varchar("deployment_id").references(() => aiAgentDeployments.id),
+  userId: text("user_id").notNull(),
+  
+  input: text("input").notNull(),
+  output: text("output"),
+  
+  actions: text("actions"), // JSON array of actions taken
+  executionProofId: varchar("execution_proof_id"),
+  
+  cost: text("cost").notNull().default("0"),
+  creatorEarning: text("creator_earning").notNull().default("0"),
+  platformFee: text("platform_fee").notNull().default("0"),
+  
+  executionTimeMs: integer("execution_time_ms"),
+  tokensUsed: integer("tokens_used"),
+  
+  rating: integer("rating"), // 1-5 user rating
+  feedback: text("feedback"),
+  
+  status: text("status").notNull().default("pending"), // 'pending', 'running', 'completed', 'failed'
+  error: text("error"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  completedAt: timestamp("completed_at"),
+});
+
+export const insertAiAgentExecutionSchema = createInsertSchema(aiAgentExecutions).omit({
+  id: true, createdAt: true, completedAt: true
+});
+export type AiAgentExecution = typeof aiAgentExecutions.$inferSelect;
+export type InsertAiAgentExecution = z.infer<typeof insertAiAgentExecutionSchema>;
+
+// ============================================
+// REAL-WORLD ASSET (RWA) TOKENIZATION
+// ============================================
+
+export const rwaAssets = pgTable("rwa_assets", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  creatorId: text("creator_id").notNull(),
+  
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  assetType: text("asset_type").notNull(), // 'real_estate', 'equity', 'bond', 'commodity', 'collectible', 'invoice', 'ip_rights'
+  
+  legalEntity: text("legal_entity"),
+  jurisdiction: text("jurisdiction"),
+  
+  documents: text("documents"), // JSON array of document URLs
+  images: text("images"), // JSON array of image URLs
+  
+  valuation: text("valuation").notNull(), // Current valuation in USD cents
+  valuationDate: timestamp("valuation_date").defaultNow().notNull(),
+  valuationSource: text("valuation_source"),
+  
+  physicalAddress: text("physical_address"),
+  gpsCoordinates: text("gps_coordinates"),
+  
+  custodian: text("custodian"),
+  insuranceProvider: text("insurance_provider"),
+  insuranceCoverage: text("insurance_coverage"),
+  
+  verified: boolean("verified").notNull().default(false),
+  verifiedBy: text("verified_by"),
+  verifiedAt: timestamp("verified_at"),
+  
+  status: text("status").notNull().default("pending"), // 'pending', 'verified', 'tokenized', 'suspended'
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertRwaAssetSchema = createInsertSchema(rwaAssets).omit({
+  id: true, createdAt: true, updatedAt: true, verifiedAt: true
+});
+export type RwaAsset = typeof rwaAssets.$inferSelect;
+export type InsertRwaAsset = z.infer<typeof insertRwaAssetSchema>;
+
+export const rwaTokens = pgTable("rwa_tokens", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  assetId: varchar("asset_id").notNull().references(() => rwaAssets.id, { onDelete: "cascade" }),
+  
+  tokenSymbol: text("token_symbol").notNull(),
+  tokenName: text("token_name").notNull(),
+  
+  totalSupply: text("total_supply").notNull(), // Total tokens issued
+  pricePerToken: text("price_per_token").notNull(), // USD cents per token
+  
+  minInvestment: text("min_investment").notNull().default("10000"), // $100 minimum
+  maxInvestment: text("max_investment"),
+  
+  dividendRate: text("dividend_rate"), // Annual dividend %
+  dividendFrequency: text("dividend_frequency"), // 'monthly', 'quarterly', 'annually'
+  
+  lockupPeriod: integer("lockup_period"), // Days before tokens can be traded
+  tradeable: boolean("tradeable").notNull().default(false),
+  
+  contractAddress: text("contract_address"),
+  deployTxHash: text("deploy_tx_hash"),
+  
+  tokensSold: text("tokens_sold").notNull().default("0"),
+  totalRaised: text("total_raised").notNull().default("0"),
+  investorCount: integer("investor_count").notNull().default(0),
+  
+  status: text("status").notNull().default("offering"), // 'offering', 'funded', 'trading', 'matured', 'liquidated'
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertRwaTokenSchema = createInsertSchema(rwaTokens).omit({
+  id: true, createdAt: true, updatedAt: true, tokensSold: true, totalRaised: true, investorCount: true
+});
+export type RwaToken = typeof rwaTokens.$inferSelect;
+export type InsertRwaToken = z.infer<typeof insertRwaTokenSchema>;
+
+export const rwaHoldings = pgTable("rwa_holdings", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  tokenId: varchar("token_id").notNull().references(() => rwaTokens.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull(),
+  
+  tokenBalance: text("token_balance").notNull(),
+  purchasePrice: text("purchase_price").notNull(), // Average cost basis
+  
+  dividendsEarned: text("dividends_earned").notNull().default("0"),
+  dividendsClaimed: text("dividends_claimed").notNull().default("0"),
+  
+  lockedUntil: timestamp("locked_until"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertRwaHoldingSchema = createInsertSchema(rwaHoldings).omit({
+  id: true, createdAt: true, updatedAt: true
+});
+export type RwaHolding = typeof rwaHoldings.$inferSelect;
+export type InsertRwaHolding = z.infer<typeof insertRwaHoldingSchema>;
+
+export const rwaDividends = pgTable("rwa_dividends", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  tokenId: varchar("token_id").notNull().references(() => rwaTokens.id, { onDelete: "cascade" }),
+  
+  amount: text("amount").notNull(), // Total dividend amount
+  perTokenAmount: text("per_token_amount").notNull(),
+  
+  recordDate: timestamp("record_date").notNull(),
+  paymentDate: timestamp("payment_date").notNull(),
+  
+  status: text("status").notNull().default("scheduled"), // 'scheduled', 'processing', 'paid'
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertRwaDividendSchema = createInsertSchema(rwaDividends).omit({
+  id: true, createdAt: true
+});
+export type RwaDividend = typeof rwaDividends.$inferSelect;
+export type InsertRwaDividend = z.infer<typeof insertRwaDividendSchema>;
