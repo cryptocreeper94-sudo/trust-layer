@@ -4376,6 +4376,348 @@ export async function registerRoutes(
     }
   });
 
+  // ============================================
+  // AI AGENT MARKETPLACE - Deploy autonomous AI agents
+  // ============================================
+
+  const { aiAgents, aiAgentDeployments, aiAgentExecutions, insertAiAgentSchema, insertAiAgentDeploymentSchema, insertAiAgentExecutionSchema } = await import("@shared/schema");
+
+  app.get("/api/ai-agents", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 50;
+      const category = req.query.category as string;
+      const featured = req.query.featured === 'true';
+      
+      let query = db.select().from(aiAgents).where(eq(aiAgents.status, 'active'));
+      if (category) {
+        query = query.where(eq(aiAgents.category, category)) as typeof query;
+      }
+      if (featured) {
+        query = query.where(eq(aiAgents.featured, true)) as typeof query;
+      }
+      const agents = await query.orderBy(desc(aiAgents.totalExecutions)).limit(limit);
+      res.json({ agents, total: agents.length });
+    } catch (error) {
+      console.error("Error fetching AI agents:", error);
+      res.status(500).json({ error: "Failed to fetch AI agents" });
+    }
+  });
+
+  app.get("/api/ai-agents/stats", async (_req, res) => {
+    try {
+      const agents = await db.select().from(aiAgents);
+      const totalAgents = agents.length;
+      const activeAgents = agents.filter(a => a.status === 'active').length;
+      const verifiedAgents = agents.filter(a => a.verified).length;
+      const totalExecutions = agents.reduce((sum, a) => sum + a.totalExecutions, 0);
+      const totalEarnings = agents.reduce((sum, a) => sum + BigInt(a.totalEarnings), BigInt(0));
+      
+      const categories = ['trading', 'portfolio', 'quest', 'social', 'analytics', 'custom'];
+      const byCategory = categories.map(cat => ({
+        category: cat,
+        count: agents.filter(a => a.category === cat).length
+      }));
+      
+      res.json({
+        totalAgents,
+        activeAgents,
+        verifiedAgents,
+        totalExecutions,
+        totalEarnings: totalEarnings.toString(),
+        byCategory
+      });
+    } catch (error) {
+      console.error("Error fetching agent stats:", error);
+      res.status(500).json({ error: "Failed to fetch agent stats" });
+    }
+  });
+
+  app.get("/api/ai-agents/:id", async (req, res) => {
+    try {
+      const agent = await db.select().from(aiAgents)
+        .where(eq(aiAgents.id, req.params.id)).limit(1);
+      if (!agent.length) {
+        return res.status(404).json({ error: "Agent not found" });
+      }
+      res.json({ agent: agent[0] });
+    } catch (error) {
+      console.error("Error fetching agent:", error);
+      res.status(500).json({ error: "Failed to fetch agent" });
+    }
+  });
+
+  app.post("/api/ai-agents", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const data = insertAiAgentSchema.parse({ ...req.body, creatorId: userId });
+      const created = await db.insert(aiAgents).values(data).returning();
+      res.json({ agent: created[0], created: true });
+    } catch (error) {
+      console.error("Error creating agent:", error);
+      res.status(500).json({ error: "Failed to create agent" });
+    }
+  });
+
+  app.get("/api/ai-agents/:id/deployments", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const deployments = await db.select().from(aiAgentDeployments)
+        .where(and(
+          eq(aiAgentDeployments.agentId, req.params.id),
+          eq(aiAgentDeployments.userId, userId)
+        ))
+        .orderBy(desc(aiAgentDeployments.createdAt));
+      res.json({ deployments });
+    } catch (error) {
+      console.error("Error fetching deployments:", error);
+      res.status(500).json({ error: "Failed to fetch deployments" });
+    }
+  });
+
+  app.post("/api/ai-agents/:id/deploy", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const data = insertAiAgentDeploymentSchema.parse({
+        ...req.body,
+        agentId: req.params.id,
+        userId
+      });
+      const deployment = await db.insert(aiAgentDeployments).values(data).returning();
+      res.json({ deployment: deployment[0], created: true });
+    } catch (error) {
+      console.error("Error deploying agent:", error);
+      res.status(500).json({ error: "Failed to deploy agent" });
+    }
+  });
+
+  app.get("/api/my-agents", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const agents = await db.select().from(aiAgents)
+        .where(eq(aiAgents.creatorId, userId))
+        .orderBy(desc(aiAgents.createdAt));
+      res.json({ agents });
+    } catch (error) {
+      console.error("Error fetching my agents:", error);
+      res.status(500).json({ error: "Failed to fetch agents" });
+    }
+  });
+
+  app.get("/api/my-deployments", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const deployments = await db.select().from(aiAgentDeployments)
+        .where(eq(aiAgentDeployments.userId, userId))
+        .orderBy(desc(aiAgentDeployments.createdAt));
+      res.json({ deployments });
+    } catch (error) {
+      console.error("Error fetching my deployments:", error);
+      res.status(500).json({ error: "Failed to fetch deployments" });
+    }
+  });
+
+  // ============================================
+  // REAL-WORLD ASSET (RWA) TOKENIZATION
+  // ============================================
+
+  const { rwaAssets, rwaTokens, rwaHoldings, rwaDividends, insertRwaAssetSchema, insertRwaTokenSchema, insertRwaHoldingSchema } = await import("@shared/schema");
+
+  app.get("/api/rwa/assets", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 50;
+      const assetType = req.query.type as string;
+      const status = req.query.status as string;
+      
+      let query = db.select().from(rwaAssets);
+      if (assetType) {
+        query = query.where(eq(rwaAssets.assetType, assetType)) as typeof query;
+      }
+      if (status) {
+        query = query.where(eq(rwaAssets.status, status)) as typeof query;
+      }
+      const assets = await query.orderBy(desc(rwaAssets.createdAt)).limit(limit);
+      res.json({ assets, total: assets.length });
+    } catch (error) {
+      console.error("Error fetching RWA assets:", error);
+      res.status(500).json({ error: "Failed to fetch RWA assets" });
+    }
+  });
+
+  app.get("/api/rwa/stats", async (_req, res) => {
+    try {
+      const assets = await db.select().from(rwaAssets);
+      const tokens = await db.select().from(rwaTokens);
+      
+      const totalAssets = assets.length;
+      const verifiedAssets = assets.filter(a => a.verified).length;
+      const tokenizedAssets = assets.filter(a => a.status === 'tokenized').length;
+      const totalValuation = assets.reduce((sum, a) => sum + BigInt(a.valuation), BigInt(0));
+      
+      const totalRaised = tokens.reduce((sum, t) => sum + BigInt(t.totalRaised), BigInt(0));
+      const totalInvestors = tokens.reduce((sum, t) => sum + t.investorCount, 0);
+      
+      const assetTypes = ['real_estate', 'equity', 'bond', 'commodity', 'collectible', 'invoice', 'ip_rights'];
+      const byType = assetTypes.map(type => ({
+        type,
+        count: assets.filter(a => a.assetType === type).length,
+        valuation: assets.filter(a => a.assetType === type).reduce((sum, a) => sum + BigInt(a.valuation), BigInt(0)).toString()
+      }));
+      
+      res.json({
+        totalAssets,
+        verifiedAssets,
+        tokenizedAssets,
+        totalValuation: totalValuation.toString(),
+        totalRaised: totalRaised.toString(),
+        totalInvestors,
+        activeTokens: tokens.filter(t => t.status === 'offering' || t.status === 'trading').length,
+        byType
+      });
+    } catch (error) {
+      console.error("Error fetching RWA stats:", error);
+      res.status(500).json({ error: "Failed to fetch RWA stats" });
+    }
+  });
+
+  app.get("/api/rwa/assets/:id", async (req, res) => {
+    try {
+      const asset = await db.select().from(rwaAssets)
+        .where(eq(rwaAssets.id, req.params.id)).limit(1);
+      if (!asset.length) {
+        return res.status(404).json({ error: "Asset not found" });
+      }
+      const tokens = await db.select().from(rwaTokens)
+        .where(eq(rwaTokens.assetId, req.params.id));
+      res.json({ asset: asset[0], tokens });
+    } catch (error) {
+      console.error("Error fetching asset:", error);
+      res.status(500).json({ error: "Failed to fetch asset" });
+    }
+  });
+
+  app.post("/api/rwa/assets", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const data = insertRwaAssetSchema.parse({ ...req.body, creatorId: userId });
+      const created = await db.insert(rwaAssets).values(data).returning();
+      res.json({ asset: created[0], created: true });
+    } catch (error) {
+      console.error("Error creating RWA asset:", error);
+      res.status(500).json({ error: "Failed to create asset" });
+    }
+  });
+
+  app.get("/api/rwa/tokens", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 50;
+      const status = req.query.status as string;
+      const tradeable = req.query.tradeable === 'true';
+      
+      let query = db.select().from(rwaTokens);
+      if (status) {
+        query = query.where(eq(rwaTokens.status, status)) as typeof query;
+      }
+      if (tradeable) {
+        query = query.where(eq(rwaTokens.tradeable, true)) as typeof query;
+      }
+      const tokens = await query.orderBy(desc(rwaTokens.createdAt)).limit(limit);
+      res.json({ tokens, total: tokens.length });
+    } catch (error) {
+      console.error("Error fetching RWA tokens:", error);
+      res.status(500).json({ error: "Failed to fetch RWA tokens" });
+    }
+  });
+
+  app.post("/api/rwa/assets/:id/tokenize", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const asset = await db.select().from(rwaAssets)
+        .where(eq(rwaAssets.id, req.params.id)).limit(1);
+      if (!asset.length) {
+        return res.status(404).json({ error: "Asset not found" });
+      }
+      if (asset[0].creatorId !== userId) {
+        return res.status(403).json({ error: "Not authorized" });
+      }
+      const data = insertRwaTokenSchema.parse({ ...req.body, assetId: req.params.id });
+      const token = await db.insert(rwaTokens).values(data).returning();
+      await db.update(rwaAssets).set({ status: 'tokenized' }).where(eq(rwaAssets.id, req.params.id));
+      res.json({ token: token[0], created: true });
+    } catch (error) {
+      console.error("Error tokenizing asset:", error);
+      res.status(500).json({ error: "Failed to tokenize asset" });
+    }
+  });
+
+  app.get("/api/rwa/my-holdings", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const holdings = await db.select().from(rwaHoldings)
+        .where(eq(rwaHoldings.userId, userId))
+        .orderBy(desc(rwaHoldings.createdAt));
+      res.json({ holdings });
+    } catch (error) {
+      console.error("Error fetching holdings:", error);
+      res.status(500).json({ error: "Failed to fetch holdings" });
+    }
+  });
+
+  app.post("/api/rwa/tokens/:id/invest", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const token = await db.select().from(rwaTokens)
+        .where(eq(rwaTokens.id, req.params.id)).limit(1);
+      if (!token.length) {
+        return res.status(404).json({ error: "Token not found" });
+      }
+      if (token[0].status !== 'offering') {
+        return res.status(400).json({ error: "Token offering is not active" });
+      }
+      const data = insertRwaHoldingSchema.parse({
+        ...req.body,
+        tokenId: req.params.id,
+        userId
+      });
+      const holding = await db.insert(rwaHoldings).values(data).returning();
+      await db.update(rwaTokens).set({
+        investorCount: token[0].investorCount + 1,
+        tokensSold: (BigInt(token[0].tokensSold) + BigInt(data.tokenBalance)).toString(),
+        totalRaised: (BigInt(token[0].totalRaised) + BigInt(data.purchasePrice)).toString()
+      }).where(eq(rwaTokens.id, req.params.id));
+      res.json({ holding: holding[0], created: true });
+    } catch (error) {
+      console.error("Error investing in token:", error);
+      res.status(500).json({ error: "Failed to invest in token" });
+    }
+  });
+
   // === WALLET CLOUD BACKUP ROUTES ===
   
   app.post("/api/wallet/backup", isAuthenticated, async (req: any, res) => {
