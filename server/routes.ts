@@ -140,7 +140,7 @@ const verifyFirebaseToken = isAuthenticated;
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -3917,6 +3917,462 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Error batch confirming stamps:", error);
       res.status(500).json({ error: "Failed to batch confirm stamps" });
+    }
+  });
+
+  // ============================================
+  // GUARDIAN SECURITY SCORES - Real-time project ratings
+  // ============================================
+
+  app.get("/api/guardian/security-scores", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 50;
+      const status = req.query.status as string;
+      let query = db.select().from(guardianSecurityScores);
+      if (status) {
+        query = query.where(eq(guardianSecurityScores.status, status)) as typeof query;
+      }
+      const scores = await query.limit(limit).orderBy(desc(guardianSecurityScores.overallScore));
+      res.json({ scores, total: scores.length });
+    } catch (error) {
+      console.error("Error fetching security scores:", error);
+      res.status(500).json({ error: "Failed to fetch security scores" });
+    }
+  });
+
+  app.get("/api/guardian/security-scores/:projectId", async (req, res) => {
+    try {
+      const score = await db.select().from(guardianSecurityScores)
+        .where(eq(guardianSecurityScores.projectId, req.params.projectId))
+        .limit(1);
+      if (!score.length) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      res.json({ score: score[0] });
+    } catch (error) {
+      console.error("Error fetching security score:", error);
+      res.status(500).json({ error: "Failed to fetch security score" });
+    }
+  });
+
+  app.get("/api/guardian/security-scores/stats/overview", async (_req, res) => {
+    try {
+      const scores = await db.select().from(guardianSecurityScores);
+      const total = scores.length;
+      const certified = scores.filter(s => s.certificationTier).length;
+      const avgScore = total > 0 ? Math.round(scores.reduce((a, b) => a + b.overallScore, 0) / total) : 0;
+      const insured = scores.filter(s => s.insuranceEligible).length;
+      res.json({
+        totalProjects: total,
+        certifiedProjects: certified,
+        averageScore: avgScore,
+        insuredProjects: insured,
+        riskDistribution: {
+          low: scores.filter(s => s.riskLevel === 'low').length,
+          medium: scores.filter(s => s.riskLevel === 'medium').length,
+          high: scores.filter(s => s.riskLevel === 'high').length,
+          critical: scores.filter(s => s.riskLevel === 'critical').length
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching score stats:", error);
+      res.status(500).json({ error: "Failed to fetch score stats" });
+    }
+  });
+
+  // ============================================
+  // CHRONOPASS IDENTITY - Unified cross-app identity
+  // ============================================
+
+  app.get("/api/chronopass/identity", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const identity = await db.select().from(chronoPassIdentities)
+        .where(eq(chronoPassIdentities.userId, userId))
+        .limit(1);
+      if (!identity.length) {
+        return res.json({ identity: null, exists: false });
+      }
+      res.json({ identity: identity[0], exists: true });
+    } catch (error) {
+      console.error("Error fetching identity:", error);
+      res.status(500).json({ error: "Failed to fetch identity" });
+    }
+  });
+
+  app.post("/api/chronopass/identity", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const schema = z.object({
+        displayName: z.string().min(2).max(50),
+        bio: z.string().max(500).optional(),
+        avatarUrl: z.string().url().optional()
+      });
+      const data = schema.parse(req.body);
+      
+      const existing = await db.select().from(chronoPassIdentities)
+        .where(eq(chronoPassIdentities.userId, userId)).limit(1);
+      
+      if (existing.length) {
+        const updated = await db.update(chronoPassIdentities)
+          .set({ ...data, updatedAt: new Date() })
+          .where(eq(chronoPassIdentities.userId, userId))
+          .returning();
+        return res.json({ identity: updated[0], updated: true });
+      }
+      
+      const created = await db.insert(chronoPassIdentities)
+        .values({ userId, ...data })
+        .returning();
+      res.json({ identity: created[0], created: true });
+    } catch (error) {
+      console.error("Error creating identity:", error);
+      res.status(500).json({ error: "Failed to create identity" });
+    }
+  });
+
+  app.get("/api/chronopass/reputation/:userId", async (req, res) => {
+    try {
+      const identity = await db.select().from(chronoPassIdentities)
+        .where(eq(chronoPassIdentities.userId, req.params.userId))
+        .limit(1);
+      if (!identity.length) {
+        return res.status(404).json({ error: "Identity not found" });
+      }
+      const id = identity[0];
+      res.json({
+        userId: id.userId,
+        displayName: id.displayName,
+        reputationScore: id.reputationScore,
+        trustLevel: id.trustLevel,
+        verificationStatus: id.verificationStatus,
+        scores: {
+          community: id.communityScore,
+          trading: id.tradingScore,
+          gaming: id.gamingScore,
+          developer: id.developerScore,
+          governance: id.governanceScore
+        },
+        staking: {
+          shells: id.shellsStaked,
+          dwc: id.dwcStaked,
+          boostMultiplier: id.stakingBoostMultiplier
+        },
+        badges: id.badges ? JSON.parse(id.badges) : [],
+        currentTitle: id.currentTitle
+      });
+    } catch (error) {
+      console.error("Error fetching reputation:", error);
+      res.status(500).json({ error: "Failed to fetch reputation" });
+    }
+  });
+
+  // ============================================
+  // EXPERIENCE SHARDS - Dedicated execution lanes
+  // ============================================
+
+  app.get("/api/shards", async (_req, res) => {
+    try {
+      const shards = await db.select().from(experienceShards)
+        .orderBy(desc(experienceShards.priorityLevel));
+      res.json({ shards });
+    } catch (error) {
+      console.error("Error fetching shards:", error);
+      res.status(500).json({ error: "Failed to fetch shards" });
+    }
+  });
+
+  app.get("/api/shards/:id", async (req, res) => {
+    try {
+      const shard = await db.select().from(experienceShards)
+        .where(eq(experienceShards.id, req.params.id))
+        .limit(1);
+      if (!shard.length) {
+        return res.status(404).json({ error: "Shard not found" });
+      }
+      const assignments = await db.select().from(shardAssignments)
+        .where(eq(shardAssignments.shardId, req.params.id));
+      res.json({ shard: shard[0], assignments });
+    } catch (error) {
+      console.error("Error fetching shard:", error);
+      res.status(500).json({ error: "Failed to fetch shard" });
+    }
+  });
+
+  app.get("/api/shards/stats/network", async (_req, res) => {
+    try {
+      const shards = await db.select().from(experienceShards);
+      const totalTps = shards.reduce((a, s) => a + s.currentTps, 0);
+      const avgLatency = shards.length > 0 
+        ? Math.round(shards.reduce((a, s) => a + s.currentLatencyMs, 0) / shards.length)
+        : 0;
+      const avgLoad = shards.length > 0
+        ? Math.round(shards.reduce((a, s) => a + s.currentLoad, 0) / shards.length)
+        : 0;
+      res.json({
+        totalShards: shards.length,
+        activeShards: shards.filter(s => s.status === 'active').length,
+        totalTps,
+        averageLatencyMs: avgLatency,
+        averageLoad: avgLoad,
+        shardsByType: shards.reduce((acc, s) => {
+          acc[s.shardType] = (acc[s.shardType] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>)
+      });
+    } catch (error) {
+      console.error("Error fetching shard stats:", error);
+      res.status(500).json({ error: "Failed to fetch shard stats" });
+    }
+  });
+
+  // ============================================
+  // QUEST MINING - Verifiable contribution rewards
+  // ============================================
+
+  app.get("/api/quests", async (req, res) => {
+    try {
+      const category = req.query.category as string;
+      const questType = req.query.type as string;
+      let query = db.select().from(questDefinitions)
+        .where(eq(questDefinitions.isActive, true));
+      
+      const quests = await query.orderBy(questDefinitions.difficultyLevel);
+      const filtered = quests.filter(q => {
+        if (category && q.category !== category) return false;
+        if (questType && q.questType !== questType) return false;
+        return true;
+      });
+      res.json({ quests: filtered });
+    } catch (error) {
+      console.error("Error fetching quests:", error);
+      res.status(500).json({ error: "Failed to fetch quests" });
+    }
+  });
+
+  app.get("/api/quests/my-progress", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const progress = await db.select().from(questProgress)
+        .where(eq(questProgress.userId, userId));
+      res.json({ progress });
+    } catch (error) {
+      console.error("Error fetching quest progress:", error);
+      res.status(500).json({ error: "Failed to fetch quest progress" });
+    }
+  });
+
+  app.post("/api/quests/:questId/start", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const existing = await db.select().from(questProgress)
+        .where(and(
+          eq(questProgress.questId, req.params.questId),
+          eq(questProgress.userId, userId)
+        )).limit(1);
+      
+      if (existing.length) {
+        return res.json({ progress: existing[0], alreadyStarted: true });
+      }
+      
+      const created = await db.insert(questProgress)
+        .values({ questId: req.params.questId, userId, status: 'in_progress' })
+        .returning();
+      res.json({ progress: created[0], started: true });
+    } catch (error) {
+      console.error("Error starting quest:", error);
+      res.status(500).json({ error: "Failed to start quest" });
+    }
+  });
+
+  app.get("/api/quests/seasons", async (_req, res) => {
+    try {
+      const seasons = await db.select().from(questSeasons)
+        .orderBy(desc(questSeasons.seasonNumber));
+      res.json({ seasons });
+    } catch (error) {
+      console.error("Error fetching seasons:", error);
+      res.status(500).json({ error: "Failed to fetch seasons" });
+    }
+  });
+
+  app.get("/api/quests/leaderboard/:seasonId", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 100;
+      const leaderboard = await db.select().from(questLeaderboard)
+        .where(eq(questLeaderboard.seasonId, req.params.seasonId))
+        .orderBy(desc(questLeaderboard.totalPoints))
+        .limit(limit);
+      res.json({ leaderboard });
+    } catch (error) {
+      console.error("Error fetching leaderboard:", error);
+      res.status(500).json({ error: "Failed to fetch leaderboard" });
+    }
+  });
+
+  // ============================================
+  // REALITY LAYER ORACLES - On-chain notarization
+  // ============================================
+
+  app.get("/api/oracles", async (_req, res) => {
+    try {
+      const oracles = await db.select().from(realityOracles)
+        .where(eq(realityOracles.status, 'active'));
+      res.json({ oracles });
+    } catch (error) {
+      console.error("Error fetching oracles:", error);
+      res.status(500).json({ error: "Failed to fetch oracles" });
+    }
+  });
+
+  app.get("/api/oracles/:id/feeds", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 50;
+      const feeds = await db.select().from(oracleDataFeeds)
+        .where(eq(oracleDataFeeds.oracleId, req.params.id))
+        .orderBy(desc(oracleDataFeeds.createdAt))
+        .limit(limit);
+      res.json({ feeds });
+    } catch (error) {
+      console.error("Error fetching oracle feeds:", error);
+      res.status(500).json({ error: "Failed to fetch oracle feeds" });
+    }
+  });
+
+  app.get("/api/oracles/feed/:feedKey", async (req, res) => {
+    try {
+      const feed = await db.select().from(oracleDataFeeds)
+        .where(eq(oracleDataFeeds.feedKey, req.params.feedKey))
+        .limit(1);
+      if (!feed.length) {
+        return res.status(404).json({ error: "Feed not found" });
+      }
+      res.json({ feed: feed[0] });
+    } catch (error) {
+      console.error("Error fetching feed:", error);
+      res.status(500).json({ error: "Failed to fetch feed" });
+    }
+  });
+
+  // ============================================
+  // AI VERIFIED EXECUTION - Cryptographic proofs
+  // ============================================
+
+  app.get("/api/ai/proofs", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 50;
+      const proofs = await db.select().from(aiExecutionProofs)
+        .orderBy(desc(aiExecutionProofs.createdAt))
+        .limit(limit);
+      res.json({ proofs });
+    } catch (error) {
+      console.error("Error fetching AI proofs:", error);
+      res.status(500).json({ error: "Failed to fetch AI proofs" });
+    }
+  });
+
+  app.get("/api/ai/proofs/:requestId", async (req, res) => {
+    try {
+      const proof = await db.select().from(aiExecutionProofs)
+        .where(eq(aiExecutionProofs.requestId, req.params.requestId))
+        .limit(1);
+      if (!proof.length) {
+        return res.status(404).json({ error: "Proof not found" });
+      }
+      res.json({ proof: proof[0] });
+    } catch (error) {
+      console.error("Error fetching proof:", error);
+      res.status(500).json({ error: "Failed to fetch proof" });
+    }
+  });
+
+  app.get("/api/ai/models", async (_req, res) => {
+    try {
+      const models = await db.select().from(aiModelRegistry)
+        .where(eq(aiModelRegistry.status, 'active'));
+      res.json({ models });
+    } catch (error) {
+      console.error("Error fetching AI models:", error);
+      res.status(500).json({ error: "Failed to fetch AI models" });
+    }
+  });
+
+  // ============================================
+  // GUARDIAN STUDIO COPILOT - AI contract generation
+  // ============================================
+
+  app.get("/api/copilot/sessions", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const sessions = await db.select().from(copilotSessions)
+        .where(eq(copilotSessions.userId, userId))
+        .orderBy(desc(copilotSessions.updatedAt));
+      res.json({ sessions });
+    } catch (error) {
+      console.error("Error fetching sessions:", error);
+      res.status(500).json({ error: "Failed to fetch sessions" });
+    }
+  });
+
+  app.post("/api/copilot/sessions", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const schema = z.object({
+        sessionName: z.string().min(1).max(100).optional(),
+        contractType: z.enum(['token', 'nft', 'staking', 'dao', 'custom']).optional()
+      });
+      const data = schema.parse(req.body);
+      
+      const session = await db.insert(copilotSessions)
+        .values({ userId, ...data })
+        .returning();
+      res.json({ session: session[0] });
+    } catch (error) {
+      console.error("Error creating session:", error);
+      res.status(500).json({ error: "Failed to create session" });
+    }
+  });
+
+  app.get("/api/copilot/sessions/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      const session = await db.select().from(copilotSessions)
+        .where(and(
+          eq(copilotSessions.id, req.params.id),
+          eq(copilotSessions.userId, userId)
+        )).limit(1);
+      if (!session.length) {
+        return res.status(404).json({ error: "Session not found" });
+      }
+      const messages = await db.select().from(copilotMessages)
+        .where(eq(copilotMessages.sessionId, req.params.id))
+        .orderBy(copilotMessages.createdAt);
+      res.json({ session: session[0], messages });
+    } catch (error) {
+      console.error("Error fetching session:", error);
+      res.status(500).json({ error: "Failed to fetch session" });
     }
   });
 

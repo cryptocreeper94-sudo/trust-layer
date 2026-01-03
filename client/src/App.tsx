@@ -123,6 +123,7 @@ import ChronoTeam from "@/pages/chrono-team";
 import ChronoCreators from "@/pages/chrono-creators";
 import ChronoExecutiveSummary from "@/pages/chrono-executive-summary";
 import SocialFeed from "@/pages/social-feed";
+import InnovationHub from "@/pages/innovation-hub";
 import Lottery from "@/pages/lottery";
 import AIAdvisor from "@/pages/ai-advisor";
 import PriceAlerts from "@/pages/price-alerts";
@@ -374,6 +375,7 @@ function DWSCRouter() {
         <Route path="/roadmap" component={RoadmapEcosystem} />
         <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
         <Route path="/roadmap-ecosystem" component={RoadmapEcosystem} />
+        <Route path="/innovation" component={InnovationHub} />
         <Route path="/chronicles" component={Chronicles} />
         <Route path="/chronicles/ai" component={ChroniclesAIDemo} />
         <Route path="/legacy" component={BuildYourLegacy} />

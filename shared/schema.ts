@@ -3795,3 +3795,490 @@ export const insertKycVerificationSchema = createInsertSchema(kycVerifications).
 
 export type KycVerification = typeof kycVerifications.$inferSelect;
 export type InsertKycVerification = z.infer<typeof insertKycVerificationSchema>;
+
+// ============================================
+// GUARDIAN SECURITY SCORES - Real-time project ratings
+// ============================================
+
+export const guardianSecurityScores = pgTable("guardian_security_scores", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: text("project_id").notNull(),
+  projectName: text("project_name").notNull(),
+  projectType: text("project_type").notNull(), // 'smart_contract', 'dapp', 'token', 'nft_collection', 'defi_protocol'
+  contractAddress: text("contract_address"),
+  chainId: text("chain_id").default("dwsc"),
+  
+  // Security Score Components (0-100 each)
+  overallScore: integer("overall_score").notNull().default(0),
+  codeQualityScore: integer("code_quality_score").notNull().default(0),
+  vulnerabilityScore: integer("vulnerability_score").notNull().default(0),
+  accessControlScore: integer("access_control_score").notNull().default(0),
+  upgradeabilityScore: integer("upgradeability_score").notNull().default(0),
+  testCoverageScore: integer("test_coverage_score").notNull().default(0),
+  documentationScore: integer("documentation_score").notNull().default(0),
+  
+  // Status and Metadata
+  status: text("status").notNull().default("pending"), // 'pending', 'analyzing', 'scored', 'certified', 'warning', 'critical'
+  riskLevel: text("risk_level").notNull().default("unknown"), // 'low', 'medium', 'high', 'critical', 'unknown'
+  certificationTier: text("certification_tier"), // null, 'self_cert', 'assurance_lite', 'guardian_premier'
+  insuranceEligible: boolean("insurance_eligible").notNull().default(false),
+  insuranceCoverage: text("insurance_coverage"), // Coverage amount in USD
+  
+  // Analysis Data
+  lastScanHash: text("last_scan_hash"),
+  issuesFound: integer("issues_found").notNull().default(0),
+  criticalIssues: integer("critical_issues").notNull().default(0),
+  warnings: integer("warnings").notNull().default(0),
+  recommendations: text("recommendations"), // JSON array
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  lastScannedAt: timestamp("last_scanned_at"),
+  certifiedAt: timestamp("certified_at"),
+  expiresAt: timestamp("expires_at"),
+});
+
+export const insertGuardianSecurityScoreSchema = createInsertSchema(guardianSecurityScores).omit({
+  id: true, createdAt: true, lastScannedAt: true, certifiedAt: true
+});
+export type GuardianSecurityScore = typeof guardianSecurityScores.$inferSelect;
+export type InsertGuardianSecurityScore = z.infer<typeof insertGuardianSecurityScoreSchema>;
+
+// ============================================
+// CHRONOPASS IDENTITY - Unified cross-app identity with reputation
+// ============================================
+
+export const chronoPassIdentities = pgTable("chrono_pass_identities", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  displayName: text("display_name").notNull(),
+  avatarUrl: text("avatar_url"),
+  bannerUrl: text("banner_url"),
+  bio: text("bio"),
+  
+  // Passkey/WebAuthn data
+  passkeyCredentialId: text("passkey_credential_id"),
+  passkeyPublicKey: text("passkey_public_key"),
+  passkeyEnabled: boolean("passkey_enabled").notNull().default(false),
+  
+  // Reputation System (0-1000 scale)
+  reputationScore: integer("reputation_score").notNull().default(100),
+  trustLevel: text("trust_level").notNull().default("newcomer"), // 'newcomer', 'member', 'trusted', 'veteran', 'legend'
+  verificationStatus: text("verification_status").notNull().default("unverified"), // 'unverified', 'email', 'phone', 'kyc', 'institutional'
+  
+  // Reputation Components
+  communityScore: integer("community_score").notNull().default(0), // ChronoChat activity
+  tradingScore: integer("trading_score").notNull().default(0), // DeFi activity
+  gamingScore: integer("gaming_score").notNull().default(0), // Chronicles activity
+  developerScore: integer("developer_score").notNull().default(0), // Developer contributions
+  governanceScore: integer("governance_score").notNull().default(0), // Voting/proposals
+  
+  // Staking-based reputation boost
+  shellsStaked: integer("shells_staked").notNull().default(0),
+  dwcStaked: integer("dwc_staked").notNull().default(0),
+  stakingBoostMultiplier: text("staking_boost_multiplier").default("1.0"),
+  
+  // Badges and achievements
+  badges: text("badges"), // JSON array of earned badges
+  titles: text("titles"), // JSON array of unlocked titles
+  currentTitle: text("current_title"),
+  
+  // Cross-app access
+  linkedApps: text("linked_apps"), // JSON array of connected apps
+  apiAccessLevel: text("api_access_level").default("standard"), // 'standard', 'elevated', 'premium'
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  lastActiveAt: timestamp("last_active_at"),
+});
+
+export const insertChronoPassIdentitySchema = createInsertSchema(chronoPassIdentities).omit({
+  id: true, createdAt: true, updatedAt: true, lastActiveAt: true
+});
+export type ChronoPassIdentity = typeof chronoPassIdentities.$inferSelect;
+export type InsertChronoPassIdentity = z.infer<typeof insertChronoPassIdentitySchema>;
+
+// ============================================
+// EXPERIENCE SHARDS - Dedicated execution lanes with SLAs
+// ============================================
+
+export const experienceShards = pgTable("experience_shards", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  shardType: text("shard_type").notNull(), // 'gaming', 'defi', 'nft', 'social', 'ai', 'custom'
+  status: text("status").notNull().default("active"), // 'active', 'degraded', 'maintenance', 'offline'
+  
+  // Performance SLAs
+  targetLatencyMs: integer("target_latency_ms").notNull().default(50),
+  targetTps: integer("target_tps").notNull().default(10000),
+  guaranteedUptime: text("guaranteed_uptime").default("99.9"),
+  
+  // Current Metrics
+  currentLatencyMs: integer("current_latency_ms").notNull().default(0),
+  currentTps: integer("current_tps").notNull().default(0),
+  currentLoad: integer("current_load").notNull().default(0), // Percentage 0-100
+  activeConnections: integer("active_connections").notNull().default(0),
+  
+  // Resource Allocation
+  allocatedCpu: text("allocated_cpu").default("4"),
+  allocatedMemoryGb: text("allocated_memory_gb").default("8"),
+  allocatedStorageGb: text("allocated_storage_gb").default("100"),
+  priorityLevel: integer("priority_level").notNull().default(1), // 1-10, higher = more priority
+  
+  // Autoscaling
+  autoScaleEnabled: boolean("auto_scale_enabled").notNull().default(true),
+  minInstances: integer("min_instances").notNull().default(1),
+  maxInstances: integer("max_instances").notNull().default(10),
+  currentInstances: integer("current_instances").notNull().default(1),
+  
+  // Billing
+  pricePerRequestDwc: text("price_per_request_dwc").default("0.000001"),
+  pricePerGbStorageDwc: text("price_per_gb_storage_dwc").default("0.01"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertExperienceShardSchema = createInsertSchema(experienceShards).omit({
+  id: true, createdAt: true, updatedAt: true
+});
+export type ExperienceShard = typeof experienceShards.$inferSelect;
+export type InsertExperienceShard = z.infer<typeof insertExperienceShardSchema>;
+
+// Shard assignments - which apps/contracts run on which shards
+export const shardAssignments = pgTable("shard_assignments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  shardId: varchar("shard_id").notNull().references(() => experienceShards.id, { onDelete: "cascade" }),
+  projectId: text("project_id").notNull(),
+  projectName: text("project_name").notNull(),
+  contractAddress: text("contract_address"),
+  priority: integer("priority").notNull().default(1),
+  rateLimitRps: integer("rate_limit_rps").default(1000),
+  assignedAt: timestamp("assigned_at").defaultNow().notNull(),
+});
+
+export const insertShardAssignmentSchema = createInsertSchema(shardAssignments).omit({
+  id: true, assignedAt: true
+});
+export type ShardAssignment = typeof shardAssignments.$inferSelect;
+export type InsertShardAssignment = z.infer<typeof insertShardAssignmentSchema>;
+
+// ============================================
+// QUEST MINING - Verifiable contribution rewards
+// ============================================
+
+export const questDefinitions = pgTable("quest_definitions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  questType: text("quest_type").notNull(), // 'daily', 'weekly', 'seasonal', 'achievement', 'special'
+  category: text("category").notNull(), // 'social', 'trading', 'gaming', 'development', 'governance', 'community'
+  
+  // Requirements
+  requirements: text("requirements").notNull(), // JSON: action type, count, conditions
+  verificationMethod: text("verification_method").notNull(), // 'automatic', 'oracle', 'manual', 'on_chain'
+  
+  // Rewards
+  shellsReward: integer("shells_reward").notNull().default(0),
+  dwcReward: text("dwc_reward").default("0"),
+  reputationReward: integer("reputation_reward").notNull().default(0),
+  badgeReward: text("badge_reward"), // Badge ID if completing unlocks a badge
+  
+  // Availability
+  isActive: boolean("is_active").notNull().default(true),
+  startsAt: timestamp("starts_at"),
+  endsAt: timestamp("ends_at"),
+  maxCompletions: integer("max_completions"), // null = unlimited
+  currentCompletions: integer("current_completions").notNull().default(0),
+  
+  // Difficulty and prerequisites
+  difficultyLevel: text("difficulty_level").notNull().default("easy"), // 'easy', 'medium', 'hard', 'legendary'
+  prerequisiteQuestId: varchar("prerequisite_quest_id"),
+  minReputationRequired: integer("min_reputation_required").default(0),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertQuestDefinitionSchema = createInsertSchema(questDefinitions).omit({
+  id: true, createdAt: true, updatedAt: true, currentCompletions: true
+});
+export type QuestDefinition = typeof questDefinitions.$inferSelect;
+export type InsertQuestDefinition = z.infer<typeof insertQuestDefinitionSchema>;
+
+// User quest progress
+export const questProgress = pgTable("quest_progress", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  questId: varchar("quest_id").notNull().references(() => questDefinitions.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull(),
+  
+  status: text("status").notNull().default("in_progress"), // 'in_progress', 'completed', 'claimed', 'expired'
+  progressData: text("progress_data"), // JSON: current progress toward requirements
+  progressPercent: integer("progress_percent").notNull().default(0),
+  
+  // Verification
+  verificationHash: text("verification_hash"), // On-chain proof
+  verifiedAt: timestamp("verified_at"),
+  
+  // Claiming
+  claimedAt: timestamp("claimed_at"),
+  rewardTxHash: text("reward_tx_hash"),
+  
+  startedAt: timestamp("started_at").defaultNow().notNull(),
+  completedAt: timestamp("completed_at"),
+});
+
+export const insertQuestProgressSchema = createInsertSchema(questProgress).omit({
+  id: true, startedAt: true, completedAt: true, claimedAt: true, verifiedAt: true
+});
+export type QuestProgress = typeof questProgress.$inferSelect;
+export type InsertQuestProgress = z.infer<typeof insertQuestProgressSchema>;
+
+// Quest seasons/leaderboards
+export const questSeasons = pgTable("quest_seasons", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description"),
+  seasonNumber: integer("season_number").notNull(),
+  
+  startsAt: timestamp("starts_at").notNull(),
+  endsAt: timestamp("ends_at").notNull(),
+  
+  // Prize pool
+  totalPrizePoolDwc: text("total_prize_pool_dwc").default("0"),
+  totalPrizePoolShells: integer("total_prize_pool_shells").default(0),
+  
+  // Tier rewards (JSON arrays)
+  tierRewards: text("tier_rewards"), // Top 1, Top 10, Top 100, etc.
+  
+  status: text("status").notNull().default("upcoming"), // 'upcoming', 'active', 'ended', 'rewards_distributed'
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertQuestSeasonSchema = createInsertSchema(questSeasons).omit({
+  id: true, createdAt: true
+});
+export type QuestSeason = typeof questSeasons.$inferSelect;
+export type InsertQuestSeason = z.infer<typeof insertQuestSeasonSchema>;
+
+// Season leaderboards
+export const questLeaderboard = pgTable("quest_leaderboard", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  seasonId: varchar("season_id").notNull().references(() => questSeasons.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull(),
+  username: text("username"),
+  
+  totalPoints: integer("total_points").notNull().default(0),
+  questsCompleted: integer("quests_completed").notNull().default(0),
+  currentStreak: integer("current_streak").notNull().default(0),
+  longestStreak: integer("longest_streak").notNull().default(0),
+  
+  rank: integer("rank"),
+  tier: text("tier").default("bronze"), // 'bronze', 'silver', 'gold', 'platinum', 'diamond', 'legendary'
+  
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertQuestLeaderboardSchema = createInsertSchema(questLeaderboard).omit({
+  id: true, updatedAt: true
+});
+export type QuestLeaderboardEntry = typeof questLeaderboard.$inferSelect;
+export type InsertQuestLeaderboardEntry = z.infer<typeof insertQuestLeaderboardSchema>;
+
+// ============================================
+// REALITY LAYER ORACLES - On-chain notarization
+// ============================================
+
+export const realityOracles = pgTable("reality_oracles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  oracleType: text("oracle_type").notNull(), // 'game_outcome', 'esports', 'real_world', 'market_data', 'random', 'custom'
+  description: text("description"),
+  
+  // Data Source
+  sourceType: text("source_type").notNull(), // 'api', 'manual', 'consensus', 'multi_chain'
+  sourceEndpoint: text("source_endpoint"),
+  sourceChains: text("source_chains"), // JSON array for multi-chain verification
+  
+  // Status
+  status: text("status").notNull().default("active"), // 'active', 'paused', 'deprecated'
+  reliability: text("reliability").default("99.9"), // Percentage uptime
+  lastUpdatedAt: timestamp("last_updated_at"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertRealityOracleSchema = createInsertSchema(realityOracles).omit({
+  id: true, createdAt: true, lastUpdatedAt: true
+});
+export type RealityOracle = typeof realityOracles.$inferSelect;
+export type InsertRealityOracle = z.infer<typeof insertRealityOracleSchema>;
+
+// Oracle data feeds - individual data points
+export const oracleDataFeeds = pgTable("oracle_data_feeds", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  oracleId: varchar("oracle_id").notNull().references(() => realityOracles.id, { onDelete: "cascade" }),
+  
+  feedKey: text("feed_key").notNull(), // Unique identifier like "chronicles_quest_123" or "match_456"
+  feedType: text("feed_type").notNull(), // 'outcome', 'score', 'state', 'event'
+  
+  // Data
+  dataValue: text("data_value").notNull(),
+  dataHash: text("data_hash").notNull(), // SHA-256 hash for verification
+  metadata: text("metadata"), // JSON additional context
+  
+  // Multi-chain notarization
+  dwscTxHash: text("dwsc_tx_hash"),
+  dwscBlockNumber: integer("dwsc_block_number"),
+  ethereumTxHash: text("ethereum_tx_hash"),
+  solanaTxHash: text("solana_tx_hash"),
+  
+  // Verification
+  verificationCount: integer("verification_count").notNull().default(1),
+  verifierAddresses: text("verifier_addresses"), // JSON array
+  consensusReached: boolean("consensus_reached").notNull().default(false),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  confirmedAt: timestamp("confirmed_at"),
+});
+
+export const insertOracleDataFeedSchema = createInsertSchema(oracleDataFeeds).omit({
+  id: true, createdAt: true, confirmedAt: true
+});
+export type OracleDataFeed = typeof oracleDataFeeds.$inferSelect;
+export type InsertOracleDataFeed = z.infer<typeof insertOracleDataFeedSchema>;
+
+// ============================================
+// AI VERIFIED EXECUTION - Cryptographic proofs for AI decisions
+// ============================================
+
+export const aiExecutionProofs = pgTable("ai_execution_proofs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  // Request context
+  requestId: text("request_id").notNull().unique(),
+  requestType: text("request_type").notNull(), // 'game_decision', 'risk_assessment', 'content_generation', 'trading_signal'
+  userId: text("user_id"),
+  appId: text("app_id"),
+  
+  // Input/Output
+  inputHash: text("input_hash").notNull(), // SHA-256 of input
+  inputSummary: text("input_summary"), // Truncated/sanitized version
+  outputHash: text("output_hash").notNull(), // SHA-256 of output
+  outputSummary: text("output_summary"), // Truncated result
+  
+  // AI Model Info
+  modelId: text("model_id").notNull(), // e.g., 'gpt-4', 'claude-3', 'dwsc-guardian-v1'
+  modelVersion: text("model_version"),
+  inferenceTimestamp: timestamp("inference_timestamp").notNull(),
+  
+  // Verification Proof
+  proofType: text("proof_type").notNull().default("commitment"), // 'commitment', 'zk_proof', 'tee_attestation'
+  proofData: text("proof_data").notNull(), // The actual cryptographic proof
+  proofValid: boolean("proof_valid").notNull().default(true),
+  
+  // On-chain anchoring
+  txHash: text("tx_hash"),
+  blockNumber: integer("block_number"),
+  
+  // Metadata
+  executionTimeMs: integer("execution_time_ms"),
+  confidenceScore: text("confidence_score"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  verifiedAt: timestamp("verified_at"),
+});
+
+export const insertAiExecutionProofSchema = createInsertSchema(aiExecutionProofs).omit({
+  id: true, createdAt: true, verifiedAt: true
+});
+export type AiExecutionProof = typeof aiExecutionProofs.$inferSelect;
+export type InsertAiExecutionProof = z.infer<typeof insertAiExecutionProofSchema>;
+
+// AI Model Registry - registered and verified AI models
+export const aiModelRegistry = pgTable("ai_model_registry", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  modelId: text("model_id").notNull().unique(),
+  modelName: text("model_name").notNull(),
+  provider: text("provider").notNull(), // 'openai', 'anthropic', 'darkwave', 'custom'
+  
+  // Verification
+  verified: boolean("verified").notNull().default(false),
+  verificationHash: text("verification_hash"),
+  auditorId: text("auditor_id"),
+  
+  // Capabilities
+  capabilities: text("capabilities"), // JSON array
+  maxTokens: integer("max_tokens"),
+  supportedProofTypes: text("supported_proof_types"), // JSON array
+  
+  // Usage
+  totalExecutions: integer("total_executions").notNull().default(0),
+  averageLatencyMs: integer("average_latency_ms"),
+  
+  status: text("status").notNull().default("active"), // 'active', 'deprecated', 'suspended'
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertAiModelRegistrySchema = createInsertSchema(aiModelRegistry).omit({
+  id: true, createdAt: true, updatedAt: true, totalExecutions: true
+});
+export type AiModelRegistryEntry = typeof aiModelRegistry.$inferSelect;
+export type InsertAiModelRegistryEntry = z.infer<typeof insertAiModelRegistrySchema>;
+
+// ============================================
+// GUARDIAN STUDIO COPILOT - AI-powered contract generation
+// ============================================
+
+export const copilotSessions = pgTable("copilot_sessions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  sessionName: text("session_name").notNull().default("Untitled Contract"),
+  
+  // Contract specification
+  contractType: text("contract_type"), // 'token', 'nft', 'staking', 'dao', 'custom'
+  specification: text("specification"), // Natural language description
+  
+  // Generated code
+  generatedCode: text("generated_code"),
+  codeLanguage: text("code_language").default("solidity"),
+  
+  // Audit results
+  autoAuditScore: integer("auto_audit_score"),
+  auditIssues: text("audit_issues"), // JSON array of issues
+  auditPassed: boolean("audit_passed"),
+  
+  // Deployment
+  deployedAddress: text("deployed_address"),
+  deployedTxHash: text("deployed_tx_hash"),
+  deployedAt: timestamp("deployed_at"),
+  
+  status: text("status").notNull().default("drafting"), // 'drafting', 'generated', 'auditing', 'passed', 'deployed', 'failed'
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertCopilotSessionSchema = createInsertSchema(copilotSessions).omit({
+  id: true, createdAt: true, updatedAt: true, deployedAt: true
+});
+export type CopilotSession = typeof copilotSessions.$inferSelect;
+export type InsertCopilotSession = z.infer<typeof insertCopilotSessionSchema>;
+
+// Copilot conversation history
+export const copilotMessages = pgTable("copilot_messages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sessionId: varchar("session_id").notNull().references(() => copilotSessions.id, { onDelete: "cascade" }),
+  role: text("role").notNull(), // 'user', 'assistant', 'system'
+  content: text("content").notNull(),
+  codeBlock: text("code_block"), // Extracted code if any
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertCopilotMessageSchema = createInsertSchema(copilotMessages).omit({
+  id: true, createdAt: true
+});
+export type CopilotMessage = typeof copilotMessages.$inferSelect;
+export type InsertCopilotMessage = z.infer<typeof insertCopilotMessageSchema>;

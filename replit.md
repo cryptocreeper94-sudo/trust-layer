@@ -46,6 +46,16 @@ The design adheres to a "Premium UI Protocol" emphasizing:
 - **Early Adopter Rewards System**: Tracks signup positions and tiered crowdfund bonuses for DWC airdrops and bonuses at Token Generation Event (February 14, 2026). API: `/api/user/early-adopter-stats` (authenticated), `/api/early-adopter/counters` (public). Rewards page at `/rewards`.
 - **Backend IDE / Studio Executor**: Docker container orchestration for code execution (`server/studio-executor.ts`), designed for self-hosted deployment (not runnable on Replit). Requires JWT auth, sandboxing, network policies, curated images, resource enforcement, quotas, and WebSocket log streaming for full implementation.
 
+### Innovation Hub Features (v1.3.0)
+- **Guardian Security Scores**: Real-time project security ratings (0-100) with 7 components: code quality, vulnerability, access control, upgradeability, test coverage, documentation, overall. Insurance eligibility tracking. API: `/api/guardian/security-scores`.
+- **ChronoPass Identity**: Unified cross-app identity with reputation system (0-1000 scale). Trust levels: newcomer, member, trusted, veteran, legend. Passkey/WebAuthn support. Reputation components: community, trading, gaming, developer, governance. Staking boosts. API: `/api/chronopass/identity`, `/api/chronopass/reputation/:userId`.
+- **Experience Shards**: Dedicated execution lanes for different use cases (gaming, defi, nft, social, ai, custom). Each shard has performance SLAs (target latency, TPS, uptime), autoscaling, and billing. Currently 6 shards active. API: `/api/shards`, `/api/shards/stats/network`.
+- **Quest Mining System**: Verifiable contribution rewards with daily/weekly/seasonal/achievement quests. Categories: social, trading, gaming, development, governance, community. Rewards in Shells, DWC, and reputation. Seasonal leaderboards. Genesis Season active with 100,000 DWC prize pool. API: `/api/quests`, `/api/quests/seasons`, `/api/quests/leaderboard/:seasonId`.
+- **Reality Layer Oracles**: On-chain notarization for game outcomes and real-world events. Oracle types: game_outcome, esports, market_data, random, real_world. Multi-chain verification (DWSC + Ethereum + Solana). API: `/api/oracles`, `/api/oracles/:id/feeds`.
+- **AI Verified Execution**: Cryptographic proofs for AI decisions. Proof types: commitment, zk_proof, tee_attestation. Registered models: GPT-4o, Claude 3 Sonnet, Guardian Security Analyzer, Studio Copilot. API: `/api/ai/proofs`, `/api/ai/models`.
+- **Guardian Studio Copilot**: AI-powered smart contract generator with automatic security audits. Contract types: token, nft, staking, dao, custom. Session-based workflow with conversation history. API: `/api/copilot/sessions`.
+- **Innovation Hub Page**: Dashboard at `/innovation` showcasing all new features with live data from shards, quests, oracles, and AI models.
+
 ## External Dependencies
 - **Database**: PostgreSQL
 - **Authentication**: Firebase Auth, WebAuthn
