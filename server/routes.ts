@@ -10740,6 +10740,233 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // ==============================================
+  // CHRONOCHAT COMMUNITY ROUTES
+  // ==============================================
+  
+  const { communities, communityChannels, communityMembers, communityMessages, messageReactions, messageAttachments, insertCommunitySchema, insertChannelSchema, insertMemberSchema, insertCommunityMessageSchema, insertReactionSchema } = await import("@shared/schema");
+
+  app.get("/api/communities", async (_req, res) => {
+    try {
+      const result = await db.select().from(communities).where(eq(communities.isPublic, true)).orderBy(desc(communities.memberCount)).limit(50);
+      res.json(result);
+    } catch (error) {
+      console.error("Get communities error:", error);
+      res.status(500).json({ error: "Failed to fetch communities" });
+    }
+  });
+
+  app.get("/api/communities/:id", async (req, res) => {
+    try {
+      const result = await db.select().from(communities).where(eq(communities.id, req.params.id));
+      if (result.length === 0) {
+        return res.status(404).json({ error: "Community not found" });
+      }
+      res.json(result[0]);
+    } catch (error) {
+      console.error("Get community error:", error);
+      res.status(500).json({ error: "Failed to fetch community" });
+    }
+  });
+
+  app.post("/api/communities", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const data = insertCommunitySchema.parse({ ...req.body, ownerId: userId });
+      const result = await db.insert(communities).values(data).returning();
+      
+      await db.insert(communityMembers).values({
+        communityId: result[0].id,
+        userId,
+        username: req.body.username || "Owner",
+        role: "admin",
+      });
+      
+      await db.insert(communityChannels).values({
+        communityId: result[0].id,
+        name: "general",
+        description: "General discussion",
+        type: "chat",
+        position: 0,
+      });
+      
+      res.json(result[0]);
+    } catch (error) {
+      console.error("Create community error:", error);
+      res.status(500).json({ error: "Failed to create community" });
+    }
+  });
+
+  app.get("/api/communities/:id/channels", async (req, res) => {
+    try {
+      const result = await db.select().from(communityChannels).where(eq(communityChannels.communityId, req.params.id)).orderBy(communityChannels.position);
+      res.json(result);
+    } catch (error) {
+      console.error("Get channels error:", error);
+      res.status(500).json({ error: "Failed to fetch channels" });
+    }
+  });
+
+  app.post("/api/communities/:id/channels", isAuthenticated, async (req: any, res) => {
+    try {
+      const data = insertChannelSchema.parse({ ...req.body, communityId: req.params.id });
+      const result = await db.insert(communityChannels).values(data).returning();
+      res.json(result[0]);
+    } catch (error) {
+      console.error("Create channel error:", error);
+      res.status(500).json({ error: "Failed to create channel" });
+    }
+  });
+
+  app.get("/api/communities/:id/members", async (req, res) => {
+    try {
+      const result = await db.select().from(communityMembers).where(eq(communityMembers.communityId, req.params.id)).orderBy(desc(communityMembers.joinedAt));
+      res.json(result);
+    } catch (error) {
+      console.error("Get members error:", error);
+      res.status(500).json({ error: "Failed to fetch members" });
+    }
+  });
+
+  app.post("/api/communities/:id/join", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const existing = await db.select().from(communityMembers).where(and(eq(communityMembers.communityId, req.params.id), eq(communityMembers.userId, userId)));
+      if (existing.length > 0) {
+        return res.json({ message: "Already a member", member: existing[0] });
+      }
+      const data = insertMemberSchema.parse({ communityId: req.params.id, userId, username: req.body.username || "Member" });
+      const result = await db.insert(communityMembers).values(data).returning();
+      await db.update(communities).set({ memberCount: sql`member_count + 1` }).where(eq(communities.id, req.params.id));
+      res.json(result[0]);
+    } catch (error) {
+      console.error("Join community error:", error);
+      res.status(500).json({ error: "Failed to join community" });
+    }
+  });
+
+  app.post("/api/communities/:id/leave", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      await db.delete(communityMembers).where(and(eq(communityMembers.communityId, req.params.id), eq(communityMembers.userId, userId)));
+      await db.update(communities).set({ memberCount: sql`GREATEST(member_count - 1, 0)` }).where(eq(communities.id, req.params.id));
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Leave community error:", error);
+      res.status(500).json({ error: "Failed to leave community" });
+    }
+  });
+
+  app.get("/api/channels/:channelId/messages", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 50;
+      const before = req.query.before as string | undefined;
+      
+      let query = db.select().from(communityMessages).where(eq(communityMessages.channelId, req.params.channelId));
+      if (before) {
+        query = query.where(sql`${communityMessages.createdAt} < ${before}`);
+      }
+      const result = await query.orderBy(desc(communityMessages.createdAt)).limit(limit);
+      res.json(result.reverse());
+    } catch (error) {
+      console.error("Get messages error:", error);
+      res.status(500).json({ error: "Failed to fetch messages" });
+    }
+  });
+
+  app.post("/api/channels/:channelId/messages", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const data = insertCommunityMessageSchema.parse({
+        channelId: req.params.channelId,
+        userId,
+        username: req.body.username || "User",
+        content: req.body.content,
+        replyToId: req.body.replyToId || null,
+      });
+      const result = await db.insert(communityMessages).values(data).returning();
+      
+      const { broadcastToChannel } = await import("./chat-presence");
+      broadcastToChannel(req.params.channelId, { type: "NEW_MESSAGE", payload: result[0] });
+      
+      res.json(result[0]);
+    } catch (error) {
+      console.error("Send message error:", error);
+      res.status(500).json({ error: "Failed to send message" });
+    }
+  });
+
+  app.put("/api/messages/:messageId", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const message = await db.select().from(communityMessages).where(eq(communityMessages.id, req.params.messageId));
+      if (message.length === 0) return res.status(404).json({ error: "Message not found" });
+      if (message[0].userId !== userId) return res.status(403).json({ error: "Not authorized" });
+      
+      const result = await db.update(communityMessages).set({ content: req.body.content, editedAt: new Date() }).where(eq(communityMessages.id, req.params.messageId)).returning();
+      res.json(result[0]);
+    } catch (error) {
+      console.error("Edit message error:", error);
+      res.status(500).json({ error: "Failed to edit message" });
+    }
+  });
+
+  app.delete("/api/messages/:messageId", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const message = await db.select().from(communityMessages).where(eq(communityMessages.id, req.params.messageId));
+      if (message.length === 0) return res.status(404).json({ error: "Message not found" });
+      if (message[0].userId !== userId) return res.status(403).json({ error: "Not authorized" });
+      
+      await db.delete(communityMessages).where(eq(communityMessages.id, req.params.messageId));
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Delete message error:", error);
+      res.status(500).json({ error: "Failed to delete message" });
+    }
+  });
+
+  app.get("/api/messages/:messageId/reactions", async (req, res) => {
+    try {
+      const result = await db.select().from(messageReactions).where(eq(messageReactions.messageId, req.params.messageId));
+      res.json(result);
+    } catch (error) {
+      console.error("Get reactions error:", error);
+      res.status(500).json({ error: "Failed to fetch reactions" });
+    }
+  });
+
+  app.post("/api/messages/:messageId/reactions", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const existing = await db.select().from(messageReactions).where(and(eq(messageReactions.messageId, req.params.messageId), eq(messageReactions.userId, userId), eq(messageReactions.emoji, req.body.emoji)));
+      if (existing.length > 0) {
+        await db.delete(messageReactions).where(eq(messageReactions.id, existing[0].id));
+        return res.json({ removed: true });
+      }
+      const data = insertReactionSchema.parse({ messageId: req.params.messageId, userId, username: req.body.username || "User", emoji: req.body.emoji });
+      const result = await db.insert(messageReactions).values(data).returning();
+      res.json(result[0]);
+    } catch (error) {
+      console.error("Add reaction error:", error);
+      res.status(500).json({ error: "Failed to add reaction" });
+    }
+  });
+
+  app.get("/api/user/communities", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const memberships = await db.select({ communityId: communityMembers.communityId }).from(communityMembers).where(eq(communityMembers.userId, userId));
+      const communityIds = memberships.map(m => m.communityId);
+      if (communityIds.length === 0) return res.json([]);
+      const result = await db.select().from(communities).where(sql`${communities.id} IN (${sql.join(communityIds.map(id => sql`${id}`), sql`, `)})`);
+      res.json(result);
+    } catch (error) {
+      console.error("Get user communities error:", error);
+      res.status(500).json({ error: "Failed to fetch user communities" });
+    }
+  });
+
   return httpServer;
 }
 
