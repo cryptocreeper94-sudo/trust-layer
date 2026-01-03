@@ -81,9 +81,9 @@ const ECOSYSTEM_PHASES: Phase[] = [
     icon: <MessageCircle className="w-6 h-6" />,
     image: cyberpunkCity,
     milestones: [
-      { id: "cc1", title: "ChronoChat for Communities", description: "Core community platform with channels, reactions, and Orbs integration", status: "in_progress", isRequired: true },
+      { id: "cc1", title: "ChronoChat for Communities", description: "Core community platform with channels, reactions, and Shells integration", status: "in_progress", isRequired: true },
       { id: "cc2", title: "ChronoChat Cloud", description: "SaaS hosting for partner communities ($149+/mo)", status: "pending", isRequired: true },
-      { id: "cc3", title: "ChronoChat for Gaming", description: "Gaming overlays: matchmaking lobbies, game telemetry, Orbs rewards", status: "pending", isRequired: true },
+      { id: "cc3", title: "ChronoChat for Gaming", description: "Gaming overlays: matchmaking lobbies, game telemetry, Shells rewards", status: "pending", isRequired: true },
       { id: "cc4", title: "ChronoChat for Teams", description: "Enterprise collaboration with tasks, docs, compliance", status: "pending", isRequired: false },
       { id: "cc5", title: "ChronoChat API", description: "Developer API with rate limits, keys, and documentation", status: "pending", isRequired: false },
     ],

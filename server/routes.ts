@@ -10255,34 +10255,33 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  // Orbs Economy - Virtual Currency System
-  app.get("/api/orbs/packages", async (req, res) => {
+  // Shells Economy - Virtual Currency System (pre-launch engagement currency)
+  app.get("/api/shells/packages-list", async (req, res) => {
     try {
       res.json({
         packages: [
-          { id: "starter", name: "Orb Starter", orbs: 1000, bonusOrbs: 0, priceUsd: 499, formattedPrice: "$4.99", popular: false },
-          { id: "value", name: "Orb Value Pack", orbs: 2500, bonusOrbs: 250, priceUsd: 999, formattedPrice: "$9.99", popular: false },
-          { id: "popular", name: "Orb Popular Pack", orbs: 6000, bonusOrbs: 1000, priceUsd: 1999, formattedPrice: "$19.99", popular: true },
-          { id: "mega", name: "Orb Mega Pack", orbs: 15000, bonusOrbs: 3500, priceUsd: 4999, formattedPrice: "$49.99", popular: false },
-          { id: "whale", name: "Orb Whale Pack", orbs: 35000, bonusOrbs: 10000, priceUsd: 9999, formattedPrice: "$99.99", popular: false },
+          { id: "starter", name: "Shell Starter", shells: 1000, bonusShells: 0, priceUsd: 499, formattedPrice: "$4.99", popular: false },
+          { id: "value", name: "Shell Value Pack", shells: 2500, bonusShells: 250, priceUsd: 999, formattedPrice: "$9.99", popular: false },
+          { id: "popular", name: "Shell Popular Pack", shells: 6000, bonusShells: 1000, priceUsd: 1999, formattedPrice: "$19.99", popular: true },
+          { id: "mega", name: "Shell Mega Pack", shells: 15000, bonusShells: 3500, priceUsd: 4999, formattedPrice: "$49.99", popular: false },
+          { id: "whale", name: "Shell Whale Pack", shells: 35000, bonusShells: 10000, priceUsd: 9999, formattedPrice: "$99.99", popular: false },
         ],
-        exchangeRate: "1 Orb = 1 DWC at TGE (Feb 14, 2026)",
-        currency: "Orbs",
-        conversionNote: "All Orbs convert to DWC tokens at Token Generation Event"
+        exchangeRate: "1 Shell = 1 DWC at TGE (Feb 14, 2026)",
+        currency: "Shells",
+        conversionNote: "All Shells convert to DWC tokens at Token Generation Event"
       });
     } catch (error) {
-      console.error("Get orbs packages error:", error);
-      res.status(500).json({ error: "Failed to get orbs packages" });
+      console.error("Get shells packages error:", error);
+      res.status(500).json({ error: "Failed to get shells packages" });
     }
   });
 
-  app.get("/api/orbs/balance", isAuthenticated, async (req: any, res) => {
+  app.get("/api/shells/my-balance", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.claims?.sub || req.session?.userId;
       if (!userId) {
         return res.status(401).json({ error: "Not authenticated" });
       }
-      // Orbs balance stored in shell transactions or separate tracking
       const shellBalance = await shellsService.getBalance(userId);
       res.json({
         balance: shellBalance || 0,
@@ -10290,8 +10289,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         conversionDate: "2026-02-14T00:00:00Z"
       });
     } catch (error) {
-      console.error("Get orbs balance error:", error);
-      res.status(500).json({ error: "Failed to get orbs balance" });
+      console.error("Get shells balance error:", error);
+      res.status(500).json({ error: "Failed to get shells balance" });
     }
   });
 

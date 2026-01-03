@@ -96,7 +96,7 @@ export function GamesComingSoonModal({ onClose }: { onClose: () => void }) {
           marginBottom: '16px'
         }}>
           <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', marginBottom: '4px' }}>
-            Play with DWC Coins or Orbs
+            Play with DWC Coins or Shells
           </p>
           <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>
             Provably fair • Instant payouts • Low house edge

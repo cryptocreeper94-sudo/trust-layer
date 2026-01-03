@@ -211,8 +211,8 @@ export default function DWSCExecutiveSummary() {
                 {[
                   { title: "Guardian Certification", desc: "Enterprise blockchain security audits at 70% less than competitors. $5,999-$14,999 per audit.", icon: Shield, color: "emerald", href: "/guardian" },
                   { title: "Guardian Shield", desc: "24/7 smart contract monitoring. Norton for blockchain. $299-$2,999/month.", icon: Activity, color: "blue", href: "/guardian" },
-                  { title: "ChronoChat", desc: "Community platform with real-time messaging, channels, reactions, and Orbs integration.", icon: MessageSquare, color: "purple", href: "/community-hub" },
-                  { title: "Orbs Economy", desc: "Pre-launch virtual currency. Earn through engagement, purchase via Stripe, converts to DWC.", icon: Sparkles, color: "pink", href: "/coin-store" },
+                  { title: "ChronoChat", desc: "Community platform with real-time messaging, channels, reactions, and Shells integration.", icon: MessageSquare, color: "purple", href: "/community-hub" },
+                  { title: "Shells Economy", desc: "Pre-launch virtual currency. Earn through engagement, purchase via Stripe, converts to DWC.", icon: Sparkles, color: "pink", href: "/coin-store" },
                   { title: "Validator Program", desc: "Become a network validator. 10,000 DWC airdrop for founders, longevity bonuses.", icon: Server, color: "cyan", href: "/validators" },
                   { title: "Token Presale", desc: "DWC at $0.005 per coin. Tiered pricing through $0.01 launch. Up to 25% bonus.", icon: Coins, color: "amber", href: "/presale" },
                   { title: "DEX & Token Swap", desc: "AMM-style decentralized exchange. Trade tokens with low fees and instant settlement.", icon: ArrowRightLeft, color: "green", href: "/swap" },
@@ -442,7 +442,7 @@ export default function DWSCExecutiveSummary() {
                   icon: CreditCard
                 },
                 {
-                  title: "Orbs Packages",
+                  title: "Shell Packages",
                   source: "Virtual Currency",
                   description: "Starter (100/$4.99), Popular (500/$19.99), Premium (1,200/$39.99), Ultimate (3,000/$79.99).",
                   icon: Sparkles
