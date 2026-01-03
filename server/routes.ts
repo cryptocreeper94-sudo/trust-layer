@@ -298,22 +298,24 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Missing signature or raw body" });
       }
       
-      const { getUncachableStripeClient } = await import("./stripeClient");
-      const stripe = await getUncachableStripeClient();
-      
-      // SECURITY: Use managed webhook secret from stripe-replit-sync initialization
-      const webhookSecret = (global as any).__stripeWebhookSecret || process.env.STRIPE_WEBHOOK_SECRET;
-      if (!webhookSecret) {
-        console.error("Stripe webhook: Webhook secret not available - managed webhooks may not be initialized");
-        return res.status(500).json({ error: "Webhook not configured" });
+      // Use managed webhook from stripe-replit-sync for signature verification and sync
+      const { getStripeSync } = await import("./stripeClient");
+      try {
+        const stripeSync = await getStripeSync();
+        await stripeSync.processWebhook(rawBody as Buffer, sig);
+      } catch (syncErr: any) {
+        console.error("Stripe webhook sync error:", syncErr.message);
+        // Continue to process custom logic even if sync fails
       }
       
+      // Parse event for custom business logic (signature already verified by processWebhook)
       let event;
       try {
-        event = stripe.webhooks.constructEvent(rawBody as Buffer, sig, webhookSecret);
+        const payload = typeof rawBody === 'string' ? rawBody : rawBody.toString('utf8');
+        event = JSON.parse(payload);
       } catch (err: any) {
-        console.error("Stripe webhook signature verification failed:", err.message);
-        return res.status(400).json({ error: "Webhook signature verification failed" });
+        console.error("Stripe webhook JSON parse error:", err.message);
+        return res.status(400).json({ error: "Invalid JSON payload" });
       }
       
       console.log(`[Stripe Webhook] Event received: ${event.type}`);

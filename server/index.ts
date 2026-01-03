@@ -160,19 +160,8 @@ app.use((req, res, next) => {
       const domains = process.env.REPLIT_DOMAINS?.split(',') || [];
       if (domains.length > 0) {
         const webhookUrl = `https://${domains[0]}/api/stripe/webhook`;
-        const result = await stripeSync.findOrCreateManagedWebhook(webhookUrl);
-        
-        if (result && result.webhook) {
-          console.log(`[Stripe] Managed webhook configured: ${result.webhook.url}`);
-          // Store webhook secret for use in routes
-          (global as any).__stripeWebhookSecret = result.webhook.secret;
-        } else if (result && result.secret) {
-          // Alternative response format
-          console.log(`[Stripe] Managed webhook configured`);
-          (global as any).__stripeWebhookSecret = result.secret;
-        } else {
-          console.log(`[Stripe] Managed webhook initialized, result:`, JSON.stringify(result));
-        }
+        const webhook = await stripeSync.findOrCreateManagedWebhook(webhookUrl);
+        console.log(`[Stripe] Managed webhook configured: ${webhook.url || webhookUrl}`);
       }
       
       // Sync existing Stripe data in background
