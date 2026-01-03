@@ -189,3 +189,57 @@ export function useWallet() {
 export function shortenAddress(address: string, chars = 4): string {
   return `${address.slice(0, chars + 2)}...${address.slice(-chars)}`;
 }
+
+// DarkWave Smart Chain network configuration for MetaMask
+export const DARKWAVE_CHAIN_CONFIG = {
+  chainId: '0x2105', // 8453 in hex
+  chainName: 'DarkWave Smart Chain',
+  nativeCurrency: {
+    name: 'DarkWave',
+    symbol: 'DWC',
+    decimals: 18,
+  },
+  rpcUrls: ['https://dwsc.io/rpc'],
+  blockExplorerUrls: ['https://dwsc.io/explorer'],
+};
+
+// Add DarkWave chain to MetaMask
+export async function addDarkWaveToMetaMask(): Promise<boolean> {
+  if (!window.ethereum) {
+    throw new Error('MetaMask not installed');
+  }
+  
+  try {
+    await window.ethereum.request({
+      method: 'wallet_addEthereumChain',
+      params: [DARKWAVE_CHAIN_CONFIG],
+    });
+    return true;
+  } catch (err: any) {
+    if (err.code === 4001) {
+      throw new Error('User rejected the request');
+    }
+    throw err;
+  }
+}
+
+// Switch to DarkWave chain
+export async function switchToDarkWaveChain(): Promise<boolean> {
+  if (!window.ethereum) {
+    throw new Error('MetaMask not installed');
+  }
+  
+  try {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: DARKWAVE_CHAIN_CONFIG.chainId }],
+    });
+    return true;
+  } catch (err: any) {
+    // Chain not added yet, try to add it
+    if (err.code === 4902) {
+      return addDarkWaveToMetaMask();
+    }
+    throw err;
+  }
+}

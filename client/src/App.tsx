@@ -111,6 +111,7 @@ import PresaleSuccess from "@/pages/presale-success";
 import InvestmentSimulator from "@/pages/investment-simulator";
 import RoadmapChronicles from "@/pages/roadmap-chronicles";
 import RoadmapEcosystem from "@/pages/roadmap-ecosystem";
+import TechnicalRoadmap from "@/pages/technical-roadmap";
 import Chronicles from "@/pages/chronicles";
 import ChronoHome from "@/pages/chrono-home";
 import ChronoEras from "@/pages/chrono-eras";
@@ -379,6 +380,7 @@ function DWSCRouter() {
         <Route path="/roadmap" component={RoadmapEcosystem} />
         <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
         <Route path="/roadmap-ecosystem" component={RoadmapEcosystem} />
+        <Route path="/technical-roadmap" component={TechnicalRoadmap} />
         <Route path="/innovation" component={InnovationHub} />
         <Route path="/ai-agents" component={AIAgentMarketplace} />
         <Route path="/rwa" component={RWATokenization} />
