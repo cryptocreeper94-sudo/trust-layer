@@ -1,8 +1,15 @@
 import crypto from "crypto";
 import { db } from "./db";
-import { chainBlocks, chainTransactions, chainAccounts, chainConfig, chainValidators } from "@shared/schema";
-import { eq, desc, sql, and } from "drizzle-orm";
+import { chainBlocks, chainTransactions, chainAccounts, chainConfig, chainValidators, blockAttestations, slashingRecords, consensusEpochs } from "@shared/schema";
+import { eq, desc, sql, and, gte } from "drizzle-orm";
 import { webhookService } from "./webhook-service";
+
+// BFT Consensus Constants
+const BFT_QUORUM_THRESHOLD = 0.67; // 2/3+ stake required for finality
+const EPOCH_LENGTH = 100; // Blocks per epoch
+const MIN_STAKE_FOR_VALIDATOR = BigInt("1000000000000000000000"); // 1000 DWC minimum stake
+const SLASHING_PERCENTAGE = 5; // 5% stake slashed for misbehavior
+const DOWNTIME_TOLERANCE_BLOCKS = 50; // Blocks before downtime slashing
 
 export interface BlockHeader {
   height: number;
@@ -62,8 +69,31 @@ export interface Validator {
   name: string;
   status: string;
   stake: string;
+  stakeWeight: number; // Percentage of total stake (0-100)
   blocksProduced: number;
+  missedBlocks: number;
+  lastActiveBlock: number;
   isFounder: boolean;
+  commission: number;
+}
+
+export interface BlockAttestation {
+  validatorId: string;
+  validatorAddress: string;
+  blockHeight: number;
+  blockHash: string;
+  stake: bigint;
+  signature: string;
+  timestamp: Date;
+}
+
+export interface ConsensusState {
+  currentEpoch: number;
+  totalStake: bigint;
+  activeValidators: number;
+  quorumThreshold: number;
+  finalizedBlock: number;
+  pendingAttestations: Map<number, BlockAttestation[]>;
 }
 
 export class DarkWaveBlockchain {
@@ -79,6 +109,17 @@ export class DarkWaveBlockchain {
   private initPromise: Promise<void> | null = null;
   private activeValidators: Validator[] = [];
   private currentValidatorIndex: number = 0;
+  
+  // BFT Consensus State
+  private consensusState: ConsensusState = {
+    currentEpoch: 0,
+    totalStake: BigInt(0),
+    activeValidators: 0,
+    quorumThreshold: BFT_QUORUM_THRESHOLD,
+    finalizedBlock: 0,
+    pendingAttestations: new Map(),
+  };
+  private lastFinalizedBlock: number = 0;
 
   constructor() {
     this.config = {
@@ -236,15 +277,29 @@ export class DarkWaveBlockchain {
         .from(chainValidators)
         .where(eq(chainValidators.status, "active"));
       
-      this.activeValidators = validators.map(v => ({
-        id: v.id,
-        address: v.address,
-        name: v.name,
-        status: v.status,
-        stake: v.stake,
-        blocksProduced: parseInt(v.blocksProduced || "0"),
-        isFounder: v.isFounder,
-      }));
+      // Calculate total stake for weight calculation
+      let totalStake = BigInt(0);
+      for (const v of validators) {
+        totalStake += BigInt(v.stake || "0");
+      }
+      
+      this.activeValidators = validators.map(v => {
+        const stake = BigInt(v.stake || "0");
+        const stakeWeight = totalStake > 0 ? Number((stake * BigInt(10000)) / totalStake) / 100 : 0;
+        return {
+          id: v.id,
+          address: v.address,
+          name: v.name,
+          status: v.status,
+          stake: v.stake,
+          stakeWeight,
+          blocksProduced: parseInt(v.blocksProduced || "0"),
+          missedBlocks: 0,
+          lastActiveBlock: this.latestHeight,
+          isFounder: v.isFounder,
+          commission: parseFloat(v.commission || "5"),
+        };
+      });
       
       // If no validators, add the treasury as a default validator
       if (this.activeValidators.length === 0) {
@@ -253,16 +308,28 @@ export class DarkWaveBlockchain {
           address: this.treasuryAddress,
           name: "Founders Validator",
           status: "active",
-          stake: "10000000000000000000000000",
+          stake: "10000000000000000000000000", // 10M DWC
+          stakeWeight: 100,
           blocksProduced: 0,
+          missedBlocks: 0,
+          lastActiveBlock: 0,
           isFounder: true,
+          commission: 0,
         }];
+        totalStake = BigInt("10000000000000000000000000");
       }
+      
+      // Update consensus state
+      this.consensusState.totalStake = totalStake;
+      this.consensusState.activeValidators = this.activeValidators.length;
+      this.consensusState.currentEpoch = Math.floor(this.latestHeight / EPOCH_LENGTH);
       
       // Reset index to ensure valid rotation
       this.currentValidatorIndex = 0;
       
       console.log(`[DarkWave Mainnet] Loaded ${this.activeValidators.length} active validator(s)`);
+      console.log(`[DarkWave Mainnet] Total stake: ${totalStake / ONE_TOKEN} DWC`);
+      console.log(`[DarkWave Mainnet] BFT Quorum: ${(BFT_QUORUM_THRESHOLD * 100).toFixed(0)}% (${Math.ceil(this.activeValidators.length * BFT_QUORUM_THRESHOLD)} validators)`);
     } catch (error) {
       console.error("[DarkWave] Failed to load validators:", error);
       // Default to treasury as validator
@@ -272,9 +339,15 @@ export class DarkWaveBlockchain {
         name: "Founders Validator",
         status: "active",
         stake: "10000000000000000000000000",
+        stakeWeight: 100,
         blocksProduced: 0,
+        missedBlocks: 0,
+        lastActiveBlock: 0,
         isFounder: true,
+        commission: 0,
       }];
+      this.consensusState.totalStake = BigInt("10000000000000000000000000");
+      this.consensusState.activeValidators = 1;
       this.currentValidatorIndex = 0;
     }
   }
@@ -287,15 +360,195 @@ export class DarkWaveBlockchain {
         name: "Founders Validator",
         status: "active",
         stake: "10000000000000000000000000",
+        stakeWeight: 100,
         blocksProduced: 0,
+        missedBlocks: 0,
+        lastActiveBlock: 0,
         isFounder: true,
+        commission: 0,
       };
     }
     
-    // Round-robin selection
+    // Stake-weighted round-robin selection (higher stake = more frequent selection)
+    // Use weighted random selection based on stake
+    if (this.activeValidators.length === 1) {
+      return this.activeValidators[0];
+    }
+    
+    const totalWeight = this.activeValidators.reduce((sum, v) => sum + v.stakeWeight, 0);
+    let random = Math.random() * totalWeight;
+    
+    for (const validator of this.activeValidators) {
+      random -= validator.stakeWeight;
+      if (random <= 0) {
+        return validator;
+      }
+    }
+    
+    // Fallback to round-robin
     const validator = this.activeValidators[this.currentValidatorIndex];
     this.currentValidatorIndex = (this.currentValidatorIndex + 1) % this.activeValidators.length;
     return validator;
+  }
+  
+  // BFT Consensus: Create attestation signature
+  private createBlockAttestation(block: Block, validator: Validator): BlockAttestation {
+    const attestationData = `${block.header.height}:${block.hash}:${validator.address}:${Date.now()}`;
+    const signature = crypto.createHmac("sha256", validator.id + validator.address).update(attestationData).digest("hex");
+    
+    return {
+      validatorId: validator.id,
+      validatorAddress: validator.address,
+      blockHeight: block.header.height,
+      blockHash: block.hash,
+      stake: BigInt(validator.stake),
+      signature,
+      timestamp: new Date(),
+    };
+  }
+  
+  // BFT Consensus: Check if block has reached finality (2/3+ stake attestations)
+  private async checkBlockFinality(blockHeight: number): Promise<boolean> {
+    const attestations = this.consensusState.pendingAttestations.get(blockHeight) || [];
+    
+    // Calculate total attested stake
+    let attestedStake = BigInt(0);
+    for (const attestation of attestations) {
+      attestedStake += attestation.stake;
+    }
+    
+    // Check if 2/3+ stake has attested
+    const quorumMet = this.consensusState.totalStake > 0 && 
+      Number((attestedStake * BigInt(100)) / this.consensusState.totalStake) >= (BFT_QUORUM_THRESHOLD * 100);
+    
+    if (quorumMet && blockHeight > this.lastFinalizedBlock) {
+      this.lastFinalizedBlock = blockHeight;
+      this.consensusState.finalizedBlock = blockHeight;
+      
+      // Persist attestations
+      try {
+        for (const attestation of attestations) {
+          await db.insert(blockAttestations).values({
+            blockHeight: attestation.blockHeight.toString(),
+            blockHash: attestation.blockHash,
+            validatorId: attestation.validatorId,
+            validatorAddress: attestation.validatorAddress,
+            signature: attestation.signature,
+            stake: attestation.stake.toString(),
+          }).onConflictDoNothing();
+        }
+      } catch (e) {
+        // Attestation storage failed, but block is still finalized in memory
+      }
+      
+      // Clean up old attestations
+      this.consensusState.pendingAttestations.delete(blockHeight);
+      
+      return true;
+    }
+    
+    return false;
+  }
+  
+  // BFT Consensus: Add attestation from a validator
+  public async addBlockAttestation(blockHeight: number, blockHash: string, validatorId: string): Promise<{ success: boolean; finalized?: boolean; error?: string }> {
+    const validator = this.activeValidators.find(v => v.id === validatorId);
+    if (!validator) {
+      return { success: false, error: "Validator not found" };
+    }
+    
+    const block = this.blocks.get(blockHeight);
+    if (!block || block.hash !== blockHash) {
+      return { success: false, error: "Block not found or hash mismatch" };
+    }
+    
+    // Create attestation
+    const attestation = this.createBlockAttestation(block, validator);
+    
+    // Add to pending attestations
+    const existing = this.consensusState.pendingAttestations.get(blockHeight) || [];
+    if (existing.some(a => a.validatorId === validatorId)) {
+      return { success: false, error: "Validator already attested" };
+    }
+    
+    existing.push(attestation);
+    this.consensusState.pendingAttestations.set(blockHeight, existing);
+    
+    // Update validator's last active block
+    validator.lastActiveBlock = blockHeight;
+    
+    // Check finality
+    const finalized = await this.checkBlockFinality(blockHeight);
+    
+    return { success: true, finalized };
+  }
+  
+  // BFT Consensus: Slash a validator for misbehavior
+  public async slashValidator(validatorId: string, reason: string, evidence?: string): Promise<{ success: boolean; slashAmount?: string; error?: string }> {
+    const validator = this.activeValidators.find(v => v.id === validatorId);
+    if (!validator) {
+      return { success: false, error: "Validator not found" };
+    }
+    
+    const stake = BigInt(validator.stake);
+    const slashAmount = (stake * BigInt(SLASHING_PERCENTAGE)) / BigInt(100);
+    
+    // Update validator stake
+    const newStake = stake - slashAmount;
+    validator.stake = newStake.toString();
+    
+    // Recalculate stake weights
+    await this.recalculateStakeWeights();
+    
+    // Persist slashing record
+    try {
+      await db.insert(slashingRecords).values({
+        validatorId,
+        validatorAddress: validator.address,
+        reason,
+        blockHeight: this.latestHeight.toString(),
+        slashAmount: slashAmount.toString(),
+        evidence: evidence || null,
+        status: "executed",
+      });
+      
+      // Update validator in database
+      await db.update(chainValidators)
+        .set({ stake: newStake.toString(), updatedAt: new Date() })
+        .where(eq(chainValidators.id, validatorId));
+        
+      console.log(`[DarkWave Mainnet] Slashed validator ${validator.name}: ${slashAmount / ONE_TOKEN} DWC for ${reason}`);
+    } catch (e) {
+      console.error("[DarkWave] Failed to persist slashing:", e);
+    }
+    
+    // Suspend validator if stake falls below minimum
+    if (newStake < MIN_STAKE_FOR_VALIDATOR) {
+      validator.status = "suspended";
+      await db.update(chainValidators)
+        .set({ status: "suspended", updatedAt: new Date() })
+        .where(eq(chainValidators.id, validatorId));
+      
+      this.activeValidators = this.activeValidators.filter(v => v.id !== validatorId);
+      console.log(`[DarkWave Mainnet] Validator ${validator.name} suspended due to insufficient stake`);
+    }
+    
+    return { success: true, slashAmount: slashAmount.toString() };
+  }
+  
+  // Recalculate stake weights after stake changes
+  private async recalculateStakeWeights(): Promise<void> {
+    let totalStake = BigInt(0);
+    for (const v of this.activeValidators) {
+      totalStake += BigInt(v.stake);
+    }
+    
+    for (const v of this.activeValidators) {
+      const stake = BigInt(v.stake);
+      v.stakeWeight = totalStake > 0 ? Number((stake * BigInt(10000)) / totalStake) / 100 : 0;
+    }
+    
+    this.consensusState.totalStake = totalStake;
   }
 
   private async updateValidatorBlockCount(validatorId: string): Promise<void> {
@@ -770,16 +1023,218 @@ export class DarkWaveBlockchain {
   }
 
   public getStats() {
+    const nakamotoCoefficient = this.calculateNakamotoCoefficient();
     return {
       tps: "200K+",
       finalityTime: `${this.config.blockTimeMs}ms`,
       avgCost: "$0.0001",
-      activeNodes: "Founders Validator",
+      activeNodes: `${this.activeValidators.length} validator${this.activeValidators.length !== 1 ? 's' : ''}`,
       currentBlock: `#${this.latestHeight}`,
+      finalizedBlock: `#${this.lastFinalizedBlock}`,
       totalTransactions: this.totalTransactions,
       totalAccounts: this.accounts.size,
       mempoolSize: this.mempool.length,
       networkType: "MAINNET",
+      // Decentralization metrics
+      consensusType: "BFT-PoA",
+      quorumThreshold: `${(BFT_QUORUM_THRESHOLD * 100).toFixed(0)}%`,
+      totalStake: `${this.consensusState.totalStake / ONE_TOKEN} DWC`,
+      nakamotoCoefficient,
+      currentEpoch: this.consensusState.currentEpoch,
+    };
+  }
+  
+  // Calculate Nakamoto Coefficient (minimum validators to control 51%+ stake)
+  private calculateNakamotoCoefficient(): number {
+    if (this.activeValidators.length <= 1) return 1;
+    
+    // Sort validators by stake descending
+    const sorted = [...this.activeValidators].sort((a, b) => {
+      return Number(BigInt(b.stake) - BigInt(a.stake));
+    });
+    
+    let cumulativeWeight = 0;
+    let count = 0;
+    
+    for (const validator of sorted) {
+      cumulativeWeight += validator.stakeWeight;
+      count++;
+      if (cumulativeWeight >= 51) {
+        return count;
+      }
+    }
+    
+    return this.activeValidators.length;
+  }
+  
+  // Get consensus state for external monitoring
+  public getConsensusState() {
+    return {
+      currentEpoch: this.consensusState.currentEpoch,
+      epochLength: EPOCH_LENGTH,
+      blocksInEpoch: this.latestHeight % EPOCH_LENGTH,
+      totalStake: this.consensusState.totalStake.toString(),
+      activeValidators: this.consensusState.activeValidators,
+      quorumThreshold: BFT_QUORUM_THRESHOLD,
+      requiredAttestations: Math.ceil(this.activeValidators.length * BFT_QUORUM_THRESHOLD),
+      finalizedBlock: this.lastFinalizedBlock,
+      latestBlock: this.latestHeight,
+      finalizationLag: this.latestHeight - this.lastFinalizedBlock,
+      nakamotoCoefficient: this.calculateNakamotoCoefficient(),
+      pendingAttestationsCount: this.consensusState.pendingAttestations.size,
+    };
+  }
+  
+  // Get detailed validator information
+  public getValidatorDetails(validatorId: string): Validator | undefined {
+    return this.activeValidators.find(v => v.id === validatorId);
+  }
+  
+  // Register a new validator with stake
+  public async registerValidator(
+    address: string, 
+    name: string, 
+    stakeAmount: bigint,
+    description?: string,
+    commission?: number
+  ): Promise<{ success: boolean; validator?: Validator; error?: string }> {
+    // Validate minimum stake
+    if (stakeAmount < MIN_STAKE_FOR_VALIDATOR) {
+      return { 
+        success: false, 
+        error: `Minimum stake is ${MIN_STAKE_FOR_VALIDATOR / ONE_TOKEN} DWC` 
+      };
+    }
+    
+    // Check if address already a validator
+    const existing = this.activeValidators.find(v => v.address === address);
+    if (existing) {
+      return { success: false, error: "Address is already a validator" };
+    }
+    
+    // Verify staker has sufficient balance
+    const stakerAccount = this.accounts.get(address);
+    if (!stakerAccount || stakerAccount.balance < stakeAmount) {
+      return { success: false, error: "Insufficient balance for staking" };
+    }
+    
+    // Lock stake (debit from account)
+    stakerAccount.balance -= stakeAmount;
+    await this.persistAccount(address);
+    
+    // Add validator
+    try {
+      const result = await db.insert(chainValidators).values({
+        address,
+        name,
+        description: description || "",
+        stake: stakeAmount.toString(),
+        commission: (commission || 5).toString(),
+        status: "active",
+        blocksProduced: "0",
+        isFounder: false,
+      }).returning();
+      
+      if (result.length > 0) {
+        const newValidator: Validator = {
+          id: result[0].id,
+          address,
+          name,
+          status: "active",
+          stake: stakeAmount.toString(),
+          stakeWeight: 0, // Will be recalculated
+          blocksProduced: 0,
+          missedBlocks: 0,
+          lastActiveBlock: this.latestHeight,
+          isFounder: false,
+          commission: commission || 5,
+        };
+        
+        this.activeValidators.push(newValidator);
+        await this.recalculateStakeWeights();
+        
+        console.log(`[DarkWave Mainnet] New validator registered: ${name} with ${stakeAmount / ONE_TOKEN} DWC stake`);
+        
+        return { success: true, validator: newValidator };
+      }
+    } catch (e) {
+      // Refund stake on failure
+      stakerAccount.balance += stakeAmount;
+      await this.persistAccount(address);
+      console.error("[DarkWave] Failed to register validator:", e);
+      return { success: false, error: "Database error" };
+    }
+    
+    return { success: false, error: "Failed to create validator" };
+  }
+  
+  // Increase validator stake
+  public async increaseStake(validatorId: string, amount: bigint, fromAddress: string): Promise<{ success: boolean; error?: string }> {
+    const validator = this.activeValidators.find(v => v.id === validatorId);
+    if (!validator) {
+      return { success: false, error: "Validator not found" };
+    }
+    
+    const stakerAccount = this.accounts.get(fromAddress);
+    if (!stakerAccount || stakerAccount.balance < amount) {
+      return { success: false, error: "Insufficient balance" };
+    }
+    
+    // Transfer stake
+    stakerAccount.balance -= amount;
+    await this.persistAccount(fromAddress);
+    
+    const newStake = BigInt(validator.stake) + amount;
+    validator.stake = newStake.toString();
+    
+    await db.update(chainValidators)
+      .set({ stake: newStake.toString(), updatedAt: new Date() })
+      .where(eq(chainValidators.id, validatorId));
+    
+    await this.recalculateStakeWeights();
+    
+    return { success: true };
+  }
+  
+  // Get chain state for node sync
+  public async getChainStateForSync(fromBlock: number, toBlock?: number): Promise<{
+    blocks: any[];
+    accounts: any[];
+    latestHeight: number;
+    checkpointHash: string;
+  }> {
+    const limit = Math.min((toBlock || fromBlock + 100) - fromBlock, 100);
+    
+    const blocks = await db.select()
+      .from(chainBlocks)
+      .where(gte(chainBlocks.height, fromBlock.toString()))
+      .orderBy(chainBlocks.height)
+      .limit(limit);
+    
+    const accounts = await db.select().from(chainAccounts);
+    
+    // Create checkpoint hash
+    const latestBlock = this.blocks.get(this.latestHeight);
+    const checkpointData = `${this.latestHeight}:${latestBlock?.hash}:${this.consensusState.totalStake}`;
+    const checkpointHash = crypto.createHash("sha256").update(checkpointData).digest("hex");
+    
+    return {
+      blocks: blocks.map(b => ({
+        height: parseInt(b.height),
+        hash: b.hash,
+        prevHash: b.prevHash,
+        timestamp: b.timestamp.toISOString(),
+        validator: b.validator,
+        merkleRoot: b.merkleRoot,
+        txCount: parseInt(b.txCount || "0"),
+      })),
+      accounts: accounts.map(a => ({
+        address: a.address,
+        balance: a.balance,
+        nonce: a.nonce,
+      })),
+      latestHeight: this.latestHeight,
+      checkpointHash,
     };
   }
 

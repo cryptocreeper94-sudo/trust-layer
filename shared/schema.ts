@@ -724,6 +724,66 @@ export const insertChainValidatorSchema = createInsertSchema(chainValidators).om
 export type InsertChainValidator = z.infer<typeof insertChainValidatorSchema>;
 export type ChainValidator = typeof chainValidators.$inferSelect;
 
+// Block Attestations for BFT Consensus
+export const blockAttestations = pgTable("block_attestations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  blockHeight: text("block_height").notNull(),
+  blockHash: text("block_hash").notNull(),
+  validatorId: text("validator_id").notNull(),
+  validatorAddress: text("validator_address").notNull(),
+  signature: text("signature").notNull(),
+  stake: text("stake").notNull(), // Validator's stake at time of attestation
+  attestedAt: timestamp("attested_at").defaultNow().notNull(),
+});
+
+export const insertBlockAttestationSchema = createInsertSchema(blockAttestations).omit({
+  id: true,
+  attestedAt: true,
+});
+export type BlockAttestation = typeof blockAttestations.$inferSelect;
+export type InsertBlockAttestation = z.infer<typeof insertBlockAttestationSchema>;
+
+// Slashing Records for Validator Misbehavior
+export const slashingRecords = pgTable("slashing_records", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  validatorId: text("validator_id").notNull(),
+  validatorAddress: text("validator_address").notNull(),
+  reason: text("reason").notNull(), // 'double_sign', 'downtime', 'invalid_block', 'censorship'
+  blockHeight: text("block_height"),
+  slashAmount: text("slash_amount").notNull(), // Amount slashed from stake
+  evidence: text("evidence"), // JSON proof of misbehavior
+  status: text("status").notNull().default("executed"), // 'pending', 'executed', 'appealed'
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertSlashingRecordSchema = createInsertSchema(slashingRecords).omit({
+  id: true,
+  createdAt: true,
+});
+export type SlashingRecord = typeof slashingRecords.$inferSelect;
+export type InsertSlashingRecord = z.infer<typeof insertSlashingRecordSchema>;
+
+// Consensus Epochs for tracking finality
+export const consensusEpochs = pgTable("consensus_epochs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  epochNumber: integer("epoch_number").notNull().unique(),
+  startBlock: text("start_block").notNull(),
+  endBlock: text("end_block"),
+  validatorSet: text("validator_set").notNull(), // JSON array of active validators
+  totalStake: text("total_stake").notNull(),
+  status: text("status").notNull().default("active"), // 'active', 'finalized'
+  finalizedAt: timestamp("finalized_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertConsensusEpochSchema = createInsertSchema(consensusEpochs).omit({
+  id: true,
+  createdAt: true,
+  finalizedAt: true,
+});
+export type ConsensusEpoch = typeof consensusEpochs.$inferSelect;
+export type InsertConsensusEpoch = z.infer<typeof insertConsensusEpochSchema>;
+
 // Cross-Chain Bridge Tables (Phase 1 - MVP Custodial Bridge)
 
 export const bridgeLocks = pgTable("bridge_locks", {

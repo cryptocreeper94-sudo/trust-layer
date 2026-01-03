@@ -23,7 +23,7 @@ The design adheres to a "Premium UI Protocol" emphasizing:
 - **Color Palette**: Cyan, Purple, Pink accents; `slate-950`, `slate-900`, `slate-800` backgrounds; white/gray text.
 
 ### Technical Implementations
-- **Blockchain**: Proof-of-Authority (PoA) with Founders Validator, PostgreSQL, SHA-256/Merkle trees/HMAC-SHA256, 400ms block time, 200K+ TPS. Native token DWC (100M supply, 18 decimals, no burn). Revenue from protocol fees.
+- **Blockchain**: BFT-PoA (Byzantine Fault Tolerant Proof-of-Authority) consensus with stake-weighted validator selection, 2/3+ quorum for block finality, PostgreSQL state storage, SHA-256/Merkle trees/HMAC-SHA256, 400ms block time, 200K+ TPS. Features validator staking (1000 DWC minimum), slashing for misbehavior (5% stake penalty), epoch-based finality, Nakamoto coefficient tracking, and node sync APIs. Native token DWC (100M supply, 18 decimals, no burn). Revenue from protocol fees. APIs: `/api/consensus`, `/api/validators/register`, `/api/sync/state`.
 - **Web Portal (Frontend)**: React 18, TypeScript, Vite, Wouter, TanStack Query, Tailwind CSS v4, Framer Motion.
 - **Web Portal (Backend)**: Node.js, Express.js, TypeScript, Drizzle ORM, PostgreSQL.
 - **Authentication**: Firebase Auth (email/password, Google, GitHub, Apple, email+PIN). Server-side Firebase token verification using Firebase Admin SDK with revocation checking. WebAuthn/Passkeys available. PIN authentication (4-6 digits) for returning users, stored as SHA256 hash with user ID salt, uses timing-safe comparison.

@@ -1669,6 +1669,164 @@ export async function registerRoutes(
       res.status(500).json({ error: "Failed to remove validator" });
     }
   });
+  
+  // BFT Consensus Endpoints
+  app.get("/api/consensus", async (_req, res) => {
+    try {
+      const consensusState = blockchain.getConsensusState();
+      res.json(consensusState);
+    } catch (error) {
+      console.error("Error fetching consensus state:", error);
+      res.status(500).json({ error: "Failed to fetch consensus state" });
+    }
+  });
+  
+  app.get("/api/consensus/stats", async (_req, res) => {
+    try {
+      const stats = blockchain.getStats();
+      const consensus = blockchain.getConsensusState();
+      res.json({
+        ...stats,
+        consensus,
+        decentralizationScore: Math.min(100, consensus.nakamotoCoefficient * 10 + consensus.activeValidators * 5),
+        isDecentralized: consensus.activeValidators >= 3 && consensus.nakamotoCoefficient >= 2,
+      });
+    } catch (error) {
+      console.error("Error fetching consensus stats:", error);
+      res.status(500).json({ error: "Failed to fetch consensus stats" });
+    }
+  });
+  
+  // Validator registration with stake
+  app.post("/api/validators/register", isAuthenticated, async (req: any, res) => {
+    try {
+      const { address, name, stakeAmount, description, commission } = req.body;
+      
+      if (!address || !name || !stakeAmount) {
+        return res.status(400).json({ error: "address, name, and stakeAmount are required" });
+      }
+      
+      const stake = BigInt(stakeAmount);
+      const result = await blockchain.registerValidator(address, name, stake, description, commission);
+      
+      if (!result.success) {
+        return res.status(400).json({ error: result.error });
+      }
+      
+      res.status(201).json({
+        success: true,
+        message: `Validator "${name}" registered successfully`,
+        validator: result.validator,
+      });
+    } catch (error: any) {
+      console.error("Error registering validator:", error);
+      res.status(500).json({ error: "Failed to register validator" });
+    }
+  });
+  
+  // Increase validator stake
+  app.post("/api/validators/:id/stake", isAuthenticated, async (req: any, res) => {
+    try {
+      const { id } = req.params;
+      const { amount, fromAddress } = req.body;
+      
+      if (!amount || !fromAddress) {
+        return res.status(400).json({ error: "amount and fromAddress are required" });
+      }
+      
+      const result = await blockchain.increaseStake(id, BigInt(amount), fromAddress);
+      
+      if (!result.success) {
+        return res.status(400).json({ error: result.error });
+      }
+      
+      res.json({ success: true, message: "Stake increased successfully" });
+    } catch (error) {
+      console.error("Error increasing stake:", error);
+      res.status(500).json({ error: "Failed to increase stake" });
+    }
+  });
+  
+  // Block attestation (for external validators)
+  app.post("/api/consensus/attest", isAuthenticated, async (req: any, res) => {
+    try {
+      const { blockHeight, blockHash, validatorId } = req.body;
+      
+      if (!blockHeight || !blockHash || !validatorId) {
+        return res.status(400).json({ error: "blockHeight, blockHash, and validatorId are required" });
+      }
+      
+      const result = await blockchain.addBlockAttestation(blockHeight, blockHash, validatorId);
+      
+      if (!result.success) {
+        return res.status(400).json({ error: result.error });
+      }
+      
+      res.json({ 
+        success: true, 
+        finalized: result.finalized,
+        message: result.finalized ? "Block finalized with quorum" : "Attestation recorded" 
+      });
+    } catch (error) {
+      console.error("Error adding attestation:", error);
+      res.status(500).json({ error: "Failed to add attestation" });
+    }
+  });
+  
+  // Slash validator (admin only)
+  app.post("/api/validators/:id/slash", isAuthenticated, async (req: any, res) => {
+    try {
+      const { id } = req.params;
+      const { reason, evidence } = req.body;
+      
+      if (!reason) {
+        return res.status(400).json({ error: "reason is required" });
+      }
+      
+      const result = await blockchain.slashValidator(id, reason, evidence);
+      
+      if (!result.success) {
+        return res.status(400).json({ error: result.error });
+      }
+      
+      res.json({ 
+        success: true, 
+        slashAmount: result.slashAmount,
+        message: `Validator slashed for ${reason}` 
+      });
+    } catch (error) {
+      console.error("Error slashing validator:", error);
+      res.status(500).json({ error: "Failed to slash validator" });
+    }
+  });
+  
+  // Node sync endpoint (for external nodes to sync chain state)
+  app.get("/api/sync/state", async (req, res) => {
+    try {
+      const fromBlock = parseInt(req.query.fromBlock as string) || 0;
+      const toBlock = req.query.toBlock ? parseInt(req.query.toBlock as string) : undefined;
+      
+      const state = await blockchain.getChainStateForSync(fromBlock, toBlock);
+      res.json(state);
+    } catch (error) {
+      console.error("Error fetching sync state:", error);
+      res.status(500).json({ error: "Failed to fetch sync state" });
+    }
+  });
+  
+  // Validator details
+  app.get("/api/validators/:id", async (req, res) => {
+    try {
+      const validator = blockchain.getValidatorDetails(req.params.id);
+      if (!validator) {
+        return res.status(404).json({ error: "Validator not found" });
+      }
+      res.json(validator);
+    } catch (error) {
+      console.error("Error fetching validator details:", error);
+      res.status(500).json({ error: "Failed to fetch validator details" });
+    }
+  });
 
   app.get("/api/block/latest", async (req, res) => {
     try {
