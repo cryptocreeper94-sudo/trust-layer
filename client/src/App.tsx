@@ -113,6 +113,7 @@ import RoadmapChronicles from "@/pages/roadmap-chronicles";
 import RoadmapEcosystem from "@/pages/roadmap-ecosystem";
 import TechnicalRoadmap from "@/pages/technical-roadmap";
 import Chronicles from "@/pages/chronicles";
+import ChroniclesDemo from "@/pages/chronicles-demo";
 import ChronoHome from "@/pages/chrono-home";
 import ChronoEras from "@/pages/chrono-eras";
 import ChronoGameplay from "@/pages/chrono-gameplay";
@@ -230,6 +231,7 @@ function ChronoRouter() {
       <Switch>
         <Route path="/" component={ChronoHome} />
         <Route path="/chronicles" component={Chronicles} />
+        <Route path="/chronicles/demo" component={ChroniclesDemo} />
         <Route path="/chronicles/ai" component={ChroniclesAIDemo} />
         <Route path="/legacy" component={BuildYourLegacy} />
         <Route path="/eras" component={ChronoEras} />
@@ -385,6 +387,7 @@ function DWSCRouter() {
         <Route path="/ai-agents" component={AIAgentMarketplace} />
         <Route path="/rwa" component={RWATokenization} />
         <Route path="/chronicles" component={Chronicles} />
+        <Route path="/chronicles/demo" component={ChroniclesDemo} />
         <Route path="/chronicles/ai" component={ChroniclesAIDemo} />
         <Route path="/legacy" component={BuildYourLegacy} />
         <Route path="/sweepstakes-rules" component={SweepstakesRules} />
