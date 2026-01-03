@@ -1,15 +1,38 @@
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState, useRef, useEffect } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Crown, Sword, Users, MessageCircle, Star, Shield, Scroll, Sparkles, BookOpen, Trophy, Target, ChevronRight, Send, User, MapPin } from "lucide-react";
+import { Crown, Sword, Users, MessageCircle, Star, Shield, Scroll, Sparkles, BookOpen, Trophy, Target, ChevronRight, Send, User, MapPin, Play, Volume2, VolumeX, Flame, Zap } from "lucide-react";
+
+import medievalVideo from "@assets/generated_videos/medieval_castle_twilight_scene.mp4";
+import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
+import fantasyHeroes from "@assets/generated_images/fantasy_character_heroes.png";
+import romanColosseum from "@assets/generated_images/roman_empire_colosseum_gladiators.png";
+import vikingFjord from "@assets/generated_images/viking_longship_fjord_scene.png";
+import wildWest from "@assets/generated_images/wild_west_frontier_town.png";
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left, opacity: 0.15 }}
+    animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.2, 0.1] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
+const FACTION_IMAGES: Record<string, string> = {
+  house_of_crowns: medievalKingdom,
+  shadow_council: fantasyHeroes,
+  merchant_guild: wildWest,
+  innovators_circle: romanColosseum,
+  old_faith: vikingFjord,
+};
 
 interface Faction {
   id: string;
@@ -62,9 +85,8 @@ export default function ChroniclesDemo() {
   const [npcMessage, setNpcMessage] = useState("");
   const [conversation, setConversation] = useState<Array<{role: string; content: string}>>([]);
   const [characterName, setCharacterName] = useState("");
-  const [character, setCharacter] = useState<any>(null);
-
-  const queryClient = useQueryClient();
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const { data: season } = useQuery<Season>({
     queryKey: ["chronicles-season"],
@@ -109,10 +131,7 @@ export default function ChroniclesDemo() {
     },
     onSuccess: (data) => {
       if (data.response) {
-        setConversation(prev => [
-          ...prev,
-          { role: "npc", content: data.response }
-        ]);
+        setConversation(prev => [...prev, { role: "npc", content: data.response }]);
       }
     },
   });
@@ -126,220 +145,292 @@ export default function ChroniclesDemo() {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "easy": return "text-green-400";
-      case "medium": return "text-yellow-400";
-      case "hard": return "text-orange-400";
-      case "legendary": return "text-purple-400";
-      default: return "text-gray-400";
+      case "easy": return "text-green-400 border-green-500/50";
+      case "medium": return "text-yellow-400 border-yellow-500/50";
+      case "hard": return "text-orange-400 border-orange-500/50";
+      case "legendary": return "text-purple-400 border-purple-500/50";
+      default: return "text-gray-400 border-gray-500/50";
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
-      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
-
-      <div className="relative z-10 container mx-auto px-4 py-8 max-w-7xl">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
+    <div className="min-h-screen bg-slate-950 overflow-hidden">
+      {/* Video Hero Section */}
+      <section className="relative h-[70vh] min-h-[500px] overflow-hidden">
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted={isMuted}
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
         >
-          <Badge className="mb-4 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border-purple-500/50" data-testid="badge-season-zero">
-            <Sparkles className="w-3 h-3 mr-1" />
-            Season Zero Demo
-          </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-            DarkWave Chronicles
-          </h1>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Enter the Age of Crowns. Choose your faction, complete quests, and forge your legacy
-            in this living political simulation.
-          </p>
-        </motion.div>
-
-        {season && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="mb-8"
-          >
-            <Card className="bg-gradient-to-r from-slate-900/90 to-slate-800/90 border-purple-500/30 backdrop-blur-xl" data-testid="card-season-info">
-              <CardContent className="p-6">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
-                      <Crown className="w-8 h-8 text-white" />
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-white">{season.name}</h2>
-                      <p className="text-gray-400">{season.description}</p>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-4">
-                    <div className="text-center px-4 py-2 rounded-lg bg-slate-800/50 border border-purple-500/20">
-                      <div className="text-2xl font-bold text-purple-400">{season.questsAvailable}</div>
-                      <div className="text-xs text-gray-500">Quests</div>
-                    </div>
-                    <div className="text-center px-4 py-2 rounded-lg bg-slate-800/50 border border-cyan-500/20">
-                      <div className="text-2xl font-bold text-cyan-400">{parseInt(season.totalShellsPool).toLocaleString()}</div>
-                      <div className="text-xs text-gray-500">Shells Pool</div>
-                    </div>
-                    <div className="text-center px-4 py-2 rounded-lg bg-slate-800/50 border border-pink-500/20">
-                      <div className="text-2xl font-bold text-pink-400">{parseInt(season.totalDwcPool).toLocaleString()}</div>
-                      <div className="text-xs text-gray-500">DWC Pool</div>
-                    </div>
-                  </div>
+          <source src={medievalVideo} type="video/mp4" />
+        </video>
+        
+        {/* Gradient overlays */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-transparent to-slate-950/80" />
+        
+        {/* Floating glow orbs */}
+        <GlowOrb color="#8B5CF6" size={400} top="10%" left="10%" delay={0} />
+        <GlowOrb color="#06B6D4" size={350} top="30%" left="70%" delay={2} />
+        <GlowOrb color="#EC4899" size={300} top="60%" left="30%" delay={4} />
+        
+        {/* Sound toggle */}
+        <button
+          onClick={() => setIsMuted(!isMuted)}
+          className="absolute top-6 right-6 z-20 p-3 rounded-full bg-black/40 backdrop-blur-sm border border-white/20 hover:bg-black/60 transition-all"
+          data-testid="button-toggle-sound"
+        >
+          {isMuted ? <VolumeX className="w-5 h-5 text-white" /> : <Volume2 className="w-5 h-5 text-white" />}
+        </button>
+        
+        {/* Hero content */}
+        <div className="absolute inset-0 flex items-center justify-center z-10">
+          <div className="text-center px-4 max-w-4xl">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <Badge className="mb-6 px-4 py-2 text-sm bg-gradient-to-r from-purple-500/30 to-cyan-500/30 border-purple-500/50 backdrop-blur-sm" data-testid="badge-season-zero">
+                <Sparkles className="w-4 h-4 mr-2" />
+                SEASON ZERO - THE AWAKENING
+              </Badge>
+              
+              <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight">
+                <span className="bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-200 bg-clip-text text-transparent drop-shadow-2xl">
+                  Age of Crowns
+                </span>
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Five factions vie for control of the realm. Choose your allegiance, 
+                complete quests, and forge your legend in this living political simulation.
+              </p>
+              
+              <div className="flex flex-wrap justify-center gap-4">
+                <div className="px-6 py-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-500/5 border border-purple-500/30 backdrop-blur-sm">
+                  <div className="text-2xl font-bold text-purple-400">{season?.questsAvailable || 4}</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wide">Quests</div>
                 </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
+                <div className="px-6 py-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 border border-cyan-500/30 backdrop-blur-sm">
+                  <div className="text-2xl font-bold text-cyan-400">{parseInt(season?.totalShellsPool || "100000").toLocaleString()}</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wide">Shell Pool</div>
+                </div>
+                <div className="px-6 py-3 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-500/5 border border-amber-500/30 backdrop-blur-sm">
+                  <div className="text-2xl font-bold text-amber-400">{parseInt(season?.totalDwcPool || "10000").toLocaleString()}</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wide">DWC Pool</div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+        
+        {/* Scroll indicator */}
+        <motion.div 
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <ChevronRight className="w-8 h-8 text-white/50 rotate-90" />
+        </motion.div>
+      </section>
 
-        <Tabs defaultValue="factions" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 bg-slate-900/50 border border-slate-700">
-            <TabsTrigger value="factions" className="data-[state=active]:bg-purple-500/20" data-testid="tab-factions">
-              <Users className="w-4 h-4 mr-2" />
+      {/* Main Content */}
+      <div className="relative z-10 container mx-auto px-4 py-12 max-w-7xl">
+        <GlowOrb color="#8B5CF6" size={500} top="20%" left="-10%" delay={1} />
+        <GlowOrb color="#06B6D4" size={400} top="60%" left="80%" delay={3} />
+        
+        <Tabs defaultValue="factions" className="space-y-8">
+          <TabsList className="grid w-full grid-cols-3 bg-slate-900/80 border border-slate-700/50 backdrop-blur-xl p-1 rounded-2xl">
+            <TabsTrigger value="factions" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500/30 data-[state=active]:to-purple-500/10 rounded-xl py-3" data-testid="tab-factions">
+              <Crown className="w-4 h-4 mr-2" />
               Factions
             </TabsTrigger>
-            <TabsTrigger value="quests" className="data-[state=active]:bg-cyan-500/20" data-testid="tab-quests">
+            <TabsTrigger value="quests" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-cyan-500/30 data-[state=active]:to-cyan-500/10 rounded-xl py-3" data-testid="tab-quests">
               <Target className="w-4 h-4 mr-2" />
               Quests
             </TabsTrigger>
-            <TabsTrigger value="npcs" className="data-[state=active]:bg-pink-500/20" data-testid="tab-npcs">
+            <TabsTrigger value="npcs" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500/30 data-[state=active]:to-pink-500/10 rounded-xl py-3" data-testid="tab-npcs">
               <MessageCircle className="w-4 h-4 mr-2" />
               NPCs
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="factions" className="space-y-6">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Factions Tab */}
+          <TabsContent value="factions" className="space-y-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {factionsData?.factions.map((faction, index) => (
                 <motion.div
                   key={faction.id}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
                 >
-                  <Card
-                    className={`cursor-pointer transition-all duration-300 hover:scale-105 bg-slate-900/80 border-slate-700 hover:border-opacity-50 ${
-                      selectedFaction?.id === faction.id ? "ring-2 ring-offset-2 ring-offset-slate-950" : ""
+                  <div
+                    className={`group relative cursor-pointer overflow-hidden rounded-2xl transition-all duration-500 hover:scale-[1.02] ${
+                      selectedFaction?.id === faction.id ? "ring-2 ring-offset-4 ring-offset-slate-950" : ""
                     }`}
                     style={{
+                      boxShadow: selectedFaction?.id === faction.id ? `0 0 40px ${faction.color}50` : undefined,
                       borderColor: selectedFaction?.id === faction.id ? faction.color : undefined,
-                      boxShadow: selectedFaction?.id === faction.id ? `0 0 20px ${faction.color}40` : undefined,
                     }}
                     onClick={() => setSelectedFaction(faction)}
                     data-testid={`card-faction-${faction.id}`}
                   >
-                    <CardHeader>
-                      <div className="flex items-center gap-3">
-                        <span className="text-4xl">{faction.iconEmoji}</span>
+                    {/* Background image */}
+                    <div className="absolute inset-0">
+                      <img 
+                        src={FACTION_IMAGES[faction.id] || medievalKingdom} 
+                        alt={faction.name}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-950/40" />
+                    </div>
+                    
+                    {/* Holographic border effect */}
+                    <div 
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                      style={{
+                        background: `linear-gradient(135deg, ${faction.color}20 0%, transparent 50%, ${faction.color}20 100%)`,
+                        boxShadow: `inset 0 0 30px ${faction.color}30`,
+                      }}
+                    />
+                    
+                    {/* Content */}
+                    <div className="relative z-10 p-6 h-72 flex flex-col justify-end">
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-5xl drop-shadow-lg">{faction.iconEmoji}</span>
                         <div>
-                          <CardTitle className="text-lg text-white">{faction.name}</CardTitle>
-                          <Badge variant="outline" className="mt-1 text-xs" style={{ borderColor: faction.color, color: faction.color }}>
-                            {faction.ideology.toUpperCase()}
+                          <h3 className="text-xl font-bold text-white">{faction.name}</h3>
+                          <Badge 
+                            variant="outline" 
+                            className="mt-1 text-xs uppercase tracking-wider"
+                            style={{ borderColor: faction.color, color: faction.color }}
+                          >
+                            {faction.ideology}
                           </Badge>
                         </div>
                       </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-400 text-sm">{faction.description}</p>
-                    </CardContent>
-                  </Card>
+                      <p className="text-gray-300 text-sm leading-relaxed">{faction.description}</p>
+                    </div>
+                  </div>
                 </motion.div>
               ))}
             </div>
 
-            {selectedFaction && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <Card className="bg-gradient-to-br from-slate-900/90 to-slate-800/90 border-slate-700" style={{ borderColor: selectedFaction.color }}>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <span className="text-3xl">{selectedFaction.iconEmoji}</span>
-                      Pledge to {selectedFaction.name}
-                    </CardTitle>
-                    <CardDescription>Enter your character name to join this faction</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex gap-4">
-                      <Input
-                        placeholder="Enter your character name..."
-                        value={characterName}
-                        onChange={(e) => setCharacterName(e.target.value)}
-                        className="bg-slate-800 border-slate-700"
-                        data-testid="input-character-name"
-                      />
-                      <Button
-                        className="bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600"
-                        disabled={!characterName.trim()}
-                        data-testid="button-join-faction"
-                      >
-                        <Shield className="w-4 h-4 mr-2" />
-                        Join Faction
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            )}
+            {/* Faction pledge card */}
+            <AnimatePresence>
+              {selectedFaction && (
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                >
+                  <Card 
+                    className="overflow-hidden border-0"
+                    style={{ 
+                      background: `linear-gradient(135deg, ${selectedFaction.color}15 0%, rgba(15,23,42,0.95) 50%)`,
+                      boxShadow: `0 0 60px ${selectedFaction.color}20`,
+                    }}
+                  >
+                    <CardHeader className="border-b border-white/10">
+                      <CardTitle className="flex items-center gap-3 text-2xl">
+                        <span className="text-4xl">{selectedFaction.iconEmoji}</span>
+                        <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                          Pledge to {selectedFaction.name}
+                        </span>
+                      </CardTitle>
+                      <CardDescription className="text-gray-400">
+                        Enter your name to join this faction and begin your journey
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-6">
+                      <div className="flex gap-4">
+                        <Input
+                          placeholder="Enter your character name..."
+                          value={characterName}
+                          onChange={(e) => setCharacterName(e.target.value)}
+                          className="bg-slate-800/50 border-slate-700 focus:border-purple-500 text-lg py-6"
+                          data-testid="input-character-name"
+                        />
+                        <Button
+                          size="lg"
+                          className="px-8 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white font-semibold shadow-lg shadow-purple-500/25"
+                          disabled={!characterName.trim()}
+                          data-testid="button-join-faction"
+                        >
+                          <Flame className="w-5 h-5 mr-2" />
+                          Join Faction
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </TabsContent>
 
+          {/* Quests Tab */}
           <TabsContent value="quests" className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-2 gap-6">
               {questsData?.quests.map((quest, index) => (
                 <motion.div
                   key={quest.id}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
                 >
                   <Card
-                    className={`cursor-pointer transition-all duration-300 bg-slate-900/80 border-slate-700 hover:border-purple-500/50 ${
-                      selectedQuest?.id === quest.id ? "ring-2 ring-purple-500 ring-offset-2 ring-offset-slate-950" : ""
+                    className={`cursor-pointer transition-all duration-300 bg-gradient-to-br from-slate-900/90 to-slate-800/90 border-slate-700/50 backdrop-blur-xl hover:border-cyan-500/50 overflow-hidden group ${
+                      selectedQuest?.id === quest.id ? "ring-2 ring-cyan-500 ring-offset-2 ring-offset-slate-950" : ""
                     }`}
                     onClick={() => setSelectedQuest(quest)}
                     data-testid={`card-quest-${quest.id}`}
                   >
-                    <CardHeader>
+                    {/* Glow effect on hover */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-cyan-500/10 to-transparent" />
+                    
+                    <CardHeader className="relative z-10">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          {quest.category === "main_story" ? (
-                            <BookOpen className="w-5 h-5 text-purple-400" />
-                          ) : quest.category === "faction" ? (
-                            <Shield className="w-5 h-5 text-cyan-400" />
-                          ) : (
-                            <Scroll className="w-5 h-5 text-pink-400" />
-                          )}
+                          <div className={`p-2 rounded-xl ${quest.category === "main_story" ? "bg-purple-500/20" : quest.category === "faction" ? "bg-cyan-500/20" : "bg-pink-500/20"}`}>
+                            {quest.category === "main_story" ? (
+                              <BookOpen className="w-5 h-5 text-purple-400" />
+                            ) : quest.category === "faction" ? (
+                              <Shield className="w-5 h-5 text-cyan-400" />
+                            ) : (
+                              <Scroll className="w-5 h-5 text-pink-400" />
+                            )}
+                          </div>
                           <CardTitle className="text-lg text-white">{quest.title}</CardTitle>
                         </div>
-                        <Badge className={getDifficultyColor(quest.difficulty)}>
-                          {quest.difficulty.toUpperCase()}
+                        <Badge variant="outline" className={`${getDifficultyColor(quest.difficulty)} uppercase text-xs font-bold`}>
+                          {quest.difficulty}
                         </Badge>
                       </div>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                      <p className="text-gray-400 text-sm">{quest.description}</p>
-                      <div className="flex items-center justify-between text-sm">
+                    <CardContent className="relative z-10 space-y-4">
+                      <p className="text-gray-400 text-sm leading-relaxed">{quest.description}</p>
+                      <div className="flex items-center justify-between pt-2 border-t border-slate-700/50">
                         <div className="flex items-center gap-4">
-                          <span className="flex items-center gap-1 text-yellow-400">
+                          <span className="flex items-center gap-1.5 text-yellow-400 font-semibold">
                             <Star className="w-4 h-4" />
                             {quest.shellsReward} Shells
                           </span>
-                          <span className="flex items-center gap-1 text-cyan-400">
-                            <Trophy className="w-4 h-4" />
+                          <span className="flex items-center gap-1.5 text-cyan-400 font-semibold">
+                            <Zap className="w-4 h-4" />
                             {quest.experienceReward} XP
                           </span>
                         </div>
-                        <ChevronRight className="w-5 h-5 text-gray-500" />
+                        <ChevronRight className="w-5 h-5 text-gray-500 group-hover:text-cyan-400 transition-colors" />
                       </div>
                       {quest.prerequisite && (
-                        <div className="text-xs text-gray-500">
-                          Requires: Complete "{questsData?.quests.find(q => q.id === quest.prerequisite)?.title}"
+                        <div className="text-xs text-amber-400/80 flex items-center gap-1">
+                          <Shield className="w-3 h-3" />
+                          Requires: {questsData?.quests.find(q => q.id === quest.prerequisite)?.title}
                         </div>
                       )}
                     </CardContent>
@@ -349,17 +440,18 @@ export default function ChroniclesDemo() {
             </div>
           </TabsContent>
 
-          <TabsContent value="npcs" className="space-y-6">
-            <div className="grid md:grid-cols-3 gap-4">
+          {/* NPCs Tab */}
+          <TabsContent value="npcs" className="space-y-8">
+            <div className="grid md:grid-cols-3 gap-6">
               {npcsData?.npcs.map((npc, index) => (
                 <motion.div
                   key={npc.id}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
                 >
                   <Card
-                    className={`cursor-pointer transition-all duration-300 bg-slate-900/80 border-slate-700 hover:border-pink-500/50 ${
+                    className={`cursor-pointer transition-all duration-300 bg-gradient-to-br from-slate-900/90 to-slate-800/90 border-slate-700/50 backdrop-blur-xl hover:border-pink-500/50 overflow-hidden group ${
                       selectedNpc?.id === npc.id ? "ring-2 ring-pink-500 ring-offset-2 ring-offset-slate-950" : ""
                     }`}
                     onClick={() => {
@@ -368,114 +460,150 @@ export default function ChroniclesDemo() {
                     }}
                     data-testid={`card-npc-${npc.id}`}
                   >
-                    <CardContent className="p-6 text-center">
-                      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/30 flex items-center justify-center">
-                        <User className="w-8 h-8 text-pink-400" />
+                    <CardContent className="p-8 text-center relative">
+                      {/* Glow effect */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-pink-500/10 to-purple-500/10" />
+                      
+                      <div className="relative z-10">
+                        <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-pink-500/30 to-purple-500/30 border-2 border-pink-500/50 flex items-center justify-center shadow-lg shadow-pink-500/20">
+                          <User className="w-10 h-10 text-pink-300" />
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-1">{npc.name}</h3>
+                        <p className="text-pink-400 text-sm font-medium mb-3">{npc.title}</p>
+                        <Badge variant="outline" className="text-xs border-slate-600 text-gray-400">
+                          <MapPin className="w-3 h-3 mr-1" />
+                          {npc.factionId.replace(/_/g, " ")}
+                        </Badge>
                       </div>
-                      <h3 className="text-lg font-semibold text-white">{npc.name}</h3>
-                      <p className="text-gray-400 text-sm">{npc.title}</p>
-                      <Badge variant="outline" className="mt-2 text-xs border-slate-600">
-                        <MapPin className="w-3 h-3 mr-1" />
-                        {npc.factionId.replace(/_/g, " ")}
-                      </Badge>
                     </CardContent>
                   </Card>
                 </motion.div>
               ))}
             </div>
 
-            {selectedNpc && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <Card className="bg-gradient-to-br from-slate-900/90 to-slate-800/90 border-pink-500/30">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <MessageCircle className="w-5 h-5 text-pink-400" />
-                      Speaking with {selectedNpc.name}
-                    </CardTitle>
-                    <CardDescription>This conversation is powered by AI with Guardian-verified execution</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <ScrollArea className="h-64 w-full rounded-lg border border-slate-700 bg-slate-950/50 p-4">
-                      {conversation.length === 0 ? (
-                        <div className="text-center text-gray-500 py-8">
-                          <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                          <p>Start a conversation with {selectedNpc.name}</p>
+            {/* NPC Conversation */}
+            <AnimatePresence>
+              {selectedNpc && (
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                >
+                  <Card 
+                    className="overflow-hidden border-0"
+                    style={{ 
+                      background: "linear-gradient(135deg, rgba(236,72,153,0.1) 0%, rgba(15,23,42,0.95) 50%)",
+                      boxShadow: "0 0 60px rgba(236,72,153,0.15)",
+                    }}
+                  >
+                    <CardHeader className="border-b border-white/10">
+                      <CardTitle className="flex items-center gap-3 text-xl">
+                        <div className="p-2 rounded-xl bg-pink-500/20">
+                          <MessageCircle className="w-5 h-5 text-pink-400" />
                         </div>
-                      ) : (
-                        <div className="space-y-4">
-                          {conversation.map((msg, i) => (
-                            <div
-                              key={i}
-                              className={`flex ${msg.role === "player" ? "justify-end" : "justify-start"}`}
-                            >
-                              <div
-                                className={`max-w-[80%] rounded-lg p-3 ${
-                                  msg.role === "player"
-                                    ? "bg-purple-500/20 border border-purple-500/30"
-                                    : "bg-pink-500/10 border border-pink-500/30"
-                                }`}
+                        <span>Speaking with {selectedNpc.name}</span>
+                        <Badge className="ml-auto bg-green-500/20 text-green-400 border-green-500/30">
+                          <Sparkles className="w-3 h-3 mr-1" />
+                          AI Powered
+                        </Badge>
+                      </CardTitle>
+                      <CardDescription className="text-gray-400">
+                        Conversations verified by Guardian Security Protocol
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-6 space-y-4">
+                      <ScrollArea className="h-80 w-full rounded-xl border border-slate-700/50 bg-slate-950/50 p-4">
+                        {conversation.length === 0 ? (
+                          <div className="h-full flex flex-col items-center justify-center text-center py-12">
+                            <div className="w-16 h-16 rounded-full bg-pink-500/10 flex items-center justify-center mb-4">
+                              <MessageCircle className="w-8 h-8 text-pink-500/50" />
+                            </div>
+                            <p className="text-gray-500 mb-2">Start a conversation with {selectedNpc.name}</p>
+                            <p className="text-gray-600 text-sm">They may have secrets to share...</p>
+                          </div>
+                        ) : (
+                          <div className="space-y-4">
+                            {conversation.map((msg, i) => (
+                              <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className={`flex ${msg.role === "player" ? "justify-end" : "justify-start"}`}
                               >
-                                <div className="text-xs text-gray-500 mb-1">
-                                  {msg.role === "player" ? "You" : selectedNpc.name}
+                                <div
+                                  className={`max-w-[80%] rounded-2xl p-4 ${
+                                    msg.role === "player"
+                                      ? "bg-gradient-to-br from-purple-500/30 to-purple-500/10 border border-purple-500/30"
+                                      : "bg-gradient-to-br from-pink-500/20 to-pink-500/5 border border-pink-500/30"
+                                  }`}
+                                >
+                                  <div className="text-xs text-gray-500 mb-1 font-medium">
+                                    {msg.role === "player" ? "You" : selectedNpc.name}
+                                  </div>
+                                  <p className="text-gray-200 leading-relaxed">{msg.content}</p>
                                 </div>
-                                <p className="text-sm text-gray-200">{msg.content}</p>
-                              </div>
-                            </div>
-                          ))}
-                          {talkMutation.isPending && (
-                            <div className="flex justify-start">
-                              <div className="max-w-[80%] rounded-lg p-3 bg-pink-500/10 border border-pink-500/30">
-                                <div className="flex items-center gap-2 text-gray-400">
-                                  <span className="animate-pulse">Thinking...</span>
+                              </motion.div>
+                            ))}
+                            {talkMutation.isPending && (
+                              <div className="flex justify-start">
+                                <div className="max-w-[80%] rounded-2xl p-4 bg-gradient-to-br from-pink-500/20 to-pink-500/5 border border-pink-500/30">
+                                  <div className="flex items-center gap-2 text-gray-400">
+                                    <motion.span 
+                                      animate={{ opacity: [0.5, 1, 0.5] }}
+                                      transition={{ duration: 1.5, repeat: Infinity }}
+                                    >
+                                      {selectedNpc.name} is thinking...
+                                    </motion.span>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </ScrollArea>
-                    <div className="flex gap-2">
-                      <Input
-                        placeholder="What would you like to say..."
-                        value={npcMessage}
-                        onChange={(e) => setNpcMessage(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                        className="bg-slate-800 border-slate-700"
-                        data-testid="input-npc-message"
-                      />
-                      <Button
-                        onClick={handleSendMessage}
-                        disabled={!npcMessage.trim() || talkMutation.isPending}
-                        className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
-                        data-testid="button-send-message"
-                      >
-                        <Send className="w-4 h-4" />
-                      </Button>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <Shield className="w-3 h-3" />
-                      AI responses verified by Guardian Security Protocol
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            )}
+                            )}
+                          </div>
+                        )}
+                      </ScrollArea>
+                      <div className="flex gap-3">
+                        <Input
+                          placeholder="What would you like to say..."
+                          value={npcMessage}
+                          onChange={(e) => setNpcMessage(e.target.value)}
+                          onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+                          className="bg-slate-800/50 border-slate-700 focus:border-pink-500 text-lg py-6"
+                          data-testid="input-npc-message"
+                        />
+                        <Button
+                          size="lg"
+                          onClick={handleSendMessage}
+                          disabled={!npcMessage.trim() || talkMutation.isPending}
+                          className="px-6 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 shadow-lg shadow-pink-500/25"
+                          data-testid="button-send-message"
+                        >
+                          <Send className="w-5 h-5" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </TabsContent>
         </Tabs>
 
+        {/* Footer */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="mt-12 text-center"
+          className="mt-16 text-center"
         >
-          <Separator className="my-8 bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
+          <Separator className="my-8 bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
           <p className="text-gray-500 text-sm">
-            Season Zero runs until February 14, 2026. All decisions are recorded on-chain as Chronicle Proofs.
+            Season Zero runs until <span className="text-purple-400 font-medium">February 14, 2026</span>. 
+            All decisions are recorded on-chain as Chronicle Proofs.
           </p>
+          <div className="flex items-center justify-center gap-2 mt-2 text-xs text-gray-600">
+            <Shield className="w-3 h-3" />
+            Guardian-verified execution
+          </div>
         </motion.div>
       </div>
     </div>
