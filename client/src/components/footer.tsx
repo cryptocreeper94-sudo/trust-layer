@@ -141,6 +141,20 @@ export function Footer() {
               Innovation
             </Link>
             <Link 
+              href="/ai-agents"
+              className="text-white/40 hover:text-cyan-400 transition-colors"
+              data-testid="link-ai-agents"
+            >
+              AI Agents
+            </Link>
+            <Link 
+              href="/rwa"
+              className="text-white/40 hover:text-blue-400 transition-colors"
+              data-testid="link-rwa"
+            >
+              RWA
+            </Link>
+            <Link 
               href="/roadmap"
               className="text-white/40 hover:text-cyan-400 transition-colors"
               data-testid="link-roadmap"

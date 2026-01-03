@@ -148,6 +148,8 @@ import OwnerDomains from "@/pages/owner-admin/domains";
 import OwnerFaucet from "@/pages/owner-admin/faucet";
 import OwnerKyc from "@/pages/owner-admin/kyc";
 import GatewayError from "@/pages/gateway-error";
+import AIAgentMarketplace from "@/pages/ai-agent-marketplace";
+import RWATokenization from "@/pages/rwa-tokenization";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
 
 function ScrollToTop() {
@@ -378,6 +380,8 @@ function DWSCRouter() {
         <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
         <Route path="/roadmap-ecosystem" component={RoadmapEcosystem} />
         <Route path="/innovation" component={InnovationHub} />
+        <Route path="/ai-agents" component={AIAgentMarketplace} />
+        <Route path="/rwa" component={RWATokenization} />
         <Route path="/chronicles" component={Chronicles} />
         <Route path="/chronicles/ai" component={ChroniclesAIDemo} />
         <Route path="/legacy" component={BuildYourLegacy} />

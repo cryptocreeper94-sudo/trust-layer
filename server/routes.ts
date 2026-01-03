@@ -4388,14 +4388,14 @@ export async function registerRoutes(
       const category = req.query.category as string;
       const featured = req.query.featured === 'true';
       
-      let query = db.select().from(aiAgents).where(eq(aiAgents.status, 'active'));
-      if (category) {
-        query = query.where(eq(aiAgents.category, category)) as typeof query;
-      }
-      if (featured) {
-        query = query.where(eq(aiAgents.featured, true)) as typeof query;
-      }
-      const agents = await query.orderBy(desc(aiAgents.totalExecutions)).limit(limit);
+      const conditions = [eq(aiAgents.status, 'active')];
+      if (category) conditions.push(eq(aiAgents.category, category));
+      if (featured) conditions.push(eq(aiAgents.featured, true));
+      
+      const agents = await db.select().from(aiAgents)
+        .where(and(...conditions))
+        .orderBy(desc(aiAgents.totalExecutions))
+        .limit(limit);
       res.json({ agents, total: agents.length });
     } catch (error) {
       console.error("Error fetching AI agents:", error);
