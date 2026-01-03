@@ -55,9 +55,11 @@ The design adheres to a "Premium UI Protocol" emphasizing:
 - **AI Verified Execution**: Cryptographic proofs for AI decisions. Proof types: commitment, zk_proof, tee_attestation. Registered models: GPT-4o, Claude 3 Sonnet, Guardian Security Analyzer, Studio Copilot. API: `/api/ai/proofs`, `/api/ai/models`.
 - **Guardian Studio Copilot**: AI-powered smart contract generator with automatic security audits. Contract types: token, nft, staking, dao, custom. Session-based workflow with conversation history. API: `/api/copilot/sessions`.
 - **Innovation Hub Page**: Dashboard at `/innovation` showcasing all new features with live data from shards, quests, oracles, and AI models.
+- **AI Agent Marketplace** (`/ai-agents`): Autonomous AI agent deployment platform. Agent types: trading, portfolio, quest, social, analytics, security, defi, gaming. Creators earn 80% revenue share on agent subscriptions. Features agent verification, deployment management, execution tracking, and performance analytics. API: `/api/ai-agents`, `/api/ai-agents/stats`, `/api/ai-agents/:id/deploy`.
+- **RWA Tokenization** (`/rwa`): Real-world asset tokenization platform for institutional-grade investment. Asset types: real_estate, equity, bonds, collectibles, intellectual_property, commodities. Features Guardian-verified assets, fractional ownership, dividend distribution, and secondary market trading. Minimum $100 investment, multi-jurisdiction compliance. API: `/api/rwa/assets`, `/api/rwa/tokens`, `/api/rwa/stats`.
 
 ### Strategic Marketing Pages
-- **Competitive Analysis** (`/token-compare`): Feature matrix comparing DarkWave vs Solana/Avalanche/Polygon/Arbitrum. Highlights 7 unique features no competitor has: Guardian Security Scores, Verifiable AI Execution, ChronoPass Identity, Experience Shards, Quest Mining, Reality Oracles, Guardian Studio Copilot.
+- **Competitive Analysis** (`/token-compare`): Feature matrix comparing DarkWave vs Solana/Avalanche/Polygon/Arbitrum. Highlights 9 unique features no competitor has: Guardian Security Scores, Verifiable AI Execution, ChronoPass Identity, Experience Shards, Quest Mining, Reality Oracles, Guardian Studio Copilot, AI Agent Marketplace, RWA Tokenization.
 - **Investor Pitch** (`/investor-pitch`): Investment thesis with 6 key points, tokenomics breakdown (100M DWC supply), roadmap milestones (Q4 2025 - Q4 2026), team highlights, and competitive advantages.
 - **Innovation Hub** (`/innovation`): Premium bento grid dashboard showcasing all differentiating features with live API data.
 
@@ -65,16 +67,16 @@ The design adheres to a "Premium UI Protocol" emphasizing:
 Full arcade with classic games: Tetris, Pacman, Snake, Solitaire, Spades, Minesweeper, Galaga, Coinflip, Crash, Slots, Lottery, Predictions. Leaderboards, player profiles, and Shells economy integration.
 
 ## Project Statistics (Audit Verified)
-- **Frontend Pages**: 120+ React pages with premium UI
-- **API Endpoints**: 455 routes with comprehensive error handling
-- **Database Tables**: 165 PostgreSQL tables via Drizzle ORM
-- **Schema Size**: 4,284 lines of type-safe definitions
+- **Frontend Pages**: 122+ React pages with premium UI
+- **API Endpoints**: 470+ routes with comprehensive error handling
+- **Database Tables**: 172 PostgreSQL tables via Drizzle ORM
+- **Schema Size**: 4,500+ lines of type-safe definitions
 - **Rate Limiters**: 16+ endpoint-specific rate limiters
 - **Blockchain Height**: 900,000+ blocks produced
 - **Security**: Helmet.js, CORS, AES-256-GCM, HMAC-SHA256, timing-safe comparisons
 
 ## External Dependencies
-- **Database**: PostgreSQL (165 tables)
+- **Database**: PostgreSQL (172 tables)
 - **Authentication**: Firebase Auth, WebAuthn/Passkeys
 - **Payments**: Stripe (fully configured), Coinbase Commerce
 - **Hub API**: https://orbitstaffing.io
