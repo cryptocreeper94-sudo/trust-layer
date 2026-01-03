@@ -4573,3 +4573,231 @@ export const insertRwaDividendSchema = createInsertSchema(rwaDividends).omit({
 });
 export type RwaDividend = typeof rwaDividends.$inferSelect;
 export type InsertRwaDividend = z.infer<typeof insertRwaDividendSchema>;
+
+// ============================================
+// DARKWAVE CHRONICLES - GAMEPLAY SYSTEM
+// ============================================
+
+// Chronicles player characters/avatars
+export const chronicleCharacters = pgTable("chronicle_characters", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  
+  name: text("name").notNull(),
+  title: text("title"), // "The Wanderer", "Lord of Flames"
+  era: text("era").notNull().default("medieval"), // 'ancient', 'medieval', 'renaissance', 'industrial', 'modern', 'future'
+  faction: text("faction"), // Player's chosen faction
+  
+  level: integer("level").notNull().default(1),
+  experience: integer("experience").notNull().default(0),
+  
+  // Core attributes (5-Axis Emotion System inspired)
+  wisdom: integer("wisdom").notNull().default(10),
+  courage: integer("courage").notNull().default(10),
+  compassion: integer("compassion").notNull().default(10),
+  cunning: integer("cunning").notNull().default(10),
+  influence: integer("influence").notNull().default(10),
+  
+  shellsEarned: text("shells_earned").notNull().default("0"),
+  questsCompleted: integer("quests_completed").notNull().default(0),
+  decisionsRecorded: integer("decisions_recorded").notNull().default(0),
+  
+  avatarUrl: text("avatar_url"),
+  isActive: boolean("is_active").notNull().default(true),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChronicleCharacterSchema = createInsertSchema(chronicleCharacters).omit({
+  id: true, createdAt: true, updatedAt: true
+});
+export type ChronicleCharacter = typeof chronicleCharacters.$inferSelect;
+export type InsertChronicleCharacter = z.infer<typeof insertChronicleCharacterSchema>;
+
+// Chronicles factions for political simulation
+export const chronicleFactions = pgTable("chronicle_factions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  era: text("era").notNull(),
+  
+  ideology: text("ideology").notNull(), // 'order', 'chaos', 'balance', 'progress', 'tradition'
+  color: text("color").notNull().default("#6366f1"),
+  iconEmoji: text("icon_emoji").notNull().default("⚔️"),
+  
+  memberCount: integer("member_count").notNull().default(0),
+  influence: integer("influence").notNull().default(100), // Faction power in the world
+  treasury: text("treasury").notNull().default("0"), // DWC pooled by members
+  
+  leaderUserId: text("leader_user_id"),
+  isPlayable: boolean("is_playable").notNull().default(true),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleFactionSchema = createInsertSchema(chronicleFactions).omit({
+  id: true, createdAt: true
+});
+export type ChronicleFaction = typeof chronicleFactions.$inferSelect;
+export type InsertChronicleFaction = z.infer<typeof insertChronicleFactionSchema>;
+
+// Player faction reputation/standing
+export const chronicleFactionStanding = pgTable("chronicle_faction_standing", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  characterId: varchar("character_id").notNull(),
+  factionId: varchar("faction_id").notNull(),
+  
+  reputation: integer("reputation").notNull().default(0), // -1000 to +1000
+  rank: text("rank").notNull().default("neutral"), // 'hostile', 'unfriendly', 'neutral', 'friendly', 'honored', 'exalted'
+  
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChronicleFactionStandingSchema = createInsertSchema(chronicleFactionStanding).omit({
+  id: true, updatedAt: true
+});
+export type ChronicleFactionStanding = typeof chronicleFactionStanding.$inferSelect;
+
+// Chronicles quest instances (active quests for players)
+export const chronicleQuestInstances = pgTable("chronicle_quest_instances", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  characterId: varchar("character_id").notNull(),
+  questId: varchar("quest_id").notNull(),
+  
+  status: text("status").notNull().default("active"), // 'active', 'completed', 'failed', 'abandoned'
+  progress: integer("progress").notNull().default(0), // 0-100
+  
+  choicesMade: text("choices_made"), // JSON array of decision IDs
+  branchPath: text("branch_path"), // Which story branch player is on
+  
+  shellsReward: text("shells_reward").notNull().default("0"),
+  experienceReward: integer("experience_reward").notNull().default(0),
+  
+  startedAt: timestamp("started_at").defaultNow().notNull(),
+  completedAt: timestamp("completed_at"),
+});
+
+export const insertChronicleQuestInstanceSchema = createInsertSchema(chronicleQuestInstances).omit({
+  id: true, startedAt: true
+});
+export type ChronicleQuestInstance = typeof chronicleQuestInstances.$inferSelect;
+
+// Chronicle Proofs - On-chain attestations of player decisions (NFT-style)
+export const chronicleProofs = pgTable("chronicle_proofs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  characterId: varchar("character_id").notNull(),
+  userId: text("user_id").notNull(),
+  
+  proofType: text("proof_type").notNull(), // 'decision', 'achievement', 'quest_completion', 'faction_event'
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  
+  era: text("era").notNull(),
+  questId: varchar("quest_id"),
+  decisionData: text("decision_data"), // JSON with decision details
+  
+  // Blockchain attestation
+  blockNumber: integer("block_number"),
+  transactionHash: text("transaction_hash"),
+  guardianSignature: text("guardian_signature"), // Ed25519 signature proving validity
+  
+  // Rewards
+  shellsAwarded: text("shells_awarded").notNull().default("0"),
+  dwcAwarded: text("dwc_awarded").notNull().default("0"),
+  
+  isSoulbound: boolean("is_soulbound").notNull().default(true), // Non-transferable
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleProofSchema = createInsertSchema(chronicleProofs).omit({
+  id: true, createdAt: true
+});
+export type ChronicleProof = typeof chronicleProofs.$inferSelect;
+export type InsertChronicleProof = z.infer<typeof insertChronicleProofSchema>;
+
+// NPC state tracking for persistent world
+export const chronicleNpcs = pgTable("chronicle_npcs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  name: text("name").notNull(),
+  title: text("title"),
+  era: text("era").notNull(),
+  factionId: varchar("faction_id"),
+  
+  personality: text("personality").notNull(), // JSON with AI personality traits
+  backstory: text("backstory"),
+  
+  // AI-driven state
+  currentMood: text("current_mood").notNull().default("neutral"),
+  disposition: integer("disposition").notNull().default(50), // 0-100 general friendliness
+  
+  // Location in game world
+  location: text("location").notNull().default("capital_city"),
+  isAlive: boolean("is_alive").notNull().default(true),
+  
+  // Guardian verification for AI decisions
+  lastAiDecisionHash: text("last_ai_decision_hash"),
+  decisionsVerified: integer("decisions_verified").notNull().default(0),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChronicleNpcSchema = createInsertSchema(chronicleNpcs).omit({
+  id: true, createdAt: true, updatedAt: true
+});
+export type ChronicleNpc = typeof chronicleNpcs.$inferSelect;
+
+// Player-NPC interaction history
+export const chronicleNpcInteractions = pgTable("chronicle_npc_interactions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  characterId: varchar("character_id").notNull(),
+  npcId: varchar("npc_id").notNull(),
+  
+  interactionType: text("interaction_type").notNull(), // 'dialogue', 'trade', 'combat', 'quest'
+  outcome: text("outcome").notNull(), // 'positive', 'negative', 'neutral'
+  
+  dispositionChange: integer("disposition_change").notNull().default(0),
+  dialogueSummary: text("dialogue_summary"),
+  
+  // AI verification
+  aiModelUsed: text("ai_model_used"),
+  aiProofHash: text("ai_proof_hash"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleNpcInteractionSchema = createInsertSchema(chronicleNpcInteractions).omit({
+  id: true, createdAt: true
+});
+export type ChronicleNpcInteraction = typeof chronicleNpcInteractions.$inferSelect;
+
+// Season Zero event tracking
+export const chronicleSeasons = pgTable("chronicle_seasons", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  seasonNumber: integer("season_number").notNull().default(0),
+  
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date"),
+  
+  totalShellsPool: text("total_shells_pool").notNull().default("100000"),
+  totalDwcPool: text("total_dwc_pool").notNull().default("10000"),
+  
+  participantCount: integer("participant_count").notNull().default(0),
+  questsAvailable: integer("quests_available").notNull().default(0),
+  
+  isActive: boolean("is_active").notNull().default(false),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleSeasonSchema = createInsertSchema(chronicleSeasons).omit({
+  id: true, createdAt: true
+});
+export type ChronicleSeason = typeof chronicleSeasons.$inferSelect;

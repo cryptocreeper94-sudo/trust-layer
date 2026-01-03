@@ -9311,6 +9311,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   // =====================================================
   
   const { chroniclesAI } = await import("./chronicles-ai");
+  const { chroniclesService: chroniclesGameService, STARTER_FACTIONS, SEASON_ZERO_QUESTS, STARTER_NPCS } = await import("./chronicles-service");
+  Object.assign(chroniclesGameService, { STARTER_FACTIONS, SEASON_ZERO_QUESTS, STARTER_NPCS });
 
   app.get("/api/chronicles/personality", isAuthenticated, async (req: any, res) => {
     try {
@@ -9579,6 +9581,149 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error: any) {
       console.error("Chronicles stats error:", error);
       res.status(500).json({ error: error.message || "Failed to get stats" });
+    }
+  });
+
+  // ============================================
+  // CHRONICLES GAMEPLAY API (Season Zero)
+  // ============================================
+  
+  app.get("/api/chronicles/game/season", async (req, res) => {
+    try {
+      const season = await chroniclesGameService.getCurrentSeason();
+      res.json(season);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/chronicles/game/factions", async (req, res) => {
+    res.json({ factions: chroniclesGameService.STARTER_FACTIONS });
+  });
+
+  app.get("/api/chronicles/game/quests", async (req, res) => {
+    res.json({ quests: chroniclesGameService.SEASON_ZERO_QUESTS });
+  });
+
+  app.get("/api/chronicles/game/npcs", async (req, res) => {
+    res.json({ npcs: chroniclesGameService.STARTER_NPCS.map(n => ({
+      id: n.name.toLowerCase().replace(/\s+/g, '_'),
+      name: n.name,
+      title: n.title,
+      era: n.era,
+      factionId: n.factionId,
+    }))});
+  });
+
+  app.post("/api/chronicles/game/character", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const { name, era } = req.body;
+      if (!name) {
+        return res.status(400).json({ error: "Character name required" });
+      }
+      
+      const character = await chroniclesGameService.createCharacter(userId, name, era || "medieval");
+      res.json(character);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/game/quest/start", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const { characterId, questId } = req.body;
+      if (!questId) {
+        return res.status(400).json({ error: "Quest ID required" });
+      }
+      
+      const questInstance = await chroniclesGameService.startQuest(characterId || "default", questId);
+      res.json(questInstance);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/game/decision", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const { characterId, questId, decisionId } = req.body;
+      const result = await chroniclesGameService.makeDecision(characterId || "default", questId, decisionId);
+      
+      // Create chronicle proof for this decision
+      if (result.success) {
+        const proof = await chroniclesGameService.createChronicleProof(
+          characterId || "default",
+          "decision",
+          `Decision: ${decisionId}`,
+          { questId, decisionId, hash: result.decisionHash }
+        );
+        result.chronicleProof = proof;
+      }
+      
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/game/npc/talk", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const { characterId, npcId, message } = req.body;
+      if (!npcId || !message) {
+        return res.status(400).json({ error: "NPC ID and message required" });
+      }
+      
+      const response = await chroniclesGameService.talkToNpc(characterId || "default", npcId, message);
+      res.json(response);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/game/faction/join", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const { characterId, factionId } = req.body;
+      if (!factionId) {
+        return res.status(400).json({ error: "Faction ID required" });
+      }
+      
+      const result = await chroniclesGameService.joinFaction(characterId || "default", factionId);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/chronicles/game/proofs/:characterId", isAuthenticated, async (req: any, res) => {
+    try {
+      const proofs = await chroniclesGameService.getChronicleProofs(req.params.characterId);
+      res.json({ proofs });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
     }
   });
 
