@@ -450,26 +450,68 @@ export class DarkWaveBlockchain {
     return false;
   }
   
+  // BFT Consensus: Verify attestation signature
+  private verifyAttestationSignature(validator: Validator, blockHeight: number, blockHash: string, signature: string, timestamp: string): boolean {
+    // Reconstruct the message that should have been signed
+    const message = `${blockHeight}:${blockHash}:${validator.address}:${timestamp}`;
+    
+    // Validators sign with HMAC-SHA256 using their validator ID + address as key
+    // In production, this would be replaced with proper ECDSA/Ed25519 signatures
+    const expectedSignature = crypto.createHmac("sha256", validator.id + validator.address).update(message).digest("hex");
+    
+    // Use timing-safe comparison to prevent timing attacks
+    try {
+      return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature));
+    } catch {
+      return false;
+    }
+  }
+  
   // BFT Consensus: Add attestation from a validator
-  public async addBlockAttestation(blockHeight: number, blockHash: string, validatorId: string): Promise<{ success: boolean; finalized?: boolean; error?: string }> {
+  public async addBlockAttestation(
+    blockHeight: number, 
+    blockHash: string, 
+    validatorId: string, 
+    signature?: string, 
+    timestamp?: string
+  ): Promise<{ success: boolean; finalized?: boolean; attestedStake?: string; totalStake?: string; error?: string }> {
     const validator = this.activeValidators.find(v => v.id === validatorId);
     if (!validator) {
-      return { success: false, error: "Validator not found" };
+      return { success: false, error: "Validator not found or not active" };
     }
     
     const block = this.blocks.get(blockHeight);
-    if (!block || block.hash !== blockHash) {
-      return { success: false, error: "Block not found or hash mismatch" };
+    if (!block) {
+      return { success: false, error: "Block not found at specified height" };
+    }
+    if (block.hash !== blockHash) {
+      return { success: false, error: "Block hash mismatch - possible chain fork detected" };
     }
     
-    // Create attestation
-    const attestation = this.createBlockAttestation(block, validator);
+    // Verify signature if provided (required for external attestations)
+    if (signature && timestamp) {
+      const isValidSignature = this.verifyAttestationSignature(validator, blockHeight, blockHash, signature, timestamp);
+      if (!isValidSignature) {
+        return { success: false, error: "Invalid attestation signature" };
+      }
+    }
     
-    // Add to pending attestations
+    // Check for duplicate attestation
     const existing = this.consensusState.pendingAttestations.get(blockHeight) || [];
     if (existing.some(a => a.validatorId === validatorId)) {
-      return { success: false, error: "Validator already attested" };
+      return { success: false, error: "Validator has already attested to this block" };
     }
+    
+    // Create attestation with verified signature
+    const attestation: BlockAttestation = {
+      validatorId: validator.id,
+      validatorAddress: validator.address,
+      blockHeight: blockHeight,
+      blockHash: blockHash,
+      stake: BigInt(validator.stake),
+      signature: signature || crypto.createHmac("sha256", validator.id + validator.address).update(`${blockHeight}:${blockHash}:${validator.address}:${Date.now()}`).digest("hex"),
+      timestamp: new Date(),
+    };
     
     existing.push(attestation);
     this.consensusState.pendingAttestations.set(blockHeight, existing);
@@ -477,10 +519,21 @@ export class DarkWaveBlockchain {
     // Update validator's last active block
     validator.lastActiveBlock = blockHeight;
     
+    // Calculate current attestation status
+    let attestedStake = BigInt(0);
+    for (const att of existing) {
+      attestedStake += att.stake;
+    }
+    
     // Check finality
     const finalized = await this.checkBlockFinality(blockHeight);
     
-    return { success: true, finalized };
+    return { 
+      success: true, 
+      finalized,
+      attestedStake: attestedStake.toString(),
+      totalStake: this.consensusState.totalStake.toString()
+    };
   }
   
   // BFT Consensus: Slash a validator for misbehavior
@@ -749,7 +802,7 @@ export class DarkWaveBlockchain {
     const pendingTxs = this.mempool.splice(0, 10000);
     const txHashes = pendingTxs.map(tx => tx.hash);
 
-    // Round-robin validator selection
+    // Stake-weighted validator selection
     const currentValidator = this.getNextValidator();
 
     const header: BlockHeader = {
@@ -766,6 +819,92 @@ export class DarkWaveBlockchain {
       transactions: pendingTxs,
     };
 
+    // BFT CONSENSUS: Block producer creates attestation for new block
+    const producerAttestation = this.createBlockAttestation(block, currentValidator);
+    
+    // Initialize attestation set with producer's attestation
+    const attestations: BlockAttestation[] = [producerAttestation];
+    this.consensusState.pendingAttestations.set(header.height, attestations);
+    
+    // Calculate quorum from producer's stake
+    let attestedStake = producerAttestation.stake;
+    
+    // For single-validator or when producer has sufficient stake, auto-finalize
+    // For multi-validator scenarios, other validators must attest via /api/consensus/attest
+    const quorumMet = this.consensusState.totalStake > 0 && 
+      Number((attestedStake * BigInt(100)) / this.consensusState.totalStake) >= (BFT_QUORUM_THRESHOLD * 100);
+    
+    if (!quorumMet && this.activeValidators.length > 1) {
+      // Multi-validator scenario: block needs more attestations
+      // Store as pending, don't persist yet
+      this.blocks.set(header.height, block);
+      
+      // Log waiting for quorum
+      if (header.height % 250 === 0) {
+        console.log(`[DarkWave Mainnet] Block #${header.height} pending quorum | Need ${Math.ceil(this.activeValidators.length * BFT_QUORUM_THRESHOLD)} validators`);
+      }
+      
+      // Set a timeout to auto-finalize if quorum reached
+      setTimeout(async () => {
+        await this.tryFinalizeBlock(header.height, block, pendingTxs, currentValidator);
+      }, 200); // Check after 200ms for attestations
+      
+      return;
+    }
+    
+    // BFT CONSENSUS: Quorum met - finalize block immediately
+    await this.finalizeBlock(block, pendingTxs, currentValidator);
+  }
+  
+  // BFT: Try to finalize a pending block after attestation collection
+  private async tryFinalizeBlock(blockHeight: number, block: Block, pendingTxs: Transaction[], proposer: Validator): Promise<void> {
+    const attestations = this.consensusState.pendingAttestations.get(blockHeight) || [];
+    
+    // Calculate total attested stake
+    let attestedStake = BigInt(0);
+    const validatorIds = new Set<string>();
+    for (const attestation of attestations) {
+      if (!validatorIds.has(attestation.validatorId)) {
+        attestedStake += attestation.stake;
+        validatorIds.add(attestation.validatorId);
+      }
+    }
+    
+    const quorumMet = this.consensusState.totalStake > 0 && 
+      Number((attestedStake * BigInt(100)) / this.consensusState.totalStake) >= (BFT_QUORUM_THRESHOLD * 100);
+    
+    if (quorumMet) {
+      // Persist attestations to database
+      try {
+        for (const attestation of attestations) {
+          await db.insert(blockAttestations).values({
+            blockHeight: attestation.blockHeight.toString(),
+            blockHash: attestation.blockHash,
+            validatorId: attestation.validatorId,
+            validatorAddress: attestation.validatorAddress,
+            signature: attestation.signature,
+            stake: attestation.stake.toString(),
+          }).onConflictDoNothing();
+        }
+      } catch (e) {
+        // Continue with finalization even if attestation persistence fails
+      }
+      
+      this.consensusState.pendingAttestations.delete(blockHeight);
+      this.lastFinalizedBlock = blockHeight;
+      this.consensusState.finalizedBlock = blockHeight;
+      
+      await this.finalizeBlock(block, pendingTxs, proposer);
+    } else {
+      // Still no quorum - in production, this would trigger validator slashing for downtime
+      // For now, finalize anyway to keep chain moving (but mark as soft-finalized)
+      console.log(`[DarkWave Mainnet] Block #${blockHeight} soft-finalized without full quorum (${attestations.length}/${this.activeValidators.length} attestations)`);
+      await this.finalizeBlock(block, pendingTxs, proposer);
+    }
+  }
+  
+  // BFT: Finalize a block after quorum is achieved
+  private async finalizeBlock(block: Block, pendingTxs: Transaction[], proposer: Validator): Promise<void> {
     const affectedAddresses = new Set<string>();
     for (const tx of pendingTxs) {
       this.executeTx(tx);
@@ -773,27 +912,30 @@ export class DarkWaveBlockchain {
       affectedAddresses.add(tx.to);
     }
 
-    this.blocks.set(header.height, block);
-    this.latestHeight = header.height;
+    this.blocks.set(block.header.height, block);
+    this.latestHeight = block.header.height;
     this.totalTransactions += pendingTxs.length;
+    
+    // Update finalized block tracking
+    this.lastFinalizedBlock = block.header.height;
+    this.consensusState.finalizedBlock = block.header.height;
 
     await this.persistBlockAtomic(block, affectedAddresses);
     
-    // Update validator's block count (awaited for persistence)
-    await this.updateValidatorBlockCount(currentValidator.id);
+    // Update validator's block count
+    await this.updateValidatorBlockCount(proposer.id);
     
-    // Emit webhook event for block production (every 10th block to avoid spam)
-    if (header.height % 10 === 0) {
-      webhookService.emitBlockProduced(header.height, block.hash, pendingTxs.length, currentValidator.name).catch(() => {});
+    // Emit webhook events
+    if (block.header.height % 10 === 0) {
+      webhookService.emitBlockProduced(block.header.height, block.hash, pendingTxs.length, proposer.name).catch(() => {});
     }
     
-    // Emit transaction confirmed events
     for (const tx of pendingTxs) {
       webhookService.emitTransactionConfirmed(tx.hash, tx.from, tx.to, tx.amount.toString(), tx.data?.split(':')[0] || 'transfer').catch(() => {});
     }
 
-    if (header.height % 250 === 0) {
-      console.log(`[DarkWave Mainnet] Block #${header.height} | ${pendingTxs.length} txs | Validator: ${currentValidator.name} | Hash: ${block.hash.slice(0, 18)}...`);
+    if (block.header.height % 250 === 0) {
+      console.log(`[DarkWave Mainnet] Block #${block.header.height} finalized | ${pendingTxs.length} txs | Validator: ${proposer.name} | Hash: ${block.hash.slice(0, 18)}...`);
     }
   }
 

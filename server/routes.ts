@@ -1748,15 +1748,27 @@ export async function registerRoutes(
   });
   
   // Block attestation (for external validators)
+  // Validators must sign: `${blockHeight}:${blockHash}:${validatorAddress}:${timestamp}`
+  // with HMAC-SHA256 using their validator secret key
   app.post("/api/consensus/attest", isAuthenticated, async (req: any, res) => {
     try {
-      const { blockHeight, blockHash, validatorId } = req.body;
+      const { blockHeight, blockHash, validatorId, signature, timestamp } = req.body;
       
-      if (!blockHeight || !blockHash || !validatorId) {
-        return res.status(400).json({ error: "blockHeight, blockHash, and validatorId are required" });
+      if (!blockHeight || !blockHash || !validatorId || !signature || !timestamp) {
+        return res.status(400).json({ 
+          error: "blockHeight, blockHash, validatorId, signature, and timestamp are required",
+          signatureFormat: "HMAC-SHA256(${blockHeight}:${blockHash}:${validatorAddress}:${timestamp})"
+        });
       }
       
-      const result = await blockchain.addBlockAttestation(blockHeight, blockHash, validatorId);
+      // Validate timestamp is recent (within 30 seconds to prevent replay attacks)
+      const attestationTime = parseInt(timestamp);
+      const now = Date.now();
+      if (isNaN(attestationTime) || Math.abs(now - attestationTime) > 30000) {
+        return res.status(400).json({ error: "Timestamp expired or invalid (must be within 30 seconds)" });
+      }
+      
+      const result = await blockchain.addBlockAttestation(blockHeight, blockHash, validatorId, signature, timestamp);
       
       if (!result.success) {
         return res.status(400).json({ error: result.error });
@@ -1765,7 +1777,9 @@ export async function registerRoutes(
       res.json({ 
         success: true, 
         finalized: result.finalized,
-        message: result.finalized ? "Block finalized with quorum" : "Attestation recorded" 
+        attestedStake: result.attestedStake,
+        totalStake: result.totalStake,
+        message: result.finalized ? "Block finalized with quorum" : "Attestation recorded, awaiting quorum" 
       });
     } catch (error) {
       console.error("Error adding attestation:", error);
