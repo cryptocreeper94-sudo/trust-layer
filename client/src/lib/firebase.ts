@@ -21,9 +21,9 @@ const firebaseConfig = {
   authDomain: window.location.hostname === "localhost" ? "darkwave-auth.firebaseapp.com" : "dwsc.io",
   projectId: "darkwave-auth",
   storageBucket: "darkwave-auth.firebasestorage.app",
-  messagingSenderId: "413074069912",
-  appId: "1:413074069912:web:bc3ec850c2c4e15c2a55a5",
-  measurementId: "G-G34FQ74WDJ"
+  messagingSenderId: "41307406912",
+  appId: "1:41307406912:web:40d118431b0ee5cd2a55a5",
+  measurementId: "G-5N184XP48W"
 };
 
 const app = initializeApp(firebaseConfig);
