@@ -2622,6 +2622,13 @@ export const playerPersonalities = pgTable("player_personalities", {
   strengthsWeaknesses: text("strengths_weaknesses"),
   predictedArchetype: text("predicted_archetype"), // "Guardian", "Seeker", "Rebel", etc.
   
+  // Season Zero Onboarding
+  primaryTrait: text("primary_trait"), // leader, builder, explorer, diplomat, scholar, protector
+  secondaryTrait: text("secondary_trait"),
+  colorPreference: text("color_preference"), // blue, green, purple, gold, red, silver
+  eraInterest: text("era_interest"), // ancient, medieval, renaissance, exploration, industrial, modern
+  challengeResponse: text("challenge_response"), // persevere, adapt, collaborate, reflect
+  
   // Learning Data
   totalChoicesMade: integer("total_choices_made").notNull().default(0),
   lastInteractionAt: timestamp("last_interaction_at"),

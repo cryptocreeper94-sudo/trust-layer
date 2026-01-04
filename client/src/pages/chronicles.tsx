@@ -672,14 +672,14 @@ function EpochDetailDrawer({ epoch, isOpen, onClose }: { epoch: typeof EPOCHS[0]
                 </div>
                 
                 <div className="pt-4 pb-8">
-                  <Link href="/legacy">
+                  <Link href="/chronicles/onboarding">
                     <Button 
                       size="lg" 
                       className="w-full h-14 rounded-2xl gap-2 bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 hover:from-purple-500 hover:via-pink-500 hover:to-cyan-500 text-white font-bold text-lg shadow-xl"
                       data-testid="button-explore-epoch"
                     >
                       <Rocket className="w-5 h-5" />
-                      Begin Your Journey
+                      Create Your Character
                     </Button>
                   </Link>
                 </div>

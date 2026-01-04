@@ -9615,6 +9615,15 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     parallelSelfName: z.string().max(100).optional(),
     worldview: z.enum(["optimist", "realist", "pessimist"]).optional(),
     visualPresentation: z.enum(["masculine", "feminine", "neutral"]).optional(),
+    coreValues: z.array(z.string()).optional(),
+    decisionStyle: z.string().optional(),
+    conflictApproach: z.string().optional(),
+    predictedArchetype: z.string().optional(),
+    colorPreference: z.string().optional(),
+    eraInterest: z.string().optional(),
+    primaryTrait: z.string().optional(),
+    secondaryTrait: z.string().optional(),
+    challengeResponse: z.string().optional(),
   });
 
   app.post("/api/chronicles/personality", isAuthenticated, async (req: any, res) => {
@@ -9629,16 +9638,29 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(400).json({ error: "Invalid request body", details: parseResult.error.issues });
       }
       
-      const { playerName, parallelSelfName, worldview, visualPresentation } = parseResult.data;
+      const { 
+        playerName, parallelSelfName, worldview, coreValues, 
+        decisionStyle, conflictApproach, predictedArchetype,
+        colorPreference, eraInterest, primaryTrait, secondaryTrait, challengeResponse
+      } = parseResult.data;
       
       const personality = await chroniclesAI.getOrCreatePersonality(userId, playerName);
       
-      if (playerName || parallelSelfName || worldview || visualPresentation) {
-        const updates: any = { updatedAt: new Date() };
-        if (playerName) updates.playerName = playerName;
-        if (parallelSelfName) updates.parallelSelfName = parallelSelfName;
-        if (worldview) updates.worldview = worldview;
-        
+      const updates: any = { updatedAt: new Date() };
+      if (playerName) updates.playerName = playerName;
+      if (parallelSelfName) updates.parallelSelfName = parallelSelfName;
+      if (worldview) updates.worldview = worldview;
+      if (coreValues && coreValues.length > 0) updates.coreValues = coreValues;
+      if (decisionStyle) updates.decisionStyle = decisionStyle;
+      if (conflictApproach) updates.conflictApproach = conflictApproach;
+      if (predictedArchetype) updates.predictedArchetype = predictedArchetype;
+      if (colorPreference) updates.colorPreference = colorPreference;
+      if (eraInterest) updates.eraInterest = eraInterest;
+      if (primaryTrait) updates.primaryTrait = primaryTrait;
+      if (secondaryTrait) updates.secondaryTrait = secondaryTrait;
+      if (challengeResponse) updates.challengeResponse = challengeResponse;
+      
+      if (Object.keys(updates).length > 1) {
         await db.update(playerPersonalities)
           .set(updates)
           .where(eq(playerPersonalities.userId, userId));

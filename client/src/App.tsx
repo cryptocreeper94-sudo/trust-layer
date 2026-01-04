@@ -116,6 +116,8 @@ import RoadmapEcosystem from "@/pages/roadmap-ecosystem";
 import TechnicalRoadmap from "@/pages/technical-roadmap";
 import Chronicles from "@/pages/chronicles";
 import ChroniclesDemo from "@/pages/chronicles-demo";
+import ChroniclesOnboarding from "@/pages/chronicles-onboarding";
+import ChroniclesEstate from "@/pages/chronicles-estate";
 import ChronoHome from "@/pages/chrono-home";
 import ChronoEras from "@/pages/chrono-eras";
 import ChronoGameplay from "@/pages/chrono-gameplay";
@@ -236,6 +238,9 @@ function ChronoRouter() {
         <Route path="/chronicles" component={Chronicles} />
         <Route path="/chronicles/demo" component={ChroniclesDemo} />
         <Route path="/chronicles/ai" component={ChroniclesAIDemo} />
+        <Route path="/chronicles/onboarding" component={ChroniclesOnboarding} />
+        <Route path="/chronicles/estate" component={ChroniclesEstate} />
+        <Route path="/chronicles-estate" component={ChroniclesEstate} />
         <Route path="/legacy" component={BuildYourLegacy} />
         <Route path="/eras" component={ChronoEras} />
         <Route path="/gameplay" component={ChronoGameplay} />
@@ -395,6 +400,9 @@ function DWSCRouter() {
         <Route path="/chronicles" component={Chronicles} />
         <Route path="/chronicles/demo" component={ChroniclesDemo} />
         <Route path="/chronicles/ai" component={ChroniclesAIDemo} />
+        <Route path="/chronicles/onboarding" component={ChroniclesOnboarding} />
+        <Route path="/chronicles/estate" component={ChroniclesEstate} />
+        <Route path="/chronicles-estate" component={ChroniclesEstate} />
         <Route path="/legacy" component={BuildYourLegacy} />
         <Route path="/sweepstakes-rules" component={SweepstakesRules} />
         <Route path="/coin-store" component={CoinStore} />
