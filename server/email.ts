@@ -325,3 +325,31 @@ export async function sendBridgeCompletionEmail(to: string, amount: string, from
     `,
   });
 }
+
+export async function sendPasswordResetEmail(to: string, resetLink: string) {
+  return sendEmail({
+    to,
+    subject: "Reset Your Password - DarkWave",
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #ffffff; padding: 30px; border-radius: 12px;">
+        <h1 style="color: #00FFFF; margin-bottom: 20px; text-align: center;">Password Reset Request</h1>
+        <p style="color: #888; text-align: center; margin-bottom: 30px;">
+          We received a request to reset your password. Click the button below to create a new password.
+        </p>
+        <div style="text-align: center; margin-bottom: 30px;">
+          <a href="${resetLink}" style="display: inline-block; background: linear-gradient(135deg, #06b6d4, #a855f7); color: #ffffff; font-weight: bold; padding: 15px 40px; border-radius: 8px; text-decoration: none; font-size: 16px;">
+            Reset Password
+          </a>
+        </div>
+        <div style="background: #1a1a2e; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+          <p style="color: #888; margin: 0; font-size: 12px;">Or copy this link:</p>
+          <p style="color: #00FFFF; margin: 5px 0 0 0; font-size: 12px; word-break: break-all; font-family: monospace;">${resetLink}</p>
+        </div>
+        <p style="color: #ff6b6b; font-size: 12px; text-align: center;">
+          This link expires in 1 hour. If you didn't request this, you can ignore this email.
+        </p>
+        <p style="color: #888; margin-top: 20px; text-align: center;">— The DarkWave Team</p>
+      </div>
+    `,
+  });
+}

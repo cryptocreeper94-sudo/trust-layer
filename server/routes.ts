@@ -140,7 +140,7 @@ const verifyFirebaseToken = isAuthenticated;
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -1073,6 +1073,99 @@ export async function registerRoutes(
       }
       res.json({ success: true });
     });
+  });
+
+  // Forgot Password - send reset email
+  app.post("/api/auth/forgot-password", authRateLimit, async (req, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ error: "Email is required" });
+      }
+
+      const user = await storage.getUserByEmail(email);
+      
+      // Always return success to prevent email enumeration
+      if (!user) {
+        return res.json({ success: true, message: "If an account exists, a reset email has been sent" });
+      }
+
+      // Generate secure token
+      const token = crypto.randomBytes(32).toString('hex');
+      const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+      // Store token in database
+      await db.insert(passwordResetTokens).values({
+        userId: user.id,
+        token,
+        expiresAt,
+      });
+
+      // Send reset email
+      const baseUrl = process.env.REPLIT_DEV_DOMAIN 
+        ? `https://${process.env.REPLIT_DEV_DOMAIN}`
+        : process.env.REPLIT_DEPLOYMENT_URL || 'https://dwsc.io';
+      const resetLink = `${baseUrl}/reset-password?token=${token}`;
+      
+      const { sendPasswordResetEmail } = await import('./email');
+      await sendPasswordResetEmail(email, resetLink);
+
+      res.json({ success: true, message: "If an account exists, a reset email has been sent" });
+    } catch (error) {
+      console.error("Forgot password error:", error);
+      res.status(500).json({ error: "Failed to process request" });
+    }
+  });
+
+  // Reset Password - verify token and set new password
+  app.post("/api/auth/reset-password", authRateLimit, async (req, res) => {
+    try {
+      const { token, newPassword } = req.body;
+      
+      if (!token || !newPassword) {
+        return res.status(400).json({ error: "Token and new password are required" });
+      }
+
+      if (newPassword.length < 6) {
+        return res.status(400).json({ error: "Password must be at least 6 characters" });
+      }
+
+      // Find valid token
+      const [resetToken] = await db.select()
+        .from(passwordResetTokens)
+        .where(eq(passwordResetTokens.token, token))
+        .limit(1);
+
+      if (!resetToken) {
+        return res.status(400).json({ error: "Invalid or expired reset link" });
+      }
+
+      if (resetToken.used) {
+        return res.status(400).json({ error: "This reset link has already been used" });
+      }
+
+      if (new Date() > resetToken.expiresAt) {
+        return res.status(400).json({ error: "This reset link has expired" });
+      }
+
+      // Hash new password
+      const salt = crypto.randomBytes(16).toString('hex');
+      const passwordHash = crypto.createHash('sha256').update(newPassword + salt).digest('hex') + ':' + salt;
+
+      // Update user password
+      await db.update(users).set({ passwordHash }).where(eq(users.id, resetToken.userId));
+
+      // Mark token as used
+      await db.update(passwordResetTokens)
+        .set({ used: true })
+        .where(eq(passwordResetTokens.id, resetToken.id));
+
+      res.json({ success: true, message: "Password has been reset successfully" });
+    } catch (error) {
+      console.error("Reset password error:", error);
+      res.status(500).json({ error: "Failed to reset password" });
+    }
   });
 
   // PIN Registration - set a 4-6 digit PIN for quick login

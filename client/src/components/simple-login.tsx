@@ -209,7 +209,16 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
             </Button>
           </form>
 
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-center space-y-3">
+            {view === "login" && (
+              <a
+                href="/forgot-password"
+                className="text-sm text-muted-foreground hover:text-cyan-400 transition-colors"
+                data-testid="link-forgot-password"
+              >
+                Forgot your password?
+              </a>
+            )}
             {view === "login" ? (
               <p className="text-sm text-muted-foreground">
                 Don't have an account?{" "}

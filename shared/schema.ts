@@ -5,6 +5,18 @@ import { z } from "zod";
 
 export * from "./models/auth";
 
+// Password Reset Tokens
+export const passwordResetTokens = pgTable("password_reset_tokens", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  token: text("token").notNull().unique(),
+  expiresAt: timestamp("expires_at").notNull(),
+  used: boolean("used").default(false).notNull(),
+  createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`).notNull(),
+});
+
+export type PasswordResetToken = typeof passwordResetTokens.$inferSelect;
+
 // AI Chat conversations
 export const conversations = pgTable("conversations", {
   id: serial("id").primaryKey(),

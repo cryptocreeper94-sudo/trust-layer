@@ -63,6 +63,8 @@ import Terms from "@/pages/terms";
 import Privacy from "@/pages/privacy";
 import ErrorPage from "@/pages/error";
 import NotFound from "@/pages/not-found";
+import ForgotPassword from "@/pages/forgot-password";
+import ResetPassword from "@/pages/reset-password";
 import TokenCompare from "@/pages/token-compare";
 import CodeSnippets from "@/pages/code-snippets";
 import ApiUsage from "@/pages/api-usage";
@@ -334,6 +336,8 @@ function DWSCRouter() {
         <Route path="/code-snippets" component={CodeSnippets} />
         <Route path="/api-usage" component={ApiUsage} />
         <Route path="/referrals" component={Referrals} />
+        <Route path="/forgot-password" component={ForgotPassword} />
+        <Route path="/reset-password" component={ResetPassword} />
         <Route path="/dashboard-pro" component={DashboardPro} />
         <Route path="/trading" component={Trading} />
         <Route path="/whale-tracker" component={WhaleTracker} />
