@@ -354,74 +354,11 @@ export default function Home() {
       {showGamesModal && <GamesComingSoonModal onClose={() => setShowGamesModal(false)} />}
       
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="w-full px-3 h-14 flex items-center gap-2">
-          <Link href="/" className="flex items-center flex-shrink-0">
+        <div className="w-full px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center">
             <span className="font-display font-bold text-xl tracking-tight">DarkWave</span>
           </Link>
-          <div className="hidden lg:flex items-center gap-3 text-xs font-medium text-muted-foreground flex-1 justify-center overflow-hidden min-w-0 max-w-[calc(100%-400px)]">
-            <Link href="/rewards" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
-              Rewards
-              <Badge variant="outline" className="text-[9px] border-purple-500/50 text-purple-400 px-1 py-0">Hot</Badge>
-            </Link>
-            <button onClick={() => setShowGamesModal(true)} className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap bg-transparent border-none cursor-pointer text-muted-foreground text-xs font-medium">
-              Games
-              <Badge variant="outline" className="text-[9px] border-amber-500/50 text-amber-400 px-1 py-0">Soon</Badge>
-            </button>
-            <Link href="/ecosystem" className="hover:text-primary transition-colors whitespace-nowrap">Ecosystem</Link>
-            <Link href="/token" className="hover:text-primary transition-colors whitespace-nowrap">Coin</Link>
-            <Link href="/bridge" className="hover:text-primary transition-colors whitespace-nowrap flex items-center gap-1">
-              Bridge
-              <Badge variant="outline" className="text-[9px] border-cyan-500/50 text-cyan-400 px-1 py-0">Beta</Badge>
-            </Link>
-            <Link href="/staking" className="hover:text-primary transition-colors whitespace-nowrap">Staking</Link>
-            <Link href="/explorer" className="hover:text-primary transition-colors whitespace-nowrap">Explorer</Link>
-            <Link href="/developers" className="hover:text-primary transition-colors whitespace-nowrap">Developers</Link>
-            <Link href="/crowdfund" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
-              Fund Us
-              <Badge variant="outline" className="text-[9px] border-pink-500/50 text-pink-400 px-1 py-0">Support</Badge>
-            </Link>
-            <Link href="/swap" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
-              DeFi
-              <Badge variant="outline" className="text-[9px] border-green-500/50 text-green-400 px-1 py-0">New</Badge>
-            </Link>
-          </div>
-          <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
-            <div className="hidden md:flex items-center gap-2">
-              <GlobalSearch />
-              <HeaderTools />
-              <NotificationsDropdown />
-            </div>
-            {authLoading ? (
-              <div className="hidden sm:flex h-8 w-16 bg-white/5 animate-pulse rounded" />
-            ) : isAuthenticated ? (
-              <div className="hidden sm:flex items-center gap-2">
-                <Link href="/dashboard">
-                  <Button variant="ghost" size="sm" className="h-8 text-xs hover:bg-white/5 gap-1.5" data-testid="button-dashboard">
-                    <User className="w-3 h-3" />
-                    {displayName}
-                  </Button>
-                </Link>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="h-8 text-xs hover:bg-white/5" 
-                  onClick={() => signOut()}
-                  data-testid="button-logout"
-                >
-                  <LogOut className="w-3 h-3" />
-                </Button>
-              </div>
-            ) : (
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="hidden sm:flex h-8 text-xs hover:bg-white/5" 
-                onClick={() => setShowLoginModal(true)}
-                data-testid="button-login"
-              >
-                Log In
-              </Button>
-            )}
+          <div className="flex items-center gap-3">
             <WalletButton />
             <MobileNav />
           </div>
