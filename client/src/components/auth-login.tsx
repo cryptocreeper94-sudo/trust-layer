@@ -62,8 +62,8 @@ export function AuthLoginModal({ isOpen, onClose, onSuccess }: AuthLoginModalPro
       toast({ title: "Missing info", description: "Please fill in all fields.", variant: "destructive" });
       return;
     }
-    if (username.length < 3) {
-      toast({ title: "Username too short", description: "Username must be at least 3 characters.", variant: "destructive" });
+    if (username.length < 2) {
+      toast({ title: "Username too short", description: "Username must be at least 2 characters.", variant: "destructive" });
       return;
     }
     setLoading('email');
@@ -339,7 +339,7 @@ export function AuthLoginModal({ isOpen, onClose, onSuccess }: AuthLoginModalPro
                 />
                 <Input
                   type="password"
-                  placeholder="Password (6+ characters)"
+                  placeholder="Password (4+ characters)"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="h-12 bg-white/5 border-white/10"

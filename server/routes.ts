@@ -858,12 +858,12 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Email and password are required" });
       }
       
-      if (password.length < 6) {
-        return res.status(400).json({ error: "Password must be at least 6 characters" });
+      if (password.length < 4) {
+        return res.status(400).json({ error: "Password must be at least 4 characters" });
       }
 
-      if (!username || username.length < 3) {
-        return res.status(400).json({ error: "Username must be at least 3 characters" });
+      if (!username || username.length < 2) {
+        return res.status(400).json({ error: "Username must be at least 2 characters" });
       }
 
       // Validate username format: lowercase letters, numbers, underscores only
