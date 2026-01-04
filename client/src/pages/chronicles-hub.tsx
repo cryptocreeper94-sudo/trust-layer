@@ -190,9 +190,17 @@ export default function ChroniclesHub() {
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.6 }}
-                className="text-slate-400 text-lg mb-8"
+                className="text-slate-400 text-lg mb-2"
               >
-                Your journey continues. The chronicles await your presence.
+                Your parallel life has begun. Everything you build is saved forever.
+              </motion.p>
+              <motion.p
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.7 }}
+                className="text-slate-500 text-sm mb-8"
+              >
+                Season Zero is just the beginning - your journey grows with every update.
               </motion.p>
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
@@ -425,10 +433,32 @@ export default function ChroniclesHub() {
           </div>
         </Card>
 
-        <div className="mt-8 text-center text-slate-500 text-sm">
-          <p>This is Season Zero - your journey is just beginning.</p>
-          <p className="text-slate-600">New features and eras coming throughout 2026.</p>
-        </div>
+        <Card className="mt-8 bg-slate-900/50 border-slate-700/50 p-6">
+          <div className="text-center">
+            <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 mb-4">
+              Season Zero - The Beginning
+            </Badge>
+            <h3 className="text-lg font-bold text-white mb-2">Your Parallel Life Begins Here</h3>
+            <p className="text-slate-400 text-sm mb-4 max-w-xl mx-auto">
+              Everything you create is permanently saved to your account. Your personality, your estate, your choices - they all persist as you progress through the seasons.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 text-xs">
+              <div className="flex items-center gap-2 bg-green-500/10 text-green-400 px-3 py-1.5 rounded-full">
+                <Sparkles className="w-3 h-3" />
+                <span>Progress Saved</span>
+              </div>
+              <div className="flex items-center gap-2 bg-cyan-500/10 text-cyan-400 px-3 py-1.5 rounded-full">
+                <Clock className="w-3 h-3" />
+                <span>Regular Updates</span>
+              </div>
+              <div className="flex items-center gap-2 bg-purple-500/10 text-purple-400 px-3 py-1.5 rounded-full">
+                <Star className="w-3 h-3" />
+                <span>Early Adopter Rewards</span>
+              </div>
+            </div>
+            <p className="text-slate-600 text-xs mt-4">Season 1 & 2 features arriving throughout 2026</p>
+          </div>
+        </Card>
       </div>
 
       {playerPersonality?.audioPreference && playerPersonality.audioPreference !== "silent" && (
