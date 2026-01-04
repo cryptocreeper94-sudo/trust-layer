@@ -66,17 +66,18 @@ The design adheres to a "Premium UI Protocol" emphasizing:
 ### Games Arcade
 Full arcade with classic games: Tetris, Pacman, Snake, Solitaire, Spades, Minesweeper, Galaga, Coinflip, Crash, Slots, Lottery, Predictions. Leaderboards, player profiles, and Shells economy integration.
 
-## Project Statistics (Audit Verified)
-- **Frontend Pages**: 122+ React pages with premium UI
-- **API Endpoints**: 470+ routes with comprehensive error handling
-- **Database Tables**: 172 PostgreSQL tables via Drizzle ORM
-- **Schema Size**: 4,500+ lines of type-safe definitions
+## Project Statistics (Audit Verified - Jan 2026)
+- **Frontend Pages**: 148 React pages with premium UI
+- **API Endpoints**: 489 routes with comprehensive error handling
+- **Database Tables**: 193 PostgreSQL tables via Drizzle ORM (includes Chronicles Admin tables)
+- **Schema Size**: 4,964 lines of type-safe definitions
 - **Rate Limiters**: 16+ endpoint-specific rate limiters
-- **Blockchain Height**: 900,000+ blocks produced
+- **Blockchain Height**: 921,000+ blocks produced
 - **Security**: Helmet.js, CORS, AES-256-GCM, HMAC-SHA256, timing-safe comparisons
+- **Authentication**: Firebase Auth with Google OAuth configured
 
 ## External Dependencies
-- **Database**: PostgreSQL (172 tables)
+- **Database**: PostgreSQL (193 tables)
 - **Authentication**: Firebase Auth, WebAuthn/Passkeys
 - **Payments**: Stripe (fully configured), Coinbase Commerce
 - **Hub API**: https://orbitstaffing.io
