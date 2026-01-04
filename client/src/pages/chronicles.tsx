@@ -7,11 +7,12 @@ import {
   Info, X, Play, Volume2, VolumeX, ArrowLeft
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
+import { getChroniclesSession } from "@/pages/chronicles-login";
 
 import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
 import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
@@ -694,6 +695,9 @@ function EpochDetailDrawer({ epoch, isOpen, onClose }: { epoch: typeof EPOCHS[0]
 
 export default function Chronicles() {
   usePageAnalytics();
+  const [, setLocation] = useLocation();
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [chroniclesAccount, setChroniclesAccount] = useState<{ id: string; username: string; displayName: string } | null>(null);
   const [epochScrollPos, setEpochScrollPos] = useState(0);
   const [videoMuted, setVideoMuted] = useState(true);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
@@ -702,6 +706,41 @@ export default function Chronicles() {
   const [selectedEpoch, setSelectedEpoch] = useState<typeof EPOCHS[0] | null>(null);
   const currentVideoRef = useRef<HTMLVideoElement>(null);
   const nextVideoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const session = getChroniclesSession();
+    if (!session) {
+      setLocation("/chronicles/login");
+      return;
+    }
+    fetch("/api/chronicles/auth/session", {
+      headers: { Authorization: `Bearer ${session.token}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.authenticated) {
+          setChroniclesAccount(data.account);
+          setCheckingAuth(false);
+        } else {
+          setLocation("/chronicles/login");
+        }
+      })
+      .catch(() => {
+        setLocation("/chronicles/login");
+      });
+  }, [setLocation]);
+
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+          className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full"
+        />
+      </div>
+    );
+  }
   
   const fadeAudio = (video: HTMLVideoElement, fadeIn: boolean, duration: number = 500) => {
     const steps = 20;

@@ -74,7 +74,7 @@ const verifyFirebaseToken = isAuthenticated;
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -9802,6 +9802,234 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       res.json({ created, count: created.length });
     } catch (error: any) {
       res.status(500).json({ error: error.message || "Failed to bulk create posts" });
+    }
+  });
+
+  // =====================================================
+  // CHRONICLES AUTHENTICATION - Separate Game Auth System
+  // =====================================================
+  
+  const crypto = await import("crypto");
+  
+  // Secure password hashing using PBKDF2 with 100,000 iterations
+  const PBKDF2_ITERATIONS = 100000;
+  const PBKDF2_KEYLEN = 64;
+  const PBKDF2_DIGEST = 'sha512';
+  
+  function hashChroniclePassword(password: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const salt = crypto.randomBytes(32).toString('hex');
+      crypto.pbkdf2(password, salt, PBKDF2_ITERATIONS, PBKDF2_KEYLEN, PBKDF2_DIGEST, (err, derivedKey) => {
+        if (err) reject(err);
+        else resolve(`${salt}:${derivedKey.toString('hex')}`);
+      });
+    });
+  }
+  
+  function verifyChroniclePassword(password: string, storedHash: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      const parts = storedHash.split(':');
+      if (parts.length !== 2) {
+        resolve(false);
+        return;
+      }
+      const [salt, hash] = parts;
+      crypto.pbkdf2(password, salt, PBKDF2_ITERATIONS, PBKDF2_KEYLEN, PBKDF2_DIGEST, (err, derivedKey) => {
+        if (err) {
+          resolve(false);
+          return;
+        }
+        const computedHash = derivedKey.toString('hex');
+        try {
+          resolve(crypto.timingSafeEqual(Buffer.from(computedHash), Buffer.from(hash)));
+        } catch {
+          resolve(false);
+        }
+      });
+    });
+  }
+  
+  function generateSessionToken(): string {
+    return crypto.randomBytes(32).toString('hex');
+  }
+  
+  // Chronicles signup
+  app.post("/api/chronicles/auth/signup", async (req: Request, res: Response) => {
+    try {
+      const { username, displayName, password } = req.body;
+      
+      if (!username || !displayName || !password) {
+        return res.status(400).json({ error: "Username, display name, and password are required" });
+      }
+      
+      if (username.length < 3 || username.length > 30) {
+        return res.status(400).json({ error: "Username must be 3-30 characters" });
+      }
+      
+      if (password.length < 6) {
+        return res.status(400).json({ error: "Password must be at least 6 characters" });
+      }
+      
+      // Check if username exists (case-insensitive)
+      const existing = await db.select().from(chronicleAccounts)
+        .where(sql`LOWER(${chronicleAccounts.username}) = LOWER(${username})`)
+        .limit(1);
+      
+      if (existing.length > 0) {
+        return res.status(400).json({ error: "Username already taken" });
+      }
+      
+      // Hash password using PBKDF2
+      const passwordHash = await hashChroniclePassword(password);
+      
+      // Generate session
+      const sessionToken = generateSessionToken();
+      const sessionExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+      
+      // Create account
+      const [account] = await db.insert(chronicleAccounts).values({
+        username: username.toLowerCase(),
+        displayName,
+        passwordHash,
+        sessionToken,
+        sessionExpiresAt,
+        lastLoginAt: new Date(),
+      }).returning();
+      
+      res.json({
+        success: true,
+        account: {
+          id: account.id,
+          username: account.username,
+          displayName: account.displayName,
+        },
+        sessionToken,
+        expiresAt: sessionExpiresAt,
+      });
+    } catch (error: any) {
+      console.error("Chronicles signup error:", error);
+      res.status(500).json({ error: error.message || "Signup failed" });
+    }
+  });
+  
+  // Chronicles login
+  app.post("/api/chronicles/auth/login", async (req: Request, res: Response) => {
+    try {
+      const { username, password } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ error: "Username and password are required" });
+      }
+      
+      // Find account (case-insensitive)
+      const [account] = await db.select().from(chronicleAccounts)
+        .where(sql`LOWER(${chronicleAccounts.username}) = LOWER(${username})`)
+        .limit(1);
+      
+      if (!account) {
+        return res.status(401).json({ error: "Invalid username or password" });
+      }
+      
+      if (!account.isActive) {
+        return res.status(401).json({ error: "Account is disabled" });
+      }
+      
+      // Verify password using PBKDF2
+      const isValidPassword = await verifyChroniclePassword(password, account.passwordHash);
+      if (!isValidPassword) {
+        return res.status(401).json({ error: "Invalid username or password" });
+      }
+      
+      // Generate new session
+      const sessionToken = generateSessionToken();
+      const sessionExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+      
+      // Update session
+      await db.update(chronicleAccounts)
+        .set({
+          sessionToken,
+          sessionExpiresAt,
+          lastLoginAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .where(eq(chronicleAccounts.id, account.id));
+      
+      res.json({
+        success: true,
+        account: {
+          id: account.id,
+          username: account.username,
+          displayName: account.displayName,
+        },
+        sessionToken,
+        expiresAt: sessionExpiresAt,
+      });
+    } catch (error: any) {
+      console.error("Chronicles login error:", error);
+      res.status(500).json({ error: error.message || "Login failed" });
+    }
+  });
+  
+  // Chronicles session check
+  app.get("/api/chronicles/auth/session", async (req: Request, res: Response) => {
+    try {
+      const authHeader = req.headers.authorization;
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ error: "No session token provided", authenticated: false });
+      }
+      
+      const sessionToken = authHeader.substring(7);
+      
+      const [account] = await db.select().from(chronicleAccounts)
+        .where(eq(chronicleAccounts.sessionToken, sessionToken))
+        .limit(1);
+      
+      if (!account) {
+        return res.status(401).json({ error: "Invalid session", authenticated: false });
+      }
+      
+      if (!account.isActive) {
+        return res.status(401).json({ error: "Account disabled", authenticated: false });
+      }
+      
+      if (account.sessionExpiresAt && new Date(account.sessionExpiresAt) < new Date()) {
+        return res.status(401).json({ error: "Session expired", authenticated: false });
+      }
+      
+      res.json({
+        authenticated: true,
+        account: {
+          id: account.id,
+          username: account.username,
+          displayName: account.displayName,
+        },
+      });
+    } catch (error: any) {
+      console.error("Chronicles session check error:", error);
+      res.status(500).json({ error: error.message || "Session check failed", authenticated: false });
+    }
+  });
+  
+  // Chronicles logout
+  app.post("/api/chronicles/auth/logout", async (req: Request, res: Response) => {
+    try {
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        const sessionToken = authHeader.substring(7);
+        
+        await db.update(chronicleAccounts)
+          .set({
+            sessionToken: null,
+            sessionExpiresAt: null,
+            updatedAt: new Date(),
+          })
+          .where(eq(chronicleAccounts.sessionToken, sessionToken));
+      }
+      
+      res.json({ success: true, message: "Logged out" });
+    } catch (error: any) {
+      console.error("Chronicles logout error:", error);
+      res.status(500).json({ error: error.message || "Logout failed" });
     }
   });
 

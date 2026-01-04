@@ -120,6 +120,7 @@ import ChroniclesOnboarding from "@/pages/chronicles-onboarding";
 import ChroniclesEstate from "@/pages/chronicles-estate";
 import ChroniclesHub from "@/pages/chronicles-hub";
 import ChroniclesTimePortal from "@/pages/chronicles-time-portal";
+import ChroniclesLogin from "@/pages/chronicles-login";
 import SyndicateInvite from "@/pages/syndicate-invite";
 import ChronoHome from "@/pages/chrono-home";
 import ChronoEras from "@/pages/chrono-eras";
@@ -240,6 +241,7 @@ function ChronoRouter() {
       <Switch>
         <Route path="/" component={ChronoHome} />
         <Route path="/chronicles" component={Chronicles} />
+        <Route path="/chronicles/login" component={ChroniclesLogin} />
         <Route path="/chronicles/demo" component={ChroniclesDemo} />
         <Route path="/chronicles/ai" component={ChroniclesAIDemo} />
         <Route path="/chronicles/onboarding" component={ChroniclesOnboarding} />
@@ -406,6 +408,7 @@ function DWSCRouter() {
         <Route path="/ai-agents" component={AIAgentMarketplace} />
         <Route path="/rwa" component={RWATokenization} />
         <Route path="/chronicles" component={Chronicles} />
+        <Route path="/chronicles/login" component={ChroniclesLogin} />
         <Route path="/chronicles/demo" component={ChroniclesDemo} />
         <Route path="/chronicles/ai" component={ChroniclesAIDemo} />
         <Route path="/chronicles/onboarding" component={ChroniclesOnboarding} />
