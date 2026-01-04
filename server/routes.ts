@@ -74,7 +74,7 @@ const verifyFirebaseToken = isAuthenticated;
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -10336,6 +10336,321 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const proofs = await chroniclesGameService.getChronicleProofs(req.params.characterId);
       res.json({ proofs });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // ============================================
+  // CHRONICLES TIME TRAVEL SYSTEM - BETA SEASON 0
+  // ============================================
+  
+  // Get all available eras
+  app.get("/api/chronicles/eras", async (req, res) => {
+    try {
+      const eras = await db.select().from(chronicleEras).where(eq(chronicleEras.isActive, true)).orderBy(chronicleEras.sortOrder);
+      res.json({ eras, isBeta: true, betaMessage: "BETA: Your progress is persistent. More eras coming soon!" });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+  // Get player's era progress and portal state
+  app.get("/api/chronicles/portal", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      // Get or create portal state
+      let [portal] = await db.select().from(chronicleTimePortals).where(eq(chronicleTimePortals.userId, userId));
+      if (!portal) {
+        [portal] = await db.insert(chronicleTimePortals).values({ userId, currentEraCode: 'modern' }).returning();
+        // Also create Modern era progress (starting era)
+        await db.insert(chroniclePlayerEras).values({ userId, eraCode: 'modern', isUnlocked: true, isCurrent: true, firstEnteredAt: new Date() });
+      }
+      
+      // Get player's era progress
+      const playerEras = await db.select().from(chroniclePlayerEras).where(eq(chroniclePlayerEras.userId, userId));
+      
+      // Get collected artifacts
+      const collectedArtifacts = await db.select().from(chroniclePlayerArtifacts).where(eq(chroniclePlayerArtifacts.userId, userId));
+      
+      // Get all eras for reference
+      const allEras = await db.select().from(chronicleEras).where(eq(chronicleEras.isActive, true)).orderBy(chronicleEras.sortOrder);
+      
+      res.json({ portal, playerEras, collectedArtifacts, allEras, isBeta: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+  // Get available missions for current era
+  app.get("/api/chronicles/missions", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      // Get player's current era
+      const [portal] = await db.select().from(chronicleTimePortals).where(eq(chronicleTimePortals.userId, userId));
+      const currentEra = portal?.currentEraCode || 'modern';
+      
+      // Get missions for current era
+      const missions = await db.select().from(chronicleEraMissions)
+        .where(and(eq(chronicleEraMissions.eraCode, currentEra), eq(chronicleEraMissions.isActive, true)))
+        .orderBy(chronicleEraMissions.sortOrder);
+      
+      // Get player's mission progress
+      const progress = await db.select().from(chronicleMissionProgress).where(eq(chronicleMissionProgress.userId, userId));
+      
+      res.json({ missions, progress, currentEra });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+  // Start a mission
+  app.post("/api/chronicles/missions/:missionId/start", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { missionId } = req.params;
+      
+      // Check if already started
+      const [existing] = await db.select().from(chronicleMissionProgress)
+        .where(and(eq(chronicleMissionProgress.userId, userId), eq(chronicleMissionProgress.missionId, missionId)));
+      
+      if (existing) {
+        return res.json({ progress: existing, alreadyStarted: true });
+      }
+      
+      const [progress] = await db.insert(chronicleMissionProgress)
+        .values({ userId, missionId, status: 'active', startedAt: new Date() })
+        .returning();
+      
+      res.json({ progress, started: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+  // Reveal a hint for a mission
+  app.post("/api/chronicles/missions/:missionId/hint", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { missionId } = req.params;
+      
+      const [progress] = await db.select().from(chronicleMissionProgress)
+        .where(and(eq(chronicleMissionProgress.userId, userId), eq(chronicleMissionProgress.missionId, missionId)));
+      
+      if (!progress) return res.status(400).json({ error: "Mission not started" });
+      if (progress.hintsRevealed >= 3) return res.json({ progress, message: "All hints revealed" });
+      
+      const [updated] = await db.update(chronicleMissionProgress)
+        .set({ hintsRevealed: progress.hintsRevealed + 1 })
+        .where(eq(chronicleMissionProgress.id, progress.id))
+        .returning();
+      
+      // Get mission to return appropriate hint
+      const [mission] = await db.select().from(chronicleEraMissions).where(eq(chronicleEraMissions.id, missionId));
+      const hints = [mission?.hint1, mission?.hint2, mission?.hint3].filter(Boolean);
+      const revealedHint = hints[updated.hintsRevealed - 1] || null;
+      
+      res.json({ progress: updated, hint: revealedHint });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+  // Submit riddle answer
+  app.post("/api/chronicles/missions/:missionId/riddle", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { missionId } = req.params;
+      const { answer } = req.body;
+      
+      const [mission] = await db.select().from(chronicleEraMissions).where(eq(chronicleEraMissions.id, missionId));
+      if (!mission?.riddleAnswer) return res.status(400).json({ error: "This mission has no riddle" });
+      
+      const isCorrect = answer?.toLowerCase().trim() === mission.riddleAnswer.toLowerCase().trim();
+      
+      if (isCorrect) {
+        await db.update(chronicleMissionProgress)
+          .set({ riddleSolved: true })
+          .where(and(eq(chronicleMissionProgress.userId, userId), eq(chronicleMissionProgress.missionId, missionId)));
+      }
+      
+      res.json({ correct: isCorrect, message: isCorrect ? "Correct! The answer reveals itself." : "That's not quite right. Think again." });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+  // Make conflict choice
+  app.post("/api/chronicles/missions/:missionId/conflict", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { missionId } = req.params;
+      const { choice } = req.body;
+      
+      await db.update(chronicleMissionProgress)
+        .set({ conflictChoiceMade: choice })
+        .where(and(eq(chronicleMissionProgress.userId, userId), eq(chronicleMissionProgress.missionId, missionId)));
+      
+      res.json({ success: true, message: "Your choice has been recorded. The consequences unfold..." });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+  // Complete a mission and claim artifact
+  app.post("/api/chronicles/missions/:missionId/complete", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { missionId } = req.params;
+      
+      const [mission] = await db.select().from(chronicleEraMissions).where(eq(chronicleEraMissions.id, missionId));
+      if (!mission) return res.status(404).json({ error: "Mission not found" });
+      
+      const [progress] = await db.select().from(chronicleMissionProgress)
+        .where(and(eq(chronicleMissionProgress.userId, userId), eq(chronicleMissionProgress.missionId, missionId)));
+      
+      if (!progress) return res.status(400).json({ error: "Mission not started" });
+      if (progress.status === 'completed') return res.json({ alreadyCompleted: true, message: "Mission already completed" });
+      
+      // Complete the mission
+      await db.update(chronicleMissionProgress)
+        .set({ status: 'completed', completedAt: new Date() })
+        .where(eq(chronicleMissionProgress.id, progress.id));
+      
+      // Award artifact if mission has one
+      let artifact = null;
+      if (mission.artifactRewardId) {
+        [artifact] = await db.select().from(chronicleArtifacts).where(eq(chronicleArtifacts.id, mission.artifactRewardId));
+        if (artifact) {
+          await db.insert(chroniclePlayerArtifacts).values({
+            userId, artifactId: artifact.id, discoveryMethod: 'mission'
+          });
+        }
+      }
+      
+      // Award Shells
+      const user = await storage.getUser(userId);
+      if (user && mission.shellsReward > 0) {
+        await shellsService.addShells(userId, user.firstName || user.email || 'User', mission.shellsReward, 'earn', `Completed: ${mission.title}`, missionId, 'mission');
+      }
+      
+      // Update mission completion count
+      await db.update(chronicleEraMissions)
+        .set({ timesCompleted: mission.timesCompleted + 1 })
+        .where(eq(chronicleEraMissions.id, missionId));
+      
+      res.json({ 
+        completed: true, 
+        artifact,
+        rewards: { shells: mission.shellsReward, experience: mission.experienceReward, reputation: mission.reputationReward }
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+  // Get artifacts for an era
+  app.get("/api/chronicles/artifacts/:eraCode", async (req, res) => {
+    try {
+      const { eraCode } = req.params;
+      const artifacts = await db.select().from(chronicleArtifacts)
+        .where(and(eq(chronicleArtifacts.eraCode, eraCode), eq(chronicleArtifacts.isActive, true)));
+      res.json({ artifacts });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+  // Check if player can travel to an era
+  app.get("/api/chronicles/portal/check/:eraCode", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { eraCode } = req.params;
+      
+      // Get era requirements
+      const [era] = await db.select().from(chronicleEras).where(eq(chronicleEras.code, eraCode));
+      if (!era) return res.status(404).json({ error: "Era not found" });
+      if (era.isStartingEra) return res.json({ canTravel: true, isStartingEra: true });
+      
+      // Count player's artifacts for this era
+      const playerArtifacts = await db.select().from(chroniclePlayerArtifacts)
+        .innerJoin(chronicleArtifacts, eq(chroniclePlayerArtifacts.artifactId, chronicleArtifacts.id))
+        .where(and(eq(chroniclePlayerArtifacts.userId, userId), eq(chronicleArtifacts.eraCode, eraCode)));
+      
+      const collected = playerArtifacts.length;
+      const required = era.artifactsRequired;
+      const canTravel = collected >= required;
+      
+      res.json({ canTravel, collected, required, era });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+  // Activate portal and travel to era
+  app.post("/api/chronicles/portal/travel", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { eraCode } = req.body;
+      
+      // Verify player can travel
+      const [era] = await db.select().from(chronicleEras).where(eq(chronicleEras.code, eraCode));
+      if (!era) return res.status(404).json({ error: "Era not found" });
+      
+      if (!era.isStartingEra) {
+        const playerArtifacts = await db.select().from(chroniclePlayerArtifacts)
+          .innerJoin(chronicleArtifacts, eq(chroniclePlayerArtifacts.artifactId, chronicleArtifacts.id))
+          .where(and(eq(chroniclePlayerArtifacts.userId, userId), eq(chronicleArtifacts.eraCode, eraCode)));
+        
+        if (playerArtifacts.length < era.artifactsRequired) {
+          return res.status(400).json({ error: "Not enough artifacts to power the portal", required: era.artifactsRequired, collected: playerArtifacts.length });
+        }
+      }
+      
+      // Update portal state
+      await db.update(chronicleTimePortals)
+        .set({ currentEraCode: eraCode, lastTravelAt: new Date(), totalTravels: sql`total_travels + 1`, portalStatus: 'active', updatedAt: new Date() })
+        .where(eq(chronicleTimePortals.userId, userId));
+      
+      // Update current era for player
+      await db.update(chroniclePlayerEras).set({ isCurrent: false }).where(eq(chroniclePlayerEras.userId, userId));
+      
+      // Create or update destination era progress
+      const [existingEraProgress] = await db.select().from(chroniclePlayerEras)
+        .where(and(eq(chroniclePlayerEras.userId, userId), eq(chroniclePlayerEras.eraCode, eraCode)));
+      
+      if (existingEraProgress) {
+        await db.update(chroniclePlayerEras)
+          .set({ isCurrent: true, isUnlocked: true, lastVisitedAt: new Date() })
+          .where(eq(chroniclePlayerEras.id, existingEraProgress.id));
+      } else {
+        await db.insert(chroniclePlayerEras).values({ userId, eraCode, isUnlocked: true, isCurrent: true, firstEnteredAt: new Date() });
+      }
+      
+      res.json({ 
+        success: true, 
+        message: `The portal activates. ${era.ambientDescription || 'A new world awaits...'}`,
+        era,
+        travelComplete: true
+      });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
