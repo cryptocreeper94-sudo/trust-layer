@@ -122,20 +122,20 @@ export function FirebaseLoginModal({ isOpen, onClose, onSuccess }: FirebaseLogin
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100]">
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm"
             onClick={handleClose}
           />
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-sm bg-background/95 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-sm bg-background/95 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl z-[101]"
           >
             <button
               onClick={handleClose}
