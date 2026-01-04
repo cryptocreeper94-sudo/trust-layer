@@ -12,8 +12,8 @@ import { Plus, FolderOpen, Trash2, Clock, GitBranch, Code2, FileCode, Globe, Box
 import { BackButton } from "@/components/page-nav";
 import { motion } from "framer-motion";
 import { format } from "date-fns";
-import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
-import { FirebaseLoginModal } from "@/components/firebase-login";
+import { useSimpleAuth } from "@/hooks/use-simple-auth";
+import { SimpleLoginModal } from "@/components/simple-login";
 
 interface Project {
   id: string;
@@ -41,7 +41,7 @@ const languageColors: Record<string, string> = {
 };
 
 export default function StudioProjects() {
-  const { user, loading: authLoading, isAuthenticated } = useFirebaseAuth();
+  const { user, loading: authLoading, isAuthenticated } = useSimpleAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [, setLocation] = useLocation();
   const [projects, setProjects] = useState<Project[]>([]);
@@ -138,7 +138,7 @@ export default function StudioProjects() {
         >
           Sign In
         </Button>
-        <FirebaseLoginModal 
+        <SimpleLoginModal 
           isOpen={showLoginModal} 
           onClose={() => setShowLoginModal(false)} 
         />

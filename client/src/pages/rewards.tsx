@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { Footer } from "@/components/footer";
-import { useFirebaseAuth, getAuthToken } from "@/hooks/use-firebase-auth";
+import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { useQuery } from "@tanstack/react-query";
 
 const CROWDFUND_TIERS = [
@@ -26,20 +26,17 @@ function getTierFromAmount(cents: number): typeof CROWDFUND_TIERS[0] | null {
 }
 
 export default function Rewards() {
-  const { user } = useFirebaseAuth();
+  const { user } = useSimpleAuth();
   
   const { data: userStats } = useQuery<{
     signupPosition?: number | null;
     crowdfundTotalCents?: number;
     tokenPurchasePosition?: number | null;
   }>({
-    queryKey: ["/api/user/early-adopter-stats", user?.uid],
+    queryKey: ["/api/user/early-adopter-stats", user?.id],
     queryFn: async () => {
-      const token = await getAuthToken();
-      if (!token) return { signupPosition: null, crowdfundTotalCents: 0, tokenPurchasePosition: null };
-      const res = await fetch("/api/user/early-adopter-stats", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      if (!user) return { signupPosition: null, crowdfundTotalCents: 0, tokenPurchasePosition: null };
+      const res = await fetch("/api/user/early-adopter-stats");
       if (!res.ok) throw new Error("Failed to fetch stats");
       return res.json();
     },

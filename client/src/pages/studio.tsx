@@ -18,8 +18,8 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GlassCard } from "@/components/glass-card";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
-import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
-import { FirebaseLoginModal } from "@/components/firebase-login";
+import { useSimpleAuth } from "@/hooks/use-simple-auth";
+import { SimpleLoginModal } from "@/components/simple-login";
 
 interface Commit {
   id: string;
@@ -428,7 +428,7 @@ const getLanguage = (filename: string): string => {
 };
 
 export default function Studio() {
-  const { user, loading: authLoading, isAuthenticated } = useFirebaseAuth();
+  const { user, loading: authLoading, isAuthenticated } = useSimpleAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [projectId, setProjectId] = useState<string | null>(null);
   const [projectName, setProjectName] = useState("Untitled Project");
@@ -1608,7 +1608,7 @@ export default function Studio() {
       ws.send(JSON.stringify({
         type: "join",
         projectId,
-        userId: user?.uid,
+        userId: user?.id,
         userName: user?.displayName || user?.email || "User",
       }));
       setTimeout(() => {
@@ -1627,7 +1627,7 @@ export default function Studio() {
       try {
         const data = JSON.parse(event.data);
         if (data.type === "presence") {
-          setPresence(data.users.filter((u: PresenceUser) => u.id !== user?.uid));
+          setPresence(data.users.filter((u: PresenceUser) => u.id !== user?.id));
         }
       } catch {}
     };
@@ -1708,7 +1708,7 @@ export default function Studio() {
             Sign In to Continue
           </Button>
         </GlassCard>
-        <FirebaseLoginModal 
+        <SimpleLoginModal 
           isOpen={showLoginModal} 
           onClose={() => setShowLoginModal(false)} 
         />

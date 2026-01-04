@@ -4,8 +4,8 @@ import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkl
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
-import { FirebaseLoginModal } from "@/components/firebase-login";
+import { useSimpleAuth } from "@/hooks/use-simple-auth";
+import { SimpleLoginModal } from "@/components/simple-login";
 
 import chroniclesImg from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
 import crowdfundImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
@@ -369,7 +369,7 @@ function GamesComingSoonModal({ onClose }: { onClose: () => void }) {
 function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin: () => void }) {
   const [location] = useLocation();
   const [showGamesModal, setShowGamesModal] = useState(false);
-  const { user, isAuthenticated, displayName, signOut } = useFirebaseAuth();
+  const { user, isAuthenticated, displayName, logout } = useSimpleAuth();
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -474,7 +474,7 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
               </div>
               <button
                 onClick={() => {
-                  signOut();
+                  logout();
                   onClose();
                 }}
                 style={{
@@ -737,7 +737,7 @@ export function MobileNav() {
 
   return (
     <div>
-      <FirebaseLoginModal 
+      <SimpleLoginModal 
         isOpen={showLoginModal} 
         onClose={() => setShowLoginModal(false)} 
       />

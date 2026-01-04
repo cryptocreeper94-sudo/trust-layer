@@ -140,7 +140,7 @@ const verifyFirebaseToken = isAuthenticated;
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -913,6 +913,156 @@ export async function registerRoutes(
       console.error("Firebase sync error:", error);
       res.status(500).json({ error: "Failed to sync user" });
     }
+  });
+
+  // Simple Email/Password Registration (no Firebase required)
+  app.post("/api/auth/register", authRateLimit, async (req, res) => {
+    try {
+      const { email, password, displayName } = req.body;
+      
+      if (!email || !password) {
+        return res.status(400).json({ error: "Email and password are required" });
+      }
+      
+      if (password.length < 6) {
+        return res.status(400).json({ error: "Password must be at least 6 characters" });
+      }
+
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(email);
+      if (existingUser) {
+        return res.status(400).json({ error: "An account with this email already exists" });
+      }
+
+      // Hash password with SHA-256 + salt
+      const salt = crypto.randomBytes(16).toString('hex');
+      const passwordHash = crypto.createHash('sha256').update(password + salt).digest('hex') + ':' + salt;
+
+      // Get signup position for early adopter tracking
+      const signupPosition = await storage.getNextSignupPosition();
+
+      // Create user
+      const userId = crypto.randomUUID();
+      await storage.upsertFirebaseUser({
+        id: userId,
+        email: email,
+        username: null,
+        displayName: displayName || email.split('@')[0],
+        firstName: displayName?.split(' ')[0] || null,
+        lastName: displayName?.split(' ').slice(1).join(' ') || null,
+        profileImageUrl: null,
+        signupPosition: signupPosition,
+      });
+
+      // Store password hash
+      await db.update(users).set({ passwordHash }).where(eq(users.id, userId));
+
+      // Set session
+      (req.session as any).userId = userId;
+
+      res.json({ success: true, userId, signupPosition });
+    } catch (error) {
+      console.error("Registration error:", error);
+      res.status(500).json({ error: "Registration failed" });
+    }
+  });
+
+  // Simple Email/Password Login (no Firebase required)
+  app.post("/api/auth/login", authRateLimit, async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      if (!email || !password) {
+        return res.status(400).json({ error: "Email and password are required" });
+      }
+
+      // Find user
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.status(401).json({ error: "Invalid email or password" });
+      }
+
+      if (!user.passwordHash) {
+        return res.status(401).json({ error: "Please sign in with your original method (Google/GitHub)" });
+      }
+
+      // Verify password - passwordHash format: "hash:salt"
+      const hashParts = user.passwordHash.split(':');
+      if (hashParts.length !== 2) {
+        console.error("Invalid password hash format for user:", user.id);
+        return res.status(401).json({ error: "Invalid email or password" });
+      }
+      
+      const [storedHash, salt] = hashParts;
+      if (!storedHash || !salt) {
+        return res.status(401).json({ error: "Invalid email or password" });
+      }
+      
+      const providedHash = crypto.createHash('sha256').update(password + salt).digest('hex');
+      
+      // Use timing-safe comparison
+      if (storedHash.length !== providedHash.length) {
+        return res.status(401).json({ error: "Invalid email or password" });
+      }
+      
+      if (!crypto.timingSafeEqual(Buffer.from(storedHash, 'hex'), Buffer.from(providedHash, 'hex'))) {
+        return res.status(401).json({ error: "Invalid email or password" });
+      }
+
+      // Set session
+      (req.session as any).userId = user.id;
+
+      res.json({ 
+        success: true, 
+        user: {
+          id: user.id,
+          email: user.email,
+          displayName: user.displayName,
+          profileImageUrl: user.profileImageUrl,
+        }
+      });
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({ error: "Login failed" });
+    }
+  });
+
+  // Get current user session
+  app.get("/api/auth/me", async (req, res) => {
+    try {
+      const userId = (req.session as any)?.userId;
+      if (!userId) {
+        return res.json({ user: null });
+      }
+
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.json({ user: null });
+      }
+
+      res.json({ 
+        user: {
+          id: user.id,
+          email: user.email,
+          displayName: user.displayName,
+          username: user.username,
+          profileImageUrl: user.profileImageUrl,
+        }
+      });
+    } catch (error) {
+      console.error("Session check error:", error);
+      res.json({ user: null });
+    }
+  });
+
+  // Logout
+  app.post("/api/auth/logout", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ error: "Logout failed" });
+      }
+      res.json({ success: true });
+    });
   });
 
   // PIN Registration - set a 4-6 digit PIN for quick login

@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { useUpload } from "@/hooks/use-upload";
-import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
+import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { signInWithGoogle, signOut } from "@/lib/firebase";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -418,13 +418,13 @@ export default function CommunityHub() {
     }
   };
 
-  const { user, loading: authLoading, isAuthenticated } = useFirebaseAuth();
+  const { user, loading: authLoading, isAuthenticated } = useSimpleAuth();
   
   const firebaseUser = user ? {
-    id: user.uid,
-    claims: { sub: user.uid },
+    id: user.id,
+    claims: { sub: user.id },
     firstName: user.displayName || user.email?.split('@')[0] || 'User',
-    photoURL: user.photoURL,
+    photoURL: user.profileImageUrl,
   } : null;
 
   const { data: shellsData, refetch: refetchShells } = useQuery<{ balance: number; lockedBalance: number }>({

@@ -16,8 +16,8 @@ import { usePreferences } from "@/lib/store";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
-import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
-import { FirebaseLoginModal } from "@/components/firebase-login";
+import { useSimpleAuth } from "@/hooks/use-simple-auth";
+import { SimpleLoginModal } from "@/components/simple-login";
 import { GamesComingSoonModal } from "@/components/games-coming-soon-modal";
 import { useState, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -321,7 +321,7 @@ function EcosystemCarousel({ apps }: { apps: EcosystemApp[] }) {
 
 export default function Home() {
   const { preferences } = usePreferences();
-  const { user, loading: authLoading, isAuthenticated, displayName, signOut } = useFirebaseAuth();
+  const { user, loading: authLoading, isAuthenticated, displayName, logout } = useSimpleAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showGamesModal, setShowGamesModal] = useState(false);
   usePageAnalytics();
@@ -344,7 +344,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
       <OnboardingTour />
-      <FirebaseLoginModal 
+      <SimpleLoginModal 
         isOpen={showLoginModal} 
         onClose={() => setShowLoginModal(false)} 
       />

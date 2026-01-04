@@ -25,6 +25,7 @@ export const users = pgTable("users", {
   profileImageUrl: varchar("profile_image_url"),
   signupPosition: varchar("signup_position"),
   pinHash: varchar("pin_hash"),
+  passwordHash: varchar("password_hash"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
