@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Crown, Sword, Users, MessageCircle, Star, Shield, Scroll, Sparkles, BookOpen, Trophy, Target, ChevronRight, Send, User, MapPin, Play, Volume2, VolumeX, Flame, Zap } from "lucide-react";
+import { Crown, Sword, Users, MessageCircle, Star, Shield, Scroll, Sparkles, BookOpen, Trophy, Target, ChevronRight, Send, User, MapPin, Play, Volume2, VolumeX, Flame, Zap, Globe, Building, Store, Clock, Compass, Layers } from "lucide-react";
 
 import medievalVideo from "@assets/generated_videos/medieval_castle_twilight_scene.mp4";
 import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
@@ -194,20 +194,30 @@ export default function ChroniclesDemo() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <Badge className="mb-6 px-4 py-2 text-sm bg-gradient-to-r from-purple-500/30 to-cyan-500/30 border-purple-500/50 backdrop-blur-sm" data-testid="badge-season-zero">
-                <Sparkles className="w-4 h-4 mr-2" />
-                SEASON ZERO - THE AWAKENING
-              </Badge>
+              <div className="flex flex-wrap justify-center gap-2 mb-6">
+                <Badge className="px-4 py-2 text-sm bg-gradient-to-r from-amber-500/30 to-orange-500/30 border-amber-500/50 backdrop-blur-sm animate-pulse" data-testid="badge-beta">
+                  <Flame className="w-4 h-4 mr-2" />
+                  BETA v0.1
+                </Badge>
+                <Badge className="px-4 py-2 text-sm bg-gradient-to-r from-purple-500/30 to-cyan-500/30 border-purple-500/50 backdrop-blur-sm" data-testid="badge-season-zero">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  SEASON ZERO - THE AWAKENING
+                </Badge>
+              </div>
               
-              <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tight">
+              <h1 className="text-5xl md:text-7xl font-black mb-4 tracking-tight">
                 <span className="bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-200 bg-clip-text text-transparent drop-shadow-2xl">
                   Age of Crowns
                 </span>
               </h1>
               
+              <p className="text-sm text-cyan-400 mb-4 uppercase tracking-widest">
+                1 of 70+ Eras in the Neverending World
+              </p>
+              
               <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-                Five factions vie for control of the realm. Choose your allegiance, 
-                complete quests, and forge your legend in this living political simulation.
+                Your parallel self awakens in a living world. Choose your allegiance, 
+                complete quests, and forge your legend across infinite eras.
               </p>
               
               <div className="flex flex-wrap justify-center gap-4">
@@ -588,6 +598,142 @@ export default function ChroniclesDemo() {
           </TabsContent>
         </Tabs>
 
+        {/* The Neverending World Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-16"
+        >
+          <div className="text-center mb-10">
+            <Badge className="mb-4 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-500/50">
+              <Globe className="w-3 h-3 mr-1" />
+              THE NEVERENDING WORLD
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              70+ Eras. Infinite Possibilities.
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Your parallel self journeys across all of human history and beyond. 
+              Each era is a living world with unique factions, quests, and legends to forge.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-10">
+            <Card className="bg-gradient-to-br from-slate-900/90 to-slate-800/90 border-slate-700/50 backdrop-blur-xl">
+              <CardContent className="p-6 text-center">
+                <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-500/5 border border-purple-500/30 flex items-center justify-center">
+                  <Layers className="w-7 h-7 text-purple-400" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">Parallel Self System</h3>
+                <p className="text-gray-400 text-sm">
+                  YOU are the hero. Not an avatar - your actual parallel self experiencing 
+                  history through your choices and values.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-slate-900/90 to-slate-800/90 border-slate-700/50 backdrop-blur-xl">
+              <CardContent className="p-6 text-center">
+                <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/5 border border-cyan-500/30 flex items-center justify-center">
+                  <Compass className="w-7 h-7 text-cyan-400" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">Era Hopping</h3>
+                <p className="text-gray-400 text-sm">
+                  Ancient Egypt to Cyberpunk futures. Viking raids to Wild West frontiers. 
+                  Each era unlocks as you progress.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-slate-900/90 to-slate-800/90 border-slate-700/50 backdrop-blur-xl">
+              <CardContent className="p-6 text-center">
+                <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-pink-500/20 to-pink-500/5 border border-pink-500/30 flex items-center justify-center">
+                  <Clock className="w-7 h-7 text-pink-400" />
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2">Chronicle Proofs</h3>
+                <p className="text-gray-400 text-sm">
+                  Every major decision is recorded on-chain as a soulbound NFT. 
+                  Your legacy is permanent and verifiable.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </motion.section>
+
+        {/* Business Storefronts Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-16"
+        >
+          <Card className="overflow-hidden border-0 bg-gradient-to-br from-amber-500/10 via-slate-900/95 to-slate-900/95">
+            <CardContent className="p-8 md:p-12">
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                  <Badge className="mb-4 bg-amber-500/20 border-amber-500/50 text-amber-400">
+                    <Building className="w-3 h-3 mr-1" />
+                    EARLY ADOPTER PROGRAM
+                  </Badge>
+                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                    Real Business Storefronts
+                  </h2>
+                  <p className="text-gray-400 mb-6 leading-relaxed">
+                    Be among the first businesses to claim your virtual storefront in the Chronicles universe. 
+                    Your real-world brand becomes part of the game world - a tavern, a trading post, 
+                    a guild hall bearing your name across 70+ historical eras.
+                  </p>
+                  <ul className="space-y-3 text-sm">
+                    <li className="flex items-center gap-3 text-gray-300">
+                      <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center">
+                        <Star className="w-3 h-3 text-green-400" />
+                      </div>
+                      Permanent in-game real estate across all eras
+                    </li>
+                    <li className="flex items-center gap-3 text-gray-300">
+                      <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center">
+                        <Star className="w-3 h-3 text-green-400" />
+                      </div>
+                      Brand integration verified on blockchain
+                    </li>
+                    <li className="flex items-center gap-3 text-gray-300">
+                      <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center">
+                        <Star className="w-3 h-3 text-green-400" />
+                      </div>
+                      Player traffic and engagement analytics
+                    </li>
+                    <li className="flex items-center gap-3 text-gray-300">
+                      <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center">
+                        <Star className="w-3 h-3 text-green-400" />
+                      </div>
+                      Limited founding partner slots available
+                    </li>
+                  </ul>
+                </div>
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-amber-500/20 to-transparent rounded-3xl blur-3xl" />
+                  <div className="relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 rounded-2xl border border-amber-500/30 p-8 text-center">
+                    <Store className="w-16 h-16 mx-auto mb-4 text-amber-400" />
+                    <h3 className="text-2xl font-bold text-white mb-2">Claim Your Storefront</h3>
+                    <p className="text-gray-400 text-sm mb-6">
+                      Early adopters receive priority placement and exclusive founding partner benefits.
+                    </p>
+                    <Button 
+                      size="lg"
+                      className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black font-bold"
+                      data-testid="button-claim-storefront"
+                    >
+                      <Building className="w-5 h-5 mr-2" />
+                      Apply for Early Access
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.section>
+
         {/* Footer */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -596,6 +742,11 @@ export default function ChroniclesDemo() {
           className="mt-16 text-center"
         >
           <Separator className="my-8 bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Badge variant="outline" className="border-amber-500/50 text-amber-400 animate-pulse">
+              BETA v0.1
+            </Badge>
+          </div>
           <p className="text-gray-500 text-sm">
             Season Zero runs until <span className="text-purple-400 font-medium">February 14, 2026</span>. 
             All decisions are recorded on-chain as Chronicle Proofs.
