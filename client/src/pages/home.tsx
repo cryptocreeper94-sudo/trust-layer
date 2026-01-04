@@ -354,11 +354,11 @@ export default function Home() {
       {showGamesModal && <GamesComingSoonModal onClose={() => setShowGamesModal(false)} />}
       
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="w-full px-3 h-14 flex items-center justify-between gap-2">
+        <div className="w-full px-3 h-14 flex items-center gap-2">
           <Link href="/" className="flex items-center flex-shrink-0">
             <span className="font-display font-bold text-xl tracking-tight">DarkWave</span>
           </Link>
-          <div className="hidden lg:flex items-center gap-3 text-xs font-medium text-muted-foreground flex-1 justify-center overflow-hidden min-w-0">
+          <div className="hidden lg:flex items-center gap-3 text-xs font-medium text-muted-foreground flex-1 justify-center overflow-hidden min-w-0 max-w-[calc(100%-400px)]">
             <Link href="/rewards" className="hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
               Rewards
               <Badge variant="outline" className="text-[9px] border-purple-500/50 text-purple-400 px-1 py-0">Hot</Badge>
@@ -385,7 +385,7 @@ export default function Home() {
               <Badge variant="outline" className="text-[9px] border-green-500/50 text-green-400 px-1 py-0">New</Badge>
             </Link>
           </div>
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
             <div className="hidden md:flex items-center gap-2">
               <GlobalSearch />
               <HeaderTools />
