@@ -5,7 +5,7 @@ import { useLocation, Link } from "wouter";
 import { 
   Home, Map, Users, Coins, Lock, ChevronRight, Sparkles, 
   Crown, Shield, Compass, Building, MessageCircle, Volume2,
-  Trophy, Star, Clock, Zap, Gift, ArrowRight, Plus, UserPlus, Link2, ChevronDown, X, Loader2, Vote
+  Trophy, Star, Clock, Zap, Gift, ArrowRight, Plus, UserPlus, Link2, ChevronDown, X, Loader2, Vote, Copy, Share2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -18,6 +18,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { CharacterPortrait } from "@/components/character-portrait";
 import { AudioPlayer } from "@/components/audio-player";
 import { toast } from "sonner";
+import { getPendingInvite, clearPendingInvite } from "./syndicate-invite";
 
 interface JourneyChapter {
   id: string;
@@ -152,6 +153,8 @@ export default function ChroniclesHub() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showJoinCodeModal, setShowJoinCodeModal] = useState(false);
   const [showManageModal, setShowManageModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [generatedInviteUrl, setGeneratedInviteUrl] = useState("");
   const [selectedSyndicate, setSelectedSyndicate] = useState<any>(null);
   const [newSyndicateName, setNewSyndicateName] = useState("");
   const [newSyndicateDesc, setNewSyndicateDesc] = useState("");
@@ -265,8 +268,10 @@ export default function ChroniclesHub() {
     },
     onSuccess: (data) => {
       if (data.code) {
-        navigator.clipboard.writeText(data.code);
-        toast.success(`Invite code copied: ${data.code}`);
+        const baseUrl = window.location.origin;
+        const fullUrl = `${baseUrl}/join/${data.code}`;
+        setGeneratedInviteUrl(fullUrl);
+        setShowShareModal(true);
       }
     },
     onError: (error: any) => {
@@ -291,6 +296,27 @@ export default function ChroniclesHub() {
       }
     }
   }, [personalityLoading, personality, setLocation]);
+
+  // Auto-join pending syndicate invite after signup
+  useEffect(() => {
+    if (!authLoading && user) {
+      const pending = getPendingInvite();
+      if (pending?.code) {
+        apiRequest("POST", `/api/guilds/join/${pending.code}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              toast.success(`Welcome to ${data.guild?.name || "the syndicate"}!`);
+              queryClient.invalidateQueries({ queryKey: ["/api/guilds/my-guilds"] });
+            }
+            clearPendingInvite();
+          })
+          .catch(() => {
+            clearPendingInvite();
+          });
+      }
+    }
+  }, [authLoading, user]);
 
   if (authLoading || personalityLoading) {
     return (
@@ -1245,6 +1271,101 @@ export default function ChroniclesHub() {
                     Advanced features unlock as our community grows
                   </p>
                 </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Share Invite Modal */}
+      <AnimatePresence>
+        {showShareModal && generatedInviteUrl && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+            onClick={() => setShowShareModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-slate-900 border border-cyan-500/30 rounded-xl p-6 max-w-md w-full"
+              onClick={e => e.stopPropagation()}
+            >
+              {/* Holographic header glow */}
+              <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-cyan-500/10 to-transparent rounded-t-xl" />
+              
+              <div className="relative">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                    <Share2 className="w-5 h-5 text-cyan-400" />
+                    Share Invite Link
+                  </h2>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setShowShareModal(false)}
+                    className="text-slate-400 hover:text-white"
+                    data-testid="button-close-share-modal"
+                  >
+                    <X className="w-5 h-5" />
+                  </Button>
+                </div>
+                
+                <div className="mb-6">
+                  <p className="text-slate-400 text-sm mb-4">
+                    Share this link with friends to invite them to your syndicate. They'll be able to join instantly!
+                  </p>
+                  
+                  {/* URL Display with glassmorphism */}
+                  <div className="relative group">
+                    <div className="absolute -inset-[1px] bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-lg opacity-50 blur-sm group-hover:opacity-75 transition-opacity" />
+                    <div className="relative bg-slate-800 rounded-lg p-4 border border-slate-700">
+                      <p className="text-cyan-300 text-sm font-mono break-all" data-testid="text-invite-url">
+                        {generatedInviteUrl}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="space-y-3">
+                  <Button
+                    onClick={() => {
+                      navigator.clipboard.writeText(generatedInviteUrl);
+                      toast.success("Invite link copied!");
+                    }}
+                    className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400"
+                    data-testid="button-copy-invite-link"
+                  >
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copy Link
+                  </Button>
+                  
+                  {/* Native Share API for mobile */}
+                  {typeof navigator.share !== 'undefined' && (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        navigator.share({
+                          title: `Join ${selectedSyndicate?.name || "my syndicate"}`,
+                          text: "Join me in DarkWave Chronicles!",
+                          url: generatedInviteUrl,
+                        }).catch(() => {});
+                      }}
+                      className="w-full border-slate-600 text-slate-300 hover:bg-slate-800"
+                      data-testid="button-native-share"
+                    >
+                      <Share2 className="w-4 h-4 mr-2" />
+                      Share via...
+                    </Button>
+                  )}
+                </div>
+                
+                <p className="text-xs text-slate-500 text-center mt-4">
+                  Link expires in 24 hours • Single use
+                </p>
               </div>
             </motion.div>
           </motion.div>

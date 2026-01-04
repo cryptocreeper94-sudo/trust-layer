@@ -11230,10 +11230,58 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         expiresAt,
       }).returning();
       
-      res.json({ success: true, invite, inviteUrl: `/guilds/join/${code}` });
+      res.json({ success: true, invite, inviteUrl: `/join/${code}`, code });
     } catch (error) {
       console.error("Create invite error:", error);
       res.status(500).json({ error: "Failed to create invite" });
+    }
+  });
+
+  // Get invite preview (public - no auth required for landing page)
+  app.get("/api/guilds/invite/:code", async (req, res) => {
+    try {
+      const [invite] = await db.select().from(guildInvites).where(eq(guildInvites.code, req.params.code));
+      if (!invite) return res.status(404).json({ error: "Invalid invite code" });
+      
+      if (invite.expiresAt && new Date(invite.expiresAt) < new Date()) {
+        return res.status(400).json({ error: "Invite has expired", expired: true });
+      }
+      if (invite.maxUses && invite.useCount >= invite.maxUses) {
+        return res.status(400).json({ error: "Invite has reached max uses", maxedOut: true });
+      }
+      
+      const [guild] = await db.select().from(guilds).where(eq(guilds.id, invite.guildId));
+      if (!guild) return res.status(404).json({ error: "Syndicate not found" });
+      
+      // Get inviter info
+      const [inviter] = await db.select({
+        id: users.id,
+        displayName: users.displayName,
+        username: users.username,
+      }).from(users).where(eq(users.id, invite.inviterId));
+      
+      res.json({
+        valid: true,
+        code: invite.code,
+        expiresAt: invite.expiresAt,
+        syndicate: {
+          id: guild.id,
+          name: guild.name,
+          icon: guild.icon,
+          description: guild.description,
+          memberCount: guild.memberCount,
+          maxMembers: guild.maxMembers,
+          level: guild.level,
+          isChronoLinkActive: guild.isChronoLinkActive,
+          shellsBonus: guild.shellsBonus,
+        },
+        invitedBy: inviter ? {
+          displayName: inviter.displayName || inviter.username || "A friend",
+        } : { displayName: "A friend" },
+      });
+    } catch (error) {
+      console.error("Get invite preview error:", error);
+      res.status(500).json({ error: "Failed to get invite" });
     }
   });
 
