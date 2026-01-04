@@ -45,6 +45,7 @@ export function FirebaseLoginModal({ isOpen, onClose, onSuccess }: FirebaseLogin
       toast({ title: "Welcome!", description: "You've successfully signed in." });
       onSuccess?.();
       handleClose();
+      window.location.reload();
     } catch (error: any) {
       if (error.code !== 'auth/popup-closed-by-user') {
         let message = error.message || "Please try again.";

@@ -127,7 +127,7 @@ export async function checkRedirectResult() {
 async function syncUserToBackend(user: User, username?: string) {
   try {
     const idToken = await user.getIdToken();
-    await fetch('/api/auth/firebase-sync', {
+    const response = await fetch('/api/auth/firebase-sync', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -141,6 +141,11 @@ async function syncUserToBackend(user: User, username?: string) {
         username: username,
       })
     });
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error("Backend sync failed:", response.status, errorData);
+    }
   } catch (error) {
     console.error("Failed to sync user to backend:", error);
   }
