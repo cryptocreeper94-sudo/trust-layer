@@ -617,7 +617,7 @@ export default function ChroniclesOnboarding() {
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <Button
                       data-testid="button-explore-estate"
-                      onClick={() => setLocation("/chronicles-estate")}
+                      onClick={() => setLocation("/chronicles/hub")}
                       className="bg-gradient-to-r from-cyan-500 to-purple-500"
                     >
                       Explore Your Estate

@@ -214,7 +214,7 @@ export default function ChroniclesEstate() {
             <Button 
               variant="ghost" 
               size="sm"
-              onClick={() => setLocation("/chronicles")}
+              onClick={() => setLocation("/chronicles/hub")}
               className="text-slate-400"
             >
               ← Back
