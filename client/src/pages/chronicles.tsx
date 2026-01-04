@@ -697,7 +697,7 @@ export default function Chronicles() {
   usePageAnalytics();
   const [, setLocation] = useLocation();
   const [checkingAuth, setCheckingAuth] = useState(true);
-  const [chroniclesAccount, setChroniclesAccount] = useState<{ id: string; username: string; displayName: string } | null>(null);
+  const [chroniclesAccount, setChroniclesAccount] = useState<{ id: string; username: string; firstName: string; lastName: string } | null>(null);
   const [epochScrollPos, setEpochScrollPos] = useState(0);
   const [videoMuted, setVideoMuted] = useState(true);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);

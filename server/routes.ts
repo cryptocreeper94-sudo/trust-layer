@@ -9856,14 +9856,20 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   // Chronicles signup
   app.post("/api/chronicles/auth/signup", async (req: Request, res: Response) => {
     try {
-      const { username, displayName, password } = req.body;
+      const { username, email, firstName, lastName, password } = req.body;
       
-      if (!username || !displayName || !password) {
-        return res.status(400).json({ error: "Username, display name, and password are required" });
+      if (!username || !email || !firstName || !lastName || !password) {
+        return res.status(400).json({ error: "All fields are required" });
       }
       
       if (username.length < 3 || username.length > 30) {
         return res.status(400).json({ error: "Username must be 3-30 characters" });
+      }
+      
+      // Basic email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ error: "Please enter a valid email address" });
       }
       
       if (password.length < 6) {
@@ -9871,12 +9877,21 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       }
       
       // Check if username exists (case-insensitive)
-      const existing = await db.select().from(chronicleAccounts)
+      const existingUsername = await db.select().from(chronicleAccounts)
         .where(sql`LOWER(${chronicleAccounts.username}) = LOWER(${username})`)
         .limit(1);
       
-      if (existing.length > 0) {
+      if (existingUsername.length > 0) {
         return res.status(400).json({ error: "Username already taken" });
+      }
+      
+      // Check if email exists (case-insensitive)
+      const existingEmail = await db.select().from(chronicleAccounts)
+        .where(sql`LOWER(${chronicleAccounts.email}) = LOWER(${email})`)
+        .limit(1);
+      
+      if (existingEmail.length > 0) {
+        return res.status(400).json({ error: "Email already registered" });
       }
       
       // Hash password using PBKDF2
@@ -9889,7 +9904,9 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       // Create account
       const [account] = await db.insert(chronicleAccounts).values({
         username: username.toLowerCase(),
-        displayName,
+        email: email.toLowerCase(),
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
         passwordHash,
         sessionToken,
         sessionExpiresAt,
@@ -9901,7 +9918,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         account: {
           id: account.id,
           username: account.username,
-          displayName: account.displayName,
+          firstName: account.firstName,
+          lastName: account.lastName,
         },
         sessionToken,
         expiresAt: sessionExpiresAt,
@@ -9959,7 +9977,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         account: {
           id: account.id,
           username: account.username,
-          displayName: account.displayName,
+          firstName: account.firstName,
+          lastName: account.lastName,
         },
         sessionToken,
         expiresAt: sessionExpiresAt,
@@ -10001,7 +10020,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         account: {
           id: account.id,
           username: account.username,
-          displayName: account.displayName,
+          firstName: account.firstName,
+          lastName: account.lastName,
         },
       });
     } catch (error: any) {

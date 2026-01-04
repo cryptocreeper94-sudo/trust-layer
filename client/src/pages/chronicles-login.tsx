@@ -15,7 +15,8 @@ const CHRONICLES_ACCOUNT_KEY = "chronicles_account";
 interface ChroniclesAccount {
   id: string;
   username: string;
-  displayName: string;
+  firstName: string;
+  lastName: string;
 }
 
 export function getChroniclesSession(): { token: string; account: ChroniclesAccount } | null {
@@ -44,7 +45,9 @@ export default function ChroniclesLogin() {
   const [, setLocation] = useLocation();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [username, setUsername] = useState("");
-  const [displayName, setDisplayName] = useState("");
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -96,7 +99,7 @@ export default function ChroniclesLogin() {
       }
 
       setChroniclesSession(data.sessionToken, data.account);
-      toast.success(`Welcome back, ${data.account.displayName}!`);
+      toast.success(`Welcome back, ${data.account.firstName}!`);
       setLocation("/chronicles");
     } catch (error: any) {
       toast.error(error.message || "Login failed");
@@ -106,8 +109,15 @@ export default function ChroniclesLogin() {
   };
 
   const handleSignup = async () => {
-    if (!username || !displayName || !password) {
+    if (!username || !email || !firstName || !lastName || !password) {
       toast.error("Please fill in all fields");
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Please enter a valid email address");
       return;
     }
 
@@ -131,7 +141,7 @@ export default function ChroniclesLogin() {
       const res = await fetch("/api/chronicles/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, displayName, password }),
+        body: JSON.stringify({ username, email, firstName, lastName, password }),
       });
 
       const data = await res.json();
@@ -141,7 +151,7 @@ export default function ChroniclesLogin() {
       }
 
       setChroniclesSession(data.sessionToken, data.account);
-      toast.success(`Welcome to Chronicles, ${data.account.displayName}!`);
+      toast.success(`Welcome to Chronicles, ${data.account.firstName}!`);
       setLocation("/chronicles");
     } catch (error: any) {
       toast.error(error.message || "Signup failed");
@@ -275,24 +285,53 @@ export default function ChroniclesLogin() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
+                        className="space-y-4"
                       >
-                        <label className="block text-sm font-medium text-white/70 mb-2">
-                          Display Name
-                        </label>
-                        <div className="relative">
-                          <Sparkles className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/40" />
-                          <Input
-                            type="text"
-                            placeholder="How should we call you?"
-                            value={displayName}
-                            onChange={(e) => setDisplayName(e.target.value)}
-                            className="pl-10 bg-slate-800/50 border-white/10 text-white placeholder:text-white/30"
-                            data-testid="input-display-name"
-                          />
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-sm font-medium text-white/70 mb-2">
+                              First Name
+                            </label>
+                            <Input
+                              type="text"
+                              placeholder="John"
+                              value={firstName}
+                              onChange={(e) => setFirstName(e.target.value)}
+                              className="bg-slate-800/50 border-white/10 text-white placeholder:text-white/30"
+                              data-testid="input-first-name"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-white/70 mb-2">
+                              Last Name
+                            </label>
+                            <Input
+                              type="text"
+                              placeholder="Doe"
+                              value={lastName}
+                              onChange={(e) => setLastName(e.target.value)}
+                              className="bg-slate-800/50 border-white/10 text-white placeholder:text-white/30"
+                              data-testid="input-last-name"
+                            />
+                          </div>
                         </div>
-                        <p className="text-xs text-white/40 mt-1">
-                          This is what you'll see in the game (e.g., "Good afternoon, {displayName || 'Your Name'}")
-                        </p>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-white/70 mb-2">
+                            Email
+                          </label>
+                          <div className="relative">
+                            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/40" />
+                            <Input
+                              type="email"
+                              placeholder="your@email.com"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              className="pl-10 bg-slate-800/50 border-white/10 text-white placeholder:text-white/30"
+                              data-testid="input-email"
+                            />
+                          </div>
+                        </div>
                       </motion.div>
                     )}
 

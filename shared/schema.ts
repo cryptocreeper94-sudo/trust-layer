@@ -4748,7 +4748,9 @@ export const chronicleAccounts = pgTable("chronicle_accounts", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   
   username: text("username").notNull().unique(),
-  displayName: text("display_name").notNull(),
+  email: text("email").notNull(),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
   passwordHash: text("password_hash").notNull(),
   
   // Optional link to main DWSC account (for cross-platform benefits)
