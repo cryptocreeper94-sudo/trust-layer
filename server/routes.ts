@@ -1153,13 +1153,16 @@ export async function registerRoutes(
       const salt = crypto.randomBytes(16).toString('hex');
       const passwordHash = crypto.createHash('sha256').update(newPassword + salt).digest('hex') + ':' + salt;
 
-      // Update user password
-      await db.update(users).set({ passwordHash }).where(eq(users.id, resetToken.userId));
+      // Use transaction to atomically update password and mark token as used
+      await db.transaction(async (tx) => {
+        // Update user password
+        await tx.update(users).set({ passwordHash }).where(eq(users.id, resetToken.userId));
 
-      // Mark token as used
-      await db.update(passwordResetTokens)
-        .set({ used: true })
-        .where(eq(passwordResetTokens.id, resetToken.id));
+        // Mark token as used
+        await tx.update(passwordResetTokens)
+          .set({ used: true })
+          .where(eq(passwordResetTokens.id, resetToken.id));
+      });
 
       res.json({ success: true, message: "Password has been reset successfully" });
     } catch (error) {
