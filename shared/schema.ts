@@ -5127,3 +5127,222 @@ export const insertChronicleProofTemplateSchema = createInsertSchema(chroniclePr
 });
 export type ChronicleProofTemplate = typeof chronicleProofTemplates.$inferSelect;
 export type InsertChronicleProofTemplate = z.infer<typeof insertChronicleProofTemplateSchema>;
+
+// ============================================
+// CHRONICLES TIME TRAVEL SYSTEM - BETA SEASON 0
+// ============================================
+
+// Era definitions - Modern, Medieval, Wild West, etc.
+export const chronicleEras = pgTable("chronicle_eras", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  code: text("code").notNull().unique(), // 'modern', 'medieval', 'wildwest'
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  tagline: text("tagline").notNull(), // Short hook: "The Old West awaits"
+  
+  region: text("region").notNull().default("global"), // 'global', 'americas', 'europe', 'asia', 'africa'
+  timePeriod: text("time_period").notNull(), // "1850-1900", "500-1500", etc.
+  
+  artifactsRequired: integer("artifacts_required").notNull().default(5), // Pieces needed to unlock
+  isStartingEra: boolean("is_starting_era").notNull().default(false), // Modern is starting era
+  isUnlocked: boolean("is_unlocked").notNull().default(false), // Global availability
+  
+  imageUrl: text("image_url"),
+  portalImageUrl: text("portal_image_url"), // Portal visual for this era
+  ambientDescription: text("ambient_description"), // What you see/hear when entering
+  
+  sortOrder: integer("sort_order").notNull().default(0),
+  isActive: boolean("is_active").notNull().default(true),
+  isBeta: boolean("is_beta").notNull().default(true), // Beta flag
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleEraSchema = createInsertSchema(chronicleEras).omit({
+  id: true, createdAt: true
+});
+export type ChronicleEra = typeof chronicleEras.$inferSelect;
+export type InsertChronicleEra = z.infer<typeof insertChronicleEraSchema>;
+
+// Artifacts/Runestones - collectible pieces that power time travel
+export const chronicleArtifacts = pgTable("chronicle_artifacts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  eraCode: text("era_code").notNull(), // Which era this unlocks
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  
+  artifactType: text("artifact_type").notNull().default("runestone"), // 'runestone', 'relic', 'scroll', 'key'
+  rarity: text("rarity").notNull().default("common"), // 'common', 'rare', 'epic', 'legendary'
+  
+  // Discovery hints
+  hint: text("hint").notNull(), // Cryptic clue to find it
+  riddleText: text("riddle_text"), // Optional riddle
+  location: text("location").notNull(), // In-game location description
+  
+  // How to obtain
+  obtainMethod: text("obtain_method").notNull().default("mission"), // 'mission', 'community', 'purchase', 'achievement'
+  missionId: varchar("mission_id"), // Link to specific mission if applicable
+  
+  imageUrl: text("image_url"),
+  glowColor: text("glow_color").notNull().default("#00ffff"), // Visual effect color
+  
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleArtifactSchema = createInsertSchema(chronicleArtifacts).omit({
+  id: true, createdAt: true
+});
+export type ChronicleArtifact = typeof chronicleArtifacts.$inferSelect;
+export type InsertChronicleArtifact = z.infer<typeof insertChronicleArtifactSchema>;
+
+// Player artifact collection
+export const chroniclePlayerArtifacts = pgTable("chronicle_player_artifacts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  userId: text("user_id").notNull(),
+  characterId: varchar("character_id"),
+  artifactId: varchar("artifact_id").notNull(),
+  
+  discoveredAt: timestamp("discovered_at").defaultNow().notNull(),
+  discoveryMethod: text("discovery_method").notNull(), // 'mission', 'riddle', 'community', 'gift'
+  
+  isEquipped: boolean("is_equipped").notNull().default(false), // Slotted in portal
+});
+
+export const insertChroniclePlayerArtifactSchema = createInsertSchema(chroniclePlayerArtifacts).omit({
+  id: true, discoveredAt: true
+});
+export type ChroniclePlayerArtifact = typeof chroniclePlayerArtifacts.$inferSelect;
+export type InsertChroniclePlayerArtifact = z.infer<typeof insertChroniclePlayerArtifactSchema>;
+
+// Player era progress and lock status
+export const chroniclePlayerEras = pgTable("chronicle_player_eras", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  userId: text("user_id").notNull(),
+  characterId: varchar("character_id"),
+  eraCode: text("era_code").notNull(),
+  
+  isUnlocked: boolean("is_unlocked").notNull().default(false),
+  isCurrent: boolean("is_current").notNull().default(false), // Currently in this era
+  
+  artifactsCollected: integer("artifacts_collected").notNull().default(0),
+  missionsCompleted: integer("missions_completed").notNull().default(0),
+  communityPoints: integer("community_points").notNull().default(0), // From ChronoChat participation
+  
+  firstEnteredAt: timestamp("first_entered_at"),
+  lastVisitedAt: timestamp("last_visited_at"),
+  totalTimeSpent: integer("total_time_spent").notNull().default(0), // Minutes
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChroniclePlayerEraSchema = createInsertSchema(chroniclePlayerEras).omit({
+  id: true, createdAt: true, updatedAt: true
+});
+export type ChroniclePlayerEra = typeof chroniclePlayerEras.$inferSelect;
+export type InsertChroniclePlayerEra = z.infer<typeof insertChroniclePlayerEraSchema>;
+
+// Time Portal state for each player
+export const chronicleTimePortals = pgTable("chronicle_time_portals", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  userId: text("user_id").notNull().unique(),
+  characterId: varchar("character_id"),
+  
+  currentEraCode: text("current_era_code").notNull().default("modern"),
+  portalEnergy: integer("portal_energy").notNull().default(0), // Accumulated from artifacts
+  
+  lastTravelAt: timestamp("last_travel_at"),
+  totalTravels: integer("total_travels").notNull().default(0),
+  
+  // Visual state
+  portalStatus: text("portal_status").notNull().default("dormant"), // 'dormant', 'charging', 'ready', 'active'
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChronicleTimePortalSchema = createInsertSchema(chronicleTimePortals).omit({
+  id: true, createdAt: true, updatedAt: true
+});
+export type ChronicleTimePortal = typeof chronicleTimePortals.$inferSelect;
+export type InsertChronicleTimePortal = z.infer<typeof insertChronicleTimePortalSchema>;
+
+// Era-specific missions with hints and riddles
+export const chronicleEraMissions = pgTable("chronicle_era_missions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  eraCode: text("era_code").notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  
+  missionType: text("mission_type").notNull().default("discovery"), // 'discovery', 'puzzle', 'conflict', 'social', 'exploration'
+  difficulty: text("difficulty").notNull().default("normal"), // 'easy', 'normal', 'hard', 'legendary'
+  
+  // Story/Direction
+  storyIntro: text("story_intro").notNull(), // Sets the scene
+  hint1: text("hint1").notNull(), // First clue
+  hint2: text("hint2"), // Second clue (if stuck)
+  hint3: text("hint3"), // Final hint
+  riddleText: text("riddle_text"), // Optional riddle to solve
+  riddleAnswer: text("riddle_answer"), // Answer for validation
+  
+  // Conflict/Challenge
+  hasConflict: boolean("has_conflict").notNull().default(false),
+  conflictDescription: text("conflict_description"),
+  conflictOptions: text("conflict_options"), // JSON array of choices
+  
+  // Requirements
+  prerequisiteMissionId: varchar("prerequisite_mission_id"),
+  minLevel: integer("min_level").notNull().default(1),
+  
+  // Rewards
+  artifactRewardId: varchar("artifact_reward_id"), // Artifact earned on completion
+  shellsReward: integer("shells_reward").notNull().default(10),
+  experienceReward: integer("experience_reward").notNull().default(25),
+  reputationReward: integer("reputation_reward").notNull().default(5),
+  
+  // Completion tracking
+  timesCompleted: integer("times_completed").notNull().default(0),
+  
+  isActive: boolean("is_active").notNull().default(true),
+  sortOrder: integer("sort_order").notNull().default(0),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleEraMissionSchema = createInsertSchema(chronicleEraMissions).omit({
+  id: true, createdAt: true
+});
+export type ChronicleEraMission = typeof chronicleEraMissions.$inferSelect;
+export type InsertChronicleEraMission = z.infer<typeof insertChronicleEraMissionSchema>;
+
+// Player mission progress
+export const chronicleMissionProgress = pgTable("chronicle_mission_progress", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  userId: text("user_id").notNull(),
+  characterId: varchar("character_id"),
+  missionId: varchar("mission_id").notNull(),
+  
+  status: text("status").notNull().default("available"), // 'available', 'active', 'completed', 'failed'
+  hintsRevealed: integer("hints_revealed").notNull().default(0), // 0-3
+  riddleSolved: boolean("riddle_solved").notNull().default(false),
+  conflictChoiceMade: text("conflict_choice_made"), // Which option chosen
+  
+  startedAt: timestamp("started_at"),
+  completedAt: timestamp("completed_at"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleMissionProgressSchema = createInsertSchema(chronicleMissionProgress).omit({
+  id: true, createdAt: true
+});
+export type ChronicleMissionProgress = typeof chronicleMissionProgress.$inferSelect;
+export type InsertChronicleMissionProgress = z.infer<typeof insertChronicleMissionProgressSchema>;
