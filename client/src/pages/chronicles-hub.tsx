@@ -1,20 +1,23 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useQuery, useQueries } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocation, Link } from "wouter";
 import { 
   Home, Map, Users, Coins, Lock, ChevronRight, Sparkles, 
   Crown, Shield, Compass, Building, MessageCircle, Volume2,
-  Trophy, Star, Clock, Zap, Gift, ArrowRight
+  Trophy, Star, Clock, Zap, Gift, ArrowRight, Plus, UserPlus, Link2, ChevronDown, X, Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { CharacterPortrait } from "@/components/character-portrait";
 import { AudioPlayer } from "@/components/audio-player";
+import { toast } from "sonner";
 
 interface JourneyChapter {
   id: string;
@@ -126,6 +129,151 @@ export default function ChroniclesHub() {
     enabled: !!user,
   });
 
+  // Syndicates (guilds) data
+  const { data: mySyndicatesData } = useQuery({
+    queryKey: ["/api/guilds/my-guilds"],
+    queryFn: async () => {
+      const res = await apiRequest("GET", "/api/guilds/my-guilds");
+      return res.json();
+    },
+    enabled: !!user,
+  });
+
+  const { data: publicSyndicatesData } = useQuery({
+    queryKey: ["/api/guilds"],
+    queryFn: async () => {
+      const res = await apiRequest("GET", "/api/guilds");
+      return res.json();
+    },
+    enabled: !!user,
+  });
+
+  const [syndicatesExpanded, setSyndicatesExpanded] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showJoinCodeModal, setShowJoinCodeModal] = useState(false);
+  const [showManageModal, setShowManageModal] = useState(false);
+  const [selectedSyndicate, setSelectedSyndicate] = useState<any>(null);
+  const [newSyndicateName, setNewSyndicateName] = useState("");
+  const [newSyndicateDesc, setNewSyndicateDesc] = useState("");
+  const [newSyndicateIcon, setNewSyndicateIcon] = useState("⚡");
+  const [joinCode, setJoinCode] = useState("");
+
+  // Helper to extract error message from API errors
+  const getErrorMessage = (error: any, fallback: string): string => {
+    try {
+      const msg = error?.message || "";
+      // Try to parse JSON error from response
+      const jsonMatch = msg.match(/\{.*\}/);
+      if (jsonMatch) {
+        const parsed = JSON.parse(jsonMatch[0]);
+        return parsed.error || fallback;
+      }
+      return msg || fallback;
+    } catch {
+      return fallback;
+    }
+  };
+
+  const createSyndicateMutation = useMutation({
+    mutationFn: async (data: { name: string; description: string; icon: string }) => {
+      const res = await apiRequest("POST", "/api/guilds/create", data);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/guilds/my-guilds"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/guilds"] });
+      setShowCreateModal(false);
+      setNewSyndicateName("");
+      setNewSyndicateDesc("");
+      setNewSyndicateIcon("⚡");
+      toast.success("Syndicate created!");
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error, "Failed to create syndicate"));
+    }
+  });
+
+  const joinSyndicateMutation = useMutation({
+    mutationFn: async (guildId: number) => {
+      const res = await apiRequest("POST", `/api/guilds/${guildId}/join`);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/guilds/my-guilds"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/guilds"] });
+      toast.success("Joined syndicate!");
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error, "Failed to join syndicate"));
+    }
+  });
+
+  const joinWithCodeMutation = useMutation({
+    mutationFn: async (code: string) => {
+      const res = await apiRequest("POST", `/api/guilds/join/${code}`);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/guilds/my-guilds"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/guilds"] });
+      setShowJoinCodeModal(false);
+      setJoinCode("");
+      toast.success("Joined syndicate!");
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error, "Invalid or expired invite code"));
+    }
+  });
+
+  const activateChronoLinkMutation = useMutation({
+    mutationFn: async (guildId: number) => {
+      const res = await apiRequest("POST", `/api/guilds/${guildId}/activate-chronolink`);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/guilds/my-guilds"] });
+      setShowManageModal(false);
+      setSelectedSyndicate(null);
+      toast.success("ChronoLink activated! Your syndicate is now connected to ChronoChat.");
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error, "Failed to activate ChronoLink"));
+    }
+  });
+
+  const leaveSyndicateMutation = useMutation({
+    mutationFn: async (guildId: number) => {
+      const res = await apiRequest("POST", `/api/guilds/${guildId}/leave`);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/guilds/my-guilds"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/guilds"] });
+      setShowManageModal(false);
+      setSelectedSyndicate(null);
+      toast.success("Left syndicate");
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error, "Failed to leave syndicate"));
+    }
+  });
+
+  const generateInviteMutation = useMutation({
+    mutationFn: async (guildId: number) => {
+      const res = await apiRequest("POST", `/api/guilds/${guildId}/invite`);
+      return res.json();
+    },
+    onSuccess: (data) => {
+      if (data.code) {
+        navigator.clipboard.writeText(data.code);
+        toast.success(`Invite code copied: ${data.code}`);
+      }
+    },
+    onError: (error: any) => {
+      toast.error(getErrorMessage(error, "Failed to generate invite"));
+    }
+  });
+
   useEffect(() => {
     if (!authLoading && !user) {
       setLocation("/");
@@ -167,6 +315,18 @@ export default function ChroniclesHub() {
   const myCommunities = myCommunitiesData?.communities || [];
   const isChronoLinkActive = myCommunities.length > 0;
   const featuredCommunities = allCommunities.slice(0, 3);
+  
+  // Syndicates data - merge guild info with membership role
+  const memberships = mySyndicatesData?.memberships || [];
+  const mySyndicates = (mySyndicatesData?.guilds || []).map((guild: any) => {
+    const membership = memberships.find((m: any) => m.guildId === guild.id);
+    return { ...guild, role: membership?.role || "member" };
+  });
+  // Only show public recruiting guilds that user isn't already a member of
+  const publicSyndicates = (publicSyndicatesData?.guilds || []).filter(
+    (g: any) => g.isRecruiting && !mySyndicates.some((my: any) => my.id === g.id)
+  );
+  const hasSyndicates = mySyndicates.length > 0;
 
   return (
     <div className="min-h-screen bg-slate-950 text-white relative overflow-hidden">
@@ -518,6 +678,184 @@ export default function ChroniclesHub() {
           </Card>
         </motion.div>
 
+        {/* Syndicates Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mb-8"
+        >
+          <Card className="bg-slate-900/80 border-slate-700 overflow-hidden">
+            <button
+              onClick={() => setSyndicatesExpanded(!syndicatesExpanded)}
+              className="w-full p-6 flex items-center justify-between hover:bg-slate-800/50 transition-colors"
+              data-testid="button-toggle-syndicates"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-amber-500/30 to-orange-500/30 flex items-center justify-center border border-amber-500/30">
+                  <Users className="w-6 h-6 text-amber-400" />
+                </div>
+                <div className="text-left">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-lg font-bold text-white">Syndicates</h3>
+                    {hasSyndicates && (
+                      <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">
+                        {mySyndicates.length} joined
+                      </Badge>
+                    )}
+                    <Badge className="bg-slate-700 text-slate-300 border-slate-600 text-xs">
+                      Season Zero
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-slate-400">
+                    {hasSyndicates 
+                      ? "Manage your syndicates and connect with allies"
+                      : "Form or join a syndicate to pool resources and earn bonuses"
+                    }
+                  </p>
+                </div>
+              </div>
+              <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${syndicatesExpanded ? "rotate-180" : ""}`} />
+            </button>
+            
+            <AnimatePresence>
+              {syndicatesExpanded && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden"
+                >
+                  <div className="px-6 pb-6 border-t border-slate-700/50 pt-4">
+                    {/* My Syndicates */}
+                    {mySyndicates.length > 0 && (
+                      <div className="mb-6">
+                        <h4 className="text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">Your Syndicates</h4>
+                        <div className="space-y-2">
+                          {mySyndicates.map((syndicate: any) => (
+                            <button 
+                              key={syndicate.id}
+                              onClick={() => {
+                                setSelectedSyndicate(syndicate);
+                                setShowManageModal(true);
+                              }}
+                              className="w-full flex items-center justify-between p-3 bg-slate-800/50 rounded-lg border border-slate-700 hover:border-amber-500/30 transition-colors cursor-pointer text-left"
+                              data-testid={`card-syndicate-${syndicate.id}`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <span className="text-2xl">{syndicate.icon || "⚡"}</span>
+                                <div>
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-semibold text-white">{syndicate.name}</span>
+                                    {syndicate.isChronoLinkActive && (
+                                      <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-xs">
+                                        <Link2 className="w-3 h-3 mr-1" />
+                                        Linked
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  <p className="text-xs text-slate-500">{syndicate.memberCount || 1} members • Level {syndicate.level || 1}</p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                {syndicate.shellsBonus > 0 && (
+                                  <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">
+                                    +{syndicate.shellsBonus}% Shells
+                                  </Badge>
+                                )}
+                                <ChevronRight className="w-4 h-4 text-slate-500" />
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Action Buttons */}
+                    <div className="flex flex-wrap gap-3 mb-6">
+                      {mySyndicates.length < 3 && (
+                        <>
+                          <Button 
+                            variant="outline" 
+                            className="border-amber-500/30 text-amber-400 hover:bg-amber-500/10"
+                            onClick={() => setShowCreateModal(true)}
+                            data-testid="button-create-syndicate"
+                          >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Create Syndicate
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            className="border-slate-600 text-slate-300 hover:bg-slate-700/50"
+                            onClick={() => setShowJoinCodeModal(true)}
+                            data-testid="button-join-invite"
+                          >
+                            <UserPlus className="w-4 h-4 mr-2" />
+                            Join with Code
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                    
+                    {/* Public Syndicates to Join */}
+                    {publicSyndicates.length > 0 && mySyndicates.length < 3 && (
+                      <div>
+                        <h4 className="text-sm font-semibold text-slate-300 mb-3 uppercase tracking-wider">Open Syndicates</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                          {publicSyndicates.slice(0, 4).map((syndicate: any) => (
+                            <div 
+                              key={syndicate.id}
+                              className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg border border-slate-700/50 hover:border-slate-600 transition-colors"
+                              data-testid={`card-public-syndicate-${syndicate.id}`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <span className="text-xl">{syndicate.icon || "⚡"}</span>
+                                <div>
+                                  <span className="font-medium text-white text-sm">{syndicate.name}</span>
+                                  <p className="text-xs text-slate-500">{syndicate.memberCount || 1} members</p>
+                                </div>
+                              </div>
+                              <Button 
+                                size="sm" 
+                                variant="ghost" 
+                                className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10"
+                                onClick={() => joinSyndicateMutation.mutate(syndicate.id)}
+                                disabled={joinSyndicateMutation.isPending}
+                                data-testid={`button-join-syndicate-${syndicate.id}`}
+                              >
+                                {joinSyndicateMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Join"}
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Empty State */}
+                    {mySyndicates.length === 0 && publicSyndicates.length === 0 && (
+                      <div className="text-center py-6">
+                        <Users className="w-12 h-12 text-slate-600 mx-auto mb-3" />
+                        <p className="text-slate-400 mb-2">No syndicates yet</p>
+                        <p className="text-slate-500 text-sm">Be the first to create a syndicate and lead your allies!</p>
+                      </div>
+                    )}
+                    
+                    {/* ChronoLink Bonus Info */}
+                    <div className="mt-4 p-3 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-lg border border-cyan-500/20">
+                      <div className="flex items-center gap-2 text-sm">
+                        <Link2 className="w-4 h-4 text-cyan-400" />
+                        <span className="text-cyan-400 font-medium">ChronoLink Bonus:</span>
+                        <span className="text-slate-300">Link your syndicate to ChronoChat for +5% Shells on all activities</span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </Card>
+        </motion.div>
+
         <div className="mb-8">
           <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
             <Zap className="w-5 h-5 text-purple-400" />
@@ -603,6 +941,281 @@ export default function ChroniclesHub() {
           audioMood={playerPersonality.audioMood || "calm"} 
         />
       )}
+
+      {/* Create Syndicate Modal */}
+      <AnimatePresence>
+        {showCreateModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+            onClick={() => setShowCreateModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-slate-900 border border-slate-700 rounded-xl p-6 max-w-md w-full"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-white">Create Syndicate</h2>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowCreateModal(false)}
+                  className="text-slate-400 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm text-slate-400 mb-2 block">Icon</label>
+                  <div className="flex gap-2 flex-wrap">
+                    {["⚡", "🔥", "💎", "🌟", "⚔️", "🛡️", "🎯", "🚀"].map((icon, idx) => (
+                      <button
+                        key={icon}
+                        onClick={() => setNewSyndicateIcon(icon)}
+                        data-testid={`button-icon-${idx}`}
+                        className={`w-10 h-10 rounded-lg text-xl flex items-center justify-center transition-all ${
+                          newSyndicateIcon === icon
+                            ? "bg-amber-500/30 border-2 border-amber-500"
+                            : "bg-slate-800 border border-slate-700 hover:border-slate-600"
+                        }`}
+                      >
+                        {icon}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="text-sm text-slate-400 mb-2 block">Syndicate Name</label>
+                  <Input
+                    value={newSyndicateName}
+                    onChange={e => setNewSyndicateName(e.target.value)}
+                    placeholder="Enter syndicate name..."
+                    className="bg-slate-800 border-slate-700 text-white"
+                    maxLength={50}
+                    data-testid="input-syndicate-name"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-sm text-slate-400 mb-2 block">Description (optional)</label>
+                  <Textarea
+                    value={newSyndicateDesc}
+                    onChange={e => setNewSyndicateDesc(e.target.value)}
+                    placeholder="What is your syndicate about?"
+                    className="bg-slate-800 border-slate-700 text-white resize-none"
+                    rows={3}
+                    maxLength={200}
+                    data-testid="input-syndicate-desc"
+                  />
+                </div>
+                
+                <Button
+                  onClick={() => createSyndicateMutation.mutate({
+                    name: newSyndicateName,
+                    description: newSyndicateDesc,
+                    icon: newSyndicateIcon
+                  })}
+                  disabled={!newSyndicateName.trim() || createSyndicateMutation.isPending}
+                  className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400"
+                  data-testid="button-confirm-create-syndicate"
+                >
+                  {createSyndicateMutation.isPending ? (
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  ) : (
+                    <Plus className="w-4 h-4 mr-2" />
+                  )}
+                  Create Syndicate
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Join with Code Modal */}
+      <AnimatePresence>
+        {showJoinCodeModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+            onClick={() => setShowJoinCodeModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-slate-900 border border-slate-700 rounded-xl p-6 max-w-md w-full"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-white">Join with Invite Code</h2>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowJoinCodeModal(false)}
+                  className="text-slate-400 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm text-slate-400 mb-2 block">Invite Code</label>
+                  <Input
+                    value={joinCode}
+                    onChange={e => setJoinCode(e.target.value.toUpperCase())}
+                    placeholder="Enter invite code..."
+                    className="bg-slate-800 border-slate-700 text-white font-mono text-center text-lg tracking-widest"
+                    maxLength={20}
+                    data-testid="input-join-code"
+                  />
+                  <p className="text-xs text-slate-500 mt-2">Ask a syndicate leader for their invite code</p>
+                </div>
+                
+                <Button
+                  onClick={() => joinWithCodeMutation.mutate(joinCode)}
+                  disabled={!joinCode.trim() || joinWithCodeMutation.isPending}
+                  className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400"
+                  data-testid="button-confirm-join-code"
+                >
+                  {joinWithCodeMutation.isPending ? (
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  ) : (
+                    <UserPlus className="w-4 h-4 mr-2" />
+                  )}
+                  Join Syndicate
+                </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Syndicate Management Modal */}
+      <AnimatePresence>
+        {showManageModal && selectedSyndicate && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+            onClick={() => setShowManageModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-slate-900 border border-slate-700 rounded-xl p-6 max-w-md w-full"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl">{selectedSyndicate.icon || "⚡"}</span>
+                  <div>
+                    <h2 className="text-xl font-bold text-white">{selectedSyndicate.name}</h2>
+                    <p className="text-sm text-slate-400">
+                      {selectedSyndicate.memberCount || 1} members • Level {selectedSyndicate.level || 1}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowManageModal(false)}
+                  className="text-slate-400 hover:text-white"
+                  data-testid="button-close-manage-modal"
+                >
+                  <X className="w-5 h-5" />
+                </Button>
+              </div>
+              
+              {selectedSyndicate.description && (
+                <p className="text-slate-400 text-sm mb-6 p-3 bg-slate-800/50 rounded-lg">
+                  {selectedSyndicate.description}
+                </p>
+              )}
+              
+              <div className="space-y-3">
+                {/* ChronoLink Status */}
+                {selectedSyndicate.isChronoLinkActive ? (
+                  <div className="p-3 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
+                    <div className="flex items-center gap-2 text-cyan-400 mb-1">
+                      <Link2 className="w-4 h-4" />
+                      <span className="font-medium">ChronoLink Active</span>
+                    </div>
+                    <p className="text-xs text-slate-400">+5% Shells bonus on all activities</p>
+                  </div>
+                ) : (selectedSyndicate.role === "leader" || String(selectedSyndicate.leaderId) === String(user?.id)) && (
+                  <Button
+                    onClick={() => activateChronoLinkMutation.mutate(selectedSyndicate.id)}
+                    disabled={activateChronoLinkMutation.isPending}
+                    className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400"
+                    data-testid="button-activate-chronolink"
+                  >
+                    {activateChronoLinkMutation.isPending ? (
+                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    ) : (
+                      <Link2 className="w-4 h-4 mr-2" />
+                    )}
+                    Activate ChronoLink (+5% Shells)
+                  </Button>
+                )}
+                
+                {/* Generate Invite Code (leaders/officers only) */}
+                {(selectedSyndicate.role === "leader" || selectedSyndicate.role === "officer" || String(selectedSyndicate.leaderId) === String(user?.id)) && (
+                  <Button
+                    variant="outline"
+                    onClick={() => generateInviteMutation.mutate(selectedSyndicate.id)}
+                    disabled={generateInviteMutation.isPending}
+                    className="w-full border-amber-500/30 text-amber-400 hover:bg-amber-500/10"
+                    data-testid="button-generate-invite"
+                  >
+                    {generateInviteMutation.isPending ? (
+                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    ) : (
+                      <UserPlus className="w-4 h-4 mr-2" />
+                    )}
+                    Generate Invite Code
+                  </Button>
+                )}
+                
+                {/* Leave Syndicate (non-leaders only) */}
+                {selectedSyndicate.role !== "leader" && String(selectedSyndicate.leaderId) !== String(user?.id) && (
+                  <Button
+                    variant="outline"
+                    onClick={() => leaveSyndicateMutation.mutate(selectedSyndicate.id)}
+                    disabled={leaveSyndicateMutation.isPending}
+                    className="w-full border-red-500/30 text-red-400 hover:bg-red-500/10"
+                    data-testid="button-leave-syndicate"
+                  >
+                    {leaveSyndicateMutation.isPending ? (
+                      <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    ) : null}
+                    Leave Syndicate
+                  </Button>
+                )}
+                
+                {(selectedSyndicate.role === "leader" || String(selectedSyndicate.leaderId) === String(user?.id)) && (
+                  <p className="text-xs text-slate-500 text-center">
+                    As the leader, you cannot leave. Transfer leadership first.
+                  </p>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
