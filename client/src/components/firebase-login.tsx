@@ -41,11 +41,13 @@ export function FirebaseLoginModal({ isOpen, onClose, onSuccess }: FirebaseLogin
   const handleLogin = async (provider: string, loginFn: () => Promise<any>) => {
     setLoading(provider);
     try {
-      await loginFn();
-      toast({ title: "Welcome!", description: "You've successfully signed in." });
-      onSuccess?.();
-      handleClose();
-      window.location.reload();
+      const result = await loginFn();
+      if (result) {
+        toast({ title: "Welcome!", description: "You've successfully signed in." });
+        onSuccess?.();
+        handleClose();
+        setTimeout(() => window.location.reload(), 100);
+      }
     } catch (error: any) {
       if (error.code !== 'auth/popup-closed-by-user') {
         let message = error.message || "Please try again.";
@@ -54,6 +56,7 @@ export function FirebaseLoginModal({ isOpen, onClose, onSuccess }: FirebaseLogin
         if (error.code === 'auth/email-already-in-use') message = "An account with this email already exists.";
         if (error.code === 'auth/weak-password') message = "Password should be at least 6 characters.";
         if (error.code === 'auth/invalid-email') message = "Please enter a valid email address.";
+        if (error.code === 'auth/unauthorized-domain') message = "This domain is not authorized. Please contact support.";
         toast({ title: "Sign in failed", description: message, variant: "destructive" });
       }
     } finally {
