@@ -26,16 +26,16 @@ const TECH_STACK = [
   { name: "Blockchain Layer", tech: "DarkWave Smart Chain (PoA)", status: "Live", icon: Database },
   { name: "Frontend", tech: "React 18 + TypeScript + Vite", status: "Production", icon: Code },
   { name: "Backend", tech: "Node.js + Express + PostgreSQL", status: "Production", icon: Server },
-  { name: "AI Stack", tech: "3-Tier (Deterministic + LLM + Batch)", status: "In Design", icon: Brain },
-  { name: "Graphics Target", tech: "Unreal Engine 5 / Unity", status: "Partnership Needed", icon: Cpu },
-  { name: "Networking", tech: "WebSocket + P2P Hybrid", status: "Architecture Ready", icon: Network },
+  { name: "AI Stack", tech: "GPT-4o + Guardian Verified Execution", status: "BETA v0.1 Live", icon: Brain },
+  { name: "Voice Cloning", tech: "ElevenLabs / Resemble.ai", status: "Operational", icon: Cpu },
+  { name: "Chronicle Proofs", tech: "Soulbound NFTs On-Chain", status: "Live", icon: Network },
 ];
 
 const MILESTONES = [
-  { phase: "Phase 0", name: "Foundation", period: "Q1-Q2 2026", status: "current", items: ["Core infrastructure", "Community building", "Crowdfunding"] },
-  { phase: "Phase 1", name: "Prototype", period: "Q2-Q3 2026", status: "upcoming", items: ["Single-era sandbox", "AI character system", "200 NPCs active"] },
-  { phase: "Phase 2", name: "Expansion", period: "Q4 2026", status: "upcoming", items: ["5+ eras live", "Cross-era mechanics", "Property system"] },
-  { phase: "Phase 3", name: "Public Beta", period: "July 4, 2026", status: "target", items: ["20+ eras", "Full economy", "Mobile companion"] },
+  { phase: "Season Zero", name: "BETA v0.1 (NOW)", period: "NOW - Feb 14, 2026", status: "current", items: ["Medieval Era playable", "AI NPCs live", "Chronicle Proofs", "Voice cloning", "Business storefronts"] },
+  { phase: "Phase 1", name: "Era Expansion", period: "Q1-Q2 2026", status: "upcoming", items: ["5+ eras live", "Cross-era mechanics", "Political simulation"] },
+  { phase: "Phase 2", name: "Full Scale", period: "Q3-Q4 2026", status: "upcoming", items: ["20+ eras available", "Full economy", "Mobile companion"] },
+  { phase: "Phase 3", name: "Neverending World", period: "2027+", status: "target", items: ["70+ eras", "Time travel", "Player-created content"] },
 ];
 
 const PARTNERSHIP_MODELS = [
@@ -871,9 +871,13 @@ function PartnerContent() {
             <span className="font-display font-bold text-lg tracking-tight">DarkWave Studios</span>
           </Link>
           <div className="flex items-center gap-3">
+            <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 animate-pulse">
+              <Zap className="w-3 h-3 mr-1" />
+              BETA v0.1 LIVE
+            </Badge>
             <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
               <Shield className="w-3 h-3 mr-1" />
-              Partner Access
+              Owner Portal
             </Badge>
           </div>
         </div>
@@ -893,10 +897,16 @@ function PartnerContent() {
               animate={{ opacity: 1, y: 0 }}
               className="text-center"
             >
-              <Badge className="mb-6 px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-500/30 text-white backdrop-blur-sm">
-                <Sparkles className="w-4 h-4 mr-2" />
-                Confidential Partner Materials
-              </Badge>
+              <div className="flex flex-wrap justify-center gap-2 mb-6">
+                <Badge className="px-4 py-2 bg-gradient-to-r from-amber-500/30 to-orange-500/30 border-amber-500/50 text-amber-400 backdrop-blur-sm animate-pulse">
+                  <Zap className="w-4 h-4 mr-2" />
+                  SEASON ZERO LIVE - BETA v0.1
+                </Badge>
+                <Badge className="px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-500/30 text-white backdrop-blur-sm">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Owner & Developer Portal
+                </Badge>
+              </div>
               
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-black mb-6">
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
