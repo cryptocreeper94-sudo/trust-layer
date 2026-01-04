@@ -274,6 +274,7 @@ function EraCarousel({ eras }: { eras: Era[] }) {
             onClick={() => setCurrentIndex(Math.max(0, currentIndex - 1))}
             disabled={currentIndex === 0}
             className="border-white/10 text-white hover:bg-white/10"
+            data-testid="button-era-carousel-prev"
           >
             <ChevronRight className="w-4 h-4 rotate-180" />
           </Button>
@@ -283,6 +284,7 @@ function EraCarousel({ eras }: { eras: Era[] }) {
             onClick={() => setCurrentIndex(Math.min(eras.length - 1, currentIndex + 1))}
             disabled={currentIndex === eras.length - 1}
             className="border-white/10 text-white hover:bg-white/10"
+            data-testid="button-era-carousel-next"
           >
             <ChevronRight className="w-4 h-4" />
           </Button>
@@ -326,10 +328,10 @@ function EraCarousel({ eras }: { eras: Era[] }) {
               </div>
               
               <div className="mt-3 flex gap-2">
-                <Button size="sm" className="flex-1 bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 border border-amber-500/30">
+                <Button size="sm" className="flex-1 bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 border border-amber-500/30" data-testid={`button-edit-era-${era.code}`}>
                   <Edit3 className="w-3 h-3 mr-1" /> Edit
                 </Button>
-                <Button size="sm" variant="outline" className="border-white/10 text-white hover:bg-white/10">
+                <Button size="sm" variant="outline" className="border-white/10 text-white hover:bg-white/10" data-testid={`button-settings-era-${era.code}`}>
                   <Settings className="w-3 h-3" />
                 </Button>
               </div>
@@ -450,7 +452,8 @@ function AdminDashboard() {
               variant="outline"
               size="sm"
               className="border-white/10 text-white hover:bg-white/10"
-              onClick={() => sessionStorage.removeItem("chroniclesAdminToken")}
+              onClick={() => { sessionStorage.removeItem("chroniclesAdminToken"); window.location.reload(); }}
+              data-testid="button-lock-portal"
             >
               <Lock className="w-4 h-4 mr-2" />
               Lock Portal
@@ -536,10 +539,10 @@ function AdminDashboard() {
                     </div>
                   </div>
                   <div className="mt-4 flex gap-2">
-                    <Button className="bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/30 border border-cyan-500/30">
+                    <Button className="bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/30 border border-cyan-500/30" data-testid="button-add-npc">
                       <Plus className="w-4 h-4 mr-2" /> Add NPC
                     </Button>
-                    <Button variant="outline" className="border-white/10 text-white hover:bg-white/10">
+                    <Button variant="outline" className="border-white/10 text-white hover:bg-white/10" data-testid="button-ai-settings">
                       <Settings className="w-4 h-4 mr-2" /> AI Settings
                     </Button>
                   </div>
@@ -569,7 +572,7 @@ function AdminDashboard() {
                       </div>
                     ))}
                   </div>
-                  <Button className="w-full mt-4 bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 border border-amber-500/30">
+                  <Button className="w-full mt-4 bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 border border-amber-500/30" data-testid="button-register-storefront">
                     <Plus className="w-4 h-4 mr-2" /> Register New Storefront
                   </Button>
                 </AccordionSection>
@@ -691,16 +694,16 @@ function AdminDashboard() {
                   <h3 className="font-semibold text-white">Quick Actions</h3>
                 </div>
                 <div className="space-y-2">
-                  <Button className="w-full justify-start bg-slate-800/50 hover:bg-slate-700/50 text-white border border-white/10">
+                  <Button className="w-full justify-start bg-slate-800/50 hover:bg-slate-700/50 text-white border border-white/10" data-testid="button-create-era">
                     <Plus className="w-4 h-4 mr-2 text-amber-400" /> Create New Era
                   </Button>
-                  <Button className="w-full justify-start bg-slate-800/50 hover:bg-slate-700/50 text-white border border-white/10">
+                  <Button className="w-full justify-start bg-slate-800/50 hover:bg-slate-700/50 text-white border border-white/10" data-testid="button-add-npc-character">
                     <Users className="w-4 h-4 mr-2 text-cyan-400" /> Add NPC Character
                   </Button>
-                  <Button className="w-full justify-start bg-slate-800/50 hover:bg-slate-700/50 text-white border border-white/10">
+                  <Button className="w-full justify-start bg-slate-800/50 hover:bg-slate-700/50 text-white border border-white/10" data-testid="button-new-chronicle-proof">
                     <Award className="w-4 h-4 mr-2 text-purple-400" /> New Chronicle Proof
                   </Button>
-                  <Button className="w-full justify-start bg-slate-800/50 hover:bg-slate-700/50 text-white border border-white/10">
+                  <Button className="w-full justify-start bg-slate-800/50 hover:bg-slate-700/50 text-white border border-white/10" data-testid="button-sync-data">
                     <RefreshCw className="w-4 h-4 mr-2 text-emerald-400" /> Sync All Data
                   </Button>
                 </div>
