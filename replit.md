@@ -76,6 +76,11 @@ Full arcade with classic games: Tetris, Pacman, Snake, Solitaire, Spades, Minesw
 - **Security**: Helmet.js, CORS, AES-256-GCM, HMAC-SHA256, timing-safe comparisons
 - **Authentication**: Firebase Auth with Google OAuth configured
 
+## Chronicles Beta Status
+- **Chronicles Authentication**: Standalone auth system (separate from DWSC) using PBKDF2 password hashing (100K iterations, SHA-512). Login at `/chronicles/login`.
+- **Status**: BETA - data is persistent but some features are still in development
+- **Upcoming Features**: Password recovery (coming soon)
+
 ## External Dependencies
 - **Database**: PostgreSQL (193 tables)
 - **Authentication**: Firebase Auth, WebAuthn/Passkeys
