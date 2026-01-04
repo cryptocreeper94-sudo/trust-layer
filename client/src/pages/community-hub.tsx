@@ -13,7 +13,6 @@ import {
 import { BackButton } from "@/components/page-nav";
 import { useUpload } from "@/hooks/use-upload";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
-import { signInWithGoogle, signOut } from "@/lib/firebase";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -418,12 +417,13 @@ export default function CommunityHub() {
     }
   };
 
-  const { user, loading: authLoading, isAuthenticated } = useSimpleAuth();
+  const { user, loading: authLoading, isAuthenticated, logout } = useSimpleAuth();
   
   const firebaseUser = user ? {
     id: user.id,
     claims: { sub: user.id },
-    firstName: user.displayName || user.email?.split('@')[0] || 'User',
+    firstName: user.displayName || user.username || user.email?.split('@')[0] || 'User',
+    username: user.username || user.displayName || user.email?.split('@')[0] || 'User',
     photoURL: user.profileImageUrl,
   } : null;
 
@@ -704,17 +704,17 @@ export default function CommunityHub() {
               <Button 
                 size="sm" 
                 className="bg-cyan-500 hover:bg-cyan-600"
-                onClick={() => signInWithGoogle()}
+                onClick={() => window.location.href = '/?login=true'}
                 disabled={authLoading}
               >
-                {authLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Sign In with Google"}
+                {authLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Sign In"}
               </Button>
             ) : (
               <Button 
                 size="sm" 
                 variant="ghost"
                 className="text-gray-400 hover:text-white"
-                onClick={() => signOut()}
+                onClick={() => logout()}
               >
                 <LogOut className="w-4 h-4 mr-1" />
                 Sign Out
@@ -1401,13 +1401,13 @@ export default function CommunityHub() {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-400">Signed in as</span>
-                    <span className="text-white">{firebaseUser?.firstName}</span>
+                    <span className="text-white">{firebaseUser?.firstName || firebaseUser?.username}</span>
                   </div>
                   <Button 
                     variant="outline" 
                     size="sm" 
                     className="w-full border-red-500/30 text-red-400 hover:bg-red-500/10"
-                    onClick={() => { signOut(); setSettingsOpen(false); }}
+                    onClick={() => { logout(); setSettingsOpen(false); }}
                   >
                     <LogOut className="w-4 h-4 mr-2" />
                     Sign Out
@@ -1417,9 +1417,9 @@ export default function CommunityHub() {
                 <Button 
                   size="sm" 
                   className="w-full bg-cyan-500 hover:bg-cyan-600"
-                  onClick={() => { signInWithGoogle(); setSettingsOpen(false); }}
+                  onClick={() => { window.location.href = '/?login=true'; setSettingsOpen(false); }}
                 >
-                  Sign In with Google
+                  Sign In
                 </Button>
               )}
             </div>

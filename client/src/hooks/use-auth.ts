@@ -1,7 +1,5 @@
-import { useState, useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { type User as FirebaseUser } from "firebase/auth";
-import { onAuthChange, signOut as firebaseSignOut, auth } from "@/lib/firebase";
+import { useState, useEffect, useCallback } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface User {
   id: string;
@@ -14,56 +12,50 @@ interface User {
 }
 
 export async function getAuthToken(): Promise<string | null> {
-  const currentUser = auth.currentUser;
-  if (!currentUser) return null;
-  return currentUser.getIdToken();
+  return null;
 }
 
 export function useAuth() {
   const queryClient = useQueryClient();
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  useEffect(() => {
-    const unsubscribe = onAuthChange(async (firebaseUser: FirebaseUser | null) => {
-      if (firebaseUser) {
-        // Map Firebase user to our User type
-        setUser({
-          id: firebaseUser.uid,
-          email: firebaseUser.email,
-          displayName: firebaseUser.displayName,
-          firstName: firebaseUser.displayName?.split(' ')[0] || null,
-          lastName: firebaseUser.displayName?.split(' ').slice(1).join(' ') || null,
-          profileImageUrl: firebaseUser.photoURL,
-          username: firebaseUser.email?.split('@')[0] || null,
-        });
-      } else {
-        setUser(null);
-      }
-      setIsLoading(false);
-    });
+  const { data: user, isLoading, refetch } = useQuery({
+    queryKey: ["auth-user"],
+    queryFn: async () => {
+      const response = await fetch("/api/auth/me");
+      const data = await response.json();
+      if (!data.user) return null;
+      return {
+        id: data.user.id,
+        email: data.user.email,
+        displayName: data.user.displayName || data.user.username,
+        firstName: data.user.displayName?.split(' ')[0] || data.user.username || null,
+        lastName: data.user.displayName?.split(' ').slice(1).join(' ') || null,
+        profileImageUrl: data.user.profileImageUrl,
+        username: data.user.username || data.user.email?.split('@')[0] || null,
+      } as User;
+    },
+    staleTime: 30000,
+  });
 
-    return () => unsubscribe();
-  }, []);
-
-  const logout = async () => {
+  const logout = useCallback(async () => {
     setIsLoggingOut(true);
     try {
-      await firebaseSignOut();
+      await fetch("/api/auth/logout", { method: "POST" });
       queryClient.clear();
-      setUser(null);
+      window.location.href = "/";
     } finally {
       setIsLoggingOut(false);
     }
-  };
+  }, [queryClient]);
 
   return {
-    user,
+    user: user || null,
     isLoading,
     isAuthenticated: !!user,
     logout,
     isLoggingOut,
     getAuthToken,
+    refetch,
   };
 }
