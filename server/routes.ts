@@ -5,132 +5,66 @@ import QRCode from "qrcode";
 import { WebSocketServer, WebSocket } from "ws";
 import { setupCommunityWebSocket } from "./community-ws";
 import { z } from "zod";
-import admin from "firebase-admin";
 import { storage } from "./storage";
 import { db } from "./db";
 
-// Initialize Firebase Admin SDK with service account
-let firebaseAdminInitialized = false;
-function initializeFirebaseAdmin() {
-  if (firebaseAdminInitialized) return;
-  
-  try {
-    let serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT;
-    if (!serviceAccountJson) {
-      console.warn("[Firebase Admin] FIREBASE_SERVICE_ACCOUNT not set - token revocation checking disabled");
-      return;
-    }
-    
-    // Clean up common copy/paste issues
-    // Remove BOM if present
-    serviceAccountJson = serviceAccountJson.replace(/^\uFEFF/, '');
-    // Trim whitespace
-    serviceAccountJson = serviceAccountJson.trim();
-    // Handle if wrapped in extra quotes (double-encoded)
-    if (serviceAccountJson.startsWith('"') && serviceAccountJson.endsWith('"')) {
-      try {
-        serviceAccountJson = JSON.parse(serviceAccountJson);
-      } catch (e) {
-        // Not double-encoded, continue
-      }
-    }
-    // Handle escaped newlines in private key
-    if (typeof serviceAccountJson === 'string') {
-      serviceAccountJson = serviceAccountJson.replace(/\\\\n/g, '\\n');
-    }
-    // Handle missing opening brace (common copy/paste error)
-    if (typeof serviceAccountJson === 'string' && !serviceAccountJson.startsWith('{') && serviceAccountJson.includes('"type"')) {
-      serviceAccountJson = '{' + serviceAccountJson;
-    }
-    // Handle missing closing brace
-    if (typeof serviceAccountJson === 'string' && !serviceAccountJson.endsWith('}') && serviceAccountJson.includes('"type"')) {
-      serviceAccountJson = serviceAccountJson + '}';
-    }
-    
-    console.log("[Firebase Admin] Parsing service account, first 50 chars:", 
-      typeof serviceAccountJson === 'string' ? serviceAccountJson.substring(0, 50) : 'object');
-    
-    const serviceAccount = typeof serviceAccountJson === 'string' 
-      ? JSON.parse(serviceAccountJson) 
-      : serviceAccountJson;
-    
-    if (!serviceAccount.project_id || !serviceAccount.private_key) {
-      console.error("[Firebase Admin] Invalid service account - missing project_id or private_key");
-      return;
-    }
-    
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-    });
-    
-    firebaseAdminInitialized = true;
-    console.log("[Firebase Admin] Initialized with service account for project:", serviceAccount.project_id);
-  } catch (error) {
-    console.error("[Firebase Admin] Failed to initialize:", error);
-    console.error("[Firebase Admin] Check that FIREBASE_SERVICE_ACCOUNT contains valid JSON");
-  }
+// Auth request interface for session-based authentication
+interface AuthenticatedRequest extends Request {
+  user?: { id: string; email: string | null; claims: { sub: string } };
+  firebaseUser?: { uid: string; email?: string }; // Legacy compatibility
 }
 
-// Initialize on module load
-initializeFirebaseAdmin();
-
-interface FirebaseAuthRequest extends Request {
-  firebaseUser?: { uid: string; email?: string };
-}
-
-// Unified Firebase authentication middleware using Firebase Admin SDK
-// Validates tokens with revocation checking enabled for security
+// Unified authentication middleware - prioritizes session-based auth
+// Falls back to token auth for backwards compatibility during migration
 async function isAuthenticated(req: any, res: Response, next: NextFunction) {
   try {
+    // Priority 1: Check session-based authentication (our custom auth system)
+    const sessionUserId = (req.session as any)?.userId;
+    if (sessionUserId) {
+      const user = await storage.getUser(sessionUserId);
+      if (user) {
+        req.user = { 
+          claims: { sub: user.id },
+          id: user.id,
+          email: user.email 
+        };
+        req.firebaseUser = { uid: user.id, email: user.email || undefined };
+        return next();
+      }
+    }
+    
+    // Priority 2: Check Bearer token (legacy support during migration)
     const authHeader = req.headers.authorization;
-    if (!authHeader?.startsWith('Bearer ')) {
-      return res.status(401).json({ error: "Authentication required" });
-    }
-    
-    const idToken = authHeader.substring(7);
-    
-    if (firebaseAdminInitialized) {
-      // Use Firebase Admin SDK with revocation checking
-      const decodedToken = await admin.auth().verifyIdToken(idToken, true);
+    if (authHeader?.startsWith('Bearer ')) {
+      const idToken = authHeader.substring(7);
       
-      req.user = { 
-        claims: { sub: decodedToken.uid },
-        id: decodedToken.uid,
-        email: decodedToken.email 
-      };
-      req.firebaseUser = { uid: decodedToken.uid, email: decodedToken.email };
-      next();
-    } else {
-      // Fallback: verify token structure without revocation check
-      // This is less secure but allows the app to function without service account
+      // Parse token to get user ID and look up in our database
       const parts = idToken.split('.');
-      if (parts.length !== 3) {
-        return res.status(401).json({ error: "Authentication required" });
+      if (parts.length === 3) {
+        try {
+          const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
+          if (payload.sub) {
+            // Look up user in our database
+            const user = await storage.getUser(payload.sub);
+            if (user) {
+              req.user = { 
+                claims: { sub: user.id },
+                id: user.id,
+                email: user.email 
+              };
+              req.firebaseUser = { uid: user.id, email: user.email || undefined };
+              return next();
+            }
+          }
+        } catch (parseError) {
+          // Token parsing failed, continue to reject
+        }
       }
-      
-      const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
-      const now = Math.floor(Date.now() / 1000);
-      
-      if (!payload.sub || !payload.exp || payload.exp < now) {
-        return res.status(401).json({ error: "Authentication required" });
-      }
-      
-      req.user = { 
-        claims: { sub: payload.sub },
-        id: payload.sub,
-        email: payload.email 
-      };
-      req.firebaseUser = { uid: payload.sub, email: payload.email };
-      next();
     }
+    
+    return res.status(401).json({ error: "Authentication required" });
   } catch (error: any) {
-    if (error.code === 'auth/id-token-revoked') {
-      console.log("Token has been revoked");
-    } else if (error.code === 'auth/user-disabled') {
-      console.log("User account has been disabled");
-    } else {
-      console.error("Firebase auth failed:", error.message || error);
-    }
+    console.error("Auth middleware error:", error.message || error);
     return res.status(401).json({ error: "Authentication required" });
   }
 }
