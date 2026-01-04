@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart, Gamepad2, Star, Zap, Globe, ChevronDown, ChevronRight, Layers, Gift, Users, LogIn, User } from "lucide-react";
+import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, ArrowRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart, Gamepad2, Star, Zap, Globe, ChevronDown, ChevronRight, Layers, Gift, Users, LogIn, User } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,7 +12,7 @@ import crowdfundImg from "@assets/generated_images/futuristic_blockchain_network
 import presaleImg from "@assets/generated_images/darkwave_crypto_token_coin_holographic.png";
 
 const featuredItems = [
-  { href: "https://yourlegacy.io", label: "DarkWave Chronicles", icon: Gamepad2, badge: "Game", image: chroniclesImg, overlayGradient: "linear-gradient(135deg, rgba(168,85,247,0.85) 0%, rgba(236,72,153,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#a855f7, #ec4899", badgeClass: "bg-purple-500/30 text-purple-300", description: "Live Your Legacy", external: true },
+  { href: "/chronicles", label: "DarkWave Chronicles", icon: Gamepad2, badge: "BETA LIVE", image: chroniclesImg, overlayGradient: "linear-gradient(135deg, rgba(168,85,247,0.85) 0%, rgba(236,72,153,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#a855f7, #ec4899", badgeClass: "bg-green-500/30 text-green-300 animate-pulse", description: "Season Zero Live Now!", external: false },
   { href: "/crowdfund", label: "Fund Development", icon: Heart, badge: "Support", image: crowdfundImg, overlayGradient: "linear-gradient(135deg, rgba(6,182,212,0.85) 0%, rgba(59,130,246,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#06b6d4, #3b82f6", badgeClass: "bg-cyan-500/30 text-cyan-300", description: "Help Build the Future", external: false },
   { href: "/presale", label: "Token Presale", icon: Coins, badge: "Live", image: presaleImg, overlayGradient: "linear-gradient(135deg, rgba(245,158,11,0.85) 0%, rgba(239,68,68,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#f59e0b, #ef4444", badgeClass: "bg-amber-500/30 text-amber-300", description: "Get DWC at Best Price", external: false },
 ];
@@ -519,6 +519,68 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
             </button>
           )}
         </div>
+
+        {/* Chronicles CTA - Top of Menu */}
+        <Link href="/chronicles" style={{ textDecoration: 'none' }}>
+          <div
+            onClick={onClose}
+            style={{
+              marginBottom: '16px',
+              padding: '16px',
+              borderRadius: '16px',
+              background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(236, 72, 153, 0.3) 100%)',
+              border: '1px solid rgba(168, 85, 247, 0.4)',
+              cursor: 'pointer',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+            data-testid="button-chronicles-top-menu"
+          >
+            <div style={{
+              position: 'absolute',
+              top: '-50%',
+              left: '-50%',
+              right: '-50%',
+              bottom: '-50%',
+              background: 'radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 70%)',
+              animation: 'pulse 2s infinite',
+            }} />
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{
+                width: '48px',
+                height: '48px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #a855f7, #ec4899)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+                <Gamepad2 style={{ width: '24px', height: '24px', color: '#fff' }} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                  <span style={{ fontSize: '16px', fontWeight: 700, color: '#fff' }}>DarkWave Chronicles</span>
+                  <span style={{
+                    padding: '2px 8px',
+                    borderRadius: '12px',
+                    background: 'rgba(34, 197, 94, 0.2)',
+                    color: '#22c55e',
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                  }}>
+                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', animation: 'pulse 1s infinite' }} />
+                    LIVE
+                  </span>
+                </div>
+                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>Season Zero Beta - Play Now!</span>
+              </div>
+              <ArrowRight style={{ width: '20px', height: '20px', color: 'rgba(255,255,255,0.6)' }} />
+            </div>
+          </div>
+        </Link>
 
         {/* Social Links */}
         <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginBottom: '20px', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>

@@ -422,6 +422,27 @@ export default function Home() {
               </Link>
             </div>
 
+            <Link href="/chronicles">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.8 }}
+                whileHover={{ scale: 1.02 }}
+                className="mt-6 px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-600/30 via-pink-600/30 to-purple-600/30 border border-purple-500/40 backdrop-blur-sm cursor-pointer group"
+                data-testid="banner-chronicles-live"
+              >
+                <div className="flex items-center justify-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">LIVE NOW</Badge>
+                  </div>
+                  <span className="text-white font-bold text-sm md:text-base">Chronicles Season Zero Beta</span>
+                  <Sparkles className="w-4 h-4 text-purple-400 group-hover:text-pink-400 transition-colors" />
+                </div>
+                <p className="text-xs text-white/60 text-center mt-1">Play the parallel life simulation - Begin your legacy today</p>
+              </motion.div>
+            </Link>
+
             <div className="flex items-center justify-center gap-4 pt-4">
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
                 <svg viewBox="0 0 24 24" className="w-4 h-4 text-white/60" fill="currentColor">
