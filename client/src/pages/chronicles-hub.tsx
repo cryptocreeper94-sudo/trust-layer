@@ -687,7 +687,7 @@ export default function ChroniclesHub() {
                         const playerEra = (portalData?.playerEras || []).find((pe: any) => pe.eraCode === era.code);
                         const isUnlocked = era.isStartingEra || playerEra?.isUnlocked;
                         const isCurrent = portalData?.portal?.currentEraCode === era.code;
-                        const artifactsForEra = (portalData?.collectedArtifacts || []).length;
+                        const artifactsForEra = (portalData?.collectedArtifacts || []).filter((a: any) => a.eraCode === era.code).length;
                         
                         return (
                           <motion.div
@@ -725,18 +725,10 @@ export default function ChroniclesHub() {
                                 <p className="text-xs text-slate-400 mb-2">
                                   {era.timePeriod}
                                 </p>
-                                {!isUnlocked && (
-                                  <div className="flex items-center gap-2 text-xs text-slate-500">
-                                    <Lock className="w-3 h-3" />
-                                    <span>Collect {era.artifactsRequired} artifacts to unlock</span>
-                                  </div>
-                                )}
-                                {isUnlocked && !era.isStartingEra && (
-                                  <div className="flex items-center gap-2 text-xs text-green-400">
-                                    <Gem className="w-3 h-3" />
-                                    <span>Unlocked!</span>
-                                  </div>
-                                )}
+                                <div className={`flex items-center gap-2 text-xs ${isUnlocked ? "text-green-400" : "text-slate-500"}`}>
+                                  {isUnlocked ? <Gem className="w-3 h-3" /> : <Lock className="w-3 h-3" />}
+                                  <span>{artifactsForEra}/{era.artifactsRequired} artifacts</span>
+                                </div>
                               </div>
                             </div>
                           </motion.div>
