@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { 
   ChevronRight, ChevronLeft, User, Sparkles, Shield, Brain,
-  Heart, Compass, Eye, Crown, Scroll, Check, Loader2
+  Heart, Compass, Eye, Crown, Scroll, Check, Loader2, MessageCircle, Users
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -722,6 +722,30 @@ export default function ChroniclesOnboarding() {
                   <Badge variant="outline" className="border-amber-500/50 text-amber-400 mb-6">
                     Season Zero - More Features Coming Soon
                   </Badge>
+                  
+                  {/* ChronoLink Introduction */}
+                  <Card className="bg-gradient-to-r from-purple-900/30 to-cyan-900/30 border-purple-500/30 p-4 max-w-md mx-auto mb-6">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500/30 to-cyan-500/30 flex items-center justify-center">
+                        <MessageCircle className="w-5 h-5 text-cyan-400" />
+                      </div>
+                      <div className="text-left">
+                        <h4 className="font-semibold text-white">Activate ChronoLink</h4>
+                        <p className="text-xs text-slate-400">Connect with fellow travelers</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-slate-400 text-left mb-3">
+                      Your journey doesn't have to be alone. Join ChronoChat to meet other explorers, share discoveries, and earn bonus Shells.
+                    </p>
+                    <Button
+                      data-testid="button-chronolink"
+                      onClick={() => setLocation("/chronochat")}
+                      className="w-full bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500"
+                    >
+                      <Users className="w-4 h-4 mr-2" />
+                      Enter ChronoChat
+                    </Button>
+                  </Card>
                   
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <Button

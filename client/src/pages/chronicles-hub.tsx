@@ -382,6 +382,88 @@ export default function ChroniclesHub() {
           </Card>
         </div>
 
+        {/* ChronoLink - Communication Hub CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="mb-8"
+        >
+          <Card className="relative overflow-hidden bg-gradient-to-r from-purple-900/40 via-cyan-900/30 to-purple-900/40 border-purple-500/30 p-6">
+            {/* Animated glow effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-500/5 to-transparent animate-pulse" />
+            
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="flex items-center gap-4">
+                <motion.div 
+                  animate={{ 
+                    boxShadow: ["0 0 20px rgba(168,85,247,0.3)", "0 0 40px rgba(6,182,212,0.5)", "0 0 20px rgba(168,85,247,0.3)"]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="w-16 h-16 rounded-full bg-gradient-to-r from-purple-500/30 to-cyan-500/30 flex items-center justify-center border border-purple-500/30"
+                >
+                  <MessageCircle className="w-8 h-8 text-cyan-400" />
+                </motion.div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs">
+                      NEW
+                    </Badge>
+                    <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-xs">
+                      Season Zero
+                    </Badge>
+                  </div>
+                  <h3 className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                    Activate ChronoLink
+                  </h3>
+                  <p className="text-slate-400 text-sm mt-1">
+                    Connect with other travelers across the timelines. Share discoveries, form alliances, and shape the future together.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row items-center gap-3">
+                <div className="text-center sm:text-right mr-2">
+                  <div className="text-xs text-slate-500 uppercase tracking-wider">Community Hub</div>
+                  <div className="text-lg font-bold text-white">ChronoChat</div>
+                </div>
+                <Link href="/chronochat">
+                  <Button 
+                    className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white px-6 py-3 text-lg font-semibold shadow-lg shadow-purple-500/20"
+                    data-testid="button-activate-chronolink"
+                  >
+                    <MessageCircle className="mr-2 w-5 h-5" />
+                    Enter ChronoChat
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            
+            {/* Feature highlights */}
+            <div className="relative z-10 mt-6 pt-4 border-t border-slate-700/50">
+              <div className="flex flex-wrap justify-center gap-4 text-xs">
+                <div className="flex items-center gap-2 text-slate-400">
+                  <Users className="w-4 h-4 text-purple-400" />
+                  <span>Join Communities</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-400">
+                  <Sparkles className="w-4 h-4 text-cyan-400" />
+                  <span>Real-Time Chat</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-400">
+                  <Shield className="w-4 h-4 text-green-400" />
+                  <span>Private Channels</span>
+                </div>
+                <div className="flex items-center gap-2 text-slate-400">
+                  <Crown className="w-4 h-4 text-amber-400" />
+                  <span>Earn Shells</span>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </motion.div>
+
         <div className="mb-8">
           <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
             <Zap className="w-5 h-5 text-purple-400" />
