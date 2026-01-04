@@ -237,12 +237,20 @@ export default function ChroniclesLogin() {
               </div>
 
               <AnimatePresence mode="wait">
-                <motion.div
+                <motion.form
                   key={mode}
                   initial={{ opacity: 0, x: mode === "login" ? -20 : 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: mode === "login" ? 20 : -20 }}
                   transition={{ duration: 0.2 }}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (mode === "login") {
+                      handleLogin();
+                    } else {
+                      handleSignup();
+                    }
+                  }}
                 >
                   <div className="space-y-4">
                     <div>
@@ -336,7 +344,7 @@ export default function ChroniclesLogin() {
                     )}
 
                     <Button
-                      onClick={mode === "login" ? handleLogin : handleSignup}
+                      type="submit"
                       disabled={isLoading}
                       className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-6"
                       data-testid="button-submit"
@@ -355,7 +363,7 @@ export default function ChroniclesLogin() {
                       )}
                     </Button>
                   </div>
-                </motion.div>
+                </motion.form>
               </AnimatePresence>
             </div>
 
