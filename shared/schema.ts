@@ -4801,3 +4801,164 @@ export const insertChronicleSeasonSchema = createInsertSchema(chronicleSeasons).
   id: true, createdAt: true
 });
 export type ChronicleSeason = typeof chronicleSeasons.$inferSelect;
+
+// =====================================================
+// CHRONICLES ADMIN PORTAL TABLES
+// For game owner/developer management
+// =====================================================
+
+// Era configurations managed by admin
+export const chronicleEraConfigs = pgTable("chronicle_era_configs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  code: text("code").notNull().unique(), // 'medieval', 'renaissance', etc.
+  name: text("name").notNull(),
+  subtitle: text("subtitle"),
+  description: text("description").notNull(),
+  
+  timelineOrder: integer("timeline_order").notNull().default(0),
+  status: text("status").notNull().default("draft"), // 'draft', 'beta', 'live', 'archived'
+  
+  narrativeHook: text("narrative_hook"),
+  primaryConflict: text("primary_conflict"),
+  
+  // Game settings
+  difficulty: integer("difficulty").notNull().default(3), // 1-5
+  economyMultiplier: text("economy_multiplier").notNull().default("1.0"),
+  maxStorefronts: integer("max_storefronts").notNull().default(50),
+  
+  // AI settings
+  aiPresetId: varchar("ai_preset_id"),
+  voiceStyle: text("voice_style").default("period_appropriate"),
+  
+  // Visual
+  thumbnailUrl: text("thumbnail_url"),
+  bannerUrl: text("banner_url"),
+  colorPrimary: text("color_primary").default("#06b6d4"),
+  colorSecondary: text("color_secondary").default("#8b5cf6"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChronicleEraConfigSchema = createInsertSchema(chronicleEraConfigs).omit({
+  id: true, createdAt: true, updatedAt: true
+});
+export type ChronicleEraConfig = typeof chronicleEraConfigs.$inferSelect;
+export type InsertChronicleEraConfig = z.infer<typeof insertChronicleEraConfigSchema>;
+
+// Business storefronts - real businesses claiming in-game real estate
+export const chronicleStorefronts = pgTable("chronicle_storefronts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  businessName: text("business_name").notNull(),
+  businessType: text("business_type").notNull(), // 'tavern', 'trading_post', 'guild_hall', etc.
+  ownerName: text("owner_name").notNull(),
+  ownerEmail: text("owner_email").notNull(),
+  ownerWallet: text("owner_wallet"),
+  
+  eraCode: text("era_code").notNull(), // which era this storefront is in
+  locationSlug: text("location_slug").notNull(), // 'kings_market_stall_01'
+  locationName: text("location_name").notNull(),
+  
+  description: text("description"),
+  websiteUrl: text("website_url"),
+  
+  status: text("status").notNull().default("pending"), // 'pending', 'approved', 'active', 'suspended'
+  
+  // Blockchain verification
+  onChainProofId: varchar("on_chain_proof_id"),
+  verifiedAt: timestamp("verified_at"),
+  
+  // Lease terms
+  leaseStartDate: timestamp("lease_start_date"),
+  leaseEndDate: timestamp("lease_end_date"),
+  shellsMonthly: text("shells_monthly").default("0"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChronicleStorefrontSchema = createInsertSchema(chronicleStorefronts).omit({
+  id: true, createdAt: true, updatedAt: true, verifiedAt: true
+});
+export type ChronicleStorefront = typeof chronicleStorefronts.$inferSelect;
+export type InsertChronicleStorefront = z.infer<typeof insertChronicleStorefrontSchema>;
+
+// Voice cloning configuration
+export const chronicleVoiceConfigs = pgTable("chronicle_voice_configs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  name: text("name").notNull(),
+  provider: text("provider").notNull().default("elevenlabs"), // 'elevenlabs', 'resemble', 'custom'
+  modelId: text("model_id"),
+  voiceId: text("voice_id"),
+  
+  defaultStyle: text("default_style").default("narrative"),
+  pitch: text("pitch").default("1.0"),
+  speed: text("speed").default("1.0"),
+  stability: text("stability").default("0.5"),
+  
+  isDefault: boolean("is_default").notNull().default(false),
+  isActive: boolean("is_active").notNull().default(true),
+  
+  usageCount: integer("usage_count").notNull().default(0),
+  lastUsedAt: timestamp("last_used_at"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChronicleVoiceConfigSchema = createInsertSchema(chronicleVoiceConfigs).omit({
+  id: true, createdAt: true, updatedAt: true, lastUsedAt: true
+});
+export type ChronicleVoiceConfig = typeof chronicleVoiceConfigs.$inferSelect;
+export type InsertChronicleVoiceConfig = z.infer<typeof insertChronicleVoiceConfigSchema>;
+
+// Admin game settings - global configuration
+export const chronicleAdminSettings = pgTable("chronicle_admin_settings", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  key: text("key").notNull().unique(),
+  value: text("value").notNull(),
+  category: text("category").notNull().default("general"), // 'general', 'ai', 'economy', 'display'
+  description: text("description"),
+  
+  updatedBy: text("updated_by"),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChronicleAdminSettingSchema = createInsertSchema(chronicleAdminSettings).omit({
+  id: true, updatedAt: true
+});
+export type ChronicleAdminSetting = typeof chronicleAdminSettings.$inferSelect;
+export type InsertChronicleAdminSetting = z.infer<typeof insertChronicleAdminSettingSchema>;
+
+// Chronicle Proof templates managed by admin
+export const chronicleProofTemplates = pgTable("chronicle_proof_templates", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  
+  eraCode: text("era_code"), // null = available in all eras
+  proofType: text("proof_type").notNull(), // 'decision', 'achievement', 'relationship', 'discovery'
+  
+  rewardType: text("reward_type").notNull().default("shells"), // 'shells', 'dwc', 'nft', 'badge'
+  rewardAmount: text("reward_amount").notNull().default("0"),
+  
+  requirements: text("requirements"), // JSON of conditions
+  
+  isSeasonal: boolean("is_seasonal").notNull().default(false),
+  isActive: boolean("is_active").notNull().default(true),
+  
+  timesAwarded: integer("times_awarded").notNull().default(0),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChronicleProofTemplateSchema = createInsertSchema(chronicleProofTemplates).omit({
+  id: true, createdAt: true, updatedAt: true
+});
+export type ChronicleProofTemplate = typeof chronicleProofTemplates.$inferSelect;
+export type InsertChronicleProofTemplate = z.infer<typeof insertChronicleProofTemplateSchema>;

@@ -134,6 +134,7 @@ import Achievements from "@/pages/achievements";
 import Domains from "@/pages/domains";
 import DomainManager from "@/pages/domain-manager";
 import PartnerPortal from "@/pages/partner-portal";
+import ChroniclesAdmin from "@/pages/chronicles-admin";
 import Tokenomics from "@/pages/tokenomics";
 import FAQ from "@/pages/faq";
 import CompetitiveAnalysis from "@/pages/competitive-analysis";
@@ -324,6 +325,7 @@ function DWSCRouter() {
         <Route path="/owner-admin/domains" component={OwnerDomains} />
         <Route path="/owner-admin/faucet" component={OwnerFaucet} />
         <Route path="/owner-admin/kyc" component={OwnerKyc} />
+        <Route path="/chronicles-admin" component={ChroniclesAdmin} />
         <Route path="/terms" component={Terms} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/error" component={ErrorPage} />
