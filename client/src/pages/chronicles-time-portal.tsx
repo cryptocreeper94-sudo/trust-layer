@@ -150,7 +150,7 @@ export default function ChroniclesTimePortal() {
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center gap-4 mb-8">
           <Link href="/chronicles">
-            <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white">
+            <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white" data-testid="button-back-chronicles">
               <ChevronLeft className="w-5 h-5" />
             </Button>
           </Link>
@@ -347,6 +347,7 @@ export default function ChroniclesTimePortal() {
                           className="w-full mt-3 bg-purple-600 hover:bg-purple-500"
                           onClick={(e) => { e.stopPropagation(); travelToEra.mutate(era.code); }}
                           disabled={travelToEra.isPending}
+                          data-testid={`button-travel-${era.code}`}
                         >
                           <Timer className="w-4 h-4 mr-2" />
                           Travel Here
@@ -383,7 +384,7 @@ export default function ChroniclesTimePortal() {
                     <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 mb-2">Mission</Badge>
                     <h2 className="text-xl font-bold">{selectedMission.title}</h2>
                   </div>
-                  <button onClick={() => setSelectedMission(null)} className="text-slate-500 hover:text-white">✕</button>
+                  <button onClick={() => setSelectedMission(null)} className="text-slate-500 hover:text-white" data-testid="button-close-modal">✕</button>
                 </div>
                 
                 <p className="text-slate-300 mb-6">{selectedMission.storyIntro}</p>
@@ -398,6 +399,7 @@ export default function ChroniclesTimePortal() {
                         className="w-full bg-cyan-600 hover:bg-cyan-500"
                         onClick={() => startMission.mutate(selectedMission.id)}
                         disabled={startMission.isPending}
+                        data-testid="button-begin-mission"
                       >
                         <Target className="w-4 h-4 mr-2" />
                         Begin Mission
@@ -420,10 +422,12 @@ export default function ChroniclesTimePortal() {
                             value={riddleAnswer}
                             onChange={(e) => setRiddleAnswer(e.target.value)}
                             className="bg-slate-700 border-slate-600"
+                            data-testid="input-riddle-answer"
                           />
                           <Button
                             onClick={() => submitRiddle.mutate({ missionId: selectedMission.id, answer: riddleAnswer })}
                             disabled={!riddleAnswer || submitRiddle.isPending}
+                            data-testid="button-submit-riddle"
                           >
                             Submit
                           </Button>
@@ -436,6 +440,7 @@ export default function ChroniclesTimePortal() {
                           size="sm"
                           onClick={() => revealHint.mutate(selectedMission.id)}
                           disabled={revealHint.isPending || progress?.hintsRevealed >= 3}
+                          data-testid="button-reveal-hint"
                         >
                           <Lightbulb className="w-4 h-4 mr-2" />
                           Reveal Hint ({progress?.hintsRevealed || 0}/3)
@@ -445,6 +450,7 @@ export default function ChroniclesTimePortal() {
                           className="bg-green-600 hover:bg-green-500"
                           onClick={() => completeMission.mutate(selectedMission.id)}
                           disabled={completeMission.isPending}
+                          data-testid="button-complete-mission"
                         >
                           <CheckCircle className="w-4 h-4 mr-2" />
                           Complete Mission

@@ -687,9 +687,7 @@ export default function ChroniclesHub() {
                         const playerEra = (portalData?.playerEras || []).find((pe: any) => pe.eraCode === era.code);
                         const isUnlocked = era.isStartingEra || playerEra?.isUnlocked;
                         const isCurrent = portalData?.portal?.currentEraCode === era.code;
-                        const artifactsCollected = (portalData?.collectedArtifacts || []).filter((a: any) => {
-                          return true;
-                        }).length;
+                        const artifactsForEra = (portalData?.collectedArtifacts || []).length;
                         
                         return (
                           <motion.div
