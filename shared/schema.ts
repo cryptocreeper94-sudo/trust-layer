@@ -2684,6 +2684,31 @@ export const insertPlayerChoiceSchema = createInsertSchema(playerChoices).omit({
 export type PlayerChoice = typeof playerChoices.$inferSelect;
 export type InsertPlayerChoice = z.infer<typeof insertPlayerChoiceSchema>;
 
+// Player Estate - Persistent estate building data
+export const playerEstates = pgTable("player_estates", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  
+  // Grid data stored as JSON
+  gridData: text("grid_data").notNull().default('[]'), // JSON array of GridCell objects
+  
+  // Estate stats
+  totalBuildings: integer("total_buildings").notNull().default(1),
+  shellsSpent: integer("shells_spent").notNull().default(0),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertPlayerEstateSchema = createInsertSchema(playerEstates).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type PlayerEstate = typeof playerEstates.$inferSelect;
+export type InsertPlayerEstate = z.infer<typeof insertPlayerEstateSchema>;
+
 // AI Conversation Memory - For context continuity
 export const chroniclesConversations = pgTable("chronicles_conversations", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),

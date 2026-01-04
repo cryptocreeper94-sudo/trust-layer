@@ -140,7 +140,7 @@ const verifyFirebaseToken = isAuthenticated;
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -9676,6 +9676,94 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error: any) {
       console.error("Update personality error:", error);
       res.status(500).json({ error: error.message || "Failed to update personality" });
+    }
+  });
+
+// Estate persistence endpoints
+  const EstateGridCellSchema = z.object({
+    x: z.number(),
+    y: z.number(),
+    building: z.string(),
+    level: z.number(),
+    rotation: z.number()
+  });
+
+  const SaveEstateSchema = z.object({
+    gridData: z.array(z.array(EstateGridCellSchema)),
+    totalBuildings: z.number().optional(),
+    shellsSpent: z.number().optional()
+  });
+
+  app.get("/api/chronicles/estate", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const [estate] = await db.select().from(playerEstates).where(eq(playerEstates.userId, userId));
+      
+      if (!estate) {
+        return res.json({ estate: null });
+      }
+      
+      let gridData = [];
+      try {
+        gridData = JSON.parse(estate.gridData || '[]');
+      } catch (e) {
+        gridData = [];
+      }
+      
+      res.json({ 
+        estate: {
+          ...estate,
+          gridData
+        }
+      });
+    } catch (error: any) {
+      console.error("Get estate error:", error);
+      res.status(500).json({ error: error.message || "Failed to get estate" });
+    }
+  });
+
+  app.post("/api/chronicles/estate", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const parseResult = SaveEstateSchema.safeParse(req.body);
+      if (!parseResult.success) {
+        return res.status(400).json({ error: "Invalid estate data", details: parseResult.error.issues });
+      }
+      
+      const { gridData, totalBuildings, shellsSpent } = parseResult.data;
+      
+      const [existing] = await db.select().from(playerEstates).where(eq(playerEstates.userId, userId));
+      
+      if (existing) {
+        await db.update(playerEstates)
+          .set({
+            gridData: JSON.stringify(gridData),
+            totalBuildings: totalBuildings || 1,
+            shellsSpent: shellsSpent || 0,
+            updatedAt: new Date()
+          })
+          .where(eq(playerEstates.userId, userId));
+      } else {
+        await db.insert(playerEstates).values({
+          userId,
+          gridData: JSON.stringify(gridData),
+          totalBuildings: totalBuildings || 1,
+          shellsSpent: shellsSpent || 0
+        });
+      }
+      
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error("Save estate error:", error);
+      res.status(500).json({ error: error.message || "Failed to save estate" });
     }
   });
 

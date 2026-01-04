@@ -15,6 +15,7 @@ import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { CharacterPortrait } from "@/components/character-portrait";
 import { ChroniclesNPC, NPCChatButton } from "@/components/chronicles-npc";
 import { apiRequest } from "@/lib/queryClient";
+import { toast } from "sonner";
 
 type BuildingType = 
   | "empty"
@@ -96,6 +97,8 @@ export default function ChroniclesEstate() {
   const [isEraseMode, setIsEraseMode] = useState(false);
   const [showShop, setShowShop] = useState(false);
   const [showNPC, setShowNPC] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
 
   const { data: shellsData } = useQuery({
     queryKey: ["/api/orbs/balance"],
@@ -114,6 +117,52 @@ export default function ChroniclesEstate() {
     },
     enabled: !!user,
   });
+
+  const { data: estateData, isLoading: estateLoading } = useQuery({
+    queryKey: ["/api/chronicles/estate"],
+    queryFn: async () => {
+      const res = await apiRequest("GET", "/api/chronicles/estate");
+      return res.json();
+    },
+    enabled: !!user,
+  });
+
+  useEffect(() => {
+    if (estateData?.estate?.gridData && Array.isArray(estateData.estate.gridData) && estateData.estate.gridData.length > 0) {
+      setGrid(estateData.estate.gridData);
+    }
+  }, [estateData]);
+
+  const saveEstateMutation = useMutation({
+    mutationFn: async (gridData: GridCell[][]) => {
+      const totalBuildings = gridData.flat().filter(c => c.building !== "empty").length;
+      const res = await apiRequest("POST", "/api/chronicles/estate", {
+        gridData,
+        totalBuildings,
+        shellsSpent: 0
+      });
+      return res.json();
+    },
+    onSuccess: () => {
+      setHasChanges(false);
+      queryClient.invalidateQueries({ queryKey: ["/api/chronicles/estate"] });
+      toast.success("Estate saved!", { description: "Your progress has been saved." });
+    },
+    onError: (error: any) => {
+      toast.error("Failed to save", { description: error.message || "Please try again." });
+    }
+  });
+
+  const saveEstate = async () => {
+    setIsSaving(true);
+    try {
+      await saveEstateMutation.mutateAsync(grid);
+    } catch (e) {
+      // Error handled by onError
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const shellsBalance = shellsData?.balance || 0;
   const personality = personalityData?.personality;
@@ -146,10 +195,12 @@ export default function ChroniclesEstate() {
     }
     
     setGrid(newGrid);
+    setHasChanges(true);
   };
 
   const resetGrid = () => {
     setGrid(createEmptyGrid());
+    setHasChanges(true);
   };
 
   const getBuildingIcon = (type: BuildingType) => {
@@ -272,7 +323,7 @@ export default function ChroniclesEstate() {
                 Season Zero Preview
               </Badge>
               <p className="text-xs text-slate-500 text-center mt-2">
-                Estate progress saves automatically. More features coming in Season 1!
+                Click Save to persist your estate. More features coming in Season 1!
               </p>
             </div>
           </Card>
@@ -302,6 +353,17 @@ export default function ChroniclesEstate() {
                 >
                   <RotateCcw className="w-4 h-4 mr-1" />
                   Reset
+                </Button>
+                <Button
+                  variant={hasChanges ? "default" : "outline"}
+                  size="sm"
+                  onClick={saveEstate}
+                  disabled={!hasChanges || isSaving}
+                  className={hasChanges ? "bg-green-500 hover:bg-green-600" : "border-slate-600"}
+                  data-testid="button-save-estate"
+                >
+                  <Save className="w-4 h-4 mr-1" />
+                  {isSaving ? "Saving..." : hasChanges ? "Save" : "Saved"}
                 </Button>
                 <Button
                   variant="outline"
