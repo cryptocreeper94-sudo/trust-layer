@@ -4743,6 +4743,34 @@ export type InsertRwaDividend = z.infer<typeof insertRwaDividendSchema>;
 // DARKWAVE CHRONICLES - GAMEPLAY SYSTEM
 // ============================================
 
+// Chronicles accounts - separate auth system for the game
+export const chronicleAccounts = pgTable("chronicle_accounts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  username: text("username").notNull().unique(),
+  displayName: text("display_name").notNull(),
+  passwordHash: text("password_hash").notNull(),
+  
+  // Optional link to main DWSC account (for cross-platform benefits)
+  linkedUserId: text("linked_user_id"),
+  
+  // Session management
+  lastLoginAt: timestamp("last_login_at"),
+  sessionToken: text("session_token"),
+  sessionExpiresAt: timestamp("session_expires_at"),
+  
+  isActive: boolean("is_active").notNull().default(true),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChronicleAccountSchema = createInsertSchema(chronicleAccounts).omit({
+  id: true, createdAt: true, updatedAt: true, lastLoginAt: true, sessionToken: true, sessionExpiresAt: true
+});
+export type ChronicleAccount = typeof chronicleAccounts.$inferSelect;
+export type InsertChronicleAccount = z.infer<typeof insertChronicleAccountSchema>;
+
 // Chronicles player characters/avatars
 export const chronicleCharacters = pgTable("chronicle_characters", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
