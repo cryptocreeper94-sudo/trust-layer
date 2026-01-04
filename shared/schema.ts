@@ -2629,6 +2629,11 @@ export const playerPersonalities = pgTable("player_personalities", {
   eraInterest: text("era_interest"), // ancient, medieval, renaissance, exploration, industrial, modern
   challengeResponse: text("challenge_response"), // persevere, adapt, collaborate, reflect
   
+  // Audio Preferences
+  audioPreference: text("audio_preference").default("curated"), // curated, spotify, silent
+  audioMood: text("audio_mood"), // epic, calm, medieval, electronic, nature
+  spotifyPlaylistId: text("spotify_playlist_id"), // User's chosen Spotify playlist
+  
   // Learning Data
   totalChoicesMade: integer("total_choices_made").notNull().default(0),
   lastInteractionAt: timestamp("last_interaction_at"),

@@ -9624,6 +9624,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     primaryTrait: z.string().optional(),
     secondaryTrait: z.string().optional(),
     challengeResponse: z.string().optional(),
+    audioPreference: z.enum(["curated", "spotify", "silent"]).optional(),
+    audioMood: z.string().optional(),
   });
 
   app.post("/api/chronicles/personality", isAuthenticated, async (req: any, res) => {
@@ -9641,7 +9643,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const { 
         playerName, parallelSelfName, worldview, coreValues, 
         decisionStyle, conflictApproach, predictedArchetype,
-        colorPreference, eraInterest, primaryTrait, secondaryTrait, challengeResponse
+        colorPreference, eraInterest, primaryTrait, secondaryTrait, challengeResponse,
+        audioPreference, audioMood
       } = parseResult.data;
       
       const personality = await chroniclesAI.getOrCreatePersonality(userId, playerName);
@@ -9659,6 +9662,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (primaryTrait) updates.primaryTrait = primaryTrait;
       if (secondaryTrait) updates.secondaryTrait = secondaryTrait;
       if (challengeResponse) updates.challengeResponse = challengeResponse;
+      if (audioPreference) updates.audioPreference = audioPreference;
+      if (audioMood) updates.audioMood = audioMood;
       
       if (Object.keys(updates).length > 1) {
         await db.update(playerPersonalities)

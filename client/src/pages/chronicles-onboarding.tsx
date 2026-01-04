@@ -22,6 +22,7 @@ type OnboardingStep =
   | "values"
   | "decisions"
   | "challenges"
+  | "audio"
   | "portrait"
   | "complete";
 
@@ -35,10 +36,26 @@ interface PersonalityAnswers {
   challengeResponse: string;
   colorPreference: string;
   eraInterest: string;
+  audioPreference: string;
+  audioMood: string;
 }
 
 const STEPS: OnboardingStep[] = [
-  "welcome", "name", "traits", "values", "decisions", "challenges", "portrait", "complete"
+  "welcome", "name", "traits", "values", "decisions", "challenges", "audio", "portrait", "complete"
+];
+
+const AUDIO_PREFERENCES = [
+  { id: "curated", label: "Curated Experience", desc: "Handpicked atmospheric music that matches your journey", icon: Sparkles },
+  { id: "spotify", label: "My Spotify", desc: "Connect your Spotify to play your own playlists", icon: Heart },
+  { id: "silent", label: "Silent Mode", desc: "No background music, just ambient sounds", icon: Eye },
+];
+
+const AUDIO_MOODS = [
+  { id: "epic", label: "Epic & Cinematic", desc: "Orchestral scores and heroic themes" },
+  { id: "calm", label: "Calm & Ambient", desc: "Peaceful, relaxing soundscapes" },
+  { id: "medieval", label: "Medieval & Folk", desc: "Lutes, harps, and tavern tunes" },
+  { id: "electronic", label: "Electronic & Synth", desc: "Modern beats with fantasy vibes" },
+  { id: "nature", label: "Nature Sounds", desc: "Forests, rain, crackling fires" },
 ];
 
 const TRAITS = [
@@ -116,6 +133,8 @@ export default function ChroniclesOnboarding() {
     challengeResponse: "",
     colorPreference: "",
     eraInterest: "",
+    audioPreference: "curated",
+    audioMood: "",
   });
 
   const stepIndex = STEPS.indexOf(currentStep);
@@ -136,6 +155,8 @@ export default function ChroniclesOnboarding() {
         primaryTrait: data.primaryTrait,
         secondaryTrait: data.secondaryTrait,
         challengeResponse: data.challengeResponse,
+        audioPreference: data.audioPreference,
+        audioMood: data.audioMood,
       });
       return res.json();
     },
@@ -171,6 +192,7 @@ export default function ChroniclesOnboarding() {
       case "values": return answers.coreValues.length >= 2;
       case "decisions": return answers.decisionStyle !== "";
       case "challenges": return answers.conflictApproach && answers.challengeResponse;
+      case "audio": return answers.audioPreference !== "" && (answers.audioPreference === "silent" || answers.audioMood !== "");
       case "portrait": return answers.colorPreference && answers.eraInterest;
       default: return false;
     }
@@ -491,6 +513,93 @@ export default function ChroniclesOnboarding() {
                       ))}
                     </div>
                   </div>
+                </motion.div>
+              )}
+
+              {/* Audio Step */}
+              {currentStep === "audio" && (
+                <motion.div
+                  key="audio"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                >
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 text-center">
+                    Your Soundtrack
+                  </h2>
+                  <p className="text-slate-400 mb-6 text-center">
+                    How do you want to experience audio in your journey?
+                  </p>
+                  
+                  <div className="mb-6">
+                    <label className="block text-sm text-cyan-400 mb-3">Audio Experience</label>
+                    <div className="grid grid-cols-1 gap-3 max-w-xl mx-auto">
+                      {AUDIO_PREFERENCES.map((pref) => {
+                        const Icon = pref.icon;
+                        return (
+                          <Card
+                            key={pref.id}
+                            data-testid={`audio-pref-${pref.id}`}
+                            onClick={() => setAnswers(prev => ({ 
+                              ...prev, 
+                              audioPreference: pref.id,
+                              audioMood: pref.id === "silent" ? "" : prev.audioMood 
+                            }))}
+                            className={`p-4 cursor-pointer transition-all flex items-center gap-4 ${
+                              answers.audioPreference === pref.id
+                                ? "bg-cyan-500/20 border-cyan-500"
+                                : "bg-slate-900/80 border-slate-700 hover:border-slate-500"
+                            }`}
+                          >
+                            <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                              answers.audioPreference === pref.id ? "bg-cyan-500/30" : "bg-slate-800"
+                            }`}>
+                              <Icon className={`w-6 h-6 ${answers.audioPreference === pref.id ? "text-cyan-400" : "text-slate-400"}`} />
+                            </div>
+                            <div>
+                              <h3 className="font-semibold text-white">{pref.label}</h3>
+                              <p className="text-sm text-slate-400">{pref.desc}</p>
+                            </div>
+                          </Card>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {answers.audioPreference !== "silent" && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                    >
+                      <label className="block text-sm text-purple-400 mb-3">
+                        {answers.audioPreference === "spotify" ? "Preferred Mood (we'll suggest playlists)" : "Music Mood"}
+                      </label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-xl mx-auto">
+                        {AUDIO_MOODS.map((mood) => (
+                          <Card
+                            key={mood.id}
+                            data-testid={`audio-mood-${mood.id}`}
+                            onClick={() => setAnswers(prev => ({ ...prev, audioMood: mood.id }))}
+                            className={`p-3 cursor-pointer transition-all ${
+                              answers.audioMood === mood.id
+                                ? "bg-purple-500/20 border-purple-500"
+                                : "bg-slate-900/80 border-slate-700 hover:border-slate-500"
+                            }`}
+                          >
+                            <h3 className="font-semibold text-white text-sm">{mood.label}</h3>
+                            <p className="text-xs text-slate-400 mt-1">{mood.desc}</p>
+                          </Card>
+                        ))}
+                      </div>
+                      
+                      {answers.audioPreference === "spotify" && (
+                        <p className="text-center text-slate-500 text-sm mt-4">
+                          You can connect your Spotify account later in settings
+                        </p>
+                      )}
+                    </motion.div>
+                  )}
                 </motion.div>
               )}
 

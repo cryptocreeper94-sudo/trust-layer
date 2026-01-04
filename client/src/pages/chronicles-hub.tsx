@@ -14,6 +14,7 @@ import { Progress } from "@/components/ui/progress";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { apiRequest } from "@/lib/queryClient";
 import { CharacterPortrait } from "@/components/character-portrait";
+import { AudioPlayer } from "@/components/audio-player";
 
 interface JourneyChapter {
   id: string;
@@ -429,6 +430,13 @@ export default function ChroniclesHub() {
           <p className="text-slate-600">New features and eras coming throughout 2026.</p>
         </div>
       </div>
+
+      {playerPersonality?.audioPreference && playerPersonality.audioPreference !== "silent" && (
+        <AudioPlayer 
+          audioPreference={playerPersonality.audioPreference} 
+          audioMood={playerPersonality.audioMood || "calm"} 
+        />
+      )}
     </div>
   );
 }
