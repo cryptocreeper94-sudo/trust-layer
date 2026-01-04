@@ -5,7 +5,7 @@ import { useLocation, Link } from "wouter";
 import { 
   Home, Map, Users, Coins, Lock, ChevronRight, Sparkles, 
   Crown, Shield, Compass, Building, MessageCircle, Volume2,
-  Trophy, Star, Clock, Zap, Gift, ArrowRight, Plus, UserPlus, Link2, ChevronDown, X, Loader2
+  Trophy, Star, Clock, Zap, Gift, ArrowRight, Plus, UserPlus, Link2, ChevronDown, X, Loader2, Vote
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -1211,6 +1211,40 @@ export default function ChroniclesHub() {
                     As the leader, you cannot leave. Transfer leadership first.
                   </p>
                 )}
+                
+                {/* Coming Soon - Governance Features */}
+                <div className="mt-6 pt-4 border-t border-slate-700">
+                  <h3 className="text-sm font-medium text-purple-400 mb-3 flex items-center gap-2">
+                    <Vote className="w-4 h-4" />
+                    Syndicate Governance
+                  </h3>
+                  <div className="space-y-2">
+                    <div className="p-3 bg-slate-800/50 border border-slate-700/50 rounded-lg opacity-60">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-slate-300">Syndicate Voting</span>
+                        <span className="text-xs bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full">Coming Soon</span>
+                      </div>
+                      <p className="text-xs text-slate-500 mt-1">Vote on proposals, expel members, elect officers</p>
+                    </div>
+                    <div className="p-3 bg-slate-800/50 border border-slate-700/50 rounded-lg opacity-60">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-slate-300">Era Time Warp</span>
+                        <span className="text-xs bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full">Coming Soon</span>
+                      </div>
+                      <p className="text-xs text-slate-500 mt-1">Collectively travel to new eras as a syndicate</p>
+                    </div>
+                    <div className="p-3 bg-slate-800/50 border border-slate-700/50 rounded-lg opacity-60">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-slate-300">Syndicate Meetings</span>
+                        <span className="text-xs bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded-full">Coming Soon</span>
+                      </div>
+                      <p className="text-xs text-slate-500 mt-1">Schedule councils, plan missions, shape your world</p>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-500 text-center mt-3">
+                    Advanced features unlock as our community grows
+                  </p>
+                </div>
               </div>
             </motion.div>
           </motion.div>
