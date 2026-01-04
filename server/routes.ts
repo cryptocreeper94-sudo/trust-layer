@@ -74,7 +74,7 @@ const verifyFirebaseToken = isAuthenticated;
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -10990,6 +10990,298 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error) {
       console.error("Get all users error:", error);
       res.status(500).json({ error: "Failed to get user data" });
+    }
+  });
+
+  // ============================================
+  // CHRONICLES GUILDS API
+  // ============================================
+  // In-game guilds that can optionally link to ChronoChat
+
+  app.get("/api/guilds", async (req, res) => {
+    try {
+      const result = await db.select().from(guilds).where(eq(guilds.isPublic, true)).orderBy(desc(guilds.memberCount));
+      res.json({ guilds: result });
+    } catch (error) {
+      console.error("Get guilds error:", error);
+      res.status(500).json({ error: "Failed to get guilds" });
+    }
+  });
+
+  app.get("/api/guilds/my-guilds", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const memberships = await db.select().from(guildMembers).where(eq(guildMembers.userId, userId));
+      const guildIds = memberships.map(m => m.guildId);
+      
+      if (guildIds.length === 0) {
+        return res.json({ guilds: [], memberships: [] });
+      }
+      
+      const userGuilds = await db.select().from(guilds).where(sql`${guilds.id} = ANY(${guildIds})`);
+      res.json({ guilds: userGuilds, memberships });
+    } catch (error) {
+      console.error("Get my guilds error:", error);
+      res.status(500).json({ error: "Failed to get your guilds" });
+    }
+  });
+
+  app.get("/api/guilds/:id", async (req, res) => {
+    try {
+      const [guild] = await db.select().from(guilds).where(eq(guilds.id, req.params.id));
+      if (!guild) return res.status(404).json({ error: "Guild not found" });
+      
+      const members = await db.select().from(guildMembers).where(eq(guildMembers.guildId, guild.id));
+      res.json({ guild, members });
+    } catch (error) {
+      console.error("Get guild error:", error);
+      res.status(500).json({ error: "Failed to get guild" });
+    }
+  });
+
+  app.post("/api/guilds/create", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { name, description, icon, isPublic } = req.body;
+      if (!name || name.length < 2) return res.status(400).json({ error: "Guild name required (min 2 characters)" });
+      
+      // Check if user already leads a guild
+      const existingGuilds = await db.select().from(guilds).where(eq(guilds.leaderId, userId));
+      if (existingGuilds.length >= 3) {
+        return res.status(400).json({ error: "You can only create up to 3 guilds" });
+      }
+      
+      // Create guild
+      const [newGuild] = await db.insert(guilds).values({
+        name,
+        description: description || null,
+        icon: icon || "⚔️",
+        leaderId: userId,
+        isPublic: isPublic !== false,
+      }).returning();
+      
+      // Add creator as leader
+      await db.insert(guildMembers).values({
+        guildId: newGuild.id,
+        userId,
+        role: "leader",
+      });
+      
+      res.json({ success: true, guild: newGuild });
+    } catch (error) {
+      console.error("Create guild error:", error);
+      res.status(500).json({ error: "Failed to create guild" });
+    }
+  });
+
+  app.post("/api/guilds/:id/join", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const [guild] = await db.select().from(guilds).where(eq(guilds.id, req.params.id));
+      if (!guild) return res.status(404).json({ error: "Guild not found" });
+      if (!guild.isRecruiting) return res.status(400).json({ error: "Guild is not recruiting" });
+      if (guild.memberCount >= guild.maxMembers) return res.status(400).json({ error: "Guild is full" });
+      
+      // Check if already a member
+      const existing = await db.select().from(guildMembers)
+        .where(and(eq(guildMembers.guildId, guild.id), eq(guildMembers.userId, userId)));
+      if (existing.length > 0) return res.status(400).json({ error: "Already a member" });
+      
+      // Add member
+      await db.insert(guildMembers).values({
+        guildId: guild.id,
+        userId,
+        role: "member",
+      });
+      
+      // Update member count
+      await db.update(guilds)
+        .set({ memberCount: guild.memberCount + 1, updatedAt: new Date() })
+        .where(eq(guilds.id, guild.id));
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Join guild error:", error);
+      res.status(500).json({ error: "Failed to join guild" });
+    }
+  });
+
+  app.post("/api/guilds/:id/leave", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const [guild] = await db.select().from(guilds).where(eq(guilds.id, req.params.id));
+      if (!guild) return res.status(404).json({ error: "Guild not found" });
+      if (guild.leaderId === userId) return res.status(400).json({ error: "Leaders cannot leave. Transfer ownership first." });
+      
+      await db.delete(guildMembers)
+        .where(and(eq(guildMembers.guildId, guild.id), eq(guildMembers.userId, userId)));
+      
+      // Update member count
+      await db.update(guilds)
+        .set({ memberCount: Math.max(1, guild.memberCount - 1), updatedAt: new Date() })
+        .where(eq(guilds.id, guild.id));
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Leave guild error:", error);
+      res.status(500).json({ error: "Failed to leave guild" });
+    }
+  });
+
+  app.post("/api/guilds/:id/activate-chronolink", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const [guild] = await db.select().from(guilds).where(eq(guilds.id, req.params.id));
+      if (!guild) return res.status(404).json({ error: "Guild not found" });
+      if (guild.leaderId !== userId) return res.status(403).json({ error: "Only the guild leader can activate ChronoLink" });
+      if (guild.isChronoLinkActive) return res.status(400).json({ error: "ChronoLink already active" });
+      
+      // Create a ChronoChat community for this guild
+      const community = await communityHubService.createCommunity({
+        name: guild.name,
+        description: `Official ChronoChat for ${guild.name} guild`,
+        icon: guild.icon || "⚔️",
+        ownerId: userId,
+        isPublic: guild.isPublic,
+      });
+      
+      // Link guild to community
+      await db.update(guilds)
+        .set({ 
+          chronoChatCommunityId: community.id, 
+          isChronoLinkActive: true,
+          shellsBonus: 5, // 5% bonus shells for linked guilds
+          updatedAt: new Date() 
+        })
+        .where(eq(guilds.id, guild.id));
+      
+      res.json({ success: true, community });
+    } catch (error) {
+      console.error("Activate ChronoLink error:", error);
+      res.status(500).json({ error: "Failed to activate ChronoLink" });
+    }
+  });
+
+  app.put("/api/guilds/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const [guild] = await db.select().from(guilds).where(eq(guilds.id, req.params.id));
+      if (!guild) return res.status(404).json({ error: "Guild not found" });
+      if (guild.leaderId !== userId) return res.status(403).json({ error: "Only the guild leader can update settings" });
+      
+      const { name, description, icon, isPublic, isRecruiting } = req.body;
+      const updates: any = { updatedAt: new Date() };
+      
+      if (name !== undefined) updates.name = name;
+      if (description !== undefined) updates.description = description;
+      if (icon !== undefined) updates.icon = icon;
+      if (isPublic !== undefined) updates.isPublic = isPublic;
+      if (isRecruiting !== undefined) updates.isRecruiting = isRecruiting;
+      
+      await db.update(guilds).set(updates).where(eq(guilds.id, guild.id));
+      
+      const [updated] = await db.select().from(guilds).where(eq(guilds.id, guild.id));
+      res.json({ success: true, guild: updated });
+    } catch (error) {
+      console.error("Update guild error:", error);
+      res.status(500).json({ error: "Failed to update guild" });
+    }
+  });
+
+  // Generate guild invite code
+  app.post("/api/guilds/:id/invite", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const [guild] = await db.select().from(guilds).where(eq(guilds.id, req.params.id));
+      if (!guild) return res.status(404).json({ error: "Guild not found" });
+      
+      // Check if user is a member with invite permission
+      const [membership] = await db.select().from(guildMembers)
+        .where(and(eq(guildMembers.guildId, guild.id), eq(guildMembers.userId, userId)));
+      if (!membership || (membership.role !== "leader" && membership.role !== "officer")) {
+        return res.status(403).json({ error: "You don't have permission to create invites" });
+      }
+      
+      // Generate invite code
+      const code = Math.random().toString(36).substring(2, 10).toUpperCase();
+      
+      const { maxUses, expiresIn } = req.body;
+      const expiresAt = expiresIn ? new Date(Date.now() + expiresIn * 1000) : null;
+      
+      const [invite] = await db.insert(guildInvites).values({
+        guildId: guild.id,
+        inviterId: userId,
+        code,
+        maxUses: maxUses || null,
+        expiresAt,
+      }).returning();
+      
+      res.json({ success: true, invite, inviteUrl: `/guilds/join/${code}` });
+    } catch (error) {
+      console.error("Create invite error:", error);
+      res.status(500).json({ error: "Failed to create invite" });
+    }
+  });
+
+  // Join via invite code
+  app.post("/api/guilds/join/:code", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const [invite] = await db.select().from(guildInvites).where(eq(guildInvites.code, req.params.code));
+      if (!invite) return res.status(404).json({ error: "Invalid invite code" });
+      
+      if (invite.expiresAt && new Date(invite.expiresAt) < new Date()) {
+        return res.status(400).json({ error: "Invite has expired" });
+      }
+      if (invite.maxUses && invite.useCount >= invite.maxUses) {
+        return res.status(400).json({ error: "Invite has reached max uses" });
+      }
+      
+      const [guild] = await db.select().from(guilds).where(eq(guilds.id, invite.guildId));
+      if (!guild) return res.status(404).json({ error: "Guild not found" });
+      if (guild.memberCount >= guild.maxMembers) return res.status(400).json({ error: "Guild is full" });
+      
+      // Check if already a member
+      const existing = await db.select().from(guildMembers)
+        .where(and(eq(guildMembers.guildId, guild.id), eq(guildMembers.userId, userId)));
+      if (existing.length > 0) return res.status(400).json({ error: "Already a member" });
+      
+      // Add member
+      await db.insert(guildMembers).values({
+        guildId: guild.id,
+        userId,
+        role: "member",
+      });
+      
+      // Update counts
+      await db.update(guilds)
+        .set({ memberCount: guild.memberCount + 1, updatedAt: new Date() })
+        .where(eq(guilds.id, guild.id));
+      
+      await db.update(guildInvites)
+        .set({ useCount: invite.useCount + 1 })
+        .where(eq(guildInvites.id, invite.id));
+      
+      res.json({ success: true, guild });
+    } catch (error) {
+      console.error("Join via invite error:", error);
+      res.status(500).json({ error: "Failed to join guild" });
     }
   });
 

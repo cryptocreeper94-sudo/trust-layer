@@ -2732,6 +2732,122 @@ export const chroniclesConversations = pgTable("chronicles_conversations", {
 export type ChroniclesConversation = typeof chroniclesConversations.$inferSelect;
 
 // =====================================================
+// CHRONICLES GUILDS SYSTEM
+// =====================================================
+// In-game guilds are first-class gameplay entities that can optionally
+// link to ChronoChat communities for cross-platform communication.
+// Solo play remains fully functional without guilds.
+// =====================================================
+
+export const guilds = pgTable("guilds", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  description: text("description"),
+  icon: text("icon").default("⚔️"),
+  bannerUrl: text("banner_url"),
+  
+  // Ownership
+  leaderId: text("leader_id").notNull(),
+  
+  // Settings
+  isPublic: boolean("is_public").notNull().default(true),
+  isRecruiting: boolean("is_recruiting").notNull().default(true),
+  maxMembers: integer("max_members").notNull().default(50),
+  
+  // ChronoChat Link (optional)
+  chronoChatCommunityId: varchar("chronochat_community_id"),
+  isChronoLinkActive: boolean("is_chronolink_active").notNull().default(false),
+  
+  // Stats
+  memberCount: integer("member_count").notNull().default(1),
+  totalXp: integer("total_xp").notNull().default(0),
+  level: integer("level").notNull().default(1),
+  
+  // Gameplay bonuses
+  xpBonus: integer("xp_bonus").notNull().default(0), // Percentage bonus
+  shellsBonus: integer("shells_bonus").notNull().default(0), // Percentage bonus
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertGuildSchema = createInsertSchema(guilds).omit({
+  id: true,
+  memberCount: true,
+  totalXp: true,
+  level: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type Guild = typeof guilds.$inferSelect;
+export type InsertGuild = z.infer<typeof insertGuildSchema>;
+
+export const guildMembers = pgTable("guild_members", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  guildId: varchar("guild_id").notNull(),
+  userId: text("user_id").notNull(),
+  
+  // Role within guild
+  role: text("role").notNull().default("member"), // leader, officer, member
+  title: text("title"), // Custom title like "Champion", "Strategist"
+  
+  // Contribution tracking
+  xpContributed: integer("xp_contributed").notNull().default(0),
+  questsCompleted: integer("quests_completed").notNull().default(0),
+  
+  joinedAt: timestamp("joined_at").defaultNow().notNull(),
+});
+
+export const insertGuildMemberSchema = createInsertSchema(guildMembers).omit({
+  id: true,
+  xpContributed: true,
+  questsCompleted: true,
+  joinedAt: true,
+});
+
+export type GuildMember = typeof guildMembers.$inferSelect;
+export type InsertGuildMember = z.infer<typeof insertGuildMemberSchema>;
+
+export const guildInvites = pgTable("guild_invites", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  guildId: varchar("guild_id").notNull(),
+  inviterId: text("inviter_id").notNull(),
+  inviteeId: text("invitee_id"), // Null for open invite codes
+  
+  // Invite code for sharing
+  code: text("code").notNull().unique(),
+  
+  // Limits
+  maxUses: integer("max_uses"),
+  useCount: integer("use_count").notNull().default(0),
+  expiresAt: timestamp("expires_at"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type GuildInvite = typeof guildInvites.$inferSelect;
+
+export const guildRoles = pgTable("guild_roles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  guildId: varchar("guild_id").notNull(),
+  name: text("name").notNull(),
+  color: text("color").default("#6366f1"),
+  position: integer("position").notNull().default(0),
+  
+  // Permissions
+  canInvite: boolean("can_invite").notNull().default(false),
+  canKick: boolean("can_kick").notNull().default(false),
+  canManageRoles: boolean("can_manage_roles").notNull().default(false),
+  canManageSettings: boolean("can_manage_settings").notNull().default(false),
+  canStartQuests: boolean("can_start_quests").notNull().default(false),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type GuildRole = typeof guildRoles.$inferSelect;
+
+// =====================================================
 // DARKWAVE CREDITS SYSTEM
 // =====================================================
 // Credits are the universal currency for AI-powered features
