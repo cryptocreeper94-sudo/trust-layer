@@ -22,11 +22,11 @@ export function useSimpleAuth() {
     staleTime: 30000,
   });
 
-  const login = useCallback(async (email: string, password: string) => {
+  const login = useCallback(async (email: string, password: string, rememberMe?: boolean) => {
     const response = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, rememberMe }),
     });
     const result = await response.json();
     if (!response.ok) {
@@ -36,11 +36,11 @@ export function useSimpleAuth() {
     return result;
   }, [refetch]);
 
-  const register = useCallback(async (email: string, password: string, displayName?: string) => {
+  const register = useCallback(async (email: string, password: string, displayName?: string, rememberMe?: boolean) => {
     const response = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, displayName }),
+      body: JSON.stringify({ email, password, displayName, rememberMe }),
     });
     const result = await response.json();
     if (!response.ok) {

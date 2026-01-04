@@ -1,0 +1,262 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    DWSC TREASURY → ORBIT ECOSYSTEM INTEGRATION HANDOFF
+═══════════════════════════════════════════════════════════════════════════════
+
+INFORMATION REQUESTS (DWSC needs to provide these to ORBIT):
+─────────────────────────────────────────────────────────────────────────────────
+1. DWSC_WEBHOOK_SECRET - Generate a 64-character hex secret and share it
+   with ORBIT so it can verify incoming webhooks from DWSC Treasury.
+   Generate with: crypto.randomBytes(32).toString('hex')
+
+═══════════════════════════════════════════════════════════════════════════════
+
+INFORMATION PROVIDED (Add these secrets to DWSC's environment):
+─────────────────────────────────────────────────────────────────────────────────
+ORBIT_API_KEY=dw_app_7d338d0cf24ef025419d39f29ab1e0a21917199d796ac8f1
+ORBIT_HUB_URL=https://orbitstaffing.io
+ORBIT_WEBHOOK_SECRET=<use the same secret you generated above>
+
+═══════════════════════════════════════════════════════════════════════════════
+
+WHAT ORBIT NEEDS FROM DWSC TREASURY:
+─────────────────────────────────────────────────────────────────────────────────
+DWSC is Jason's 100% owned central treasury. Report the following to ORBIT:
+
+1. Revenue Events - Franchise fees, subscriptions, platform fees from all products
+2. Expense Events - Operating costs, contractor payments, infrastructure
+3. Treasury Movements - Fund transfers, investment activity, reserves
+4. Blockchain Activity - Token mints, wallet transactions, DeFi yields
+5. Cross-Product Aggregates - Consolidated financials from all DarkWave apps
+
+═══════════════════════════════════════════════════════════════════════════════
+
+API ENDPOINTS (All require authentication headers):
+─────────────────────────────────────────────────────────────────────────────────
+Base: https://orbitstaffing.io/api/ecosystem
+
+POST /sync/workers         - Sync worker/contractor profiles
+POST /sync/contractors     - Sync 1099 contractors  
+POST /sync/timesheets      - Sync timesheet entries
+POST /sync/1099            - Sync annual 1099 payment totals
+POST /snippets             - Share code snippets across ecosystem
+POST /logs                 - Log activity events
+GET  /status               - Check connection status
+
+Financial Hub: https://orbitstaffing.io/api/financial-hub
+POST /events               - Report revenue, expenses, payouts, treasury movements
+
+═══════════════════════════════════════════════════════════════════════════════
+
+REQUIRED HEADERS (Include on all API requests):
+─────────────────────────────────────────────────────────────────────────────────
+Content-Type: application/json
+X-API-Key: <ORBIT_API_KEY from env>
+X-API-Secret: <ORBIT_WEBHOOK_SECRET from env>
+X-App-Name: DWSC Treasury
+
+═══════════════════════════════════════════════════════════════════════════════
+
+ECOSYSTEM CLIENT (Create file: server/services/orbitEcosystem.ts):
+─────────────────────────────────────────────────────────────────────────────────
+
+import crypto from 'crypto';
+
+const ORBIT_HUB_URL = process.env.ORBIT_HUB_URL || 'https://orbitstaffing.io';
+const ORBIT_API_KEY = process.env.ORBIT_API_KEY!;
+const ORBIT_WEBHOOK_SECRET = process.env.ORBIT_WEBHOOK_SECRET!;
+
+export class OrbitEcosystemClient {
+  private async request<T>(endpoint: string, method: string, body?: any): Promise<T> {
+    const response = await fetch(`${ORBIT_HUB_URL}/api/ecosystem${endpoint}`, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': ORBIT_API_KEY,
+        'X-API-Secret': ORBIT_WEBHOOK_SECRET,
+        'X-App-Name': 'DWSC Treasury',
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    if (!response.ok) throw new Error(`ORBIT API error: ${response.status}`);
+    return response.json();
+  }
+
+  async reportFinancialEvent(event: {
+    eventType: 'revenue' | 'expense' | 'payout' | 'adjustment';
+    grossAmount: number;
+    netAmount?: number;
+    description: string;
+    productCode?: string;
+    periodStart?: string;
+    periodEnd?: string;
+    metadata?: Record<string, any>;
+  }) {
+    return fetch(`${ORBIT_HUB_URL}/api/financial-hub/events`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': ORBIT_API_KEY,
+        'X-API-Secret': ORBIT_WEBHOOK_SECRET,
+      },
+      body: JSON.stringify({
+        sourceSystem: 'dwsc-treasury',
+        sourceAppId: 'dw_app_dwsc',
+        ...event,
+      }),
+    }).then(r => r.json());
+  }
+
+  async reportTreasuryMovement(movement: {
+    movementType: 'transfer' | 'investment' | 'reserve' | 'payout';
+    amount: number;
+    fromAccount?: string;
+    toAccount?: string;
+    description: string;
+    metadata?: Record<string, any>;
+  }) {
+    return this.reportFinancialEvent({
+      eventType: 'adjustment',
+      grossAmount: movement.amount,
+      description: `Treasury ${movement.movementType}: ${movement.description}`,
+      productCode: 'dwsc-treasury',
+      metadata: {
+        movementType: movement.movementType,
+        fromAccount: movement.fromAccount,
+        toAccount: movement.toAccount,
+        ...movement.metadata,
+      },
+    });
+  }
+
+  async reportBlockchainActivity(activity: {
+    txHash: string;
+    chain: string;
+    activityType: 'mint' | 'transfer' | 'swap' | 'stake' | 'yield';
+    tokenSymbol?: string;
+    amount: number;
+    usdValue?: number;
+    metadata?: Record<string, any>;
+  }) {
+    return this.reportFinancialEvent({
+      eventType: activity.activityType === 'yield' ? 'revenue' : 'adjustment',
+      grossAmount: activity.usdValue || activity.amount,
+      description: `Blockchain ${activity.activityType}: ${activity.tokenSymbol || ''} on ${activity.chain}`,
+      productCode: 'dwsc-treasury',
+      metadata: {
+        blockchain: true,
+        txHash: activity.txHash,
+        chain: activity.chain,
+        ...activity,
+      },
+    });
+  }
+
+  async syncContractors(contractors: Array<{
+    externalId: string; name: string; email: string;
+    phone?: string; skills?: string[]; status: 'active' | 'inactive';
+  }>) {
+    return this.request('/sync/contractors', 'POST', { contractors });
+  }
+
+  async sync1099Payments(year: number, payments: Array<{
+    contractorId: string; contractorName: string;
+    totalPaid: number; taxWithheld?: number;
+  }>) {
+    return this.request('/sync/1099', 'POST', { year, payments });
+  }
+
+  async logActivity(action: string, details?: Record<string, any>) {
+    return this.request('/logs', 'POST', { action, details });
+  }
+
+  async checkStatus() {
+    return this.request('/status', 'GET', null);
+  }
+}
+
+export const orbitClient = new OrbitEcosystemClient();
+
+═══════════════════════════════════════════════════════════════════════════════
+
+INTEGRATION POINTS (Hook these into DWSC's existing code):
+─────────────────────────────────────────────────────────────────────────────────
+
+// When franchise fee is collected:
+await orbitClient.reportFinancialEvent({
+  eventType: 'revenue',
+  grossAmount: 25000,
+  description: 'Franchise fee - Nashville territory',
+  productCode: 'orbit-staffing',
+  metadata: { franchiseId: franchise.id, territory: 'Nashville, TN' }
+});
+
+// When subscription payment received:
+await orbitClient.reportFinancialEvent({
+  eventType: 'revenue',
+  grossAmount: 499,
+  description: 'Monthly SaaS subscription - Brew & Board',
+  productCode: 'brewandboard',
+  metadata: { customerId: customer.id, plan: 'pro' }
+});
+
+// When treasury funds are moved:
+await orbitClient.reportTreasuryMovement({
+  movementType: 'transfer',
+  amount: 50000,
+  fromAccount: 'operating',
+  toAccount: 'reserve',
+  description: 'Q1 reserve allocation'
+});
+
+// When blockchain activity occurs:
+await orbitClient.reportBlockchainActivity({
+  txHash: '5KQn...',
+  chain: 'solana',
+  activityType: 'yield',
+  tokenSymbol: 'SOL',
+  amount: 2.5,
+  usdValue: 375,
+  metadata: { protocol: 'marinade', apy: 7.2 }
+});
+
+// When paying a contractor:
+await orbitClient.reportFinancialEvent({
+  eventType: 'expense',
+  grossAmount: 5000,
+  description: 'Development contractor - December 2025',
+  productCode: 'dwsc-treasury',
+  metadata: { contractorId: contractor.id }
+});
+
+// End of year 1099 reporting:
+await orbitClient.sync1099Payments(2025, [{
+  contractorId: contractor.id,
+  contractorName: contractor.name,
+  totalPaid: 65000,
+  taxWithheld: 0
+}]);
+
+═══════════════════════════════════════════════════════════════════════════════
+
+ROYALTY SPLIT NOTE:
+─────────────────────────────────────────────────────────────────────────────────
+DWSC Treasury is 100% Jason Andrews. No partner split applies.
+
+When reporting revenue for other products, use the correct productCode:
+- 'orbit-staffing' or 'orbit' → 50/50 Jason/Sidonie
+- 'brewandboard' → 50/50 Jason/Sidonie  
+- 'paintpros' → 50/50 Jason/Sidonie
+- 'dwsc-treasury', 'garagebot', 'darkwavehealth', etc. → 100% Jason
+
+═══════════════════════════════════════════════════════════════════════════════
+
+NEXT STEPS:
+─────────────────────────────────────────────────────────────────────────────────
+1. Generate DWSC_WEBHOOK_SECRET: crypto.randomBytes(32).toString('hex')
+2. Send the generated secret to ORBIT (Jason will add it as DWSC_WEBHOOK_SECRET)
+3. Add the 3 environment variables to DWSC (ORBIT_API_KEY, ORBIT_HUB_URL, ORBIT_WEBHOOK_SECRET)
+4. Create the OrbitEcosystemClient service file
+5. Test connection: await orbitClient.checkStatus()
+6. Hook financial event calls into revenue collection, expense tracking, and treasury operations
+
+═══════════════════════════════════════════════════════════════════════════════

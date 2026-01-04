@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Loader2, Mail, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { X, Loader2, Mail, ArrowLeft, Eye, EyeOff, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
@@ -24,6 +24,7 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const resetForm = () => {
     setEmail("");
@@ -31,6 +32,7 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
     setName("");
     setView("login");
     setShowPassword(false);
+    setRememberMe(false);
   };
 
   const handleClose = () => {
@@ -46,7 +48,7 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
     }
     setLoading(true);
     try {
-      await login(email, password);
+      await login(email, password, rememberMe);
       toast({ title: "Welcome back!", description: "You've successfully signed in." });
       onSuccess?.();
       handleClose();
@@ -70,7 +72,7 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
     }
     setLoading(true);
     try {
-      await register(email, password, name);
+      await register(email, password, name, rememberMe);
       toast({ title: "Account created!", description: "Welcome to DarkWave!" });
       onSuccess?.();
       handleClose();
@@ -166,6 +168,29 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
+            </div>
+
+            <div className="space-y-2">
+              <label className="flex items-center gap-3 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="w-4 h-4 rounded border-white/20 bg-white/5 text-cyan-500 focus:ring-cyan-500"
+                  data-testid="checkbox-remember-me"
+                />
+                <span className="text-sm text-muted-foreground group-hover:text-white transition-colors">
+                  Remember me for 30 days
+                </span>
+              </label>
+              {rememberMe && (
+                <div className="flex items-start gap-2 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                  <AlertTriangle className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-amber-200/80">
+                    Anyone with access to this device can access your account during this period. Only use on personal devices.
+                  </p>
+                </div>
+              )}
             </div>
 
             <Button

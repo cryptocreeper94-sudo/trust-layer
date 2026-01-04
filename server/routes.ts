@@ -918,7 +918,7 @@ export async function registerRoutes(
   // Simple Email/Password Registration (no Firebase required)
   app.post("/api/auth/register", authRateLimit, async (req, res) => {
     try {
-      const { email, password, displayName } = req.body;
+      const { email, password, displayName, rememberMe } = req.body;
       
       if (!email || !password) {
         return res.status(400).json({ error: "Email and password are required" });
@@ -959,6 +959,11 @@ export async function registerRoutes(
 
       // Set session
       (req.session as any).userId = userId;
+      
+      // Extend session to 30 days if rememberMe is checked
+      if (rememberMe) {
+        req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
+      }
 
       res.json({ success: true, userId, signupPosition });
     } catch (error) {
@@ -970,7 +975,7 @@ export async function registerRoutes(
   // Simple Email/Password Login (no Firebase required)
   app.post("/api/auth/login", authRateLimit, async (req, res) => {
     try {
-      const { email, password } = req.body;
+      const { email, password, rememberMe } = req.body;
       
       if (!email || !password) {
         return res.status(400).json({ error: "Email and password are required" });
@@ -1011,6 +1016,11 @@ export async function registerRoutes(
 
       // Set session
       (req.session as any).userId = user.id;
+      
+      // Extend session to 30 days if rememberMe is checked
+      if (rememberMe) {
+        req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
+      }
 
       res.json({ 
         success: true, 
