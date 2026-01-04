@@ -276,6 +276,7 @@ function DWSCRouter() {
       <ScrollToTop />
       <Switch>
         <Route path="/" component={Home} />
+        <Route path="/join/:code" component={SyndicateInvite} />
         <Route path="/rewards" component={Rewards} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/developers" component={Developers} />
