@@ -5,7 +5,8 @@ import { useLocation, Link } from "wouter";
 import { 
   Home, Map, Users, Coins, Lock, ChevronRight, Sparkles, 
   Crown, Shield, Compass, Building, MessageCircle, Volume2,
-  Trophy, Star, Clock, Zap, Gift, ArrowRight, Plus, UserPlus, Link2, ChevronDown, X, Loader2, Vote, Copy, Share2
+  Trophy, Star, Clock, Zap, Gift, ArrowRight, Plus, UserPlus, Link2, ChevronDown, X, Loader2, Vote, Copy, Share2,
+  Timer, Scroll, Gem, Target
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -149,7 +150,26 @@ export default function ChroniclesHub() {
     enabled: !!user,
   });
 
+  const { data: portalData } = useQuery({
+    queryKey: ["/api/chronicles/portal"],
+    queryFn: async () => {
+      const res = await apiRequest("GET", "/api/chronicles/portal");
+      return res.json();
+    },
+    enabled: !!user,
+  });
+
+  const { data: missionsData } = useQuery({
+    queryKey: ["/api/chronicles/missions"],
+    queryFn: async () => {
+      const res = await apiRequest("GET", "/api/chronicles/missions");
+      return res.json();
+    },
+    enabled: !!user,
+  });
+
   const [syndicatesExpanded, setSyndicatesExpanded] = useState(false);
+  const [portalExpanded, setPortalExpanded] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showJoinCodeModal, setShowJoinCodeModal] = useState(false);
   const [showManageModal, setShowManageModal] = useState(false);
@@ -592,6 +612,209 @@ export default function ChroniclesHub() {
             </div>
           </Card>
         </div>
+
+        {/* Time Portal - Era Travel System */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mb-8"
+        >
+          <Card className="bg-slate-900/80 border-slate-700 overflow-hidden relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-cyan-500/5" />
+            <button
+              onClick={() => setPortalExpanded(!portalExpanded)}
+              className="w-full p-6 flex items-center justify-between hover:bg-slate-800/50 transition-colors relative z-10"
+              data-testid="button-toggle-portal"
+            >
+              <div className="flex items-center gap-4">
+                <motion.div 
+                  animate={{ 
+                    boxShadow: ["0 0 20px rgba(6,182,212,0.3)", "0 0 40px rgba(168,85,247,0.5)", "0 0 20px rgba(6,182,212,0.3)"]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="w-14 h-14 rounded-full bg-gradient-to-r from-cyan-500/30 to-purple-500/30 flex items-center justify-center border border-cyan-500/30"
+                >
+                  <Timer className="w-7 h-7 text-cyan-400" />
+                </motion.div>
+                <div className="text-left">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-lg font-bold text-white">Time Portal</h3>
+                    <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-xs">
+                      BETA
+                    </Badge>
+                    <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">
+                      Season Zero
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-slate-400">
+                    Collect artifacts to unlock eras and travel through time
+                  </p>
+                </div>
+              </div>
+              <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${portalExpanded ? "rotate-180" : ""}`} />
+            </button>
+            
+            <AnimatePresence>
+              {portalExpanded && portalData && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden"
+                >
+                  <div className="px-6 pb-6 border-t border-slate-700/50 pt-4 relative z-10">
+                    <div className="bg-gradient-to-r from-cyan-900/20 to-purple-900/20 rounded-lg p-4 mb-4 border border-cyan-500/20">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Sparkles className="w-4 h-4 text-amber-400" />
+                        <span className="text-xs text-amber-400 uppercase tracking-wider font-semibold">Beta Notice</span>
+                      </div>
+                      <p className="text-sm text-slate-300">
+                        Your progress is persistent and saved forever. Complete missions to discover artifacts and unlock new eras!
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="text-sm font-semibold text-slate-300 uppercase tracking-wider">Current Era</h4>
+                      <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+                        {portalData?.portal?.currentEraCode?.toUpperCase() || "MODERN"}
+                      </Badge>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                      {(portalData?.allEras || []).map((era: any) => {
+                        const playerEra = (portalData?.playerEras || []).find((pe: any) => pe.eraCode === era.code);
+                        const isUnlocked = era.isStartingEra || playerEra?.isUnlocked;
+                        const isCurrent = portalData?.portal?.currentEraCode === era.code;
+                        const artifactsCollected = (portalData?.collectedArtifacts || []).filter((a: any) => {
+                          return true;
+                        }).length;
+                        
+                        return (
+                          <motion.div
+                            key={era.id}
+                            whileHover={{ scale: isUnlocked ? 1.02 : 1 }}
+                            className={`relative p-4 rounded-lg border transition-all ${
+                              isCurrent 
+                                ? "bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-cyan-500/40" 
+                                : isUnlocked
+                                  ? "bg-slate-800/50 border-slate-700 hover:border-cyan-500/30"
+                                  : "bg-slate-800/30 border-slate-700/50 opacity-60"
+                            }`}
+                            data-testid={`card-era-${era.code}`}
+                          >
+                            {isCurrent && (
+                              <div className="absolute -top-2 -right-2">
+                                <motion.div
+                                  animate={{ scale: [1, 1.2, 1] }}
+                                  transition={{ duration: 2, repeat: Infinity }}
+                                >
+                                  <Badge className="bg-cyan-500 text-white text-xs">
+                                    Current
+                                  </Badge>
+                                </motion.div>
+                              </div>
+                            )}
+                            <div className="flex items-start gap-3">
+                              <div className={`text-3xl ${isUnlocked ? "" : "grayscale"}`}>
+                                {era.icon || "⏳"}
+                              </div>
+                              <div className="flex-1">
+                                <h5 className={`font-semibold ${isUnlocked ? "text-white" : "text-slate-500"}`}>
+                                  {era.name}
+                                </h5>
+                                <p className="text-xs text-slate-400 mb-2">
+                                  {era.timePeriod}
+                                </p>
+                                {!isUnlocked && (
+                                  <div className="flex items-center gap-2 text-xs text-slate-500">
+                                    <Lock className="w-3 h-3" />
+                                    <span>Collect {era.artifactsRequired} artifacts to unlock</span>
+                                  </div>
+                                )}
+                                {isUnlocked && !era.isStartingEra && (
+                                  <div className="flex items-center gap-2 text-xs text-green-400">
+                                    <Gem className="w-3 h-3" />
+                                    <span>Unlocked!</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+
+                    {missionsData?.missions && missionsData.missions.length > 0 && (
+                      <>
+                        <h4 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                          <Target className="w-4 h-4 text-cyan-400" />
+                          Discovery Missions
+                        </h4>
+                        <div className="space-y-2 mb-4">
+                          {missionsData.missions.slice(0, 3).map((mission: any) => {
+                            const progress = (missionsData.progress || []).find((p: any) => p.missionId === mission.id);
+                            const isCompleted = progress?.status === 'completed';
+                            const isActive = progress?.status === 'active';
+                            
+                            return (
+                              <div
+                                key={mission.id}
+                                className={`p-3 rounded-lg border transition-all ${
+                                  isCompleted 
+                                    ? "bg-green-500/10 border-green-500/30" 
+                                    : isActive
+                                      ? "bg-cyan-500/10 border-cyan-500/30"
+                                      : "bg-slate-800/50 border-slate-700 hover:border-slate-600"
+                                }`}
+                                data-testid={`card-mission-${mission.id}`}
+                              >
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-3">
+                                    <Scroll className={`w-5 h-5 ${isCompleted ? "text-green-400" : isActive ? "text-cyan-400" : "text-slate-500"}`} />
+                                    <div>
+                                      <h5 className={`font-medium text-sm ${isCompleted ? "text-green-400" : "text-white"}`}>
+                                        {mission.title}
+                                      </h5>
+                                      <p className="text-xs text-slate-400">
+                                        +{mission.shellsReward} Shells • +{mission.experienceReward} XP
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <Badge className={
+                                    isCompleted 
+                                      ? "bg-green-500/20 text-green-400 border-green-500/30" 
+                                      : isActive 
+                                        ? "bg-cyan-500/20 text-cyan-400 border-cyan-500/30 animate-pulse" 
+                                        : "bg-slate-700 text-slate-400 border-slate-600"
+                                  }>
+                                    {isCompleted ? "Complete" : isActive ? "In Progress" : "Available"}
+                                  </Badge>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </>
+                    )}
+
+                    <Link href="/chronicles/time-portal">
+                      <Button 
+                        className="w-full bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500"
+                        data-testid="button-open-portal"
+                      >
+                        <Timer className="w-4 h-4 mr-2" />
+                        Enter Time Portal
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </Link>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </Card>
+        </motion.div>
 
         {/* ChronoLink - Communication Hub CTA */}
         <motion.div
