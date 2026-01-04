@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueries } from "@tanstack/react-query";
 import { useLocation, Link } from "wouter";
 import { 
   Home, Map, Users, Coins, Lock, ChevronRight, Sparkles, 
@@ -107,6 +107,25 @@ export default function ChroniclesHub() {
     enabled: !!user,
   });
 
+  // ChronoChat community data for preview
+  const { data: communitiesData } = useQuery({
+    queryKey: ["/api/community/list"],
+    queryFn: async () => {
+      const res = await apiRequest("GET", "/api/community/list");
+      return res.json();
+    },
+    enabled: !!user,
+  });
+
+  const { data: myCommunitiesData } = useQuery({
+    queryKey: ["/api/community/my-communities"],
+    queryFn: async () => {
+      const res = await apiRequest("GET", "/api/community/my-communities");
+      return res.json();
+    },
+    enabled: !!user,
+  });
+
   useEffect(() => {
     if (!authLoading && !user) {
       setLocation("/");
@@ -142,6 +161,12 @@ export default function ChroniclesHub() {
   const shells = typeof shellsData === 'number' ? shellsData : (shellsData?.balance || shellsData?.shells || 0);
   const completedChapters = JOURNEY_CHAPTERS.filter(c => c.status === "completed").length;
   const journeyProgress = (completedChapters / JOURNEY_CHAPTERS.length) * 100;
+  
+  // ChronoChat preview data
+  const allCommunities = communitiesData?.communities || [];
+  const myCommunities = myCommunitiesData?.communities || [];
+  const isChronoLinkActive = myCommunities.length > 0;
+  const featuredCommunities = allCommunities.slice(0, 3);
 
   return (
     <div className="min-h-screen bg-slate-950 text-white relative overflow-hidden">
@@ -406,18 +431,27 @@ export default function ChroniclesHub() {
                 </motion.div>
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs">
-                      NEW
-                    </Badge>
+                    {isChronoLinkActive ? (
+                      <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">
+                        ACTIVE
+                      </Badge>
+                    ) : (
+                      <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs">
+                        NEW
+                      </Badge>
+                    )}
                     <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-xs">
                       Season Zero
                     </Badge>
                   </div>
                   <h3 className="text-xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                    Activate ChronoLink
+                    {isChronoLinkActive ? "ChronoLink Active" : "Activate ChronoLink"}
                   </h3>
                   <p className="text-slate-400 text-sm mt-1">
-                    Connect with other travelers across the timelines. Share discoveries, form alliances, and shape the future together.
+                    {isChronoLinkActive 
+                      ? `You're connected to ${myCommunities.length} communit${myCommunities.length === 1 ? 'y' : 'ies'}. Continue your conversations and earn Shells.`
+                      : "Connect with other travelers across the timelines. Share discoveries, form alliances, and shape the future together."
+                    }
                   </p>
                 </div>
               </div>
@@ -461,6 +495,26 @@ export default function ChroniclesHub() {
                 </div>
               </div>
             </div>
+            
+            {/* Community Preview */}
+            {featuredCommunities.length > 0 && (
+              <div className="relative z-10 mt-4 pt-4 border-t border-slate-700/50">
+                <p className="text-xs text-slate-500 uppercase tracking-wider mb-3 text-center">Active Communities</p>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {featuredCommunities.map((community: any) => (
+                    <Link key={community.id} href="/chronochat">
+                      <div className="flex items-center gap-2 bg-slate-800/50 hover:bg-slate-700/50 px-3 py-2 rounded-full border border-slate-700 hover:border-cyan-500/30 transition-all cursor-pointer">
+                        <span className="text-lg">{community.icon || "⚡"}</span>
+                        <span className="text-sm text-white">{community.name}</span>
+                        {community.memberCount > 0 && (
+                          <span className="text-xs text-slate-500">{community.memberCount} members</span>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </Card>
         </motion.div>
 
