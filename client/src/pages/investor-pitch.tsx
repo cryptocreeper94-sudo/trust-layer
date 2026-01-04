@@ -59,11 +59,12 @@ const tokenomics = [
 
 const milestones = [
   { date: "Q4 2025", title: "Testnet Launch", desc: "Full testnet with all core features", status: "completed" },
-  { date: "Q1 2026", title: "Security Audits", desc: "Guardian Protocol + external audits", status: "in_progress" },
+  { date: "NOW", title: "Season Zero BETA v0.1", desc: "Chronicles playable - Medieval Era, AI NPCs, Chronicle Proofs", status: "in_progress" },
+  { date: "Q1 2026", title: "Security Audits", desc: "Guardian Protocol + external audits", status: "upcoming" },
   { date: "Feb 14, 2026", title: "TGE (Token Launch)", desc: "Mainnet launch & token generation", status: "upcoming" },
   { date: "Q2 2026", title: "DeFi Suite Launch", desc: "DEX, Staking, Bridge go live", status: "planned" },
-  { date: "Q3 2026", title: "Gaming Ecosystem", desc: "DarkWave Chronicles & partner games", status: "planned" },
-  { date: "Q4 2026", title: "Enterprise Adoption", desc: "B2B partnerships & integrations", status: "planned" }
+  { date: "Q3 2026", title: "Chronicles Expansion", desc: "20+ eras, full economy, mobile companion", status: "planned" },
+  { date: "Q4 2026", title: "70+ Eras & Scale", desc: "Full neverending world with all eras", status: "planned" }
 ];
 
 const investmentThesis = [
@@ -74,8 +75,8 @@ const investmentThesis = [
     gradient: "from-emerald-500 to-teal-600"
   },
   {
-    title: "Entertainment Superchain Focus",
-    description: "While others chase generic DeFi, we're building the infrastructure for gaming, social, and entertainment — a $200B+ market opportunity.",
+    title: "Chronicles: The Parallel Self Game",
+    description: "DarkWave Chronicles (BETA v0.1 live now) - You navigate 70+ eras as YOUR parallel self. AI NPCs, Chronicle Proofs, voice cloning - infrastructure for immersive entertainment.",
     icon: Gamepad2,
     gradient: "from-purple-500 to-pink-600"
   },
@@ -124,8 +125,8 @@ export default function InvestorPitch() {
   });
 
   const liveStats = {
-    blockHeight: chainStats?.chainHeight?.toLocaleString() || "910,000+",
-    validators: validators?.length || 4,
+    blockHeight: (chainStats as any)?.chainHeight?.toLocaleString() || "910,000+",
+    validators: Array.isArray(validators) ? validators.length : 4,
     totalStake: "20,000,000 DWC",
     uptime: "99.99%",
   };

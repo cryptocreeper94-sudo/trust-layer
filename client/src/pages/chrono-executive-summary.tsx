@@ -40,8 +40,13 @@ export default function ChronoExecutiveSummary() {
               animate={{ opacity: 1, y: 0 }}
               className="text-center mb-12"
             >
-              <div className="inline-block px-4 py-1 rounded-full bg-amber-500/20 text-amber-400 text-sm font-medium mb-4">
-                Confidential Executive Summary
+              <div className="flex flex-wrap justify-center gap-2 mb-4">
+                <div className="inline-block px-4 py-1 rounded-full bg-amber-500/20 text-amber-400 text-sm font-medium animate-pulse">
+                  BETA v0.1 NOW PLAYABLE
+                </div>
+                <div className="inline-block px-4 py-1 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium">
+                  Executive Summary
+                </div>
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-4">
                 <span className="bg-gradient-to-r from-amber-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">

@@ -35,6 +35,36 @@ interface RoadmapPhase {
 
 const roadmapData: RoadmapPhase[] = [
   {
+    phase: "Season Zero",
+    title: "Chronicles BETA v0.1 (NOW)",
+    icon: <Rocket className="w-6 h-6" />,
+    items: [
+      {
+        title: "Medieval Era (Age of Crowns)",
+        description: "First playable era with 5 factions and AI NPCs",
+        status: "completed",
+        details: ["Guardian-verified AI", "Chronicle Proofs on-chain", "Voice cloning technology"]
+      },
+      {
+        title: "AI NPC Conversation System",
+        description: "GPT-4o powered NPCs with persistent memory",
+        status: "completed",
+        details: ["Context-aware responses", "Faction personality", "Choice Echoes (no moral labels)"]
+      },
+      {
+        title: "5-Axis Emotion System",
+        description: "Arousal, Valence, Social Cohesion, Fear, and Ambition",
+        status: "completed"
+      },
+      {
+        title: "Business Storefront Program",
+        description: "Real businesses claim in-game real estate across all eras",
+        status: "in-progress",
+        eta: "Q1 2026"
+      }
+    ]
+  },
+  {
     phase: "Phase 1",
     title: "Core Blockchain Infrastructure",
     icon: <Cpu className="w-6 h-6" />,

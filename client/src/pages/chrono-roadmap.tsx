@@ -29,17 +29,34 @@ interface Phase {
 
 const PHASES: Phase[] = [
   {
+    id: "season-zero",
+    name: "Season Zero: The Awakening",
+    period: "NOW - Feb 14, 2026",
+    status: "current",
+    description: "BETA v0.1 - First playable era with AI NPCs, factions, and Chronicle Proofs.",
+    milestones: [
+      { item: "Medieval Era (Age of Crowns) playable", done: true },
+      { item: "5 factions with AI NPCs", done: true },
+      { item: "Guardian-verified AI execution", done: true },
+      { item: "Chronicle Proofs on-chain", done: true },
+      { item: "Voice cloning technology", done: true },
+      { item: "Business storefront program", done: false },
+    ],
+    image: medievalKingdom,
+    color: "from-amber-500 to-orange-600"
+  },
+  {
     id: "foundation",
     name: "Foundation",
     period: "Q4 2024 - Q1 2026",
-    status: "current",
-    description: "Building the core infrastructure, community, and vision documentation.",
+    status: "completed",
+    description: "Core infrastructure, blockchain, and vision documentation.",
     milestones: [
       { item: "Vision document complete", done: true },
       { item: "Website & community launch", done: true },
       { item: "DWC blockchain operational", done: true },
-      { item: "Crowdfunding campaign", done: false },
-      { item: "Discord community 1,000+", done: false },
+      { item: "AI NPC conversation system", done: true },
+      { item: "5-Axis emotion system", done: true },
     ],
     image: fantasyWorld,
     color: "from-cyan-500 to-blue-600"

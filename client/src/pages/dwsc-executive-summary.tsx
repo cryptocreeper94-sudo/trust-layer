@@ -75,8 +75,13 @@ export default function DWSCExecutiveSummary() {
               animate={{ opacity: 1, y: 0 }}
               className="text-center mb-12"
             >
-              <div className="inline-block px-4 py-1 rounded-full bg-cyan-500/20 text-cyan-400 text-sm font-medium mb-4">
-                Executive Summary
+              <div className="flex flex-wrap justify-center gap-2 mb-4">
+                <div className="inline-block px-4 py-1 rounded-full bg-amber-500/20 text-amber-400 text-sm font-medium animate-pulse">
+                  Chronicles BETA v0.1 LIVE
+                </div>
+                <div className="inline-block px-4 py-1 rounded-full bg-cyan-500/20 text-cyan-400 text-sm font-medium">
+                  Executive Summary
+                </div>
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-4">
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">

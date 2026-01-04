@@ -29,27 +29,44 @@ interface Phase {
   milestones: Milestone[];
 }
 
-// ACCURATE STATUS - Only mark what's actually fully implemented
+// ACCURATE STATUS - Updated for Season Zero BETA v0.1
 // "completed" = fully working, production-ready
 // "in_progress" = actively being developed
 // "pending" = not yet started
-// Progress: ~5% complete (architecture defined, scenario generator prototype exists)
+// Season Zero is LIVE with Medieval Era playable
 const CHRONICLES_PHASES: Phase[] = [
+  {
+    id: "season-zero",
+    name: "Season Zero: The Awakening (BETA v0.1)",
+    description: "First playable era - Medieval Kingdom with AI NPCs and Chronicle Proofs",
+    status: "in_progress",
+    targetDate: "NOW - Feb 14, 2026",
+    icon: <Crown className="w-6 h-6" />,
+    image: medievalKingdom,
+    milestones: [
+      { id: "sz1", title: "Medieval Era (Age of Crowns)", description: "First of 70+ eras - medieval kingdom with 5 factions", status: "completed", isRequired: true },
+      { id: "sz2", title: "AI NPC Conversations", description: "Guardian-verified GPT-4o powered NPCs with persistent memory", status: "completed", isRequired: true },
+      { id: "sz3", title: "Chronicle Proofs", description: "Soulbound NFTs recording major decisions on-chain", status: "completed", isRequired: true },
+      { id: "sz4", title: "Voice Cloning Technology", description: "ElevenLabs/Resemble.ai integration for NPC voices", status: "completed", isRequired: true },
+      { id: "sz5", title: "5-Axis Emotion System", description: "Arousal, Valence, Social Cohesion, Fear, and Ambition", status: "completed", isRequired: true },
+      { id: "sz6", title: "Business Storefront Program", description: "Real businesses claim in-game real estate across all eras", status: "in_progress", isRequired: true },
+    ],
+  },
   {
     id: "phase-0",
     name: "Phase 0: Foundation",
-    description: "Build the core systems that power every AI life in the world",
-    status: "in_progress",
-    targetDate: "TBD",
+    description: "Core AI systems powering every life in the world",
+    status: "completed",
+    targetDate: "Completed",
     icon: <Brain className="w-6 h-6" />,
     image: fantasyWorld,
     milestones: [
-      { id: "m1", title: "5-Axis Emotion System", description: "Arousal, Valence, Social Cohesion, Fear, and Ambition driving every decision", status: "in_progress", isRequired: true },
-      { id: "m2", title: "Belief System Framework", description: "Buddhism, Christianity, Islam, Hinduism, atheism, and more shaping moral compass", status: "pending", isRequired: true },
-      { id: "m3", title: "Scenario Generator", description: "AI-generated situations with consequence webs and emotional impact", status: "in_progress", isRequired: true },
-      { id: "m4", title: "Character Portrait System", description: "Photorealistic character cards with emotion visualization", status: "pending", isRequired: true },
-      { id: "m5", title: "Single-Era Sandbox", description: "One historical era with 200 AI agents living their lives", status: "pending", isRequired: true },
-      { id: "m6", title: "Emotion Dashboard", description: "See how your character feels and why", status: "pending", isRequired: true },
+      { id: "m1", title: "5-Axis Emotion System", description: "Arousal, Valence, Social Cohesion, Fear, and Ambition driving every decision", status: "completed", isRequired: true },
+      { id: "m2", title: "Belief System Framework", description: "Buddhism, Christianity, Islam, Hinduism, atheism, and more shaping moral compass", status: "in_progress", isRequired: true },
+      { id: "m3", title: "Scenario Generator", description: "AI-generated situations with consequence webs and emotional impact", status: "completed", isRequired: true },
+      { id: "m4", title: "Character Portrait System", description: "Photorealistic character cards with emotion visualization", status: "in_progress", isRequired: true },
+      { id: "m5", title: "Single-Era Sandbox", description: "One historical era with 200 AI agents living their lives", status: "completed", isRequired: true },
+      { id: "m6", title: "Emotion Dashboard", description: "See how your character feels and why", status: "in_progress", isRequired: true },
     ],
   },
   {
