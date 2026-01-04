@@ -918,7 +918,7 @@ export async function registerRoutes(
   // Simple Email/Password Registration (no Firebase required)
   app.post("/api/auth/register", authRateLimit, async (req, res) => {
     try {
-      const { email, password, displayName, rememberMe } = req.body;
+      const { email, password, displayName, username, rememberMe } = req.body;
       
       if (!email || !password) {
         return res.status(400).json({ error: "Email and password are required" });
@@ -928,10 +928,26 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Password must be at least 6 characters" });
       }
 
+      if (!username || username.length < 3) {
+        return res.status(400).json({ error: "Username must be at least 3 characters" });
+      }
+
+      // Validate username format: lowercase letters, numbers, underscores only
+      const usernameRegex = /^[a-z0-9_]+$/;
+      if (!usernameRegex.test(username)) {
+        return res.status(400).json({ error: "Username can only contain lowercase letters, numbers, and underscores" });
+      }
+
       // Check if user already exists
       const existingUser = await storage.getUserByEmail(email);
       if (existingUser) {
         return res.status(400).json({ error: "An account with this email already exists" });
+      }
+
+      // Check if username is taken
+      const existingUsername = await db.select().from(users).where(eq(users.username, username)).limit(1);
+      if (existingUsername.length > 0) {
+        return res.status(400).json({ error: "This username is already taken" });
       }
 
       // Hash password with SHA-256 + salt
@@ -946,8 +962,8 @@ export async function registerRoutes(
       await storage.upsertFirebaseUser({
         id: userId,
         email: email,
-        username: null,
-        displayName: displayName || email.split('@')[0],
+        username: username,
+        displayName: displayName || username,
         firstName: displayName?.split(' ')[0] || null,
         lastName: displayName?.split(' ').slice(1).join(' ') || null,
         profileImageUrl: null,

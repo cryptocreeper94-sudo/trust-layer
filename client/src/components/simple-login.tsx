@@ -23,6 +23,7 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
@@ -30,6 +31,7 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
     setEmail("");
     setPassword("");
     setName("");
+    setUsername("");
     setView("login");
     setShowPassword(false);
     setRememberMe(false);
@@ -70,9 +72,17 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
       toast({ title: "Weak password", description: "Password must be at least 6 characters", variant: "destructive" });
       return;
     }
+    if (!username.trim()) {
+      toast({ title: "Username required", description: "Please choose a username", variant: "destructive" });
+      return;
+    }
+    if (username.length < 3) {
+      toast({ title: "Username too short", description: "Username must be at least 3 characters", variant: "destructive" });
+      return;
+    }
     setLoading(true);
     try {
-      await register(email, password, name, rememberMe);
+      await register(email, password, name, username, rememberMe);
       toast({ title: "Account created!", description: "Welcome to DarkWave!" });
       onSuccess?.();
       handleClose();
@@ -131,14 +141,25 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
 
           <form onSubmit={view === "login" ? handleLogin : handleSignup} className="space-y-4">
             {view === "signup" && (
-              <Input
-                type="text"
-                placeholder="Display Name (optional)"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="bg-white/5 border-white/10 h-12"
-                data-testid="input-name"
-              />
+              <>
+                <Input
+                  type="text"
+                  placeholder="Your Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="bg-white/5 border-white/10 h-12"
+                  data-testid="input-name"
+                />
+                <Input
+                  type="text"
+                  placeholder="Choose a Username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
+                  className="bg-white/5 border-white/10 h-12"
+                  required
+                  data-testid="input-username"
+                />
+              </>
             )}
 
             <Input

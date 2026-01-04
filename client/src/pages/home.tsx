@@ -319,9 +319,16 @@ function EcosystemCarousel({ apps }: { apps: EcosystemApp[] }) {
   );
 }
 
+function getTimeGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 17) return "Good afternoon";
+  return "Good evening";
+}
+
 export default function Home() {
   const { preferences } = usePreferences();
-  const { user, loading: authLoading, isAuthenticated, displayName, logout } = useSimpleAuth();
+  const { user, loading: authLoading, isAuthenticated, displayName, username, logout } = useSimpleAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showGamesModal, setShowGamesModal] = useState(false);
   usePageAnalytics();
@@ -369,6 +376,20 @@ export default function Home() {
         </div>
 
         <div className="container relative z-10 px-4 text-center">
+          {isAuthenticated && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6"
+            >
+              <p className="text-xl md:text-2xl font-medium text-white/90" data-testid="text-greeting">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">
+                  {getTimeGreeting()}, {username}
+                </span>
+                <Sparkles className="inline-block w-5 h-5 ml-2 text-cyan-400" />
+              </p>
+            </motion.div>
+          )}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

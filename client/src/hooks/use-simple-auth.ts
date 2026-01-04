@@ -36,11 +36,11 @@ export function useSimpleAuth() {
     return result;
   }, [refetch]);
 
-  const register = useCallback(async (email: string, password: string, displayName?: string, rememberMe?: boolean) => {
+  const register = useCallback(async (email: string, password: string, displayName?: string, username?: string, rememberMe?: boolean) => {
     const response = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, displayName, rememberMe }),
+      body: JSON.stringify({ email, password, displayName, username, rememberMe }),
     });
     const result = await response.json();
     if (!response.ok) {
@@ -60,7 +60,8 @@ export function useSimpleAuth() {
     user: data,
     loading: isLoading,
     isAuthenticated: !!data,
-    displayName: data?.displayName || data?.email?.split("@")[0] || "User",
+    displayName: data?.displayName || data?.username || data?.email?.split("@")[0] || "User",
+    username: data?.username || data?.displayName || data?.email?.split("@")[0] || "User",
     email: data?.email,
     photoURL: data?.profileImageUrl,
     login,
