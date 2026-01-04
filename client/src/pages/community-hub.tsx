@@ -41,9 +41,27 @@ function useWebSocket(channelId: string | null, communityId: string | null, user
   const [onlineUsers, setOnlineUsers] = useState<any[]>([]);
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeout = useRef<any>(null);
+  const wsTokenRef = useRef<string | null>(null);
 
-  const connect = useCallback(() => {
+  const connect = useCallback(async () => {
     if (!channelId || !user) return;
+
+    // Fetch WebSocket auth token if not cached
+    if (!wsTokenRef.current) {
+      try {
+        const res = await fetch('/api/auth/ws-token');
+        if (res.ok) {
+          const data = await res.json();
+          wsTokenRef.current = data.token;
+        } else {
+          console.error('Failed to get WS token');
+          return;
+        }
+      } catch (err) {
+        console.error('WS token fetch error:', err);
+        return;
+      }
+    }
 
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const ws = new WebSocket(`${protocol}//${window.location.host}/ws/community`);
@@ -54,13 +72,21 @@ function useWebSocket(channelId: string | null, communityId: string | null, user
         type: "join",
         channelId,
         communityId,
-        userId: user.claims?.sub || user.id,
-        username: user.claims?.firstName || user.firstName || "User",
+        token: wsTokenRef.current,
       }));
     };
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
+      
+      // Handle auth errors
+      if (data.type === 'error') {
+        console.error('WebSocket error:', data.message);
+        if (data.message?.includes('Authentication') || data.message?.includes('token')) {
+          wsTokenRef.current = null; // Clear stale token
+        }
+        return;
+      }
       
       switch (data.type) {
         case "new_message":
@@ -96,6 +122,8 @@ function useWebSocket(channelId: string | null, communityId: string | null, user
     };
 
     ws.onclose = () => {
+      // Clear cached token on disconnect to force refresh on reconnect
+      wsTokenRef.current = null;
       reconnectTimeout.current = setTimeout(() => {
         connect();
       }, 2000);

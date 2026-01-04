@@ -1015,6 +1015,42 @@ export async function registerRoutes(
     }
   });
 
+  // Generate WebSocket auth token for real-time features
+  app.get("/api/auth/ws-token", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      const user = await storage.getUser(userId);
+      
+      if (!user) {
+        return res.status(401).json({ error: "User not found" });
+      }
+      
+      // Create a simple JWT-like token for WebSocket auth
+      const payload = {
+        sub: user.id,
+        name: user.firstName || user.displayName || user.email?.split('@')[0] || 'User',
+        exp: Math.floor(Date.now() / 1000) + (60 * 60), // 1 hour expiry
+        iat: Math.floor(Date.now() / 1000)
+      };
+      
+      const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
+      const payloadB64 = Buffer.from(JSON.stringify(payload)).toString('base64url');
+      const signature = crypto.createHmac('sha256', process.env.SESSION_SECRET || 'darkwave-ws-secret')
+        .update(`${header}.${payloadB64}`)
+        .digest('base64url');
+      
+      const token = `${header}.${payloadB64}.${signature}`;
+      
+      res.json({ token });
+    } catch (error) {
+      console.error("WS token generation error:", error);
+      res.status(500).json({ error: "Failed to generate token" });
+    }
+  });
+
   // Logout
   app.post("/api/auth/logout", (req, res) => {
     req.session.destroy((err) => {
@@ -4556,6 +4592,14 @@ export async function registerRoutes(
         return res.status(401).json({ error: "Authentication required" });
       }
       
+      // Get quest definition
+      const [quest] = await db.select().from(questDefinitions)
+        .where(eq(questDefinitions.id, req.params.questId));
+      
+      if (!quest) {
+        return res.status(404).json({ error: "Quest not found" });
+      }
+      
       const existing = await db.select().from(questProgress)
         .where(and(
           eq(questProgress.questId, req.params.questId),
@@ -4566,13 +4610,262 @@ export async function registerRoutes(
         return res.json({ progress: existing[0], alreadyStarted: true });
       }
       
+      // Parse requirements to get target count
+      let targetCount = 1;
+      try {
+        const reqs = JSON.parse(quest.requirements || '{}');
+        targetCount = reqs.count || reqs.target || reqs.amount || 1;
+      } catch (e) {
+        // Default to 1 if requirements is not valid JSON
+      }
+      
       const created = await db.insert(questProgress)
-        .values({ questId: req.params.questId, userId, status: 'in_progress' })
+        .values({ 
+          questId: req.params.questId, 
+          userId, 
+          status: 'in_progress',
+          progressPercent: 0,
+          progressData: JSON.stringify({ current: 0, target: targetCount })
+        })
         .returning();
       res.json({ progress: created[0], started: true });
     } catch (error) {
       console.error("Error starting quest:", error);
       res.status(500).json({ error: "Failed to start quest" });
+    }
+  });
+
+  // Complete a quest and distribute rewards (idempotent)
+  app.post("/api/quests/:questId/complete", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const { questId } = req.params;
+      
+      // Get quest definition
+      const [quest] = await db.select().from(questDefinitions)
+        .where(eq(questDefinitions.id, questId));
+      
+      if (!quest) {
+        return res.status(404).json({ error: "Quest not found" });
+      }
+      
+      // Get existing progress
+      const [progress] = await db.select().from(questProgress)
+        .where(and(
+          eq(questProgress.questId, questId),
+          eq(questProgress.userId, userId)
+        ));
+      
+      if (!progress) {
+        return res.status(400).json({ error: "Quest not started" });
+      }
+      
+      const rewardAmount = quest.shellsReward || 10;
+      
+      // Idempotent - if already completed, just return success with info
+      if (progress.status === 'completed' || progress.status === 'claimed') {
+        return res.json({ 
+          progress, 
+          completed: true,
+          alreadyCompleted: true,
+          reward: {
+            shells: rewardAmount,
+            xp: quest.reputationReward || 10
+          }
+        });
+      }
+      
+      // Update progress to completed
+      const [updatedProgress] = await db.update(questProgress)
+        .set({
+          status: 'completed',
+          completedAt: new Date(),
+          progressPercent: 100,
+        })
+        .where(eq(questProgress.id, progress.id))
+        .returning();
+      
+      // Award Shells as quest reward
+      const user = await storage.getUser(userId);
+      
+      if (user) {
+        await shellsService.addShells(
+          userId,
+          user.firstName || user.email || 'User',
+          rewardAmount,
+          'earn',
+          `Completed quest: ${quest.title}`,
+          questId,
+          'quest'
+        );
+      }
+      
+      // Update leaderboard for active season
+      const [activeSeason] = await db.select().from(questSeasons)
+        .where(eq(questSeasons.status, 'active'))
+        .limit(1);
+      
+      if (activeSeason) {
+        const pointsEarned = quest.reputationReward || 10;
+        
+        // Get or create leaderboard entry
+        const [existingEntry] = await db.select().from(questLeaderboard)
+          .where(and(
+            eq(questLeaderboard.seasonId, activeSeason.id),
+            eq(questLeaderboard.userId, userId)
+          ));
+        
+        if (existingEntry) {
+          await db.update(questLeaderboard)
+            .set({
+              totalPoints: existingEntry.totalPoints + pointsEarned,
+              questsCompleted: existingEntry.questsCompleted + 1,
+              updatedAt: new Date(),
+            })
+            .where(eq(questLeaderboard.id, existingEntry.id));
+        } else {
+          await db.insert(questLeaderboard)
+            .values({
+              seasonId: activeSeason.id,
+              userId,
+              username: user?.firstName || user?.displayName || user?.email?.split('@')[0] || 'User',
+              totalPoints: pointsEarned,
+              questsCompleted: 1,
+            });
+        }
+      }
+      
+      res.json({ 
+        progress: updatedProgress, 
+        completed: true,
+        reward: {
+          shells: rewardAmount,
+          xp: quest.reputationReward || 10
+        }
+      });
+    } catch (error) {
+      console.error("Error completing quest:", error);
+      res.status(500).json({ error: "Failed to complete quest" });
+    }
+  });
+
+  // Update quest progress (increment)
+  app.post("/api/quests/:questId/progress", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const { questId } = req.params;
+      const { increment = 1 } = req.body;
+      
+      // Get existing progress
+      const [progress] = await db.select().from(questProgress)
+        .where(and(
+          eq(questProgress.questId, questId),
+          eq(questProgress.userId, userId)
+        ));
+      
+      if (!progress) {
+        return res.status(400).json({ error: "Quest not started" });
+      }
+      
+      if (progress.status === 'completed' || progress.status === 'claimed') {
+        return res.json({ progress, alreadyCompleted: true });
+      }
+      
+      // Parse progressData to get current and target
+      let progressInfo = { current: 0, target: 1 };
+      try {
+        progressInfo = JSON.parse(progress.progressData || '{"current": 0, "target": 1}');
+      } catch (e) {}
+      
+      const newCurrent = (progressInfo.current || 0) + increment;
+      const target = progressInfo.target || 1;
+      const isComplete = newCurrent >= target;
+      const newPercent = Math.min(Math.round((newCurrent / target) * 100), 100);
+      
+      // Update progress
+      const [updated] = await db.update(questProgress)
+        .set({
+          progressData: JSON.stringify({ current: Math.min(newCurrent, target), target }),
+          progressPercent: newPercent,
+          status: isComplete ? 'completed' : 'in_progress',
+          completedAt: isComplete ? new Date() : null,
+        })
+        .where(eq(questProgress.id, progress.id))
+        .returning();
+      
+      let reward = null;
+      
+      // If complete, award rewards directly
+      if (isComplete) {
+        const [quest] = await db.select().from(questDefinitions)
+          .where(eq(questDefinitions.id, questId));
+        
+        if (quest) {
+          const user = await storage.getUser(userId);
+          const rewardAmount = quest.shellsReward || 10;
+          
+          if (user) {
+            await shellsService.addShells(
+              userId,
+              user.firstName || user.email || 'User',
+              rewardAmount,
+              'earn',
+              `Completed quest: ${quest.title}`,
+              questId,
+              'quest'
+            );
+          }
+          
+          // Update leaderboard
+          const [activeSeason] = await db.select().from(questSeasons)
+            .where(eq(questSeasons.status, 'active'))
+            .limit(1);
+          
+          if (activeSeason) {
+            const pointsEarned = quest.reputationReward || 10;
+            
+            const [existingEntry] = await db.select().from(questLeaderboard)
+              .where(and(
+                eq(questLeaderboard.seasonId, activeSeason.id),
+                eq(questLeaderboard.userId, userId)
+              ));
+            
+            if (existingEntry) {
+              await db.update(questLeaderboard)
+                .set({
+                  totalPoints: existingEntry.totalPoints + pointsEarned,
+                  questsCompleted: existingEntry.questsCompleted + 1,
+                  updatedAt: new Date(),
+                })
+                .where(eq(questLeaderboard.id, existingEntry.id));
+            } else {
+              await db.insert(questLeaderboard)
+                .values({
+                  seasonId: activeSeason.id,
+                  userId,
+                  username: user?.firstName || user?.displayName || user?.email?.split('@')[0] || 'User',
+                  totalPoints: pointsEarned,
+                  questsCompleted: 1,
+                });
+            }
+          }
+          
+          reward = { shells: rewardAmount, xp: quest.reputationReward || 10 };
+        }
+      }
+      
+      res.json({ progress: updated, isComplete, reward });
+    } catch (error) {
+      console.error("Error updating quest progress:", error);
+      res.status(500).json({ error: "Failed to update progress" });
     }
   });
 

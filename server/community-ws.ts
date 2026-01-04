@@ -1,6 +1,8 @@
 import { WebSocket, WebSocketServer } from "ws";
 import type { Server } from "http";
+import crypto from "crypto";
 import { communityHubService } from "./community-hub-service";
+import { storage } from "./storage";
 
 interface ChannelClient {
   ws: WebSocket;
@@ -8,15 +10,62 @@ interface ChannelClient {
   username: string;
   channelId: string;
   communityId: string;
+  tokenExpiry: number; // Unix timestamp when token expires
+  expiryTimer?: NodeJS.Timeout;
 }
 
 const channelClients = new Map<string, Set<ChannelClient>>();
+
+// Verify signed auth token and return user info with expiry, or null if invalid
+async function verifyAuthToken(token: string): Promise<{ userId: string; username: string; exp: number } | null> {
+  if (!token) return null;
+  
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    
+    const [header, payloadB64, signature] = parts;
+    
+    // Verify signature
+    const expectedSignature = crypto.createHmac('sha256', process.env.SESSION_SECRET || 'darkwave-ws-secret')
+      .update(`${header}.${payloadB64}`)
+      .digest('base64url');
+    
+    if (!crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature))) {
+      return null;
+    }
+    
+    // Parse and verify payload
+    const payload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString());
+    
+    // Check expiry
+    const now = Math.floor(Date.now() / 1000);
+    if (payload.exp && payload.exp < now) {
+      return null;
+    }
+    
+    if (!payload.sub) return null;
+    
+    // Verify user exists in database
+    const user = await storage.getUser(payload.sub);
+    if (!user) return null;
+    
+    return {
+      userId: user.id,
+      username: payload.name || user.firstName || user.email || 'User',
+      exp: payload.exp || (now + 3600) // Default 1 hour if no exp
+    };
+  } catch (err) {
+    return null;
+  }
+}
 
 export function setupCommunityWebSocket(server: Server) {
   const wss = new WebSocketServer({ server, path: "/ws/community" });
 
   wss.on("connection", (ws: WebSocket) => {
     let client: ChannelClient | null = null;
+    let authenticated = false;
 
     ws.on("message", async (data: string) => {
       try {
@@ -24,10 +73,39 @@ export function setupCommunityWebSocket(server: Server) {
 
         switch (message.type) {
           case "join": {
-            const { channelId, communityId, userId, username } = message;
-            if (!channelId || !userId || !username) return;
+            const { channelId, communityId, token } = message;
+            if (!channelId) {
+              ws.send(JSON.stringify({ type: "error", message: "Channel ID required" }));
+              return;
+            }
+            
+            // Require and verify auth token
+            if (!token) {
+              ws.send(JSON.stringify({ type: "error", message: "Authentication required" }));
+              ws.close();
+              return;
+            }
+            
+            const authResult = await verifyAuthToken(token);
+            if (!authResult) {
+              ws.send(JSON.stringify({ type: "error", message: "Invalid authentication token" }));
+              ws.close();
+              return;
+            }
+            
+            authenticated = true;
+            const { userId, username, exp } = authResult;
 
-            client = { ws, userId, username, channelId, communityId };
+            client = { ws, userId, username, channelId, communityId, tokenExpiry: exp };
+            
+            // Set up expiry timer to disconnect when token expires
+            const msUntilExpiry = (exp * 1000) - Date.now();
+            if (msUntilExpiry > 0) {
+              client.expiryTimer = setTimeout(() => {
+                ws.send(JSON.stringify({ type: "error", message: "Session expired, please reconnect" }));
+                ws.close();
+              }, msUntilExpiry);
+            }
 
             if (!channelClients.has(channelId)) {
               channelClients.set(channelId, new Set());
@@ -51,7 +129,7 @@ export function setupCommunityWebSocket(server: Server) {
           }
 
           case "message": {
-            if (!client) return;
+            if (!authenticated || !client) return;
             const { content, replyToId, attachment } = message;
             if (!content?.trim() && !attachment) return;
 
@@ -81,7 +159,7 @@ export function setupCommunityWebSocket(server: Server) {
           }
 
           case "reaction": {
-            if (!client) return;
+            if (!authenticated || !client) return;
             const { messageId, emoji, action } = message;
             if (!messageId || !emoji) return;
 
@@ -101,7 +179,7 @@ export function setupCommunityWebSocket(server: Server) {
           }
 
           case "typing": {
-            if (!client) return;
+            if (!authenticated || !client) return;
             broadcastToChannel(client.channelId, {
               type: "typing",
               userId: client.userId,
@@ -111,7 +189,7 @@ export function setupCommunityWebSocket(server: Server) {
           }
 
           case "edit_message": {
-            if (!client) return;
+            if (!authenticated || !client) return;
             const { messageId, content } = message;
             if (!messageId || !content?.trim()) return;
 
@@ -126,7 +204,7 @@ export function setupCommunityWebSocket(server: Server) {
           }
 
           case "delete_message": {
-            if (!client) return;
+            if (!authenticated || !client) return;
             const { messageId } = message;
             if (!messageId) return;
 
@@ -147,6 +225,11 @@ export function setupCommunityWebSocket(server: Server) {
 
     ws.on("close", async () => {
       if (client) {
+        // Clear expiry timer on disconnect
+        if (client.expiryTimer) {
+          clearTimeout(client.expiryTimer);
+        }
+        
         const clients = channelClients.get(client.channelId);
         if (clients) {
           clients.delete(client);
