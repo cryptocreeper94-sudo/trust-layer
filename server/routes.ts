@@ -9904,6 +9904,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       // Create account
       const [account] = await db.insert(chronicleAccounts).values({
         username: username.toLowerCase(),
+        displayName: `${firstName.trim()} ${lastName.trim()}`,
         email: email.toLowerCase(),
         firstName: firstName.trim(),
         lastName: lastName.trim(),
