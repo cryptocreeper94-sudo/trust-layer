@@ -23,6 +23,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { useKyc } from "@/hooks/use-kyc";
 import { useAuth } from "@/hooks/use-auth";
+import { AuthLoginModal } from "@/components/auth-login";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 
 interface LaunchedToken {
@@ -107,6 +108,8 @@ export default function Launchpad() {
   const [createOpen, setCreateOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [showKycForm, setShowKycForm] = useState(false);
   const [kycFormData, setKycFormData] = useState({ fullName: "", country: "" });
   const [formData, setFormData] = useState({
@@ -123,10 +126,13 @@ export default function Launchpad() {
   });
 
   const tokens = tokensData?.tokens || [];
-  const filteredTokens = tokens.filter(t => 
-    t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    t.symbol.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredTokens = tokens.filter(t => {
+    const matchesSearch = t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      t.symbol.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || t.status === statusFilter || 
+      (statusFilter === 'presale' && t.launchType === 'presale');
+    return matchesSearch && matchesStatus;
+  });
 
   const createMutation = useMutation({
     mutationFn: async () => {
@@ -190,10 +196,38 @@ export default function Launchpad() {
                 </CollapsibleTrigger>
                 <CollapsibleContent className="mt-2">
                   <div className="p-3 rounded-lg bg-white/5 space-y-2">
-                    <Badge variant="outline" className="mr-2 cursor-pointer">All</Badge>
-                    <Badge variant="outline" className="mr-2 cursor-pointer">Live</Badge>
-                    <Badge variant="outline" className="mr-2 cursor-pointer">Presale</Badge>
-                    <Badge variant="outline" className="cursor-pointer">Ended</Badge>
+                    <Badge 
+                      variant="outline" 
+                      className={`mr-2 cursor-pointer ${statusFilter === 'all' ? 'bg-pink-500/20 border-pink-500 text-pink-400' : ''}`}
+                      onClick={() => setStatusFilter('all')}
+                      data-testid="filter-all"
+                    >
+                      All
+                    </Badge>
+                    <Badge 
+                      variant="outline" 
+                      className={`mr-2 cursor-pointer ${statusFilter === 'live' ? 'bg-green-500/20 border-green-500 text-green-400' : ''}`}
+                      onClick={() => setStatusFilter('live')}
+                      data-testid="filter-live"
+                    >
+                      Live
+                    </Badge>
+                    <Badge 
+                      variant="outline" 
+                      className={`mr-2 cursor-pointer ${statusFilter === 'presale' ? 'bg-amber-500/20 border-amber-500 text-amber-400' : ''}`}
+                      onClick={() => setStatusFilter('presale')}
+                      data-testid="filter-presale"
+                    >
+                      Presale
+                    </Badge>
+                    <Badge 
+                      variant="outline" 
+                      className={`cursor-pointer ${statusFilter === 'ended' ? 'bg-gray-500/20 border-gray-500 text-gray-400' : ''}`}
+                      onClick={() => setStatusFilter('ended')}
+                      data-testid="filter-ended"
+                    >
+                      Ended
+                    </Badge>
                   </div>
                 </CollapsibleContent>
               </Collapsible>
@@ -218,8 +252,15 @@ export default function Launchpad() {
                       <p className="text-sm text-muted-foreground mb-4">
                         Please sign in to launch a token on DarkWave.
                       </p>
-                      <Button asChild className="bg-pink-500 hover:bg-pink-600">
-                        <Link href="/login">Sign In</Link>
+                      <Button 
+                        className="bg-pink-500 hover:bg-pink-600"
+                        onClick={() => {
+                          setCreateOpen(false);
+                          setAuthModalOpen(true);
+                        }}
+                        data-testid="button-sign-in"
+                      >
+                        Sign In
                       </Button>
                     </div>
                   ) : !isKycVerified ? (
@@ -514,6 +555,12 @@ export default function Launchpad() {
         </div>
       </main>
       <Footer />
+      
+      <AuthLoginModal 
+        isOpen={authModalOpen} 
+        onClose={() => setAuthModalOpen(false)}
+        onSuccess={() => setCreateOpen(true)}
+      />
     </div>
   );
 }
