@@ -263,7 +263,7 @@ export function AIAssistant() {
       <AnimatePresence>
         {isMinimized && (
           <motion.button
-            className="fixed bottom-1/2 right-0 z-50 bg-gradient-to-l from-cyan-500 to-purple-500 text-white px-2 py-4 rounded-l-lg shadow-lg"
+            className="fixed bottom-32 right-0 z-50 bg-gradient-to-l from-cyan-500 to-purple-500 text-white px-2 py-4 rounded-l-lg shadow-lg"
             onClick={toggleMinimized}
             initial={{ x: 50 }}
             animate={{ x: 0 }}
