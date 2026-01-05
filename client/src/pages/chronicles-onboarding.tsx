@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "wouter";
@@ -11,8 +11,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { useSimpleAuth } from "@/hooks/use-simple-auth";
-import { apiRequest } from "@/lib/queryClient";
+import { getChroniclesSession } from "@/pages/chronicles-login";
 import { CharacterPortraitPreview } from "@/components/character-portrait";
 
 type OnboardingStep = 
@@ -118,9 +117,34 @@ const ERAS = [
 ];
 
 export default function ChroniclesOnboarding() {
-  const { user, loading: authLoading } = useSimpleAuth();
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
+  const [authLoading, setAuthLoading] = useState(true);
+  const [chroniclesAccount, setChroniclesAccount] = useState<{ id: string; username: string; firstName: string; lastName: string } | null>(null);
+  
+  useEffect(() => {
+    const session = getChroniclesSession();
+    if (!session) {
+      setLocation("/chronicles/login");
+      return;
+    }
+    fetch("/api/chronicles/auth/session", {
+      headers: { Authorization: `Bearer ${session.token}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.authenticated) {
+          setChroniclesAccount(data.account);
+        } else {
+          setLocation("/chronicles/login");
+        }
+        setAuthLoading(false);
+      })
+      .catch(() => {
+        setLocation("/chronicles/login");
+        setAuthLoading(false);
+      });
+  }, [setLocation]);
   
   const [currentStep, setCurrentStep] = useState<OnboardingStep>("welcome");
   const [answers, setAnswers] = useState<PersonalityAnswers>({
@@ -142,21 +166,29 @@ export default function ChroniclesOnboarding() {
 
   const savePersonalityMutation = useMutation({
     mutationFn: async (data: PersonalityAnswers) => {
-      const res = await apiRequest("POST", "/api/chronicles/personality", {
-        playerName: user?.displayName || user?.username || "Hero",
-        parallelSelfName: data.chroniclesName,
-        coreValues: data.coreValues,
-        decisionStyle: data.decisionStyle,
-        conflictApproach: data.conflictApproach,
-        predictedArchetype: data.primaryTrait,
-        worldview: "realist",
-        colorPreference: data.colorPreference,
-        eraInterest: data.eraInterest,
-        primaryTrait: data.primaryTrait,
-        secondaryTrait: data.secondaryTrait,
-        challengeResponse: data.challengeResponse,
-        audioPreference: data.audioPreference,
-        audioMood: data.audioMood,
+      const session = getChroniclesSession();
+      const res = await fetch("/api/chronicles/personality", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session?.token}` 
+        },
+        body: JSON.stringify({
+          playerName: chroniclesAccount?.firstName || "Hero",
+          parallelSelfName: data.chroniclesName,
+          coreValues: data.coreValues,
+          decisionStyle: data.decisionStyle,
+          conflictApproach: data.conflictApproach,
+          predictedArchetype: data.primaryTrait,
+          worldview: "realist",
+          colorPreference: data.colorPreference,
+          eraInterest: data.eraInterest,
+          primaryTrait: data.primaryTrait,
+          secondaryTrait: data.secondaryTrait,
+          challengeResponse: data.challengeResponse,
+          audioPreference: data.audioPreference,
+          audioMood: data.audioMood,
+        })
       });
       return res.json();
     },
@@ -215,14 +247,14 @@ export default function ChroniclesOnboarding() {
     );
   }
 
-  if (!user) {
+  if (!chroniclesAccount) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
         <Card className="max-w-md w-full bg-slate-900/80 border-slate-700 p-8 text-center">
           <User className="w-16 h-16 mx-auto text-cyan-400 mb-4" />
           <h2 className="text-2xl font-bold text-white mb-2">Sign In Required</h2>
           <p className="text-slate-400 mb-6">Create an account to begin your Chronicles journey</p>
-          <Button onClick={() => setLocation("/login")} className="bg-gradient-to-r from-cyan-500 to-purple-500">
+          <Button onClick={() => setLocation("/chronicles/login")} className="bg-gradient-to-r from-cyan-500 to-purple-500">
             Sign In or Create Account
           </Button>
         </Card>

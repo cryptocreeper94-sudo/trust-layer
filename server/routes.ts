@@ -71,6 +71,48 @@ async function isAuthenticated(req: any, res: Response, next: NextFunction) {
 
 // Alias for routes using the old name
 const verifyFirebaseToken = isAuthenticated;
+
+// Chronicles-specific authentication middleware
+// Uses the separate Chronicles account system with session tokens stored in chronicleAccounts
+async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunction) {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: "Authentication required" });
+    }
+    
+    const sessionToken = authHeader.substring(7);
+    
+    const [account] = await db.select().from(chronicleAccounts)
+      .where(eq(chronicleAccounts.sessionToken, sessionToken))
+      .limit(1);
+    
+    if (!account) {
+      return res.status(401).json({ error: "Invalid session" });
+    }
+    
+    if (!account.isActive) {
+      return res.status(401).json({ error: "Account disabled" });
+    }
+    
+    if (account.sessionExpiresAt && new Date(account.sessionExpiresAt) < new Date()) {
+      return res.status(401).json({ error: "Session expired" });
+    }
+    
+    // Set the Chronicles account on the request for use in route handlers
+    req.chroniclesAccount = account;
+    req.user = { 
+      id: account.id,
+      claims: { sub: account.id },
+      email: account.email
+    };
+    
+    return next();
+  } catch (error: any) {
+    console.error("Chronicles auth middleware error:", error.message || error);
+    return res.status(401).json({ error: "Authentication required" });
+  }
+}
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
@@ -10062,7 +10104,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   const { chroniclesService: chroniclesGameService, STARTER_FACTIONS, SEASON_ZERO_QUESTS, STARTER_NPCS } = await import("./chronicles-service");
   Object.assign(chroniclesGameService, { STARTER_FACTIONS, SEASON_ZERO_QUESTS, STARTER_NPCS });
 
-  app.get("/api/chronicles/personality", isAuthenticated, async (req: any, res) => {
+  app.get("/api/chronicles/personality", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) {
@@ -10104,7 +10146,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     audioMood: z.string().optional(),
   });
 
-  app.post("/api/chronicles/personality", isAuthenticated, async (req: any, res) => {
+  app.post("/api/chronicles/personality", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) {
@@ -10170,7 +10212,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     shellsSpent: z.number().optional()
   });
 
-  app.get("/api/chronicles/estate", isAuthenticated, async (req: any, res) => {
+  app.get("/api/chronicles/estate", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) {
@@ -10202,7 +10244,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.post("/api/chronicles/estate", isAuthenticated, async (req: any, res) => {
+  app.post("/api/chronicles/estate", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) {
@@ -10243,7 +10285,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.post("/api/chronicles/scenario", isAuthenticated, async (req: any, res) => {
+  app.post("/api/chronicles/scenario", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) {
@@ -10292,7 +10334,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.post("/api/chronicles/choice", isAuthenticated, async (req: any, res) => {
+  app.post("/api/chronicles/choice", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) {
@@ -10346,7 +10388,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.post("/api/chronicles/chat", isAuthenticated, async (req: any, res) => {
+  app.post("/api/chronicles/chat", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) {
@@ -10398,7 +10440,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.get("/api/chronicles/summary", isAuthenticated, async (req: any, res) => {
+  app.get("/api/chronicles/summary", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) {
@@ -10422,7 +10464,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     });
   });
 
-  app.get("/api/chronicles/stats", isAuthenticated, async (req: any, res) => {
+  app.get("/api/chronicles/stats", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) {
@@ -10478,7 +10520,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }))});
   });
 
-  app.post("/api/chronicles/game/character", isAuthenticated, async (req: any, res) => {
+  app.post("/api/chronicles/game/character", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) {
@@ -10497,7 +10539,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.post("/api/chronicles/game/quest/start", isAuthenticated, async (req: any, res) => {
+  app.post("/api/chronicles/game/quest/start", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) {
@@ -10516,7 +10558,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.post("/api/chronicles/game/decision", isAuthenticated, async (req: any, res) => {
+  app.post("/api/chronicles/game/decision", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) {
@@ -10543,7 +10585,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.post("/api/chronicles/game/npc/talk", isAuthenticated, async (req: any, res) => {
+  app.post("/api/chronicles/game/npc/talk", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) {
@@ -10562,7 +10604,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.post("/api/chronicles/game/faction/join", isAuthenticated, async (req: any, res) => {
+  app.post("/api/chronicles/game/faction/join", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) {
@@ -10581,7 +10623,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.get("/api/chronicles/game/proofs/:characterId", isAuthenticated, async (req: any, res) => {
+  app.get("/api/chronicles/game/proofs/:characterId", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const proofs = await chroniclesGameService.getChronicleProofs(req.params.characterId);
       res.json({ proofs });
@@ -10605,7 +10647,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
   
   // Get player's era progress and portal state
-  app.get("/api/chronicles/portal", isAuthenticated, async (req: any, res) => {
+  app.get("/api/chronicles/portal", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
@@ -10634,7 +10676,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
   
   // Get available missions for current era
-  app.get("/api/chronicles/missions", isAuthenticated, async (req: any, res) => {
+  app.get("/api/chronicles/missions", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
@@ -10658,7 +10700,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
   
   // Start a mission
-  app.post("/api/chronicles/missions/:missionId/start", isAuthenticated, async (req: any, res) => {
+  app.post("/api/chronicles/missions/:missionId/start", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
@@ -10684,7 +10726,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
   
   // Reveal a hint for a mission
-  app.post("/api/chronicles/missions/:missionId/hint", isAuthenticated, async (req: any, res) => {
+  app.post("/api/chronicles/missions/:missionId/hint", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
@@ -10714,7 +10756,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
   
   // Submit riddle answer
-  app.post("/api/chronicles/missions/:missionId/riddle", isAuthenticated, async (req: any, res) => {
+  app.post("/api/chronicles/missions/:missionId/riddle", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
@@ -10740,7 +10782,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
   
   // Make conflict choice
-  app.post("/api/chronicles/missions/:missionId/conflict", isAuthenticated, async (req: any, res) => {
+  app.post("/api/chronicles/missions/:missionId/conflict", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
@@ -10759,7 +10801,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
   
   // Complete a mission and claim artifact
-  app.post("/api/chronicles/missions/:missionId/complete", isAuthenticated, async (req: any, res) => {
+  app.post("/api/chronicles/missions/:missionId/complete", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
@@ -10825,7 +10867,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
   
   // Check if player can travel to an era
-  app.get("/api/chronicles/portal/check/:eraCode", isAuthenticated, async (req: any, res) => {
+  app.get("/api/chronicles/portal/check/:eraCode", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
@@ -10853,7 +10895,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
   
   // Activate portal and travel to era
-  app.post("/api/chronicles/portal/travel", isAuthenticated, async (req: any, res) => {
+  app.post("/api/chronicles/portal/travel", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
