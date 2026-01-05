@@ -107,13 +107,12 @@ const COLORS = [
   { id: "silver", label: "Silver", hex: "#94a3b8", meaning: "Wise & Balanced" },
 ];
 
-const ERAS = [
+const FUTURE_ERAS = [
   { id: "ancient", label: "Ancient Civilizations", desc: "Egypt, Rome, Greece, Mesopotamia" },
   { id: "medieval", label: "Medieval Era", desc: "Knights, castles, and kingdoms" },
   { id: "renaissance", label: "Renaissance", desc: "Art, invention, and discovery" },
   { id: "exploration", label: "Age of Exploration", desc: "New worlds and adventures" },
   { id: "industrial", label: "Industrial Age", desc: "Innovation and progress" },
-  { id: "modern", label: "Early Modern", desc: "The world taking shape" },
 ];
 
 export default function ChroniclesOnboarding() {
@@ -156,7 +155,7 @@ export default function ChroniclesOnboarding() {
     conflictApproach: "",
     challengeResponse: "",
     colorPreference: "",
-    eraInterest: "",
+    eraInterest: "modern",
     audioPreference: "curated",
     audioMood: "",
   });
@@ -225,7 +224,7 @@ export default function ChroniclesOnboarding() {
       case "decisions": return answers.decisionStyle !== "";
       case "challenges": return answers.conflictApproach && answers.challengeResponse;
       case "audio": return answers.audioPreference !== "" && (answers.audioPreference === "silent" || answers.audioMood !== "");
-      case "portrait": return answers.colorPreference && answers.eraInterest;
+      case "portrait": return !!answers.colorPreference;
       default: return false;
     }
   };
