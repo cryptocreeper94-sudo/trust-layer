@@ -48,11 +48,11 @@ interface SpeechRecognitionInstance extends EventTarget {
 export function AIAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(() => {
-    // Check localStorage for minimized preference
+    // Default to hidden, check localStorage for explicit "show" preference
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('ai-assistant-minimized') === 'true';
+      return localStorage.getItem('ai-assistant-minimized') !== 'false';
     }
-    return false;
+    return true;
   });
   const [messages, setMessages] = useState<Message[]>([
     {
