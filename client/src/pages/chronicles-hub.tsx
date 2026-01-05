@@ -14,12 +14,12 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { CharacterPortrait } from "@/components/character-portrait";
 import { AudioPlayer } from "@/components/audio-player";
 import { toast } from "sonner";
 import { getPendingInvite, clearPendingInvite } from "./syndicate-invite";
+import { getChroniclesSession } from "./chronicles-login";
 
 interface JourneyChapter {
   id: string;
@@ -90,26 +90,57 @@ const UPCOMING_FEATURES = [
 ];
 
 export default function ChroniclesHub() {
-  const { user, loading: authLoading } = useSimpleAuth();
   const [, setLocation] = useLocation();
   const [showWelcome, setShowWelcome] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [chroniclesAccount, setChroniclesAccount] = useState<{ id: string; username: string; firstName: string; lastName: string } | null>(null);
+
+  useEffect(() => {
+    const session = getChroniclesSession();
+    if (!session) {
+      setLocation("/chronicles/login");
+      return;
+    }
+    fetch("/api/chronicles/auth/session", {
+      headers: { Authorization: `Bearer ${session.token}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.authenticated) {
+          setChroniclesAccount(data.account);
+        } else {
+          setLocation("/chronicles/login");
+        }
+        setAuthLoading(false);
+      })
+      .catch(() => {
+        setLocation("/chronicles/login");
+        setAuthLoading(false);
+      });
+  }, [setLocation]);
 
   const { data: personality, isLoading: personalityLoading } = useQuery({
     queryKey: ["/api/chronicles/personality"],
     queryFn: async () => {
-      const res = await apiRequest("GET", "/api/chronicles/personality");
+      const session = getChroniclesSession();
+      const res = await fetch("/api/chronicles/personality", {
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
       return res.json();
     },
-    enabled: !!user,
+    enabled: !!chroniclesAccount,
   });
 
   const { data: shellsData } = useQuery({
     queryKey: ["/api/shells/balance"],
     queryFn: async () => {
-      const res = await apiRequest("GET", "/api/shells/balance");
+      const session = getChroniclesSession();
+      const res = await fetch("/api/shells/balance", {
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
       return res.json();
     },
-    enabled: !!user,
+    enabled: !!chroniclesAccount,
   });
 
   // ChronoChat community data for preview
@@ -119,7 +150,7 @@ export default function ChroniclesHub() {
       const res = await apiRequest("GET", "/api/community/list");
       return res.json();
     },
-    enabled: !!user,
+    enabled: !!chroniclesAccount,
   });
 
   const { data: myCommunitiesData } = useQuery({
@@ -128,7 +159,7 @@ export default function ChroniclesHub() {
       const res = await apiRequest("GET", "/api/community/my-communities");
       return res.json();
     },
-    enabled: !!user,
+    enabled: !!chroniclesAccount,
   });
 
   // Syndicates (guilds) data
@@ -138,7 +169,7 @@ export default function ChroniclesHub() {
       const res = await apiRequest("GET", "/api/guilds/my-guilds");
       return res.json();
     },
-    enabled: !!user,
+    enabled: !!chroniclesAccount,
   });
 
   const { data: publicSyndicatesData } = useQuery({
@@ -147,25 +178,31 @@ export default function ChroniclesHub() {
       const res = await apiRequest("GET", "/api/guilds");
       return res.json();
     },
-    enabled: !!user,
+    enabled: !!chroniclesAccount,
   });
 
   const { data: portalData } = useQuery({
     queryKey: ["/api/chronicles/portal"],
     queryFn: async () => {
-      const res = await apiRequest("GET", "/api/chronicles/portal");
+      const session = getChroniclesSession();
+      const res = await fetch("/api/chronicles/portal", {
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
       return res.json();
     },
-    enabled: !!user,
+    enabled: !!chroniclesAccount,
   });
 
   const { data: missionsData } = useQuery({
     queryKey: ["/api/chronicles/missions"],
     queryFn: async () => {
-      const res = await apiRequest("GET", "/api/chronicles/missions");
+      const session = getChroniclesSession();
+      const res = await fetch("/api/chronicles/missions", {
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
       return res.json();
     },
-    enabled: !!user,
+    enabled: !!chroniclesAccount,
   });
 
   const [syndicatesExpanded, setSyndicatesExpanded] = useState(false);
@@ -299,11 +336,6 @@ export default function ChroniclesHub() {
     }
   });
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      setLocation("/");
-    }
-  }, [authLoading, user, setLocation]);
 
   useEffect(() => {
     if (!personalityLoading && personality && !personality.personality?.parallelSelfName) {
@@ -319,7 +351,7 @@ export default function ChroniclesHub() {
 
   // Auto-join pending syndicate invite after signup
   useEffect(() => {
-    if (!authLoading && user) {
+    if (!authLoading && chroniclesAccount) {
       const pending = getPendingInvite();
       if (pending?.code) {
         apiRequest("POST", `/api/guilds/join/${pending.code}`)
@@ -336,7 +368,7 @@ export default function ChroniclesHub() {
           });
       }
     }
-  }, [authLoading, user]);
+  }, [authLoading, chroniclesAccount]);
 
   if (authLoading || personalityLoading) {
     return (
@@ -1395,7 +1427,7 @@ export default function ChroniclesHub() {
                     </div>
                     <p className="text-xs text-slate-400">+5% Shells bonus on all activities</p>
                   </div>
-                ) : (selectedSyndicate.role === "leader" || String(selectedSyndicate.leaderId) === String(user?.id)) && (
+                ) : (selectedSyndicate.role === "leader" || String(selectedSyndicate.leaderId) === String(chroniclesAccount?.id)) && (
                   <Button
                     onClick={() => activateChronoLinkMutation.mutate(selectedSyndicate.id)}
                     disabled={activateChronoLinkMutation.isPending}
@@ -1412,7 +1444,7 @@ export default function ChroniclesHub() {
                 )}
                 
                 {/* Generate Invite Code (leaders/officers only) */}
-                {(selectedSyndicate.role === "leader" || selectedSyndicate.role === "officer" || String(selectedSyndicate.leaderId) === String(user?.id)) && (
+                {(selectedSyndicate.role === "leader" || selectedSyndicate.role === "officer" || String(selectedSyndicate.leaderId) === String(chroniclesAccount?.id)) && (
                   <Button
                     variant="outline"
                     onClick={() => generateInviteMutation.mutate(selectedSyndicate.id)}
@@ -1430,7 +1462,7 @@ export default function ChroniclesHub() {
                 )}
                 
                 {/* Leave Syndicate (non-leaders only) */}
-                {selectedSyndicate.role !== "leader" && String(selectedSyndicate.leaderId) !== String(user?.id) && (
+                {selectedSyndicate.role !== "leader" && String(selectedSyndicate.leaderId) !== String(chroniclesAccount?.id) && (
                   <Button
                     variant="outline"
                     onClick={() => leaveSyndicateMutation.mutate(selectedSyndicate.id)}
@@ -1445,7 +1477,7 @@ export default function ChroniclesHub() {
                   </Button>
                 )}
                 
-                {(selectedSyndicate.role === "leader" || String(selectedSyndicate.leaderId) === String(user?.id)) && (
+                {(selectedSyndicate.role === "leader" || String(selectedSyndicate.leaderId) === String(chroniclesAccount?.id)) && (
                   <p className="text-xs text-slate-500 text-center">
                     As the leader, you cannot leave. Transfer leadership first.
                   </p>
