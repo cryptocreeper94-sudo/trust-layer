@@ -684,24 +684,63 @@ export default function ChroniclesOnboarding() {
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-sm text-purple-400 mb-3">Starting Era Interest</label>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                      {ERAS.map((era) => (
-                        <Card
-                          key={era.id}
-                          data-testid={`era-${era.id}`}
-                          onClick={() => setAnswers(prev => ({ ...prev, eraInterest: era.id }))}
-                          className={`p-3 cursor-pointer transition-all ${
-                            answers.eraInterest === era.id
-                              ? "bg-purple-500/20 border-purple-500"
-                              : "bg-slate-900/80 border-slate-700 hover:border-slate-500"
-                          }`}
-                        >
-                          <h3 className="font-semibold text-white text-sm">{era.label}</h3>
-                          <p className="text-xs text-slate-400">{era.desc}</p>
-                        </Card>
-                      ))}
+                  <div className="mt-6">
+                    <Card className="bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border-cyan-500/30 p-4 mb-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Compass className="w-5 h-5 text-cyan-400" />
+                        <h3 className="font-bold text-white">All Journeys Begin in the Modern Era</h3>
+                      </div>
+                      <p className="text-sm text-slate-300">
+                        Every Chronicles player starts together in the Modern Era. Complete missions to unlock transport to other time periods.
+                      </p>
+                    </Card>
+                    
+                    <label className="block text-sm text-purple-400 mb-3">Available Eras to Unlock</label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                      <Card className="p-3 bg-slate-900/80 border-emerald-500/30">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h3 className="font-semibold text-white text-sm">Medieval Era</h3>
+                            <p className="text-xs text-slate-400">Knights, castles, and kingdoms</p>
+                          </div>
+                          <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">Unlockable</Badge>
+                        </div>
+                      </Card>
+                      <Card className="p-3 bg-slate-900/80 border-emerald-500/30">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h3 className="font-semibold text-white text-sm">Roman Empire</h3>
+                            <p className="text-xs text-slate-400">Glory of ancient Rome</p>
+                          </div>
+                          <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">Unlockable</Badge>
+                        </div>
+                      </Card>
+                    </div>
+                    
+                    <div className="text-center">
+                      <p className="text-sm text-slate-500 italic">More eras coming soon...</p>
+                    </div>
+                    
+                    <div className="mt-6">
+                      <label className="block text-sm text-purple-400 mb-3">Which era excites you most? (Optional)</label>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        {FUTURE_ERAS.map((era) => (
+                          <Card
+                            key={era.id}
+                            data-testid={`era-${era.id}`}
+                            onClick={() => setAnswers(prev => ({ ...prev, eraInterest: prev.eraInterest === era.id ? "modern" : era.id }))}
+                            className={`p-3 cursor-pointer transition-all ${
+                              answers.eraInterest === era.id
+                                ? "bg-purple-500/20 border-purple-500"
+                                : "bg-slate-900/80 border-slate-700 hover:border-slate-500"
+                            }`}
+                          >
+                            <h3 className="font-semibold text-white text-sm">{era.label}</h3>
+                            <p className="text-xs text-slate-400">{era.desc}</p>
+                          </Card>
+                        ))}
+                      </div>
+                      <p className="text-xs text-slate-500 text-center mt-2">This helps us personalize your future journey recommendations</p>
                     </div>
                   </div>
                 </motion.div>
