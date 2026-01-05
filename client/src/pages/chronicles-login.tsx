@@ -109,33 +109,40 @@ export default function ChroniclesLogin() {
   };
 
   const handleSignup = async () => {
+    console.log("[Chronicles Signup] Starting signup...", { username, email, firstName, lastName, password: password ? "***" : "empty", confirmPassword: confirmPassword ? "***" : "empty" });
+    
     if (!username || !email || !firstName || !lastName || !password) {
+      console.log("[Chronicles Signup] Missing fields");
       toast.error("Please fill in all fields");
       return;
     }
 
-    // Basic email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
+      console.log("[Chronicles Signup] Invalid email");
       toast.error("Please enter a valid email address");
       return;
     }
 
     if (password !== confirmPassword) {
+      console.log("[Chronicles Signup] Passwords don't match");
       toast.error("Passwords don't match");
       return;
     }
 
     if (password.length < 6) {
+      console.log("[Chronicles Signup] Password too short");
       toast.error("Password must be at least 6 characters");
       return;
     }
 
     if (username.length < 3 || username.length > 30) {
+      console.log("[Chronicles Signup] Username length invalid");
       toast.error("Username must be 3-30 characters");
       return;
     }
 
+    console.log("[Chronicles Signup] Validation passed, calling API...");
     setIsLoading(true);
     try {
       const res = await fetch("/api/chronicles/auth/signup", {
@@ -144,7 +151,10 @@ export default function ChroniclesLogin() {
         body: JSON.stringify({ username, email, firstName, lastName, password }),
       });
 
+      console.log("[Chronicles Signup] API response status:", res.status);
       const data = await res.json();
+      console.log("[Chronicles Signup] API response data:", data);
+      
       if (!res.ok) {
         toast.error(data.error || "Signup failed");
         return;
@@ -154,6 +164,7 @@ export default function ChroniclesLogin() {
       toast.success(`Welcome to Chronicles, ${data.account.firstName}!`);
       setLocation("/chronicles");
     } catch (error: any) {
+      console.error("[Chronicles Signup] Error:", error);
       toast.error(error.message || "Signup failed");
     } finally {
       setIsLoading(false);
@@ -382,17 +393,32 @@ export default function ChroniclesLogin() {
                       </motion.div>
                     )}
 
-                    <Button
+                    <button
                       type="button"
                       disabled={isLoading}
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log("[Chronicles] Button clicked, mode:", mode);
+                        alert("Button clicked! Mode: " + mode);
                         if (mode === "login") {
                           handleLogin();
                         } else {
                           handleSignup();
                         }
                       }}
-                      className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-6"
+                      onTouchEnd={(e) => {
+                        e.preventDefault();
+                        console.log("[Chronicles] Touch end, mode:", mode);
+                        alert("Touch detected! Mode: " + mode);
+                        if (mode === "login") {
+                          handleLogin();
+                        } else {
+                          handleSignup();
+                        }
+                      }}
+                      className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-4 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50"
+                      style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
                       data-testid="button-submit"
                     >
                       {isLoading ? (
@@ -404,10 +430,10 @@ export default function ChroniclesLogin() {
                       ) : (
                         <>
                           {mode === "login" ? "Enter Chronicles" : "Begin Your Journey"}
-                          <ArrowRight className="w-5 h-5 ml-2" />
+                          <ArrowRight className="w-5 h-5" />
                         </>
                       )}
-                    </Button>
+                    </button>
                   </div>
                 </motion.form>
               </AnimatePresence>
