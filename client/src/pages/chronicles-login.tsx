@@ -396,29 +396,14 @@ export default function ChroniclesLogin() {
                     <button
                       type="button"
                       disabled={isLoading}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        console.log("[Chronicles] Button clicked, mode:", mode);
-                        alert("Button clicked! Mode: " + mode);
+                      onClick={() => {
                         if (mode === "login") {
                           handleLogin();
                         } else {
                           handleSignup();
                         }
                       }}
-                      onTouchEnd={(e) => {
-                        e.preventDefault();
-                        console.log("[Chronicles] Touch end, mode:", mode);
-                        alert("Touch detected! Mode: " + mode);
-                        if (mode === "login") {
-                          handleLogin();
-                        } else {
-                          handleSignup();
-                        }
-                      }}
-                      className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-4 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50"
-                      style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'transparent' }}
+                      className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-4 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50 active:scale-95 transition-transform"
                       data-testid="button-submit"
                     >
                       {isLoading ? (
