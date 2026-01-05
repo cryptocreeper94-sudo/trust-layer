@@ -232,6 +232,41 @@ export default function Launchpad() {
                 </CollapsibleContent>
               </Collapsible>
               
+              <div className="hidden sm:flex items-center gap-2">
+                <Badge 
+                  variant="outline" 
+                  className={`cursor-pointer transition-colors ${statusFilter === 'all' ? 'bg-pink-500/20 border-pink-500 text-pink-400' : 'hover:bg-white/5'}`}
+                  onClick={() => setStatusFilter('all')}
+                  data-testid="filter-all-desktop"
+                >
+                  All
+                </Badge>
+                <Badge 
+                  variant="outline" 
+                  className={`cursor-pointer transition-colors ${statusFilter === 'live' ? 'bg-green-500/20 border-green-500 text-green-400' : 'hover:bg-white/5'}`}
+                  onClick={() => setStatusFilter('live')}
+                  data-testid="filter-live-desktop"
+                >
+                  Live
+                </Badge>
+                <Badge 
+                  variant="outline" 
+                  className={`cursor-pointer transition-colors ${statusFilter === 'presale' ? 'bg-amber-500/20 border-amber-500 text-amber-400' : 'hover:bg-white/5'}`}
+                  onClick={() => setStatusFilter('presale')}
+                  data-testid="filter-presale-desktop"
+                >
+                  Presale
+                </Badge>
+                <Badge 
+                  variant="outline" 
+                  className={`cursor-pointer transition-colors ${statusFilter === 'ended' ? 'bg-gray-500/20 border-gray-500 text-gray-400' : 'hover:bg-white/5'}`}
+                  onClick={() => setStatusFilter('ended')}
+                  data-testid="filter-ended-desktop"
+                >
+                  Ended
+                </Badge>
+              </div>
+              
               <Dialog open={createOpen} onOpenChange={setCreateOpen}>
                 <DialogTrigger asChild>
                   <Button className="bg-pink-500 hover:bg-pink-600 shrink-0" data-testid="button-create-token">
