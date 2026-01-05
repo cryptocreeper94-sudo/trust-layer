@@ -4,7 +4,7 @@ import {
   Clock, Users, Brain, Shield, Crown, Sparkles, Heart, Eye, Map, Coins, 
   ChevronRight, ChevronLeft, Star, Flame, Target, Compass,
   Globe, Zap, History, Theater, Sword, BookOpen, Building, Rocket,
-  Info, X, Play, Volume2, VolumeX, ArrowLeft
+  Info, X, Play, Volume2, VolumeX, ArrowLeft, Gamepad2
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Link, useLocation } from "wouter";
@@ -710,7 +710,8 @@ export default function Chronicles() {
   useEffect(() => {
     const session = getChroniclesSession();
     if (!session) {
-      setLocation("/chronicles/login");
+      // No session - show landing page (don't redirect)
+      setCheckingAuth(false);
       return;
     }
     fetch("/api/chronicles/auth/session", {
@@ -720,13 +721,11 @@ export default function Chronicles() {
       .then(data => {
         if (data.authenticated) {
           setChroniclesAccount(data.account);
-          setCheckingAuth(false);
-        } else {
-          setLocation("/chronicles/login");
         }
+        setCheckingAuth(false);
       })
       .catch(() => {
-        setLocation("/chronicles/login");
+        setCheckingAuth(false);
       });
   }, [setLocation]);
 
@@ -943,16 +942,16 @@ export default function Chronicles() {
               transition={{ delay: 0.8 }}
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
-              <Link href="/crowdfund">
-                <Button size="lg" className="rounded-full gap-2 text-lg px-8 py-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white shadow-xl shadow-purple-500/25 hover:shadow-purple-500/40 transition-all" data-testid="button-support-development">
+              <Link href={chroniclesAccount ? "/chronicles/hub" : "/chronicles/login"}>
+                <Button size="lg" className="rounded-full gap-2 text-lg px-8 py-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white shadow-xl shadow-purple-500/25 hover:shadow-purple-500/40 transition-all" data-testid="button-enter-chronoverse">
                   <Rocket className="w-5 h-5" />
-                  Join the Campaign
+                  {chroniclesAccount ? "Continue Your Journey" : "Enter the Chronoverse"}
                 </Button>
               </Link>
-              <Link href="/presale">
-                <Button size="lg" variant="outline" className="rounded-full gap-2 text-lg px-8 py-6 border-white/20 hover:bg-white/10 backdrop-blur-sm" data-testid="button-get-dwc">
-                  <Coins className="w-5 h-5" />
-                  Secure Your Gear
+              <Link href="/crowdfund">
+                <Button size="lg" variant="outline" className="rounded-full gap-2 text-lg px-8 py-6 border-white/20 hover:bg-white/10 backdrop-blur-sm" data-testid="button-support-development">
+                  <Heart className="w-5 h-5" />
+                  Support Development
                 </Button>
               </Link>
             </motion.div>
