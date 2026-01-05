@@ -707,6 +707,26 @@ export default function Chronicles() {
   const currentVideoRef = useRef<HTMLVideoElement>(null);
   const nextVideoRef = useRef<HTMLVideoElement>(null);
 
+  const fadeAudio = (video: HTMLVideoElement, fadeIn: boolean, duration: number = 500) => {
+    const steps = 20;
+    const stepTime = duration / steps;
+    const startVolume = fadeIn ? 0 : 1;
+    const endVolume = fadeIn ? 1 : 0;
+    const volumeStep = (endVolume - startVolume) / steps;
+    
+    video.volume = startVolume;
+    let step = 0;
+    
+    const interval = setInterval(() => {
+      step++;
+      video.volume = Math.max(0, Math.min(1, startVolume + (volumeStep * step)));
+      if (step >= steps) {
+        clearInterval(interval);
+        video.volume = endVolume;
+      }
+    }, stepTime);
+  };
+
   useEffect(() => {
     const session = getChroniclesSession();
     if (!session) {
@@ -729,39 +749,8 @@ export default function Chronicles() {
       });
   }, [setLocation]);
 
-  if (checkingAuth) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full"
-        />
-      </div>
-    );
-  }
-  
-  const fadeAudio = (video: HTMLVideoElement, fadeIn: boolean, duration: number = 500) => {
-    const steps = 20;
-    const stepTime = duration / steps;
-    const startVolume = fadeIn ? 0 : 1;
-    const endVolume = fadeIn ? 1 : 0;
-    const volumeStep = (endVolume - startVolume) / steps;
-    
-    video.volume = startVolume;
-    let step = 0;
-    
-    const interval = setInterval(() => {
-      step++;
-      video.volume = Math.max(0, Math.min(1, startVolume + (volumeStep * step)));
-      if (step >= steps) {
-        clearInterval(interval);
-        video.volume = endVolume;
-      }
-    }, stepTime);
-  };
-
   useEffect(() => {
+    if (checkingAuth) return;
     const handleVideoEnd = () => {
       const currentVideo = currentVideoRef.current;
       if (currentVideo && !videoMuted) {
@@ -782,15 +771,17 @@ export default function Chronicles() {
       video.addEventListener('ended', handleVideoEnd);
       return () => video.removeEventListener('ended', handleVideoEnd);
     }
-  }, [nextVideoIndex, videoMuted]);
+  }, [nextVideoIndex, videoMuted, checkingAuth]);
 
   useEffect(() => {
+    if (checkingAuth) return;
     if (nextVideoRef.current) {
       nextVideoRef.current.load();
     }
-  }, [nextVideoIndex]);
+  }, [nextVideoIndex, checkingAuth]);
 
   useEffect(() => {
+    if (checkingAuth) return;
     if (currentVideoRef.current && !isVideoTransitioning) {
       const video = currentVideoRef.current;
       video.volume = 0;
@@ -799,7 +790,7 @@ export default function Chronicles() {
         fadeAudio(video, true, 500);
       }
     }
-  }, [currentVideoIndex, isVideoTransitioning, videoMuted]);
+  }, [currentVideoIndex, isVideoTransitioning, videoMuted, checkingAuth]);
   
   const scrollEpochs = (direction: 'left' | 'right') => {
     const container = document.getElementById('epoch-carousel');
@@ -808,6 +799,18 @@ export default function Chronicles() {
       container.scrollBy({ left: direction === 'right' ? scrollAmount : -scrollAmount, behavior: 'smooth' });
     }
   };
+
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+          className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full"
+        />
+      </div>
+    );
+  }
   
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden overflow-y-auto selection:bg-primary/20 selection:text-primary w-full max-w-full">
