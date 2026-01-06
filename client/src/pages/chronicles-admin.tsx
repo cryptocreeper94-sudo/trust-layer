@@ -636,7 +636,7 @@ function AdminDashboard() {
                     </div>
                     <div className="grid grid-cols-3 gap-3 text-center">
                       <div>
-                        <p className="text-xl font-bold text-white">Feb 14</p>
+                        <p className="text-xl font-bold text-white">Apr 11</p>
                         <p className="text-xs text-gray-400">End Date</p>
                       </div>
                       <div>

@@ -395,7 +395,7 @@ Stay in character. Be concise (2-3 sentences max). Your faction is important to 
       description: "The first season of DarkWave Chronicles. Establish your legacy.",
       seasonNumber: 0,
       startDate: new Date("2026-01-01"),
-      endDate: new Date("2026-02-14"),
+      endDate: new Date("2026-04-11"),
       totalShellsPool: "100000",
       totalDwcPool: "10000",
       participantCount: 0,

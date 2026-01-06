@@ -208,8 +208,8 @@ const response = await fetch('https://orbitstaffing.io/api/darkwave/snippets', {
 
 ## Launch Timeline
 
-- **Genesis:** February 14, 2025
-- **Public Launch:** February 14, 2026
+- **Genesis:** April 11, 2026
+- **Public Launch:** April 11, 2026
 
 ---
 

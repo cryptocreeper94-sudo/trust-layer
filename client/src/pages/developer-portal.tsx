@@ -801,7 +801,7 @@ console.log('All successful:', result.allSuccessful);`}
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-display font-bold text-lg flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-primary" />
-                Launch Roadmap - February 14, 2026
+                Launch Roadmap - April 11, 2026
               </h3>
               <Badge className="bg-primary/20 text-primary border-primary/30">INTERNAL</Badge>
             </div>
@@ -941,12 +941,12 @@ console.log('All successful:', result.allSuccessful);`}
               </AccordionItem>
               <AccordionItem value="phase4" className="border-white/10">
                 <AccordionTrigger className="text-sm font-medium hover:text-primary">
-                  Phase 4: Launch Week (February 8-14, 2026)
+                  Phase 4: Launch Week (April 5-11, 2026)
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
                   <div className="space-y-4">
                     <div>
-                      <h4 className="font-semibold text-white mb-2">February 8-13: Final Preparations</h4>
+                      <h4 className="font-semibold text-white mb-2">April 5-10: Final Preparations</h4>
                       <ul className="list-disc list-inside space-y-1 text-sm">
                         <li>Go-live rehearsals</li>
                         <li>Final testnet verification</li>
@@ -956,7 +956,7 @@ console.log('All successful:', result.allSuccessful);`}
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-primary mb-2">February 14: LAUNCH DAY</h4>
+                      <h4 className="font-semibold text-primary mb-2">April 11: LAUNCH DAY</h4>
                       <ul className="list-disc list-inside space-y-1 text-sm">
                         <li>Lift press embargo (6:00 AM UTC)</li>
                         <li>Execute genesis block ceremony</li>
@@ -973,12 +973,12 @@ console.log('All successful:', result.allSuccessful);`}
               </AccordionItem>
               <AccordionItem value="phase5" className="border-white/10">
                 <AccordionTrigger className="text-sm font-medium hover:text-primary">
-                  Phase 5: Post-Launch (February 15+)
+                  Phase 5: Post-Launch (April 12+)
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
                   <div className="space-y-4">
                     <div>
-                      <h4 className="font-semibold text-white mb-2">Week 1 (Feb 15-21)</h4>
+                      <h4 className="font-semibold text-white mb-2">Week 1 (Apr 12-18)</h4>
                       <ul className="list-disc list-inside space-y-1 text-sm">
                         <li>Monitor network stability</li>
                         <li>Publish performance statistics</li>
@@ -1051,7 +1051,7 @@ console.log('All successful:', result.allSuccessful);`}
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-white mb-2">Launch Day (Feb 14, 2026)</h4>
+                      <h4 className="font-semibold text-white mb-2">Launch Day (Apr 11, 2026)</h4>
                       <ul className="list-disc list-inside space-y-1 text-sm">
                         <li>Coordinated press release at 6:00 AM UTC</li>
                         <li>Live event on YouTube/Twitter Spaces</li>

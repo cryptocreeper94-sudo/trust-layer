@@ -40,7 +40,7 @@ const mockValidators: Validator[] = [
     status: "active",
     votes: 156,
     lastActive: "2 minutes ago",
-    addedAt: "Feb 14, 2026"
+    addedAt: "Apr 11, 2026"
   },
   {
     id: "v2",

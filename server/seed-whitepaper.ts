@@ -130,7 +130,7 @@ Flagship gaming application demonstrating chain capabilities:
 - Developer SDK release
 
 ### Phase 2: Growth (Q2-Q3 2026)
-- Token Generation Event (Feb 14, 2026)
+- Token Generation Event (Apr 11, 2026)
 - DEX and staking launch
 - Bridge deployment
 

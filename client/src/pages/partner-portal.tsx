@@ -32,7 +32,7 @@ const TECH_STACK = [
 ];
 
 const MILESTONES = [
-  { phase: "Season Zero", name: "BETA v0.1 (NOW)", period: "NOW - Feb 14, 2026", status: "current", items: ["Medieval Era playable", "AI NPCs live", "Chronicle Proofs", "Voice cloning", "Business storefronts"] },
+  { phase: "Season Zero", name: "BETA v0.1 (NOW)", period: "NOW - Apr 11, 2026", status: "current", items: ["Medieval Era playable", "AI NPCs live", "Chronicle Proofs", "Voice cloning", "Business storefronts"] },
   { phase: "Phase 1", name: "Era Expansion", period: "Q1-Q2 2026", status: "upcoming", items: ["5+ eras live", "Cross-era mechanics", "Political simulation"] },
   { phase: "Phase 2", name: "Full Scale", period: "Q3-Q4 2026", status: "upcoming", items: ["20+ eras available", "Full economy", "Mobile companion"] },
   { phase: "Phase 3", name: "Neverending World", period: "2027+", status: "target", items: ["70+ eras", "Time travel", "Player-created content"] },

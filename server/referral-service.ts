@@ -226,7 +226,7 @@ class ReferralService {
       const commissionPercent = tier?.commissionPercent || 10;
       const commissionAmount = Math.floor(conversionValueCents * (commissionPercent / 100));
       
-      const DWC_LAUNCH_DATE = new Date("2026-02-14T00:00:00Z");
+      const DWC_LAUNCH_DATE = new Date("2026-04-11T00:00:00Z");
       const isPreLaunch = new Date() < DWC_LAUNCH_DATE;
       const distributionMode = isPreLaunch ? "airdrop" : "cash";
       

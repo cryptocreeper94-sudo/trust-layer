@@ -748,7 +748,7 @@ export default function ChroniclesDemo() {
             </Badge>
           </div>
           <p className="text-gray-500 text-sm">
-            Season Zero runs until <span className="text-purple-400 font-medium">February 14, 2026</span>. 
+            Season Zero runs until <span className="text-purple-400 font-medium">April 11, 2026</span>. 
             All decisions are recorded on-chain as Chronicle Proofs.
           </p>
           <div className="flex items-center justify-center gap-2 mt-2 text-xs text-gray-600">

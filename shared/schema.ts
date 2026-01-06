@@ -1682,7 +1682,7 @@ export const LEGACY_FOUNDER_CONFIG = {
   priceCents: 2400,
   airdropTokens: 35000,
   maxSpots: 10000,
-  deadline: new Date("2026-02-14T00:00:00Z"),
+  deadline: new Date("2026-04-11T00:00:00Z"),
   regularPriceMonthly: 20,
   perks: [
     "Unlimited AI analysis (crypto & stocks)",

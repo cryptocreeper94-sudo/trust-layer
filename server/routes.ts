@@ -3049,7 +3049,7 @@ export async function registerRoutes(
           blockTime: "400ms",
           tps: "200,000+",
           validator: "Founders Validator",
-          launchDate: "February 14, 2026",
+          launchDate: "April 11, 2026",
         },
         verified: true,
         message: "Genesis Block - DarkWave Smart Chain Origin",
@@ -9765,8 +9765,8 @@ DarkWave Smart Chain is a Layer 1 blockchain with:
 - 200,000+ TPS capacity  
 - Proof-of-Authority consensus with the Founders Validator
 - Native DWC token (100 million total supply, 18 decimals)
-- Genesis block: February 14, 2026
-- Public launch: February 14, 2026
+- Genesis block: April 11, 2026
+- Public launch: April 11, 2026
 
 Key features available:
 - Faucet: Get 1000 free test DWC (24-hour cooldown)
@@ -12117,7 +12117,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         airdropBalance: (profile.airdropBalance || 0) / 100,
         airdropBalanceDwc: profile.airdropBalanceDwc || "0",
         airdropStatus: profile.airdropStatus || "none",
-        launchDate: "2026-02-14T00:00:00Z",
+        launchDate: "2026-04-11T00:00:00Z",
         walletVerified: profile.walletVerified,
         dwcWalletAddress: profile.dwcWalletAddress,
       });
@@ -13278,7 +13278,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           { id: "mega", name: "Shell Mega Pack", shells: 15000, bonusShells: 3500, priceUsd: 4999, formattedPrice: "$49.99", popular: false },
           { id: "whale", name: "Shell Whale Pack", shells: 35000, bonusShells: 10000, priceUsd: 9999, formattedPrice: "$99.99", popular: false },
         ],
-        exchangeRate: "1 Shell = 1 DWC at TGE (Feb 14, 2026)",
+        exchangeRate: "1 Shell = 1 DWC at TGE (Apr 11, 2026)",
         currency: "Shells",
         conversionNote: "All Shells convert to DWC tokens at Token Generation Event"
       });
@@ -13298,7 +13298,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       res.json({
         balance: shellBalance || 0,
         pendingConversion: shellBalance || 0,
-        conversionDate: "2026-02-14T00:00:00Z"
+        conversionDate: "2026-04-11T00:00:00Z"
       });
     } catch (error) {
       console.error("Get shells balance error:", error);

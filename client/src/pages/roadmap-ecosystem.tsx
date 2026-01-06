@@ -110,7 +110,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
     name: "Season Zero: Chronicles BETA",
     description: "First playable era - Medieval Kingdom with AI NPCs",
     status: "in_progress",
-    targetDate: "NOW - Feb 14, 2026",
+    targetDate: "NOW - Apr 11, 2026",
     icon: <Gamepad2 className="w-6 h-6" />,
     image: medievalKingdom,
     milestones: [
@@ -127,11 +127,11 @@ const ECOSYSTEM_PHASES: Phase[] = [
     name: "Mainnet Launch",
     description: "Public launch and live operations",
     status: "upcoming",
-    targetDate: "Feb 14, 2026",
+    targetDate: "Apr 11, 2026",
     icon: <Rocket className="w-6 h-6" />,
     image: quantumRealm,
     milestones: [
-      { id: "e21", title: "Mainnet Genesis Block", description: "Official network launch on Valentine's Day 2026", status: "pending", isRequired: true },
+      { id: "e21", title: "Mainnet Genesis Block", description: "Official network launch on April 11, 2026", status: "pending", isRequired: true },
       { id: "e22", title: "Token Migration", description: "Testnet to mainnet token conversion", status: "pending", isRequired: true },
       { id: "e23", title: "Chronicles 20+ Eras", description: "Expand from Medieval to 20+ historical eras", status: "pending", isRequired: true },
       { id: "e24", title: "Exchange Listings", description: "CEX and DEX trading availability", status: "pending", isRequired: false },
@@ -346,7 +346,7 @@ export default function RoadmapEcosystem() {
               </span>
             </h1>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Our path to mainnet launch on February 14, 2026. 
+              Our path to mainnet launch on April 11, 2026. 
               A Layer 1 blockchain built to surpass Solana and Ethereum.
             </p>
           </div>

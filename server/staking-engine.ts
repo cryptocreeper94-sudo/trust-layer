@@ -99,7 +99,7 @@ class StakingEngine {
         totalStaked: "0",
         totalStakers: 0,
         isActive: true,
-        endsAt: new Date("2026-02-14"),
+        endsAt: new Date("2026-04-11"),
       },
     ];
 

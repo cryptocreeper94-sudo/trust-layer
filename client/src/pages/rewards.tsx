@@ -302,7 +302,7 @@ export default function Rewards() {
           <GlassCard className="p-8 max-w-2xl mx-auto">
             <h2 className="text-2xl font-bold mb-4">Ready to Claim Your Rewards?</h2>
             <p className="text-white/60 mb-6">
-              All bonuses will be distributed as DWC tokens at the Token Generation Event (February 14, 2026).
+              All bonuses will be distributed as DWC tokens at the Token Generation Event (April 11, 2026).
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {!user && (

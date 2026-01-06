@@ -40,7 +40,7 @@ const CHRONICLES_PHASES: Phase[] = [
     name: "Season Zero: The Awakening (BETA v0.1)",
     description: "First playable era - Medieval Kingdom with AI NPCs and Chronicle Proofs",
     status: "in_progress",
-    targetDate: "NOW - Feb 14, 2026",
+    targetDate: "NOW - Apr 11, 2026",
     icon: <Crown className="w-6 h-6" />,
     image: medievalKingdom,
     milestones: [

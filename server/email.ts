@@ -199,7 +199,7 @@ export async function sendFounderWelcomeEmail(to: string, founderNumber: number,
         <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 25px; border-radius: 10px; margin-bottom: 20px;">
           <h3 style="color: #FFD700; margin: 0 0 15px 0;">Your Exclusive Perks</h3>
           <ul style="color: #ffffff; padding-left: 20px; margin: 0;">
-            <li style="margin-bottom: 8px;">35,000 DWC Airdrop on Launch (Feb 14, 2026)</li>
+            <li style="margin-bottom: 8px;">35,000 DWC Airdrop on Launch (Apr 11, 2026)</li>
             <li style="margin-bottom: 8px;">Unlimited AI Analysis (Crypto & Stocks)</li>
             <li style="margin-bottom: 8px;">StrikeAgent Sniper Bot Access</li>
             <li style="margin-bottom: 8px;">Founding Member Badge (Forever)</li>

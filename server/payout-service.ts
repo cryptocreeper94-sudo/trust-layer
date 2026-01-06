@@ -15,7 +15,7 @@ const DWC_EXCHANGE_RATE = 0.008;
 const PAYOUT_BATCH_SIZE = 50;
 const SETTLEMENT_WAIT_DAYS = 7;
 
-const DWC_LAUNCH_DATE = new Date("2026-02-14T00:00:00Z");
+const DWC_LAUNCH_DATE = new Date("2026-04-11T00:00:00Z");
 
 function isPreLaunch(): boolean {
   return new Date() < DWC_LAUNCH_DATE;

@@ -233,7 +233,7 @@ const roadmapData: RoadmapPhase[] = [
         title: "Airdrop Distribution",
         description: "DWC airdrop to early supporters",
         status: "planned",
-        eta: "February 14, 2026"
+        eta: "April 11, 2026"
       },
       {
         title: "DEX Listing",
@@ -363,7 +363,7 @@ export default function TechnicalRoadmap() {
           <div className="bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 border border-cyan-500/30 rounded-2xl p-8">
             <h2 className="text-2xl font-bold text-white mb-4">Token Generation Event</h2>
             <p className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-2">
-              February 14, 2026
+              April 11, 2026
             </p>
             <p className="text-slate-400 mb-6">Mainnet launch with full token distribution</p>
             <div className="flex flex-wrap justify-center gap-4">

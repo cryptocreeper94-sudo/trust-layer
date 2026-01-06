@@ -44,7 +44,7 @@ interface EarlyAdopterRewards {
   scenariosCompleted: number;
 }
 
-const DWC_LAUNCH_DATE = new Date("2026-02-14T00:00:00Z");
+const DWC_LAUNCH_DATE = new Date("2026-04-11T00:00:00Z");
 
 async function fetchAirdropStatus(): Promise<AirdropData> {
   const res = await fetch("/api/referrals/my-airdrop", { credentials: "include" });
@@ -343,7 +343,7 @@ export function AirdropDashboard() {
               </div>
             </div>
             <p className="text-xs text-muted-foreground mt-4">
-              February 14, 2026 • Valentine's Day Launch 💜
+              April 11, 2026 • Spring Launch 🌸
             </p>
           </div>
         </div>

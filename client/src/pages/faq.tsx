@@ -40,7 +40,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       },
       {
         question: "When does the token launch?",
-        answer: "The DWC token is scheduled for launch on February 14, 2026 (Valentine's Day). DarkWave Chronicles is a community-driven project - the timeline depends on community involvement and support. Join us to help make it happen!"
+        answer: "The DWC token is scheduled for launch on April 11, 2026. DarkWave Chronicles is a community-driven project - the timeline depends on community involvement and support. Join us to help make it happen!"
       },
       {
         question: "What makes DWSC different from other blockchains?",
@@ -92,7 +92,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       },
       {
         question: "When will tokens be distributed?",
-        answer: "Presale tokens will be distributed at the Token Generation Event (TGE) scheduled for February 14, 2026. Public sale participants receive 100% at TGE."
+        answer: "Presale tokens will be distributed at the Token Generation Event (TGE) scheduled for April 11, 2026. Public sale participants receive 100% at TGE."
       },
       {
         question: "Is there a referral program?",

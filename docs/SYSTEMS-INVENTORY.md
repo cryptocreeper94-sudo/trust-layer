@@ -189,7 +189,7 @@
 |-----------|-------------|
 | Guardian Certification Launch | Now (Ready) |
 | Guardian Shield Beta | Q1 2026 |
-| Token Launch | February 14, 2026 |
+| Token Launch | April 11, 2026 |
 | Chronicles Public Beta | July 4, 2026 |
 
 ---

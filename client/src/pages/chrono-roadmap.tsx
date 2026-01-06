@@ -31,7 +31,7 @@ const PHASES: Phase[] = [
   {
     id: "season-zero",
     name: "Season Zero: The Awakening",
-    period: "NOW - Feb 14, 2026",
+    period: "NOW - Apr 11, 2026",
     status: "current",
     description: "BETA v0.1 - First playable era with AI NPCs, factions, and Chronicle Proofs.",
     milestones: [

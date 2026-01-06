@@ -1,11 +1,11 @@
 # DarkWave Chain Launch Roadmap
-## Target Launch Date: February 14, 2026
+## Target Launch Date: April 11, 2026
 
 ---
 
 ## Executive Summary
 
-DarkWave Chain is a Layer 1 blockchain launching with 100,000,000 DWT tokens. This roadmap outlines the path from current state (December 2025) to mainnet launch on February 14, 2026 - Valentine's Day.
+DarkWave Chain is a Layer 1 blockchain launching with 100,000,000 DWT tokens. This roadmap outlines the path from current state (December 2025) to mainnet launch on April 11, 2026.
 
 ---
 
@@ -94,16 +94,16 @@ DarkWave Chain is a Layer 1 blockchain launching with 100,000,000 DWT tokens. Th
 
 ---
 
-## Phase 4: Launch Week (February 8-14, 2026)
+## Phase 4: Launch Week (April 5-11, 2026)
 
-### February 8-13: Final Preparations
+### April 5-10: Final Preparations
 - [ ] Go-live rehearsals
 - [ ] Final testnet verification
 - [ ] Liquidity seeding preparations
 - [ ] Media activation scheduling
 - [ ] Partner coordination calls
 
-### February 14: Launch Day
+### April 11: Launch Day
 - [ ] Lift press embargo (6:00 AM UTC)
 - [ ] Execute genesis block ceremony
 - [ ] Mint initial token distribution
@@ -115,9 +115,9 @@ DarkWave Chain is a Layer 1 blockchain launching with 100,000,000 DWT tokens. Th
 
 ---
 
-## Phase 5: Post-Launch (February 15 - March 2026)
+## Phase 5: Post-Launch (April 12 - May 2026)
 
-### Week 1 (Feb 15-21)
+### Week 1 (Apr 12-18)
 - [ ] Monitor network stability
 - [ ] Publish performance statistics
 - [ ] Address any critical issues
@@ -205,7 +205,7 @@ A proprietary programming language optimized for the DWSC ecosystem:
 4. **Media Relations**: Secure coverage in crypto publications
 5. **Influencer Partnerships**: Engage crypto thought leaders
 
-### Launch Day Strategy (Feb 14, 2026)
+### Launch Day Strategy (Apr 11, 2026)
 1. **Coordinated Press Release**: Embargo lift at 6:00 AM UTC
 2. **Live Event**: YouTube/Twitter Spaces launch ceremony
 3. **Social Blitz**: Coordinated posts across all platforms

@@ -424,7 +424,7 @@ function ExecutiveSummary() {
               <div>
                 <h4 className="text-sm font-semibold text-cyan-400 mb-2">Launch Strategy</h4>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• February 14, 2026: Public mainnet launch</li>
+                  <li>• April 11, 2026: Public mainnet launch</li>
                   <li>• 10,000 Legacy Founder spots ($24 each)</li>
                   <li>• 35,000 DWC airdrop per founder</li>
                   <li>• Community-driven growth</li>

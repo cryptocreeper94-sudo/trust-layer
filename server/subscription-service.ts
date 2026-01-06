@@ -57,7 +57,7 @@ export const SUBSCRIPTION_PLANS = {
     dwcTokens: 35000,
     features: [
       "Full access for 6 months",
-      "35,000 DWC coins (Feb 14, 2026)",
+      "35,000 DWC coins (Apr 11, 2026)",
       "StrikeAgent access",
       "Founding member badge",
     ],
