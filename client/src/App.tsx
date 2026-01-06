@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, lazy, Suspense } from "react";
 import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -8,162 +8,178 @@ import { PreferencesProvider, NotificationsProvider } from "@/lib/store";
 import { WalletProvider } from "@/hooks/use-wallet";
 import { AIAssistant } from "@/components/ai-assistant";
 import { getAppFromHost } from "@/lib/app-config";
+import { FavoritesProvider } from "@/components/favorites-watchlist";
+
+// Critical pages - load immediately
 import Home from "@/pages/home";
-import GamesHome from "@/pages/games-home";
-import StudiosHome from "@/pages/studios-home";
-import GameDeveloper from "@/pages/game-developer";
-import Dashboard from "@/pages/dashboard";
-import Developers from "@/pages/developers";
-import DevelopersRegister from "@/pages/developers-register";
-import Ecosystem from "@/pages/ecosystem";
-import Token from "@/pages/token";
-import Explorer from "@/pages/explorer";
-import DocHub from "@/pages/doc-hub";
-import DWSCExecutiveSummary from "@/pages/dwsc-executive-summary";
-import ApiPlayground from "@/pages/api-playground";
-import Treasury from "@/pages/treasury";
-import DeveloperPortal from "@/pages/developer-portal";
-import DevStudio from "@/pages/dev-studio";
-import Billing from "@/pages/billing";
-import Studio from "@/pages/studio";
-import StudioProjects from "@/pages/studio-projects";
-import Team from "@/pages/team";
-import Bridge from "@/pages/bridge";
-import Staking from "@/pages/staking";
-import Faucet from "@/pages/faucet";
-import Swap from "@/pages/swap";
-import NftMarketplace from "@/pages/nft-marketplace";
-import Portfolio from "@/pages/portfolio";
-import Transactions from "@/pages/transactions";
-import Launchpad from "@/pages/launchpad";
-import Liquidity from "@/pages/liquidity";
-import NftGallery from "@/pages/nft-gallery";
-import NftCreator from "@/pages/nft-creator";
-import Charts from "@/pages/charts";
-import Webhooks from "@/pages/webhooks";
-import MultiSig from "@/pages/multisig";
-import ProofOfReserve from "@/pages/proof-of-reserve";
-import LiquidStaking from "@/pages/liquid-staking";
-import AdminRewards from "@/pages/admin-rewards";
-import AirdropClaim from "@/pages/airdrop-claim";
-import Quests from "@/pages/quests";
-import NetworkStats from "@/pages/network-stats";
-import FounderProgram from "@/pages/founder-program";
-import Validators from "@/pages/validators";
-import Wallet from "@/pages/wallet";
-import Status from "@/pages/status";
-import ApiDocs from "@/pages/api-docs";
-import AdminAnalytics from "@/pages/admin-analytics";
-import AdminPartnerRequests from "@/pages/admin-partner-requests";
-import AdminMarketing from "@/pages/admin-marketing";
-import AdminDashboard from "@/pages/admin-dashboard";
-import ChroniclesAIDemo from "@/pages/chronicles-ai-demo";
-import BuildYourLegacy from "@/pages/build-your-legacy";
+import NotFound from "@/pages/not-found";
 import Terms from "@/pages/terms";
 import Privacy from "@/pages/privacy";
-import ErrorPage from "@/pages/error";
-import NotFound from "@/pages/not-found";
-import ForgotPassword from "@/pages/forgot-password";
-import ResetPassword from "@/pages/reset-password";
-import TokenCompare from "@/pages/token-compare";
-import CodeSnippets from "@/pages/code-snippets";
-import ApiUsage from "@/pages/api-usage";
-import Referrals from "@/pages/referrals";
-import DashboardPro from "@/pages/dashboard-pro";
-import Trading from "@/pages/trading";
-import WhaleTracker from "@/pages/whale-tracker";
-import CopyTrading from "@/pages/copy-trading";
-import DCABot from "@/pages/dca-bot";
-import TokenAnalytics from "@/pages/token-analytics";
-import Leaderboard from "@/pages/leaderboard";
-import WalletProfiler from "@/pages/wallet-profiler";
-import GasEstimator from "@/pages/gas-estimator";
-import ActivityFeed from "@/pages/activity-feed";
-import AINFTGenerator from "@/pages/ai-nft-generator";
-import RarityAnalyzer from "@/pages/rarity-analyzer";
-import UserProfiles from "@/pages/user-profiles";
-import DAOGovernance from "@/pages/dao-governance";
-import TxSimulator from "@/pages/tx-simulator";
-import PortfolioRebalancer from "@/pages/portfolio-rebalancer";
-import Arcade from "@/pages/arcade";
-import Crash from "@/pages/crash";
-import Predictions from "@/pages/predictions";
-import PlayerProfile from "@/pages/player-profile";
-import CoinStore from "@/pages/coin-store";
-import DailyBonus from "@/pages/daily-bonus";
-import Slots from "@/pages/slots";
-import Coinflip from "@/pages/coinflip";
-import SweepstakesRules from "@/pages/sweepstakes-rules";
-import Spades from "@/pages/spades";
-import Solitaire from "@/pages/solitaire";
-import Minesweeper from "@/pages/minesweeper";
-import Galaga from "@/pages/galaga";
-import Tetris from "@/pages/tetris";
-import Snake from "@/pages/snake";
-import Pacman from "@/pages/pacman";
-import Genesis from "@/pages/genesis";
-import CreatorProgram from "@/pages/creator-program";
-import EraCodex from "@/pages/era-codex";
-import ScenarioGenerator from "@/pages/scenario-generator";
-import Crowdfund from "@/pages/crowdfund";
-import Rewards from "@/pages/rewards";
-import CommunityHub from "@/pages/community-hub";
-import Presale from "@/pages/presale";
-import PresaleSuccess from "@/pages/presale-success";
-import InvestmentSimulator from "@/pages/investment-simulator";
-import RoadmapChronicles from "@/pages/roadmap-chronicles";
-import RoadmapEcosystem from "@/pages/roadmap-ecosystem";
-import TechnicalRoadmap from "@/pages/technical-roadmap";
-import Chronicles from "@/pages/chronicles";
-import ChroniclesDemo from "@/pages/chronicles-demo";
-import ChroniclesOnboarding from "@/pages/chronicles-onboarding";
-import ChroniclesEstate from "@/pages/chronicles-estate";
-import ChroniclesHub from "@/pages/chronicles-hub";
-import ChroniclesTimePortal from "@/pages/chronicles-time-portal";
-import ChroniclesLogin from "@/pages/chronicles-login";
-import SyndicateInvite from "@/pages/syndicate-invite";
-import ChronoHome from "@/pages/chrono-home";
-import ChronoEras from "@/pages/chrono-eras";
-import ChronoGameplay from "@/pages/chrono-gameplay";
-import ChronoEconomy from "@/pages/chrono-economy";
-import ChronoCommunity from "@/pages/chrono-community";
-import ChronoRoadmap from "@/pages/chrono-roadmap";
-import ChronoDashboard from "@/pages/chrono-dashboard";
-import ChronoTeam from "@/pages/chrono-team";
-import ChronoCreators from "@/pages/chrono-creators";
-import ChronoExecutiveSummary from "@/pages/chrono-executive-summary";
-import SocialFeed from "@/pages/social-feed";
-import InnovationHub from "@/pages/innovation-hub";
-import Lottery from "@/pages/lottery";
-import AIAdvisor from "@/pages/ai-advisor";
-import PriceAlerts from "@/pages/price-alerts";
-import PaperTrading from "@/pages/paper-trading";
-import Achievements from "@/pages/achievements";
-import Domains from "@/pages/domains";
-import DomainManager from "@/pages/domain-manager";
-import PartnerPortal from "@/pages/partner-portal";
-import ChroniclesAdmin from "@/pages/chronicles-admin";
-import Tokenomics from "@/pages/tokenomics";
-import FAQ from "@/pages/faq";
-import SupportPage from "@/pages/support";
-import CompetitiveAnalysis from "@/pages/competitive-analysis";
-import InvestorPitch from "@/pages/investor-pitch";
-import SecurityPage from "@/pages/security";
-import GuardianCertification from "@/pages/guardian-certification";
-import GuardianPortal from "@/pages/guardian-portal";
-import OwnerAdminPortal from "@/pages/owner-admin";
-import OwnerAnalytics from "@/pages/owner-admin/analytics";
-import OwnerSeoManager from "@/pages/owner-admin/seo";
-import OwnerReferrals from "@/pages/owner-admin/referrals";
-import OwnerUsers from "@/pages/owner-admin/users";
-import OwnerDomains from "@/pages/owner-admin/domains";
-import OwnerFaucet from "@/pages/owner-admin/faucet";
-import OwnerKyc from "@/pages/owner-admin/kyc";
-import GatewayError from "@/pages/gateway-error";
-import AIAgentMarketplace from "@/pages/ai-agent-marketplace";
-import RWATokenization from "@/pages/rwa-tokenization";
-import InfluencerPartnership from "@/pages/influencer-partnership";
-import { FavoritesProvider } from "@/components/favorites-watchlist";
+
+// Loading fallback component
+function PageLoader() {
+  return (
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-10 h-10 border-3 border-cyan-400 border-t-transparent rounded-full animate-spin" />
+        <p className="text-slate-400 text-sm">Loading...</p>
+      </div>
+    </div>
+  );
+}
+
+// Lazy-loaded pages - code splitting for smaller initial bundle
+const GamesHome = lazy(() => import("@/pages/games-home"));
+const StudiosHome = lazy(() => import("@/pages/studios-home"));
+const GameDeveloper = lazy(() => import("@/pages/game-developer"));
+const Dashboard = lazy(() => import("@/pages/dashboard"));
+const Developers = lazy(() => import("@/pages/developers"));
+const DevelopersRegister = lazy(() => import("@/pages/developers-register"));
+const Ecosystem = lazy(() => import("@/pages/ecosystem"));
+const Token = lazy(() => import("@/pages/token"));
+const Explorer = lazy(() => import("@/pages/explorer"));
+const DocHub = lazy(() => import("@/pages/doc-hub"));
+const DWSCExecutiveSummary = lazy(() => import("@/pages/dwsc-executive-summary"));
+const ApiPlayground = lazy(() => import("@/pages/api-playground"));
+const Treasury = lazy(() => import("@/pages/treasury"));
+const DeveloperPortal = lazy(() => import("@/pages/developer-portal"));
+const DevStudio = lazy(() => import("@/pages/dev-studio"));
+const Billing = lazy(() => import("@/pages/billing"));
+const Studio = lazy(() => import("@/pages/studio"));
+const StudioProjects = lazy(() => import("@/pages/studio-projects"));
+const Team = lazy(() => import("@/pages/team"));
+const Bridge = lazy(() => import("@/pages/bridge"));
+const Staking = lazy(() => import("@/pages/staking"));
+const Faucet = lazy(() => import("@/pages/faucet"));
+const Swap = lazy(() => import("@/pages/swap"));
+const NftMarketplace = lazy(() => import("@/pages/nft-marketplace"));
+const Portfolio = lazy(() => import("@/pages/portfolio"));
+const Transactions = lazy(() => import("@/pages/transactions"));
+const Launchpad = lazy(() => import("@/pages/launchpad"));
+const Liquidity = lazy(() => import("@/pages/liquidity"));
+const NftGallery = lazy(() => import("@/pages/nft-gallery"));
+const NftCreator = lazy(() => import("@/pages/nft-creator"));
+const Charts = lazy(() => import("@/pages/charts"));
+const Webhooks = lazy(() => import("@/pages/webhooks"));
+const MultiSig = lazy(() => import("@/pages/multisig"));
+const ProofOfReserve = lazy(() => import("@/pages/proof-of-reserve"));
+const LiquidStaking = lazy(() => import("@/pages/liquid-staking"));
+const AdminRewards = lazy(() => import("@/pages/admin-rewards"));
+const AirdropClaim = lazy(() => import("@/pages/airdrop-claim"));
+const Quests = lazy(() => import("@/pages/quests"));
+const NetworkStats = lazy(() => import("@/pages/network-stats"));
+const FounderProgram = lazy(() => import("@/pages/founder-program"));
+const Validators = lazy(() => import("@/pages/validators"));
+const Wallet = lazy(() => import("@/pages/wallet"));
+const Status = lazy(() => import("@/pages/status"));
+const ApiDocs = lazy(() => import("@/pages/api-docs"));
+const AdminAnalytics = lazy(() => import("@/pages/admin-analytics"));
+const AdminPartnerRequests = lazy(() => import("@/pages/admin-partner-requests"));
+const AdminMarketing = lazy(() => import("@/pages/admin-marketing"));
+const AdminDashboard = lazy(() => import("@/pages/admin-dashboard"));
+const ChroniclesAIDemo = lazy(() => import("@/pages/chronicles-ai-demo"));
+const BuildYourLegacy = lazy(() => import("@/pages/build-your-legacy"));
+const ErrorPage = lazy(() => import("@/pages/error"));
+const ForgotPassword = lazy(() => import("@/pages/forgot-password"));
+const ResetPassword = lazy(() => import("@/pages/reset-password"));
+const TokenCompare = lazy(() => import("@/pages/token-compare"));
+const CodeSnippets = lazy(() => import("@/pages/code-snippets"));
+const ApiUsage = lazy(() => import("@/pages/api-usage"));
+const Referrals = lazy(() => import("@/pages/referrals"));
+const DashboardPro = lazy(() => import("@/pages/dashboard-pro"));
+const Trading = lazy(() => import("@/pages/trading"));
+const WhaleTracker = lazy(() => import("@/pages/whale-tracker"));
+const CopyTrading = lazy(() => import("@/pages/copy-trading"));
+const DCABot = lazy(() => import("@/pages/dca-bot"));
+const TokenAnalytics = lazy(() => import("@/pages/token-analytics"));
+const Leaderboard = lazy(() => import("@/pages/leaderboard"));
+const WalletProfiler = lazy(() => import("@/pages/wallet-profiler"));
+const GasEstimator = lazy(() => import("@/pages/gas-estimator"));
+const ActivityFeed = lazy(() => import("@/pages/activity-feed"));
+const AINFTGenerator = lazy(() => import("@/pages/ai-nft-generator"));
+const RarityAnalyzer = lazy(() => import("@/pages/rarity-analyzer"));
+const UserProfiles = lazy(() => import("@/pages/user-profiles"));
+const DAOGovernance = lazy(() => import("@/pages/dao-governance"));
+const TxSimulator = lazy(() => import("@/pages/tx-simulator"));
+const PortfolioRebalancer = lazy(() => import("@/pages/portfolio-rebalancer"));
+const Arcade = lazy(() => import("@/pages/arcade"));
+const Crash = lazy(() => import("@/pages/crash"));
+const Predictions = lazy(() => import("@/pages/predictions"));
+const PlayerProfile = lazy(() => import("@/pages/player-profile"));
+const CoinStore = lazy(() => import("@/pages/coin-store"));
+const DailyBonus = lazy(() => import("@/pages/daily-bonus"));
+const Slots = lazy(() => import("@/pages/slots"));
+const Coinflip = lazy(() => import("@/pages/coinflip"));
+const SweepstakesRules = lazy(() => import("@/pages/sweepstakes-rules"));
+const Spades = lazy(() => import("@/pages/spades"));
+const Solitaire = lazy(() => import("@/pages/solitaire"));
+const Minesweeper = lazy(() => import("@/pages/minesweeper"));
+const Galaga = lazy(() => import("@/pages/galaga"));
+const Tetris = lazy(() => import("@/pages/tetris"));
+const Snake = lazy(() => import("@/pages/snake"));
+const Pacman = lazy(() => import("@/pages/pacman"));
+const Genesis = lazy(() => import("@/pages/genesis"));
+const CreatorProgram = lazy(() => import("@/pages/creator-program"));
+const EraCodex = lazy(() => import("@/pages/era-codex"));
+const ScenarioGenerator = lazy(() => import("@/pages/scenario-generator"));
+const Crowdfund = lazy(() => import("@/pages/crowdfund"));
+const Rewards = lazy(() => import("@/pages/rewards"));
+const CommunityHub = lazy(() => import("@/pages/community-hub"));
+const Presale = lazy(() => import("@/pages/presale"));
+const PresaleSuccess = lazy(() => import("@/pages/presale-success"));
+const InvestmentSimulator = lazy(() => import("@/pages/investment-simulator"));
+const RoadmapChronicles = lazy(() => import("@/pages/roadmap-chronicles"));
+const RoadmapEcosystem = lazy(() => import("@/pages/roadmap-ecosystem"));
+const TechnicalRoadmap = lazy(() => import("@/pages/technical-roadmap"));
+const Chronicles = lazy(() => import("@/pages/chronicles"));
+const ChroniclesDemo = lazy(() => import("@/pages/chronicles-demo"));
+const ChroniclesOnboarding = lazy(() => import("@/pages/chronicles-onboarding"));
+const ChroniclesEstate = lazy(() => import("@/pages/chronicles-estate"));
+const ChroniclesHub = lazy(() => import("@/pages/chronicles-hub"));
+const ChroniclesTimePortal = lazy(() => import("@/pages/chronicles-time-portal"));
+const ChroniclesLogin = lazy(() => import("@/pages/chronicles-login"));
+const SyndicateInvite = lazy(() => import("@/pages/syndicate-invite"));
+const ChronoHome = lazy(() => import("@/pages/chrono-home"));
+const ChronoEras = lazy(() => import("@/pages/chrono-eras"));
+const ChronoGameplay = lazy(() => import("@/pages/chrono-gameplay"));
+const ChronoEconomy = lazy(() => import("@/pages/chrono-economy"));
+const ChronoCommunity = lazy(() => import("@/pages/chrono-community"));
+const ChronoRoadmap = lazy(() => import("@/pages/chrono-roadmap"));
+const ChronoDashboard = lazy(() => import("@/pages/chrono-dashboard"));
+const ChronoTeam = lazy(() => import("@/pages/chrono-team"));
+const ChronoCreators = lazy(() => import("@/pages/chrono-creators"));
+const ChronoExecutiveSummary = lazy(() => import("@/pages/chrono-executive-summary"));
+const SocialFeed = lazy(() => import("@/pages/social-feed"));
+const InnovationHub = lazy(() => import("@/pages/innovation-hub"));
+const Lottery = lazy(() => import("@/pages/lottery"));
+const AIAdvisor = lazy(() => import("@/pages/ai-advisor"));
+const PriceAlerts = lazy(() => import("@/pages/price-alerts"));
+const PaperTrading = lazy(() => import("@/pages/paper-trading"));
+const Achievements = lazy(() => import("@/pages/achievements"));
+const Domains = lazy(() => import("@/pages/domains"));
+const DomainManager = lazy(() => import("@/pages/domain-manager"));
+const PartnerPortal = lazy(() => import("@/pages/partner-portal"));
+const ChroniclesAdmin = lazy(() => import("@/pages/chronicles-admin"));
+const Tokenomics = lazy(() => import("@/pages/tokenomics"));
+const FAQ = lazy(() => import("@/pages/faq"));
+const SupportPage = lazy(() => import("@/pages/support"));
+const CompetitiveAnalysis = lazy(() => import("@/pages/competitive-analysis"));
+const InvestorPitch = lazy(() => import("@/pages/investor-pitch"));
+const SecurityPage = lazy(() => import("@/pages/security"));
+const GuardianCertification = lazy(() => import("@/pages/guardian-certification"));
+const GuardianPortal = lazy(() => import("@/pages/guardian-portal"));
+const OwnerAdminPortal = lazy(() => import("@/pages/owner-admin"));
+const OwnerAnalytics = lazy(() => import("@/pages/owner-admin/analytics"));
+const OwnerSeoManager = lazy(() => import("@/pages/owner-admin/seo"));
+const OwnerReferrals = lazy(() => import("@/pages/owner-admin/referrals"));
+const OwnerUsers = lazy(() => import("@/pages/owner-admin/users"));
+const OwnerDomains = lazy(() => import("@/pages/owner-admin/domains"));
+const OwnerFaucet = lazy(() => import("@/pages/owner-admin/faucet"));
+const OwnerKyc = lazy(() => import("@/pages/owner-admin/kyc"));
+const GatewayError = lazy(() => import("@/pages/gateway-error"));
+const AIAgentMarketplace = lazy(() => import("@/pages/ai-agent-marketplace"));
+const RWATokenization = lazy(() => import("@/pages/rwa-tokenization"));
+const InfluencerPartnership = lazy(() => import("@/pages/influencer-partnership"));
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -177,7 +193,7 @@ function ScrollToTop() {
 
 function GamesRouter() {
   return (
-    <>
+    <Suspense fallback={<PageLoader />}>
       <ScrollToTop />
       <Switch>
         <Route path="/" component={GamesHome} />
@@ -218,13 +234,13 @@ function GamesRouter() {
         <Route path="/privacy" component={Privacy} />
         <Route component={NotFound} />
       </Switch>
-    </>
+    </Suspense>
   );
 }
 
 function StudiosRouter() {
   return (
-    <>
+    <Suspense fallback={<PageLoader />}>
       <ScrollToTop />
       <Switch>
         <Route path="/" component={StudiosHome} />
@@ -232,13 +248,13 @@ function StudiosRouter() {
         <Route path="/privacy" component={Privacy} />
         <Route component={NotFound} />
       </Switch>
-    </>
+    </Suspense>
   );
 }
 
 function ChronoRouter() {
   return (
-    <>
+    <Suspense fallback={<PageLoader />}>
       <ScrollToTop />
       <Switch>
         <Route path="/" component={ChronoHome} />
@@ -272,13 +288,13 @@ function ChronoRouter() {
         <Route path="/privacy" component={Privacy} />
         <Route component={NotFound} />
       </Switch>
-    </>
+    </Suspense>
   );
 }
 
 function DWSCRouter() {
   return (
-    <>
+    <Suspense fallback={<PageLoader />}>
       <ScrollToTop />
       <Switch>
         <Route path="/" component={Home} />
@@ -428,7 +444,7 @@ function DWSCRouter() {
         <Route path="/gateway-error" component={GatewayError} />
         <Route component={NotFound} />
       </Switch>
-    </>
+    </Suspense>
   );
 }
 

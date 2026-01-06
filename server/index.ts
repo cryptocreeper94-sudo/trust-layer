@@ -232,6 +232,8 @@ app.use((req, res, next) => {
       reusePort: true,
     },
     async () => {
+      console.log(`[Health] Server started and listening on 0.0.0.0:${port}`);
+      console.log(`[Health] Application ready to accept HTTP requests`);
       log(`serving on port ${port}`);
       
       // Setup ChronoChat WebSocket presence
