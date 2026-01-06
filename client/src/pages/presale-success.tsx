@@ -20,9 +20,11 @@ const TIER_BONUSES: Record<string, number> = {
 export default function PresaleSuccess() {
   const searchParams = new URLSearchParams(window.location.search);
   const sessionId = searchParams.get("session_id");
+  const cryptoPurchaseId = searchParams.get("crypto_purchase");
   const { toast } = useToast();
   
-  const { data, isLoading, error } = useQuery({
+  // Standard Stripe verification
+  const { data: stripeData, isLoading: stripeLoading, error: stripeError } = useQuery({
     queryKey: ["/api/presale/verify", sessionId],
     queryFn: async () => {
       if (!sessionId) throw new Error("No session ID");
@@ -34,14 +36,39 @@ export default function PresaleSuccess() {
     retry: false,
   });
 
+  // Crypto (Coinbase) verification - poll until confirmed (crypto can take longer)
+  const { data: cryptoData, isLoading: cryptoLoading, error: cryptoError } = useQuery({
+    queryKey: ["/api/presale/verify-crypto", cryptoPurchaseId],
+    queryFn: async () => {
+      if (!cryptoPurchaseId) throw new Error("No purchase ID");
+      const res = await fetch(`/api/presale/verify-crypto?purchase_id=${cryptoPurchaseId}`);
+      if (!res.ok) throw new Error("Verification failed");
+      const data = await res.json();
+      // Keep polling if not yet confirmed
+      if (!data.success && data.status !== "EXPIRED" && data.status !== "CANCELED") {
+        throw new Error("Payment still processing");
+      }
+      return data;
+    },
+    enabled: !!cryptoPurchaseId,
+    retry: 30, // Poll for up to 5 minutes (30 retries * 10s)
+    retryDelay: 10000, // Check every 10 seconds
+    staleTime: 5000,
+  });
+
+  const data = sessionId ? stripeData : cryptoData;
+  const isLoading = sessionId ? stripeLoading : cryptoLoading;
+  const error = sessionId ? stripeError : cryptoError;
+  const isCrypto = !!cryptoPurchaseId;
+
   const amountPaid = parseFloat(data?.amountPaid || "0");
   const tier = data?.tier || "unknown";
   const bonusPercent = TIER_BONUSES[tier] || 0;
   const baseTokens = Math.floor(amountPaid / TOKEN_PRICE);
   const bonusTokens = Math.floor(baseTokens * (bonusPercent / 100));
-  const totalTokens = baseTokens + bonusTokens;
+  const totalTokens = data?.totalTokens || (baseTokens + bonusTokens);
 
-  if (!sessionId) {
+  if (!sessionId && !cryptoPurchaseId) {
     return (
       <div className="min-h-screen bg-[#080c18] flex items-center justify-center">
         <div className="text-center">

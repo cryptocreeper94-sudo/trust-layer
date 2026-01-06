@@ -4203,6 +4203,103 @@ export async function registerRoutes(
     }
   });
 
+  // Crowdfund crypto checkout via Coinbase Commerce
+  app.post("/api/crowdfund/crypto-checkout", async (req, res) => {
+    try {
+      const { amountCents, featureId, displayName, isAnonymous, message } = req.body;
+      
+      if (!amountCents || amountCents < 100) {
+        return res.status(400).json({ error: "Minimum donation is $1.00" });
+      }
+
+      const campaign = await storage.getActiveCampaign();
+      if (!campaign) {
+        return res.status(404).json({ error: "No active campaign" });
+      }
+
+      const user = req.user as any;
+      
+      const contribution = await storage.createCrowdfundContribution({
+        campaignId: campaign.id,
+        featureId: featureId || null,
+        userId: user?.id || null,
+        displayName: isAnonymous ? null : (displayName || user?.firstName || null),
+        amountCents,
+        currency: "USD",
+        paymentMethod: "coinbase",
+        isAnonymous: isAnonymous || false,
+        message: message || null,
+        status: "pending",
+      });
+
+      const host = req.get("host") || "dwsc.io";
+      const protocol = host.includes("localhost") ? "http" : "https";
+      const baseUrl = `${protocol}://${host}`;
+
+      const { createCoinbaseCharge } = await import("./coinbaseClient");
+      const charge = await createCoinbaseCharge({
+        name: featureId ? "Feature Funding Contribution" : "DarkWave Dev Fund Contribution",
+        description: "Transparent blockchain development funding",
+        amountUsd: (amountCents / 100).toFixed(2),
+        successUrl: `${baseUrl}/crowdfund?success=true&contribution=${contribution.id}&crypto=true`,
+        cancelUrl: `${baseUrl}/crowdfund?canceled=true`,
+        metadata: {
+          contributionId: contribution.id,
+          campaignId: campaign.id,
+          featureId: featureId || "",
+        },
+      });
+
+      await storage.updateCrowdfundContribution(contribution.id, {
+        stripePaymentIntentId: `coinbase_${charge.id}`,
+      });
+
+      res.json({ checkoutUrl: charge.hostedUrl, contributionId: contribution.id, chargeId: charge.id });
+    } catch (error) {
+      console.error("Crowdfund crypto checkout error:", error);
+      res.status(500).json({ error: "Failed to create crypto checkout" });
+    }
+  });
+
+  // Verify crowdfund crypto contribution
+  app.post("/api/crowdfund/confirm-crypto/:contributionId", async (req, res) => {
+    try {
+      const { contributionId } = req.params;
+      
+      const contribution = await storage.getCrowdfundContribution(contributionId);
+      if (!contribution) {
+        return res.status(404).json({ error: "Contribution not found" });
+      }
+      
+      // Already confirmed
+      if (contribution.status === "confirmed") {
+        return res.json({ success: true, contribution });
+      }
+      
+      // Check if it's a Coinbase payment
+      const paymentId = contribution.stripePaymentIntentId;
+      if (!paymentId?.startsWith("coinbase_")) {
+        // Not a crypto payment, use standard confirm
+        const updated = await storage.updateCrowdfundContribution(contributionId, { status: "confirmed" });
+        return res.json({ success: true, contribution: updated });
+      }
+      
+      const chargeId = paymentId.replace("coinbase_", "");
+      const { getCoinbaseCharge } = await import("./coinbaseClient");
+      const charge = await getCoinbaseCharge(chargeId);
+      
+      if (charge.status === "COMPLETED" || charge.status === "CONFIRMED") {
+        const updated = await storage.updateCrowdfundContribution(contributionId, { status: "confirmed" });
+        return res.json({ success: true, contribution: updated });
+      }
+      
+      res.json({ success: false, status: charge.status });
+    } catch (error) {
+      console.error("Confirm crypto contribution error:", error);
+      res.status(500).json({ error: "Failed to confirm contribution" });
+    }
+  });
+
   // === GUARDIAN CERTIFICATION CHECKOUT ROUTES ===
   const GUARDIAN_TIERS = {
     assurance_lite: {
@@ -6645,6 +6742,152 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Presale checkout error:", error);
       res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  // Presale crypto checkout via Coinbase Commerce
+  app.post("/api/presale/crypto-checkout", async (req, res) => {
+    try {
+      const { email, tier, amountCents } = req.body;
+      
+      if (!email || !email.includes("@")) {
+        return res.status(400).json({ error: "Valid email required" });
+      }
+      
+      const TIER_CONFIG: Record<string, { amount: number; bonus: number; name: string }> = {
+        genesis: { amount: 100000, bonus: 25, name: "Genesis Tier" },
+        founder: { amount: 50000, bonus: 15, name: "Founder Tier" },
+        pioneer: { amount: 25000, bonus: 10, name: "Pioneer Tier" },
+        early_bird: { amount: 10000, bonus: 5, name: "Early Bird Tier" },
+      };
+      
+      const tierConfig = TIER_CONFIG[tier];
+      const finalAmount = amountCents || tierConfig?.amount;
+      
+      if (!finalAmount || finalAmount < 100) {
+        return res.status(400).json({ error: "Invalid amount" });
+      }
+      
+      const TOKEN_PRICE = 0.008;
+      const tokenAmount = Math.floor((finalAmount / 100) / TOKEN_PRICE);
+      const bonusPercent = tierConfig?.bonus || 0;
+      const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
+      const totalTokens = tokenAmount + bonusTokens;
+      
+      const host = req.get("host") || "dwsc.io";
+      const protocol = host.includes("localhost") ? "http" : "https";
+      const baseUrl = `${protocol}://${host}`;
+      
+      const { createCoinbaseCharge } = await import("./coinbaseClient");
+      
+      // Create a pending record first to get an ID we can use in the redirect
+      const pendingResult = await db.execute(sql`
+        INSERT INTO presale_purchases (stripe_payment_intent_id, email, usd_amount_cents, token_amount, tier, status, payment_method, created_at)
+        VALUES (
+          ${`coinbase_pending_${Date.now()}`}, 
+          ${email}, 
+          ${finalAmount}, 
+          ${totalTokens},
+          ${tier || "custom"},
+          'pending',
+          'coinbase',
+          NOW()
+        )
+        RETURNING id
+      `);
+      const purchaseId = (pendingResult.rows[0] as any)?.id;
+      
+      const charge = await createCoinbaseCharge({
+        name: tierConfig?.name || "DWC Token Presale",
+        description: `${totalTokens.toLocaleString()} DWC tokens (includes ${bonusTokens.toLocaleString()} bonus tokens)`,
+        amountUsd: (finalAmount / 100).toFixed(2),
+        successUrl: `${baseUrl}/presale/success?crypto_purchase=${purchaseId}`,
+        cancelUrl: `${baseUrl}/presale`,
+        metadata: {
+          type: "presale",
+          tier: tier || "custom",
+          email: email,
+          tokenAmount: String(tokenAmount),
+          bonusTokens: String(bonusTokens),
+          totalTokens: String(totalTokens),
+          amountCents: String(finalAmount),
+          purchaseId: String(purchaseId),
+        },
+      });
+      
+      // Update with actual charge ID
+      await db.execute(sql`
+        UPDATE presale_purchases 
+        SET stripe_payment_intent_id = ${`coinbase_${charge.id}`}
+        WHERE id = ${purchaseId}
+      `);
+      
+      res.json({ checkoutUrl: charge.hostedUrl, chargeId: charge.id, purchaseId });
+    } catch (error) {
+      console.error("Presale crypto checkout error:", error);
+      res.status(500).json({ error: "Failed to create crypto checkout" });
+    }
+  });
+
+  // Verify crypto presale payment by purchase ID
+  app.get("/api/presale/verify-crypto", async (req, res) => {
+    try {
+      const purchaseId = req.query.purchase_id as string;
+      if (!purchaseId) {
+        return res.status(400).json({ error: "Purchase ID required" });
+      }
+      
+      // Get the pending purchase record
+      const purchaseResult = await db.execute(sql`
+        SELECT * FROM presale_purchases WHERE id = ${purchaseId} AND payment_method = 'coinbase'
+      `);
+      
+      const purchase = purchaseResult.rows[0] as any;
+      if (!purchase) {
+        return res.status(404).json({ error: "Purchase not found" });
+      }
+      
+      // Already completed
+      if (purchase.status === "completed") {
+        return res.json({
+          success: true,
+          email: purchase.email,
+          tier: purchase.tier,
+          totalTokens: purchase.token_amount,
+          amountPaid: (purchase.usd_amount_cents / 100).toFixed(2),
+        });
+      }
+      
+      // Extract charge ID from stored payment intent ID (format: coinbase_CHARGE_ID)
+      const chargeId = purchase.stripe_payment_intent_id?.replace("coinbase_", "").replace("coinbase_pending_", "");
+      if (!chargeId || chargeId.startsWith("pending")) {
+        return res.json({ success: false, status: "pending", message: "Payment not yet initiated" });
+      }
+      
+      const { getCoinbaseCharge } = await import("./coinbaseClient");
+      const charge = await getCoinbaseCharge(chargeId);
+      
+      if (charge.status === "COMPLETED" || charge.status === "CONFIRMED") {
+        // Update to completed
+        await db.execute(sql`
+          UPDATE presale_purchases 
+          SET status = 'completed'
+          WHERE id = ${purchaseId}
+        `);
+        
+        return res.json({
+          success: true,
+          email: purchase.email,
+          tier: purchase.tier,
+          totalTokens: purchase.token_amount,
+          amountPaid: (purchase.usd_amount_cents / 100).toFixed(2),
+        });
+      }
+      
+      res.json({ success: false, status: charge.status });
+    } catch (error) {
+      console.error("Verify crypto presale error:", error);
+      res.status(500).json({ error: "Failed to verify crypto payment" });
     }
   });
 

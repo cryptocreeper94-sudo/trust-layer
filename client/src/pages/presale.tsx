@@ -285,6 +285,7 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
   const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto">("card");
   const tierImages = [quantumRealm, deepSpace, cyberpunkCity, fantasyWorld];
   const tierColors: Record<string, string> = {
     genesis: "from-yellow-400 to-amber-500",
@@ -301,13 +302,15 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
       if (!isValidEmail) {
         throw new Error("Valid email required");
       }
-      const res = await fetch("/api/presale/checkout", {
+      const endpoint = paymentMethod === "crypto" ? "/api/presale/crypto-checkout" : "/api/presale/checkout";
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           priceId: tier.priceId,
           tier: tier.tier,
           email: email,
+          amountCents: tier.amount,
         }),
       });
       if (!res.ok) {
@@ -317,8 +320,9 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
       return res.json();
     },
     onSuccess: (data) => {
-      if (data.url) {
-        window.location.href = data.url;
+      const redirectUrl = data.url || data.checkoutUrl;
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
       }
     },
     onError: (error: Error) => {
@@ -400,8 +404,39 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
               <p className="text-xs text-red-400 mt-1">Please enter a valid email</p>
             )}
           </div>
+
+          <div className="mt-3 p-2 rounded-lg bg-black/30 border border-white/10">
+            <p className="text-[10px] text-gray-400 mb-2 text-center">Payment Method</p>
+            <div className="flex gap-1">
+              <button
+                onClick={() => setPaymentMethod("card")}
+                className={`flex-1 py-1.5 px-2 rounded text-xs font-medium transition-all ${
+                  paymentMethod === "card" 
+                    ? "bg-white/10 text-white border border-white/20" 
+                    : "text-gray-400 hover:text-white"
+                }`}
+                data-testid={`button-pay-card-${tier.tier}`}
+              >
+                💳 Card
+              </button>
+              <button
+                onClick={() => setPaymentMethod("crypto")}
+                className={`flex-1 py-1.5 px-2 rounded text-xs font-medium transition-all ${
+                  paymentMethod === "crypto" 
+                    ? "bg-gradient-to-r from-orange-500/20 to-yellow-500/20 text-orange-400 border border-orange-500/30" 
+                    : "text-gray-400 hover:text-orange-400"
+                }`}
+                data-testid={`button-pay-crypto-${tier.tier}`}
+              >
+                🪙 Crypto
+              </button>
+            </div>
+            {paymentMethod === "crypto" && (
+              <p className="text-[9px] text-orange-400/70 text-center mt-1">USDC, BTC, ETH accepted</p>
+            )}
+          </div>
           
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-2 mt-3">
             <Button 
               variant="outline"
               onClick={() => setShowModal(true)}
@@ -413,13 +448,13 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
             <Button 
               onClick={handleBuyClick}
               disabled={checkoutMutation.isPending || !isValidEmail}
-              className={`flex-1 bg-gradient-to-r ${color} hover:opacity-90 border-0 disabled:opacity-50`}
+              className={`flex-1 bg-gradient-to-r ${paymentMethod === "crypto" ? "from-orange-500 to-yellow-500" : color} hover:opacity-90 border-0 disabled:opacity-50`}
               data-testid={`button-select-tier-${tier.tier}`}
             >
               {checkoutMutation.isPending ? (
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
               ) : null}
-              Buy
+              {paymentMethod === "crypto" ? "Pay Crypto" : "Buy"}
             </Button>
           </div>
         </div>

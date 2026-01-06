@@ -129,6 +129,7 @@ function DonationModal({ feature, onSuccess }: { feature?: CrowdfundFeature; onS
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto">("card");
 
   const presetAmounts = [25, 50, 100, 500, 1000];
 
@@ -141,7 +142,8 @@ function DonationModal({ feature, onSuccess }: { feature?: CrowdfundFeature; onS
 
     setIsLoading(true);
     try {
-      const res = await fetch("/api/crowdfund/checkout", {
+      const endpoint = paymentMethod === "crypto" ? "/api/crowdfund/crypto-checkout" : "/api/crowdfund/checkout";
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -154,8 +156,9 @@ function DonationModal({ feature, onSuccess }: { feature?: CrowdfundFeature; onS
       });
 
       const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
+      const redirectUrl = data.url || data.checkoutUrl;
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
       } else {
         alert(data.error || "Failed to create checkout session");
       }
@@ -244,17 +247,48 @@ function DonationModal({ feature, onSuccess }: { feature?: CrowdfundFeature; onS
         />
       </div>
 
+      <div className="p-3 rounded-lg bg-gray-800/50 border border-gray-700/50">
+        <p className="text-xs text-gray-400 mb-2 text-center">Payment Method</p>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setPaymentMethod("card")}
+            className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+              paymentMethod === "card" 
+                ? "bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border border-cyan-500/30" 
+                : "text-gray-400 hover:text-white bg-gray-800/50"
+            }`}
+            data-testid="button-pay-card"
+          >
+            💳 Card
+          </button>
+          <button
+            onClick={() => setPaymentMethod("crypto")}
+            className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
+              paymentMethod === "crypto" 
+                ? "bg-gradient-to-r from-orange-500/20 to-yellow-500/20 text-orange-400 border border-orange-500/30" 
+                : "text-gray-400 hover:text-orange-400 bg-gray-800/50"
+            }`}
+            data-testid="button-pay-crypto"
+          >
+            🪙 Crypto
+          </button>
+        </div>
+        {paymentMethod === "crypto" && (
+          <p className="text-[10px] text-orange-400/70 text-center mt-2">Pay with USDC, BTC, ETH & more</p>
+        )}
+      </div>
+
       <Button
-        className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"
+        className={`w-full ${paymentMethod === "crypto" ? "bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600" : "bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"}`}
         onClick={handleDonate}
         disabled={isLoading}
         data-testid="button-donate"
       >
-        {isLoading ? "Processing..." : `Donate ${formatCurrency(Math.round(parseFloat(amount || "0") * 100))}`}
+        {isLoading ? "Processing..." : `${paymentMethod === "crypto" ? "Pay with Crypto" : "Donate"} ${formatCurrency(Math.round(parseFloat(amount || "0") * 100))}`}
       </Button>
 
       <p className="text-xs text-gray-500 text-center">
-        Secure payment powered by Stripe. All contributions are non-refundable donations.
+        {paymentMethod === "crypto" ? "Crypto payments powered by Coinbase Commerce." : "Secure payment powered by Stripe."} All contributions are non-refundable donations.
       </p>
     </div>
   );
@@ -395,13 +429,43 @@ export default function CrowdfundPage() {
     const params = new URLSearchParams(searchString);
     if (params.get("success") === "true") {
       const contributionId = params.get("contribution");
+      const isCrypto = params.get("crypto") === "true";
       if (contributionId) {
-        fetch(`/api/crowdfund/confirm/${contributionId}`, { method: "POST" })
-          .then(() => {
+        // Use crypto confirm endpoint for Coinbase payments
+        const confirmUrl = isCrypto 
+          ? `/api/crowdfund/confirm-crypto/${contributionId}`
+          : `/api/crowdfund/confirm/${contributionId}`;
+        
+        const confirmPayment = async () => {
+          if (isCrypto) {
+            // Poll for crypto payment confirmation (can take longer)
+            let attempts = 0;
+            const maxAttempts = 30;
+            while (attempts < maxAttempts) {
+              try {
+                const res = await fetch(confirmUrl, { method: "POST" });
+                const data = await res.json();
+                if (data.success) {
+                  queryClient.invalidateQueries({ queryKey: ["/api/crowdfund"] });
+                  setShowSuccess(true);
+                  return;
+                }
+                // Wait 10 seconds before next attempt
+                await new Promise(resolve => setTimeout(resolve, 10000));
+                attempts++;
+              } catch (e) {
+                console.error("Crypto confirm error:", e);
+                attempts++;
+              }
+            }
+          } else {
+            // Standard Stripe confirmation
+            await fetch(confirmUrl, { method: "POST" });
             queryClient.invalidateQueries({ queryKey: ["/api/crowdfund"] });
             setShowSuccess(true);
-          })
-          .catch(console.error);
+          }
+        };
+        confirmPayment().catch(console.error);
       }
     }
   }, [searchString, queryClient]);
