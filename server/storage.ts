@@ -288,6 +288,12 @@ export interface IStorage {
   getSupportTicketsByUser(userId: string): Promise<any[]>;
   getSupportTicket(id: string): Promise<any | undefined>;
   updateSupportTicketStatus(id: string, status: string, adminNotes?: string): Promise<any | undefined>;
+  
+  // Influencer/KOL Applications
+  createInfluencerApplication(data: { name: string; email: string; platform: string; handle: string; followers?: string; contentType?: string; message?: string }): Promise<any>;
+  getInfluencerApplications(status?: string): Promise<any[]>;
+  getInfluencerApplication(id: string): Promise<any | undefined>;
+  updateInfluencerApplicationStatus(id: string, status: string, adminNotes?: string): Promise<any | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -2323,6 +2329,40 @@ export class DatabaseStorage implements IStorage {
     const result = await db.execute(sql`
       UPDATE support_tickets 
       SET status = ${status}, admin_notes = ${adminNotes || null}, resolved_at = ${resolvedAt}, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ${id}
+      RETURNING *
+    `);
+    return result.rows[0];
+  }
+
+  async createInfluencerApplication(data: { name: string; email: string; platform: string; handle: string; followers?: string; contentType?: string; message?: string }): Promise<any> {
+    const result = await db.execute(sql`
+      INSERT INTO influencer_applications (name, email, platform, handle, followers, content_type, message)
+      VALUES (${data.name}, ${data.email}, ${data.platform}, ${data.handle}, ${data.followers || null}, ${data.contentType || null}, ${data.message || null})
+      RETURNING *
+    `);
+    return result.rows[0];
+  }
+
+  async getInfluencerApplications(status?: string): Promise<any[]> {
+    if (status) {
+      const result = await db.execute(sql`SELECT * FROM influencer_applications WHERE status = ${status} ORDER BY created_at DESC`);
+      return result.rows;
+    }
+    const result = await db.execute(sql`SELECT * FROM influencer_applications ORDER BY created_at DESC`);
+    return result.rows;
+  }
+
+  async getInfluencerApplication(id: string): Promise<any | undefined> {
+    const result = await db.execute(sql`SELECT * FROM influencer_applications WHERE id = ${id}`);
+    return result.rows[0];
+  }
+
+  async updateInfluencerApplicationStatus(id: string, status: string, adminNotes?: string): Promise<any | undefined> {
+    const reviewedAt = ['approved', 'rejected'].includes(status) ? sql`CURRENT_TIMESTAMP` : sql`NULL`;
+    const result = await db.execute(sql`
+      UPDATE influencer_applications 
+      SET status = ${status}, admin_notes = ${adminNotes || null}, reviewed_at = ${reviewedAt}, updated_at = CURRENT_TIMESTAMP
       WHERE id = ${id}
       RETURNING *
     `);

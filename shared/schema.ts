@@ -95,6 +95,34 @@ export const insertSupportTicketSchema = createInsertSchema(supportTickets).omit
 export type InsertSupportTicket = z.infer<typeof insertSupportTicketSchema>;
 export type SupportTicket = typeof supportTickets.$inferSelect;
 
+export const influencerApplications = pgTable("influencer_applications", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  platform: text("platform").notNull(),
+  handle: text("handle").notNull(),
+  followers: text("followers"),
+  contentType: text("content_type"),
+  message: text("message"),
+  status: text("status").notNull().default("pending"),
+  adminNotes: text("admin_notes"),
+  reviewedAt: timestamp("reviewed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertInfluencerApplicationSchema = createInsertSchema(influencerApplications).omit({
+  id: true,
+  status: true,
+  adminNotes: true,
+  reviewedAt: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertInfluencerApplication = z.infer<typeof insertInfluencerApplicationSchema>;
+export type InfluencerApplication = typeof influencerApplications.$inferSelect;
+
 export const ecosystemAppSchema = z.object({
   id: z.string(),
   name: z.string(),

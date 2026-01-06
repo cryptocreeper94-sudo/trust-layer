@@ -162,6 +162,7 @@ import OwnerKyc from "@/pages/owner-admin/kyc";
 import GatewayError from "@/pages/gateway-error";
 import AIAgentMarketplace from "@/pages/ai-agent-marketplace";
 import RWATokenization from "@/pages/rwa-tokenization";
+import InfluencerPartnership from "@/pages/influencer-partnership";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
 
 function ScrollToTop() {
@@ -383,6 +384,8 @@ function DWSCRouter() {
         <Route path="/domains" component={Domains} />
         <Route path="/domain/:name" component={DomainManager} />
         <Route path="/partners" component={PartnerPortal} />
+        <Route path="/influencer-partnership" component={InfluencerPartnership} />
+        <Route path="/kol" component={InfluencerPartnership} />
         <Route path="/game-developer" component={GameDeveloper} />
         <Route path="/slots" component={Slots} />
         <Route path="/coinflip" component={Coinflip} />

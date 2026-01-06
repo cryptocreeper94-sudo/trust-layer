@@ -116,7 +116,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -3991,6 +3991,104 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Error updating support ticket:", error);
       res.status(500).json({ error: "Failed to update ticket" });
+    }
+  });
+
+  // ============================================
+  // INFLUENCER/KOL PARTNERSHIP APPLICATIONS
+  // ============================================
+
+  app.post("/api/partnerships/influencer-application", async (req, res) => {
+    try {
+      const parseResult = insertInfluencerApplicationSchema.safeParse(req.body);
+      if (!parseResult.success) {
+        return res.status(400).json({ 
+          error: "Invalid application data", 
+          details: parseResult.error.flatten() 
+        });
+      }
+
+      const { name, email, platform, handle, followers, contentType, message } = parseResult.data;
+
+      // Store the application in the database
+      const application = await storage.createInfluencerApplication({
+        name,
+        email,
+        platform,
+        handle,
+        followers: followers || undefined,
+        contentType: contentType || undefined,
+        message: message || undefined,
+      });
+
+      // Try to send notification email to team
+      try {
+        await sendEmail({
+          to: "partnerships@darkwavestudios.io",
+          subject: `New Influencer Application: ${name} (@${handle})`,
+          html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #fff; padding: 24px; border-radius: 12px;">
+              <h1 style="color: #00ffff; margin-bottom: 20px;">New KOL/Influencer Application</h1>
+              <div style="background: #1a1a2e; padding: 16px; border-radius: 8px; margin-bottom: 16px;">
+                <p style="margin: 8px 0;"><strong>Name:</strong> ${name}</p>
+                <p style="margin: 8px 0;"><strong>Email:</strong> ${email}</p>
+                <p style="margin: 8px 0;"><strong>Platform:</strong> ${platform}</p>
+                <p style="margin: 8px 0;"><strong>Handle:</strong> @${handle}</p>
+                <p style="margin: 8px 0;"><strong>Followers:</strong> ${followers || "Not specified"}</p>
+                <p style="margin: 8px 0;"><strong>Content Type:</strong> ${contentType || "Not specified"}</p>
+              </div>
+              ${message ? `
+              <div style="background: #1a1a2e; padding: 16px; border-radius: 8px;">
+                <p style="color: #888; margin: 0 0 8px 0;">Message:</p>
+                <p style="margin: 0;">${message}</p>
+              </div>
+              ` : ""}
+              <p style="color: #888; margin-top: 20px; font-size: 12px;">Submitted via DarkWave Influencer Partnership page</p>
+            </div>
+          `,
+        });
+      } catch (emailError) {
+        console.error("Failed to send partnership notification email:", emailError);
+        // Continue even if email fails - we can still log the application
+      }
+
+      // Also send confirmation to applicant
+      try {
+        await sendEmail({
+          to: email,
+          subject: "DarkWave Partnership Application Received",
+          html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #fff; padding: 24px; border-radius: 12px;">
+              <h1 style="color: #00ffff; margin-bottom: 20px;">Application Received!</h1>
+              <p>Hi ${name},</p>
+              <p>Thank you for your interest in partnering with DarkWave Smart Chain. We've received your application and our team will review it within 48-72 hours.</p>
+              <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <h3 style="color: #a855f7; margin: 0 0 10px 0;">What's Next?</h3>
+                <ul style="color: #ccc; padding-left: 20px; margin: 0;">
+                  <li>We'll review your profile and audience</li>
+                  <li>A team member will reach out via email</li>
+                  <li>We'll discuss partnership tier and benefits</li>
+                </ul>
+              </div>
+              <p style="color: #888;">In the meantime, follow us on <a href="https://twitter.com/darkwavechain" style="color: #00ffff;">Twitter</a> for the latest updates.</p>
+              <p style="color: #888; margin-top: 20px;">— The DarkWave Partnerships Team</p>
+            </div>
+          `,
+        });
+      } catch (emailError) {
+        console.error("Failed to send confirmation email:", emailError);
+      }
+
+      console.log("[Partnership] New influencer application:", { id: application?.id, name, email, platform, handle, followers });
+      
+      res.json({ 
+        success: true, 
+        message: "Application submitted successfully. We'll be in touch within 48-72 hours.",
+        applicationId: application?.id
+      });
+    } catch (error) {
+      console.error("Error processing influencer application:", error);
+      res.status(500).json({ error: "Failed to submit application" });
     }
   });
 
