@@ -2228,7 +2228,25 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/documents", documentRateLimit, async (req, res) => {
+  const requireOwnerForDocs = (req: any, res: any, next: any) => {
+    const ownerSecret = process.env.OWNER_SECRET;
+    const providedSecret = req.headers["x-owner-secret"];
+    if (!ownerSecret || !providedSecret || typeof providedSecret !== 'string') {
+      return res.status(403).json({ error: "Document management is restricted to owner only" });
+    }
+    try {
+      const secretBuffer = Buffer.from(ownerSecret, 'utf8');
+      const providedBuffer = Buffer.from(providedSecret, 'utf8');
+      if (secretBuffer.length !== providedBuffer.length || !require('crypto').timingSafeEqual(secretBuffer, providedBuffer)) {
+        return res.status(403).json({ error: "Document management is restricted to owner only" });
+      }
+    } catch {
+      return res.status(403).json({ error: "Document management is restricted to owner only" });
+    }
+    next();
+  };
+
+  app.post("/api/documents", documentRateLimit, requireOwnerForDocs, async (req, res) => {
     try {
       const parsed = insertDocumentSchema.safeParse(req.body);
       if (!parsed.success) {
@@ -2242,7 +2260,7 @@ export async function registerRoutes(
     }
   });
 
-  app.patch("/api/documents/:id", async (req, res) => {
+  app.patch("/api/documents/:id", requireOwnerForDocs, async (req, res) => {
     try {
       const doc = await storage.updateDocument(req.params.id, req.body);
       if (!doc) {
@@ -2255,7 +2273,7 @@ export async function registerRoutes(
     }
   });
 
-  app.delete("/api/documents/:id", async (req, res) => {
+  app.delete("/api/documents/:id", requireOwnerForDocs, async (req, res) => {
     try {
       await storage.deleteDocument(req.params.id);
       res.status(204).send();

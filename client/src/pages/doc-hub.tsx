@@ -1,16 +1,13 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Plus, FileText, Search, Edit3, Trash2, Save, X, BookOpen } from "lucide-react";
+import { motion } from "framer-motion";
+import { FileText, Search, BookOpen } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchDocuments, createDocument, updateDocument, deleteDocument } from "@/lib/api";
-import type { Document, InsertDocument } from "@shared/schema";
+import { useQuery } from "@tanstack/react-query";
+import { fetchDocuments } from "@/lib/api";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
@@ -28,16 +25,6 @@ export default function DocHub() {
   usePageAnalytics();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isCreating, setIsCreating] = useState(false);
-  const [editingDoc, setEditingDoc] = useState<Document | null>(null);
-  const [newDoc, setNewDoc] = useState<Partial<InsertDocument>>({
-    title: "",
-    content: "",
-    category: "general",
-    isPublic: true,
-  });
-
-  const queryClient = useQueryClient();
 
   const { data: allDocuments = [], isLoading } = useQuery({
     queryKey: ["documents"],
@@ -52,49 +39,10 @@ export default function DocHub() {
     return allDocuments.filter(doc => doc.category === categoryId).length;
   };
 
-  const createMutation = useMutation({
-    mutationFn: createDocument,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["documents"] });
-      setIsCreating(false);
-      setNewDoc({ title: "", content: "", category: "general", isPublic: true });
-    },
-  });
-
-  const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<InsertDocument> }) => updateDocument(id, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["documents"] });
-      setEditingDoc(null);
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: deleteDocument,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["documents"] });
-    },
-  });
-
   const filteredDocs = documents.filter((doc) =>
     doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     doc.content.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const handleCreate = () => {
-    if (newDoc.title && newDoc.content) {
-      createMutation.mutate(newDoc as InsertDocument);
-    }
-  };
-
-  const handleUpdate = () => {
-    if (editingDoc) {
-      updateMutation.mutate({
-        id: editingDoc.id,
-        data: { title: editingDoc.title, content: editingDoc.content, category: editingDoc.category },
-      });
-    }
-  };
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
@@ -172,66 +120,9 @@ export default function DocHub() {
                   })}
                 </div>
               </div>
-
-              <Button
-                onClick={() => setIsCreating(true)}
-                className="w-full h-9 bg-primary text-background hover:bg-primary/90 font-bold text-xs"
-                data-testid="button-create-doc"
-              >
-                <Plus className="w-3 h-3 mr-1.5" /> New Document
-              </Button>
             </div>
 
             <div className="flex-1">
-              <AnimatePresence mode="wait">
-                {isCreating && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="mb-4"
-                  >
-                    <GlassCard glow hover={false}>
-                      <div className="p-5 space-y-4">
-                        <div className="flex items-center justify-between">
-                          <h3 className="text-sm font-bold text-white">New Document</h3>
-                          <Button variant="ghost" size="sm" onClick={() => setIsCreating(false)} className="h-7 w-7 p-0">
-                            <X className="w-4 h-4" />
-                          </Button>
-                        </div>
-                        <Input
-                          placeholder="Title"
-                          value={newDoc.title}
-                          onChange={(e) => setNewDoc({ ...newDoc, title: e.target.value })}
-                          className="h-9 bg-black/30 border-white/10 text-xs"
-                        />
-                        <Textarea
-                          placeholder="Content (Markdown supported)"
-                          value={newDoc.content}
-                          onChange={(e) => setNewDoc({ ...newDoc, content: e.target.value })}
-                          className="min-h-[120px] bg-black/30 border-white/10 text-xs"
-                        />
-                        <div className="flex gap-2">
-                          <Select value={newDoc.category} onValueChange={(v) => setNewDoc({ ...newDoc, category: v })}>
-                            <SelectTrigger className="h-9 bg-black/30 border-white/10 text-xs w-40">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {CATEGORIES.map((cat) => (
-                                <SelectItem key={cat.id} value={cat.id}>{cat.label}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <Button onClick={handleCreate} disabled={createMutation.isPending} className="h-9 bg-primary text-background text-xs">
-                            <Save className="w-3 h-3 mr-1.5" /> Save
-                          </Button>
-                        </div>
-                      </div>
-                    </GlassCard>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
               {isLoading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {[1, 2, 3, 4].map((i) => (
@@ -250,48 +141,13 @@ export default function DocHub() {
                   {filteredDocs.map((doc) => (
                     <GlassCard glow key={doc.id}>
                       <div className="p-4">
-                        {editingDoc?.id === doc.id ? (
-                          <div className="space-y-3">
-                            <Input
-                              value={editingDoc.title}
-                              onChange={(e) => setEditingDoc({ ...editingDoc, title: e.target.value })}
-                              className="h-8 bg-black/30 border-white/10 text-xs"
-                            />
-                            <Textarea
-                              value={editingDoc.content}
-                              onChange={(e) => setEditingDoc({ ...editingDoc, content: e.target.value })}
-                              className="min-h-[80px] bg-black/30 border-white/10 text-xs"
-                            />
-                            <div className="flex gap-2">
-                              <Button onClick={handleUpdate} size="sm" className="h-7 text-[10px] bg-primary text-background">
-                                <Save className="w-3 h-3 mr-1" /> Save
-                              </Button>
-                              <Button onClick={() => setEditingDoc(null)} variant="ghost" size="sm" className="h-7 text-[10px]">
-                                Cancel
-                              </Button>
-                            </div>
-                          </div>
-                        ) : (
-                          <>
-                            <div className="flex items-start justify-between mb-2">
-                              <div>
-                                <h3 className="text-sm font-bold text-white mb-1">{doc.title}</h3>
-                                <Badge variant="outline" className="text-[8px] border-white/10 text-white/40">
-                                  {CATEGORIES.find(c => c.id === doc.category)?.label || doc.category}
-                                </Badge>
-                              </div>
-                              <div className="flex gap-1">
-                                <Button variant="ghost" size="sm" onClick={() => setEditingDoc(doc)} className="h-6 w-6 p-0">
-                                  <Edit3 className="w-3 h-3" />
-                                </Button>
-                                <Button variant="ghost" size="sm" onClick={() => deleteMutation.mutate(doc.id)} className="h-6 w-6 p-0 text-red-400 hover:text-red-300">
-                                  <Trash2 className="w-3 h-3" />
-                                </Button>
-                              </div>
-                            </div>
-                            <p className="text-[11px] text-white/50 line-clamp-3">{doc.content}</p>
-                          </>
-                        )}
+                        <div className="mb-2">
+                          <h3 className="text-sm font-bold text-white mb-1">{doc.title}</h3>
+                          <Badge variant="outline" className="text-[8px] border-white/10 text-white/40">
+                            {CATEGORIES.find(c => c.id === doc.category)?.label || doc.category}
+                          </Badge>
+                        </div>
+                        <p className="text-[11px] text-white/50 line-clamp-3">{doc.content}</p>
                       </div>
                     </GlassCard>
                   ))}
