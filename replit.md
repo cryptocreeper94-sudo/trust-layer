@@ -13,14 +13,20 @@ DarkWave Smart Chain (DSC) is a high-performance Layer 1 Proof-of-Authority (PoA
 
 ## System Architecture
 
-### UI/UX Decisions
-The design adheres to a "Premium UI Protocol" emphasizing:
-- **Visuals**: Glassmorphism, holographic borders with glow, gradient overlays, floating ambient glow orbs.
-- **Interactivity**: Framer Motion for animations.
-- **Layout**: Bento grids, full-width hero sections with photorealistic backgrounds, diverse card styles.
-- **Mobile-First**: Touch targets ≥48px, horizontal carousels, accordions, optimized for 375px viewport.
-- **Typography & Branding**: Gradient text for headlines, premium badges, uppercase tracking.
-- **Color Palette**: Cyan, Purple, Pink accents; `slate-950`, `slate-900`, `slate-800` backgrounds; white/gray text.
+### UI/UX Decisions - MANDATORY PREMIUM UI PROTOCOL
+**CRITICAL: Every new page MUST be built with the Ultra-Premium Bento Grid LED Protocol by default. This is the baseline design standard, not an enhancement.**
+
+Every page requires:
+1. **Floating Ambient Orbs**: Absolute-positioned, blurred gradient circles (`bg-cyan-500/10 rounded-full blur-3xl animate-pulse`)
+2. **Glassmorphism**: Use `GlassCard` component or `bg-[rgba(12,18,36,0.65)] backdrop-blur-2xl border-white/[0.08]`
+3. **Holographic Glow**: `shadow-[0_0_40px_rgba(0,255,255,0.15)]` on cards, gradient border glows
+4. **Framer Motion**: Entry animations, hover states, transitions on all interactive elements
+5. **Gradient Headlines**: `bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent`
+6. **Bento Grid Layouts**: Multi-column responsive grids with varied card sizes
+7. **Premium Badges**: Gradient backgrounds with border glows, uppercase tracking
+8. **Mobile-First**: Touch targets ≥48px, horizontal carousels, accordions, optimized for 375px viewport
+9. **Color Palette**: Cyan/Purple/Pink accents; `slate-950`, `slate-900`, `slate-800` backgrounds; white/gray text
+10. **Import `GlassCard`**: From `@/components/glass-card` - use with `glow` prop enabled
 
 ### Technical Implementations
 - **Blockchain**: BFT-PoA consensus with stake-weighted validator selection, PostgreSQL state storage, SHA-256/Merkle trees/HMAC-SHA256, 400ms block time, 200K+ TPS. Features validator staking, slashing, epoch-based finality, and node sync APIs. Native token DWC (100M supply, 18 decimals, no burn).
