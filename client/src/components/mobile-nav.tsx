@@ -131,6 +131,13 @@ const navCategories = [
       { href: "/roadmap", label: "Roadmap", icon: Star },
     ]
   },
+  {
+    label: "Partnerships",
+    icon: Users,
+    items: [
+      { href: "/influencer-partnership", label: "KOL/Influencer Program", icon: Users, badge: "Apply" },
+    ]
+  },
 ];
 
 function NavCategory({ category, location, onClose, onShowComingSoon }: { 

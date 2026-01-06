@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { FileText, Search, BookOpen } from "lucide-react";
+import { FileText, Search, BookOpen, Download } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -56,6 +56,16 @@ export default function DocHub() {
             <Badge variant="outline" className="border-primary/20 text-primary bg-primary/5 text-[10px]">
               <BookOpen className="w-3 h-3 mr-1" /> Doc Hub
             </Badge>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 text-xs gap-1.5 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"
+              onClick={() => window.open('/api/whitepaper/pdf', '_blank')}
+              data-testid="button-download-whitepaper-pdf"
+            >
+              <Download className="w-3 h-3" />
+              <span className="hidden sm:inline">Download PDF</span>
+            </Button>
             <BackButton />
           </div>
         </div>
