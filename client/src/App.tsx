@@ -145,6 +145,7 @@ import PartnerPortal from "@/pages/partner-portal";
 import ChroniclesAdmin from "@/pages/chronicles-admin";
 import Tokenomics from "@/pages/tokenomics";
 import FAQ from "@/pages/faq";
+import SupportPage from "@/pages/support";
 import CompetitiveAnalysis from "@/pages/competitive-analysis";
 import InvestorPitch from "@/pages/investor-pitch";
 import SecurityPage from "@/pages/security";
@@ -289,6 +290,7 @@ function DWSCRouter() {
         <Route path="/token" component={Token} />
         <Route path="/tokenomics" component={Tokenomics} />
         <Route path="/faq" component={FAQ} />
+        <Route path="/support" component={SupportPage} />
         <Route path="/competitive-analysis" component={CompetitiveAnalysis} />
         <Route path="/security" component={SecurityPage} />
         <Route path="/guardian" component={GuardianCertification} />

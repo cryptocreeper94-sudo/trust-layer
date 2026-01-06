@@ -3918,6 +3918,82 @@ export async function registerRoutes(
     }
   });
 
+  // ============================================
+  // SUPPORT TICKETS
+  // ============================================
+
+  app.post("/api/support/tickets", isAuthenticated, async (req, res) => {
+    try {
+      const { category, subject, message, priority } = req.body;
+      
+      if (!subject || !message) {
+        return res.status(400).json({ error: "Subject and message are required" });
+      }
+      
+      const ticket = await storage.createSupportTicket({
+        userId: req.user!.id,
+        userEmail: req.user!.email || "",
+        userName: req.user!.firstName ? `${req.user!.firstName} ${req.user!.lastName || ""}`.trim() : undefined,
+        category: category || "general",
+        subject,
+        message,
+        priority: priority || "normal",
+      });
+      
+      res.status(201).json({ success: true, ticket });
+    } catch (error) {
+      console.error("Error creating support ticket:", error);
+      res.status(500).json({ error: "Failed to create support ticket" });
+    }
+  });
+
+  app.get("/api/support/tickets", isAuthenticated, async (req, res) => {
+    try {
+      const tickets = await storage.getSupportTicketsByUser(req.user!.id);
+      res.json({ tickets });
+    } catch (error) {
+      console.error("Error fetching support tickets:", error);
+      res.status(500).json({ error: "Failed to fetch tickets" });
+    }
+  });
+
+  app.get("/api/owner/support/tickets", async (req, res) => {
+    const ownerSecret = process.env.OWNER_SECRET;
+    const providedSecret = req.headers["x-owner-secret"];
+    if (!ownerSecret || !providedSecret || providedSecret !== ownerSecret) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+    
+    try {
+      const status = req.query.status as string | undefined;
+      const tickets = await storage.getSupportTickets(status);
+      res.json({ tickets });
+    } catch (error) {
+      console.error("Error fetching all support tickets:", error);
+      res.status(500).json({ error: "Failed to fetch tickets" });
+    }
+  });
+
+  app.patch("/api/owner/support/tickets/:id", async (req, res) => {
+    const ownerSecret = process.env.OWNER_SECRET;
+    const providedSecret = req.headers["x-owner-secret"];
+    if (!ownerSecret || !providedSecret || providedSecret !== ownerSecret) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+    
+    try {
+      const { status, adminNotes } = req.body;
+      const ticket = await storage.updateSupportTicketStatus(req.params.id, status, adminNotes);
+      if (!ticket) {
+        return res.status(404).json({ error: "Ticket not found" });
+      }
+      res.json({ success: true, ticket });
+    } catch (error) {
+      console.error("Error updating support ticket:", error);
+      res.status(500).json({ error: "Failed to update ticket" });
+    }
+  });
+
   // Waitlist signup for Dev Studio
   app.post("/api/waitlist", async (req, res) => {
     try {

@@ -281,6 +281,13 @@ export interface IStorage {
   getArcadeLeaderboard(game: string, limit?: number): Promise<ArcadeLeaderboardEntry[]>;
   submitArcadeScore(entry: InsertArcadeLeaderboardEntry): Promise<ArcadeLeaderboardEntry>;
   getUserHighScore(game: string, userId: string): Promise<ArcadeLeaderboardEntry | undefined>;
+  
+  // Support Tickets
+  createSupportTicket(data: { userId: string; userEmail: string; userName?: string; category: string; subject: string; message: string; priority?: string }): Promise<any>;
+  getSupportTickets(status?: string): Promise<any[]>;
+  getSupportTicketsByUser(userId: string): Promise<any[]>;
+  getSupportTicket(id: string): Promise<any | undefined>;
+  updateSupportTicketStatus(id: string, status: string, adminNotes?: string): Promise<any | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -2280,6 +2287,46 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(arcadeLeaderboard.score))
       .limit(1);
     return entry;
+  }
+
+  // Support Tickets
+  async createSupportTicket(data: { userId: string; userEmail: string; userName?: string; category: string; subject: string; message: string; priority?: string }): Promise<any> {
+    const result = await db.execute(sql`
+      INSERT INTO support_tickets (user_id, user_email, user_name, category, subject, message, priority)
+      VALUES (${data.userId}, ${data.userEmail}, ${data.userName || null}, ${data.category}, ${data.subject}, ${data.message}, ${data.priority || 'normal'})
+      RETURNING *
+    `);
+    return result.rows[0];
+  }
+
+  async getSupportTickets(status?: string): Promise<any[]> {
+    if (status) {
+      const result = await db.execute(sql`SELECT * FROM support_tickets WHERE status = ${status} ORDER BY created_at DESC`);
+      return result.rows;
+    }
+    const result = await db.execute(sql`SELECT * FROM support_tickets ORDER BY created_at DESC`);
+    return result.rows;
+  }
+
+  async getSupportTicketsByUser(userId: string): Promise<any[]> {
+    const result = await db.execute(sql`SELECT * FROM support_tickets WHERE user_id = ${userId} ORDER BY created_at DESC`);
+    return result.rows;
+  }
+
+  async getSupportTicket(id: string): Promise<any | undefined> {
+    const result = await db.execute(sql`SELECT * FROM support_tickets WHERE id = ${id}`);
+    return result.rows[0];
+  }
+
+  async updateSupportTicketStatus(id: string, status: string, adminNotes?: string): Promise<any | undefined> {
+    const resolvedAt = status === 'resolved' ? sql`CURRENT_TIMESTAMP` : sql`NULL`;
+    const result = await db.execute(sql`
+      UPDATE support_tickets 
+      SET status = ${status}, admin_notes = ${adminNotes || null}, resolved_at = ${resolvedAt}, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ${id}
+      RETURNING *
+    `);
+    return result.rows[0];
   }
 }
 
