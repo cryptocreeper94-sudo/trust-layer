@@ -5,7 +5,8 @@ import { useLocation } from "wouter";
 import { 
   Home, TreeDeciduous, Mountain, Droplets, Store, Hammer,
   Plus, Minus, RotateCcw, Save, Coins, Lock, Sparkles,
-  ChevronRight, User, Grid3X3, Eye, ShoppingBag, Crown
+  ChevronRight, User, Grid3X3, Eye, ShoppingBag, Crown,
+  Rocket, Building2, MapPin, Gift, Briefcase, Calendar, X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -99,6 +100,7 @@ export default function ChroniclesEstate() {
   const [showNPC, setShowNPC] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+  const [showComingSoon, setShowComingSoon] = useState(true);
 
   const { data: shellsData } = useQuery({
     queryKey: ["/api/orbs/balance"],
@@ -258,6 +260,91 @@ export default function ChroniclesEstate() {
 
   return (
     <div className="min-h-screen bg-slate-950">
+      {/* Coming Soon Features Modal */}
+      <AnimatePresence>
+        {showComingSoon && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative w-full max-w-lg bg-gradient-to-b from-slate-900 to-slate-950 border border-cyan-500/30 rounded-2xl p-6 shadow-[0_0_60px_rgba(6,182,212,0.2)]"
+            >
+              <button
+                onClick={() => setShowComingSoon(false)}
+                className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
+                data-testid="button-close-coming-soon"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
+                  <Rocket className="w-8 h-8 text-white" />
+                </div>
+                <h2 className="text-2xl font-bold text-white mb-2">Major Update Coming!</h2>
+                <p className="text-slate-400">Exciting new features arriving within the next week</p>
+              </div>
+
+              <div className="space-y-3 mb-6">
+                <div className="flex items-start gap-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
+                  <MapPin className="w-5 h-5 text-cyan-400 mt-0.5 shrink-0" />
+                  <div>
+                    <h3 className="font-semibold text-white text-sm">City Zoning System</h3>
+                    <p className="text-xs text-slate-400">Residential & commercial districts, just like real cities</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
+                  <Building2 className="w-5 h-5 text-purple-400 mt-0.5 shrink-0" />
+                  <div>
+                    <h3 className="font-semibold text-white text-sm">Plot Marketplace</h3>
+                    <p className="text-xs text-slate-400">Buy and expand your land with Shells (and soon DWC)</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
+                  <Briefcase className="w-5 h-5 text-amber-400 mt-0.5 shrink-0" />
+                  <div>
+                    <h3 className="font-semibold text-white text-sm">Business Onboarding</h3>
+                    <p className="text-xs text-slate-400">Verified businesses get access to commercial properties</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
+                  <Gift className="w-5 h-5 text-pink-400 mt-0.5 shrink-0" />
+                  <div>
+                    <h3 className="font-semibold text-white text-sm">Daily Login Rewards</h3>
+                    <p className="text-xs text-slate-400">Earn Shells every day just for playing</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
+                  <Calendar className="w-5 h-5 text-green-400 mt-0.5 shrink-0" />
+                  <div>
+                    <h3 className="font-semibold text-white text-sm">Era-Appropriate Settlements</h3>
+                    <p className="text-xs text-slate-400">Each era has unique building styles and layouts</p>
+                  </div>
+                </div>
+              </div>
+
+              <Button
+                onClick={() => setShowComingSoon(false)}
+                className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500"
+                data-testid="button-got-it"
+              >
+                Got It - Let Me Build!
+              </Button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Header */}
       <div className="bg-slate-900/80 border-b border-slate-700 p-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
