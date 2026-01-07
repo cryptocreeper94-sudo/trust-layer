@@ -524,6 +524,89 @@ This template scales to all 70+ eras.
 
 ---
 
+## THE PARALLEL SELF (Core Identity)
+
+### Not Just an Avatar
+Your parallel self is NOT:
+- A disposable character
+- A puppet you control
+- An avatar with stats
+
+Your parallel self IS:
+- A reflection of YOU
+- Shaped by your choices, beliefs, voice
+- Emotionally connected to you through investment
+- Something players genuinely care about
+
+### Emotional & Psychological Evolution
+
+As you play, your parallel self changes:
+- **Thoughts evolve** - Beliefs shift based on experiences
+- **Emotions fluctuate** - Joy, sadness, fear, wonder all affect gameplay
+- **Worldview transforms** - What you believed at the start may not hold
+- **Growth or regression** - Can become wiser OR more broken
+
+This isn't just stat progression - it's CHARACTER progression in the narrative sense.
+
+### Death Mechanics (CRITICAL DESIGN CHALLENGE)
+
+**The Problem:**
+- Death as finality = game ends = bad
+- "3 lives left" = old school arcade = not what we're doing
+- But death is real, and stakes need to exist
+
+**Possible Approaches (TBD - needs more brainstorming):**
+- Death triggers forced quantum leap (you "die" but wake up in another dimension)
+- Near-death experiences that scar/change your character
+- Resurrection mechanics tied to the Veil (death isn't permanent when reality is fluid)
+- Consequences without finality (lose progress, relationships, possessions - but not the character)
+- Perhaps death works differently in different dimensions?
+
+**Design Goal:**
+Stakes must feel REAL without permanent loss of the parallel self you've invested in.
+
+### Staying in an Era
+
+Players don't have to leave:
+- Can live an entire life in one era
+- Build a home, have a family, grow old
+- The dimensional/parallel content is OPTIONAL adventure
+- Some players will never leave their first era - and that's fine
+
+---
+
+## LONG-TERM VISION
+
+### Continuous Evolution
+- Regular updates with new features
+- New dimensions added over time
+- Player feedback shapes development
+- The game grows alongside its community
+
+### Why This Will Last
+Most games:
+- Rush to market for sales
+- 6-12 month hype cycle
+- Fade into obscurity
+- Static after launch
+
+Chronicles is designed to:
+- Be a living, evolving experience
+- Continuous content (70+ eras is just the start)
+- Community-driven growth
+- Never "complete" - always expanding
+- Psychological depth that keeps players invested beyond mechanics
+
+### The Scale
+- 70+ eras × 5 parallels × 3 tones = 1,000+ unique environments
+- Infinite parallel variations within each
+- Real-time 1:1 clock means daily engagement
+- Years of content before seeing everything
+
+**This is not a game you play. It's a life you live alongside your own.**
+
+---
+
 ## GAMEPLAY LOOP
 
 ### Check-In Sessions (2-20 minutes typical)
