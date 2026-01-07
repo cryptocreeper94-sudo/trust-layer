@@ -36,7 +36,7 @@ Every page requires:
 - **Multi-PWA**: Host-based routing for ecosystem domains.
 - **DeFi Features**: Testnet Faucet, AMM-style DEX/Token Swap, NFT Marketplace & Gallery, Portfolio Dashboard, Transaction History, Token Launchpad, Liquidity Pools, NFT Creator Tool, Price Charts (Recharts), Webhook/Events API, Liquid Staking (stDWC).
 - **Cross-Chain Bridge**: Lock & mint (DWC ↔ wDWC) for Ethereum Sepolia and Solana Devnet.
-- **DarkWave Chronicles**: A social experiment and parallel life simulation focusing on self-discovery across eras, with a persistent world and emotion-driven AI. It is narrative-driven and not a traditional RPG.
+- **DarkWave Chronicles**: A social experiment and parallel life simulation focusing on self-discovery across eras, with a persistent world and emotion-driven AI. It is narrative-driven and not a traditional RPG. **Full game design document: `docs/chronicles-game-design.md`**
 - **Credits System**: Manages costs for AI chat, scenario generation, voice cloning, and personality summaries.
 - **Voice Cloning Technology**: Integrates Web Audio API and external APIs.
 - **Owner Admin Portal**: Secure portal (`/owner-admin`) with `OWNER_SECRET` authentication, rate limiting, and lockout.
