@@ -7,7 +7,8 @@ import {
   Settings, MapPin, Mic, Award, Calendar, ChevronDown, ChevronRight,
   Plus, Edit3, Trash2, Save, X, Check, Clock, Zap, Crown, Sword,
   Building2, Store, Volume2, Brain, Target, Star, Rocket, ArrowRight,
-  RefreshCw, Database, Code, Layers, TrendingUp, AlertCircle, CheckCircle
+  RefreshCw, Database, Code, Layers, TrendingUp, AlertCircle, CheckCircle,
+  BookOpen, FileText, ScrollText
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -253,6 +254,141 @@ function AccordionSection({ title, icon: Icon, children, defaultOpen = false, ba
             className="overflow-hidden"
           >
             <div className="px-6 pb-6">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function GameDesignDocSection() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [docContent, setDocContent] = useState<string | null>(null);
+  const [docMeta, setDocMeta] = useState<{ lastModified: string; lines: number } | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const fetchDoc = async () => {
+    if (docContent) return;
+    setLoading(true);
+    try {
+      const token = sessionStorage.getItem("chroniclesAdminToken");
+      const res = await fetch("/api/chronicles/game-design-doc", {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setDocContent(data.content);
+        setDocMeta({ lastModified: data.lastModified, lines: data.lines });
+      } else {
+        toast.error("Failed to load game design document");
+      }
+    } catch (error) {
+      toast.error("Failed to load game design document");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleToggle = () => {
+    if (!isOpen) fetchDoc();
+    setIsOpen(!isOpen);
+  };
+
+  const formatDate = (dateStr: string) => {
+    return new Date(dateStr).toLocaleString();
+  };
+
+  return (
+    <div className="border border-white/10 rounded-xl overflow-hidden bg-slate-900/50 backdrop-blur-sm">
+      <button
+        onClick={handleToggle}
+        className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-white/5 transition-colors"
+        data-testid="accordion-game-design-document"
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center">
+            <BookOpen className="w-5 h-5 text-cyan-400" />
+          </div>
+          <span className="font-semibold text-white">Game Design Document</span>
+          <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-xs">
+            LIVING DOC
+          </Badge>
+        </div>
+        <motion.div animate={{ rotate: isOpen ? 180 : 0 }}>
+          <ChevronDown className="w-5 h-5 text-gray-400" />
+        </motion.div>
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <div className="px-6 pb-6">
+              {loading ? (
+                <div className="flex items-center justify-center py-8">
+                  <RefreshCw className="w-6 h-6 text-cyan-400 animate-spin" />
+                  <span className="ml-2 text-gray-400">Loading document...</span>
+                </div>
+              ) : docContent ? (
+                <div className="space-y-4">
+                  {docMeta && (
+                    <div className="flex items-center gap-4 p-3 rounded-lg bg-slate-800/50 text-sm">
+                      <div className="flex items-center gap-2">
+                        <FileText className="w-4 h-4 text-cyan-400" />
+                        <span className="text-gray-400">{docMeta.lines} lines</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-purple-400" />
+                        <span className="text-gray-400">Updated: {formatDate(docMeta.lastModified)}</span>
+                      </div>
+                    </div>
+                  )}
+                  <div 
+                    className="max-h-[600px] overflow-y-auto rounded-lg bg-slate-950/50 border border-white/5 p-4"
+                    style={{ scrollbarWidth: "thin", scrollbarColor: "#4b5563 transparent" }}
+                  >
+                    <pre className="text-sm text-gray-300 whitespace-pre-wrap font-mono leading-relaxed">
+                      {docContent}
+                    </pre>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button 
+                      size="sm"
+                      onClick={() => {
+                        setDocContent(null);
+                        fetchDoc();
+                        toast.success("Document refreshed");
+                      }}
+                      className="bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/30 border border-cyan-500/30"
+                      data-testid="button-refresh-doc"
+                    >
+                      <RefreshCw className="w-4 h-4 mr-2" /> Refresh
+                    </Button>
+                    <Button 
+                      size="sm"
+                      onClick={() => {
+                        navigator.clipboard.writeText(docContent);
+                        toast.success("Document copied to clipboard");
+                      }}
+                      variant="outline"
+                      className="border-white/10 text-white hover:bg-white/10"
+                      data-testid="button-copy-doc"
+                    >
+                      <ScrollText className="w-4 h-4 mr-2" /> Copy Full Document
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-400">
+                  <BookOpen className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                  <p>Failed to load document</p>
+                </div>
+              )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -650,6 +786,8 @@ function AdminDashboard() {
                     </div>
                   </div>
                 </AccordionSection>
+
+                <GameDesignDocSection />
               </div>
             </div>
 

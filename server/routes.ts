@@ -14333,6 +14333,29 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // Chronicles Game Design Document API
+  app.get("/api/chronicles/game-design-doc", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const fs = await import("fs");
+      const path = await import("path");
+      const docPath = path.join(process.cwd(), "docs", "chronicles-game-design.md");
+      
+      if (!fs.existsSync(docPath)) {
+        return res.status(404).json({ error: "Game design document not found" });
+      }
+      
+      const content = fs.readFileSync(docPath, "utf-8");
+      res.json({ 
+        content,
+        lastModified: fs.statSync(docPath).mtime.toISOString(),
+        lines: content.split("\n").length
+      });
+    } catch (error) {
+      console.error("Game design doc error:", error);
+      res.status(500).json({ error: "Failed to fetch game design document" });
+    }
+  });
+
   return httpServer;
 }
 
