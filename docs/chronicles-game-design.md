@@ -363,6 +363,167 @@ Players can choose where they spend their time.
 
 ---
 
+## ERA DESIGN TEMPLATE
+
+### The Framework
+Every era needs to be designed with multiple layers. This template can be copied and applied to all 70+ eras.
+
+**Layer 1: The Base Dimension**
+- The "default" version of this era
+- Historically accurate (or our interpretation)
+- Neutral tone - neither utopia nor dystopia
+- This is where most new players will start exploring
+
+**Layer 2: Parallel Universe Variations (Same Era, Different Outcomes)**
+| Parallel Type | Description | Example (Rome) |
+|---------------|-------------|----------------|
+| **Prosperous** | Things went better than real history | Rome never fell, became enlightened empire |
+| **Collapsed** | Things went worse than real history | Rome fell earlier, darker age |
+| **Divergent** | Key event changed everything | Christianity never adopted, old gods reign |
+| **Conquered** | Different power won | Carthage won the Punic Wars |
+| **Unified** | Unlikely alliance succeeded | Rome and Persia merged |
+
+**Layer 3: Dimensional Tones (Same Era, Different Vibe)**
+| Tone | Description | Gameplay Feel |
+|------|-------------|---------------|
+| **Bright** | Peaceful, prosperous, beautiful | Safe exploration, trade, relationships |
+| **Dark** | Hostile, dangerous, decaying | Horror, survival, combat |
+| **Abstract** | Glitchy, surreal, incomprehensible | Puzzle-solving, perception challenges |
+| **Ethereal** | Spiritual, mystical, otherworldly | Quests involving faith, spirits, Veil entities |
+| **Chaotic** | Unstable, unpredictable | High risk/reward, random events |
+
+**Layer 4: Reasons to Visit**
+Every variation needs a PURPOSE:
+- Unique resources only found there
+- Quests that require that specific parallel
+- Characters/allies exclusive to that version
+- Sigil fragments or Chrono Keystones
+- Safe havens for Settlers/Observers
+- Challenges for Adventurers
+
+---
+
+## BETA ERA #1: ROMAN EMPIRE (Height of Power)
+
+### Base Dimension: Roma Aeterna
+- Time Period: ~100 AD, Trajan's reign
+- Setting: Empire at maximum extent
+- Tone: Neutral - glory and corruption coexist
+- Main Hub: Rome itself, the Eternal City
+
+### Parallel Universes
+
+**1. Roma Invicta (Prosperous Parallel)**
+- Rome never declined
+- Technology advanced, enlightened governance
+- Tone: Bright, utopian
+- Why Visit: Safe trading, advanced resources, peaceful alliances
+- Quest Hook: Learn lost Roman engineering secrets
+
+**2. Roma Ruina (Collapsed Parallel)**
+- Rome fell in 100 AD instead of 476 AD
+- Barbarian chaos, burning cities, survival mode
+- Tone: Dark, post-apocalyptic
+- Why Visit: Scavenge rare artifacts from the ashes
+- Quest Hook: Find a Sigil fragment hidden in the ruins
+
+**3. Roma Divina (Divergent Parallel)**
+- Old Roman gods are REAL and walk among mortals
+- Jupiter, Mars, Venus actively intervene
+- Tone: Ethereal, mythological
+- Why Visit: Gain favor of gods, divine quests
+- Quest Hook: Earn blessing of a god to unlock abilities
+
+**4. Roma Carthago (Conquered Parallel)**
+- Hannibal won, Carthage rules the Mediterranean
+- Rome is a vassal state, different culture dominates
+- Tone: Alien, unfamiliar
+- Why Visit: Unique Carthaginian resources, different political landscape
+- Quest Hook: Lead Roman resistance or serve new masters
+
+**5. Roma Obscura (Abstract Parallel)**
+- Glitches in reality, time loops, perception breaks
+- NPCs repeat actions, buildings shift, reality unstable
+- Tone: Surreal, unsettling
+- Why Visit: Rare dimensional artifacts, puzzle challenges
+- Quest Hook: Fix a Veil tear before it consumes the era
+
+### Dimensional Overlays (Apply to ANY Parallel)
+- **Bright Rome**: Festivals, peace, prosperity focus
+- **Dark Rome**: Nero's persecution, gladiator death, conspiracy
+- **Horror Rome**: Entities from the Ether bleeding through, catacombs full of terrors
+
+---
+
+## BETA ERA #2: MEDIEVAL EUROPE (Middle Ages)
+
+### Base Dimension: The Realm
+- Time Period: ~1200 AD, High Middle Ages
+- Setting: Feudal kingdoms, the Church, crusades
+- Tone: Neutral - nobility and poverty coexist
+- Main Hub: A central kingdom (France, England, or HRE)
+
+### Parallel Universes
+
+**1. The Golden Age (Prosperous Parallel)**
+- Dark Ages never happened, knowledge preserved
+- Universities flourished, plague never struck
+- Tone: Bright, Renaissance-early
+- Why Visit: Advanced medieval tech, scholarly quests
+- Quest Hook: Recover texts that could change your home dimension
+
+**2. The Endless Night (Collapsed Parallel)**
+- Plague killed 90%, civilization collapsed
+- Survivors in scattered villages, lords became warlords
+- Tone: Dark, survival horror
+- Why Visit: Rare plague-immune artifacts, desperate NPCs need help
+- Quest Hook: Find the origin of the plague (hint: Veil-related)
+
+**3. The Pagan Realm (Divergent Parallel)**
+- Christianity never spread, old European gods reign
+- Druids, Norse pantheon, Celtic magic
+- Tone: Ethereal, magical
+- Why Visit: Nature magic, different spiritual quests
+- Quest Hook: Earn favor of Odin or the Morrigan
+
+**4. The Caliphate (Conquered Parallel)**
+- Umayyad conquest of Europe succeeded
+- Islamic Golden Age covers all of Europe
+- Tone: Different, culturally rich
+- Why Visit: Advanced science, different political alliances
+- Quest Hook: Navigate between Christian resistance and Caliphate power
+
+**5. The Shattered Veil (Abstract Parallel)**
+- Reality is thin here, entities roam freely
+- Castles exist in multiple dimensions simultaneously
+- Tone: Surreal, terrifying, beautiful
+- Why Visit: Highest-tier dimensional artifacts
+- Quest Hook: Seal a major Veil breach threatening all parallels
+
+### Dimensional Overlays
+- **Bright Medieval**: Tournaments, feasts, courtly love
+- **Dark Medieval**: Inquisition, witch hunts, peasant suffering
+- **Horror Medieval**: Demonic possession, cursed bloodlines, the Wild Hunt
+
+---
+
+## ERA DESIGN CHECKLIST
+
+For each new era, create:
+- [ ] Base Dimension (neutral default)
+- [ ] 3-5 Parallel Universes (different outcomes)
+- [ ] 3 Dimensional Tones (bright/dark/abstract minimum)
+- [ ] Reasons to visit each variation
+- [ ] Quest hooks for each
+- [ ] Unique resources per variation
+- [ ] Safe zones for Settlers
+- [ ] Danger zones for Adventurers
+- [ ] At least one Sigil/Keystone location
+
+This template scales to all 70+ eras.
+
+---
+
 ## GAMEPLAY LOOP
 
 ### Check-In Sessions (2-20 minutes typical)
