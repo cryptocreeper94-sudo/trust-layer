@@ -1616,6 +1616,33 @@ export default function ChroniclesHub() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Footer */}
+      <footer className="mt-16 pb-8 border-t border-slate-800/50">
+        <div className="max-w-6xl mx-auto px-4 pt-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="text-center md:text-left">
+              <p className="text-sm text-slate-500">
+                &copy; {new Date().getFullYear()} DarkWave Studios. All rights reserved.
+              </p>
+            </div>
+            <div className="flex items-center gap-6 text-sm">
+              <Link href="/chronicles/roadmap" className="text-slate-500 hover:text-cyan-400 transition-colors">
+                Roadmap
+              </Link>
+              <Link href="/privacy" className="text-slate-500 hover:text-cyan-400 transition-colors">
+                Privacy
+              </Link>
+              <Link href="/terms" className="text-slate-500 hover:text-cyan-400 transition-colors">
+                Terms
+              </Link>
+              <Link href="/chronicles-admin" className="text-slate-600 hover:text-slate-400 transition-colors" data-testid="link-chronicles-team">
+                Team
+              </Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
