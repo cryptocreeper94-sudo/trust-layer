@@ -59,15 +59,41 @@ Within the first day or few days of play, a triggering event occurs:
 - Over time, you learn to control the leaps instead of being pulled randomly
 - Eventually you master the Portal and can go where you CHOOSE
 
-### Terminology Consideration
+### Terminology & Concepts
 
-Consider calling it:
-- **Quantum Leaping** instead of "time travel"
-- **Dimensions** instead of "eras" (each dimension exists in a different time period)
-- **The Veil** - what separates dimensions (and it's thinning/broken)
-- **Chrono-Echoes** - your parallel selves across dimensions
+**Key Terms:**
+- **Quantum Leaping** - The act of traveling between realities (not "time travel")
+- **The Veil** - What separates all realities (and it's thinning/broken)
+- **Chrono-Echoes** - Your parallel selves that exist across realities
 
-This frames it as interdimensional travel, not just hopping through history.
+**CRITICAL DISTINCTION: Dimensions vs. Parallel Universes**
+
+These are NOT the same thing:
+
+**DIMENSIONS** = Completely different realms/realities
+- Different rules, different physics, different existence
+- Stone Age, Renaissance, Neo-Cyber are different DIMENSIONS
+- Could include abstract realms, spirit worlds, realms beyond human comprehension
+- Think of the 11 dimensions in string theory - each fundamentally different
+- 70+ dimensions in the game = 70+ completely different worlds to explore
+
+**PARALLEL UNIVERSES** = Alternate versions of the SAME dimension
+- Same world, same places, but different outcomes
+- Example: In one Renaissance, you're a noble. In a parallel Renaissance, you're a peasant.
+- Same dimension, different path - choices created the split
+- Infinite variations possible within each dimension
+
+**This means TWO types of travel:**
+1. **Dimensional Leaping** - Move between completely different realms (Stone Age → Neo-Cyber)
+2. **Parallel Shifting** - Move between alternate versions of the same dimension
+
+**Gameplay Implications:**
+- Some quests may require finding items that only exist in a parallel version
+- Your choices in one universe ripple into parallels
+- You could meet alternate versions of yourself
+- 70 dimensions × infinite parallels = truly endless content
+
+This frames it as interdimensional AND multiverse travel - far deeper than just "time travel."
 
 ### Relationships & Life Partners
 
@@ -125,6 +151,63 @@ Relationships add emotional weight and consequences to your choices.
 5. Rebellion - Revolution and overthrowing tyrants
 6. Stewardship - Leadership and civilization building
 7. Transcendence - The final awakening
+
+---
+
+## ENDGAME & CONTINUATION
+
+### The Problem
+Once players collect all 7 Sigils and can quantum leap anywhere, what keeps them playing?
+Real life exists - people will get bored if there's nothing left but "walking around handling business."
+
+### Solution: Phase Shifts
+The game fundamentally CHANGES at key milestones - almost like a new game begins:
+
+**Phase 1: The Explorer** (Early-Mid Game)
+- Learning to leap, surviving, collecting Sigils
+- Focus: Personal mastery and discovery
+
+**Phase 2: The Threat Reveals** (Post-Sigil Collection)
+- You weren't the only one who discovered the Veil
+- Something or someone has been watching, waiting
+- Now that you're powerful, you become a TARGET or you're NEEDED
+- Stakes shift from exploration to survival/defense
+- Completely new quest lines, new enemies, new purpose
+
+**Phase 3: The Other Side** (Major Expansion)
+- Discovery: There's not just past dimensions, but FUTURE ones
+- Or entirely new categories of dimensions you didn't know existed
+- The map DOUBLES - 70+ more dimensions to explore
+- With parallel universes, this is exponential growth
+
+**Phase 4: Becoming the Guide** (Leadership Era)
+- Others start experiencing involuntary leaps (new players entering the game)
+- You can mentor, lead, build a faction of leapers
+- Shift from solo journey to community/faction leadership
+- Your legacy becomes helping others navigate the Veil
+
+**Phase 5: The Source** (Ultimate Meta-Quest)
+- Why did the Veil break? Who/what caused it?
+- A quest spanning ALL dimensions to find the origin
+- Could take YEARS of real-time to complete
+- The ultimate mystery - may never be fully solved
+
+### Cyclical Content (Never "Done")
+- **Seasons** - Real-world seasons bring new events, limited-time dimensions
+- **World Events** - Community-wide challenges requiring mass coordination
+- **Dimension Instability** - Mastered dimensions can shift, requiring re-exploration
+- **Political Upheaval** - New players and factions change the landscape constantly
+
+### The Relationship Anchor
+Even after "beating" exploration:
+- Your partner, home, and community still exist
+- Daily life continues - it's not just about quests
+- Drama, politics, economics keep happening
+- You've built something worth protecting and maintaining
+
+### Design Philosophy
+**Power unlocks new problems, not the end of problems.**
+Every milestone should reveal a new layer, a new threat, a new mystery.
 
 ---
 
