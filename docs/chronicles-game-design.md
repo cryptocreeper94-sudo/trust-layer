@@ -20,6 +20,78 @@
 
 ---
 
+## NARRATIVE FRAMEWORK
+
+### The Hook (First Experience)
+
+**You start in PRESENT DAY.**
+
+- You wake up in your life - you have a home, basic necessities, everyday comforts
+- It feels like you've been living this life already (even though you just started)
+- You go about your day - normal activities, routines, maybe meet people
+
+**Then something happens.**
+
+Within the first day or few days of play, a triggering event occurs:
+- Could be something you do, something you find, or completely random
+- Suddenly you're ZAPPED - pulled away against your will
+- You land in another dimension/era - not one you chose
+- You're disoriented, confused, desperate to get back
+
+**The Desperate Return**
+
+- You have to figure out how to get home
+- This is your first real quest - survival and escape
+- Through gameplay, you find a way back to present day
+
+**The Realization**
+
+- You're back home, safe... but shaken
+- What you thought was science fiction is REAL
+- There are other dimensions, other eras, and somehow you can access them
+- The veil has dropped - you've seen behind reality
+
+**The Journey Begins**
+
+- Curiosity and necessity pull you back
+- You start finding cryptic clues about what happened
+- You discover pieces of a greater puzzle - the Sigils
+- Over time, you learn to control the leaps instead of being pulled randomly
+- Eventually you master the Portal and can go where you CHOOSE
+
+### Terminology Consideration
+
+Consider calling it:
+- **Quantum Leaping** instead of "time travel"
+- **Dimensions** instead of "eras" (each dimension exists in a different time period)
+- **The Veil** - what separates dimensions (and it's thinning/broken)
+- **Chrono-Echoes** - your parallel selves across dimensions
+
+This frames it as interdimensional travel, not just hopping through history.
+
+### Relationships & Life Partners
+
+Your parallel self can form deep connections:
+- **Allies** - Political/strategic partnerships
+- **Friends** - Companionship and loyalty
+- **Life Partners** - Romantic relationships (implied intimacy, not explicit)
+  - Can live together, build a life
+  - Affects gameplay - shared resources, emotional stakes
+  - Can leave or be left - real relationship dynamics
+  - Partner may or may not be able to quantum leap with you
+
+Relationships add emotional weight and consequences to your choices.
+
+### Story Arc Summary
+
+1. **ACT 1: The Awakening** - Normal life → First involuntary leap → Desperate return
+2. **ACT 2: The Discovery** - Learning the truth → Finding first clues → First intentional leap
+3. **ACT 3: The Hunt** - Collecting Sigils → Mastering travel → Uncovering the mystery
+4. **ACT 4: The Purpose** - Understanding why YOU → The greater threat → The ultimate choice
+5. **ONGOING: The Life** - Never ends → Always more to discover → Your parallel self forever
+
+---
+
 ## PROGRESSION SYSTEM
 
 ### Era Ladder (70+ Eras)
