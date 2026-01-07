@@ -5433,3 +5433,22 @@ export const insertChronicleMissionProgressSchema = createInsertSchema(chronicle
 });
 export type ChronicleMissionProgress = typeof chronicleMissionProgress.$inferSelect;
 export type InsertChronicleMissionProgress = z.infer<typeof insertChronicleMissionProgressSchema>;
+
+// Development Roadmap Features - public facing feature tracker
+export const roadmapFeatures = pgTable("roadmap_features", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  category: text("category").notNull(), // 'chronicles-estate', 'strategic', 'platform'
+  status: text("status").notNull().default("pending"), // 'pending', 'in-progress', 'completed'
+  sortOrder: integer("sort_order").notNull().default(0),
+  estimatedTime: text("estimated_time"),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertRoadmapFeatureSchema = createInsertSchema(roadmapFeatures).omit({
+  id: true, createdAt: true, completedAt: true
+});
+export type RoadmapFeature = typeof roadmapFeatures.$inferSelect;
+export type InsertRoadmapFeature = z.infer<typeof insertRoadmapFeatureSchema>;
