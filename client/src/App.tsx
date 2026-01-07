@@ -180,6 +180,7 @@ const GatewayError = lazy(() => import("@/pages/gateway-error"));
 const AIAgentMarketplace = lazy(() => import("@/pages/ai-agent-marketplace"));
 const RWATokenization = lazy(() => import("@/pages/rwa-tokenization"));
 const InfluencerPartnership = lazy(() => import("@/pages/influencer-partnership"));
+const ComingFeatures = lazy(() => import("@/pages/coming-features"));
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -442,6 +443,7 @@ function DWSCRouter() {
         <Route path="/coin-store" component={CoinStore} />
         <Route path="/daily-bonus" component={DailyBonus} />
         <Route path="/gateway-error" component={GatewayError} />
+        <Route path="/coming-features" component={ComingFeatures} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>

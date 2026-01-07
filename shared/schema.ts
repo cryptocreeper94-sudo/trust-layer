@@ -2173,16 +2173,21 @@ export const cardSchema = z.object({
 
 export type Card = z.infer<typeof cardSchema>;
 
-// Community Roadmap Features
+// Development Roadmap Features - dual view (public & developer)
 export const roadmapFeatures = pgTable("roadmap_features", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   title: text("title").notNull(),
   description: text("description").notNull(),
-  category: text("category").notNull().default("general"),
-  status: text("status").notNull().default("proposed"),
+  category: text("category").notNull().default("general"), // 'chronicles-estate', 'strategic', 'platform'
+  status: text("status").notNull().default("pending"), // 'pending', 'in-progress', 'completed'
   priority: integer("priority").notNull().default(0),
-  targetRelease: text("target_release"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  estimatedTime: text("estimated_time"),
+  scheduledStart: timestamp("scheduled_start"),
+  scheduledEnd: timestamp("scheduled_end"),
+  visibility: text("visibility").notNull().default("public"), // 'public', 'internal'
   createdBy: text("created_by"),
+  completedAt: timestamp("completed_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -2191,6 +2196,7 @@ export const insertRoadmapFeatureSchema = createInsertSchema(roadmapFeatures).om
   id: true,
   createdAt: true,
   updatedAt: true,
+  completedAt: true,
 });
 
 export type RoadmapFeature = typeof roadmapFeatures.$inferSelect;
@@ -5433,22 +5439,3 @@ export const insertChronicleMissionProgressSchema = createInsertSchema(chronicle
 });
 export type ChronicleMissionProgress = typeof chronicleMissionProgress.$inferSelect;
 export type InsertChronicleMissionProgress = z.infer<typeof insertChronicleMissionProgressSchema>;
-
-// Development Roadmap Features - public facing feature tracker
-export const roadmapFeatures = pgTable("roadmap_features", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-  category: text("category").notNull(), // 'chronicles-estate', 'strategic', 'platform'
-  status: text("status").notNull().default("pending"), // 'pending', 'in-progress', 'completed'
-  sortOrder: integer("sort_order").notNull().default(0),
-  estimatedTime: text("estimated_time"),
-  completedAt: timestamp("completed_at"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-export const insertRoadmapFeatureSchema = createInsertSchema(roadmapFeatures).omit({
-  id: true, createdAt: true, completedAt: true
-});
-export type RoadmapFeature = typeof roadmapFeatures.$inferSelect;
-export type InsertRoadmapFeature = z.infer<typeof insertRoadmapFeatureSchema>;

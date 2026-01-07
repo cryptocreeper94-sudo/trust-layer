@@ -127,7 +127,8 @@ const navCategories = [
     label: "About",
     icon: Star,
     items: [
-      { href: "/executive-summary", label: "Investors", icon: Star, badge: "New" },
+      { href: "/coming-features", label: "Coming Features", icon: Rocket, badge: "New" },
+      { href: "/executive-summary", label: "Investors", icon: Star },
       { href: "/roadmap", label: "Roadmap", icon: Star },
     ]
   },
