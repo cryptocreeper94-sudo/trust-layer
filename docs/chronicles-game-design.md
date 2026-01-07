@@ -268,6 +268,101 @@ The game doesn't tell you what's "real" - your interpretation shapes your experi
 
 ---
 
+## PLAYSTYLE FREEDOM
+
+### The Core Truth
+**This is a LIFE SIMULATOR with gamified features - not a game with life elements.**
+
+Not everyone wants:
+- Monsters and ghosts
+- Horror and conflict
+- Constant danger and missions
+- The stress of combat
+
+Some players just want to EXIST. And that's valid.
+
+### The Opening Experience
+
+**You start as a normal person:**
+- Happy-go-lucky, living your life
+- You have a home, maybe a partner (could be real spouse playing with you)
+- Everything is normal... at first
+
+**The Slow Decay:**
+- The Veil doesn't break all at once
+- Strange occurrences begin - subtle at first
+- Something feels "off" in the world
+- Then the terrifying first leap happens
+
+**The Desperate Return:**
+- You're pulled somewhere against your will
+- You fight to get back home
+- When you do, you realize: The Veil is real
+
+### Playstyle Options
+
+**The Adventurer:**
+- Seeks out mysteries, conflict, the unknown
+- Hunts creatures, investigates hauntings
+- Collects Sigils, masters quantum leaping
+- High risk, high reward
+
+**The Settler:**
+- Focuses on building a life
+- Home, relationships, community
+- Trade, craft, socialize
+- Minimal conflict unless they seek it
+
+**The Observer:**
+- Sims-style peaceful existence
+- Go to the store, talk to people, live quietly
+- Coexist with the world without engaging the dangers
+- The scary stuff exists, but they avoid it
+
+**The Hybrid:**
+- Mix of all approaches
+- Adventure when they want, settle when they don't
+- Most players will be here
+
+### Universe Variety
+
+Not all dimensions/parallels are dark:
+- **Bright Universes** - Peaceful, prosperous, beautiful
+- **Dark Universes** - Dangerous, decaying, hostile
+- **Neutral Universes** - Balanced, normal, stable
+- **Abstract Realms** - Beyond comprehension, non-physical
+- **Utopias & Dystopias** - Extremes of order and chaos
+
+Players can choose where they spend their time.
+
+### What We Can't See
+
+**The Science:**
+- Humans see only ~0.0035% of the electromagnetic spectrum
+- We perceive a tiny fraction of reality
+- What exists in frequencies we can't detect?
+
+**The Ether:**
+- Beings/things that exist in imperceptible wavelengths
+- Not necessarily physical, not carbon-based
+- Intelligence without organic form
+- Things we literally cannot comprehend with human minds
+
+**The Veil:**
+- What separates us from seeing ALL of reality
+- When it thins or drops, we perceive more
+- Some dimensions are entirely in frequencies we'd normally miss
+- "Ghosts," "spirits," "entities" - maybe just bleed-through from other frequencies
+
+### Implications for Gameplay
+- The Veil dropping isn't just dimensional travel
+- It's PERCEPTION expanding
+- You start seeing what was always there
+- This is both wondrous and terrifying
+- Players control how much horror they engage with
+
+---
+
 ## GAMEPLAY LOOP
 
 ### Check-In Sessions (2-20 minutes typical)
