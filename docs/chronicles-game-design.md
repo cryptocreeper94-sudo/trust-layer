@@ -555,12 +555,24 @@ This isn't just stat progression - it's CHARACTER progression in the narrative s
 - "3 lives left" = old school arcade = not what we're doing
 - But death is real, and stakes need to exist
 
-**Possible Approaches (TBD - needs more brainstorming):**
-- Death triggers forced quantum leap (you "die" but wake up in another dimension)
-- Near-death experiences that scar/change your character
-- Resurrection mechanics tied to the Veil (death isn't permanent when reality is fluid)
-- Consequences without finality (lose progress, relationships, possessions - but not the character)
-- Perhaps death works differently in different dimensions?
+**The Solution: Parallel Shift**
+
+When you "die":
+1. Screen fades to black
+2. Moment of dread - "Am I done?"
+3. You wake up in a PARALLEL UNIVERSE
+4. It's still YOU - your memories, your identity
+5. But you're displaced - not where you were
+6. You must find your way back to your "main" dimension
+7. Your partner, your home, your life - still exists, but you're separated
+8. The journey back IS the consequence
+
+**Why This Works:**
+- Stakes feel real (you lose your place, your relationships are at risk)
+- But not permanent (you can fight back)
+- Mirrors real-life belief systems (death as transition, not end)
+- Creates emergent gameplay (the return journey)
+- The Veil makes this logically consistent
 
 **Design Goal:**
 Stakes must feel REAL without permanent loss of the parallel self you've invested in.
