@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { GlassCard } from "@/components/glass-card";
-import { Info, Check, Clock, Circle, Sparkles, Building2, TrendingUp, Rocket } from "lucide-react";
+import { Info, Check, Clock, Circle, Sparkles, Building2, TrendingUp, Rocket, Landmark } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const defaultFeatures = [
@@ -95,6 +95,15 @@ const defaultFeatures = [
     status: "pending",
     sortOrder: 10,
     estimatedTime: "10-14 weeks"
+  },
+  {
+    id: "11",
+    title: "ISO 20022 Banking Compliance",
+    description: "Full ISO 20022 messaging standard integration for DWC. Banks and financial institutions will be able to recognize and interface directly with our coin. Includes Digital Token Identifier (DTI) registration under ISO 24165, compliant API gateways, and institutional-grade payment rails.",
+    category: "compliance",
+    status: "pending",
+    sortOrder: 11,
+    estimatedTime: "Post-TGE"
   }
 ];
 
@@ -110,6 +119,12 @@ const categoryConfig = {
     icon: TrendingUp,
     gradient: "from-cyan-400 via-purple-400 to-pink-400",
     bgGlow: "rgba(139,92,246,0.15)"
+  },
+  "compliance": {
+    label: "Institutional Compliance",
+    icon: Landmark,
+    gradient: "from-emerald-400 via-teal-400 to-cyan-400",
+    bgGlow: "rgba(20,184,166,0.15)"
   }
 };
 
@@ -129,6 +144,7 @@ export default function ComingFeatures() {
   
   const chroniclesFeatures = features.filter(f => f.category === "chronicles-estate").sort((a, b) => a.sortOrder - b.sortOrder);
   const strategicFeatures = features.filter(f => f.category === "strategic").sort((a, b) => a.sortOrder - b.sortOrder);
+  const complianceFeatures = features.filter(f => f.category === "compliance").sort((a, b) => a.sortOrder - b.sortOrder);
 
   const completedCount = features.filter(f => f.status === "completed").length;
   const inProgressCount = features.filter(f => f.status === "in-progress").length;
@@ -215,6 +231,14 @@ export default function ComingFeatures() {
           subtitle="What sets DarkWave apart"
           config={categoryConfig["strategic"]}
           features={strategicFeatures}
+        />
+
+        {/* Compliance Section */}
+        <FeatureSection
+          title="Institutional Compliance"
+          subtitle="Bank-ready infrastructure for the future"
+          config={categoryConfig["compliance"]}
+          features={complianceFeatures}
         />
 
         {/* Footer CTA */}
