@@ -13825,7 +13825,13 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.get("/api/shells/balance", isAuthenticated, async (req: any, res) => {
+  app.get("/api/shells/balance", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });

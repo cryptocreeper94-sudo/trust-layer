@@ -14,12 +14,12 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { CharacterPortrait } from "@/components/character-portrait";
 import { ChroniclesNPC, NPCChatButton } from "@/components/chronicles-npc";
 import { GlassCard } from "@/components/glass-card";
 import { apiRequest } from "@/lib/queryClient";
 import { toast } from "sonner";
+import { getChroniclesSession } from "@/pages/chronicles-login";
 
 interface CityZone {
   id: string;
@@ -139,9 +139,10 @@ function createEmptyGrid(): GridCell[][] {
 }
 
 export default function ChroniclesEstate() {
-  const { user, loading: authLoading } = useSimpleAuth();
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
+  const [authLoading, setAuthLoading] = useState(true);
+  const [chroniclesAccount, setChroniclesAccount] = useState<{ id: string; username: string } | null>(null);
   
   const [grid, setGrid] = useState<GridCell[][]>(createEmptyGrid);
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingType | null>(null);
@@ -154,31 +155,64 @@ export default function ChroniclesEstate() {
     return !localStorage.getItem("chronicles_welcomed");
   });
 
+  useEffect(() => {
+    const session = getChroniclesSession();
+    if (!session) {
+      setLocation("/chronicles/login");
+      return;
+    }
+    fetch("/api/chronicles/auth/session", {
+      headers: { Authorization: `Bearer ${session.token}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.authenticated) {
+          setChroniclesAccount(data.account);
+        } else {
+          setLocation("/chronicles/login");
+        }
+        setAuthLoading(false);
+      })
+      .catch(() => {
+        setLocation("/chronicles/login");
+        setAuthLoading(false);
+      });
+  }, [setLocation]);
+
   const { data: shellsData } = useQuery({
-    queryKey: ["/api/orbs/balance"],
+    queryKey: ["/api/shells/balance"],
     queryFn: async () => {
-      const res = await apiRequest("GET", "/api/orbs/balance");
+      const session = getChroniclesSession();
+      const res = await fetch("/api/shells/balance", {
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
       return res.json();
     },
-    enabled: !!user,
+    enabled: !!chroniclesAccount,
   });
 
   const { data: personalityData } = useQuery({
     queryKey: ["/api/chronicles/personality"],
     queryFn: async () => {
-      const res = await apiRequest("GET", "/api/chronicles/personality");
+      const session = getChroniclesSession();
+      const res = await fetch("/api/chronicles/personality", {
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
       return res.json();
     },
-    enabled: !!user,
+    enabled: !!chroniclesAccount,
   });
 
   const { data: estateData, isLoading: estateLoading } = useQuery({
     queryKey: ["/api/chronicles/estate"],
     queryFn: async () => {
-      const res = await apiRequest("GET", "/api/chronicles/estate");
+      const session = getChroniclesSession();
+      const res = await fetch("/api/chronicles/estate", {
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
       return res.json();
     },
-    enabled: !!user,
+    enabled: !!chroniclesAccount,
   });
 
   useEffect(() => {
@@ -189,12 +223,17 @@ export default function ChroniclesEstate() {
 
   const saveEstateMutation = useMutation({
     mutationFn: async (gridData: GridCell[][]) => {
+      const session = getChroniclesSession();
       const totalBuildings = gridData.flat().filter(c => c.building !== "empty").length;
-      const res = await apiRequest("POST", "/api/chronicles/estate", {
-        gridData,
-        totalBuildings,
-        shellsSpent: 0
+      const res = await fetch("/api/chronicles/estate", {
+        method: "POST",
+        headers: { 
+          Authorization: `Bearer ${session?.token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ gridData, totalBuildings, shellsSpent: 0 })
       });
+      if (!res.ok) throw new Error((await res.json()).error || "Failed to save");
       return res.json();
     },
     onSuccess: () => {
@@ -214,16 +253,22 @@ export default function ChroniclesEstate() {
   const { data: zonesData } = useQuery({
     queryKey: ["/api/chronicles/zones", selectedEra],
     queryFn: async () => {
-      const res = await apiRequest("GET", `/api/chronicles/zones?era=${selectedEra}`);
+      const session = getChroniclesSession();
+      const res = await fetch(`/api/chronicles/zones?era=${selectedEra}`, {
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
       return res.json();
     },
-    enabled: !!user,
+    enabled: !!chroniclesAccount,
   });
 
   const { data: zonePlotsData, refetch: refetchPlots } = useQuery({
     queryKey: ["/api/chronicles/zones", selectedZone?.id, "plots"],
     queryFn: async () => {
-      const res = await apiRequest("GET", `/api/chronicles/zones/${selectedZone!.id}/plots`);
+      const session = getChroniclesSession();
+      const res = await fetch(`/api/chronicles/zones/${selectedZone!.id}/plots`, {
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
       return res.json();
     },
     enabled: !!selectedZone,
@@ -232,29 +277,40 @@ export default function ChroniclesEstate() {
   const { data: dailyRewardData, refetch: refetchDailyReward } = useQuery<DailyRewardData>({
     queryKey: ["/api/chronicles/daily-reward"],
     queryFn: async () => {
-      const res = await apiRequest("GET", "/api/chronicles/daily-reward");
+      const session = getChroniclesSession();
+      const res = await fetch("/api/chronicles/daily-reward", {
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
       return res.json();
     },
-    enabled: !!user,
+    enabled: !!chroniclesAccount,
   });
 
   const { data: eraBuildingsData } = useQuery({
     queryKey: ["/api/chronicles/era-buildings", selectedEra],
     queryFn: async () => {
-      const res = await apiRequest("GET", `/api/chronicles/era-buildings/${selectedEra}`);
+      const session = getChroniclesSession();
+      const res = await fetch(`/api/chronicles/era-buildings/${selectedEra}`, {
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
       return res.json();
     },
-    enabled: !!user,
+    enabled: !!chroniclesAccount,
   });
 
   const claimDailyRewardMutation = useMutation({
     mutationFn: async () => {
-      const res = await apiRequest("POST", "/api/chronicles/daily-reward/claim");
+      const session = getChroniclesSession();
+      const res = await fetch("/api/chronicles/daily-reward/claim", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
+      if (!res.ok) throw new Error((await res.json()).error || "Failed to claim");
       return res.json();
     },
     onSuccess: (data) => {
       refetchDailyReward();
-      queryClient.invalidateQueries({ queryKey: ["/api/orbs/balance"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/shells/balance"] });
       toast.success(data.message || "Daily reward claimed!", {
         description: `+${data.reward} Shells! Streak: ${data.currentStreak} days`
       });
@@ -266,12 +322,17 @@ export default function ChroniclesEstate() {
 
   const purchasePlotMutation = useMutation({
     mutationFn: async (plotId: string) => {
-      const res = await apiRequest("POST", `/api/chronicles/plots/${plotId}/purchase`);
+      const session = getChroniclesSession();
+      const res = await fetch(`/api/chronicles/plots/${plotId}/purchase`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
+      if (!res.ok) throw new Error((await res.json()).error || "Purchase failed");
       return res.json();
     },
     onSuccess: () => {
       refetchPlots();
-      queryClient.invalidateQueries({ queryKey: ["/api/orbs/balance"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/shells/balance"] });
       toast.success("Plot purchased!", { description: "You now own this plot" });
     },
     onError: (error: any) => {
@@ -356,15 +417,15 @@ export default function ChroniclesEstate() {
     );
   }
 
-  if (!user) {
+  if (!chroniclesAccount) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
         <Card className="max-w-md w-full bg-slate-900/80 border-slate-700 p-8 text-center">
           <User className="w-16 h-16 mx-auto text-cyan-400 mb-4" />
           <h2 className="text-2xl font-bold text-white mb-2">Sign In Required</h2>
           <p className="text-slate-400 mb-6">Create your character first to access your estate</p>
-          <Button onClick={() => setLocation("/chronicles/onboarding")} className="bg-gradient-to-r from-cyan-500 to-purple-500">
-            Create Character
+          <Button onClick={() => setLocation("/chronicles/login")} className="bg-gradient-to-r from-cyan-500 to-purple-500">
+            Sign In to Chronicles
           </Button>
         </Card>
       </div>
@@ -629,39 +690,43 @@ export default function ChroniclesEstate() {
                 </div>
               )}
               {zones.map((zone) => (
-                <GlassCard
+                <div
                   key={zone.id}
-                  glow
-                  className={`p-4 cursor-pointer transition-all ${
-                    selectedZone?.id === zone.id ? "ring-2 ring-cyan-400" : ""
-                  }`}
                   onClick={() => setSelectedZone(zone)}
                   data-testid={`zone-${zone.id}`}
+                  className="cursor-pointer"
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <h3 className="font-bold text-white">{zone.name}</h3>
-                      <p className="text-xs text-slate-400">{zone.description}</p>
+                  <GlassCard
+                    glow
+                    className={`p-4 transition-all ${
+                      selectedZone?.id === zone.id ? "ring-2 ring-cyan-400" : ""
+                    }`}
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <h3 className="font-bold text-white">{zone.name}</h3>
+                        <p className="text-xs text-slate-400">{zone.description}</p>
+                      </div>
+                      <Badge className={
+                        zone.zoneType === "commercial" ? "bg-purple-500/20 text-purple-300 border-purple-500/30" :
+                        zone.zoneType === "residential" ? "bg-green-500/20 text-green-300 border-green-500/30" :
+                        zone.zoneType === "civic" ? "bg-blue-500/20 text-blue-300 border-blue-500/30" :
+                        "bg-amber-500/20 text-amber-300 border-amber-500/30"
+                      }>
+                        {zone.zoneType}
+                      </Badge>
                     </div>
-                    <Badge className={
-                      zone.zoneType === "commercial" ? "bg-purple-500/20 text-purple-300 border-purple-500/30" :
-                      zone.zoneType === "residential" ? "bg-green-500/20 text-green-300 border-green-500/30" :
-                      zone.zoneType === "civic" ? "bg-blue-500/20 text-blue-300 border-blue-500/30" :
-                      "bg-amber-500/20 text-amber-300 border-amber-500/30"
-                    }>
-                      {zone.zoneType}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-400">
-                      {zone.occupiedPlots}/{zone.totalPlots} plots taken
-                    </span>
-                    <Progress 
-                      value={(zone.occupiedPlots / zone.totalPlots) * 100} 
-                      className="w-20 h-2"
-                    />
-                  </div>
-                </GlassCard>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-slate-400">
+                        {zone.occupiedPlots}/{zone.totalPlots} plots taken
+                      </span>
+                      <Progress 
+                        value={(zone.occupiedPlots / zone.totalPlots) * 100} 
+                        className="w-20 h-2"
+                      />
+                    </div>
+                  </GlassCard>
+                </div>
               ))}
             </div>
 
