@@ -5677,3 +5677,48 @@ export const insertChronicleMissionProgressSchema = createInsertSchema(chronicle
 });
 export type ChronicleMissionProgress = typeof chronicleMissionProgress.$inferSelect;
 export type InsertChronicleMissionProgress = z.infer<typeof insertChronicleMissionProgressSchema>;
+
+// Daily Login Streaks - 24-hour real-time rule
+export const chronicleLoginStreaks = pgTable("chronicle_login_streaks", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  userId: text("user_id").notNull().unique(),
+  
+  currentStreak: integer("current_streak").notNull().default(0),
+  longestStreak: integer("longest_streak").notNull().default(0),
+  totalLogins: integer("total_logins").notNull().default(0),
+  
+  lastLoginAt: timestamp("last_login_at"),
+  lastRewardClaimedAt: timestamp("last_reward_claimed_at"),
+  
+  totalShellsEarned: integer("total_shells_earned").notNull().default(0),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChronicleLoginStreakSchema = createInsertSchema(chronicleLoginStreaks).omit({
+  id: true, createdAt: true, updatedAt: true
+});
+export type ChronicleLoginStreak = typeof chronicleLoginStreaks.$inferSelect;
+export type InsertChronicleLoginStreak = z.infer<typeof insertChronicleLoginStreakSchema>;
+
+// Daily Reward Claims - tracks individual reward claims
+export const chronicleDailyRewards = pgTable("chronicle_daily_rewards", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  userId: text("user_id").notNull(),
+  
+  day: integer("day").notNull(), // Day 1-7 in the streak cycle
+  shellsAwarded: integer("shells_awarded").notNull(),
+  bonusType: text("bonus_type"), // 'streak_bonus', 'milestone', 'weekly_jackpot'
+  bonusAmount: integer("bonus_amount").default(0),
+  
+  claimedAt: timestamp("claimed_at").defaultNow().notNull(),
+});
+
+export const insertChronicleDailyRewardSchema = createInsertSchema(chronicleDailyRewards).omit({
+  id: true, claimedAt: true
+});
+export type ChronicleDailyReward = typeof chronicleDailyRewards.$inferSelect;
+export type InsertChronicleDailyReward = z.infer<typeof insertChronicleDailyRewardSchema>;
