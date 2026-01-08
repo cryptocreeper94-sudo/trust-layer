@@ -7,7 +7,7 @@ import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
 import { startScheduler } from "./marketing-scheduler";
-import { seedDocuments } from "./storage";
+import { seedDocuments, seedCityZones } from "./storage";
 import { setupPresence } from "./chat-presence";
 import { runMigrations } from "stripe-replit-sync";
 import { getStripeSync } from "./stripeClient";
@@ -241,6 +241,9 @@ app.use((req, res, next) => {
       
       // Seed core documents if empty
       await seedDocuments();
+      
+      // Seed city zones for Chronicles Estate
+      await seedCityZones();
       
       // Start marketing auto-deploy scheduler
       startScheduler();

@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type ReferralCode, type InsertReferralCode, type Referral, type InsertReferral, type ReferralEvent, type InsertReferralEvent, type AffiliateTierRecord, type InsertAffiliateTier, type CommissionPayout, type InsertCommissionPayout, type AffiliateProfile, type InsertAffiliateProfile, type FraudFlag, type InsertFraudFlag, type MarketingPost, type InsertMarketingPost, type MarketingDeployLog, type InsertMarketingDeployLog, type MarketingScheduleConfig, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, type BlockchainDomain, type InsertBlockchainDomain, type DomainRecord, type InsertDomainRecord, type DomainTransfer, type InsertDomainTransfer, type ChronicleSponsorshipSlot, type InsertChronicleSponsorshipSlot, type DomainSponsorshipClaim, type InsertDomainSponsorshipClaim, type EarlyAdopterProgram, type TreasuryAllocation, type TreasuryLedgerEntry, type SeoConfig, type InsertSeoConfig, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, webhookLogs, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory, blockchainDomains, domainRecords, domainTransfers, chronicleSponsorshipSlots, domainSponsorshipClaims, earlyAdopterProgram, marketingPosts, marketingDeployLogs, marketingScheduleConfig, treasuryAllocations, treasuryLedger, seoConfigs, referralCodes, referrals, referralEvents, affiliateTiers, commissionPayouts, affiliateProfiles, fraudFlags, signupCounter, arcadeLeaderboard, type ArcadeLeaderboardEntry, type InsertArcadeLeaderboardEntry } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type ReferralCode, type InsertReferralCode, type Referral, type InsertReferral, type ReferralEvent, type InsertReferralEvent, type AffiliateTierRecord, type InsertAffiliateTier, type CommissionPayout, type InsertCommissionPayout, type AffiliateProfile, type InsertAffiliateProfile, type FraudFlag, type InsertFraudFlag, type MarketingPost, type InsertMarketingPost, type MarketingDeployLog, type InsertMarketingDeployLog, type MarketingScheduleConfig, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, type BlockchainDomain, type InsertBlockchainDomain, type DomainRecord, type InsertDomainRecord, type DomainTransfer, type InsertDomainTransfer, type ChronicleSponsorshipSlot, type InsertChronicleSponsorshipSlot, type DomainSponsorshipClaim, type InsertDomainSponsorshipClaim, type EarlyAdopterProgram, type TreasuryAllocation, type TreasuryLedgerEntry, type SeoConfig, type InsertSeoConfig, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, webhookLogs, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory, blockchainDomains, domainRecords, domainTransfers, chronicleSponsorshipSlots, domainSponsorshipClaims, earlyAdopterProgram, marketingPosts, marketingDeployLogs, marketingScheduleConfig, treasuryAllocations, treasuryLedger, seoConfigs, referralCodes, referrals, referralEvents, affiliateTiers, commissionPayouts, affiliateProfiles, fraudFlags, signupCounter, arcadeLeaderboard, type ArcadeLeaderboardEntry, type InsertArcadeLeaderboardEntry, cityZones, landPlots, type CityZone, type InsertCityZone, type LandPlot, type InsertLandPlot } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, asc, count, and, lt } from "drizzle-orm";
 import crypto from "crypto";
@@ -294,6 +294,20 @@ export interface IStorage {
   getInfluencerApplications(status?: string): Promise<any[]>;
   getInfluencerApplication(id: string): Promise<any | undefined>;
   updateInfluencerApplicationStatus(id: string, status: string, adminNotes?: string): Promise<any | undefined>;
+  
+  // City Zones & Land Plots
+  getCityZones(era?: string): Promise<CityZone[]>;
+  getCityZone(id: string): Promise<CityZone | undefined>;
+  createCityZone(data: InsertCityZone): Promise<CityZone>;
+  updateCityZone(id: string, data: Partial<InsertCityZone>): Promise<CityZone | undefined>;
+  
+  getLandPlots(zoneId?: string): Promise<LandPlot[]>;
+  getLandPlot(id: string): Promise<LandPlot | undefined>;
+  getLandPlotsByOwner(ownerId: string): Promise<LandPlot[]>;
+  getAvailablePlots(zoneId?: string): Promise<LandPlot[]>;
+  createLandPlot(data: InsertLandPlot): Promise<LandPlot>;
+  updateLandPlot(id: string, data: Partial<InsertLandPlot>): Promise<LandPlot | undefined>;
+  purchasePlot(plotId: string, buyerId: string, price: number): Promise<LandPlot | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -2368,6 +2382,80 @@ export class DatabaseStorage implements IStorage {
     `);
     return result.rows[0];
   }
+
+  // City Zones
+  async getCityZones(era?: string): Promise<CityZone[]> {
+    if (era) {
+      return db.select().from(cityZones).where(eq(cityZones.era, era)).orderBy(cityZones.name);
+    }
+    return db.select().from(cityZones).orderBy(cityZones.era, cityZones.name);
+  }
+
+  async getCityZone(id: string): Promise<CityZone | undefined> {
+    const [zone] = await db.select().from(cityZones).where(eq(cityZones.id, id));
+    return zone;
+  }
+
+  async createCityZone(data: InsertCityZone): Promise<CityZone> {
+    const [zone] = await db.insert(cityZones).values(data).returning();
+    return zone;
+  }
+
+  async updateCityZone(id: string, data: Partial<InsertCityZone>): Promise<CityZone | undefined> {
+    const [zone] = await db.update(cityZones).set(data).where(eq(cityZones.id, id)).returning();
+    return zone;
+  }
+
+  // Land Plots
+  async getLandPlots(zoneId?: string): Promise<LandPlot[]> {
+    if (zoneId) {
+      return db.select().from(landPlots).where(eq(landPlots.zoneId, zoneId)).orderBy(landPlots.plotX, landPlots.plotY);
+    }
+    return db.select().from(landPlots).orderBy(landPlots.zoneId, landPlots.plotX, landPlots.plotY);
+  }
+
+  async getLandPlot(id: string): Promise<LandPlot | undefined> {
+    const [plot] = await db.select().from(landPlots).where(eq(landPlots.id, id));
+    return plot;
+  }
+
+  async getLandPlotsByOwner(ownerId: string): Promise<LandPlot[]> {
+    return db.select().from(landPlots).where(eq(landPlots.ownerId, ownerId));
+  }
+
+  async getAvailablePlots(zoneId?: string): Promise<LandPlot[]> {
+    if (zoneId) {
+      return db.select().from(landPlots).where(and(eq(landPlots.zoneId, zoneId), eq(landPlots.isForSale, true)));
+    }
+    return db.select().from(landPlots).where(eq(landPlots.isForSale, true));
+  }
+
+  async createLandPlot(data: InsertLandPlot): Promise<LandPlot> {
+    const [plot] = await db.insert(landPlots).values(data).returning();
+    return plot;
+  }
+
+  async updateLandPlot(id: string, data: Partial<InsertLandPlot>): Promise<LandPlot | undefined> {
+    const [plot] = await db.update(landPlots).set(data).where(eq(landPlots.id, id)).returning();
+    return plot;
+  }
+
+  async purchasePlot(plotId: string, buyerId: string, price: number): Promise<LandPlot | undefined> {
+    const [plot] = await db.update(landPlots).set({
+      ownerId: buyerId,
+      ownerType: "player",
+      isForSale: false,
+      purchasedAt: new Date(),
+    }).where(eq(landPlots.id, plotId)).returning();
+    
+    if (plot) {
+      await db.update(cityZones)
+        .set({ occupiedPlots: sql`occupied_plots + 1` })
+        .where(eq(cityZones.id, plot.zoneId));
+    }
+    
+    return plot;
+  }
 }
 
 export const storage = new DatabaseStorage();
@@ -2592,5 +2680,77 @@ export async function seedDocuments(): Promise<void> {
     console.log(`[seed] Successfully seeded ${SEED_DOCUMENTS.length} documents`);
   } catch (error) {
     console.error("[seed] Failed to seed documents:", error);
+  }
+}
+
+const SEED_ZONES: InsertCityZone[] = [
+  // Present Day Era
+  { era: "present", name: "Downtown Core", description: "The bustling heart of the modern city with skyscrapers and corporate headquarters", zoneType: "commercial", gridX: 0, gridY: 0, width: 6, height: 6, totalPlots: 36, occupiedPlots: 0, architectureStyle: "modern" },
+  { era: "present", name: "Residential Heights", description: "Upscale apartment complexes and condominiums with city views", zoneType: "residential", gridX: 6, gridY: 0, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "modern" },
+  { era: "present", name: "City Hall District", description: "Government buildings, courts, and public services", zoneType: "civic", gridX: 0, gridY: 6, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "modern" },
+  { era: "present", name: "Central Park", description: "Green oasis in the urban jungle with walking paths and fountains", zoneType: "nature", gridX: 4, gridY: 4, width: 3, height: 3, totalPlots: 9, occupiedPlots: 0, architectureStyle: "modern" },
+  { era: "present", name: "Innovation Hub", description: "Tech startups and coworking spaces for entrepreneurs", zoneType: "mixed", gridX: 7, gridY: 4, width: 3, height: 4, totalPlots: 12, occupiedPlots: 0, architectureStyle: "modern" },
+  
+  // Medieval Era
+  { era: "medieval", name: "Castle Ward", description: "The fortified castle and its surrounding noble estates", zoneType: "civic", gridX: 0, gridY: 0, width: 5, height: 5, totalPlots: 25, occupiedPlots: 0, architectureStyle: "medieval" },
+  { era: "medieval", name: "Market Square", description: "Bustling marketplace with merchant stalls and guild halls", zoneType: "commercial", gridX: 5, gridY: 0, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "medieval" },
+  { era: "medieval", name: "Peasant Quarter", description: "Humble cottages and farms for the common folk", zoneType: "residential", gridX: 0, gridY: 5, width: 5, height: 4, totalPlots: 20, occupiedPlots: 0, architectureStyle: "medieval" },
+  { era: "medieval", name: "Abbey Grounds", description: "The monastery and its sacred gardens", zoneType: "civic", gridX: 5, gridY: 4, width: 3, height: 3, totalPlots: 9, occupiedPlots: 0, architectureStyle: "medieval" },
+  { era: "medieval", name: "The Woodlands", description: "Dense forest on the outskirts, home to hunters and hermits", zoneType: "nature", gridX: 8, gridY: 4, width: 2, height: 5, totalPlots: 10, occupiedPlots: 0, architectureStyle: "medieval" },
+  
+  // Roman Era
+  { era: "roman", name: "The Forum", description: "Center of political, religious, and commercial life", zoneType: "civic", gridX: 0, gridY: 0, width: 6, height: 4, totalPlots: 24, occupiedPlots: 0, architectureStyle: "roman" },
+  { era: "roman", name: "Merchant District", description: "Shops, taverns, and trading houses along the main road", zoneType: "commercial", gridX: 6, gridY: 0, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "roman" },
+  { era: "roman", name: "Patrician Villas", description: "Luxurious homes of the wealthy elite with private gardens", zoneType: "residential", gridX: 0, gridY: 4, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "roman" },
+  { era: "roman", name: "Plebeian Quarter", description: "Crowded insulae apartments for common citizens", zoneType: "residential", gridX: 4, gridY: 4, width: 3, height: 4, totalPlots: 12, occupiedPlots: 0, architectureStyle: "roman" },
+  { era: "roman", name: "Temple Complex", description: "Sacred temples to the gods and ritual spaces", zoneType: "civic", gridX: 7, gridY: 4, width: 3, height: 4, totalPlots: 12, occupiedPlots: 0, architectureStyle: "roman" },
+];
+
+export async function seedCityZones(): Promise<void> {
+  try {
+    const existingZones = await storage.getCityZones();
+    if (existingZones.length > 0) {
+      console.log(`[seed] ${existingZones.length} city zones already exist, skipping seed`);
+      return;
+    }
+    
+    console.log("[seed] Seeding city zones...");
+    for (const zone of SEED_ZONES) {
+      const createdZone = await storage.createCityZone(zone);
+      
+      const width = zone.width || 4;
+      const height = zone.height || 4;
+      
+      // Create plots for each zone
+      for (let x = 0; x < width; x++) {
+        for (let y = 0; y < height; y++) {
+          const plotSize = (x === 0 && y === 0) ? "premium" : 
+                          (x < 2 && y < 2) ? "large" : 
+                          (x < width - 1 && y < height - 1) ? "standard" : "small";
+          
+          const basePrices: Record<string, number> = {
+            "premium": 500,
+            "large": 250,
+            "standard": 100,
+            "small": 50
+          };
+          
+          const basePrice = basePrices[plotSize];
+          
+          await storage.createLandPlot({
+            zoneId: createdZone.id,
+            plotX: x,
+            plotY: y,
+            plotSize,
+            basePrice,
+            currentPrice: basePrice,
+            isForSale: true,
+          });
+        }
+      }
+    }
+    console.log(`[seed] Successfully seeded ${SEED_ZONES.length} city zones with plots`);
+  } catch (error) {
+    console.error("[seed] Failed to seed city zones:", error);
   }
 }
