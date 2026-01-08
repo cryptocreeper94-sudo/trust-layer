@@ -14,6 +14,7 @@ import { FavoritesProvider } from "@/components/favorites-watchlist";
 import Home from "@/pages/home";
 import NotFound from "@/pages/not-found";
 import Terms from "@/pages/terms";
+import VirtualCurrencyTerms from "@/pages/virtual-currency-terms";
 import Privacy from "@/pages/privacy";
 
 // Loading fallback component
@@ -234,6 +235,7 @@ function GamesRouter() {
         <Route path="/wallet" component={Wallet} />
         <Route path="/game-developer" component={GameDeveloper} />
         <Route path="/terms" component={Terms} />
+        <Route path="/virtual-currency-terms" component={VirtualCurrencyTerms} />
         <Route path="/privacy" component={Privacy} />
         <Route component={NotFound} />
       </Switch>
@@ -288,6 +290,7 @@ function ChronoRouter() {
         <Route path="/presale" component={Presale} />
         <Route path="/presale/success" component={PresaleSuccess} />
         <Route path="/terms" component={Terms} />
+        <Route path="/virtual-currency-terms" component={VirtualCurrencyTerms} />
         <Route path="/privacy" component={Privacy} />
         <Route component={NotFound} />
       </Switch>
@@ -368,6 +371,7 @@ function DWSCRouter() {
         <Route path="/owner-admin/kyc" component={OwnerKyc} />
         <Route path="/chronicles-admin" component={ChroniclesAdmin} />
         <Route path="/terms" component={Terms} />
+        <Route path="/virtual-currency-terms" component={VirtualCurrencyTerms} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/error" component={ErrorPage} />
         <Route path="/token-compare" component={TokenCompare} />

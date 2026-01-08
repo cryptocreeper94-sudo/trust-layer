@@ -138,7 +138,7 @@ import { walletBotService } from "./wallet-bot-service";
 import { broadcastToChannel } from "./chat-presence";
 import { pulseClient } from "./pulse-client";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
-import { shellsService, SHELL_PACKAGES, SHELL_EARN_RATES, SHELL_COSTS } from "./shells-service";
+import { shellsService, SHELL_PACKAGES, SHELL_BUNDLES, SHELL_EARN_RATES, SHELL_COSTS, DWC_CONVERSION_RATE, DWC_LAUNCH_DATE } from "./shells-service";
 import { subscriptionService, SUBSCRIPTION_PLANS } from "./subscription-service";
 import { guardianService, generateDataHash as guardianHash, generateMerkleRoot } from "./guardian-service";
 
@@ -14110,14 +14110,122 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(400).json({ error: "Invalid package data" });
       }
       
-      // Credit the Orbs (uses sessionId as referenceId for idempotency)
+      // Credit the Shells (uses sessionId as referenceId for idempotency)
       const transaction = await shellsService.purchaseShells(userId, username, packageKey, session.id);
       const balance = await shellsService.getBalance(userId);
       
-      res.json({ success: true, transaction, balance, orbsAdded: shellAmount });
+      // Record purchase receipt for DWC conversion tracking
+      try {
+        await shellsService.recordPurchaseReceipt(
+          userId,
+          session.payment_intent as string || session.id,
+          session.customer as string || null,
+          packageKey,
+          shellAmount,
+          session.amount_total || 0
+        );
+      } catch (receiptError) {
+        console.error("Failed to record purchase receipt:", receiptError);
+        // Don't fail the transaction if receipt recording fails
+      }
+      
+      res.json({ 
+        success: true, 
+        transaction, 
+        balance, 
+        shellsAdded: shellAmount,
+        dwcConversionInfo: {
+          rate: DWC_CONVERSION_RATE,
+          dwcEquivalent: shellAmount / DWC_CONVERSION_RATE,
+          launchDate: DWC_LAUNCH_DATE,
+          message: `These Shells will convert to ${(shellAmount / DWC_CONVERSION_RATE).toFixed(2)} DWC on ${DWC_LAUNCH_DATE}`
+        }
+      });
     } catch (error) {
-      console.error("Verify orbs purchase error:", error);
+      console.error("Verify shells purchase error:", error);
       res.status(500).json({ error: "Failed to verify purchase" });
+    }
+  });
+
+  // Get Shell bundles with pricing and DWC conversion info
+  app.get("/api/shells/bundles", async (req, res) => {
+    try {
+      const bundles = shellsService.getBundles();
+      res.json({ 
+        bundles,
+        conversionInfo: {
+          rate: DWC_CONVERSION_RATE,
+          launchDate: DWC_LAUNCH_DATE,
+          message: `All Shells will convert to DWC at a rate of ${DWC_CONVERSION_RATE} Shells = 1 DWC on ${DWC_LAUNCH_DATE}`
+        }
+      });
+    } catch (error) {
+      console.error("Get bundles error:", error);
+      res.status(500).json({ error: "Failed to get bundles" });
+    }
+  });
+
+  // Get user's DWC conversion eligible shells
+  app.get("/api/shells/conversion-info", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const conversionInfo = await shellsService.getConversionEligibleShells(userId);
+      res.json({
+        ...conversionInfo,
+        conversionRate: DWC_CONVERSION_RATE,
+        launchDate: DWC_LAUNCH_DATE,
+        message: `Your ${conversionInfo.totalShells.toLocaleString()} Shells will convert to ${conversionInfo.dwcEquivalent.toFixed(2)} DWC on ${DWC_LAUNCH_DATE}`
+      });
+    } catch (error) {
+      console.error("Get conversion info error:", error);
+      res.status(500).json({ error: "Failed to get conversion info" });
+    }
+  });
+
+  // Record user consent to virtual currency ToS
+  app.post("/api/shells/accept-tos", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { consentType, version } = req.body;
+      if (!consentType || !version) {
+        return res.status(400).json({ error: "Consent type and version required" });
+      }
+      
+      const consent = await shellsService.recordFinancialConsent(
+        userId,
+        consentType,
+        version,
+        req.ip,
+        req.headers["user-agent"]
+      );
+      
+      res.json({ success: true, consent });
+    } catch (error) {
+      console.error("Accept ToS error:", error);
+      res.status(500).json({ error: "Failed to record consent" });
+    }
+  });
+
+  // Check if user has accepted required ToS
+  app.get("/api/shells/tos-status", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { consentType, version } = req.query;
+      if (!consentType || !version) {
+        return res.status(400).json({ error: "Consent type and version required" });
+      }
+      
+      const hasAccepted = await shellsService.hasAcceptedToS(userId, consentType as string, version as string);
+      res.json({ hasAccepted });
+    } catch (error) {
+      console.error("Check ToS status error:", error);
+      res.status(500).json({ error: "Failed to check ToS status" });
     }
   });
 

@@ -4,10 +4,19 @@ import {
   shellWallets,
   shellTransactions,
   shellConversionSnapshots,
+  shellPurchaseReceipts,
+  userFinancialConsents,
   type ShellWallet,
   type ShellTransaction,
   type ShellConversionSnapshot,
+  type ShellPurchaseReceipt,
+  type UserFinancialConsent,
 } from "@shared/schema";
+import { getUncachableStripeClient } from "./stripeClient";
+
+// DWC Conversion rate: 1 DWC = 100 Shells (launches April 11, 2026)
+export const DWC_CONVERSION_RATE = 100;
+export const DWC_LAUNCH_DATE = "2026-04-11";
 
 export type TransactionType = 
   | "earn"           // Earned through engagement
@@ -19,13 +28,17 @@ export type TransactionType =
   | "bonus"          // Bonus/promotional
   | "conversion";    // Converted to DWC at launch
 
-// Shell packages available for purchase
-export const SHELL_PACKAGES = {
-  starter: { amount: 100, price: 499, name: "Starter Pack" },      // $4.99
-  popular: { amount: 500, price: 1999, name: "Popular Pack" },     // $19.99
-  premium: { amount: 1200, price: 3999, name: "Premium Pack" },    // $39.99
-  ultimate: { amount: 3000, price: 7999, name: "Ultimate Pack" },  // $79.99
+// Shell bundles available for purchase - Updated pricing for April 11, 2026 launch
+// All Shell purchases will convert to DWC at launch rate: 1 DWC = 100 Shells
+export const SHELL_BUNDLES = {
+  starter: { amount: 1000, price: 900, name: "Starter Bundle", dwcEquivalent: 10 },      // $9
+  pro: { amount: 5000, price: 4000, name: "Pro Bundle", dwcEquivalent: 50, bonus: 25 },       // $40 (25% bonus = 5000 base + 1250 bonus)
+  elite: { amount: 12500, price: 9000, name: "Elite Bundle", dwcEquivalent: 125, bonus: 39 }, // $90 (39% bonus)
+  founders: { amount: 30000, price: 20000, name: "Founders Bundle", dwcEquivalent: 300, bonus: 50 }, // $200 (50% bonus)
 } as const;
+
+// Legacy alias for backward compatibility
+export const SHELL_PACKAGES = SHELL_BUNDLES;
 
 // Engagement earning rates
 export const SHELL_EARN_RATES = {
@@ -357,6 +370,150 @@ class ShellsService {
       totalUsers: orbStats?.totalUsers || 0,
       totalTransactions: txStats?.totalTransactions || 0,
     };
+  }
+
+  // Create Stripe checkout session for Shell bundle purchase
+  async createShellBundleCheckout(
+    userId: string,
+    username: string,
+    bundleKey: keyof typeof SHELL_BUNDLES,
+    successUrl: string,
+    cancelUrl: string
+  ): Promise<{ sessionId: string; url: string }> {
+    const bundle = SHELL_BUNDLES[bundleKey];
+    if (!bundle) throw new Error(`Invalid bundle key: ${bundleKey}`);
+
+    const stripe = await getUncachableStripeClient();
+    
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [{
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: bundle.name,
+            description: `${bundle.amount.toLocaleString()} Shells (converts to ~${bundle.dwcEquivalent} DWC at launch)`,
+            metadata: {
+              bundleKey,
+              shellAmount: bundle.amount.toString(),
+              dwcEquivalent: bundle.dwcEquivalent.toString(),
+            },
+          },
+          unit_amount: bundle.price,
+        },
+        quantity: 1,
+      }],
+      mode: "payment",
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+      metadata: {
+        userId,
+        username,
+        bundleKey,
+        shellAmount: bundle.amount.toString(),
+        purchaseType: "shell_bundle",
+      },
+    });
+
+    return { sessionId: session.id, url: session.url! };
+  }
+
+  // Record a purchase receipt (called from webhook after successful payment)
+  async recordPurchaseReceipt(
+    userId: string,
+    stripePaymentIntentId: string,
+    stripeCustomerId: string | null,
+    bundleKey: string,
+    shellAmount: number,
+    amountPaidCents: number
+  ): Promise<ShellPurchaseReceipt> {
+    const dwcConversionAmount = (shellAmount / DWC_CONVERSION_RATE).toString();
+    
+    const [receipt] = await db.insert(shellPurchaseReceipts)
+      .values({
+        userId,
+        stripePaymentIntentId,
+        stripeCustomerId,
+        bundleKey,
+        shellAmount,
+        amountPaidCents,
+        dwcConversionRate: DWC_CONVERSION_RATE.toString(),
+        dwcConversionAmount,
+        conversionEligible: true,
+        conversionStatus: "pending",
+      })
+      .returning();
+    
+    return receipt;
+  }
+
+  // Get user's total Shells eligible for DWC conversion
+  async getConversionEligibleShells(userId: string): Promise<{
+    totalShells: number;
+    dwcEquivalent: number;
+    purchaseHistory: ShellPurchaseReceipt[];
+  }> {
+    const receipts = await db.select()
+      .from(shellPurchaseReceipts)
+      .where(and(
+        eq(shellPurchaseReceipts.userId, userId),
+        eq(shellPurchaseReceipts.conversionEligible, true)
+      ))
+      .orderBy(desc(shellPurchaseReceipts.createdAt));
+
+    const totalShells = receipts.reduce((sum, r) => sum + r.shellAmount, 0);
+    const wallet = await this.getWallet(userId);
+    const currentBalance = wallet?.balance || 0;
+    
+    return {
+      totalShells: currentBalance,
+      dwcEquivalent: currentBalance / DWC_CONVERSION_RATE,
+      purchaseHistory: receipts,
+    };
+  }
+
+  // Record user consent to ToS
+  async recordFinancialConsent(
+    userId: string,
+    consentType: string,
+    version: string,
+    ipAddress?: string,
+    userAgent?: string
+  ): Promise<UserFinancialConsent> {
+    const [consent] = await db.insert(userFinancialConsents)
+      .values({
+        userId,
+        consentType,
+        version,
+        ipAddress,
+        userAgent,
+      })
+      .returning();
+    
+    return consent;
+  }
+
+  // Check if user has accepted required ToS
+  async hasAcceptedToS(userId: string, consentType: string, version: string): Promise<boolean> {
+    const [consent] = await db.select()
+      .from(userFinancialConsents)
+      .where(and(
+        eq(userFinancialConsents.userId, userId),
+        eq(userFinancialConsents.consentType, consentType),
+        eq(userFinancialConsents.version, version)
+      ));
+    
+    return !!consent;
+  }
+
+  // Get all Shell bundles with pricing info
+  getBundles() {
+    return Object.entries(SHELL_BUNDLES).map(([key, bundle]) => ({
+      key,
+      ...bundle,
+      priceFormatted: `$${(bundle.price / 100).toFixed(2)}`,
+      dwcConversionInfo: `Converts to ~${bundle.dwcEquivalent} DWC at launch (April 11, 2026)`,
+    }));
   }
 }
 
