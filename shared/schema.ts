@@ -3915,6 +3915,57 @@ export type OrbWallet = ShellWallet;
 export type OrbTransaction = ShellTransaction;
 export type OrbConversionSnapshot = ShellConversionSnapshot;
 
+// Shell Purchase Receipts - Track all Stripe purchases of Shell bundles
+export const shellPurchaseReceipts = pgTable("shell_purchase_receipts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  stripePaymentIntentId: text("stripe_payment_intent_id").notNull().unique(),
+  stripeCustomerId: text("stripe_customer_id"),
+  bundleKey: text("bundle_key").notNull(), // 'starter', 'pro', 'elite', 'founders'
+  shellAmount: integer("shell_amount").notNull(),
+  amountPaidCents: integer("amount_paid_cents").notNull(),
+  currency: text("currency").notNull().default("usd"),
+  status: text("status").notNull().default("completed"), // 'pending', 'completed', 'refunded', 'failed'
+  conversionEligible: boolean("conversion_eligible").notNull().default(true),
+  dwcConversionRate: text("dwc_conversion_rate"), // Rate at time of purchase (null until set)
+  dwcConversionAmount: text("dwc_conversion_amount"), // Calculated DWC amount
+  conversionStatus: text("conversion_status").default("pending"), // 'pending', 'converted', 'claimed'
+  convertedAt: timestamp("converted_at"),
+  metadata: text("metadata"), // JSON for extra data
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// User Financial Consents - Track ToS acceptance for crypto/virtual currency
+export const userFinancialConsents = pgTable("user_financial_consents", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  consentType: text("consent_type").notNull(), // 'virtual_currency_tos', 'crypto_disclosure', 'dwc_conversion_terms'
+  version: text("version").notNull(), // ToS version number
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  consentedAt: timestamp("consented_at").defaultNow().notNull(),
+});
+
+// Shell Bundle Products - Configuration for purchasable bundles
+export const shellBundleProducts = pgTable("shell_bundle_products", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  bundleKey: text("bundle_key").notNull().unique(), // 'starter', 'pro', 'elite', 'founders'
+  displayName: text("display_name").notNull(),
+  shellAmount: integer("shell_amount").notNull(),
+  priceUsdCents: integer("price_usd_cents").notNull(),
+  stripePriceId: text("stripe_price_id"), // Stripe Price ID
+  stripeProductId: text("stripe_product_id"), // Stripe Product ID
+  bonusPercentage: integer("bonus_percentage").default(0), // Extra shells as bonus
+  isActive: boolean("is_active").notNull().default(true),
+  sortOrder: integer("sort_order").default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type ShellPurchaseReceipt = typeof shellPurchaseReceipts.$inferSelect;
+export type UserFinancialConsent = typeof userFinancialConsents.$inferSelect;
+export type ShellBundleProduct = typeof shellBundleProducts.$inferSelect;
+
 // =====================================================
 // CHRONOCHAT ENHANCED FEATURES
 // =====================================================
