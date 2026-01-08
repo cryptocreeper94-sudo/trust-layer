@@ -167,12 +167,14 @@ const CompetitiveAnalysis = lazy(() => import("@/pages/competitive-analysis"));
 const InvestorPitch = lazy(() => import("@/pages/investor-pitch"));
 const SecurityPage = lazy(() => import("@/pages/security"));
 const GuardianCertification = lazy(() => import("@/pages/guardian-certification"));
+const GuardianRegistry = lazy(() => import("@/pages/guardian-registry"));
 const GuardianPortal = lazy(() => import("@/pages/guardian-portal"));
 const OwnerAdminPortal = lazy(() => import("@/pages/owner-admin"));
 const OwnerAnalytics = lazy(() => import("@/pages/owner-admin/analytics"));
 const OwnerSeoManager = lazy(() => import("@/pages/owner-admin/seo"));
 const OwnerReferrals = lazy(() => import("@/pages/owner-admin/referrals"));
 const OwnerUsers = lazy(() => import("@/pages/owner-admin/users"));
+const OwnerGuardian = lazy(() => import("@/pages/owner-admin/guardian"));
 const OwnerDomains = lazy(() => import("@/pages/owner-admin/domains"));
 const OwnerFaucet = lazy(() => import("@/pages/owner-admin/faucet"));
 const OwnerKyc = lazy(() => import("@/pages/owner-admin/kyc"));
@@ -313,6 +315,7 @@ function DWSCRouter() {
         <Route path="/security" component={SecurityPage} />
         <Route path="/guardian" component={GuardianCertification} />
         <Route path="/guardian-certification" component={GuardianCertification} />
+        <Route path="/guardian-registry" component={GuardianRegistry} />
         <Route path="/guardian-portal" component={GuardianPortal} />
         <Route path="/explorer" component={Explorer} />
         <Route path="/doc-hub" component={DocHub} />
@@ -359,6 +362,7 @@ function DWSCRouter() {
         <Route path="/owner-admin/seo" component={OwnerSeoManager} />
         <Route path="/owner-admin/referrals" component={OwnerReferrals} />
         <Route path="/owner-admin/users" component={OwnerUsers} />
+        <Route path="/owner-admin/guardian" component={OwnerGuardian} />
         <Route path="/owner-admin/domains" component={OwnerDomains} />
         <Route path="/owner-admin/faucet" component={OwnerFaucet} />
         <Route path="/owner-admin/kyc" component={OwnerKyc} />

@@ -406,6 +406,24 @@ export async function registerRoutes(
           }
         }
         
+        // Handle Guardian Certification purchases
+        if (metadata.type === "guardian_certification") {
+          try {
+            const certification = await guardianService.createCertification({
+              projectName: metadata.projectName || "Unknown Project",
+              projectUrl: metadata.projectUrl || null,
+              contactEmail: customerEmail || metadata.contactEmail || "",
+              tier: metadata.tier || "assurance_lite",
+              status: "pending",
+              stripePaymentId: paymentId as string,
+              userId: metadata.userId || null,
+            });
+            console.log(`[Stripe Webhook] Guardian certification created: ${certification.id}, tier: ${metadata.tier}, project: ${metadata.projectName}`);
+          } catch (dbError) {
+            console.error("[Stripe Webhook] DB error for Guardian certification:", dbError);
+          }
+        }
+        
         // Handle new subscription activation (with server-side validation)
         if (metadata.type === "subscription" && session.subscription) {
           try {
@@ -12093,6 +12111,66 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error) {
       console.error("Delete SEO config error:", error);
       res.status(500).json({ error: "Failed to delete SEO config" });
+    }
+  });
+
+  // =====================================================
+  // OWNER ADMIN - GUARDIAN CERTIFICATION APIs
+  // =====================================================
+
+  app.get("/api/owner/guardian/certifications", ownerAuthMiddleware, async (_req, res) => {
+    try {
+      const certifications = await guardianService.getAllCertifications();
+      res.json({ certifications });
+    } catch (error) {
+      console.error("Get all certifications error:", error);
+      res.status(500).json({ error: "Failed to fetch certifications" });
+    }
+  });
+
+  app.post("/api/owner/guardian/certifications/:id/complete", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { score, findings } = req.body;
+      if (typeof score !== "number" || score < 0 || score > 100) {
+        return res.status(400).json({ error: "Score must be a number between 0 and 100" });
+      }
+      const updated = await guardianService.completeCertification(id, score, findings || "");
+      if (!updated) {
+        return res.status(404).json({ error: "Certification not found" });
+      }
+      res.json({ success: true, certification: updated });
+    } catch (error) {
+      console.error("Complete certification error:", error);
+      res.status(500).json({ error: "Failed to complete certification" });
+    }
+  });
+
+  app.post("/api/owner/guardian/certifications/:id/revoke", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const updated = await guardianService.updateCertification(id, { status: "revoked" });
+      if (!updated) {
+        return res.status(404).json({ error: "Certification not found" });
+      }
+      res.json({ success: true, certification: updated });
+    } catch (error) {
+      console.error("Revoke certification error:", error);
+      res.status(500).json({ error: "Failed to revoke certification" });
+    }
+  });
+
+  app.post("/api/owner/guardian/certifications/:id/start", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const updated = await guardianService.updateCertification(id, { status: "in_progress" });
+      if (!updated) {
+        return res.status(404).json({ error: "Certification not found" });
+      }
+      res.json({ success: true, certification: updated });
+    } catch (error) {
+      console.error("Start certification error:", error);
+      res.status(500).json({ error: "Failed to start certification" });
     }
   });
 

@@ -277,13 +277,14 @@ function BentoCard({
   className?: string; 
   span?: "1" | "2" | "row"; 
   href?: string;
-  glow?: "cyan" | "purple" | "pink" | "amber";
+  glow?: "cyan" | "purple" | "pink" | "amber" | "emerald";
 }) {
   const glowColors = {
     cyan: "rgba(0,200,255,0.15)",
     purple: "rgba(168,85,247,0.15)",
     pink: "rgba(236,72,153,0.15)",
     amber: "rgba(245,158,11,0.15)",
+    emerald: "rgba(16,185,129,0.15)",
   };
   
   const spanClasses = {
@@ -350,6 +351,7 @@ function OwnerDashboard() {
   ];
 
   const portalModules = [
+    { id: "guardian", title: "Guardian Admin", description: "Security certifications, audits, revenue tracking", icon: <Shield className="w-6 h-6" />, href: "/owner-admin/guardian", glow: "emerald" as const },
     { id: "users", title: "User Management", description: "Waitlist, beta testers, whitelist, payments", icon: <Users className="w-6 h-6" />, href: "/owner-admin/users", glow: "cyan" as const },
     { id: "kyc", title: "KYC Verification", description: "Review and approve identity verifications", icon: <ShieldCheck className="w-6 h-6" />, href: "/owner-admin/kyc", glow: "purple" as const },
     { id: "analytics", title: "Analytics Dashboard", description: "Real visitor data, traffic sources, geographic insights", icon: <BarChart3 className="w-6 h-6" />, href: "/owner-admin/analytics", glow: "purple" as const },

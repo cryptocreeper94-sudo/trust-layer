@@ -34,6 +34,16 @@ export function generateMerkleRoot(hashes: string[]): string {
 
 export const guardianService = {
   async createCertification(data: InsertGuardianCertification) {
+    if (data.stripePaymentId) {
+      const existing = await db.select()
+        .from(guardianCertifications)
+        .where(eq(guardianCertifications.stripePaymentId, data.stripePaymentId))
+        .limit(1);
+      if (existing.length > 0) {
+        return existing[0];
+      }
+    }
+    
     const [certification] = await db.insert(guardianCertifications)
       .values(data)
       .returning();
@@ -208,6 +218,13 @@ export const guardianService = {
       })
       .where(eq(guardianBlockchainStamps.id, stampId))
       .returning();
+    
+    if (confirmed && confirmed.referenceType === "certification") {
+      await db.update(guardianCertifications)
+        .set({ blockchainTxHash: transactionHash })
+        .where(eq(guardianCertifications.id, confirmed.referenceId));
+    }
+    
     return confirmed;
   },
 
@@ -296,5 +313,52 @@ export const guardianService = {
       .where(eq(guardianCertifications.status, "completed"))
       .orderBy(desc(guardianCertifications.createdAt))
       .limit(limit);
+  },
+
+  async getAllCertifications() {
+    return db.select()
+      .from(guardianCertifications)
+      .orderBy(desc(guardianCertifications.createdAt));
+  },
+
+  async completeCertification(id: string, score: number, findings: string) {
+    if (typeof score !== "number" || score < 0 || score > 100) {
+      throw new Error("Score must be a number between 0 and 100");
+    }
+    if (!findings || findings.trim().length < 10) {
+      throw new Error("Findings must be at least 10 characters");
+    }
+    
+    const reportHash = generateDataHash({ id, score, findings, completedAt: new Date().toISOString() });
+    const validFrom = new Date();
+    const validUntil = new Date();
+    validUntil.setFullYear(validUntil.getFullYear() + 1);
+    
+    const [updated] = await db.update(guardianCertifications)
+      .set({ 
+        status: "completed", 
+        score,
+        reportHash,
+        findings,
+        validFrom,
+        validUntil,
+        updatedAt: new Date()
+      })
+      .where(eq(guardianCertifications.id, id))
+      .returning();
+    
+    if (updated) {
+      await this.createBlockchainStamp({
+        stampType: "certification_complete",
+        referenceId: id,
+        referenceType: "certification",
+        dataHash: reportHash,
+        chainId: "dwsc",
+        status: "pending",
+        metadata: JSON.stringify({ score, findings: findings.substring(0, 500) })
+      });
+    }
+    
+    return updated;
   }
 };
