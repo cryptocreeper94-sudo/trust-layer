@@ -11011,45 +11011,47 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   // =====================================================
-  // DAILY LOGIN REWARDS APIs
+  // DAILY LOGIN REWARDS APIs (24-hour real-time rule)
   // =====================================================
 
-  const DAILY_REWARDS = [10, 15, 20, 30, 50, 75, 100]; // Shells per streak day (cycles after 7)
+  const DAILY_REWARDS_SCHEDULE = [25, 35, 50, 65, 85, 110, 150]; // Shells per streak day (cycles after 7)
 
   app.get("/api/chronicles/daily-reward", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       
-      const [reward] = await db.select().from(dailyLoginRewards).where(eq(dailyLoginRewards.userId, userId));
+      const streak = await storage.getLoginStreak(userId);
       
-      if (!reward) {
+      if (!streak) {
         return res.json({ 
           canClaim: true, 
           currentStreak: 0, 
-          nextReward: DAILY_REWARDS[0],
+          nextReward: DAILY_REWARDS_SCHEDULE[0],
           longestStreak: 0,
-          totalLogins: 0
+          totalLogins: 0,
+          totalShellsEarned: 0
         });
       }
       
       const now = new Date();
-      const lastClaim = reward.lastClaimDate ? new Date(reward.lastClaimDate) : null;
-      const hoursSinceClaim = lastClaim ? (now.getTime() - lastClaim.getTime()) / (1000 * 60 * 60) : 999;
+      const lastLogin = streak.lastLoginAt ? new Date(streak.lastLoginAt) : null;
+      const hoursSinceLogin = lastLogin ? (now.getTime() - lastLogin.getTime()) / (1000 * 60 * 60) : 999;
       
-      const canClaim = hoursSinceClaim >= 20; // Can claim after 20 hours
-      const streakBroken = hoursSinceClaim > 48; // Streak breaks after 48 hours
-      const currentStreak = streakBroken ? 0 : reward.currentStreak;
-      const nextRewardIndex = currentStreak % DAILY_REWARDS.length;
+      const canClaim = hoursSinceLogin >= 24; // Strict 24-hour rule
+      const streakBroken = hoursSinceLogin > 48; // Streak breaks after 48 hours
+      const currentStreak = streakBroken ? 0 : streak.currentStreak;
+      const nextRewardIndex = currentStreak % DAILY_REWARDS_SCHEDULE.length;
       
       res.json({
         canClaim,
         currentStreak,
-        nextReward: DAILY_REWARDS[nextRewardIndex],
-        longestStreak: reward.longestStreak,
-        totalLogins: reward.totalLogins,
-        lastClaimDate: reward.lastClaimDate,
-        hoursUntilClaim: canClaim ? 0 : Math.max(0, 20 - hoursSinceClaim)
+        nextReward: DAILY_REWARDS_SCHEDULE[nextRewardIndex],
+        longestStreak: streak.longestStreak,
+        totalLogins: streak.totalLogins,
+        totalShellsEarned: streak.totalShellsEarned,
+        lastLoginAt: streak.lastLoginAt,
+        hoursUntilClaim: canClaim ? 0 : Math.max(0, Math.ceil(24 - hoursSinceLogin))
       });
     } catch (error: any) {
       res.status(500).json({ error: error.message || "Failed to get daily reward" });
@@ -11061,73 +11063,47 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       
-      const [existing] = await db.select().from(dailyLoginRewards).where(eq(dailyLoginRewards.userId, userId));
+      // Use the new storage method with 24-hour real-time rule
+      const result = await storage.checkInDaily(userId);
       
-      const now = new Date();
-      let currentStreak = 0;
-      let longestStreak = 0;
-      let totalLogins = 0;
-      
-      if (existing) {
-        const lastClaim = existing.lastClaimDate ? new Date(existing.lastClaimDate) : null;
-        const hoursSinceClaim = lastClaim ? (now.getTime() - lastClaim.getTime()) / (1000 * 60 * 60) : 999;
-        
-        if (hoursSinceClaim < 20) {
-          return res.status(400).json({ error: "Already claimed today", hoursUntilClaim: 20 - hoursSinceClaim });
-        }
-        
-        const streakBroken = hoursSinceClaim > 48;
-        currentStreak = streakBroken ? 1 : existing.currentStreak + 1;
-        longestStreak = Math.max(existing.longestStreak, currentStreak);
-        totalLogins = existing.totalLogins + 1;
-      } else {
-        currentStreak = 1;
-        longestStreak = 1;
-        totalLogins = 1;
-      }
-      
-      const rewardIndex = (currentStreak - 1) % DAILY_REWARDS.length;
-      const rewardAmount = DAILY_REWARDS[rewardIndex];
-      const multiplier = 1 + (currentStreak * 0.05); // 5% bonus per streak day
-      const finalReward = Math.floor(rewardAmount * multiplier);
-      
-      // Grant Shells
-      await storage.updateOrbsBalance(userId, finalReward, "Daily login reward");
-      
-      // Update or create reward record
-      if (existing) {
-        await db.update(dailyLoginRewards)
-          .set({
-            currentStreak,
-            longestStreak,
-            totalLogins,
-            lastClaimDate: now,
-            lastClaimReward: finalReward,
-            streakMultiplier: multiplier,
-            updatedAt: now
-          })
-          .where(eq(dailyLoginRewards.userId, userId));
-      } else {
-        await db.insert(dailyLoginRewards).values({
-          userId,
-          currentStreak,
-          longestStreak,
-          totalLogins,
-          lastClaimDate: now,
-          lastClaimReward: finalReward,
-          streakMultiplier: multiplier
+      if (!result.reward) {
+        return res.status(400).json({ 
+          error: result.message,
+          currentStreak: result.streak.currentStreak,
+          canClaim: false
         });
       }
       
+      // Grant Shells to the user's balance
+      const totalReward = result.reward.shellsAwarded + (result.reward.bonusAmount || 0);
+      await storage.updateOrbsBalance(userId, totalReward, "Daily login reward");
+      
       res.json({ 
         success: true, 
-        reward: finalReward, 
-        currentStreak,
-        multiplier,
-        message: `Day ${currentStreak} streak! +${finalReward} Shells`
+        reward: totalReward, 
+        baseReward: result.reward.shellsAwarded,
+        bonusType: result.reward.bonusType,
+        bonusAmount: result.reward.bonusAmount,
+        currentStreak: result.streak.currentStreak,
+        longestStreak: result.streak.longestStreak,
+        totalShellsEarned: result.streak.totalShellsEarned,
+        message: result.message
       });
     } catch (error: any) {
       res.status(500).json({ error: error.message || "Failed to claim reward" });
+    }
+  });
+
+  // Get reward history
+  app.get("/api/chronicles/daily-reward/history", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const history = await storage.getRewardHistory(userId, 30);
+      res.json({ history });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get history" });
     }
   });
 
