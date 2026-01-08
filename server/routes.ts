@@ -116,7 +116,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -10906,6 +10906,297 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error: any) {
       console.error("Save estate error:", error);
       res.status(500).json({ error: error.message || "Failed to save estate" });
+    }
+  });
+
+  // =====================================================
+  // CITY ZONING & PLOT MARKETPLACE APIs
+  // =====================================================
+
+  // Get all zones for an era
+  app.get("/api/chronicles/zones", async (req, res) => {
+    try {
+      const era = (req.query.era as string) || "present";
+      const zones = await db.select().from(cityZones).where(eq(cityZones.era, era));
+      res.json({ zones });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get zones" });
+    }
+  });
+
+  // Get plots in a zone
+  app.get("/api/chronicles/zones/:zoneId/plots", async (req, res) => {
+    try {
+      const { zoneId } = req.params;
+      const plots = await db.select().from(landPlots).where(eq(landPlots.zoneId, zoneId));
+      res.json({ plots });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get plots" });
+    }
+  });
+
+  // Get marketplace listings
+  app.get("/api/chronicles/marketplace", async (req, res) => {
+    try {
+      const listings = await db.select()
+        .from(plotListings)
+        .where(eq(plotListings.status, "active"))
+        .orderBy(desc(plotListings.createdAt))
+        .limit(50);
+      res.json({ listings });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get marketplace" });
+    }
+  });
+
+  // Purchase a plot
+  app.post("/api/chronicles/plots/:plotId/purchase", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { plotId } = req.params;
+      const [plot] = await db.select().from(landPlots).where(eq(landPlots.id, plotId));
+      
+      if (!plot) return res.status(404).json({ error: "Plot not found" });
+      if (plot.ownerId) return res.status(400).json({ error: "Plot already owned" });
+      
+      // Check user has enough Shells
+      const shellsBalance = await storage.getOrbsBalance(userId);
+      if (shellsBalance < plot.currentPrice) {
+        return res.status(400).json({ error: "Insufficient Shells", required: plot.currentPrice, balance: shellsBalance });
+      }
+      
+      // Deduct Shells and assign plot
+      await storage.updateOrbsBalance(userId, -plot.currentPrice, "Plot purchase");
+      await db.update(landPlots)
+        .set({ ownerId: userId, isForSale: false, purchasedAt: new Date() })
+        .where(eq(landPlots.id, plotId));
+      
+      // Update zone occupied count
+      await db.execute(sql`UPDATE city_zones SET occupied_plots = occupied_plots + 1 WHERE id = ${plot.zoneId}`);
+      
+      res.json({ success: true, message: "Plot purchased!" });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to purchase plot" });
+    }
+  });
+
+  // List plot for sale
+  app.post("/api/chronicles/plots/:plotId/list", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { plotId } = req.params;
+      const { askingPrice } = req.body;
+      
+      const [plot] = await db.select().from(landPlots).where(eq(landPlots.id, plotId));
+      if (!plot) return res.status(404).json({ error: "Plot not found" });
+      if (plot.ownerId !== userId) return res.status(403).json({ error: "You don't own this plot" });
+      
+      await db.insert(plotListings).values({
+        plotId,
+        sellerId: userId,
+        askingPrice: askingPrice || plot.currentPrice,
+        status: "active"
+      });
+      
+      await db.update(landPlots).set({ isForSale: true, listingPrice: askingPrice }).where(eq(landPlots.id, plotId));
+      
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to list plot" });
+    }
+  });
+
+  // =====================================================
+  // DAILY LOGIN REWARDS APIs
+  // =====================================================
+
+  const DAILY_REWARDS = [10, 15, 20, 30, 50, 75, 100]; // Shells per streak day (cycles after 7)
+
+  app.get("/api/chronicles/daily-reward", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const [reward] = await db.select().from(dailyLoginRewards).where(eq(dailyLoginRewards.userId, userId));
+      
+      if (!reward) {
+        return res.json({ 
+          canClaim: true, 
+          currentStreak: 0, 
+          nextReward: DAILY_REWARDS[0],
+          longestStreak: 0,
+          totalLogins: 0
+        });
+      }
+      
+      const now = new Date();
+      const lastClaim = reward.lastClaimDate ? new Date(reward.lastClaimDate) : null;
+      const hoursSinceClaim = lastClaim ? (now.getTime() - lastClaim.getTime()) / (1000 * 60 * 60) : 999;
+      
+      const canClaim = hoursSinceClaim >= 20; // Can claim after 20 hours
+      const streakBroken = hoursSinceClaim > 48; // Streak breaks after 48 hours
+      const currentStreak = streakBroken ? 0 : reward.currentStreak;
+      const nextRewardIndex = currentStreak % DAILY_REWARDS.length;
+      
+      res.json({
+        canClaim,
+        currentStreak,
+        nextReward: DAILY_REWARDS[nextRewardIndex],
+        longestStreak: reward.longestStreak,
+        totalLogins: reward.totalLogins,
+        lastClaimDate: reward.lastClaimDate,
+        hoursUntilClaim: canClaim ? 0 : Math.max(0, 20 - hoursSinceClaim)
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get daily reward" });
+    }
+  });
+
+  app.post("/api/chronicles/daily-reward/claim", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const [existing] = await db.select().from(dailyLoginRewards).where(eq(dailyLoginRewards.userId, userId));
+      
+      const now = new Date();
+      let currentStreak = 0;
+      let longestStreak = 0;
+      let totalLogins = 0;
+      
+      if (existing) {
+        const lastClaim = existing.lastClaimDate ? new Date(existing.lastClaimDate) : null;
+        const hoursSinceClaim = lastClaim ? (now.getTime() - lastClaim.getTime()) / (1000 * 60 * 60) : 999;
+        
+        if (hoursSinceClaim < 20) {
+          return res.status(400).json({ error: "Already claimed today", hoursUntilClaim: 20 - hoursSinceClaim });
+        }
+        
+        const streakBroken = hoursSinceClaim > 48;
+        currentStreak = streakBroken ? 1 : existing.currentStreak + 1;
+        longestStreak = Math.max(existing.longestStreak, currentStreak);
+        totalLogins = existing.totalLogins + 1;
+      } else {
+        currentStreak = 1;
+        longestStreak = 1;
+        totalLogins = 1;
+      }
+      
+      const rewardIndex = (currentStreak - 1) % DAILY_REWARDS.length;
+      const rewardAmount = DAILY_REWARDS[rewardIndex];
+      const multiplier = 1 + (currentStreak * 0.05); // 5% bonus per streak day
+      const finalReward = Math.floor(rewardAmount * multiplier);
+      
+      // Grant Shells
+      await storage.updateOrbsBalance(userId, finalReward, "Daily login reward");
+      
+      // Update or create reward record
+      if (existing) {
+        await db.update(dailyLoginRewards)
+          .set({
+            currentStreak,
+            longestStreak,
+            totalLogins,
+            lastClaimDate: now,
+            lastClaimReward: finalReward,
+            streakMultiplier: multiplier,
+            updatedAt: now
+          })
+          .where(eq(dailyLoginRewards.userId, userId));
+      } else {
+        await db.insert(dailyLoginRewards).values({
+          userId,
+          currentStreak,
+          longestStreak,
+          totalLogins,
+          lastClaimDate: now,
+          lastClaimReward: finalReward,
+          streakMultiplier: multiplier
+        });
+      }
+      
+      res.json({ 
+        success: true, 
+        reward: finalReward, 
+        currentStreak,
+        multiplier,
+        message: `Day ${currentStreak} streak! +${finalReward} Shells`
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to claim reward" });
+    }
+  });
+
+  // =====================================================
+  // BUSINESS ONBOARDING APIs
+  // =====================================================
+
+  app.post("/api/chronicles/business/claim", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { plotId, businessName, businessType, businessWebsite, businessEmail } = req.body;
+      
+      if (!plotId || !businessName || !businessType || !businessEmail) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+      
+      // Verify plot exists and is in commercial zone
+      const [plot] = await db.select().from(landPlots).where(eq(landPlots.id, plotId));
+      if (!plot) return res.status(404).json({ error: "Plot not found" });
+      
+      const [zone] = await db.select().from(cityZones).where(eq(cityZones.id, plot.zoneId));
+      if (!zone || (zone.zoneType !== "commercial" && zone.zoneType !== "mixed")) {
+        return res.status(400).json({ error: "Businesses can only claim commercial or mixed-use plots" });
+      }
+      
+      // Create business claim
+      const [claim] = await db.insert(businessClaims).values({
+        plotId,
+        businessName,
+        businessType,
+        businessWebsite,
+        businessEmail,
+        claimantUserId: userId,
+        verificationStatus: "pending"
+      }).returning();
+      
+      res.json({ success: true, claim, message: "Business claim submitted for verification" });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to submit claim" });
+    }
+  });
+
+  app.get("/api/chronicles/businesses", async (_req, res) => {
+    try {
+      const businesses = await db.select()
+        .from(businessClaims)
+        .where(eq(businessClaims.isActive, true))
+        .orderBy(desc(businessClaims.createdAt));
+      res.json({ businesses });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get businesses" });
+    }
+  });
+
+  // =====================================================
+  // ERA BUILDING TEMPLATES APIs
+  // =====================================================
+
+  app.get("/api/chronicles/era-buildings/:era", async (req, res) => {
+    try {
+      const { era } = req.params;
+      const templates = await db.select()
+        .from(eraBuildingTemplates)
+        .where(eq(eraBuildingTemplates.era, era));
+      res.json({ templates });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get era buildings" });
     }
   });
 

@@ -6,17 +6,65 @@ import {
   Home, TreeDeciduous, Mountain, Droplets, Store, Hammer,
   Plus, Minus, RotateCcw, Save, Coins, Lock, Sparkles,
   ChevronRight, User, Grid3X3, Eye, ShoppingBag, Crown,
-  Rocket, Building2, MapPin, Gift, Briefcase, Calendar, X
+  Rocket, Building2, MapPin, Gift, Briefcase, Calendar, X,
+  Timer, Flame, Clock, Zap, Map, ShoppingCart
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { CharacterPortrait } from "@/components/character-portrait";
 import { ChroniclesNPC, NPCChatButton } from "@/components/chronicles-npc";
+import { GlassCard } from "@/components/glass-card";
 import { apiRequest } from "@/lib/queryClient";
 import { toast } from "sonner";
+
+interface CityZone {
+  id: string;
+  era: string;
+  name: string;
+  description: string;
+  zoneType: string;
+  gridX: number;
+  gridY: number;
+  totalPlots: number;
+  occupiedPlots: number;
+}
+
+interface LandPlot {
+  id: string;
+  zoneId: string;
+  plotX: number;
+  plotY: number;
+  plotSize: string;
+  basePrice: number;
+  currentPrice: number;
+  ownerId: string | null;
+  isForSale: boolean;
+}
+
+interface DailyRewardData {
+  canClaim: boolean;
+  currentStreak: number;
+  nextReward: number;
+  longestStreak: number;
+  totalLogins: number;
+  hoursUntilClaim?: number;
+}
+
+interface EraBuildingTemplate {
+  id: string;
+  era: string;
+  buildingType: string;
+  displayName: string;
+  iconEmoji: string;
+  colorClass: string;
+  description: string;
+  baseCost: number;
+  unlockLevel: number;
+}
 
 type BuildingType = 
   | "empty"
@@ -100,7 +148,6 @@ export default function ChroniclesEstate() {
   const [showNPC, setShowNPC] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
-  const [showComingSoon, setShowComingSoon] = useState(true);
 
   const { data: shellsData } = useQuery({
     queryKey: ["/api/orbs/balance"],
@@ -154,6 +201,82 @@ export default function ChroniclesEstate() {
       toast.error("Failed to save", { description: error.message || "Please try again." });
     }
   });
+
+  const [selectedEra, setSelectedEra] = useState("present");
+  const [selectedZone, setSelectedZone] = useState<CityZone | null>(null);
+  const [activeTab, setActiveTab] = useState("builder");
+
+  const { data: zonesData } = useQuery({
+    queryKey: ["/api/chronicles/zones", selectedEra],
+    queryFn: async () => {
+      const res = await apiRequest("GET", `/api/chronicles/zones?era=${selectedEra}`);
+      return res.json();
+    },
+    enabled: !!user,
+  });
+
+  const { data: zonePlotsData, refetch: refetchPlots } = useQuery({
+    queryKey: ["/api/chronicles/zones", selectedZone?.id, "plots"],
+    queryFn: async () => {
+      const res = await apiRequest("GET", `/api/chronicles/zones/${selectedZone!.id}/plots`);
+      return res.json();
+    },
+    enabled: !!selectedZone,
+  });
+
+  const { data: dailyRewardData, refetch: refetchDailyReward } = useQuery<DailyRewardData>({
+    queryKey: ["/api/chronicles/daily-reward"],
+    queryFn: async () => {
+      const res = await apiRequest("GET", "/api/chronicles/daily-reward");
+      return res.json();
+    },
+    enabled: !!user,
+  });
+
+  const { data: eraBuildingsData } = useQuery({
+    queryKey: ["/api/chronicles/era-buildings", selectedEra],
+    queryFn: async () => {
+      const res = await apiRequest("GET", `/api/chronicles/era-buildings/${selectedEra}`);
+      return res.json();
+    },
+    enabled: !!user,
+  });
+
+  const claimDailyRewardMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest("POST", "/api/chronicles/daily-reward/claim");
+      return res.json();
+    },
+    onSuccess: (data) => {
+      refetchDailyReward();
+      queryClient.invalidateQueries({ queryKey: ["/api/orbs/balance"] });
+      toast.success(data.message || "Daily reward claimed!", {
+        description: `+${data.reward} Shells! Streak: ${data.currentStreak} days`
+      });
+    },
+    onError: (error: any) => {
+      toast.error("Could not claim reward", { description: error.message });
+    }
+  });
+
+  const purchasePlotMutation = useMutation({
+    mutationFn: async (plotId: string) => {
+      const res = await apiRequest("POST", `/api/chronicles/plots/${plotId}/purchase`);
+      return res.json();
+    },
+    onSuccess: () => {
+      refetchPlots();
+      queryClient.invalidateQueries({ queryKey: ["/api/orbs/balance"] });
+      toast.success("Plot purchased!", { description: "You now own this plot" });
+    },
+    onError: (error: any) => {
+      toast.error("Purchase failed", { description: error.message });
+    }
+  });
+
+  const zones: CityZone[] = zonesData?.zones || [];
+  const zonePlots: LandPlot[] = zonePlotsData?.plots || [];
+  const eraBuildings: EraBuildingTemplate[] = eraBuildingsData?.templates || [];
 
   const saveEstate = async () => {
     setIsSaving(true);
@@ -259,94 +382,52 @@ export default function ChroniclesEstate() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950">
-      {/* Coming Soon Features Modal */}
-      <AnimatePresence>
-        {showComingSoon && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-lg bg-gradient-to-b from-slate-900 to-slate-950 border border-cyan-500/30 rounded-2xl p-6 shadow-[0_0_60px_rgba(6,182,212,0.2)]"
+    <div className="min-h-screen bg-slate-950 relative overflow-hidden">
+      {/* Floating Ambient Orbs */}
+      <div className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse pointer-events-none" />
+      <div className="absolute bottom-40 right-10 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse pointer-events-none" style={{ animationDelay: "1s" }} />
+
+      {/* Daily Reward Banner */}
+      {dailyRewardData?.canClaim && (
+        <motion.div
+          initial={{ y: -100 }}
+          animate={{ y: 0 }}
+          className="bg-gradient-to-r from-amber-500/20 via-pink-500/20 to-purple-500/20 border-b border-amber-500/30"
+        >
+          <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-pink-500 flex items-center justify-center animate-pulse">
+                <Gift className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <p className="text-white font-semibold text-sm">Daily Reward Ready!</p>
+                <p className="text-amber-300 text-xs">
+                  Claim +{dailyRewardData.nextReward} Shells
+                  {dailyRewardData.currentStreak > 0 && ` (${dailyRewardData.currentStreak} day streak!)`}
+                </p>
+              </div>
+            </div>
+            <Button
+              onClick={() => claimDailyRewardMutation.mutate()}
+              disabled={claimDailyRewardMutation.isPending}
+              className="bg-gradient-to-r from-amber-500 to-pink-500 hover:from-amber-400 hover:to-pink-400 text-white font-semibold"
+              data-testid="button-claim-daily"
             >
-              <button
-                onClick={() => setShowComingSoon(false)}
-                className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
-                data-testid="button-close-coming-soon"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
-                  <Rocket className="w-8 h-8 text-white" />
-                </div>
-                <h2 className="text-2xl font-bold text-white mb-2">Major Update Coming!</h2>
-                <p className="text-slate-400">Exciting new features arriving within the next week</p>
-              </div>
-
-              <div className="space-y-3 mb-6">
-                <div className="flex items-start gap-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
-                  <MapPin className="w-5 h-5 text-cyan-400 mt-0.5 shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-white text-sm">City Zoning System</h3>
-                    <p className="text-xs text-slate-400">Residential & commercial districts, just like real cities</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
-                  <Building2 className="w-5 h-5 text-purple-400 mt-0.5 shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-white text-sm">Plot Marketplace</h3>
-                    <p className="text-xs text-slate-400">Buy and expand your land with Shells (and soon DWC)</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
-                  <Briefcase className="w-5 h-5 text-amber-400 mt-0.5 shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-white text-sm">Business Onboarding</h3>
-                    <p className="text-xs text-slate-400">Verified businesses get access to commercial properties</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
-                  <Gift className="w-5 h-5 text-pink-400 mt-0.5 shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-white text-sm">Daily Login Rewards</h3>
-                    <p className="text-xs text-slate-400">Earn Shells every day just for playing</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
-                  <Calendar className="w-5 h-5 text-green-400 mt-0.5 shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-white text-sm">Era-Appropriate Settlements</h3>
-                    <p className="text-xs text-slate-400">Each era has unique building styles and layouts</p>
-                  </div>
-                </div>
-              </div>
-
-              <Button
-                onClick={() => setShowComingSoon(false)}
-                className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500"
-                data-testid="button-got-it"
-              >
-                Got It - Let Me Build!
-              </Button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              {claimDailyRewardMutation.isPending ? (
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <>
+                  <Flame className="w-4 h-4 mr-1" />
+                  Claim Now
+                </>
+              )}
+            </Button>
+          </div>
+        </motion.div>
+      )}
 
       {/* Header */}
-      <div className="bg-slate-900/80 border-b border-slate-700 p-4">
+      <div className="bg-slate-900/80 border-b border-slate-700 p-4 relative z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button 
@@ -358,7 +439,9 @@ export default function ChroniclesEstate() {
               ← Back
             </Button>
             <div>
-              <h1 className="text-xl font-bold text-white">{personality.parallelSelfName}'s Estate</h1>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                {personality.parallelSelfName}'s Estate
+              </h1>
               <p className="text-sm text-slate-400">Season Zero - Build Your Legacy</p>
             </div>
           </div>
@@ -374,7 +457,257 @@ export default function ChroniclesEstate() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto p-4 md:p-6">
+      {/* Main Navigation Tabs */}
+      <div className="max-w-6xl mx-auto px-4 pt-4 relative z-10">
+        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+          {[
+            { id: "builder", label: "Estate Builder", icon: Home },
+            { id: "zones", label: "City Zones", icon: Map },
+            { id: "marketplace", label: "Plot Market", icon: ShoppingCart },
+            { id: "rewards", label: "Daily Rewards", icon: Gift },
+          ].map((tab) => (
+            <Button
+              key={tab.id}
+              variant={activeTab === tab.id ? "default" : "outline"}
+              onClick={() => setActiveTab(tab.id)}
+              className={activeTab === tab.id 
+                ? "bg-gradient-to-r from-cyan-500 to-purple-500 text-white shrink-0" 
+                : "border-slate-600 text-slate-300 shrink-0"
+              }
+              data-testid={`tab-${tab.id}`}
+            >
+              <tab.icon className="w-4 h-4 mr-2" />
+              {tab.label}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto p-4 md:p-6 relative z-10">
+        {/* City Zones Tab */}
+        {activeTab === "zones" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-6"
+          >
+            {/* Era Selector */}
+            <div className="flex gap-2 flex-wrap">
+              {[
+                { id: "present", label: "Present Day", emoji: "🏙️" },
+                { id: "medieval", label: "Medieval", emoji: "🏰" },
+                { id: "roman", label: "Roman Empire", emoji: "🏛️" },
+              ].map((era) => (
+                <Button
+                  key={era.id}
+                  variant={selectedEra === era.id ? "default" : "outline"}
+                  onClick={() => { setSelectedEra(era.id); setSelectedZone(null); }}
+                  className={selectedEra === era.id 
+                    ? "bg-gradient-to-r from-purple-500 to-pink-500" 
+                    : "border-slate-600"
+                  }
+                  data-testid={`era-${era.id}`}
+                >
+                  <span className="mr-2">{era.emoji}</span>
+                  {era.label}
+                </Button>
+              ))}
+            </div>
+
+            {/* Zones Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {zones.length === 0 && (
+                <div className="col-span-full text-center py-8">
+                  <Map className="w-12 h-12 mx-auto text-slate-600 mb-3" />
+                  <p className="text-slate-400">Loading city zones...</p>
+                </div>
+              )}
+              {zones.map((zone) => (
+                <GlassCard
+                  key={zone.id}
+                  glow
+                  className={`p-4 cursor-pointer transition-all ${
+                    selectedZone?.id === zone.id ? "ring-2 ring-cyan-400" : ""
+                  }`}
+                  onClick={() => setSelectedZone(zone)}
+                  data-testid={`zone-${zone.id}`}
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <h3 className="font-bold text-white">{zone.name}</h3>
+                      <p className="text-xs text-slate-400">{zone.description}</p>
+                    </div>
+                    <Badge className={
+                      zone.zoneType === "commercial" ? "bg-purple-500/20 text-purple-300 border-purple-500/30" :
+                      zone.zoneType === "residential" ? "bg-green-500/20 text-green-300 border-green-500/30" :
+                      zone.zoneType === "civic" ? "bg-blue-500/20 text-blue-300 border-blue-500/30" :
+                      "bg-amber-500/20 text-amber-300 border-amber-500/30"
+                    }>
+                      {zone.zoneType}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-slate-400">
+                      {zone.occupiedPlots}/{zone.totalPlots} plots taken
+                    </span>
+                    <Progress 
+                      value={(zone.occupiedPlots / zone.totalPlots) * 100} 
+                      className="w-20 h-2"
+                    />
+                  </div>
+                </GlassCard>
+              ))}
+            </div>
+
+            {/* Zone Plots */}
+            {selectedZone && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-6"
+              >
+                <GlassCard glow className="p-6">
+                  <h3 className="text-lg font-bold text-white mb-4">
+                    {selectedZone.name} - Available Plots
+                  </h3>
+                  <div className="grid grid-cols-4 gap-2">
+                    {zonePlots.map((plot) => (
+                      <div
+                        key={plot.id}
+                        className={`aspect-square rounded-lg border-2 flex flex-col items-center justify-center text-xs p-2 ${
+                          plot.ownerId 
+                            ? "bg-slate-700/50 border-slate-600 text-slate-500" 
+                            : "bg-slate-800/50 border-cyan-500/30 hover:border-cyan-400 cursor-pointer"
+                        }`}
+                        onClick={() => {
+                          if (!plot.ownerId) {
+                            if (confirm(`Purchase this ${plot.plotSize} plot for ${plot.currentPrice} Shells?`)) {
+                              purchasePlotMutation.mutate(plot.id);
+                            }
+                          }
+                        }}
+                        data-testid={`plot-${plot.id}`}
+                      >
+                        <span className={`text-lg ${plot.ownerId ? "opacity-30" : ""}`}>
+                          {plot.plotSize === "premium" ? "👑" : 
+                           plot.plotSize === "large" ? "🏠" : "📦"}
+                        </span>
+                        <span className={plot.ownerId ? "text-slate-500" : "text-cyan-300"}>
+                          {plot.ownerId ? "Owned" : `${plot.currentPrice}🐚`}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </GlassCard>
+              </motion.div>
+            )}
+          </motion.div>
+        )}
+
+        {/* Marketplace Tab */}
+        {activeTab === "marketplace" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <GlassCard glow className="p-6 text-center">
+              <ShoppingCart className="w-16 h-16 mx-auto text-cyan-400 mb-4" />
+              <h2 className="text-2xl font-bold text-white mb-2">Plot Marketplace</h2>
+              <p className="text-slate-400 mb-4">
+                Buy and sell plots with other players. Coming soon with peer-to-peer trading!
+              </p>
+              <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30">
+                Phase 2 Feature
+              </Badge>
+            </GlassCard>
+          </motion.div>
+        )}
+
+        {/* Daily Rewards Tab */}
+        {activeTab === "rewards" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-lg mx-auto"
+          >
+            <GlassCard glow className="p-6">
+              <div className="text-center mb-6">
+                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-amber-400 to-pink-500 flex items-center justify-center shadow-[0_0_40px_rgba(251,191,36,0.3)]">
+                  <Gift className="w-10 h-10 text-white" />
+                </div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-amber-400 to-pink-400 bg-clip-text text-transparent">
+                  Daily Login Rewards
+                </h2>
+                <p className="text-slate-400 text-sm mt-1">Claim your reward every 20 hours</p>
+              </div>
+
+              <div className="grid grid-cols-7 gap-2 mb-6">
+                {[10, 15, 20, 30, 50, 75, 100].map((reward, idx) => {
+                  const currentDay = (dailyRewardData?.currentStreak || 0) % 7;
+                  const isPast = idx < currentDay;
+                  const isCurrent = idx === currentDay;
+                  return (
+                    <div
+                      key={idx}
+                      className={`aspect-square rounded-lg flex flex-col items-center justify-center text-xs ${
+                        isPast 
+                          ? "bg-green-500/20 border border-green-500/30" 
+                          : isCurrent 
+                            ? "bg-amber-500/20 border-2 border-amber-400 animate-pulse" 
+                            : "bg-slate-800/50 border border-slate-700"
+                      }`}
+                    >
+                      <span className="font-bold text-white">{reward}</span>
+                      <span className="text-slate-400">🐚</span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="space-y-3 mb-6">
+                <div className="flex justify-between text-sm">
+                  <span className="text-slate-400">Current Streak</span>
+                  <span className="text-amber-400 font-bold flex items-center gap-1">
+                    <Flame className="w-4 h-4" />
+                    {dailyRewardData?.currentStreak || 0} days
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-slate-400">Longest Streak</span>
+                  <span className="text-purple-400">{dailyRewardData?.longestStreak || 0} days</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-slate-400">Total Logins</span>
+                  <span className="text-cyan-400">{dailyRewardData?.totalLogins || 0}</span>
+                </div>
+              </div>
+
+              <Button
+                onClick={() => claimDailyRewardMutation.mutate()}
+                disabled={!dailyRewardData?.canClaim || claimDailyRewardMutation.isPending}
+                className="w-full bg-gradient-to-r from-amber-500 to-pink-500 hover:from-amber-400 hover:to-pink-400 disabled:opacity-50"
+                data-testid="button-claim-reward-page"
+              >
+                {claimDailyRewardMutation.isPending ? (
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : dailyRewardData?.canClaim ? (
+                  <>
+                    <Gift className="w-4 h-4 mr-2" />
+                    Claim +{dailyRewardData.nextReward} Shells
+                  </>
+                ) : (
+                  <>
+                    <Clock className="w-4 h-4 mr-2" />
+                    Available in {Math.ceil(dailyRewardData?.hoursUntilClaim || 0)}h
+                  </>
+                )}
+              </Button>
+            </GlassCard>
+          </motion.div>
+        )}
+
+        {/* Builder Tab */}
+        {activeTab === "builder" && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Character Portrait & Stats */}
           <Card className="bg-slate-900/80 border-slate-700 p-6">
@@ -550,29 +883,30 @@ export default function ChroniclesEstate() {
               </p>
             </Card>
           </div>
-        </div>
 
-        {/* Coming Soon Features */}
-        <Card className="mt-6 bg-slate-900/80 border-slate-700 p-6">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-purple-400" />
-            Coming in Future Seasons
-          </h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { title: "NPC Visitors", desc: "Characters visit your estate" },
-              { title: "Player Trading", desc: "Trade items with others" },
-              { title: "Era Themes", desc: "Transform your estate by era" },
-              { title: "Achievements", desc: "Unlock rewards for building" },
-            ].map((feature, i) => (
-              <div key={i} className="text-center p-3 bg-slate-800/50 rounded-lg border border-slate-700">
-                <Lock className="w-6 h-6 mx-auto text-slate-500 mb-2" />
-                <p className="text-sm font-medium text-white">{feature.title}</p>
-                <p className="text-xs text-slate-400">{feature.desc}</p>
-              </div>
-            ))}
-          </div>
-        </Card>
+          {/* Coming Soon Features */}
+          <Card className="mt-6 bg-slate-900/80 border-slate-700 p-6 lg:col-span-3">
+            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-purple-400" />
+              Coming in Future Seasons
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { title: "NPC Visitors", desc: "Characters visit your estate" },
+                { title: "Player Trading", desc: "Trade items with others" },
+                { title: "Era Themes", desc: "Transform your estate by era" },
+                { title: "Achievements", desc: "Unlock rewards for building" },
+              ].map((feature, i) => (
+                <div key={i} className="text-center p-3 bg-slate-800/50 rounded-lg border border-slate-700">
+                  <Lock className="w-6 h-6 mx-auto text-slate-500 mb-2" />
+                  <p className="text-sm font-medium text-white">{feature.title}</p>
+                  <p className="text-xs text-slate-400">{feature.desc}</p>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
+        )}
       </div>
 
       {/* NPC Chat */}

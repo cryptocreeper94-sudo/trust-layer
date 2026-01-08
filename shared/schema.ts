@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, boolean, serial, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, boolean, serial, integer, real } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -2770,6 +2770,193 @@ export const insertPlayerEstateSchema = createInsertSchema(playerEstates).omit({
 
 export type PlayerEstate = typeof playerEstates.$inferSelect;
 export type InsertPlayerEstate = z.infer<typeof insertPlayerEstateSchema>;
+
+// =====================================================
+// CITY ZONING & PLOT MARKETPLACE SYSTEM
+// =====================================================
+
+// City Zones - Define areas in the world with specific types
+export const cityZones = pgTable("city_zones", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  era: text("era").notNull().default("present"), // Which era this zone belongs to
+  name: text("name").notNull(),
+  description: text("description"),
+  
+  // Zone type determines what can be built
+  zoneType: text("zone_type").notNull(), // 'residential', 'commercial', 'civic', 'mixed', 'nature'
+  
+  // Zone boundaries (grid coordinates in the world map)
+  gridX: integer("grid_x").notNull(),
+  gridY: integer("grid_y").notNull(),
+  width: integer("width").notNull().default(4),
+  height: integer("height").notNull().default(4),
+  
+  // Stats
+  totalPlots: integer("total_plots").notNull().default(16),
+  occupiedPlots: integer("occupied_plots").notNull().default(0),
+  
+  // Era-specific styling
+  architectureStyle: text("architecture_style"), // 'medieval', 'roman', 'victorian', 'modern', 'futuristic'
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertCityZoneSchema = createInsertSchema(cityZones).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type CityZone = typeof cityZones.$inferSelect;
+export type InsertCityZone = z.infer<typeof insertCityZoneSchema>;
+
+// Land Plots - Individual buildable plots within zones
+export const landPlots = pgTable("land_plots", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  zoneId: varchar("zone_id").notNull(),
+  
+  // Plot location within zone
+  plotX: integer("plot_x").notNull(),
+  plotY: integer("plot_y").notNull(),
+  
+  // Ownership
+  ownerId: text("owner_id"), // null = available for purchase
+  ownerType: text("owner_type").default("player"), // 'player', 'business', 'npc', 'civic'
+  
+  // Plot details
+  plotSize: text("plot_size").notNull().default("standard"), // 'small', 'standard', 'large', 'premium'
+  basePrice: integer("base_price").notNull().default(100), // in Shells
+  currentPrice: integer("current_price").notNull().default(100), // market-adjusted
+  
+  // Building on this plot (JSON of building data)
+  buildingData: text("building_data"), // JSON
+  
+  // For sale
+  isForSale: boolean("is_for_sale").notNull().default(true),
+  listingPrice: integer("listing_price"),
+  
+  purchasedAt: timestamp("purchased_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertLandPlotSchema = createInsertSchema(landPlots).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type LandPlot = typeof landPlots.$inferSelect;
+export type InsertLandPlot = z.infer<typeof insertLandPlotSchema>;
+
+// Plot Marketplace Listings - Active sales/trades
+export const plotListings = pgTable("plot_listings", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  plotId: varchar("plot_id").notNull(),
+  sellerId: text("seller_id").notNull(),
+  
+  listingType: text("listing_type").notNull().default("sale"), // 'sale', 'auction', 'trade'
+  askingPrice: integer("asking_price").notNull(),
+  
+  // Auction fields
+  currentBid: integer("current_bid"),
+  highestBidderId: text("highest_bidder_id"),
+  auctionEndsAt: timestamp("auction_ends_at"),
+  
+  status: text("status").notNull().default("active"), // 'active', 'sold', 'cancelled', 'expired'
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  expiresAt: timestamp("expires_at"),
+});
+
+export const insertPlotListingSchema = createInsertSchema(plotListings).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type PlotListing = typeof plotListings.$inferSelect;
+export type InsertPlotListing = z.infer<typeof insertPlotListingSchema>;
+
+// Daily Login Rewards - Track player streaks and rewards
+export const dailyLoginRewards = pgTable("daily_login_rewards", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  
+  // Streak tracking
+  currentStreak: integer("current_streak").notNull().default(0),
+  longestStreak: integer("longest_streak").notNull().default(0),
+  totalLogins: integer("total_logins").notNull().default(0),
+  
+  // Last claim info
+  lastClaimDate: timestamp("last_claim_date"),
+  lastClaimReward: integer("last_claim_reward"),
+  
+  // Bonus multipliers
+  streakMultiplier: real("streak_multiplier").notNull().default(1.0),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertDailyLoginRewardSchema = createInsertSchema(dailyLoginRewards).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type DailyLoginReward = typeof dailyLoginRewards.$inferSelect;
+export type InsertDailyLoginReward = z.infer<typeof insertDailyLoginRewardSchema>;
+
+// Business Claims - Real businesses claiming commercial plots
+export const businessClaims = pgTable("business_claims", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  plotId: varchar("plot_id").notNull(),
+  
+  // Business info
+  businessName: text("business_name").notNull(),
+  businessType: text("business_type").notNull(), // 'retail', 'restaurant', 'service', 'entertainment'
+  businessWebsite: text("business_website"),
+  businessEmail: text("business_email").notNull(),
+  
+  // Owner info
+  claimantUserId: text("claimant_user_id"),
+  
+  // Verification
+  verificationStatus: text("verification_status").notNull().default("pending"), // 'pending', 'verified', 'rejected'
+  verifiedAt: timestamp("verified_at"),
+  
+  // In-game presence
+  storefrontData: text("storefront_data"), // JSON for in-game appearance
+  isActive: boolean("is_active").notNull().default(false),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertBusinessClaimSchema = createInsertSchema(businessClaims).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type BusinessClaim = typeof businessClaims.$inferSelect;
+export type InsertBusinessClaim = z.infer<typeof insertBusinessClaimSchema>;
+
+// Era Building Templates - Define what buildings look like in each era
+export const eraBuildingTemplates = pgTable("era_building_templates", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  era: text("era").notNull(),
+  buildingType: text("building_type").notNull(), // matches BuildingType from frontend
+  
+  // Visual customization
+  displayName: text("display_name").notNull(), // Era-specific name (e.g., "Villa" in Roman, "Cottage" in Medieval)
+  iconEmoji: text("icon_emoji"),
+  colorClass: text("color_class"), // Tailwind color class
+  description: text("description"),
+  
+  // Era-specific stats
+  baseCost: integer("base_cost").notNull().default(100),
+  unlockLevel: integer("unlock_level").notNull().default(0),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type EraBuildingTemplate = typeof eraBuildingTemplates.$inferSelect;
 
 // AI Conversation Memory - For context continuity
 export const chroniclesConversations = pgTable("chronicles_conversations", {
