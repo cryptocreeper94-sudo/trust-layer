@@ -51,6 +51,8 @@ interface DailyRewardData {
   nextReward: number;
   longestStreak: number;
   totalLogins: number;
+  totalShellsEarned?: number;
+  lastLoginAt?: string;
   hoursUntilClaim?: number;
 }
 
