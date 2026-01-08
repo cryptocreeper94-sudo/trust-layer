@@ -40,15 +40,41 @@ export const SHELL_BUNDLES = {
 // Legacy alias for backward compatibility
 export const SHELL_PACKAGES = SHELL_BUNDLES;
 
-// Engagement earning rates
+// Engagement earning rates - Generous F2P system
+// Players should be able to earn ~100-200 Shells/day through normal gameplay
 export const SHELL_EARN_RATES = {
-  daily_login: 5,
-  send_message: 1,
-  receive_reaction: 2,
-  join_community: 10,
-  referral_signup: 50,
-  first_purchase: 25,
-  share_content: 3,
+  // Core Daily Activities (repeatable)
+  daily_login: 25,              // Base daily bonus (separate from streak rewards)
+  send_message: 2,              // Community chat
+  receive_reaction: 3,          // Getting likes
+  join_community: 25,           // First time joining
+  share_content: 5,             // Sharing/posting
+  
+  // Daily Quests (3 per day, resetting)
+  daily_quest_easy: 15,         // Easy quest completion
+  daily_quest_medium: 30,       // Medium quest completion  
+  daily_quest_hard: 50,         // Hard quest completion
+  
+  // Weekly Challenges
+  weekly_challenge: 150,        // Complete weekly challenge
+  weekly_all_dailies: 100,      // Complete all 7 days of dailies
+  
+  // Chronicles Gameplay
+  story_choice: 10,             // Make a narrative choice
+  complete_mission: 35,         // Finish a mission
+  era_first_visit: 50,          // First time visiting a new era
+  estate_upgrade: 20,           // Building something on estate
+  npc_conversation: 5,          // Talk to NPCs
+  
+  // Achievements (one-time)
+  achievement_bronze: 25,       // Bronze tier achievement
+  achievement_silver: 75,       // Silver tier achievement
+  achievement_gold: 200,        // Gold tier achievement
+  
+  // Social
+  referral_signup: 100,         // Someone signs up with your code
+  first_purchase: 50,           // Your first Shell purchase (bonus)
+  invite_friend: 25,            // Invite sent (if they join)
 } as const;
 
 // Feature costs

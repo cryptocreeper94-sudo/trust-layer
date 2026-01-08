@@ -10580,6 +10580,24 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         lastLoginAt: new Date(),
       }).returning();
       
+      // Grant welcome bonus Shells to new players (F2P friendly start)
+      const WELCOME_BONUS_SHELLS = 250;
+      try {
+        await shellsService.addShells(
+          account.id,
+          account.username,
+          WELCOME_BONUS_SHELLS,
+          "bonus",
+          "Welcome to DarkWave Chronicles! Here's your starter Shells to begin your journey.",
+          account.id,
+          "welcome_bonus"
+        );
+        console.log(`[Chronicles] Granted ${WELCOME_BONUS_SHELLS} welcome Shells to new user ${account.username}`);
+      } catch (shellError) {
+        console.error("[Chronicles] Failed to grant welcome Shells:", shellError);
+        // Don't fail registration if Shell grant fails
+      }
+      
       res.json({
         success: true,
         account: {
@@ -10884,6 +10902,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       
       const [existing] = await db.select().from(playerEstates).where(eq(playerEstates.userId, userId));
       
+      const previousBuildings = existing?.totalBuildings || 0;
+      
       if (existing) {
         await db.update(playerEstates)
           .set({
@@ -10902,7 +10922,22 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         });
       }
       
-      res.json({ success: true });
+      // Award Shells for estate upgrades (building new structures) - F2P reward
+      let shellsEarned = 0;
+      const newBuildings = (totalBuildings || 1) - previousBuildings;
+      if (newBuildings > 0) {
+        try {
+          const username = req.user?.username || req.user?.firstName || "Player";
+          for (let i = 0; i < Math.min(newBuildings, 5); i++) { // Cap at 5 per save to prevent abuse
+            await shellsService.awardEngagementShells(userId, username, "estate_upgrade");
+          }
+          shellsEarned = SHELL_EARN_RATES.estate_upgrade * Math.min(newBuildings, 5);
+        } catch (shellErr) {
+          console.warn("[Chronicles] Failed to award estate_upgrade Shells:", shellErr);
+        }
+      }
+      
+      res.json({ success: true, shellsEarned });
     } catch (error: any) {
       console.error("Save estate error:", error);
       res.status(500).json({ error: error.message || "Failed to save estate" });
@@ -11074,9 +11109,24 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         });
       }
       
-      // Grant Shells to the user's balance
+      // Grant Shells to the user's balance via the Shells ledger
       const totalReward = result.reward.shellsAwarded + (result.reward.bonusAmount || 0);
-      await storage.updateOrbsBalance(userId, totalReward, "Daily login reward");
+      const username = req.user?.username || req.user?.firstName || "Player";
+      try {
+        await shellsService.addShells(
+          userId, 
+          username, 
+          totalReward, 
+          "bonus", 
+          `Daily login reward (Day ${result.streak.currentStreak})`,
+          `daily_${Date.now()}`,
+          "daily_login"
+        );
+      } catch (shellErr) {
+        // Fallback to legacy orbs balance if Shell ledger fails
+        await storage.updateOrbsBalance(userId, totalReward, "Daily login reward");
+        console.warn("[Daily Reward] Fell back to orbs balance:", shellErr);
+      }
       
       res.json({ 
         success: true, 
@@ -11272,7 +11322,17 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         console.warn(`[Credits] Choice processed but deduction failed for user ${userId} - returning free result`);
       }
       
-      res.json({ ...result, creditsUsed: creditsResult.success ? CREDIT_COSTS.CHOICE_PROCESSING : 0, creditsRemaining: creditsResult.newBalance });
+      // Award Shells for making a story choice (F2P reward)
+      let shellsEarned = 0;
+      try {
+        const username = req.user?.username || req.user?.firstName || "Player";
+        await shellsService.awardEngagementShells(userId, username, "story_choice");
+        shellsEarned = SHELL_EARN_RATES.story_choice;
+      } catch (shellErr) {
+        console.warn("[Chronicles] Failed to award story_choice Shells:", shellErr);
+      }
+      
+      res.json({ ...result, creditsUsed: creditsResult.success ? CREDIT_COSTS.CHOICE_PROCESSING : 0, creditsRemaining: creditsResult.newBalance, shellsEarned });
     } catch (error: any) {
       console.error("Process choice error:", error);
       res.status(500).json({ error: error.message || "Failed to process choice" });
@@ -11489,7 +11549,18 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       }
       
       const response = await chroniclesGameService.talkToNpc(characterId || "default", npcId, message);
-      res.json(response);
+      
+      // Award Shells for NPC conversation (F2P reward)
+      let shellsEarned = 0;
+      try {
+        const username = req.user?.username || req.user?.firstName || "Player";
+        await shellsService.awardEngagementShells(userId, username, "npc_conversation");
+        shellsEarned = SHELL_EARN_RATES.npc_conversation;
+      } catch (shellErr) {
+        // Silently fail - NPC conversations are casual
+      }
+      
+      res.json({ ...response, shellsEarned });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
@@ -13975,21 +14046,27 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.post("/api/shells/earn", isAuthenticated, async (req: any, res) => {
+  app.post("/api/shells/earn", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
-      const username = req.user?.claims?.firstName || req.user?.firstName || "User";
+      const username = req.user?.claims?.firstName || req.user?.firstName || req.user?.username || "User";
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       
       const { action } = req.body;
       if (!action || !SHELL_EARN_RATES[action as keyof typeof SHELL_EARN_RATES]) {
-        return res.status(400).json({ error: "Invalid action" });
+        return res.status(400).json({ error: "Invalid action", validActions: Object.keys(SHELL_EARN_RATES) });
       }
       
       const transaction = await shellsService.awardEngagementShells(userId, username, action as keyof typeof SHELL_EARN_RATES);
       const balance = await shellsService.getBalance(userId);
       
-      res.json({ success: true, transaction, balance });
+      res.json({ success: true, transaction, balance, earned: SHELL_EARN_RATES[action as keyof typeof SHELL_EARN_RATES] });
     } catch (error) {
       console.error("Earn shells error:", error);
       res.status(500).json({ error: "Failed to earn shells" });
