@@ -11981,6 +11981,18 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // Apply 2026 updated marketing posts (Owner only)
+  app.post("/api/marketing/apply-2026-update", ownerAuthMiddleware, async (_req, res) => {
+    try {
+      const { seedUpdatedMarketingPosts } = await import("./seed-marketing-2026");
+      const result = await seedUpdatedMarketingPosts();
+      res.json(result);
+    } catch (error: any) {
+      console.error("Apply 2026 update error:", error);
+      res.status(500).json({ error: error.message || "Failed to apply update" });
+    }
+  });
+
   app.get("/api/owner/analytics", ownerAuthMiddleware, async (req, res) => {
     try {
       const host = validateHost(req.query.host as string);
