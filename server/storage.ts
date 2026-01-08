@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type ReferralCode, type InsertReferralCode, type Referral, type InsertReferral, type ReferralEvent, type InsertReferralEvent, type AffiliateTierRecord, type InsertAffiliateTier, type CommissionPayout, type InsertCommissionPayout, type AffiliateProfile, type InsertAffiliateProfile, type FraudFlag, type InsertFraudFlag, type MarketingPost, type InsertMarketingPost, type MarketingDeployLog, type InsertMarketingDeployLog, type MarketingScheduleConfig, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, type BlockchainDomain, type InsertBlockchainDomain, type DomainRecord, type InsertDomainRecord, type DomainTransfer, type InsertDomainTransfer, type ChronicleSponsorshipSlot, type InsertChronicleSponsorshipSlot, type DomainSponsorshipClaim, type InsertDomainSponsorshipClaim, type EarlyAdopterProgram, type TreasuryAllocation, type TreasuryLedgerEntry, type SeoConfig, type InsertSeoConfig, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, webhookLogs, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory, blockchainDomains, domainRecords, domainTransfers, chronicleSponsorshipSlots, domainSponsorshipClaims, earlyAdopterProgram, marketingPosts, marketingDeployLogs, marketingScheduleConfig, treasuryAllocations, treasuryLedger, seoConfigs, referralCodes, referrals, referralEvents, affiliateTiers, commissionPayouts, affiliateProfiles, fraudFlags, signupCounter, arcadeLeaderboard, type ArcadeLeaderboardEntry, type InsertArcadeLeaderboardEntry, cityZones, landPlots, type CityZone, type InsertCityZone, type LandPlot, type InsertLandPlot } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type ReferralCode, type InsertReferralCode, type Referral, type InsertReferral, type ReferralEvent, type InsertReferralEvent, type AffiliateTierRecord, type InsertAffiliateTier, type CommissionPayout, type InsertCommissionPayout, type AffiliateProfile, type InsertAffiliateProfile, type FraudFlag, type InsertFraudFlag, type MarketingPost, type InsertMarketingPost, type MarketingDeployLog, type InsertMarketingDeployLog, type MarketingScheduleConfig, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, type BlockchainDomain, type InsertBlockchainDomain, type DomainRecord, type InsertDomainRecord, type DomainTransfer, type InsertDomainTransfer, type ChronicleSponsorshipSlot, type InsertChronicleSponsorshipSlot, type DomainSponsorshipClaim, type InsertDomainSponsorshipClaim, type EarlyAdopterProgram, type TreasuryAllocation, type TreasuryLedgerEntry, type SeoConfig, type InsertSeoConfig, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, webhookLogs, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory, blockchainDomains, domainRecords, domainTransfers, chronicleSponsorshipSlots, domainSponsorshipClaims, earlyAdopterProgram, marketingPosts, marketingDeployLogs, marketingScheduleConfig, treasuryAllocations, treasuryLedger, seoConfigs, referralCodes, referrals, referralEvents, affiliateTiers, commissionPayouts, affiliateProfiles, fraudFlags, signupCounter, arcadeLeaderboard, type ArcadeLeaderboardEntry, type InsertArcadeLeaderboardEntry, cityZones, landPlots, type CityZone, type InsertCityZone, type LandPlot, type InsertLandPlot, chronicleLoginStreaks, chronicleDailyRewards, type ChronicleLoginStreak, type ChronicleDailyReward } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, asc, count, and, lt } from "drizzle-orm";
 import crypto from "crypto";
@@ -308,6 +308,11 @@ export interface IStorage {
   createLandPlot(data: InsertLandPlot): Promise<LandPlot>;
   updateLandPlot(id: string, data: Partial<InsertLandPlot>): Promise<LandPlot | undefined>;
   purchasePlot(plotId: string, buyerId: string, price: number): Promise<LandPlot | undefined>;
+  
+  // Daily Login Streaks (24-hour real-time rule)
+  getLoginStreak(userId: string): Promise<ChronicleLoginStreak | undefined>;
+  checkInDaily(userId: string): Promise<{ streak: ChronicleLoginStreak; reward: ChronicleDailyReward | null; message: string }>;
+  getRewardHistory(userId: string, limit?: number): Promise<ChronicleDailyReward[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -2455,6 +2460,103 @@ export class DatabaseStorage implements IStorage {
     }
     
     return plot;
+  }
+
+  async getLoginStreak(userId: string): Promise<ChronicleLoginStreak | undefined> {
+    const [streak] = await db.select().from(chronicleLoginStreaks).where(eq(chronicleLoginStreaks.userId, userId));
+    return streak;
+  }
+
+  async checkInDaily(userId: string): Promise<{ streak: ChronicleLoginStreak; reward: ChronicleDailyReward | null; message: string }> {
+    const now = new Date();
+    let streak = await this.getLoginStreak(userId);
+    
+    const DAILY_REWARDS = [25, 35, 50, 65, 85, 110, 150];
+    const MILESTONE_BONUSES: Record<number, number> = { 7: 100, 14: 250, 30: 500, 60: 1000, 90: 2000 };
+    
+    if (!streak) {
+      const [newStreak] = await db.insert(chronicleLoginStreaks).values({
+        userId,
+        currentStreak: 1,
+        longestStreak: 1,
+        totalLogins: 1,
+        lastLoginAt: now,
+        lastRewardClaimedAt: now,
+        totalShellsEarned: DAILY_REWARDS[0],
+      }).returning();
+      
+      const [reward] = await db.insert(chronicleDailyRewards).values({
+        userId,
+        day: 1,
+        shellsAwarded: DAILY_REWARDS[0],
+      }).returning();
+      
+      return { streak: newStreak, reward, message: "Welcome! Day 1 streak started. +25 Shells" };
+    }
+    
+    const lastLogin = streak.lastLoginAt ? new Date(streak.lastLoginAt) : null;
+    const hoursSinceLastLogin = lastLogin ? (now.getTime() - lastLogin.getTime()) / (1000 * 60 * 60) : Infinity;
+    
+    if (hoursSinceLastLogin < 24) {
+      return { streak, reward: null, message: "Already checked in today. Come back in " + Math.ceil(24 - hoursSinceLastLogin) + " hours!" };
+    }
+    
+    let newStreakCount = streak.currentStreak;
+    let streakMessage = "";
+    
+    if (hoursSinceLastLogin >= 24 && hoursSinceLastLogin < 48) {
+      newStreakCount = streak.currentStreak + 1;
+      streakMessage = `Day ${newStreakCount} streak!`;
+    } else {
+      newStreakCount = 1;
+      streakMessage = "Streak reset. Day 1 begins!";
+    }
+    
+    const dayIndex = Math.min(newStreakCount - 1, 6);
+    let shellsToAward = DAILY_REWARDS[dayIndex];
+    let bonusType: string | null = null;
+    let bonusAmount = 0;
+    
+    if (MILESTONE_BONUSES[newStreakCount]) {
+      bonusAmount = MILESTONE_BONUSES[newStreakCount];
+      bonusType = "milestone";
+      streakMessage += ` MILESTONE BONUS: +${bonusAmount} Shells!`;
+    }
+    
+    if (newStreakCount % 7 === 0 && !bonusType) {
+      bonusAmount = 50;
+      bonusType = "weekly_jackpot";
+      streakMessage += " Weekly jackpot! +50 bonus Shells!";
+    }
+    
+    const totalShells = shellsToAward + bonusAmount;
+    
+    const [updatedStreak] = await db.update(chronicleLoginStreaks).set({
+      currentStreak: newStreakCount,
+      longestStreak: Math.max(newStreakCount, streak.longestStreak),
+      totalLogins: streak.totalLogins + 1,
+      lastLoginAt: now,
+      lastRewardClaimedAt: now,
+      totalShellsEarned: streak.totalShellsEarned + totalShells,
+      updatedAt: now,
+    }).where(eq(chronicleLoginStreaks.userId, userId)).returning();
+    
+    const [reward] = await db.insert(chronicleDailyRewards).values({
+      userId,
+      day: ((newStreakCount - 1) % 7) + 1,
+      shellsAwarded: shellsToAward,
+      bonusType,
+      bonusAmount,
+    }).returning();
+    
+    return { streak: updatedStreak, reward, message: `${streakMessage} +${totalShells} Shells` };
+  }
+
+  async getRewardHistory(userId: string, limit: number = 30): Promise<ChronicleDailyReward[]> {
+    return db.select().from(chronicleDailyRewards)
+      .where(eq(chronicleDailyRewards.userId, userId))
+      .orderBy(desc(chronicleDailyRewards.claimedAt))
+      .limit(limit);
   }
 }
 
