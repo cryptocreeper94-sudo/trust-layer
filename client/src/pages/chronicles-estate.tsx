@@ -150,6 +150,9 @@ export default function ChroniclesEstate() {
   const [showNPC, setShowNPC] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(() => {
+    return !localStorage.getItem("chronicles_welcomed");
+  });
 
   const { data: shellsData } = useQuery({
     queryKey: ["/api/orbs/balance"],
@@ -388,6 +391,85 @@ export default function ChroniclesEstate() {
       {/* Floating Ambient Orbs */}
       <div className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse pointer-events-none" />
       <div className="absolute bottom-40 right-10 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse pointer-events-none" style={{ animationDelay: "1s" }} />
+
+      {/* Chronicle Initiation Welcome Modal */}
+      <AnimatePresence>
+        {showWelcome && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="max-w-lg w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl border border-cyan-500/30 shadow-[0_0_60px_rgba(0,255,255,0.2)] overflow-hidden"
+            >
+              <div className="p-6 text-center">
+                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center">
+                  <Sparkles className="w-10 h-10 text-white" />
+                </div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+                  Welcome to the Veil
+                </h2>
+                <p className="text-slate-300 mb-6">
+                  You are about to live a <span className="text-cyan-400 font-semibold">parallel life</span> - 
+                  an alternate version of yourself across time and space.
+                </p>
+                
+                <div className="space-y-4 text-left mb-6">
+                  <div className="flex gap-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700">
+                    <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
+                      <Clock className="w-4 h-4 text-cyan-400" />
+                    </div>
+                    <div>
+                      <p className="text-white font-medium text-sm">1:1 Real Time</p>
+                      <p className="text-slate-400 text-xs">A day here is a day there. Your choices unfold naturally.</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700">
+                    <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0">
+                      <Map className="w-4 h-4 text-purple-400" />
+                    </div>
+                    <div>
+                      <p className="text-white font-medium text-sm">Shape the World</p>
+                      <p className="text-slate-400 text-xs">Your decisions ripple through society. The world changes based on collective choices.</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-3 p-3 bg-slate-800/50 rounded-lg border border-slate-700">
+                    <div className="w-8 h-8 rounded-full bg-pink-500/20 flex items-center justify-center flex-shrink-0">
+                      <Gift className="w-4 h-4 text-pink-400" />
+                    </div>
+                    <div>
+                      <p className="text-white font-medium text-sm">Earn Shells Daily</p>
+                      <p className="text-slate-400 text-xs">Check in every 24 hours to earn Shells. Build your estate, own land, grow your legacy.</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <Button
+                  onClick={() => {
+                    localStorage.setItem("chronicles_welcomed", "true");
+                    setShowWelcome(false);
+                  }}
+                  className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white font-semibold py-3"
+                  data-testid="button-begin-chronicle"
+                >
+                  Begin My Chronicle
+                </Button>
+                
+                <p className="text-slate-500 text-xs mt-4">
+                  Shells convert to DWC tokens at launch (100 Shells = 1 DWC)
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Daily Reward Banner */}
       {dailyRewardData?.canClaim && (
