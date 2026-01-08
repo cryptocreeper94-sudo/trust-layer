@@ -975,10 +975,18 @@ export default function CommunityHub() {
                 </div>
                 <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                   {isAuthenticated && (
-                    <div className="flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full flex-shrink-0">
-                      <Coins className="w-3 h-3 sm:w-4 sm:h-4 text-amber-400" />
-                      <span className="text-xs sm:text-sm font-medium text-amber-400" data-testid="shells-balance">
-                        {shellsData?.balance?.toLocaleString() || 0}
+                    <div 
+                      className="flex flex-col items-end px-2 py-1 sm:px-3 sm:py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full flex-shrink-0 group relative cursor-help"
+                      title={`≈ ${((shellsData?.balance || 0) / 100).toFixed(2)} DWC at launch (April 11, 2026)`}
+                    >
+                      <div className="flex items-center gap-1">
+                        <Coins className="w-3 h-3 sm:w-4 sm:h-4 text-amber-400" />
+                        <span className="text-xs sm:text-sm font-medium text-amber-400" data-testid="shells-balance">
+                          {shellsData?.balance?.toLocaleString() || 0}
+                        </span>
+                      </div>
+                      <span className="text-[8px] text-cyan-400/70 hidden sm:block">
+                        ≈ {((shellsData?.balance || 0) / 100).toFixed(2)} DWC
                       </span>
                     </div>
                   )}

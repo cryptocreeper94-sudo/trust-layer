@@ -446,14 +446,36 @@ export default function ChroniclesEstate() {
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <Badge variant="outline" className="border-amber-500/50 text-amber-400">
-              <Coins className="w-3 h-3 mr-1" />
-              {shellsBalance.toLocaleString()} Shells
-            </Badge>
+            <div className="flex flex-col items-end">
+              <Badge variant="outline" className="border-amber-500/50 text-amber-400">
+                <Coins className="w-3 h-3 mr-1" />
+                {shellsBalance.toLocaleString()} Shells
+              </Badge>
+              <span className="text-[10px] text-cyan-400/70 mt-0.5">
+                ≈ {(shellsBalance / 100).toFixed(2)} DWC at launch
+              </span>
+            </div>
             <Badge variant="outline" className="border-cyan-500/50 text-cyan-400">
               Level {playerLevel}
             </Badge>
           </div>
+        </div>
+      </div>
+
+      {/* DWC Conversion Banner */}
+      <div className="bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 border-y border-cyan-500/20 py-2 px-4 relative z-10">
+        <div className="max-w-6xl mx-auto flex items-center justify-center gap-2 text-sm">
+          <Sparkles className="w-4 h-4 text-cyan-400" />
+          <span className="text-slate-300">
+            <span className="text-cyan-400 font-semibold">Shells → DWC:</span> All Shells convert to DarkWave Coin at <span className="text-white font-bold">100 Shells = 1 DWC</span> on April 11, 2026
+          </span>
+          <a 
+            href="/virtual-currency-terms" 
+            className="text-cyan-400 hover:text-cyan-300 underline text-xs ml-2"
+            data-testid="link-vc-terms"
+          >
+            Learn more
+          </a>
         </div>
       </div>
 
