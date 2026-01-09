@@ -448,7 +448,7 @@ function ExecutiveSummary() {
         </Card>
         <Card className="bg-white/5 border-white/10 p-4 text-center">
           <Shield className="w-8 h-8 text-green-400 mx-auto mb-2" />
-          <p className="text-2xl font-bold text-white">100M</p>
+          <p className="text-2xl font-bold text-white">1B</p>
           <p className="text-xs text-muted-foreground">DWC Supply</p>
         </Card>
         <Card className="bg-white/5 border-white/10 p-4 text-center">

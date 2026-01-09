@@ -56,7 +56,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
     items: [
       {
         question: "What is the total supply of DWC?",
-        answer: "The total supply is fixed at 100 million DWC tokens. There will be no additional minting or burning - the supply is permanent and verifiable on-chain."
+        answer: "The total supply is fixed at 1 billion DWC coins. There will be no additional minting or burning - the supply is permanent and verifiable on-chain."
       },
       {
         question: "Is there a token burn mechanism?",

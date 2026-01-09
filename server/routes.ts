@@ -1996,7 +1996,7 @@ export async function registerRoutes(
           chainBlock: blockchain.getLatestBlock()?.header?.height || 0,
           treasuryAddress: treasuryInfo?.address || "unknown",
           treasuryBalanceDwc: treasuryInfo?.balance || "0",
-          totalSupply: treasuryInfo?.total_supply || "100,000,000 DWC",
+          totalSupply: treasuryInfo?.total_supply || "1,000,000,000 DWC",
         },
         allocations: (allocations || []).map(a => ({
           category: a.category,
@@ -2552,7 +2552,7 @@ export async function registerRoutes(
       chainId: 8453,
       chainName: "DarkWave Smart Chain",
       nativeToken: "DWC",
-      totalSupply: "100,000,000",
+      totalSupply: "1,000,000,000",
     });
   });
 
@@ -3203,7 +3203,7 @@ export async function registerRoutes(
         verificationUrl,
         qrCodeSvg,
         metadata: {
-          totalSupply: "100,000,000 DWC",
+          totalSupply: "1,000,000,000 DWC",
           decimals: 18,
           consensusType: "Proof-of-Authority",
           blockTime: "400ms",
@@ -4343,7 +4343,7 @@ export async function registerRoutes(
   <table>
     <tr><th>Property</th><th>Value</th></tr>
     <tr><td>Token Symbol</td><td>DWC</td></tr>
-    <tr><td>Total Supply</td><td>100,000,000 (Fixed)</td></tr>
+    <tr><td>Total Supply</td><td>1,000,000,000 (Fixed)</td></tr>
     <tr><td>Decimals</td><td>18</td></tr>
     <tr><td>Burn Mechanism</td><td>None (Fixed Supply)</td></tr>
     <tr><td>Token Generation Event</td><td>April 11, 2026</td></tr>

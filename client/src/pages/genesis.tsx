@@ -15,7 +15,7 @@ const BLOCKCHAIN_SPECS = [
   { icon: Zap, label: "Block Time", value: "400ms", desc: "Ultra-fast finality" },
   { icon: Cpu, label: "TPS", value: "200,000+", desc: "High throughput" },
   { icon: Shield, label: "Consensus", value: "PoA", desc: "Proof of Authority" },
-  { icon: Database, label: "Total Supply", value: "100M DWC", desc: "Fixed supply" },
+  { icon: Database, label: "Total Supply", value: "1B DWC", desc: "Fixed supply" },
 ];
 
 const FOUNDING_PRINCIPLES = [

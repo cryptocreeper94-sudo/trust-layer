@@ -326,7 +326,7 @@ export default function DWSCExecutiveSummary() {
                   <div>
                     <h4 className="text-sm font-semibold text-white/80 mb-2">Native Token: DWC</h4>
                     <ul className="space-y-1 text-sm text-white/60">
-                      <li>• <span className="text-white">100 Million</span> total supply</li>
+                      <li>• <span className="text-white">1 Billion</span> total supply</li>
                       <li>• <span className="text-white">18 decimals</span> for micro-transactions</li>
                       <li>• <span className="text-white">No burn mechanism</span> - stable economics</li>
                       <li>• Utility: gas, staking, governance, in-game currency</li>
@@ -455,7 +455,7 @@ export default function DWSCExecutiveSummary() {
                 {
                   title: "Token Presale",
                   source: "Blockchain",
-                  description: "DWC at $0.005 per coin. 15M allocation (15% of supply). Tiered pricing through $0.01 launch.",
+                  description: "DWC at $0.001 per coin. 150M allocation (15% of supply). Tiered pricing through $0.0014 launch.",
                   icon: Coins
                 },
                 {

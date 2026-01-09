@@ -425,7 +425,7 @@ export default function Token() {
                 <TrendingUp className="w-4 h-4 text-green-400" /> No Coin Burns
               </h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Fixed 100M supply. Protocol fees fund staking rewards and treasury, ensuring sustainable growth without artificial scarcity.
+                Fixed 1B supply. Protocol fees fund staking rewards and treasury, ensuring sustainable growth without artificial scarcity.
               </p>
             </GlassCard>
             <GlassCard className="p-5">

@@ -299,7 +299,7 @@ export class DarkWaveBlockchain {
 
     console.log(`[DarkWave Mainnet] Genesis block created`);
     console.log(`[DarkWave Mainnet] Treasury: ${this.treasuryAddress}`);
-    console.log(`[DarkWave Mainnet] Total Supply: 100,000,000 DWC`);
+    console.log(`[DarkWave Mainnet] Total Supply: 1,000,000,000 DWC`);
     console.log(`[DarkWave Mainnet] Network: MAINNET`);
   }
 
@@ -1420,7 +1420,7 @@ export class DarkWaveBlockchain {
       address: this.treasuryAddress,
       balance: `${displayBalance} DWC`,
       balance_raw: balance.toString(),
-      total_supply: "100,000,000 DWC",
+      total_supply: "1,000,000,000 DWC",
     };
   }
 

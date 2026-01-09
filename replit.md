@@ -29,7 +29,7 @@ Every page requires:
 10. **Import `GlassCard`**: From `@/components/glass-card` - use with `glow` prop enabled
 
 ### Technical Implementations
-- **Blockchain**: BFT-PoA consensus with stake-weighted validator selection, PostgreSQL state storage, SHA-256/Merkle trees/HMAC-SHA256, 400ms block time, 200K+ TPS. Features validator staking, slashing, epoch-based finality, and node sync APIs. Native token DWC (100M supply, 18 decimals, no burn).
+- **Blockchain**: BFT-PoA consensus with stake-weighted validator selection, PostgreSQL state storage, SHA-256/Merkle trees/HMAC-SHA256, 400ms block time, 200K+ TPS. Features validator staking, slashing, epoch-based finality, and node sync APIs. Native coin DWC (1B supply, 18 decimals, no burn). Presale price: $0.001 (Month 1), $0.0012 (Month 2), $0.0014 (Month 3).
 - **Web Portal (Frontend)**: React 18, TypeScript, Vite, Wouter, TanStack Query, Tailwind CSS v4, Framer Motion.
 - **Web Portal (Backend)**: Node.js, Express.js, TypeScript, Drizzle ORM, PostgreSQL.
 - **Authentication**: Firebase Auth (multiple providers), server-side Firebase token verification, WebAuthn/Passkeys, PIN authentication.

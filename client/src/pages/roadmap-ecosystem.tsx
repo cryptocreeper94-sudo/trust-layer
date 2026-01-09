@@ -47,7 +47,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
     milestones: [
       { id: "e1", title: "Proof-of-Authority Consensus", description: "400ms block time with Founders Validator", status: "completed", isRequired: true },
       { id: "e2", title: "Web Portal Launch", description: "React-based blockchain interface with wallet integration", status: "completed", isRequired: true },
-      { id: "e3", title: "DWC Token Implementation", description: "100M supply, 18 decimals, native token", status: "completed", isRequired: true },
+      { id: "e3", title: "DWC Token Implementation", description: "1B supply, 18 decimals, native coin", status: "completed", isRequired: true },
       { id: "e4", title: "Block Explorer", description: "Transaction search, block details, account views", status: "completed", isRequired: true },
       { id: "e5", title: "Testnet Faucet", description: "Free DWC for developers and testers", status: "completed", isRequired: true },
       { id: "e6", title: "Transparent Crowdfunding", description: "DWSC stamps for donation verification", status: "completed", isRequired: true },
