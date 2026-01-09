@@ -7,6 +7,7 @@ import { setupCommunityWebSocket } from "./community-ws";
 import { z } from "zod";
 import { storage } from "./storage";
 import { db } from "./db";
+import { zealyService, type ZealyWebhookPayload } from "./zealy-service";
 
 // Auth request interface for session-based authentication
 interface AuthenticatedRequest extends Request {
@@ -558,6 +559,45 @@ export async function registerRoutes(
     } catch (error: any) {
       console.error("Stripe webhook error:", error);
       res.status(500).json({ error: error.message || "Webhook processing failed" });
+    }
+  });
+
+  // ============================================
+  // ZEALY WEBHOOK - Community Quest Platform
+  // ============================================
+  app.post("/api/zealy/webhook", async (req: Request, res: Response) => {
+    try {
+      const signature = req.headers["x-zealy-signature"] as string;
+      const webhookSecret = process.env.ZEALY_WEBHOOK_SECRET;
+
+      if (!webhookSecret) {
+        console.error("ZEALY_WEBHOOK_SECRET not configured");
+        return res.status(500).json({ error: "Webhook not configured" });
+      }
+
+      const rawBody = JSON.stringify(req.body);
+
+      if (signature && !zealyService.verifyWebhookSignature(rawBody, signature, webhookSecret)) {
+        console.warn("Zealy webhook: Invalid signature");
+        return res.status(401).json({ error: "Invalid signature" });
+      }
+
+      const payload: ZealyWebhookPayload = req.body;
+
+      if (!payload.userId || !payload.questId || !payload.requestId) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      const result = await zealyService.processWebhook(payload);
+
+      if (result.success) {
+        return res.status(200).json({ success: true, message: result.message });
+      } else {
+        return res.status(400).json({ success: false, error: result.error });
+      }
+    } catch (error: any) {
+      console.error("Zealy webhook error:", error);
+      return res.status(500).json({ error: "Webhook processing failed" });
     }
   });
 

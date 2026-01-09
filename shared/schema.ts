@@ -6475,3 +6475,75 @@ export const chronicleLocations = pgTable("chronicle_locations", {
 });
 
 export type ChronicleLocation = typeof chronicleLocations.$inferSelect;
+
+// ============================================
+// ZEALY INTEGRATION - Community Quest Platform
+// ============================================
+
+// Maps Zealy quests to internal reward rules
+export const zealyQuestMappings = pgTable("zealy_quest_mappings", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  zealyQuestId: text("zealy_quest_id").notNull().unique(), // Zealy's quest identifier
+  zealyQuestName: text("zealy_quest_name").notNull(),
+  
+  // Reward configuration
+  shellsReward: integer("shells_reward").notNull().default(0),
+  dwcReward: text("dwc_reward").default("0"),
+  reputationReward: integer("reputation_reward").default(0),
+  
+  // Optional: Link to internal quest system
+  internalQuestId: varchar("internal_quest_id"),
+  
+  // Caps and limits
+  maxRewardsPerUser: integer("max_rewards_per_user").default(1),
+  totalRewardsCap: integer("total_rewards_cap"), // null = unlimited
+  currentRewards: integer("current_rewards").notNull().default(0),
+  
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertZealyQuestMappingSchema = createInsertSchema(zealyQuestMappings).omit({
+  id: true, createdAt: true, updatedAt: true, currentRewards: true
+});
+export type ZealyQuestMapping = typeof zealyQuestMappings.$inferSelect;
+export type InsertZealyQuestMapping = z.infer<typeof insertZealyQuestMappingSchema>;
+
+// Tracks all Zealy webhook events for idempotency and auditing
+export const zealyQuestEvents = pgTable("zealy_quest_events", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  // Zealy identifiers
+  zealyUserId: text("zealy_user_id").notNull(),
+  zealyQuestId: text("zealy_quest_id").notNull(),
+  zealyRequestId: text("zealy_request_id").notNull().unique(), // For idempotency
+  zealyCommunityId: text("zealy_community_id"),
+  
+  // User mapping
+  userId: text("user_id"), // Our internal user ID if matched
+  walletAddress: text("wallet_address"),
+  email: text("email"),
+  discordId: text("discord_id"),
+  twitterHandle: text("twitter_handle"),
+  
+  // Processing status
+  status: text("status").notNull().default("pending"), // 'pending', 'processed', 'failed', 'rejected'
+  errorMessage: text("error_message"),
+  
+  // Rewards granted
+  shellsGranted: integer("shells_granted").default(0),
+  dwcGranted: text("dwc_granted").default("0"),
+  
+  // Raw payload for debugging
+  rawPayload: text("raw_payload"),
+  
+  processedAt: timestamp("processed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertZealyQuestEventSchema = createInsertSchema(zealyQuestEvents).omit({
+  id: true, createdAt: true, processedAt: true
+});
+export type ZealyQuestEvent = typeof zealyQuestEvents.$inferSelect;
+export type InsertZealyQuestEvent = z.infer<typeof insertZealyQuestEventSchema>;

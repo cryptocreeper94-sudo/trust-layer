@@ -56,6 +56,7 @@ Every page requires:
     - **ChronoPass Identity**: Unified cross-app identity with a reputation system and Passkey/WebAuthn support.
     - **Experience Shards**: Dedicated execution lanes for different use cases (gaming, defi, nft, social, ai, custom) with performance SLAs.
     - **Quest Mining System**: Verifiable contribution rewards with daily/weekly/seasonal/achievement quests.
+    - **Zealy Integration**: Community questing platform integration with HMAC webhook verification, quest-to-Shell reward mapping, idempotent event processing. Endpoint: `POST /api/zealy/webhook`. Database tables: `zealy_quest_mappings`, `zealy_quest_events`.
     - **Reality Layer Oracles**: On-chain notarization for game outcomes and real-world events with multi-chain verification.
     - **AI Verified Execution**: Cryptographic proofs for AI decisions from registered models.
     - **Guardian Studio Copilot**: AI-powered smart contract generator with automatic security audits.
