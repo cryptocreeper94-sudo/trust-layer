@@ -14862,6 +14862,88 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // NPC Routes
+  app.post("/api/chronicles/npcs/seed", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const { npcService } = await import("./npc-service");
+      const result = await npcService.seedModernNpcs();
+      res.json(result);
+    } catch (error) {
+      console.error("Seed NPCs error:", error);
+      res.status(500).json({ error: "Failed to seed NPCs" });
+    }
+  });
+
+  app.get("/api/chronicles/npcs", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const location = (req.query.location as string) || "home";
+      const era = (req.query.era as string) || "modern";
+      const { npcService } = await import("./npc-service");
+      const npcs = await npcService.getNpcsByLocation(location, era);
+      res.json({ npcs: npcs.map(npc => ({
+        ...npc,
+        personality: JSON.parse(npc.personality || "{}"),
+      })) });
+    } catch (error) {
+      console.error("Get NPCs error:", error);
+      res.status(500).json({ error: "Failed to get NPCs" });
+    }
+  });
+
+  app.post("/api/chronicles/npcs/interact", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const { characterId, npcId, interactionType } = req.body;
+      if (!characterId || !npcId) {
+        return res.status(400).json({ error: "Character ID and NPC ID required" });
+      }
+      const { npcService } = await import("./npc-service");
+      const result = await npcService.interact(characterId, npcId, interactionType || "dialogue");
+      res.json(result);
+    } catch (error) {
+      console.error("NPC interact error:", error);
+      res.status(500).json({ error: "Failed to interact with NPC" });
+    }
+  });
+
+  app.get("/api/chronicles/relationships", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const characterId = req.query.characterId as string;
+      if (!characterId) {
+        return res.status(400).json({ error: "Character ID required" });
+      }
+      const { npcService } = await import("./npc-service");
+      const relationships = await npcService.getCharacterRelationships(characterId);
+      res.json({ relationships });
+    } catch (error) {
+      console.error("Get relationships error:", error);
+      res.status(500).json({ error: "Failed to get relationships" });
+    }
+  });
+
   app.post("/api/shells/earn", async (req: any, res, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     if (authHeader?.startsWith("Bearer ")) {
