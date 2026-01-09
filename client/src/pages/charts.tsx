@@ -26,7 +26,17 @@ export default function Charts() {
   const [timeframe, setTimeframe] = useState("7d");
   const [selectedToken, setSelectedToken] = useState("DWC");
 
-  const { data: statsData, isLoading: statsLoading } = useQuery<{ price: string; change24h: string; volume24h: string; marketCap: string; high24h: string; low24h: string }>({
+  const { data: statsData, isLoading: statsLoading } = useQuery<{ 
+    isTestnet?: boolean;
+    launchDate?: string;
+    message?: string;
+    price: string | null; 
+    change24h: string | null; 
+    volume24h: string | null; 
+    marketCap: string | null; 
+    high24h: string | null; 
+    low24h: string | null; 
+  }>({
     queryKey: ["/api/charts/stats", selectedToken],
     refetchInterval: 30000,
   });
@@ -41,20 +51,8 @@ export default function Charts() {
     refetchInterval: 60000,
   });
 
-  const stats = statsData || {
-    price: "0.000124",
-    change24h: "+12.4",
-    volume24h: "2,450,000",
-    marketCap: "12,400,000",
-    high24h: "0.000135",
-    low24h: "0.000108",
-  };
-
-  const isPositive = parseFloat(stats.change24h) >= 0;
+  const isTestnet = statsData?.isTestnet || !statsData?.price;
   const priceData = historyData?.data || [];
-  const currentPrice = priceData[priceData.length - 1]?.price || 0;
-  const startPrice = priceData[0]?.price || 0;
-  const periodChange = startPrice > 0 ? ((currentPrice - startPrice) / startPrice * 100).toFixed(2) : "0";
   const isLoading = statsLoading || historyLoading;
 
   return (
@@ -106,17 +104,23 @@ export default function Charts() {
             </div>
           </motion.div>
 
+          <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 border border-white/10">
+            <div className="flex items-center justify-center gap-2 text-primary">
+              <Clock className="w-5 h-5" />
+              <span className="font-semibold">Live Price Data Available April 11, 2026</span>
+            </div>
+            <p className="text-center text-xs text-muted-foreground mt-2">
+              Real-time charts, volume, and market data will be available when mainnet launches
+            </p>
+          </div>
+
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
             <GlassCard hover={false}>
               <div className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-muted-foreground">Price</span>
-                  <div className={`flex items-center gap-1 text-xs ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
-                    {isPositive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                    {stats.change24h}%
-                  </div>
                 </div>
-                <div className="text-xl font-bold">${stats.price}</div>
+                <div className="text-xl font-bold text-white/50">—</div>
               </div>
             </GlassCard>
             
@@ -126,7 +130,7 @@ export default function Charts() {
                   <BarChart3 className="w-3 h-3 text-muted-foreground" />
                   <span className="text-xs text-muted-foreground">24h Volume</span>
                 </div>
-                <div className="text-xl font-bold">${stats.volume24h}</div>
+                <div className="text-xl font-bold text-white/50">—</div>
               </div>
             </GlassCard>
             
@@ -136,7 +140,7 @@ export default function Charts() {
                   <DollarSign className="w-3 h-3 text-muted-foreground" />
                   <span className="text-xs text-muted-foreground">Market Cap</span>
                 </div>
-                <div className="text-xl font-bold">${stats.marketCap}</div>
+                <div className="text-xl font-bold text-white/50">—</div>
               </div>
             </GlassCard>
             
@@ -144,11 +148,11 @@ export default function Charts() {
               <div className="p-4">
                 <div className="text-xs text-muted-foreground mb-2">24h Range</div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-red-400">${stats.low24h}</span>
+                  <span className="text-xs text-white/50">—</span>
                   <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-red-400 via-yellow-400 to-green-400 w-[65%]" />
+                    <div className="h-full bg-white/20 w-0" />
                   </div>
-                  <span className="text-xs text-green-400">${stats.high24h}</span>
+                  <span className="text-xs text-white/50">—</span>
                 </div>
               </div>
             </GlassCard>
@@ -159,9 +163,7 @@ export default function Charts() {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
                 <div>
                   <h2 className="font-bold text-lg">Price Chart</h2>
-                  <p className="text-xs text-muted-foreground">
-                    {timeframe} change: <span className={parseFloat(periodChange) >= 0 ? 'text-green-400' : 'text-red-400'}>{periodChange}%</span>
-                  </p>
+                  <p className="text-xs text-muted-foreground">Historical data available at mainnet</p>
                 </div>
                 
                 <div className="flex bg-white/5 rounded-lg p-1 border border-white/10">
@@ -179,26 +181,11 @@ export default function Charts() {
                 </div>
               </div>
               
-              <div className="h-[300px] sm:h-[400px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={priceData}>
-                    <defs>
-                      <linearGradient id="priceGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#00ffff" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#00ffff" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                    <XAxis dataKey="time" stroke="rgba(255,255,255,0.3)" fontSize={10} tickLine={false} />
-                    <YAxis stroke="rgba(255,255,255,0.3)" fontSize={10} tickLine={false} tickFormatter={(v) => `$${v}`} domain={['auto', 'auto']} />
-                    <Tooltip
-                      contentStyle={{ background: 'rgba(12,18,36,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
-                      labelStyle={{ color: 'rgba(255,255,255,0.7)' }}
-                      formatter={(value: number) => [`$${value.toFixed(6)}`, 'Price']}
-                    />
-                    <Area type="monotone" dataKey="price" stroke="#00ffff" strokeWidth={2} fill="url(#priceGradient)" />
-                  </AreaChart>
-                </ResponsiveContainer>
+              <div className="h-[300px] sm:h-[400px] flex items-center justify-center">
+                <div className="text-center">
+                  <LineChart className="w-16 h-16 text-white/20 mx-auto mb-4" />
+                  <p className="text-muted-foreground">Chart data available at mainnet launch</p>
+                </div>
               </div>
             </div>
           </GlassCard>
@@ -206,20 +193,11 @@ export default function Charts() {
           <GlassCard>
             <div className="p-4">
               <h2 className="font-bold text-lg mb-4">Volume Chart</h2>
-              <div className="h-[200px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={priceData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                    <XAxis dataKey="time" stroke="rgba(255,255,255,0.3)" fontSize={10} tickLine={false} />
-                    <YAxis stroke="rgba(255,255,255,0.3)" fontSize={10} tickLine={false} tickFormatter={(v) => `$${(v/1000000).toFixed(1)}M`} />
-                    <Tooltip
-                      contentStyle={{ background: 'rgba(12,18,36,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
-                      labelStyle={{ color: 'rgba(255,255,255,0.7)' }}
-                      formatter={(value: number) => [`$${value.toLocaleString()}`, 'Volume']}
-                    />
-                    <Bar dataKey="volume" fill="rgba(139,92,246,0.6)" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
+              <div className="h-[200px] flex items-center justify-center">
+                <div className="text-center">
+                  <BarChart3 className="w-12 h-12 text-white/20 mx-auto mb-3" />
+                  <p className="text-sm text-muted-foreground">Volume data available at mainnet launch</p>
+                </div>
               </div>
             </div>
           </GlassCard>

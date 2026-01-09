@@ -9577,52 +9577,18 @@ Current context:
   // PRICE CHARTS
   // ============================================
 
-  async function seedPriceHistory(token: string, days: number) {
-    const now = Date.now();
-    const hoursToSeed = days * 24;
-    let basePrice = 0.000124;
-    
-    for (let i = hoursToSeed; i >= 0; i--) {
-      const variation = (Math.random() - 0.48) * 0.00002;
-      basePrice = Math.max(0.00005, basePrice + variation);
-      await storage.recordPrice({
-        token,
-        price: basePrice.toFixed(8),
-        volume: Math.floor(Math.random() * 100000 + 50000).toString(),
-        marketCap: "12400000",
-        timestamp: new Date(now - i * 3600000),
-      });
-    }
-  }
-
   app.get("/api/charts/stats", async (req, res) => {
     try {
-      const history = await storage.getPriceHistory("DWC", 24);
-      
-      if (history.length === 0) {
-        await seedPriceHistory("DWC", 90);
-      }
-      
-      const latestHistory = await storage.getPriceHistory("DWC", 24);
-      const current = latestHistory[0];
-      const oldest = latestHistory[latestHistory.length - 1];
-      
-      const currentPrice = parseFloat(current?.price || "0.000124");
-      const oldPrice = parseFloat(oldest?.price || String(currentPrice));
-      const change = oldPrice > 0 ? ((currentPrice - oldPrice) / oldPrice * 100).toFixed(1) : "0";
-      
-      const prices = latestHistory.map(h => parseFloat(h.price));
-      const high = Math.max(...prices).toFixed(6);
-      const low = Math.min(...prices).toFixed(6);
-      const totalVolume = latestHistory.reduce((sum, h) => sum + parseInt(h.volume || "0"), 0);
-      
       res.json({
-        price: currentPrice.toFixed(6),
-        change24h: change,
-        volume24h: totalVolume.toLocaleString(),
-        marketCap: "12,400,000",
-        high24h: high,
-        low24h: low,
+        isTestnet: true,
+        launchDate: "April 11, 2026",
+        message: "Live price data available at mainnet launch",
+        price: null,
+        change24h: null,
+        volume24h: null,
+        marketCap: null,
+        high24h: null,
+        low24h: null,
       });
     } catch (error) {
       console.error("Charts stats error:", error);
@@ -9632,38 +9598,11 @@ Current context:
 
   app.get("/api/charts/history", async (req, res) => {
     try {
-      const { token = "DWC", timeframe = "7d" } = req.query;
-      
-      let limit = 24 * 7;
-      switch (timeframe) {
-        case "24h": limit = 24; break;
-        case "7d": limit = 24 * 7; break;
-        case "30d": limit = 24 * 30; break;
-        case "90d": limit = 24 * 90; break;
-      }
-      
-      const history = await storage.getPriceHistory(token as string, limit);
-      
-      if (history.length === 0) {
-        await seedPriceHistory(token as string, 90);
-        const newHistory = await storage.getPriceHistory(token as string, limit);
-        return res.json({
-          data: newHistory.map(h => ({
-            time: new Date(h.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-            timestamp: h.timestamp,
-            price: parseFloat(h.price),
-            volume: parseInt(h.volume || "0"),
-          })).reverse(),
-        });
-      }
-      
       res.json({
-        data: history.map(h => ({
-          time: new Date(h.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-          timestamp: h.timestamp,
-          price: parseFloat(h.price),
-          volume: parseInt(h.volume || "0"),
-        })).reverse(),
+        isTestnet: true,
+        launchDate: "April 11, 2026",
+        message: "Price history available at mainnet launch",
+        data: [],
       });
     } catch (error) {
       console.error("Charts history error:", error);
