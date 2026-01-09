@@ -12967,6 +12967,81 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   startPayoutScheduler(24);
 
   // ============================================
+  // ZEALY ADMIN ROUTES - Quest Reward Management
+  // ============================================
+  app.get("/api/owner/zealy/mappings", ownerAuthMiddleware, async (_req, res) => {
+    try {
+      const mappings = await zealyService.getQuestMappings();
+      res.json(mappings);
+    } catch (error) {
+      console.error("Failed to fetch Zealy mappings:", error);
+      res.status(500).json({ error: "Failed to fetch quest mappings" });
+    }
+  });
+
+  app.post("/api/owner/zealy/mappings", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { zealyQuestId, zealyQuestName, shellsReward, dwcReward, reputationReward, maxRewardsPerUser, totalRewardsCap } = req.body;
+      
+      if (!zealyQuestId || !zealyQuestName) {
+        return res.status(400).json({ error: "Quest ID and name are required" });
+      }
+      
+      const mapping = await zealyService.createQuestMapping({
+        zealyQuestId,
+        zealyQuestName,
+        shellsReward: shellsReward || 0,
+        dwcReward: dwcReward || "0",
+        reputationReward: reputationReward || 0,
+        maxRewardsPerUser: maxRewardsPerUser || null,
+        totalRewardsCap: totalRewardsCap || null,
+      });
+      
+      res.json(mapping);
+    } catch (error) {
+      console.error("Failed to create Zealy mapping:", error);
+      res.status(500).json({ error: "Failed to create quest mapping" });
+    }
+  });
+
+  app.put("/api/owner/zealy/mappings/:id", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { zealyQuestName, shellsReward, dwcReward, reputationReward, maxRewardsPerUser, totalRewardsCap, isActive } = req.body;
+      
+      const mapping = await zealyService.updateQuestMapping(id, {
+        zealyQuestName,
+        shellsReward,
+        dwcReward,
+        reputationReward,
+        maxRewardsPerUser,
+        totalRewardsCap,
+        isActive,
+      });
+      
+      if (!mapping) {
+        return res.status(404).json({ error: "Quest mapping not found" });
+      }
+      
+      res.json(mapping);
+    } catch (error) {
+      console.error("Failed to update Zealy mapping:", error);
+      res.status(500).json({ error: "Failed to update quest mapping" });
+    }
+  });
+
+  app.get("/api/owner/zealy/events", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 50;
+      const events = await zealyService.getRecentEvents(limit);
+      res.json(events);
+    } catch (error) {
+      console.error("Failed to fetch Zealy events:", error);
+      res.status(500).json({ error: "Failed to fetch quest events" });
+    }
+  });
+
+  // ============================================
   // OWNER DOMAIN MANAGEMENT (NO WALLET REQUIRED)
   // ============================================
 
