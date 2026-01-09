@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
 
-const TOKEN_PRICE = 0.008;
+const TOKEN_PRICE = 0.001; // $0.001 per DWC (1B supply)
 
 const TIER_BONUSES: Record<string, number> = {
   genesis: 25,

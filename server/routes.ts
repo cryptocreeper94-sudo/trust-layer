@@ -7081,7 +7081,7 @@ export async function registerRoutes(
       `);
       
       const stats = result.rows[0] || { total_raised_cents: 0, total_purchases: 0, unique_holders: 0 };
-      const tokenPrice = 0.008;
+      const tokenPrice = 0.001; // $0.001 per DWC (1B supply)
       const totalRaisedCents = parseInt(stats.total_raised_cents as string || "0");
       const tokensSold = Math.floor((totalRaisedCents / 100) / tokenPrice);
       

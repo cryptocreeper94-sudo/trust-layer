@@ -11,7 +11,7 @@ import { blockchain } from "./blockchain-engine";
 
 const ORBIT_HUB_URL = "https://orbitstaffing.io";
 const MIN_PAYOUT_THRESHOLD_CENTS = 5000;
-const DWC_EXCHANGE_RATE = 0.008;
+const DWC_EXCHANGE_RATE = 0.001; // $0.001 per DWC (1B supply)
 const PAYOUT_BATCH_SIZE = 50;
 const SETTLEMENT_WAIT_DAYS = 7;
 

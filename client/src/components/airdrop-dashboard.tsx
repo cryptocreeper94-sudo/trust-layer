@@ -322,7 +322,7 @@ export function AirdropDashboard() {
               >
                 ${usdValue.toFixed(2)}
               </motion.div>
-              <div className="text-xs text-muted-foreground mt-1">@ $0.008/DWC</div>
+              <div className="text-xs text-muted-foreground mt-1">@ $0.001/DWC</div>
             </div>
           </div>
 

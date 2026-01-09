@@ -250,7 +250,7 @@ class ReferralService {
         
         const profile = await storage.getAffiliateProfile(referral.referrerId);
         if (profile) {
-          const dwcExchangeRate = 0.008;
+          const dwcExchangeRate = 0.001; // $0.001 per DWC (1B supply)
           
           if (isPreLaunch) {
             const newAirdropBalance = (profile.airdropBalance || 0) + commissionAmount;

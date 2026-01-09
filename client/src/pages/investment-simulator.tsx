@@ -16,12 +16,12 @@ import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.pn
 import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
 import deepSpace from "@assets/generated_images/deep_space_station.png";
 
-const TOKEN_PRICE = 0.008;
+const TOKEN_PRICE = 0.001; // $0.001 per DWC (1B supply)
 const TIER_BONUSES = [
-  { min: 2500, bonus: 25, name: "Genesis" },
+  { min: 1000, bonus: 25, name: "Genesis" },
   { min: 500, bonus: 15, name: "Founder" },
-  { min: 100, bonus: 10, name: "Pioneer" },
-  { min: 25, bonus: 5, name: "Early Bird" },
+  { min: 250, bonus: 10, name: "Pioneer" },
+  { min: 100, bonus: 5, name: "Early Bird" },
 ];
 
 function HolographicCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
