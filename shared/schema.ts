@@ -6075,3 +6075,258 @@ export const chronicleActivitySessions = pgTable("chronicle_activity_sessions", 
 });
 
 export type ChronicleActivitySession = typeof chronicleActivitySessions.$inferSelect;
+
+// =====================================================
+// COMMUNITY BUILDER PROGRAM
+// Tier-based contribution system for community-driven development
+// =====================================================
+
+// Builder profiles - tracks a user's builder status and progression
+export const communityBuilders = pgTable("community_builders", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  userId: text("user_id").notNull().unique(),
+  username: text("username").notNull(),
+  displayName: text("display_name"),
+  
+  // Tier progression: explorer (1) -> artisan (2) -> architect (3) -> legend (4)
+  tier: integer("tier").notNull().default(1),
+  tierName: text("tier_name").notNull().default("Explorer"),
+  
+  // Experience and progression
+  totalXp: integer("total_xp").notNull().default(0),
+  currentLevelXp: integer("current_level_xp").notNull().default(0),
+  level: integer("level").notNull().default(1),
+  
+  // Contribution stats
+  totalContributions: integer("total_contributions").notNull().default(0),
+  approvedContributions: integer("approved_contributions").notNull().default(0),
+  rejectedContributions: integer("rejected_contributions").notNull().default(0),
+  pendingContributions: integer("pending_contributions").notNull().default(0),
+  
+  // Rewards earned
+  totalShellsEarned: integer("total_shells_earned").notNull().default(0),
+  totalDwcEarned: text("total_dwc_earned").default("0"), // String for precision
+  
+  // Reputation
+  reputationScore: integer("reputation_score").notNull().default(100), // 0-1000
+  upvotesReceived: integer("upvotes_received").notNull().default(0),
+  downvotesReceived: integer("downvotes_received").notNull().default(0),
+  
+  // Permissions (unlocked at higher tiers)
+  canSubmitObjects: boolean("can_submit_objects").notNull().default(true),
+  canSubmitQuests: boolean("can_submit_quests").notNull().default(false),
+  canSubmitEras: boolean("can_submit_eras").notNull().default(false),
+  canReviewContent: boolean("can_review_content").notNull().default(false),
+  canVoteOnContent: boolean("can_vote_on_content").notNull().default(true),
+  
+  // Specializations (what they're known for)
+  specializations: text("specializations").default("[]"), // JSON: ['object_design', 'quest_writing', 'era_creation']
+  
+  // Badges earned
+  badges: text("badges").default("[]"), // JSON array of badge codes
+  
+  // Application status for tier upgrades
+  tierUpgradeStatus: text("tier_upgrade_status").default("none"), // 'none', 'pending', 'approved', 'rejected'
+  tierUpgradeAppliedAt: timestamp("tier_upgrade_applied_at"),
+  
+  isActive: boolean("is_active").notNull().default(true),
+  joinedAt: timestamp("joined_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type CommunityBuilder = typeof communityBuilders.$inferSelect;
+
+// Contribution types configuration
+export const contributionTypes = pgTable("contribution_types", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  code: text("code").notNull().unique(), // 'object', 'quest', 'npc', 'era_variant', 'ambient_event', 'cosmetic'
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  
+  // Requirements
+  minTier: integer("min_tier").notNull().default(1), // Minimum tier to submit this type
+  requiresReview: boolean("requires_review").notNull().default(true),
+  reviewerMinTier: integer("reviewer_min_tier").default(3), // Min tier to review this type
+  
+  // Rewards
+  baseShellReward: integer("base_shell_reward").notNull().default(100),
+  baseDwcReward: text("base_dwc_reward").default("0"),
+  xpReward: integer("xp_reward").notNull().default(50),
+  
+  // Quality bonuses
+  qualityMultipliers: text("quality_multipliers").default('{"standard": 1.0, "quality": 1.5, "exceptional": 2.0, "legendary": 3.0}'),
+  
+  // Voting thresholds
+  votesRequiredForApproval: integer("votes_required_for_approval").default(5),
+  approvalPercentRequired: integer("approval_percent_required").default(60), // 60% upvotes
+  
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ContributionType = typeof contributionTypes.$inferSelect;
+
+// Individual contributions submitted by builders
+export const builderContributions = pgTable("builder_contributions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  builderId: varchar("builder_id").notNull().references(() => communityBuilders.id),
+  userId: text("user_id").notNull(),
+  
+  // Type and content
+  contributionTypeCode: text("contribution_type_code").notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  
+  // The actual content (JSON schema varies by type)
+  contentData: text("content_data").notNull(), // JSON with type-specific structure
+  
+  // For era/object contributions
+  targetEra: text("target_era"),
+  category: text("category"),
+  
+  // Review process
+  status: text("status").notNull().default("draft"), // 'draft', 'submitted', 'in_review', 'approved', 'rejected', 'live'
+  submittedAt: timestamp("submitted_at"),
+  reviewStartedAt: timestamp("review_started_at"),
+  reviewCompletedAt: timestamp("review_completed_at"),
+  
+  // Voting
+  upvotes: integer("upvotes").notNull().default(0),
+  downvotes: integer("downvotes").notNull().default(0),
+  voteScore: integer("vote_score").notNull().default(0), // upvotes - downvotes
+  
+  // Quality assessment
+  qualityRating: text("quality_rating").default("standard"), // 'standard', 'quality', 'exceptional', 'legendary'
+  
+  // Reviewer notes
+  reviewNotes: text("review_notes"),
+  rejectionReason: text("rejection_reason"),
+  
+  // Rewards (set when approved)
+  shellRewardAmount: integer("shell_reward_amount"),
+  dwcRewardAmount: text("dwc_reward_amount"),
+  xpRewardAmount: integer("xp_reward_amount"),
+  rewardClaimedAt: timestamp("reward_claimed_at"),
+  
+  // If this went live, track usage
+  timesUsedInGame: integer("times_used_in_game").default(0),
+  playerRating: real("player_rating"), // 1-5 stars from players
+  playerRatingCount: integer("player_rating_count").default(0),
+  
+  // Revenue share for premium content
+  isPremium: boolean("is_premium").notNull().default(false),
+  revenueSharePercent: integer("revenue_share_percent").default(0),
+  totalRevenueEarned: integer("total_revenue_earned").default(0),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type BuilderContribution = typeof builderContributions.$inferSelect;
+
+// Votes on contributions
+export const contributionVotes = pgTable("contribution_votes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  contributionId: varchar("contribution_id").notNull().references(() => builderContributions.id),
+  voterId: varchar("voter_id").notNull().references(() => communityBuilders.id),
+  voterUserId: text("voter_user_id").notNull(),
+  
+  voteType: text("vote_type").notNull(), // 'up', 'down'
+  
+  // Optional feedback
+  comment: text("comment"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ContributionVote = typeof contributionVotes.$inferSelect;
+
+// Reviews by tier 3+ builders
+export const contributionReviews = pgTable("contribution_reviews", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  contributionId: varchar("contribution_id").notNull().references(() => builderContributions.id),
+  reviewerId: varchar("reviewer_id").notNull().references(() => communityBuilders.id),
+  reviewerUserId: text("reviewer_user_id").notNull(),
+  
+  // Review outcome
+  decision: text("decision").notNull(), // 'approve', 'reject', 'request_changes'
+  qualityRating: text("quality_rating"), // 'standard', 'quality', 'exceptional', 'legendary'
+  
+  // Detailed feedback
+  feedback: text("feedback").notNull(),
+  improvementSuggestions: text("improvement_suggestions"),
+  
+  // Checklist items
+  meetsQualityStandards: boolean("meets_quality_standards").notNull(),
+  isEraAppropriate: boolean("is_era_appropriate").notNull(),
+  isBalanced: boolean("is_balanced").notNull(), // For gameplay elements
+  hasNoOffensiveContent: boolean("has_no_offensive_content").notNull(),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ContributionReview = typeof contributionReviews.$inferSelect;
+
+// Builder badges/achievements
+export const builderBadges = pgTable("builder_badges", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  code: text("code").notNull().unique(), // 'first_contribution', 'century_club', 'era_master', etc.
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  
+  // Visual
+  iconEmoji: text("icon_emoji").notNull().default("🏅"),
+  colorClass: text("color_class").default("bg-amber-500"),
+  rarity: text("rarity").notNull().default("common"), // 'common', 'uncommon', 'rare', 'epic', 'legendary'
+  
+  // Requirements (JSON for flexibility)
+  requirements: text("requirements").default("{}"), // e.g., {"approved_contributions": 10}
+  
+  // Rewards for earning
+  shellReward: integer("shell_reward").default(0),
+  xpReward: integer("xp_reward").default(0),
+  
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type BuilderBadge = typeof builderBadges.$inferSelect;
+
+// Tier requirements and benefits
+export const builderTiers = pgTable("builder_tiers", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  tier: integer("tier").notNull().unique(), // 1, 2, 3, 4
+  name: text("name").notNull(), // 'Explorer', 'Artisan', 'Architect', 'Legend'
+  description: text("description").notNull(),
+  
+  // Visual
+  iconEmoji: text("icon_emoji").notNull(),
+  colorClass: text("color_class").notNull(),
+  
+  // Requirements to reach this tier
+  minLevel: integer("min_level").notNull().default(1),
+  minApprovedContributions: integer("min_approved_contributions").notNull().default(0),
+  minReputationScore: integer("min_reputation_score").notNull().default(0),
+  requiresApplication: boolean("requires_application").notNull().default(false),
+  
+  // Permissions unlocked
+  canSubmitObjects: boolean("can_submit_objects").notNull().default(true),
+  canSubmitQuests: boolean("can_submit_quests").notNull().default(false),
+  canSubmitNpcs: boolean("can_submit_npcs").notNull().default(false),
+  canSubmitEras: boolean("can_submit_eras").notNull().default(false),
+  canReviewContent: boolean("can_review_content").notNull().default(false),
+  
+  // Reward multipliers
+  rewardMultiplier: real("reward_multiplier").notNull().default(1.0),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type BuilderTier = typeof builderTiers.$inferSelect;

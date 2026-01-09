@@ -139,6 +139,7 @@ import { broadcastToChannel } from "./chat-presence";
 import { pulseClient } from "./pulse-client";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { shellsService, SHELL_PACKAGES, SHELL_BUNDLES, SHELL_EARN_RATES, SHELL_COSTS, DWC_CONVERSION_RATE, DWC_LAUNCH_DATE } from "./shells-service";
+import { builderService } from "./builder-service";
 import { questsService } from "./quests-service";
 import { mirrorLifeService } from "./mirror-life-service";
 import { interiorsService } from "./interiors-service";
@@ -14329,6 +14330,210 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error) {
       console.error("Get stats error:", error);
       res.status(500).json({ error: "Failed to get stats" });
+    }
+  });
+
+  // =====================================================
+  // COMMUNITY BUILDER PROGRAM API
+  // =====================================================
+
+  // Get or create builder profile
+  app.get("/api/builder/profile", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const username = req.user?.claims?.firstName || req.user?.firstName || req.user?.username || "Builder";
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const builder = await builderService.getOrCreateBuilder(userId, username);
+      const tiers = await builderService.getTiers();
+      const currentTier = tiers.find(t => t.tier === builder.tier);
+      const nextTier = tiers.find(t => t.tier === builder.tier + 1);
+      
+      res.json({ 
+        builder, 
+        currentTier,
+        nextTier,
+        eligibilityCheck: nextTier ? await builderService.checkTierEligibility(builder.id) : null
+      });
+    } catch (error) {
+      console.error("Get builder profile error:", error);
+      res.status(500).json({ error: "Failed to get builder profile" });
+    }
+  });
+
+  // Get builder tiers and requirements
+  app.get("/api/builder/tiers", async (req, res) => {
+    try {
+      const tiers = await builderService.getTiers();
+      res.json({ tiers });
+    } catch (error) {
+      console.error("Get tiers error:", error);
+      res.status(500).json({ error: "Failed to get tiers" });
+    }
+  });
+
+  // Get contribution types available for user's tier
+  app.get("/api/builder/contribution-types", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const builder = await builderService.getBuilder(userId);
+      const tier = builder?.tier || 1;
+      const types = await builderService.getContributionTypes(tier);
+      
+      res.json({ types, currentTier: tier });
+    } catch (error) {
+      console.error("Get contribution types error:", error);
+      res.status(500).json({ error: "Failed to get contribution types" });
+    }
+  });
+
+  // Get all badges
+  app.get("/api/builder/badges", async (req, res) => {
+    try {
+      const badges = await builderService.getBadges();
+      res.json({ badges });
+    } catch (error) {
+      console.error("Get badges error:", error);
+      res.status(500).json({ error: "Failed to get badges" });
+    }
+  });
+
+  // Get my contributions
+  app.get("/api/builder/contributions", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const status = req.query.status as string | undefined;
+      const contributions = await builderService.getContributions(userId, status);
+      
+      res.json({ contributions });
+    } catch (error) {
+      console.error("Get contributions error:", error);
+      res.status(500).json({ error: "Failed to get contributions" });
+    }
+  });
+
+  // Create a new contribution (draft)
+  app.post("/api/builder/contributions", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const username = req.user?.claims?.firstName || req.user?.firstName || req.user?.username || "Builder";
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { typeCode, title, description, contentData, targetEra, category } = req.body;
+      
+      if (!typeCode || !title || !description || !contentData) {
+        return res.status(400).json({ error: "Missing required fields: typeCode, title, description, contentData" });
+      }
+      
+      const builder = await builderService.getOrCreateBuilder(userId, username);
+      
+      const contribution = await builderService.createContribution(
+        builder.id,
+        userId,
+        typeCode,
+        title,
+        description,
+        contentData,
+        targetEra,
+        category
+      );
+      
+      res.json({ success: true, contribution });
+    } catch (error) {
+      console.error("Create contribution error:", error);
+      res.status(500).json({ error: "Failed to create contribution" });
+    }
+  });
+
+  // Submit contribution for review
+  app.post("/api/builder/contributions/:id/submit", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { id } = req.params;
+      const result = await builderService.submitContribution(id, userId);
+      
+      res.json(result);
+    } catch (error) {
+      console.error("Submit contribution error:", error);
+      res.status(500).json({ error: "Failed to submit contribution" });
+    }
+  });
+
+  // Vote on a contribution
+  app.post("/api/builder/contributions/:id/vote", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const username = req.user?.claims?.firstName || req.user?.firstName || req.user?.username || "Voter";
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { id } = req.params;
+      const { voteType, comment } = req.body;
+      
+      if (!voteType || !["up", "down"].includes(voteType)) {
+        return res.status(400).json({ error: "Invalid vote type. Use 'up' or 'down'" });
+      }
+      
+      const builder = await builderService.getOrCreateBuilder(userId, username);
+      const result = await builderService.voteOnContribution(id, builder.id, userId, voteType, comment);
+      
+      res.json(result);
+    } catch (error) {
+      console.error("Vote error:", error);
+      res.status(500).json({ error: "Failed to record vote" });
+    }
+  });
+
+  // Builder leaderboard
+  app.get("/api/builder/leaderboard", async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 20;
+      const leaderboard = await builderService.getLeaderboard(limit);
+      res.json({ leaderboard });
+    } catch (error) {
+      console.error("Get builder leaderboard error:", error);
+      res.status(500).json({ error: "Failed to get leaderboard" });
     }
   });
 
