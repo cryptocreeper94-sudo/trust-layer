@@ -139,6 +139,7 @@ import { broadcastToChannel } from "./chat-presence";
 import { pulseClient } from "./pulse-client";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { shellsService, SHELL_PACKAGES, SHELL_BUNDLES, SHELL_EARN_RATES, SHELL_COSTS, DWC_CONVERSION_RATE, DWC_LAUNCH_DATE } from "./shells-service";
+import { questsService } from "./quests-service";
 import { subscriptionService, SUBSCRIPTION_PLANS } from "./subscription-service";
 import { guardianService, generateDataHash as guardianHash, generateMerkleRoot } from "./guardian-service";
 
@@ -10924,6 +10925,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       
       // Award Shells for estate upgrades (building new structures) - F2P reward
       let shellsEarned = 0;
+      let questProgress = { questsUpdated: [] as string[], questsCompleted: [] as string[] };
       const newBuildings = (totalBuildings || 1) - previousBuildings;
       if (newBuildings > 0) {
         try {
@@ -10932,12 +10934,13 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
             await shellsService.awardEngagementShells(userId, username, "estate_upgrade");
           }
           shellsEarned = SHELL_EARN_RATES.estate_upgrade * Math.min(newBuildings, 5);
+          questProgress = await questsService.trackProgress(userId, "estate_upgrade", Math.min(newBuildings, 5));
         } catch (shellErr) {
           console.warn("[Chronicles] Failed to award estate_upgrade Shells:", shellErr);
         }
       }
       
-      res.json({ success: true, shellsEarned });
+      res.json({ success: true, shellsEarned, questProgress });
     } catch (error: any) {
       console.error("Save estate error:", error);
       res.status(500).json({ error: error.message || "Failed to save estate" });
@@ -11158,6 +11161,44 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   // =====================================================
+  // REPEATABLE QUEST SYSTEM - Infinite Progression
+  // =====================================================
+
+  // Get all active quests with player progress
+  app.get("/api/chronicles/quests", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const quests = await questsService.getActiveQuests(userId);
+      res.json(quests);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get quests" });
+    }
+  });
+
+  // Claim quest reward
+  app.post("/api/chronicles/quests/:questId/claim", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { questId } = req.params;
+      const username = req.user?.username || req.user?.firstName || "Player";
+      
+      const result = await questsService.claimReward(userId, username, questId);
+      
+      if (!result.success) {
+        return res.status(400).json({ error: result.message });
+      }
+      
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to claim reward" });
+    }
+  });
+
+  // =====================================================
   // BUSINESS ONBOARDING APIs
   // =====================================================
 
@@ -11324,15 +11365,17 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       
       // Award Shells for making a story choice (F2P reward)
       let shellsEarned = 0;
+      let questProgress = { questsUpdated: [] as string[], questsCompleted: [] as string[] };
       try {
         const username = req.user?.username || req.user?.firstName || "Player";
         await shellsService.awardEngagementShells(userId, username, "story_choice");
         shellsEarned = SHELL_EARN_RATES.story_choice;
+        questProgress = await questsService.trackProgress(userId, "story_choice", 1);
       } catch (shellErr) {
         console.warn("[Chronicles] Failed to award story_choice Shells:", shellErr);
       }
       
-      res.json({ ...result, creditsUsed: creditsResult.success ? CREDIT_COSTS.CHOICE_PROCESSING : 0, creditsRemaining: creditsResult.newBalance, shellsEarned });
+      res.json({ ...result, creditsUsed: creditsResult.success ? CREDIT_COSTS.CHOICE_PROCESSING : 0, creditsRemaining: creditsResult.newBalance, shellsEarned, questProgress });
     } catch (error: any) {
       console.error("Process choice error:", error);
       res.status(500).json({ error: error.message || "Failed to process choice" });
@@ -11552,15 +11595,17 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       
       // Award Shells for NPC conversation (F2P reward)
       let shellsEarned = 0;
+      let questProgress = { questsUpdated: [] as string[], questsCompleted: [] as string[] };
       try {
         const username = req.user?.username || req.user?.firstName || "Player";
         await shellsService.awardEngagementShells(userId, username, "npc_conversation");
         shellsEarned = SHELL_EARN_RATES.npc_conversation;
+        questProgress = await questsService.trackProgress(userId, "npc_conversation", 1);
       } catch (shellErr) {
         // Silently fail - NPC conversations are casual
       }
       
-      res.json({ ...response, shellsEarned });
+      res.json({ ...response, shellsEarned, questProgress });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }

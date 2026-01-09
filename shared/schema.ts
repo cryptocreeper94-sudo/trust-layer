@@ -5722,3 +5722,68 @@ export const insertChronicleDailyRewardSchema = createInsertSchema(chronicleDail
 });
 export type ChronicleDailyReward = typeof chronicleDailyRewards.$inferSelect;
 export type InsertChronicleDailyReward = z.infer<typeof insertChronicleDailyRewardSchema>;
+
+// =====================================================
+// REPEATABLE QUEST SYSTEM - Infinite Progression
+// =====================================================
+
+// Quest Templates - Designer-editable content, no code changes needed
+export const chronicleQuestTemplates = pgTable("chronicle_quest_templates", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  code: text("code").notNull().unique(), // 'daily_npc_chat', 'weekly_build_5', etc.
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  
+  questType: text("quest_type").notNull().default("daily"), // 'daily', 'weekly', 'seasonal', 'achievement'
+  category: text("category").notNull().default("social"), // 'social', 'building', 'exploration', 'story', 'trading'
+  
+  // Requirements
+  requiredAction: text("required_action").notNull(), // 'npc_conversation', 'story_choice', 'estate_upgrade', 'mission_complete', 'era_visit'
+  requiredCount: integer("required_count").notNull().default(1),
+  requiredEra: text("required_era"), // null = any era
+  
+  // Rewards
+  shellReward: integer("shell_reward").notNull().default(10),
+  bonusShellReward: integer("bonus_shell_reward").default(0), // Extra for perfect completion
+  experienceReward: integer("experience_reward").default(0),
+  
+  // Reset timing
+  resetHours: integer("reset_hours").notNull().default(24), // 24 for daily, 168 for weekly
+  
+  // Availability
+  isActive: boolean("is_active").notNull().default(true),
+  sortOrder: integer("sort_order").notNull().default(0),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleQuestTemplateSchema = createInsertSchema(chronicleQuestTemplates).omit({
+  id: true, createdAt: true
+});
+export type ChronicleQuestTemplate = typeof chronicleQuestTemplates.$inferSelect;
+export type InsertChronicleQuestTemplate = z.infer<typeof insertChronicleQuestTemplateSchema>;
+
+// Player Quest Progress - Tracks individual completion toward templates
+export const chronicleQuestProgress = pgTable("chronicle_quest_progress", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  userId: text("user_id").notNull(),
+  questTemplateId: varchar("quest_template_id").notNull(),
+  
+  currentProgress: integer("current_progress").notNull().default(0),
+  completed: boolean("completed").notNull().default(false),
+  
+  // Reset tracking
+  periodStartedAt: timestamp("period_started_at").defaultNow().notNull(), // When this period began
+  completedAt: timestamp("completed_at"),
+  rewardClaimedAt: timestamp("reward_claimed_at"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleQuestProgressSchema = createInsertSchema(chronicleQuestProgress).omit({
+  id: true, createdAt: true
+});
+export type ChronicleQuestProgress = typeof chronicleQuestProgress.$inferSelect;
+export type InsertChronicleQuestProgress = z.infer<typeof insertChronicleQuestProgressSchema>;
