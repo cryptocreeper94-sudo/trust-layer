@@ -323,7 +323,7 @@ export async function registerRoutes(
             const TIER_BONUSES: Record<string, number> = {
               genesis: 25, founder: 15, pioneer: 10, early_bird: 5
             };
-            const TOKEN_PRICE = 0.008;
+            const TOKEN_PRICE = 0.005;
             const tokenAmount = Math.floor((amountCents / 100) / TOKEN_PRICE);
             const bonusPercent = TIER_BONUSES[tier] || 0;
             const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
@@ -602,25 +602,22 @@ export async function registerRoutes(
         // Handle presale purchases
         if (metadata.type === "presale" && customerEmail) {
           try {
-            // Determine tier based on amount
-            const tiers = {
-              genesis: { amount: 100000, bonus: 25 },
-              founder: { amount: 50000, bonus: 15 },
-              pioneer: { amount: 25000, bonus: 10 },
-              early_bird: { amount: 10000, bonus: 5 },
-            };
-
-            let tier = "standard";
-            let bonus = 0;
-            for (const [tierName, tierData] of Object.entries(tiers)) {
-              if (amountCents >= tierData.amount) {
-                tier = tierName;
-                bonus = tierData.bonus;
-                break;
-              }
+            const purchaseId = metadata.purchaseId;
+            const tier = metadata.tier || "standard";
+            const totalTokens = parseInt(metadata.totalTokens || "0");
+            
+            // Update existing pending purchase to completed
+            if (purchaseId) {
+              await db.execute(sql`
+                UPDATE presale_purchases 
+                SET status = 'completed',
+                    stripe_payment_intent_id = ${`coinbase_${charge.code}`}
+                WHERE id = ${purchaseId} AND status = 'pending'
+              `);
+              console.log(`[Coinbase Webhook] Updated purchase ${purchaseId} to completed`);
             }
 
-            // Record the presale purchase
+            // Also record in early_adopter_program for tracking
             await db.execute(sql`
               INSERT INTO early_adopter_program (email, tier, status, registered_at, total_contributed)
               VALUES (${customerEmail}, ${tier}, 'active', NOW(), ${amountCents})
@@ -629,7 +626,7 @@ export async function registerRoutes(
                 total_contributed = early_adopter_program.total_contributed + ${amountCents}
             `);
 
-            console.log(`[Coinbase Webhook] Presale recorded: ${customerEmail}, tier: ${tier}, amount: $${amountUsd}`);
+            console.log(`[Coinbase Webhook] Presale recorded: ${customerEmail}, tier: ${tier}, amount: $${amountUsd}, tokens: ${totalTokens}`);
           } catch (dbError) {
             console.error("[Coinbase Webhook] DB error for presale:", dbError);
           }
@@ -7136,7 +7133,7 @@ export async function registerRoutes(
       const protocol = host.includes("localhost") ? "http" : "https";
       const baseUrl = `${protocol}://${host}`;
       
-      const TOKEN_PRICE = 0.008;
+      const TOKEN_PRICE = 0.005;
       const tokenAmount = Math.floor((finalAmount / 100) / TOKEN_PRICE);
       const bonusPercent = tierConfig?.bonus || 0;
       const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
@@ -7200,7 +7197,7 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Invalid amount" });
       }
       
-      const TOKEN_PRICE = 0.008;
+      const TOKEN_PRICE = 0.005;
       const tokenAmount = Math.floor((finalAmount / 100) / TOKEN_PRICE);
       const bonusPercent = tierConfig?.bonus || 0;
       const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
@@ -7326,6 +7323,30 @@ export async function registerRoutes(
   app.get("/api/presale/verify", async (req, res) => {
     try {
       const sessionId = req.query.session_id as string;
+      const cryptoPurchaseId = req.query.crypto_purchase as string;
+      
+      // Handle crypto purchase verification
+      if (cryptoPurchaseId) {
+        const purchaseResult = await db.execute(sql`
+          SELECT * FROM presale_purchases WHERE id = ${cryptoPurchaseId}
+        `);
+        const purchase = purchaseResult.rows[0] as any;
+        
+        if (!purchase) {
+          return res.status(404).json({ error: "Purchase not found" });
+        }
+        
+        return res.json({
+          success: purchase.status === 'completed',
+          email: purchase.email,
+          tier: purchase.tier,
+          totalTokens: purchase.token_amount,
+          amountPaid: (purchase.usd_amount_cents / 100).toFixed(2),
+          status: purchase.status,
+          message: purchase.status === 'completed' ? "Purchase confirmed!" : "Payment pending confirmation",
+        });
+      }
+      
       if (!sessionId) {
         return res.status(400).json({ error: "Session ID required" });
       }
@@ -7345,7 +7366,7 @@ export async function registerRoutes(
         const tier = session.metadata?.tier || 'unknown';
         const amountPaid = (amountCents / 100).toFixed(2);
         
-        const TOKEN_PRICE = 0.008;
+        const TOKEN_PRICE = 0.005;
         const TIER_BONUSES: Record<string, number> = {
           genesis: 25, founder: 15, pioneer: 10, early_bird: 5
         };
