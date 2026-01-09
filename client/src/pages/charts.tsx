@@ -205,23 +205,23 @@ export default function Charts() {
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
             <GlassCard>
               <div className="p-4 text-center">
-                <Clock className="w-5 h-5 text-primary mx-auto mb-2" />
+                <TrendingUp className="w-5 h-5 text-green-400/50 mx-auto mb-2" />
                 <div className="text-sm font-bold">All-Time High</div>
-                <div className="text-lg font-bold text-green-400">$0.000185</div>
-                <div className="text-[10px] text-muted-foreground">Dec 15, 2024</div>
+                <div className="text-lg font-bold text-white/50">—</div>
+                <div className="text-[10px] text-muted-foreground">Available at launch</div>
               </div>
             </GlassCard>
             <GlassCard>
               <div className="p-4 text-center">
-                <Clock className="w-5 h-5 text-red-400 mx-auto mb-2" />
+                <TrendingDown className="w-5 h-5 text-red-400/50 mx-auto mb-2" />
                 <div className="text-sm font-bold">All-Time Low</div>
-                <div className="text-lg font-bold text-red-400">$0.000045</div>
-                <div className="text-[10px] text-muted-foreground">Apr 11, 2026</div>
+                <div className="text-lg font-bold text-white/50">—</div>
+                <div className="text-[10px] text-muted-foreground">Available at launch</div>
               </div>
             </GlassCard>
             <GlassCard>
               <div className="p-4 text-center">
-                <TrendingUp className="w-5 h-5 text-purple-400 mx-auto mb-2" />
+                <DollarSign className="w-5 h-5 text-purple-400 mx-auto mb-2" />
                 <div className="text-sm font-bold">Total Supply</div>
                 <div className="text-lg font-bold">100M DWC</div>
                 <div className="text-[10px] text-muted-foreground">Fixed supply</div>

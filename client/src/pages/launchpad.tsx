@@ -42,11 +42,6 @@ interface LaunchedToken {
   createdAt: string;
 }
 
-const SAMPLE_TOKENS: LaunchedToken[] = [
-  { id: "1", name: "MoonDoge", symbol: "MDOGE", description: "Community-driven meme token", totalSupply: "1000000000", initialPrice: "0.0001", currentPrice: "0.00025", marketCap: "250000", holders: 1284, status: "live", launchType: "fair", createdAt: new Date().toISOString() },
-  { id: "2", name: "DarkWave AI", symbol: "DWAI", description: "AI-powered DeFi protocols", totalSupply: "100000000", initialPrice: "0.01", currentPrice: "0.045", marketCap: "4500000", holders: 3421, status: "live", launchType: "presale", createdAt: new Date().toISOString() },
-  { id: "3", name: "GreenChain", symbol: "GREEN", description: "Carbon credit tokenization", totalSupply: "500000000", initialPrice: "0.005", currentPrice: "0.008", marketCap: "4000000", holders: 892, status: "live", launchType: "fair", createdAt: new Date().toISOString() },
-];
 
 function TokenCard({ token }: { token: LaunchedToken }) {
   const priceChange = ((parseFloat(token.currentPrice) - parseFloat(token.initialPrice)) / parseFloat(token.initialPrice) * 100).toFixed(1);
@@ -544,9 +539,10 @@ export default function Launchpad() {
               ) : filteredTokens.length === 0 ? (
                 <div className="text-center py-12">
                   <Rocket className="w-12 h-12 text-white/20 mx-auto mb-3" />
-                  <p className="text-sm text-muted-foreground mb-4">No tokens launched yet</p>
+                  <p className="text-sm text-muted-foreground mb-2">Token launchpad coming at mainnet</p>
+                  <p className="text-xs text-muted-foreground/60 mb-4">April 11, 2026</p>
                   <Button onClick={() => setCreateOpen(true)} className="bg-pink-500 hover:bg-pink-600">
-                    <Plus className="w-4 h-4 mr-2" /> Be the First to Launch
+                    <Plus className="w-4 h-4 mr-2" /> Create Token (Preview)
                   </Button>
                 </div>
               ) : (
