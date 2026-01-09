@@ -141,6 +141,7 @@ import { registerObjectStorageRoutes } from "./replit_integrations/object_storag
 import { shellsService, SHELL_PACKAGES, SHELL_BUNDLES, SHELL_EARN_RATES, SHELL_COSTS, DWC_CONVERSION_RATE, DWC_LAUNCH_DATE } from "./shells-service";
 import { questsService } from "./quests-service";
 import { mirrorLifeService } from "./mirror-life-service";
+import { interiorsService } from "./interiors-service";
 import { subscriptionService, SUBSCRIPTION_PLANS } from "./subscription-service";
 import { guardianService, generateDataHash as guardianHash, generateMerkleRoot } from "./guardian-service";
 
@@ -11278,6 +11279,113 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       res.json({ anomalies, effects });
     } catch (error: any) {
       res.status(500).json({ error: error.message || "Failed to get anomalies" });
+    }
+  });
+
+  // =====================================================
+  // SIMS-STYLE INTERIOR DOMICILE APIs
+  // =====================================================
+
+  // Get player's interior/domicile
+  app.get("/api/chronicles/interior", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.chroniclesUser.id;
+      const interior = await interiorsService.getOrCreateInterior(userId);
+      const rooms = await interiorsService.getRooms(userId);
+      res.json({ interior, rooms });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get interior" });
+    }
+  });
+
+  // Get object catalog for an era
+  app.get("/api/chronicles/interior/catalog/:era", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const { era } = req.params;
+      const catalog = await interiorsService.getObjectCatalog(era);
+      res.json({ catalog });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get catalog" });
+    }
+  });
+
+  // Get a specific room with objects
+  app.get("/api/chronicles/interior/room/:roomId", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const { roomId } = req.params;
+      const room = await interiorsService.getRoom(roomId);
+      if (!room) {
+        return res.status(404).json({ error: "Room not found" });
+      }
+      const objects = await interiorsService.getRoomObjects(roomId);
+      res.json({ room, objects });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get room" });
+    }
+  });
+
+  // Place an object in a room
+  app.post("/api/chronicles/interior/room/:roomId/objects", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.chroniclesUser.id;
+      const { roomId } = req.params;
+      const { catalogId, gridX, gridY } = req.body;
+      
+      if (!catalogId || gridX === undefined || gridY === undefined) {
+        return res.status(400).json({ error: "Missing required fields: catalogId, gridX, gridY" });
+      }
+      
+      const obj = await interiorsService.placeObject(userId, roomId, catalogId, gridX, gridY);
+      res.json({ success: true, object: obj });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to place object" });
+    }
+  });
+
+  // Remove an object from a room
+  app.delete("/api/chronicles/interior/objects/:objectId", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.chroniclesUser.id;
+      const { objectId } = req.params;
+      await interiorsService.removeObject(userId, objectId);
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to remove object" });
+    }
+  });
+
+  // Interact with an object
+  app.post("/api/chronicles/interior/objects/:objectId/interact", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.chroniclesUser.id;
+      const { objectId } = req.params;
+      const { verb } = req.body;
+      
+      if (!verb) {
+        return res.status(400).json({ error: "Interaction verb required" });
+      }
+      
+      const result = await interiorsService.interactWithObject(userId, objectId, verb);
+      
+      if (result.success && result.shellsEarned && result.shellsEarned > 0) {
+        await shellsService.earnShells(userId, result.shellsEarned, "activity", `Interacted: ${verb}`);
+        await questsService.recordAction(userId, "object_interaction");
+      }
+      
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to interact" });
+    }
+  });
+
+  // Get active activity session
+  app.get("/api/chronicles/interior/activity", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.chroniclesUser.id;
+      const session = await interiorsService.getActiveSession(userId);
+      res.json({ session });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get activity" });
     }
   });
 

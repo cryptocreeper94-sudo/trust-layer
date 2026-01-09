@@ -5889,3 +5889,179 @@ export const veilAnomalies = pgTable("veil_anomalies", {
 });
 
 export type VeilAnomaly = typeof veilAnomalies.$inferSelect;
+
+// =====================================================
+// SIMS-STYLE INTERIOR DOMICILE SYSTEM
+// =====================================================
+
+// Player's overall domicile/home interior
+export const chronicleInteriors = pgTable("chronicle_interiors", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  userId: text("user_id").notNull().unique(),
+  
+  // Current era theme
+  activeEra: text("active_era").notNull().default("present"),
+  
+  // Domicile stats
+  totalRooms: integer("total_rooms").notNull().default(1),
+  currentRoomId: varchar("current_room_id"), // Which room player is in
+  
+  // Upgrades
+  domicileLevel: integer("domicile_level").notNull().default(1),
+  maxRooms: integer("max_rooms").notNull().default(4),
+  
+  // Stats affected by activities
+  comfortLevel: integer("comfort_level").notNull().default(50), // 0-100
+  cleanlinessLevel: integer("cleanliness_level").notNull().default(50),
+  ambienceLevel: integer("ambience_level").notNull().default(50),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type ChronicleInterior = typeof chronicleInteriors.$inferSelect;
+
+// Rooms within the domicile
+export const chronicleRooms = pgTable("chronicle_rooms", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  interiorId: varchar("interior_id").notNull(),
+  userId: text("user_id").notNull(),
+  
+  name: text("name").notNull(), // "Living Room", "Bedchamber", "Workshop"
+  roomType: text("room_type").notNull().default("living"), // 'living', 'bedroom', 'kitchen', 'workshop', 'study', 'garden'
+  
+  // Grid layout (like estate but for interior)
+  gridWidth: integer("grid_width").notNull().default(6),
+  gridHeight: integer("grid_height").notNull().default(6),
+  layoutData: text("layout_data").default("[]"), // JSON grid of placed objects
+  
+  // Room stats
+  isUnlocked: boolean("is_unlocked").notNull().default(true),
+  unlockCost: integer("unlock_cost").default(0),
+  
+  // Era theming
+  era: text("era").notNull().default("present"),
+  
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type ChronicleRoom = typeof chronicleRooms.$inferSelect;
+
+// Era-specific object catalog (furniture, appliances, decorations)
+export const chronicleObjectCatalogs = pgTable("chronicle_object_catalogs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  code: text("code").notNull(), // 'present_tv', 'medieval_hearth', 'cyberpunk_holodisplay'
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  
+  // Era/timeline
+  era: text("era").notNull(), // 'stone_age', 'medieval', 'present', 'cyberpunk', etc.
+  category: text("category").notNull(), // 'furniture', 'appliance', 'decoration', 'utility', 'recreation'
+  
+  // Visual
+  iconEmoji: text("icon_emoji").notNull().default("📦"),
+  colorClass: text("color_class").default("bg-slate-500"),
+  spriteUrl: text("sprite_url"), // For more detailed visuals
+  
+  // Placement
+  gridWidth: integer("grid_width").notNull().default(1),
+  gridHeight: integer("grid_height").notNull().default(1),
+  allowedRoomTypes: text("allowed_room_types").default("[]"), // JSON array of room types
+  
+  // Cost
+  shellCost: integer("shell_cost").notNull().default(10),
+  unlockLevel: integer("unlock_level").notNull().default(0),
+  
+  // Interaction
+  isInteractive: boolean("is_interactive").notNull().default(true),
+  interactionVerbs: text("interaction_verbs").default("[]"), // JSON: ['watch', 'turn_on', 'sit']
+  activityCategory: text("activity_category"), // 'comfort', 'intellect', 'creation', 'social', 'hygiene', 'food'
+  
+  // Activity effects
+  comfortBonus: integer("comfort_bonus").default(0),
+  entertainmentBonus: integer("entertainment_bonus").default(0),
+  productivityBonus: integer("productivity_bonus").default(0),
+  
+  // Rewards for using
+  shellsPerUse: integer("shells_per_use").default(0),
+  useCooldownMinutes: integer("use_cooldown_minutes").default(60),
+  
+  // Time restrictions
+  availableFromHour: integer("available_from_hour"), // null = always available
+  availableToHour: integer("available_to_hour"),
+  
+  isActive: boolean("is_active").notNull().default(true),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ChronicleObjectCatalog = typeof chronicleObjectCatalogs.$inferSelect;
+
+// Objects placed in rooms
+export const chronicleRoomObjects = pgTable("chronicle_room_objects", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  roomId: varchar("room_id").notNull(),
+  userId: text("user_id").notNull(),
+  catalogId: varchar("catalog_id").notNull(),
+  
+  // Position in room grid
+  gridX: integer("grid_x").notNull(),
+  gridY: integer("grid_y").notNull(),
+  rotation: integer("rotation").notNull().default(0), // 0, 90, 180, 270
+  
+  // Object state
+  state: text("state").notNull().default("idle"), // 'idle', 'in_use', 'broken', 'upgrading'
+  stateData: text("state_data").default("{}"), // JSON for object-specific state
+  
+  // Upgrades
+  level: integer("level").notNull().default(1),
+  condition: integer("condition").notNull().default(100), // 0-100, degrades over time
+  
+  // Usage tracking
+  lastUsedAt: timestamp("last_used_at"),
+  totalUses: integer("total_uses").notNull().default(0),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type ChronicleRoomObject = typeof chronicleRoomObjects.$inferSelect;
+
+// Active activity sessions (player doing something with an object)
+export const chronicleActivitySessions = pgTable("chronicle_activity_sessions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  userId: text("user_id").notNull(),
+  roomObjectId: varchar("room_object_id").notNull(),
+  
+  activityType: text("activity_type").notNull(), // 'watching_tv', 'cooking', 'reading', 'crafting'
+  verb: text("verb").notNull(), // The interaction verb used
+  
+  // Timing
+  startedAt: timestamp("started_at").defaultNow().notNull(),
+  expectedEndAt: timestamp("expected_end_at").notNull(),
+  completedAt: timestamp("completed_at"),
+  
+  // Progress
+  durationMinutes: integer("duration_minutes").notNull(),
+  progress: integer("progress").notNull().default(0), // 0-100
+  
+  // Rewards
+  shellReward: integer("shell_reward").default(0),
+  statBonuses: text("stat_bonuses").default("{}"), // JSON: {comfort: +5, intellect: +2}
+  
+  // Quest integration
+  questProgressContributed: boolean("quest_progress_contributed").default(false),
+  
+  status: text("status").notNull().default("active"), // 'active', 'completed', 'cancelled'
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ChronicleActivitySession = typeof chronicleActivitySessions.$inferSelect;
