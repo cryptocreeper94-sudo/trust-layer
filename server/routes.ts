@@ -139,6 +139,7 @@ import { broadcastToChannel } from "./chat-presence";
 import { pulseClient } from "./pulse-client";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { shellsService, SHELL_PACKAGES, SHELL_BUNDLES, SHELL_EARN_RATES, SHELL_COSTS, DWC_CONVERSION_RATE, DWC_LAUNCH_DATE } from "./shells-service";
+import { needsService } from "./needs-service";
 import { builderService } from "./builder-service";
 import { questsService } from "./quests-service";
 import { mirrorLifeService } from "./mirror-life-service";
@@ -14686,6 +14687,178 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error) {
       console.error("Get contribution error:", error);
       res.status(500).json({ error: "Failed to get contribution" });
+    }
+  });
+
+  // ============================================
+  // CHRONICLES LIFE SIMULATION API
+  // ============================================
+  
+  // Get character status with needs
+  app.get("/api/chronicles/character", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const status = await needsService.getCharacterStatus(userId);
+      if (!status) {
+        return res.status(404).json({ error: "Character not found", needsOnboarding: true });
+      }
+      
+      res.json(status);
+    } catch (error) {
+      console.error("Get character status error:", error);
+      res.status(500).json({ error: "Failed to get character status" });
+    }
+  });
+
+  // Create character
+  app.post("/api/chronicles/character", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { name, primaryTrait, secondaryTrait, era } = req.body;
+      if (!name) {
+        return res.status(400).json({ error: "Name is required" });
+      }
+      
+      const existing = await needsService.getCharacter(userId);
+      if (existing) {
+        return res.status(400).json({ error: "Character already exists" });
+      }
+      
+      const character = await needsService.createCharacter(userId, name, {
+        primaryTrait,
+        secondaryTrait,
+        era: era || "modern",
+      });
+      
+      res.json({ success: true, character });
+    } catch (error) {
+      console.error("Create character error:", error);
+      res.status(500).json({ error: "Failed to create character" });
+    }
+  });
+
+  // Daily check-in
+  app.post("/api/chronicles/check-in", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const character = await needsService.getCharacter(userId);
+      if (!character) {
+        return res.status(404).json({ error: "Character not found" });
+      }
+      
+      const result = await needsService.dailyCheckIn(character.id, userId);
+      res.json(result);
+    } catch (error) {
+      console.error("Daily check-in error:", error);
+      res.status(500).json({ error: "Failed to process check-in" });
+    }
+  });
+
+  // Perform activity
+  app.post("/api/chronicles/activity", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { activityCode } = req.body;
+      if (!activityCode) {
+        return res.status(400).json({ error: "Activity code is required" });
+      }
+      
+      const character = await needsService.getCharacter(userId);
+      if (!character) {
+        return res.status(404).json({ error: "Character not found" });
+      }
+      
+      const result = await needsService.performActivity(character.id, activityCode, userId);
+      res.json(result);
+    } catch (error) {
+      console.error("Perform activity error:", error);
+      res.status(500).json({ error: "Failed to perform activity" });
+    }
+  });
+
+  // Travel to location
+  app.post("/api/chronicles/travel", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { locationCode } = req.body;
+      if (!locationCode) {
+        return res.status(400).json({ error: "Location code is required" });
+      }
+      
+      const character = await needsService.getCharacter(userId);
+      if (!character) {
+        return res.status(404).json({ error: "Character not found" });
+      }
+      
+      const result = await needsService.travelTo(character.id, locationCode);
+      res.json(result);
+    } catch (error) {
+      console.error("Travel error:", error);
+      res.status(500).json({ error: "Failed to travel" });
+    }
+  });
+
+  // Get available activities
+  app.get("/api/chronicles/activities", async (req: any, res) => {
+    try {
+      const era = (req.query.era as string) || "modern";
+      const activities = await needsService.getActivities(era);
+      res.json({ activities });
+    } catch (error) {
+      console.error("Get activities error:", error);
+      res.status(500).json({ error: "Failed to get activities" });
+    }
+  });
+
+  // Get available locations
+  app.get("/api/chronicles/locations", async (req: any, res) => {
+    try {
+      const era = (req.query.era as string) || "modern";
+      const locations = await needsService.getLocations(era);
+      res.json({ locations });
+    } catch (error) {
+      console.error("Get locations error:", error);
+      res.status(500).json({ error: "Failed to get locations" });
     }
   });
 

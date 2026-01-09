@@ -279,7 +279,7 @@ export default function ChroniclesBuilder() {
                 </div>
                 <div className="text-center p-3 rounded-lg bg-white/5">
                   <div className="text-2xl font-bold text-yellow-400" data-testid="text-shells-earned">
-                    {builder.shellsEarned.toLocaleString()}
+                    {(builder.shellsEarned || 0).toLocaleString()}
                   </div>
                   <div className="text-xs text-gray-400">Shells Earned</div>
                 </div>
@@ -628,7 +628,7 @@ export default function ChroniclesBuilder() {
                         <div className="text-xs text-gray-500">reputation</div>
                       </div>
                       <div className="text-right">
-                        <div className="text-yellow-400 font-bold">{entry.shellsEarned.toLocaleString()}</div>
+                        <div className="text-yellow-400 font-bold">{(entry.shellsEarned || 0).toLocaleString()}</div>
                         <div className="text-xs text-gray-500">shells earned</div>
                       </div>
                     </motion.div>

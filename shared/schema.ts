@@ -5108,6 +5108,23 @@ export const chronicleCharacters = pgTable("chronicle_characters", {
   questsCompleted: integer("quests_completed").notNull().default(0),
   decisionsRecorded: integer("decisions_recorded").notNull().default(0),
   
+  // Daily needs system (0-100 scale)
+  energy: integer("energy").notNull().default(100),
+  mood: integer("mood").notNull().default(75),
+  health: integer("health").notNull().default(100),
+  social: integer("social").notNull().default(50),
+  hunger: integer("hunger").notNull().default(0), // 0 = full, 100 = starving
+  
+  // Check-in tracking
+  lastCheckIn: timestamp("last_check_in"),
+  lastNeedsUpdate: timestamp("last_needs_update"),
+  checkInStreak: integer("check_in_streak").notNull().default(0),
+  totalCheckIns: integer("total_check_ins").notNull().default(0),
+  
+  // Current location in world
+  currentLocation: text("current_location").default("home"),
+  currentActivity: text("current_activity"),
+  
   avatarUrl: text("avatar_url"),
   isActive: boolean("is_active").notNull().default(true),
   
@@ -6330,3 +6347,131 @@ export const builderTiers = pgTable("builder_tiers", {
 });
 
 export type BuilderTier = typeof builderTiers.$inferSelect;
+
+// ============================================
+// CHRONICLES LIFE SIMULATION TABLES
+// ============================================
+
+// Daily check-in log
+export const chronicleCheckIns = pgTable("chronicle_check_ins", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  characterId: varchar("character_id").notNull(),
+  userId: text("user_id").notNull(),
+  
+  // Check-in details
+  checkInType: text("check_in_type").notNull().default("daily"), // 'daily', 'morning', 'evening', 'quick'
+  moodBefore: integer("mood_before"),
+  moodAfter: integer("mood_after"),
+  energyBefore: integer("energy_before"),
+  energyAfter: integer("energy_after"),
+  
+  // Activities chosen during check-in
+  activitiesChosen: text("activities_chosen").default("[]"), // JSON array
+  decisionsMade: text("decisions_made").default("[]"), // JSON array
+  
+  // Rewards earned
+  shellsEarned: integer("shells_earned").default(0),
+  xpEarned: integer("xp_earned").default(0),
+  
+  // Streak tracking
+  streakDay: integer("streak_day").default(1),
+  bonusMultiplier: real("bonus_multiplier").default(1.0),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ChronicleCheckIn = typeof chronicleCheckIns.$inferSelect;
+
+// Player relationships with NPCs
+export const chronicleRelationships = pgTable("chronicle_relationships", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  characterId: varchar("character_id").notNull(),
+  npcId: varchar("npc_id").notNull(),
+  
+  // Relationship status
+  relationshipType: text("relationship_type").notNull().default("acquaintance"), // 'stranger', 'acquaintance', 'friend', 'close_friend', 'romantic', 'partner', 'spouse', 'family'
+  affection: integer("affection").notNull().default(0), // -100 to 100
+  trust: integer("trust").notNull().default(0), // 0 to 100
+  
+  // Interaction history
+  timesInteracted: integer("times_interacted").notNull().default(0),
+  lastInteraction: timestamp("last_interaction"),
+  giftsGiven: integer("gifts_given").default(0),
+  questsCompletedTogether: integer("quests_completed_together").default(0),
+  
+  // Milestones
+  milestones: text("milestones").default("[]"), // JSON array of relationship milestones reached
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type ChronicleRelationship = typeof chronicleRelationships.$inferSelect;
+
+// Available activities in the world
+export const chronicleActivities = pgTable("chronicle_activities", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  code: text("code").notNull().unique(), // 'sleep', 'eat', 'work', 'socialize', 'exercise'
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  category: text("category").notNull(), // 'basic_needs', 'social', 'work', 'leisure', 'self_improvement'
+  
+  // Location requirements
+  era: text("era").default("all"), // 'all', 'modern', 'medieval', etc.
+  location: text("location"), // null = can do anywhere
+  
+  // Duration
+  durationMinutes: integer("duration_minutes").notNull().default(30),
+  
+  // Effects on needs
+  energyChange: integer("energy_change").default(0),
+  moodChange: integer("mood_change").default(0),
+  healthChange: integer("health_change").default(0),
+  socialChange: integer("social_change").default(0),
+  hungerChange: integer("hunger_change").default(0),
+  
+  // Rewards
+  shellReward: integer("shell_reward").default(0),
+  xpReward: integer("xp_reward").default(0),
+  
+  // Requirements
+  minEnergy: integer("min_energy").default(0),
+  minMood: integer("min_mood").default(0),
+  
+  iconEmoji: text("icon_emoji").default("🎯"),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ChronicleActivity = typeof chronicleActivities.$inferSelect;
+
+// Locations in the world
+export const chronicleLocations = pgTable("chronicle_locations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  code: text("code").notNull().unique(), // 'home', 'cafe', 'gym', 'park', 'office'
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  era: text("era").notNull().default("modern"),
+  
+  // Location type
+  locationType: text("location_type").notNull(), // 'residence', 'commercial', 'public', 'workplace', 'entertainment'
+  
+  // Available activities here
+  availableActivities: text("available_activities").default("[]"), // JSON array of activity codes
+  
+  // NPCs that can be found here
+  residentNpcs: text("resident_npcs").default("[]"), // JSON array of NPC IDs
+  
+  // Requirements to access
+  unlockRequirement: text("unlock_requirement"), // null = always accessible
+  
+  iconEmoji: text("icon_emoji").default("📍"),
+  imageUrl: text("image_url"),
+  
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ChronicleLocation = typeof chronicleLocations.$inferSelect;
