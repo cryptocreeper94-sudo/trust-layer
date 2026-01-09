@@ -7,7 +7,7 @@ import {
   Plus, Minus, RotateCcw, Save, Coins, Lock, Sparkles,
   ChevronRight, User, Grid3X3, Eye, ShoppingBag, Crown,
   Rocket, Building2, MapPin, Gift, Briefcase, Calendar, X,
-  Timer, Flame, Clock, Zap, Map, ShoppingCart
+  Timer, Flame, Clock, Zap, Map, ShoppingCart, DoorOpen
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -960,17 +960,20 @@ export default function ChroniclesEstate() {
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
           {[
             { id: "builder", label: "Estate Builder", icon: Home },
+            { id: "interior", label: "Enter Home", icon: DoorOpen, isLink: true, href: "/chronicles/interior" },
             { id: "zones", label: "City Zones", icon: Map },
             { id: "marketplace", label: "Plot Market", icon: ShoppingCart },
             { id: "rewards", label: "Daily Rewards", icon: Gift },
-          ].map((tab) => (
+          ].map((tab: any) => (
             <Button
               key={tab.id}
-              variant={activeTab === tab.id ? "default" : "outline"}
-              onClick={() => setActiveTab(tab.id)}
-              className={activeTab === tab.id 
-                ? "bg-gradient-to-r from-cyan-500 to-purple-500 text-white shrink-0" 
-                : "border-slate-600 text-slate-300 shrink-0"
+              variant={activeTab === tab.id && !tab.isLink ? "default" : "outline"}
+              onClick={() => tab.isLink ? setLocation(tab.href) : setActiveTab(tab.id)}
+              className={tab.isLink 
+                ? "bg-gradient-to-r from-pink-500 to-amber-500 text-white shrink-0 shadow-[0_0_15px_rgba(236,72,153,0.3)]"
+                : activeTab === tab.id 
+                  ? "bg-gradient-to-r from-cyan-500 to-purple-500 text-white shrink-0" 
+                  : "border-slate-600 text-slate-300 shrink-0"
               }
               data-testid={`tab-${tab.id}`}
             >
