@@ -96,7 +96,7 @@
 - **Block Time**: 400ms
 - **TPS Capacity**: 200,000+
 - **Transaction Cost**: ~$0.0001
-- **Token**: DWC (100M supply, 18 decimals)
+- **Coin**: DWC (1B supply, 18 decimals)
 
 ### DeFi Features
 - DEX/Token Swap (0.3% fee)

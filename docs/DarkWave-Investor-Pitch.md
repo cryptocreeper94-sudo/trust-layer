@@ -13,7 +13,7 @@ A Layer 1 Proof-of-Authority blockchain designed for real-world performance:
 - **400ms block finality** - faster than Visa
 - **200,000+ TPS capacity** - built for scale
 - **$0.0001 average transaction cost** - accessible to everyone
-- **Native token (DWC)** - 100M supply, no buy/sell tax, revenue from protocol fees
+- **Native coin (DWC)** - 1B supply, no buy/sell tax, revenue from protocol fees
 
 ---
 
@@ -115,18 +115,18 @@ Developers who learn DarkWave Script become part of OUR ecosystem permanently.
 
 ---
 
-## Token Presale
+## Coin Presale
 
-| Round | Price | Discount | Status |
-|-------|-------|----------|--------|
-| Seed Round | $0.005 | 50% | Open |
-| Private Sale | $0.007 | 30% | Coming Soon |
-| Public Presale | $0.008 | 20% | Coming Soon |
-| Launch Price | $0.01 | - | Feb 2026 |
+| Round | Price | Bonus | Status |
+|-------|-------|-------|--------|
+| Month 1 | $0.001 | Up to 25% | Open |
+| Month 2 | $0.0012 | Up to 20% | Coming Soon |
+| Month 3 | $0.0014 | Up to 15% | Coming Soon |
+| Launch Price | $0.01 | - | April 2026 |
 
-**Presale Allocation:** 15M tokens (15% of supply)  
-**Minimum Investment:** $25  
-**Bonus Tokens:** Up to 25% for early tiers
+**Presale Allocation:** 150M coins (15% of 1B supply)  
+**Minimum Investment:** $100  
+**Bonus Tiers:** Genesis ($1,000+/25%), Founder ($500+/15%), Pioneer ($250+/10%), Early Bird ($100+/5%)
 
 ---
 
@@ -140,7 +140,7 @@ Developers who learn DarkWave Script become part of OUR ecosystem permanently.
 | Orbs Economy | Transactional | $4.99-$79.99 packages |
 | Domain Registration | Recurring | $12-$350/year |
 | Protocol Fees (DEX, NFT, Bridge) | Transaction | Variable |
-| Token Presale | One-time | $75,000 target (15M tokens × $0.005) |
+| Coin Presale | One-time | $150,000 target (150M coins × $0.001) |
 
 ---
 

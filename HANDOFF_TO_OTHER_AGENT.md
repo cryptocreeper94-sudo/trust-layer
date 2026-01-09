@@ -104,13 +104,13 @@ Follow React Native Firebase setup: https://rnfirebase.io/
 
 ---
 
-## DarkWave Token (DWT) Specifications
+## DarkWave Coin (DWC) Specifications
 
 | Property | Value |
 |----------|-------|
-| **Token Name** | DarkWave Token |
-| **Symbol** | DWT |
-| **Total Supply** | 100,000,000 DWT |
+| **Coin Name** | DarkWave Coin |
+| **Symbol** | DWC |
+| **Total Supply** | 1,000,000,000 DWC |
 | **Decimals** | 18 |
 | **Network** | DarkWave Chain (Layer 1) |
 | **Chain ID** | 8453 |

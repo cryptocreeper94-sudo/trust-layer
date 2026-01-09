@@ -16,8 +16,8 @@ DarkWave Chain is a next-generation Layer 1 blockchain ecosystem designed for sp
 |----------|-------|
 | Chain ID | 8453 |
 | Chain Name | DarkWave Chain |
-| Native Token | DWT (DarkWave Token) |
-| Total Supply | 100,000,000 DWT |
+| Native Coin | DWC (DarkWave Coin) |
+| Total Supply | 1,000,000,000 DWC |
 | Decimals | 18 |
 | Block Time | 400ms |
 | Max TPS | 200,000+ |
