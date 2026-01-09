@@ -61,21 +61,21 @@ DWSC employs a Proof-of-Authority (PoA) consensus with a Founders Validator syst
 
 ## 3. Token Economics
 
-### 3.1 Native Token (DWC)
+### 3.1 Native Coin (DWC)
 
-- **Total Supply**: 100,000,000 DWC (fixed, no inflation/deflation)
+- **Total Supply**: 1,000,000,000 DWC (fixed, no inflation/deflation)
 - **Decimals**: 18
 - **Utility**: Gas fees, staking, governance, in-app purchases
 
 ### 3.2 Allocation
 
-| Category | Percentage | Tokens | Vesting |
+| Category | Percentage | Coins | Vesting |
 |----------|------------|--------|---------|
-| Community & Ecosystem | 40% | 40M | Milestone-based |
-| Development Fund | 20% | 20M | DAO-controlled |
-| Team & Advisors | 15% | 15M | 4-year vest |
-| Treasury Reserve | 15% | 15M | 3-year vest |
-| Public Sale | 10% | 10M | Immediate |
+| Community & Ecosystem | 40% | 400M | Milestone-based |
+| Development Fund | 20% | 200M | DAO-controlled |
+| Team & Advisors | 15% | 150M | 4-year vest |
+| Presale | 15% | 150M | Immediate |
+| Liquidity | 10% | 100M | Immediate |
 
 ### 3.3 Fee Structure
 

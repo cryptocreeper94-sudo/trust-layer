@@ -18,7 +18,7 @@ import { getUncachableStripeClient } from "./stripeClient";
 export const DWC_CONVERSION_RATE = 100;
 export const DWC_LAUNCH_DATE = "2026-04-11";
 
-// Earning caps to protect DWC supply (100M total = 10B Shells max)
+// Earning caps to protect DWC supply (1B total = 100B Shells max)
 // These limits ensure sustainable token distribution
 export const SHELL_EARNING_CAPS = {
   dailyMax: 200,         // 2 DWC per day max from gameplay

@@ -2605,7 +2605,7 @@ DarkWave Smart Chain (DWSC) is a purpose-built Layer 1 blockchain optimized for 
 ## Token Economics
 
 - **Native Token**: DWC
-- **Total Supply**: 100,000,000 (fixed)
+- **Total Supply**: 1,000,000,000 (fixed)
 - **Decimals**: 18
 
 ## Roadmap

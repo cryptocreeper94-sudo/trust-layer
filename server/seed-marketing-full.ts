@@ -34,7 +34,7 @@ const TWITTER_POSTS = [
   { content: `⚡ DarkWave Smart Chain\n\n• 400ms block time\n• 200K+ TPS\n• Proof-of-Authority\n• Built for the future\n\nThis is next-gen blockchain. dwsc.io`, category: 'blockchain' },
   { content: `Why build on slow chains?\n\nDWSC: 400ms blocks. 200K TPS. Real speed.\n\nThe blockchain built for serious builders 🔗`, category: 'blockchain' },
   { content: `Proof-of-Authority. Founders Validation. Real security.\n\nDWSC isn't just fast—it's RELIABLE.\n\ndwsc.io ⚡`, category: 'blockchain' },
-  { content: `100 million DWC. No burn. Pure utility.\n\nThe native token powering an entire ecosystem.\n\nLearn more: dwsc.io 💎`, category: 'blockchain' },
+  { content: `1 billion DWC. No burn. Pure utility.\n\nThe native coin powering an entire ecosystem.\n\nLearn more: dwsc.io 💎`, category: 'blockchain' },
   { content: `Block explorer live. Network stats real-time.\n\nDWSC: Transparent. Fast. Ready.\n\ndwsc.io/explorer 🔍`, category: 'blockchain' },
   { content: `Building something unprecedented.\n\nPropriety blockchain. Next-gen gaming. Player-first design.\n\nDarkWave Studios 🚀`, category: 'blockchain' },
   { content: `No compromises. No shortcuts. Just vision.\n\nDWSC is the foundation for everything we're building.\n\ndwsc.io 🌊`, category: 'blockchain' },
@@ -50,7 +50,7 @@ const TWITTER_POSTS = [
   
   // Pre-sales & Token (6 posts)
   { content: `🚀 DWC Pre-sale coming soon.\n\nEarly believers. Early access. Early rewards.\n\nJoin the waitlist: dwsc.io/presale`, category: 'presale' },
-  { content: `100M DWC total supply. No inflation. No burn.\n\nPure utility token for an entire ecosystem.\n\nPre-sale soon 💎`, category: 'presale' },
+  { content: `1B DWC total supply. No inflation. No burn.\n\nPure utility coin for an entire ecosystem.\n\nPre-sale soon 💎`, category: 'presale' },
   { content: `Get in before the world catches on.\n\nDWC pre-sale launching soon.\n\ndwsc.io/presale 🔥`, category: 'presale' },
   { content: `The token that powers games, NFTs, staking, and more.\n\nDWC. One token. Infinite possibilities.\n\nPre-sale soon ⚡`, category: 'presale' },
   { content: `Early access. Better prices. Founder benefits.\n\nDWC pre-sale is your entry point.\n\ndwsc.io/presale 🚀`, category: 'presale' },
@@ -244,7 +244,7 @@ Are you ready to discover who you could become?
 • 400ms block time—near-instant finality
 • 200,000+ TPS—enterprise-grade throughput
 • Proof-of-Authority—security without waste
-• Native DWC token—100M supply, pure utility
+• Native DWC coin—1B supply, pure utility
 
 This isn't just another blockchain. This is the infrastructure for legends.
 
@@ -275,9 +275,9 @@ DWSC uses Founders Validation—trusted validators securing the network while ma
 No energy waste. No slow confirmations. Just reliable, fast blockchain.
 
 Learn more: dwsc.io`, category: 'blockchain' },
-  { content: `💎 The DWC Token
+  { content: `💎 The DWC Coin
 
-100 million total supply. No inflation. No burn mechanics.
+1 billion total supply. No inflation. No burn mechanics.
 
 Pure utility for:
 • Gaming transactions
@@ -375,16 +375,16 @@ Early believers get:
 • Founder recognition
 
 Join the waitlist: dwsc.io/presale`, category: 'presale' },
-  { content: `100 Million DWC. Fixed Supply. Infinite Utility.
+  { content: `1 Billion DWC. Fixed Supply. Infinite Utility.
 
-The DWC token powers:
+The DWC coin powers:
 🎮 Gaming transactions
 💎 Staking rewards
 🖼️ NFT marketplace
 🔄 DEX trading
 🌉 Cross-chain bridging
 
-One token for the entire ecosystem.
+One coin for the entire ecosystem.
 
 Pre-sale soon: dwsc.io/presale`, category: 'presale' },
   { content: `⚡ Why DWC Pre-Sale Matters
@@ -396,9 +396,9 @@ Pre-sale participants helped build Ethereum, Solana, and more. Now it's your tur
 Don't watch from the sidelines.
 
 dwsc.io/presale`, category: 'presale' },
-  { content: `📢 Token Economics Revealed
+  { content: `📢 Coin Economics Revealed
 
-• 100M total supply (fixed)
+• 1B total supply (fixed)
 • No inflation mechanics
 • No burn mechanics
 • Pure utility design
@@ -1093,7 +1093,7 @@ Existing chains couldn't deliver what we needed:
 • Consensus: Proof-of-Authority (Founders Validation)
 • Block Time: 400ms
 • Throughput: 200,000+ TPS
-• Native Token: DWC (100M supply, 18 decimals)
+• Native Coin: DWC (1B supply, 18 decimals)
 • Cryptography: SHA-256, Merkle Trees, HMAC-SHA256
 
 This is enterprise-grade blockchain built for entertainment.
@@ -1121,8 +1121,8 @@ Trusted validators. Fast consensus. Reliable operation.
 Technical docs: dwsc.io/api-docs`, category: 'blockchain' },
   { content: `💎 **The DWC Token: Utility at Its Core**
 
-**Token Economics:**
-• Total Supply: 100,000,000 DWC
+**Coin Economics:**
+• Total Supply: 1,000,000,000 DWC
 • Decimals: 18
 • Inflation: None
 • Burn: None
@@ -1135,7 +1135,7 @@ Technical docs: dwsc.io/api-docs`, category: 'blockchain' },
 • Cross-chain bridging
 • Governance voting
 
-This is a UTILITY token. Designed for use. Built for the ecosystem.
+This is a UTILITY coin. Designed for use. Built for the ecosystem.
 
 Learn more: dwsc.io/token`, category: 'blockchain' },
   { content: `🔍 **Block Explorer: Full Transparency**
@@ -1329,8 +1329,8 @@ Early access to acquire DWC tokens before public launch at preferential terms.
 • Priority access
 • Founder recognition
 
-**Token Details:**
-• 100M total supply
+**Coin Details:**
+• 1B total supply
 • No inflation
 • Pure utility design
 
@@ -2415,9 +2415,9 @@ Existing blockchains couldn't deliver what gaming needs:
 • Validation: Founders Protocol
 • Cryptography: SHA-256, Merkle Trees, HMAC-SHA256
 
-💎 <b>Native Token:</b>
+💎 <b>Native Coin:</b>
 • Symbol: DWC
-• Supply: 100,000,000 (fixed)
+• Supply: 1,000,000,000 (fixed)
 • Decimals: 18
 • Inflation: None
 • Burn: None
@@ -2460,8 +2460,8 @@ Trusted validators carefully selected and monitored for our ecosystem's needs.
 Technical docs: dwsc.io/api-docs`, category: 'blockchain' },
   { content: `💎 <b>The DWC Token: Complete Breakdown</b>
 
-<b>Token Economics:</b>
-• Total Supply: 100,000,000 DWC
+<b>Coin Economics:</b>
+• Total Supply: 1,000,000,000 DWC
 • Decimals: 18
 • Inflation: None (fixed supply)
 • Burn: None (supply preserved)
@@ -2776,8 +2776,8 @@ Early access to acquire DWC tokens before public launch at preferential terms.
 ✅ Priority access to features
 ✅ Founder-level recognition
 
-<b>Token Details:</b>
-• 100M total supply (fixed)
+<b>Coin Details:</b>
+• 1B total supply (fixed)
 • No inflation mechanisms
 • Pure utility design
 
