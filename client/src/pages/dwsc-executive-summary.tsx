@@ -219,7 +219,7 @@ export default function DWSCExecutiveSummary() {
                   { title: "ChronoChat", desc: "Community platform with real-time messaging, channels, reactions, and Shells integration.", icon: MessageSquare, color: "purple", href: "/community-hub" },
                   { title: "Shells Economy", desc: "Pre-launch virtual currency. Earn through engagement, purchase via Stripe, converts to DWC.", icon: Sparkles, color: "pink", href: "/coin-store" },
                   { title: "Validator Program", desc: "Become a network validator. 10,000 DWC airdrop for founders, longevity bonuses.", icon: Server, color: "cyan", href: "/validators" },
-                  { title: "Token Presale", desc: "DWC at $0.005 per coin. Tiered pricing through $0.01 launch. Up to 25% bonus.", icon: Coins, color: "amber", href: "/presale" },
+                  { title: "Token Presale", desc: "DWC at $0.001 per coin. Tiered pricing through $0.0014 launch. Up to 25% bonus.", icon: Coins, color: "amber", href: "/presale" },
                   { title: "DEX & Token Swap", desc: "AMM-style decentralized exchange. Trade tokens with low fees and instant settlement.", icon: ArrowRightLeft, color: "green", href: "/swap" },
                   { title: "Liquid Staking", desc: "Stake DWC, receive stDWC. Earn rewards while maintaining liquidity.", icon: TrendingUp, color: "teal", href: "/liquid-staking" },
                   { title: "NFT Marketplace", desc: "Create, buy, sell NFTs. 2.5% transaction fees. Rarity analyzer included.", icon: Store, color: "orange", href: "/nft-marketplace" },

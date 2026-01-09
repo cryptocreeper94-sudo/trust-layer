@@ -77,7 +77,7 @@ export default function Token() {
                 </GlassCard>
                 <GlassCard hover={false}>
                   <div className="p-3 text-center">
-                    <div className="text-lg font-bold text-white">100M</div>
+                    <div className="text-lg font-bold text-white">1B</div>
                     <div className="text-[10px] text-white/50">Total Supply</div>
                   </div>
                 </GlassCard>
@@ -249,7 +249,7 @@ export default function Token() {
                 <GlassCard hover={false}>
                   <div className="p-4">
                     <div className="text-[10px] text-white/40 uppercase tracking-wider mb-1">Total Supply</div>
-                    <div className="text-lg font-bold font-mono text-white">100M DWC</div>
+                    <div className="text-lg font-bold font-mono text-white">1B DWC</div>
                   </div>
                 </GlassCard>
                 <GlassCard hover={false}>

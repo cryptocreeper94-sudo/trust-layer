@@ -49,8 +49,8 @@ const keyMetrics = [
 ];
 
 const tokenomics = [
-  { label: "Total Supply", value: "100,000,000 DWC", color: "from-cyan-500 to-blue-600" },
-  { label: "Presale Allocation", value: "15%", color: "from-purple-500 to-pink-600" },
+  { label: "Total Supply", value: "1,000,000,000 DWC", color: "from-cyan-500 to-blue-600" },
+  { label: "Presale Allocation", value: "15% (150M)", color: "from-purple-500 to-pink-600" },
   { label: "Ecosystem & Rewards", value: "40%", color: "from-amber-500 to-orange-600" },
   { label: "Team & Advisors", value: "15%", color: "from-emerald-500 to-teal-600" },
   { label: "Treasury", value: "20%", color: "from-indigo-500 to-violet-600" },
