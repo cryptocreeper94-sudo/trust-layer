@@ -14164,6 +14164,57 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // Claim starter bonus for new players
+  app.post("/api/shells/claim-starter-bonus", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      const username = req.user?.claims?.firstName || req.user?.firstName || req.user?.username || "Player";
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const result = await shellsService.claimStarterBonus(userId, username);
+      res.json(result);
+    } catch (error) {
+      console.error("Claim starter bonus error:", error);
+      res.status(500).json({ error: "Failed to claim bonus" });
+    }
+  });
+
+  // Get earning caps status for current user
+  app.get("/api/shells/earning-status", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const { SHELL_EARNING_CAPS } = await import("./shells-service");
+      const status = await shellsService.getEarnableAmount(userId, 1000);
+      
+      res.json({
+        dailyLimit: SHELL_EARNING_CAPS.dailyMax,
+        weeklyLimit: SHELL_EARNING_CAPS.weeklyMax,
+        dailyRemaining: status.dailyRemaining,
+        weeklyRemaining: status.weeklyRemaining,
+        atDailyCap: status.atDailyCap,
+        atWeeklyCap: status.atWeeklyCap,
+        starterBonus: SHELL_EARNING_CAPS.starterBonus,
+      });
+    } catch (error) {
+      console.error("Get earning status error:", error);
+      res.status(500).json({ error: "Failed to get earning status" });
+    }
+  });
+
   app.post("/api/shells/tip", isAuthenticated, async (req: any, res) => {
     try {
       const fromUserId = req.user?.claims?.sub || req.user?.id;

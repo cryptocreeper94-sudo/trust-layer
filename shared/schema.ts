@@ -3856,6 +3856,11 @@ export const shellWallets = pgTable("orb_wallets", {
   lockedBalance: integer("locked_balance").notNull().default(0),
   totalEarned: integer("total_earned").notNull().default(0),
   totalSpent: integer("total_spent").notNull().default(0),
+  dailyEarned: integer("daily_earned").notNull().default(0),
+  weeklyEarned: integer("weekly_earned").notNull().default(0),
+  lastDailyReset: timestamp("last_daily_reset").defaultNow().notNull(),
+  lastWeeklyReset: timestamp("last_weekly_reset").defaultNow().notNull(),
+  starterBonusClaimed: boolean("starter_bonus_claimed").notNull().default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -3892,6 +3897,11 @@ export const insertShellWalletSchema = createInsertSchema(shellWallets).omit({
   lockedBalance: true,
   totalEarned: true,
   totalSpent: true,
+  dailyEarned: true,
+  weeklyEarned: true,
+  lastDailyReset: true,
+  lastWeeklyReset: true,
+  starterBonusClaimed: true,
   createdAt: true,
   updatedAt: true,
 });

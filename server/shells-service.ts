@@ -18,6 +18,14 @@ import { getUncachableStripeClient } from "./stripeClient";
 export const DWC_CONVERSION_RATE = 100;
 export const DWC_LAUNCH_DATE = "2026-04-11";
 
+// Earning caps to protect DWC supply (100M total = 10B Shells max)
+// These limits ensure sustainable token distribution
+export const SHELL_EARNING_CAPS = {
+  dailyMax: 200,         // 2 DWC per day max from gameplay
+  weeklyMax: 1000,       // 10 DWC per week max from gameplay
+  starterBonus: 500,     // 5 DWC worth to get new players started
+} as const;
+
 export type TransactionType = 
   | "earn"           // Earned through engagement
   | "spend"          // Spent on features
@@ -125,6 +133,80 @@ class ShellsService {
     return tx || null;
   }
 
+  // Check and reset earning caps if needed
+  private async resetCapsIfNeeded(wallet: ShellWallet): Promise<{ dailyEarned: number; weeklyEarned: number }> {
+    const now = new Date();
+    const lastDaily = new Date(wallet.lastDailyReset || now);
+    const lastWeekly = new Date(wallet.lastWeeklyReset || now);
+    
+    let dailyEarned = wallet.dailyEarned || 0;
+    let weeklyEarned = wallet.weeklyEarned || 0;
+    let needsUpdate = false;
+    const updates: any = {};
+    
+    // Reset daily if it's a new day (past midnight UTC)
+    if (now.getUTCDate() !== lastDaily.getUTCDate() || 
+        now.getTime() - lastDaily.getTime() > 24 * 60 * 60 * 1000) {
+      dailyEarned = 0;
+      updates.dailyEarned = 0;
+      updates.lastDailyReset = now;
+      needsUpdate = true;
+    }
+    
+    // Reset weekly if it's a new week (Monday)
+    const daysSinceReset = Math.floor((now.getTime() - lastWeekly.getTime()) / (24 * 60 * 60 * 1000));
+    if (daysSinceReset >= 7) {
+      weeklyEarned = 0;
+      updates.weeklyEarned = 0;
+      updates.lastWeeklyReset = now;
+      needsUpdate = true;
+    }
+    
+    if (needsUpdate) {
+      await db.update(shellWallets)
+        .set(updates)
+        .where(eq(shellWallets.id, wallet.id));
+    }
+    
+    return { dailyEarned, weeklyEarned };
+  }
+
+  // Calculate how many shells can actually be earned (respecting caps)
+  async getEarnableAmount(userId: string, requestedAmount: number): Promise<{ 
+    earnableAmount: number; 
+    atDailyCap: boolean; 
+    atWeeklyCap: boolean;
+    dailyRemaining: number;
+    weeklyRemaining: number;
+  }> {
+    const wallet = await this.getWallet(userId);
+    if (!wallet) {
+      return { 
+        earnableAmount: Math.min(requestedAmount, SHELL_EARNING_CAPS.dailyMax, SHELL_EARNING_CAPS.weeklyMax),
+        atDailyCap: false, 
+        atWeeklyCap: false,
+        dailyRemaining: SHELL_EARNING_CAPS.dailyMax,
+        weeklyRemaining: SHELL_EARNING_CAPS.weeklyMax
+      };
+    }
+    
+    const { dailyEarned, weeklyEarned } = await this.resetCapsIfNeeded(wallet);
+    
+    const dailyRemaining = Math.max(0, SHELL_EARNING_CAPS.dailyMax - dailyEarned);
+    const weeklyRemaining = Math.max(0, SHELL_EARNING_CAPS.weeklyMax - weeklyEarned);
+    
+    // Earnable is the minimum of what's requested and what's left in both caps
+    const earnableAmount = Math.min(requestedAmount, dailyRemaining, weeklyRemaining);
+    
+    return {
+      earnableAmount,
+      atDailyCap: dailyRemaining === 0,
+      atWeeklyCap: weeklyRemaining === 0,
+      dailyRemaining,
+      weeklyRemaining
+    };
+  }
+
   async addShells(
     userId: string, 
     username: string, 
@@ -132,17 +214,52 @@ class ShellsService {
     type: TransactionType, 
     description?: string,
     referenceId?: string,
-    referenceType?: string
-  ): Promise<ShellTransaction> {
+    referenceType?: string,
+    bypassCaps: boolean = false  // For purchases, bonuses, etc.
+  ): Promise<ShellTransaction | null> {
     const wallet = await this.getOrCreateWallet(userId, username);
-    const newBalance = wallet.balance + amount;
+    
+    let finalAmount = amount;
+    let currentDailyEarned = 0;
+    let currentWeeklyEarned = 0;
+    
+    // Apply earning caps for "earn" type transactions (gameplay rewards)
+    if (type === "earn" && !bypassCaps) {
+      // Get the reset values (accounts for daily/weekly resets)
+      const { dailyEarned, weeklyEarned } = await this.resetCapsIfNeeded(wallet);
+      currentDailyEarned = dailyEarned;
+      currentWeeklyEarned = weeklyEarned;
+      
+      const dailyRemaining = Math.max(0, SHELL_EARNING_CAPS.dailyMax - dailyEarned);
+      const weeklyRemaining = Math.max(0, SHELL_EARNING_CAPS.weeklyMax - weeklyEarned);
+      
+      finalAmount = Math.min(amount, dailyRemaining, weeklyRemaining);
+      
+      // If at cap, skip the transaction entirely
+      if (finalAmount <= 0) {
+        console.log(`[Shells] User ${username} at earning cap. Daily: ${dailyEarned}/${SHELL_EARNING_CAPS.dailyMax}, Weekly: ${weeklyEarned}/${SHELL_EARNING_CAPS.weeklyMax}`);
+        return null;
+      }
+    }
+    
+    const newBalance = wallet.balance + finalAmount;
+    
+    // Update wallet with new balance and earning counters
+    const updateData: any = { 
+      balance: newBalance, 
+      totalEarned: wallet.totalEarned + finalAmount,
+      updatedAt: new Date() 
+    };
+    
+    // Track earned amounts for cap enforcement (only for "earn" type)
+    // Use the reset values from resetCapsIfNeeded, not stale wallet values
+    if (type === "earn" && !bypassCaps) {
+      updateData.dailyEarned = currentDailyEarned + finalAmount;
+      updateData.weeklyEarned = currentWeeklyEarned + finalAmount;
+    }
     
     await db.update(shellWallets)
-      .set({ 
-        balance: newBalance, 
-        totalEarned: wallet.totalEarned + amount,
-        updatedAt: new Date() 
-      })
+      .set(updateData)
       .where(eq(shellWallets.id, wallet.id));
     
     const [transaction] = await db.insert(shellTransactions)
@@ -150,15 +267,60 @@ class ShellsService {
         walletId: wallet.id,
         userId,
         type,
-        amount,
+        amount: finalAmount,
         balance: newBalance,
-        description,
+        description: finalAmount < amount 
+          ? `${description} (capped from ${amount})` 
+          : description,
         referenceId,
         referenceType,
       })
       .returning();
     
     return transaction;
+  }
+
+  // Grant starter bonus to new players (one-time)
+  async claimStarterBonus(userId: string, username: string): Promise<{ 
+    success: boolean; 
+    amount: number; 
+    message: string;
+  }> {
+    const wallet = await this.getOrCreateWallet(userId, username);
+    
+    if (wallet.starterBonusClaimed) {
+      return { success: false, amount: 0, message: "Starter bonus already claimed" };
+    }
+    
+    const bonusAmount = SHELL_EARNING_CAPS.starterBonus;
+    
+    // Mark as claimed and add bonus (bypasses earning caps)
+    await db.update(shellWallets)
+      .set({ 
+        balance: wallet.balance + bonusAmount,
+        totalEarned: wallet.totalEarned + bonusAmount,
+        starterBonusClaimed: true,
+        updatedAt: new Date() 
+      })
+      .where(eq(shellWallets.id, wallet.id));
+    
+    await db.insert(shellTransactions)
+      .values({
+        walletId: wallet.id,
+        userId,
+        type: "bonus",
+        amount: bonusAmount,
+        balance: wallet.balance + bonusAmount,
+        description: "Welcome to Chronicles! Here's your starter bonus.",
+        referenceId: "starter_bonus",
+        referenceType: "onboarding",
+      });
+    
+    return { 
+      success: true, 
+      amount: bonusAmount, 
+      message: `Welcome bonus: ${bonusAmount} Shells (${bonusAmount / DWC_CONVERSION_RATE} DWC equivalent)!` 
+    };
   }
 
   async spendShells(
@@ -292,24 +454,28 @@ class ShellsService {
   ): Promise<ShellTransaction> {
     const pkg = SHELL_PACKAGES[packageKey];
     
-    return this.addShells(
+    // Purchases bypass earning caps
+    const tx = await this.addShells(
       userId,
       username,
       pkg.amount,
       "purchase",
       `Purchased ${pkg.name} (${pkg.amount} Shells)`,
       stripePaymentId,
-      "stripe_payment"
+      "stripe_payment",
+      true  // bypass caps
     );
+    return tx!; // Purchases always succeed
   }
 
   async awardEngagementShells(
     userId: string,
     username: string,
     action: keyof typeof SHELL_EARN_RATES
-  ): Promise<ShellTransaction> {
+  ): Promise<ShellTransaction | null> {
     const amount = SHELL_EARN_RATES[action];
     
+    // May return null if at earning cap
     return this.addShells(
       userId,
       username,

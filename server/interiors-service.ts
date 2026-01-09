@@ -192,19 +192,30 @@ export const interiorsService = {
       updatedAt: new Date(),
     }).where(eq(chronicleRoomObjects.id, objectId));
     
-    const shellsEarned = catalog.shellsPerUse || 0;
+    const baseShells = catalog.shellsPerUse || 0;
+    let shellsEarned = 0;
+    let capMessage = "";
     
-    // Credit shells to user's wallet
-    if (shellsEarned > 0) {
-      await shellsService.addShells(
+    // Credit shells to user's wallet (respects earning caps)
+    if (baseShells > 0) {
+      const tx = await shellsService.addShells(
         userId,
         username,
-        shellsEarned,
+        baseShells,
         "earn",
         `Used ${catalog.name}: ${verb}`,
         `interior_${objectId}_${Date.now()}`,
         "interior_interaction"
       );
+      
+      if (tx) {
+        shellsEarned = tx.amount;
+        if (tx.amount < baseShells) {
+          capMessage = " (daily limit reached)";
+        }
+      } else {
+        capMessage = " (earning limit reached - resets tomorrow)";
+      }
     }
     
     // Track quest progress
@@ -212,7 +223,7 @@ export const interiorsService = {
     
     return {
       success: true,
-      message: `You ${verb} the ${catalog.name}`,
+      message: `You ${verb} the ${catalog.name}${capMessage}`,
       shellsEarned,
       questsUpdated: questResult.questsUpdated,
     };
