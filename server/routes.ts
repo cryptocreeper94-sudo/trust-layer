@@ -14537,6 +14537,158 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // Get pending reviews (for tier 3+ reviewers)
+  app.get("/api/builder/pending-reviews", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const builder = await builderService.getBuilder(userId);
+      if (!builder || !builder.canReviewContent) {
+        return res.status(403).json({ error: "Review permission required (Tier 3+)" });
+      }
+      
+      const pending = await builderService.getPendingReviews(builder.tier);
+      res.json({ contributions: pending });
+    } catch (error) {
+      console.error("Get pending reviews error:", error);
+      res.status(500).json({ error: "Failed to get pending reviews" });
+    }
+  });
+
+  // Approve a contribution (tier 3+ reviewers)
+  app.post("/api/builder/contributions/:id/approve", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const builder = await builderService.getBuilder(userId);
+      if (!builder || !builder.canReviewContent) {
+        return res.status(403).json({ error: "Review permission required (Tier 3+)" });
+      }
+      
+      const { id } = req.params;
+      const { feedback, qualityRating } = req.body;
+      
+      if (!feedback) {
+        return res.status(400).json({ error: "Feedback is required" });
+      }
+      
+      const validRatings = ["standard", "quality", "exceptional", "legendary"];
+      const rating = validRatings.includes(qualityRating) ? qualityRating : "standard";
+      
+      const result = await builderService.approveContribution(id, builder.id, feedback, rating);
+      res.json(result);
+    } catch (error) {
+      console.error("Approve contribution error:", error);
+      res.status(500).json({ error: "Failed to approve contribution" });
+    }
+  });
+
+  // Reject a contribution (tier 3+ reviewers)
+  app.post("/api/builder/contributions/:id/reject", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const builder = await builderService.getBuilder(userId);
+      if (!builder || !builder.canReviewContent) {
+        return res.status(403).json({ error: "Review permission required (Tier 3+)" });
+      }
+      
+      const { id } = req.params;
+      const { feedback } = req.body;
+      
+      if (!feedback) {
+        return res.status(400).json({ error: "Feedback is required for rejections" });
+      }
+      
+      const result = await builderService.rejectContribution(id, builder.id, feedback);
+      res.json(result);
+    } catch (error) {
+      console.error("Reject contribution error:", error);
+      res.status(500).json({ error: "Failed to reject contribution" });
+    }
+  });
+
+  // Make contribution live (system or admin)
+  app.post("/api/builder/contributions/:id/publish", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const builder = await builderService.getBuilder(userId);
+      if (!builder) {
+        return res.status(403).json({ error: "Builder profile required" });
+      }
+      
+      const { id } = req.params;
+      
+      // Check if user owns this contribution or is a reviewer
+      const contribution = await builderService.getContributionById(id);
+      if (!contribution) {
+        return res.status(404).json({ error: "Contribution not found" });
+      }
+      
+      if (contribution.userId !== userId && !builder.canReviewContent) {
+        return res.status(403).json({ error: "Not authorized to publish this contribution" });
+      }
+      
+      const result = await builderService.makeContributionLive(id);
+      res.json(result);
+    } catch (error) {
+      console.error("Publish contribution error:", error);
+      res.status(500).json({ error: "Failed to publish contribution" });
+    }
+  });
+
+  // Get single contribution details
+  app.get("/api/builder/contributions/:id", async (req: any, res, next: NextFunction) => {
+    const authHeader = req.headers.authorization;
+    if (authHeader?.startsWith("Bearer ")) {
+      return isChroniclesAuthenticated(req, res, next);
+    }
+    return isAuthenticated(req, res, next);
+  }, async (req: any, res) => {
+    try {
+      const { id } = req.params;
+      const contribution = await builderService.getContributionById(id);
+      
+      if (!contribution) {
+        return res.status(404).json({ error: "Contribution not found" });
+      }
+      
+      res.json({ contribution });
+    } catch (error) {
+      console.error("Get contribution error:", error);
+      res.status(500).json({ error: "Failed to get contribution" });
+    }
+  });
+
   app.post("/api/shells/earn", async (req: any, res, next: NextFunction) => {
     const authHeader = req.headers.authorization;
     if (authHeader?.startsWith("Bearer ")) {

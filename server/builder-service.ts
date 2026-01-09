@@ -368,6 +368,23 @@ class BuilderService {
       })
       .where(eq(builderContributions.id, contributionId));
     
+    // Insert review record for audit trail
+    if (reviewerId) {
+      const reviewer = await this.getBuilderById(reviewerId);
+      if (reviewer) {
+        await db.insert(contributionReviews).values({
+          contributionId,
+          reviewerId,
+          reviewerUserId: reviewer.userId,
+          decision: "approve",
+          qualityRating,
+          feedback,
+          shellsAwarded: shellReward,
+          xpAwarded: xpReward,
+        });
+      }
+    }
+    
     // Update builder stats
     await db.update(communityBuilders)
       .set({
@@ -386,7 +403,7 @@ class BuilderService {
     if (builder) {
       await shellsService.addShells(
         builder.userId,
-        builder.username,
+        builder.displayName,
         shellReward,
         "bonus",
         `Builder reward: ${contribution.title} (${qualityRating})`,
@@ -497,6 +514,101 @@ class BuilderService {
       .where(eq(communityBuilders.isActive, true))
       .orderBy(desc(communityBuilders.totalXp))
       .limit(limit);
+  }
+
+  // Reject a contribution
+  async rejectContribution(
+    contributionId: string,
+    reviewerId: string,
+    feedback: string
+  ): Promise<{ success: boolean; message: string }> {
+    const [contribution] = await db.select().from(builderContributions)
+      .where(eq(builderContributions.id, contributionId))
+      .limit(1);
+    
+    if (!contribution) {
+      return { success: false, message: "Contribution not found" };
+    }
+    
+    if (contribution.status !== "submitted") {
+      return { success: false, message: "Contribution is not in submitted status" };
+    }
+    
+    // Update contribution
+    await db.update(builderContributions)
+      .set({
+        status: "rejected",
+        reviewCompletedAt: new Date(),
+        reviewNotes: feedback,
+        updatedAt: new Date(),
+      })
+      .where(eq(builderContributions.id, contributionId));
+    
+    // Insert review record for audit trail
+    const reviewer = await this.getBuilderById(reviewerId);
+    if (reviewer) {
+      await db.insert(contributionReviews).values({
+        contributionId,
+        reviewerId,
+        reviewerUserId: reviewer.userId,
+        decision: "reject",
+        feedback,
+        shellsAwarded: 0,
+        xpAwarded: 0,
+      });
+    }
+    
+    // Update builder stats
+    await db.update(communityBuilders)
+      .set({
+        pendingContributions: sql`GREATEST(0, ${communityBuilders.pendingContributions} - 1)`,
+        updatedAt: new Date(),
+      })
+      .where(eq(communityBuilders.id, contribution.builderId));
+    
+    console.log(`[Builder] Rejected contribution: ${contribution.title}`);
+    
+    return { success: true, message: "Contribution rejected" };
+  }
+
+  // Make contribution live (after approval)
+  async makeContributionLive(contributionId: string): Promise<{ success: boolean; message: string }> {
+    const [contribution] = await db.select().from(builderContributions)
+      .where(eq(builderContributions.id, contributionId))
+      .limit(1);
+    
+    if (!contribution) {
+      return { success: false, message: "Contribution not found" };
+    }
+    
+    if (contribution.status !== "approved") {
+      return { success: false, message: "Contribution must be approved before going live" };
+    }
+    
+    await db.update(builderContributions)
+      .set({
+        status: "live",
+        updatedAt: new Date(),
+      })
+      .where(eq(builderContributions.id, contributionId));
+    
+    // Award bonus XP for going live
+    const builder = await this.getBuilderById(contribution.builderId);
+    if (builder) {
+      await this.addXp(contribution.builderId, 25); // Bonus XP for live content
+    }
+    
+    console.log(`[Builder] Contribution now live: ${contribution.title}`);
+    
+    return { success: true, message: "Contribution is now live!" };
+  }
+
+  // Get a single contribution by ID
+  async getContributionById(id: string): Promise<BuilderContribution | null> {
+    const [contribution] = await db.select().from(builderContributions)
+      .where(eq(builderContributions.id, id))
+      .limit(1);
+    return contribution || null;
   }
 }
 
