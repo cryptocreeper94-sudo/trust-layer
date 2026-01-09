@@ -12,6 +12,8 @@ import {
   ChronicleRoomObject,
   ChronicleActivitySession,
 } from "@shared/schema";
+import { shellsService } from "./shells-service";
+import { questsService } from "./quests-service";
 
 const ERA_OBJECT_CATALOGS = [
   // Stone Age
@@ -162,7 +164,7 @@ export const interiorsService = {
     return true;
   },
 
-  async interactWithObject(userId: string, objectId: string, verb: string): Promise<{ success: boolean; message: string; shellsEarned?: number }> {
+  async interactWithObject(userId: string, username: string, objectId: string, verb: string): Promise<{ success: boolean; message: string; shellsEarned?: number; questsUpdated?: string[] }> {
     const objects = await db.select().from(chronicleRoomObjects).where(eq(chronicleRoomObjects.id, objectId)).limit(1);
     if (objects.length === 0) return { success: false, message: "Object not found" };
     
@@ -192,10 +194,27 @@ export const interiorsService = {
     
     const shellsEarned = catalog.shellsPerUse || 0;
     
+    // Credit shells to user's wallet
+    if (shellsEarned > 0) {
+      await shellsService.addShells(
+        userId,
+        username,
+        shellsEarned,
+        "earn",
+        `Used ${catalog.name}: ${verb}`,
+        `interior_${objectId}_${Date.now()}`,
+        "interior_interaction"
+      );
+    }
+    
+    // Track quest progress
+    const questResult = await questsService.trackProgress(userId, "interior_interaction", 1);
+    
     return {
       success: true,
       message: `You ${verb} the ${catalog.name}`,
       shellsEarned,
+      questsUpdated: questResult.questsUpdated,
     };
   },
 

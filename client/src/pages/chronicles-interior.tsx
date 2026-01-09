@@ -142,10 +142,10 @@ export default function ChroniclesInterior() {
 
   const placeObjectMutation = useMutation({
     mutationFn: async ({ catalogId, roomId, x, y }: { catalogId: string; roomId: string; x: number; y: number }) => {
-      const res = await fetch("/api/chronicles/interior/object", {
+      const res = await fetch(`/api/chronicles/interior/room/${roomId}/objects`, {
         method: "POST",
         headers: authHeaders,
-        body: JSON.stringify({ catalogId, roomId, positionX: x, positionY: y }),
+        body: JSON.stringify({ catalogId, gridX: x, gridY: y }),
       });
       if (!res.ok) throw new Error("Failed to place object");
       return res.json();
@@ -163,7 +163,7 @@ export default function ChroniclesInterior() {
 
   const interactMutation = useMutation({
     mutationFn: async ({ objectId, verb }: { objectId: string; verb: string }) => {
-      const res = await fetch(`/api/chronicles/interior/object/${objectId}/interact`, {
+      const res = await fetch(`/api/chronicles/interior/objects/${objectId}/interact`, {
         method: "POST",
         headers: authHeaders,
         body: JSON.stringify({ verb }),
@@ -188,7 +188,7 @@ export default function ChroniclesInterior() {
 
   const removeObjectMutation = useMutation({
     mutationFn: async (objectId: string) => {
-      const res = await fetch(`/api/chronicles/interior/object/${objectId}`, {
+      const res = await fetch(`/api/chronicles/interior/objects/${objectId}`, {
         method: "DELETE",
         headers: authHeaders,
       });

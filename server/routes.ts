@@ -11358,6 +11358,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   app.post("/api/chronicles/interior/objects/:objectId/interact", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.chroniclesUser.id;
+      const username = req.chroniclesUser.username || req.chroniclesUser.displayName || "Player";
       const { objectId } = req.params;
       const { verb } = req.body;
       
@@ -11365,13 +11366,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(400).json({ error: "Interaction verb required" });
       }
       
-      const result = await interiorsService.interactWithObject(userId, objectId, verb);
-      
-      if (result.success && result.shellsEarned && result.shellsEarned > 0) {
-        await shellsService.earnShells(userId, result.shellsEarned, "activity", `Interacted: ${verb}`);
-        await questsService.recordAction(userId, "object_interaction");
-      }
-      
+      const result = await interiorsService.interactWithObject(userId, username, objectId, verb);
       res.json(result);
     } catch (error: any) {
       res.status(500).json({ error: error.message || "Failed to interact" });

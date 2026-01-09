@@ -3,7 +3,7 @@ import { chronicleQuestTemplates, chronicleQuestProgress } from "@shared/schema"
 import { eq, and, lt, gte } from "drizzle-orm";
 import { shellsService, SHELL_EARN_RATES } from "./shells-service";
 
-export type QuestAction = 'npc_conversation' | 'story_choice' | 'estate_upgrade' | 'mission_complete' | 'era_visit';
+export type QuestAction = 'npc_conversation' | 'story_choice' | 'estate_upgrade' | 'mission_complete' | 'era_visit' | 'interior_interaction';
 
 class QuestsService {
   
@@ -227,24 +227,31 @@ const DEFAULT_QUESTS = [
   { code: 'daily_npc_chat_3', title: 'Social Butterfly', description: 'Have 3 conversations with NPCs', questType: 'daily', category: 'social', requiredAction: 'npc_conversation', requiredCount: 3, shellReward: 30, resetHours: 24, sortOrder: 1 },
   { code: 'daily_story_choice_2', title: 'Pathfinder', description: 'Make 2 story choices', questType: 'daily', category: 'story', requiredAction: 'story_choice', requiredCount: 2, shellReward: 25, resetHours: 24, sortOrder: 2 },
   { code: 'daily_build_1', title: 'Constructor', description: 'Build 1 structure on your estate', questType: 'daily', category: 'building', requiredAction: 'estate_upgrade', requiredCount: 1, shellReward: 35, resetHours: 24, sortOrder: 3 },
+  { code: 'daily_interior_5', title: 'Homemaker', description: 'Interact with 5 objects in your home', questType: 'daily', category: 'lifestyle', requiredAction: 'interior_interaction', requiredCount: 5, shellReward: 40, resetHours: 24, sortOrder: 4 },
   { code: 'weekly_npc_chat_20', title: 'Community Pillar', description: 'Have 20 NPC conversations this week', questType: 'weekly', category: 'social', requiredAction: 'npc_conversation', requiredCount: 20, shellReward: 150, resetHours: 168, sortOrder: 10 },
   { code: 'weekly_story_10', title: 'Chronicle Weaver', description: 'Make 10 story choices this week', questType: 'weekly', category: 'story', requiredAction: 'story_choice', requiredCount: 10, shellReward: 120, resetHours: 168, sortOrder: 11 },
   { code: 'weekly_build_5', title: 'Master Builder', description: 'Build 5 structures this week', questType: 'weekly', category: 'building', requiredAction: 'estate_upgrade', requiredCount: 5, shellReward: 200, resetHours: 168, sortOrder: 12 },
+  { code: 'weekly_interior_25', title: 'Domestic Champion', description: 'Interact with 25 objects in your home this week', questType: 'weekly', category: 'lifestyle', requiredAction: 'interior_interaction', requiredCount: 25, shellReward: 175, resetHours: 168, sortOrder: 13 },
 ];
 
-// Auto-seed on startup
+// Auto-seed on startup - always add missing templates
 (async () => {
   try {
     const existing = await db.select().from(chronicleQuestTemplates);
-    if (existing.length === 0) {
-      console.log("[Quests] Seeding default quest templates...");
-      for (const quest of DEFAULT_QUESTS) {
+    const existingCodes = existing.map(q => q.code);
+    
+    let seeded = 0;
+    for (const quest of DEFAULT_QUESTS) {
+      if (!existingCodes.includes(quest.code)) {
         await db.insert(chronicleQuestTemplates).values(quest as any).onConflictDoNothing();
+        seeded++;
       }
-      console.log("[Quests] Seeded", DEFAULT_QUESTS.length, "quest templates");
-    } else {
-      console.log("[Quests]", existing.length, "quest templates already exist");
     }
+    
+    if (seeded > 0) {
+      console.log("[Quests] Seeded", seeded, "new quest templates");
+    }
+    console.log("[Quests]", existing.length + seeded, "quest templates total");
   } catch (err) {
     console.warn("[Quests] Failed to seed quests:", err);
   }
