@@ -1723,7 +1723,7 @@ export const LEGACY_FOUNDER_CONFIG = {
   ],
 } as const;
 
-export const APP_VERSION = "1.2.7";
+export const APP_VERSION = "1.2.9";
 
 export const referralTracking = pgTable("referral_tracking", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
