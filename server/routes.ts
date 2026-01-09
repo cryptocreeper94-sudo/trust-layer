@@ -563,6 +563,106 @@ export async function registerRoutes(
   });
 
   // ============================================
+  // COINBASE COMMERCE WEBHOOK
+  // ============================================
+  app.post("/api/coinbase/webhook", async (req: Request, res: Response) => {
+    try {
+      const signature = req.headers["x-cc-webhook-signature"] as string;
+      const webhookSecret = process.env.COINBASE_WEBHOOK_SECRET;
+
+      if (!webhookSecret) {
+        console.error("[Coinbase] COINBASE_WEBHOOK_SECRET not configured");
+        return res.status(500).json({ error: "Webhook not configured" });
+      }
+
+      // Verify webhook signature using HMAC-SHA256
+      const rawBody = JSON.stringify(req.body);
+      const expectedSig = crypto
+        .createHmac("sha256", webhookSecret)
+        .update(rawBody)
+        .digest("hex");
+
+      if (signature !== expectedSig) {
+        console.warn("[Coinbase] Invalid webhook signature");
+        return res.status(401).json({ error: "Invalid signature" });
+      }
+
+      const event = req.body;
+      console.log(`[Coinbase Webhook] Event received: ${event.type}`);
+
+      if (event.type === "charge:confirmed" || event.type === "charge:resolved") {
+        const charge = event.data;
+        const metadata = charge.metadata || {};
+        const customerEmail = metadata.email;
+        const amountUsd = parseFloat(charge.pricing?.local?.amount || "0");
+        const amountCents = Math.round(amountUsd * 100);
+
+        console.log(`[Coinbase Webhook] Payment confirmed: $${amountUsd}, email: ${customerEmail}`);
+
+        // Handle presale purchases
+        if (metadata.type === "presale" && customerEmail) {
+          try {
+            // Determine tier based on amount
+            const tiers = {
+              genesis: { amount: 100000, bonus: 25 },
+              founder: { amount: 50000, bonus: 15 },
+              pioneer: { amount: 25000, bonus: 10 },
+              early_bird: { amount: 10000, bonus: 5 },
+            };
+
+            let tier = "standard";
+            let bonus = 0;
+            for (const [tierName, tierData] of Object.entries(tiers)) {
+              if (amountCents >= tierData.amount) {
+                tier = tierName;
+                bonus = tierData.bonus;
+                break;
+              }
+            }
+
+            // Record the presale purchase
+            await db.execute(sql`
+              INSERT INTO early_adopter_program (email, tier, status, registered_at, total_contributed)
+              VALUES (${customerEmail}, ${tier}, 'active', NOW(), ${amountCents})
+              ON CONFLICT (email) DO UPDATE SET
+                tier = CASE WHEN EXCLUDED.tier = 'genesis' OR EXCLUDED.tier = 'founder' THEN EXCLUDED.tier ELSE early_adopter_program.tier END,
+                total_contributed = early_adopter_program.total_contributed + ${amountCents}
+            `);
+
+            console.log(`[Coinbase Webhook] Presale recorded: ${customerEmail}, tier: ${tier}, amount: $${amountUsd}`);
+          } catch (dbError) {
+            console.error("[Coinbase Webhook] DB error for presale:", dbError);
+          }
+        }
+
+        // Handle Shell purchases
+        if (metadata.type === "shells" && metadata.userId) {
+          try {
+            const shellsAmount = parseInt(metadata.shellsAmount || "0");
+            if (shellsAmount > 0) {
+              await shellsService.creditShells(
+                metadata.userId,
+                shellsAmount,
+                "coinbase_purchase",
+                `Coinbase purchase: $${amountUsd}`,
+                charge.code
+              );
+              console.log(`[Coinbase Webhook] Shells credited: ${shellsAmount} to user ${metadata.userId}`);
+            }
+          } catch (shellsError) {
+            console.error("[Coinbase Webhook] Shells credit error:", shellsError);
+          }
+        }
+      }
+
+      res.json({ received: true });
+    } catch (error: any) {
+      console.error("[Coinbase Webhook] Error:", error);
+      res.status(500).json({ error: "Webhook processing failed" });
+    }
+  });
+
+  // ============================================
   // ZEALY WEBHOOK - Community Quest Platform
   // ============================================
   app.post("/api/zealy/webhook", async (req: Request, res: Response) => {
