@@ -1,5 +1,5 @@
 # DARKWAVE MASTER ROADMAP
-*Single Source of Truth - Last Updated: January 8, 2026*
+*Single Source of Truth - Last Updated: January 9, 2026*
 
 ---
 
@@ -9,45 +9,66 @@
 
 ---
 
-## PRIORITY 1: IMMEDIATE (This Week)
-*Get the game functional and revenue flowing*
+## COMPLETED FEATURES ✅
 
-### Chronicles Estate - Make It Work
-- [ ] City Zoning System (Residential/Commercial/Civic zones)
-- [ ] Plot Marketplace (buy/sell/trade land with Shells)
-- [ ] Daily Login Rewards (streak-based system)
-- [ ] Business Onboarding (real businesses claim commercial plots)
-- [ ] Era-Appropriate Settlements (architecture matches each era)
+### Chronicles Core Systems (DONE)
+- [x] Character creation with personality quiz
+- [x] Parallel Self onboarding flow
+- [x] Daily check-in system with streak bonuses (1x-3x multiplier)
+- [x] Daily needs system (energy, mood, health, social, hunger)
+- [x] Need decay over time and restoration through activities
+- [x] 8 Modern Era locations (home, office, gym, cafe, park, library, mall, restaurant)
+- [x] 10 base activities with effects and rewards
+- [x] 8 NPCs with personality traits and dialogue
+- [x] Relationship tracking (acquaintance → friend → close friend progression)
+- [x] Shell economy with earning caps (200/day, 1000/week)
+- [x] Estate/interior building system
+- [x] Community Builder Program for player-created content
 
-### Guardian Certification - First Revenue
-- [ ] Admin dashboard for marking certifications complete
-- [ ] PDF report generator for deliverables
-- [ ] Public registry page (credibility showcase)
-- [ ] Payment webhook handler (auto-create certifications on payment)
+### Main Portal (DONE)
+- [x] Full blockchain explorer and documentation
+- [x] Wallet, staking, faucet, DEX
+- [x] NFT marketplace and creator tools
+- [x] Games arcade with multiple games
+- [x] Token presale and crowdfunding
+- [x] Guardian Certification service pages
+- [x] Developer portal and API documentation
 
 ---
 
-## PRIORITY 2: GAME FUNCTIONALITY (Weeks 2-4)
-*Make the beta eras playable*
+## PRIORITY 1: IMMEDIATE (Next Sprint)
+*Expand core gameplay*
+
+### Chronicles Expansion
+- [ ] Real-time 1:1 world clock (time of day affects gameplay)
+- [ ] Basic quest system with daily/weekly objectives
+- [ ] Relationship milestones and special interactions
+- [ ] Career/job system for income generation
+- [ ] Life events system (random encounters, opportunities)
+
+### City & Estate Enhancements
+- [ ] City Zoning System (Residential/Commercial/Civic zones)
+- [ ] Plot Marketplace (buy/sell/trade land with Shells)
+- [ ] Business Onboarding (real businesses claim commercial plots)
+- [ ] Era-Appropriate Settlements (architecture matches each era)
+
+---
+
+## PRIORITY 2: GAME CONTENT (Weeks 2-4)
+*Expand the world*
 
 ### Beta Era Implementation
 - [ ] Roman Empire era - functional with parallel universe selection
 - [ ] Medieval Europe era - functional with parallel universe selection
 - [ ] Era selection UI (choose dimension/parallel/tone)
-- [ ] Present Day starting area (player's home base)
+- [ ] Era-specific NPCs, activities, and storylines
 
-### Core Gameplay Systems
-- [ ] Real-time 1:1 world clock
-- [ ] Basic turn-based encounter system
-- [ ] Settlement/town view (tap buildings to enter)
-- [ ] Offline hibernation system
-- [ ] Check-in session flow (catch-up digest → decisions → actions → exit)
-
-### Player Systems
-- [ ] Parallel Self creation/onboarding
+### Player Systems Expansion
+- [ ] Marriage/partner system
+- [ ] Family and generational play
 - [ ] Basic inventory system
-- [ ] Relationship tracking (allies, friends, partners)
 - [ ] Quest log and progress tracking
+- [ ] Offline hibernation system (catch-up mechanics)
 
 ---
 
@@ -170,33 +191,39 @@
 
 ---
 
-## CHRONICLES GAME DESIGN CHECKLIST
-*Detailed design work for the game*
+## CHRONICLES SEASON ROADMAP
 
-### Narrative & Story
-- [ ] Detailed lore bible / world history
-- [ ] The Portal origin story
-- [ ] Sigil saga storylines (7 total)
-- [ ] Era-specific narratives and conflicts
+### Season Zero (NOW - Active Beta)
+- [x] Character creation & personality
+- [x] Modern Era hub with locations
+- [x] Daily needs system
+- [x] Check-in streaks & rewards
+- [x] NPC interactions & relationships
+- [x] Estate building basics
+- [x] Community Builder Program
 
-### Design Details
-- [ ] Specific design for remaining 67 eras
-- [ ] NPC personality and relationship system
-- [ ] Economy / currency design across eras
-- [ ] Artifact and item systems
-- [ ] Death mechanics (Parallel Shift) implementation
+### Season One (Post-TGE)
+- [ ] Daily & weekly quests
+- [ ] Faction system introduction
+- [ ] 3 additional eras (Roman, Medieval, Renaissance)
+- [ ] Career paths
+- [ ] Marriage system
+- [ ] Voice integration (text-to-speech)
 
-### Technical Systems
-- [ ] Voice cloning integration specs
-- [ ] Personality mirroring algorithm
-- [ ] Real-time world sync architecture
-- [ ] Multi-player infrastructure
+### Season Two (Summer 2026)
+- [ ] Voice cloning technology
+- [ ] Estate trading marketplace
+- [ ] 10+ additional eras
+- [ ] Generational gameplay
+- [ ] AI companion system
+- [ ] Cross-era travel mechanics
 
-### Art & Presentation
-- [ ] Visual style guide
-- [ ] Era-specific art direction
-- [ ] Character design standards
-- [ ] Animation requirements
+### Season Three+ (Fall 2026 onwards)
+- [ ] Full 70+ era library
+- [ ] Parallel universe mechanics
+- [ ] Community-created eras
+- [ ] Competitive seasons
+- [ ] On-chain achievements as NFTs
 
 ---
 
@@ -222,41 +249,3 @@
 - [ ] Social blitz across all platforms
 - [ ] Partner activation
 - [ ] Community celebration (airdrops, giveaways)
-
----
-
-## LEGAL & COMPLIANCE
-
-- [ ] Ratify token distribution policy
-- [ ] Complete legal review of tokenomics
-- [ ] Prepare terms of service and privacy policy
-- [ ] Document regulatory considerations
-
----
-
-## REVENUE STREAMS STATUS
-
-| Stream | Price Range | Status |
-|--------|-------------|--------|
-| Guardian Certification | $5,999-$14,999 | Checkout working, admin pending |
-| Guardian Shield | $299-$2,999/mo | UI done, backend pending |
-| Subscriptions | $8-$40/mo | Active |
-| Shells/Orbs | $4.99-$79.99 | Active |
-| .dwsc Domains | $12-$350/yr | Active |
-
----
-
-## COMPLETED ITEMS
-
-### January 8, 2026
-- [x] Chronicles Game Design Document (600+ lines)
-- [x] Roman Empire era fully designed (5 parallels)
-- [x] Medieval Europe era fully designed (5 parallels)
-- [x] Era design template created
-- [x] Game Design Doc accessible in Chronicles Admin portal
-- [x] "Team" link added to Chronicles footer
-- [x] Coming Features page with 11 features
-
----
-
-*Update this file as tasks are completed. This is the single source of truth.*

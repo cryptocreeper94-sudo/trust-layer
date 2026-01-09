@@ -6,7 +6,7 @@ import {
   Home, Map, Users, Coins, Lock, ChevronRight, Sparkles, 
   Crown, Shield, Compass, Building, MessageCircle, Volume2,
   Trophy, Star, Clock, Zap, Gift, ArrowRight, Plus, UserPlus, Link2, ChevronDown, X, Loader2, Vote, Copy, Share2,
-  Timer, Scroll, Gem, Target
+  Timer, Scroll, Gem, Target, Briefcase, Heart
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -83,9 +83,11 @@ const JOURNEY_CHAPTERS: JourneyChapter[] = [
 ];
 
 const UPCOMING_FEATURES = [
+  { id: "quests", title: "Daily & Weekly Quests", season: "Season 1", icon: Trophy },
+  { id: "careers", title: "Career Paths", season: "Season 1", icon: Briefcase },
+  { id: "marriage", title: "Marriage System", season: "Season 1", icon: Heart },
+  { id: "eras", title: "New Eras (Roman, Medieval)", season: "Season 1", icon: Compass },
   { id: "voice", title: "Voice Cloning", season: "Season 2", icon: Volume2 },
-  { id: "quests", title: "Daily Quests", season: "Season 1", icon: Trophy },
-  { id: "factions", title: "Faction Wars", season: "Season 1", icon: Shield },
   { id: "trading", title: "Estate Trading", season: "Season 2", icon: Coins },
 ];
 

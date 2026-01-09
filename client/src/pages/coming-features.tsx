@@ -7,49 +7,85 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 
 const defaultFeatures = [
   {
+    id: "0a",
+    title: "Daily Needs System",
+    description: "Full Sims-style needs management with energy, mood, health, social, and hunger bars. Needs decay over time and are restored through activities. Low needs affect what you can do in the game.",
+    category: "chronicles-estate",
+    status: "completed",
+    sortOrder: 0,
+    estimatedTime: "Complete"
+  },
+  {
+    id: "0b",
+    title: "Daily Check-In & Streaks",
+    description: "Streak-based rewards system with multipliers up to 3x at 100 days. Earn Shells and XP for consecutive check-ins. Milestone bonuses at 3, 7, 14, 30, 60, and 100 day streaks.",
+    category: "chronicles-estate",
+    status: "completed",
+    sortOrder: 0,
+    estimatedTime: "Complete"
+  },
+  {
+    id: "0c",
+    title: "Modern Era Locations",
+    description: "8 fully functional locations in the Modern Era: Home, Office, Gym, Cafe, Park, Library, Mall, and Restaurant. Each location has unique activities and NPCs to interact with.",
+    category: "chronicles-estate",
+    status: "completed",
+    sortOrder: 0,
+    estimatedTime: "Complete"
+  },
+  {
+    id: "0d",
+    title: "NPC Relationships",
+    description: "8 unique NPCs with personalities, dialogue, and relationship progression. Build friendships through interactions. Relationships evolve from acquaintance to friend to close friend.",
+    category: "chronicles-estate",
+    status: "completed",
+    sortOrder: 0,
+    estimatedTime: "Complete"
+  },
+  {
     id: "1",
-    title: "City Zoning System",
-    description: "Divide Chronicles settlements into Residential, Commercial, and Civic zones. Each zone has unique building types, costs, and benefits. Residential zones for player homes, Commercial for businesses and shops, Civic for community buildings and governance.",
+    title: "Daily & Weekly Quests",
+    description: "Objective-based gameplay with daily tasks and weekly challenges. Complete quests to earn bonus Shells and XP. Quest variety includes social, exploration, and skill-building activities.",
     category: "chronicles-estate",
     status: "pending",
     sortOrder: 1,
-    estimatedTime: "2-3 days"
+    estimatedTime: "Season 1"
   },
   {
     id: "2",
-    title: "Plot Marketplace",
-    description: "Buy, sell, and trade land plots using Shells. Browse available plots by era, zone type, and location. Auction system for premium plots. Price history and market analytics for smart investing.",
+    title: "Career Paths",
+    description: "Choose and advance in a career for steady income. Multiple career tracks with promotions and skill requirements. Work affects your daily schedule and social connections.",
     category: "chronicles-estate",
     status: "pending",
     sortOrder: 2,
-    estimatedTime: "2-3 days"
+    estimatedTime: "Season 1"
   },
   {
     id: "3",
-    title: "Daily Login Rewards",
-    description: "Streak-based rewards system to encourage daily engagement. Earn Shells, XP, and exclusive items for consecutive logins. Milestone bonuses at 7, 30, and 90 day streaks. Never miss a day to maximize rewards.",
+    title: "Marriage & Family",
+    description: "Build romantic relationships with NPCs leading to marriage. Start a family and experience generational gameplay. Your legacy continues through your descendants.",
     category: "chronicles-estate",
     status: "pending",
     sortOrder: 3,
-    estimatedTime: "1-2 days"
+    estimatedTime: "Season 1"
   },
   {
     id: "4",
-    title: "Business Onboarding",
-    description: "Real-world businesses can claim and operate commercial plots in Chronicles. Verification process ensures legitimate businesses. Era-appropriate storefronts across all time periods. Advertising and customer engagement tools.",
+    title: "New Eras (Roman, Medieval, Renaissance)",
+    description: "Travel through time to experience life in ancient Rome, medieval Europe, and Renaissance Italy. Each era has unique locations, NPCs, careers, and storylines.",
     category: "chronicles-estate",
     status: "pending",
     sortOrder: 4,
-    estimatedTime: "2-3 days"
+    estimatedTime: "Season 1"
   },
   {
     id: "5",
-    title: "Era-Appropriate Settlements",
-    description: "Settlement templates that match each historical era's architecture and culture. Ancient Egyptian pyramids, Medieval castles, Renaissance villas, Victorian mansions, and Futuristic megastructures. Buildings auto-style to fit their era.",
+    title: "City Zoning System",
+    description: "Divide Chronicles settlements into Residential, Commercial, and Civic zones. Each zone has unique building types, costs, and benefits.",
     category: "chronicles-estate",
     status: "pending",
     sortOrder: 5,
-    estimatedTime: "2-3 days"
+    estimatedTime: "Season 1"
   },
   {
     id: "6",
