@@ -323,7 +323,7 @@ export async function registerRoutes(
             const TIER_BONUSES: Record<string, number> = {
               genesis: 25, founder: 15, pioneer: 10, early_bird: 5
             };
-            const TOKEN_PRICE = 0.005;
+            const TOKEN_PRICE = 0.001;
             const tokenAmount = Math.floor((amountCents / 100) / TOKEN_PRICE);
             const bonusPercent = TIER_BONUSES[tier] || 0;
             const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
@@ -7133,7 +7133,7 @@ export async function registerRoutes(
       const protocol = host.includes("localhost") ? "http" : "https";
       const baseUrl = `${protocol}://${host}`;
       
-      const TOKEN_PRICE = 0.005;
+      const TOKEN_PRICE = 0.001;
       const tokenAmount = Math.floor((finalAmount / 100) / TOKEN_PRICE);
       const bonusPercent = tierConfig?.bonus || 0;
       const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
@@ -7197,7 +7197,7 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Invalid amount" });
       }
       
-      const TOKEN_PRICE = 0.005;
+      const TOKEN_PRICE = 0.001;
       const tokenAmount = Math.floor((finalAmount / 100) / TOKEN_PRICE);
       const bonusPercent = tierConfig?.bonus || 0;
       const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
@@ -7366,7 +7366,7 @@ export async function registerRoutes(
         const tier = session.metadata?.tier || 'unknown';
         const amountPaid = (amountCents / 100).toFixed(2);
         
-        const TOKEN_PRICE = 0.005;
+        const TOKEN_PRICE = 0.001;
         const TIER_BONUSES: Record<string, number> = {
           genesis: 25, founder: 15, pioneer: 10, early_bird: 5
         };

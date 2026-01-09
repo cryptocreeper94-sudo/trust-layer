@@ -31,8 +31,8 @@ import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
 import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
 import deepSpace from "@assets/generated_images/deep_space_station.png";
 
-const TOKEN_PRICE = 0.005;
-const PRESALE_ALLOCATION = 15000000;
+const TOKEN_PRICE = 0.001;
+const PRESALE_ALLOCATION = 150000000;
 
 interface PresaleTier {
   id: string;

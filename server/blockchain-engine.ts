@@ -57,7 +57,7 @@ export interface ChainConfig {
 
 const DECIMALS = 18;
 const ONE_TOKEN = BigInt("1000000000000000000");
-const TOTAL_SUPPLY = BigInt("100000000") * ONE_TOKEN;
+const TOTAL_SUPPLY = BigInt("1000000000") * ONE_TOKEN;
 const GENESIS_TIMESTAMP = new Date("2025-02-14T00:00:00Z");
 
 // No buy/sell tax - revenue from protocol fees (DEX, NFT marketplace, bridge, launchpad)
