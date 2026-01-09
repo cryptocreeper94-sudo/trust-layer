@@ -37,30 +37,29 @@ class ZealyService {
     signature: string | undefined,
     secret: string | undefined
   ): boolean {
-    // If webhook secret is configured, use HMAC verification
-    if (secret && signature) {
-      const hmac = crypto.createHmac("sha256", secret);
-      hmac.update(payload);
-      const expectedSignature = hmac.digest("hex");
-
-      try {
-        return crypto.timingSafeEqual(
-          Buffer.from(signature),
-          Buffer.from(expectedSignature)
-        );
-      } catch {
-        return false;
-      }
-    }
-    
-    // If no webhook secret, allow requests (webhook security handled by Zealy)
-    // This is safe because we validate request structure and use idempotent processing
+    // Require webhook secret for security
     if (!secret) {
-      console.log("[Zealy] No webhook secret configured - using payload validation only");
-      return true;
+      console.warn("[Zealy] ZEALY_WEBHOOK_SECRET not configured - rejecting request");
+      return false;
     }
     
-    return false;
+    if (!signature) {
+      console.warn("[Zealy] No signature provided in request");
+      return false;
+    }
+
+    const hmac = crypto.createHmac("sha256", secret);
+    hmac.update(payload);
+    const expectedSignature = hmac.digest("hex");
+
+    try {
+      return crypto.timingSafeEqual(
+        Buffer.from(signature),
+        Buffer.from(expectedSignature)
+      );
+    } catch {
+      return false;
+    }
   }
 
   async processWebhook(
