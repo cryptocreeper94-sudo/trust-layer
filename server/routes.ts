@@ -12339,9 +12339,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   const ALLOWED_HOSTS = ["dwsc.io", "yourlegacy.io"];
   const ownerTokens = new Map<string, number>();
 
-  if (!OWNER_SECRET || OWNER_SECRET.length < 16) {
-    console.error("[Owner Portal] CRITICAL: OWNER_SECRET not set or too short! Owner portal will be disabled.");
-    console.error("[Owner Portal] Set OWNER_SECRET environment variable with at least 16 characters.");
+  if (!OWNER_SECRET) {
+    console.error("[Owner Portal] OWNER_SECRET not set. Owner portal will be disabled.");
   }
 
   const generateOwnerToken = (): string => {
