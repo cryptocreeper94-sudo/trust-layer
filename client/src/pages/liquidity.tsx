@@ -258,25 +258,35 @@ export default function Liquidity() {
             </p>
           </motion.div>
 
+          <div className="mb-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30">
+            <div className="flex items-center justify-center gap-2 text-amber-400">
+              <Info className="w-5 h-5" />
+              <span className="font-semibold">Liquidity Pools Launch April 11, 2026</span>
+            </div>
+            <p className="text-center text-xs text-muted-foreground mt-2">
+              Provide liquidity and earn trading fees when mainnet goes live
+            </p>
+          </div>
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
             <GlassCard hover={false}>
               <div className="p-3 text-center">
                 <DollarSign className="w-5 h-5 text-primary mx-auto mb-1" />
-                <div className="text-lg font-bold text-white">$5.1M</div>
+                <div className="text-lg font-bold text-white/50">—</div>
                 <div className="text-[10px] text-muted-foreground">Total TVL</div>
               </div>
             </GlassCard>
             <GlassCard hover={false}>
               <div className="p-3 text-center">
                 <BarChart3 className="w-5 h-5 text-blue-400 mx-auto mb-1" />
-                <div className="text-lg font-bold text-white">$1.1M</div>
+                <div className="text-lg font-bold text-white/50">—</div>
                 <div className="text-[10px] text-muted-foreground">24h Volume</div>
               </div>
             </GlassCard>
             <GlassCard hover={false}>
               <div className="p-3 text-center">
                 <Percent className="w-5 h-5 text-green-400 mx-auto mb-1" />
-                <div className="text-lg font-bold text-green-400">39.6%</div>
+                <div className="text-lg font-bold text-white/50">—</div>
                 <div className="text-[10px] text-muted-foreground">Avg APR</div>
               </div>
             </GlassCard>

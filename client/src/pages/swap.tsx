@@ -77,9 +77,11 @@ export default function Swap() {
   const [orderType, setOrderType] = useState<"market" | "limit">("market");
 
   const { data: swapInfo } = useQuery<{ 
-    pairs: any[]; 
-    volume24h: string;
-    tvl: string;
+    supportedTokens: string[];
+    totalSwaps: number;
+    isTestnet: boolean;
+    launchDate: string;
+    message: string;
   }>({
     queryKey: ["/api/swap/info"],
   });
@@ -175,10 +177,10 @@ export default function Swap() {
         </div>
       </nav>
 
-      <div className="fixed top-14 left-0 right-0 z-40 bg-amber-500/90 backdrop-blur-sm border-b border-amber-600">
+      <div className="fixed top-14 left-0 right-0 z-40 bg-gradient-to-r from-cyan-500/90 via-purple-500/90 to-pink-500/90 backdrop-blur-sm border-b border-white/20">
         <div className="container mx-auto px-4 py-2 flex items-center justify-center gap-2">
-          <AlertCircle className="w-4 h-4 text-black" />
-          <span className="text-xs sm:text-sm font-medium text-black">TESTNET MODE - Simulated trading only. No real tokens are exchanged.</span>
+          <Clock className="w-4 h-4 text-white" />
+          <span className="text-xs sm:text-sm font-medium text-white">DEX Trading Launches April 11, 2026 with Mainnet</span>
         </div>
       </div>
 
@@ -215,14 +217,14 @@ export default function Swap() {
             className="grid grid-cols-3 gap-2 mb-6"
           >
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
-              <div className="text-lg font-bold text-primary">$0</div>
+              <div className="text-lg font-bold text-white/50">—</div>
               <div className="text-[10px] text-muted-foreground">24h Volume</div>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
               <div className="text-lg font-bold text-green-400">
-                {swapInfo?.pairs?.length || 5}
+                {swapInfo?.supportedTokens?.length || 5}
               </div>
-              <div className="text-[10px] text-muted-foreground">Trading Pairs</div>
+              <div className="text-[10px] text-muted-foreground">Supported Tokens</div>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
               <div className="text-lg font-bold text-amber-400">0.3%</div>
@@ -344,13 +346,7 @@ export default function Swap() {
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="flex-1 h-12 flex items-center">
-                        {quoteLoading ? (
-                          <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
-                        ) : (
-                          <span className="text-xl font-bold text-muted-foreground">
-                            {quoteData ? formatAmount(quoteData.amountOut) : "0.0"}
-                          </span>
-                        )}
+                        <span className="text-xl font-bold text-muted-foreground">—</span>
                       </div>
                       <button
                         onClick={() => setSelectingToken("out")}
@@ -365,46 +361,26 @@ export default function Swap() {
                   </div>
                 </div>
 
-                  {amountIn && parseFloat(amountIn) > 0 && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-3 p-3 rounded-lg bg-primary/10 border border-primary/20"
-                    >
-                      <div className="space-y-1 text-xs">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Rate</span>
-                          <span>1 {tokenIn.symbol} = ~0.001 {tokenOut.symbol}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Price Impact</span>
-                          <span className="text-green-400">{quoteData?.priceImpact || "<0.01"}%</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Min. Received</span>
-                          <span>{quoteData ? formatAmount(quoteData.minReceived) : "0"} {tokenOut.symbol}</span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30"
+                  >
+                    <div className="flex items-center justify-center gap-2 text-amber-400 text-sm">
+                      <Clock className="w-4 h-4" />
+                      <span>Live quotes available at mainnet launch</span>
+                    </div>
+                  </motion.div>
 
                   <Button
-                    className="w-full h-11 mt-4 text-sm font-bold bg-gradient-to-r from-primary to-cyan-400 text-black"
-                    onClick={() => swapMutation.mutate()}
-                    disabled={swapMutation.isPending || !amountIn || parseFloat(amountIn) <= 0}
+                    className="w-full h-11 mt-4 text-sm font-bold bg-white/20 cursor-not-allowed"
+                    disabled={true}
                     data-testid="button-swap"
                   >
-                    {swapMutation.isPending ? (
-                      <span className="flex items-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        Swapping...
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-2">
-                        <Sparkles className="w-4 h-4" />
-                        Swap
-                      </span>
-                    )}
+                    <span className="flex items-center gap-2 text-white/70">
+                      <Clock className="w-4 h-4" />
+                      Trading Opens April 11, 2026
+                    </span>
                   </Button>
                   </>
                 ) : (

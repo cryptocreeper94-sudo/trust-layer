@@ -8550,20 +8550,17 @@ Current context:
   // DEX / TOKEN SWAP
   // ============================================
   
-  const DEFAULT_PAIRS = [
-    { tokenA: "DWC", tokenB: "USDC", reserveA: "10000000000000000000000000", reserveB: "1000000000000000000000" },
-    { tokenA: "DWC", tokenB: "wETH", reserveA: "5000000000000000000000000", reserveB: "100000000000000000000" },
-    { tokenA: "DWC", tokenB: "wSOL", reserveA: "3000000000000000000000000", reserveB: "50000000000000000000000" },
-    { tokenA: "DWC", tokenB: "USDT", reserveA: "8000000000000000000000000", reserveB: "800000000000000000000" },
-    { tokenA: "wETH", tokenB: "USDC", reserveA: "50000000000000000000", reserveB: "100000000000000000000000" },
-  ];
+  const SUPPORTED_TOKENS = ["DWC", "USDC", "wETH", "wSOL", "USDT"];
 
   app.get("/api/swap/info", async (req, res) => {
     try {
+      const recentSwaps = await storage.getRecentSwaps();
       res.json({
-        pairs: DEFAULT_PAIRS.map((p, i) => ({ id: `pair-${i}`, ...p, fee: "0.003" })),
-        volume24h: "0",
-        tvl: "50000000000000000000000000",
+        supportedTokens: SUPPORTED_TOKENS,
+        totalSwaps: recentSwaps.length,
+        isTestnet: true,
+        launchDate: "April 11, 2026",
+        message: "DEX trading will be available at mainnet launch"
       });
     } catch (error) {
       console.error("Swap info error:", error);
@@ -8573,39 +8570,17 @@ Current context:
 
   app.get("/api/swap/quote", async (req, res) => {
     try {
-      const { tokenIn, tokenOut, amountIn } = req.query;
-      
-      if (!tokenIn || !tokenOut || !amountIn) {
-        return res.json({ amountOut: "0", priceImpact: "0", fee: "0", route: "", minReceived: "0" });
-      }
-      
-      const amountInBigInt = BigInt(String(amountIn) || "0");
-      if (amountInBigInt <= 0) {
-        return res.json({ amountOut: "0", priceImpact: "0", fee: "0", route: "", minReceived: "0" });
-      }
-      
-      // Simplified AMM calculation (constant product)
-      // For demo: 1 DWC = 0.0001 USDC equivalent
-      let rate = 0.0001;
-      if (tokenIn === "DWC" && tokenOut === "USDC") rate = 0.0001;
-      else if (tokenIn === "USDC" && tokenOut === "DWC") rate = 10000;
-      else if (tokenIn === "DWC" && tokenOut === "wETH") rate = 0.00004;
-      else if (tokenIn === "wETH" && tokenOut === "DWC") rate = 25000;
-      else if (tokenIn === "DWC" && tokenOut === "wSOL") rate = 0.002;
-      else if (tokenIn === "wSOL" && tokenOut === "DWC") rate = 500;
-      else rate = 1;
-      
-      const amountOutRaw = Number(amountInBigInt) * rate;
-      const fee = amountOutRaw * 0.003;
-      const amountOut = Math.floor((amountOutRaw - fee)).toString();
-      const minReceived = Math.floor(Number(amountOut) * 0.995).toString(); // 0.5% slippage
+      const { tokenIn, tokenOut } = req.query;
       
       res.json({
-        amountOut,
-        priceImpact: "0.01",
-        fee: Math.floor(fee).toString(),
-        route: `${tokenIn} → ${tokenOut}`,
-        minReceived,
+        isTestnet: true,
+        launchDate: "April 11, 2026",
+        message: "Live trading quotes available at mainnet launch",
+        route: tokenIn && tokenOut ? `${tokenIn} → ${tokenOut}` : "",
+        amountOut: null,
+        priceImpact: null,
+        fee: null,
+        minReceived: null,
       });
     } catch (error) {
       console.error("Swap quote error:", error);
@@ -8625,45 +8600,10 @@ Current context:
 
   app.post("/api/swap/execute", swapRateLimit, async (req, res) => {
     try {
-      const parseResult = SwapRequestSchema.safeParse(req.body);
-      if (!parseResult.success) {
-        return res.status(400).json({ error: parseResult.error.errors[0]?.message || "Invalid request" });
-      }
-      const { tokenIn, tokenOut, amountIn, minAmountOut } = parseResult.data;
-      
-      // Calculate output using same logic as quote
-      const amountInBigInt = BigInt(amountIn);
-      let rate = 0.0001;
-      if (tokenIn === "DWC" && tokenOut === "USDC") rate = 0.0001;
-      else if (tokenIn === "USDC" && tokenOut === "DWC") rate = 10000;
-      else if (tokenIn === "DWC" && tokenOut === "wETH") rate = 0.00004;
-      else if (tokenIn === "wETH" && tokenOut === "DWC") rate = 25000;
-      else if (tokenIn === "DWC" && tokenOut === "wSOL") rate = 0.002;
-      else if (tokenIn === "wSOL" && tokenOut === "DWC") rate = 500;
-      else rate = 1;
-      
-      const amountOutRaw = Number(amountInBigInt) * rate;
-      const fee = amountOutRaw * 0.003;
-      const amountOut = Math.floor(amountOutRaw - fee).toString();
-      
-      // Record the swap
-      const swap = await storage.createSwap({
-        pairId: `${tokenIn}-${tokenOut}`,
-        tokenIn,
-        tokenOut,
-        amountIn,
-        amountOut,
-        priceImpact: "0.01",
-        status: "completed",
-        txHash: `0x${crypto.randomBytes(32).toString("hex")}`,
-      });
-      
-      res.json({
-        success: true,
-        swapId: swap.id,
-        amountIn,
-        amountOut,
-        txHash: swap.txHash,
+      res.status(503).json({ 
+        error: "DEX trading launches April 11, 2026",
+        isTestnet: true,
+        launchDate: "April 11, 2026"
       });
     } catch (error: any) {
       console.error("Swap execute error:", error);
@@ -9540,26 +9480,11 @@ Current context:
 
   app.get("/api/liquidity/pools", async (req, res) => {
     try {
-      let pools = await storage.getLiquidityPools();
-      
-      // Seed default pools if none exist
-      if (pools.length === 0) {
-        const defaultPools = [
-          { tokenA: "DWC", tokenB: "USDC", reserveA: "10000000", reserveB: "1000000", tvl: "2000000", apr: "45.2", volume24h: "520000", fee: "0.3" },
-          { tokenA: "DWC", tokenB: "wETH", reserveA: "5000000", reserveB: "200", tvl: "1500000", apr: "38.7", volume24h: "340000", fee: "0.3" },
-          { tokenA: "DWC", tokenB: "wSOL", reserveA: "3000000", reserveB: "15000", tvl: "900000", apr: "52.1", volume24h: "180000", fee: "0.3" },
-          { tokenA: "wETH", tokenB: "USDC", reserveA: "100", reserveB: "350000", tvl: "700000", apr: "22.4", volume24h: "95000", fee: "0.3" },
-        ];
-        for (const pool of defaultPools) {
-          await storage.createLiquidityPool(pool);
-        }
-        pools = await storage.getLiquidityPools();
-      }
-      
-      res.json({ pools });
+      const pools = await storage.getLiquidityPools();
+      res.json({ pools, isTestnet: true, launchDate: "April 11, 2026" });
     } catch (error) {
       console.error("Liquidity pools error:", error);
-      res.json({ pools: [] });
+      res.json({ pools: [], isTestnet: true, launchDate: "April 11, 2026" });
     }
   });
 
