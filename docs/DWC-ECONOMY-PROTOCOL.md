@@ -147,6 +147,15 @@
 - Example: $10 commission = 10,000 DWC airdrop
 - Distributed April 11, 2026
 
+## DISCORD QUEST TIERS (Value at Launch)
+
+| Quest Tier | USD Value | DWC | Shells |
+|------------|-----------|-----|--------|
+| Premium | $10.00 | 10,000 DWC | 1,000,000 Shells |
+| Gold | $5.00 | 5,000 DWC | 500,000 Shells |
+| Silver | $2.50 | 2,500 DWC | 250,000 Shells |
+| Bronze | $1.00 | 1,000 DWC | 100,000 Shells |
+
 ## ZEALY QUEST REWARDS (Admin Configurable)
 
 Recommended defaults - set in Owner Admin Panel:
@@ -205,6 +214,12 @@ AFFILIATE TIERS
 ├── Silver: 12% commission
 ├── Gold: 15% commission
 └── Platinum: 20% commission
+
+DISCORD QUEST TIERS (Value @ Launch)
+├── Premium: $10.00 = 10,000 DWC = 1,000,000 Shells
+├── Gold: $5.00 = 5,000 DWC = 500,000 Shells
+├── Silver: $2.50 = 2,500 DWC = 250,000 Shells
+└── Bronze: $1.00 = 1,000 DWC = 100,000 Shells
 ```
 
 ---
