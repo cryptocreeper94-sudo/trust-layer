@@ -5787,3 +5787,105 @@ export const insertChronicleQuestProgressSchema = createInsertSchema(chronicleQu
 });
 export type ChronicleQuestProgress = typeof chronicleQuestProgress.$inferSelect;
 export type InsertChronicleQuestProgress = z.infer<typeof insertChronicleQuestProgressSchema>;
+
+// =====================================================
+// MIRROR-LIFE EXPERIENCE SYSTEM
+// =====================================================
+
+// Echo Persona - AI profile that evolves from player choices
+export const echoPersonas = pgTable("echo_personas", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  userId: text("user_id").notNull().unique(),
+  
+  // Personality vectors derived from choices
+  personalityVectors: text("personality_vectors").default("{}"), // JSON: {compassion: 0.7, ambition: 0.4, ...}
+  dominantTraits: text("dominant_traits").default("[]"), // JSON array of top 3 traits
+  choicePatterns: text("choice_patterns").default("{}"), // JSON: patterns observed
+  
+  // Cached insights
+  latestInsight: text("latest_insight"), // AI-generated insight about the player
+  insightGeneratedAt: timestamp("insight_generated_at"),
+  
+  totalChoicesMade: integer("total_choices_made").notNull().default(0),
+  totalNpcInteractions: integer("total_npc_interactions").notNull().default(0),
+  totalBuildingsPlaced: integer("total_buildings_placed").notNull().default(0),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type EchoPersona = typeof echoPersonas.$inferSelect;
+
+// Mirror Journal - AI summaries of player sessions
+export const mirrorJournalEntries = pgTable("mirror_journal_entries", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  userId: text("user_id").notNull(),
+  
+  summary: text("summary").notNull(), // AI-generated summary
+  tone: text("tone"), // 'reflective', 'adventurous', 'cautious', etc.
+  keyChoices: text("key_choices").default("[]"), // JSON array of significant choices
+  emotionalArc: text("emotional_arc"), // 'rising', 'falling', 'steady', 'turbulent'
+  
+  sessionDurationMinutes: integer("session_duration_minutes"),
+  actionsCount: integer("actions_count").default(0),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type MirrorJournalEntry = typeof mirrorJournalEntries.$inferSelect;
+
+// Morning Pulse - Daily check-in state
+export const chronicleDailyPulse = pgTable("chronicle_daily_pulse", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  userId: text("user_id").notNull(),
+  pulseDate: text("pulse_date").notNull(), // YYYY-MM-DD format
+  
+  // Overnight accumulation
+  overnightShellsEarned: integer("overnight_shells_earned").default(0),
+  pendingQuestsCount: integer("pending_quests_count").default(0),
+  activeAnomaliesCount: integer("active_anomalies_count").default(0),
+  
+  // State
+  claimed: boolean("claimed").notNull().default(false),
+  claimedAt: timestamp("claimed_at"),
+  
+  // Personalized message
+  pulseMessage: text("pulse_message"), // AI-generated morning greeting
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ChronicleDailyPulse = typeof chronicleDailyPulse.$inferSelect;
+
+// Veil Anomalies - Surprise events that break routine
+export const veilAnomalies = pgTable("veil_anomalies", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  code: text("code").notNull().unique(), // 'era_rift', 'shell_storm', etc.
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  
+  // Timing
+  startAt: timestamp("start_at").notNull(),
+  endAt: timestamp("end_at").notNull(),
+  
+  // Effect configuration
+  effectType: text("effect_type").notNull(), // 'shell_multiplier', 'era_unlock', 'quest_bonus', 'npc_special'
+  effectConfig: text("effect_config").default("{}"), // JSON with effect parameters
+  
+  // Scope
+  isGlobal: boolean("is_global").notNull().default(true), // Affects all players
+  targetEra: text("target_era"), // null = all eras
+  
+  // Visual
+  glowColor: text("glow_color").default("cyan"), // For UI effects
+  icon: text("icon").default("sparkles"),
+  
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type VeilAnomaly = typeof veilAnomalies.$inferSelect;

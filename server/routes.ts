@@ -140,6 +140,7 @@ import { pulseClient } from "./pulse-client";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { shellsService, SHELL_PACKAGES, SHELL_BUNDLES, SHELL_EARN_RATES, SHELL_COSTS, DWC_CONVERSION_RATE, DWC_LAUNCH_DATE } from "./shells-service";
 import { questsService } from "./quests-service";
+import { mirrorLifeService } from "./mirror-life-service";
 import { subscriptionService, SUBSCRIPTION_PLANS } from "./subscription-service";
 import { guardianService, generateDataHash as guardianHash, generateMerkleRoot } from "./guardian-service";
 
@@ -10935,6 +10936,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           }
           shellsEarned = SHELL_EARN_RATES.estate_upgrade * Math.min(newBuildings, 5);
           questProgress = await questsService.trackProgress(userId, "estate_upgrade", Math.min(newBuildings, 5));
+          // Track for Echo Persona
+          await mirrorLifeService.trackChoice(userId, 'building', `built ${newBuildings} structures`);
         } catch (shellErr) {
           console.warn("[Chronicles] Failed to award estate_upgrade Shells:", shellErr);
         }
@@ -11199,6 +11202,86 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   // =====================================================
+  // MIRROR-LIFE EXPERIENCE SYSTEM
+  // =====================================================
+
+  // Echo Persona - Get player's evolving AI profile
+  app.get("/api/chronicles/echo-persona", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const persona = await mirrorLifeService.getOrCreateEchoPersona(userId);
+      res.json({ persona });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get Echo Persona" });
+    }
+  });
+
+  // Generate new insight from Echo
+  app.post("/api/chronicles/echo-persona/insight", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const insight = await mirrorLifeService.generatePersonaInsight(userId);
+      res.json({ insight });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to generate insight" });
+    }
+  });
+
+  // Mirror Journal - Get recent journal entries
+  app.get("/api/chronicles/mirror-journal", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const entries = await mirrorLifeService.getRecentJournalEntries(userId, 7);
+      res.json({ entries });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get journal" });
+    }
+  });
+
+  // Morning Pulse - Get today's check-in
+  app.get("/api/chronicles/morning-pulse", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const pulse = await mirrorLifeService.getMorningPulse(userId);
+      res.json(pulse);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get morning pulse" });
+    }
+  });
+
+  // Claim morning pulse
+  app.post("/api/chronicles/morning-pulse/claim", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      
+      const result = await mirrorLifeService.claimMorningPulse(userId);
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to claim pulse" });
+    }
+  });
+
+  // Veil Anomalies - Get active anomalies
+  app.get("/api/chronicles/anomalies", async (req, res) => {
+    try {
+      const anomalies = await mirrorLifeService.getActiveAnomalies();
+      const effects = await mirrorLifeService.getActiveEffects();
+      res.json({ anomalies, effects });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get anomalies" });
+    }
+  });
+
+  // =====================================================
   // BUSINESS ONBOARDING APIs
   // =====================================================
 
@@ -11371,6 +11454,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         await shellsService.awardEngagementShells(userId, username, "story_choice");
         shellsEarned = SHELL_EARN_RATES.story_choice;
         questProgress = await questsService.trackProgress(userId, "story_choice", 1);
+        // Track for Echo Persona
+        await mirrorLifeService.trackChoice(userId, 'story', chosenOption || 'unknown choice');
       } catch (shellErr) {
         console.warn("[Chronicles] Failed to award story_choice Shells:", shellErr);
       }
@@ -11601,6 +11686,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         await shellsService.awardEngagementShells(userId, username, "npc_conversation");
         shellsEarned = SHELL_EARN_RATES.npc_conversation;
         questProgress = await questsService.trackProgress(userId, "npc_conversation", 1);
+        // Track for Echo Persona
+        await mirrorLifeService.trackChoice(userId, 'npc', message || 'conversation');
       } catch (shellErr) {
         // Silently fail - NPC conversations are casual
       }

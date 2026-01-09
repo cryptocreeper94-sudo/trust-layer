@@ -298,6 +298,103 @@ export default function ChroniclesEstate() {
     enabled: !!chroniclesAccount,
   });
 
+  // Mirror-Life Experience Queries
+  const { data: echoPersonaData } = useQuery({
+    queryKey: ["/api/chronicles/echo-persona"],
+    queryFn: async () => {
+      const session = getChroniclesSession();
+      const res = await fetch("/api/chronicles/echo-persona", {
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
+      return res.json();
+    },
+    enabled: !!chroniclesAccount,
+  });
+
+  const { data: morningPulseData, refetch: refetchPulse } = useQuery({
+    queryKey: ["/api/chronicles/morning-pulse"],
+    queryFn: async () => {
+      const session = getChroniclesSession();
+      const res = await fetch("/api/chronicles/morning-pulse", {
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
+      return res.json();
+    },
+    enabled: !!chroniclesAccount,
+  });
+
+  const { data: anomaliesData } = useQuery({
+    queryKey: ["/api/chronicles/anomalies"],
+    queryFn: async () => {
+      const session = getChroniclesSession();
+      const res = await fetch("/api/chronicles/anomalies", {
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
+      return res.json();
+    },
+    enabled: !!chroniclesAccount,
+  });
+
+  const { data: questsData, refetch: refetchQuests } = useQuery({
+    queryKey: ["/api/chronicles/quests"],
+    queryFn: async () => {
+      const session = getChroniclesSession();
+      const res = await fetch("/api/chronicles/quests", {
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
+      return res.json();
+    },
+    enabled: !!chroniclesAccount,
+  });
+
+  const [showMorningPulse, setShowMorningPulse] = useState(false);
+  const [showEchoPersona, setShowEchoPersona] = useState(false);
+
+  // Show Morning Pulse on first load if not claimed today
+  useEffect(() => {
+    if (morningPulseData && !morningPulseData.claimed && chroniclesAccount) {
+      setShowMorningPulse(true);
+    }
+  }, [morningPulseData, chroniclesAccount]);
+
+  const claimMorningPulseMutation = useMutation({
+    mutationFn: async () => {
+      const session = getChroniclesSession();
+      const res = await fetch("/api/chronicles/morning-pulse/claim", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
+      if (!res.ok) throw new Error((await res.json()).error || "Failed to claim");
+      return res.json();
+    },
+    onSuccess: (data) => {
+      refetchPulse();
+      setShowMorningPulse(false);
+      toast.success(data.message || "Morning Pulse claimed!");
+    },
+    onError: (error: any) => {
+      toast.error("Could not claim pulse", { description: error.message });
+    }
+  });
+
+  const generateInsightMutation = useMutation({
+    mutationFn: async () => {
+      const session = getChroniclesSession();
+      const res = await fetch("/api/chronicles/echo-persona/insight", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
+      if (!res.ok) throw new Error((await res.json()).error || "Failed to generate");
+      return res.json();
+    },
+    onSuccess: (data) => {
+      toast.success("Your Echo speaks...", { description: data.insight?.substring(0, 100) + "..." });
+    },
+    onError: (error: any) => {
+      toast.error("The Echo is silent", { description: error.message });
+    }
+  });
+
   const claimDailyRewardMutation = useMutation({
     mutationFn: async () => {
       const session = getChroniclesSession();
@@ -532,6 +629,200 @@ export default function ChroniclesEstate() {
         )}
       </AnimatePresence>
 
+      {/* Morning Pulse Modal */}
+      <AnimatePresence>
+        {showMorningPulse && morningPulseData && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-md w-full"
+            >
+              <GlassCard glow className="p-6 text-center">
+                <div className="absolute -top-12 left-1/2 -translate-x-1/2">
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center animate-pulse shadow-[0_0_40px_rgba(0,255,255,0.4)]">
+                    <Clock className="w-12 h-12 text-white" />
+                  </div>
+                </div>
+                
+                <div className="mt-12 mb-6">
+                  <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    Morning Pulse
+                  </h2>
+                  <p className="text-slate-400 text-sm mt-2">A new day dawns across all eras</p>
+                </div>
+                
+                <div className="bg-slate-800/50 rounded-lg p-4 mb-4">
+                  <p className="text-white italic">"{morningPulseData.pulseMessage || 'The cosmos awaits your choices.'}"</p>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  <div className="bg-slate-800/50 rounded-lg p-3">
+                    <p className="text-cyan-400 text-2xl font-bold">{morningPulseData.pendingQuestsCount || 3}</p>
+                    <p className="text-slate-400 text-xs">Quests Today</p>
+                  </div>
+                  <div className="bg-slate-800/50 rounded-lg p-3">
+                    <p className="text-pink-400 text-2xl font-bold">{morningPulseData.activeAnomaliesCount || 0}</p>
+                    <p className="text-slate-400 text-xs">Active Anomalies</p>
+                  </div>
+                </div>
+                
+                {morningPulseData.activeAnomalies?.length > 0 && (
+                  <div className="bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-lg p-3 mb-4 border border-cyan-500/30">
+                    <div className="flex items-center gap-2">
+                      <Zap className="w-4 h-4 text-cyan-400" />
+                      <p className="text-cyan-300 text-sm font-medium">
+                        {morningPulseData.activeAnomalies[0]?.title}
+                      </p>
+                    </div>
+                    <p className="text-slate-400 text-xs mt-1">
+                      {morningPulseData.activeAnomalies[0]?.description}
+                    </p>
+                  </div>
+                )}
+                
+                <Button
+                  onClick={() => claimMorningPulseMutation.mutate()}
+                  disabled={claimMorningPulseMutation.isPending}
+                  className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white font-semibold py-3"
+                  data-testid="button-claim-pulse"
+                >
+                  {claimMorningPulseMutation.isPending ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    "Begin Today's Journey"
+                  )}
+                </Button>
+              </GlassCard>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Echo Persona Modal */}
+      <AnimatePresence>
+        {showEchoPersona && echoPersonaData?.persona && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setShowEchoPersona(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-lg w-full"
+              onClick={e => e.stopPropagation()}
+            >
+              <GlassCard glow className="p-6">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowEchoPersona(false)}
+                  className="absolute top-2 right-2 text-slate-400"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+                
+                <div className="text-center mb-6">
+                  <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-emerald-500 to-cyan-600 flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(0,255,255,0.3)]">
+                    <Eye className="w-10 h-10 text-white" />
+                  </div>
+                  <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                    Your Echo
+                  </h2>
+                  <p className="text-slate-400 text-sm">The mirror of your parallel self</p>
+                </div>
+                
+                {echoPersonaData.persona.dominantTraits?.length > 0 && (
+                  <div className="mb-4">
+                    <p className="text-slate-400 text-xs uppercase tracking-wider mb-2">Dominant Traits</p>
+                    <div className="flex flex-wrap gap-2">
+                      {echoPersonaData.persona.dominantTraits.map((trait: string) => (
+                        <Badge key={trait} className="bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-300 border-cyan-500/30">
+                          {trait}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                <div className="grid grid-cols-3 gap-3 mb-4">
+                  <div className="bg-slate-800/50 rounded-lg p-3 text-center">
+                    <p className="text-cyan-400 text-lg font-bold">{echoPersonaData.persona.totalChoicesMade}</p>
+                    <p className="text-slate-400 text-xs">Choices</p>
+                  </div>
+                  <div className="bg-slate-800/50 rounded-lg p-3 text-center">
+                    <p className="text-pink-400 text-lg font-bold">{echoPersonaData.persona.totalNpcInteractions}</p>
+                    <p className="text-slate-400 text-xs">NPC Chats</p>
+                  </div>
+                  <div className="bg-slate-800/50 rounded-lg p-3 text-center">
+                    <p className="text-amber-400 text-lg font-bold">{echoPersonaData.persona.totalBuildingsPlaced}</p>
+                    <p className="text-slate-400 text-xs">Buildings</p>
+                  </div>
+                </div>
+                
+                {echoPersonaData.persona.latestInsight && (
+                  <div className="bg-slate-800/50 rounded-lg p-4 mb-4 border border-emerald-500/20">
+                    <p className="text-white italic text-sm">"{echoPersonaData.persona.latestInsight}"</p>
+                  </div>
+                )}
+                
+                <Button
+                  onClick={() => generateInsightMutation.mutate()}
+                  disabled={generateInsightMutation.isPending}
+                  className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white"
+                  data-testid="button-generate-insight"
+                >
+                  {generateInsightMutation.isPending ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Commune with Echo
+                    </>
+                  )}
+                </Button>
+              </GlassCard>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Veil Anomaly Banner */}
+      {anomaliesData?.anomalies?.length > 0 && (
+        <motion.div
+          initial={{ y: -100 }}
+          animate={{ y: 0 }}
+          className="bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 border-b border-cyan-500/30"
+        >
+          <div className="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center animate-pulse">
+                <Zap className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <p className="text-cyan-300 font-semibold text-sm flex items-center gap-1">
+                  <Sparkles className="w-3 h-3" />
+                  {anomaliesData.anomalies[0]?.title}
+                </p>
+                <p className="text-slate-400 text-xs">
+                  {anomaliesData.anomalies[0]?.description?.substring(0, 60)}...
+                </p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
       {/* Daily Reward Banner */}
       {dailyRewardData?.canClaim && (
         <motion.div
@@ -603,9 +894,49 @@ export default function ChroniclesEstate() {
             <Badge variant="outline" className="border-cyan-500/50 text-cyan-400">
               Level {playerLevel}
             </Badge>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowEchoPersona(true)}
+              className="border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10"
+              data-testid="button-open-echo"
+            >
+              <Eye className="w-4 h-4 mr-1" />
+              Echo
+            </Button>
           </div>
         </div>
       </div>
+
+      {/* Quest Progress Section */}
+      {questsData && (questsData.daily?.length > 0 || questsData.weekly?.length > 0) && (
+        <div className="bg-slate-900/50 border-b border-slate-700 px-4 py-3">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-center gap-2 mb-2">
+              <Timer className="w-4 h-4 text-cyan-400" />
+              <span className="text-white text-sm font-medium">Active Quests</span>
+              <Badge variant="secondary" className="text-xs">{(questsData.daily?.length || 0) + (questsData.weekly?.length || 0)}</Badge>
+            </div>
+            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+              {[...(questsData.daily || []), ...(questsData.weekly || [])].slice(0, 4).map((quest: any) => (
+                <div key={quest.id} className="flex-shrink-0 bg-slate-800/60 rounded-lg p-3 min-w-[200px] border border-slate-700/50">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className={`text-xs px-1.5 py-0.5 rounded ${quest.questType === 'daily' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-purple-500/20 text-purple-400'}`}>
+                      {quest.questType}
+                    </span>
+                    <span className="text-amber-400 text-xs">+{quest.shellReward} ⭐</span>
+                  </div>
+                  <p className="text-white text-sm font-medium">{quest.title}</p>
+                  <div className="mt-2">
+                    <Progress value={(quest.currentProgress / quest.targetProgress) * 100} className="h-1.5" />
+                    <p className="text-slate-400 text-xs mt-1">{quest.currentProgress}/{quest.targetProgress}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* DWC Conversion Banner */}
       <div className="bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 border-y border-cyan-500/20 py-2 px-4 relative z-10">
