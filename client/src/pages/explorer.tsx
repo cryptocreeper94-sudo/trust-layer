@@ -168,9 +168,9 @@ export default function Explorer() {
             <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-green-500/10 border border-green-500/20">
-              <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-              <span className="text-[10px] font-mono text-green-400 font-medium">MAINNET</span>
+            <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
+              <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+              <span className="text-[10px] font-mono text-amber-400 font-medium">TESTNET</span>
             </div>
             <BackButton />
             <Link href="/">
@@ -216,7 +216,7 @@ export default function Explorer() {
                   <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shrink-0" />
                   <InfoTooltip content="Transactions Per Second - network processing capacity" label="TPS info" />
                 </div>
-                <div className="text-lg md:text-xl font-bold text-white">{chainStats?.tps || "200K+"}</div>
+                <div className="text-lg md:text-xl font-bold text-white">{chainStats?.tps || "—"}</div>
                 <div className="text-[9px] md:text-[10px] text-white/50 uppercase">TPS</div>
               </div>
             </GlassCard>
@@ -226,7 +226,7 @@ export default function Explorer() {
                   <Activity className="w-3 h-3 text-cyan-400/60 shrink-0" />
                   <InfoTooltip content="Time between each block being produced on the chain" label="Block time info" />
                 </div>
-                <div className="text-lg md:text-xl font-bold text-white">{chainStats?.finalityTime || "400ms"}</div>
+                <div className="text-lg md:text-xl font-bold text-white">{chainStats?.finalityTime || "—"}</div>
                 <div className="text-[9px] md:text-[10px] text-white/50 uppercase">Block Time</div>
               </div>
             </GlassCard>
@@ -238,8 +238,8 @@ export default function Explorer() {
                   <InfoTooltip content="DarkWave uses Proof-of-Authority consensus. The Founders Validator runs enterprise-grade infrastructure for maximum uptime." label="Network info" />
                 </div>
                 <div className="text-sm md:text-xl font-bold text-white leading-tight">
-                  <span className="hidden md:inline">{chainStats?.activeNodes?.includes("Founder") ? chainStats.activeNodes : "Founders Validator"}</span>
-                  <span className="md:hidden">Founders</span>
+                  <span className="hidden md:inline">{chainStats?.activeNodes || "—"}</span>
+                  <span className="md:hidden">{chainStats?.activeNodes ? "Active" : "—"}</span>
                 </div>
                 <div className="text-[9px] md:text-[10px] text-white/50 uppercase">Network</div>
               </div>
@@ -250,7 +250,7 @@ export default function Explorer() {
                   <Box className="w-3 h-3 text-green-400/60 shrink-0" />
                   <InfoTooltip content="Total number of blocks produced since the chain started" label="Block height info" />
                 </div>
-                <div className="text-base md:text-xl font-bold text-white truncate">{chainInfo?.blockHeight?.toLocaleString() || chainStats?.currentBlock || "0"}</div>
+                <div className="text-base md:text-xl font-bold text-white truncate">{chainInfo?.blockHeight?.toLocaleString() || chainStats?.currentBlock || "—"}</div>
                 <div className="text-[9px] md:text-[10px] text-white/50 uppercase">Block Height</div>
               </div>
             </GlassCard>
