@@ -568,7 +568,7 @@ export async function registerRoutes(
   app.post("/api/coinbase/webhook", async (req: Request, res: Response) => {
     try {
       const signature = req.headers["x-cc-webhook-signature"] as string;
-      const webhookSecret = process.env.COINBASE_WEBHOOK_SECRET;
+      const webhookSecret = process.env.COINBASE_COMMERCE_WEBHOOK_SECRET;
 
       if (!webhookSecret) {
         console.error("[Coinbase] COINBASE_WEBHOOK_SECRET not configured");
