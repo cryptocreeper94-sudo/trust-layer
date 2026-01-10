@@ -2,15 +2,15 @@ import PDFDocument from 'pdfkit';
 import fs from 'fs';
 import path from 'path';
 
-const inputMd = path.join(process.cwd(), 'attached_assets', 'Through-The-Veil-COMPREHENSIVE.md');
+const inputMd = path.join(process.cwd(), 'attached_assets', 'Through-The-Veil-EXPANDED.md');
 const outputPdf = path.join(process.cwd(), 'attached_assets', 'Through-The-Veil-EBOOK.pdf');
 
 const PAGE_WIDTH = 432;
 const PAGE_HEIGHT = 648;
-const MARGIN_TOP = 60;
-const MARGIN_BOTTOM = 60;
-const MARGIN_LEFT = 50;
-const MARGIN_RIGHT = 50;
+const MARGIN_TOP = 48;
+const MARGIN_BOTTOM = 48;
+const MARGIN_LEFT = 42;
+const MARGIN_RIGHT = 42;
 const CONTENT_WIDTH = PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT;
 
 const FONT_BODY = 'Helvetica';
@@ -24,8 +24,8 @@ const FONT_SIZE_H2 = 14;
 const FONT_SIZE_BODY = 11;
 const FONT_SIZE_SMALL = 9;
 
-const LINE_GAP = 4;
-const PARAGRAPH_GAP = 12;
+const LINE_GAP = 3;
+const PARAGRAPH_GAP = 8;
 
 function sanitizeText(text: string): string {
   return text
