@@ -9,89 +9,122 @@ const content = fs.readFileSync(inputFile, 'utf-8');
 
 const doc = new PDFDocument({
   size: [360, 576],
-  margins: { top: 40, bottom: 40, left: 36, right: 36 },
+  margins: { top: 40, bottom: 50, left: 36, right: 36 },
   info: {
     Title: 'Through The Veil',
-    Author: 'Anonymous',
-    Subject: 'Spiritual Awakening'
+    Author: 'Anonymous'
   }
 });
 
 const writeStream = fs.createWriteStream(outputFile);
 doc.pipe(writeStream);
 
-doc.moveDown(6);
-doc.fontSize(24).font('Helvetica-Bold').text('Through The Veil', { align: 'center' });
-doc.moveDown(1);
-doc.fontSize(11).font('Helvetica-Oblique').text('A Journey Beyond the Illusion', { align: 'center' });
+const HEADINGS = [
+  'TABLE OF CONTENTS',
+  "AUTHOR'S NOTE",
+  'DEDICATION',
+  'FOREWORD',
+  'INTRODUCTION: THE AWAKENING',
+  'INTERLUDE I',
+  'INTERLUDE II',
+  'CHAPTER 1',
+  'CHAPTER 2',
+  'CHAPTER 3',
+  'CHAPTER 4',
+  'CHAPTER 5',
+  'CHAPTER 6',
+  'CHAPTER 7',
+  'CHAPTER 8',
+  'CHAPTER 9',
+  'CHAPTER 10',
+  'CHAPTER 11',
+  'CHAPTER 12',
+  'CHAPTER 13',
+  'APPENDIX',
+  'MESSAGE TO THE READER',
+  'ACKNOWLEDGMENTS',
+  'AUTHOR BIO'
+];
+
+function isHeading(line: string): boolean {
+  const upper = line.trim().toUpperCase();
+  for (const h of HEADINGS) {
+    if (upper.startsWith(h)) return true;
+  }
+  return false;
+}
+
+doc.moveDown(8);
+doc.fontSize(26).font('Helvetica-Bold').text('Through The Veil', { align: 'center' });
+doc.moveDown(1.5);
+doc.fontSize(12).font('Helvetica-Oblique').text('A Journey Beyond the Illusion', { align: 'center' });
 doc.addPage();
 
-const lines = content.split('\n');
-let inTOC = false;
-let firstSection = true;
+const paragraphs = content.split('\n\n');
+let isFirst = true;
+let skipNext = false;
 
-for (let i = 0; i < lines.length; i++) {
-  const line = lines[i].trim();
+for (const para of paragraphs) {
+  const trimmed = para.trim();
   
-  if (line === 'Through The Veil' && i < 3) continue;
+  if (!trimmed) continue;
+  if (trimmed === 'Through The Veil') continue;
   
-  if (line === '') {
-    doc.moveDown(0.4);
-    continue;
-  }
+  const firstLine = trimmed.split('\n')[0].trim();
   
-  if (line === 'TABLE OF CONTENTS') {
-    inTOC = true;
-    doc.fontSize(14).font('Helvetica-Bold').text('TABLE OF CONTENTS', { align: 'center' });
-    doc.moveDown(1);
-    continue;
-  }
-  
-  if (inTOC) {
-    if (/^(AUTHOR'S NOTE|DEDICATION|FOREWORD|INTRODUCTION)/i.test(line)) {
-      inTOC = false;
+  if (isHeading(firstLine)) {
+    if (!isFirst) {
       doc.addPage();
+    }
+    isFirst = false;
+    
+    doc.moveDown(3);
+    
+    if (firstLine.includes('—')) {
+      const [prefix, title] = firstLine.split('—').map(s => s.trim());
+      doc.fontSize(11).font('Helvetica').text(prefix, { align: 'center' });
+      doc.moveDown(0.4);
+      doc.fontSize(18).font('Helvetica-Bold').text(title, { align: 'center' });
+    } else if (firstLine.includes(':') && !firstLine.startsWith('INTRODUCTION')) {
+      const [prefix, title] = firstLine.split(':').map(s => s.trim());
+      doc.fontSize(11).font('Helvetica').text(prefix, { align: 'center' });
+      doc.moveDown(0.4);
+      doc.fontSize(18).font('Helvetica-Bold').text(title, { align: 'center' });
     } else {
-      doc.fontSize(9).font('Helvetica').text(line, { align: 'left' });
-      doc.moveDown(0.2);
-      continue;
+      doc.fontSize(18).font('Helvetica-Bold').text(firstLine, { align: 'center' });
     }
-  }
-  
-  const isHeading = /^(AUTHOR'S NOTE|DEDICATION|FOREWORD|INTRODUCTION|CHAPTER \d+|INTERLUDE [IV]+|APPENDIX|MESSAGE TO THE READER|ACKNOWLEDGMENTS|AUTHOR BIO)/i.test(line);
-  
-  if (isHeading) {
-    if (!firstSection) {
-      doc.addPage();
-    }
-    firstSection = false;
     
     doc.moveDown(2);
     
-    if (line.includes('—')) {
-      const parts = line.split('—');
-      doc.fontSize(10).font('Helvetica').text(parts[0].trim(), { align: 'center' });
-      doc.moveDown(0.3);
-      doc.fontSize(16).font('Helvetica-Bold').text(parts[1].trim(), { align: 'center' });
-    } else if (line.includes(':')) {
-      const parts = line.split(':');
-      doc.fontSize(10).font('Helvetica').text(parts[0].trim(), { align: 'center' });
-      doc.moveDown(0.3);
-      doc.fontSize(16).font('Helvetica-Bold').text(parts[1].trim(), { align: 'center' });
-    } else {
-      doc.fontSize(16).font('Helvetica-Bold').text(line, { align: 'center' });
+    const remainingLines = trimmed.split('\n').slice(1).join('\n').trim();
+    if (remainingLines) {
+      doc.fontSize(10).font('Helvetica').text(remainingLines, { 
+        align: 'left',
+        lineGap: 3
+      });
     }
-    
-    doc.moveDown(1.5);
     continue;
   }
   
-  doc.fontSize(10).font('Helvetica').text(line, { align: 'left', lineGap: 2 });
+  const lines = trimmed.split('\n');
+  for (const line of lines) {
+    const l = line.trim();
+    if (!l) {
+      doc.moveDown(0.3);
+      continue;
+    }
+    doc.fontSize(10).font('Helvetica').text(l, { 
+      align: 'left',
+      lineGap: 3
+    });
+  }
+  doc.moveDown(0.5);
 }
 
 doc.end();
 
 writeStream.on('finish', () => {
   const stats = fs.statSync(outputFile);
-  console.log(`Done: ${outputFile} (${(stats.size / 1024).toFixed(0)} KB)`);
+  console.log(`PDF created: ${outputFile}`);
+  console.log(`Size: ${(stats.size / 1024).toFixed(0)} KB`);
 });
