@@ -833,6 +833,18 @@ How do governments deny involvement in false flags? The playbook is consistent:
 - **Delay, delay, delay**: Keep documents classified for 50-75 years. By the time truth emerges, the perpetrators are dead and the public has moved on.
 - **Rely on normalcy bias**: Most people cannot believe their government would harm its own citizens. This disbelief is the greatest protection.
 
+**PATTERNS WORTH NOTING**
+
+This book makes no definitive claims about specific modern events. But patterns are worth noting. Questions are worth asking. Timing is worth observing.
+
+On September 10, 2001, Secretary of Defense Donald Rumsfeld announced on C-SPAN that the Pentagon could not account for $2.3 trillion in transactions. Two point three trillion dollars. Missing. He called it "a matter of life and death."
+
+The very next day was September 11, 2001.
+
+The $2.3 trillion was never mentioned again. The accounting offices investigating the missing funds were located in the section of the Pentagon that was struck. The records were destroyed. The story disappeared.
+
+No claim is made here about what happened. Only observation: the timing. The convenient destruction of records. The complete disappearance of a story that should have been the biggest scandal in American history. And the fact that anyone who notices these patterns is immediately labeled with that CIA-created term.
+
 **THE MODERN APPLICATION**
 
 The pattern hasn't stopped. It has become more sophisticated.
