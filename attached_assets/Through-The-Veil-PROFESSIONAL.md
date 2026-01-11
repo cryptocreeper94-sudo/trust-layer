@@ -62,6 +62,24 @@ What happens next is between you and the Most High.
 
 ---
 
+## Preface: A Word About This Work
+
+This book is based on research. On world events. On historical precedent. On patterns that keep appearing across cultures, centuries, and continents.
+
+We are not making definitive claims. We are presenting connections, observations, and questions that we believe deserve consideration.
+
+You have free will. You have discernment. It is up to you to seek your own truth.
+
+What follows is our version - a guide, an outline, examples drawn from years of study and personal revelation. We present it not as doctrine but as a starting point for your own journey.
+
+We would welcome any additional details, corrections, or insights from readers. Truth is a collaborative pursuit. None of us has the complete picture. But together, we can assemble more of it.
+
+Take what resonates. Question what doesn't. Verify everything you can. And above all - seek the Creator directly. No book, no teacher, no institution can replace that relationship.
+
+The veil is lifting. We're honored you're here.
+
+---
+
 ## Author's Note
 
 For years, regret and self-loathing were constant companions. Alcohol became a way to cope - a way to numb something that couldn't be named. It nearly won.
@@ -3075,11 +3093,35 @@ Welcome to the other side.
 
 ---
 
-## Connect
+## Connect & Resources
 
-For updates, additional resources, and discussion:
+**For updates, corrections, and discussion:**
+Contact coming soon - we welcome additional insights and research contributions.
 
-*[Author contact/website to be added]*
+---
+
+## Recommended Resources
+
+**The Cepher Bible**
+The scripture references in this book use the Cepher translation - the most complete collection of sacred texts with restored Hebrew names. Available at cepher.net
+
+Why the Cepher matters:
+- Restores the true names (Yahuah, Yahusha) removed from other translations
+- Includes 87 books - the complete canon before institutional editing
+- Contains Enoch, Jasher, Jubilees, and other essential texts
+- Preserves the Hebrew context lost in Greek/Latin translations
+
+If this book has sparked a desire to study scripture with restored names and complete texts, the Cepher is where to start.
+
+---
+
+## Coming Soon
+
+- Expanded edition with additional research
+- Deception Tracker: A growing database of predictive programming and hidden-in-plain-sight symbolism
+- Audio version narrated by the author
+- Study guide and discussion questions
+- Community forum for collaborative research
 
 ---
 
