@@ -156,9 +156,12 @@ function renderElement(
                      text.toUpperCase().includes('AUTHOR') ||
                      text.toUpperCase().includes('SUPPLEMENTARY');
       
-      if (isPart && !isFirstContent) {
+      const isChapter = text.toUpperCase().startsWith('CHAPTER ');
+      
+      // All chapters and parts start on new pages
+      if ((isPart || isChapter) && !isFirstContent) {
         doc.addPage();
-        doc.moveDown(2);
+        doc.moveDown(isPart ? 2 : 1);
       } else if (!isFirstContent && doc.y > PAGE_HEIGHT - MARGIN_BOTTOM - 100) {
         doc.addPage();
       } else if (!isFirstContent) {
@@ -239,9 +242,9 @@ async function generatePDF() {
     },
     info: {
       Title: 'Through The Veil',
-      Author: 'Anonymous',
+      Author: 'Asher Reed',
       Subject: 'Unraveling the Tapestry of Lies?',
-      Keywords: 'testimony, spiritual, awakening'
+      Keywords: 'spiritual awakening, hidden history, truth seeking, biblical research'
     },
     bufferPages: true,
     autoFirstPage: true
