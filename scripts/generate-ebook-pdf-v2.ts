@@ -151,21 +151,29 @@ function renderElement(
       if (text === 'THROUGH THE VEIL') return isFirstContent;
       if (text.includes('Table of Contents')) return isFirstContent;
       
-      if (!isFirstContent && doc.y > PAGE_HEIGHT - MARGIN_BOTTOM - 100) {
+      const isPart = text.toUpperCase().startsWith('PART ') || 
+                     text.toUpperCase().includes('APPENDIX') ||
+                     text.toUpperCase().includes('AUTHOR') ||
+                     text.toUpperCase().includes('SUPPLEMENTARY');
+      
+      if (isPart && !isFirstContent) {
+        doc.addPage();
+        doc.moveDown(2);
+      } else if (!isFirstContent && doc.y > PAGE_HEIGHT - MARGIN_BOTTOM - 100) {
         doc.addPage();
       } else if (!isFirstContent) {
         doc.moveDown(0.8);
       }
       
       doc.font(FONT_BOLD)
-         .fontSize(FONT_SIZE_H1)
+         .fontSize(isPart ? FONT_SIZE_H1 + 2 : FONT_SIZE_H1)
          .text(text, MARGIN_LEFT, doc.y, {
            width: CONTENT_WIDTH,
-           align: 'left',
+           align: isPart ? 'center' : 'left',
            lineGap: LINE_GAP
          });
       
-      doc.moveDown(0.5);
+      doc.moveDown(isPart ? 1 : 0.5);
       return false;
       
     case 'h2':
