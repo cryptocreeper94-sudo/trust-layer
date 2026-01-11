@@ -1,5 +1,5 @@
 # THROUGH THE VEIL
-## Unraveling the Tapestry of Lies
+## Unraveling the Tapestry of Lies?
 
 ---
 
@@ -11,7 +11,7 @@ This material is presented for exploration and critical thinking. Nothing here s
 
 What follows are patterns, possibilities, and questions - not certainties. Take what resonates. Question everything else.
 
-This is not doctrine. This is not theory. This is a field report.
+This is not doctrine. This is not theory. This is pattern recognition.
 
 ---
 
@@ -110,6 +110,8 @@ The adversary's strategy has always been imitation. Create a counterfeit of ever
 The council of the fallen mirrors the divine council of heaven. Everything is inverted. Everything is substituted. And most people can't tell the difference because they've never been shown the original.
 
 This is the pattern that runs through everything that follows. Once you see it, you'll recognize it everywhere.
+
+When this book refers to "the system" - understand what that means. Not bureaucracy. Not incompetence. Not random corruption. An ancient intelligence. A coordinated adversarial council that has operated continuously across millennia, working through human proxies, institutions, and bloodlines. It adapts. It plans across centuries. It remembers what humanity has been made to forget. Every substitution, every inversion, every erasure documented in these pages traces back to this single source - the council of the cast-out, still executing the rebellion that began before human history.
 
 ---
 
@@ -1503,6 +1505,6 @@ HalleluYah.
 
 ---
 
-*Through the Veil: Unraveling the Tapestry of Lies*
+*Through the Veil: Unraveling the Tapestry of Lies?*
 
 HalleluYah.

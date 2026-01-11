@@ -54,7 +54,7 @@ function createTitlePage(doc: typeof PDFDocument.prototype) {
   
   doc.font(FONT_ITALIC)
      .fontSize(FONT_SIZE_SUBTITLE)
-     .text('Unraveling the Tapestry of Lies', {
+     .text('Unraveling the Tapestry of Lies?', {
        width: CONTENT_WIDTH,
        align: 'center'
      });
@@ -240,7 +240,7 @@ async function generatePDF() {
     info: {
       Title: 'Through The Veil',
       Author: 'Anonymous',
-      Subject: 'Unraveling the Tapestry of Lies',
+      Subject: 'Unraveling the Tapestry of Lies?',
       Keywords: 'testimony, spiritual, awakening'
     },
     bufferPages: true,
