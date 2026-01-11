@@ -913,6 +913,56 @@ Understanding this motivation changes everything. The chaos isn't pointless - it
 
 ---
 
+## The Scripture That Shouldn't Exist
+
+Before we go further, let's address the skeptics - and the believers who dismiss the "extra" books.
+
+The Bible - from Bere'shiyth (Genesis) through Chizayon (Revelation) - was written by approximately 40 different authors. Kings, shepherds, fishermen, tax collectors, prophets, physicians. Different backgrounds. Different centuries. Different continents.
+
+The timespan? Roughly 1,500 years from the first writings to the last.
+
+Most of these authors never met each other. They couldn't have collaborated. They wrote in different languages - Hebrew, Aramaic, Greek. They addressed different audiences in different eras facing different circumstances.
+
+And yet.
+
+The themes connect. The prophecies align. The narrative threads weave together into a coherent tapestry across fifteen centuries. The statistical probability of this happening by chance is so astronomical it's effectively zero.
+
+Consider: If you took 40 random authors from different centuries and asked them to write about the nature of existence, the origin of evil, the purpose of humanity, and the resolution of cosmic conflict - would their writings align? Would prophecies written 700 years before events describe them with precision?
+
+This is the evidence skeptics dismiss. Not because it lacks merit, but because accepting it requires accepting what follows.
+
+## The Books They Removed
+
+Here's what most people don't know: The Bible used to be larger.
+
+The Ethiopian canon contains 81 books. The Catholic canon has 73. The Protestant canon - what most English speakers know - has 66. The Cepher restores 87.
+
+What was removed?
+
+**Chanok (Enoch)** - Written by the great-grandfather of Noach (Noah). This isn't some random mystic's writing - this is family history. Chanok describes the fall of the 200 Watchers, the corruption of humanity, the coming flood, and the final judgment. It was quoted by Yahudah (Jude) in the New Testament - Yahudah 1:14-15 directly cites Chanok's prophecy. If it was authoritative enough for scripture to quote, why was it removed?
+
+**Yashar (Jasher)** - Referenced in Yahusha (Joshua) 10:13 and Shemu'el Sheniy (2 Samuel) 1:18. Scripture itself tells us to read this book. It fills in details about the patriarchs, the Egyptian captivity, and events the canonical books only summarize.
+
+**Yovheliym (Jubilees)** - A detailed chronology from creation through the Exodus, providing timeline information that helps resolve apparent contradictions in the standard text.
+
+**Ezra Reviy'iy (4 Ezra/2 Esdras)** - Contains prophecies about the end times and the Messiah that are remarkably specific.
+
+Why were these removed?
+
+The official answer: They weren't considered "inspired" by the councils that determined the canon.
+
+The pattern answer: They filled in gaps. They connected dots. They made the narrative too clear, too complete, too verifiable. A scattered, incomplete canon is easier to interpret creatively. A complete record is harder to twist.
+
+When people say "the Bible has contradictions" or "there are gaps in the narrative" - yes, there are. Because pieces were removed. The books that filled those gaps were deliberately excluded.
+
+This is why we recommend the Cepher translation. Not because it's the only valid text, but because it restores what was removed. Eighty-seven books instead of sixty-six. Including Chanok, Yashar, Yovheliym, and others that scripture itself references.
+
+The same system that changed the names, substituted the calendar, and introduced pagan symbols - that same system decided which books you're allowed to read.
+
+Think about that.
+
+---
+
 # CHAPTER 22: THE SUBSTITUTED CALENDAR
 
 The biblical year began in Abib (Aviv) - the month of spring, new growth, renewal. Shemoth (Exodus) 12:2: "This month shall be unto you the beginning of months: it shall be the first month of the year to you."
