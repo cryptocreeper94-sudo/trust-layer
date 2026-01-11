@@ -845,6 +845,18 @@ The $2.3 trillion was never mentioned again. The accounting offices investigatin
 
 No claim is made here about what happened. Only observation: the timing. The convenient destruction of records. The complete disappearance of a story that should have been the biggest scandal in American history. And the fact that anyone who notices these patterns is immediately labeled with that CIA-created term.
 
+Another pattern: The Oklahoma City bombing of 1995.
+
+The Alfred P. Murrah Federal Building housed, among other agencies, offices containing extensive documentation related to the Waco siege that had occurred two years earlier - a siege that raised serious questions about federal conduct. The bombing occurred on the two-year anniversary of the Waco fire.
+
+The records were destroyed. The investigation into federal actions at Waco effectively ended.
+
+Timothy McVeigh, the convicted bomber, had documented connections to federal informants. Court records and investigative journalism have established links between McVeigh and individuals working with federal agencies. Whether he was a lone actor, a patsy, or something else entirely remains debated.
+
+What is not debated: the timing. The destruction of inconvenient records. The way the event shifted public attention from questions about federal overreach at Waco to sympathy for federal victims at Oklahoma City. The narrative inversion was complete.
+
+Again - no definitive claims. Only patterns. Only questions. Only the observation that convenient timing and convenient destruction of evidence appear repeatedly throughout history. And that those who notice are always given the same label.
+
 **THE MODERN APPLICATION**
 
 The pattern hasn't stopped. It has become more sophisticated.
