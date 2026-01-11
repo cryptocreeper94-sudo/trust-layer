@@ -120,6 +120,7 @@ const Tetris = lazy(() => import("@/pages/tetris"));
 const Snake = lazy(() => import("@/pages/snake"));
 const Pacman = lazy(() => import("@/pages/pacman"));
 const Genesis = lazy(() => import("@/pages/genesis"));
+const Veil = lazy(() => import("@/pages/veil"));
 const CreatorProgram = lazy(() => import("@/pages/creator-program"));
 const EraCodex = lazy(() => import("@/pages/era-codex"));
 const ScenarioGenerator = lazy(() => import("@/pages/scenario-generator"));
@@ -222,6 +223,7 @@ function GamesRouter() {
         <Route path="/snake" component={Snake} />
         <Route path="/pacman" component={Pacman} />
         <Route path="/genesis" component={Genesis} />
+        <Route path="/veil" component={Veil} />
         <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/scenario-generator" component={ScenarioGenerator} />
@@ -291,6 +293,7 @@ function ChronoRouter() {
         <Route path="/executive-summary" component={ChronoExecutiveSummary} />
         <Route path="/roadmap" component={ChronoRoadmap} />
         <Route path="/genesis" component={Genesis} />
+        <Route path="/veil" component={Veil} />
         <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/crowdfund" component={Crowdfund} />
@@ -430,6 +433,7 @@ function DWSCRouter() {
         <Route path="/snake" component={Snake} />
         <Route path="/pacman" component={Pacman} />
         <Route path="/genesis" component={Genesis} />
+        <Route path="/veil" component={Veil} />
         <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/scenario-generator" component={ScenarioGenerator} />
