@@ -2,30 +2,30 @@ import PDFDocument from 'pdfkit';
 import fs from 'fs';
 import path from 'path';
 
-const inputMd = path.join(process.cwd(), 'attached_assets', 'Through-The-Veil-EXPANDED.md');
+const inputMd = path.join(process.cwd(), 'attached_assets', 'Through-The-Veil-MANUAL.md');
 const outputPdf = path.join(process.cwd(), 'attached_assets', 'Through-The-Veil-EBOOK.pdf');
 
 const PAGE_WIDTH = 432;
 const PAGE_HEIGHT = 648;
-const MARGIN_TOP = 54;
-const MARGIN_BOTTOM = 54;
-const MARGIN_LEFT = 48;
-const MARGIN_RIGHT = 48;
+const MARGIN_TOP = 36;
+const MARGIN_BOTTOM = 36;
+const MARGIN_LEFT = 36;
+const MARGIN_RIGHT = 36;
 const CONTENT_WIDTH = PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT;
 
 const FONT_BODY = 'Helvetica';
 const FONT_BOLD = 'Helvetica-Bold';
 const FONT_ITALIC = 'Helvetica-Oblique';
 
-const FONT_SIZE_TITLE = 22;
-const FONT_SIZE_SUBTITLE = 13;
-const FONT_SIZE_H1 = 16;
-const FONT_SIZE_H2 = 13;
+const FONT_SIZE_TITLE = 20;
+const FONT_SIZE_SUBTITLE = 12;
+const FONT_SIZE_H1 = 14;
+const FONT_SIZE_H2 = 12;
 const FONT_SIZE_BODY = 10;
 const FONT_SIZE_SMALL = 8;
 
-const LINE_GAP = 2;
-const PARAGRAPH_GAP = 6;
+const LINE_GAP = 1;
+const PARAGRAPH_GAP = 4;
 
 function sanitizeText(text: string): string {
   return text
@@ -151,21 +151,21 @@ function renderElement(
       if (text === 'THROUGH THE VEIL') return isFirstContent;
       if (text.includes('Table of Contents')) return isFirstContent;
       
-      if (!isFirstContent && doc.y > MARGIN_TOP + 30) {
+      if (!isFirstContent && doc.y > PAGE_HEIGHT - MARGIN_BOTTOM - 100) {
         doc.addPage();
+      } else if (!isFirstContent) {
+        doc.moveDown(0.8);
       }
-      
-      doc.moveDown(1.5);
       
       doc.font(FONT_BOLD)
          .fontSize(FONT_SIZE_H1)
          .text(text, MARGIN_LEFT, doc.y, {
            width: CONTENT_WIDTH,
-           align: 'center',
+           align: 'left',
            lineGap: LINE_GAP
          });
       
-      doc.moveDown(1);
+      doc.moveDown(0.5);
       return false;
       
     case 'h2':
