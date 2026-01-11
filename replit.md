@@ -63,7 +63,27 @@ Every page requires:
     - **AI Agent Marketplace**: Autonomous AI agent deployment platform with revenue sharing for creators.
     - **RWA Tokenization**: Real-world asset tokenization platform for institutional investment with Guardian-verified assets and fractional ownership.
 - **Strategic Marketing Pages**: Competitive Analysis (`/token-compare`), Investor Pitch (`/investor-pitch`), Innovation Hub (`/innovation`) dashboard.
-- **Games Arcade**: Full arcade with classic games (Tetris, Pacman, Snake, Solitaire, Spades, Minesweeper, Galaga, Coinflip, Crash, Slots, Lottery, Predictions) with leaderboards and Shells economy integration.
+- **Through The Veil Book**: Spiritual awakening ebook (188 pages) at `/veil` with PDF/EPUB downloads. By Asher Reed.
+
+## Future Roadmap - Scripture & Truth Tools
+
+**What Does The Cepher Say (Living Concordance)**
+- Search scripture topics with Cepher translations (restored Hebrew names)
+- Compare across versions: Cepher vs KJV vs NIV vs Ethiopian Bible
+- Show what words were changed, when, by whom, why
+- Explain frequency/resonance impact of word substitutions
+- Display Father's name count: 6,823+ in Hebrew → replaced with LORD/GOD
+- List removed books with "official reason" vs "pattern reason"
+- Probability section: 40 authors, 1,500 years, astronomical odds of coherence
+- "Why Is Everyone Confused" educational breakdown
+
+**Prophecy Reference Page**
+- Index prophecies by topic (end times, Messiah, tribulation, kingdoms)
+- Pull from Daniel, Ezekiel, Revelation, Matthew, Mark, Isaiah, Zechariah
+- Show verses, who received prophecy, context, meaning
+- Cross-reference where same prophecy appears in multiple books
+- Cepher as primary source with restored names
+- Connects to "Through The Veil" book content
 
 ## External Dependencies
 - **Database**: PostgreSQL
