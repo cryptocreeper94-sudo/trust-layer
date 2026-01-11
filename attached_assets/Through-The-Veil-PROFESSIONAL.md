@@ -2320,6 +2320,75 @@ The following claims made in this book can be verified through publicly availabl
 - Source: Multiple Aramaic fragments catalogued as 4QEn (4Q201-4Q212)
 - Verification: Israel Antiquities Authority, multiple academic publications
 
+**MKUltra Mind Control Program (Context for System patterns)**
+- Document: Senate Church Committee hearings, 1975
+- Date: Program active 1953-1973
+- Status: Officially acknowledged by CIA Director Richard Helms; documents mostly destroyed 1973, partial recovery through FOIA
+- Quote: "We need a program of psychosurgery for political control of our society" - attributed to Dr. Jose Delgado, Congressional Record, 1974
+- Verification: Senate Select Committee to Study Governmental Operations with Respect to Intelligence Activities (Church Committee)
+
+**Smithsonian Giant Bones Controversy**
+- Source: 19th century newspaper accounts (searchable via newspapers.com archive)
+- Examples: New York Times, 1902 - "Giant Skulls and Bones"; multiple accounts from American Antiquarian journals
+- Pattern: Reports of giant skeleton discoveries followed by Smithsonian acquisition and subsequent disappearance from record
+- Note: Listed as pattern worth investigating, not proven suppression
+
+**Edward Bernays on Propaganda**
+- Source: "Propaganda" (1928), by Edward Bernays (nephew of Sigmund Freud)
+- Quote: "The conscious and intelligent manipulation of the organized habits and opinions of the masses is an important element in democratic society. Those who manipulate this unseen mechanism of society constitute an invisible government which is the true ruling power of our country."
+- Verification: Book is in public domain, freely available
+
+**Television Patent and Early Research**
+- Source: Philo Farnsworth patent application, 1927
+- Historical note: Early television researchers documented the hypnotic effect of the screen
+- Quote: Attributed to Farnsworth later in life: "There's nothing on it worthwhile, and we're not going to watch it in this household"
+- Additional: Hertha Sturm research on "missing half second" in television perception (1980s studies)
+
+**Pharmaceutical Industry Deaths vs. Alternative Medicine**
+- Source: Journal of the American Medical Association (JAMA), 1998, 2000
+- Starfield, B. (2000). "Is US Health Really the Best in the World?" JAMA 284(4):483-485
+- Content: Documented approximately 225,000 annual deaths from medical intervention (iatrogenic deaths)
+- Note: Third leading cause of death per study analysis
+
+**Project Mockingbird - CIA Media Infiltration**
+- Source: Senate Church Committee hearings, 1975
+- Date: Program began 1950s
+- Quote: Carl Bernstein, Rolling Stone (1977): "The CIA's use of journalists has been much more extensive than the agency has acknowledged"
+- Content: Documented placement of CIA assets in major news organizations
+
+**Oklahoma City Bombing - Timing Pattern**
+- Date: April 19, 1995
+- Source: Federal court records, contemporaneous news accounts
+- Content: Murrah Federal Building housed numerous federal agencies including ATF
+- Pattern note: Bombing occurred two years to the day after Waco siege conclusion
+
+**USS Liberty Survivor Testimony**
+- Date: June 8, 1967
+- Source: Survivor testimonies, declassified NSA documents, BBC documentary "Dead in the Water" (2002)
+- Content: Sustained Israeli attack on clearly marked U.S. vessel; 34 dead, 171 wounded
+- Status: Official inquiries concluded "mistaken identity" despite survivor accounts contradicting this
+- Verification: USS Liberty Veterans Association records, declassified communications
+
+**Reichstag Fire Decree**
+- Date: February 28, 1933 (one day after fire)
+- Source: German legal records, "Verordnung des Reichspräsidenten zum Schutz von Volk und Staat"
+- Content: Suspended civil liberties, enabled mass arrests
+- Pattern: Crisis → immediate legislation → expanded powers
+- Verification: German Federal Archives
+
+**Constantine's Sunday Law**
+- Date: March 7, 321 AD
+- Source: Codex Justinianus, Book 3, Title 12, Law 3
+- Quote: "On the venerable Day of the Sun let the magistrates and people residing in cities rest"
+- Content: First civil legislation mandating Sunday rest in Roman Empire
+- Verification: Corpus Iuris Civilis, available in multiple translations
+
+**Dead Sea Scrolls and Masoretic Divergence**
+- Source: Comparative textual analysis, multiple academic publications
+- Example: The Great Isaiah Scroll (1QIsaa) shows variants from Masoretic Text
+- Significance: Demonstrates textual changes occurred during transmission
+- Verification: Israel Museum, Jerusalem (scroll on display)
+
 ---
 
 ## Note on Sources
