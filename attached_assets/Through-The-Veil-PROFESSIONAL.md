@@ -1643,40 +1643,8 @@ What happens next is between the reader and the Most High.
 
 ---
 
-## Final Blessing
-
-May your eyes be opened to see what has been hidden.
-
-May your ears be tuned to hear what has been silenced.
-
-May your mind be freed from the patterns that bind.
-
-May your heart be strengthened for the journey ahead.
-
-May your feet be established on the path of truth.
-
-May your hands be equipped for the work of restoration.
-
-May your voice be emboldened to speak what must be spoken.
-
-May your spirit be connected to the Source of all light.
-
-May you remember what you were designed to know.
-
-May you become what you were created to be.
-
-May you find your place in the awakening that is spreading.
-
-May you stand in the day of testing that approaches.
-
-And may Yahuah Himself be your portion, your inheritance, and your eternal reward.
-
-In the name of Yahusha HaMashiach, the Way, the Truth, and the Life.
-
-HalleluYah.
-
----
-
 *Through the Veil: Unraveling the Tapestry of Lies?*
+
+*"The signal is broadcasting. The receiver can be restored."*
 
 HalleluYah.
