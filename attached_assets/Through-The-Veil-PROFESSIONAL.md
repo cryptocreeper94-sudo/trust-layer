@@ -989,12 +989,75 @@ This is where the spell changes. Remember - spelling is spellcasting. The words 
 | Original (Cepher) | King James | NIV | What Changed |
 |-------------------|------------|-----|--------------|
 | **Yahuah** | LORD, GOD | LORD, GOD | The Name erased, replaced with titles |
-| **Yahusha** | Jesus | Jesus | Greek substitution of Hebrew name |
+| **Yahusha** | Jesus | Jesus | NOT a transliteration - see below |
 | **Ruach Ha'Qodesh** | Holy Ghost/Spirit | Holy Spirit | Hebrew meaning lost |
 | **Elohiym** | God | God | Plurality obscured |
 | **Shabbath** | Sabbath | Sabbath | Same word, different observance |
 | **Pesach** | Passover | Passover | Hebrew connection severed |
 | **Mashiach** | Messiah/Christ | Messiah/Christ | Same meaning (Anointed One), but Hebrew context severed |
+
+### The "Jesus" Deception: Not a Transliteration
+
+People say "Jesus is just the English transliteration of the Hebrew name." They're wrong. And understanding why matters.
+
+**What is transliteration?**
+
+Transliteration means taking the sounds of a word in one language and representing them with the letters of another language. The sounds stay the same - only the alphabet changes.
+
+Example: The Hebrew name דָּוִד becomes "David" in English. The sounds are preserved: Dah-veed → David. That's transliteration.
+
+**What happened to Yahusha?**
+
+The Hebrew name is יהושע - **Yahusha** (Yah-HOO-sha). It means "Yah is salvation" - the Father's name (Yah) is embedded in the Son's name.
+
+If this were transliterated into English, it would be: Yahusha. Or at minimum, something phonetically similar.
+
+Instead, here's what actually happened:
+
+1. **Hebrew**: Yahusha (יהושע)
+2. **Aramaic**: Shortened in some dialects to Y'shua
+3. **Greek**: Ἰησοῦς (Iēsous) - The "Yah" sound is removed, Greek has no "sh" sound, ending changed to Greek masculine form
+4. **Latin**: Iesus
+5. **English**: Jesus
+
+From Yahusha to Jesus, virtually every sound changed:
+- "Yah" → "Jee" (the Father's name removed)
+- "hu" → disappeared
+- "sha" → "sus"
+
+That's not transliteration. That's transformation. The sounds don't match. The meaning is lost. The Father's name - embedded in the Son's name - is erased.
+
+**The "Yeshua" Trap**
+
+Some people think they're being clever by saying "Yeshua" instead of Jesus. They believe this is the "real Hebrew name."
+
+It's closer - but still wrong.
+
+"Yeshua" (ישוע) is a shortened, post-exilic form that appeared after the Babylonian captivity. It removes the "Yahu" (יהו) prefix that contains the Father's name.
+
+The full, original name preserved in the Tanakh is **Yahusha** (יהושע) - the same name given to Mosheh's successor (whom English Bibles call "Joshua").
+
+Think about that: The man English speakers call "Joshua" and the man they call "Jesus" have the exact same Hebrew name - Yahusha. One gets a reasonable transliteration. The other gets completely transformed.
+
+Why would two people with identical Hebrew names receive completely different English renderings? Unless the goal was to obscure the connection.
+
+**The Greek Demigod Connection**
+
+The name "Iesous" in Greek bears uncomfortable similarity to Greek mythological figures. Whether this was intentional or coincidental, the result is the same: a Hebrew name containing the Father's sacred name was replaced with a Greek construction that severs that connection entirely.
+
+When you call on "Jesus," you're using:
+- A name that doesn't sound like the original
+- A name that doesn't mean what the original meant
+- A name that removed the Father's name from the Son's identity
+
+When you call on "Yahusha," you're using:
+- The actual sounds of His name
+- The meaning He was given: "Yah is salvation"
+- The connection between Father and Son that was designed to be inseparable
+
+This isn't legalism. This isn't splitting hairs. This is recognizing that names have power, frequencies matter, and the systematic removal of Hebrew from our faith was not accidental.
+
+---
 
 ### A Critical Clarification: Christ, Mashiach, and Christianity
 
