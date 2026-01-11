@@ -160,13 +160,13 @@ The journey through the veil begins now.
 
 To understand where we are, we have to go back to where it started. Not human history. Before that. The celestial rebellion that set everything in motion.
 
-Scripture speaks of principalities and powers. Of rulers of darkness. Of spiritual wickedness in high places. These aren't metaphors. They're descriptions of an organized hierarchy that predates humanity itself.
+Scripture speaks of principalities and powers. Of rulers of darkness. Of spiritual wickedness in high places. Sha'ul (Paul) wrote in Eph'siym (Ephesians) 6:12: "For we wrestle not against flesh and blood, but against principalities, against powers, against the rulers of the darkness of this world, against spiritual wickedness in high places." These aren't metaphors. They're descriptions of an organized hierarchy that predates humanity itself.
 
-At the top of this hierarchy sits the adversary - Satan, the dragon, the serpent of old. But he doesn't rule alone. He has a council. The fallen ones who joined his rebellion. The entities who have operated through human proxies throughout recorded history.
+At the top of this hierarchy sits the adversary - Satan, the dragon, the serpent of old. Chizayon (Revelation) 12:9 identifies him: "And the great dragon was cast out, that old serpent, called the Devil, and Satan, which deceives the whole world." But he doesn't rule alone. He has a council. The fallen ones who joined his rebellion. The entities who have operated through human proxies throughout recorded history.
 
-The adversary's strategy has always been imitation. Create a counterfeit of everything the Creator established. A false trinity. A false salvation. A false kingdom.
+The adversary's strategy has always been imitation. Create a counterfeit of everything the Creator established. A false trinity. A false salvation. A false kingdom. Qorintiym Sheniy (2 Corinthians) 11:14 warns: "And no marvel; for Satan himself is transformed into an angel of light."
 
-The council of the fallen mirrors the divine council of heaven. Everything is inverted. Everything is substituted. And most people can't tell the difference because they've never been shown the original.
+The council of the fallen mirrors the divine council of heaven. Tehilliym (Psalm) 82:1 reveals: "Elohim stands in the congregation of the mighty; he judges among the elohim." Everything is inverted. Everything is substituted. And most people can't tell the difference because they've never been shown the original.
 
 This is the pattern that runs through everything that follows. Once you see it, you'll recognize it everywhere.
 
@@ -176,9 +176,9 @@ When this book refers to "the system" - understand what that means. Not bureaucr
 
 # CHAPTER 2: THE 200 WATCHERS DESCEND
 
-The Book of Enoch describes two hundred angels who abandoned their station in heaven. They descended to Mount Hermon. They took human women as wives. They taught forbidden knowledge. They fathered giants.
+The Book of Chanok (Enoch) describes two hundred angels who abandoned their station in heaven. They descended to Mount Hermon. They took human women as wives. They taught forbidden knowledge. They fathered giants.
 
-This wasn't myth to the early church. Jude references it. Peter alludes to it. The Dead Sea Scrolls preserve it.
+This wasn't myth to the early church. Yahudah (Jude) 1:6 references it directly: "And the angels which kept not their first estate, but left their own habitation, he has reserved in everlasting chains under darkness unto the judgment of the great day." Kepha Sheniy (2 Peter) 2:4 confirms: "For if Elohim spared not the angels that sinned, but cast them down to hell, and delivered them into chains of darkness, to be reserved unto judgment." The Dead Sea Scrolls preserve it.
 
 It was deliberately excluded from the canon. Made apocryphal. Marginalized.
 
@@ -218,13 +218,13 @@ This pattern will appear again. And again. Each time with the same fingerprints.
 
 # CHAPTER 4: THE NEPHILIM AND THE CORRUPTION
 
-The Nephilim - the giants of old - were the offspring of the Watchers and human women. Scripture describes them as men of renown. Heroes of old. But also abominations. Violations of the divine order.
+The Nephiliym - the giants of old - were the offspring of the Watchers and human women. Bere'shiyth (Genesis) 6:4 records: "There were giants in the earth in those days; and also after that, when the sons of Elohim came in unto the daughters of men, and they bore children to them, the same became mighty men which were of old, men of renown." Scripture describes them as men of renown. Heroes of old. But also abominations. Violations of the divine order.
 
 The mixing of the angelic with the human produced something that violated the divine order. It wasn't just genetic - it was spiritual. The resulting beings were powerful but wrong. They had capabilities humans didn't, but they lacked something humans did.
 
-The flood was necessary because the corruption had spread so far that barely anyone remained untainted. Noah was "perfect in his generations" - a phrase that may refer to genetic as much as moral purity.
+The flood was necessary because the corruption had spread so far that barely anyone remained untainted. Bere'shiyth (Genesis) 6:9 tells us Noach was "perfect in his generations" - a phrase using the Hebrew word "tamiym" meaning complete, whole, without blemish - which may refer to genetic as much as moral purity.
 
-But here's what matters for our story: the Nephilim weren't just giants. They were corruption embodied. And their bloodlines may not have ended with the flood.
+But here's what matters for our story: the Nephiliym weren't just giants. They were corruption embodied. And their bloodlines may not have ended with the flood. Bemidbar (Numbers) 13:33 confirms giants returned after the flood: "And there we saw the giants, the sons of Anak, which come of the giants."
 
 This thread connects to the ruling families. To the "divine right of kings." To the elite who believe themselves fundamentally different from the rest of humanity.
 
@@ -238,13 +238,13 @@ Keep that in mind as we move forward.
 
 # CHAPTER 5: THE FLOOD AND WHAT IT DESTROYED
 
-The flood was necessary because the corruption had spread so far that barely anyone remained untainted. But it wasn't just a water event. It was a reset. A wiping of the slate.
+The flood was necessary because the corruption had spread so far that barely anyone remained untainted. Bere'shiyth (Genesis) 6:5-7: "And Yahuah saw that the wickedness of man was great in the earth, and that every imagination of the thoughts of his heart was only evil continually. And it repented Yahuah that he had made man on the earth... And Yahuah said, I will destroy man whom I have created from the face of the earth." But it wasn't just a water event. It was a reset. A wiping of the slate.
 
 Consider what was lost. An entire civilization. Technology that had been taught by the Watchers. Structures. Knowledge. History.
 
-And consider who survived. Noah and his family. Eight people carrying forward whatever they had preserved - genetically, spiritually, intellectually.
+And consider who survived. Noach and his family. Kepha Ri'shon (1 Peter) 3:20 confirms: "Eight souls were saved by water." Eight people carrying forward whatever they had preserved - genetically, spiritually, intellectually.
 
-The post-flood world was different. The lifespans shortened. The giants were gone - mostly. The memory of what came before faded into what we now call mythology.
+The post-flood world was different. The lifespans shortened dramatically - from Noach's 950 years to Avraham's 175 to Mosheh's 120. The giants were gone - mostly. The memory of what came before faded into what we now call mythology.
 
 But fragments remained. In stories passed down. In structures that survived. In bloodlines that continued despite the reset.
 
@@ -260,6 +260,8 @@ The word "dinosaur" was invented in 1842 by Richard Owen. Before that, the creat
 
 Dragons.
 
+Scripture speaks of dragons as real creatures, not metaphors. Iyov (Job) 41 describes the leviathan in specific physical detail: "Out of his mouth go burning lamps, and sparks of fire leap out. Out of his nostrils goes smoke, as out of a seething pot or caldron. His breath kindles coals, and a flame goes out of his mouth." Yesha'yahu (Isaiah) 27:1 warns: "In that day Yahuah with his sore and great and strong sword shall punish leviathan the piercing serpent, even leviathan that crooked serpent; and he shall slay the dragon that is in the sea."
+
 Up until around 1950, dictionaries described dragons as "rare" - not mythological, not extinct. Rare. As in still existing, but uncommon.
 
 The Chinese zodiac includes a dragon alongside eleven real animals. Did they just add one fake animal, just for fun? Where would they even come up with that idea?
@@ -268,7 +270,7 @@ Anyone could create an animal right now. A tiguan - a mix between a tiger and an
 
 But dragons are part of lore across every culture. Every continent. Every ancient civilization has dragon stories. And they're not all the same dragon - they have regional variations, specific behaviors, distinct characteristics.
 
-That's not mythology. That's documentation.
+That's not mythology. That's documentation. Iyov (Job) 40:15-19 also describes behemoth: "Behold now behemoth, which I made with you; he eats grass as an ox... his strength is in his loins... He moves his tail like a cedar."
 
 Dragon legends may be distorted memories of real creatures from the previous age. These beings were likely destroyed due to the abominations created by the rebellion of the Watchers.
 
@@ -308,15 +310,17 @@ The thread continues: remnants of the corruption survived. Not just in bloodline
 
 # CHAPTER 8: BABEL AND THE CONFUSION OF TONGUES
 
-Before Babel, humanity spoke one language. And it wasn't just communication - it was power.
+Before Babel, humanity spoke one language. Bere'shiyth (Genesis) 11:1: "And the whole earth was of one language, and of one speech." And it wasn't just communication - it was power.
 
-That's why the tower was a threat. Because when humanity spoke as one, their intentions manifested. They could accomplish whatever they imagined.
+Bere'shiyth (Genesis) 11:4 records their words: "And they said, Go to, let us build us a city and a tower, whose top may reach unto heaven; and let us make us a name, lest we be scattered abroad upon the face of the whole earth." That's why the tower was a threat. Because when humanity spoke as one, their intentions manifested. They could accomplish whatever they imagined.
+
+The Creator's response reveals the danger - Bere'shiyth (Genesis) 11:6: "And Yahuah said, Behold, the people is one, and they have all one language; and this they begin to do: and now nothing will be restrained from them, which they have imagined to do."
 
 The confusion of languages was mercy and judgment combined. It prevented the united expression of corrupt will. But it also disconnected humanity from the power of unified speech.
 
 The scattering that followed created the diverse civilizations we study today. But something was lost in that scattering. A coherence. A connection to the original tongue that connected sound, image, and meaning.
 
-And that loss wasn't accidental. It was strategic. Disconnecting humanity from the language of creation was part of the same pattern we've been tracing.
+And that loss wasn't accidental. It was strategic. Disconnecting humanity from the language of creation was part of the same pattern we've been tracing. But the restoration is prophesied in Tsephanyahu (Zephaniah) 3:9: "For then will I turn to the people a pure language, that they may all call upon the name of Yahuah, to serve him with one consent."
 
 ---
 
@@ -617,11 +621,13 @@ The patterns in the book match too many other pieces of evidence to be dismissed
 
 Why? They claimed reverence. They claimed tradition. But the effect was erasure. Millions of readers for centuries have been disconnected from the actual name of their Creator.
 
-And the name matters. It's not just a label. It's identity. It's covenant. It's power. That's why it was targeted.
+And the name matters. Shemoth (Exodus) 3:15 could not be clearer: "And Elohiym said moreover unto Mosheh, Thus shall you say unto the children of Yashar'el, Yahuah Elohiym of your fathers, the Elohiym of Avraham, the Elohiym of Yitschaq, and the Elohiym of Ya'aqov, has sent me unto you: this is my name forever, and this is my memorial unto all generations." It's not just a label. It's identity. It's covenant. It's power. That's why it was targeted.
+
+Yesha'yahu (Isaiah) 42:8 declares: "I am Yahuah: that is my name: and my glory will I not give to another, neither my praise to graven images."
 
 The same happened with the Messiah's name.
 
-Yahusha. It means "Yahuah is salvation." It contains the divine name. It declares the source of redemption.
+Yahusha. It means "Yahuah is salvation." It contains the divine name. It declares the source of redemption. This is why Ma'asiym (Acts) 4:12 matters so deeply: "Neither is there salvation in any other: for there is no other name under heaven given among men, whereby we must be saved."
 
 The name "Jesus" is a transliteration odyssey: Hebrew (Yeshua/Yahusha) to Greek (Iesous) to Latin (Iesus) to English (Jesus).
 
@@ -631,7 +637,9 @@ Does pronunciation really matter? Some argue that names are arbitrary. That the 
 
 There's truth in this. The heart behind the prayer matters.
 
-But there's also truth in precision. In honoring the name as given rather than the substitutes imposed. In rejecting the erasure perpetrated by those who wanted the connection broken.
+But there's also truth in precision. Yo'el (Joel) 2:32 prophesies: "And it shall come to pass, that whosoever shall call on the name of Yahuah shall be delivered." In honoring the name as given rather than the substitutes imposed. In rejecting the erasure perpetrated by those who wanted the connection broken.
+
+Yahuchanon (John) 17:6 records Yahusha's own words: "I have manifested your name unto the men which you gave me out of the world."
 
 When someone deliberately changes your name, it's an act of power. It's saying they get to define you. Recovering the original name is an act of resistance. Of honoring the one who gave it.
 
@@ -785,15 +793,17 @@ Yahuah is not a torturer. He is righteous. He is just. And justice does not requ
 
 # CHAPTER 22: THE SUBSTITUTED CALENDAR
 
-The seventh day is the Sabbath. From creation. In the commandments. Throughout scripture.
+The seventh day is the Sabbath. From creation. In the commandments. Throughout scripture. Bere'shiyth (Genesis) 2:2-3: "And on the seventh day Elohiym ended his work which he had made; and he rested on the seventh day from all his work which he had made. And Elohiym blessed the seventh day, and sanctified it."
+
+Shemoth (Exodus) 20:8-11 commands: "Remember the sabbath day, to keep it set-apart. Six days shall you labour, and do all your work: But the seventh day is the sabbath of Yahuah your Elohiym."
 
 But Christianity observes Sunday. The first day. The day of the sun god.
 
-The shift happened early. Constantine made it official. The church followed. And now, billions keep a day that was never commanded while ignoring the one that was.
+The shift happened early. Constantine made it official in 321 AD. The church followed. And now, billions keep a day that was never commanded while ignoring the one that was.
 
-This isn't a minor calendrical adjustment. It's a substitution. A replacement of Yahuah's appointment with another entity's celebration.
+This isn't a minor calendrical adjustment. It's a substitution. A replacement of Yahuah's appointment with another entity's celebration. Daniy'el (Daniel) 7:25 prophesied this: "And he shall speak great words against the most High, and shall wear out the saints of the most High, and think to change times and laws."
 
-The biblical feasts - Passover, Unleavened Bread, Firstfruits, Pentecost, Trumpets, Atonement, Tabernacles - these were appointed times. Rehearsals for the redemption plan. Shadows of the substance.
+The biblical feasts - Pesach (Passover), Matzot (Unleavened Bread), Bikkuriym (Firstfruits), Shavu'ot (Pentecost), Yom Teruah (Trumpets), Yom Kippur (Atonement), Sukkot (Tabernacles) - these were mo'edim, appointed times. Vayiqra (Leviticus) 23:2 declares them: "The feasts of Yahuah, which you shall proclaim to be set-apart convocations, even these are my feasts." Rehearsals for the redemption plan. Shadows of the substance.
 
 They were replaced with:
 
