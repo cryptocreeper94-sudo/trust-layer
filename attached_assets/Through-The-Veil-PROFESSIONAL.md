@@ -2451,29 +2451,77 @@ HalleluYah.
 
 ## Cross-Reference of Key Scriptures
 
-**On the Name:**
-- Exodus 3:15 - "This is my name forever"
-- Joel 2:32 - "Whoever calls on the name of Yahuah shall be saved"
-- John 17:6 - "I have manifested Your name"
+*All references from Cepher translation where possible*
 
-**On the Eye:**
-- Matthew 6:22 - "If your eye be single, your whole body shall be full of light"
-- Genesis 32:30 - "I have seen Elohim face to face, and I call this place Peniel"
+**On the Name - Why It Matters:**
+- Shemoth (Exodus) 3:15 - "This is my name forever, and this is my memorial unto all generations"
+- Yo'el (Joel) 2:32 - "Whoever calls on the name of Yahuah shall be delivered"
+- Yahuchanon (John) 17:6 - "I have manifested Your name to the men whom You gave me"
+- Yesha'yahu (Isaiah) 42:8 - "I am Yahuah: that is my name: and my glory will I not give to another"
+- Ma'asiym (Acts) 4:12 - "Neither is there salvation in any other: for there is no other name under heaven given among men, whereby we must be saved"
+- Tehilliym (Psalm) 68:4 - "Sing unto Elohim, sing praises to his name: extol him that rides upon the heavens by his name Yah"
 
-**On the Watchers:**
-- Genesis 6:1-4 - The sons of God and daughters of men
-- Jude 1:6 - The angels who left their proper dwelling
-- 2 Peter 2:4 - The angels who sinned and were cast down
+**On the Eye/Pineal - The True Receiver:**
+- Mattithyahu (Matthew) 6:22-23 - "The light of the body is the eye: if therefore your eye be single, your whole body shall be full of light. But if your eye be evil, your whole body shall be full of darkness."
+- Bere'shiyth (Genesis) 32:30 - "And Ya'aqov called the name of the place Peniy'el: for I have seen Elohim face to face"
+- Yirmeyahu (Jeremiah) 5:21 - "Hear now this, O foolish people, and without understanding; which have eyes, and see not; which have ears, and hear not"
+- Yesha'yahu (Isaiah) 6:10 - "Make the heart of this people fat, and make their ears heavy, and shut their eyes; lest they see with their eyes, and hear with their ears"
 
-**On the End Times:**
-- Revelation 20:7-8 - Satan released after the thousand years
-- Matthew 24:24 - False christs and false prophets with great signs
-- 2 Thessalonians 2:9-12 - The coming of the lawless one with deception
+**On the Watchers and Nephilim:**
+- Bere'shiyth (Genesis) 6:1-4 - The sons of Elohim and daughters of men; Nephilim on the earth
+- Yahudah (Jude) 1:6 - "The angels which kept not their first estate, but left their own habitation"
+- Kepha Sheniy (2 Peter) 2:4 - "Elohim spared not the angels that sinned, but cast them down to hell"
+- Bere'shiyth (Genesis) 6:4 - "There were giants in the earth in those days; and also after that" (Nephilim present before AND after flood)
+- Bemidbar (Numbers) 13:33 - "And there we saw the giants, the sons of Anak, which come of the giants"
 
-**On Discernment:**
-- 1 John 4:1 - Test the spirits
-- Hebrews 5:14 - Those who have their senses trained to discern
-- Proverbs 25:2 - It is the glory of kings to search out a matter
+**On the Days of Noah - Pattern Recognition:**
+- Mattithyahu (Matthew) 24:37-39 - "But as the days of Noach were, so shall also the coming of the Son of Adam be"
+- Bere'shiyth (Genesis) 6:5 - "Every imagination of the thoughts of his heart was only evil continually"
+- Bere'shiyth (Genesis) 6:11-12 - "The earth was corrupt... for all flesh had corrupted his way upon the earth"
+
+**On the Little Season and End Times:**
+- Chizayon (Revelation) 20:7-8 - "When the thousand years are expired, Satan shall be loosed out of his prison, and shall go out to deceive the nations"
+- Mattithyahu (Matthew) 24:24 - "False mashiachs, and false prophets, and shall show great signs and wonders"
+- Tasloniqiym Sheniy (2 Thessalonians) 2:9-12 - "The working of Satan with all power and signs and lying wonders"
+- Chizayon (Revelation) 12:12 - "The devil is come down unto you, having great wrath, because he knows that he has but a short time"
+
+**On Discernment and Testing:**
+- Yahuchanon Ri'shon (1 John) 4:1 - "Beloved, believe not every spirit, but try the spirits whether they are of Elohim"
+- Ivriym (Hebrews) 5:14 - "Those who by reason of use have their senses exercised to discern both good and evil"
+- Mishlei (Proverbs) 25:2 - "It is the glory of Elohim to conceal a thing: but the honour of kings is to search out a matter"
+- Tasloniqiym Ri'shon (1 Thessalonians) 5:21 - "Test all things; hold fast that which is good"
+- Mattithyahu (Matthew) 7:16 - "You shall know them by their fruits"
+
+**On Faith as Evidence, Not Blind Belief:**
+- Ivriym (Hebrews) 11:1 - "Now faith is the substance of things hoped for, the evidence of things not seen"
+- Yirmeyahu (Jeremiah) 29:13 - "And you shall seek me, and find me, when you shall search for me with all your heart"
+- Yesha'yahu (Isaiah) 42:3 - "A bruised reed shall he not break, and the smoking flax shall he not quench"
+
+**On the Mark - Forehead and Hand:**
+- Devariym (Deuteronomy) 6:6-8 - "These words... shall be as frontlets between your eyes"
+- Chizayon (Revelation) 13:16-17 - "He causes all... to receive a mark in their right hand, or in their foreheads"
+- Chizayon (Revelation) 14:1 - "Having his Father's name written in their foreheads"
+- Yechezq'el (Ezekiel) 9:4 - "Set a mark upon the foreheads of the men that sigh and that cry for all the abominations"
+
+**On the Inversion of Good and Evil:**
+- Yesha'yahu (Isaiah) 5:20 - "Woe unto them that call evil good, and good evil; that put darkness for light, and light for darkness"
+- Romaiym (Romans) 1:25 - "Who changed the truth of Elohim into a lie, and worshipped and served the creature more than the Creator"
+- Mattithyahu (Matthew) 7:15 - "Beware of false prophets, which come to you in sheep's clothing, but inwardly they are ravening wolves"
+
+**On the Sabbath and Calendar:**
+- Bere'shiyth (Genesis) 2:2-3 - "On the seventh day Elohim ended his work... and sanctified it"
+- Shemoth (Exodus) 20:8-11 - "Remember the sabbath day, to keep it set-apart"
+- Daniy'el (Daniel) 7:25 - "He shall think to change times and laws"
+
+**On Remembering and Awakening:**
+- Yahuchanon (John) 14:26 - "The Ruach Ha'Qodesh... shall teach you all things, and bring all things to your remembrance"
+- Daniy'el (Daniel) 12:2 - "Many of them that sleep in the dust of the earth shall awake"
+- Eph'siym (Ephesians) 5:14 - "Awake you that sleep, and arise from the dead, and Mashiach shall give you light"
+
+**On Bloodlines and Rulers:**
+- Eph'siym (Ephesians) 6:12 - "We wrestle not against flesh and blood, but against principalities, against powers, against the rulers of the darkness of this world"
+- Tehilliym (Psalm) 2:2 - "The kings of the earth set themselves, and the rulers take counsel together, against Yahuah"
+- Chizayon (Revelation) 17:18 - "That great city, which reigns over the kings of the earth"
 
 ---
 
