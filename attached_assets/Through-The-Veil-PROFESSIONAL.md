@@ -994,7 +994,7 @@ This is where the spell changes. Remember - spelling is spellcasting. The words 
 | **Elohiym** | God | God | Plurality obscured |
 | **Shabbath** | Sabbath | Sabbath | Same word, different observance |
 | **Pesach** | Passover | Passover | Hebrew connection severed |
-| **Mashiach** | Christ | Christ | Greek title replaces Hebrew |
+| **Mashiach** | Messiah/Christ | Messiah/Christ | Same meaning (Anointed One), but Hebrew context severed |
 
 When you pray to "LORD" - you're using a title that could refer to anyone. When you call on Yahuah - you're using His actual Name. The one He gave. The one with power. The one they removed.
 
