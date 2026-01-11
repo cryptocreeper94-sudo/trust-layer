@@ -7,25 +7,25 @@ const outputPdf = path.join(process.cwd(), 'attached_assets', 'Through-The-Veil-
 
 const PAGE_WIDTH = 432;
 const PAGE_HEIGHT = 648;
-const MARGIN_TOP = 48;
-const MARGIN_BOTTOM = 48;
-const MARGIN_LEFT = 42;
-const MARGIN_RIGHT = 42;
+const MARGIN_TOP = 54;
+const MARGIN_BOTTOM = 54;
+const MARGIN_LEFT = 48;
+const MARGIN_RIGHT = 48;
 const CONTENT_WIDTH = PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT;
 
 const FONT_BODY = 'Helvetica';
 const FONT_BOLD = 'Helvetica-Bold';
 const FONT_ITALIC = 'Helvetica-Oblique';
 
-const FONT_SIZE_TITLE = 24;
-const FONT_SIZE_SUBTITLE = 14;
-const FONT_SIZE_H1 = 18;
-const FONT_SIZE_H2 = 14;
-const FONT_SIZE_BODY = 11;
-const FONT_SIZE_SMALL = 9;
+const FONT_SIZE_TITLE = 22;
+const FONT_SIZE_SUBTITLE = 13;
+const FONT_SIZE_H1 = 16;
+const FONT_SIZE_H2 = 13;
+const FONT_SIZE_BODY = 10;
+const FONT_SIZE_SMALL = 8;
 
-const LINE_GAP = 3;
-const PARAGRAPH_GAP = 8;
+const LINE_GAP = 2;
+const PARAGRAPH_GAP = 6;
 
 function sanitizeText(text: string): string {
   return text
@@ -50,7 +50,7 @@ function createTitlePage(doc: typeof PDFDocument.prototype) {
        align: 'center'
      });
   
-  doc.moveDown(1.5);
+  doc.moveDown(1.2);
   
   doc.font(FONT_ITALIC)
      .fontSize(FONT_SIZE_SUBTITLE)
@@ -59,7 +59,16 @@ function createTitlePage(doc: typeof PDFDocument.prototype) {
        align: 'center'
      });
   
-  doc.moveDown(8);
+  doc.moveDown(0.8);
+  
+  doc.font(FONT_BODY)
+     .fontSize(FONT_SIZE_SMALL)
+     .text('The Complete Expanded Edition', {
+       width: CONTENT_WIDTH,
+       align: 'center'
+     });
+  
+  doc.moveDown(6);
   
   doc.font(FONT_ITALIC)
      .fontSize(FONT_SIZE_SMALL)
@@ -67,17 +76,6 @@ function createTitlePage(doc: typeof PDFDocument.prototype) {
        width: CONTENT_WIDTH,
        align: 'center'
      });
-}
-
-function addPageNumber(doc: typeof PDFDocument.prototype, pageNum: number) {
-  if (pageNum > 1) {
-    doc.font(FONT_BODY)
-       .fontSize(FONT_SIZE_SMALL)
-       .text(String(pageNum), 0, PAGE_HEIGHT - 40, {
-         width: PAGE_WIDTH,
-         align: 'center'
-       });
-  }
 }
 
 function parseMarkdown(content: string): { type: string; text: string }[] {
@@ -93,7 +91,6 @@ function parseMarkdown(content: string): { type: string; text: string }[] {
         elements.push({ type: 'paragraph', text: currentParagraph.trim() });
         currentParagraph = '';
       }
-      elements.push({ type: 'separator', text: '' });
       continue;
     }
     
@@ -142,33 +139,23 @@ function parseMarkdown(content: string): { type: string; text: string }[] {
   return elements;
 }
 
-function checkPageBreak(doc: typeof PDFDocument.prototype, neededHeight: number): boolean {
-  const bottomLimit = PAGE_HEIGHT - MARGIN_BOTTOM;
-  if (doc.y + neededHeight > bottomLimit) {
-    return true;
-  }
-  return false;
-}
-
 function renderElement(
   doc: typeof PDFDocument.prototype, 
   element: { type: string; text: string },
-  pageCounter: { count: number },
-  isFirstChapter: boolean
-) {
+  isFirstContent: boolean
+): boolean {
   const text = sanitizeText(element.text);
   
   switch (element.type) {
     case 'h1':
-      if (text === 'THROUGH THE VEIL') return;
+      if (text === 'THROUGH THE VEIL') return isFirstContent;
+      if (text.includes('Table of Contents')) return isFirstContent;
       
-      if (!isFirstChapter) {
-        addPageNumber(doc, pageCounter.count);
+      if (!isFirstContent && doc.y > MARGIN_TOP + 30) {
         doc.addPage();
-        pageCounter.count++;
       }
       
-      doc.y = MARGIN_TOP + 40;
+      doc.moveDown(1.5);
       
       doc.font(FONT_BOLD)
          .fontSize(FONT_SIZE_H1)
@@ -178,18 +165,11 @@ function renderElement(
            lineGap: LINE_GAP
          });
       
-      doc.moveDown(2);
-      break;
+      doc.moveDown(1);
+      return false;
       
     case 'h2':
-      if (checkPageBreak(doc, 60)) {
-        addPageNumber(doc, pageCounter.count);
-        doc.addPage();
-        pageCounter.count++;
-        doc.y = MARGIN_TOP;
-      }
-      
-      doc.moveDown(1);
+      doc.moveDown(0.8);
       
       doc.font(FONT_BOLD)
          .fontSize(FONT_SIZE_H2)
@@ -199,55 +179,38 @@ function renderElement(
            lineGap: LINE_GAP
          });
       
-      doc.moveDown(0.8);
-      break;
+      doc.moveDown(0.5);
+      return isFirstContent;
       
     case 'paragraph':
-      if (!text) return;
-      
-      const heightEstimate = Math.ceil(text.length / 60) * (FONT_SIZE_BODY + LINE_GAP) + PARAGRAPH_GAP;
-      
-      if (checkPageBreak(doc, Math.min(heightEstimate, 80))) {
-        addPageNumber(doc, pageCounter.count);
-        doc.addPage();
-        pageCounter.count++;
-        doc.y = MARGIN_TOP;
-      }
+      if (!text) return isFirstContent;
       
       doc.font(FONT_BODY)
          .fontSize(FONT_SIZE_BODY)
          .text(text, MARGIN_LEFT, doc.y, {
            width: CONTENT_WIDTH,
            align: 'justify',
-           lineGap: LINE_GAP
+           lineGap: LINE_GAP,
+           paragraphGap: PARAGRAPH_GAP
          });
       
-      doc.moveDown(0.8);
-      break;
+      doc.moveDown(0.4);
+      return false;
       
     case 'bullet':
-      if (checkPageBreak(doc, 30)) {
-        addPageNumber(doc, pageCounter.count);
-        doc.addPage();
-        pageCounter.count++;
-        doc.y = MARGIN_TOP;
-      }
-      
       doc.font(FONT_BODY)
          .fontSize(FONT_SIZE_BODY)
-         .text('•  ' + text, MARGIN_LEFT + 15, doc.y, {
-           width: CONTENT_WIDTH - 15,
+         .text('  *  ' + text, MARGIN_LEFT + 10, doc.y, {
+           width: CONTENT_WIDTH - 10,
            align: 'left',
            lineGap: LINE_GAP
          });
       
-      doc.moveDown(0.4);
-      break;
-      
-    case 'separator':
-      doc.moveDown(0.5);
-      break;
+      doc.moveDown(0.2);
+      return false;
   }
+  
+  return isFirstContent;
 }
 
 async function generatePDF() {
@@ -272,7 +235,8 @@ async function generatePDF() {
       Subject: 'A Testimony of the Great Substitution',
       Keywords: 'testimony, spiritual, awakening'
     },
-    bufferPages: true
+    bufferPages: true,
+    autoFirstPage: true
   });
   
   const writeStream = fs.createWriteStream(outputPdf);
@@ -280,24 +244,25 @@ async function generatePDF() {
   
   createTitlePage(doc);
   
-  const pageCounter = { count: 2 };
-  
-  addPageNumber(doc, 1);
   doc.addPage();
   doc.y = MARGIN_TOP;
   
-  let isFirstChapter = true;
+  let isFirstContent = true;
   
   for (const element of elements) {
-    if (element.type === 'h1' && element.text !== 'THROUGH THE VEIL') {
-      renderElement(doc, element, pageCounter, isFirstChapter);
-      isFirstChapter = false;
-    } else {
-      renderElement(doc, element, pageCounter, isFirstChapter);
-    }
+    isFirstContent = renderElement(doc, element, isFirstContent);
   }
   
-  addPageNumber(doc, pageCounter.count);
+  const range = doc.bufferedPageRange();
+  for (let i = 1; i < range.count; i++) {
+    doc.switchToPage(i);
+    doc.font(FONT_BODY)
+       .fontSize(FONT_SIZE_SMALL)
+       .text(String(i + 1), 0, PAGE_HEIGHT - 36, {
+         width: PAGE_WIDTH,
+         align: 'center'
+       });
+  }
   
   doc.end();
   
@@ -306,7 +271,7 @@ async function generatePDF() {
       const stats = fs.statSync(outputPdf);
       console.log(`PDF saved: ${outputPdf}`);
       console.log(`Size: ${(stats.size / 1024).toFixed(0)} KB`);
-      console.log(`Pages: ${pageCounter.count}`);
+      console.log(`Pages: ${range.count}`);
       resolve();
     });
     writeStream.on('error', reject);
