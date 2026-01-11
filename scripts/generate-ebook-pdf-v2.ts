@@ -2,7 +2,7 @@ import PDFDocument from 'pdfkit';
 import fs from 'fs';
 import path from 'path';
 
-const inputMd = path.join(process.cwd(), 'attached_assets', 'Through-The-Veil-MANUAL.md');
+const inputMd = path.join(process.cwd(), 'attached_assets', 'Through-The-Veil-EXPANDED.md');
 const outputPdf = path.join(process.cwd(), 'attached_assets', 'Through-The-Veil-EBOOK.pdf');
 
 const PAGE_WIDTH = 432;
