@@ -6,27 +6,27 @@ const inputMd = path.join(process.cwd(), 'attached_assets', 'Through-The-Veil-PR
 const outputPdf = path.join(process.cwd(), 'attached_assets', 'Through-The-Veil-EBOOK.pdf');
 const imagesDir = path.join(process.cwd(), 'attached_assets', 'generated_images');
 
-const PAGE_WIDTH = 432;
-const PAGE_HEIGHT = 648;
-const MARGIN_TOP = 36;
-const MARGIN_BOTTOM = 36;
-const MARGIN_LEFT = 36;
-const MARGIN_RIGHT = 36;
+const PAGE_WIDTH = 612;
+const PAGE_HEIGHT = 792;
+const MARGIN_TOP = 54;
+const MARGIN_BOTTOM = 54;
+const MARGIN_LEFT = 54;
+const MARGIN_RIGHT = 54;
 const CONTENT_WIDTH = PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT;
 
 const FONT_BODY = 'Helvetica';
 const FONT_BOLD = 'Helvetica-Bold';
 const FONT_ITALIC = 'Helvetica-Oblique';
 
-const FONT_SIZE_TITLE = 24;
-const FONT_SIZE_SUBTITLE = 14;
-const FONT_SIZE_H1 = 16;
-const FONT_SIZE_H2 = 14;
-const FONT_SIZE_BODY = 12;
-const FONT_SIZE_SMALL = 10;
+const FONT_SIZE_TITLE = 32;
+const FONT_SIZE_SUBTITLE = 18;
+const FONT_SIZE_H1 = 20;
+const FONT_SIZE_H2 = 17;
+const FONT_SIZE_BODY = 14;
+const FONT_SIZE_SMALL = 12;
 
-const LINE_GAP = 2;
-const PARAGRAPH_GAP = 6;
+const LINE_GAP = 3;
+const PARAGRAPH_GAP = 8;
 
 const CHAPTER_IMAGES: Record<string, string> = {
   'PART ONE: THE REBELLION': 'veil_lifting_revealing_light.png',
