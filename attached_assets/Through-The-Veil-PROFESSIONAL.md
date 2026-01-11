@@ -2200,6 +2200,79 @@ For those who wish to investigate further, these areas warrant attention:
 
 ---
 
+## Documented Sources and Verifiable References
+
+The following claims made in this book can be verified through publicly available documents, official records, and primary sources. These are not opinions - they are documented facts that the reader can independently confirm.
+
+**CIA Dispatch 1035-960 - "Conspiracy Theorist" Origin (Chapter 10)**
+- Document: CIA Dispatch #1035-960 titled "Countering Criticism of the Warren Report"
+- Date: April 1, 1967
+- Status: Declassified under FOIA
+- Location: Available through National Archives, MaryFerrell.org, and multiple FOIA repositories
+- Content: Instructions to CIA media assets on how to use the term "conspiracy theorists" to discredit Warren Commission critics
+
+**Operation Northwoods (Chapter 25B)**
+- Document: "Justification for U.S. Military Intervention in Cuba"
+- Date: March 13, 1962
+- Status: Declassified 1997 under JFK Assassination Records Act
+- Location: National Security Archive, George Washington University
+- Content: Joint Chiefs of Staff proposal to stage terrorist attacks on American soil and blame Cuba
+
+**Gulf of Tonkin - Declassified Admission (Chapter 25B)**
+- Document: NSA Historical Study "Skunks, Bogies, Silent Hounds, and the Flying Fish"
+- Date: Declassified 2005
+- Content: NSA historian Robert Hanyok's study confirming the August 4, 1964 attack never occurred
+- Additional: 2005 declassified NSA documents available through National Security Archive
+
+**Rumsfeld $2.3 Trillion Announcement (Chapter 25B)**
+- Date: September 10, 2001
+- Source: C-SPAN archived footage, Department of Defense press briefing
+- Quote: "According to some estimates, we cannot track $2.3 trillion in transactions"
+- Verification: C-SPAN archives, DoD records
+
+**The Lusitania - Munitions Cargo (Chapter 25B)**
+- Source: British Admiralty records, declassified after 1982
+- Verification: National Archives of UK, multiple maritime historical sources
+- Content: Ship's manifest showing ammunition and contraband cargo
+
+**Fluoride and Pineal Gland Calcification (Chapter 29)**
+- Source: National Research Council (2006), "Fluoride in Drinking Water: A Scientific Review"
+- Additional: Luke, J. (2001), "Fluoride Deposition in the Aged Human Pineal Gland," Caries Research 35:125-128
+- Content: Peer-reviewed studies documenting fluoride accumulation in pineal tissue
+
+**440 Hz Standard Tuning Change (Chapter 30)**
+- Date: 1953 ISO adoption (ISO 16)
+- Historical: Previous standards varied; 432 Hz was common in classical period
+- Verification: International Organization for Standardization records
+
+**Tech Executive Admissions on Social Media Design (Chapter 27)**
+- Chamath Palihapitiya: Stanford Graduate School of Business interview, November 2017
+- Tristan Harris: Congressional testimony, multiple public statements
+- Source: "The Social Dilemma" documentary (2020), Netflix - features direct statements from former executives
+
+**Council of Nicaea and Constantine (Chapters 19-22)**
+- Date: 325 AD
+- Source: Eusebius of Caesarea, "Life of Constantine"; Council records
+- Verification: Multiple primary historical sources, church archives
+- Content: Formalization of Christian doctrine under imperial authority
+
+**Book of Enoch - Dead Sea Scrolls Preservation**
+- Discovery: Qumran caves, 1947-1956
+- Source: Multiple Aramaic fragments catalogued as 4QEn (4Q201-4Q212)
+- Verification: Israel Antiquities Authority, multiple academic publications
+
+---
+
+## Note on Sources
+
+Where claims are marked as "theory" or "speculation," no sources are provided because they represent questions rather than established facts. The reader is encouraged to investigate these areas independently.
+
+Where claims are presented as documented history, sources exist and can be verified. The reader is encouraged to obtain and read primary documents rather than relying on secondary interpretations - including this book.
+
+Truth does not fear investigation. Only lies require protection from scrutiny.
+
+---
+
 ## Final Note on Research
 
 Do Your Own Research.
