@@ -66,13 +66,21 @@ What happens next is between you and the Most High.
 
 This book is based on research. On world events. On historical precedent. On patterns that keep appearing across cultures, centuries, and continents.
 
-We are not making definitive claims. We are presenting connections, observations, and questions that we believe deserve consideration.
+**We are not making definitive claims.**
+
+We are presenting what is understood. What is known. What is circulating. What has been published and documented - some accepted, some suppressed, some dismissed without examination.
+
+Think of truth as a massive puzzle - not one tidy box with matching pieces, but fragments from a hundred different puzzles scattered across time and geography. You can shake that box for a billion years hoping it assembles itself. Or you can start connecting pieces that fit, building a tapestry that reveals a picture.
+
+That's what this book offers: a connect-the-dots model. If a piece fits the pattern, it's probably part of the larger picture. If it doesn't, set it aside. The goal isn't to convince you of anything. The goal is to show you how we connected the dots - and invite you to verify, challenge, or expand on what we've found.
 
 You have free will. You have discernment. It is up to you to seek your own truth.
 
 What follows is our version - a guide, an outline, examples drawn from years of study and personal revelation. We present it not as doctrine but as a starting point for your own journey.
 
 We would welcome any additional details, corrections, or insights from readers. Truth is a collaborative pursuit. None of us has the complete picture. But together, we can assemble more of it.
+
+People are conditioned not to pay attention. Not to care. Not to question. That conditioning serves the system, not the Creator. We believe the Father is separating His flock - those with ears to hear and eyes to see - from those who choose to remain asleep. This book is for those who are waking up.
 
 Take what resonates. Question what doesn't. Verify everything you can. And above all - seek the Creator directly. No book, no teacher, no institution can replace that relationship.
 
