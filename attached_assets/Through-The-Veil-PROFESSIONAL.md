@@ -1,5 +1,5 @@
 # THROUGH THE VEIL
-## A Testimony of the Great Substitution
+## An Exploration of the Great Substitution
 
 ---
 
@@ -685,6 +685,6 @@ What happens next is between you and the Most High.
 
 ---
 
-*Through the Veil: A Testimony of the Great Substitution*
+*Through the Veil: An Exploration of the Great Substitution*
 
 HalleluYah.

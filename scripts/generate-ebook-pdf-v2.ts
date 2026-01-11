@@ -54,7 +54,7 @@ function createTitlePage(doc: typeof PDFDocument.prototype) {
   
   doc.font(FONT_ITALIC)
      .fontSize(FONT_SIZE_SUBTITLE)
-     .text('A Testimony of the Great Substitution', {
+     .text('An Exploration of the Great Substitution', {
        width: CONTENT_WIDTH,
        align: 'center'
      });
@@ -240,7 +240,7 @@ async function generatePDF() {
     info: {
       Title: 'Through The Veil',
       Author: 'Anonymous',
-      Subject: 'A Testimony of the Great Substitution',
+      Subject: 'An Exploration of the Great Substitution',
       Keywords: 'testimony, spiritual, awakening'
     },
     bufferPages: true,
