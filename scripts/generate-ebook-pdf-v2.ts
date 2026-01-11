@@ -4,6 +4,7 @@ import path from 'path';
 
 const inputMd = path.join(process.cwd(), 'attached_assets', 'Through-The-Veil-PROFESSIONAL.md');
 const outputPdf = path.join(process.cwd(), 'attached_assets', 'Through-The-Veil-EBOOK.pdf');
+const imagesDir = path.join(process.cwd(), 'attached_assets', 'generated_images');
 
 const PAGE_WIDTH = 432;
 const PAGE_HEIGHT = 648;
@@ -27,6 +28,14 @@ const FONT_SIZE_SMALL = 10;
 const LINE_GAP = 2;
 const PARAGRAPH_GAP = 6;
 
+const CHAPTER_IMAGES: Record<string, string> = {
+  'PART ONE: THE REBELLION': 'veil_lifting_revealing_light.png',
+  'CHAPTER 18: THE NAME THAT WAS ERASED': 'hebrew_yhwh_divine_name.png',
+  'CHAPTER 27: THE EYE VERSUS THE I': 'eye_to_pineal_transformation.png',
+  'CHAPTER 30: THE FREQUENCY WAR': 'black_mirror_smartphone_scrying.png',
+  'CHAPTER 36: THE LAYERS OF DECEPTION': 'seven_layers_of_deception.png',
+};
+
 function sanitizeText(text: string): string {
   return text
     .replace(/—/g, ' - ')
@@ -41,7 +50,24 @@ function sanitizeText(text: string): string {
 }
 
 function createTitlePage(doc: typeof PDFDocument.prototype) {
-  doc.y = PAGE_HEIGHT / 3;
+  const veilImage = path.join(imagesDir, 'veil_lifting_revealing_light.png');
+  if (fs.existsSync(veilImage)) {
+    try {
+      doc.image(veilImage, MARGIN_LEFT, MARGIN_TOP + 20, {
+        width: CONTENT_WIDTH,
+        height: 150,
+        fit: [CONTENT_WIDTH, 150],
+        align: 'center'
+      });
+      doc.y = MARGIN_TOP + 180;
+    } catch (e) {
+      doc.y = PAGE_HEIGHT / 3;
+    }
+  } else {
+    doc.y = PAGE_HEIGHT / 3;
+  }
+  
+  doc.moveDown(1);
   
   doc.font(FONT_BOLD)
      .fontSize(FONT_SIZE_TITLE)
@@ -68,7 +94,16 @@ function createTitlePage(doc: typeof PDFDocument.prototype) {
        align: 'center'
      });
   
-  doc.moveDown(6);
+  doc.moveDown(1);
+  
+  doc.font(FONT_BOLD)
+     .fontSize(FONT_SIZE_BODY)
+     .text('by Asher Reed', {
+       width: CONTENT_WIDTH,
+       align: 'center'
+     });
+  
+  doc.moveDown(4);
   
   doc.font(FONT_ITALIC)
      .fontSize(FONT_SIZE_SMALL)
@@ -139,6 +174,30 @@ function parseMarkdown(content: string): { type: string; text: string }[] {
   return elements;
 }
 
+function addChapterImage(doc: typeof PDFDocument.prototype, chapterTitle: string) {
+  for (const [key, imageName] of Object.entries(CHAPTER_IMAGES)) {
+    if (chapterTitle.toUpperCase().includes(key.toUpperCase().split(':')[0])) {
+      const imagePath = path.join(imagesDir, imageName);
+      if (fs.existsSync(imagePath)) {
+        try {
+          const imageHeight = 120;
+          doc.image(imagePath, MARGIN_LEFT + 40, doc.y, {
+            width: CONTENT_WIDTH - 80,
+            height: imageHeight,
+            fit: [CONTENT_WIDTH - 80, imageHeight],
+            align: 'center'
+          });
+          doc.y += imageHeight + 15;
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+    }
+  }
+  return false;
+}
+
 function renderElement(
   doc: typeof PDFDocument.prototype, 
   element: { type: string; text: string },
@@ -158,7 +217,6 @@ function renderElement(
       
       const isChapter = text.toUpperCase().startsWith('CHAPTER ');
       
-      // All chapters and parts start on new pages
       if ((isPart || isChapter) && !isFirstContent) {
         doc.addPage();
         doc.moveDown(isPart ? 2 : 1);
@@ -177,6 +235,11 @@ function renderElement(
          });
       
       doc.moveDown(isPart ? 1 : 0.5);
+      
+      if (isPart || isChapter) {
+        addChapterImage(doc, text);
+      }
+      
       return false;
       
     case 'h2':
@@ -231,7 +294,7 @@ async function generatePDF() {
   console.log('Parsing content...');
   const elements = parseMarkdown(markdown);
   
-  console.log('Creating PDF...');
+  console.log('Creating PDF with images...');
   const doc = new PDFDocument({
     size: [PAGE_WIDTH, PAGE_HEIGHT],
     margins: {
