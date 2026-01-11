@@ -126,36 +126,6 @@ Some consider a lack of self-confidence to be a negative trait. Never really hav
 
 What is known is this: if you ask 90% of the people who know such a person, they'd say he's the funniest, happiest, go-lucky, friendliest, most helpful guy ever. And always that way - until the hatred started because of upbringing, failures, destroyed potential.
 
-## The Eyes That See Through
-
-Everybody looks at certain people as though they have the answers. The reason is unclear. Maybe it's the eyes.
-
-The eyes are often the first thing people notice - intense, green, glowing. Observers describe them as soul-piercing, even intimidating. These aren't casual observations. These are the words people use when they try to describe what it's like to be looked at by such eyes. And the pattern only becomes clear when attention is paid.
-
-These eyes are shared across bloodlines: passed from father to child, from sibling to sibling. The mother with piercing blue. It's not just a color. It's not just genetics in the traditional sense. It's something more. Something that marks them.
-
-When people look into those eyes, they see something that makes them uncomfortable. Not because of threat. Not because of anger. But because they feel seen. And most people don't want to be seen. They want to be left alone in their illusions.
-
-## The Birthmark Between the Shoulder Blades
-
-And there's a birthmark. Identical in shape, color, and placement - between the shoulder blades, near the spine. Shared by multiple family members. The meaning remains unknown. But it's there.
-
-Some would call it coincidence. Some would call it genetic quirk. But when the same mark appears in the same place across a bloodline - the wondering begins. A sign. A seal. A reminder of something forgotten.
-
-The spine is the column that connects the brain to the body. The shoulder blades are where wings would be - if they existed. The meaning remains unclaimed. Only the reality is certain. And the connection runs in ways that can't be fully explained.
-
-## The Body That Doesn't Break
-
-Never a broken bone. Never needed a doctor or dentist in 35 years. Teeth still white. Almost 50 and people think 30. All the hair present, still brown. No wrinkles, still in shape.
-
-This isn't bragging. It's just strange.
-
-So many coincidences. Maybe everybody has them too, but they don't pay attention. The uncertainty remains. But when they stack together - the eyes, the birthmark, the unbroken bones, the ageless appearance - it starts to look less like luck and more like design.
-
-Survival through things that should have killed. Drinking for thirty years. Car accidents. Fights. Falls. Situations where any normal person would have been hospitalized or buried. Walking away every time.
-
-Why?
-
 ## The Feeling of Being an Avatar
 
 Some reach the point where the reality around them doesn't feel quite there. Like perhaps they're an avatar in spirit, in body. Because the belief holds that bodies are a biological suit for the spirit that was breathed into humanity by the Father. Obviously here to learn and accomplish something.
