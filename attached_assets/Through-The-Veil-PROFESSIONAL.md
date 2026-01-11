@@ -963,6 +963,108 @@ Think about that.
 
 ---
 
+## The Fracturing of Scripture: A Comparison
+
+People say "It's all the same Bible." It's not. Not even close.
+
+Here's what happened to the Word as it passed through human hands and institutional agendas:
+
+### Book Count Comparison
+
+| Version | Books | First Published | Notes |
+|---------|-------|-----------------|-------|
+| **Cepher** | 87 | 2014 | Restored names, includes Enoch, Jasher, Jubilees |
+| **Ethiopian Bible** | 81 | Ancient | Oldest Christian canon, preserves Enoch |
+| **Catholic Bible** | 73 | 382 AD (Vulgate) | Includes Apocrypha/Deuterocanonical |
+| **King James Version** | 66 | 1611 | Originally included Apocrypha, later removed |
+| **New King James Version** | 66 | 1982 | Modernized KJV language |
+| **New International Version** | 66 | 1978 | "Dynamic equivalence" translation |
+
+From 87 books to 66. Twenty-one books removed. That's not "the same Bible."
+
+### The Name Substitutions
+
+This is where the spell changes. Remember - spelling is spellcasting. The words carry frequency. Change the word, change the vibration, sever the connection.
+
+| Original (Cepher) | King James | NIV | What Changed |
+|-------------------|------------|-----|--------------|
+| **Yahuah** | LORD, GOD | LORD, GOD | The Name erased, replaced with titles |
+| **Yahusha** | Jesus | Jesus | Greek substitution of Hebrew name |
+| **Ruach Ha'Qodesh** | Holy Ghost/Spirit | Holy Spirit | Hebrew meaning lost |
+| **Elohiym** | God | God | Plurality obscured |
+| **Shabbath** | Sabbath | Sabbath | Same word, different observance |
+| **Pesach** | Passover | Passover | Hebrew connection severed |
+| **Mashiach** | Christ | Christ | Greek title replaces Hebrew |
+
+When you pray to "LORD" - you're using a title that could refer to anyone. When you call on Yahuah - you're using His actual Name. The one He gave. The one with power. The one they removed.
+
+### Key Verse Comparisons
+
+**Shemoth (Exodus) 3:15 - The Eternal Name**
+
+*Cepher*: "Yahuah Elohiym of your fathers... this is my name forever, and this is my memorial unto all generations."
+
+*KJV*: "The LORD God of your fathers... this is my name for ever, and this is my memorial unto all generations."
+
+*NIV*: "The LORD, the God of your fathers... This is my name forever, the name you shall call me from generation to generation."
+
+The Name itself is removed and replaced with "LORD" - a generic title. The very verse that commands the Name be used forever... has the Name stripped from it.
+
+**Yahuchanon (John) 5:4 - The Angel at the Pool**
+
+*Cepher*: "For an angel went down at a certain season into the pool, and troubled the water: whosoever then first after the troubling of the water stepped in was made whole of whatsoever disease he had."
+
+*KJV*: Includes this verse.
+
+*NIV*: **Verse removed entirely** or placed in brackets with footnotes.
+
+Why remove an angel healing people? Because it confirms supernatural intervention in daily life.
+
+**Ma'asiym (Acts) 8:37 - The Confession of Faith**
+
+*Cepher*: "And Philip said, If you believe with all your heart, you may. And he answered and said, I believe that Yahusha Ha'Mashiach is the Son of Elohiym."
+
+*KJV*: Includes this verse.
+
+*NIV*: **Verse removed entirely.**
+
+The explicit confession that Yahusha is the Son of Elohiym - removed from modern translations.
+
+### The Denominational Fracturing
+
+By the 1900s, Christianity had splintered into thousands of denominations. Each claiming to be right. Each fighting the others.
+
+Baptist. Methodist. Presbyterian. Lutheran. Pentecostal. Evangelical. Non-denominational. Charismatic. Reformed. Orthodox. Catholic. Anglican.
+
+All reading different versions. All interpreting differently. All certain they have the truth.
+
+This fracturing serves the deceiver perfectly. If believers are fighting each other over doctrinal minutiae, they're not united against the system. They're not recognizing the common enemy. They're too busy proving their denomination is the correct one.
+
+Divide and conquer. It works on nations. It works on religions. It works on families.
+
+### The Frequency Connection
+
+Words carry frequency. This isn't mystical speculation - it's physics. Sound is vibration. Vibration affects matter. The Creator spoke the universe into existence. Words have power.
+
+When the original words are changed:
+- The frequency changes
+- The resonance changes
+- The connection changes
+
+Calling on "LORD" doesn't carry the same vibration as calling on Yahuah. Using "Jesus" doesn't resonate the same as Yahusha. The spell is literally different.
+
+This is why they changed the words. Not translation convenience. Not linguistic evolution. Intentional severing of the frequency connection between humanity and the Creator.
+
+You were designed to connect to the ether, the cosmos, the Father. That connection operates on frequency. The words are the tuning mechanism. Change the words, detune the receiver.
+
+Now everything feels solid, blocky, disconnected. The spiritual realm seems foreign. Connection to the Creator feels like imagination rather than experience.
+
+That's not because the connection doesn't exist. It's because the tuning has been sabotaged.
+
+Restore the words. Restore the frequency. Restore the connection.
+
+---
+
 # CHAPTER 22: THE SUBSTITUTED CALENDAR
 
 The biblical year began in Abib (Aviv) - the month of spring, new growth, renewal. Shemoth (Exodus) 12:2: "This month shall be unto you the beginning of months: it shall be the first month of the year to you."
