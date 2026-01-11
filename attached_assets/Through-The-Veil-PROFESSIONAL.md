@@ -463,6 +463,26 @@ The adversary's strategy has always been imitation. Create a counterfeit of ever
 
 The council of the fallen mirrors the divine council of heaven. The bloodline families mirror the tribes of Israel. The Beast system mirrors the Kingdom of Yahuah.
 
+## Astana: The Council Made Visible
+
+In Kazakhstan, in the middle of nowhere, sits a city called Astana (now Nur-Sultan). A modern capital built from nothing in the 1990s. And it is filled with occult symbolism that would make any researcher's jaw drop.
+
+The Palace of Peace and Reconciliation - a massive pyramid - hosts the Congress of Leaders of World and Traditional Religions. Every few years, the heads of the world's major religions gather there. Christianity, Islam, Judaism, Buddhism, Hinduism - all represented. All meeting in a pyramid.
+
+The meeting hall? A 200-seat boardroom more elaborate than any corporate gathering you've ever seen. Religious leaders who supposedly have nothing in common, who represent faiths that have been at war for centuries, who preach exclusivity and claim sole access to truth - they all travel to Kazakhstan and sit together in a pyramid.
+
+What business could they possibly have with each other? If each religion believes it alone has the truth, what is there to negotiate? What common ground could they be finding?
+
+Unless they're not negotiating. Unless they're coordinating.
+
+The symbolism throughout Astana screams the agenda. The Bayterek Tower with its golden sphere at the top, representing the sun egg laid by a magic bird. The Khan Shatyr entertainment center - the world's largest tent - shaped like a pyramid with an indoor beach at the top. The Palace of Independence with its massive yurt symbolism.
+
+None of this is random. A brand new city, built from scratch, filled with occult architecture, hosting secret meetings of world religious leaders.
+
+If the fallen council operates through proxies, if the principalities and powers work through human institutions, if the same adversarial intelligence runs all the controlled religions... then Astana makes perfect sense.
+
+It's not hidden. It's right there. The council made visible for those with eyes to see.
+
 If the theory of the lost millennium holds - if the Dark Ages were actually the Millennial Reign and we are now in Satan's "little season" - then the council of the cast-out is operating at peak power.
 
 This explains the acceleration. The rapid technological change. The increasing inversion of values. The boldness of the agenda.
@@ -2017,21 +2037,59 @@ But it won't work. Because once the carousel is seen for what it is, it can neve
 
 Information without application is entertainment. The point isn't to accumulate knowledge. It's to live differently.
 
-Practical steps:
+## The Two Things That Matter
+
+After all the research, all the connections, all the layers peeled back - what does the Creator actually expect?
+
+It's remarkably simple. Two things.
+
+**First: Call Him By His Name**
+
+Yo'el (Joel) 2:32: "And it shall come to pass, that whosoever shall call on the name of Yahuah shall be delivered."
+
+Yahuchanon (John) 17:6, Yahusha speaking: "I have manifested your name unto the men which you gave me out of the world."
+
+Not a title. Not "Lord" or "God" - generic terms that could apply to anyone. His actual name. The name He gave to Mosheh at the burning bush. The name that was erased over 6,800 times from scripture. The name that matters.
+
+**Second: Keep His Commandments**
+
+Yahuchanon Ri'shon (1 John) 2:3-4: "And hereby we do know that we know him, if we keep his commandments. He that says, I know him, and keeps not his commandments, is a liar, and the truth is not in him."
+
+Yahuchanon (John) 14:15: "If you love me, keep my commandments."
+
+Chizayon (Revelation) 14:12: "Here is the patience of the saints: here are they that keep the commandments of Elohiym, and the faith of Yahusha."
+
+Not suggestions. Not outdated laws replaced by grace. Commandments. Still in effect.
+
+The greatest lie the system ever told was that the Torah was "done away with" by the cross. That the gospels replaced the law. That grace meant commandments don't matter.
+
+Mattithyahu (Matthew) 5:17-19, Yahusha's own words: "Think not that I am come to destroy the Torah, or the prophets: I am not come to destroy, but to fulfil. For verily I say unto you, Till heaven and earth pass, one jot or one tittle shall in no wise pass from the Torah, till all be fulfilled. Whosoever therefore shall break one of these least commandments, and shall teach men so, he shall be called the least in the kingdom of heaven."
+
+Heaven and earth haven't passed yet. The Torah stands.
+
+That's it. Two things. Call Him by His name. Keep His commandments.
+
+Not complicated. Not requiring seminary education or institutional membership. Not demanding you become boring or give up living. The commandments are for life, for flourishing, for protection - not restriction.
+
+Everything else is commentary.
+
+## Practical Steps
 
 1. **Restore the Names**: Use Yahuah and Yahusha. Let the tongue learn what the mind has understood.
 
-2. **Cleanse the Body**: Stop the substances that calcify the receiver. Fluoride. Alcohol. Processed chemicals.
+2. **Study the Torah**: Read the first five books. Understand what was actually commanded. Don't rely on what you've been told about the law - read it yourself.
 
-3. **Restore the Sabbath**: Set apart the seventh day. Rest. Worship. Disconnect from the system's demands.
+3. **Restore the Sabbath**: Set apart the seventh day. Not Sunday - the seventh day. Rest. Worship. Disconnect from the system's demands.
 
-4. **Study the Scriptures**: Go beyond the surface. Check the Hebrew. Question the translations. Find the patterns.
+4. **Keep the Feasts**: Learn the mo'edim - Passover, Unleavened Bread, Firstfruits, Shavuot, Trumpets, Atonement, Tabernacles. These are Yahuah's appointments, not Jewish holidays.
 
-5. **Reduce the Noise**: Less screen time. Less news. Less entertainment designed to program. More silence. More nature. More listening.
+5. **Cleanse the Body**: Stop the substances that calcify the receiver. Fluoride. Alcohol. Processed chemicals.
 
-6. **Build Community**: Find others who see. Not to create echo chambers, but to encourage. To sharpen. To stand together.
+6. **Reduce the Noise**: Less screen time. Less news. Less entertainment designed to program. More silence. More nature. More listening.
 
-7. **Prepare for Opposition**: The system will not be happy. Expect pressure. Expect attack. Stand anyway.
+7. **Build Community**: Find others who see. Not to create echo chambers, but to encourage. To sharpen. To stand together.
+
+8. **Prepare for Opposition**: The system will not be happy. Expect pressure. Expect attack. Stand anyway.
 
 This isn't a quick fix. It's a lifetime pursuit.
 
