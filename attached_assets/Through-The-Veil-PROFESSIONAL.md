@@ -30,15 +30,15 @@ Scripture quotations are from the Cepher translation, using restored Hebrew name
 
 ## Dedication
 
-*To those who sense that something is wrong but can't quite name it.*
+*To Yahuah, the Father, for His grace and mercy that endures forever.*
 
-*To those who have been called "crazy" for asking questions.*
+*To Yahusha, the Son, for His sacrifice that opened the way back.*
 
-*To those who lost years to substances, distractions, and the fog of the system - and found their way back.*
+*They cared enough to offer redemption when we deserved destruction.*
 
-*To the One who never stopped broadcasting, even when we couldn't receive.*
+*This work exists because They exist.*
 
-*And to you, the reader - may your veil be lifted.*
+*All glory to the Most High.*
 
 ---
 
@@ -907,13 +907,35 @@ Understanding this motivation changes everything. The chaos isn't pointless - it
 
 # CHAPTER 22: THE SUBSTITUTED CALENDAR
 
+The biblical year began in Abib (Aviv) - the month of spring, new growth, renewal. Shemoth (Exodus) 12:2: "This month shall be unto you the beginning of months: it shall be the first month of the year to you."
+
+Abib falls in March/April. Spring. When the earth awakens. When life returns. When the lambs are born for Passover. This makes complete sense - the year begins with resurrection, with new life.
+
+But the Roman calendar starts with January. Named for Janus - the two-faced god. The god of doorways, transitions, beginnings and endings. Two faces - one looking forward, one looking back. The symbol of duality. Of deception.
+
+The year now begins in the dead of winter. In darkness. Named for a pagan deity. And no one questions it.
+
 The seventh day is the Sabbath. From creation. In the commandments. Throughout scripture. Bere'shiyth (Genesis) 2:2-3: "And on the seventh day Elohiym ended his work which he had made; and he rested on the seventh day from all his work which he had made. And Elohiym blessed the seventh day, and sanctified it."
 
 Shemoth (Exodus) 20:8-11 commands: "Remember the sabbath day, to keep it set-apart. Six days shall you labour, and do all your work: But the seventh day is the sabbath of Yahuah your Elohiym."
 
 But Christianity observes Sunday. The first day. The day of the sun god.
 
-The shift happened early. Constantine made it official in 321 AD. The church followed. And now, billions keep a day that was never commanded while ignoring the one that was.
+## The Edict of Constantine
+
+In 321 AD, Constantine issued his famous Sunday law: "On the venerable Day of the Sun let the magistrates and people residing in cities rest."
+
+Day of the Sun. Not the Sabbath. Sun-day.
+
+But it went further. The Edict of Milan (313 AD) and subsequent councils created a system where common people were essentially forced to renounce their previous beliefs and subscribe to the new imperial religion - or face punishment.
+
+Constantine is celebrated as the great Christianizer. The visionary who brought Christianity to the world. But what he actually brought was a counterfeit. A merger of Roman paganism with fragments of the true faith. A controlled opposition designed to redirect worship while appearing to honor the Messiah.
+
+The cross - an ancient pagan symbol predating Christianity by millennia - was reintroduced as the central symbol. The names were changed. The calendar was substituted. The feasts were replaced with pagan holidays given Christian names.
+
+Christianity as most know it today did not exist until well after the Messiah died. It was manufactured. Designed. Implemented by Rome to control the narrative and redirect the growing movement away from the true path.
+
+This is why we believe the name and history were changed - to serve this purpose. To create something that could be controlled. Something with Rome at the center instead of Yahuah.
 
 This isn't a minor calendrical adjustment. It's a substitution. A replacement of Yahuah's appointment with another entity's celebration. Daniy'el (Daniel) 7:25 prophesied this: "And he shall speak great words against the most High, and shall wear out the saints of the most High, and think to change times and laws."
 
@@ -921,13 +943,13 @@ The biblical feasts - Pesach (Passover), Matzot (Unleavened Bread), Bikkuriym (F
 
 They were replaced with:
 
-**Christmas**: Winter solstice celebration. Saturnalia. Sol Invictus birthday. Wrapped in Nativity story but timed to pagan festivals.
+**Christmas**: Winter solstice celebration. Saturnalia. Sol Invictus birthday. December 25th was the birthday of the sun god, not the Messiah. Shepherds don't watch flocks in fields in December - it's winter in Israel. Wrapped in Nativity story but timed to pagan festivals.
 
-**Easter**: Ishtar. Eostre. Fertility goddess celebration with eggs and rabbits. Timed to eclipse the true Passover.
+**Easter**: Ishtar. Eostre. Fertility goddess celebration with eggs and rabbits - symbols of fertility, not resurrection. Timed to eclipse the true Passover.
 
-**Halloween**: Samhain. The celebration of death. Normalized and marketed to children.
+**Halloween**: Samhain. The celebration of death. The thinning of the veil between worlds - but not Yahuah's veil. Normalized and marketed to children.
 
-**Valentine's Day**: Lupercalia. Roman fertility festival. Rebranded.
+**Valentine's Day**: Lupercalia. Roman fertility festival. Rebranded with hearts and romance.
 
 Each substitution severs connection to the original. Each replacement redirects worship from the Creator to entities He opposes.
 
