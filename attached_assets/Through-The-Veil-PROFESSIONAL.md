@@ -1,5 +1,5 @@
 # THROUGH THE VEIL
-## An Exploration of the Great Substitution
+## Unraveling the Tapestry of Lies
 
 ---
 
@@ -685,6 +685,6 @@ What happens next is between you and the Most High.
 
 ---
 
-*Through the Veil: An Exploration of the Great Substitution*
+*Through the Veil: Unraveling the Tapestry of Lies*
 
 HalleluYah.
