@@ -1208,6 +1208,30 @@ The signal is still broadcasting. Make sure it can be heard.
 
 # CHAPTER 31: THE HIDDEN COSMOLOGY
 
+**THE SCIENCE STOOGES AND THEIR MOCKERY**
+
+Watch how it works. The science devotees mock religion - "fairy tales," "bronze age mythology," "invisible sky daddy." They position themselves as the enlightened ones, standing on the solid ground of empirical evidence while believers float on clouds of delusion.
+
+But here's the uncomfortable truth: most of what they worship as "science" requires just as much faith as any religion. More, actually. Because at least religion admits it requires faith. Science pretends it doesn't - while demanding belief in things never witnessed, never replicated, never proven.
+
+The only science that truly passes or fails without variation is mathematics. 2+2=4. Every time. No interpretation needed. No peer review can change it. No funding source can influence the outcome. Math is the only discipline where the answer is either correct or incorrect, with no gray area, no "evolving understanding," no "settled science that might change tomorrow."
+
+Everything else? Physics, biology, cosmology, medicine? Full of variation. Full of interpretation. Full of theories presented as facts, models presented as reality, consensus presented as proof.
+
+**THE PUZZLE ANALOGY**
+
+Consider evolution. The story: everything came from nothing in a massive explosion. That explosion somehow organized itself into galaxies, stars, planets. On one of those planets, lightning struck mud and created proteins. Those proteins became cells. Those cells became fish. Fish became amphibians. Amphibians became reptiles. Reptiles became mammals. Mammals became apes. Apes became humans.
+
+All by random chance. All through entropy - the same entropy that supposedly makes everything fall apart over time magically made everything come together and become more complex over billions of years.
+
+Here's an analogy: Take a million puzzle pieces from ten different puzzles. Put them in a bag. Shake that bag for a billion years. Open it and expect to find all ten puzzles perfectly assembled.
+
+That's evolution. That's the Big Bang to modern humans narrative. And honestly, even this analogy is generous - because at least puzzle pieces were designed to fit together. The evolutionary model claims the pieces designed themselves while randomly falling into place.
+
+And this is the "science" that mocks belief in a Creator. This is the narrative that demands faith while pretending to require none.
+
+**THE HIDDEN COSMOLOGY ITSELF**
+
 The story goes: life exists on a spinning ball, hurtling through infinite space at thousands of miles per hour, orbiting a star in a galaxy among billions, in a universe that exploded from nothing and will eventually collapse into nothing.
 
 This is called science. This is called proven. Trust the experts, they say.
@@ -1328,15 +1352,43 @@ The timeline matters because it changes expectations. If the millennium is futur
 
 # CHAPTER 35: THE SHORT SEASON
 
-If we're living in Satan's little season, certain patterns make sense.
+**AS IT WAS IN THE DAYS OF NOAH**
+
+"But as the days of Noach were, so shall also the coming of the Son of Adam be. For as in the days that were before the flood they were eating and drinking, marrying and giving in marriage, until the day that Noach entered into the ark, And knew not until the flood came, and took them all away; so shall also the coming of the Son of Adam be." *(Cepher, Mattithyahu 24:37-39)*
+
+This passage is usually interpreted as a warning about sudden judgment - people going about their daily lives, unaware of the coming destruction. That's true. But there's a deeper layer.
+
+What characterized the days of Noah? Genesis 6 tells us: the Nephilim were on the earth. The corruption of flesh had spread. Violence filled the earth. The sons of God were taking human wives. Genetic manipulation. Spiritual contamination. The blending of the human with the non-human.
+
+Sound familiar?
+
+If we're living in Satan's little season, certain patterns make sense - and they're the same patterns that defined Noah's era.
+
+**THE RETURN OF FORBIDDEN KNOWLEDGE**
 
 The acceleration. Technology advancing faster than at any point in history. Not evolution - but the return of forbidden knowledge. The same technology the Watchers taught before the flood.
 
-The inversion. Good called evil and evil called good. Values flipping within a single generation. What was shameful becoming celebrated. What was honored becoming mocked.
+Genetic manipulation - they called it CRISPR and mRNA. Metallurgy and weapons - they called it military-industrial complex. Enchantments and sorcery - they called it pharmaceuticals (pharmakeia in Greek). Cosmetics and seduction - they called it the beauty industry. The same teachings, the same corruptions, returned and rebranded.
 
-The boldness. The agenda no longer hiding. The controllers no longer pretending. The deception becoming so obvious that those who can't see it are choosing not to.
+**THE INVERSION**
 
-The convergence. All systems - media, medicine, education, government, religion - aligning around the same narrative. The same substitutions. The same inversions.
+Good called evil and evil called good. Values flipping within a single generation. What was shameful becoming celebrated. What was honored becoming mocked.
+
+The seven deadly sins - pride, greed, lust, envy, gluttony, wrath, sloth - have become the seven virtues of modern culture. Pride month. Hustle culture. Sexual liberation. Keeping up with the neighbors. all-you-can-eat everything. Justified rage. Self-care that looks like doing nothing.
+
+Every sin repackaged as a value. Every value dismissed as outdated.
+
+**THE BOLDNESS**
+
+The agenda no longer hiding. The controllers no longer pretending. The deception becoming so obvious that those who can't see it are choosing not to.
+
+This is characteristic of the little season. The adversary knows time is short. The subtlety of previous ages gives way to brazen, open defiance. The signs and symbols displayed openly. The inversions celebrated publicly. The mockery of the Creator made entertainment.
+
+**THE CONVERGENCE**
+
+All systems - media, medicine, education, government, religion - aligning around the same narrative. The same substitutions. The same inversions.
+
+Every carousel horse moving in the same direction. Every institution singing from the same hymnal. Every voice of dissent silenced, censored, or marginalized.
 
 The little season is characterized by deception so convincing it would deceive, if possible, even the elect. That requires sophistication. That requires technology. That requires the accumulated wisdom of millennia of opposition to the Most High.
 
@@ -1346,7 +1398,7 @@ If indeed life is happening in Satan's little season - the brief time after the 
 
 The deception is at its peak. The technology of control is fully deployed. The inversion of everything true is nearly complete. And the final confrontation is approaching.
 
-This isn't about dates and predictions. The when is unknown. Nobody knows. But the signs are accumulating. The veil is thinning. The patterns are converging.
+This isn't about dates and predictions. The when is unknown. Nobody knows. But the signs are accumulating. The veil is thinning. The patterns are converging. And as in the days of Noah, most will not know until it is upon them.
 
 ---
 
@@ -1773,6 +1825,32 @@ HalleluYah.
 - Characteristics: Acceleration, inversion, boldness, convergence of all systems
 - Theory: The present age may be this little season
 - See also: Chapter 34, Chapter 35
+
+**Days of Noah**
+- Scripture: Mattithyahu 24:37-39 (Cepher) - "As the days of Noach were, so shall also the coming of the Son of Adam be"
+- Connection: Same patterns repeating - Nephilim activity, genetic manipulation, corruption of flesh, violence, forbidden knowledge
+- Modern equivalents: CRISPR, mRNA, pharmaceutical sorcery (pharmakeia), military-industrial complex
+- See also: Chapter 35
+
+**Evolution / Big Bang**
+- Definition: The official narrative that everything came from nothing, organized itself, and became complex through random chance
+- The Puzzle Analogy: Shaking a million pieces from ten different puzzles for a billion years and expecting assembly
+- Contradiction: Entropy supposedly drives everything to disorder - yet evolution claims increasing complexity over time
+- Function: Removes Creator, removes purpose, removes accountability
+- See also: Chapter 31
+
+**Math as True Science**
+- Definition: The only discipline that truly passes or fails without variation
+- Characteristics: 2+2=4 every time; no interpretation, no peer review influence, no funding bias
+- Contrast: All other "sciences" have variation, interpretation, theories presented as facts
+- Point: The science stooges demand faith while mocking faith
+- See also: Chapter 31
+
+**Seven Deadly Sins**
+- Traditional: Pride, Greed, Lust, Envy, Gluttony, Wrath, Sloth
+- Modern inversion: Each sin repackaged as virtue - Pride Month, Hustle Culture, Sexual Liberation, Keeping Up appearances, All-you-can-eat, Justified Rage, Self-Care
+- Pattern: Total inversion characteristic of the little season
+- See also: Chapter 35
 
 **Tartaria**
 - Definition: Theorized previous civilization more advanced than officially acknowledged
