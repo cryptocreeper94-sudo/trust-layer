@@ -94,6 +94,10 @@ export function serveStatic(app: Express) {
   });
 
   app.use(express.static(distPath));
+  
+  // Serve ebook assets from public/assets
+  const publicAssetsPath = path.resolve(process.cwd(), "public/assets");
+  app.use("/assets", express.static(publicAssetsPath));
 
   app.use("*", (req: Request, res: Response) => {
     const appConfig = (req as any).appConfig;
