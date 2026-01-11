@@ -17,15 +17,15 @@ const FONT_BODY = 'Helvetica';
 const FONT_BOLD = 'Helvetica-Bold';
 const FONT_ITALIC = 'Helvetica-Oblique';
 
-const FONT_SIZE_TITLE = 20;
-const FONT_SIZE_SUBTITLE = 12;
-const FONT_SIZE_H1 = 14;
-const FONT_SIZE_H2 = 12;
-const FONT_SIZE_BODY = 10;
-const FONT_SIZE_SMALL = 8;
+const FONT_SIZE_TITLE = 24;
+const FONT_SIZE_SUBTITLE = 14;
+const FONT_SIZE_H1 = 16;
+const FONT_SIZE_H2 = 14;
+const FONT_SIZE_BODY = 12;
+const FONT_SIZE_SMALL = 10;
 
-const LINE_GAP = 1;
-const PARAGRAPH_GAP = 4;
+const LINE_GAP = 2;
+const PARAGRAPH_GAP = 6;
 
 function sanitizeText(text: string): string {
   return text
