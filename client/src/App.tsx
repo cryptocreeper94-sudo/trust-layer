@@ -121,6 +121,8 @@ const Snake = lazy(() => import("@/pages/snake"));
 const Pacman = lazy(() => import("@/pages/pacman"));
 const Genesis = lazy(() => import("@/pages/genesis"));
 const Veil = lazy(() => import("@/pages/veil"));
+const ChronoChat = lazy(() => import("@/pages/chronochat"));
+const ChronoChatInvite = lazy(() => import("@/pages/chronochat-invite"));
 const CreatorProgram = lazy(() => import("@/pages/creator-program"));
 const EraCodex = lazy(() => import("@/pages/era-codex"));
 const ScenarioGenerator = lazy(() => import("@/pages/scenario-generator"));
@@ -224,6 +226,8 @@ function GamesRouter() {
         <Route path="/pacman" component={Pacman} />
         <Route path="/genesis" component={Genesis} />
         <Route path="/veil" component={Veil} />
+        <Route path="/chronochat" component={ChronoChat} />
+        <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
         <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/scenario-generator" component={ScenarioGenerator} />
@@ -294,6 +298,8 @@ function ChronoRouter() {
         <Route path="/roadmap" component={ChronoRoadmap} />
         <Route path="/genesis" component={Genesis} />
         <Route path="/veil" component={Veil} />
+        <Route path="/chronochat" component={ChronoChat} />
+        <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
         <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/crowdfund" component={Crowdfund} />
@@ -434,6 +440,8 @@ function DWSCRouter() {
         <Route path="/pacman" component={Pacman} />
         <Route path="/genesis" component={Genesis} />
         <Route path="/veil" component={Veil} />
+        <Route path="/chronochat" component={ChronoChat} />
+        <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
         <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/scenario-generator" component={ScenarioGenerator} />
