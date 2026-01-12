@@ -351,23 +351,6 @@ TGE: April 11, 2026 💎`,
   // NEW FEATURES - January 2026
   {
     platform: 'discord',
-    content: `📖 **NEW: "THROUGH THE VEIL" - FREE EBOOK**
-
-188 pages of hidden history and spiritual awakening.
-
-Topics covered:
-• Scripture with restored Hebrew names
-• The name that was erased (Yahuah/Yahusha)
-• Calendar manipulation and historical cover-ups
-• What they don't want you to know
-
-Free PDF & EPUB download at dwsc.io/veil
-
-By Asher Reed. The "Blessed Scribe."`,
-    category: 'content',
-  },
-  {
-    platform: 'discord',
     content: `💳 **PRESALE NOW EASIER THAN EVER**
 
 New one-click buy flow:
@@ -388,17 +371,6 @@ Early Bird: $100 (5% bonus)
   },
   {
     platform: 'telegram',
-    content: `📖 <b>FREE EBOOK: "THROUGH THE VEIL"</b>
-
-188 pages. Hidden history. Spiritual awakening.
-
-Restored Hebrew names. Calendar deception. What they erased.
-
-Free download → dwsc.io/veil`,
-    category: 'content',
-  },
-  {
-    platform: 'telegram',
     content: `💳 <b>PRESALE SIMPLIFIED</b>
 
 New quick-buy:
@@ -411,17 +383,6 @@ Early Bird: 5% bonus
 
 → dwsc.io/presale`,
     category: 'presale',
-  },
-  {
-    platform: 'twitter',
-    content: `📖 Free ebook: "Through The Veil"
-
-188 pages of hidden history and spiritual awakening.
-
-Restored Hebrew names. Calendar deception. What they erased.
-
-Free download → dwsc.io/veil`,
-    category: 'content',
   },
   {
     platform: 'twitter',
