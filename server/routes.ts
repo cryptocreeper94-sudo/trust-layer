@@ -4397,7 +4397,7 @@ export async function registerRoutes(
   <p>DarkWave Chronicles is the flagship application demonstrating the chain's capabilities—an unprecedented adventure platform spanning 70+ historical eras where players experience immersive narratives powered by AI.</p>
   
   <div class="highlight">
-    <strong>Launch Date:</strong> July 4, 2026 (Public Beta)
+    <strong>Launch Date:</strong> Beta LIVE now (Public Beta)
   </div>
 
   <h2>7. Roadmap</h2>
@@ -4405,7 +4405,7 @@ export async function registerRoutes(
     <li><strong>Q1 2025:</strong> Testnet Launch</li>
     <li><strong>Q4 2025:</strong> Security Audits Complete</li>
     <li><strong>April 11, 2026:</strong> Token Generation Event (TGE)</li>
-    <li><strong>July 4, 2026:</strong> DarkWave Chronicles Public Beta</li>
+    <li><strong>Beta LIVE now:</strong> DarkWave Chronicles Public Beta</li>
     <li><strong>Q4 2026:</strong> Full Mainnet with all DeFi features</li>
   </ul>
 

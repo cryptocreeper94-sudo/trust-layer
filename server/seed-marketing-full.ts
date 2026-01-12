@@ -19,13 +19,13 @@ import { marketingPosts } from '@shared/schema';
 // ============================================
 const TWITTER_POSTS = [
   // Chronicles Game (10 posts)
-  { content: `🎮 DarkWave Chronicles: 70+ mission theaters. One parallel self. YOUR legend.\n\nNot a life sim. A LEGEND FACTORY.\n\nJuly 2026 ⚡`, category: 'chronicles' },
+  { content: `🎮 DarkWave Chronicles: 70+ mission theaters. One parallel self. YOUR legend.\n\nNot a life sim. A LEGEND FACTORY.\n\nBeta LIVE ⚡`, category: 'chronicles' },
   { content: `What if the game adapted to YOUR beliefs?\n\n"Many Lenses" design—where reality shifts based on player perspective.\n\nDarkWave Chronicles. Coming 2026 🌌`, category: 'chronicles' },
   { content: `No grind. No filler. Just legend-building.\n\nDarkWave Chronicles puts YOU at the center.\n\nEvery choice echoes. Every action matters. 🔥`, category: 'chronicles' },
   { content: `YOUR parallel self. 70+ eras. One legendary campaign.\n\nDarkWave Chronicles.\n\nNot life simulation. LEGEND building. ⚔️`, category: 'chronicles' },
   { content: `The game that asks: Who will YOU become?\n\nChoices that matter. Consequences that echo.\n\nDarkWave Chronicles 🌊`, category: 'chronicles' },
   { content: `Ancient empires. Future frontiers. Everything between.\n\nEach era is YOUR chance to prove yourself.\n\n#DarkWaveChronicles 🎯`, category: 'chronicles' },
-  { content: `NPCs that remember. Worlds that evolve. Stories that matter.\n\nDarkWave Chronicles redefines adventure gaming.\n\nComing July 2026 🚀`, category: 'chronicles' },
+  { content: `NPCs that remember. Worlds that evolve. Stories that matter.\n\nDarkWave Chronicles redefines adventure gaming.\n\nComing Beta LIVE 🚀`, category: 'chronicles' },
   { content: `Every campaign. Every decision. Every moment.\n\nYours to shape. Yours to own. Yours to legend.\n\n#DarkWaveChronicles ⚡`, category: 'chronicles' },
   { content: `Awakening disguised as entertainment.\n\nDarkWave Chronicles challenges how you see the world.\n\nAre you ready? 🌌`, category: 'chronicles' },
   { content: `70+ historical eras await your parallel self.\n\nWrite history. Build legend. Become eternal.\n\nDarkWave Chronicles 🎮`, category: 'chronicles' },
@@ -95,8 +95,8 @@ const TWITTER_POSTS = [
   { content: `Code snippets. API playground. Full docs.\n\nStart building on DarkWave today.\n\ndwsc.io/developers 🛠️`, category: 'developer' },
   
   // Roadmap (4 posts)
-  { content: `📍 Roadmap update:\n\n✅ Blockchain live\n✅ Portal complete\n🔄 Chronicles in development\n🎯 Public beta: July 2026`, category: 'roadmap' },
-  { content: `On track. On time. On mission.\n\nChronicles public beta: July 4, 2026.\n\nMark your calendars 📅`, category: 'roadmap' },
+  { content: `📍 Roadmap update:\n\n✅ Blockchain live\n✅ Portal complete\n🔄 Chronicles in development\n🎯 Public beta: Beta LIVE`, category: 'roadmap' },
+  { content: `On track. On time. On mission.\n\nChronicles public beta: Beta LIVE now.\n\nMark your calendars 📅`, category: 'roadmap' },
   { content: `Phase 1: Foundation ✅\nPhase 2: Ecosystem 🔄\nPhase 3: Chronicles 🎯\n\nProgress is constant. dwsc.io/roadmap`, category: 'roadmap' },
   { content: `Every milestone hit. Every promise kept.\n\nTrack our progress: dwsc.io/roadmap\n\n#DarkWave 🚀`, category: 'roadmap' },
   
@@ -151,7 +151,7 @@ Every choice matters. Every action shapes your legacy. The world itself adapts t
 
 This is awakening disguised as entertainment.
 
-Public beta: July 4, 2026 🚀
+Public beta: Beta LIVE now 🚀
 
 Learn more: darkwavegames.io`, category: 'chronicles' },
   { content: `What makes DarkWave Chronicles different?
@@ -172,7 +172,7 @@ In DarkWave Chronicles, NPCs remember your choices. History bends to your interp
 
 This isn't passive entertainment. This is interactive awakening.
 
-July 2026 ⚡`, category: 'chronicles' },
+Beta LIVE ⚡`, category: 'chronicles' },
   { content: `70+ Mission Theaters await your parallel self.
 
 🏛️ Ancient empires rising and falling
@@ -193,7 +193,7 @@ DarkWave Chronicles asks the question: Who will YOU become?
 
 Your story. Your choices. Your eternal legacy.
 
-Coming July 4, 2026 🎮`, category: 'chronicles' },
+Coming Beta LIVE now 🎮`, category: 'chronicles' },
   { content: `🎯 NPCs That Remember. Worlds That Evolve.
 
 In DarkWave Chronicles, your actions have real consequences. Characters remember what you've done. Alliances shift. Enemies emerge.
@@ -211,7 +211,7 @@ Not someone else's story.
 Not a predefined path.
 YOUR legend. YOUR way.
 
-DarkWave Chronicles. July 2026 ⚡`, category: 'chronicles' },
+DarkWave Chronicles. Beta LIVE ⚡`, category: 'chronicles' },
   { content: `We're building DarkWave Chronicles with one philosophy: YOU are the hero.
 
 Not following a protagonist. Not playing a role. Being the center of an epic that spans time itself.
@@ -227,7 +227,7 @@ DarkWave Chronicles isn't just entertainment—it's a tool for awakening.
 
 What will you discover about yourself?
 
-Public beta: July 4, 2026`, category: 'chronicles' },
+Public beta: Beta LIVE now`, category: 'chronicles' },
   { content: `Ancient. Medieval. Modern. Future.
 
 DarkWave Chronicles spans ALL of human experience. Every era is a new battlefield. Every mission is a step toward legend.
@@ -665,7 +665,7 @@ dwsc.io/developers 🛠️`, category: 'developer' },
 ✅ Phase 1: Blockchain & Portal (COMPLETE)
 🔄 Phase 2: DeFi & NFT Ecosystem (ACTIVE)
 🎯 Phase 3: Chronicles Development (IN PROGRESS)
-📅 Phase 4: Public Beta (July 4, 2026)
+📅 Phase 4: Public Beta (Beta LIVE now)
 
 Track progress: dwsc.io/roadmap`, category: 'roadmap' },
   { content: `Every milestone. On time. On target.
@@ -678,7 +678,7 @@ DeFi: ✅ Live
 Chronicles: 🔄 Building
 
 dwsc.io/roadmap`, category: 'roadmap' },
-  { content: `🎯 Mark Your Calendar: July 4, 2026
+  { content: `🎯 Mark Your Calendar: Beta LIVE now
 
 DarkWave Chronicles public beta launches.
 
@@ -908,7 +908,7 @@ The world adapts to YOUR beliefs. Your worldview shapes how NPCs react, how even
 
 This isn't entertainment. This is awakening in game form.
 
-**Public Beta:** July 4, 2026 🎯
+**Public Beta:** Beta LIVE now 🎯
 
 www.darkwavegames.io`, category: 'chronicles' },
   { content: `⚔️ **70+ Mission Theaters Await**
@@ -966,7 +966,7 @@ A game that asks: **Who will YOU become?**
 
 And then lets you answer. Across 70+ eras. In ways that last forever.
 
-Coming July 2026 🔥`, category: 'chronicles' },
+Coming Beta LIVE 🔥`, category: 'chronicles' },
   { content: `🌟 **Your Parallel Self Awaits**
 
 In quantum theory, parallel versions of ourselves exist across infinite possibilities.
@@ -1015,7 +1015,7 @@ The team is heads-down building your legendary experience:
 🔄 NPC AI behavior systems in testing
 🔄 Era-specific world building ongoing
 
-**Target:** Public Beta - July 4, 2026
+**Target:** Public Beta - Beta LIVE now
 
 We're not rushing. We're not cutting corners. We're building something that matters.
 
@@ -1038,7 +1038,7 @@ You're not living a virtual life. You're writing a legend that echoes through et
 
 **Big difference.**
 
-Coming July 2026. www.darkwavegames.io 🎮`, category: 'chronicles' },
+Coming Beta LIVE. www.darkwavegames.io 🎮`, category: 'chronicles' },
   { content: `⚡ **The Philosophy Behind Chronicles**
 
 **Why we're building this:**
@@ -1076,7 +1076,7 @@ You won't just play DarkWave Chronicles.
 
 You'll become part of its history.
 
-**Coming July 4, 2026** 💎`, category: 'chronicles' },
+**Coming Beta LIVE now** 💎`, category: 'chronicles' },
   
   // DWSC Blockchain (8 posts)
   { content: `⚡ **DarkWave Smart Chain: Technical Overview**
@@ -1850,7 +1850,7 @@ dwsc.io/code-snippets 🛠️`, category: 'developer' },
 • Many Lenses system
 
 **📅 PHASE 4: LAUNCH**
-• Public beta: July 4, 2026
+• Public beta: Beta LIVE now
 
 Full roadmap: dwsc.io/roadmap`, category: 'roadmap' },
   { content: `⚡ **Weekly Progress Update**
@@ -1865,7 +1865,7 @@ Full roadmap: dwsc.io/roadmap`, category: 'roadmap' },
 No vaporware. Real progress. Constant delivery.
 
 Track everything: dwsc.io/roadmap`, category: 'roadmap' },
-  { content: `🎯 **July 4, 2026: Mark Your Calendar**
+  { content: `🎯 **Beta LIVE now: Mark Your Calendar**
 
 **DarkWave Chronicles Public Beta Launch**
 
@@ -2184,7 +2184,7 @@ We're building something unprecedented. A game where YOU are the hero—not foll
 🌆 Modern day
 🚀 Future frontiers
 
-<b>Public Beta:</b> July 4, 2026
+<b>Public Beta:</b> Beta LIVE now
 
 This isn't just entertainment. This is awakening in game form.
 
@@ -2241,7 +2241,7 @@ Every era of human history. Every type of adventure. Every chance to prove yours
 
 <b>Each era is a complete world.</b> Each mission builds YOUR legend.
 
-Coming July 2026 🎮`, category: 'chronicles' },
+Coming Beta LIVE 🎮`, category: 'chronicles' },
   { content: `🎮 <b>DarkWave Chronicles: Development Update</b>
 
 <b>Current Progress:</b>
@@ -2261,7 +2261,7 @@ Coming July 2026 🎮`, category: 'chronicles' },
 📅 <b>Upcoming:</b>
 • Alpha testing (Founders only)
 • Beta expansion
-• Public launch: July 4, 2026
+• Public launch: Beta LIVE now
 
 <b>We're not rushing. We're not cutting corners.</b>
 
@@ -2287,7 +2287,7 @@ When you complete a campaign, you don't just get XP. You become part of the stor
 
 <b>Your achievements. Your choices. Your legend.</b>
 
-Coming July 2026 ⚡`, category: 'chronicles' },
+Coming Beta LIVE ⚡`, category: 'chronicles' },
   { content: `🌟 <b>Your Parallel Self Awaits</b>
 
 In quantum theory, parallel versions of ourselves exist across infinite possibilities.
@@ -2330,7 +2330,7 @@ Not playing a character someone else created. Being the version of YOU that hist
 
 <b>This is next-gen gaming.</b>
 
-Coming July 2026`, category: 'chronicles' },
+Coming Beta LIVE`, category: 'chronicles' },
   { content: `🏆 <b>Your Legacy. Forever.</b>
 
 Every campaign you complete in DarkWave Chronicles becomes part of your permanent record.
@@ -2349,7 +2349,7 @@ You'll become part of its history.
 
 <b>Your story. Forever preserved.</b>
 
-Coming July 4, 2026 💎`, category: 'chronicles' },
+Coming Beta LIVE now 💎`, category: 'chronicles' },
   { content: `⚡ <b>The Philosophy Behind Chronicles</b>
 
 <b>Why we're building this:</b>
@@ -2379,7 +2379,7 @@ Are you ready? 🌌`, category: 'chronicles' },
 
 <i>"The Many Lenses concept is genius."</i>
 
-<i>"Can't wait for July 2026."</i>
+<i>"Can't wait for Beta LIVE."</i>
 
 <i>"This is what gaming should be."</i>
 
@@ -3536,7 +3536,7 @@ Save hours of development time.
 
 <b>📅 PHASE 4: LAUNCH</b>
 • Founder alpha testing
-• Public beta: July 4, 2026
+• Public beta: Beta LIVE now
 • Full launch
 
 <b>On track. On time.</b>
@@ -3561,7 +3561,7 @@ Save hours of development time.
 <b>Every week, we ship.</b>
 
 Progress updates in Discord.`, category: 'roadmap' },
-  { content: `🎯 <b>July 4, 2026: The Date That Matters</b>
+  { content: `🎯 <b>Beta LIVE now: The Date That Matters</b>
 
 <b>DarkWave Chronicles Public Beta Launch</b>
 

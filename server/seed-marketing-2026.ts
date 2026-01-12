@@ -65,19 +65,22 @@ April 11, 2026. The real one launches.`,
   },
   {
     platform: 'discord',
-    content: `🎮 **DARKWAVE CHRONICLES UPDATE**
+    content: `🎮 **DARKWAVE CHRONICLES - BETA NOW LIVE**
 
-July 4, 2026. The legend begins.
+The legend has begun. Beta v0.1 is LIVE.
 
-70+ eras. YOUR parallel self. Real-time persistence.
+What's playable NOW:
+• AI-powered companion conversations
+• Era exploration and scenario generation
+• Voice cloning technology
+• Character building tools
+• Shells economy integration
 
-While you sleep, your world hibernates.
-When you return, time resumes.
-Every choice echoes through eternity.
+Coming soon: Full era campaigns, multiplayer, and more.
 
 Not a game. A parallel life.
 
-Join the waitlist → darkwavegames.io`,
+Play now → darkwavegames.io`,
     category: 'chronicles',
   },
   {
@@ -166,13 +169,16 @@ The earlier you believe, the more you earn.
   },
   {
     platform: 'telegram',
-    content: `🎮 <b>CHRONICLES: JULY 4, 2026</b>
+    content: `🎮 <b>CHRONICLES BETA v0.1 - LIVE NOW</b>
 
-70+ eras. YOUR parallel self. Real-time world.
+The legend has begun. Beta is playable today.
 
-No grinding. No filler. Just legend-building.
+✅ AI companion conversations
+✅ Era exploration
+✅ Voice cloning tech
+✅ Shells economy
 
-The game that asks: Who will YOU become?
+Full launch date TBD. Play what's ready NOW.
 
 → darkwavegames.io`,
     category: 'chronicles',
@@ -257,11 +263,13 @@ dwsc.io/presale`,
   },
   {
     platform: 'twitter',
-    content: `DarkWave Chronicles drops July 4, 2026.
+    content: `DarkWave Chronicles Beta is LIVE. 🎮
 
-70+ eras. YOUR parallel self. Real-time persistence.
+AI companions. Era exploration. Voice cloning. Shells economy.
 
-Not life simulation. LEGEND building. 🎮`,
+Play what's ready now. Full launch TBD.
+
+darkwavegames.io`,
     category: 'chronicles',
   },
   {
@@ -321,9 +329,11 @@ dwsc.io/guardian-registry 🔒`,
     platform: 'twitter',
     content: `70+ eras. One parallel self. Your legend.
 
-DarkWave Chronicles. July 4, 2026.
+DarkWave Chronicles Beta is LIVE now.
 
-The game that asks: Who will YOU become? 🌌`,
+AI-powered. Voice cloning. Shells economy.
+
+Play today → darkwavegames.io 🌌`,
     category: 'chronicles',
   },
   {
@@ -336,6 +346,107 @@ Founder status forever.
 
 TGE: April 11, 2026 💎`,
     category: 'presale',
+  },
+  
+  // NEW FEATURES - January 2026
+  {
+    platform: 'discord',
+    content: `📖 **NEW: "THROUGH THE VEIL" - FREE EBOOK**
+
+188 pages of hidden history and spiritual awakening.
+
+Topics covered:
+• Scripture with restored Hebrew names
+• The name that was erased (Yahuah/Yahusha)
+• Calendar manipulation and historical cover-ups
+• What they don't want you to know
+
+Free PDF & EPUB download at dwsc.io/veil
+
+By Asher Reed. The "Blessed Scribe."`,
+    category: 'content',
+  },
+  {
+    platform: 'discord',
+    content: `💳 **PRESALE NOW EASIER THAN EVER**
+
+New one-click buy flow:
+1. Click "Buy DWC Tokens"
+2. Select your tier
+3. Enter email
+4. Checkout with Stripe
+
+No scrolling. No confusion. Just tokens.
+
+Genesis: $1,000 (25% bonus)
+Founder: $500 (15% bonus)
+Pioneer: $250 (10% bonus)
+Early Bird: $100 (5% bonus)
+
+→ dwsc.io/presale`,
+    category: 'presale',
+  },
+  {
+    platform: 'telegram',
+    content: `📖 <b>FREE EBOOK: "THROUGH THE VEIL"</b>
+
+188 pages. Hidden history. Spiritual awakening.
+
+Restored Hebrew names. Calendar deception. What they erased.
+
+Free download → dwsc.io/veil`,
+    category: 'content',
+  },
+  {
+    platform: 'telegram',
+    content: `💳 <b>PRESALE SIMPLIFIED</b>
+
+New quick-buy:
+• Click button → Select tier → Checkout
+
+Genesis: 25% bonus
+Founder: 15% bonus  
+Pioneer: 10% bonus
+Early Bird: 5% bonus
+
+→ dwsc.io/presale`,
+    category: 'presale',
+  },
+  {
+    platform: 'twitter',
+    content: `📖 Free ebook: "Through The Veil"
+
+188 pages of hidden history and spiritual awakening.
+
+Restored Hebrew names. Calendar deception. What they erased.
+
+Free download → dwsc.io/veil`,
+    category: 'content',
+  },
+  {
+    platform: 'twitter',
+    content: `Presale just got easier.
+
+One button. Pick your tier. Checkout.
+
+Up to 25% bonus tokens.
+
+dwsc.io/presale 💎`,
+    category: 'presale',
+  },
+  {
+    platform: 'twitter',
+    content: `Chronicles Beta v0.1 is LIVE.
+
+• AI companion chat
+• Voice cloning tech
+• Era exploration  
+• Shells economy
+
+Full launch date TBD. Play NOW.
+
+darkwavegames.io 🎮`,
+    category: 'chronicles',
   },
 ];
 

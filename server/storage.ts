@@ -2612,7 +2612,7 @@ DarkWave Smart Chain (DWSC) is a purpose-built Layer 1 blockchain optimized for 
 
 - Q1 2025: Testnet Launch
 - Apr 11, 2026: Token Generation Event
-- July 4, 2026: DarkWave Chronicles Public Beta`,
+- Beta LIVE now: DarkWave Chronicles Public Beta`,
     category: "general",
     isPublic: true,
   },

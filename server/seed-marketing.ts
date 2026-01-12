@@ -19,7 +19,7 @@ Every choice echoes through history. Every action shapes your legacy.
 The question isn't whether you'll leave your mark...
 It's HOW LEGENDARY will you become?
 
-🎮 Coming July 4, 2026`,
+🎮 Coming Beta LIVE now`,
     category: 'vision',
   },
   {
@@ -89,7 +89,7 @@ We're building a LEGEND FACTORY.
 YOUR parallel self as the hero
 Choices that echo through eternity
 
-Public beta: July 4, 2026 🎯
+Public beta: Beta LIVE now 🎯
 
 Join the journey → darkwavegames.io`,
     category: 'news',
@@ -158,7 +158,7 @@ It's a legend factory.
 
 70+ eras. One parallel self. YOUR story.
 
-Coming July 4, 2026 ⚡`,
+Coming Beta LIVE now ⚡`,
     category: 'vision',
   },
   {
@@ -216,7 +216,7 @@ Not life simulation. LEGEND building. ⚔️`,
 
 Choices that matter. Consequences that echo.
 
-DarkWave Chronicles - July 2026 🌌`,
+DarkWave Chronicles - Beta LIVE 🌌`,
     category: 'vision',
   },
   {
@@ -238,7 +238,7 @@ Imagine stepping into 70+ mission theaters across history as YOUR parallel self.
 
 This isn't about levels or loot. It's about WHO YOU BECOME.
 
-Public beta: July 4, 2026. The legend begins.
+Public beta: Beta LIVE now. The legend begins.
 
 Learn more at darkwavegames.io 🎮`,
     category: 'vision',
@@ -283,7 +283,7 @@ Each era is YOUR chance to prove yourself. Each mission builds YOUR legend.
 Not life simulation. Not passive entertainment.
 LEGEND BUILDING.
 
-Coming July 4, 2026 🚀`,
+Coming Beta LIVE now 🚀`,
     category: 'hype',
   },
   {
