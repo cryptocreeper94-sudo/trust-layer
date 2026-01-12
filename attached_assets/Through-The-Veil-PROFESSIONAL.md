@@ -3398,6 +3398,192 @@ If this book has sparked a desire to study scripture with restored names and com
 
 ---
 
+# APPENDIX B: ABOUT THE CEPHER TRANSLATION
+
+## Why This Book Uses the Cepher
+
+Throughout "Through The Veil," scripture quotations come from the Cepher translation. Many readers will be unfamiliar with this text, as it stands outside the mainstream Bible translations promoted by institutional Christianity. This is not accidental. The Cepher restores what was systematically removed - and that restoration is precisely why it remains relatively unknown.
+
+The following is a summary of key points from the Cepher's own preface, explaining their translation methodology and why it differs from conventional Bibles. We encourage readers to obtain the complete Cepher for themselves at cepher.net.
+
+---
+
+## The Restoration of Set-Apart Names
+
+### The Name of the Father: Yahuah
+
+The Cepher restores the Father's name as **Yahuah** (יהוה). This name went unmentioned for over two millennia based on the "ineffable name doctrine" - a rabbinical teaching that the name was too sacred to pronounce. However, scripture itself directly contradicts this:
+
+*"I will publish the name of Yahuah: ascribe you greatness unto our Elohiym."* - Devariym (Deuteronomy) 32:1-3
+
+*"I will declare your name unto my brethren: in the midst of the assembly will I praise you."* - Tehilliym (Psalms) 22:22
+
+The historian Yocephus (Josephus) records in "Wars of the Jews" that priests pronounced this name prior to the temple's destruction. The pronunciation is constructed from four vowels: **ee (yod) - ah (heh) - oo (vav) - ah (heh)** = Yahuah.
+
+Even the King James Bible acknowledges this name, writing in Psalm 68:4: "Sing unto God, sing praises to his Name: extoll him that rideth upon the heavens, **by his Name Iah**, and rejoice before him." The name stands alone as "Yah" 45 times in the Tanakh.
+
+### The Name of the Son: Yahusha
+
+The Messiah's name is restored as **Yahusha** (יהושע), not "Jesus." This name is identical to the Hebrew name of the son of Nun who led Israel into the Promised Land - the one English Bibles call "Joshua."
+
+The name Yahusha is constructed from two Hebrew words: **Yahuah** (יהוה) and **yasha** (ישע), meaning "to be open, wide, free; to save, rescue, preserve, help, deliver." Thus, the name literally means "Yahuah saves" or "Yahuah is salvation."
+
+The Septuagint (Greek translation of the Hebrew scriptures) translated both Joshua son of Nun and the Messiah with the same Greek word: **Iesous** (Ἰησοῦς). This proves the names were understood to be identical. Modern translators render one as "Joshua" and the other as "Jesus" - but the Greek makes no such distinction.
+
+The proof is found in Hebrews 4:8-10, where the Greek text uses "Iesous" but clearly refers to Joshua son of Nun, not the Messiah. The NKJV footnotes this, admitting "Hebrews 4:8 Gr. Jesus, same as Heb. Joshua."
+
+### The Name "God" and Elohiym
+
+The Hebrew word **Elohiym** and its declensions have been translated in most English Bibles as "God." This English word is actually a pronunciation-driven replica of the Yiddish title "G_d" - the underscore exists to avoid disclosing the spelling **Gad** (pronounced "gawd").
+
+Scripture warns against this very substitution:
+
+*"But you are they that forsake Yahuah, that forget my holy mountain, that prepare a table for Gad, and that furnish the drink offering to Meniy."* - Yesha'yahu (Isaiah) 65:11
+
+Brown, Driver, and Briggs confirm that this word (גד, H1409, gad) is a masculine noun meaning "fortune" or "good fortune." The Cepher uses the Hebrew **Elohiym** rather than substituting a title with troubling origins.
+
+---
+
+## The Use of Ruach Instead of "Spirit"
+
+The translation of two languages - Greek (Yavaniy) and Hebrew (Ivriyt) - has been used to render the phrase "Holy Spirit" or "Holy Ghost." However, neither translation lends credence to this rendering.
+
+The notion that "El" is personified as "ghost" or "spirit" actually has its source in Sumer, in the construction of the "god" Enlil (El-Al). The true meaning of the original words gives better understanding. In Hebrew, the phrase is **eth-ruach qodesh'u** - more easily rendered as "Ruach Ha'Qodesh."
+
+Strong's defines **Ruach** (רוח, H7306) as a primitive root meaning "to blow" - breathe, wind; by resemblance breath, a sensible (or even violent) exhalation. Strong's defines **Qodesh** (קדש, H6944) as meaning a sacred place or thing; dedicated, hallowed, holiness, sanctuary.
+
+Rather than distort the meaning using terms with pagan beginnings personifying breath as a ghost or spirit, the Cepher uses **Ruach** where it appears in the text for both Hebrew and Greek, and **Qodesh** for the Greek hagios, as they have identical meaning. The Ruach is identified by conspicuous characteristics in the text:
+
+*"With him dwells the Ruach Da'ath v'Chokmah [Breath of knowledge and wisdom] the Ruach Ha'Torah [the Breath of Instruction] and Gevurah [strength], and the ruach of those who sleep in righteousness."* - Chanoch (Enoch) 49:1-4
+
+---
+
+## The Word "Lucifer" Does Not Exist
+
+Yesha'yahu (Isaiah) 14 is known as the only place in all of Scripture where some Bibles have substituted the name "Lucifer." Yet this name does not actually appear in the original Ivriyt (Hebrew). The original reads:
+
+*"How art thou fallen from heaven, O Howling son of the morning!"* - Yesha'yahu (Isaiah) 14:12
+
+The term translated by Eusibeus as "Lucifer" is incorrect and does not properly divide the word. When the word is rightly divided, the remaining root is **yalal**, which appears 29 times in the Tanakh and means **howling**. The phrase formerly referenced as "Lucifer" now reads:
+
+*"How are you fallen from heaven, the howling son of the morning! How are you cut down to the ground, which did weaken the nations!"* - Yesha'yahu (Isaiah) 14:12
+
+---
+
+## The Books That Were Removed
+
+### The Dead Sea Scrolls and Missing Texts
+
+The Cepher includes books that adherents to the post-19th Century Protestant Bible will not recognize. These include:
+
+- Cepher Yovheliym (Jubilees)
+- Cepher Chanoch (Enoch)
+- Cepher ha'Yashar (Jasher)
+- Cepheriym Baruch
+- Cepheriym Esdras (Ezra)
+- Cepheriym Makkabiym (Maccabees)
+
+Some of these have been called the Apocrypha. This term deserves examination: the Apocrypha was included as part of the Bible since the text was initially assembled in the late 4th Century by Eusibeus. It was canonized at the Council of Trent and included in the 1539 Great Bible of Myles Coverdale, the 1560 Geneva Bible of John Calvin, and the 1611 Bible of King James - the Authorized Version.
+
+The sixty-six-book reduction was the result of the Westminster Confession, where Parliament reversed itself to give favor to Scottish Presbyterians. The reduction of the text of scripture was exclusively an Anglican political act, not a theological conclusion consistent with the development of scripture.
+
+### The Canon History
+
+In the 2nd Century BC, 70 Rabbis translated 54 books from Ivriyt to Greek - this translation is called the Septuagint. The gathering of these works appears in the Hexapla compiled by Origen of Alexandria in Caesarea, Palestine, before AD 245. The Septuagint did not include Chanoch (Enoch) or Yovheliym (Jubilees), but did contain all of the Apocrypha, including 1 and 2 Maccabees, 1 and 2 Esdras (3, 4, and 5 Esdras).
+
+The delineation of sacred Scripture by rule or canon began to emerge in the late 4th Century with St. Jerome. Jerome sought to limit the books of the Old Testament to the 39 books of the Tanakh. He was overruled by Pope Damasus, who wanted all 46 traditionally-accepted books included - so the Latin Vulgate Old Testament was finalized with 46 books, but not Canonized.
+
+The New Testament was initially established by Athanasius, Bishop of Alexandria, in a letter of AD 367, and Pope Damasus later ratified the same list.
+
+The Canon of Trent excluded Makkabiym Sheliyshiy (3 Maccabees), Makkabiym Reviy'iy (4 Maccabees), Baruch Sheniy (2 Baruch), Ezra Sheliyshiy and Reviy'iy (3 and 4 Ezra), Chanoch (Enoch), and Yovheliym (Jubilees). These were excluded from the Vulgate but appear in the Abyssinian sect as deuterocanonical works. Both Chanoch and Yovheliym appear in the Ethiopian Bible.
+
+The 1535 Coverdale Bible, 1560 Geneva, and 1611 King James contained a 39-book Old Testament, a 15-book Apocrypha, and a 27-book New Testament. The redaction of the Authorized Version to only 66 books violated the Canonic list, followed the publication of the Westminster Confession of 1647, and the beheading of Charles I of England.
+
+---
+
+## Chanoch (Enoch) and Its Importance
+
+The Cepher includes the Cepher of the Prophet Chanoch (also known as 1 Enoch). While some historians have rejected Chanoch as heresy, Kepha Sheniy (2 Peter) 2:4-5 indicates that one of the believers in Chanoch was Kepha himself:
+
+*"For if Elohiym spared not the angels that sinned, but cast them down to She'ol, and delivered them into chains of darkness, to be watched unto the judgment of anguish..."*
+
+The delivery into chains of darkness and being watched unto judgment is discussed primarily in the Cepher Chanoch.
+
+The Ethiopian Bible - the earliest complete collection in the world - has always contained both Chanoch and Yovheliym. The decision to include both books was made easier when ancient versions were found in Cave 4 at Qumran (Dead Sea Scrolls). While some fragments are disparate, the Ethiopian text comports with these fragments.
+
+There are substantial Messianic prophecies in Chanoch:
+
+*"At that time my eyes beheld the dwelling of the elect, of truth, faith, and righteousness. Countless shall be the number of the holy and the elect, in the presence of Elohiym forever and ever."* - Chanoch (Enoch) 39:5-6
+
+*"Then Yahuah commanded the kings, the princes, the exalted, and those who dwell on earth, saying: Open your eyes, and lift up your horns, if you are capable of comprehending the Elect One."* - Chanoch (Enoch) 62:1
+
+---
+
+## Yovheliym (Jubilees) and Yashar (Jasher)
+
+### Yovheliym (Jubilees)
+
+The Book of Jubilees (Cepher Ha'Yovheliym) is also known as "The Little Genesis." It is an ancient text believed to have been set forth in Ivriyt and attributable to Mosheh as the author.
+
+Until the discovery of the Dead Sea Scrolls, the only surviving manuscripts were four complete Ge'ez texts dating to the 15th and 16th centuries, with fragmentary quotations in Greek found in various church fathers. Between 1947 and 1956, approximately 15 Yovheliym scrolls were found in five caves at Qumran, all written in Ivriyt.
+
+The Cepher Yovheliym presents "the history of the division of the days of the Torah, of the events of the years, the year-weeks, and the jubilees of the world" as secretly revealed to Mosheh by Yahuah while Mosheh was on Mount Ciynai for forty days and forty nights. The chronology given in Yovheliym is heptadic, based on multiples of seven; the "Jubilee year" is the Shabbath year that follows periods of 49 years, seven 'year-weeks', into which all of time has been divided.
+
+### Yashar (Jasher)
+
+The Cepher Yashar is also set forth in this Cepher. The traditions of construction in the world of the Ivriym was by oral tradition. Some scholars believe the transmission may have been at some time done through writing. One scholar who acknowledged the ancient origin, according to M. M. Noah, was Yocephus, who had written in respect of the Cepher Yashar that "by this book are to be understood certain records kept in some safe place on purpose, giving an account of what happened among the Ivriym from year to year, and called 'Jasher' or 'The Upright', on account of the fidelity of the annals."
+
+The Cepher Yashar is quoted in Scripture:
+
+*"And the sun stood still, and the moon stayed, until the people had avenged themselves upon their enemies. Is not this written in the Cepher of Yashar?"* - Yahusha (Joshua) 10:13
+
+*"Also he bade them teach the children of Yahudah the use of the bow: behold, it is written in the Cepher of Yashar."* - Shemu'el Sheniy (2 Samuel) 1:18
+
+---
+
+## Key Corrections in the Brit Chadashah (New Testament)
+
+### The Aleph Tav
+
+One Ivriyt word which has escaped translation in all English texts is the word "eth," spelled as Aleph Tav. The Aleph is understood as a representation of the ox head, the symbol of strength, and is often construed as a crown of leadership. The Tav means the mark, or sign, or covenant. It is the Cepher's election to include all of the stand-alone Aleph Tavs that show up in the text in the Tanakh and in the Brit Chadashah (Ivriyt translation from the Greek Textus Receptus) without benefit of direct translation.
+
+*"In the beginning Elohiym created the heavens and the earth."* - Bere'shiyth (Genesis) 1:1
+
+*"In the beginning was the Word, and the Word was with Elohiym, and Elohiym was the Word."* - Yochanon (John) 1:1
+
+*"I am the Aleph and the Tav, the beginning and the ending, says Yahuah Elohiym, which is, and which was, and which is to come, Yahuah Tseva'oth."* - Chazon (Revelation) 1:8
+
+### The Correction of 666
+
+The most interesting correction in the Cepher is found in Chazon (Revelation) 13:18, which restores the original Greek letters to what has been interpreted for the last 400 years as "six hundred threescore and six."
+
+The King James renders this:
+*"Here is wisdom. Let him that hath understanding count the number of the beast: for it is the number of a man; and his number is Six hundred threescore and six."* - Revelation 13:18 KJV
+
+However, there are no numbers in the Greek text - rather three Greek letters: chi xi stigma. These letters found in Strong's Greek Dictionary 5516 are defined as the 22nd, 14th, and an obsolete letter (4742) of the Greek alphabet, used as numbers denoting 600, 60, and 6. Stigma, Strong's Greek Dictionary 4742, is a word from a primary stizo meaning a mark incised or punched (for recognition of ownership) - a scar of service, or mark. The Cepher elects to restore the actual picture of the mark as it was seen by Yochanon.
+
+### Yashar'el (Israel)
+
+Another word restored is the word commonly found in English as "Israel." The review of the words **Yah** (I AM), **shar** (prince), **Yashar** (the prince of Yah), and **Yasharun** (the whole of the people in the exodus) has led to the conclusion that the word spelled with the letters yod-shin-resh-aleph-lamed is to be pronounced "Yashar'el." All words with this spelling in the Ivriyt have been restored to this spelling in the English.
+
+### Sha'ul and Pa'al
+
+In Ma'asiym (Acts) 13:9, Sha'ul is first identified as Paul. However, the name Paul (in the Greek, Paulos) is a Greek spelling, yet Sha'ul spoke (Ma'asiym 21:40) and was spoken to (Ma'asiym 26:14) in Ivriyt. Sha'ul was schooled in Ivriyt under Gamliy'el (Ma'asiym 22:3). The Cepher concludes that Sha'ul did not take the Greek name Paulos, but rather took the Ivriyt name **Pa'al** (Strong's H6466), which means "worker." Because his nature was Hebraic, he used the Ivriyt Pa'al rather than the Greek Paulos.
+
+---
+
+## The Prayer of the Cepher
+
+These, then, are some of the corrections in the Cepher. It is the most fervent prayer of the translators that these are found true and pleasing to **Yahuah Elohaynu** (Yahuah our Elohiym), and that they would come to bless you in your pursuit of the Truth to which you were called:
+
+*"Who has ascended up into heaven, or descended? Who has gathered the wind in his fists? Who has bound the waters in a garment? Who has established all the ends of the earth? What is His name, and what is His Son's name, if you can tell?"* - Mishlei (Proverbs) 30:4
+
+---
+
+**Source:** This appendix summarizes key points from the Preface of *The Cepher* (3rd Edition), published by Cepher Publishing Group, LLC. For the complete text with all 87 books and restored Hebrew names, visit **cepher.net**. The Cepher team has done invaluable work in restoring what was hidden. We encourage every serious seeker to obtain a copy.
+
+---
+
 ## Coming Soon
 
 - Expanded edition with additional research
