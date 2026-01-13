@@ -117,7 +117,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -13055,6 +13055,157 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error) {
       console.error("Get faucet claims error:", error);
       res.status(500).json({ error: "Failed to get faucet claims" });
+    }
+  });
+
+  // =====================================================
+  // OWNER ADMIN - SHELL REWARDS & ZEALY MANAGEMENT
+  // =====================================================
+
+  // Get all Zealy quest mappings
+  app.get("/api/owner/zealy/quests", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const quests = await db.select().from(zealyQuestMappings).orderBy(zealyQuestMappings.createdAt);
+      res.json({ quests });
+    } catch (error) {
+      console.error("Get Zealy quests error:", error);
+      res.status(500).json({ error: "Failed to fetch Zealy quests" });
+    }
+  });
+
+  // Add a new Zealy quest mapping
+  app.post("/api/owner/zealy/quests", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { zealyQuestId, zealyQuestName, shellsReward, dwcReward, maxRewardsPerUser, totalRewardsCap } = req.body;
+      if (!zealyQuestId || !zealyQuestName) {
+        return res.status(400).json({ error: "Quest ID and name are required" });
+      }
+      const [quest] = await db.insert(zealyQuestMappings).values({
+        zealyQuestId,
+        zealyQuestName,
+        shellsReward: shellsReward || 100,
+        dwcReward: dwcReward || "0",
+        reputationReward: 0,
+        internalQuestId: null,
+        maxRewardsPerUser: maxRewardsPerUser || null,
+        totalRewardsCap: totalRewardsCap || null,
+        currentRewards: 0,
+        isActive: true,
+      }).returning();
+      res.json({ success: true, quest });
+    } catch (error) {
+      console.error("Add Zealy quest error:", error);
+      res.status(500).json({ error: "Failed to add Zealy quest" });
+    }
+  });
+
+  // Update a Zealy quest mapping
+  app.patch("/api/owner/zealy/quests/:id", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { shellsReward, dwcReward, isActive, maxRewardsPerUser, totalRewardsCap } = req.body;
+      const updates: any = { updatedAt: new Date() };
+      if (shellsReward !== undefined) updates.shellsReward = shellsReward;
+      if (dwcReward !== undefined) updates.dwcReward = dwcReward;
+      if (isActive !== undefined) updates.isActive = isActive;
+      if (maxRewardsPerUser !== undefined) updates.maxRewardsPerUser = maxRewardsPerUser;
+      if (totalRewardsCap !== undefined) updates.totalRewardsCap = totalRewardsCap;
+      
+      const [quest] = await db.update(zealyQuestMappings)
+        .set(updates)
+        .where(eq(zealyQuestMappings.id, id))
+        .returning();
+      if (!quest) {
+        return res.status(404).json({ error: "Quest not found" });
+      }
+      res.json({ success: true, quest });
+    } catch (error) {
+      console.error("Update Zealy quest error:", error);
+      res.status(500).json({ error: "Failed to update Zealy quest" });
+    }
+  });
+
+  // Delete a Zealy quest mapping
+  app.delete("/api/owner/zealy/quests/:id", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { id } = req.params;
+      await db.delete(zealyQuestMappings).where(eq(zealyQuestMappings.id, id));
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Delete Zealy quest error:", error);
+      res.status(500).json({ error: "Failed to delete Zealy quest" });
+    }
+  });
+
+  // Get Zealy webhook events log
+  app.get("/api/owner/zealy/events", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 100;
+      const events = await db.select().from(zealyQuestEvents).orderBy(desc(zealyQuestEvents.createdAt)).limit(limit);
+      res.json({ events });
+    } catch (error) {
+      console.error("Get Zealy events error:", error);
+      res.status(500).json({ error: "Failed to fetch Zealy events" });
+    }
+  });
+
+  // Get Shell reward stats
+  app.get("/api/owner/shells/stats", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const stats = await shellsService.getTotalStats();
+      const profiles = await db.select().from(shellRewardProfiles).limit(100);
+      const tierCounts = {
+        founders: profiles.filter(p => p.tier === "founders").length,
+        core: profiles.filter(p => p.tier === "core").length,
+        active: profiles.filter(p => p.tier === "active").length,
+        participant: profiles.filter(p => p.tier === "participant").length,
+      };
+      res.json({ ...stats, tierCounts, profileCount: profiles.length });
+    } catch (error) {
+      console.error("Get Shell stats error:", error);
+      res.status(500).json({ error: "Failed to fetch Shell stats" });
+    }
+  });
+
+  // Get all reward profiles
+  app.get("/api/owner/shells/profiles", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 100;
+      const profiles = await db.select().from(shellRewardProfiles).orderBy(desc(shellRewardProfiles.createdAt)).limit(limit);
+      res.json({ profiles });
+    } catch (error) {
+      console.error("Get reward profiles error:", error);
+      res.status(500).json({ error: "Failed to fetch reward profiles" });
+    }
+  });
+
+  // Manually award Shells to a user
+  app.post("/api/owner/shells/award", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { userId, amount, reason } = req.body;
+      if (!userId || !amount || amount <= 0) {
+        return res.status(400).json({ error: "User ID and positive amount required" });
+      }
+      await shellsService.addShells(userId, amount, reason || "Admin award", { type: "admin_award" });
+      const newBalance = await shellsService.getBalance(userId);
+      res.json({ success: true, awarded: amount, newBalance });
+    } catch (error) {
+      console.error("Award Shells error:", error);
+      res.status(500).json({ error: "Failed to award Shells" });
+    }
+  });
+
+  // Get user's Shell transaction history
+  app.get("/api/owner/shells/user/:userId", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const balance = await shellsService.getBalance(userId);
+      const transactions = await shellsService.getUserTransactions(userId, 100);
+      const profile = await zealyService.getRewardProfile(userId);
+      res.json({ userId, balance, transactions, profile });
+    } catch (error) {
+      console.error("Get user Shells error:", error);
+      res.status(500).json({ error: "Failed to fetch user Shells" });
     }
   });
 
