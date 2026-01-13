@@ -23,6 +23,14 @@ const TIER_CONFIG = {
 // Cap on Founders tier (first 10 only)
 const FOUNDERS_TIER_CAP = 10;
 
+// Recommended base reward per quest for 90-day campaign
+// At 10,000 Shells per quest:
+// - Founders (2x): 50 quests × 10,000 × 2 = 1,000,000 Shells = $1,000 at launch
+// - Core (1.5x): 50 quests × 10,000 × 1.5 = 750,000 Shells = $750 at launch
+// - Active (1.2x): 50 quests × 10,000 × 1.2 = 600,000 Shells = $600 at launch
+// - Participant (1x): 50 quests × 10,000 × 1 = 500,000 Shells = $500 at launch
+export const RECOMMENDED_QUEST_REWARD = 10000;
+
 export interface ZealyWebhookPayload {
   userId: string;
   communityId: string;
@@ -203,8 +211,11 @@ class ZealyService {
           internalUserId,
           username,
           multipliedReward,
-          "earn",
-          `Zealy quest: ${questMapping.zealyQuestName}${multiplier > 1 ? ` (${multiplier}x ${profile.tier} bonus)` : ""}`
+          "bonus",  // Use "bonus" type to bypass earning caps for campaign rewards
+          `Zealy quest: ${questMapping.zealyQuestName}${multiplier > 1 ? ` (${multiplier}x ${profile.tier} bonus)` : ""}`,
+          questMapping.zealyQuestId,
+          "zealy_quest",
+          true  // bypassCaps: Zealy campaign rewards are not subject to daily/weekly limits
         );
         shellsAwarded = multipliedReward;
         
