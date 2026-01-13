@@ -349,7 +349,7 @@ function generateContentOpf(chapters: Chapter[]): string {
   <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
     <dc:identifier id="BookId">urn:uuid:through-the-veil-2024</dc:identifier>
     <dc:title>Through The Veil: Unraveling the Tapestry of Lies?</dc:title>
-    <dc:creator>Anonymous</dc:creator>
+    <dc:creator>Asher Reed</dc:creator>
     <dc:language>en</dc:language>
     <dc:subject>Spirituality</dc:subject>
     <dc:description>A chronological exploration of hidden patterns across history.</dc:description>
