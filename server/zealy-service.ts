@@ -20,6 +20,9 @@ const TIER_CONFIG = {
   participant: { multiplier: 1.0, minQuests: 0, minDays: 0 },
 };
 
+// Cap on Founders tier (first 10 only)
+const FOUNDERS_TIER_CAP = 10;
+
 export interface ZealyWebhookPayload {
   userId: string;
   communityId: string;
@@ -409,9 +412,28 @@ class ZealyService {
     let tier: keyof typeof TIER_CONFIG = "participant";
     let multiplier = "1.0";
     
-    if (totalQuests >= TIER_CONFIG.founders.minQuests && consecutiveDays >= TIER_CONFIG.founders.minDays) {
-      tier = "founders";
-      multiplier = TIER_CONFIG.founders.multiplier.toString();
+    // Check if user qualifies for Founders tier
+    const qualifiesForFounders = totalQuests >= TIER_CONFIG.founders.minQuests && consecutiveDays >= TIER_CONFIG.founders.minDays;
+    
+    if (qualifiesForFounders) {
+      // Check if user is already a founder (keep their tier)
+      if (profile.tier === "founders") {
+        tier = "founders";
+        multiplier = TIER_CONFIG.founders.multiplier.toString();
+      } else {
+        // Check if Founders cap has been reached
+        const foundersCount = await this.getFoundersTierCount();
+        if (foundersCount < FOUNDERS_TIER_CAP) {
+          tier = "founders";
+          multiplier = TIER_CONFIG.founders.multiplier.toString();
+          console.log(`[Zealy] User ${userId} promoted to Founders tier (${foundersCount + 1}/${FOUNDERS_TIER_CAP})`);
+        } else {
+          // Cap reached, assign Core tier instead
+          tier = "core";
+          multiplier = TIER_CONFIG.core.multiplier.toString();
+          console.log(`[Zealy] User ${userId} qualifies for Founders but cap reached (${foundersCount}/${FOUNDERS_TIER_CAP}), assigned Core`);
+        }
+      }
     } else if (totalQuests >= TIER_CONFIG.core.minQuests && consecutiveDays >= TIER_CONFIG.core.minDays) {
       tier = "core";
       multiplier = TIER_CONFIG.core.multiplier.toString();
@@ -468,6 +490,15 @@ class ZealyService {
       .where(eq(shellRewardProfiles.userId, userId))
       .returning();
     return updated || null;
+  }
+
+  // Get count of users in Founders tier
+  async getFoundersTierCount(): Promise<number> {
+    const result = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(shellRewardProfiles)
+      .where(eq(shellRewardProfiles.tier, "founders"));
+    return Number(result[0]?.count || 0);
   }
 
   async getQuestMappings(): Promise<ZealyQuestMapping[]> {
