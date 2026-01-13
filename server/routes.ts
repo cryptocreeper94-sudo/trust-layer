@@ -117,7 +117,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -1496,6 +1496,92 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Counters error:", error);
       res.json({ signupPosition: "0", tokenPurchasePosition: "0" });
+    }
+  });
+
+  // Shell reward profile for authenticated users
+  app.get("/api/user/reward-profile", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
+    try {
+      const userId = req.firebaseUser?.uid;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      // Get or create reward profile
+      const profile = await zealyService.getOrCreateRewardProfile(userId);
+      
+      // Get shell balance
+      const shellBalanceRaw = await shellsService.getBalance(userId);
+      const shellBalance = Number(shellBalanceRaw) || 0;
+      
+      res.json({
+        profile: {
+          tier: profile.tier,
+          multiplier: parseFloat(profile.multiplier),
+          totalQuestsCompleted: profile.totalQuestsCompleted,
+          consecutiveDays: profile.consecutiveDays,
+          hasWallet: profile.hasWallet,
+          walletAddress: profile.walletAddress,
+          conversionStatus: profile.conversionStatus,
+        },
+        shellBalance,
+        tiers: {
+          founders: { multiplier: 2.0, minQuests: 50, minDays: 30 },
+          core: { multiplier: 1.5, minQuests: 20, minDays: 14 },
+          active: { multiplier: 1.2, minQuests: 5, minDays: 7 },
+          participant: { multiplier: 1.0, minQuests: 0, minDays: 0 },
+        },
+        conversion: {
+          rate: 100, // 100 shells = 1 DWC
+          tgeDate: "2026-04-11",
+          shellsValue: shellBalance * 0.001, // $0.001 per shell
+          estimatedDwc: Math.floor(shellBalance / 100),
+        },
+      });
+    } catch (error) {
+      console.error("Reward profile error:", error);
+      res.status(500).json({ error: "Failed to get reward profile" });
+    }
+  });
+
+  // Link wallet to reward profile
+  app.post("/api/user/reward-profile/link-wallet", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
+    try {
+      const userId = req.firebaseUser?.uid;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      const { walletAddress } = req.body;
+      if (!walletAddress || typeof walletAddress !== "string") {
+        return res.status(400).json({ error: "Wallet address required" });
+      }
+      
+      const profile = await zealyService.linkWallet(userId, walletAddress);
+      if (!profile) {
+        return res.status(404).json({ error: "Reward profile not found" });
+      }
+      
+      res.json({ success: true, profile });
+    } catch (error) {
+      console.error("Link wallet error:", error);
+      res.status(500).json({ error: "Failed to link wallet" });
+    }
+  });
+
+  // Check if user can withdraw shells
+  app.get("/api/user/can-withdraw", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
+    try {
+      const userId = req.firebaseUser?.uid;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      const result = await zealyService.canWithdraw(userId);
+      res.json(result);
+    } catch (error) {
+      console.error("Can withdraw check error:", error);
+      res.status(500).json({ error: "Failed to check withdrawal status" });
     }
   });
 
@@ -14430,6 +14516,168 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error) {
       console.error("Get stats error:", error);
       res.status(500).json({ error: "Failed to get stats" });
+    }
+  });
+
+  // =====================================================
+  // SHELL → DWC CONVERSION (TGE System)
+  // =====================================================
+
+  // Get conversion info for authenticated user
+  app.get("/api/shells/conversion-info", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.session?.userId;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      // Get or create profile to ensure user has one
+      const profile = await zealyService.getOrCreateRewardProfile(userId);
+      const shellBalanceRaw = await shellsService.getBalance(userId);
+      const shellBalance = Number(shellBalanceRaw) || 0;
+      
+      // Check wallet requirement for conversion eligibility
+      const canWithdrawCheck = await zealyService.canWithdraw(userId);
+      
+      const conversionRate = DWC_CONVERSION_RATE; // 100 shells = 1 DWC
+      const estimatedDwc = Math.floor(shellBalance / conversionRate);
+      const shellValue = shellBalance * 0.001; // $0.001 per shell
+      const dwcValue = estimatedDwc * 0.10; // $0.10 per DWC at launch
+      
+      res.json({
+        shellBalance,
+        conversionRate,
+        estimatedDwc: estimatedDwc.toString(),
+        values: {
+          shellsUsd: shellValue.toFixed(2),
+          dwcUsd: dwcValue.toFixed(2),
+        },
+        tgeDate: DWC_LAUNCH_DATE, // April 11, 2026
+        profile: {
+          tier: profile.tier,
+          multiplier: parseFloat(profile.multiplier),
+          hasWallet: profile.hasWallet,
+          walletAddress: profile.walletAddress,
+          conversionStatus: profile.conversionStatus,
+        },
+        requirements: {
+          walletRequired: true,
+          walletConnected: canWithdrawCheck.canWithdraw,
+          canProceed: canWithdrawCheck.canWithdraw,
+          reason: canWithdrawCheck.reason,
+          message: canWithdrawCheck.canWithdraw 
+            ? "Ready for TGE conversion" 
+            : canWithdrawCheck.reason || "Connect your DarkWave wallet to receive DWC at Token Generation Event",
+        },
+      });
+    } catch (error) {
+      console.error("Get conversion info error:", error);
+      res.status(500).json({ error: "Failed to get conversion info" });
+    }
+  });
+
+  // Preview conversion (how much DWC user would get)
+  app.post("/api/shells/conversion-preview", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.session?.userId;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      // Check wallet requirement for redemption
+      const canWithdrawCheck = await zealyService.canWithdraw(userId);
+      if (!canWithdrawCheck.canWithdraw) {
+        return res.status(403).json({ 
+          error: "Wallet required", 
+          reason: canWithdrawCheck.reason,
+          requiresWallet: true 
+        });
+      }
+      
+      const { shellAmount } = req.body;
+      const amount = parseInt(shellAmount) || 0;
+      
+      const userBalanceRaw = await shellsService.getBalance(userId);
+      const userBalance = Number(userBalanceRaw) || 0;
+      
+      if (amount > userBalance) {
+        return res.status(400).json({ error: "Insufficient shell balance" });
+      }
+      
+      const dwcAmount = Math.floor(amount / DWC_CONVERSION_RATE);
+      
+      res.json({
+        shellsToConvert: amount,
+        dwcToReceive: dwcAmount.toString(),
+        conversionRate: DWC_CONVERSION_RATE,
+        remainingShells: userBalance - amount,
+        valueUsd: (dwcAmount * 0.10).toFixed(2),
+      });
+    } catch (error) {
+      console.error("Conversion preview error:", error);
+      res.status(500).json({ error: "Failed to preview conversion" });
+    }
+  });
+
+  // Request shell redemption (wallet-gated, processed at TGE)
+  app.post("/api/shells/request-redemption", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.session?.userId;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      // Enforce wallet requirement
+      const canWithdrawCheck = await zealyService.canWithdraw(userId);
+      if (!canWithdrawCheck.canWithdraw) {
+        return res.status(403).json({ 
+          error: "Wallet required for redemption", 
+          reason: canWithdrawCheck.reason,
+          requiresWallet: true 
+        });
+      }
+      
+      // Get profile and mark for conversion
+      const profile = await zealyService.getRewardProfile(userId);
+      if (!profile) {
+        return res.status(404).json({ error: "Reward profile not found" });
+      }
+      
+      if (profile.conversionStatus === "snapshotted" || profile.conversionStatus === "converted") {
+        return res.status(400).json({ error: "Redemption already processed or pending" });
+      }
+      
+      const shellBalanceRaw = await shellsService.getBalance(userId);
+      const shellBalance = Number(shellBalanceRaw) || 0;
+      
+      if (shellBalance === 0) {
+        return res.status(400).json({ error: "No shells to redeem" });
+      }
+      
+      // Calculate DWC amount
+      const dwcAmount = Math.floor(shellBalance / DWC_CONVERSION_RATE);
+      
+      // Update profile to mark as pending conversion (will process at TGE)
+      await db.update(shellRewardProfiles)
+        .set({
+          shellsAtSnapshot: shellBalance,
+          dwcConverted: dwcAmount.toString(),
+          conversionStatus: "snapshotted",
+          updatedAt: new Date(),
+        })
+        .where(eq(shellRewardProfiles.userId, userId));
+      
+      res.json({
+        success: true,
+        message: "Redemption request submitted. DWC will be distributed at TGE (April 11, 2026).",
+        shellsLocked: shellBalance,
+        dwcToReceive: dwcAmount.toString(),
+        walletAddress: profile.walletAddress,
+        tgeDate: DWC_LAUNCH_DATE,
+      });
+    } catch (error) {
+      console.error("Redemption request error:", error);
+      res.status(500).json({ error: "Failed to process redemption request" });
     }
   });
 

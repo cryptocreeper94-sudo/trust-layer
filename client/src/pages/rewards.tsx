@@ -1,12 +1,13 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowLeft, Gift, Users, Coins, Heart, Trophy, Sparkles, Check, Info } from "lucide-react";
+import { ArrowLeft, Gift, Users, Coins, Heart, Trophy, Sparkles, Check, Info, Wallet, TrendingUp, Zap, Calendar, ArrowUpRight, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { Footer } from "@/components/footer";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { useQuery } from "@tanstack/react-query";
+import { Progress } from "@/components/ui/progress";
 
 const CROWDFUND_TIERS = [
   { name: "Supporter", min: 25, max: 99, bonus: 10, color: "from-slate-500 to-slate-600" },
@@ -51,6 +52,39 @@ export default function Rewards() {
       const res = await fetch("/api/early-adopter/counters");
       return res.json();
     },
+  });
+
+  const { data: rewardProfile } = useQuery<{
+    profile: {
+      tier: string;
+      multiplier: number;
+      totalQuestsCompleted: number;
+      consecutiveDays: number;
+      hasWallet: boolean;
+      walletAddress: string | null;
+      conversionStatus: string;
+    };
+    shellBalance: number;
+    tiers: {
+      founders: { multiplier: number; minQuests: number; minDays: number };
+      core: { multiplier: number; minQuests: number; minDays: number };
+      active: { multiplier: number; minQuests: number; minDays: number };
+      participant: { multiplier: number; minQuests: number; minDays: number };
+    };
+    conversion: {
+      rate: number;
+      tgeDate: string;
+      shellsValue: number;
+      estimatedDwc: number;
+    };
+  }>({
+    queryKey: ["/api/user/reward-profile", user?.id],
+    queryFn: async () => {
+      const res = await fetch("/api/user/reward-profile");
+      if (!res.ok) throw new Error("Failed to fetch reward profile");
+      return res.json();
+    },
+    enabled: !!user,
   });
 
   const signupPosition = userStats?.signupPosition ?? null;
@@ -173,6 +207,131 @@ export default function Rewards() {
                     </p>
                   )}
                 </div>
+              </div>
+            </GlassCard>
+          </motion.div>
+        )}
+
+        {user && rewardProfile && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="mb-12"
+          >
+            <GlassCard className="p-6" glow>
+              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <Zap className="w-5 h-5 text-cyan-400" />
+                Shell Rewards &amp; TGE Conversion
+              </h2>
+              
+              <div className="grid md:grid-cols-4 gap-4 mb-6">
+                <div className="p-4 rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-600/20 border border-cyan-500/30">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Coins className="w-4 h-4 text-cyan-400" />
+                    <span className="font-medium">Shell Balance</span>
+                  </div>
+                  <p className="text-3xl font-bold text-cyan-400" data-testid="text-shell-balance">
+                    {rewardProfile.shellBalance.toLocaleString()}
+                  </p>
+                  <p className="text-sm text-white/60">
+                    ≈ ${rewardProfile.conversion.shellsValue.toFixed(2)} USD
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-600/20 border border-purple-500/30">
+                  <div className="flex items-center gap-2 mb-2">
+                    <TrendingUp className="w-4 h-4 text-purple-400" />
+                    <span className="font-medium">Your Tier</span>
+                  </div>
+                  <p className="text-2xl font-bold text-purple-400 capitalize" data-testid="text-tier">
+                    {rewardProfile.profile.tier}
+                  </p>
+                  <p className="text-sm text-white/60">
+                    {rewardProfile.profile.multiplier}x Shell Multiplier
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-600/20 border border-amber-500/30">
+                  <div className="flex items-center gap-2 mb-2">
+                    <ArrowUpRight className="w-4 h-4 text-amber-400" />
+                    <span className="font-medium">Est. DWC at TGE</span>
+                  </div>
+                  <p className="text-2xl font-bold text-amber-400" data-testid="text-estimated-dwc">
+                    {rewardProfile.conversion.estimatedDwc.toLocaleString()}
+                  </p>
+                  <p className="text-sm text-white/60">
+                    100 Shells = 1 DWC
+                  </p>
+                </div>
+
+                <div className={`p-4 rounded-xl ${rewardProfile.profile.hasWallet ? 'bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 border border-emerald-500/30' : 'bg-gradient-to-br from-rose-500/20 to-rose-600/20 border border-rose-500/30'}`}>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Wallet className="w-4 h-4" />
+                    <span className="font-medium">Wallet Status</span>
+                  </div>
+                  {rewardProfile.profile.hasWallet ? (
+                    <>
+                      <p className="text-lg font-bold text-emerald-400 flex items-center gap-1">
+                        <Check className="w-4 h-4" /> Connected
+                      </p>
+                      <p className="text-xs text-white/60 truncate" title={rewardProfile.profile.walletAddress || ''}>
+                        {rewardProfile.profile.walletAddress?.slice(0, 8)}...{rewardProfile.profile.walletAddress?.slice(-6)}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-lg font-bold text-rose-400">Not Connected</p>
+                      <Link href="/wallet">
+                        <Button size="sm" variant="outline" className="mt-2 text-xs border-rose-500/50 text-rose-400 hover:bg-rose-500/20" data-testid="button-connect-wallet">
+                          Connect Wallet
+                        </Button>
+                      </Link>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4 mb-4">
+                <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-white/60">Quests Completed</span>
+                    <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+                      {rewardProfile.profile.totalQuestsCompleted}
+                    </Badge>
+                  </div>
+                  <Progress value={Math.min((rewardProfile.profile.totalQuestsCompleted / 50) * 100, 100)} className="h-2" />
+                  <p className="text-xs text-white/50 mt-1">
+                    {50 - rewardProfile.profile.totalQuestsCompleted > 0 ? `${50 - rewardProfile.profile.totalQuestsCompleted} more to Founders tier` : 'Founders tier achieved!'}
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-white/60">Consecutive Days</span>
+                    <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
+                      {rewardProfile.profile.consecutiveDays} days
+                    </Badge>
+                  </div>
+                  <Progress value={Math.min((rewardProfile.profile.consecutiveDays / 30) * 100, 100)} className="h-2" />
+                  <p className="text-xs text-white/50 mt-1">
+                    {30 - rewardProfile.profile.consecutiveDays > 0 ? `${30 - rewardProfile.profile.consecutiveDays} more days for Founders tier` : 'Founders streak achieved!'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 border border-white/10">
+                <div className="flex items-center gap-2 mb-2">
+                  <Calendar className="w-4 h-4 text-cyan-400" />
+                  <span className="font-medium">Token Generation Event</span>
+                </div>
+                <p className="text-white/70">
+                  <span className="text-cyan-400 font-bold">April 11, 2026</span> — Your {rewardProfile.shellBalance.toLocaleString()} Shells will convert to{' '}
+                  <span className="text-amber-400 font-bold">{rewardProfile.conversion.estimatedDwc.toLocaleString()} DWC</span>
+                  {!rewardProfile.profile.hasWallet && (
+                    <span className="text-rose-400 ml-2">(Connect wallet to receive tokens)</span>
+                  )}
+                </p>
               </div>
             </GlassCard>
           </motion.div>

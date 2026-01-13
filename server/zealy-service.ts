@@ -1,14 +1,24 @@
 import crypto from "crypto";
 import { db } from "./db";
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 import {
   zealyQuestMappings,
   zealyQuestEvents,
+  shellRewardProfiles,
   type ZealyQuestMapping,
   type ZealyQuestEvent,
+  type ShellRewardProfile,
 } from "@shared/schema";
 import { shellsService } from "./shells-service";
 import { storage } from "./storage";
+
+// Tier multipliers for 90-day campaign
+const TIER_CONFIG = {
+  founders: { multiplier: 2.0, minQuests: 50, minDays: 30 },
+  core: { multiplier: 1.5, minQuests: 20, minDays: 14 },
+  active: { multiplier: 1.2, minQuests: 5, minDays: 7 },
+  participant: { multiplier: 1.0, minQuests: 0, minDays: 0 },
+};
 
 export interface ZealyWebhookPayload {
   userId: string;
@@ -179,14 +189,24 @@ class ZealyService {
 
       if (internalUserId && questMapping.shellsReward > 0) {
         const username = accounts.twitter?.username || accounts.discord?.handle || accounts.email || `zealy_${zealyUserId}`;
+        
+        // Get or create reward profile and apply tier multiplier
+        const profile = await this.getOrCreateRewardProfile(internalUserId, zealyUserId, username, accounts.wallet);
+        const multiplier = parseFloat(profile.multiplier);
+        const baseReward = questMapping.shellsReward;
+        const multipliedReward = Math.floor(baseReward * multiplier);
+        
         await shellsService.addShells(
           internalUserId,
           username,
-          questMapping.shellsReward,
+          multipliedReward,
           "earn",
-          `Zealy quest: ${questMapping.zealyQuestName}`
+          `Zealy quest: ${questMapping.zealyQuestName}${multiplier > 1 ? ` (${multiplier}x ${profile.tier} bonus)` : ""}`
         );
-        shellsAwarded = questMapping.shellsReward;
+        shellsAwarded = multipliedReward;
+        
+        // Update profile stats
+        await this.updateRewardProfileStats(internalUserId);
       }
 
       await this.logEvent({
@@ -298,6 +318,156 @@ class ZealyService {
       ...event,
       processedAt: event.status === "processed" ? new Date() : null,
     });
+  }
+
+  // Get or create a reward profile for tier tracking
+  async getOrCreateRewardProfile(
+    userId: string,
+    zealyUserId?: string,
+    zealyUsername?: string,
+    walletAddress?: string
+  ): Promise<ShellRewardProfile> {
+    const [existing] = await db
+      .select()
+      .from(shellRewardProfiles)
+      .where(eq(shellRewardProfiles.userId, userId))
+      .limit(1);
+
+    if (existing) {
+      // Update Zealy/wallet info if provided
+      if (zealyUserId || walletAddress) {
+        const updates: Partial<ShellRewardProfile> = { updatedAt: new Date() };
+        if (zealyUserId && !existing.zealyUserId) updates.zealyUserId = zealyUserId;
+        if (zealyUsername && !existing.zealyUsername) updates.zealyUsername = zealyUsername;
+        if (walletAddress && !existing.walletAddress) {
+          updates.walletAddress = walletAddress;
+          updates.hasWallet = true;
+          updates.walletVerifiedAt = new Date();
+        }
+        if (Object.keys(updates).length > 1) {
+          await db
+            .update(shellRewardProfiles)
+            .set(updates)
+            .where(eq(shellRewardProfiles.id, existing.id));
+        }
+      }
+      return existing;
+    }
+
+    // Create new profile
+    const [profile] = await db
+      .insert(shellRewardProfiles)
+      .values({
+        userId,
+        zealyUserId: zealyUserId || null,
+        zealyUsername: zealyUsername || null,
+        walletAddress: walletAddress || null,
+        hasWallet: !!walletAddress,
+        walletVerifiedAt: walletAddress ? new Date() : null,
+        tier: "participant",
+        multiplier: "1.0",
+      })
+      .returning();
+
+    return profile;
+  }
+
+  // Update profile stats and recalculate tier
+  private async updateRewardProfileStats(userId: string): Promise<void> {
+    const [profile] = await db
+      .select()
+      .from(shellRewardProfiles)
+      .where(eq(shellRewardProfiles.userId, userId))
+      .limit(1);
+
+    if (!profile) return;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const lastActive = profile.lastActiveDate ? new Date(profile.lastActiveDate) : null;
+    if (lastActive) lastActive.setHours(0, 0, 0, 0);
+
+    let consecutiveDays = profile.consecutiveDays;
+    
+    // Check if this is a new day
+    if (!lastActive || lastActive.getTime() < today.getTime()) {
+      // Check if consecutive
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      
+      if (lastActive && lastActive.getTime() === yesterday.getTime()) {
+        consecutiveDays = consecutiveDays + 1;
+      } else if (!lastActive || lastActive.getTime() < yesterday.getTime()) {
+        consecutiveDays = 1; // Reset streak
+      }
+    }
+
+    const totalQuests = profile.totalQuestsCompleted + 1;
+    
+    // Calculate tier based on activity
+    let tier: keyof typeof TIER_CONFIG = "participant";
+    let multiplier = "1.0";
+    
+    if (totalQuests >= TIER_CONFIG.founders.minQuests && consecutiveDays >= TIER_CONFIG.founders.minDays) {
+      tier = "founders";
+      multiplier = TIER_CONFIG.founders.multiplier.toString();
+    } else if (totalQuests >= TIER_CONFIG.core.minQuests && consecutiveDays >= TIER_CONFIG.core.minDays) {
+      tier = "core";
+      multiplier = TIER_CONFIG.core.multiplier.toString();
+    } else if (totalQuests >= TIER_CONFIG.active.minQuests && consecutiveDays >= TIER_CONFIG.active.minDays) {
+      tier = "active";
+      multiplier = TIER_CONFIG.active.multiplier.toString();
+    }
+
+    await db
+      .update(shellRewardProfiles)
+      .set({
+        totalQuestsCompleted: totalQuests,
+        consecutiveDays,
+        lastActiveDate: new Date(),
+        tier,
+        multiplier,
+        updatedAt: new Date(),
+      })
+      .where(eq(shellRewardProfiles.userId, userId));
+  }
+
+  // Get user's reward profile
+  async getRewardProfile(userId: string): Promise<ShellRewardProfile | null> {
+    const [profile] = await db
+      .select()
+      .from(shellRewardProfiles)
+      .where(eq(shellRewardProfiles.userId, userId))
+      .limit(1);
+    return profile || null;
+  }
+
+  // Check if user can withdraw/redeem (requires wallet)
+  async canWithdraw(userId: string): Promise<{ canWithdraw: boolean; reason?: string }> {
+    const profile = await this.getRewardProfile(userId);
+    if (!profile) {
+      return { canWithdraw: false, reason: "No reward profile found" };
+    }
+    if (!profile.hasWallet || !profile.walletAddress) {
+      return { canWithdraw: false, reason: "Wallet required for withdrawals. Connect your DarkWave wallet to redeem Shells." };
+    }
+    return { canWithdraw: true };
+  }
+
+  // Link wallet to profile
+  async linkWallet(userId: string, walletAddress: string): Promise<ShellRewardProfile | null> {
+    const [updated] = await db
+      .update(shellRewardProfiles)
+      .set({
+        walletAddress,
+        hasWallet: true,
+        walletVerifiedAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(eq(shellRewardProfiles.userId, userId))
+      .returning();
+    return updated || null;
   }
 
   async getQuestMappings(): Promise<ZealyQuestMapping[]> {
