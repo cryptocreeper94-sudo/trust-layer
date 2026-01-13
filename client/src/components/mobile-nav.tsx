@@ -130,6 +130,7 @@ const navCategories = [
       { href: "/coming-features", label: "Coming Features", icon: Rocket, badge: "New" },
       { href: "/executive-summary", label: "Investors", icon: Star },
       { href: "/roadmap", label: "Roadmap", icon: Star },
+      { href: "/doc-hub", label: "Doc Hub", icon: FileText },
     ]
   },
   {
