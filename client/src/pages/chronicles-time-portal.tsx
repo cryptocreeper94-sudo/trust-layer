@@ -128,7 +128,47 @@ export default function ChroniclesTimePortal() {
     }
   });
 
-  if (authLoading || portalLoading) {
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}>
+          <Timer className="w-12 h-12 text-cyan-400" />
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
+        </div>
+        <Card className="relative z-10 bg-slate-900/80 border-slate-700 p-8 max-w-md mx-4 text-center">
+          <motion.div
+            animate={{ boxShadow: ["0 0 30px rgba(6,182,212,0.3)", "0 0 60px rgba(168,85,247,0.5)", "0 0 30px rgba(6,182,212,0.3)"] }}
+            transition={{ duration: 3, repeat: Infinity }}
+            className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-cyan-500/30 to-purple-500/30 flex items-center justify-center border-2 border-cyan-500/40"
+          >
+            <Timer className="w-10 h-10 text-cyan-400" />
+          </motion.div>
+          <h2 className="text-2xl font-bold text-white mb-3">Time Portal Access Required</h2>
+          <p className="text-slate-400 mb-6">
+            Sign in to access the Time Portal and begin your journey through the ages. Complete missions, collect artifacts, and unlock new eras.
+          </p>
+          <Link href="/chronicles">
+            <Button className="w-full bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500" data-testid="button-signin-chronicles">
+              <ArrowRight className="w-4 h-4 mr-2" />
+              Go to Chronicles & Sign In
+            </Button>
+          </Link>
+        </Card>
+      </div>
+    );
+  }
+
+  if (portalLoading) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}>
