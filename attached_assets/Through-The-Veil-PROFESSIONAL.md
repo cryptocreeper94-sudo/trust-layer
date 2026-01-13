@@ -623,11 +623,17 @@ But the questions persist. Where did all these orphans come from? Why were there
 
 Some researchers suggest the orphan trains were population replacement. Children from a previous civilization - survivors of the reset - redistributed to families who would raise them with no knowledge of the past.
 
-The Cabbage Patch Kids were a cultural phenomenon of the 1980s. Dolls that came with "adoption papers." Unique, hand-signed certificates. A narrative of children being found, not manufactured.
+During the orphan train era, a term emerged for these children with erased histories. When children asked where babies came from, European folklore told them babies were "found in the cabbage patch." For orphans with no traceable past - no family records, no birthplace, no origin story - the term took on a darker meaning. They might as well have sprouted from the ground.
 
-Strange marketing for a toy. Unless it was programming.
+Vintage postcards from the early 1900s - contemporaneous with the orphan trains - depict babies emerging from cabbages. German and French artists created these images extensively between 1900 and 1920. A French silent film from 1896, *La Fée aux Choux* (The Cabbage Fairy), showed babies being harvested from a cabbage garden. These weren't random artistic choices during an era when 200,000 children were being redistributed with no verifiable origins.
 
-The theory suggests that the Cabbage Patch Kids were conditioning - preparing the collective consciousness to accept a story. The story of orphans who came from somewhere else. Who were placed with families who had no knowledge of their true origins.
+By the 1970s, researchers began examining orphan train records more critically. Questions emerged about the sheer volume of children, the missing documentation, the erased family histories. Descendants started searching for records that didn't exist.
+
+Then in 1983, Cabbage Patch Kids dolls became a national phenomenon. Each doll came with unique "adoption papers" and a birth certificate. The marketing emphasized that these dolls weren't purchased - they were *adopted*. Children participated in adoption ceremonies at retail stores.
+
+Some researchers note the timing. Just as historical inquiry into the orphan trains intensified, a toy appeared that normalized the concept. Adoption papers became cute. Being found rather than born became a playful narrative. The darker history of children with erased identities was repackaged as something adorable.
+
+Whether intentional or coincidence, the effect was the same. A generation of children internalized a story: some people just appear. Some people are found rather than born to families. Some people have adoption papers instead of family trees.
 
 Throughout history, conquering powers have understood that controlling the next generation is essential to maintaining power.
 
