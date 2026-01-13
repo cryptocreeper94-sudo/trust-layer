@@ -153,7 +153,7 @@ async function generateWhitepaper() {
     'Utility: Gas fees, staking, governance, in-app purchases'
   ]);
   
-  addSection(doc, '3.2 Token Allocation', '');
+  addSection(doc, '3.2 Coin Allocation', '');
   addBulletList(doc, [
     'Community & Ecosystem: 40% (400M) - Milestone-based vesting',
     'Development Fund: 20% (200M) - DAO-controlled',
@@ -190,21 +190,36 @@ async function generateWhitepaper() {
      .text('Contact & Resources', MARGIN, doc.y);
   doc.moveDown(1);
   
+  addSection(doc, 'Official Links', '');
   addBulletList(doc, [
     'Website: https://dwsc.io',
     'Documentation: https://dwsc.io/doc-hub',
-    'Token Presale: https://dwsc.io/presale',
+    'Coin Presale: https://dwsc.io/presale',
     'Developer Portal: https://dwsc.io/developers',
-    'Community: https://dwsc.io/community-hub'
+    'Community Hub: https://dwsc.io/community-hub'
+  ]);
+  
+  addSection(doc, 'Social Media', '');
+  addBulletList(doc, [
+    'Twitter/X: @DarkWaveChain',
+    'Discord: discord.gg/darkwave',
+    'Telegram: t.me/darkwavechain',
+    'YouTube: @DarkWaveStudios'
+  ]);
+  
+  addSection(doc, 'Contact', '');
+  addBulletList(doc, [
+    'General Inquiries: team@dwsc.io',
+    'Website: https://darkwavestudios.io'
   ]);
   
   doc.moveDown(2);
   doc.font(FONT_ITALIC)
      .fontSize(10)
      .fillColor('#64748b')
-     .text('Version 1.0 - January 2026', MARGIN, doc.y)
-     .text('DarkWave Studios', MARGIN, doc.y + 15)
-     .text('This document is for informational purposes only.', MARGIN, doc.y + 30);
+     .text('Version 2.0 - January 2026', MARGIN, doc.y)
+     .text('DarkWave Studios LLC', MARGIN, doc.y + 15)
+     .text('This document is for informational purposes only and does not constitute financial advice.', MARGIN, doc.y + 30);
   
   const range = doc.bufferedPageRange();
   for (let i = 0; i < range.count; i++) {
@@ -260,12 +275,13 @@ async function generateExecutiveSummary() {
     'Full vertical stack from consensus to applications'
   ]);
   
-  addSection(doc, 'Token Economics (DWC)', '');
+  addSection(doc, 'Coin Economics (DWC)', 
+    'DWC is the native coin of the DarkWave Smart Chain - a Layer 1 blockchain with its own consensus, validators, and block production. Unlike tokens built on other chains, DWC powers the entire network.');
   addBulletList(doc, [
-    'Total Supply: 1 Billion DWC (fixed, no inflation)',
-    'Presale Price: $0.001 - $0.0014 (tiered)',
-    'Launch Price Target: $0.10',
-    'Use Cases: Gas fees, staking, governance, in-game purchases'
+    'Total Supply: 1 Billion DWC (fixed, no inflation or burn)',
+    'Presale Price: $0.001 (Month 1), $0.0012 (Month 2), $0.0014 (Month 3)',
+    'TGE Launch: April 11, 2026',
+    'Use Cases: Gas fees, staking, governance, in-game purchases, NFT transactions'
   ]);
   
   addSection(doc, 'Revenue Streams', '');
@@ -330,12 +346,21 @@ async function generateExecutiveSummary() {
     'Validator Program: https://dwsc.io/validators'
   ]);
   
-  doc.moveDown(2);
+  addSection(doc, 'Social Media', '');
+  addBulletList(doc, [
+    'Twitter/X: @DarkWaveChain',
+    'Discord: discord.gg/darkwave',
+    'Telegram: t.me/darkwavechain',
+    'YouTube: @DarkWaveStudios'
+  ]);
+  
+  doc.moveDown(1);
   doc.font(FONT_ITALIC)
      .fontSize(10)
      .fillColor('#64748b')
-     .text('January 2026 | DarkWave Studios', MARGIN, doc.y)
-     .text('Contact: invest@darkwavestudios.io', MARGIN, doc.y + 15);
+     .text('January 2026 | DarkWave Studios LLC', MARGIN, doc.y)
+     .text('Contact: team@dwsc.io', MARGIN, doc.y + 15)
+     .text('Website: https://darkwavestudios.io', MARGIN, doc.y + 30);
   
   const range = doc.bufferedPageRange();
   for (let i = 0; i < range.count; i++) {
