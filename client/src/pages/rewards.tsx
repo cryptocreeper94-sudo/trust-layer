@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowLeft, Gift, Users, Coins, Heart, Trophy, Sparkles, Check, Info, Wallet, TrendingUp, Zap, Calendar, ArrowUpRight, Shield } from "lucide-react";
+import { ArrowLeft, Gift, Users, Coins, Heart, Trophy, Sparkles, Check, Info, Wallet, TrendingUp, Zap, Calendar, ArrowUpRight, Shield, CheckCircle2, Target, Lock, HelpCircle, Star, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
@@ -8,6 +8,7 @@ import { Footer } from "@/components/footer";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { useQuery } from "@tanstack/react-query";
 import { Progress } from "@/components/ui/progress";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 const CROWDFUND_TIERS = [
   { name: "Supporter", min: 25, max: 99, bonus: 10, color: "from-slate-500 to-slate-600" },
@@ -116,6 +117,51 @@ export default function Rewards() {
       </header>
 
       <main className="container mx-auto px-4 py-12">
+        {/* OPERATIONAL STATUS BANNER */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="mb-8"
+        >
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-500/20 via-cyan-500/20 to-emerald-500/20 border border-emerald-500/40 p-4 md:p-6">
+            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_left,_rgba(16,185,129,0.15)_0%,_transparent_50%)]" />
+            <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_right,_rgba(6,182,212,0.15)_0%,_transparent_50%)]" />
+            
+            <div className="relative flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                    <Activity className="w-6 h-6 text-emerald-400" />
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full animate-pulse" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-lg md:text-xl font-bold text-emerald-400">Reward System Operational</h3>
+                    <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">
+                      LIVE
+                    </Badge>
+                  </div>
+                  <p className="text-white/70 text-sm">
+                    Your progress is being tracked in real-time. Every action counts toward your airdrop.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3 text-sm">
+                <div className="flex items-center gap-2 px-3 py-2 bg-white/5 rounded-lg">
+                  <Shield className="w-4 h-4 text-cyan-400" />
+                  <span className="text-white/70">Verified</span>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-2 bg-white/5 rounded-lg">
+                  <Lock className="w-4 h-4 text-purple-400" />
+                  <span className="text-white/70">Secured</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -337,6 +383,72 @@ export default function Rewards() {
           </motion.div>
         )}
 
+        {/* HOW TO EARN SHELLS SECTION */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18 }}
+          className="mb-12"
+        >
+          <GlassCard className="p-6" glow>
+            <h2 className="text-xl font-bold mb-2 flex items-center gap-2">
+              <Target className="w-5 h-5 text-cyan-400" />
+              How to Earn Shells
+            </h2>
+            <p className="text-white/60 mb-6">
+              Shells are our pre-launch reward currency. Every Shell you earn converts to real DWC tokens at launch.
+            </p>
+            
+            <div className="grid md:grid-cols-4 gap-4 mb-6">
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+                <div className="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center mx-auto mb-3">
+                  <span className="text-lg font-bold text-cyan-400">1</span>
+                </div>
+                <h4 className="font-semibold mb-1">Complete Quests</h4>
+                <p className="text-sm text-white/60">Earn Shells for social tasks, referrals, and community participation via Zealy</p>
+              </div>
+              
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+                <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-3">
+                  <span className="text-lg font-bold text-purple-400">2</span>
+                </div>
+                <h4 className="font-semibold mb-1">Boost Your Tier</h4>
+                <p className="text-sm text-white/60">Complete more quests to unlock higher tiers with up to 2x multiplier</p>
+              </div>
+              
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+                <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center mx-auto mb-3">
+                  <span className="text-lg font-bold text-amber-400">3</span>
+                </div>
+                <h4 className="font-semibold mb-1">Connect Wallet</h4>
+                <p className="text-sm text-white/60">Link your DarkWave wallet to be eligible for TGE airdrop</p>
+              </div>
+              
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+                <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-3">
+                  <span className="text-lg font-bold text-emerald-400">4</span>
+                </div>
+                <h4 className="font-semibold mb-1">Receive DWC</h4>
+                <p className="text-sm text-white/60">At TGE (April 11, 2026), your Shells convert to real DWC tokens</p>
+              </div>
+            </div>
+            
+            <div className="p-4 rounded-xl bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
+              <div className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="font-medium text-emerald-400 mb-1">Your Progress is Guaranteed</p>
+                  <p className="text-sm text-white/70">
+                    Every Shell you earn is permanently recorded on our system. Your balance will be snapshot before TGE and 
+                    automatically converted to DWC tokens at a rate of <span className="text-cyan-400 font-bold">100 Shells = 1 DWC</span>. 
+                    No action needed — just keep earning and connect your wallet before the deadline.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </GlassCard>
+        </motion.div>
+
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -452,11 +564,123 @@ export default function Rewards() {
           </GlassCard>
         </motion.div>
 
+        {/* FAQ - TRUST BUILDING SECTION */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.55 }}
+          className="mb-12"
+        >
+          <GlassCard className="p-6">
+            <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+              <HelpCircle className="w-5 h-5 text-cyan-400" />
+              Common Questions About Rewards
+            </h2>
+            
+            <Accordion type="single" collapsible className="space-y-2">
+              <AccordionItem value="how-guaranteed" className="border border-white/10 rounded-xl px-4 bg-white/5">
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-emerald-400" />
+                    How do I know my rewards are guaranteed?
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent className="text-white/70 pb-4">
+                  Every Shell you earn is recorded in our secure database with a timestamp and transaction ID. 
+                  Before TGE, we take a snapshot of all balances. Your DWC tokens are then distributed directly to your 
+                  connected wallet. This process is verifiable and transparent — you can see your balance grow in real-time 
+                  on this page.
+                </AccordionContent>
+              </AccordionItem>
+              
+              <AccordionItem value="what-if-no-wallet" className="border border-white/10 rounded-xl px-4 bg-white/5">
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="flex items-center gap-2">
+                    <Wallet className="w-4 h-4 text-amber-400" />
+                    What if I don't have a wallet connected yet?
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent className="text-white/70 pb-4">
+                  No problem! You can earn Shells without a wallet — your balance is tracked by your account. 
+                  However, to receive your DWC tokens at TGE, you'll need to connect a DarkWave wallet before the 
+                  snapshot date. We'll send reminders as the deadline approaches. Your earned Shells are safe and 
+                  waiting for you.
+                </AccordionContent>
+              </AccordionItem>
+              
+              <AccordionItem value="not-waste-time" className="border border-white/10 rounded-xl px-4 bg-white/5">
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="flex items-center gap-2">
+                    <Star className="w-4 h-4 text-purple-400" />
+                    How do I know this isn't a waste of my time?
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent className="text-white/70 pb-4">
+                  DarkWave is a real blockchain project with active development, a working testnet, and a clear roadmap. 
+                  The Shell reward system is live and operational right now — you can see your balance update immediately 
+                  when you complete quests. At TGE (April 11, 2026), Shells convert to DWC tokens at a fixed rate of 
+                  100:1. Early adopters who participate now get the best tier multipliers and the largest airdrops.
+                </AccordionContent>
+              </AccordionItem>
+              
+              <AccordionItem value="what-is-tge" className="border border-white/10 rounded-xl px-4 bg-white/5">
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-cyan-400" />
+                    What happens at Token Generation Event (TGE)?
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent className="text-white/70 pb-4">
+                  TGE is when DWC tokens officially launch on April 11, 2026. At this point:
+                  <ul className="list-disc list-inside mt-2 space-y-1">
+                    <li>Your Shell balance is snapshot and frozen</li>
+                    <li>Shells are converted to DWC at 100:1 ratio</li>
+                    <li>DWC tokens are sent directly to your connected wallet</li>
+                    <li>Tokens become tradeable on exchanges</li>
+                  </ul>
+                  All bonuses from early adopter programs are distributed at the same time.
+                </AccordionContent>
+              </AccordionItem>
+              
+              <AccordionItem value="tier-benefits" className="border border-white/10 rounded-xl px-4 bg-white/5">
+                <AccordionTrigger className="text-left hover:no-underline">
+                  <span className="flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4 text-pink-400" />
+                    How do tier multipliers work?
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent className="text-white/70 pb-4">
+                  Your tier is based on your engagement level:
+                  <div className="mt-2 space-y-2">
+                    <div className="flex justify-between items-center p-2 bg-white/5 rounded">
+                      <span className="font-medium text-amber-400">Founders</span>
+                      <span>2x multiplier (50+ quests, 30+ days active)</span>
+                    </div>
+                    <div className="flex justify-between items-center p-2 bg-white/5 rounded">
+                      <span className="font-medium text-purple-400">Core</span>
+                      <span>1.5x multiplier (20+ quests, 14+ days active)</span>
+                    </div>
+                    <div className="flex justify-between items-center p-2 bg-white/5 rounded">
+                      <span className="font-medium text-cyan-400">Active</span>
+                      <span>1.2x multiplier (5+ quests, 7+ days active)</span>
+                    </div>
+                    <div className="flex justify-between items-center p-2 bg-white/5 rounded">
+                      <span className="font-medium text-white/60">Participant</span>
+                      <span>1x multiplier (starting tier)</span>
+                    </div>
+                  </div>
+                  <p className="mt-2">Multipliers are applied automatically to all Shell rewards you earn!</p>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </GlassCard>
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="text-center"
+          className="text-center mb-12"
         >
           <GlassCard className="p-8 max-w-2xl mx-auto">
             <h2 className="text-2xl font-bold mb-4">Ready to Claim Your Rewards?</h2>
