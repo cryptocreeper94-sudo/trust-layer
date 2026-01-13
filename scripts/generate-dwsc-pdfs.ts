@@ -31,9 +31,14 @@ function createHeader(doc: typeof PDFDocument.prototype, title: string) {
   doc.y = 140;
 }
 
+function addDarkBackground(doc: typeof PDFDocument.prototype) {
+  doc.rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT).fill('#0f172a');
+}
+
 function addSection(doc: typeof PDFDocument.prototype, title: string, content: string) {
   if (doc.y > PAGE_HEIGHT - 150) {
     doc.addPage();
+    addDarkBackground(doc);
     doc.y = MARGIN;
   }
   
@@ -60,6 +65,7 @@ function addBulletList(doc: typeof PDFDocument.prototype, items: string[]) {
   for (const item of items) {
     if (doc.y > PAGE_HEIGHT - 80) {
       doc.addPage();
+      addDarkBackground(doc);
       doc.y = MARGIN;
     }
     doc.font(FONT_BODY)
