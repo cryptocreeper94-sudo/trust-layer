@@ -4,9 +4,47 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { 
   ArrowLeft, Plus, Edit2, ToggleLeft, ToggleRight, 
-  Shell, Trophy, Users, Clock, CheckCircle, XCircle, AlertCircle
+  Shell, Trophy, Users, Clock, CheckCircle, XCircle, AlertCircle,
+  Lightbulb, ChevronDown, ChevronUp, Sparkles
 } from "lucide-react";
 import { MobileNav } from "@/components/mobile-nav";
+
+const QUEST_SUGGESTIONS = [
+  { category: "Daily Engagement", quests: [
+    { name: "Daily Check-in", shells: 100, desc: "Visit the platform daily", maxPerUser: 90 },
+    { name: "Like & Repost Daily Post", shells: 50, desc: "Engage with daily X post", maxPerUser: 90 },
+    { name: "Comment on Announcement", shells: 75, desc: "Leave thoughtful comment", maxPerUser: 90 },
+  ]},
+  { category: "Social Growth", quests: [
+    { name: "Follow on X", shells: 500, desc: "One-time follow", maxPerUser: 1 },
+    { name: "Join Discord", shells: 500, desc: "One-time join", maxPerUser: 1 },
+    { name: "Join Telegram", shells: 500, desc: "One-time join", maxPerUser: 1 },
+    { name: "Refer a Friend", shells: 2500, desc: "Verified referral signup", maxPerUser: null },
+  ]},
+  { category: "Content Creation", quests: [
+    { name: "Create Thread about DWSC", shells: 5000, desc: "Original content", maxPerUser: 10 },
+    { name: "Make a Meme", shells: 2000, desc: "Creative content", maxPerUser: 10 },
+    { name: "Record Video Review", shells: 10000, desc: "YouTube/TikTok", maxPerUser: 5 },
+    { name: "Write Blog Post", shells: 7500, desc: "Medium/Substack", maxPerUser: 5 },
+  ]},
+  { category: "Community Building", quests: [
+    { name: "Attend X Space", shells: 1500, desc: "Stay for 15+ mins", maxPerUser: 12 },
+    { name: "Ask Question in AMA", shells: 500, desc: "Participate actively", maxPerUser: 12 },
+    { name: "Help New Member", shells: 250, desc: "Answer questions", maxPerUser: null },
+    { name: "Report Bug/Issue", shells: 1000, desc: "Valid bug report", maxPerUser: 10 },
+  ]},
+  { category: "Weekly Sprints", quests: [
+    { name: "Complete Weekly Sprint", shells: 5000, desc: "All week's tasks done", maxPerUser: 12 },
+    { name: "Top 10 Weekly Leaderboard", shells: 10000, desc: "Weekly bonus", maxPerUser: 12 },
+    { name: "Perfect Week (7/7 days)", shells: 3000, desc: "Daily streak bonus", maxPerUser: 12 },
+  ]},
+  { category: "Milestones", quests: [
+    { name: "30-Day Completion", shells: 25000, desc: "Month 1 complete", maxPerUser: 1 },
+    { name: "60-Day Completion", shells: 25000, desc: "Month 2 complete", maxPerUser: 1 },
+    { name: "90-Day Completion", shells: 50000, desc: "Full campaign bonus", maxPerUser: 1 },
+    { name: "Founders Circle Qualification", shells: 100000, desc: "Top contributor bonus", maxPerUser: 1 },
+  ]},
+];
 
 interface QuestMapping {
   id: string;
@@ -56,6 +94,7 @@ function getOwnerHeaders() {
 export default function ZealyAdmin() {
   const queryClient = useQueryClient();
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     zealyQuestId: "",
@@ -64,6 +103,19 @@ export default function ZealyAdmin() {
     maxRewardsPerUser: "",
     totalRewardsCap: "",
   });
+
+  const importSuggestion = (quest: { name: string; shells: number; maxPerUser: number | null }) => {
+    const questId = quest.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    setFormData({
+      zealyQuestId: questId,
+      zealyQuestName: quest.name,
+      shellsReward: quest.shells,
+      maxRewardsPerUser: quest.maxPerUser?.toString() || "",
+      totalRewardsCap: "",
+    });
+    setShowAddForm(true);
+    setShowSuggestions(false);
+  };
 
   const { data: mappings = [], isLoading: mappingsLoading } = useQuery<QuestMapping[]>({
     queryKey: ["/api/owner/zealy/mappings"],
@@ -190,8 +242,94 @@ export default function ZealyAdmin() {
               <Plus className="w-5 h-5" />
               Add Quest Mapping
             </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setShowSuggestions(!showSuggestions)}
+              className="flex items-center gap-2 px-4 py-2 bg-slate-800/80 border border-yellow-500/30 rounded-xl text-yellow-400 font-semibold"
+              data-testid="button-toggle-suggestions"
+            >
+              <Lightbulb className="w-5 h-5" />
+              Quest Suggestions
+              {showSuggestions ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </motion.button>
           </div>
         </motion.div>
+
+        <AnimatePresence>
+          {showSuggestions && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mb-8 overflow-hidden"
+            >
+              <div className="bg-slate-900/60 backdrop-blur-xl border border-yellow-500/20 rounded-2xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <Sparkles className="w-6 h-6 text-yellow-400" />
+                  <div>
+                    <h3 className="text-xl font-bold text-white">Quest Templates</h3>
+                    <p className="text-sm text-gray-400">Click any quest to import it - you can customize before saving</p>
+                  </div>
+                </div>
+                
+                <div className="grid gap-6">
+                  {QUEST_SUGGESTIONS.map((category) => (
+                    <div key={category.category}>
+                      <h4 className="text-sm font-semibold text-purple-400 uppercase tracking-wider mb-3">
+                        {category.category}
+                      </h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                        {category.quests.map((quest) => (
+                          <motion.button
+                            key={quest.name}
+                            whileHover={{ scale: 1.02, borderColor: "rgba(168, 85, 247, 0.5)" }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => importSuggestion(quest)}
+                            className="text-left p-3 bg-slate-800/50 border border-white/10 rounded-xl hover:bg-slate-800 transition-colors"
+                            data-testid={`button-import-${quest.name.toLowerCase().replace(/\s+/g, '-')}`}
+                          >
+                            <div className="flex justify-between items-start mb-1">
+                              <span className="font-medium text-white text-sm">{quest.name}</span>
+                              <span className="text-cyan-400 text-xs font-bold">{quest.shells.toLocaleString()}</span>
+                            </div>
+                            <p className="text-xs text-gray-500">{quest.desc}</p>
+                            {quest.maxPerUser && (
+                              <p className="text-xs text-gray-600 mt-1">Max {quest.maxPerUser}x per user</p>
+                            )}
+                          </motion.button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-6 p-4 bg-slate-800/50 rounded-xl border border-cyan-500/20">
+                  <h4 className="text-sm font-semibold text-cyan-400 mb-2">90-Day Campaign Math</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div>
+                      <div className="text-2xl font-bold text-white">~11K</div>
+                      <div className="text-xs text-gray-400">Daily Shells (top tier)</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-white">1M+</div>
+                      <div className="text-xs text-gray-400">90-day potential</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-white">$1,000</div>
+                      <div className="text-xs text-gray-400">Top tier value</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-white">2x</div>
+                      <div className="text-xs text-gray-400">Founders multiplier</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <AnimatePresence>
           {showAddForm && (

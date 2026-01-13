@@ -6547,3 +6547,69 @@ export const insertZealyQuestEventSchema = createInsertSchema(zealyQuestEvents).
 });
 export type ZealyQuestEvent = typeof zealyQuestEvents.$inferSelect;
 export type InsertZealyQuestEvent = z.infer<typeof insertZealyQuestEventSchema>;
+
+// ============================================
+// SHELL REWARD PROFILES - Tier Multipliers
+// ============================================
+
+// Tracks user reward tiers and multipliers for the 90-day campaign
+export const shellRewardProfiles = pgTable("shell_reward_profiles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  
+  // Tier: 'participant', 'active', 'core', 'founders'
+  tier: text("tier").notNull().default("participant"),
+  multiplier: text("multiplier").notNull().default("1.0"), // 1.0, 1.5, 2.0
+  
+  // Tracking for tier calculation
+  totalQuestsCompleted: integer("total_quests_completed").notNull().default(0),
+  consecutiveDays: integer("consecutive_days").notNull().default(0),
+  lastActiveDate: timestamp("last_active_date"),
+  campaignStartDate: timestamp("campaign_start_date").defaultNow(),
+  
+  // Wallet status for redemption gating
+  hasWallet: boolean("has_wallet").notNull().default(false),
+  walletAddress: text("wallet_address"),
+  walletVerifiedAt: timestamp("wallet_verified_at"),
+  lastWalletReminder: timestamp("last_wallet_reminder"),
+  
+  // Zealy linking
+  zealyUserId: text("zealy_user_id"),
+  zealyUsername: text("zealy_username"),
+  
+  // Conversion tracking
+  conversionEligible: boolean("conversion_eligible").notNull().default(true),
+  shellsAtSnapshot: integer("shells_at_snapshot"),
+  dwcConverted: text("dwc_converted"),
+  conversionStatus: text("conversion_status").default("pending"), // 'pending', 'snapshotted', 'converted', 'claimed'
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertShellRewardProfileSchema = createInsertSchema(shellRewardProfiles).omit({
+  id: true, createdAt: true, updatedAt: true
+});
+export type ShellRewardProfile = typeof shellRewardProfiles.$inferSelect;
+export type InsertShellRewardProfile = z.infer<typeof insertShellRewardProfileSchema>;
+
+// Shell Conversion Batches - For TGE mass conversion
+export const shellConversionBatches = pgTable("shell_conversion_batches", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  
+  batchName: text("batch_name").notNull(), // e.g., "TGE_2026_04_11"
+  conversionRate: text("conversion_rate").notNull(), // "100" = 100 shells per 1 DWC
+  shellPrice: text("shell_price").notNull().default("0.001"), // $0.001 per shell
+  dwcPrice: text("dwc_price").notNull().default("0.10"), // $0.10 per DWC at launch
+  
+  totalUsersProcessed: integer("total_users_processed").notNull().default(0),
+  totalShellsConverted: integer("total_shells_converted").notNull().default(0),
+  totalDwcMinted: text("total_dwc_minted").notNull().default("0"),
+  
+  status: text("status").notNull().default("pending"), // 'pending', 'processing', 'completed', 'failed'
+  startedAt: timestamp("started_at"),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ShellConversionBatch = typeof shellConversionBatches.$inferSelect;
