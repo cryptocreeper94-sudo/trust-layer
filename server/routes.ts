@@ -6947,6 +6947,68 @@ export async function registerRoutes(
     }
   });
 
+  // Stripe Crypto Onramp - allows users to buy crypto with card and deposit to their wallet
+  app.post("/api/crypto-onramp/create-session", isAuthenticated, async (req: any, res) => {
+    try {
+      const { walletAddress, cryptoCurrency = "eth", fiatCurrency = "usd", fiatAmount } = req.body;
+      
+      if (!walletAddress) {
+        return res.status(400).json({ error: "Wallet address is required" });
+      }
+      
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      
+      // Create the OnrampSessionResource by extending Stripe
+      const OnrampSessionResource = (stripe as any).StripeResource.extend({
+        create: (stripe as any).StripeResource.method({
+          method: 'POST',
+          path: 'crypto/onramp_sessions',
+        }),
+      });
+      
+      const onrampSessionResource = new OnrampSessionResource(stripe);
+      
+      // Create the onramp session
+      const session = await onrampSessionResource.create({
+        transaction_details: {
+          destination_currency: cryptoCurrency,
+          destination_exchange_amount: fiatAmount ? undefined : undefined,
+          destination_network: cryptoCurrency === "sol" ? "solana" : "ethereum",
+          destination_wallet_address: walletAddress,
+          source_currency: fiatCurrency,
+          source_exchange_amount: fiatAmount || undefined,
+        },
+        customer_ip_address: req.ip || req.headers['x-forwarded-for'] || '127.0.0.1',
+      });
+      
+      res.json({ 
+        clientSecret: session.client_secret,
+        sessionId: session.id 
+      });
+    } catch (error: any) {
+      console.error("Crypto onramp session error:", error);
+      res.status(500).json({ 
+        error: "Failed to create crypto onramp session",
+        details: error.message 
+      });
+    }
+  });
+
+  // Get supported cryptocurrencies for onramp
+  app.get("/api/crypto-onramp/supported-currencies", async (req, res) => {
+    // Stripe crypto onramp supports these currencies
+    res.json({
+      cryptocurrencies: [
+        { symbol: "eth", name: "Ethereum", network: "ethereum" },
+        { symbol: "usdc", name: "USD Coin", network: "ethereum" },
+        { symbol: "sol", name: "Solana", network: "solana" },
+        { symbol: "matic", name: "Polygon", network: "polygon" },
+      ],
+      fiatCurrencies: ["usd", "eur", "gbp"],
+    });
+  });
+
   // DWC Token Presale Routes
   app.get("/api/presale/tiers", async (req, res) => {
     try {
