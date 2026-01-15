@@ -52,6 +52,17 @@ async function getCredentials() {
     return cachedCredentials;
   } catch (error: any) {
     console.error('[Stripe] Connector error:', error?.message);
+    
+    // Fallback to direct environment variable
+    if (process.env.STRIPE_SECRET_KEY) {
+      console.log('[Stripe] Using STRIPE_SECRET_KEY from environment (fallback)');
+      cachedCredentials = {
+        publishableKey: process.env.STRIPE_PUBLISHABLE_KEY || '',
+        secretKey: process.env.STRIPE_SECRET_KEY,
+      };
+      return cachedCredentials;
+    }
+    
     throw new Error(`Stripe credentials unavailable: ${error?.message}`);
   }
 }
