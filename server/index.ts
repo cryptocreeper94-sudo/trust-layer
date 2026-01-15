@@ -117,14 +117,23 @@ app.use(express.urlencoded({ extended: false, limit: '50mb' }));
 const pgStore = connectPg(session);
 const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
 
+const sessionStore = new pgStore({
+  conString: process.env.DATABASE_URL,
+  createTableIfMissing: true,
+  ttl: sessionTtl,
+  tableName: "user_sessions",
+  errorLog: (err: Error) => {
+    if (err.message?.includes('already exists')) {
+      console.log('[Session] Index already exists, ignoring...');
+    } else {
+      console.error('[Session] Store error:', err.message);
+    }
+  },
+});
+
 app.set("trust proxy", 1);
 app.use(session({
-  store: new pgStore({
-    conString: process.env.DATABASE_URL,
-    createTableIfMissing: true,
-    ttl: sessionTtl,
-    tableName: "user_sessions",
-  }),
+  store: sessionStore,
   secret: process.env.SESSION_SECRET || process.env.OWNER_SECRET || 'darkwave-session-secret-dev',
   resave: false,
   saveUninitialized: false,

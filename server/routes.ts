@@ -7246,9 +7246,10 @@ export async function registerRoutes(
       });
       
       res.json({ url: session.url, sessionId: session.id });
-    } catch (error) {
-      console.error("Presale checkout error:", error);
-      res.status(500).json({ error: "Failed to create checkout session" });
+    } catch (error: any) {
+      console.error("Presale checkout error:", error?.message || error);
+      const errorMessage = error?.message || "Unknown error";
+      res.status(500).json({ error: `Failed to create checkout session: ${errorMessage}` });
     }
   });
 
