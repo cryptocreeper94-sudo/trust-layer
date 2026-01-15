@@ -130,7 +130,7 @@ function DonationModal({ feature, onSuccess }: { feature?: CrowdfundFeature; onS
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto">("card");
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto">("crypto");
 
   const presetAmounts = [25, 50, 100, 500, 1000];
 
