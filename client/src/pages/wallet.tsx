@@ -428,10 +428,10 @@ export default function WalletPage() {
         </div>
       </nav>
 
-      <div className="fixed top-14 left-0 right-0 z-40 bg-amber-500/90 backdrop-blur-sm border-b border-amber-600">
-        <div className="container mx-auto px-4 py-2 flex items-center justify-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-black" />
-          <span className="text-xs sm:text-sm font-medium text-black">TESTNET MODE - Demo wallet only. External wallet connection coming soon.</span>
+      <div className="fixed top-14 left-0 right-0 z-40 bg-gradient-to-r from-amber-500/90 to-orange-500/90 backdrop-blur-sm border-b border-amber-500/50">
+        <div className="container mx-auto px-4 py-2 flex items-center justify-center gap-2 flex-wrap text-center">
+          <AlertTriangle className="w-4 h-4 text-black flex-shrink-0" />
+          <span className="text-xs sm:text-sm font-medium text-black">TESTNET MODE • DWC presale tokens tracked separately • Use "Buy Crypto" for card purchases via Stripe</span>
         </div>
       </div>
 
@@ -441,7 +441,7 @@ export default function WalletPage() {
         <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-500" />
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 pt-32 pb-8">
+      <div className="relative z-10 container mx-auto px-4 pt-32 pb-8 overflow-hidden">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -765,8 +765,8 @@ export default function WalletPage() {
               </motion.div>
             )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 overflow-hidden">
+              <div className="lg:col-span-2 space-y-4 min-w-0">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold">Your Assets</h2>
                   <Button variant="ghost" size="sm" className="text-muted-foreground">
@@ -784,16 +784,16 @@ export default function WalletPage() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
                     >
-                      <Card className="bg-white/5 backdrop-blur-xl border-white/10 hover:bg-white/10 transition-all duration-300 group cursor-pointer">
+                      <Card className="bg-white/5 backdrop-blur-xl border-white/10 hover:bg-white/10 transition-all duration-300 group cursor-pointer overflow-hidden">
                         <CardContent className="p-4">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                              <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${chain.color} flex items-center justify-center text-2xl shadow-lg group-hover:scale-110 transition-transform`}>
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="flex items-center gap-3 min-w-0 flex-1">
+                              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-r ${chain.color} flex items-center justify-center text-xl sm:text-2xl shadow-lg group-hover:scale-110 transition-transform flex-shrink-0`}>
                                 {chain.icon}
                               </div>
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <h3 className="font-semibold">{chain.name}</h3>
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
+                                  <h3 className="font-semibold text-sm sm:text-base truncate">{chain.name}</h3>
                                   <span className="px-1.5 py-0.5 text-[10px] rounded bg-cyan-500/20 text-cyan-400 border border-cyan-500/20">
                                     {getTestnetName(chain.id)}
                                   </span>
@@ -817,17 +817,18 @@ export default function WalletPage() {
                                 </div>
                               </div>
                             </div>
-                            <div className="text-right flex flex-col items-end gap-1">
-                              <p className="font-semibold">{account.balance} {chain.symbol}</p>
+                            <div className="text-right flex flex-col items-end gap-1 flex-shrink-0">
+                              <p className="font-semibold text-sm sm:text-base">{account.balance} {chain.symbol}</p>
                               <a 
                                 href={getTestnetFaucetUrl(chain.id)} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors"
+                                className="text-[10px] sm:text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors"
                                 data-testid={`link-faucet-${chain.id}`}
                               >
                                 <Zap className="w-3 h-3" />
-                                Get Test Tokens
+                                <span className="hidden sm:inline">Get Test Tokens</span>
+                                <span className="sm:hidden">Faucet</span>
                               </a>
                             </div>
                           </div>
@@ -838,11 +839,11 @@ export default function WalletPage() {
                 })}
               </div>
 
-              <div className="space-y-6">
-                <Card className="bg-white/5 backdrop-blur-xl border-white/10">
-                  <CardHeader>
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <Send className="w-5 h-5 text-purple-400" />
+              <div className="space-y-6 min-w-0">
+                <Card className="bg-white/5 backdrop-blur-xl border-white/10 overflow-hidden">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+                      <Send className="w-5 h-5 text-purple-400 flex-shrink-0" />
                       Quick Send
                     </CardTitle>
                   </CardHeader>
@@ -934,15 +935,15 @@ export default function WalletPage() {
                       {isSending ? "Sending..." : `Send ${selectedChain.symbol}`}
                     </Button>
                     <p className="text-xs text-center text-muted-foreground mt-2">
-                      Testnet mode - use faucet to get test tokens
+                      Multi-chain support • Faucets available for test tokens
                     </p>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-white/5 backdrop-blur-xl border-white/10">
-                  <CardHeader>
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <Shield className="w-5 h-5 text-green-400" />
+                <Card className="bg-white/5 backdrop-blur-xl border-white/10 overflow-hidden">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+                      <Shield className="w-5 h-5 text-green-400 flex-shrink-0" />
                       Security
                     </CardTitle>
                   </CardHeader>
