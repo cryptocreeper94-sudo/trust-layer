@@ -1,4 +1,4 @@
-const CACHE_NAME = 'darkwave-v10';
+const CACHE_NAME = 'darkwave-v11';
 const STATIC_ASSETS = [
   '/',
   '/manifest.webmanifest',

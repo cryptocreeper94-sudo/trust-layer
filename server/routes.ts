@@ -319,13 +319,11 @@ export async function registerRoutes(
           try {
             const tier = metadata.tier || "custom";
             
-            // SECURITY: Calculate tokens server-side from verified amount, not from metadata
-            const TIER_BONUSES: Record<string, number> = {
-              genesis: 25, founder: 15, pioneer: 10, early_bird: 5
-            };
+            // SECURITY: Calculate bonus server-side from verified amount (not tier)
             const TOKEN_PRICE = 0.001;
             const tokenAmount = Math.floor((amountCents / 100) / TOKEN_PRICE);
-            const bonusPercent = TIER_BONUSES[tier] || 0;
+            // Bonus thresholds: $250+=25%, $100+=15%, $50+=10%, $25+=5%
+            const bonusPercent = amountCents >= 25000 ? 25 : amountCents >= 10000 ? 15 : amountCents >= 5000 ? 10 : amountCents >= 2500 ? 5 : 0;
             const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
             const totalTokens = tokenAmount + bonusTokens;
             
@@ -7184,25 +7182,20 @@ export async function registerRoutes(
 
   app.post("/api/presale/checkout", async (req, res) => {
     try {
-      const { priceId, email, tier, amountCents } = req.body;
+      const { priceId, email, name, tier, amountCents } = req.body;
       
       if (!email || !email.includes("@")) {
         return res.status(400).json({ error: "Valid email required" });
       }
       
-      // Tier definitions for dynamic pricing
-      const TIER_CONFIG: Record<string, { amount: number; bonus: number; name: string }> = {
-        genesis: { amount: 100000, bonus: 25, name: "Genesis Tier" },
-        founder: { amount: 50000, bonus: 15, name: "Founder Tier" },
-        pioneer: { amount: 25000, bonus: 10, name: "Pioneer Tier" },
-        early_bird: { amount: 10000, bonus: 5, name: "Early Bird Tier" },
-      };
+      if (!name || name.trim().length < 2) {
+        return res.status(400).json({ error: "Name required (at least 2 characters)" });
+      }
       
-      const tierConfig = TIER_CONFIG[tier];
-      const finalAmount = amountCents || tierConfig?.amount;
+      const finalAmount = amountCents || 1000;
       
-      if (!finalAmount || finalAmount < 100) {
-        return res.status(400).json({ error: "Invalid amount" });
+      if (!finalAmount || finalAmount < 1000) {
+        return res.status(400).json({ error: "Minimum purchase is $10" });
       }
       
       const { getUncachableStripeClient } = await import("./stripeClient");
@@ -7214,19 +7207,24 @@ export async function registerRoutes(
       
       const TOKEN_PRICE = 0.001;
       const tokenAmount = Math.floor((finalAmount / 100) / TOKEN_PRICE);
-      const bonusPercent = tierConfig?.bonus || 0;
+      const bonusPercent = finalAmount >= 25000 ? 25 : finalAmount >= 10000 ? 15 : finalAmount >= 5000 ? 10 : finalAmount >= 2500 ? 5 : 0;
       const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
       const totalTokens = tokenAmount + bonusTokens;
       
-      // Use dynamic price_data (no Stripe dashboard setup required)
+      const tierName = !tier || tier === "custom" 
+        ? "DWC Token Presale" 
+        : `${tier.charAt(0).toUpperCase()}${tier.slice(1).replace("_", " ")} Tier`;
+      
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: [{
           price_data: {
             currency: "usd",
             product_data: {
-              name: tierConfig?.name || "DWC Token Presale",
-              description: `${totalTokens.toLocaleString()} DWC tokens (${tokenAmount.toLocaleString()} base + ${bonusTokens.toLocaleString()} bonus)`,
+              name: tierName,
+              description: bonusTokens > 0 
+                ? `${totalTokens.toLocaleString()} DWC tokens (${tokenAmount.toLocaleString()} base + ${bonusTokens.toLocaleString()} bonus)`
+                : `${tokenAmount.toLocaleString()} DWC tokens`,
             },
             unit_amount: finalAmount,
           },
@@ -7239,6 +7237,7 @@ export async function registerRoutes(
         metadata: {
           type: "presale",
           tier: tier || "custom",
+          name: name.trim(),
           email: email,
           tokenAmount: String(tokenAmount),
           bonusTokens: String(bonusTokens),

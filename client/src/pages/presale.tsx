@@ -137,22 +137,44 @@ function HolographicCard({ children, className = "", glow = "cyan" }: { children
 }
 
 function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [selectedTier, setSelectedTier] = useState("early_bird");
+  const [customAmount, setCustomAmount] = useState("10");
+  const [useCustom, setUseCustom] = useState(true);
+  const [selectedTier, setSelectedTier] = useState<string | null>(null);
   const { toast } = useToast();
   
+  const { data: user } = useQuery<{ email?: string; displayName?: string }>({
+    queryKey: ["/api/user/me"],
+    retry: false,
+  });
+  
+  useEffect(() => {
+    if (user?.email && !email) setEmail(user.email);
+    if (user?.displayName && !name) setName(user.displayName);
+  }, [user]);
+  
   const isValidEmail = email.includes("@") && email.includes(".");
+  const isValidName = name.trim().length >= 2;
   
   const TIERS = [
-    { id: "early_bird", name: "Early Bird", amount: 10000, bonus: 5, color: "from-green-400 to-emerald-500" },
-    { id: "pioneer", name: "Pioneer", amount: 25000, bonus: 10, color: "from-cyan-400 to-blue-500" },
-    { id: "founder", name: "Founder", amount: 50000, bonus: 15, color: "from-purple-400 to-pink-500" },
-    { id: "genesis", name: "Genesis", amount: 100000, bonus: 25, color: "from-yellow-400 to-orange-500" },
+    { id: "starter", name: "Starter", amount: 1000, bonus: 0, color: "from-gray-400 to-gray-500" },
+    { id: "early_bird", name: "Early Bird", amount: 2500, bonus: 5, color: "from-green-400 to-emerald-500" },
+    { id: "pioneer", name: "Pioneer", amount: 5000, bonus: 10, color: "from-cyan-400 to-blue-500" },
+    { id: "founder", name: "Founder", amount: 10000, bonus: 15, color: "from-purple-400 to-pink-500" },
+    { id: "genesis", name: "Genesis", amount: 25000, bonus: 25, color: "from-yellow-400 to-orange-500" },
   ];
   
-  const tier = TIERS.find(t => t.id === selectedTier) || TIERS[0];
-  const tokenAmount = Math.floor((tier.amount / 100) / TOKEN_PRICE);
-  const bonusTokens = Math.floor(tokenAmount * (tier.bonus / 100));
+  const amountCents = useCustom 
+    ? Math.max(1000, Math.round(parseFloat(customAmount || "10") * 100))
+    : (TIERS.find(t => t.id === selectedTier)?.amount || 1000);
+  
+  const bonusPercent = useCustom
+    ? (amountCents >= 25000 ? 25 : amountCents >= 10000 ? 15 : amountCents >= 5000 ? 10 : amountCents >= 2500 ? 5 : 0)
+    : (TIERS.find(t => t.id === selectedTier)?.bonus || 0);
+  
+  const tokenAmount = Math.floor((amountCents / 100) / TOKEN_PRICE);
+  const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
   
   const checkoutMutation = useMutation({
     mutationFn: async () => {
@@ -161,9 +183,10 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           priceId: "dynamic",
-          tier: selectedTier,
-          email: email,
-          amountCents: tier.amount,
+          tier: useCustom ? "custom" : selectedTier,
+          name: name.trim(),
+          email: email.trim(),
+          amountCents: amountCents,
         }),
       });
       if (!res.ok) {
@@ -188,51 +211,28 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-slate-900 border-white/10 w-[95vw] max-w-md p-6 rounded-xl">
+      <DialogContent className="bg-slate-900 border-white/10 w-[95vw] max-w-md p-5 rounded-xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
             Buy DWC Tokens
           </DialogTitle>
           <DialogDescription className="text-gray-400">
-            Select your tier and enter your email to proceed to checkout
+            Enter any amount ($10 minimum) or pick a tier
           </DialogDescription>
         </DialogHeader>
         
-        <div className="space-y-4 mt-4">
+        <div className="space-y-4 mt-3">
           <div>
-            <label className="text-sm text-gray-400 mb-2 block">Select Tier</label>
-            <div className="grid grid-cols-2 gap-2">
-              {TIERS.map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => setSelectedTier(t.id)}
-                  className={`p-3 rounded-xl border transition-all ${
-                    selectedTier === t.id
-                      ? `bg-gradient-to-r ${t.color} bg-opacity-20 border-white/30`
-                      : "bg-white/5 border-white/10 hover:border-white/20"
-                  }`}
-                >
-                  <p className="font-bold text-white">{t.name}</p>
-                  <p className="text-sm text-gray-400">${(t.amount / 100).toLocaleString()}</p>
-                  <p className="text-xs text-green-400">+{t.bonus}% bonus</p>
-                </button>
-              ))}
-            </div>
-          </div>
-          
-          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-            <div className="flex justify-between text-sm mb-1">
-              <span className="text-gray-400">Base Tokens</span>
-              <span className="text-white">{tokenAmount.toLocaleString()} DWC</span>
-            </div>
-            <div className="flex justify-between text-sm mb-1">
-              <span className="text-gray-400">Bonus (+{tier.bonus}%)</span>
-              <span className="text-green-400">+{bonusTokens.toLocaleString()} DWC</span>
-            </div>
-            <div className="flex justify-between text-lg font-bold border-t border-white/10 pt-2 mt-2">
-              <span className="text-white">Total</span>
-              <span className="text-cyan-400">{(tokenAmount + bonusTokens).toLocaleString()} DWC</span>
-            </div>
+            <label className="text-sm text-gray-400 mb-2 block">Your Name</label>
+            <Input
+              type="text"
+              placeholder="Enter your full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className={`bg-black/50 border-white/20 text-white placeholder:text-gray-500 ${
+                name && !isValidName ? "border-red-500/50" : ""
+              } ${isValidName ? "border-green-500/50" : ""}`}
+            />
           </div>
           
           <div>
@@ -251,17 +251,91 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
             )}
           </div>
           
+          <div>
+            <label className="text-sm text-gray-400 mb-2 block">Amount (USD)</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">$</span>
+              <Input
+                type="number"
+                min="10"
+                step="1"
+                placeholder="10"
+                value={customAmount}
+                onChange={(e) => {
+                  setCustomAmount(e.target.value);
+                  setUseCustom(true);
+                  setSelectedTier(null);
+                }}
+                className="bg-black/50 border-white/20 text-white pl-7"
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-1">Minimum $10 - Enter any amount you'd like</p>
+          </div>
+          
+          <div>
+            <label className="text-sm text-gray-400 mb-2 block">Or Quick Select a Tier</label>
+            <div className="flex flex-wrap gap-2">
+              {TIERS.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => {
+                    setSelectedTier(t.id);
+                    setUseCustom(false);
+                    setCustomAmount(String(t.amount / 100));
+                  }}
+                  className={`px-3 py-2 rounded-lg border transition-all text-sm ${
+                    selectedTier === t.id && !useCustom
+                      ? `bg-gradient-to-r ${t.color} border-white/30`
+                      : "bg-white/5 border-white/10 hover:border-white/20"
+                  }`}
+                >
+                  <span className="font-medium text-white">${(t.amount / 100)}</span>
+                  {t.bonus > 0 && <span className="text-green-400 ml-1">+{t.bonus}%</span>}
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+            <div className="flex justify-between text-sm mb-1">
+              <span className="text-gray-400">You Pay</span>
+              <span className="text-white font-medium">${(amountCents / 100).toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between text-sm mb-1">
+              <span className="text-gray-400">Base Tokens</span>
+              <span className="text-white">{tokenAmount.toLocaleString()} DWC</span>
+            </div>
+            {bonusPercent > 0 && (
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-gray-400">Bonus (+{bonusPercent}%)</span>
+                <span className="text-green-400">+{bonusTokens.toLocaleString()} DWC</span>
+              </div>
+            )}
+            <div className="flex justify-between text-lg font-bold border-t border-white/10 pt-2 mt-2">
+              <span className="text-white">Total Tokens</span>
+              <span className="text-cyan-400">{(tokenAmount + bonusTokens).toLocaleString()} DWC</span>
+            </div>
+          </div>
+          
+          {bonusPercent > 0 && (
+            <div className="p-2 rounded-lg bg-green-500/10 border border-green-500/20">
+              <p className="text-xs text-green-400 text-center">
+                You qualify for a {bonusPercent}% bonus!
+              </p>
+            </div>
+          )}
+          
           <Button
             onClick={() => checkoutMutation.mutate()}
-            disabled={!isValidEmail || checkoutMutation.isPending}
+            disabled={!isValidEmail || !isValidName || amountCents < 1000 || checkoutMutation.isPending}
             className="w-full py-6 text-lg font-bold bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:opacity-90 disabled:opacity-50"
           >
             {checkoutMutation.isPending ? (
               <Loader2 className="w-5 h-5 animate-spin mr-2" />
             ) : (
-              <Wallet className="w-5 h-5 mr-2" />
+              <CreditCard className="w-5 h-5 mr-2" />
             )}
-            Proceed to Checkout - ${(tier.amount / 100).toLocaleString()}
+            Proceed to Checkout - ${(amountCents / 100).toLocaleString()}
           </Button>
           
           <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
