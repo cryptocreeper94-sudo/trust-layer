@@ -988,16 +988,20 @@ export default function Presale() {
             Ground floor opportunity - this is where it all begins.
           </p>
           
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-3 mb-4">
             <Button
               onClick={() => setShowBuyCryptoModal(true)}
-              className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
+              className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-lg py-6 px-8"
               data-testid="button-buy-crypto-header"
             >
-              <CreditCard className="w-4 h-4 mr-2" />
-              Need Crypto? Buy with Card
+              <CreditCard className="w-5 h-5 mr-2" />
+              Buy Crypto with Card (Stripe)
             </Button>
           </div>
+          <p className="text-sm text-gray-500 max-w-xl mx-auto">
+            No crypto? No problem! Buy USDC, ETH, or SOL with your card via Stripe's secure onramp, 
+            then use it to purchase DWC tokens below.
+          </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-8 mb-16">
@@ -1050,16 +1054,16 @@ export default function Presale() {
           <div className="grid md:grid-cols-4 gap-4 mb-8">
             <HolographicCard className="p-6 text-center relative" glow="cyan">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm">1</div>
-              <Wallet className="w-8 h-8 text-cyan-400 mx-auto mb-4 mt-2" />
-              <h3 className="text-lg font-bold text-white mb-2">Purchase Tokens</h3>
-              <p className="text-gray-400 text-sm">Choose your tier and complete payment via Stripe</p>
+              <CreditCard className="w-8 h-8 text-cyan-400 mx-auto mb-4 mt-2" />
+              <h3 className="text-lg font-bold text-white mb-2">Get Crypto</h3>
+              <p className="text-gray-400 text-sm">Use existing crypto or buy with card via Stripe's secure onramp</p>
             </HolographicCard>
             
             <HolographicCard className="p-6 text-center relative" glow="purple">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">2</div>
-              <CheckCircle className="w-8 h-8 text-purple-400 mx-auto mb-4 mt-2" />
-              <h3 className="text-lg font-bold text-white mb-2">Allocation Tracked</h3>
-              <p className="text-gray-400 text-sm">No wallet needed! DWC & Shells tracked by your account</p>
+              <Wallet className="w-8 h-8 text-purple-400 mx-auto mb-4 mt-2" />
+              <h3 className="text-lg font-bold text-white mb-2">Pay with Crypto</h3>
+              <p className="text-gray-400 text-sm">Complete checkout via Coinbase - BTC, ETH, USDC accepted</p>
             </HolographicCard>
             
             <HolographicCard className="p-6 text-center relative" glow="pink">
