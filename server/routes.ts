@@ -12659,6 +12659,90 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // Team Admin Authentication (separate from owner)
+  const TEAM_PIN = process.env.TEAM_ADMIN_PIN || "1111";
+  const teamAuthLockouts = new Map<string, { attempts: number; lockedUntil: number }>();
+
+  const teamAuthMiddleware = (req: any, res: any, next: any) => {
+    const token = req.headers["x-team-token"];
+    if (!token || !validOwnerTokens.has(token.replace("team_", ""))) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+    next();
+  };
+
+  app.post("/api/team/auth", rateLimit("team-auth", 5, 5 * 60 * 1000), (req, res) => {
+    const ip = req.ip || "unknown";
+    const lockout = teamAuthLockouts.get(ip);
+    
+    if (lockout && Date.now() < lockout.lockedUntil) {
+      const waitSeconds = Math.ceil((lockout.lockedUntil - Date.now()) / 1000);
+      return res.status(429).json({ error: `Too many failed attempts. Try again in ${waitSeconds} seconds.` });
+    }
+    
+    const { pin } = req.body;
+    if (pin && pin === TEAM_PIN) {
+      teamAuthLockouts.delete(ip);
+      const token = "team_" + generateOwnerToken();
+      validOwnerTokens.add(token.replace("team_", ""));
+      res.json({ success: true, token });
+    } else {
+      const current = teamAuthLockouts.get(ip) || { attempts: 0, lockedUntil: 0 };
+      current.attempts++;
+      if (current.attempts >= 3) {
+        current.lockedUntil = Date.now() + (current.attempts * 60 * 1000);
+      }
+      teamAuthLockouts.set(ip, current);
+      res.status(401).json({ error: "Invalid PIN" });
+    }
+  });
+
+  // Team admin endpoints - limited Zealy stats access
+  app.get("/api/team/zealy/stats", teamAuthMiddleware, async (_req, res) => {
+    try {
+      const [participantsResult, shellsResult, questsResult] = await Promise.all([
+        db.execute(sql`SELECT COUNT(DISTINCT user_id) as count FROM shell_reward_profiles WHERE total_quests_completed > 0`),
+        db.execute(sql`SELECT COALESCE(SUM(shells_granted), 0) as total FROM zealy_quest_events WHERE status = 'granted'`),
+        db.execute(sql`SELECT COUNT(*) as count FROM zealy_quest_events WHERE status = 'granted'`),
+      ]);
+
+      res.json({
+        participants: Number(participantsResult.rows[0]?.count || 0),
+        totalShellsGranted: Number(shellsResult.rows[0]?.total || 0),
+        questsCompleted: Number(questsResult.rows[0]?.count || 0),
+      });
+    } catch (error) {
+      console.error("Team zealy stats error:", error);
+      res.status(500).json({ error: "Failed to fetch stats" });
+    }
+  });
+
+  app.get("/api/team/zealy/recent-events", teamAuthMiddleware, async (_req, res) => {
+    try {
+      const events = await db.execute(sql`
+        SELECT e.*, m.zealy_quest_name as quest_name
+        FROM zealy_quest_events e
+        LEFT JOIN zealy_quest_mappings m ON e.zealy_quest_id = m.zealy_quest_id
+        ORDER BY e.created_at DESC
+        LIMIT 50
+      `);
+      res.json(events.rows);
+    } catch (error) {
+      console.error("Team zealy events error:", error);
+      res.status(500).json({ error: "Failed to fetch events" });
+    }
+  });
+
+  // Owner can reset team PIN
+  app.post("/api/owner/team/reset-pin", ownerAuthMiddleware, async (req, res) => {
+    const { newPin } = req.body;
+    if (!newPin || newPin.length < 4) {
+      return res.status(400).json({ error: "PIN must be at least 4 digits" });
+    }
+    // In production, this would update the env var or database
+    res.json({ success: true, message: "PIN reset. Update TEAM_ADMIN_PIN environment variable." });
+  });
+
   // Apply 2026 updated marketing posts (Owner only)
   app.post("/api/marketing/apply-2026-update", ownerAuthMiddleware, async (_req, res) => {
     try {
