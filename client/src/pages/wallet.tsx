@@ -30,7 +30,9 @@ import {
   AlertTriangle,
   Cloud,
   CloudOff,
-  Loader
+  Loader,
+  CreditCard,
+  X
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
@@ -191,6 +193,12 @@ export default function WalletPage() {
   const [importMnemonic, setImportMnemonic] = useState("");
   const [importPassword, setImportPassword] = useState("");
   const [isRefreshingBalances, setIsRefreshingBalances] = useState(false);
+  
+  // Buy Crypto (Stripe Onramp) state
+  const [showBuyCrypto, setShowBuyCrypto] = useState(false);
+  const [buyAmount, setBuyAmount] = useState("100");
+  const [selectedCrypto, setSelectedCrypto] = useState("eth");
+  const [isCreatingOnrampSession, setIsCreatingOnrampSession] = useState(false);
 
   // Get stored wallet addresses
   const getStoredAddresses = (): Record<string, string> => {
@@ -647,7 +655,7 @@ export default function WalletPage() {
                       </p>
                     </div>
                     
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 flex-wrap justify-center md:justify-end">
                       <Button
                         variant="outline"
                         className="bg-white/5 border-white/10 hover:bg-white/10"
@@ -662,6 +670,14 @@ export default function WalletPage() {
                       >
                         <Send className="w-4 h-4 mr-2" />
                         Send
+                      </Button>
+                      <Button
+                        onClick={() => setShowBuyCrypto(true)}
+                        className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
+                        data-testid="button-buy-crypto"
+                      >
+                        <CreditCard className="w-4 h-4 mr-2" />
+                        Buy Crypto
                       </Button>
                     </div>
                   </div>
@@ -997,6 +1013,177 @@ export default function WalletPage() {
             </div>
           </>
         )}
+        
+        {/* Buy Crypto Modal */}
+        <AnimatePresence>
+          {showBuyCrypto && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+              onClick={() => setShowBuyCrypto(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+                className="w-full max-w-md"
+              >
+                <Card className="bg-slate-900/95 backdrop-blur-xl border-white/10 shadow-2xl shadow-emerald-500/20">
+                  <CardHeader className="relative">
+                    <button
+                      onClick={() => setShowBuyCrypto(false)}
+                      className="absolute right-4 top-4 p-2 rounded-full hover:bg-white/10 transition-colors"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500">
+                        <CreditCard className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-xl">Buy Crypto</CardTitle>
+                        <p className="text-sm text-muted-foreground">Purchase with card via Stripe</p>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="space-y-2">
+                      <Label>Amount (USD)</Label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                        <Input
+                          type="number"
+                          value={buyAmount}
+                          onChange={(e) => setBuyAmount(e.target.value)}
+                          className="pl-7 bg-white/5 border-white/10"
+                          placeholder="100"
+                          min="10"
+                          data-testid="input-buy-amount"
+                        />
+                      </div>
+                      <div className="flex gap-2 mt-2">
+                        {["50", "100", "250", "500"].map((amount) => (
+                          <Button
+                            key={amount}
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setBuyAmount(amount)}
+                            className={`flex-1 ${buyAmount === amount ? 'bg-emerald-500/20 border-emerald-500/50' : 'bg-white/5 border-white/10'}`}
+                          >
+                            ${amount}
+                          </Button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Cryptocurrency</Label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {[
+                          { id: "eth", name: "Ethereum", symbol: "ETH", icon: "Ξ" },
+                          { id: "sol", name: "Solana", symbol: "SOL", icon: "◎" },
+                          { id: "usdc", name: "USD Coin", symbol: "USDC", icon: "$" },
+                          { id: "matic", name: "Polygon", symbol: "MATIC", icon: "⬡" },
+                        ].map((crypto) => (
+                          <button
+                            key={crypto.id}
+                            onClick={() => setSelectedCrypto(crypto.id)}
+                            className={`p-3 rounded-xl border transition-all ${
+                              selectedCrypto === crypto.id
+                                ? 'bg-emerald-500/20 border-emerald-500/50 shadow-lg shadow-emerald-500/20'
+                                : 'bg-white/5 border-white/10 hover:bg-white/10'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="text-xl">{crypto.icon}</span>
+                              <div className="text-left">
+                                <div className="font-medium text-sm">{crypto.symbol}</div>
+                                <div className="text-xs text-muted-foreground">{crypto.name}</div>
+                              </div>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/20">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Shield className="w-4 h-4 text-emerald-400" />
+                        <span className="text-sm font-medium text-emerald-400">Powered by Stripe</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Secure payment processing. Crypto will be deposited directly to your wallet address.
+                      </p>
+                    </div>
+
+                    <Button
+                      onClick={async () => {
+                        if (!user) {
+                          toast({ title: "Sign in required", description: "Please sign in to buy crypto", variant: "destructive" });
+                          return;
+                        }
+                        
+                        const walletAddress = storedAddresses[selectedCrypto === 'sol' ? 'solana' : 'ethereum'];
+                        if (!walletAddress) {
+                          toast({ title: "Wallet required", description: "Please create a wallet first", variant: "destructive" });
+                          return;
+                        }
+                        
+                        setIsCreatingOnrampSession(true);
+                        try {
+                          const response = await axios.post("/api/crypto-onramp/create-session", {
+                            walletAddress,
+                            cryptoCurrency: selectedCrypto,
+                            fiatCurrency: "usd",
+                            fiatAmount: buyAmount,
+                          });
+                          
+                          if (response.data.clientSecret) {
+                            toast({ 
+                              title: "Redirecting to Stripe", 
+                              description: "Complete your purchase on Stripe's secure checkout" 
+                            });
+                            window.open(`https://crypto.link.com?client_secret=${response.data.clientSecret}`, '_blank');
+                          }
+                        } catch (error: any) {
+                          toast({ 
+                            title: "Error", 
+                            description: error.response?.data?.details || "Failed to start purchase", 
+                            variant: "destructive" 
+                          });
+                        } finally {
+                          setIsCreatingOnrampSession(false);
+                        }
+                      }}
+                      disabled={isCreatingOnrampSession || !buyAmount || parseFloat(buyAmount) < 10}
+                      className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 h-12 text-lg"
+                      data-testid="button-confirm-buy-crypto"
+                    >
+                      {isCreatingOnrampSession ? (
+                        <>
+                          <Loader className="w-5 h-5 mr-2 animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <CreditCard className="w-5 h-5 mr-2" />
+                          Buy ${buyAmount} of {selectedCrypto.toUpperCase()}
+                        </>
+                      )}
+                    </Button>
+
+                    <p className="text-xs text-center text-muted-foreground">
+                      Minimum purchase: $10 USD. Fees and exchange rates apply.
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
