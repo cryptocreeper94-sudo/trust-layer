@@ -4,7 +4,7 @@ import { Link, useSearch } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { 
   Heart, Zap, Target, Shield, Users, Clock, 
-  ExternalLink, Sparkles, TrendingUp, Lock, Gift, Award
+  ExternalLink, Sparkles, TrendingUp, Lock, Gift, Award, CreditCard
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
+import { BuyCryptoModal } from "@/components/buy-crypto-modal";
 import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
 import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
@@ -424,6 +425,7 @@ export default function CrowdfundPage() {
   const searchString = useSearch();
   const queryClient = useQueryClient();
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showBuyCryptoModal, setShowBuyCryptoModal] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(searchString);
@@ -586,21 +588,32 @@ export default function CrowdfundPage() {
                   <p className="text-gray-300">{campaign?.description || "Support the future of decentralized technology"}</p>
                 </div>
               </div>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button 
-                    size="lg" 
-                    className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:opacity-90 px-8 border-0"
-                    data-testid="button-donate-main"
-                  >
-                    <Gift className="w-5 h-5 mr-2" />
-                    Support Development
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="bg-gray-900 border-gray-800">
-                  <DonationModal onSuccess={() => {}} />
-                </DialogContent>
-              </Dialog>
+              <div className="flex flex-wrap gap-3">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button 
+                      size="lg" 
+                      className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:opacity-90 px-8 border-0"
+                      data-testid="button-donate-main"
+                    >
+                      <Gift className="w-5 h-5 mr-2" />
+                      Support Development
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="bg-gray-900 border-gray-800">
+                    <DonationModal onSuccess={() => {}} />
+                  </DialogContent>
+                </Dialog>
+                <Button 
+                  size="lg"
+                  onClick={() => setShowBuyCryptoModal(true)}
+                  className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 border-0"
+                  data-testid="button-buy-crypto"
+                >
+                  <CreditCard className="w-5 h-5 mr-2" />
+                  Buy Crypto
+                </Button>
+              </div>
             </div>
 
             <ProgressMeter 
@@ -745,6 +758,11 @@ export default function CrowdfundPage() {
           </GlassCard>
         </motion.div>
       </div>
+      
+      <BuyCryptoModal 
+        isOpen={showBuyCryptoModal}
+        onClose={() => setShowBuyCryptoModal(false)}
+      />
     </div>
   );
 }

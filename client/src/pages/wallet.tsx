@@ -52,6 +52,7 @@ import {
   validateMnemonic,
   type StoredWallet 
 } from "@/lib/wallet-crypto";
+import { DwcBagDashboard } from "@/components/dwc-bag-dashboard";
 import { 
   fetchAllTestnetBalances, 
   getTestnetFaucetUrl, 
@@ -459,6 +460,17 @@ export default function WalletPage() {
             One wallet, all chains. Manage your assets across 9+ blockchains with military-grade security.
           </p>
         </motion.div>
+
+        {user && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="mb-8 max-w-4xl mx-auto"
+          >
+            <DwcBagDashboard />
+          </motion.div>
+        )}
 
         {!walletCreated ? (
           <motion.div

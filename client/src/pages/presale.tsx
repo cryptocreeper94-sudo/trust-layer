@@ -5,7 +5,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { 
   Zap, Shield, TrendingUp, Users, Gift, Award, Crown, Sparkles,
   ArrowRight, Clock, CheckCircle, Copy, ExternalLink, Wallet,
-  Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator, X
+  Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator, X, CreditCard
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
+import { BuyCryptoModal } from "@/components/buy-crypto-modal";
 import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
 import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
@@ -831,6 +832,8 @@ function PurchaseCalculator() {
 }
 
 export default function Presale() {
+  const [showBuyCryptoModal, setShowBuyCryptoModal] = useState(false);
+  
   const { data: tiersData, isLoading: tiersLoading } = useQuery<{ tiers: PresaleTier[] }>({
     queryKey: ["/api/presale/tiers"],
   });
@@ -864,10 +867,21 @@ export default function Presale() {
               Join the DarkWave Revolution
             </span>
           </h1>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-6">
             Be among the first to own DWC tokens and unlock exclusive early adopter rewards. 
             Ground floor opportunity - this is where it all begins.
           </p>
+          
+          <div className="flex flex-wrap justify-center gap-3">
+            <Button
+              onClick={() => setShowBuyCryptoModal(true)}
+              className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
+              data-testid="button-buy-crypto-header"
+            >
+              <CreditCard className="w-4 h-4 mr-2" />
+              Need Crypto? Buy with Card
+            </Button>
+          </div>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-8 mb-16">
@@ -992,6 +1006,11 @@ export default function Presale() {
           </Link>
         </div>
       </div>
+      
+      <BuyCryptoModal 
+        isOpen={showBuyCryptoModal}
+        onClose={() => setShowBuyCryptoModal(false)}
+      />
     </div>
   );
 }

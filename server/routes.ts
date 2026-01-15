@@ -1544,6 +1544,95 @@ export async function registerRoutes(
     }
   });
 
+  // Get user's DWC bag - all pending DWC tokens from various sources
+  app.get("/api/user/dwc-bag", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
+    try {
+      const userId = req.firebaseUser?.uid;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const user = await storage.getFirebaseUser(userId);
+      const email = user?.email;
+
+      // Get presale purchases (confirmed only)
+      const presaleResult = await db.execute(sql`
+        SELECT 
+          COALESCE(SUM(token_amount), 0) as total_tokens,
+          COALESCE(SUM(usd_amount_cents), 0) as total_spent_cents,
+          COUNT(*) as purchase_count
+        FROM presale_purchases 
+        WHERE status = 'confirmed' 
+        AND (user_id = ${userId} OR email = ${email})
+      `);
+      const presaleTokens = Number(presaleResult.rows[0]?.total_tokens || 0);
+      const presaleSpentCents = Number(presaleResult.rows[0]?.total_spent_cents || 0);
+      const presalePurchaseCount = Number(presaleResult.rows[0]?.purchase_count || 0);
+
+      // Get shell balance (100 shells = 1 DWC) - preserve decimals
+      const shellBalanceRaw = await shellsService.getBalance(userId);
+      const shellBalance = Number(shellBalanceRaw) || 0;
+      const shellsConvertedToDwc = shellBalance / 100; // Keep decimal precision
+
+      // Get airdrop claims (pending) - safely parse numeric values
+      const airdropResult = await db.execute(sql`
+        SELECT COALESCE(SUM(CAST(amount AS NUMERIC)), 0)::text as total_airdrop
+        FROM airdrop_claims 
+        WHERE user_id = ${userId} AND status = 'pending'
+      `);
+      const pendingAirdrops = parseFloat(String(airdropResult.rows[0]?.total_airdrop || "0")) || 0;
+
+      // Get early adopter bonus (first 500 signups get 5% bonus)
+      let earlyAdopterBonus = 0;
+      const signupPosition = user?.signupPosition ? Number(user.signupPosition) : null;
+      if (signupPosition && signupPosition <= 500) {
+        // 5% bonus on presale tokens for first 500 users
+        earlyAdopterBonus = Math.floor(presaleTokens * 0.05);
+      }
+
+      // Calculate total DWC bag
+      const totalDwc = presaleTokens + shellsConvertedToDwc + pendingAirdrops + earlyAdopterBonus;
+
+      // Presale price: $0.001 per DWC, so value = totalDwc * 0.001
+      const currentValue = totalDwc * 0.001;
+      
+      // Future projected value at launch (estimated $0.10)
+      const launchProjectedValue = totalDwc * 0.10;
+
+      res.json({
+        totalDwc,
+        currentValue,
+        launchProjectedValue,
+        sources: {
+          presale: {
+            tokens: presaleTokens,
+            spentUsd: presaleSpentCents / 100,
+            purchases: presalePurchaseCount,
+          },
+          shells: {
+            balance: shellBalance,
+            convertedToDwc: shellsConvertedToDwc,
+            conversionRate: 100,
+          },
+          airdrops: {
+            pending: pendingAirdrops,
+          },
+          earlyAdopterBonus: {
+            tokens: earlyAdopterBonus,
+            signupPosition,
+            isEarlyAdopter: signupPosition !== null && signupPosition <= 500,
+          },
+        },
+        tgeDate: "2026-04-11",
+        launchPrice: 0.10,
+        currentPrice: 0.001,
+      });
+    } catch (error) {
+      console.error("DWC bag error:", error);
+      res.status(500).json({ error: "Failed to get DWC bag" });
+    }
+  });
+
   // Link wallet to reward profile
   app.post("/api/user/reward-profile/link-wallet", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
     try {
