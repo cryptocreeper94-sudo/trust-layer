@@ -12665,7 +12665,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 
   const teamAuthMiddleware = (req: any, res: any, next: any) => {
     const token = req.headers["x-team-token"];
-    if (!token || !validOwnerTokens.has(token.replace("team_", ""))) {
+    const innerToken = token?.replace("team_", "");
+    if (!token || !innerToken || !isTokenValid(innerToken)) {
       return res.status(401).json({ error: "Unauthorized" });
     }
     next();
@@ -12683,8 +12684,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     const { pin } = req.body;
     if (pin && pin === TEAM_PIN) {
       teamAuthLockouts.delete(ip);
-      const token = "team_" + generateOwnerToken();
-      validOwnerTokens.add(token.replace("team_", ""));
+      const innerToken = generateOwnerToken();
+      const token = "team_" + innerToken;
       res.json({ success: true, token });
     } else {
       const current = teamAuthLockouts.get(ip) || { attempts: 0, lockedUntil: 0 };
