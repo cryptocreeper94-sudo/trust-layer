@@ -6244,9 +6244,16 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Chain and address are required" });
       }
       
-      // Basic address validation
-      if (chain === 'solana' && !/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address)) {
-        return res.status(400).json({ error: "Invalid Solana address format" });
+      // Basic address validation - more permissive for various wallet formats
+      if (chain === 'solana') {
+        // Solana addresses are base58, typically 32-44 chars but can vary
+        if (address.length < 32 || address.length > 50) {
+          return res.status(400).json({ error: "Invalid Solana address length" });
+        }
+        // Check for valid base58 characters (no 0, O, I, l)
+        if (/[0OIl]/.test(address)) {
+          return res.status(400).json({ error: "Invalid Solana address format" });
+        }
       }
       if (['ethereum', 'base', 'polygon', 'arbitrum', 'optimism', 'bsc'].includes(chain) && !/^0x[a-fA-F0-9]{40}$/.test(address)) {
         return res.status(400).json({ error: "Invalid EVM address format" });

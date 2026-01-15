@@ -1142,13 +1142,18 @@ export default function WalletPage() {
                             className="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-sm"
                             data-testid="select-external-chain"
                           >
-                            <option value="ethereum">Ethereum (MetaMask)</option>
-                            <option value="solana">Solana (Phantom)</option>
-                            <option value="base">Base</option>
-                            <option value="polygon">Polygon</option>
-                            <option value="arbitrum">Arbitrum</option>
-                            <option value="optimism">Optimism</option>
-                            <option value="bsc">BNB Chain</option>
+                            <optgroup label="Solana Wallets">
+                              <option value="solana">Solana (Phantom, Solflare)</option>
+                            </optgroup>
+                            <optgroup label="EVM Wallets (MetaMask, Trust, Coinbase)">
+                              <option value="ethereum">Ethereum</option>
+                              <option value="base">Base</option>
+                              <option value="polygon">Polygon</option>
+                              <option value="arbitrum">Arbitrum</option>
+                              <option value="optimism">Optimism</option>
+                              <option value="bsc">BNB Chain</option>
+                              <option value="avalanche">Avalanche</option>
+                            </optgroup>
                           </select>
                           <Input
                             placeholder="Wallet address"
