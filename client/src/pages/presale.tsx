@@ -142,6 +142,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
   const [customAmount, setCustomAmount] = useState("10");
   const [useCustom, setUseCustom] = useState(true);
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto">("card");
   const { toast } = useToast();
   
   const { data: user } = useQuery<{ email?: string; displayName?: string }>({
@@ -178,7 +179,8 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
   
   const checkoutMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch("/api/presale/checkout", {
+      const endpoint = paymentMethod === "crypto" ? "/api/presale/crypto-checkout" : "/api/presale/checkout";
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -196,8 +198,9 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
       return res.json();
     },
     onSuccess: (data) => {
-      if (data.url) {
-        window.location.href = data.url;
+      const redirectUrl = data.url || data.checkoutUrl;
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
       }
     },
     onError: (error: Error) => {
@@ -325,17 +328,54 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
             </div>
           )}
           
+          <div className="p-3 rounded-lg bg-black/30 border border-white/10">
+            <p className="text-xs text-gray-400 mb-2 text-center">Payment Method</p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setPaymentMethod("card")}
+                className={`flex-1 py-2.5 px-3 rounded-lg text-sm font-medium transition-all ${
+                  paymentMethod === "card" 
+                    ? "bg-white/10 text-white border border-white/20" 
+                    : "text-gray-400 hover:text-white"
+                }`}
+                data-testid="button-pay-card-modal"
+              >
+                💳 Card
+              </button>
+              <button
+                onClick={() => setPaymentMethod("crypto")}
+                className={`flex-1 py-2.5 px-3 rounded-lg text-sm font-medium transition-all ${
+                  paymentMethod === "crypto" 
+                    ? "bg-gradient-to-r from-orange-500/20 to-yellow-500/20 text-orange-400 border border-orange-500/30" 
+                    : "text-gray-400 hover:text-orange-400"
+                }`}
+                data-testid="button-pay-crypto-modal"
+              >
+                🪙 Crypto
+              </button>
+            </div>
+            {paymentMethod === "crypto" && (
+              <p className="text-[10px] text-orange-400/70 text-center mt-2">USDC, BTC, ETH, and more accepted via Coinbase</p>
+            )}
+          </div>
+          
           <Button
             onClick={() => checkoutMutation.mutate()}
             disabled={!isValidEmail || !isValidName || amountCents < 1000 || checkoutMutation.isPending}
-            className="w-full py-6 text-lg font-bold bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:opacity-90 disabled:opacity-50"
+            className={`w-full py-6 text-lg font-bold hover:opacity-90 disabled:opacity-50 ${
+              paymentMethod === "crypto" 
+                ? "bg-gradient-to-r from-orange-500 to-yellow-500" 
+                : "bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600"
+            }`}
           >
             {checkoutMutation.isPending ? (
               <Loader2 className="w-5 h-5 animate-spin mr-2" />
+            ) : paymentMethod === "crypto" ? (
+              <span className="mr-2">🪙</span>
             ) : (
               <CreditCard className="w-5 h-5 mr-2" />
             )}
-            Proceed to Checkout - ${(amountCents / 100).toLocaleString()}
+            {paymentMethod === "crypto" ? "Pay with Crypto" : "Pay with Card"} - ${(amountCents / 100).toLocaleString()}
           </Button>
           
           <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">

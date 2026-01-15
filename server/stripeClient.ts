@@ -1,8 +1,14 @@
 import Stripe from 'stripe';
 
 let connectionSettings: any;
+let cachedCredentials: { publishableKey: string; secretKey: string } | null = null;
 
 async function getCredentials() {
+  if (cachedCredentials) {
+    return cachedCredentials;
+  }
+
+  // First try Replit connector system (preferred for environment-aware keys)
   const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
   const xReplitToken = process.env.REPL_IDENTITY
     ? 'repl ' + process.env.REPL_IDENTITY
@@ -10,37 +16,44 @@ async function getCredentials() {
       ? 'depl ' + process.env.WEB_REPL_RENEWAL
       : null;
 
-  if (!xReplitToken) {
-    throw new Error('X_REPLIT_TOKEN not found for repl/depl');
+  if (!xReplitToken || !hostname) {
+    throw new Error('No Stripe credentials available - set STRIPE_SECRET_KEY or configure Stripe connector');
   }
 
   const connectorName = 'stripe';
   const isProduction = process.env.REPLIT_DEPLOYMENT === '1';
   const targetEnvironment = isProduction ? 'production' : 'development';
 
-  const url = new URL(`https://${hostname}/api/v2/connection`);
-  url.searchParams.set('include_secrets', 'true');
-  url.searchParams.set('connector_names', connectorName);
-  url.searchParams.set('environment', targetEnvironment);
+  try {
+    const url = new URL(`https://${hostname}/api/v2/connection`);
+    url.searchParams.set('include_secrets', 'true');
+    url.searchParams.set('connector_names', connectorName);
+    url.searchParams.set('environment', targetEnvironment);
 
-  const response = await fetch(url.toString(), {
-    headers: {
-      'Accept': 'application/json',
-      'X_REPLIT_TOKEN': xReplitToken
+    const response = await fetch(url.toString(), {
+      headers: {
+        'Accept': 'application/json',
+        'X_REPLIT_TOKEN': xReplitToken
+      }
+    });
+
+    const data = await response.json();
+    connectionSettings = data.items?.[0];
+
+    if (!connectionSettings || (!connectionSettings.settings.publishable || !connectionSettings.settings.secret)) {
+      throw new Error(`Stripe ${targetEnvironment} connection not found in connector`);
     }
-  });
 
-  const data = await response.json();
-  connectionSettings = data.items?.[0];
-
-  if (!connectionSettings || (!connectionSettings.settings.publishable || !connectionSettings.settings.secret)) {
-    throw new Error(`Stripe ${targetEnvironment} connection not found`);
+    console.log(`[Stripe] Using connector credentials for ${targetEnvironment}`);
+    cachedCredentials = {
+      publishableKey: connectionSettings.settings.publishable,
+      secretKey: connectionSettings.settings.secret,
+    };
+    return cachedCredentials;
+  } catch (error: any) {
+    console.error('[Stripe] Connector error:', error?.message);
+    throw new Error(`Stripe credentials unavailable: ${error?.message}`);
   }
-
-  return {
-    publishableKey: connectionSettings.settings.publishable,
-    secretKey: connectionSettings.settings.secret,
-  };
 }
 
 export async function getUncachableStripeClient() {
