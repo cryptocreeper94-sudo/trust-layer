@@ -264,9 +264,11 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
             Proceed to Checkout - ${(tier.amount / 100).toLocaleString()}
           </Button>
           
-          <p className="text-xs text-gray-500 text-center">
-            Secure payment via Stripe. Your tokens will be allocated to your email.
-          </p>
+          <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
+            <p className="text-xs text-amber-400 text-center">
+              No wallet needed now! Tokens are tracked by email. You'll create a DarkWave wallet before TGE to receive your DWC.
+            </p>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
@@ -942,22 +944,22 @@ export default function Presale() {
             <HolographicCard className="p-6 text-center relative" glow="purple">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">2</div>
               <CheckCircle className="w-8 h-8 text-purple-400 mx-auto mb-4 mt-2" />
-              <h3 className="text-lg font-bold text-white mb-2">Tokens Allocated</h3>
-              <p className="text-gray-400 text-sm">Your DWC allocation is recorded to your email</p>
+              <h3 className="text-lg font-bold text-white mb-2">Allocation Tracked</h3>
+              <p className="text-gray-400 text-sm">No wallet needed! DWC & Shells tracked by your account</p>
             </HolographicCard>
             
             <HolographicCard className="p-6 text-center relative" glow="pink">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm">3</div>
               <Users className="w-8 h-8 text-pink-400 mx-auto mb-4 mt-2" />
-              <h3 className="text-lg font-bold text-white mb-2">Create Wallet</h3>
-              <p className="text-gray-400 text-sm">Sign up and create your DarkWave wallet before launch</p>
+              <h3 className="text-lg font-bold text-white mb-2">Create Wallet at TGE</h3>
+              <p className="text-gray-400 text-sm">Before launch, create your DarkWave wallet to claim tokens</p>
             </HolographicCard>
             
             <HolographicCard className="p-6 text-center relative" glow="amber">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm">4</div>
               <Coins className="w-8 h-8 text-amber-400 mx-auto mb-4 mt-2" />
-              <h3 className="text-lg font-bold text-white mb-2">Receive Tokens</h3>
-              <p className="text-gray-400 text-sm">Tokens distributed to your wallet at mainnet launch</p>
+              <h3 className="text-lg font-bold text-white mb-2">Receive DWC</h3>
+              <p className="text-gray-400 text-sm">DWC + converted Shells airdropped to your wallet</p>
             </HolographicCard>
           </div>
           
@@ -967,12 +969,12 @@ export default function Presale() {
                 <Shield className="w-5 h-5 text-blue-400" />
               </div>
               <div>
-                <h4 className="text-white font-semibold mb-2">Important: Token Distribution Timeline</h4>
+                <h4 className="text-white font-semibold mb-2">No Wallet Required Until TGE</h4>
                 <p className="text-gray-400 text-sm leading-relaxed">
-                  Your presale purchase is <span className="text-cyan-400 font-medium">recorded immediately</span> and linked to your email. 
-                  Before our mainnet launch (October 2026), you'll receive instructions to create your DarkWave wallet. 
-                  At launch, your tokens will be <span className="text-green-400 font-medium">automatically distributed</span> to your wallet 
-                  according to the vesting schedule (20% at TGE, 80% vested over 12 months).
+                  <span className="text-cyan-400 font-medium">Participate now without a wallet!</span> Your presale purchases and Zealy Shell earnings are 
+                  tracked by your account, not your wallet. Before TGE (October 2026), you'll create a DarkWave wallet to receive your tokens.
+                  At launch, your <span className="text-green-400 font-medium">DWC tokens + converted Shells</span> will be airdropped to your wallet 
+                  (20% at TGE, 80% vested over 12 months). Shell conversion rate: 100 Shells = 1 DWC.
                 </p>
               </div>
             </div>

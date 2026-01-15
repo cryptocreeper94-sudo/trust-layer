@@ -174,7 +174,7 @@ export function DwcBagDashboard({ compact = false }: { compact?: boolean }) {
           />
           <p className="text-xs text-gray-500 mt-2">
             <Lock className="w-3 h-3 inline mr-1" />
-            Tokens will be airdropped at TGE: {new Date(tgeDate).toLocaleDateString()}
+            Create your DarkWave wallet before TGE ({new Date(tgeDate).toLocaleDateString()}) to receive tokens
           </p>
         </div>
       </GlassCard>
@@ -224,7 +224,7 @@ export function DwcBagDashboard({ compact = false }: { compact?: boolean }) {
           <Wallet className="w-12 h-12 text-gray-600 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-white mb-2">Start Building Your Bag</h3>
           <p className="text-gray-400 text-sm mb-4">
-            Purchase DWC tokens during presale, complete Zealy quests to earn Shells, or participate in airdrops.
+            No wallet needed yet! Purchase DWC tokens or earn Shells - all tracked by your account until TGE.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link href="/presale">
