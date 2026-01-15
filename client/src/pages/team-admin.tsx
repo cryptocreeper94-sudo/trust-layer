@@ -335,22 +335,25 @@ function TeamDashboard() {
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group"
+                onClick={(e) => e.stopPropagation()}
               >
                 <span className="text-sm text-gray-300">Zealy Dashboard</span>
                 <ExternalLink className="w-4 h-4 text-gray-500 group-hover:text-cyan-400" />
               </a>
-              <Link href="/zealy-campaign">
-                <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group cursor-pointer">
-                  <span className="text-sm text-gray-300">Public Campaign Page</span>
-                  <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-cyan-400" />
-                </div>
-              </Link>
-              <Link href="/rewards">
-                <div className="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group cursor-pointer">
-                  <span className="text-sm text-gray-300">Rewards Page</span>
-                  <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-cyan-400" />
-                </div>
-              </Link>
+              <a 
+                href="/zealy-campaign"
+                className="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group cursor-pointer"
+              >
+                <span className="text-sm text-gray-300">Public Campaign Page</span>
+                <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-cyan-400" />
+              </a>
+              <a 
+                href="/rewards"
+                className="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group cursor-pointer"
+              >
+                <span className="text-sm text-gray-300">Rewards Page</span>
+                <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-cyan-400" />
+              </a>
             </div>
           </GlassCard>
         </div>
