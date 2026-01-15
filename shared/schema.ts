@@ -4304,6 +4304,30 @@ export type WalletBackup = typeof walletBackups.$inferSelect;
 export type InsertWalletBackup = z.infer<typeof insertWalletBackupSchema>;
 
 // ============================================
+// USER EXTERNAL WALLETS (Third-Party Wallets)
+// ============================================
+
+export const userExternalWallets = pgTable("user_external_wallets", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  chain: text("chain").notNull(), // 'ethereum', 'solana', 'base', 'polygon', etc.
+  address: text("address").notNull(),
+  label: text("label"), // Optional friendly name
+  isDefault: boolean("is_default").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertUserExternalWalletSchema = createInsertSchema(userExternalWallets).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type UserExternalWallet = typeof userExternalWallets.$inferSelect;
+export type InsertUserExternalWallet = z.infer<typeof insertUserExternalWalletSchema>;
+
+// ============================================
 // KYC VERIFICATION
 // ============================================
 

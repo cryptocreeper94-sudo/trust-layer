@@ -200,6 +200,61 @@ export default function WalletPage() {
   const [buyAmount, setBuyAmount] = useState("100");
   const [selectedCrypto, setSelectedCrypto] = useState("eth");
   const [isCreatingOnrampSession, setIsCreatingOnrampSession] = useState(false);
+  
+  // External wallet management state
+  const [showExternalWallets, setShowExternalWallets] = useState(false);
+  const [newExternalAddress, setNewExternalAddress] = useState("");
+  const [newExternalChain, setNewExternalChain] = useState("ethereum");
+  const [newExternalLabel, setNewExternalLabel] = useState("");
+  const [isSavingExternalWallet, setIsSavingExternalWallet] = useState(false);
+  
+  // Fetch external wallets
+  const { data: externalWalletsData, refetch: refetchExternalWallets } = useQuery({
+    queryKey: ["external-wallets", user?.id],
+    queryFn: () => axios.get("/api/wallet/external").then(r => r.data.wallets),
+    enabled: !!user?.id,
+  });
+  
+  const externalWallets = externalWalletsData || [];
+  
+  const handleSaveExternalWallet = async () => {
+    if (!newExternalAddress.trim()) {
+      toast({ title: "Address required", description: "Please enter a wallet address", variant: "destructive" });
+      return;
+    }
+    
+    setIsSavingExternalWallet(true);
+    try {
+      await axios.post("/api/wallet/external", {
+        chain: newExternalChain,
+        address: newExternalAddress.trim(),
+        label: newExternalLabel.trim() || null,
+      });
+      
+      toast({ title: "Wallet saved", description: "Your external wallet has been saved" });
+      setNewExternalAddress("");
+      setNewExternalLabel("");
+      refetchExternalWallets();
+    } catch (error: any) {
+      toast({ 
+        title: "Error", 
+        description: error.response?.data?.error || "Failed to save wallet", 
+        variant: "destructive" 
+      });
+    } finally {
+      setIsSavingExternalWallet(false);
+    }
+  };
+  
+  const handleDeleteExternalWallet = async (walletId: string) => {
+    try {
+      await axios.delete(`/api/wallet/external/${walletId}`);
+      toast({ title: "Wallet removed" });
+      refetchExternalWallets();
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to remove wallet", variant: "destructive" });
+    }
+  };
 
   // Get stored wallet addresses
   const getStoredAddresses = (): Record<string, string> => {
@@ -288,14 +343,24 @@ export default function WalletPage() {
     toast({ title: "Address Copied", description: "Wallet address copied to clipboard" });
   };
 
+  const validatePassword = (pwd: string): { valid: boolean; message: string } => {
+    if (pwd.length < 8) return { valid: false, message: "Password must be at least 8 characters" };
+    if (!/[A-Z]/.test(pwd)) return { valid: false, message: "Password must contain at least one uppercase letter" };
+    if (!/[a-z]/.test(pwd)) return { valid: false, message: "Password must contain at least one lowercase letter" };
+    if (!/[0-9]/.test(pwd)) return { valid: false, message: "Password must contain at least one number" };
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) return { valid: false, message: "Password must contain at least one special character (!@#$%^&*)" };
+    return { valid: true, message: "" };
+  };
+
   // Create wallet using proper BIP39 mnemonic generation
   const handleCreateWallet = async () => {
     if (password !== confirmPassword) {
       toast({ title: "Error", description: "Passwords do not match", variant: "destructive" });
       return;
     }
-    if (password.length < 8) {
-      toast({ title: "Error", description: "Password must be at least 8 characters", variant: "destructive" });
+    const passwordCheck = validatePassword(password);
+    if (!passwordCheck.valid) {
+      toast({ title: "Weak Password", description: passwordCheck.message, variant: "destructive" });
       return;
     }
     
@@ -365,7 +430,12 @@ export default function WalletPage() {
       toast({ title: "Error", description: "Invalid recovery phrase. Must be 12 valid BIP39 words.", variant: "destructive" });
       return;
     }
-    if (importPassword.length < 8) {
+    const importPasswordCheck = validatePassword(importPassword);
+    if (!importPasswordCheck.valid) {
+      toast({ title: "Weak Password", description: importPasswordCheck.message, variant: "destructive" });
+      return;
+    }
+    if (false) { // kept for backwards compatibility
       toast({ title: "Error", description: "Password must be at least 8 characters", variant: "destructive" });
       return;
     }
@@ -428,10 +498,13 @@ export default function WalletPage() {
         </div>
       </nav>
 
-      <div className="fixed top-14 left-0 right-0 z-40 bg-gradient-to-r from-amber-500/90 to-orange-500/90 backdrop-blur-sm border-b border-amber-500/50">
-        <div className="container mx-auto px-4 py-2 flex items-center justify-center gap-2 flex-wrap text-center">
-          <AlertTriangle className="w-4 h-4 text-black flex-shrink-0" />
-          <span className="text-xs sm:text-sm font-medium text-black">TESTNET MODE • DWC presale tokens tracked separately • Use "Buy Crypto" for card purchases via Stripe</span>
+      <div className="fixed top-14 left-0 right-0 z-40 bg-gradient-to-r from-cyan-600/90 to-purple-600/90 backdrop-blur-sm border-b border-cyan-500/50">
+        <div className="container mx-auto px-4 py-3 flex flex-col items-center gap-1 text-center">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-white flex-shrink-0" />
+            <span className="text-xs sm:text-sm font-bold text-white">DarkWave Wallet — Shells Only Until April 11th Launch</span>
+          </div>
+          <span className="text-[10px] sm:text-xs text-white/80">Use your preferred wallet (MetaMask, Phantom, etc.) for presale crypto purchases</span>
         </div>
       </div>
 
@@ -447,18 +520,23 @@ export default function WalletPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 mb-6">
-            <Sparkles className="w-4 h-4 text-purple-400" />
-            <span className="text-sm text-purple-300">Multi-Chain Wallet</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 mb-6">
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            <span className="text-sm text-amber-300">Shells Economy Wallet</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
               DarkWave Wallet
             </span>
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            One wallet, all chains. Manage your assets across 9+ blockchains with military-grade security.
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-4">
+            Collect and manage your Shells before mainnet launch on April 11th, 2025.
           </p>
+          <div className="max-w-xl mx-auto p-4 rounded-xl bg-slate-800/50 border border-white/10">
+            <p className="text-sm text-gray-300">
+              <strong className="text-amber-400">Pre-Launch Mode:</strong> This wallet is for Shells only. For presale purchases, use your preferred third-party wallet (MetaMask for Ethereum, Phantom for Solana, etc.) with the "Buy Crypto" button below.
+            </p>
+          </div>
         </motion.div>
 
         {user && (
@@ -547,6 +625,13 @@ export default function WalletPage() {
                         className="bg-white/5 border-white/10"
                         data-testid="input-wallet-password"
                       />
+                      <div className="text-xs text-muted-foreground space-y-1">
+                        <p className={password.length >= 8 ? "text-green-400" : ""}>• At least 8 characters</p>
+                        <p className={/[A-Z]/.test(password) ? "text-green-400" : ""}>• One uppercase letter</p>
+                        <p className={/[a-z]/.test(password) ? "text-green-400" : ""}>• One lowercase letter</p>
+                        <p className={/[0-9]/.test(password) ? "text-green-400" : ""}>• One number</p>
+                        <p className={/[!@#$%^&*(),.?":{}|<>]/.test(password) ? "text-green-400" : ""}>• One special character</p>
+                      </div>
                     </div>
                     <div className="space-y-2">
                       <Label>Confirm Password</Label>
@@ -561,7 +646,7 @@ export default function WalletPage() {
                     </div>
                     <Button
                       onClick={handleCreateWallet}
-                      disabled={isCreating || password.length < 8 || password !== confirmPassword}
+                      disabled={isCreating || !validatePassword(password).valid || password !== confirmPassword}
                       className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
                       data-testid="button-create-wallet"
                     >
@@ -586,19 +671,20 @@ export default function WalletPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Password (min 8 characters)</Label>
+                      <Label>Password</Label>
                       <Input
                         type="password"
-                        placeholder="Create a password to encrypt your wallet"
+                        placeholder="Create a strong password"
                         value={importPassword}
                         onChange={(e) => setImportPassword(e.target.value)}
                         className="bg-white/5 border-white/10"
                         data-testid="input-import-password"
                       />
+                      <p className="text-xs text-muted-foreground">Must have 8+ chars, uppercase, lowercase, number, special character</p>
                     </div>
                     <Button
                       onClick={handleImportWallet}
-                      disabled={isCreating || !importMnemonic || importPassword.length < 8}
+                      disabled={isCreating || !importMnemonic || !validatePassword(importPassword).valid}
                       className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600"
                       data-testid="button-import-wallet"
                     >
@@ -1020,6 +1106,124 @@ export default function WalletPage() {
                         <p className="text-xs text-muted-foreground">Sign in to enable cloud backup</p>
                       )}
                     </div>
+                  </CardContent>
+                </Card>
+                
+                {/* External Wallets Card */}
+                <Card className="bg-white/5 backdrop-blur-xl border-white/10 overflow-hidden">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <ExternalLink className="w-4 h-4 text-purple-400" />
+                        <span className="text-sm font-medium">Third-Party Wallets</span>
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => setShowExternalWallets(!showExternalWallets)}
+                        className="h-7 text-xs"
+                        data-testid="button-toggle-external-wallets"
+                      >
+                        {showExternalWallets ? 'Hide' : 'Manage'}
+                      </Button>
+                    </div>
+                    
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Save your MetaMask or Phantom addresses for easy access during crypto purchases.
+                    </p>
+                    
+                    {showExternalWallets && user?.id && (
+                      <div className="space-y-3 mt-4 pt-3 border-t border-white/10">
+                        {/* Add new wallet form */}
+                        <div className="space-y-2">
+                          <select
+                            value={newExternalChain}
+                            onChange={(e) => setNewExternalChain(e.target.value)}
+                            className="w-full p-2 rounded-lg bg-white/5 border border-white/10 text-sm"
+                            data-testid="select-external-chain"
+                          >
+                            <option value="ethereum">Ethereum (MetaMask)</option>
+                            <option value="solana">Solana (Phantom)</option>
+                            <option value="base">Base</option>
+                            <option value="polygon">Polygon</option>
+                            <option value="arbitrum">Arbitrum</option>
+                            <option value="optimism">Optimism</option>
+                            <option value="bsc">BNB Chain</option>
+                          </select>
+                          <Input
+                            placeholder="Wallet address"
+                            value={newExternalAddress}
+                            onChange={(e) => setNewExternalAddress(e.target.value)}
+                            className="bg-white/5 border-white/10 text-sm"
+                            data-testid="input-external-address"
+                          />
+                          <Input
+                            placeholder="Label (optional)"
+                            value={newExternalLabel}
+                            onChange={(e) => setNewExternalLabel(e.target.value)}
+                            className="bg-white/5 border-white/10 text-sm"
+                            data-testid="input-external-label"
+                          />
+                          <Button
+                            size="sm"
+                            onClick={handleSaveExternalWallet}
+                            disabled={isSavingExternalWallet || !newExternalAddress.trim()}
+                            className="w-full bg-purple-500/20 border border-purple-500/30 text-purple-400 hover:bg-purple-500/30"
+                            data-testid="button-save-external-wallet"
+                          >
+                            {isSavingExternalWallet ? <Loader className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4 mr-1" />}
+                            Save Wallet
+                          </Button>
+                        </div>
+                        
+                        {/* Saved wallets list */}
+                        {externalWallets.length > 0 && (
+                          <div className="space-y-2 mt-3">
+                            <p className="text-xs text-muted-foreground">Saved wallets:</p>
+                            {externalWallets.map((wallet: any) => (
+                              <div key={wallet.id} className="flex items-center justify-between p-2 rounded-lg bg-white/5 border border-white/10">
+                                <div className="min-w-0 flex-1">
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-xs font-medium text-purple-400 uppercase">{wallet.chain}</span>
+                                    {wallet.label && <span className="text-xs text-muted-foreground">({wallet.label})</span>}
+                                  </div>
+                                  <code className="text-xs text-muted-foreground font-mono truncate block">
+                                    {wallet.address.slice(0, 10)}...{wallet.address.slice(-6)}
+                                  </code>
+                                </div>
+                                <div className="flex gap-1 ml-2">
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => {
+                                      navigator.clipboard.writeText(wallet.address);
+                                      toast({ title: "Copied!" });
+                                    }}
+                                    className="h-7 w-7 p-0"
+                                    data-testid={`button-copy-external-${wallet.id}`}
+                                  >
+                                    <Copy className="w-3 h-3" />
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => handleDeleteExternalWallet(wallet.id)}
+                                    className="h-7 w-7 p-0 text-red-400 hover:text-red-300"
+                                    data-testid={`button-delete-external-${wallet.id}`}
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </Button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
+                    {!user?.id && (
+                      <p className="text-xs text-muted-foreground">Sign in to save external wallets</p>
+                    )}
                   </CardContent>
                 </Card>
               </div>

@@ -93,3 +93,18 @@ export const aiUsageLogs = pgTable("ai_usage_logs", {
 });
 
 export type AiUsageLog = typeof aiUsageLogs.$inferSelect;
+
+// External wallet addresses for crypto purchases (Stripe onramp, etc.)
+export const userExternalWallets = pgTable("user_external_wallets", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  chain: varchar("chain").notNull(), // 'ethereum', 'solana', 'base', 'polygon', etc.
+  address: varchar("address").notNull(),
+  label: varchar("label"), // Optional nickname like "My MetaMask"
+  isDefault: varchar("is_default").default("false"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export type UserExternalWallet = typeof userExternalWallets.$inferSelect;
+export type InsertUserExternalWallet = typeof userExternalWallets.$inferInsert;

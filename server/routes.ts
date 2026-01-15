@@ -117,7 +117,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -1069,8 +1069,20 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Email and password are required" });
       }
       
-      if (password.length < 4) {
-        return res.status(400).json({ error: "Password must be at least 4 characters" });
+      if (password.length < 8) {
+        return res.status(400).json({ error: "Password must be at least 8 characters" });
+      }
+      if (!/[A-Z]/.test(password)) {
+        return res.status(400).json({ error: "Password must contain at least one uppercase letter" });
+      }
+      if (!/[a-z]/.test(password)) {
+        return res.status(400).json({ error: "Password must contain at least one lowercase letter" });
+      }
+      if (!/[0-9]/.test(password)) {
+        return res.status(400).json({ error: "Password must contain at least one number" });
+      }
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        return res.status(400).json({ error: "Password must contain at least one special character" });
       }
 
       if (!username || username.length < 2) {
@@ -1324,8 +1336,20 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Token and new password are required" });
       }
 
-      if (newPassword.length < 6) {
-        return res.status(400).json({ error: "Password must be at least 6 characters" });
+      if (newPassword.length < 8) {
+        return res.status(400).json({ error: "Password must be at least 8 characters" });
+      }
+      if (!/[A-Z]/.test(newPassword)) {
+        return res.status(400).json({ error: "Password must contain at least one uppercase letter" });
+      }
+      if (!/[a-z]/.test(newPassword)) {
+        return res.status(400).json({ error: "Password must contain at least one lowercase letter" });
+      }
+      if (!/[0-9]/.test(newPassword)) {
+        return res.status(400).json({ error: "Password must contain at least one number" });
+      }
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(newPassword)) {
+        return res.status(400).json({ error: "Password must contain at least one special character" });
       }
 
       // Find valid token
@@ -6184,6 +6208,80 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Error checking backup:", error);
       res.status(500).json({ error: "Failed to check backup status" });
+    }
+  });
+
+  // === EXTERNAL WALLET MANAGEMENT ===
+  app.get("/api/wallet/external", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const wallets = await db.select()
+        .from(userExternalWallets)
+        .where(eq(userExternalWallets.userId, userId))
+        .orderBy(userExternalWallets.createdAt);
+      
+      res.json({ wallets });
+    } catch (error) {
+      console.error("Error fetching external wallets:", error);
+      res.status(500).json({ error: "Failed to fetch wallets" });
+    }
+  });
+
+  app.post("/api/wallet/external", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const { chain, address, label } = req.body;
+      
+      if (!chain || !address) {
+        return res.status(400).json({ error: "Chain and address are required" });
+      }
+      
+      // Basic address validation
+      if (chain === 'solana' && !/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address)) {
+        return res.status(400).json({ error: "Invalid Solana address format" });
+      }
+      if (['ethereum', 'base', 'polygon', 'arbitrum', 'optimism', 'bsc'].includes(chain) && !/^0x[a-fA-F0-9]{40}$/.test(address)) {
+        return res.status(400).json({ error: "Invalid EVM address format" });
+      }
+      
+      const [wallet] = await db.insert(userExternalWallets).values({
+        userId,
+        chain,
+        address,
+        label: label || null,
+      }).returning();
+      
+      res.json({ wallet });
+    } catch (error) {
+      console.error("Error saving external wallet:", error);
+      res.status(500).json({ error: "Failed to save wallet" });
+    }
+  });
+
+  app.delete("/api/wallet/external/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      const walletId = req.params.id;
+      
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      await db.delete(userExternalWallets)
+        .where(and(eq(userExternalWallets.id, walletId), eq(userExternalWallets.userId, userId)));
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting external wallet:", error);
+      res.status(500).json({ error: "Failed to delete wallet" });
     }
   });
 

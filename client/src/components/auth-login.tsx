@@ -339,16 +339,23 @@ export function AuthLoginModal({ isOpen, onClose, onSuccess }: AuthLoginModalPro
                 />
                 <Input
                   type="password"
-                  placeholder="Password (4+ characters)"
+                  placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="h-12 bg-white/5 border-white/10"
                   data-testid="input-password"
                 />
+                <div className="text-xs text-muted-foreground grid grid-cols-2 gap-1">
+                  <p className={password.length >= 8 ? "text-green-400" : ""}>• 8+ characters</p>
+                  <p className={/[A-Z]/.test(password) ? "text-green-400" : ""}>• Uppercase</p>
+                  <p className={/[a-z]/.test(password) ? "text-green-400" : ""}>• Lowercase</p>
+                  <p className={/[0-9]/.test(password) ? "text-green-400" : ""}>• Number</p>
+                  <p className={/[!@#$%^&*(),.?":{}|<>]/.test(password) ? "text-green-400" : ""}>• Special char</p>
+                </div>
                 <Button
                   className="w-full h-12 bg-gradient-to-r from-cyan-500 to-purple-500 text-black font-semibold"
                   onClick={handleEmailSignup}
-                  disabled={loading !== null || !email || !password || !username}
+                  disabled={loading !== null || !email || password.length < 8 || !/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password) || !/[!@#$%^&*(),.?":{}|<>]/.test(password) || !username}
                   data-testid="button-submit-signup"
                 >
                   {loading === 'email' ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Create Account'}
