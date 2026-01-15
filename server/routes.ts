@@ -625,6 +625,17 @@ export async function registerRoutes(
             `);
 
             console.log(`[Coinbase Webhook] Presale recorded: ${customerEmail}, tier: ${tier}, amount: $${amountUsd}, tokens: ${totalTokens}`);
+            
+            // Send confirmation email
+            try {
+              const bonusPercent = tier === 'genesis' ? 25 : tier === 'founder' ? 15 : tier === 'pioneer' ? 10 : tier === 'early_bird' ? 5 : 0;
+              const baseTokens = Math.floor(totalTokens / (1 + bonusPercent / 100));
+              const bonusTokens = totalTokens - baseTokens;
+              await sendPresaleConfirmationEmail(customerEmail, amountUsd.toFixed(2), tier, baseTokens, bonusTokens);
+              console.log(`[Coinbase Webhook] Confirmation email sent to ${customerEmail}`);
+            } catch (emailError) {
+              console.error("[Coinbase Webhook] Failed to send confirmation email:", emailError);
+            }
           } catch (dbError) {
             console.error("[Coinbase Webhook] DB error for presale:", dbError);
           }
