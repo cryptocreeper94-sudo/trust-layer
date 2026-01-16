@@ -387,8 +387,8 @@ function renderElement(
       
       doc.moveDown(isPart ? 0.8 : 0.4);
       
-      if (isPart) {
-        // Only add images for part headers, not every chapter
+      // Add images for parts AND chapters that have mapped images
+      if (isPart || isChapter) {
         addChapterImage(doc, text);
       }
       
