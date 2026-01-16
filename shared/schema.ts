@@ -1665,7 +1665,7 @@ export const insertSocialLeaderboardSchema = createInsertSchema(socialLeaderboar
 export type InsertSocialLeaderboard = z.infer<typeof insertSocialLeaderboardSchema>;
 export type SocialLeaderboard = typeof socialLeaderboard.$inferSelect;
 
-// Legacy Founder Program - DarkWave Smart Chain Early Adopters
+// Legacy Founder Program - DarkWave Trust Layer Early Adopters
 export const legacyFounders = pgTable("legacy_founders", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull(),

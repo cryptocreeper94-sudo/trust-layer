@@ -32,7 +32,7 @@ export async function submitHashToDarkWave(payload: HashPayload): Promise<DarkWa
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Failed to submit to DarkWave Smart Chain",
+      error: error instanceof Error ? error.message : "Failed to submit to DarkWave Trust Layer",
     };
   }
 }

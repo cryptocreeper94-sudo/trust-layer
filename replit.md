@@ -1,7 +1,14 @@
-# DarkWave Smart Chain - Replit Agent Guide
+# DarkWave Trust Layer - Replit Agent Guide
 
 ## Overview
-DarkWave Smart Chain (DSC) is a high-performance Layer 1 Proof-of-Authority (PoA) blockchain ecosystem by DarkWave Studios. It features the DarkWave Portal, a comprehensive React web application serving as an ecosystem interface, block explorer, and developer hub. The project also includes "DarkWave Chronicles," a fantasy-themed game focused on a living political simulation and community-driven content. The primary goal is to deliver a fast, feature-rich blockchain with a premium user experience and innovative gaming across four key domains: dwsc.io, darkwavegames.io, darkwavestudios.io, and yourlegacy.io.
+DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (PoA) blockchain ecosystem by DarkWave Studios. Unlike traditional "smart chains" that focus solely on code execution, DWTL is designed as a **Coordinated Trust Layer** - infrastructure that provides verified identity, accountability, and transparent audit trails for real business operations. It features the DarkWave Portal, a comprehensive React web application serving as an ecosystem interface, block explorer, and developer hub. The project also includes "DarkWave Chronicles," a fantasy-themed game focused on a living political simulation and community-driven content. The primary goal is to deliver a fast, feature-rich trust infrastructure with a premium user experience and innovative gaming across four key domains: dwsc.io, darkwavegames.io, darkwavestudios.io, and yourlegacy.io.
+
+### Why "Trust Layer" Instead of "Blockchain"
+- **"Blockchain" has become a hollow buzzword** - it only describes the technical implementation (blocks chained together), not the value proposition
+- **"Smart Chain" implies code execution** - every chain does that now; it's table stakes, not a differentiator
+- **"Trust Layer" describes what we provide** - verified participants, Guardian certifications, ChronoPass identity, audit trails, and accountability
+- **Enterprises need trust infrastructure** - they don't care how it works, they care that it enables trusted business relationships
+- DWTL IS blockchain technology under the hood, but the brand focuses on value delivered, not implementation details
 
 ## User Preferences
 - Preferred communication style: Simple, everyday language

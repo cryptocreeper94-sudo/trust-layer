@@ -1,6 +1,6 @@
 /**
- * DarkWave Smart Chain - Token Deployment Templates
- * Pre-built templates for deploying tokens on DWSC
+ * DarkWave Trust Layer - Token Deployment Templates
+ * Pre-built templates for deploying tokens on DWTL
  * 
  * Note: These templates are pre-VM and work with the native token system.
  * Full EVM smart contract support is planned for Q2 2026.
@@ -163,10 +163,10 @@ export function generateTokenMetadata(config: TokenConfig): object {
     metadata: config.metadata || {},
     chain: {
       id: 8453,
-      name: "DarkWave Smart Chain",
+      name: "DarkWave Trust Layer",
       network: "mainnet",
     },
-    standard: "DWSC-20",
+    standard: "DWTL-20",
     version: "1.0.0",
   };
 }

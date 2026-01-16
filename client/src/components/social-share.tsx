@@ -142,7 +142,7 @@ export function ShareTransaction({ hash, type, amount, token }: { hash: string; 
   return (
     <SocialShare
       title={`DarkWave ${type} Transaction`}
-      text={`I just ${type.toLowerCase()}ed ${amount} ${token} on DarkWave Smart Chain! Check it out:`}
+      text={`I just ${type.toLowerCase()}ed ${amount} ${token} on DarkWave Trust Layer! Check it out:`}
       url={`${window.location.origin}/explorer?tx=${hash}`}
       hashtags={["DarkWave", "DWC", "Crypto", type]}
     />

@@ -7,14 +7,14 @@ import { storage } from './storage';
 
 const WHITEPAPER_DOCS = [
   {
-    title: "DarkWave Smart Chain - Technical Whitepaper",
+    title: "DarkWave Trust Layer - Technical Whitepaper",
     category: "general",
     isPublic: true,
-    content: `# DarkWave Smart Chain Technical Whitepaper
+    content: `# DarkWave Trust Layer Technical Whitepaper
 
 ## Abstract
 
-DarkWave Smart Chain (DWSC) is a purpose-built Layer 1 blockchain optimized for high-performance gaming, digital asset ownership, and decentralized applications. This whitepaper outlines the technical architecture, consensus mechanism, and economic model that powers the DarkWave ecosystem.
+DarkWave Trust Layer (DWSC) is a purpose-built Layer 1 blockchain optimized for high-performance gaming, digital asset ownership, and decentralized applications. This whitepaper outlines the technical architecture, consensus mechanism, and economic model that powers the DarkWave ecosystem.
 
 ## 1. Introduction
 
@@ -141,7 +141,7 @@ Flagship gaming application demonstrating chain capabilities:
 
 ## 7. Conclusion
 
-DarkWave Smart Chain represents a purpose-built solution for the next generation of interactive blockchain applications. By optimizing for gaming use cases while maintaining security and decentralization principles, DWSC enables experiences previously impossible on existing platforms.
+DarkWave Trust Layer represents a purpose-built solution for the next generation of interactive blockchain applications. By optimizing for gaming use cases while maintaining security and decentralization principles, DWSC enables experiences previously impossible on existing platforms.
 
 ---
 
@@ -157,7 +157,7 @@ DarkWave Smart Chain represents a purpose-built solution for the next generation
 
 ## Overview
 
-The DarkWave Coin (DWC) serves as the native utility token of the DarkWave Smart Chain ecosystem. This document details the various use cases and utility functions of DWC.
+The DarkWave Coin (DWC) serves as the native utility token of the DarkWave Trust Layer ecosystem. This document details the various use cases and utility functions of DWC.
 
 ## Primary Utilities
 

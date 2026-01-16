@@ -32,7 +32,7 @@ const APP_CONFIG: Record<AppDomain, {
   dwsc: {
     manifest: "/manifest-dwsc.webmanifest",
     themeColor: "#00ffff",
-    title: "DarkWave Smart Chain",
+    title: "DarkWave Trust Layer",
     description: "The next-generation Layer 1 blockchain. DeFi, staking, NFTs, and developer tools.",
     icon: "/icons/dwsc-512x512.png",
   },

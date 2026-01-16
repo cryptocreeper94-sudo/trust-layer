@@ -545,7 +545,7 @@ export default function CrowdfundPage() {
             </h1>
           </div>
           <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-            Support the transparent development of DarkWave Smart Chain. Every contribution is tracked on-chain with a unique DWSC stamp.
+            Support the transparent development of DarkWave Trust Layer. Every contribution is tracked on-chain with a unique DWTL stamp.
           </p>
         </motion.div>
 

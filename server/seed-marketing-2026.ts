@@ -190,7 +190,7 @@ Full launch date TBD. Play what's ready NOW.
 Not theoretical. Not "up to."
 Real throughput on a real chain.
 
-DarkWave Smart Chain launches April 11, 2026.
+DarkWave Trust Layer launches April 11, 2026.
 
 See the metrics live → dwsc.io/explorer`,
     category: 'tech',
@@ -245,7 +245,7 @@ $0.0001 fees.
 
 Not promises. Metrics.
 
-DarkWave Smart Chain. April 11, 2026. ⚡`,
+DarkWave Trust Layer. April 11, 2026. ⚡`,
     category: 'tech',
   },
   {

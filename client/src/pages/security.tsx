@@ -62,12 +62,12 @@ const SECURITY_FEATURES = [
 ];
 
 const COMPARISON_DATA = [
-  { category: "Encryption", dwsc: 95, industry: 60 },
-  { category: "Authentication", dwsc: 85, industry: 55 },
-  { category: "API Protection", dwsc: 80, industry: 45 },
-  { category: "Data Integrity", dwsc: 90, industry: 50 },
-  { category: "Secret Management", dwsc: 90, industry: 40 },
-  { category: "Headers & CORS", dwsc: 85, industry: 35 },
+  { category: "Encryption", dwtl: 95, industry: 60 },
+  { category: "Authentication", dwtl: 85, industry: 55 },
+  { category: "API Protection", dwtl: 80, industry: 45 },
+  { category: "Data Integrity", dwtl: 90, industry: 50 },
+  { category: "Secret Management", dwtl: 90, industry: 40 },
+  { category: "Headers & CORS", dwtl: 85, industry: 35 },
 ];
 
 const CERTIFICATIONS_PLANNED = [
@@ -164,7 +164,7 @@ function HeroScoreBadge() {
   );
 }
 
-function ComparisonBar({ category, dwsc, industry, index }: { category: string; dwsc: number; industry: number; index: number }) {
+function ComparisonBar({ category, dwtl, industry, index }: { category: string; dwtl: number; industry: number; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
@@ -176,7 +176,7 @@ function ComparisonBar({ category, dwsc, industry, index }: { category: string; 
       <div className="flex justify-between text-sm">
         <span className="text-white/80 font-medium">{category}</span>
         <div className="flex gap-4">
-          <span className="text-cyan-400">{dwsc}%</span>
+          <span className="text-cyan-400">{dwtl}%</span>
           <span className="text-white/30">{industry}%</span>
         </div>
       </div>
@@ -190,7 +190,7 @@ function ComparisonBar({ category, dwsc, industry, index }: { category: string; 
         />
         <motion.div
           initial={{ width: 0 }}
-          whileInView={{ width: `${dwsc}%` }}
+          whileInView={{ width: `${dwtl}%` }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, delay: 0.5 }}
           className="absolute h-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full"
@@ -239,7 +239,7 @@ export default function SecurityPage() {
                   </span>
                 </h1>
                 <p className="text-xl text-white/60 mb-8 leading-relaxed">
-                  We don't wait for problems. DWSC implements enterprise-grade security from day one, 
+                  We don't wait for problems. DWTL implements enterprise-grade security from day one, 
                   scoring <span className="text-cyan-400 font-semibold">50% higher</span> than the industry average 
                   before our first transaction.
                 </p>
@@ -308,7 +308,7 @@ export default function SecurityPage() {
               </h2>
               <p className="text-white/60 max-w-2xl mx-auto">
                 While most blockchain projects launch first and secure later, 
-                DWSC builds security into every layer from the start.
+                DWTL builds security into every layer from the start.
               </p>
             </motion.div>
 
@@ -316,7 +316,7 @@ export default function SecurityPage() {
               <div className="flex items-center justify-end gap-6 mb-6 text-sm">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-2 rounded bg-gradient-to-r from-cyan-500 to-pink-500" />
-                  <span className="text-white/80">DWSC</span>
+                  <span className="text-white/80">DWTL</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-2 rounded bg-white/20" />
@@ -328,7 +328,7 @@ export default function SecurityPage() {
                   <ComparisonBar
                     key={item.category}
                     category={item.category}
-                    dwsc={item.dwsc}
+                    dwtl={item.dwtl}
                     industry={item.industry}
                     index={index}
                   />

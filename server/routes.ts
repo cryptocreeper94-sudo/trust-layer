@@ -1969,19 +1969,19 @@ export async function registerRoutes(
         message?: string;
       }> = [];
 
-      // Check DarkWave Smart Chain (Blockchain Engine)
+      // Check DarkWave Trust Layer (Blockchain Engine)
       const chainStart = Date.now();
       try {
         const chainInfo = blockchain.getChainInfo();
         const chainLatency = Date.now() - chainStart;
         services.push({
-          name: "DarkWave Smart Chain",
+          name: "DarkWave Trust Layer",
           status: chainInfo.blockHeight > 0 ? "operational" : "degraded",
           latency: chainLatency,
           message: `Block #${chainInfo.blockHeight}`
         });
       } catch {
-        services.push({ name: "DarkWave Smart Chain", status: "down", message: "Chain unavailable" });
+        services.push({ name: "DarkWave Trust Layer", status: "down", message: "Chain unavailable" });
       }
 
       // Check Database
@@ -2758,7 +2758,7 @@ export async function registerRoutes(
     res.json({
       version: APP_VERSION,
       chainId: 8453,
-      chainName: "DarkWave Smart Chain",
+      chainName: "DarkWave Trust Layer",
       nativeToken: "DWC",
       totalSupply: "1,000,000,000",
     });
@@ -3369,7 +3369,7 @@ export async function registerRoutes(
     }
   });
 
-  // Genesis Hallmark - The first ever DarkWave Smart Chain hallmark (MUST be before :hallmarkId route)
+  // Genesis Hallmark - The first ever DarkWave Trust Layer hallmark (MUST be before :hallmarkId route)
   app.get("/api/hallmark/genesis", async (req, res) => {
     try {
       const stats = blockchain.getStats();
@@ -3381,7 +3381,7 @@ export async function registerRoutes(
         id: "DWH-000000000001",
         type: "genesis",
         url: verificationUrl,
-        chain: "DarkWave Smart Chain",
+        chain: "DarkWave Trust Layer",
       });
       const qrCodeSvg = await QRCode.toString(qrData, { type: "svg", width: 200 });
       
@@ -3389,7 +3389,7 @@ export async function registerRoutes(
       const genesisPayload = {
         id: "DWH-000000000001",
         type: "genesis",
-        chain: "DarkWave Smart Chain",
+        chain: "DarkWave Trust Layer",
         blockHeight: 0,
         timestamp: genesisTimestamp,
         validator: "Founders Validator",
@@ -3403,7 +3403,7 @@ export async function registerRoutes(
         globalSerial: "DWH-000000000001",
         serialNumber: "DWH-GENESIS-0001",
         type: "Genesis Hallmark",
-        chain: "DarkWave Smart Chain",
+        chain: "DarkWave Trust Layer",
         blockNumber: 0,
         payloadHash,
         txHash: "genesis-block-0x" + payloadHash.slice(0, 16),
@@ -3420,7 +3420,7 @@ export async function registerRoutes(
           launchDate: "April 11, 2026",
         },
         verified: true,
-        message: "Genesis Block - DarkWave Smart Chain Origin",
+        message: "Genesis Block - DarkWave Trust Layer Origin",
       });
     } catch (error) {
       console.error("Genesis hallmark error:", error);
@@ -3456,7 +3456,7 @@ export async function registerRoutes(
         },
         verified,
         message: verified 
-          ? `Verified on DarkWave Smart Chain (Block ${hallmark.darkwaveBlockHeight})`
+          ? `Verified on DarkWave Trust Layer (Block ${hallmark.darkwaveBlockHeight})`
           : "Hallmark registered, pending chain confirmation",
         createdAt: hallmark.createdAt,
       });
@@ -3641,7 +3641,7 @@ export async function registerRoutes(
       res.json({
         success: true,
         burnId: result.burnId,
-        message: "Burn recorded. DWC will be released on DarkWave Smart Chain.",
+        message: "Burn recorded. DWC will be released on DarkWave Trust Layer.",
       });
     } catch (error) {
       res.status(500).json({ error: "Failed to process burn" });
@@ -4429,7 +4429,7 @@ export async function registerRoutes(
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #fff; padding: 24px; border-radius: 12px;">
               <h1 style="color: #00ffff; margin-bottom: 20px;">Application Received!</h1>
               <p>Hi ${name},</p>
-              <p>Thank you for your interest in partnering with DarkWave Smart Chain. We've received your application and our team will review it within 48-72 hours.</p>
+              <p>Thank you for your interest in partnering with DarkWave Trust Layer. We've received your application and our team will review it within 48-72 hours.</p>
               <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 20px; border-radius: 10px; margin: 20px 0;">
                 <h3 style="color: #a855f7; margin: 0 0 10px 0;">What's Next?</h3>
                 <ul style="color: #ccc; padding-left: 20px; margin: 0;">
@@ -10396,9 +10396,9 @@ Current context:
         baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
       });
 
-      const systemPrompt = `You are DarkWave AI, a friendly and knowledgeable assistant for the DarkWave Smart Chain ecosystem. 
+      const systemPrompt = `You are DarkWave AI, a friendly and knowledgeable assistant for the DarkWave Trust Layer ecosystem. 
 
-DarkWave Smart Chain is a Layer 1 blockchain with:
+DarkWave Trust Layer is a Layer 1 blockchain with:
 - 400ms block times
 - 200,000+ TPS capacity  
 - Proof-of-Authority consensus with the Founders Validator
@@ -16744,7 +16744,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
     },
     {
       id: "darkwave-chain",
-      name: "DarkWave Smart Chain",
+      name: "DarkWave Trust Layer",
       category: "Blockchain",
       description: "High-performance Layer 1 blockchain with 200K+ TPS, 400ms finality, and enterprise-grade security.",
       hook: "The universal ledger for the next web",

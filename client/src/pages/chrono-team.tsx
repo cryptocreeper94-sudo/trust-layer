@@ -120,7 +120,7 @@ const TECH_STACK = [
   { name: "Frontend", tech: "React, TypeScript, Tailwind", icon: Code },
   { name: "Backend", tech: "Node.js, Express, PostgreSQL", icon: Server },
   { name: "AI Layer", tech: "OpenAI GPT, Custom Models", icon: Brain },
-  { name: "Blockchain", tech: "DarkWave Smart Chain", icon: Coins },
+  { name: "Blockchain", tech: "DarkWave Trust Layer", icon: Coins },
   { name: "Real-time", tech: "WebSockets, Event System", icon: Zap },
   { name: "Mobile", tech: "React Native, Expo", icon: Layers },
 ];

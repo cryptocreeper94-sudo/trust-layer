@@ -31,7 +31,7 @@ const TWITTER_POSTS = [
   { content: `70+ historical eras await your parallel self.\n\nWrite history. Build legend. Become eternal.\n\nDarkWave Chronicles 🎮`, category: 'chronicles' },
   
   // DWSC Blockchain (8 posts)
-  { content: `⚡ DarkWave Smart Chain\n\n• 400ms block time\n• 200K+ TPS\n• Proof-of-Authority\n• Built for the future\n\nThis is next-gen blockchain. dwsc.io`, category: 'blockchain' },
+  { content: `⚡ DarkWave Trust Layer\n\n• 400ms block time\n• 200K+ TPS\n• Proof-of-Authority\n• Built for the future\n\nThis is next-gen blockchain. dwsc.io`, category: 'blockchain' },
   { content: `Why build on slow chains?\n\nDWSC: 400ms blocks. 200K TPS. Real speed.\n\nThe blockchain built for serious builders 🔗`, category: 'blockchain' },
   { content: `Proof-of-Authority. Founders Validation. Real security.\n\nDWSC isn't just fast—it's RELIABLE.\n\ndwsc.io ⚡`, category: 'blockchain' },
   { content: `1 billion DWC. No burn. Pure utility.\n\nThe native coin powering an entire ecosystem.\n\nLearn more: dwsc.io 💎`, category: 'blockchain' },
@@ -79,7 +79,7 @@ const TWITTER_POSTS = [
   
   // DEX & Swap (4 posts)
   { content: `🔄 Token Swap live on DWSC.\n\nFast trades. Low fees. No middlemen.\n\ndwsc.io/swap`, category: 'defi' },
-  { content: `Liquidity pools open. Earn while you provide.\n\nDeFi done right on DarkWave Smart Chain.\n\ndwsc.io/liquidity 💧`, category: 'defi' },
+  { content: `Liquidity pools open. Earn while you provide.\n\nDeFi done right on DarkWave Trust Layer.\n\ndwsc.io/liquidity 💧`, category: 'defi' },
   { content: `Swap tokens instantly. Add liquidity. Earn rewards.\n\nDWSC DeFi is live.\n\ndwsc.io/swap 🔄`, category: 'defi' },
   { content: `Real DeFi. Real speed. Real utility.\n\nDWSC swap and liquidity pools now live.\n\n#DeFi ⚡`, category: 'defi' },
   
@@ -239,7 +239,7 @@ Are you ready to discover who you could become?
 #DarkWaveChronicles 🎮`, category: 'chronicles' },
   
   // DWSC Blockchain (8 posts)
-  { content: `⚡ DarkWave Smart Chain: The Foundation of Everything
+  { content: `⚡ DarkWave Trust Layer: The Foundation of Everything
 
 • 400ms block time—near-instant finality
 • 200,000+ TPS—enterprise-grade throughput
@@ -262,7 +262,7 @@ dwsc.io 🔗`, category: 'blockchain' },
 
 Track every transaction. Monitor network health. Verify everything.
 
-DarkWave Smart Chain is fully transparent and ready for builders.
+DarkWave Trust Layer is fully transparent and ready for builders.
 
 Explorer: dwsc.io/explorer
 Network Stats: dwsc.io/network-stats
@@ -306,7 +306,7 @@ Status: dwsc.io/status
 Explorer: dwsc.io/explorer`, category: 'blockchain' },
   { content: `🌐 Built Different. Built Better.
 
-DarkWave Smart Chain was engineered from day one to power games, DeFi, NFTs, and more—all at enterprise scale.
+DarkWave Trust Layer was engineered from day one to power games, DeFi, NFTs, and more—all at enterprise scale.
 
 No compromises. No shortcuts. Just pure technical excellence.
 
@@ -604,7 +604,7 @@ Liquidity: dwsc.io/liquidity 🔄`, category: 'defi' },
   { content: `🌉 Cross-Chain Bridge LIVE
 
 Move tokens between:
-• DarkWave Smart Chain
+• DarkWave Trust Layer
 • Ethereum (Sepolia)
 • Solana (Devnet)
 
@@ -1079,7 +1079,7 @@ You'll become part of its history.
 **Coming Beta LIVE now** 💎`, category: 'chronicles' },
   
   // DWSC Blockchain (8 posts)
-  { content: `⚡ **DarkWave Smart Chain: Technical Overview**
+  { content: `⚡ **DarkWave Trust Layer: Technical Overview**
 
 **Why We Built Our Own Blockchain:**
 
@@ -1205,7 +1205,7 @@ Security isn't an afterthought—it's the foundation.
 **Build with confidence on DWSC.** ⚡`, category: 'blockchain' },
   { content: `🌐 **DWSC Ecosystem Overview**
 
-**What's Running on DarkWave Smart Chain:**
+**What's Running on DarkWave Trust Layer:**
 
 ✅ Native DWC token
 ✅ Token Swap DEX
@@ -1728,8 +1728,8 @@ Analytics: dwsc.io/token-analytics`, category: 'defi' },
   { content: `🌉 **Cross-Chain Bridge: Complete Guide**
 
 **Supported Chains:**
-• DarkWave Smart Chain ↔ Ethereum
-• DarkWave Smart Chain ↔ Solana
+• DarkWave Trust Layer ↔ Ethereum
+• DarkWave Trust Layer ↔ Solana
 
 **How It Works:**
 1. Connect source chain wallet
@@ -2393,7 +2393,7 @@ Join thousands of future legends waiting for launch.
 <b>Your legend begins soon.</b> 🎮`, category: 'chronicles' },
   
   // DWSC Blockchain (8 posts)
-  { content: `⚡ <b>DarkWave Smart Chain: Technical Deep Dive</b>
+  { content: `⚡ <b>DarkWave Trust Layer: Technical Deep Dive</b>
 
 <b>Why We Built DWSC:</b>
 
@@ -2593,7 +2593,7 @@ A blockchain that does exactly what we need, exactly how we need it.
 👉 dwsc.io`, category: 'blockchain' },
   { content: `🌐 <b>DWSC Ecosystem Overview</b>
 
-<b>What's Running on DarkWave Smart Chain:</b>
+<b>What's Running on DarkWave Trust Layer:</b>
 
 ✅ <b>Core:</b>
 • Native DWC token
@@ -3362,7 +3362,7 @@ Preview transaction outcomes
   { content: `🌉 <b>Cross-Chain Bridge: Complete Guide</b>
 
 <b>Supported Chains:</b>
-• DarkWave Smart Chain
+• DarkWave Trust Layer
 • Ethereum (Sepolia testnet)
 • Solana (Devnet)
 

@@ -20,7 +20,7 @@ const ECONOMY_PILLARS = [
   {
     icon: Coins,
     title: "DarkWave Coin (DWC)",
-    description: "Real cryptocurrency on DarkWave Smart Chain. Not play money - actual blockchain tokens with real-world value.",
+    description: "Real cryptocurrency on DarkWave Trust Layer. Not play money - actual blockchain tokens with real-world value.",
     color: "from-amber-500 to-yellow-600",
     image: deepSpace
   },
@@ -129,7 +129,7 @@ export default function ChronoEconomy() {
               Real Currency. <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">Real Value.</span>
             </h1>
             <p className="text-xl text-white/60 max-w-2xl mx-auto">
-              DWC isn't play money. It's real cryptocurrency on DarkWave Smart Chain.
+              DWC isn't play money. It's real cryptocurrency on DarkWave Trust Layer.
               Every transaction stamped, tracked, and auditable.
             </p>
           </motion.div>

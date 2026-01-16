@@ -120,7 +120,7 @@ export default function GatewayError() {
 
           {/* Footer */}
           <p className="text-xs text-slate-500 text-center mt-6">
-            DarkWave Smart Chain • .dwsc Domain Gateway
+            DarkWave Trust Layer • .dwsc Domain Gateway
           </p>
         </div>
       </div>

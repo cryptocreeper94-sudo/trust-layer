@@ -22,7 +22,7 @@ export default function Privacy() {
     },
     {
       title: "2. Blockchain Data",
-      content: `All blockchain transactions are publicly visible on the DarkWave Smart Chain. This includes transaction hashes, wallet addresses, amounts, and timestamps. This data is immutable and cannot be deleted. We recommend using separate wallets for privacy-sensitive activities.`
+      content: `All blockchain transactions are publicly visible on the DarkWave Trust Layer. This includes transaction hashes, wallet addresses, amounts, and timestamps. This data is immutable and cannot be deleted. We recommend using separate wallets for privacy-sensitive activities.`
     },
     {
       title: "3. How We Use Information",
@@ -96,7 +96,7 @@ export default function Privacy() {
                 <h3 className="font-semibold text-primary">Our Privacy Commitment</h3>
                 <p className="text-sm text-muted-foreground">
                   DarkWave Studios is committed to protecting your privacy. This policy explains how we 
-                  collect, use, and safeguard your information when you use DarkWave Smart Chain.
+                  collect, use, and safeguard your information when you use DarkWave Trust Layer.
                 </p>
               </div>
             </div>
@@ -125,7 +125,7 @@ export default function Privacy() {
           </div>
 
           <div className="text-center text-sm text-muted-foreground py-8" data-testid="text-footer">
-            <p>DarkWave Smart Chain - DarkWave Studios</p>
+            <p>DarkWave Trust Layer - DarkWave Studios</p>
             <p>Privacy inquiries: privacy@darkwavestudios.io</p>
           </div>
         </motion.div>

@@ -130,13 +130,13 @@ export function ReferralTracker() {
   };
 
   const shareToTwitter = () => {
-    const text = encodeURIComponent(`Join DarkWave Smart Chain and get bonus credits! Use my referral link:`);
+    const text = encodeURIComponent(`Join DarkWave Trust Layer and get bonus credits! Use my referral link:`);
     const url = encodeURIComponent(referralLink);
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, "_blank");
   };
 
   const shareToTelegram = () => {
-    const text = encodeURIComponent(`Join DarkWave Smart Chain and get bonus credits! ${referralLink}`);
+    const text = encodeURIComponent(`Join DarkWave Trust Layer and get bonus credits! ${referralLink}`);
     window.open(`https://t.me/share/url?url=${referralLink}&text=${text}`, "_blank");
   };
 

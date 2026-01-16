@@ -164,7 +164,7 @@ export default function AdminDashboard() {
               Owner Control Center
             </span>
           </h1>
-          <p className="text-gray-400 text-lg">DarkWave Smart Chain • Complete Ecosystem Management</p>
+          <p className="text-gray-400 text-lg">DarkWave Trust Layer • Complete Ecosystem Management</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

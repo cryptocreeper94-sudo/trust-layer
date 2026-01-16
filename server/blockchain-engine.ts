@@ -156,7 +156,7 @@ export class DarkWaveBlockchain {
   constructor() {
     this.config = {
       chainId: 8453,
-      chainName: "DarkWave Smart Chain",
+      chainName: "DarkWave Trust Layer",
       symbol: "DWC",
       decimals: 18,
       blockTimeMs: 400,

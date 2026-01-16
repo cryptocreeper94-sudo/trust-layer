@@ -2588,12 +2588,12 @@ Visit our developer documentation to learn more.`,
     isPublic: true,
   },
   {
-    title: "DarkWave Smart Chain - Technical Whitepaper",
-    content: `# DarkWave Smart Chain Technical Whitepaper
+    title: "DarkWave Trust Layer - Technical Whitepaper",
+    content: `# DarkWave Trust Layer Technical Whitepaper
 
 ## Abstract
 
-DarkWave Smart Chain (DWSC) is a purpose-built Layer 1 blockchain optimized for high-performance gaming, digital asset ownership, and decentralized applications.
+DarkWave Trust Layer (DWSC) is a purpose-built Layer 1 blockchain optimized for high-performance gaming, digital asset ownership, and decentralized applications.
 
 ## Key Specifications
 

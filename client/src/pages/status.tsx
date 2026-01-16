@@ -18,7 +18,7 @@ interface ServiceStatus {
 
 export default function Status() {
   const [services, setServices] = useState<ServiceStatus[]>([
-    { name: "DarkWave Smart Chain", status: "operational", latency: 12, uptime: "99.99%", lastCheck: new Date() },
+    { name: "DarkWave Trust Layer", status: "operational", latency: 12, uptime: "99.99%", lastCheck: new Date() },
     { name: "Block Explorer", status: "operational", latency: 45, uptime: "99.98%", lastCheck: new Date() },
     { name: "Developer API", status: "operational", latency: 23, uptime: "99.97%", lastCheck: new Date() },
     { name: "Bridge Service", status: "operational", latency: 156, uptime: "99.95%", lastCheck: new Date() },
@@ -43,7 +43,7 @@ export default function Status() {
     } catch {
       setServices(prev => prev.map(service => ({
         ...service,
-        status: service.name === "DarkWave Smart Chain" ? "down" : service.status,
+        status: service.name === "DarkWave Trust Layer" ? "down" : service.status,
         lastCheck: new Date(),
       })));
     }
@@ -102,7 +102,7 @@ export default function Status() {
             <div>
               <h1 className="text-2xl md:text-3xl font-display font-bold mb-2" data-testid="text-status-title">System Status</h1>
               <p className="text-muted-foreground text-sm">
-                Real-time health monitoring for DarkWave Smart Chain
+                Real-time health monitoring for DarkWave Trust Layer
               </p>
             </div>
             <Button 
@@ -177,7 +177,7 @@ export default function Status() {
               <div className="text-center py-8 text-muted-foreground">
                 <CheckCircle2 className="w-12 h-12 mx-auto mb-3 text-green-400/50" />
                 <p>No incidents reported in the last 90 days</p>
-                <p className="text-xs mt-1">DarkWave Smart Chain has maintained 99.99% uptime</p>
+                <p className="text-xs mt-1">DarkWave Trust Layer has maintained 99.99% uptime</p>
               </div>
             </div>
           </GlassCard>
