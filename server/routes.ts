@@ -117,7 +117,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -5103,6 +5103,132 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Error fetching score stats:", error);
       res.status(500).json({ error: "Failed to fetch score stats" });
+    }
+  });
+
+  // ============================================
+  // PULSE AI TRADING INTELLIGENCE
+  // Token safety scanning, predictions, and Strike Agent
+  // ============================================
+
+  // Safety check for a specific token
+  app.post("/api/pulse/safety-check", async (req, res) => {
+    try {
+      const schema = z.object({
+        tokenAddress: z.string().min(30).max(50),
+        chain: z.string().default('solana')
+      });
+      const { tokenAddress, chain } = schema.parse(req.body);
+      
+      const { safetyEngineService } = await import('./services/pulse/safetyEngineService');
+      const safetyReport = await safetyEngineService.runFullSafetyCheck(tokenAddress);
+      
+      res.json({ 
+        success: true, 
+        report: safetyReport,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error("Error running safety check:", error);
+      res.status(500).json({ 
+        success: false, 
+        error: error.message || "Failed to run safety check" 
+      });
+    }
+  });
+
+  // Quick safety score (lighter weight check)
+  app.get("/api/pulse/safety-score/:tokenAddress", async (req, res) => {
+    try {
+      const { tokenAddress } = req.params;
+      
+      const { safetyEngineService } = await import('./services/pulse/safetyEngineService');
+      const report = await safetyEngineService.runFullSafetyCheck(tokenAddress);
+      
+      res.json({
+        tokenAddress,
+        score: report?.overallScore || 0,
+        grade: report?.grade || 'F',
+        riskLevel: report?.riskLevel || 'high',
+        flags: report?.flags || [],
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error("Error getting safety score:", error);
+      res.status(500).json({ error: error.message || "Failed to get safety score" });
+    }
+  });
+
+  // Get Strike Agent recommendations (recent token discoveries)
+  app.get("/api/pulse/strike-agent/recommendations", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 10, 50);
+      const recommendation = req.query.recommendation as string;
+      
+      let query = db.select().from(strikeAgentPredictions);
+      if (recommendation && ['snipe', 'watch', 'avoid'].includes(recommendation)) {
+        query = query.where(eq(strikeAgentPredictions.aiRecommendation, recommendation)) as typeof query;
+      }
+      const predictions = await query
+        .orderBy(desc(strikeAgentPredictions.createdAt))
+        .limit(limit);
+      
+      res.json({
+        success: true,
+        recommendations: predictions,
+        count: predictions.length
+      });
+    } catch (error: any) {
+      console.error("Error fetching Strike Agent recommendations:", error);
+      res.status(500).json({ error: "Failed to fetch recommendations" });
+    }
+  });
+
+  // Get prediction accuracy stats
+  app.get("/api/pulse/accuracy", async (req, res) => {
+    try {
+      const stats = await db.select().from(predictionAccuracyStats)
+        .orderBy(desc(predictionAccuracyStats.totalPredictions))
+        .limit(20);
+      
+      res.json({
+        success: true,
+        stats: stats,
+        summary: {
+          totalStats: stats.length,
+          avgWinRate: stats.length > 0 
+            ? Math.round(stats.reduce((a, b) => a + parseFloat(b.winRate || '0'), 0) / stats.length)
+            : 0
+        }
+      });
+    } catch (error: any) {
+      console.error("Error fetching accuracy stats:", error);
+      res.status(500).json({ error: "Failed to fetch accuracy stats" });
+    }
+  });
+
+  // Get recent prediction events
+  app.get("/api/pulse/predictions", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const ticker = req.query.ticker as string;
+      
+      let query = db.select().from(predictionEvents);
+      if (ticker) {
+        query = query.where(eq(predictionEvents.ticker, ticker.toUpperCase())) as typeof query;
+      }
+      const predictions = await query
+        .orderBy(desc(predictionEvents.createdAt))
+        .limit(limit);
+      
+      res.json({
+        success: true,
+        predictions: predictions,
+        count: predictions.length
+      });
+    } catch (error: any) {
+      console.error("Error fetching predictions:", error);
+      res.status(500).json({ error: "Failed to fetch predictions" });
     }
   });
 
