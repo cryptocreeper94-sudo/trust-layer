@@ -59,7 +59,7 @@ export default function Veil() {
               <ul className="space-y-2 mb-6 text-slate-300">
                 <li className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                  188 pages of documented research
+                  167 pages of documented research
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />

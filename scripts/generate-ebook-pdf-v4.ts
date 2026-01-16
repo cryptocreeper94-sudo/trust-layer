@@ -298,13 +298,27 @@ function renderTextWithFootnotes(
     }
     termToFootnotes.get(termNorm)!.push(footnoteNum);
     
-    const numText = ` [${footnoteNum}]`;
+    // Make concordance references highly visible with underline
+    const refText = `[See Concordance: ${term}]`;
+    const startX = MARGIN_LEFT;
+    const startY = doc.y;
     
     doc.font(FONT_BOLD)
-       .fontSize(FONT_SIZE_FOOTNOTE_MARKER)
+       .fontSize(FONT_SIZE_SMALL)
        .fillColor('#0055aa')
-       .text(numText, doc.x, doc.y)
-       .fillColor('#000000');
+       .text(refText, startX, startY, { continued: false });
+    
+    // Add underline for visibility
+    const textWidth = doc.widthOfString(refText);
+    doc.moveTo(startX, doc.y + 2)
+       .lineTo(startX + textWidth, doc.y + 2)
+       .strokeColor('#0055aa')
+       .lineWidth(0.5)
+       .stroke()
+       .strokeColor('#000000');
+    
+    doc.fillColor('#000000');
+    doc.moveDown(0.3);
   }
 }
 
@@ -333,10 +347,29 @@ function renderElement(
       
       const isChapter = text.toUpperCase().startsWith('CHAPTER ');
       
-      if ((isPart || isChapter) && !isFirstContent) {
+      // Only force new page for PARTS (major sections), not every chapter
+      // This reduces empty space and title-only pages
+      if (isPart && !isFirstContent) {
         doc.addPage();
         currentPageNumber++;
-        doc.moveDown(isPart ? 2 : 1);
+        doc.moveDown(1.5);
+      } else if (isChapter && !isFirstContent) {
+        // For chapters: only new page if we're in bottom 25% of page
+        if (doc.y > PAGE_HEIGHT - MARGIN_BOTTOM - 180) {
+          doc.addPage();
+          currentPageNumber++;
+          doc.moveDown(0.5);
+        } else {
+          // Add a visual separator instead of new page
+          doc.moveDown(1.2);
+          doc.moveTo(MARGIN_LEFT + 100, doc.y)
+             .lineTo(MARGIN_LEFT + CONTENT_WIDTH - 100, doc.y)
+             .strokeColor('#cccccc')
+             .lineWidth(0.5)
+             .stroke()
+             .strokeColor('#000000');
+          doc.moveDown(1.2);
+        }
       } else if (!isFirstContent && doc.y > PAGE_HEIGHT - MARGIN_BOTTOM - 100) {
         doc.addPage();
         currentPageNumber++;
@@ -352,9 +385,10 @@ function renderElement(
            lineGap: LINE_GAP
          });
       
-      doc.moveDown(isPart ? 1 : 0.5);
+      doc.moveDown(isPart ? 0.8 : 0.4);
       
-      if (isPart || isChapter) {
+      if (isPart) {
+        // Only add images for part headers, not every chapter
         addChapterImage(doc, text);
       }
       
@@ -393,9 +427,10 @@ function renderElement(
         
         const matchingFootnoteNums = termToFootnotes.get(h3Normalized) || [];
         
+        // Concordance entry with visible styling
         doc.font(FONT_BOLD)
            .fontSize(FONT_SIZE_BODY)
-           .fillColor('#000000')
+           .fillColor('#1a1a1a')
            .text(h3Text, MARGIN_LEFT, doc.y, {
              width: CONTENT_WIDTH,
              align: 'left',
@@ -403,11 +438,14 @@ function renderElement(
            });
         
         if (matchingFootnoteNums.length > 0) {
-          doc.font(FONT_BODY)
+          // Make back-references prominent with a background highlight
+          const refText = `Referenced in text ${matchingFootnoteNums.length} time(s)`;
+          doc.font(FONT_ITALIC)
              .fontSize(FONT_SIZE_SMALL)
              .fillColor('#0055aa')
-             .text(`  [Referenced from: ${matchingFootnoteNums.map(n => `#${n}`).join(', ')}]`, MARGIN_LEFT, doc.y)
+             .text(`  ${refText}`, MARGIN_LEFT + 10, doc.y)
              .fillColor('#000000');
+          doc.moveDown(0.2);
         }
       } else {
         doc.font(FONT_BOLD)
