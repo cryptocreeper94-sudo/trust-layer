@@ -254,8 +254,8 @@ app.use((req, res, next) => {
       // Seed city zones for Chronicles Estate
       await seedCityZones();
       
-      // Start marketing auto-deploy scheduler
-      startScheduler();
+      // Marketing auto-deploy scheduler - DISABLED (rebrand in progress)
+      // startScheduler();
     },
   );
 })();
