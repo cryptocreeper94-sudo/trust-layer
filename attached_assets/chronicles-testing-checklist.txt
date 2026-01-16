@@ -1,0 +1,82 @@
+DARKWAVE CHRONICLES - TESTING CHECKLIST
+========================================
+When you're ready, just ask me to pull this up.
+
+STEP 1: LOGIN/ACCOUNT
+----------------------
+[ ] Go to: /chronicles-login
+[ ] Can you create an account or log in?
+[ ] Does the session persist (refresh page, still logged in)?
+[ ] Note any errors you see
+
+STEP 2: CHARACTER CREATION  
+--------------------------
+[ ] Go to: /chronicles-onboarding
+[ ] Can you enter a character name?
+[ ] Can you select an era?
+[ ] Does the character get created successfully?
+[ ] Note any errors or things that don't work
+
+STEP 3: MAIN HUB
+----------------
+[ ] Go to: /chronicles-hub (or wherever you land after onboarding)
+[ ] Does the hub load?
+[ ] Can you see your character info?
+[ ] What options/buttons are available?
+[ ] Can you navigate to different sections?
+
+STEP 4: QUESTS
+--------------
+[ ] Can you see available quests?
+[ ] Can you start a quest (first one should be "Arrival in the Realm")?
+[ ] Does the quest description show?
+[ ] Can you make a decision/choice?
+[ ] Does the decision register/save?
+
+STEP 5: NPCs
+------------
+[ ] Go to NPC interaction (if available)
+[ ] Can you talk to an NPC?
+[ ] Does dialogue appear?
+[ ] Does the AI generate responses?
+
+STEP 6: ERA TRAVEL
+------------------
+[ ] Go to: /chronicles-time-portal
+[ ] Can you see the era options?
+[ ] Can you attempt to travel to another era?
+[ ] Does it work or error?
+
+STEP 7: ESTATE/HOME
+-------------------
+[ ] Go to: /chronicles-estate
+[ ] Does the estate view load?
+[ ] Can you customize anything?
+
+STEP 8: AI FEATURES
+-------------------
+[ ] Try: /chronicles-ai-demo
+[ ] Does the AI respond to your input?
+[ ] Is the scenario generation working?
+
+
+WHAT TO TELL ME AFTER TESTING:
+==============================
+Just summarize:
+1. What worked
+2. What didn't work (any error messages)
+3. Where you got stuck
+
+I'll then know exactly what to fix.
+
+
+URLS QUICK REFERENCE:
+=====================
+/chronicles-login     - Login/Account
+/chronicles-onboarding - Character creation
+/chronicles-hub       - Main hub
+/chronicles           - Main entry
+/chronicles-life      - Daily life
+/chronicles-estate    - Property
+/chronicles-time-portal - Era travel
+/chronicles-ai-demo   - AI testing
