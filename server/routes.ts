@@ -7,6 +7,7 @@ import { setupCommunityWebSocket } from "./community-ws";
 import { z } from "zod";
 import { storage } from "./storage";
 import { db } from "./db";
+import { verifyFirebaseIdToken } from "./firebase-admin";
 import { zealyService, type ZealyWebhookPayload } from "./zealy-service";
 
 // Auth request interface for session-based authentication
@@ -16,7 +17,7 @@ interface AuthenticatedRequest extends Request {
 }
 
 // Unified authentication middleware - prioritizes session-based auth
-// Falls back to token auth for backwards compatibility during migration
+// Falls back to Firebase token verification for API clients
 async function isAuthenticated(req: any, res: Response, next: NextFunction) {
   try {
     // Priority 1: Check session-based authentication (our custom auth system)
@@ -34,31 +35,24 @@ async function isAuthenticated(req: any, res: Response, next: NextFunction) {
       }
     }
     
-    // Priority 2: Check Bearer token (legacy support during migration)
+    // Priority 2: Check Bearer token with PROPER Firebase signature verification
     const authHeader = req.headers.authorization;
     if (authHeader?.startsWith('Bearer ')) {
       const idToken = authHeader.substring(7);
       
-      // Parse token to get user ID and look up in our database
-      const parts = idToken.split('.');
-      if (parts.length === 3) {
-        try {
-          const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
-          if (payload.sub) {
-            // Look up user in our database
-            const user = await storage.getUser(payload.sub);
-            if (user) {
-              req.user = { 
-                claims: { sub: user.id },
-                id: user.id,
-                email: user.email 
-              };
-              req.firebaseUser = { uid: user.id, email: user.email || undefined };
-              return next();
-            }
-          }
-        } catch (parseError) {
-          // Token parsing failed, continue to reject
+      // SECURITY: Properly verify Firebase token signature using Admin SDK
+      const decodedToken = await verifyFirebaseIdToken(idToken);
+      if (decodedToken) {
+        // Token is cryptographically verified - look up user in our database
+        const user = await storage.getUser(decodedToken.uid);
+        if (user) {
+          req.user = { 
+            claims: { sub: user.id },
+            id: user.id,
+            email: user.email 
+          };
+          req.firebaseUser = { uid: user.id, email: user.email || undefined };
+          return next();
         }
       }
     }
@@ -211,6 +205,8 @@ const ecosystemRateLimit = rateLimit("ecosystem", 60, 60 * 1000);
 const stakingRateLimit = rateLimit("staking", 10, 60 * 1000);
 const liquidityRateLimit = rateLimit("liquidity", 10, 60 * 1000);
 const bridgeRateLimit = rateLimit("bridge", 5, 60 * 1000);
+const pulseSafetyRateLimit = rateLimit("pulse-safety", 10, 60 * 1000); // 10 safety checks per minute
+const pulseDataRateLimit = rateLimit("pulse-data", 30, 60 * 1000); // 30 data requests per minute
 
 interface PresenceUser {
   id: string;
@@ -5109,10 +5105,11 @@ export async function registerRoutes(
   // ============================================
   // PULSE AI TRADING INTELLIGENCE
   // Token safety scanning, predictions, and Strike Agent
+  // All endpoints require authentication to prevent abuse
   // ============================================
 
   // Safety check for a specific token
-  app.post("/api/pulse/safety-check", async (req, res) => {
+  app.post("/api/pulse/safety-check", pulseSafetyRateLimit, isAuthenticated, async (req: any, res) => {
     try {
       const schema = z.object({
         tokenAddress: z.string().min(30).max(50),
@@ -5138,7 +5135,7 @@ export async function registerRoutes(
   });
 
   // Quick safety score (lighter weight check)
-  app.get("/api/pulse/safety-score/:tokenAddress", async (req, res) => {
+  app.get("/api/pulse/safety-score/:tokenAddress", pulseSafetyRateLimit, isAuthenticated, async (req: any, res) => {
     try {
       const { tokenAddress } = req.params;
       
@@ -5160,7 +5157,7 @@ export async function registerRoutes(
   });
 
   // Get Strike Agent recommendations (recent token discoveries)
-  app.get("/api/pulse/strike-agent/recommendations", async (req, res) => {
+  app.get("/api/pulse/strike-agent/recommendations", pulseDataRateLimit, isAuthenticated, async (req: any, res) => {
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 10, 50);
       const recommendation = req.query.recommendation as string;
@@ -5185,7 +5182,7 @@ export async function registerRoutes(
   });
 
   // Get prediction accuracy stats
-  app.get("/api/pulse/accuracy", async (req, res) => {
+  app.get("/api/pulse/accuracy", pulseDataRateLimit, isAuthenticated, async (req: any, res) => {
     try {
       const stats = await db.select().from(predictionAccuracyStats)
         .orderBy(desc(predictionAccuracyStats.totalPredictions))
@@ -5208,7 +5205,7 @@ export async function registerRoutes(
   });
 
   // Get recent prediction events
-  app.get("/api/pulse/predictions", async (req, res) => {
+  app.get("/api/pulse/predictions", pulseDataRateLimit, isAuthenticated, async (req: any, res) => {
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
       const ticker = req.query.ticker as string;
@@ -16331,8 +16328,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  // Pulse API proxy endpoints for frontend
-  app.get("/api/pulse/market", async (req, res) => {
+  // Pulse API proxy endpoints for frontend - all require authentication
+  app.get("/api/pulse/market", pulseDataRateLimit, isAuthenticated, async (req: any, res) => {
     try {
       const data = await pulseClient.getMarketOverview();
       res.json(data || { error: "Could not fetch market data" });
@@ -16342,7 +16339,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.get("/api/pulse/signals", async (req, res) => {
+  app.get("/api/pulse/signals", pulseDataRateLimit, isAuthenticated, async (req: any, res) => {
     try {
       const chain = (req.query.chain as string) || "all";
       const limit = parseInt(req.query.limit as string) || 10;
@@ -16354,7 +16351,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.get("/api/pulse/price/:symbol", async (req, res) => {
+  app.get("/api/pulse/price/:symbol", pulseDataRateLimit, isAuthenticated, async (req: any, res) => {
     try {
       const data = await pulseClient.getPrice(req.params.symbol);
       res.json(data || { error: "Could not fetch price" });
