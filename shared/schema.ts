@@ -6637,3 +6637,168 @@ export const shellConversionBatches = pgTable("shell_conversion_batches", {
 });
 
 export type ShellConversionBatch = typeof shellConversionBatches.$inferSelect;
+
+// ============================================
+// PULSE AI PREDICTION SYSTEM
+// Integrated from DarkWave Pulse for AI trading predictions
+// ============================================
+
+// Prediction Events - Every AI signal logged here
+export const predictionEvents = pgTable('prediction_events', {
+  id: varchar('id', { length: 255 }).primaryKey(),
+  userId: varchar('user_id', { length: 255 }),
+  
+  ticker: varchar('ticker', { length: 50 }).notNull(),
+  assetType: varchar('asset_type', { length: 20 }).notNull().default('crypto'),
+  priceAtPrediction: varchar('price_at_prediction', { length: 50 }).notNull(),
+  
+  signal: varchar('signal', { length: 20 }).notNull(),
+  confidence: varchar('confidence', { length: 20 }),
+  
+  indicators: text('indicators').notNull(),
+  
+  bullishSignals: integer('bullish_signals').notNull().default(0),
+  bearishSignals: integer('bearish_signals').notNull().default(0),
+  signalsList: text('signals_list'),
+  
+  payloadHash: varchar('payload_hash', { length: 128 }).notNull(),
+  auditEventId: varchar('audit_event_id', { length: 255 }),
+  onchainSignature: varchar('onchain_signature', { length: 128 }),
+  
+  status: varchar('status', { length: 50 }).notNull().default('pending'),
+  
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  stampedAt: timestamp('stamped_at'),
+});
+
+export type PredictionEvent = typeof predictionEvents.$inferSelect;
+
+// Prediction Outcomes - Results at different time horizons
+export const predictionOutcomes = pgTable('prediction_outcomes', {
+  id: varchar('id', { length: 255 }).primaryKey(),
+  predictionId: varchar('prediction_id', { length: 255 }).notNull(),
+  
+  horizon: varchar('horizon', { length: 20 }).notNull(),
+  
+  priceAtCheck: varchar('price_at_check', { length: 50 }).notNull(),
+  priceChange: varchar('price_change', { length: 50 }).notNull(),
+  priceChangePercent: varchar('price_change_percent', { length: 20 }).notNull(),
+  
+  outcome: varchar('outcome', { length: 20 }).notNull(),
+  isCorrect: boolean('is_correct').notNull(),
+  
+  volatilityDuring: varchar('volatility_during', { length: 20 }),
+  maxDrawdown: varchar('max_drawdown', { length: 20 }),
+  maxGain: varchar('max_gain', { length: 20 }),
+  
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  evaluatedAt: timestamp('evaluated_at').defaultNow().notNull(),
+});
+
+export type PredictionOutcome = typeof predictionOutcomes.$inferSelect;
+
+// Prediction Accuracy Stats - Aggregated accuracy metrics
+export const predictionAccuracyStats = pgTable('prediction_accuracy_stats', {
+  id: varchar('id', { length: 255 }).primaryKey(),
+  
+  ticker: varchar('ticker', { length: 50 }),
+  signal: varchar('signal', { length: 20 }),
+  horizon: varchar('horizon', { length: 20 }),
+  
+  totalPredictions: integer('total_predictions').notNull().default(0),
+  correctPredictions: integer('correct_predictions').notNull().default(0),
+  winRate: varchar('win_rate', { length: 10 }).notNull().default('0'),
+  
+  avgReturn: varchar('avg_return', { length: 20 }),
+  avgWinReturn: varchar('avg_win_return', { length: 20 }),
+  avgLossReturn: varchar('avg_loss_return', { length: 20 }),
+  bestReturn: varchar('best_return', { length: 20 }),
+  worstReturn: varchar('worst_return', { length: 20 }),
+  
+  currentStreak: integer('current_streak').default(0),
+  longestWinStreak: integer('longest_win_streak').default(0),
+  longestLossStreak: integer('longest_loss_streak').default(0),
+  
+  weightedWinRate: varchar('weighted_win_rate', { length: 10 }),
+  
+  lastPredictionAt: timestamp('last_prediction_at'),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type PredictionAccuracyStat = typeof predictionAccuracyStats.$inferSelect;
+
+// Strike Agent Predictions - Token discovery and snipe recommendations
+export const strikeAgentPredictions = pgTable('strikeagent_predictions', {
+  id: varchar('id', { length: 255 }).primaryKey(),
+  userId: varchar('user_id', { length: 255 }),
+  
+  tokenAddress: varchar('token_address', { length: 255 }).notNull(),
+  tokenSymbol: varchar('token_symbol', { length: 50 }).notNull(),
+  tokenName: varchar('token_name', { length: 255 }),
+  dex: varchar('dex', { length: 50 }),
+  chain: varchar('chain', { length: 50 }).notNull().default('solana'),
+  
+  priceUsd: varchar('price_usd', { length: 50 }).notNull(),
+  priceSol: varchar('price_sol', { length: 50 }),
+  marketCapUsd: varchar('market_cap_usd', { length: 50 }),
+  liquidityUsd: varchar('liquidity_usd', { length: 50 }),
+  tokenAgeMinutes: integer('token_age_minutes'),
+  
+  aiRecommendation: varchar('ai_recommendation', { length: 20 }).notNull(),
+  aiScore: integer('ai_score').notNull(),
+  aiReasoning: text('ai_reasoning'),
+  
+  safetyMetrics: text('safety_metrics'),
+  movementMetrics: text('movement_metrics'),
+  
+  holderCount: integer('holder_count'),
+  top10HoldersPercent: varchar('top10_holders_percent', { length: 20 }),
+  botPercent: varchar('bot_percent', { length: 20 }),
+  bundlePercent: varchar('bundle_percent', { length: 20 }),
+  mintAuthorityActive: boolean('mint_authority_active'),
+  freezeAuthorityActive: boolean('freeze_authority_active'),
+  isHoneypot: boolean('is_honeypot'),
+  liquidityLocked: boolean('liquidity_locked'),
+  isPumpFun: boolean('is_pump_fun'),
+  creatorWalletRisky: boolean('creator_wallet_risky'),
+  
+  payloadHash: varchar('payload_hash', { length: 128 }),
+  onchainSignature: varchar('onchain_signature', { length: 128 }),
+  
+  status: varchar('status', { length: 50 }).notNull().default('pending'),
+  
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  stampedAt: timestamp('stamped_at'),
+});
+
+export type StrikeAgentPrediction = typeof strikeAgentPredictions.$inferSelect;
+
+// Strike Agent Outcomes - Track token performance after recommendation
+export const strikeAgentOutcomes = pgTable('strikeagent_outcomes', {
+  id: varchar('id', { length: 255 }).primaryKey(),
+  predictionId: varchar('prediction_id', { length: 255 }).notNull(),
+  
+  horizon: varchar('horizon', { length: 20 }).notNull(),
+  
+  priceAtCheck: varchar('price_at_check', { length: 50 }).notNull(),
+  priceChangePercent: varchar('price_change_percent', { length: 20 }).notNull(),
+  
+  marketCapAtCheck: varchar('market_cap_at_check', { length: 50 }),
+  liquidityAtCheck: varchar('liquidity_at_check', { length: 50 }),
+  holderCountAtCheck: integer('holder_count_at_check'),
+  volumeChange: varchar('volume_change', { length: 20 }),
+  
+  isRugged: boolean('is_rugged').default(false),
+  hit2x: boolean('hit_2x').default(false),
+  hit5x: boolean('hit_5x').default(false),
+  hit10x: boolean('hit_10x').default(false),
+  maxGainPercent: varchar('max_gain_percent', { length: 20 }),
+  maxDrawdownPercent: varchar('max_drawdown_percent', { length: 20 }),
+  
+  outcome: varchar('outcome', { length: 20 }).notNull(),
+  isCorrect: boolean('is_correct').notNull(),
+  
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export type StrikeAgentOutcome = typeof strikeAgentOutcomes.$inferSelect;
