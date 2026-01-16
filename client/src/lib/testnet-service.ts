@@ -115,7 +115,7 @@ async function fetchSolanaBalance(address: string): Promise<{ balance: string; r
 
 export async function fetchTestnetBalance(chain: string, address: string): Promise<TestnetBalance> {
   const symbols: Record<string, string> = {
-    darkwave: 'DWC',
+    darkwave: 'SIG',
     ethereum: 'ETH',
     solana: 'SOL',
     polygon: 'MATIC',

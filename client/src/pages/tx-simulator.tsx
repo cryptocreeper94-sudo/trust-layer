@@ -37,7 +37,7 @@ const SAMPLE_RESULT: SimulationResult = {
   gasPrice: 0.0001,
   totalCost: 0.0145,
   changes: [
-    { type: "token", direction: "out", asset: "DWC", amount: "10,000", value: "$1,520" },
+    { type: "token", direction: "out", asset: "SIG", amount: "10,000", value: "$1,520" },
     { type: "token", direction: "in", asset: "USDC", amount: "1,520", value: "$1,520" },
   ],
   warnings: [
@@ -47,9 +47,9 @@ const SAMPLE_RESULT: SimulationResult = {
 };
 
 const EXAMPLE_TXS = [
-  { name: "Token Swap", desc: "Swap DWC for USDC", type: "swap" },
-  { name: "Add Liquidity", desc: "Add to DWC/USDC pool", type: "liquidity" },
-  { name: "Stake DWC", desc: "Stake tokens for rewards", type: "stake" },
+  { name: "Token Swap", desc: "Swap SIG for USDC", type: "swap" },
+  { name: "Add Liquidity", desc: "Add to SIG/USDC pool", type: "liquidity" },
+  { name: "Stake SIG", desc: "Stake tokens for rewards", type: "stake" },
   { name: "NFT Mint", desc: "Mint a new NFT", type: "mint" },
 ];
 

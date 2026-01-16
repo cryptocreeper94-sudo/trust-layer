@@ -580,7 +580,7 @@ export default function CrowdfundPage() {
             <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-6">
               <div className="flex items-center gap-4">
                 <div className="relative">
-                  <img src={darkwaveLogo} alt="DWC" className="w-16 h-16 object-contain flex-shrink-0" />
+                  <img src={darkwaveLogo} alt="SIG" className="w-16 h-16 object-contain flex-shrink-0" />
                   <div className="absolute inset-0 animate-pulse bg-cyan-400/20 rounded-full blur-xl" />
                 </div>
                 <div>

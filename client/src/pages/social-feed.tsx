@@ -26,16 +26,16 @@ const COMMUNITY_STATS = {
 };
 
 const TRENDING_TOPICS = [
-  { tag: "#DWCMoon", posts: 234 },
+  { tag: "#SIGMoon", posts: 234 },
   { tag: "#StakingRewards", posts: 189 },
   { tag: "#NFTLaunch", posts: 145 },
   { tag: "#BridgeLive", posts: 98 },
 ];
 
 const TOP_CREATORS = [
-  { name: "CryptoVision", followers: "12.4K", tips: "8,500 DWC" },
-  { name: "DarkWaveAlpha", followers: "9.8K", tips: "6,200 DWC" },
-  { name: "ChainAnalyst", followers: "7.2K", tips: "4,100 DWC" },
+  { name: "CryptoVision", followers: "12.4K", tips: "8,500 SIG" },
+  { name: "DarkWaveAlpha", followers: "9.8K", tips: "6,200 SIG" },
+  { name: "ChainAnalyst", followers: "7.2K", tips: "4,100 SIG" },
 ];
 
 const FEATURED_POSTS = [
@@ -44,11 +44,11 @@ const FEATURED_POSTS = [
     author: "DarkWaveTeam",
     handle: "@darkwave_official",
     verified: true,
-    content: "Bridge to Ethereum is now LIVE! Lock your DWC and receive wDWC on Ethereum. Cross-chain future is here 🚀",
+    content: "Bridge to Ethereum is now LIVE! Lock your SIG and receive wSIG on Ethereum. Cross-chain future is here 🚀",
     likes: 847,
     comments: 156,
     reposts: 234,
-    tips: "2,450 DWC",
+    tips: "2,450 SIG",
     time: "2h ago",
   },
   {
@@ -56,11 +56,11 @@ const FEATURED_POSTS = [
     author: "CryptoVision",
     handle: "@cryptovision",
     verified: false,
-    content: "Just hit 100K DWC staked! The APY on this chain is unreal. Who else is diamond handing? 💎",
+    content: "Just hit 100K SIG staked! The APY on this chain is unreal. Who else is diamond handing? 💎",
     likes: 423,
     comments: 67,
     reposts: 89,
-    tips: "850 DWC",
+    tips: "850 SIG",
     time: "4h ago",
   },
 ];

@@ -186,7 +186,7 @@ export default function ApiPlayground() {
                     <h3 className="text-xs font-bold text-white mb-2">How to Use It</h3>
                     <ol className="text-[11px] text-white/60 space-y-1.5">
                       <li><span className="text-primary font-bold">1.</span> Create a Test Wallet (click the button below)</li>
-                      <li><span className="text-primary font-bold">2.</span> Request free test DWC from the Faucet</li>
+                      <li><span className="text-primary font-bold">2.</span> Request free test SIG from the Faucet</li>
                       <li><span className="text-primary font-bold">3.</span> Send test transactions to any address</li>
                       <li><span className="text-primary font-bold">4.</span> View the API response on the right</li>
                     </ol>
@@ -196,7 +196,7 @@ export default function ApiPlayground() {
                 <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
                   <p className="text-[11px] text-yellow-400">
                     <span className="font-bold">Important:</span> This is a test network. All coins, wallets, and transactions here are for 
-                    testing only and have no monetary value. When you're ready to use real DWC, you'll use the Mainnet instead.
+                    testing only and have no monetary value. When you're ready to use real SIG, you'll use the Mainnet instead.
                   </p>
                 </div>
               </div>
@@ -260,7 +260,7 @@ export default function ApiPlayground() {
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] text-white/40">Balance</span>
-                        <span className="text-lg font-bold text-primary">{walletBalance || testWallet.balance} DWC</span>
+                        <span className="text-lg font-bold text-primary">{walletBalance || testWallet.balance} SIG</span>
                       </div>
                       <Button onClick={checkBalance} disabled={isExecuting} variant="outline" className="w-full h-8 text-[10px] border-white/10">
                         <RefreshCw className={`w-3 h-3 mr-1.5 ${isExecuting ? 'animate-spin' : ''}`} /> Refresh Balance

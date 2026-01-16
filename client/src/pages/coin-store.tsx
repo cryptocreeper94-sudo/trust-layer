@@ -235,7 +235,7 @@ export default function CoinStore() {
               </div>
               <div>
                 <h3 className="font-semibold text-white">Redeem SC for Prizes</h3>
-                <p className="text-sm text-gray-400">Win real DWC tokens</p>
+                <p className="text-sm text-gray-400">Win real SIG tokens</p>
               </div>
             </CardContent>
           </Card>
@@ -368,7 +368,7 @@ export default function CoinStore() {
               </div>
               <div>
                 <h4 className="font-semibold text-white mb-1">Redeem for Prizes</h4>
-                <p className="text-sm text-gray-400">Redeem SC for real DWC cryptocurrency tokens. Minimum 100 SC to redeem.</p>
+                <p className="text-sm text-gray-400">Redeem SC for real SIG cryptocurrency tokens. Minimum 100 SC to redeem.</p>
               </div>
             </div>
           </div>

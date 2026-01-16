@@ -196,7 +196,7 @@ export const DARKWAVE_CHAIN_CONFIG = {
   chainName: 'DarkWave Trust Layer',
   nativeCurrency: {
     name: 'DarkWave',
-    symbol: 'DWC',
+    symbol: 'SIG',
     decimals: 18,
   },
   rpcUrls: ['https://dwsc.io/rpc'],

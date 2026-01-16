@@ -49,7 +49,7 @@ const keyMetrics = [
 ];
 
 const tokenomics = [
-  { label: "Total Supply", value: "1,000,000,000 DWC", color: "from-cyan-500 to-blue-600" },
+  { label: "Total Supply", value: "1,000,000,000 SIG", color: "from-cyan-500 to-blue-600" },
   { label: "Presale Allocation", value: "15% (150M)", color: "from-purple-500 to-pink-600" },
   { label: "Ecosystem & Rewards", value: "40%", color: "from-amber-500 to-orange-600" },
   { label: "Team & Advisors", value: "15%", color: "from-emerald-500 to-teal-600" },
@@ -127,7 +127,7 @@ export default function InvestorPitch() {
   const liveStats = {
     blockHeight: (chainStats as any)?.chainHeight?.toLocaleString() || "910,000+",
     validators: Array.isArray(validators) ? validators.length : 4,
-    totalStake: "20,000,000 DWC",
+    totalStake: "20,000,000 SIG",
     uptime: "99.99%",
   };
 
@@ -185,7 +185,7 @@ export default function InvestorPitch() {
               
               <h1 className="text-4xl md:text-5xl lg:text-7xl font-display font-bold mb-6 leading-tight">
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(6,182,212,0.5)]">
-                  DarkWave Smart Chain
+                  DarkWave Trust Layer
                 </span>
                 <br />
                 <span className="text-white text-3xl md:text-4xl lg:text-5xl">Investment Overview</span>
@@ -292,7 +292,7 @@ export default function InvestorPitch() {
                     <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent" />
                     <Coins className="w-8 h-8 text-cyan-400 mx-auto mb-2" />
                     <div className="text-3xl font-bold text-white mb-1" data-testid="stat-stake">
-                      20M DWC
+                      20M SIG
                     </div>
                     <div className="text-sm text-white/50">Total Staked</div>
                     <div className="flex items-center justify-center gap-1 mt-2">
@@ -415,7 +415,7 @@ export default function InvestorPitch() {
                   <h2 className="text-2xl md:text-3xl font-display font-bold text-white">
                     Tokenomics
                   </h2>
-                  <p className="text-white/50">DWC token allocation and distribution</p>
+                  <p className="text-white/50">Signal token allocation and distribution</p>
                 </div>
               </div>
             </motion.div>
@@ -457,7 +457,7 @@ export default function InvestorPitch() {
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
                     <div>
                       <h3 className="text-xl font-bold text-white mb-1">Token Utility</h3>
-                      <p className="text-white/50 text-sm">DWC powers the entire ecosystem</p>
+                      <p className="text-white/50 text-sm">Signal powers the entire ecosystem</p>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {["Transaction Fees", "Staking Rewards", "Governance Votes", "Bridge Collateral", "Quest Rewards", "NFT Marketplace"].map((util) => (

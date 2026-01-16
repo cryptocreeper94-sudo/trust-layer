@@ -490,7 +490,7 @@ export default function SecurityPage() {
                   </h2>
                   <p className="text-white/60 mb-8 max-w-xl mx-auto">
                     Our bug bounty program rewards responsible disclosure. 
-                    Help us stay secure and earn DWC tokens at mainnet launch.
+                    Help us stay secure and earn SIG tokens at mainnet launch.
                   </p>
                   <a
                     href="mailto:security@dwsc.io?subject=Security%20Vulnerability%20Report"

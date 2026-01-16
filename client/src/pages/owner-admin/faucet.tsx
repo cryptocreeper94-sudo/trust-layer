@@ -49,10 +49,10 @@ interface FaucetResponse {
   stats: FaucetStats;
 }
 
-function formatDWC(amount: string): string {
+function formatSIG(amount: string): string {
   const value = BigInt(amount);
   const wholePart = value / BigInt(10 ** 18);
-  return wholePart.toLocaleString() + " DWC";
+  return wholePart.toLocaleString() + " SIG";
 }
 
 export default function OwnerFaucet() {
@@ -181,7 +181,7 @@ export default function OwnerFaucet() {
               </div>
               <span className="text-gray-400 text-sm">Distributed</span>
             </div>
-            <p className="text-xl font-bold text-white">{stats ? formatDWC(stats.totalDistributed) : "0 DWC"}</p>
+            <p className="text-xl font-bold text-white">{stats ? formatSIG(stats.totalDistributed) : "0 SIG"}</p>
           </motion.div>
         </div>
 
@@ -223,7 +223,7 @@ export default function OwnerFaucet() {
                         </span>
                       </td>
                       <td className="py-3 px-4 text-cyan-400 font-medium">
-                        {formatDWC(claim.amount)}
+                        {formatSIG(claim.amount)}
                       </td>
                       <td className="py-3 px-4">
                         <Badge className={STATUS_COLORS[claim.status] || 'bg-gray-500/20'}>

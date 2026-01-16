@@ -54,7 +54,7 @@ const PHASES: Phase[] = [
     milestones: [
       { item: "Vision document complete", done: true },
       { item: "Website & community launch", done: true },
-      { item: "DWC blockchain operational", done: true },
+      { item: "SIG blockchain operational", done: true },
       { item: "AI NPC conversation system", done: true },
       { item: "5-Axis emotion system", done: true },
     ],

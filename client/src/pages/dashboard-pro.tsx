@@ -20,16 +20,16 @@ const miniChartData = Array.from({ length: 20 }, (_, i) => ({
 }));
 
 const portfolioData = [
-  { name: "DWC", value: 45, color: "#8b5cf6" },
-  { name: "stDWC", value: 30, color: "#06b6d4" },
+  { name: "SIG", value: 45, color: "#8b5cf6" },
+  { name: "stSIG", value: 30, color: "#06b6d4" },
   { name: "LP Tokens", value: 15, color: "#22c55e" },
   { name: "NFTs", value: 10, color: "#f59e0b" },
 ];
 
 const recentActivity = [
-  { type: "swap", desc: "Swapped 1,000 DWC → 150 USDC", time: "2m ago", icon: ArrowUpRight },
-  { type: "stake", desc: "Staked 5,000 DWC", time: "1h ago", icon: Lock },
-  { type: "reward", desc: "Claimed 125 DWC rewards", time: "3h ago", icon: Gift },
+  { type: "swap", desc: "Swapped 1,000 SIG → 150 USDC", time: "2m ago", icon: ArrowUpRight },
+  { type: "stake", desc: "Staked 5,000 SIG", time: "1h ago", icon: Lock },
+  { type: "reward", desc: "Claimed 125 SIG rewards", time: "3h ago", icon: Gift },
   { type: "nft", desc: "Minted Genesis NFT #247", time: "1d ago", icon: Sparkles },
 ];
 
@@ -40,9 +40,9 @@ const topTraders = [
 ];
 
 const whaleAlerts = [
-  { amount: "2.5M DWC", type: "buy", time: "Just now" },
-  { amount: "1.2M DWC", type: "sell", time: "5m ago" },
-  { amount: "800K DWC", type: "transfer", time: "12m ago" },
+  { amount: "2.5M SIG", type: "buy", time: "Just now" },
+  { amount: "1.2M SIG", type: "sell", time: "5m ago" },
+  { amount: "800K SIG", type: "transfer", time: "12m ago" },
 ];
 
 function BentoCard({ 
@@ -148,13 +148,13 @@ export default function DashboardPro() {
                   <div className="flex items-center gap-2">
                     <motion.img 
                       src={darkwaveLogo} 
-                      alt="DWC" 
+                      alt="SIG" 
                       className="w-8 h-8"
                       animate={{ rotate: [0, 5, -5, 0] }}
                       transition={{ duration: 4, repeat: Infinity }}
                     />
                     <div>
-                      <span className="font-bold">DWC/USD</span>
+                      <span className="font-bold">SIG/USD</span>
                       <Badge className="ml-2 bg-green-500/20 text-green-400 text-[9px]">+{priceChange.toFixed(2)}%</Badge>
                     </div>
                   </div>
@@ -243,7 +243,7 @@ export default function DashboardPro() {
                 </div>
                 <div>
                   <p className="text-[10px] text-muted-foreground">Staked</p>
-                  <p className="text-lg font-bold">5,000 DWC</p>
+                  <p className="text-lg font-bold">5,000 SIG</p>
                   <p className="text-[10px] text-green-400">12.5% APY</p>
                 </div>
               </div>
@@ -257,7 +257,7 @@ export default function DashboardPro() {
                   </div>
                 </div>
                 <div>
-                  <p className="text-[10px] text-muted-foreground">stDWC</p>
+                  <p className="text-[10px] text-muted-foreground">stSIG</p>
                   <p className="text-lg font-bold">5,000</p>
                   <p className="text-[10px] text-blue-400">Liquid Staking</p>
                 </div>
@@ -308,8 +308,8 @@ export default function DashboardPro() {
               <div className="p-4 h-full flex items-center justify-between">
                 <div>
                   <p className="text-[10px] text-muted-foreground mb-1">Quick Swap</p>
-                  <p className="font-bold">DWC → USDC</p>
-                  <p className="text-xs text-muted-foreground">Best rate: 1 DWC = $0.152</p>
+                  <p className="font-bold">SIG → USDC</p>
+                  <p className="text-xs text-muted-foreground">Best rate: 1 SIG = $0.152</p>
                 </div>
                 <Button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0">
                   <Zap className="w-4 h-4 mr-1" />
@@ -372,7 +372,7 @@ export default function DashboardPro() {
                 <div>
                   <p className="text-[10px] text-muted-foreground">Referrals</p>
                   <p className="text-lg font-bold">8</p>
-                  <p className="text-[10px] text-green-400">+1,250 DWC earned</p>
+                  <p className="text-[10px] text-green-400">+1,250 SIG earned</p>
                 </div>
               </div>
             </BentoCard>
@@ -386,7 +386,7 @@ export default function DashboardPro() {
                   </div>
                   <Badge className="bg-purple-500/20 text-purple-400 text-[9px]">3/5</Badge>
                 </div>
-                <p className="text-xs text-muted-foreground mb-2">Complete 5 swaps to earn 100 DWC</p>
+                <p className="text-xs text-muted-foreground mb-2">Complete 5 swaps to earn 100 SIG</p>
                 <Progress value={60} className="h-2" />
               </div>
             </BentoCard>

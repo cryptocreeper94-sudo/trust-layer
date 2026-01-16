@@ -45,18 +45,18 @@ const connected = await sdk.connect();`
     language: "javascript",
     category: "wallet",
     code: `const balance = await sdk.getBalance(walletAddress);
-console.log('Balance:', balance.dwc, 'DWC');
+console.log('Balance:', balance.sig, 'SIG');
 console.log('USD Value:', balance.usd);`
   },
   {
     id: "send-transaction",
     title: "Send Transaction",
-    description: "Transfer DWC to another wallet",
+    description: "Transfer SIG to another wallet",
     language: "javascript",
     category: "transactions",
     code: `const tx = await sdk.sendTransaction({
   to: '0xRecipientAddress...',
-  amount: '100', // DWC amount
+  amount: '100', // SIG amount
   memo: 'Payment for services'
 });
 
@@ -65,11 +65,11 @@ console.log('Status:', tx.status);`
   },
   {
     id: "stake-tokens",
-    title: "Stake DWC Tokens",
+    title: "Stake SIG Tokens",
     description: "Stake tokens to earn rewards",
     language: "javascript",
     category: "staking",
-    code: `// Stake DWC tokens
+    code: `// Stake SIG tokens
 const stake = await sdk.staking.stake({
   amount: '1000',
   tier: 'gold', // bronze, silver, gold, platinum
@@ -102,10 +102,10 @@ console.log('NFT Token ID:', nft.tokenId);`
   {
     id: "bridge-tokens",
     title: "Bridge to Ethereum",
-    description: "Bridge DWC to wDWC on Ethereum",
+    description: "Bridge SIG to wSIG on Ethereum",
     language: "javascript",
     category: "bridge",
-    code: `// Lock DWC and mint wDWC on Ethereum
+    code: `// Lock SIG and mint wSIG on Ethereum
 const bridge = await sdk.bridge.lock({
   amount: '500',
   targetChain: 'ethereum',
@@ -152,7 +152,7 @@ sdk = DarkWaveSDK(
 
 # Get wallet balance
 balance = sdk.get_balance("DW7a8f9c3b2e...")
-print(f"Balance: {balance['dwc']} DWC")
+print(f"Balance: {balance['sig']} SIG")
 
 # Send transaction
 tx = sdk.send_transaction(

@@ -15,8 +15,8 @@ interface ProductConfig {
 
 const PRODUCTS: ProductConfig[] = [
   {
-    name: "DWC Token Presale",
-    description: "Pre-launch purchase of DarkWave Coin (DWC) tokens",
+    name: "SIG Token Presale",
+    description: "Pre-launch purchase of Signal (SIG) tokens",
     metadata: { category: "token", tier: "presale" },
     prices: [
       { nickname: "Token Bundle - Starter", unit_amount: 2500, currency: "usd", metadata: { tokens: "5000" } },

@@ -85,7 +85,7 @@ export default function DWSCExecutiveSummary() {
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-4">
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  DarkWave Smart Chain
+                  DarkWave Trust Layer
                 </span>
               </h1>
               <p className="text-xl md:text-2xl text-white/80 mb-2">Next-Generation Layer 1 Blockchain</p>
@@ -103,7 +103,7 @@ export default function DWSCExecutiveSummary() {
                 Executive Overview
               </h2>
               <p className="text-white/80 leading-relaxed mb-4">
-                <span className="text-cyan-400 font-semibold">DarkWave Smart Chain (DWSC)</span> is a purpose-built 
+                <span className="text-cyan-400 font-semibold">DarkWave Trust Layer (DWSC)</span> is a purpose-built 
                 Layer 1 blockchain ecosystem designed for high-performance gaming, digital asset ownership, and 
                 decentralized applications. Unlike general-purpose chains, DWSC is optimized from the ground up 
                 for real-time interactive experiences and seamless digital commerce.
@@ -147,7 +147,7 @@ export default function DWSCExecutiveSummary() {
                   description: "Proof-of-Authority consensus optimized for gaming. Sub-second finality, high throughput, and native support for complex digital assets.",
                   icon: Database,
                   color: "cyan",
-                  features: ["PoA Consensus", "Native Token (DWC)", "Smart Contracts", "Cross-Chain Bridge"]
+                  features: ["PoA Consensus", "Native Token (SIG)", "Smart Contracts", "Cross-Chain Bridge"]
                 },
                 {
                   title: "DarkWave Portal",
@@ -217,20 +217,20 @@ export default function DWSCExecutiveSummary() {
                   { title: "Guardian Certification", desc: "Enterprise blockchain security audits at 70% less than competitors. $5,999-$14,999 per audit.", icon: Shield, color: "emerald", href: "/guardian" },
                   { title: "Guardian Shield", desc: "24/7 smart contract monitoring. Norton for blockchain. $299-$2,999/month.", icon: Activity, color: "blue", href: "/guardian" },
                   { title: "ChronoChat", desc: "Community platform with real-time messaging, channels, reactions, and Shells integration.", icon: MessageSquare, color: "purple", href: "/community-hub" },
-                  { title: "Shells Economy", desc: "Pre-launch virtual currency. Earn through engagement, purchase via Stripe, converts to DWC.", icon: Sparkles, color: "pink", href: "/coin-store" },
-                  { title: "Validator Program", desc: "Become a network validator. 10,000 DWC airdrop for founders, longevity bonuses.", icon: Server, color: "cyan", href: "/validators" },
-                  { title: "Token Presale", desc: "DWC at $0.001 per coin. Tiered pricing through $0.0014 launch. Up to 25% bonus.", icon: Coins, color: "amber", href: "/presale" },
+                  { title: "Shells Economy", desc: "Pre-launch virtual currency. Earn through engagement, purchase via Stripe, converts to Signal.", icon: Sparkles, color: "pink", href: "/coin-store" },
+                  { title: "Validator Program", desc: "Become a network validator. 10,000 SIG airdrop for founders, longevity bonuses.", icon: Server, color: "cyan", href: "/validators" },
+                  { title: "Token Presale", desc: "Signal at $0.001 per coin. Tiered pricing through $0.0014 launch. Up to 25% bonus.", icon: Coins, color: "amber", href: "/presale" },
                   { title: "DEX & Token Swap", desc: "AMM-style decentralized exchange. Trade tokens with low fees and instant settlement.", icon: ArrowRightLeft, color: "green", href: "/swap" },
-                  { title: "Liquid Staking", desc: "Stake DWC, receive stDWC. Earn rewards while maintaining liquidity.", icon: TrendingUp, color: "teal", href: "/liquid-staking" },
+                  { title: "Liquid Staking", desc: "Stake SIG, receive stSIG. Earn rewards while maintaining liquidity.", icon: TrendingUp, color: "teal", href: "/liquid-staking" },
                   { title: "NFT Marketplace", desc: "Create, buy, sell NFTs. 2.5% transaction fees. Rarity analyzer included.", icon: Store, color: "orange", href: "/nft-marketplace" },
-                  { title: "Cross-Chain Bridge", desc: "Lock & mint DWC ↔ wDWC. Ethereum and Solana bridges.", icon: Layers, color: "indigo", href: "/bridge" },
+                  { title: "Cross-Chain Bridge", desc: "Lock & mint SIG ↔ wSIG. Ethereum and Solana bridges.", icon: Layers, color: "indigo", href: "/bridge" },
                   { title: "Domain Registration", desc: "Premium .dwsc domains. 30% early adopter discount. $12-$350/year.", icon: Globe, color: "violet", href: "/domains" },
                   { title: "Subscriptions", desc: "Pulse Pro, StrikeAgent, Complete Bundle. Free trials available.", icon: CreditCard, color: "rose", href: "/billing" },
                   { title: "Arcade Games", desc: "Provably fair casino games: Slots, Crash, Coinflip, Dice.", icon: Gamepad2, color: "fuchsia", href: "#", comingSoon: true },
                   { title: "AI NFT Generator", desc: "Describe your vision, AI generates artwork, mint as NFT.", icon: Brain, color: "sky", href: "/ai-nft-generator" },
                   { title: "Developer Portal", desc: "APIs, SDKs, webhooks, testnet faucet. Full documentation.", icon: Code, color: "lime", href: "/developers" },
                   { title: "Block Explorer", desc: "Real-time blockchain data. Transaction history and network stats.", icon: Database, color: "yellow", href: "/explorer" },
-                  { title: "Referral Program", desc: "Earn DWC for referrals. Fraud detection and automated payouts.", icon: Gift, color: "red", href: "/referrals" },
+                  { title: "Referral Program", desc: "Earn Signal for referrals. Fraud detection and automated payouts.", icon: Gift, color: "red", href: "/referrals" },
                   { title: "Chronicles Game", desc: "70+ eras. AI-powered parallel life experience. YOUR legend.", icon: Gamepad2, color: "slate", href: "/chronicles" }
                 ].map((feature, i) => {
                   const cardContent = (
@@ -324,7 +324,7 @@ export default function DWSCExecutiveSummary() {
                     </ul>
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-white/80 mb-2">Native Token: DWC</h4>
+                    <h4 className="text-sm font-semibold text-white/80 mb-2">Native Token: Signal (SIG)</h4>
                     <ul className="space-y-1 text-sm text-white/60">
                       <li>• <span className="text-white">1 Billion</span> total supply</li>
                       <li>• <span className="text-white">18 decimals</span> for micro-transactions</li>
@@ -350,9 +350,9 @@ export default function DWSCExecutiveSummary() {
                   <div>
                     <h4 className="text-sm font-semibold text-white/80 mb-2">Bridge Architecture</h4>
                     <ul className="space-y-1 text-sm text-white/60">
-                      <li>• Lock & mint model (DWC ↔ wDWC)</li>
-                      <li>• <span className="text-white">Ethereum</span> bridge (ERC-20 wDWC)</li>
-                      <li>• <span className="text-white">Solana</span> bridge (SPL wDWC)</li>
+                      <li>• Lock & mint model (SIG ↔ wSIG)</li>
+                      <li>• <span className="text-white">Ethereum</span> bridge (ERC-20 wSIG)</li>
+                      <li>• <span className="text-white">Solana</span> bridge (SPL wSIG)</li>
                       <li>• UUPS proxy pattern for upgradeability</li>
                     </ul>
                   </div>
@@ -455,7 +455,7 @@ export default function DWSCExecutiveSummary() {
                 {
                   title: "Token Presale",
                   source: "Blockchain",
-                  description: "DWC at $0.001 per coin. 150M allocation (15% of supply). Tiered pricing through $0.0014 launch.",
+                  description: "SIG at $0.001 per coin. 150M allocation (15% of supply). Tiered pricing through $0.0014 launch.",
                   icon: Coins
                 },
                 {

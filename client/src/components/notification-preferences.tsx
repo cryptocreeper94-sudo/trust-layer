@@ -22,9 +22,9 @@ export function NotificationPreferences({ onClose }: { onClose: () => void }) {
   const [pushEnabled, setPushEnabled] = useState(false);
   
   const [settings, setSettings] = useState<NotificationSetting[]>([
-    { id: "large_transfers", label: "Large Transfers", description: "Alert when transfers exceed 1,000 DWC", icon: DollarSign, enabled: true },
+    { id: "large_transfers", label: "Large Transfers", description: "Alert when transfers exceed 1,000 SIG", icon: DollarSign, enabled: true },
     { id: "staking_rewards", label: "Staking Rewards", description: "Weekly staking reward summaries", icon: Coins, enabled: true },
-    { id: "price_alerts", label: "Price Alerts", description: "Notify when DWC price changes significantly", icon: TrendingUp, enabled: false },
+    { id: "price_alerts", label: "Price Alerts", description: "Notify when SIG price changes significantly", icon: TrendingUp, enabled: false },
     { id: "new_features", label: "New Features", description: "Updates about new platform features", icon: Gift, enabled: true },
     { id: "security", label: "Security Alerts", description: "Important security notifications", icon: Shield, enabled: true },
   ]);

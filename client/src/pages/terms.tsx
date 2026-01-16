@@ -27,7 +27,7 @@ export default function Terms() {
     },
     {
       title: "5. Digital Assets & Risks",
-      content: `Digital assets are volatile and risky. You acknowledge that: (a) the value of DWC and other tokens may fluctuate significantly; (b) blockchain transactions are irreversible; (c) you may lose some or all of your digital assets; (d) past performance does not guarantee future results. You should only use funds you can afford to lose.`
+      content: `Digital assets are volatile and risky. You acknowledge that: (a) the value of SIG and other tokens may fluctuate significantly; (b) blockchain transactions are irreversible; (c) you may lose some or all of your digital assets; (d) past performance does not guarantee future results. You should only use funds you can afford to lose.`
     },
     {
       title: "6. Staking & Rewards",

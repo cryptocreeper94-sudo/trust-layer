@@ -100,7 +100,7 @@ function LiveWinTicker() {
           <Trophy className="w-4 h-4 text-yellow-400" />
           <span className="text-muted-foreground">{LIVE_WINS[currentWin].player}</span>
           <span className="text-white">won</span>
-          <span className="text-green-400 font-bold font-mono">+{LIVE_WINS[currentWin].amount} DWC</span>
+          <span className="text-green-400 font-bold font-mono">+{LIVE_WINS[currentWin].amount} SIG</span>
           <span className="text-muted-foreground">in {LIVE_WINS[currentWin].game}</span>
           <span className="text-xs text-muted-foreground">({LIVE_WINS[currentWin].time})</span>
         </motion.div>
@@ -209,7 +209,7 @@ export default function GamesHome() {
               <h1 className="text-5xl md:text-7xl font-display font-bold mb-6 leading-tight">
                 Play. Win.{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 animate-pulse">
-                  Earn DWC.
+                  Earn SIG.
                 </span>
               </h1>
               
@@ -242,7 +242,7 @@ export default function GamesHome() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
               {[
                 { icon: Users, label: "Players Online", value: playersOnline.toString(), color: "text-blue-400" },
-                { icon: Coins, label: "DWC Wagered Today", value: "1.2M", color: "text-yellow-400" },
+                { icon: Coins, label: "SIG Wagered Today", value: "1.2M", color: "text-yellow-400" },
                 { icon: Trophy, label: "Paid Out Today", value: "1.1M", color: "text-green-400" },
                 { icon: Shield, label: "Average RTP", value: "98%", color: "text-purple-400" },
               ].map((stat, i) => (
@@ -278,7 +278,7 @@ export default function GamesHome() {
                     animate={{ scale: [1, 1.02, 1] }}
                     transition={{ duration: 1, repeat: Infinity }}
                   >
-                    {jackpot.toLocaleString()} DWC
+                    {jackpot.toLocaleString()} SIG
                   </motion.p>
                   <p className="text-muted-foreground mt-2">Play Jackpot Slots for a chance to win it all!</p>
                 </div>

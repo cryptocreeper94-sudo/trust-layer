@@ -35,7 +35,7 @@ interface DCAStrategy {
 const STRATEGIES: DCAStrategy[] = [
   {
     id: "1",
-    token: "DWC",
+    token: "SIG",
     amount: 100,
     frequency: "Weekly",
     totalInvested: 1200,
@@ -48,7 +48,7 @@ const STRATEGIES: DCAStrategy[] = [
   },
   {
     id: "2",
-    token: "stDWC",
+    token: "stSIG",
     amount: 50,
     frequency: "Daily",
     totalInvested: 850,
@@ -62,8 +62,8 @@ const STRATEGIES: DCAStrategy[] = [
 ];
 
 const TOKENS = [
-  { symbol: "DWC", name: "DarkWave Coin", icon: darkwaveLogo },
-  { symbol: "stDWC", name: "Staked DarkWave", icon: darkwaveLogo },
+  { symbol: "SIG", name: "Signal", icon: darkwaveLogo },
+  { symbol: "stSIG", name: "Staked Signal", icon: darkwaveLogo },
   { symbol: "USDC", name: "USD Coin", icon: "💵" },
 ];
 
@@ -179,7 +179,7 @@ function StrategyCard({ strategy }: { strategy: DCAStrategy }) {
 
 export default function DCABot() {
   const [showCreate, setShowCreate] = useState(false);
-  const [selectedToken, setSelectedToken] = useState("DWC");
+  const [selectedToken, setSelectedToken] = useState("SIG");
   const [amount, setAmount] = useState([100]);
   const [frequency, setFrequency] = useState("weekly");
 

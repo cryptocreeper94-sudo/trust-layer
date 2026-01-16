@@ -79,7 +79,7 @@ const roadmapData: RoadmapPhase[] = [
         title: "Validator Economics",
         description: "Staking, slashing, and commission systems",
         status: "completed",
-        details: ["1,000 DWC minimum stake", "5% slashing for misbehavior", "Ed25519 attestation signatures"]
+        details: ["1,000 SIG minimum stake", "5% slashing for misbehavior", "Ed25519 attestation signatures"]
       },
       {
         title: "Node Sync APIs",
@@ -135,7 +135,7 @@ const roadmapData: RoadmapPhase[] = [
       },
       {
         title: "Staking & Liquid Staking",
-        description: "DWC staking with stDWC liquid staking tokens",
+        description: "SIG staking with stSIG liquid staking tokens",
         status: "completed"
       },
       {
@@ -231,7 +231,7 @@ const roadmapData: RoadmapPhase[] = [
       },
       {
         title: "Airdrop Distribution",
-        description: "DWC airdrop to early supporters",
+        description: "SIG airdrop to early supporters",
         status: "planned",
         eta: "April 11, 2026"
       },
@@ -280,7 +280,7 @@ export default function TechnicalRoadmap() {
             </span>
           </h1>
           <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-            DarkWave Smart Chain development progress and upcoming milestones
+            DarkWave Trust Layer development progress and upcoming milestones
           </p>
           <div className="flex justify-center gap-6 mt-6">
             <div className="flex items-center gap-2">

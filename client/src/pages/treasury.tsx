@@ -41,7 +41,7 @@ interface AllocationCategory {
 const defaultAllocations: AllocationCategory[] = [
   { category: "development", percentage: 30, label: "Development", description: "Engineering, tools, infrastructure", color: "cyan", icon: "Code" },
   { category: "marketing", percentage: 20, label: "Marketing", description: "Advertising, community, partnerships", color: "purple", icon: "Megaphone" },
-  { category: "staking_rewards", percentage: 20, label: "Staking Rewards", description: "APY for DWC stakers", color: "green", icon: "TrendingUp" },
+  { category: "staking_rewards", percentage: 20, label: "Staking Rewards", description: "APY for SIG stakers", color: "green", icon: "TrendingUp" },
   { category: "team_founder", percentage: 15, label: "Team & Founder", description: "Core team compensation", color: "amber", icon: "Users" },
   { category: "operations", percentage: 10, label: "Operations", description: "Legal, hosting, security", color: "blue", icon: "Settings" },
   { category: "reserve", percentage: 5, label: "Reserve", description: "Future opportunities", color: "pink", icon: "Shield" },
@@ -403,7 +403,7 @@ export default function Treasury() {
                     </div>
 
                     <div>
-                      <Label htmlFor="amount" className="text-[11px] text-white/60">Amount (DWC)</Label>
+                      <Label htmlFor="amount" className="text-[11px] text-white/60">Amount (SIG)</Label>
                       <Input
                         id="amount"
                         type="number"
@@ -458,7 +458,7 @@ export default function Treasury() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-white/40">Amount</span>
-                        <span className="text-white">{(BigInt(lastTx.amount) / BigInt(1e18)).toString()} DWC</span>
+                        <span className="text-white">{(BigInt(lastTx.amount) / BigInt(1e18)).toString()} SIG</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-white/40">Tx Hash</span>

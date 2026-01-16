@@ -950,7 +950,7 @@ export const stakingPools = pgTable("staking_pools", {
   apyBase: text("apy_base").notNull(), // Base APY percentage as string (e.g., "12.5")
   apyBoost: text("apy_boost").notNull().default("0"), // Bonus APY for streaks/badges
   lockDays: integer("lock_days").notNull().default(0), // 0 = no lock (liquid)
-  minStake: text("min_stake").notNull().default("100"), // Minimum DWC to stake
+  minStake: text("min_stake").notNull().default("100"), // Minimum SIG to stake
   maxStake: text("max_stake"), // Optional maximum per user
   totalStaked: text("total_staked").notNull().default("0"),
   totalStakers: integer("total_stakers").notNull().default(0),
@@ -1084,7 +1084,7 @@ export const faucetClaims = pgTable("faucet_claims", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   walletAddress: text("wallet_address").notNull(),
   ipAddress: text("ip_address"),
-  amount: text("amount").notNull().default("1000000000000000000000"), // 1000 DWC default
+  amount: text("amount").notNull().default("1000000000000000000000"), // 1000 SIG default
   txHash: text("tx_hash"),
   status: text("status").notNull().default("pending"), // 'pending' | 'completed' | 'failed'
   claimedAt: timestamp("claimed_at").defaultNow().notNull(),
@@ -1104,7 +1104,7 @@ export type FaucetClaim = typeof faucetClaims.$inferSelect;
 
 export const tokenPairs = pgTable("token_pairs", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  tokenA: text("token_a").notNull(), // e.g., "DWC"
+  tokenA: text("token_a").notNull(), // e.g., "SIG"
   tokenB: text("token_b").notNull(), // e.g., "USDC"
   reserveA: text("reserve_a").notNull().default("0"),
   reserveB: text("reserve_b").notNull().default("0"),
@@ -1199,7 +1199,7 @@ export const nftListings = pgTable("nft_listings", {
   nftId: text("nft_id").notNull(),
   sellerId: text("seller_id").notNull(),
   price: text("price").notNull(),
-  currency: text("currency").notNull().default("DWC"),
+  currency: text("currency").notNull().default("SIG"),
   status: text("status").notNull().default("active"), // active, sold, cancelled
   expiresAt: timestamp("expires_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -1384,7 +1384,7 @@ export type InsertWebhookLog = z.infer<typeof insertWebhookLogSchema>;
 export type WebhookLog = typeof webhookLogs.$inferSelect;
 
 // ============================================
-// LIQUID STAKING (stDWC)
+// LIQUID STAKING (stSIG)
 // ============================================
 
 export const liquidStakingState = pgTable("liquid_staking_state", {
@@ -1674,7 +1674,7 @@ export const legacyFounders = pgTable("legacy_founders", {
   paymentId: text("payment_id"), // Stripe session ID or Coinbase charge ID
   amountPaidCents: integer("amount_paid_cents").notNull().default(2400), // $24.00
   status: text("status").notNull().default("pending"), // pending, paid, airdrop_pending, completed
-  airdropAmount: text("airdrop_amount").notNull().default("35000000000000000000000"), // 35,000 DWC (18 decimals)
+  airdropAmount: text("airdrop_amount").notNull().default("35000000000000000000000"), // 35,000 SIG (18 decimals)
   airdropTxHash: text("airdrop_tx_hash"),
   founderNumber: serial("founder_number"),
   referralCode: text("referral_code"),
@@ -1716,9 +1716,9 @@ export const LEGACY_FOUNDER_CONFIG = {
     "Unlimited AI analysis (crypto & stocks)",
     "StrikeAgent sniper bot access",
     "Founding member badge",
-    "Priority access to DWC staking pools",
+    "Priority access to SIG staking pools",
     "Early access to all new features",
-    "35,000 DWC coin airdrop on launch",
+    "35,000 SIG token airdrop on launch",
     "No recurring billing after initial payment",
   ],
 } as const;
@@ -2020,7 +2020,7 @@ export const sweepsDailyLogin = pgTable("sweeps_daily_login", {
 
 export type SweepsDailyLogin = typeof sweepsDailyLogin.$inferSelect;
 
-// SC Redemptions to DWC
+// SC Redemptions to SIG
 export const sweepsRedemptions = pgTable("sweeps_redemptions", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: text("user_id").notNull(),
@@ -2467,7 +2467,7 @@ export type InsertDomainTransfer = z.infer<typeof insertDomainTransferSchema>;
 export const domainPricingSchema = z.object({
   length: z.number(), // character length
   priceUsd: z.number(), // annual price in USD
-  priceDwc: z.number(), // annual price in DWC
+  priceDwc: z.number(), // annual price in SIG
 });
 
 export type DomainPricing = z.infer<typeof domainPricingSchema>;
@@ -3330,7 +3330,7 @@ export type VoiceUsage = typeof voiceUsage.$inferSelect;
 // =====================================================
 // TREASURY ALLOCATION SYSTEM
 // =====================================================
-// Transparent allocation tracking for DWC treasury funds
+// Transparent allocation tracking for SIG treasury funds
 // =====================================================
 
 export const treasuryAllocationCategories = [
@@ -3368,7 +3368,7 @@ export type InsertTreasuryAllocation = z.infer<typeof insertTreasuryAllocationSc
 export const treasuryLedger = pgTable("treasury_ledger", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   category: text("category").notNull(), // Which allocation bucket
-  amountDwc: text("amount_dwc").notNull(), // Amount in DWC
+  amountDwc: text("amount_dwc").notNull(), // Amount in SIG
   amountUsd: text("amount_usd"), // Optional USD equivalent
   transactionType: text("transaction_type").notNull(), // "deposit", "withdrawal", "allocation"
   txHash: text("tx_hash"), // On-chain tx hash if applicable
@@ -3618,7 +3618,7 @@ export const insertCommissionPayoutSchema = createInsertSchema(commissionPayouts
 export type CommissionPayout = typeof commissionPayouts.$inferSelect;
 export type InsertCommissionPayout = z.infer<typeof insertCommissionPayoutSchema>;
 
-// User Affiliate Profile - Stores per-user affiliate status with wallet for DWC payouts
+// User Affiliate Profile - Stores per-user affiliate status with wallet for SIG payouts
 export const affiliateProfiles = pgTable("affiliate_profiles", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: text("user_id").notNull().unique(),
@@ -3884,7 +3884,7 @@ export const shellConversionSnapshots = pgTable("orb_conversion_snapshots", {
   userId: text("user_id").notNull(),
   walletId: varchar("wallet_id").notNull().references(() => shellWallets.id),
   orbBalance: integer("orb_balance").notNull(),
-  dwcAmount: text("dwc_amount").notNull(), // Conversion amount in DWC
+  dwcAmount: text("dwc_amount").notNull(), // Conversion amount in SIG
   conversionRate: text("conversion_rate").notNull(),
   status: text("status").notNull().default("pending"), // 'pending', 'converted', 'claimed'
   snapshotAt: timestamp("snapshot_at").defaultNow().notNull(),
@@ -3938,7 +3938,7 @@ export const shellPurchaseReceipts = pgTable("shell_purchase_receipts", {
   status: text("status").notNull().default("completed"), // 'pending', 'completed', 'refunded', 'failed'
   conversionEligible: boolean("conversion_eligible").notNull().default(true),
   dwcConversionRate: text("dwc_conversion_rate"), // Rate at time of purchase (null until set)
-  dwcConversionAmount: text("dwc_conversion_amount"), // Calculated DWC amount
+  dwcConversionAmount: text("dwc_conversion_amount"), // Calculated SIG amount
   conversionStatus: text("conversion_status").default("pending"), // 'pending', 'converted', 'claimed'
   convertedAt: timestamp("converted_at"),
   metadata: text("metadata"), // JSON for extra data
@@ -4859,7 +4859,7 @@ export const aiAgents = pgTable("ai_agents", {
   systemPrompt: text("system_prompt").notNull(),
   capabilities: text("capabilities"), // JSON array: ['trade', 'analyze', 'execute_quests', 'social_post']
   
-  pricePerExecution: text("price_per_execution").notNull().default("1000000000000000000"), // 1 DWC in wei
+  pricePerExecution: text("price_per_execution").notNull().default("1000000000000000000"), // 1 SIG in wei
   revenueShare: integer("revenue_share").notNull().default(80), // Creator gets 80%, platform 20%
   
   totalExecutions: integer("total_executions").notNull().default(0),
@@ -5176,7 +5176,7 @@ export const chronicleFactions = pgTable("chronicle_factions", {
   
   memberCount: integer("member_count").notNull().default(0),
   influence: integer("influence").notNull().default(100), // Faction power in the world
-  treasury: text("treasury").notNull().default("0"), // DWC pooled by members
+  treasury: text("treasury").notNull().default("0"), // SIG pooled by members
   
   leaderUserId: text("leader_user_id"),
   isPlayable: boolean("is_playable").notNull().default(true),
@@ -6622,9 +6622,9 @@ export const shellConversionBatches = pgTable("shell_conversion_batches", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   
   batchName: text("batch_name").notNull(), // e.g., "TGE_2026_04_11"
-  conversionRate: text("conversion_rate").notNull(), // "100" = 100 shells per 1 DWC
+  conversionRate: text("conversion_rate").notNull(), // "100" = 100 shells per 1 SIG
   shellPrice: text("shell_price").notNull().default("0.001"), // $0.001 per shell
-  dwcPrice: text("dwc_price").notNull().default("0.10"), // $0.10 per DWC at launch
+  dwcPrice: text("dwc_price").notNull().default("0.10"), // $0.10 per SIG at launch
   
   totalUsersProcessed: integer("total_users_processed").notNull().default(0),
   totalShellsConverted: integer("total_shells_converted").notNull().default(0),

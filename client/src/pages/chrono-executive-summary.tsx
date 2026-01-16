@@ -75,7 +75,7 @@ export default function ChronoExecutiveSummary() {
                 experience that responds authentically to your choices.
               </p>
               <p className="text-white/80 leading-relaxed">
-                Built on the <span className="text-cyan-400 font-semibold">DarkWave Smart Chain (DWSC)</span> blockchain infrastructure, 
+                Built on the <span className="text-cyan-400 font-semibold">DarkWave Trust Layer (DWSC)</span> blockchain infrastructure, 
                 Chronicles leverages blockchain technology for true digital ownership of in-game assets, community-created content licensing, 
                 and a revolutionary <span className="text-purple-400 font-semibold">Storefront Sponsorship System</span> that bridges 
                 real-world commerce with immersive historical experiences.
@@ -322,7 +322,7 @@ export default function ChronoExecutiveSummary() {
               {[
                 {
                   title: "Creator Licenses",
-                  revenue: "500 DWC each",
+                  revenue: "500 SIG each",
                   description: "Creators pay for licensing rights to retain IP ownership of their in-game contributions. Includes royalty participation and trading rights.",
                   icon: Users
                 },
@@ -351,7 +351,7 @@ export default function ChronoExecutiveSummary() {
                   icon: TrendingUp
                 },
                 {
-                  title: "DWC Token Utility",
+                  title: "SIG Token Utility",
                   revenue: "Ecosystem Value",
                   description: "Native blockchain token required for creator licenses, property purchases, and premium features. Drives token demand.",
                   icon: Coins
@@ -456,7 +456,7 @@ export default function ChronoExecutiveSummary() {
                       "iOS & Android apps on stores",
                       "Full creator marketplace operational",
                       "Active storefront sponsor network",
-                      "DWC mainnet integration complete",
+                      "SIG mainnet integration complete",
                       "Community content creation tools"
                     ]
                   }
@@ -676,7 +676,7 @@ export default function ChronoExecutiveSummary() {
                 </Link>
               </div>
               <p className="text-white/40 text-sm">
-                DarkWave Studios • DarkWave Smart Chain • yourlegacy.io
+                DarkWave Studios • DarkWave Trust Layer • yourlegacy.io
               </p>
               <p className="text-white/30 text-xs mt-2">
                 Direct inquiries: cryptocreeper94@gmail.com

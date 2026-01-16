@@ -51,7 +51,7 @@ const MARKETS: Market[] = [
   },
   {
     id: "dwc-price",
-    question: "Will DWC reach $1 by February launch?",
+    question: "Will SIG reach $1 by February launch?",
     category: "DarkWave",
     endsIn: "52 days",
     yesOdds: 75.8,
@@ -123,7 +123,7 @@ function MarketCard({ market, isConnected }: { market: Market; isConnected: bool
         </span>
         <span className="flex items-center gap-1">
           <DollarSign className="w-3 h-3" />
-          {market.totalPool.toLocaleString()} DWC Pool
+          {market.totalPool.toLocaleString()} SIG Pool
         </span>
       </div>
 
@@ -168,7 +168,7 @@ function MarketCard({ market, isConnected }: { market: Market; isConnected: bool
             >
               <Input
                 type="number"
-                placeholder="Enter amount in DWC"
+                placeholder="Enter amount in SIG"
                 value={betAmount}
                 onChange={(e) => setBetAmount(e.target.value)}
                 className="bg-white/5 border-white/10"
@@ -178,7 +178,7 @@ function MarketCard({ market, isConnected }: { market: Market; isConnected: bool
                 <div className="p-2 rounded-lg bg-white/5 text-xs">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Potential Win:</span>
-                    <span className="text-green-400 font-mono">{potentialWin} DWC</span>
+                    <span className="text-green-400 font-mono">{potentialWin} SIG</span>
                   </div>
                 </div>
               )}
@@ -236,7 +236,7 @@ export default function Predictions() {
               Prediction <span className="text-amber-400">Markets</span>
             </h1>
             <p className="text-sm text-muted-foreground">
-              Bet on future events • Earn DWC • Decentralized oracle resolution
+              Bet on future events • Earn SIG • Decentralized oracle resolution
             </p>
           </motion.div>
 
@@ -271,7 +271,7 @@ export default function Predictions() {
                 <div>
                   <h3 className="font-bold">Ready to Predict?</h3>
                   <p className="text-sm text-muted-foreground">
-                    Connect your wallet to place bets and win DWC
+                    Connect your wallet to place bets and win SIG
                   </p>
                 </div>
                 <Link href="/wallet">

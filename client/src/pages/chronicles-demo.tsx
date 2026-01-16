@@ -231,7 +231,7 @@ export default function ChroniclesDemo() {
                 </div>
                 <div className="px-6 py-3 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-500/5 border border-amber-500/30 backdrop-blur-sm">
                   <div className="text-2xl font-bold text-amber-400">{parseInt(season?.totalDwcPool || "10000").toLocaleString()}</div>
-                  <div className="text-xs text-gray-400 uppercase tracking-wide">DWC Pool</div>
+                  <div className="text-xs text-gray-400 uppercase tracking-wide">SIG Pool</div>
                 </div>
               </div>
             </motion.div>

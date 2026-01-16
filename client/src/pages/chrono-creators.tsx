@@ -84,7 +84,7 @@ const OWNERSHIP_TIERS = [
   },
   {
     tier: "Creator License",
-    price: "500 DWC",
+    price: "500 SIG",
     description: "Own your creations as digital real estate",
     features: [
       "Full ownership rights to your content",

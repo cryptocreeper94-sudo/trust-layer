@@ -116,7 +116,7 @@ export default function InnovationHub() {
     {
       id: "quest-mining",
       title: "Quest Mining",
-      description: "Earn Shells and DWC through verifiable contributions",
+      description: "Earn Shells and Signal through verifiable contributions",
       icon: Target,
       gradient: "from-amber-500 to-orange-600",
       href: "/quests",
@@ -249,7 +249,7 @@ export default function InnovationHub() {
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
                 <StatCard 
                   value={seasons?.seasons?.[0]?.totalPrizePoolDwc ? `${parseInt(seasons.seasons[0].totalPrizePoolDwc).toLocaleString()}` : "100,000"}
-                  label="DWC Prize Pool" 
+                  label="SIG Prize Pool" 
                   icon={Award}
                 />
               </motion.div>
@@ -430,7 +430,7 @@ export default function InnovationHub() {
                   <h2 className="text-2xl md:text-3xl font-display font-bold text-white">
                     Quest Mining
                   </h2>
-                  <p className="text-white/50">Complete quests to earn Shells and DWC rewards</p>
+                  <p className="text-white/50">Complete quests to earn Shells and Signal rewards</p>
                 </div>
               </div>
             </motion.div>
@@ -458,7 +458,7 @@ export default function InnovationHub() {
                       </div>
                       <div className="text-right">
                         <div className="text-3xl font-bold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
-                          {parseInt(seasons.seasons[0].totalPrizePoolDwc || '0').toLocaleString()} DWC
+                          {parseInt(seasons.seasons[0].totalPrizePoolDwc || '0').toLocaleString()} SIG
                         </div>
                         <div className="text-sm text-white/40">Total Prize Pool</div>
                       </div>
@@ -614,7 +614,7 @@ export default function InnovationHub() {
                       {[
                         { step: 1, title: "Input Hashing", desc: "AI inputs are cryptographically hashed before processing", icon: Hexagon },
                         { step: 2, title: "Execution Proof", desc: "Model generates verifiable commitment of its decision", icon: Code },
-                        { step: 3, title: "On-Chain Anchor", desc: "Proof is permanently recorded on DarkWave Smart Chain", icon: Layers },
+                        { step: 3, title: "On-Chain Anchor", desc: "Proof is permanently recorded on DarkWave Trust Layer", icon: Layers },
                         { step: 4, title: "Public Verification", desc: "Anyone can verify the AI decision was fair and correct", icon: CheckCircle }
                       ].map((item, i) => (
                         <motion.div 

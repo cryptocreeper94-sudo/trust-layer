@@ -44,12 +44,12 @@ export default function PaperTrading() {
   const [balance, setBalance] = useState(STARTING_BALANCE);
   const [orderType, setOrderType] = useState<"buy" | "sell">("buy");
   const [amount, setAmount] = useState("");
-  const [token, setToken] = useState("DWC");
+  const [token, setToken] = useState("SIG");
   const [positions, setPositions] = useState<Position[]>([]);
   const [trades, setTrades] = useState<Trade[]>([]);
 
   const tokenPrices: Record<string, number> = {
-    DWC: 0.152,
+    SIG: 0.152,
     BTC: 98500,
     ETH: 3450,
     SOL: 185,
@@ -246,7 +246,7 @@ export default function PaperTrading() {
                     className="w-full h-10 px-3 rounded-md bg-white/5 border border-white/10 text-sm"
                     data-testid="select-paper-token"
                   >
-                    <option value="DWC">DWC - ${tokenPrices.DWC}</option>
+                    <option value="SIG">SIG - ${tokenPrices.SIG}</option>
                     <option value="BTC">BTC - ${tokenPrices.BTC.toLocaleString()}</option>
                     <option value="ETH">ETH - ${tokenPrices.ETH.toLocaleString()}</option>
                     <option value="SOL">SOL - ${tokenPrices.SOL}</option>

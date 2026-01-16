@@ -15,8 +15,8 @@ export default function VirtualCurrencyTerms() {
     },
     {
       icon: ArrowRightLeft,
-      title: "2. DarkWave Coin (DWC) Conversion",
-      content: `On April 11, 2026, DarkWave Coin (DWC) will launch as the native cryptocurrency of DarkWave Smart Chain. All Shells in your account will be eligible for conversion to DWC at a rate of 100 Shells = 1 DWC. This conversion rate is fixed and guaranteed for all Shells purchased before launch. After conversion, Shells will no longer be available as DWC will serve as the primary currency. You acknowledge that DWC is a cryptocurrency subject to market volatility, and its value may fluctuate significantly after launch.`
+      title: "2. Signal (SIG) Conversion",
+      content: `On April 11, 2026, Signal (SIG) will launch as the native cryptocurrency of DarkWave Trust Layer. All Shells in your account will be eligible for conversion to SIG at a rate of 100 Shells = 1 SIG. This conversion rate is fixed and guaranteed for all Shells purchased before launch. After conversion, Shells will no longer be available as SIG will serve as the primary currency. You acknowledge that SIG is a cryptocurrency subject to market volatility, and its value may fluctuate significantly after launch.`
     },
     {
       icon: AlertTriangle,
@@ -91,9 +91,9 @@ export default function VirtualCurrencyTerms() {
                 <ArrowRightLeft className="w-6 h-6 text-cyan-400" />
               </div>
               <div>
-                <h3 className="font-semibold text-cyan-400 text-lg">DWC Conversion Promise</h3>
+                <h3 className="font-semibold text-cyan-400 text-lg">SIG Conversion Promise</h3>
                 <p className="text-gray-300 mt-1">
-                  All Shells purchased before April 11, 2026 will convert to DarkWave Coin (DWC) at a guaranteed rate of <span className="text-cyan-400 font-bold">100 Shells = 1 DWC</span>. Your purchase history is permanently recorded and your conversion eligibility is guaranteed.
+                  All Shells purchased before April 11, 2026 will convert to Signal (SIG) at a guaranteed rate of <span className="text-cyan-400 font-bold">100 Shells = 1 SIG</span>. Your purchase history is permanently recorded and your conversion eligibility is guaranteed.
                 </p>
               </div>
             </div>
@@ -106,7 +106,7 @@ export default function VirtualCurrencyTerms() {
                 <h3 className="font-semibold text-yellow-500 text-lg">Important Risk Warning</h3>
                 <p className="text-gray-300 text-sm mt-1">
                   Virtual currencies and cryptocurrencies are highly speculative and involve substantial risk. 
-                  The value of DWC after launch is not guaranteed and may fluctuate significantly. 
+                  The value of SIG after launch is not guaranteed and may fluctuate significantly. 
                   Only purchase what you can afford to lose. This is not investment advice.
                 </p>
               </div>
@@ -132,7 +132,7 @@ export default function VirtualCurrencyTerms() {
               <Coins className="w-8 h-8 text-pink-400" />
               <div>
                 <h3 className="font-semibold text-white">Guaranteed Rate</h3>
-                <p className="text-xs text-gray-400">100 Shells = 1 DWC</p>
+                <p className="text-xs text-gray-400">100 Shells = 1 SIG</p>
               </div>
             </GlassCard>
           </div>
@@ -163,7 +163,7 @@ export default function VirtualCurrencyTerms() {
           <GlassCard className="p-6 border-cyan-500/20" data-testid="card-contact">
             <h3 className="font-semibold text-cyan-400 mb-2">Questions About These Terms?</h3>
             <p className="text-gray-300 text-sm">
-              For questions about virtual currency purchases, DWC conversion, or these terms, 
+              For questions about virtual currency purchases, SIG conversion, or these terms, 
               please contact us at <a href="mailto:legal@darkwavestudios.io" className="text-cyan-400 hover:underline">legal@darkwavestudios.io</a>
             </p>
           </GlassCard>

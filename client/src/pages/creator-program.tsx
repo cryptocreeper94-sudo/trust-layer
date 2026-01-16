@@ -162,7 +162,7 @@ export default function CreatorProgram() {
               </div>
               <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
                 <Zap className="w-4 h-4 text-amber-400" />
-                <span className="text-sm">Powered by DWC</span>
+                <span className="text-sm">Powered by SIG</span>
               </div>
             </div>
 

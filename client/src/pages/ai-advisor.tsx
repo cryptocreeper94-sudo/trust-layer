@@ -207,7 +207,7 @@ export default function AIAdvisor() {
                       <CheckCircle2 className="w-8 h-8 mx-auto mb-2 text-green-400" />
                       <p className="font-medium mb-1">Portfolio Analyzed!</p>
                       <p className="text-xs text-muted-foreground">
-                        No holdings detected yet. Start by acquiring some DWC to receive personalized recommendations.
+                        No holdings detected yet. Start by acquiring some SIG to receive personalized recommendations.
                       </p>
                     </div>
                     <div className="p-3 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
@@ -216,7 +216,7 @@ export default function AIAdvisor() {
                         <div>
                           <p className="text-sm font-medium">Get Started</p>
                           <p className="text-xs text-muted-foreground">
-                            Use the faucet to claim free testnet DWC, then explore staking and trading to build your portfolio.
+                            Use the faucet to claim free testnet SIG, then explore staking and trading to build your portfolio.
                           </p>
                         </div>
                       </div>
@@ -255,7 +255,7 @@ export default function AIAdvisor() {
               </Button>
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
-              {["Best staking strategy?", "When to rebalance?", "Is DWC undervalued?", "NFT investment tips"].map((q) => (
+              {["Best staking strategy?", "When to rebalance?", "Is SIG undervalued?", "NFT investment tips"].map((q) => (
                 <Button
                   key={q}
                   variant="outline"

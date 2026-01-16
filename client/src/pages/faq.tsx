@@ -31,8 +31,8 @@ const FAQ_CATEGORIES: FAQCategory[] = [
     color: "#06b6d4",
     items: [
       {
-        question: "What is DarkWave Smart Chain?",
-        answer: "DarkWave Smart Chain (DWSC) is a purpose-built Layer 1 blockchain ecosystem designed for high-performance gaming, digital asset ownership, and decentralized applications. Unlike general-purpose chains, DWSC is optimized for real-time interactive experiences with 400ms block times and 200K+ TPS."
+        question: "What is DarkWave Trust Layer?",
+        answer: "DarkWave Trust Layer is a purpose-built Layer 1 trust infrastructure designed for high-performance gaming, digital asset ownership, and decentralized applications. Unlike general-purpose chains, DarkWave is optimized for real-time interactive experiences with 400ms block times and 200K+ TPS."
       },
       {
         question: "Who is behind DarkWave?",
@@ -40,11 +40,11 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       },
       {
         question: "When does the token launch?",
-        answer: "The DWC token is scheduled for launch on April 11, 2026. DarkWave Chronicles is a community-driven project - the timeline depends on community involvement and support. Join us to help make it happen!"
+        answer: "Signal is scheduled for launch on April 11, 2026. DarkWave Chronicles is a community-driven project - the timeline depends on community involvement and support. Join us to help make it happen!"
       },
       {
-        question: "What makes DWSC different from other blockchains?",
-        answer: "DWSC is purpose-built for gaming and interactive experiences. Key differentiators include: Proof-of-Authority consensus for speed and efficiency, 400ms block times, native gaming infrastructure, integrated DeFi services, and the DarkWave Chronicles flagship game that demonstrates the chain's capabilities."
+        question: "What makes DarkWave Trust Layer different from other blockchains?",
+        answer: "DarkWave Trust Layer is purpose-built for gaming and interactive experiences. Key differentiators include: Proof-of-Authority consensus for speed and efficiency, 400ms block times, native gaming infrastructure, integrated DeFi services, and the DarkWave Chronicles flagship game that demonstrates the platform's capabilities."
       }
     ]
   },
@@ -55,12 +55,12 @@ const FAQ_CATEGORIES: FAQCategory[] = [
     color: "#a855f7",
     items: [
       {
-        question: "What is the total supply of DWC?",
-        answer: "The total supply is fixed at 1 billion DWC coins. There will be no additional minting or burning - the supply is permanent and verifiable on-chain."
+        question: "What is the total supply of Signal?",
+        answer: "The total supply is fixed at 1 billion Signal. There will be no additional minting or burning - the supply is permanent and verifiable on-chain."
       },
       {
         question: "Is there a token burn mechanism?",
-        answer: "No. DWC maintains a fixed supply without burn mechanics. We believe value should come from genuine utility and ecosystem growth, not artificial scarcity through token destruction."
+        answer: "No. Signal maintains a fixed supply without burn mechanics. We believe value should come from genuine utility and ecosystem growth, not artificial scarcity through token destruction."
       },
       {
         question: "What is the token allocation?",
@@ -71,8 +71,8 @@ const FAQ_CATEGORIES: FAQCategory[] = [
         answer: "Yes. Team tokens have a 12-month cliff followed by 48-month linear vesting. Advisor tokens have a 6-month cliff with 24-month vesting. This ensures long-term alignment with the project's success."
       },
       {
-        question: "What can I use DWC for?",
-        answer: "DWC is used for: transaction fees on the network, staking rewards, governance voting, in-game purchases in DarkWave Chronicles, DEX trading and liquidity provision, and NFT marketplace transactions."
+        question: "What can I use Signal for?",
+        answer: "Signal is used for: transaction fees on the network, staking rewards, governance voting, in-game purchases in DarkWave Chronicles, DEX trading and liquidity provision, and NFT marketplace transactions."
       }
     ]
   },
@@ -96,7 +96,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       },
       {
         question: "Is there a referral program?",
-        answer: "Yes! Our affiliate program rewards you with bonus DWC tokens for every successful referral. Share your unique link and earn commissions that will be distributed at token launch."
+        answer: "Yes! Our affiliate program rewards you with bonus Signal for every successful referral. Share your unique link and earn commissions that will be distributed at token launch."
       }
     ]
   },
@@ -119,8 +119,8 @@ const FAQ_CATEGORIES: FAQCategory[] = [
         answer: "The public beta is targeted for July 4, 2026. Before that, early supporters may receive alpha access and exclusive content based on their participation level."
       },
       {
-        question: "Do I need DWC tokens to play?",
-        answer: "Free-to-play content will be available. DWC tokens unlock premium features, exclusive eras, enhanced AI interactions, and cosmetic items. The game is designed to be enjoyable without spending, but rewarding for token holders."
+        question: "Do I need Signal to play?",
+        answer: "Free-to-play content will be available. Signal unlocks premium features, exclusive eras, enhanced AI interactions, and cosmetic items. The game is designed to be enjoyable without spending, but rewarding for token holders."
       }
     ]
   },
@@ -254,7 +254,7 @@ export default function FAQ() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400">Frequently Asked Questions</span>
             </h1>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Everything you need to know about DarkWave Smart Chain, $DWC token, and the ecosystem.
+              Everything you need to know about DarkWave Trust Layer, Signal, and the ecosystem.
             </p>
           </motion.div>
 

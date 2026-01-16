@@ -74,6 +74,6 @@ export const darkwaveConfig = {
   rpcUrl: "embedded",
   chainId: DARKWAVE_CHAIN_ID,
   explorerUrl: process.env.DARKWAVE_EXPLORER_URL || "/explorer",
-  symbol: "DWC",
+  symbol: "SIG",
   decimals: 18,
 };

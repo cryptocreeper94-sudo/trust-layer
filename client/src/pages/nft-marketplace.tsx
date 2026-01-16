@@ -149,7 +149,7 @@ export default function NftMarketplace() {
               <div className="text-lg font-bold text-pink-400">
                 {stats?.totalVolume ? formatPrice(stats.totalVolume) : "0"}
               </div>
-              <div className="text-[10px] text-muted-foreground">Volume (DWC)</div>
+              <div className="text-[10px] text-muted-foreground">Volume (SIG)</div>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
               <div className="text-lg font-bold text-primary">
@@ -289,7 +289,7 @@ export default function NftMarketplace() {
                         <div className="flex items-center justify-between mt-1">
                           <span className="text-[10px] text-muted-foreground">Price</span>
                           <span className="text-xs font-bold text-pink-400">
-                            {formatPrice(nft.price)} DWC
+                            {formatPrice(nft.price)} SIG
                           </span>
                         </div>
                       </div>

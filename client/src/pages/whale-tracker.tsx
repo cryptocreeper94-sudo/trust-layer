@@ -28,12 +28,12 @@ interface WhaleMovement {
 }
 
 const WHALE_MOVEMENTS: WhaleMovement[] = [
-  { id: "1", type: "buy", amount: 2500000, value: 375000, from: "DEX", to: "0x7a23...f8d1", token: "DWC", timestamp: new Date(Date.now() - 120000), txHash: "0xabc123" },
-  { id: "2", type: "transfer", amount: 1000000, value: 150000, from: "0x8b34...c2e5", to: "0x9d45...a3f7", token: "DWC", timestamp: new Date(Date.now() - 300000), txHash: "0xdef456" },
-  { id: "3", type: "sell", amount: 500000, value: 75000, from: "0x1e56...d4g8", to: "DEX", token: "DWC", timestamp: new Date(Date.now() - 600000), txHash: "0xghi789" },
-  { id: "4", type: "buy", amount: 3200000, value: 480000, from: "DEX", to: "0x2f67...e5h9", token: "DWC", timestamp: new Date(Date.now() - 900000), txHash: "0xjkl012" },
-  { id: "5", type: "transfer", amount: 750000, value: 112500, from: "0x3g78...f6i0", to: "Cold Wallet", token: "DWC", timestamp: new Date(Date.now() - 1200000), txHash: "0xmno345" },
-  { id: "6", type: "sell", amount: 1500000, value: 225000, from: "0x4h89...g7j1", to: "DEX", token: "DWC", timestamp: new Date(Date.now() - 1800000), txHash: "0xpqr678" },
+  { id: "1", type: "buy", amount: 2500000, value: 375000, from: "DEX", to: "0x7a23...f8d1", token: "SIG", timestamp: new Date(Date.now() - 120000), txHash: "0xabc123" },
+  { id: "2", type: "transfer", amount: 1000000, value: 150000, from: "0x8b34...c2e5", to: "0x9d45...a3f7", token: "SIG", timestamp: new Date(Date.now() - 300000), txHash: "0xdef456" },
+  { id: "3", type: "sell", amount: 500000, value: 75000, from: "0x1e56...d4g8", to: "DEX", token: "SIG", timestamp: new Date(Date.now() - 600000), txHash: "0xghi789" },
+  { id: "4", type: "buy", amount: 3200000, value: 480000, from: "DEX", to: "0x2f67...e5h9", token: "SIG", timestamp: new Date(Date.now() - 900000), txHash: "0xjkl012" },
+  { id: "5", type: "transfer", amount: 750000, value: 112500, from: "0x3g78...f6i0", to: "Cold Wallet", token: "SIG", timestamp: new Date(Date.now() - 1200000), txHash: "0xmno345" },
+  { id: "6", type: "sell", amount: 1500000, value: 225000, from: "0x4h89...g7j1", to: "DEX", token: "SIG", timestamp: new Date(Date.now() - 1800000), txHash: "0xpqr678" },
 ];
 
 const TOP_WHALES = [
@@ -142,7 +142,7 @@ export default function WhaleTracker() {
         value: 75000 + Math.random() * 450000,
         from: Math.random() > 0.5 ? "DEX" : `0x${Math.random().toString(16).slice(2, 6)}...${Math.random().toString(16).slice(2, 6)}`,
         to: Math.random() > 0.5 ? "DEX" : `0x${Math.random().toString(16).slice(2, 6)}...${Math.random().toString(16).slice(2, 6)}`,
-        token: "DWC",
+        token: "SIG",
         timestamp: new Date(),
         txHash: `0x${Math.random().toString(16).slice(2, 10)}`,
         isNew: true,
@@ -279,7 +279,7 @@ export default function WhaleTracker() {
                       </Badge>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">{(whale.balance/1000000).toFixed(2)}M DWC</span>
+                      <span className="text-muted-foreground">{(whale.balance/1000000).toFixed(2)}M SIG</span>
                       <span className="font-bold">${(whale.value/1000).toFixed(0)}K</span>
                     </div>
                   </GlassCard>

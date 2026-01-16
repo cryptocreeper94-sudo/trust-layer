@@ -80,7 +80,7 @@ const ROADMAP_PHASES = [
       { text: "Advanced sponsor analytics dashboard", done: false },
       { text: "Community content creation tools", done: false },
       { text: "Public beta release", done: false },
-      { text: "DWC mainnet integration", done: false },
+      { text: "SIG mainnet integration", done: false },
     ]
   },
 ];
@@ -110,7 +110,7 @@ const CURRENT_PRIORITIES = [
   {
     priority: 4,
     title: "Economy Foundation",
-    description: "Building the trade, property, and currency systems that will eventually integrate with DWC.",
+    description: "Building the trade, property, and currency systems that will eventually integrate with SIG.",
     icon: Coins,
     status: "Planning"
   },

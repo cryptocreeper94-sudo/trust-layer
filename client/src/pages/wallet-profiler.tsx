@@ -20,8 +20,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 const portfolioBreakdown = [
-  { name: "DWC", value: 45, color: "#8b5cf6", amount: "125,000", usd: "$18,750" },
-  { name: "stDWC", value: 30, color: "#06b6d4", amount: "75,000", usd: "$11,250" },
+  { name: "SIG", value: 45, color: "#8b5cf6", amount: "125,000", usd: "$18,750" },
+  { name: "stSIG", value: 30, color: "#06b6d4", amount: "75,000", usd: "$11,250" },
   { name: "LP Tokens", value: 15, color: "#22c55e", amount: "50,000", usd: "$7,500" },
   { name: "NFTs", value: 10, color: "#f59e0b", amount: "12", usd: "$5,000" },
 ];
@@ -32,11 +32,11 @@ const pnlHistory = Array.from({ length: 30 }, (_, i) => ({
 }));
 
 const recentTransactions = [
-  { type: "swap", from: "10,000 DWC", to: "1,520 USDC", time: "2h ago", hash: "0xabc...", pnl: 152 },
-  { type: "stake", from: "5,000 DWC", to: "Staking Pool", time: "1d ago", hash: "0xdef...", pnl: 0 },
-  { type: "buy", from: "2,000 USDC", to: "13,200 DWC", time: "2d ago", hash: "0xghi...", pnl: 0 },
-  { type: "claim", from: "Rewards", to: "450 DWC", time: "3d ago", hash: "0xjkl...", pnl: 67.5 },
-  { type: "sell", from: "8,000 DWC", to: "1,180 USDC", time: "5d ago", hash: "0xmno...", pnl: -42 },
+  { type: "swap", from: "10,000 SIG", to: "1,520 USDC", time: "2h ago", hash: "0xabc...", pnl: 152 },
+  { type: "stake", from: "5,000 SIG", to: "Staking Pool", time: "1d ago", hash: "0xdef...", pnl: 0 },
+  { type: "buy", from: "2,000 USDC", to: "13,200 SIG", time: "2d ago", hash: "0xghi...", pnl: 0 },
+  { type: "claim", from: "Rewards", to: "450 SIG", time: "3d ago", hash: "0xjkl...", pnl: 67.5 },
+  { type: "sell", from: "8,000 SIG", to: "1,180 USDC", time: "5d ago", hash: "0xmno...", pnl: -42 },
 ];
 
 const tradingStats = {

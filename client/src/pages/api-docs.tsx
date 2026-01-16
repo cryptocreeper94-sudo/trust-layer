@@ -27,13 +27,13 @@ const endpoints: Record<string, Endpoint[]> = {
   ],
   wallet: [
     { method: "POST", path: "/api/wallet/create", description: "Generate new wallet keypair", auth: true },
-    { method: "GET", path: "/api/wallet/balance/:address", description: "Get wallet DWC balance", auth: false },
-    { method: "POST", path: "/api/wallet/transfer", description: "Transfer DWC between addresses", auth: true, params: [{ name: "from", type: "string", required: true, description: "Sender address" }, { name: "to", type: "string", required: true, description: "Recipient address" }, { name: "amount", type: "string", required: true, description: "Amount in DWC" }] },
+    { method: "GET", path: "/api/wallet/balance/:address", description: "Get wallet SIG balance", auth: false },
+    { method: "POST", path: "/api/wallet/transfer", description: "Transfer SIG between addresses", auth: true, params: [{ name: "from", type: "string", required: true, description: "Sender address" }, { name: "to", type: "string", required: true, description: "Recipient address" }, { name: "amount", type: "string", required: true, description: "Amount in SIG" }] },
   ],
   staking: [
     { method: "GET", path: "/api/staking/pools", description: "List all staking pools", auth: false },
-    { method: "POST", path: "/api/staking/stake", description: "Stake DWC tokens", auth: true },
-    { method: "POST", path: "/api/staking/unstake", description: "Unstake DWC tokens", auth: true },
+    { method: "POST", path: "/api/staking/stake", description: "Stake SIG tokens", auth: true },
+    { method: "POST", path: "/api/staking/unstake", description: "Unstake SIG tokens", auth: true },
     { method: "GET", path: "/api/staking/rewards/:address", description: "Get pending rewards", auth: false },
   ],
   webhooks: [
@@ -51,8 +51,8 @@ const webhookEvents = [
   { event: "transaction.confirmed", description: "Transaction confirmed" },
   { event: "liquidity.added", description: "LP deposit" },
   { event: "token.launched", description: "New token on launchpad" },
-  { event: "bridge.locked", description: "DWC locked for bridge" },
-  { event: "bridge.released", description: "DWC released from bridge" },
+  { event: "bridge.locked", description: "SIG locked for bridge" },
+  { event: "bridge.released", description: "SIG released from bridge" },
 ];
 
 export default function ApiDocs() {

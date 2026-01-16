@@ -27,7 +27,7 @@ interface LimitOrder {
 }
 
 const TOKENS: TokenInfo[] = [
-  { symbol: "DWC", name: "DarkWave Coin", icon: "🌊" },
+  { symbol: "SIG", name: "Signal", icon: "🌊" },
   { symbol: "wETH", name: "Wrapped Ethereum", icon: "⟠" },
   { symbol: "wSOL", name: "Wrapped Solana", icon: "◎" },
   { symbol: "USDC", name: "USD Coin", icon: "💵" },
@@ -48,7 +48,7 @@ export function LimitOrderForm({ tokenIn, tokenOut, onTokenInClick, onTokenOutCl
   const [targetPrice, setTargetPrice] = useState("");
   const [expiry, setExpiry] = useState("7d");
 
-  const currentPrice = tokenIn.symbol === "DWC" ? 0.10 : 1.00;
+  const currentPrice = tokenIn.symbol === "SIG" ? 0.10 : 1.00;
   const targetPriceNum = parseFloat(targetPrice) || 0;
   const priceDiff = ((targetPriceNum - currentPrice) / currentPrice) * 100;
 

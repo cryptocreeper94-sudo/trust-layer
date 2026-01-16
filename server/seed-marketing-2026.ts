@@ -16,7 +16,7 @@ const UPDATED_POSTS = [
     platform: 'discord',
     content: `🚀 **TOKEN GENERATION EVENT: APRIL 11, 2026**
 
-The countdown has begun. DarkWave Coin (DWC) launches on our own Layer 1 blockchain.
+The countdown has begun. Signal (SIG) launches on our own Layer 1 blockchain.
 
 What you're getting:
 • 200,000+ TPS throughput
@@ -125,7 +125,7 @@ View verified projects → dwsc.io/guardian-registry`,
     platform: 'telegram',
     content: `🚀 <b>APRIL 11, 2026 - TOKEN GENERATION EVENT</b>
 
-DarkWave Coin (DWC) launches on our Layer 1 blockchain.
+Signal (SIG) launches on our Layer 1 blockchain.
 
 ⚡ 200K+ TPS
 ⚡ 400ms finality  
@@ -217,7 +217,7 @@ April 11. The serious chain launches.
     platform: 'twitter',
     content: `🚀 APRIL 11, 2026
 
-DarkWave Coin launches on our own Layer 1.
+Signal launches on our own Layer 1.
 
 200K+ TPS. 400ms finality. $0.0001 fees.
 
@@ -300,7 +300,7 @@ dwsc.io/guardian-registry 🛡️`,
 
 April 11, 2026.
 
-DarkWave Coin. DarkWave Chain. DarkWave Future.
+Signal. DarkWave Chain. DarkWave Future.
 
 Presale live → dwsc.io/presale 🚀`,
     category: 'tge',
@@ -354,7 +354,7 @@ TGE: April 11, 2026 💎`,
     content: `💳 **PRESALE NOW EASIER THAN EVER**
 
 New one-click buy flow:
-1. Click "Buy DWC Tokens"
+1. Click "Buy SIG Tokens"
 2. Select your tier
 3. Enter email
 4. Checkout with Stripe

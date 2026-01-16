@@ -134,10 +134,10 @@ const CORE_FEATURES = [
   },
   {
     id: "economy",
-    title: "DWC Blockchain Economy",
+    title: "SIG Blockchain Economy",
     subtitle: "Earn. Trade. Own.",
-    description: "Complete missions for DWC tokens. Trade gear with players. Every transaction is blockchain-verified with real value.",
-    longDescription: "DWC isn't play money. It's real blockchain currency on DarkWave Smart Chain. Earn through missions, trade with other players, own property with blockchain deeds. A real economy powering epic adventures.",
+    description: "Complete missions for SIG tokens. Trade gear with players. Every transaction is blockchain-verified with real value.",
+    longDescription: "SIG isn't play money. It's real blockchain currency on DarkWave Trust Layer. Earn through missions, trade with other players, own property with blockchain deeds. A real economy powering epic adventures.",
     icon: Coins,
     image: deepSpace,
     color: "from-yellow-500 to-amber-600",
@@ -307,7 +307,7 @@ const EPOCHS = [
 const DEFINITIONS: Record<string, { term: string; definition: string }> = {
   "persistent": { term: "Living World", definition: "A dynamic world with evolving story arcs and missions. Drop in anytime - the adventure continues whether you're on an epic campaign or taking a break." },
   "era": { term: "Mission Theater", definition: "A historical time period with unique campaigns, factions, and rewards. Each era offers different missions, NPCs, and ways to build your legend." },
-  "dwc": { term: "DWC (DarkWave Coin)", definition: "The cryptocurrency earned through missions and traded between players. Real blockchain tokens with real value." },
+  "dwc": { term: "SIG (Signal)", definition: "The cryptocurrency earned through missions and traded between players. Real blockchain tokens with real value." },
   "epoch": { term: "Epoch", definition: "A major division of historical time containing multiple mission theaters. Example: The Medieval Epoch contains Dark Ages, Crusades, and High Medieval campaigns." },
   "echoes": { term: "Cross-Era Echoes", definition: "Narrative connections between eras - legendary artifacts and story arcs that span multiple time periods, creating epic cross-campaign quests." },
   "lens": { term: "Your Lens", definition: "Every legend brings their own lens. The world adapts to what you seek, what you question, and what you accept. No two experiences are identical." },
@@ -317,7 +317,7 @@ const DEFINITIONS: Record<string, { term: string; definition: string }> = {
   "parallel_self": { term: "Parallel Self", definition: "This isn't an avatar you control - it's YOU in another reality. The AI learns your voice, your patterns, your instincts. When your parallel self speaks, it sounds like you, thinks like you, and makes choices aligned with your emerging identity." },
   "voice_clone": { term: "Voice Cloning", definition: "Record your voice and your parallel self speaks WITH YOUR ACTUAL VOICE across 70+ eras. Your accent, your inflections, your unique sound - brought to life in the game world. Industry first: hear yourself as an ancient warrior, a space captain, or a medieval noble." },
   "choice_signatures": { term: "Choice Signatures", definition: "Fluid observations of your emerging patterns, not labels. Instead of 'You are a Guardian,' we say 'Your choices reveal an affinity for protection.' Instead of 'Chaotic alignment,' we observe 'You embrace uncertainty.' Your identity remains your own to define." },
-  "early_adopter": { term: "Early Adopter Rewards", definition: "Pioneer participants who join before public beta receive DWC coin bonuses, exclusive titles, and priority access to new eras. Your early belief in Chronicles is recognized and rewarded." }
+  "early_adopter": { term: "Early Adopter Rewards", definition: "Pioneer participants who join before public beta receive SIG token bonuses, exclusive titles, and priority access to new eras. Your early belief in Chronicles is recognized and rewarded." }
 };
 
 function DefinitionModal({ term, onClose }: { term: string; onClose: () => void }) {
@@ -912,7 +912,7 @@ export default function Chronicles() {
           >
             <Badge className="mb-6 px-3 py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-500/30 text-white text-xs sm:text-sm backdrop-blur-sm max-w-full whitespace-normal text-center leading-tight">
               <Flame className="w-4 h-4 mr-2 text-orange-400 animate-pulse flex-shrink-0" />
-              <span className="hidden sm:inline">The Flagship Product of DarkWave Smart Chain</span>
+              <span className="hidden sm:inline">The Flagship Product of DarkWave Trust Layer</span>
               <span className="sm:hidden">DarkWave Flagship Product</span>
             </Badge>
             
@@ -1111,7 +1111,7 @@ export default function Chronicles() {
           >
             <img 
               src={deepSpace} 
-              alt="DWC Economy"
+              alt="SIG Economy"
               className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-black/70" />
@@ -1127,7 +1127,7 @@ export default function Chronicles() {
                 </h2>
                 
                 <p className="text-white/70 mb-6 leading-relaxed">
-                  <InfoTooltip termKey="dwc">DWC</InfoTooltip> isn't play money. It's real cryptocurrency on DarkWave Smart Chain. 
+                  <InfoTooltip termKey="dwc">SIG</InfoTooltip> isn't play money. It's real cryptocurrency on DarkWave Trust Layer. 
                   Every transaction is blockchain-verified, stamped, and auditable.
                 </p>
                 
@@ -1412,13 +1412,13 @@ export default function Chronicles() {
             </h2>
             
             <p className="text-xl text-white/70 max-w-2xl mx-auto mb-12">
-              Join before public beta and receive <InfoTooltip termKey="dwc">DWC</InfoTooltip> coin bonuses, 
+              Join before public beta and receive <InfoTooltip termKey="dwc">SIG</InfoTooltip> coin bonuses, 
               exclusive titles, and priority access to new eras.
             </p>
 
             <div className="grid sm:grid-cols-3 gap-6 mb-12">
               {[
-                { reward: "500 DWC", desc: "Bonus coins for early signup", icon: Coins },
+                { reward: "500 SIG", desc: "Bonus coins for early signup", icon: Coins },
                 { reward: "Pioneer Title", desc: "Exclusive in-game recognition", icon: Crown },
                 { reward: "Era Access", desc: "First to explore new theaters", icon: Compass }
               ].map((item, i) => (

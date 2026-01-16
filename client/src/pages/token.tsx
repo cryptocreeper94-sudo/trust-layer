@@ -44,7 +44,7 @@ export default function Token() {
               </Badge>
               <h1 className="text-4xl md:text-5xl font-display font-bold leading-tight">
                 DarkWave <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-purple-400 to-primary">($DWC)</span>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-purple-400 to-primary">(Signal)</span>
               </h1>
               <p className="text-sm text-muted-foreground leading-relaxed max-w-md">
                 The fuel of the DarkWave Ecosystem. Not just a currency; it's the governance, security, and utility layer for the next generation of decentralized apps.
@@ -96,7 +96,7 @@ export default function Token() {
                 <div className="relative w-full rounded-full overflow-hidden">
                   <motion.img 
                     src={tokenBg} 
-                    alt="DarkWave Coin" 
+                    alt="Signal" 
                     className="w-full drop-shadow-2xl scale-110"
                     animate={{ y: [0, -10, 0], rotate: [0, 2, 0] }}
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
@@ -160,7 +160,7 @@ export default function Token() {
           <div className="text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-display font-bold mb-3">Real Utility. No Fluff.</h2>
             <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-              Unlike meme coins, $DWC is required to use every app in the DarkWave ecosystem.
+              Unlike meme coins, Signal is required to use every app in the DarkWave ecosystem.
             </p>
           </div>
 
@@ -178,7 +178,7 @@ export default function Token() {
                 </div>
                 <h3 className="text-sm font-bold text-white mb-2">Gas Fees</h3>
                 <p className="text-[11px] text-white/70 leading-relaxed">
-                  Pay for transactions on DarkWave Smart Chain with $DWC. Micro-fees ensure speed without breaking the bank.
+                  Pay for transactions on DarkWave Trust Layer with Signal. Micro-fees ensure speed without breaking the bank.
                 </p>
               </div>
             </motion.div>
@@ -195,7 +195,7 @@ export default function Token() {
                 </div>
                 <h3 className="text-sm font-bold text-white mb-2">Validator Staking</h3>
                 <p className="text-[11px] text-white/70 leading-relaxed">
-                  Secure the network by staking $DWC. Earn rewards for validating transactions and honest behavior.
+                  Secure the network by staking Signal. Earn rewards for validating transactions and honest behavior.
                 </p>
               </div>
             </motion.div>
@@ -243,13 +243,13 @@ export default function Token() {
             <div className="order-1 lg:order-2 space-y-5">
               <h2 className="text-2xl md:text-3xl font-display font-bold">Fair Launch Tokenomics</h2>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                We designed $DWC to be fair and sustainable. The token powers governance, staking, and all transactions across the DarkWave ecosystem.
+                We designed Signal to be fair and sustainable. The native asset powers governance, staking, and all transactions across the DarkWave ecosystem.
               </p>
               <div className="grid grid-cols-2 gap-3">
                 <GlassCard hover={false}>
                   <div className="p-4">
                     <div className="text-[10px] text-white/40 uppercase tracking-wider mb-1">Total Supply</div>
-                    <div className="text-lg font-bold font-mono text-white">1B DWC</div>
+                    <div className="text-lg font-bold font-mono text-white">1B SIG</div>
                   </div>
                 </GlassCard>
                 <GlassCard hover={false}>
@@ -302,7 +302,7 @@ export default function Token() {
                   </div>
                 </div>
                 <ul className="space-y-2 text-sm text-white/80">
-                  <li className="flex items-center gap-2"><Sparkles className="w-3 h-3 text-amber-400" /> 10,000 DWC allocation</li>
+                  <li className="flex items-center gap-2"><Sparkles className="w-3 h-3 text-amber-400" /> 10,000 SIG allocation</li>
                   <li className="flex items-center gap-2"><TrendingUp className="w-3 h-3 text-amber-400" /> 2x staking multiplier</li>
                   <li className="flex items-center gap-2"><Star className="w-3 h-3 text-amber-400" /> Exclusive NFT badge</li>
                   <li className="flex items-center gap-2"><Users className="w-3 h-3 text-amber-400" /> Private Discord access</li>
@@ -329,7 +329,7 @@ export default function Token() {
                   </div>
                 </div>
                 <ul className="space-y-2 text-sm text-white/80">
-                  <li className="flex items-center gap-2"><Sparkles className="w-3 h-3 text-purple-400" /> 5,000 DWC allocation</li>
+                  <li className="flex items-center gap-2"><Sparkles className="w-3 h-3 text-purple-400" /> 5,000 SIG allocation</li>
                   <li className="flex items-center gap-2"><TrendingUp className="w-3 h-3 text-purple-400" /> 1.5x staking multiplier</li>
                   <li className="flex items-center gap-2"><Star className="w-3 h-3 text-purple-400" /> Early access to features</li>
                   <li className="flex items-center gap-2"><Gift className="w-3 h-3 text-purple-400" /> Priority airdrop eligibility</li>
@@ -356,7 +356,7 @@ export default function Token() {
                   </div>
                 </div>
                 <ul className="space-y-2 text-sm text-white/80">
-                  <li className="flex items-center gap-2"><Sparkles className="w-3 h-3 text-blue-400" /> 1,000 DWC allocation</li>
+                  <li className="flex items-center gap-2"><Sparkles className="w-3 h-3 text-blue-400" /> 1,000 SIG allocation</li>
                   <li className="flex items-center gap-2"><TrendingUp className="w-3 h-3 text-blue-400" /> 1.25x staking multiplier</li>
                   <li className="flex items-center gap-2"><Star className="w-3 h-3 text-blue-400" /> Bug bounty rewards</li>
                   <li className="flex items-center gap-2"><Gift className="w-3 h-3 text-blue-400" /> Contribution-based bonuses</li>
@@ -417,7 +417,7 @@ export default function Token() {
                 <ArrowRightLeft className="w-4 h-4 text-cyan-400" /> Transaction Fees
               </h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Minimal gas fees (0.0001 DWC) on all on-chain transactions fund network operations and validator rewards.
+                Minimal gas fees (0.0001 SIG) on all on-chain transactions fund network operations and validator rewards.
               </p>
             </GlassCard>
             <GlassCard className="p-5">
@@ -470,7 +470,7 @@ export default function Token() {
             </Badge>
             <h2 className="text-2xl md:text-3xl font-display font-bold mb-3">Treasury Allocation</h2>
             <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-              Know exactly where every DWC goes. Transparent allocation across development, marketing, and community rewards.
+              Know exactly where every Signal goes. Transparent allocation across development, marketing, and community rewards.
             </p>
           </div>
 
@@ -553,7 +553,7 @@ export default function Token() {
                 Become a Legacy Founder
               </h2>
               <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-                Pay $24 once. Get lifetime access. Receive 35,000 DWC tokens on launch day.
+                Pay $24 once. Get lifetime access. Receive 35,000 Signal on launch day.
                 Only 10,000 spots available - program closes April 11, 2026.
               </p>
               <Link href="/founder-program">

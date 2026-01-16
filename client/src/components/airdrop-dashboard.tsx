@@ -191,7 +191,7 @@ export function AirdropDashboard() {
         <Coins className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
         <h3 className="text-lg font-bold mb-2">Sign In to View Your Airdrop</h3>
         <p className="text-sm text-muted-foreground mb-4">
-          Connect your account to see your accumulated DWC rewards
+          Connect your account to see your accumulated SIG rewards
         </p>
         <Button asChild data-testid="button-signin-airdrop">
           <a href="/api/login">Sign In to Continue</a>
@@ -254,7 +254,7 @@ export function AirdropDashboard() {
               </motion.div>
               <div>
                 <h2 className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                  DWC Airdrop
+                  SIG Airdrop
                 </h2>
                 <p className="text-xs text-muted-foreground">Your pre-launch rewards</p>
               </div>
@@ -295,7 +295,7 @@ export function AirdropDashboard() {
             <div className="p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
               <div className="flex items-center gap-2 mb-2">
                 <Coins className="w-4 h-4 text-cyan-400" />
-                <span className="text-xs text-muted-foreground">DWC Balance</span>
+                <span className="text-xs text-muted-foreground">SIG Balance</span>
               </div>
               <motion.div
                 data-testid="text-dwc-balance"
@@ -306,7 +306,7 @@ export function AirdropDashboard() {
               >
                 {dwcAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}
               </motion.div>
-              <div className="text-xs text-muted-foreground mt-1">DWC Tokens</div>
+              <div className="text-xs text-muted-foreground mt-1">SIG Tokens</div>
             </div>
             <div className="p-4 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm">
               <div className="flex items-center gap-2 mb-2">
@@ -322,14 +322,14 @@ export function AirdropDashboard() {
               >
                 ${usdValue.toFixed(2)}
               </motion.div>
-              <div className="text-xs text-muted-foreground mt-1">@ $0.001/DWC</div>
+              <div className="text-xs text-muted-foreground mt-1">@ $0.001/SIG</div>
             </div>
           </div>
 
           <div className="text-center mb-4">
             <h3 className="text-sm font-semibold mb-4 flex items-center justify-center gap-2">
               <PartyPopper className="w-4 h-4 text-pink-400" />
-              Time Until DWC Launch
+              Time Until SIG Launch
             </h3>
             <div className="flex items-center justify-center gap-3">
               <CountdownUnit value={countdown.days} label="Days" />
@@ -384,7 +384,7 @@ export function AirdropDashboard() {
         ) : (
           <div className="space-y-3">
             <p className="text-xs text-muted-foreground mb-2">
-              Enter your DarkWave Smart Chain wallet address to receive your airdrop at launch.
+              Enter your DarkWave Trust Layer wallet address to receive your airdrop at launch.
             </p>
             <div className="flex gap-2">
               <Input
@@ -424,7 +424,7 @@ export function AirdropDashboard() {
           >
             <Coins className="w-5 h-5 text-amber-400 mx-auto mb-1" />
             <div className="text-lg font-bold text-amber-400" data-testid="text-bonus-dwc">500</div>
-            <div className="text-[9px] text-muted-foreground">Bonus DWC</div>
+            <div className="text-[9px] text-muted-foreground">Bonus SIG</div>
           </motion.div>
           <motion.div
             whileHover={{ scale: 1.02 }}
@@ -465,19 +465,19 @@ export function AirdropDashboard() {
           <EligibilityItem 
             label="Wallet Verified" 
             completed={airdrop?.walletVerified || false} 
-            description={airdrop?.walletVerified ? "Ready to receive DWC" : "Add your wallet address above"}
+            description={airdrop?.walletVerified ? "Ready to receive SIG" : "Add your wallet address above"}
             testId="eligibility-wallet"
           />
           <EligibilityItem 
             label="Commission Balance" 
             completed={dwcAmount > 0} 
-            description={dwcAmount > 0 ? `${dwcAmount.toFixed(2)} DWC accumulated` : "Refer friends to earn commissions"}
+            description={dwcAmount > 0 ? `${dwcAmount.toFixed(2)} SIG accumulated` : "Refer friends to earn commissions"}
             testId="eligibility-commission"
           />
           <EligibilityItem 
             label="Pre-Launch Status" 
             completed={countdown.total > 0} 
-            description={countdown.total > 0 ? "You're in pre-launch mode" : "DWC has launched!"}
+            description={countdown.total > 0 ? "You're in pre-launch mode" : "SIG has launched!"}
             testId="eligibility-prelaunch"
           />
         </div>

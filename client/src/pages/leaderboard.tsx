@@ -43,10 +43,10 @@ const WEEKLY_LEADERS: Trader[] = [
 ];
 
 const PRIZES = [
-  { rank: "1st", prize: "10,000 DWC + Golden NFT", color: "from-amber-400 to-yellow-500" },
-  { rank: "2nd", prize: "5,000 DWC + Silver NFT", color: "from-gray-300 to-gray-400" },
-  { rank: "3rd", prize: "2,500 DWC + Bronze NFT", color: "from-amber-600 to-amber-700" },
-  { rank: "4-10", prize: "500 DWC each", color: "from-purple-400 to-pink-500" },
+  { rank: "1st", prize: "10,000 SIG + Golden NFT", color: "from-amber-400 to-yellow-500" },
+  { rank: "2nd", prize: "5,000 SIG + Silver NFT", color: "from-gray-300 to-gray-400" },
+  { rank: "3rd", prize: "2,500 SIG + Bronze NFT", color: "from-amber-600 to-amber-700" },
+  { rank: "4-10", prize: "500 SIG each", color: "from-purple-400 to-pink-500" },
 ];
 
 function TopThreePodium() {

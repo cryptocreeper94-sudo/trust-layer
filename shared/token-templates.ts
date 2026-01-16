@@ -137,9 +137,9 @@ export function validateTokenConfig(config: Partial<TokenConfig>): { valid: bool
   };
 }
 
-// Calculate token deployment cost in DWC
+// Calculate token deployment cost in SIG
 export function calculateDeploymentCost(config: Partial<TokenConfig>): string {
-  let baseCost = 100; // 100 DWC base deployment cost
+  let baseCost = 100; // 100 SIG base deployment cost
 
   if (config.mintable) baseCost += 50;
   if (config.burnable) baseCost += 25;

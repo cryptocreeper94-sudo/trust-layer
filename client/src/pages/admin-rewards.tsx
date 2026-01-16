@@ -172,7 +172,7 @@ export default function AdminRewards() {
               <div className="p-4 text-center">
                 <Coins className="w-6 h-6 mx-auto mb-2 text-amber-400" />
                 <div className="text-2xl font-bold">{totalAllocated.toLocaleString()}</div>
-                <div className="text-xs text-muted-foreground">DWC Allocated</div>
+                <div className="text-xs text-muted-foreground">SIG Allocated</div>
               </div>
             </GlassCard>
           </div>
@@ -470,7 +470,7 @@ function TiersTab({ tiers, queryClient, showDialog, setShowDialog }: any) {
                 data-testid="input-tier-description"
               />
               <Input
-                placeholder="Token Allocation (DWC per member)"
+                placeholder="Token Allocation (SIG per member)"
                 value={formData.allocation}
                 onChange={(e) => setFormData({ ...formData, allocation: e.target.value })}
                 data-testid="input-tier-allocation"
@@ -538,7 +538,7 @@ function TiersTab({ tiers, queryClient, showDialog, setShowDialog }: any) {
               <div className="grid grid-cols-3 gap-3 text-center">
                 <div className="bg-white/5 rounded-lg p-2">
                   <div className="text-lg font-bold text-amber-400">{parseInt(tier.allocation).toLocaleString()}</div>
-                  <div className="text-[10px] text-muted-foreground">DWC/Member</div>
+                  <div className="text-[10px] text-muted-foreground">SIG/Member</div>
                 </div>
                 <div className="bg-white/5 rounded-lg p-2">
                   <div className="text-lg font-bold text-purple-400">{tier.multiplier}x</div>
@@ -621,7 +621,7 @@ function GiftsTab({ gifts, queryClient, showDialog, setShowDialog }: any) {
               />
               <Input
                 type="number"
-                placeholder="Amount (DWC)"
+                placeholder="Amount (SIG)"
                 value={formData.amount}
                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                 data-testid="input-gift-amount"
@@ -667,7 +667,7 @@ function GiftsTab({ gifts, queryClient, showDialog, setShowDialog }: any) {
                 <div>
                   <div className="font-medium">{gift.recipientName || gift.recipientEmail || "Unknown"}</div>
                   <div className="text-xs text-muted-foreground">
-                    {parseFloat(gift.amount).toLocaleString()} DWC • {gift.category} • {gift.reason || "No reason"}
+                    {parseFloat(gift.amount).toLocaleString()} SIG • {gift.category} • {gift.reason || "No reason"}
                   </div>
                 </div>
               </div>
@@ -757,7 +757,7 @@ function AirdropsTab({ airdrops, queryClient, showDialog, setShowDialog }: any) 
               </Select>
               <Input
                 type="number"
-                placeholder="Total Amount (DWC)"
+                placeholder="Total Amount (SIG)"
                 value={formData.totalAmount}
                 onChange={(e) => setFormData({ ...formData, totalAmount: e.target.value })}
                 data-testid="input-airdrop-amount"
@@ -802,7 +802,7 @@ function AirdropsTab({ airdrops, queryClient, showDialog, setShowDialog }: any) 
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Progress</span>
-                  <span>{claimed.toLocaleString()} / {total.toLocaleString()} DWC</span>
+                  <span>{claimed.toLocaleString()} / {total.toLocaleString()} SIG</span>
                 </div>
                 <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                   <div 

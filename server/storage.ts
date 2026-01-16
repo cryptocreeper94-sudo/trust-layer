@@ -921,7 +921,7 @@ export class DatabaseStorage implements IStorage {
       transactions.push({
         id: claim.id,
         type: "claim",
-        token: "DWC",
+        token: "SIG",
         amount: claim.amount,
         hash: claim.txHash || "",
         status: claim.status,
@@ -2604,7 +2604,7 @@ DarkWave Trust Layer (DWSC) is a purpose-built Layer 1 blockchain optimized for 
 
 ## Token Economics
 
-- **Native Token**: DWC
+- **Native Token**: SIG
 - **Total Supply**: 1,000,000,000 (fixed)
 - **Decimals**: 18
 

@@ -75,7 +75,7 @@ const CORE_SYSTEMS = [
   {
     icon: Coins,
     title: "Real Economy",
-    description: "DWC cryptocurrency. Real value. Trade goods, own property, build empires - all blockchain-verified.",
+    description: "SIG cryptocurrency. Real value. Trade goods, own property, build empires - all blockchain-verified.",
     bullets: ["Blockchain transactions", "Property ownership", "Cross-era trading", "Audit trail on everything"],
     image: deepSpace
   },

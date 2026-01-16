@@ -205,7 +205,7 @@ export function GenesisHallmarkCard() {
               {/* Title & Info */}
               <div className="text-center mb-6">
                 <h3 className="text-xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent mb-1">
-                  DarkWave Smart Chain
+                  DarkWave Trust Layer
                 </h3>
                 <p className="text-sm text-white/60">{genesis.message}</p>
               </div>
@@ -337,7 +337,7 @@ export function GenesisHallmarkSection() {
             transition={{ delay: 0.2 }}
             className="text-muted-foreground max-w-2xl mx-auto"
           >
-            The first-ever DarkWave Smart Chain hallmark. Every transaction, asset, and product 
+            The first-ever DarkWave Trust Layer hallmark. Every transaction, asset, and product 
             in the ecosystem is stamped with a unique 12-digit serial number for permanent 
             blockchain verification.
           </motion.p>

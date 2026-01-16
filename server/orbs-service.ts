@@ -17,7 +17,7 @@ export type TransactionType =
   | "purchase"       // Bought with fiat (Stripe)
   | "refund"         // Refunded
   | "bonus"          // Bonus/promotional
-  | "conversion";    // Converted to DWC at launch
+  | "conversion";    // Converted to SIG at launch
 
 // Orb packages available for purchase
 export const ORB_PACKAGES = {
@@ -300,7 +300,7 @@ class OrbsService {
 
   async createConversionSnapshot(
     userId: string,
-    conversionRate: string = "1"  // 1 Orb = 1 DWC by default
+    conversionRate: string = "1"  // 1 Orb = 1 SIG by default
   ): Promise<OrbConversionSnapshot | null> {
     const wallet = await this.getWallet(userId);
     if (!wallet || wallet.balance === 0) return null;

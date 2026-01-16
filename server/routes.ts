@@ -1561,7 +1561,7 @@ export async function registerRoutes(
           participant: { multiplier: 1.0, minQuests: 0, minDays: 0 },
         },
         conversion: {
-          rate: 100, // 100 shells = 1 DWC
+          rate: 100, // 100 shells = 1 SIG
           tgeDate: "2026-04-11",
           shellsValue: shellBalance * 0.001, // $0.001 per shell
           estimatedDwc: Math.floor(shellBalance / 100),
@@ -1573,7 +1573,7 @@ export async function registerRoutes(
     }
   });
 
-  // Get user's DWC bag - all pending DWC tokens from various sources
+  // Get user's SIG bag - all pending SIG tokens from various sources
   app.get("/api/user/dwc-bag", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
     try {
       const userId = req.firebaseUser?.uid;
@@ -1598,7 +1598,7 @@ export async function registerRoutes(
       const presaleSpentCents = Number(presaleResult.rows[0]?.total_spent_cents || 0);
       const presalePurchaseCount = Number(presaleResult.rows[0]?.purchase_count || 0);
 
-      // Get shell balance (100 shells = 1 DWC) - preserve decimals
+      // Get shell balance (100 shells = 1 SIG) - preserve decimals
       const shellBalanceRaw = await shellsService.getBalance(userId);
       const shellBalance = Number(shellBalanceRaw) || 0;
       const shellsConvertedToDwc = shellBalance / 100; // Keep decimal precision
@@ -1619,10 +1619,10 @@ export async function registerRoutes(
         earlyAdopterBonus = Math.floor(presaleTokens * 0.05);
       }
 
-      // Calculate total DWC bag
+      // Calculate total SIG bag
       const totalDwc = presaleTokens + shellsConvertedToDwc + pendingAirdrops + earlyAdopterBonus;
 
-      // Presale price: $0.001 per DWC, so value = totalDwc * 0.001
+      // Presale price: $0.001 per SIG, so value = totalDwc * 0.001
       const currentValue = totalDwc * 0.001;
       
       // Future projected value at launch (estimated $0.10)
@@ -1657,8 +1657,8 @@ export async function registerRoutes(
         currentPrice: 0.001,
       });
     } catch (error) {
-      console.error("DWC bag error:", error);
-      res.status(500).json({ error: "Failed to get DWC bag" });
+      console.error("SIG bag error:", error);
+      res.status(500).json({ error: "Failed to get SIG bag" });
     }
   });
 
@@ -2200,7 +2200,7 @@ export async function registerRoutes(
           chainBlock: blockchain.getLatestBlock()?.header?.height || 0,
           treasuryAddress: treasuryInfo?.address || "unknown",
           treasuryBalanceDwc: treasuryInfo?.balance || "0",
-          totalSupply: treasuryInfo?.total_supply || "1,000,000,000 DWC",
+          totalSupply: treasuryInfo?.total_supply || "1,000,000,000 SIG",
         },
         allocations: (allocations || []).map(a => ({
           category: a.category,
@@ -2755,7 +2755,7 @@ export async function registerRoutes(
       version: APP_VERSION,
       chainId: 8453,
       chainName: "DarkWave Trust Layer",
-      nativeToken: "DWC",
+      nativeToken: "SIG",
       totalSupply: "1,000,000,000",
     });
   });
@@ -2777,7 +2777,7 @@ export async function registerRoutes(
         gasLimit,
         gasPrice,
         estimatedCost: `${totalGas}`,
-        estimatedCostDWC: `${costInDWC.toFixed(8)} DWC`,
+        estimatedCostDWC: `${costInDWC.toFixed(8)} SIG`,
         estimatedCostUSD: `$${costInUSD.toFixed(6)}`,
       });
     } catch (error) {
@@ -2792,7 +2792,7 @@ export async function registerRoutes(
       maxFee: 100000,
       feePerByte: 16,
       hashSubmissionFee: 25000,
-      currency: "DWC",
+      currency: "SIG",
       estimatedUSDPerDWC: 0.01,
     });
   });
@@ -2887,7 +2887,7 @@ export async function registerRoutes(
         success: true,
         txHash: blockchainTx.hash,
         status: "confirmed",
-        fee: `${Number(fee) / 1e18} DWC`,
+        fee: `${Number(fee) / 1e18} SIG`,
         blockHeight: chainInfo.blockHeight.toString(),
         timestamp: blockchainTx.timestamp.toISOString(),
       });
@@ -2911,7 +2911,7 @@ export async function registerRoutes(
         category: tx.category,
         status: tx.status,
         blockHeight: tx.blockHeight,
-        fee: tx.fee ? `${Number(tx.fee) / 1e18} DWC` : null,
+        fee: tx.fee ? `${Number(tx.fee) / 1e18} SIG` : null,
         createdAt: tx.createdAt,
         confirmedAt: tx.confirmedAt,
       });
@@ -3182,8 +3182,8 @@ export async function registerRoutes(
       const walletAddress = `0x${crypto.randomBytes(20).toString("hex")}`;
       const privateKey = crypto.randomBytes(32).toString("hex");
       
-      // Fund the test wallet with 1000 test DWC
-      blockchain.creditAccount(walletAddress, BigInt("1000000000000000000000")); // 1000 DWC
+      // Fund the test wallet with 1000 test SIG
+      blockchain.creditAccount(walletAddress, BigInt("1000000000000000000000")); // 1000 SIG
       
       res.json({
         success: true,
@@ -3194,7 +3194,7 @@ export async function registerRoutes(
           network: "DarkWave Devnet",
           chainId: 8453,
         },
-        message: "Test wallet created and funded with 1000 DWC",
+        message: "Test wallet created and funded with 1000 SIG",
       });
     } catch (error) {
       console.error("Devnet wallet creation error:", error);
@@ -3211,7 +3211,7 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Wallet address required" });
       }
       
-      // Validate and limit faucet to 100 DWC per request (must be positive)
+      // Validate and limit faucet to 100 SIG per request (must be positive)
       const parsedAmount = parseFloat(amount || "100");
       if (isNaN(parsedAmount) || parsedAmount <= 0) {
         return res.status(400).json({ error: "Amount must be a positive number" });
@@ -3226,12 +3226,12 @@ export async function registerRoutes(
         success: true,
         faucet: {
           address,
-          amountSent: `${requestedAmount} DWC`,
+          amountSent: `${requestedAmount} SIG`,
           newBalance: account ? (Number(account.balance) / 1e18).toFixed(4) : "0",
           txHash: `0x${crypto.randomBytes(32).toString("hex")}`,
           network: "DarkWave Devnet",
         },
-        message: `Sent ${requestedAmount} test DWC to ${address}`,
+        message: `Sent ${requestedAmount} test SIG to ${address}`,
       });
     } catch (error) {
       console.error("Devnet faucet error:", error);
@@ -3291,13 +3291,13 @@ export async function registerRoutes(
           txHash,
           from,
           to,
-          amount: `${amount || 0} DWC`,
+          amount: `${amount || 0} SIG`,
           data: data || null,
           status: "confirmed",
           blockHeight,
           network: "DarkWave Devnet",
           gasUsed: "21000",
-          gasFee: "0.000021 DWC",
+          gasFee: "0.000021 SIG",
         },
       });
     } catch (error) {
@@ -3318,8 +3318,8 @@ export async function registerRoutes(
         tps: stats.tps,
         finalityTime: stats.finalityTime,
         faucetAvailable: true,
-        faucetLimit: "100 DWC per request",
-        symbol: "DWC",
+        faucetLimit: "100 SIG per request",
+        symbol: "SIG",
         decimals: 18,
       });
     } catch (error) {
@@ -3407,7 +3407,7 @@ export async function registerRoutes(
         verificationUrl,
         qrCodeSvg,
         metadata: {
-          totalSupply: "1,000,000,000 DWC",
+          totalSupply: "1,000,000,000 SIG",
           decimals: 18,
           consensusType: "Proof-of-Authority",
           blockTime: "400ms",
@@ -3607,7 +3607,7 @@ export async function registerRoutes(
         success: true,
         lockId: result.lockId,
         txHash: result.txHash,
-        message: "DWC locked on DarkWave. Wrapped tokens will be minted on target chain.",
+        message: "SIG locked on DarkWave. Wrapped tokens will be minted on target chain.",
       });
     } catch (error) {
       res.status(500).json({ error: "Failed to lock tokens" });
@@ -3637,7 +3637,7 @@ export async function registerRoutes(
       res.json({
         success: true,
         burnId: result.burnId,
-        message: "Burn recorded. DWC will be released on DarkWave Trust Layer.",
+        message: "Burn recorded. SIG will be released on DarkWave Trust Layer.",
       });
     } catch (error) {
       res.status(500).json({ error: "Failed to process burn" });
@@ -3883,7 +3883,7 @@ export async function registerRoutes(
   });
 
   // ============================================
-  // LIQUID STAKING (stDWC)
+  // LIQUID STAKING (stSIG)
   // ============================================
   
   app.get("/api/liquid-staking/state", async (req, res) => {
@@ -3994,7 +3994,7 @@ export async function registerRoutes(
       const stDwtToBurn = BigInt(stDwtAmount);
       const position = await storage.getLiquidStakingPosition(userId);
       if (!position || BigInt(position.stDwtBalance) < stDwtToBurn) {
-        return res.status(400).json({ error: "Insufficient stDWC balance" });
+        return res.status(400).json({ error: "Insufficient stSIG balance" });
       }
       
       const state = await storage.getLiquidStakingState();
@@ -4456,16 +4456,16 @@ export async function registerRoutes(
     }
   });
 
-  // Whitepaper PDF Download - serves the comprehensive DWC Coin Whitepaper
+  // Whitepaper PDF Download - serves the comprehensive Signal Whitepaper
   app.get("/api/whitepaper/pdf", async (req, res) => {
-    const pdfPath = path.join(process.cwd(), 'public', 'assets', 'DWC-Coin-Whitepaper.pdf');
+    const pdfPath = path.join(process.cwd(), 'public', 'assets', 'SIG-Token-Whitepaper.pdf');
     
     if (!fs.existsSync(pdfPath)) {
       return res.status(404).json({ error: "Whitepaper PDF not found" });
     }
     
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'inline; filename="DWC-Coin-Whitepaper.pdf"');
+    res.setHeader('Content-Disposition', 'inline; filename="SIG-Token-Whitepaper.pdf"');
     fs.createReadStream(pdfPath).pipe(res);
   });
 
@@ -6865,7 +6865,7 @@ export async function registerRoutes(
   app.get("/api/quests", async (req, res) => {
     try {
       const quests = [
-        { id: "1", name: "First Stake", description: "Stake any amount of DWC", xpReward: 50, tokenReward: "10", difficulty: "easy", category: "staking", progress: 0, target: 1, icon: "zap", completed: false },
+        { id: "1", name: "First Stake", description: "Stake any amount of SIG", xpReward: 50, tokenReward: "10", difficulty: "easy", category: "staking", progress: 0, target: 1, icon: "zap", completed: false },
         { id: "2", name: "Bridge Pioneer", description: "Complete your first cross-chain bridge", xpReward: 100, tokenReward: "25", difficulty: "medium", category: "bridge", progress: 0, target: 1, icon: "link", completed: false },
         { id: "3", name: "Swap Master", description: "Complete 10 token swaps", xpReward: 150, tokenReward: "50", difficulty: "medium", category: "defi", progress: 3, target: 10, icon: "repeat", completed: false },
         { id: "4", name: "NFT Collector", description: "Own 5 DarkWave NFTs", xpReward: 200, tokenReward: "100", difficulty: "hard", category: "nft", progress: 1, target: 5, icon: "image", completed: false },
@@ -7335,7 +7335,7 @@ export async function registerRoutes(
     });
   });
 
-  // DWC Token Presale Routes
+  // SIG Token Presale Routes
   app.get("/api/presale/tiers", async (req, res) => {
     try {
       // Hardcoded tiers for immediate availability (no Stripe dashboard setup needed)
@@ -7397,7 +7397,7 @@ export async function registerRoutes(
       `);
       
       const stats = result.rows[0] || { total_raised_cents: 0, total_purchases: 0, unique_holders: 0 };
-      const tokenPrice = 0.001; // $0.001 per DWC (1B supply)
+      const tokenPrice = 0.001; // $0.001 per SIG (1B supply)
       const totalRaisedCents = parseInt(stats.total_raised_cents as string || "0");
       const tokensSold = Math.floor((totalRaisedCents / 100) / tokenPrice);
       
@@ -7451,7 +7451,7 @@ export async function registerRoutes(
       const totalTokens = tokenAmount + bonusTokens;
       
       const tierName = !tier || tier === "custom" 
-        ? "DWC Token Presale" 
+        ? "SIG Token Presale" 
         : `${tier.charAt(0).toUpperCase()}${tier.slice(1).replace("_", " ")} Tier`;
       
       const session = await stripe.checkout.sessions.create({
@@ -7462,8 +7462,8 @@ export async function registerRoutes(
             product_data: {
               name: tierName,
               description: bonusTokens > 0 
-                ? `${totalTokens.toLocaleString()} DWC tokens (${tokenAmount.toLocaleString()} base + ${bonusTokens.toLocaleString()} bonus)`
-                : `${tokenAmount.toLocaleString()} DWC tokens`,
+                ? `${totalTokens.toLocaleString()} SIG tokens (${tokenAmount.toLocaleString()} base + ${bonusTokens.toLocaleString()} bonus)`
+                : `${tokenAmount.toLocaleString()} SIG tokens`,
             },
             unit_amount: finalAmount,
           },
@@ -7545,8 +7545,8 @@ export async function registerRoutes(
       const purchaseId = (pendingResult.rows[0] as any)?.id;
       
       const charge = await createCoinbaseCharge({
-        name: tierConfig?.name || "DWC Token Presale",
-        description: `${totalTokens.toLocaleString()} DWC tokens (includes ${bonusTokens.toLocaleString()} bonus tokens)`,
+        name: tierConfig?.name || "SIG Token Presale",
+        description: `${totalTokens.toLocaleString()} SIG tokens (includes ${bonusTokens.toLocaleString()} bonus tokens)`,
         amountUsd: (finalAmount / 100).toFixed(2),
         successUrl: `${baseUrl}/presale/success?crypto_purchase=${purchaseId}`,
         cancelUrl: `${baseUrl}/presale`,
@@ -7887,7 +7887,7 @@ export async function registerRoutes(
             currency: "usd",
             product_data: {
               name: "DarkWave Legacy Founder",
-              description: "Lifetime access + 35,000 DWC token airdrop",
+              description: "Lifetime access + 35,000 SIG token airdrop",
             },
             unit_amount: 2400,
           },
@@ -7943,7 +7943,7 @@ export async function registerRoutes(
       const { createCoinbaseCharge } = await import("./coinbaseClient");
       const charge = await createCoinbaseCharge({
         name: "DarkWave Legacy Founder",
-        description: "Lifetime access + 35,000 DWC token airdrop",
+        description: "Lifetime access + 35,000 SIG token airdrop",
         amountUsd: "24.00",
         successUrl: `${baseUrl}/founder-program?success=true&coinbase_charge={CHECKOUT_ID}`,
         cancelUrl: `${baseUrl}/founder-program?canceled=true`,
@@ -8881,7 +8881,7 @@ Current context:
           tx.from || "",
           tx.to || "",
           tx.amount || "",
-          tx.token || "DWC",
+          tx.token || "SIG",
           tx.status || "",
           tx.timestamp ? new Date(tx.timestamp).toISOString() : "",
         ].map(field => `"${String(field).replace(/"/g, '""')}"`);
@@ -9029,7 +9029,7 @@ Current context:
   // DEX / TOKEN SWAP
   // ============================================
   
-  const SUPPORTED_TOKENS = ["DWC", "USDC", "wETH", "wSOL", "USDT"];
+  const SUPPORTED_TOKENS = ["SIG", "USDC", "wETH", "wSOL", "USDT"];
 
   app.get("/api/swap/info", async (req, res) => {
     try {
@@ -9105,7 +9105,7 @@ Current context:
         dwtBalance = account?.balance || "0";
       }
       
-      const priceHistory = await storage.getPriceHistory("DWC", 2);
+      const priceHistory = await storage.getPriceHistory("SIG", 2);
       const currentPrice = parseFloat(priceHistory[0]?.price || "0.000124");
       const oldPrice = parseFloat(priceHistory[1]?.price || String(currentPrice));
       const priceChange = oldPrice > 0 ? ((currentPrice - oldPrice) / oldPrice * 100) : 0;
@@ -9136,10 +9136,10 @@ Current context:
       // Build tokens array
       const tokens: any[] = [];
       
-      // Always show DWC
+      // Always show SIG
       tokens.push({ 
-        symbol: "DWC", 
-        name: "DarkWave Coin", 
+        symbol: "SIG", 
+        name: "Signal", 
         balance: dwtBalance, 
         displayBalance: dwtBalanceNum.toFixed(2),
         value: dwtValue, 
@@ -9147,11 +9147,11 @@ Current context:
         icon: "🌊" 
       });
       
-      // Show stDWC if user has any
+      // Show stSIG if user has any
       if (stDwtBalanceNum > 0) {
         tokens.push({
-          symbol: "stDWC",
-          name: "Staked DarkWave Coin",
+          symbol: "stSIG",
+          name: "Staked Signal",
           balance: stDwtBalance,
           displayBalance: stDwtBalanceNum.toFixed(2),
           value: stDwtValue,
@@ -9470,7 +9470,7 @@ Current context:
     }
   });
 
-  // Request SC redemption (convert SC to DWC)
+  // Request SC redemption (convert SC to SIG)
   app.post("/api/sweeps/redeem", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
@@ -9489,7 +9489,7 @@ Current context:
         return res.status(400).json({ error: "Insufficient SC balance" });
       }
       
-      // 1 SC = 1 DWC conversion rate
+      // 1 SC = 1 SIG conversion rate
       const dwcAmount = scAmount;
       
       const redemption = await storage.requestSweepsRedemption({
@@ -9627,7 +9627,7 @@ Current context:
   // TESTNET FAUCET
   // ============================================
   
-  const FAUCET_AMOUNT = "1000000000000000000000"; // 1000 DWC
+  const FAUCET_AMOUNT = "1000000000000000000000"; // 1000 SIG
   const FAUCET_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
   
   app.get("/api/faucet/info", async (req, res) => {
@@ -9642,7 +9642,7 @@ Current context:
         .reduce((sum, c) => sum + BigInt(c.amount), BigInt(0));
       
       res.json({
-        dailyLimit: "10000000000000000000000", // 10,000 DWC per day total
+        dailyLimit: "10000000000000000000000", // 10,000 SIG per day total
         claimAmount: FAUCET_AMOUNT,
         totalDistributed: totalDistributed.toString(),
         claimsToday,
@@ -9754,19 +9754,19 @@ Current context:
       }
 
       const betAmountBigInt = BigInt(betAmount);
-      const minBet = BigInt("1000000000000000000"); // 1 DWC minimum
-      const maxBet = BigInt("100000000000000000000000"); // 100,000 DWC maximum
+      const minBet = BigInt("1000000000000000000"); // 1 SIG minimum
+      const maxBet = BigInt("100000000000000000000000"); // 100,000 SIG maximum
 
       if (betAmountBigInt < minBet) {
-        return res.status(400).json({ error: "Minimum bet is 1 DWC" });
+        return res.status(400).json({ error: "Minimum bet is 1 SIG" });
       }
       if (betAmountBigInt > maxBet) {
-        return res.status(400).json({ error: "Maximum bet is 100,000 DWC" });
+        return res.status(400).json({ error: "Maximum bet is 100,000 SIG" });
       }
 
       const account = blockchain.getAccount(walletAddress);
       if (!account || account.balance < betAmountBigInt) {
-        return res.status(400).json({ error: "Insufficient DWC balance" });
+        return res.status(400).json({ error: "Insufficient SIG balance" });
       }
 
       if (!blockchain.debitAccount(walletAddress, betAmountBigInt)) {
@@ -9844,11 +9844,11 @@ Current context:
     try {
       res.json({
         leaderboard: [
-          { address: "DWC...x7K2", winnings: "12,450", game: "Crash" },
-          { address: "DWC...m3P8", winnings: "8,200", game: "Coin Flip" },
-          { address: "DWC...n9R5", winnings: "6,800", game: "Dice" },
-          { address: "DWC...k4L1", winnings: "5,100", game: "Crash" },
-          { address: "DWC...p2W8", winnings: "4,500", game: "Coin Flip" },
+          { address: "SIG...x7K2", winnings: "12,450", game: "Crash" },
+          { address: "SIG...m3P8", winnings: "8,200", game: "Coin Flip" },
+          { address: "SIG...n9R5", winnings: "6,800", game: "Dice" },
+          { address: "SIG...k4L1", winnings: "5,100", game: "Crash" },
+          { address: "SIG...p2W8", winnings: "4,500", game: "Coin Flip" },
         ],
       });
     } catch (error) {
@@ -9869,7 +9869,7 @@ Current context:
           { id: "blackjack", name: "Blackjack", description: "Classic 21 - beat the dealer", minBet: "25", maxBet: "10000", houseEdge: "0.5%", rtp: "99.5%", icon: "spade" },
           { id: "lottery", name: "Daily Lottery", description: "Pick numbers for jackpot prizes", minBet: "1", maxBet: "100", houseEdge: "5%", rtp: "95%", icon: "ticket" },
         ],
-        currency: "DWC",
+        currency: "SIG",
         provablyFair: true,
         licenseInfo: "Games operate under DarkWave Studios provably fair system"
       });
@@ -10399,19 +10399,19 @@ DarkWave Trust Layer is a Layer 1 blockchain with:
 - 400ms block times
 - 200,000+ TPS capacity  
 - Proof-of-Authority consensus with the Founders Validator
-- Native DWC token (100 million total supply, 18 decimals)
+- Native SIG token (100 million total supply, 18 decimals)
 - Genesis block: April 11, 2026
 - Public launch: April 11, 2026
 
 Key features available:
-- Faucet: Get 1000 free test DWC (24-hour cooldown)
+- Faucet: Get 1000 free test SIG (24-hour cooldown)
 - Swap/DEX: Trade tokens with 0.3% fee
 - NFT Marketplace: Buy, sell, and mint NFTs
-- Staking: Stake DWC to earn rewards
+- Staking: Stake SIG to earn rewards
 - Portfolio: Track holdings and transactions
 - Liquidity Pools: Provide liquidity and earn fees
 - Launchpad: Launch new tokens
-- Bridge: Transfer DWC to Ethereum (wDWC) or Solana
+- Bridge: Transfer SIG to Ethereum (wSIG) or Solana
 - DarkWave Studio: Full-featured web IDE
 
 Keep responses concise (2-3 sentences max), friendly, and helpful. If asked about prices, balances, or specific data, explain that you can guide them to the relevant page. Use casual, warm language like you're a helpful friend. Do not use emojis or describe emojis in text form (like ":)" or "smile emoji"). Just communicate naturally without any emoji references.`;
@@ -12003,7 +12003,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         eraYear: "1247 CE",
         daysLived: 127,
         reputation: 72,
-        wealth: "3,450 DWC",
+        wealth: "3,450 SIG",
         activeQuests: 4,
         completedQuests: 23,
         secretsFound: 7,
@@ -14922,9 +14922,9 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           { id: "mega", name: "Shell Mega Pack", shells: 15000, bonusShells: 3500, priceUsd: 4999, formattedPrice: "$49.99", popular: false },
           { id: "whale", name: "Shell Whale Pack", shells: 35000, bonusShells: 10000, priceUsd: 9999, formattedPrice: "$99.99", popular: false },
         ],
-        exchangeRate: "1 Shell = 1 DWC at TGE (Apr 11, 2026)",
+        exchangeRate: "1 Shell = 1 SIG at TGE (Apr 11, 2026)",
         currency: "Shells",
-        conversionNote: "All Shells convert to DWC tokens at Token Generation Event"
+        conversionNote: "All Shells convert to SIG tokens at Token Generation Event"
       });
     } catch (error) {
       console.error("Get shells packages error:", error);
@@ -14988,7 +14988,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   // =====================================================
-  // SHELL → DWC CONVERSION (TGE System)
+  // SHELL → SIG CONVERSION (TGE System)
   // =====================================================
 
   // Get conversion info for authenticated user
@@ -15007,10 +15007,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       // Check wallet requirement for conversion eligibility
       const canWithdrawCheck = await zealyService.canWithdraw(userId);
       
-      const conversionRate = DWC_CONVERSION_RATE; // 100 shells = 1 DWC
+      const conversionRate = DWC_CONVERSION_RATE; // 100 shells = 1 SIG
       const estimatedDwc = Math.floor(shellBalance / conversionRate);
       const shellValue = shellBalance * 0.001; // $0.001 per shell
-      const dwcValue = estimatedDwc * 0.10; // $0.10 per DWC at launch
+      const dwcValue = estimatedDwc * 0.10; // $0.10 per SIG at launch
       
       res.json({
         shellBalance,
@@ -15035,7 +15035,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           reason: canWithdrawCheck.reason,
           message: canWithdrawCheck.canWithdraw 
             ? "Ready for TGE conversion" 
-            : canWithdrawCheck.reason || "Connect your DarkWave wallet to receive DWC at Token Generation Event",
+            : canWithdrawCheck.reason || "Connect your DarkWave wallet to receive SIG at Token Generation Event",
         },
       });
     } catch (error) {
@@ -15044,7 +15044,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  // Preview conversion (how much DWC user would get)
+  // Preview conversion (how much SIG user would get)
   app.post("/api/shells/conversion-preview", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.claims?.sub || req.session?.userId;
@@ -15122,7 +15122,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(400).json({ error: "No shells to redeem" });
       }
       
-      // Calculate DWC amount
+      // Calculate SIG amount
       const dwcAmount = Math.floor(shellBalance / DWC_CONVERSION_RATE);
       
       // Update profile to mark as pending conversion (will process at TGE)
@@ -15137,7 +15137,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       
       res.json({
         success: true,
-        message: "Redemption request submitted. DWC will be distributed at TGE (April 11, 2026).",
+        message: "Redemption request submitted. SIG will be distributed at TGE (April 11, 2026).",
         shellsLocked: shellBalance,
         dwcToReceive: dwcAmount.toString(),
         walletAddress: profile.walletAddress,
@@ -15910,7 +15910,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           rate: DWC_CONVERSION_RATE,
           dwcEquivalent: shellAmount / DWC_CONVERSION_RATE,
           launchDate: DWC_LAUNCH_DATE,
-          message: `These Shells will convert to ${(shellAmount / DWC_CONVERSION_RATE).toFixed(2)} DWC on ${DWC_LAUNCH_DATE}`
+          message: `These Shells will convert to ${(shellAmount / DWC_CONVERSION_RATE).toFixed(2)} SIG on ${DWC_LAUNCH_DATE}`
         }
       });
     } catch (error) {
@@ -15928,7 +15928,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         conversionInfo: {
           rate: DWC_CONVERSION_RATE,
           launchDate: DWC_LAUNCH_DATE,
-          message: `All Shells will convert to DWC at a rate of ${DWC_CONVERSION_RATE} Shells = 1 DWC on ${DWC_LAUNCH_DATE}`
+          message: `All Shells will convert to SIG at a rate of ${DWC_CONVERSION_RATE} Shells = 1 SIG on ${DWC_LAUNCH_DATE}`
         }
       });
     } catch (error) {
@@ -15948,7 +15948,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         ...conversionInfo,
         conversionRate: DWC_CONVERSION_RATE,
         launchDate: DWC_LAUNCH_DATE,
-        message: `Your ${conversionInfo.totalShells.toLocaleString()} Shells will convert to ${conversionInfo.dwcEquivalent.toFixed(2)} DWC on ${DWC_LAUNCH_DATE}`
+        message: `Your ${conversionInfo.totalShells.toLocaleString()} Shells will convert to ${conversionInfo.dwcEquivalent.toFixed(2)} SIG on ${DWC_LAUNCH_DATE}`
       });
     } catch (error) {
       console.error("Get conversion info error:", error);

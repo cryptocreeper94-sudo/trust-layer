@@ -61,9 +61,9 @@ DWSC employs a Proof-of-Authority (PoA) consensus with a Founders Validator syst
 
 ## 3. Token Economics
 
-### 3.1 Native Coin (DWC)
+### 3.1 Native Coin (SIG)
 
-- **Total Supply**: 1,000,000,000 DWC (fixed, no inflation/deflation)
+- **Total Supply**: 1,000,000,000 SIG (fixed, no inflation/deflation)
 - **Decimals**: 18
 - **Utility**: Gas fees, staking, governance, in-app purchases
 
@@ -79,7 +79,7 @@ DWSC employs a Proof-of-Authority (PoA) consensus with a Founders Validator syst
 
 ### 3.3 Fee Structure
 
-- Transaction base fee: 0.0001 DWC (~$0.001)
+- Transaction base fee: 0.0001 SIG (~$0.001)
 - Smart contract execution: Variable based on computation
 - All fees distributed to validators and ecosystem fund
 
@@ -153,31 +153,31 @@ DarkWave Trust Layer represents a purpose-built solution for the next generation
     title: "Token Utility & Use Cases",
     category: "general",
     isPublic: true,
-    content: `# DWC Token Utility Guide
+    content: `# SIG Token Utility Guide
 
 ## Overview
 
-The DarkWave Coin (DWC) serves as the native utility token of the DarkWave Trust Layer ecosystem. This document details the various use cases and utility functions of DWC.
+The Signal (SIG) serves as the native utility token of the DarkWave Trust Layer ecosystem. This document details the various use cases and utility functions of SIG.
 
 ## Primary Utilities
 
 ### 1. Transaction Fees (Gas)
 
-All transactions on DWSC require DWC for gas fees:
-- Standard transfers: ~0.0001 DWC
+All transactions on DWSC require SIG for gas fees:
+- Standard transfers: ~0.0001 SIG
 - Smart contract calls: Variable based on computation
-- NFT minting: ~0.001 DWC
+- NFT minting: ~0.001 SIG
 
 ### 2. Staking Rewards
 
-Stake DWC to earn passive yield:
+Stake SIG to earn passive yield:
 - Base APY: 8-12% depending on lock period
-- Liquid staking via stDWC available
+- Liquid staking via stSIG available
 - Validator delegation supported
 
 ### 3. Governance
 
-DWC holders can vote on:
+SIG holders can vote on:
 - Protocol upgrades
 - Treasury allocation
 - Fee structure changes
@@ -194,14 +194,14 @@ In-game utility includes:
 ### 5. DEX & DeFi
 
 Trading and liquidity:
-- Swap fees paid in DWC
+- Swap fees paid in SIG
 - Liquidity provision rewards
 - Yield farming opportunities
 
 ### 6. NFT Marketplace
 
 Digital asset trading:
-- Listing fees in DWC
+- Listing fees in SIG
 - Purchase payments
 - Royalty distributions
 
@@ -368,7 +368,7 @@ console.log('Connected:', account.address);
 \`\`\`typescript
 const tx = await wallet.sendTransaction({
   to: '0x...',
-  value: '1000000000000000000', // 1 DWC in wei
+  value: '1000000000000000000', // 1 SIG in wei
   data: '0x' // optional
 });
 
@@ -446,7 +446,7 @@ try {
 ## v1.4.0 (December 20, 2024)
 
 ### Added
-- Orbs economy system for pre-DWC engagement
+- Orbs economy system for pre-SIG engagement
 - Subscription management with Stripe integration
 - Partner portal for early access requests
 

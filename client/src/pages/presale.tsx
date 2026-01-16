@@ -60,7 +60,7 @@ const ECOSYSTEM_FEATURES = [
     icon: Zap,
     image: blockchainBg,
     gradient: "from-cyan-500/20 to-blue-600/20",
-    fullDescription: "DarkWave Smart Chain is a high-performance Layer 1 blockchain built for speed and scalability. With 400ms block times and over 200,000 transactions per second, it's designed for real-world applications that demand instant finality.",
+    fullDescription: "DarkWave Trust Layer is a high-performance Layer 1 trust infrastructure built for speed and accountability. With 400ms block times and over 200,000 transactions per second, it's designed for real-world applications that demand instant finality and verified coordination.",
     features: ["Ultra-fast 400ms block confirmation", "200,000+ TPS capacity", "Proof-of-Authority consensus for reliability", "EVM-compatible smart contracts", "Low transaction fees"],
   },
   {
@@ -88,7 +88,7 @@ const ECOSYSTEM_FEATURES = [
     image: bridgeVisual,
     gradient: "from-orange-500/20 to-red-600/20",
     fullDescription: "Move assets freely between DarkWave, Ethereum, and Solana with our secure cross-chain bridge. Lock and mint technology ensures your assets are always backed 1:1.",
-    features: ["Bridge to Ethereum and Solana", "Secure lock-and-mint mechanism", "Fast transfer times", "Low bridging fees", "Wrapped token support (wDWC)"],
+    features: ["Bridge to Ethereum and Solana", "Secure lock-and-mint mechanism", "Fast transfer times", "Low bridging fees", "Wrapped asset support (wSIG)"],
   },
   {
     title: "NFT Marketplace",
@@ -217,7 +217,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
       <DialogContent className="bg-slate-900 border-white/10 w-[95vw] max-w-md p-5 rounded-xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-            Buy DWC Tokens
+            Acquire Signal
           </DialogTitle>
           <DialogDescription className="text-gray-400">
             Enter any amount ($10 minimum) or pick a tier
@@ -306,17 +306,17 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
             </div>
             <div className="flex justify-between text-sm mb-1">
               <span className="text-gray-400">Base Tokens</span>
-              <span className="text-white">{tokenAmount.toLocaleString()} DWC</span>
+              <span className="text-white">{tokenAmount.toLocaleString()} SIG</span>
             </div>
             {bonusPercent > 0 && (
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-gray-400">Bonus (+{bonusPercent}%)</span>
-                <span className="text-green-400">+{bonusTokens.toLocaleString()} DWC</span>
+                <span className="text-green-400">+{bonusTokens.toLocaleString()} SIG</span>
               </div>
             )}
             <div className="flex justify-between text-lg font-bold border-t border-white/10 pt-2 mt-2">
               <span className="text-white">Total Tokens</span>
-              <span className="text-cyan-400">{(tokenAmount + bonusTokens).toLocaleString()} DWC</span>
+              <span className="text-cyan-400">{(tokenAmount + bonusTokens).toLocaleString()} SIG</span>
             </div>
           </div>
           
@@ -380,7 +380,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
           
           <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
             <p className="text-xs text-amber-400 text-center">
-              No wallet needed now! Tokens are tracked by email. You'll create a DarkWave wallet before TGE to receive your DWC.
+              No wallet needed now! Your allocation is tracked by email. You'll create a DarkWave wallet before TGE to receive your Signal.
             </p>
           </div>
         </div>
@@ -408,11 +408,11 @@ function PresaleProgress() {
         
         <div className="flex items-center gap-4 mb-6">
           <div className="relative">
-            <img src={darkwaveLogo} alt="DWC" className="w-16 h-16 object-contain" />
+            <img src={darkwaveLogo} alt="Signal" className="w-16 h-16 object-contain" />
             <div className="absolute inset-0 animate-pulse bg-cyan-400/20 rounded-full blur-xl" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-white">DWC Token Presale</h2>
+            <h2 className="text-2xl font-bold text-white">Signal Presale</h2>
             <p className="text-gray-400">Launching October 2026</p>
           </div>
         </div>
@@ -459,8 +459,8 @@ function PresaleProgress() {
             <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.3)_50%,transparent_100%)] animate-pulse" />
           </div>
           <div className="flex justify-between text-xs text-gray-500">
-            <span>{tokensSold.toLocaleString()} DWC</span>
-            <span>{PRESALE_ALLOCATION.toLocaleString()} DWC</span>
+            <span>{tokensSold.toLocaleString()} SIG</span>
+            <span>{PRESALE_ALLOCATION.toLocaleString()} SIG</span>
           </div>
         </div>
 
@@ -479,7 +479,7 @@ function PresaleProgress() {
           data-testid="button-buy-tokens"
         >
           <Wallet className="w-5 h-5 mr-2" />
-          {uniqueHolders === 0 ? "Be the First to Buy" : "Buy DWC Tokens"}
+          {uniqueHolders === 0 ? "Be the First" : "Acquire Signal"}
         </Button>
       </HolographicCard>
     </>
@@ -738,17 +738,17 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
               </div>
               <div className="flex justify-between items-center mb-2">
                 <span className="text-gray-400 text-sm">Base Tokens</span>
-                <span className="text-base sm:text-lg text-white">{tokenAmount.toLocaleString()} DWC</span>
+                <span className="text-base sm:text-lg text-white">{tokenAmount.toLocaleString()} SIG</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-gray-400 text-sm">Bonus ({tier.bonus}%)</span>
                 <span className={`text-base sm:text-lg bg-gradient-to-r ${color} bg-clip-text text-transparent font-semibold`}>
-                  +{bonusTokens.toLocaleString()} DWC
+                  +{bonusTokens.toLocaleString()} SIG
                 </span>
               </div>
               <div className="border-t border-white/10 mt-3 pt-3 flex justify-between items-center">
-                <span className="text-white font-semibold text-sm">Total Tokens</span>
-                <span className="text-lg sm:text-xl font-bold text-cyan-400">{(tokenAmount + bonusTokens).toLocaleString()} DWC</span>
+                <span className="text-white font-semibold text-sm">Total Signal</span>
+                <span className="text-lg sm:text-xl font-bold text-cyan-400">{(tokenAmount + bonusTokens).toLocaleString()} SIG</span>
               </div>
             </div>
 
@@ -928,7 +928,7 @@ function PurchaseCalculator() {
         <div className="p-4 rounded-xl bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-400 text-sm">Total DWC Tokens</p>
+              <p className="text-gray-400 text-sm">Total Signal</p>
               <p className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                 {totalTokens.toLocaleString(undefined, { maximumFractionDigits: 0 })}
               </p>
@@ -984,7 +984,7 @@ export default function Presale() {
             </span>
           </h1>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-6">
-            Be among the first to own DWC tokens and unlock exclusive early adopter rewards. 
+            Be among the first to receive Signal and unlock exclusive early adopter rewards. 
             Ground floor opportunity - this is where it all begins.
           </p>
           
@@ -1000,7 +1000,7 @@ export default function Presale() {
           </div>
           <p className="text-sm text-gray-500 max-w-xl mx-auto">
             No crypto? No problem! Buy USDC, ETH, or SOL with your card via Stripe's secure onramp, 
-            then use it to purchase DWC tokens below.
+            then use it to acquire Signal below.
           </p>
         </motion.div>
 
@@ -1076,8 +1076,8 @@ export default function Presale() {
             <HolographicCard className="p-6 text-center relative" glow="amber">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm">4</div>
               <Coins className="w-8 h-8 text-amber-400 mx-auto mb-4 mt-2" />
-              <h3 className="text-lg font-bold text-white mb-2">Receive DWC</h3>
-              <p className="text-gray-400 text-sm">DWC + converted Shells airdropped to your wallet</p>
+              <h3 className="text-lg font-bold text-white mb-2">Receive Signal</h3>
+              <p className="text-gray-400 text-sm">Signal + converted Shells airdropped to your wallet</p>
             </HolographicCard>
           </div>
           
@@ -1091,8 +1091,8 @@ export default function Presale() {
                 <p className="text-gray-400 text-sm leading-relaxed">
                   <span className="text-cyan-400 font-medium">Participate now without a wallet!</span> Your presale purchases and Zealy Shell earnings are 
                   tracked by your account, not your wallet. Before TGE (October 2026), you'll create a DarkWave wallet to receive your tokens.
-                  At launch, your <span className="text-green-400 font-medium">DWC tokens + converted Shells</span> will be airdropped to your wallet 
-                  (20% at TGE, 80% vested over 12 months). Shell conversion rate: 100 Shells = 1 DWC.
+                  At launch, your <span className="text-green-400 font-medium">Signal + converted Shells</span> will be airdropped to your wallet 
+                  (20% at TGE, 80% vested over 12 months). Shell conversion rate: 100 Shells = 1 SIG.
                 </p>
               </div>
             </div>

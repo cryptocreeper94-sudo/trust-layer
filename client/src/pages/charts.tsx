@@ -24,7 +24,7 @@ interface PriceData {
 
 export default function Charts() {
   const [timeframe, setTimeframe] = useState("7d");
-  const [selectedToken, setSelectedToken] = useState("DWC");
+  const [selectedToken, setSelectedToken] = useState("SIG");
 
   const { data: statsData, isLoading: statsLoading } = useQuery<{ 
     isTestnet?: boolean;
@@ -77,11 +77,11 @@ export default function Charts() {
               <div>
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center font-bold text-sm">
-                    DWC
+                    SIG
                   </div>
                   <div>
-                    <h1 className="text-2xl font-display font-bold">DarkWave Coin</h1>
-                    <p className="text-xs text-muted-foreground">DWC/USD</p>
+                    <h1 className="text-2xl font-display font-bold">Signal</h1>
+                    <p className="text-xs text-muted-foreground">SIG/USD</p>
                   </div>
                 </div>
               </div>
@@ -92,7 +92,7 @@ export default function Charts() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="DWC">DWC</SelectItem>
+                    <SelectItem value="SIG">SIG</SelectItem>
                     <SelectItem value="wETH">wETH</SelectItem>
                     <SelectItem value="wSOL">wSOL</SelectItem>
                   </SelectContent>
@@ -223,7 +223,7 @@ export default function Charts() {
               <div className="p-4 text-center">
                 <DollarSign className="w-5 h-5 text-purple-400 mx-auto mb-2" />
                 <div className="text-sm font-bold">Total Supply</div>
-                <div className="text-lg font-bold">1B DWC</div>
+                <div className="text-lg font-bold">1B SIG</div>
                 <div className="text-[10px] text-muted-foreground">Fixed supply</div>
               </div>
             </GlassCard>

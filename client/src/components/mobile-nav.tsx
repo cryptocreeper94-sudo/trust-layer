@@ -13,7 +13,7 @@ import presaleImg from "@assets/generated_images/darkwave_crypto_token_coin_holo
 
 const featuredItems = [
   { href: "/crowdfund", label: "Fund Development", icon: Heart, badge: "Support", image: crowdfundImg, overlayGradient: "linear-gradient(135deg, rgba(6,182,212,0.85) 0%, rgba(59,130,246,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#06b6d4, #3b82f6", badgeClass: "bg-cyan-500/30 text-cyan-300", description: "Help Build the Future", external: false },
-  { href: "/presale", label: "Token Presale", icon: Coins, badge: "Live", image: presaleImg, overlayGradient: "linear-gradient(135deg, rgba(245,158,11,0.85) 0%, rgba(239,68,68,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#f59e0b, #ef4444", badgeClass: "bg-amber-500/30 text-amber-300", description: "Get DWC at Best Price", external: false },
+  { href: "/presale", label: "Token Presale", icon: Coins, badge: "Live", image: presaleImg, overlayGradient: "linear-gradient(135deg, rgba(245,158,11,0.85) 0%, rgba(239,68,68,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#f59e0b, #ef4444", badgeClass: "bg-amber-500/30 text-amber-300", description: "Get SIG at Best Price", external: false },
 ];
 
 // Organized nav categories for cleaner menu
@@ -78,7 +78,7 @@ const navCategories = [
     label: "Blockchain",
     icon: Box,
     items: [
-      { href: "/token", label: "DWC Coin", icon: Coins },
+      { href: "/token", label: "SIG Token", icon: Coins },
       { href: "/genesis", label: "Genesis Block", icon: Star },
       { href: "/explorer", label: "Explorer", icon: SearchIcon },
       { href: "/network", label: "Network", icon: TrendingUp },
@@ -344,7 +344,7 @@ function GamesComingSoonModal({ onClose }: { onClose: () => void }) {
           marginBottom: '16px'
         }}>
           <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)', marginBottom: '4px' }}>
-            Play with DWC Coins or Shells
+            Play with SIG tokens or Shells
           </p>
           <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>
             Provably fair • Instant payouts • Low house edge

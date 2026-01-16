@@ -26,7 +26,7 @@ const MAX_MULTIPLIER = 5000;
 const HOUSE_EDGE = 0.015;
 const MIN_PROGRESSIVE_FLOOR = 0.05;
 
-function formatDWC(amount: number): string {
+function formatSIG(amount: number): string {
   return amount.toLocaleString(undefined, { maximumFractionDigits: 2 });
 }
 
@@ -546,21 +546,21 @@ function LiveLedger({ secured, riding, lost }: { secured: number; riding: number
           <Lock className="w-3 h-3 text-green-400" />
           <span className="text-[10px] text-muted-foreground uppercase">Secured</span>
         </div>
-        <p className="text-sm font-bold text-green-400 font-mono">{formatDWC(secured)}</p>
+        <p className="text-sm font-bold text-green-400 font-mono">{formatSIG(secured)}</p>
       </div>
       <div className="text-center border-x border-white/10">
         <div className="flex items-center justify-center gap-1 mb-1">
           <Rocket className="w-3 h-3 text-yellow-400" />
           <span className="text-[10px] text-muted-foreground uppercase">Riding</span>
         </div>
-        <p className="text-sm font-bold text-yellow-400 font-mono">{formatDWC(riding)}</p>
+        <p className="text-sm font-bold text-yellow-400 font-mono">{formatSIG(riding)}</p>
       </div>
       <div className="text-center">
         <div className="flex items-center justify-center gap-1 mb-1">
           <AlertTriangle className="w-3 h-3 text-red-400" />
           <span className="text-[10px] text-muted-foreground uppercase">Lost</span>
         </div>
-        <p className="text-sm font-bold text-red-400 font-mono">{formatDWC(lost)}</p>
+        <p className="text-sm font-bold text-red-400 font-mono">{formatSIG(lost)}</p>
       </div>
     </motion.div>
   );
@@ -800,7 +800,7 @@ export default function CrashGame() {
     
     toast({
       title: `Partial Cashout! 💰`,
-      description: `Secured ${percent}% (+${cashoutAmount.toFixed(2)} DWC) at ${mult.toFixed(2)}x`,
+      description: `Secured ${percent}% (+${cashoutAmount.toFixed(2)} SIG) at ${mult.toFixed(2)}x`,
     });
     
     if (newRiding < lockedStake * MIN_PROGRESSIVE_FLOOR) {
@@ -846,7 +846,7 @@ export default function CrashGame() {
         
         toast({
           title: "Auto Take Profit! 🎯",
-          description: `+${payout.toFixed(2)} DWC at ${target.toFixed(2)}x`,
+          description: `+${payout.toFixed(2)} SIG at ${target.toFixed(2)}x`,
         });
       }
     }
@@ -952,7 +952,7 @@ export default function CrashGame() {
       autoProgressive: `Auto Prog (${autoProgStep}% every ${autoProgInterval}%)`,
     }[betMode];
     
-    toast({ title: "Bet Placed!", description: `${amount} DWC - ${modeLabel}` });
+    toast({ title: "Bet Placed!", description: `${amount} SIG - ${modeLabel}` });
   };
 
   const handleCashout = () => {
@@ -990,7 +990,7 @@ export default function CrashGame() {
       
       toast({
         title: "Cashed Out! 💰",
-        description: `+${payout.toFixed(2)} DWC at ${multiplier.toFixed(2)}x`,
+        description: `+${payout.toFixed(2)} SIG at ${multiplier.toFixed(2)}x`,
       });
     }
   };
@@ -1026,7 +1026,7 @@ export default function CrashGame() {
     
     toast({
       title: "Fully Cashed Out! 💰",
-      description: `+${payout.toFixed(2)} DWC at ${multiplier.toFixed(2)}x`,
+      description: `+${payout.toFixed(2)} SIG at ${multiplier.toFixed(2)}x`,
     });
   };
 
@@ -1047,7 +1047,7 @@ export default function CrashGame() {
   const claimRewards = () => {
     if (pendingRewards <= 0) return;
     setDemoBalance(prev => prev + pendingRewards);
-    toast({ title: "Rewards Claimed!", description: `+${pendingRewards.toFixed(2)} DWC added to balance` });
+    toast({ title: "Rewards Claimed!", description: `+${pendingRewards.toFixed(2)} SIG added to balance` });
     setPendingRewards(0);
   };
 
@@ -1088,7 +1088,7 @@ export default function CrashGame() {
               {bets.length} Players
             </Badge>
             <div className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30">
-              <span className="text-sm font-mono font-bold text-purple-400">{formatDWC(demoBalance)} DWC</span>
+              <span className="text-sm font-mono font-bold text-purple-400">{formatSIG(demoBalance)} SIG</span>
             </div>
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setSoundEnabled(!soundEnabled)}>
               {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
@@ -1295,7 +1295,7 @@ export default function CrashGame() {
                             className="mt-2 sm:mt-3 px-3 sm:px-4 py-1 sm:py-1.5 rounded-lg bg-green-500/20 border border-green-500/40"
                           >
                             <span className="text-green-400 font-mono text-sm sm:text-base font-bold">
-                              +{(ridingAmount * multiplier * (1 - HOUSE_EDGE)).toFixed(2)} DWC
+                              +{(ridingAmount * multiplier * (1 - HOUSE_EDGE)).toFixed(2)} SIG
                             </span>
                           </motion.div>
                         )}
@@ -1574,7 +1574,7 @@ export default function CrashGame() {
                       ) : (
                         <>
                           <Rocket className="w-4 h-4 mr-2" />
-                          BET {betAmount} DWC
+                          BET {betAmount} SIG
                         </>
                       )}
                     </Button>
@@ -1595,7 +1595,7 @@ export default function CrashGame() {
                       Live Bets ({bets.length})
                     </h3>
                     <Badge variant="outline" className="text-[10px] font-mono">
-                      Pool: {bets.reduce((sum, b) => sum + b.amount, 0).toLocaleString()} DWC
+                      Pool: {bets.reduce((sum, b) => sum + b.amount, 0).toLocaleString()} SIG
                     </Badge>
                   </div>
                   
@@ -1631,7 +1631,7 @@ export default function CrashGame() {
                             </div>
                           </div>
                           <div className="text-right">
-                            <span className="text-muted-foreground font-mono">{bet.amount} DWC</span>
+                            <span className="text-muted-foreground font-mono">{bet.amount} SIG</span>
                             {bet.status === "cashed" && bet.cashoutMultiplier && (
                               <Badge className="bg-green-500/20 text-green-400 text-[10px] font-mono ml-1">
                                 {bet.cashoutMultiplier.toFixed(2)}x
@@ -1706,7 +1706,7 @@ export default function CrashGame() {
                 {/* Pending */}
                 <div className="text-center">
                   <p className="text-sm font-bold text-green-400 font-mono">{pendingRewards.toFixed(1)}</p>
-                  <p className="text-[9px] text-white/50">Pending DWC</p>
+                  <p className="text-[9px] text-white/50">Pending SIG</p>
                   <Button
                     size="sm"
                     className="h-5 text-[9px] px-2 mt-1 bg-green-500/30 hover:bg-green-500/50"

@@ -977,7 +977,7 @@ export default function CommunityHub() {
                   {isAuthenticated && (
                     <div 
                       className="flex flex-col items-end px-2 py-1 sm:px-3 sm:py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full flex-shrink-0 group relative cursor-help"
-                      title={`≈ ${((shellsData?.balance || 0) / 100).toFixed(2)} DWC at launch (April 11, 2026)`}
+                      title={`≈ ${((shellsData?.balance || 0) / 100).toFixed(2)} SIG at launch (April 11, 2026)`}
                     >
                       <div className="flex items-center gap-1">
                         <Coins className="w-3 h-3 sm:w-4 sm:h-4 text-amber-400" />
@@ -986,7 +986,7 @@ export default function CommunityHub() {
                         </span>
                       </div>
                       <span className="text-[8px] text-cyan-400/70 hidden sm:block">
-                        ≈ {((shellsData?.balance || 0) / 100).toFixed(2)} DWC
+                        ≈ {((shellsData?.balance || 0) / 100).toFixed(2)} SIG
                       </span>
                     </div>
                   )}
@@ -1515,7 +1515,7 @@ export default function CommunityHub() {
             
             <div className="p-3 rounded-lg bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
               <p className="text-xs sm:text-sm text-gray-300">
-                Part of the <span className="text-cyan-400 font-medium">DarkWave Smart Chain</span> ecosystem
+                Part of the <span className="text-cyan-400 font-medium">DarkWave Trust Layer</span> ecosystem
               </p>
             </div>
             

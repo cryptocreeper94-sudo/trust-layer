@@ -46,7 +46,7 @@ export default function Referrals() {
               </h1>
             </div>
             <p className="text-xs text-muted-foreground">
-              Earn DWC tokens and exclusive rewards
+              Earn SIG tokens and exclusive rewards
             </p>
           </motion.div>
 

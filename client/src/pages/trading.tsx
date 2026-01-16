@@ -98,16 +98,16 @@ export default function Trading() {
                   }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  <img src={darkwaveLogo} alt="DWC" className="w-10 h-10" />
+                  <img src={darkwaveLogo} alt="SIG" className="w-10 h-10" />
                 </motion.div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h1 className="text-xl font-bold">DWC/USD</h1>
+                    <h1 className="text-xl font-bold">SIG/USD</h1>
                     <Button variant="ghost" size="icon" className="h-6 w-6">
                       <Star className="w-4 h-4" />
                     </Button>
                   </div>
-                  <p className="text-xs text-muted-foreground">DarkWave Coin</p>
+                  <p className="text-xs text-muted-foreground">Signal</p>
                 </div>
               </div>
               

@@ -96,11 +96,11 @@ export default function SweepstakesRules() {
               <ul className="space-y-2 text-gray-300 text-sm">
                 <li className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-green-400 mt-1 flex-shrink-0" />
-                  Redeemable for DWC cryptocurrency
+                  Redeemable for SIG cryptocurrency
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-green-400 mt-1 flex-shrink-0" />
-                  1 SC = 1 DWC redemption rate
+                  1 SC = 1 SIG redemption rate
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-green-400 mt-1 flex-shrink-0" />
@@ -223,7 +223,7 @@ export default function SweepstakesRules() {
                   coin pack purchase and through daily bonuses.</p>
                   
                   <p><strong>Sweeps Coins (SC):</strong> SC are promotional entries that can be used to play games. 
-                  SC winnings can be redeemed for DWC cryptocurrency at a rate of 1 SC = 1 DWC.</p>
+                  SC winnings can be redeemed for SIG cryptocurrency at a rate of 1 SC = 1 SIG.</p>
                   
                   <p><strong>Games:</strong> All games are games of chance. The odds of winning depend on the 
                   specific game mechanics. No skill is involved in determining outcomes. All results are 
@@ -236,12 +236,12 @@ export default function SweepstakesRules() {
                   3. Redemption Process
                 </AccordionTrigger>
                 <AccordionContent className="text-gray-300 space-y-3">
-                  <p>To redeem your SC winnings for DWC cryptocurrency:</p>
+                  <p>To redeem your SC winnings for SIG cryptocurrency:</p>
                   <ol className="list-decimal pl-6 space-y-2">
                     <li>Accumulate a minimum of 100 SC in your account</li>
                     <li>Complete identity verification (KYC) as required by law</li>
                     <li>Submit a redemption request through your account</li>
-                    <li>Receive DWC to your connected wallet within 3-5 business days</li>
+                    <li>Receive SIG to your connected wallet within 3-5 business days</li>
                   </ol>
                   <div className="bg-yellow-900/30 border border-yellow-500/30 rounded-lg p-3 mt-4">
                     <p className="text-yellow-300 text-sm flex items-start gap-2">

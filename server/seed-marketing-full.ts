@@ -34,27 +34,27 @@ const TWITTER_POSTS = [
   { content: `⚡ DarkWave Trust Layer\n\n• 400ms block time\n• 200K+ TPS\n• Proof-of-Authority\n• Built for the future\n\nThis is next-gen blockchain. dwsc.io`, category: 'blockchain' },
   { content: `Why build on slow chains?\n\nDWSC: 400ms blocks. 200K TPS. Real speed.\n\nThe blockchain built for serious builders 🔗`, category: 'blockchain' },
   { content: `Proof-of-Authority. Founders Validation. Real security.\n\nDWSC isn't just fast—it's RELIABLE.\n\ndwsc.io ⚡`, category: 'blockchain' },
-  { content: `1 billion DWC. No burn. Pure utility.\n\nThe native coin powering an entire ecosystem.\n\nLearn more: dwsc.io 💎`, category: 'blockchain' },
+  { content: `1 billion SIG. No burn. Pure utility.\n\nThe native coin powering an entire ecosystem.\n\nLearn more: dwsc.io 💎`, category: 'blockchain' },
   { content: `Block explorer live. Network stats real-time.\n\nDWSC: Transparent. Fast. Ready.\n\ndwsc.io/explorer 🔍`, category: 'blockchain' },
   { content: `Building something unprecedented.\n\nPropriety blockchain. Next-gen gaming. Player-first design.\n\nDarkWave Studios 🚀`, category: 'blockchain' },
   { content: `No compromises. No shortcuts. Just vision.\n\nDWSC is the foundation for everything we're building.\n\ndwsc.io 🌊`, category: 'blockchain' },
-  { content: `The chain that powers legends.\n\nDWC token. DarkWave Chronicles. An entire ecosystem.\n\nAll connected. All fast. ⚡`, category: 'blockchain' },
+  { content: `The chain that powers legends.\n\nSIG token. DarkWave Chronicles. An entire ecosystem.\n\nAll connected. All fast. ⚡`, category: 'blockchain' },
   
   // Staking (6 posts)
-  { content: `💎 Stake DWC. Earn rewards. Build wealth.\n\nLiquid staking now live with stDWC.\n\nYour tokens work while you play.\n\ndwsc.io/staking`, category: 'staking' },
-  { content: `stDWC: Stake and stay liquid.\n\nEarn rewards. Keep flexibility. No lockups holding you back.\n\ndwsc.io/liquid-staking 🔥`, category: 'staking' },
-  { content: `Passive income. Active gaming. Both at once.\n\nStake DWC. Play Chronicles. Earn everywhere.\n\n#DarkWave 💎`, category: 'staking' },
+  { content: `💎 Stake SIG. Earn rewards. Build wealth.\n\nLiquid staking now live with stSIG.\n\nYour tokens work while you play.\n\ndwsc.io/staking`, category: 'staking' },
+  { content: `stSIG: Stake and stay liquid.\n\nEarn rewards. Keep flexibility. No lockups holding you back.\n\ndwsc.io/liquid-staking 🔥`, category: 'staking' },
+  { content: `Passive income. Active gaming. Both at once.\n\nStake SIG. Play Chronicles. Earn everywhere.\n\n#DarkWave 💎`, category: 'staking' },
   { content: `Validators securing the network. Stakers earning rewards.\n\nEveryone wins in the DarkWave ecosystem.\n\ndwsc.io/staking ⚡`, category: 'staking' },
-  { content: `Why let tokens sit idle?\n\nStake DWC → Earn stDWC → Stay liquid → Keep playing\n\nSimple. Powerful. 💰`, category: 'staking' },
-  { content: `Real yield. Real utility. Real ecosystem.\n\nDWC staking is live. Your journey starts now.\n\ndwsc.io/staking 🚀`, category: 'staking' },
+  { content: `Why let tokens sit idle?\n\nStake SIG → Earn stSIG → Stay liquid → Keep playing\n\nSimple. Powerful. 💰`, category: 'staking' },
+  { content: `Real yield. Real utility. Real ecosystem.\n\nSIG staking is live. Your journey starts now.\n\ndwsc.io/staking 🚀`, category: 'staking' },
   
   // Pre-sales & Token (6 posts)
-  { content: `🚀 DWC Pre-sale coming soon.\n\nEarly believers. Early access. Early rewards.\n\nJoin the waitlist: dwsc.io/presale`, category: 'presale' },
-  { content: `1B DWC total supply. No inflation. No burn.\n\nPure utility coin for an entire ecosystem.\n\nPre-sale soon 💎`, category: 'presale' },
-  { content: `Get in before the world catches on.\n\nDWC pre-sale launching soon.\n\ndwsc.io/presale 🔥`, category: 'presale' },
-  { content: `The token that powers games, NFTs, staking, and more.\n\nDWC. One token. Infinite possibilities.\n\nPre-sale soon ⚡`, category: 'presale' },
-  { content: `Early access. Better prices. Founder benefits.\n\nDWC pre-sale is your entry point.\n\ndwsc.io/presale 🚀`, category: 'presale' },
-  { content: `Building wealth before launch.\n\nDWC pre-sale participants get exclusive advantages.\n\nDon't miss it 💎`, category: 'presale' },
+  { content: `🚀 SIG Pre-sale coming soon.\n\nEarly believers. Early access. Early rewards.\n\nJoin the waitlist: dwsc.io/presale`, category: 'presale' },
+  { content: `1B SIG total supply. No inflation. No burn.\n\nPure utility coin for an entire ecosystem.\n\nPre-sale soon 💎`, category: 'presale' },
+  { content: `Get in before the world catches on.\n\nSIG pre-sale launching soon.\n\ndwsc.io/presale 🔥`, category: 'presale' },
+  { content: `The token that powers games, NFTs, staking, and more.\n\nSIG. One token. Infinite possibilities.\n\nPre-sale soon ⚡`, category: 'presale' },
+  { content: `Early access. Better prices. Founder benefits.\n\nSIG pre-sale is your entry point.\n\ndwsc.io/presale 🚀`, category: 'presale' },
+  { content: `Building wealth before launch.\n\nSIG pre-sale participants get exclusive advantages.\n\nDon't miss it 💎`, category: 'presale' },
   
   // Founder Program (5 posts)
   { content: `🏆 Founder Program now open.\n\nPriority access. Exclusive rewards. Legendary status.\n\ndwsc.io/founder-program`, category: 'founder' },
@@ -84,9 +84,9 @@ const TWITTER_POSTS = [
   { content: `Real DeFi. Real speed. Real utility.\n\nDWSC swap and liquidity pools now live.\n\n#DeFi ⚡`, category: 'defi' },
   
   // Bridge (3 posts)
-  { content: `🌉 Cross-chain bridge live.\n\nDWC ↔ wDWC on Ethereum & Solana.\n\nYour tokens, your choice.\n\ndwsc.io/bridge`, category: 'bridge' },
+  { content: `🌉 Cross-chain bridge live.\n\nSIG ↔ wSIG on Ethereum & Solana.\n\nYour tokens, your choice.\n\ndwsc.io/bridge`, category: 'bridge' },
   { content: `Bridging worlds. Ethereum. Solana. DWSC.\n\nMove tokens freely across chains.\n\ndwsc.io/bridge 🌉`, category: 'bridge' },
-  { content: `Lock & mint. Secure bridging.\n\nDWC to wDWC and back. Seamless.\n\n#CrossChain ⚡`, category: 'bridge' },
+  { content: `Lock & mint. Secure bridging.\n\nSIG to wSIG and back. Seamless.\n\n#CrossChain ⚡`, category: 'bridge' },
   
   // Developer Tools (4 posts)
   { content: `🛠️ Build on DWSC.\n\nAPIs. SDKs. Full documentation.\n\nDeveloper Portal: dwsc.io/developers`, category: 'developer' },
@@ -127,9 +127,9 @@ const TWITTER_POSTS = [
   { content: `Your community deserves better.\n\nChronoChat: Premium community platform. Orbs rewards. No middlemen.\n\nchronochat.io ⚡`, category: 'community' },
 
   // Orbs Economy (3 posts)
-  { content: `🔮 Orbs: The DarkWave economy.\n\nEarn Orbs → Convert to DWC at launch.\n\nDaily login: 5 Orbs\nReferral signup: 50 Orbs\n\nStart earning now 💎`, category: 'economy' },
+  { content: `🔮 Orbs: The DarkWave economy.\n\nEarn Orbs → Convert to SIG at launch.\n\nDaily login: 5 Orbs\nReferral signup: 50 Orbs\n\nStart earning now 💎`, category: 'economy' },
   { content: `Orbs packages available:\n\n• Starter: 100 for $4.99\n• Popular: 500 for $19.99\n• Premium: 1,200 for $39.99\n• Ultimate: 3,000 for $79.99\n\ndwsc.io 🔮`, category: 'economy' },
-  { content: `Convert Orbs to DWC tokens at launch.\n\nEarn now. Redeem later. Build wealth.\n\n#Orbs #DWC ⚡`, category: 'economy' },
+  { content: `Convert Orbs to SIG tokens at launch.\n\nEarn now. Redeem later. Build wealth.\n\n#Orbs #SIG ⚡`, category: 'economy' },
 
   // Validator Program (4 posts)
   { content: `🖥️ Become a DWSC Validator!\n\nEarn rewards. Secure the network. Build the future.\n\nJoin the waitlist: dwsc.io/validators 🚀`, category: 'validator' },
@@ -244,7 +244,7 @@ Are you ready to discover who you could become?
 • 400ms block time—near-instant finality
 • 200,000+ TPS—enterprise-grade throughput
 • Proof-of-Authority—security without waste
-• Native DWC coin—1B supply, pure utility
+• Native SIG coin—1B supply, pure utility
 
 This isn't just another blockchain. This is the infrastructure for legends.
 
@@ -275,7 +275,7 @@ DWSC uses Founders Validation—trusted validators securing the network while ma
 No energy waste. No slow confirmations. Just reliable, fast blockchain.
 
 Learn more: dwsc.io`, category: 'blockchain' },
-  { content: `💎 The DWC Coin
+  { content: `💎 The SIG Coin
 
 1 billion total supply. No inflation. No burn mechanics.
 
@@ -313,29 +313,29 @@ No compromises. No shortcuts. Just pure technical excellence.
 Explore: dwsc.io`, category: 'blockchain' },
   
   // Staking (6 posts)
-  { content: `💎 DWC Staking is LIVE
+  { content: `💎 SIG Staking is LIVE
 
-Stake your DWC tokens. Earn passive rewards. Support network security.
+Stake your SIG tokens. Earn passive rewards. Support network security.
 
-Plus: Liquid staking with stDWC means you keep your flexibility while earning.
+Plus: Liquid staking with stSIG means you keep your flexibility while earning.
 
 Your tokens work. You win.
 
 Start staking: dwsc.io/staking`, category: 'staking' },
-  { content: `Introducing stDWC: Liquid Staking
+  { content: `Introducing stSIG: Liquid Staking
 
-Stake DWC → Receive stDWC → Stay Liquid
+Stake SIG → Receive stSIG → Stay Liquid
 
-Traditional staking locks your tokens. We don't. With stDWC, you earn rewards AND maintain flexibility.
+Traditional staking locks your tokens. We don't. With stSIG, you earn rewards AND maintain flexibility.
 
 The best of both worlds.
 
 dwsc.io/liquid-staking`, category: 'staking' },
-  { content: `🔥 Why Stake DWC?
+  { content: `🔥 Why Stake SIG?
 
 • Earn passive rewards
 • Support network security  
-• Get stDWC for liquidity
+• Get stSIG for liquidity
 • Compound your earnings
 
 Your tokens shouldn't sit idle. Put them to work in the DarkWave ecosystem.
@@ -343,7 +343,7 @@ Your tokens shouldn't sit idle. Put them to work in the DarkWave ecosystem.
 dwsc.io/staking`, category: 'staking' },
   { content: `Play games. Earn staking rewards. Live the dream.
 
-DarkWave ecosystem lets you be a gamer AND an investor. Chronicle your legend while your DWC compounds.
+DarkWave ecosystem lets you be a gamer AND an investor. Chronicle your legend while your SIG compounds.
 
 Staking + Gaming = Future.
 
@@ -364,9 +364,9 @@ Ecosystem participation that pays.
 dwsc.io/staking`, category: 'staking' },
   
   // Pre-sales & Token (6 posts)
-  { content: `🚀 DWC Pre-Sale Coming Soon
+  { content: `🚀 SIG Pre-Sale Coming Soon
 
-Be among the first to acquire DWC tokens at the best possible terms.
+Be among the first to acquire SIG tokens at the best possible terms.
 
 Early believers get:
 • Priority access
@@ -375,9 +375,9 @@ Early believers get:
 • Founder recognition
 
 Join the waitlist: dwsc.io/presale`, category: 'presale' },
-  { content: `1 Billion DWC. Fixed Supply. Infinite Utility.
+  { content: `1 Billion SIG. Fixed Supply. Infinite Utility.
 
-The DWC coin powers:
+The SIG coin powers:
 🎮 Gaming transactions
 💎 Staking rewards
 🖼️ NFT marketplace
@@ -387,7 +387,7 @@ The DWC coin powers:
 One coin for the entire ecosystem.
 
 Pre-sale soon: dwsc.io/presale`, category: 'presale' },
-  { content: `⚡ Why DWC Pre-Sale Matters
+  { content: `⚡ Why SIG Pre-Sale Matters
 
 Getting in early = maximum benefit.
 
@@ -403,7 +403,7 @@ dwsc.io/presale`, category: 'presale' },
 • No burn mechanics
 • Pure utility design
 
-DWC is designed for USE, not speculation.
+SIG is designed for USE, not speculation.
 
 Learn more: dwsc.io/token
 Pre-sale: dwsc.io/presale`, category: 'presale' },
@@ -419,7 +419,7 @@ This opportunity won't repeat.
 Join waitlist: dwsc.io/presale 💎`, category: 'presale' },
   { content: `🎯 Building Wealth Before Launch
 
-Smart investors position early. DWC pre-sale is your positioning moment.
+Smart investors position early. SIG pre-sale is your positioning moment.
 
 When Chronicles launches with millions of players, you'll be glad you moved first.
 
@@ -565,7 +565,7 @@ Analyze: dwsc.io/rarity-analyzer`, category: 'nft' },
 
 Instant trades. Minimal fees. No intermediaries.
 
-Swap DWC and ecosystem tokens with confidence. Powered by our native AMM.
+Swap SIG and ecosystem tokens with confidence. Powered by our native AMM.
 
 Start trading: dwsc.io/swap`, category: 'defi' },
   { content: `💧 Liquidity Pools Open
@@ -591,7 +591,7 @@ DWSC's decentralized exchange offers:
 Real utility. Real value.
 
 dwsc.io/swap`, category: 'defi' },
-  { content: `Your DWC. Your Choice.
+  { content: `Your SIG. Your Choice.
 
 Swap it. Stake it. Provide liquidity. Earn rewards.
 
@@ -608,7 +608,7 @@ Move tokens between:
 • Ethereum (Sepolia)
 • Solana (Devnet)
 
-DWC ↔ wDWC seamless bridging.
+SIG ↔ wSIG seamless bridging.
 
 Bridge now: dwsc.io/bridge`, category: 'bridge' },
   { content: `Your Tokens. Any Chain.
@@ -839,7 +839,7 @@ Earn Orbs:
 • Receive reaction: 2 Orbs
 • Referral signup: 50 Orbs
 
-All Orbs convert to DWC tokens at launch!
+All Orbs convert to SIG tokens at launch!
 
 Start earning: dwsc.io`, category: 'economy' },
   { content: `Need Orbs faster? Packages available:
@@ -849,7 +849,7 @@ Start earning: dwsc.io`, category: 'economy' },
 💎 Premium: 1,200 Orbs / $39.99
 💎 Ultimate: 3,000 Orbs / $79.99
 
-Convert to DWC at token launch. Build your wallet now.
+Convert to SIG at token launch. Build your wallet now.
 
 dwsc.io 🔮`, category: 'economy' },
 
@@ -1087,13 +1087,13 @@ Existing chains couldn't deliver what we needed:
 • Games need SPEED → 400ms block time
 • Scale requires POWER → 200,000+ TPS
 • Users need RELIABILITY → 99.99% uptime target
-• Ecosystem needs UTILITY → Native DWC token
+• Ecosystem needs UTILITY → Native SIG token
 
 **DWSC Specifications:**
 • Consensus: Proof-of-Authority (Founders Validation)
 • Block Time: 400ms
 • Throughput: 200,000+ TPS
-• Native Coin: DWC (1B supply, 18 decimals)
+• Native Coin: SIG (1B supply, 18 decimals)
 • Cryptography: SHA-256, Merkle Trees, HMAC-SHA256
 
 This is enterprise-grade blockchain built for entertainment.
@@ -1119,10 +1119,10 @@ Trusted validators. Fast consensus. Reliable operation.
 **The right tool for the job.** ⚡
 
 Technical docs: dwsc.io/api-docs`, category: 'blockchain' },
-  { content: `💎 **The DWC Token: Utility at Its Core**
+  { content: `💎 **The SIG Token: Utility at Its Core**
 
 **Coin Economics:**
-• Total Supply: 1,000,000,000 DWC
+• Total Supply: 1,000,000,000 SIG
 • Decimals: 18
 • Inflation: None
 • Burn: None
@@ -1207,7 +1207,7 @@ Security isn't an afterthought—it's the foundation.
 
 **What's Running on DarkWave Trust Layer:**
 
-✅ Native DWC token
+✅ Native SIG token
 ✅ Token Swap DEX
 ✅ Liquidity Pools
 ✅ NFT Marketplace
@@ -1226,18 +1226,18 @@ One chain. Complete ecosystem.
 dwsc.io 🚀`, category: 'blockchain' },
   
   // Staking (6 posts)
-  { content: `💎 **DWC Staking: Complete Guide**
+  { content: `💎 **SIG Staking: Complete Guide**
 
 **Why Stake?**
 • Earn passive rewards
 • Support network security
-• Get stDWC (liquid staking)
+• Get stSIG (liquid staking)
 • Compound over time
 
 **How It Works:**
 1. Connect wallet to dwsc.io/staking
 2. Choose staking amount
-3. Receive stDWC (liquid stake token)
+3. Receive stSIG (liquid stake token)
 4. Earn rewards while staying liquid
 
 **No lockups. No restrictions.**
@@ -1245,14 +1245,14 @@ dwsc.io 🚀`, category: 'blockchain' },
 Your tokens work for you while you maintain full flexibility.
 
 Start staking: dwsc.io/staking`, category: 'staking' },
-  { content: `🔥 **Liquid Staking with stDWC**
+  { content: `🔥 **Liquid Staking with stSIG**
 
 Traditional staking = locked tokens.
 DWSC staking = freedom.
 
-**When you stake DWC, you receive stDWC:**
+**When you stake SIG, you receive stSIG:**
 • 1:1 ratio maintained
-• stDWC is tradeable
+• stSIG is tradeable
 • Use in DeFi protocols
 • Maintain liquidity
 
@@ -1282,7 +1282,7 @@ dwsc.io/staking 💰`, category: 'staking' },
 
 The DarkWave vision:
 
-While you're conquering eras in Chronicles, your staked DWC is earning rewards in the background.
+While you're conquering eras in Chronicles, your staked SIG is earning rewards in the background.
 
 **Gaming + Investing = One Ecosystem.**
 
@@ -1295,7 +1295,7 @@ dwsc.io/staking`, category: 'staking' },
 
 **Current Staking Status:**
 • Staking Pool: Active ✅
-• stDWC Minting: Live ✅
+• stSIG Minting: Live ✅
 • Rewards: Distributing ✅
 
 **Why Wait?**
@@ -1304,7 +1304,7 @@ Every day you're not staking is rewards you're not earning.
 Get started: dwsc.io/staking 💎`, category: 'staking' },
   { content: `🔐 **Staking Security**
 
-**Your Staked DWC is Secure:**
+**Your Staked SIG is Secure:**
 
 • Smart contract audited
 • Non-custodial design
@@ -1318,10 +1318,10 @@ We built staking to be trustless. You don't need to trust us—you trust the cod
 dwsc.io/staking ⚡`, category: 'staking' },
   
   // Pre-sales & Token (6 posts)
-  { content: `🚀 **DWC Pre-Sale: Everything You Need to Know**
+  { content: `🚀 **SIG Pre-Sale: Everything You Need to Know**
 
 **What Is the Pre-Sale?**
-Early access to acquire DWC tokens before public launch at preferential terms.
+Early access to acquire SIG tokens before public launch at preferential terms.
 
 **Benefits:**
 • Discounted pricing
@@ -1344,14 +1344,14 @@ Look at history:
 • SOL seed: $0.20 → $250+
 • Early believers WIN
 
-**DWC Pre-Sale is your opportunity.**
+**SIG Pre-Sale is your opportunity.**
 
 Not financial advice—but early positioning in quality projects has historically been... significant.
 
 Join waitlist: dwsc.io/presale`, category: 'presale' },
-  { content: `📢 **DWC Token Utility Breakdown**
+  { content: `📢 **SIG Token Utility Breakdown**
 
-**What Can You DO with DWC?**
+**What Can You DO with SIG?**
 
 🎮 **Gaming:**
 • In-game transactions
@@ -1360,7 +1360,7 @@ Join waitlist: dwsc.io/presale`, category: 'presale' },
 
 💎 **Staking:**
 • Earn rewards
-• Get stDWC
+• Get stSIG
 • Network security
 
 🖼️ **NFTs:**
@@ -1375,7 +1375,7 @@ Join waitlist: dwsc.io/presale`, category: 'presale' },
 
 🌉 **Bridge:**
 • Cross-chain transfers
-• wDWC conversion
+• wSIG conversion
 
 **One token. Complete ecosystem.**
 
@@ -1411,7 +1411,7 @@ dwsc.io/presale 💎`, category: 'presale' },
 
 Smart money moves early.
 
-The DWC pre-sale isn't just about tokens—it's about positioning for an entire ecosystem:
+The SIG pre-sale isn't just about tokens—it's about positioning for an entire ecosystem:
 • Chronicles game launch
 • NFT marketplace growth
 • DeFi expansion
@@ -1594,7 +1594,7 @@ Register: dwsc.io ⚡`, category: 'early_adopter' },
 • Instant listing
 
 **Trade:**
-• Buy/sell with DWC
+• Buy/sell with SIG
 • Auction support
 • Offer system
 • Collection management
@@ -1689,7 +1689,7 @@ dwsc.io/swap`, category: 'defi' },
 3. Compound or withdraw anytime
 
 **Current Pools:**
-• DWC/STABLE pairs
+• SIG/STABLE pairs
 • Ecosystem token pairs
 • More launching regularly
 
@@ -1762,7 +1762,7 @@ Our bridge connects us to:
 • Solana ecosystem (Speed, gaming)
 • Future chain integrations
 
-**Use DWC everywhere you want.**
+**Use SIG everywhere you want.**
 
 dwsc.io/bridge 🌉`, category: 'bridge' },
   
@@ -2112,7 +2112,7 @@ What if participating in your community EARNED you rewards?
 • Send messages → Earn Orbs
 • Receive reactions → Earn Orbs
 • Join communities → Earn Orbs
-• Orbs convert to DWC at token launch
+• Orbs convert to SIG at token launch
 
 **No middlemen. No censorship. Pure community.**
 
@@ -2123,7 +2123,7 @@ Coming Q4 2026.
   // Orbs Economy (2 posts)
   { content: `🔮 **The Orbs Economy - Earn Before Launch**
 
-Orbs = DarkWave's internal economy before DWC token launch.
+Orbs = DarkWave's internal economy before SIG token launch.
 
 **How to Earn Orbs:**
 • Daily login: 5 Orbs
@@ -2138,16 +2138,16 @@ Orbs = DarkWave's internal economy before DWC token launch.
 💎 Premium: 1,200 Orbs / $39.99
 💎 Ultimate: 3,000 Orbs / $79.99
 
-**At DWC token launch, ALL Orbs convert to DWC tokens.**
+**At SIG token launch, ALL Orbs convert to SIG tokens.**
 
 Start earning now. Build your wallet.
 
 👉 dwsc.io`, category: 'economy' },
-  { content: `💫 **Orbs → DWC Conversion**
+  { content: `💫 **Orbs → SIG Conversion**
 
 **Why Orbs Matter:**
 
-Every Orb you earn or purchase today will convert to DWC tokens at launch.
+Every Orb you earn or purchase today will convert to SIG tokens at launch.
 
 **This means:**
 • Early participation = token accumulation
@@ -2416,7 +2416,7 @@ Existing blockchains couldn't deliver what gaming needs:
 • Cryptography: SHA-256, Merkle Trees, HMAC-SHA256
 
 💎 <b>Native Coin:</b>
-• Symbol: DWC
+• Symbol: SIG
 • Supply: 1,000,000,000 (fixed)
 • Decimals: 18
 • Inflation: None
@@ -2458,10 +2458,10 @@ Trusted validators carefully selected and monitored for our ecosystem's needs.
 <b>The right tool for the job.</b>
 
 Technical docs: dwsc.io/api-docs`, category: 'blockchain' },
-  { content: `💎 <b>The DWC Token: Complete Breakdown</b>
+  { content: `💎 <b>The SIG Token: Complete Breakdown</b>
 
 <b>Coin Economics:</b>
-• Total Supply: 1,000,000,000 DWC
+• Total Supply: 1,000,000,000 SIG
 • Decimals: 18
 • Inflation: None (fixed supply)
 • Burn: None (supply preserved)
@@ -2596,7 +2596,7 @@ A blockchain that does exactly what we need, exactly how we need it.
 <b>What's Running on DarkWave Trust Layer:</b>
 
 ✅ <b>Core:</b>
-• Native DWC token
+• Native SIG token
 • Block explorer
 • Network APIs
 
@@ -2625,30 +2625,30 @@ A blockchain that does exactly what we need, exactly how we need it.
 👉 dwsc.io`, category: 'blockchain' },
   
   // Staking (6 posts)
-  { content: `💎 <b>DWC Staking: Complete Guide</b>
+  { content: `💎 <b>SIG Staking: Complete Guide</b>
 
-<b>Why Stake DWC?</b>
+<b>Why Stake SIG?</b>
 • Earn passive rewards
 • Support network security
-• Get liquid stDWC
+• Get liquid stSIG
 • Compound earnings over time
 
 <b>How It Works:</b>
 1. Connect wallet to dwsc.io/staking
 2. Choose staking amount
 3. Confirm transaction
-4. Receive stDWC tokens
+4. Receive stSIG tokens
 5. Earn rewards automatically
 
 <b>Liquid Staking Benefit:</b>
-Unlike traditional staking, stDWC keeps you liquid. Use it in DeFi, trade it, or hold it—while still earning rewards.
+Unlike traditional staking, stSIG keeps you liquid. Use it in DeFi, trade it, or hold it—while still earning rewards.
 
 <b>No lockups. Full flexibility.</b>
 
 Your tokens work for you while you maintain complete control.
 
 👉 Start staking: dwsc.io/staking`, category: 'staking' },
-  { content: `🔥 <b>Liquid Staking with stDWC Explained</b>
+  { content: `🔥 <b>Liquid Staking with stSIG Explained</b>
 
 <b>The Problem with Traditional Staking:</b>
 • Tokens locked
@@ -2656,18 +2656,18 @@ Your tokens work for you while you maintain complete control.
 • Missed opportunities
 • Flexibility sacrificed
 
-<b>The stDWC Solution:</b>
-• Stake DWC → Receive stDWC (1:1)
-• stDWC is fully tradeable
+<b>The stSIG Solution:</b>
+• Stake SIG → Receive stSIG (1:1)
+• stSIG is fully tradeable
 • Use in DeFi protocols
 • Maintain complete flexibility
 
 <b>How Value Works:</b>
-stDWC represents your staked DWC plus accumulated rewards. As rewards build, stDWC value relative to DWC increases.
+stSIG represents your staked SIG plus accumulated rewards. As rewards build, stSIG value relative to SIG increases.
 
 <b>Example:</b>
-Stake 1000 DWC → Get 1000 stDWC
-After rewards → 1000 stDWC = 1050 DWC
+Stake 1000 SIG → Get 1000 stSIG
+After rewards → 1000 stSIG = 1050 SIG
 
 <b>Best of both worlds.</b>
 
@@ -2683,12 +2683,12 @@ After rewards → 1000 stDWC = 1050 DWC
 • Calculated per epoch
 • Automatically distributed
 • Compounded by default
-• Visible in stDWC value
+• Visible in stSIG value
 
 <b>How to Maximize:</b>
 • Stake early (time in = rewards out)
 • Stake more (larger stake = larger share)
-• Hold stDWC (compound effect)
+• Hold stSIG (compound effect)
 
 <b>No manual claiming. No gas for distribution.</b>
 
@@ -2701,13 +2701,13 @@ Just stake and watch your holdings grow.
 Play games. Earn staking rewards. Do both at once.
 
 <b>How It Works:</b>
-• Stake DWC before gaming
+• Stake SIG before gaming
 • Rewards accumulate while you play
 • Chronicles achievements + staking returns
 • Double benefit from ecosystem participation
 
 <b>The Math:</b>
-• 1000 DWC staked = continuous rewards
+• 1000 SIG staked = continuous rewards
 • Chronicles campaigns = in-game earnings
 • Total = Gaming + passive income
 
@@ -2718,13 +2718,13 @@ Play games. Earn staking rewards. Do both at once.
 
 <b>Current Status:</b>
 ✅ Staking Pool: Active
-✅ stDWC Minting: Live
+✅ stSIG Minting: Live
 ✅ Rewards: Distributing
 ✅ Withdrawals: Enabled
 
 <b>Pool Metrics:</b>
 • Total Staked: [Dynamic]
-• stDWC Supply: [Dynamic]
+• stSIG Supply: [Dynamic]
 • APY: Variable based on participation
 
 <b>Your Potential:</b>
@@ -2735,7 +2735,7 @@ Every day you're not staking = rewards missed.
 👉 dwsc.io/staking`, category: 'staking' },
   { content: `🔐 <b>Staking Security</b>
 
-<b>How Your Staked DWC is Protected:</b>
+<b>How Your Staked SIG is Protected:</b>
 
 ✅ <b>Smart Contract:</b>
 • Audited code
@@ -2760,10 +2760,10 @@ All staking contracts are verifiable on-chain.
   
   // Continuing with more posts...
   // Pre-sales (6 posts)
-  { content: `🚀 <b>DWC Pre-Sale: Everything You Need to Know</b>
+  { content: `🚀 <b>SIG Pre-Sale: Everything You Need to Know</b>
 
 <b>What Is the Pre-Sale?</b>
-Early access to acquire DWC tokens before public launch at preferential terms.
+Early access to acquire SIG tokens before public launch at preferential terms.
 
 <b>Who Is It For?</b>
 • Early believers in DarkWave vision
@@ -2799,7 +2799,7 @@ Early access to acquire DWC tokens before public launch at preferential terms.
 <b>The Pattern:</b>
 Those who position early in quality projects have historically seen significant returns.
 
-<b>DWC Opportunity:</b>
+<b>SIG Opportunity:</b>
 • Entire ecosystem being built
 • Game launch on horizon
 • DeFi, NFTs, staking active
@@ -2810,9 +2810,9 @@ Those who position early in quality projects have historically seen significant 
 <i>Not financial advice. DYOR.</i>
 
 👉 dwsc.io/presale`, category: 'presale' },
-  { content: `📢 <b>DWC Token Utility Breakdown</b>
+  { content: `📢 <b>SIG Token Utility Breakdown</b>
 
-<b>What Can You DO with DWC?</b>
+<b>What Can You DO with SIG?</b>
 
 🎮 <b>Gaming:</b>
 • Chronicles transactions
@@ -2822,7 +2822,7 @@ Those who position early in quality projects have historically seen significant 
 
 💰 <b>Staking:</b>
 • Earn passive rewards
-• Get liquid stDWC
+• Get liquid stSIG
 • Support network
 
 🖼️ <b>NFTs:</b>
@@ -2837,7 +2837,7 @@ Those who position early in quality projects have historically seen significant 
 
 🌉 <b>Bridge:</b>
 • Cross-chain transfers
-• wDWC conversion
+• wSIG conversion
 
 🗳️ <b>Governance:</b>
 • Vote on proposals
@@ -2897,7 +2897,7 @@ When pre-sale opens, you're first in line.
 <b>Smart Money Strategy:</b>
 Position before the crowd arrives.
 
-<b>DWC Pre-Sale Timing:</b>
+<b>SIG Pre-Sale Timing:</b>
 • Before Chronicles launch
 • Before mainstream attention
 • Before FOMO kicks in
@@ -3164,7 +3164,7 @@ Becoming #10,001 and missing everything.
 • Collection management
 
 <b>Trade:</b>
-• Buy/sell with DWC tokens
+• Buy/sell with SIG tokens
 • Auction support
 • Offer/counter-offer
 • Price history
@@ -3225,7 +3225,7 @@ This is true digital ownership meets epic gaming.
 
 <b>No artistic skills required.</b>
 
-Just creativity and DWC for minting.
+Just creativity and SIG for minting.
 
 👉 dwsc.io/ai-nft-generator`, category: 'nft' },
   { content: `💎 <b>NFT Rarity Analyzer</b>
@@ -3301,7 +3301,7 @@ Just you and the blockchain.
 4️⃣ Compound or withdraw anytime
 
 <b>Available Pools:</b>
-• DWC/Stablecoin pairs
+• SIG/Stablecoin pairs
 • Ecosystem token pairs
 • New pairs launching regularly
 
@@ -3369,13 +3369,13 @@ Preview transaction outcomes
 <b>How Bridging Works:</b>
 
 <b>DWSC → Ethereum:</b>
-1. Lock DWC on DWSC
-2. Receive wDWC on Ethereum
+1. Lock SIG on DWSC
+2. Receive wSIG on Ethereum
 3. Use in Ethereum DeFi
 
 <b>Ethereum → DWSC:</b>
-1. Lock wDWC on Ethereum
-2. Receive DWC on DWSC
+1. Lock wSIG on Ethereum
+2. Receive SIG on DWSC
 3. Use in DarkWave ecosystem
 
 <b>Same process for Solana.</b>
@@ -3415,7 +3415,7 @@ Our bridge connects us to:
 • Future chains (expansion planned)
 
 <b>Benefits:</b>
-• Use DWC anywhere
+• Use SIG anywhere
 • Access other ecosystems
 • Bring external value in
 • Export value out
@@ -3919,7 +3919,7 @@ ChronoChat integrates the Orbs economy directly into community participation.
 • Helping other members
 • Creating content
 
-<b>Orbs → DWC at token launch.</b>
+<b>Orbs → SIG at token launch.</b>
 
 This means your community engagement today = token holdings tomorrow.
 
@@ -3933,7 +3933,7 @@ Coming Q4 2026.
   { content: `🔮 <b>The Orbs Economy - Comprehensive Guide</b>
 
 <b>What are Orbs?</b>
-Orbs are DarkWave's internal economy before DWC token launch. Think of them as early-access credits that convert to real tokens.
+Orbs are DarkWave's internal economy before SIG token launch. Think of them as early-access credits that convert to real tokens.
 
 <b>How to Earn Orbs:</b>
 • 🔑 Daily login: 5 Orbs
@@ -3949,18 +3949,18 @@ Orbs are DarkWave's internal economy before DWC token launch. Think of them as e
 💎 Ultimate: 3,000 Orbs / $79.99
 
 <b>What Happens at Token Launch:</b>
-ALL Orbs convert to DWC tokens at an announced conversion rate.
+ALL Orbs convert to SIG tokens at an announced conversion rate.
 
 Early earners = early token holders.
 
 <b>Start building your wallet now.</b>
 
 👉 dwsc.io`, category: 'economy' },
-  { content: `💫 <b>Orbs → DWC: The Conversion</b>
+  { content: `💫 <b>Orbs → SIG: The Conversion</b>
 
 <b>Why Orbs Matter:</b>
 
-Every Orb you earn or purchase today will convert to DWC tokens at launch.
+Every Orb you earn or purchase today will convert to SIG tokens at launch.
 
 <b>This creates a simple equation:</b>
 Early participation = Token accumulation

@@ -121,11 +121,11 @@ export default function RarityAnalyzer() {
               <div className="grid grid-cols-2 gap-2 mb-4">
                 <div className="p-2 rounded-lg bg-white/5 text-center">
                   <p className="text-[10px] text-muted-foreground">Floor Price</p>
-                  <p className="font-bold">{nft.floorPrice} DWC</p>
+                  <p className="font-bold">{nft.floorPrice} SIG</p>
                 </div>
                 <div className="p-2 rounded-lg bg-white/5 text-center">
                   <p className="text-[10px] text-muted-foreground">Last Sale</p>
-                  <p className="font-bold">{nft.lastSale} DWC</p>
+                  <p className="font-bold">{nft.lastSale} SIG</p>
                 </div>
               </div>
 

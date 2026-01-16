@@ -45,8 +45,8 @@ const USER_PROFILE = {
 };
 
 const portfolioData = [
-  { name: "DWC", value: 55, color: "#8b5cf6" },
-  { name: "stDWC", value: 25, color: "#06b6d4" },
+  { name: "SIG", value: 55, color: "#8b5cf6" },
+  { name: "stSIG", value: 25, color: "#06b6d4" },
   { name: "LP Tokens", value: 12, color: "#22c55e" },
   { name: "NFTs", value: 8, color: "#f59e0b" },
 ];
@@ -57,18 +57,18 @@ const activityData = Array.from({ length: 30 }, (_, i) => ({
 }));
 
 const ACHIEVEMENTS = [
-  { id: 1, name: "First Trade", desc: "Complete your first swap", progress: 100, reward: "50 DWC" },
-  { id: 2, name: "Staking Pro", desc: "Stake 10,000 DWC", progress: 100, reward: "200 DWC" },
-  { id: 3, name: "NFT Master", desc: "Own 25 NFTs", progress: 48, reward: "500 DWC" },
-  { id: 4, name: "Whale Status", desc: "Hold $100k+ in portfolio", progress: 100, reward: "1000 DWC" },
-  { id: 5, name: "Community Leader", desc: "Refer 50 users", progress: 24, reward: "2500 DWC" },
+  { id: 1, name: "First Trade", desc: "Complete your first swap", progress: 100, reward: "50 SIG" },
+  { id: 2, name: "Staking Pro", desc: "Stake 10,000 SIG", progress: 100, reward: "200 SIG" },
+  { id: 3, name: "NFT Master", desc: "Own 25 NFTs", progress: 48, reward: "500 SIG" },
+  { id: 4, name: "Whale Status", desc: "Hold $100k+ in portfolio", progress: 100, reward: "1000 SIG" },
+  { id: 5, name: "Community Leader", desc: "Refer 50 users", progress: 24, reward: "2500 SIG" },
 ];
 
 const RECENT_ACTIVITY = [
-  { type: "trade", desc: "Swapped 10,000 DWC → 1,520 USDC", time: "2h ago", pnl: "+$152" },
-  { type: "stake", desc: "Staked 5,000 DWC", time: "1d ago", pnl: null },
+  { type: "trade", desc: "Swapped 10,000 SIG → 1,520 USDC", time: "2h ago", pnl: "+$152" },
+  { type: "stake", desc: "Staked 5,000 SIG", time: "1d ago", pnl: null },
   { type: "nft", desc: "Minted Genesis NFT #247", time: "2d ago", pnl: null },
-  { type: "claim", desc: "Claimed 450 DWC rewards", time: "3d ago", pnl: "+$67.50" },
+  { type: "claim", desc: "Claimed 450 SIG rewards", time: "3d ago", pnl: "+$67.50" },
 ];
 
 export default function UserProfiles() {

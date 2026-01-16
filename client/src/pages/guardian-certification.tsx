@@ -146,7 +146,7 @@ const WHY_GUARDIAN = [
 ];
 
 const CERTIFIED_PROJECTS = [
-  { name: "DarkWave Smart Chain", status: "Certified", score: 78, date: "Dec 2024" },
+  { name: "DarkWave Trust Layer", status: "Certified", score: 78, date: "Dec 2024" },
   { name: "ChronoChat Platform", status: "In Progress", score: null, date: "Q1 2026" },
   { name: "DarkWave Chronicles", status: "Community-Driven", score: null, date: "TBD" }
 ];
@@ -173,7 +173,7 @@ const TRUST_CENTER_DOCS = [
   {
     icon: Shield,
     title: "DWSC Self-Audit Report",
-    description: "Full transparency report for DarkWave Smart Chain (78/100)",
+    description: "Full transparency report for DarkWave Trust Layer (78/100)",
     type: "PDF",
     size: "3.2 MB",
     available: true,
@@ -1353,7 +1353,7 @@ export default function GuardianCertificationPage() {
                 </span>
               </h2>
               <p className="text-white/60 max-w-2xl mx-auto">
-                Our transparent path to becoming a trusted security certification authority, aligned with the DWC token launch in February 2026.
+                Our transparent path to becoming a trusted security certification authority, aligned with the SIG token launch in February 2026.
               </p>
             </motion.div>
 

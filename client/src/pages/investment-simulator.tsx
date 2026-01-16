@@ -16,7 +16,7 @@ import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.pn
 import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
 import deepSpace from "@assets/generated_images/deep_space_station.png";
 
-const TOKEN_PRICE = 0.001; // $0.001 per DWC (1B supply)
+const TOKEN_PRICE = 0.001; // $0.001 per SIG (1B supply)
 const TIER_BONUSES = [
   { min: 1000, bonus: 25, name: "Genesis" },
   { min: 500, bonus: 15, name: "Founder" },
@@ -231,12 +231,12 @@ export default function InvestmentSimulator() {
             <div className="p-6 rounded-xl bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-amber-500/10 border border-purple-500/20 mb-6" data-testid="display-total-tokens">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <p className="text-gray-400 text-sm">Total DWC Tokens</p>
+                  <p className="text-gray-400 text-sm">Total SIG Tokens</p>
                   <p className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent" data-testid="text-total-tokens">
                     {calculations.totalTokens.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                   </p>
                 </div>
-                <img src={darkwaveLogo} alt="DWC" className="w-16 h-16 object-contain opacity-80" />
+                <img src={darkwaveLogo} alt="SIG" className="w-16 h-16 object-contain opacity-80" />
               </div>
             </div>
 

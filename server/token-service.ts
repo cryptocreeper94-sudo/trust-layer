@@ -102,7 +102,7 @@ export class TokenService {
       console.log(`[Token Service] Deployed ${config.symbol} at ${tokenAddress}`);
       console.log(`[Token Service] Transaction: ${transactionHash}`);
       console.log(`[Token Service] Block: ${currentBlockNumber}`);
-      console.log(`[Token Service] Cost: ${cost} DWC`);
+      console.log(`[Token Service] Cost: ${cost} SIG`);
 
       return {
         success: true,

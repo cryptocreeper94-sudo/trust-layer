@@ -141,7 +141,7 @@ export function NotificationsProvider({ children }: { children: ReactNode }) {
     {
       id: "welcome",
       type: "info",
-      title: "Welcome to DarkWave Smart Chain",
+      title: "Welcome to DarkWave Trust Layer",
       message: "Explore the DarkWave ecosystem and start building decentralized apps.",
       timestamp: new Date(),
       read: false,

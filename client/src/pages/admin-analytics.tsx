@@ -81,12 +81,12 @@ export default function AdminAnalytics() {
   const statCards = [
     { label: "Total Users", value: analytics.totalUsers.toLocaleString(), change: "+12.5%", positive: true, icon: Users },
     { label: "Active Wallets", value: analytics.activeWallets.toLocaleString(), change: "+8.2%", positive: true, icon: Wallet },
-    { label: "24h Volume", value: `${analytics.totalVolume} DWC`, change: "+23.1%", positive: true, icon: Activity },
-    { label: "Total Staked", value: `${analytics.totalStaked} DWC`, change: "+5.7%", positive: true, icon: Coins },
+    { label: "24h Volume", value: `${analytics.totalVolume} SIG`, change: "+23.1%", positive: true, icon: Activity },
+    { label: "Total Staked", value: `${analytics.totalStaked} SIG`, change: "+5.7%", positive: true, icon: Coins },
     { label: "Legacy Founders", value: analytics.foundersCount.toLocaleString(), change: "+3.2%", positive: true, icon: Users },
     { label: "Daily Transactions", value: analytics.dailyTransactions.toLocaleString(), change: "-2.1%", positive: false, icon: BarChart3 },
     { label: "Total Value Locked", value: `$${analytics.tvl}`, change: "+15.8%", positive: true, icon: DollarSign },
-    { label: "Avg Stake Amount", value: `${analytics.averageStakeAmount} DWC`, change: "+4.3%", positive: true, icon: TrendingUp },
+    { label: "Avg Stake Amount", value: `${analytics.averageStakeAmount} SIG`, change: "+4.3%", positive: true, icon: TrendingUp },
   ];
 
   if (authLoading) {
@@ -190,7 +190,7 @@ export default function AdminAnalytics() {
               <GlassCard className="p-6" glow data-testid="card-volume-chart">
                 <h3 className="font-bold mb-4 flex items-center gap-2">
                   <Activity className="w-4 h-4 text-primary" />
-                  Trading Volume (DWC)
+                  Trading Volume (SIG)
                 </h3>
                 <div className="h-80">
                   <ResponsiveContainer width="100%" height="100%">

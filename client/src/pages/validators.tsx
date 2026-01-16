@@ -244,7 +244,7 @@ export default function Validators() {
                           <div className="text-[10px] text-muted-foreground">Blocks</div>
                         </div>
                         <div className="text-center">
-                          <div className="font-bold">{formatStake(validator.stake)} DWC</div>
+                          <div className="font-bold">{formatStake(validator.stake)} SIG</div>
                           <div className="text-[10px] text-muted-foreground">Staked</div>
                         </div>
                         <div className="text-center">
@@ -276,7 +276,7 @@ export default function Validators() {
                 </div>
                 <div>
                   <h4 className="font-semibold text-white mb-2">Becoming a Validator</h4>
-                  <p>Apply to become a trusted validator by submitting your wallet address. Approved validators must stake DWC as collateral.</p>
+                  <p>Apply to become a trusted validator by submitting your wallet address. Approved validators must stake SIG as collateral.</p>
                 </div>
               </div>
             </GlassCard>
@@ -319,7 +319,7 @@ export default function Validators() {
                         <span className="font-bold text-cyan-400">Phase 2: Community Validators</span>
                         <Badge className="bg-cyan-500/20 text-cyan-400 text-[10px]">Q3 2026</Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground">Open applications for community validators. Approved members run nodes and stake DWC. On-chain governance for validator approval.</p>
+                      <p className="text-sm text-muted-foreground">Open applications for community validators. Approved members run nodes and stake SIG. On-chain governance for validator approval.</p>
                       <div className="mt-2 text-xs text-white/60">Target: 15-25 Active Validators</div>
                     </div>
                   </div>
@@ -332,7 +332,7 @@ export default function Validators() {
                         <span className="font-bold text-purple-400">Phase 3: PoSA Hybrid</span>
                         <Badge className="bg-purple-500/20 text-purple-400 text-[10px]">2027</Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground">Transition to Proof of Staked Authority. Any DWC holder can stake to become a validator candidate. Community votes on validator set.</p>
+                      <p className="text-sm text-muted-foreground">Transition to Proof of Staked Authority. Any SIG holder can stake to become a validator candidate. Community votes on validator set.</p>
                       <div className="mt-2 text-xs text-white/60">Target: 50+ Decentralized Validators</div>
                     </div>
                   </div>
@@ -399,7 +399,7 @@ export default function Validators() {
                         <Shield className="w-5 h-5 text-pink-400 mt-0.5 shrink-0" />
                         <div>
                           <div className="font-semibold text-sm">Stake</div>
-                          <div className="text-xs text-muted-foreground">Minimum DWC stake (amount TBD at launch)</div>
+                          <div className="text-xs text-muted-foreground">Minimum SIG stake (amount TBD at launch)</div>
                         </div>
                       </div>
                     </div>
@@ -412,18 +412,18 @@ export default function Validators() {
                       <div className="space-y-2 text-xs">
                         <div className="flex justify-between items-center p-2 rounded bg-white/5">
                           <span className="text-amber-400 font-semibold">Founder Validators (1-10)</span>
-                          <span className="text-white font-bold">10,000 DWC</span>
+                          <span className="text-white font-bold">10,000 SIG</span>
                         </div>
                         <div className="flex justify-between items-center p-2 rounded bg-white/5">
                           <span className="text-cyan-400 font-semibold">Early Validators (11-50)</span>
-                          <span className="text-white font-bold">5,000 DWC</span>
+                          <span className="text-white font-bold">5,000 SIG</span>
                         </div>
                         <div className="flex justify-between items-center p-2 rounded bg-white/5">
                           <span className="text-purple-400 font-semibold">Standard Validators (51+)</span>
-                          <span className="text-white font-bold">1,000 DWC</span>
+                          <span className="text-white font-bold">1,000 SIG</span>
                         </div>
                       </div>
-                      <p className="text-[10px] text-muted-foreground mt-2">* Airdrop at DWC token launch + ongoing transaction fee share</p>
+                      <p className="text-[10px] text-muted-foreground mt-2">* Airdrop at SIG token launch + ongoing transaction fee share</p>
                     </div>
 
                     <div className="mt-4 p-4 rounded-lg bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30">
@@ -434,19 +434,19 @@ export default function Validators() {
                       <div className="space-y-1.5 text-xs">
                         <div className="flex justify-between items-center">
                           <span className="text-muted-foreground">30 days active</span>
-                          <span className="text-green-400 font-semibold">+500 DWC</span>
+                          <span className="text-green-400 font-semibold">+500 SIG</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-muted-foreground">90 days (3 months)</span>
-                          <span className="text-green-400 font-semibold">+1,500 DWC</span>
+                          <span className="text-green-400 font-semibold">+1,500 SIG</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-muted-foreground">180 days (6 months)</span>
-                          <span className="text-green-400 font-semibold">+3,000 DWC</span>
+                          <span className="text-green-400 font-semibold">+3,000 SIG</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-muted-foreground">365 days (1 year)</span>
-                          <span className="text-green-400 font-semibold">+5,000 DWC</span>
+                          <span className="text-green-400 font-semibold">+5,000 SIG</span>
                         </div>
                       </div>
                       <p className="text-[10px] text-muted-foreground mt-2">* Stay active, earn more. Milestones stack!</p>
@@ -461,7 +461,7 @@ export default function Validators() {
                         Refer a friend who becomes a validator and stays 30+ days:
                       </p>
                       <div className="text-center p-2 rounded bg-white/5">
-                        <span className="text-pink-400 font-bold text-lg">+1,000 DWC</span>
+                        <span className="text-pink-400 font-bold text-lg">+1,000 SIG</span>
                         <span className="text-xs text-muted-foreground ml-2">per referral</span>
                       </div>
                     </div>

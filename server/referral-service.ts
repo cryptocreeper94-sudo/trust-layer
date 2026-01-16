@@ -226,8 +226,8 @@ class ReferralService {
       const commissionPercent = tier?.commissionPercent || 10;
       const commissionAmount = Math.floor(conversionValueCents * (commissionPercent / 100));
       
-      const DWC_LAUNCH_DATE = new Date("2026-04-11T00:00:00Z");
-      const isPreLaunch = new Date() < DWC_LAUNCH_DATE;
+      const SIG_LAUNCH_DATE = new Date("2026-04-11T00:00:00Z");
+      const isPreLaunch = new Date() < SIG_LAUNCH_DATE;
       const distributionMode = isPreLaunch ? "airdrop" : "cash";
       
       const updatedReferral = await storage.updateReferralStatus(referral.id, "converted", {
@@ -250,7 +250,7 @@ class ReferralService {
         
         const profile = await storage.getAffiliateProfile(referral.referrerId);
         if (profile) {
-          const dwcExchangeRate = 0.001; // $0.001 per DWC (1B supply)
+          const dwcExchangeRate = 0.001; // $0.001 per SIG (1B supply)
           
           if (isPreLaunch) {
             const newAirdropBalance = (profile.airdropBalance || 0) + commissionAmount;

@@ -27,10 +27,10 @@ interface Asset {
 }
 
 const PORTFOLIO: Asset[] = [
-  { symbol: "DWC", name: "DarkWave Coin", currentValue: 8500, currentPercent: 42.5, targetPercent: 40, color: "#8b5cf6", change: 5.2 },
-  { symbol: "stDWC", name: "Staked DarkWave", currentValue: 5200, currentPercent: 26, targetPercent: 30, color: "#06b6d4", change: 0 },
+  { symbol: "SIG", name: "Signal", currentValue: 8500, currentPercent: 42.5, targetPercent: 40, color: "#8b5cf6", change: 5.2 },
+  { symbol: "stSIG", name: "Staked Signal", currentValue: 5200, currentPercent: 26, targetPercent: 30, color: "#06b6d4", change: 0 },
   { symbol: "USDC", name: "USD Coin", currentValue: 3000, currentPercent: 15, targetPercent: 15, color: "#22c55e", change: 0 },
-  { symbol: "LP-DWC/USDC", name: "LP Tokens", currentValue: 2300, currentPercent: 11.5, targetPercent: 10, color: "#f59e0b", change: -2.1 },
+  { symbol: "LP-SIG/USDC", name: "LP Tokens", currentValue: 2300, currentPercent: 11.5, targetPercent: 10, color: "#f59e0b", change: -2.1 },
   { symbol: "NFTs", name: "NFT Collection", currentValue: 1000, currentPercent: 5, targetPercent: 5, color: "#ec4899", change: 8.5 },
 ];
 

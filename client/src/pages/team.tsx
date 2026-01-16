@@ -91,7 +91,7 @@ function FinancialCalculator() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-xs text-muted-foreground">DWC Airdrop per Spot</label>
+              <label className="text-xs text-muted-foreground">SIG Airdrop per Spot</label>
               <Input 
                 type="number" 
                 value={model.dwtAirdrop}
@@ -128,7 +128,7 @@ function FinancialCalculator() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-xs text-muted-foreground">DWC Token Price ($)</label>
+              <label className="text-xs text-muted-foreground">SIG Token Price ($)</label>
               <Input 
                 type="number" 
                 step="0.0001"
@@ -204,7 +204,7 @@ function FinancialCalculator() {
         <div className="p-4">
           <h4 className="font-semibold text-amber-400 mb-2">Airdrop Liability</h4>
           <p className="text-sm text-muted-foreground">
-            Total DWC to distribute: <span className="text-white font-bold">{(model.founderSpots * model.dwtAirdrop).toLocaleString()} DWC</span>
+            Total SIG to distribute: <span className="text-white font-bold">{(model.founderSpots * model.dwtAirdrop).toLocaleString()} SIG</span>
           </p>
           <p className="text-sm text-muted-foreground">
             Value at current price: <span className="text-white font-bold">${airdropValue.toLocaleString()}</span>
@@ -387,7 +387,7 @@ function ExecutiveSummary() {
               <Briefcase className="w-6 h-6 text-primary" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-white">DarkWave Smart Chain</h3>
+              <h3 className="text-xl font-bold text-white">DarkWave Trust Layer</h3>
               <p className="text-sm text-muted-foreground">Executive Summary</p>
             </div>
           </div>
@@ -398,7 +398,7 @@ function ExecutiveSummary() {
                 <h4 className="text-sm font-semibold text-primary mb-2">The Opportunity</h4>
                 <p className="text-sm text-muted-foreground">
                   The blockchain industry continues to struggle with the trilemma of speed, security, and decentralization. 
-                  DarkWave Smart Chain addresses this with a Proof-of-Authority consensus that delivers 400ms block times and 
+                  DarkWave Trust Layer addresses this with a Proof-of-Authority consensus that delivers 400ms block times and 
                   200,000+ TPS while maintaining security through trusted validator committees.
                 </p>
               </div>
@@ -426,7 +426,7 @@ function ExecutiveSummary() {
                 <ul className="text-sm text-muted-foreground space-y-1">
                   <li>• April 11, 2026: Public mainnet launch</li>
                   <li>• 10,000 Legacy Founder spots ($24 each)</li>
-                  <li>• 35,000 DWC airdrop per founder</li>
+                  <li>• 35,000 SIG airdrop per founder</li>
                   <li>• Community-driven growth</li>
                 </ul>
               </div>
@@ -449,7 +449,7 @@ function ExecutiveSummary() {
         <Card className="bg-white/5 border-white/10 p-4 text-center">
           <Shield className="w-8 h-8 text-green-400 mx-auto mb-2" />
           <p className="text-2xl font-bold text-white">1B</p>
-          <p className="text-xs text-muted-foreground">DWC Supply</p>
+          <p className="text-xs text-muted-foreground">SIG Supply</p>
         </Card>
         <Card className="bg-white/5 border-white/10 p-4 text-center">
           <Globe className="w-8 h-8 text-cyan-400 mx-auto mb-2" />
@@ -530,7 +530,7 @@ export default function Team() {
                 <span>Authenticated Access</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-display font-bold mb-2">Admin Dashboard</h1>
-              <p className="text-muted-foreground">DarkWave Smart Chain Command Center</p>
+              <p className="text-muted-foreground">DarkWave Trust Layer Command Center</p>
             </div>
 
             <Tabs defaultValue="overview" className="space-y-6">

@@ -248,13 +248,13 @@ export default function Portfolio() {
                     <div className="p-2 rounded-lg bg-white/5">
                       <div className="text-[10px] text-muted-foreground">Total Staked</div>
                       <div className="font-bold text-sm text-muted-foreground">
-                        {parseFloat(portfolio.staking.totalStaked) > 0 ? `${parseFloat(portfolio.staking.totalStaked).toLocaleString()} DWC` : '--'}
+                        {parseFloat(portfolio.staking.totalStaked) > 0 ? `${parseFloat(portfolio.staking.totalStaked).toLocaleString()} SIG` : '--'}
                       </div>
                     </div>
                     <div className="p-2 rounded-lg bg-white/5">
                       <div className="text-[10px] text-muted-foreground">Pending Rewards</div>
                       <div className={`font-bold text-sm ${parseFloat(portfolio.staking.pendingRewards) > 0 ? 'text-green-400' : 'text-muted-foreground'}`}>
-                        {parseFloat(portfolio.staking.pendingRewards) > 0 ? `${parseFloat(portfolio.staking.pendingRewards).toFixed(4)} DWC` : '--'}
+                        {parseFloat(portfolio.staking.pendingRewards) > 0 ? `${parseFloat(portfolio.staking.pendingRewards).toFixed(4)} SIG` : '--'}
                       </div>
                     </div>
                   </div>
@@ -268,8 +268,8 @@ export default function Portfolio() {
                         <Badge variant="outline" className="text-[10px]">{position.apy}% APY</Badge>
                       </div>
                       <div className="flex items-center justify-between text-xs">
-                        <span className="text-muted-foreground">Staked: {formatAmount(position.amount)} DWC</span>
-                        <span className="text-green-400">+{formatAmount(position.rewards)} DWC</span>
+                        <span className="text-muted-foreground">Staked: {formatAmount(position.amount)} SIG</span>
+                        <span className="text-green-400">+{formatAmount(position.rewards)} SIG</span>
                       </div>
                     </GlassCard>
                   ))

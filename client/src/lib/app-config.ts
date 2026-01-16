@@ -27,7 +27,7 @@ export const APP_CONFIG: Record<AppDomain, {
   primaryGradient: string;
 }> = {
   dwsc: {
-    name: "DarkWave Smart Chain",
+    name: "DarkWave Trust Layer",
     shortName: "DWSC",
     themeColor: "#8b5cf6",
     description: "The next-generation Layer 1 blockchain",

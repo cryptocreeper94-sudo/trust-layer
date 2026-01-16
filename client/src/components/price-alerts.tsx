@@ -18,7 +18,7 @@ interface PriceAlert {
 }
 
 const TOKENS = [
-  { symbol: "DWC", name: "DarkWave Coin", price: 0.10 },
+  { symbol: "SIG", name: "Signal", price: 0.10 },
   { symbol: "wETH", name: "Wrapped Ethereum", price: 3500 },
   { symbol: "wSOL", name: "Wrapped Solana", price: 180 },
   { symbol: "USDC", name: "USD Coin", price: 1.00 },
@@ -29,10 +29,10 @@ export function PriceAlerts() {
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [alerts, setAlerts] = useState<PriceAlert[]>([
-    { id: "1", token: "DWC", condition: "above", price: 0.15, enabled: true, createdAt: new Date() },
-    { id: "2", token: "DWC", condition: "below", price: 0.08, enabled: true, createdAt: new Date() },
+    { id: "1", token: "SIG", condition: "above", price: 0.15, enabled: true, createdAt: new Date() },
+    { id: "2", token: "SIG", condition: "below", price: 0.08, enabled: true, createdAt: new Date() },
   ]);
-  const [newAlert, setNewAlert] = useState({ token: "DWC", condition: "above" as "above" | "below", price: "" });
+  const [newAlert, setNewAlert] = useState({ token: "SIG", condition: "above" as "above" | "below", price: "" });
 
   const addAlert = () => {
     if (!newAlert.price || isNaN(parseFloat(newAlert.price))) {
@@ -48,7 +48,7 @@ export function PriceAlerts() {
       createdAt: new Date(),
     };
     setAlerts([...alerts, alert]);
-    setNewAlert({ token: "DWC", condition: "above", price: "" });
+    setNewAlert({ token: "SIG", condition: "above", price: "" });
     toast({ title: "Alert Created", description: `You'll be notified when ${newAlert.token} goes ${newAlert.condition} $${newAlert.price}` });
   };
 

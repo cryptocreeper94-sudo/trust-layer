@@ -167,7 +167,7 @@ export default function AirdropClaim() {
                     <div className="grid grid-cols-2 gap-4 mb-6">
                       <div className="bg-white/5 rounded-lg p-4 text-center">
                         <div className="text-2xl font-bold text-primary">{parseFloat(eligibility.allocation || "0").toLocaleString()}</div>
-                        <div className="text-xs text-muted-foreground">DWC Allocation</div>
+                        <div className="text-xs text-muted-foreground">SIG Allocation</div>
                       </div>
                       <div className="bg-white/5 rounded-lg p-4 text-center">
                         <div className="text-2xl font-bold text-secondary">{parseFloat(eligibility.claimableAmount || "0").toLocaleString()}</div>
@@ -206,7 +206,7 @@ export default function AirdropClaim() {
                         </Link>
                         <Link href="/token">
                           <Button className="gap-2">
-                            <ExternalLink className="w-4 h-4" /> Learn About DWC
+                            <ExternalLink className="w-4 h-4" /> Learn About Signal
                           </Button>
                         </Link>
                       </div>

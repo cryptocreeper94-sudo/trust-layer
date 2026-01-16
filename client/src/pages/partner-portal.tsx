@@ -23,7 +23,7 @@ import blockchainBg from "@assets/generated_images/futuristic_blockchain_network
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 
 const TECH_STACK = [
-  { name: "Blockchain Layer", tech: "DarkWave Smart Chain (PoA)", status: "Live", icon: Database },
+  { name: "Blockchain Layer", tech: "DarkWave Trust Layer (PoA)", status: "Live", icon: Database },
   { name: "Frontend", tech: "React 18 + TypeScript + Vite", status: "Production", icon: Code },
   { name: "Backend", tech: "Node.js + Express + PostgreSQL", status: "Production", icon: Server },
   { name: "AI Stack", tech: "GPT-4o + Guardian Verified Execution", status: "BETA v0.1 Live", icon: Brain },
@@ -98,7 +98,7 @@ const VISION_SLIDES = [
   {
     title: "Production-Ready Infrastructure",
     subtitle: "200K+ TPS blockchain powering the ecosystem",
-    description: "DarkWave Smart Chain is live and operational. We need world-class partners for graphics, AI, and narrative systems.",
+    description: "DarkWave Trust Layer is live and operational. We need world-class partners for graphics, AI, and narrative systems.",
     gradient: "from-amber-500 to-red-600",
     icon: Zap,
   },
@@ -1346,7 +1346,7 @@ function PartnerContent() {
                 <span className="text-emerald-400 font-semibold">Production Status: Live</span>
               </div>
               <p className="text-white/70 text-sm">
-                Our DarkWave Smart Chain is fully operational with Proof-of-Authority consensus. 
+                Our DarkWave Trust Layer is fully operational with Proof-of-Authority consensus. 
                 This isn't a testnet or simulation - it's the same infrastructure that will power Chronicles.
               </p>
             </motion.div>

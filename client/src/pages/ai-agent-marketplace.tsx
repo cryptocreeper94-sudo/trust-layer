@@ -135,8 +135,8 @@ export default function AIAgentMarketplace() {
   const displayAgents = agents?.agents?.length > 0 ? agents.agents : featuredAgents;
 
   const formatPrice = (wei: string) => {
-    const dwc = parseFloat(wei) / 1e18;
-    return dwc < 1 ? `${(dwc * 1000).toFixed(0)} mDWC` : `${dwc.toFixed(2)} DWC`;
+    const sig = parseFloat(wei) / 1e18;
+    return sig < 1 ? `${(sig * 1000).toFixed(0)} mSIG` : `${sig.toFixed(2)} SIG`;
   };
 
   return (

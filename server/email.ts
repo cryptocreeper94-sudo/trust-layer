@@ -142,17 +142,17 @@ export async function sendHallmarkEmail(to: string, hallmarkId: string, productN
 export async function sendStakingRewardEmail(to: string, rewardAmount: string, totalStaked: string) {
   return sendEmail({
     to,
-    subject: `Staking Rewards Claimed: ${rewardAmount} DWC`,
+    subject: `Staking Rewards Claimed: ${rewardAmount} SIG`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #ffffff; padding: 30px; border-radius: 12px;">
         <h1 style="color: #00FFFF; margin-bottom: 20px;">Staking Rewards Claimed!</h1>
         <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 25px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
           <p style="color: #888; margin: 0 0 10px 0; font-size: 14px;">Rewards Claimed</p>
-          <p style="color: #00FFFF; font-size: 32px; font-weight: bold; margin: 0;">${rewardAmount} DWC</p>
+          <p style="color: #00FFFF; font-size: 32px; font-weight: bold; margin: 0;">${rewardAmount} SIG</p>
         </div>
         <div style="background: #1a1a2e; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
           <p style="color: #888; margin: 0; font-size: 12px;">Total Staked</p>
-          <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 16px;">${totalStaked} DWC</p>
+          <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 16px;">${totalStaked} SIG</p>
         </div>
         <p style="color: #888; font-size: 12px;">Your rewards are now in your wallet. Keep staking to earn more!</p>
         <p style="color: #888; margin-top: 20px;">— The DarkWave Team</p>
@@ -167,13 +167,13 @@ export async function sendLargeTransferAlert(to: string, amount: string, directi
   
   return sendEmail({
     to,
-    subject: `Large Transfer Alert: ${amount} DWC ${action}`,
+    subject: `Large Transfer Alert: ${amount} SIG ${action}`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #ffffff; padding: 30px; border-radius: 12px;">
         <h1 style="color: ${color}; margin-bottom: 20px;">Large Transfer ${action}</h1>
         <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 25px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
           <p style="color: #888; margin: 0 0 10px 0; font-size: 14px;">Amount ${action}</p>
-          <p style="color: ${color}; font-size: 32px; font-weight: bold; margin: 0;">${amount} DWC</p>
+          <p style="color: ${color}; font-size: 32px; font-weight: bold; margin: 0;">${amount} SIG</p>
         </div>
         <div style="background: #1a1a2e; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
           <p style="color: #888; margin: 0; font-size: 12px;">Transaction Hash</p>
@@ -199,7 +199,7 @@ export async function sendFounderWelcomeEmail(to: string, founderNumber: number,
         <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 25px; border-radius: 10px; margin-bottom: 20px;">
           <h3 style="color: #FFD700; margin: 0 0 15px 0;">Your Exclusive Perks</h3>
           <ul style="color: #ffffff; padding-left: 20px; margin: 0;">
-            <li style="margin-bottom: 8px;">35,000 DWC Airdrop on Launch (Apr 11, 2026)</li>
+            <li style="margin-bottom: 8px;">35,000 SIG Airdrop on Launch (Apr 11, 2026)</li>
             <li style="margin-bottom: 8px;">Unlimited AI Analysis (Crypto & Stocks)</li>
             <li style="margin-bottom: 8px;">StrikeAgent Sniper Bot Access</li>
             <li style="margin-bottom: 8px;">Founding Member Badge (Forever)</li>
@@ -222,13 +222,13 @@ export async function sendFounderWelcomeEmail(to: string, founderNumber: number,
 export async function sendReferralBonusEmail(to: string, referralCount: number, bonusAmount: string) {
   return sendEmail({
     to,
-    subject: `Referral Bonus: ${bonusAmount} DWC Earned!`,
+    subject: `Referral Bonus: ${bonusAmount} SIG Earned!`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #ffffff; padding: 30px; border-radius: 12px;">
         <h1 style="color: #00ff88; margin-bottom: 20px; text-align: center;">Referral Bonus Earned!</h1>
         <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 25px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
           <p style="color: #888; margin: 0 0 10px 0; font-size: 14px;">You Earned</p>
-          <p style="color: #00ff88; font-size: 32px; font-weight: bold; margin: 0;">${bonusAmount} DWC</p>
+          <p style="color: #00ff88; font-size: 32px; font-weight: bold; margin: 0;">${bonusAmount} SIG</p>
         </div>
         <div style="background: #1a1a2e; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
           <p style="color: #888; margin: 0; font-size: 12px;">Total Referrals</p>
@@ -253,7 +253,7 @@ export async function sendPresaleConfirmationEmail(to: string, amountPaid: strin
   
   return sendEmail({
     to,
-    subject: `DWC Token Purchase Confirmed - ${tierName} Tier`,
+    subject: `SIG Token Purchase Confirmed - ${tierName} Tier`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #ffffff; padding: 30px; border-radius: 12px;">
         <h1 style="color: #00FFFF; margin-bottom: 20px; text-align: center;">Purchase Confirmed!</h1>
@@ -261,7 +261,7 @@ export async function sendPresaleConfirmationEmail(to: string, amountPaid: strin
         
         <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 25px; border-radius: 10px; text-align: center; margin: 20px 0;">
           <p style="color: #888; margin: 0 0 10px 0; font-size: 14px;">Your Token Allocation</p>
-          <p style="color: #00FFFF; font-size: 36px; font-weight: bold; margin: 0;">${totalTokens.toLocaleString()} DWC</p>
+          <p style="color: #00FFFF; font-size: 36px; font-weight: bold; margin: 0;">${totalTokens.toLocaleString()} SIG</p>
           <p style="color: #00ff88; margin-top: 10px; font-size: 14px;">Includes +${bonusTokens.toLocaleString()} bonus tokens</p>
         </div>
         

@@ -397,7 +397,7 @@ export default function GameDeveloper() {
                   </li>
                   <li className="flex items-center gap-2">
                     <Zap className="w-4 h-4 text-purple-400" />
-                    <span>Integration with DWC payments</span>
+                    <span>Integration with Signal payments</span>
                   </li>
                 </ul>
               </GlassCard>

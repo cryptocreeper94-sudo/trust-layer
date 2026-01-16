@@ -19,7 +19,7 @@ import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.p
 const ECONOMY_PILLARS = [
   {
     icon: Coins,
-    title: "DarkWave Coin (DWC)",
+    title: "Signal (SIG)",
     description: "Real cryptocurrency on DarkWave Trust Layer. Not play money - actual blockchain tokens with real-world value.",
     color: "from-amber-500 to-yellow-600",
     image: deepSpace
@@ -50,14 +50,14 @@ const ECONOMY_PILLARS = [
 const HOW_IT_WORKS = [
   {
     step: 1,
-    title: "Earn DWC",
+    title: "Earn SIG",
     description: "Complete missions, trade goods, provide services, win competitions. Your skill generates real value.",
     icon: TrendingUp
   },
   {
     step: 2,
     title: "Spend or Save",
-    description: "Buy equipment, property, services from other players. Or hold DWC as an investment in the ecosystem.",
+    description: "Buy equipment, property, services from other players. Or hold SIG as an investment in the ecosystem.",
     icon: Wallet
   },
   {
@@ -129,7 +129,7 @@ export default function ChronoEconomy() {
               Real Currency. <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">Real Value.</span>
             </h1>
             <p className="text-xl text-white/60 max-w-2xl mx-auto">
-              DWC isn't play money. It's real cryptocurrency on DarkWave Trust Layer.
+              SIG isn't play money. It's real cryptocurrency on DarkWave Trust Layer.
               Every transaction stamped, tracked, and auditable.
             </p>
           </motion.div>
@@ -223,7 +223,7 @@ export default function ChronoEconomy() {
                 <Layers className="w-3 h-3 mr-1" /> Token Utility
               </Badge>
               <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 text-white">
-                What Can You Do With DWC?
+                What Can You Do With SIG?
               </h2>
               <div className="space-y-4">
                 {TOKEN_UTILITY.map((item, i) => (
@@ -248,12 +248,12 @@ export default function ChronoEconomy() {
               <HoloCard image={quantumRealm} glow="purple" className="aspect-square">
                 <div className="p-8 h-full flex flex-col justify-center items-center text-center">
                   <Coins className="w-16 h-16 text-amber-400 mb-6" />
-                  <h3 className="text-2xl font-bold text-white mb-2">DarkWave Coin</h3>
+                  <h3 className="text-2xl font-bold text-white mb-2">Signal</h3>
                   <p className="text-white/60 mb-6">The native currency of the ChronoVerse</p>
                   <Link href="/presale">
                     <Button className="rounded-full gap-2 bg-gradient-to-r from-amber-500 to-orange-600" data-testid="get-dwc-tokens">
                       <Coins className="w-4 h-4" />
-                      Get DWC Tokens
+                      Get SIG Tokens
                     </Button>
                   </Link>
                 </div>
@@ -306,8 +306,8 @@ export default function ChronoEconomy() {
 
       <CTABanner
         title="Ready to Join the Economy?"
-        subtitle="Get DWC tokens now and be ready when the ChronoVerse launches."
-        primaryAction={{ label: "Get DWC Tokens", href: "/presale" }}
+        subtitle="Get SIG tokens now and be ready when the ChronoVerse launches."
+        primaryAction={{ label: "Get SIG Tokens", href: "/presale" }}
         secondaryAction={{ label: "Learn More", href: "/chronicles" }}
         backgroundImage={cyberpunkCity}
       />

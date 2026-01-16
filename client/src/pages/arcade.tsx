@@ -99,7 +99,7 @@ function CoinFlipGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }:
         
         toast({
           title: data.won ? "You Won!" : "You Lost",
-          description: data.won ? `+${formatDWC(data.winnings)} DWC` : `Better luck next time!`,
+          description: data.won ? `+${formatDWC(data.winnings)} SIG` : `Better luck next time!`,
           variant: data.won ? "default" : "destructive",
         });
       }, 2000);
@@ -121,7 +121,7 @@ function CoinFlipGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }:
         </div>
       ) : isConnected && (
         <div className="p-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-center">
-          <p className="text-sm text-purple-400">Balance: {formatDWC(userBalance)} DWC</p>
+          <p className="text-sm text-purple-400">Balance: {formatDWC(userBalance)} SIG</p>
         </div>
       )}
       
@@ -145,7 +145,7 @@ function CoinFlipGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }:
             className={`text-center p-4 rounded-lg ${won ? "bg-green-500/20 text-green-400 border border-green-500/30" : "bg-red-500/20 text-red-400 border border-red-500/30"}`}
           >
             <p className="text-2xl font-bold">
-              {won ? `You Won ${winAmount} ${isDemoMode ? "Play Coins" : "DWC"}!` : "You Lost!"}
+              {won ? `You Won ${winAmount} ${isDemoMode ? "Play Coins" : "SIG"}!` : "You Lost!"}
             </p>
             <p className="text-sm">Result: {result?.toUpperCase()}</p>
           </motion.div>
@@ -195,7 +195,7 @@ function CoinFlipGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }:
         {isFlipping ? (
           <><RefreshCw className="w-5 h-5 mr-2 animate-spin" /> Flipping...</>
         ) : (
-          <><Coins className="w-5 h-5 mr-2" /> Flip for {betAmount} {isDemoMode ? "Play Coins" : "DWC"}</>
+          <><Coins className="w-5 h-5 mr-2" /> Flip for {betAmount} {isDemoMode ? "Play Coins" : "SIG"}</>
         )}
       </Button>
       
@@ -286,7 +286,7 @@ function SlotsGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }: {
         
         toast({
           title: middleRow[0] === "👑" ? "JACKPOT!" : "Winner!",
-          description: `+${win} ${isDemoMode ? "Play Coins" : "DWC"} (${multiplier}x)`,
+          description: `+${win} ${isDemoMode ? "Play Coins" : "SIG"} (${multiplier}x)`,
         });
       } else if (twoSame) {
         const win = (parseFloat(betAmount) * 1.5).toFixed(2);
@@ -299,7 +299,7 @@ function SlotsGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }: {
         
         toast({
           title: "Small Win!",
-          description: `+${win} ${isDemoMode ? "Play Coins" : "DWC"} (1.5x)`,
+          description: `+${win} ${isDemoMode ? "Play Coins" : "SIG"} (1.5x)`,
         });
       } else {
         setWon(false);
@@ -320,7 +320,7 @@ function SlotsGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }: {
         </div>
       ) : isConnected && (
         <div className="p-2 rounded-lg bg-purple-500/20 border border-purple-500/30 text-center">
-          <p className="text-sm text-purple-400">Balance: {formatDWC(userBalance)} DWC</p>
+          <p className="text-sm text-purple-400">Balance: {formatDWC(userBalance)} SIG</p>
         </div>
       )}
 
@@ -336,7 +336,7 @@ function SlotsGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }: {
           animate={{ scale: [1, 1.02, 1] }}
           transition={{ duration: 1, repeat: Infinity }}
         >
-          {jackpot.toLocaleString()} DWC
+          {jackpot.toLocaleString()} SIG
         </motion.p>
       </div>
 
@@ -374,7 +374,7 @@ function SlotsGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }: {
             className={`text-center p-4 rounded-lg ${won ? "bg-green-500/20 text-green-400 border border-green-500/30" : "bg-red-500/20 text-red-400 border border-red-500/30"}`}
           >
             <p className="text-2xl font-bold">
-              {won ? `You Won ${winAmount} ${isDemoMode ? "Play Coins" : "DWC"}!` : "No Match - Try Again!"}
+              {won ? `You Won ${winAmount} ${isDemoMode ? "Play Coins" : "SIG"}!` : "No Match - Try Again!"}
             </p>
           </motion.div>
         )}
@@ -404,7 +404,7 @@ function SlotsGame({ isConnected, isDemoMode, userBalance, onBalanceUpdate }: {
         {isSpinning ? (
           <><RefreshCw className="w-5 h-5 mr-2 animate-spin" /> Spinning...</>
         ) : (
-          <><Sparkles className="w-5 h-5 mr-2" /> SPIN ({betAmount} {isDemoMode ? "Play Coins" : "DWC"})</>
+          <><Sparkles className="w-5 h-5 mr-2" /> SPIN ({betAmount} {isDemoMode ? "Play Coins" : "SIG"})</>
         )}
       </Button>
 
@@ -663,7 +663,7 @@ export default function Arcade() {
               DarkWave <span className="text-pink-400">Games</span>
             </h1>
             <p className="text-sm text-muted-foreground">
-              Provably fair games • Win real DWC • Instant payouts
+              Provably fair games • Win real SIG • Instant payouts
             </p>
           </motion.div>
 
@@ -684,7 +684,7 @@ export default function Arcade() {
               <div className="relative z-10 p-3 text-center">
                 <Coins className="w-5 h-5 mx-auto mb-1 text-yellow-400" />
                 <p className="text-xl font-bold">{arcadeStats.wageredToday}</p>
-                <p className="text-[10px] text-muted-foreground">DWC Wagered Today</p>
+                <p className="text-[10px] text-muted-foreground">SIG Wagered Today</p>
               </div>
             </div>
             <div className="relative overflow-hidden rounded-xl">

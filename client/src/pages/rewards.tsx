@@ -213,7 +213,7 @@ export default function Rewards() {
                       <p className="text-2xl font-bold" data-testid="text-signup-position">#{signupPosition}</p>
                       {isEarlyAdopter && (
                         <p className="text-sm text-emerald-400 flex items-center gap-1 mt-1">
-                          <Check className="w-3 h-3" /> Eligible for 2,000 DWC airdrop
+                          <Check className="w-3 h-3" /> Eligible for 2,000 SIG airdrop
                         </p>
                       )}
                     </>
@@ -301,13 +301,13 @@ export default function Rewards() {
                 <div className="p-4 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-600/20 border border-amber-500/30">
                   <div className="flex items-center gap-2 mb-2">
                     <ArrowUpRight className="w-4 h-4 text-amber-400" />
-                    <span className="font-medium">Est. DWC at TGE</span>
+                    <span className="font-medium">Est. SIG at TGE</span>
                   </div>
                   <p className="text-2xl font-bold text-amber-400" data-testid="text-estimated-dwc">
                     {rewardProfile.conversion.estimatedDwc.toLocaleString()}
                   </p>
                   <p className="text-sm text-white/60">
-                    100 Shells = 1 DWC
+                    100 Shells = 1 SIG
                   </p>
                 </div>
 
@@ -373,7 +373,7 @@ export default function Rewards() {
                 </div>
                 <p className="text-white/70">
                   <span className="text-cyan-400 font-bold">April 11, 2026</span> — Your {rewardProfile.shellBalance.toLocaleString()} Shells will convert to{' '}
-                  <span className="text-amber-400 font-bold">{rewardProfile.conversion.estimatedDwc.toLocaleString()} DWC</span>
+                  <span className="text-amber-400 font-bold">{rewardProfile.conversion.estimatedDwc.toLocaleString()} SIG</span>
                   {!rewardProfile.profile.hasWallet && (
                     <span className="text-rose-400 ml-2">(Connect wallet to receive tokens)</span>
                   )}
@@ -396,7 +396,7 @@ export default function Rewards() {
               How to Earn Shells
             </h2>
             <p className="text-white/60 mb-6">
-              Shells are our pre-launch reward currency. Every Shell you earn converts to real DWC tokens at launch.
+              Shells are our pre-launch reward currency. Every Shell you earn converts to real Signal tokens at launch.
             </p>
             
             <div className="grid md:grid-cols-4 gap-4 mb-6">
@@ -428,8 +428,8 @@ export default function Rewards() {
                 <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-3">
                   <span className="text-lg font-bold text-emerald-400">4</span>
                 </div>
-                <h4 className="font-semibold mb-1">Receive DWC</h4>
-                <p className="text-sm text-white/60">At TGE (April 11, 2026), your Shells convert to real DWC tokens</p>
+                <h4 className="font-semibold mb-1">Receive SIG</h4>
+                <p className="text-sm text-white/60">At TGE (April 11, 2026), your Shells convert to real SIG tokens</p>
               </div>
             </div>
             
@@ -440,7 +440,7 @@ export default function Rewards() {
                   <p className="font-medium text-emerald-400 mb-1">Your Progress is Guaranteed</p>
                   <p className="text-sm text-white/70">
                     Every Shell you earn is permanently recorded on our system. Your balance will be snapshot before TGE and 
-                    automatically converted to DWC tokens at a rate of <span className="text-cyan-400 font-bold">100 Shells = 1 DWC</span>. 
+                    automatically converted to SIG tokens at a rate of <span className="text-cyan-400 font-bold">100 Shells = 1 SIG</span>. 
                     No action needed — just keep earning and connect your wallet before the deadline.
                   </p>
                 </div>
@@ -460,9 +460,9 @@ export default function Rewards() {
                 <Users className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-2">First 500 Sign-ups</h3>
-              <p className="text-3xl font-bold text-emerald-400 mb-2">2,000 DWC</p>
+              <p className="text-3xl font-bold text-emerald-400 mb-2">2,000 SIG</p>
               <p className="text-white/60 text-sm mb-4">
-                The first 500 people to create an account receive a bonus airdrop of 2,000 DWC tokens at launch.
+                The first 500 people to create an account receive a bonus airdrop of 2,000 SIG tokens at launch.
               </p>
               <div className="flex items-center gap-2 text-sm text-white/50">
                 <Info className="w-4 h-4" />
@@ -531,7 +531,7 @@ export default function Rewards() {
                   <tr className="border-b border-white/10">
                     <th className="text-left py-3 px-4 text-white/60">Tier</th>
                     <th className="text-left py-3 px-4 text-white/60">Donation Amount</th>
-                    <th className="text-left py-3 px-4 text-white/60">DWC Bonus</th>
+                    <th className="text-left py-3 px-4 text-white/60">SIG Bonus</th>
                     <th className="text-left py-3 px-4 text-white/60">Example</th>
                   </tr>
                 </thead>
@@ -587,7 +587,7 @@ export default function Rewards() {
                 </AccordionTrigger>
                 <AccordionContent className="text-white/70 pb-4">
                   Every Shell you earn is recorded in our secure database with a timestamp and transaction ID. 
-                  Before TGE, we take a snapshot of all balances. Your DWC tokens are then distributed directly to your 
+                  Before TGE, we take a snapshot of all balances. Your SIG tokens are then distributed directly to your 
                   connected wallet. This process is verifiable and transparent — you can see your balance grow in real-time 
                   on this page.
                 </AccordionContent>
@@ -602,7 +602,7 @@ export default function Rewards() {
                 </AccordionTrigger>
                 <AccordionContent className="text-white/70 pb-4">
                   No problem! You can earn Shells without a wallet — your balance is tracked by your account. 
-                  However, to receive your DWC tokens at TGE, you'll need to connect a DarkWave wallet before the 
+                  However, to receive your SIG tokens at TGE, you'll need to connect a DarkWave wallet before the 
                   snapshot date. We'll send reminders as the deadline approaches. Your earned Shells are safe and 
                   waiting for you.
                 </AccordionContent>
@@ -618,7 +618,7 @@ export default function Rewards() {
                 <AccordionContent className="text-white/70 pb-4">
                   DarkWave is a real blockchain project with active development, a working testnet, and a clear roadmap. 
                   The Shell reward system is live and operational right now — you can see your balance update immediately 
-                  when you complete quests. At TGE (April 11, 2026), Shells convert to DWC tokens at a fixed rate of 
+                  when you complete quests. At TGE (April 11, 2026), Shells convert to SIG tokens at a fixed rate of 
                   100:1. Early adopters who participate now get the best tier multipliers and the largest airdrops.
                 </AccordionContent>
               </AccordionItem>
@@ -631,11 +631,11 @@ export default function Rewards() {
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="text-white/70 pb-4">
-                  TGE is when DWC tokens officially launch on April 11, 2026. At this point:
+                  TGE is when SIG tokens officially launch on April 11, 2026. At this point:
                   <ul className="list-disc list-inside mt-2 space-y-1">
                     <li>Your Shell balance is snapshot and frozen</li>
-                    <li>Shells are converted to DWC at 100:1 ratio</li>
-                    <li>DWC tokens are sent directly to your connected wallet</li>
+                    <li>Shells are converted to SIG at 100:1 ratio</li>
+                    <li>SIG tokens are sent directly to your connected wallet</li>
                     <li>Tokens become tradeable on exchanges</li>
                   </ul>
                   All bonuses from early adopter programs are distributed at the same time.
@@ -685,7 +685,7 @@ export default function Rewards() {
           <GlassCard className="p-8 max-w-2xl mx-auto">
             <h2 className="text-2xl font-bold mb-4">Ready to Claim Your Rewards?</h2>
             <p className="text-white/60 mb-6">
-              All bonuses will be distributed as DWC tokens at the Token Generation Event (April 11, 2026).
+              All bonuses will be distributed as SIG tokens at the Token Generation Event (April 11, 2026).
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {!user && (

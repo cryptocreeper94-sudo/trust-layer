@@ -8,7 +8,7 @@ import { webhookService } from "./webhook-service";
 // BFT Consensus Constants
 const BFT_QUORUM_THRESHOLD = 0.67; // 2/3+ stake required for finality
 const EPOCH_LENGTH = 100; // Blocks per epoch
-const MIN_STAKE_FOR_VALIDATOR = BigInt("1000000000000000000000"); // 1000 DWC minimum stake
+const MIN_STAKE_FOR_VALIDATOR = BigInt("1000000000000000000000"); // 1000 SIG minimum stake
 const SLASHING_PERCENTAGE = 5; // 5% stake slashed for misbehavior
 const DOWNTIME_TOLERANCE_BLOCKS = 50; // Blocks before downtime slashing
 
@@ -157,7 +157,7 @@ export class DarkWaveBlockchain {
     this.config = {
       chainId: 8453,
       chainName: "DarkWave Trust Layer",
-      symbol: "DWC",
+      symbol: "SIG",
       decimals: 18,
       blockTimeMs: 400,
       totalSupply: TOTAL_SUPPLY,
@@ -299,7 +299,7 @@ export class DarkWaveBlockchain {
 
     console.log(`[DarkWave Mainnet] Genesis block created`);
     console.log(`[DarkWave Mainnet] Treasury: ${this.treasuryAddress}`);
-    console.log(`[DarkWave Mainnet] Total Supply: 1,000,000,000 DWC`);
+    console.log(`[DarkWave Mainnet] Total Supply: 1,000,000,000 SIG`);
     console.log(`[DarkWave Mainnet] Network: MAINNET`);
   }
 
@@ -340,7 +340,7 @@ export class DarkWaveBlockchain {
           address: this.treasuryAddress,
           name: "Founders Validator",
           status: "active",
-          stake: "10000000000000000000000000", // 10M DWC
+          stake: "10000000000000000000000000", // 10M SIG
           stakeWeight: 100,
           blocksProduced: 0,
           missedBlocks: 0,
@@ -360,7 +360,7 @@ export class DarkWaveBlockchain {
       this.currentValidatorIndex = 0;
       
       console.log(`[DarkWave Mainnet] Loaded ${this.activeValidators.length} active validator(s)`);
-      console.log(`[DarkWave Mainnet] Total stake: ${totalStake / ONE_TOKEN} DWC`);
+      console.log(`[DarkWave Mainnet] Total stake: ${totalStake / ONE_TOKEN} SIG`);
       console.log(`[DarkWave Mainnet] BFT Quorum: ${(BFT_QUORUM_THRESHOLD * 100).toFixed(0)}% (${Math.ceil(this.activeValidators.length * BFT_QUORUM_THRESHOLD)} validators)`);
     } catch (error) {
       console.error("[DarkWave] Failed to load validators:", error);
@@ -602,7 +602,7 @@ export class DarkWaveBlockchain {
         .set({ stake: newStake.toString(), updatedAt: new Date() })
         .where(eq(chainValidators.id, validatorId));
         
-      console.log(`[DarkWave Mainnet] Slashed validator ${validator.name}: ${slashAmount / ONE_TOKEN} DWC for ${reason}`);
+      console.log(`[DarkWave Mainnet] Slashed validator ${validator.name}: ${slashAmount / ONE_TOKEN} SIG for ${reason}`);
     } catch (e) {
       console.error("[DarkWave] Failed to persist slashing:", e);
     }
@@ -1212,7 +1212,7 @@ export class DarkWaveBlockchain {
       // Decentralization metrics
       consensusType: "BFT-PoA",
       quorumThreshold: `${(BFT_QUORUM_THRESHOLD * 100).toFixed(0)}%`,
-      totalStake: `${this.consensusState.totalStake / ONE_TOKEN} DWC`,
+      totalStake: `${this.consensusState.totalStake / ONE_TOKEN} SIG`,
       nakamotoCoefficient,
       currentEpoch: this.consensusState.currentEpoch,
     };
@@ -1276,7 +1276,7 @@ export class DarkWaveBlockchain {
     if (stakeAmount < MIN_STAKE_FOR_VALIDATOR) {
       return { 
         success: false, 
-        error: `Minimum stake is ${MIN_STAKE_FOR_VALIDATOR / ONE_TOKEN} DWC` 
+        error: `Minimum stake is ${MIN_STAKE_FOR_VALIDATOR / ONE_TOKEN} SIG` 
       };
     }
     
@@ -1327,7 +1327,7 @@ export class DarkWaveBlockchain {
         this.activeValidators.push(newValidator);
         await this.recalculateStakeWeights();
         
-        console.log(`[DarkWave Mainnet] New validator registered: ${name} with ${stakeAmount / ONE_TOKEN} DWC stake`);
+        console.log(`[DarkWave Mainnet] New validator registered: ${name} with ${stakeAmount / ONE_TOKEN} SIG stake`);
         
         return { success: true, validator: newValidator };
       }
@@ -1418,9 +1418,9 @@ export class DarkWaveBlockchain {
     const displayBalance = balance / ONE_TOKEN;
     return {
       address: this.treasuryAddress,
-      balance: `${displayBalance} DWC`,
+      balance: `${displayBalance} SIG`,
       balance_raw: balance.toString(),
-      total_supply: "1,000,000,000 DWC",
+      total_supply: "1,000,000,000 SIG",
     };
   }
 
@@ -1495,7 +1495,7 @@ export class DarkWaveBlockchain {
     const balance = treasuryAccount?.balance || BigInt(0);
     return {
       address: this.treasuryAddress,
-      balance: `${balance / ONE_TOKEN} DWC`,
+      balance: `${balance / ONE_TOKEN} SIG`,
       balance_raw: balance.toString(),
     };
   }

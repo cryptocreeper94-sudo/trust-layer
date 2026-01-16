@@ -43,9 +43,9 @@ export const FEATURE_FLAGS: Record<string, FeatureFlag> = {
   },
   staking: {
     id: 'staking',
-    name: 'DWC Staking',
+    name: 'SIG Staking',
     status: 'coming_soon',
-    description: 'Stake DWC for rewards',
+    description: 'Stake SIG for rewards',
     expectedLaunch: 'August 2026',
     launchQuarter: 'Q3 2026',
     enabled: false,
@@ -122,14 +122,14 @@ export const FEATURE_FLAGS: Record<string, FeatureFlag> = {
     id: 'presale',
     name: 'Token Presale',
     status: 'live',
-    description: 'DWC token presale',
+    description: 'SIG token presale',
     enabled: true,
   },
   faucet: {
     id: 'faucet',
     name: 'Testnet Faucet',
     status: 'testnet',
-    description: 'Get test DWC tokens',
+    description: 'Get test SIG tokens',
     enabled: true,
   },
   arcade: {

@@ -225,7 +225,7 @@ class DarkWaveBridge {
         .set({ status: "confirmed", confirmedAt: new Date() })
         .where(eq(bridgeBurns.id, burnId));
 
-      // Release DWC on DarkWave Trust Layer
+      // Release SIG on DarkWave Trust Layer
       const tx = blockchain.submitTransaction(
         BRIDGE_CUSTODY_ADDRESS,
         burn.targetAddress,
@@ -242,7 +242,7 @@ class DarkWaveBridge {
         completedAt: new Date(),
       });
 
-      console.log(`[DarkWave Bridge] Burn confirmed, release completed: ${burnId} | DWC tx: ${tx.hash}`);
+      console.log(`[DarkWave Bridge] Burn confirmed, release completed: ${burnId} | SIG tx: ${tx.hash}`);
     } catch (error) {
       console.error(`[DarkWave Bridge] Failed to process burn:`, error);
       await db.update(bridgeBurns)
@@ -350,11 +350,11 @@ class DarkWaveBridge {
     return {
       ethereum: {
         deployed: externalChains.isContractDeployed("ethereum"),
-        address: externalChains.getWDWCContractAddress("ethereum")
+        address: externalChains.getWSIGContractAddress("ethereum")
       },
       solana: {
         deployed: externalChains.isContractDeployed("solana"),
-        address: externalChains.getWDWCContractAddress("solana")
+        address: externalChains.getWSIGContractAddress("solana")
       }
     };
   }

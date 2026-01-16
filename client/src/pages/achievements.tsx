@@ -31,34 +31,34 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
   {
     id: "first_stake",
     name: "Staking Pioneer",
-    description: "Stake DWC for the first time",
+    description: "Stake SIG for the first time",
     icon: <Coins className="w-6 h-6" />,
     category: "Staking",
     rarity: "common",
-    requirement: "Stake any amount of DWC",
-    reward: "100 DWC",
+    requirement: "Stake any amount of SIG",
+    reward: "100 SIG",
     totalUnlocked: 8472,
   },
   {
     id: "diamond_hands",
     name: "Diamond Hands",
-    description: "Hold DWC for 30 days without selling",
+    description: "Hold SIG for 30 days without selling",
     icon: <Star className="w-6 h-6" />,
     category: "Holding",
     rarity: "epic",
-    requirement: "Hold DWC for 30 consecutive days",
-    reward: "1,000 DWC + NFT Badge",
+    requirement: "Hold SIG for 30 consecutive days",
+    reward: "1,000 SIG + NFT Badge",
     totalUnlocked: 1247,
   },
   {
     id: "whale_status",
     name: "Whale Status",
-    description: "Hold over 100,000 DWC",
+    description: "Hold over 100,000 SIG",
     icon: <Target className="w-6 h-6" />,
     category: "Holding",
     rarity: "legendary",
-    requirement: "Accumulate 100,000 DWC",
-    reward: "5,000 DWC + Exclusive NFT",
+    requirement: "Accumulate 100,000 SIG",
+    reward: "5,000 SIG + Exclusive NFT",
     totalUnlocked: 89,
   },
   {
@@ -69,7 +69,7 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
     category: "Trading",
     rarity: "common",
     requirement: "Execute 1 swap",
-    reward: "50 DWC",
+    reward: "50 SIG",
     totalUnlocked: 12847,
   },
   {
@@ -80,7 +80,7 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
     category: "Trading",
     rarity: "rare",
     requirement: "Execute 100 swaps",
-    reward: "500 DWC",
+    reward: "500 SIG",
     totalUnlocked: 892,
   },
   {
@@ -91,18 +91,18 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
     category: "Social",
     rarity: "rare",
     requirement: "Receive 100 total likes",
-    reward: "250 DWC",
+    reward: "250 SIG",
     totalUnlocked: 456,
   },
   {
     id: "arcade_master",
     name: "Arcade Master",
-    description: "Win 10,000 DWC in the arcade",
+    description: "Win 10,000 SIG in the arcade",
     icon: <Flame className="w-6 h-6" />,
     category: "Gaming",
     rarity: "epic",
-    requirement: "Accumulate 10,000 DWC in winnings",
-    reward: "1,000 DWC + VIP Access",
+    requirement: "Accumulate 10,000 SIG in winnings",
+    reward: "1,000 SIG + VIP Access",
     totalUnlocked: 234,
   },
   {
@@ -113,7 +113,7 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
     category: "Referrals",
     rarity: "legendary",
     requirement: "Successfully refer 50 users",
-    reward: "10,000 DWC + Genesis NFT",
+    reward: "10,000 SIG + Genesis NFT",
     totalUnlocked: 12,
   },
 ];
@@ -233,7 +233,7 @@ export default function Achievements() {
             <GlassCard hover={false} className="p-3 text-center">
               <Coins className="w-5 h-5 mx-auto mb-1 text-green-400" />
               <p className="text-xl font-bold">{GLOBAL_STATS.totalRewardsGiven}</p>
-              <p className="text-[10px] text-muted-foreground">DWC Rewarded</p>
+              <p className="text-[10px] text-muted-foreground">SIG Rewarded</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
               <Sparkles className="w-5 h-5 mx-auto mb-1 text-purple-400" />

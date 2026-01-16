@@ -14,16 +14,16 @@ import {
 } from "@shared/schema";
 import { getUncachableStripeClient } from "./stripeClient";
 
-// DWC Conversion rate: 1 DWC = 100 Shells (launches April 11, 2026)
+// SIG Conversion rate: 1 SIG = 100 Shells (launches April 11, 2026)
 export const DWC_CONVERSION_RATE = 100;
 export const DWC_LAUNCH_DATE = "2026-04-11";
 
-// Earning caps to protect DWC supply (1B total = 100B Shells max)
+// Earning caps to protect SIG supply (1B total = 100B Shells max)
 // These limits ensure sustainable token distribution
 export const SHELL_EARNING_CAPS = {
-  dailyMax: 200,         // 2 DWC per day max from gameplay
-  weeklyMax: 1000,       // 10 DWC per week max from gameplay
-  starterBonus: 500,     // 5 DWC worth to get new players started
+  dailyMax: 200,         // 2 SIG per day max from gameplay
+  weeklyMax: 1000,       // 10 SIG per week max from gameplay
+  starterBonus: 500,     // 5 SIG worth to get new players started
 } as const;
 
 export type TransactionType = 
@@ -34,10 +34,10 @@ export type TransactionType =
   | "purchase"       // Bought with fiat (Stripe)
   | "refund"         // Refunded
   | "bonus"          // Bonus/promotional
-  | "conversion";    // Converted to DWC at launch
+  | "conversion";    // Converted to SIG at launch
 
 // Shell bundles available for purchase - Updated pricing for April 11, 2026 launch
-// All Shell purchases will convert to DWC at launch rate: 1 DWC = 100 Shells
+// All Shell purchases will convert to SIG at launch rate: 1 SIG = 100 Shells
 export const SHELL_BUNDLES = {
   starter: { amount: 1000, price: 900, name: "Starter Bundle", dwcEquivalent: 10 },      // $9
   pro: { amount: 5000, price: 4000, name: "Pro Bundle", dwcEquivalent: 50, bonus: 25 },       // $40 (25% bonus = 5000 base + 1250 bonus)
@@ -319,7 +319,7 @@ class ShellsService {
     return { 
       success: true, 
       amount: bonusAmount, 
-      message: `Welcome bonus: ${bonusAmount} Shells (${bonusAmount / DWC_CONVERSION_RATE} DWC equivalent)!` 
+      message: `Welcome bonus: ${bonusAmount} Shells (${bonusAmount / DWC_CONVERSION_RATE} SIG equivalent)!` 
     };
   }
 
@@ -505,7 +505,7 @@ class ShellsService {
 
   async createConversionSnapshot(
     userId: string,
-    conversionRate: string = "1"  // 1 Shell = 1 DWC by default
+    conversionRate: string = "1"  // 1 Shell = 1 SIG by default
   ): Promise<ShellConversionSnapshot | null> {
     const wallet = await this.getWallet(userId);
     if (!wallet || wallet.balance === 0) return null;
@@ -584,7 +584,7 @@ class ShellsService {
           currency: "usd",
           product_data: {
             name: bundle.name,
-            description: `${bundle.amount.toLocaleString()} Shells (converts to ~${bundle.dwcEquivalent} DWC at launch)`,
+            description: `${bundle.amount.toLocaleString()} Shells (converts to ~${bundle.dwcEquivalent} SIG at launch)`,
             metadata: {
               bundleKey,
               shellAmount: bundle.amount.toString(),
@@ -704,7 +704,7 @@ class ShellsService {
       key,
       ...bundle,
       priceFormatted: `$${(bundle.price / 100).toFixed(2)}`,
-      dwcConversionInfo: `Converts to ~${bundle.dwcEquivalent} DWC at launch (April 11, 2026)`,
+      dwcConversionInfo: `Converts to ~${bundle.dwcEquivalent} SIG at launch (April 11, 2026)`,
     }));
   }
 }

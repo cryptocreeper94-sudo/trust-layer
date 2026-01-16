@@ -206,7 +206,7 @@ function ProfitChart({ data }: { data: { date: string; profit: number }[] }) {
                 labelStyle={{ color: '#9ca3af' }}
                 formatter={(value: number) => [
                   <span style={{ color: value >= 0 ? '#22c55e' : '#ef4444' }}>
-                    {value >= 0 ? '+' : ''}{value.toLocaleString()} DWC
+                    {value >= 0 ? '+' : ''}{value.toLocaleString()} SIG
                   </span>,
                   'Profit'
                 ]}
@@ -282,10 +282,10 @@ function GameHistoryRow({
       
       <div className="text-right">
         <p className={`font-bold ${isWin ? 'text-green-400' : 'text-red-400'}`}>
-          {profit >= 0 ? '+' : ''}{parseFloat(game.profit).toLocaleString()} DWC
+          {profit >= 0 ? '+' : ''}{parseFloat(game.profit).toLocaleString()} SIG
         </p>
         <p className="text-gray-500 text-xs">
-          Bet: {parseFloat(game.betAmount).toLocaleString()} DWC
+          Bet: {parseFloat(game.betAmount).toLocaleString()} SIG
           {game.multiplier && ` @ ${game.multiplier}x`}
         </p>
       </div>
@@ -460,14 +460,14 @@ export default function PlayerProfilePage() {
           <StatCard
             icon={Coins}
             label="Total Wagered"
-            value={`${parseFloat(playerStats.totalWagered).toLocaleString()} DWC`}
+            value={`${parseFloat(playerStats.totalWagered).toLocaleString()} SIG`}
             gradient="bg-gradient-to-br from-yellow-900/30 to-yellow-800/20"
             delay={0.15}
           />
           <StatCard
             icon={isProfit ? TrendingUp : TrendingDown}
             label="Net Profit"
-            value={`${isProfit ? '+' : ''}${netProfit.toLocaleString()} DWC`}
+            value={`${isProfit ? '+' : ''}${netProfit.toLocaleString()} SIG`}
             subValue={isProfit ? "You're winning!" : "Keep playing!"}
             gradient={isProfit 
               ? "bg-gradient-to-br from-green-900/30 to-green-800/20" 
@@ -552,13 +552,13 @@ export default function PlayerProfilePage() {
                   <div className="flex justify-between items-center py-2 border-b border-white/5">
                     <span className="text-gray-400">Total Won</span>
                     <span className="text-green-400 font-medium">
-                      +{parseFloat(playerStats.totalWon).toLocaleString()} DWC
+                      +{parseFloat(playerStats.totalWon).toLocaleString()} SIG
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-white/5">
                     <span className="text-gray-400">Total Lost</span>
                     <span className="text-red-400 font-medium">
-                      -{parseFloat(playerStats.totalLost).toLocaleString()} DWC
+                      -{parseFloat(playerStats.totalLost).toLocaleString()} SIG
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-white/5">
@@ -566,7 +566,7 @@ export default function PlayerProfilePage() {
                     <span className="text-white font-medium">
                       {playerStats.totalGamesPlayed > 0
                         ? (parseFloat(playerStats.totalWagered) / playerStats.totalGamesPlayed).toFixed(2)
-                        : "0"} DWC
+                        : "0"} SIG
                     </span>
                   </div>
                   <div className="flex justify-between items-center py-2">

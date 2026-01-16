@@ -51,7 +51,7 @@ const PROPOSALS: Proposal[] = [
   {
     id: "DWP-002",
     title: "Launch Community Grant Program",
-    description: "Allocate 1M DWC from treasury to fund developer grants and community projects building on DarkWave.",
+    description: "Allocate 1M SIG from treasury to fund developer grants and community projects building on DarkWave.",
     author: "defi_king",
     status: "active",
     votesFor: 1800000,
@@ -65,7 +65,7 @@ const PROPOSALS: Proposal[] = [
   {
     id: "DWP-003",
     title: "Add Polygon Bridge Support",
-    description: "Integrate Polygon network into the cross-chain bridge to enable DWC transfers to and from Polygon.",
+    description: "Integrate Polygon network into the cross-chain bridge to enable SIG transfers to and from Polygon.",
     author: "satoshi.eth",
     status: "passed",
     votesFor: 4200000,
@@ -266,7 +266,7 @@ export default function DAOGovernance() {
                   <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
                     <div className="flex items-center gap-2 text-yellow-400 text-sm">
                       <AlertCircle className="w-4 h-4" />
-                      Requires 10,000 DWC to submit a proposal
+                      Requires 10,000 SIG to submit a proposal
                     </div>
                   </div>
                   <Button className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white" data-testid="button-submit-proposal">

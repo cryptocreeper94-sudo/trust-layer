@@ -11,7 +11,7 @@ interface SocialShareProps {
   hashtags?: string[];
 }
 
-export function SocialShare({ title, text, url = window.location.href, hashtags = ["DarkWave", "DWC", "Blockchain"] }: SocialShareProps) {
+export function SocialShare({ title, text, url = window.location.href, hashtags = ["DarkWave", "SIG", "Blockchain"] }: SocialShareProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
@@ -144,7 +144,7 @@ export function ShareTransaction({ hash, type, amount, token }: { hash: string; 
       title={`DarkWave ${type} Transaction`}
       text={`I just ${type.toLowerCase()}ed ${amount} ${token} on DarkWave Trust Layer! Check it out:`}
       url={`${window.location.origin}/explorer?tx=${hash}`}
-      hashtags={["DarkWave", "DWC", "Crypto", type]}
+      hashtags={["DarkWave", "SIG", "Crypto", type]}
     />
   );
 }

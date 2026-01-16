@@ -19,21 +19,21 @@ interface Achievement {
 }
 
 const ACHIEVEMENTS: Achievement[] = [
-  { id: "first_swap", title: "First Trade", description: "Complete your first token swap", icon: TrendingUp, category: "trading", requirement: 1, progress: 1, reward: "10 DWC", unlocked: true, rarity: "common" },
-  { id: "swap_10", title: "Trader", description: "Complete 10 token swaps", icon: TrendingUp, category: "trading", requirement: 10, progress: 7, reward: "50 DWC", unlocked: false, rarity: "common" },
-  { id: "swap_100", title: "Active Trader", description: "Complete 100 token swaps", icon: TrendingUp, category: "trading", requirement: 100, progress: 7, reward: "500 DWC", unlocked: false, rarity: "rare" },
-  { id: "swap_1000", title: "Trading Legend", description: "Complete 1,000 token swaps", icon: Zap, category: "trading", requirement: 1000, progress: 7, reward: "5,000 DWC", unlocked: false, rarity: "legendary" },
-  { id: "first_stake", title: "Staker", description: "Stake your first DWC", icon: Coins, category: "staking", requirement: 1, progress: 1, reward: "25 DWC", unlocked: true, rarity: "common" },
-  { id: "stake_1000", title: "Committed", description: "Stake 1,000+ DWC", icon: Coins, category: "staking", requirement: 1000, progress: 500, reward: "100 DWC", unlocked: false, rarity: "common" },
-  { id: "stake_10000", title: "Whale Staker", description: "Stake 10,000+ DWC", icon: Coins, category: "staking", requirement: 10000, progress: 500, reward: "1,000 DWC", unlocked: false, rarity: "epic" },
-  { id: "stake_30days", title: "Diamond Hands", description: "Stake for 30+ days", icon: Shield, category: "staking", requirement: 30, progress: 12, reward: "500 DWC", unlocked: false, rarity: "rare" },
-  { id: "first_nft", title: "Collector", description: "Own your first NFT", icon: Image, category: "nft", requirement: 1, progress: 0, reward: "50 DWC", unlocked: false, rarity: "common" },
-  { id: "nft_10", title: "Art Enthusiast", description: "Own 10 NFTs", icon: Image, category: "nft", requirement: 10, progress: 0, reward: "200 DWC", unlocked: false, rarity: "rare" },
-  { id: "mint_nft", title: "Creator", description: "Mint your own NFT", icon: Star, category: "nft", requirement: 1, progress: 0, reward: "100 DWC", unlocked: false, rarity: "rare" },
-  { id: "referral_1", title: "Networker", description: "Refer 1 friend", icon: Users, category: "social", requirement: 1, progress: 0, reward: "100 DWC", unlocked: false, rarity: "common" },
-  { id: "referral_10", title: "Influencer", description: "Refer 10 friends", icon: Users, category: "social", requirement: 10, progress: 0, reward: "1,000 DWC", unlocked: false, rarity: "epic" },
+  { id: "first_swap", title: "First Trade", description: "Complete your first token swap", icon: TrendingUp, category: "trading", requirement: 1, progress: 1, reward: "10 SIG", unlocked: true, rarity: "common" },
+  { id: "swap_10", title: "Trader", description: "Complete 10 token swaps", icon: TrendingUp, category: "trading", requirement: 10, progress: 7, reward: "50 SIG", unlocked: false, rarity: "common" },
+  { id: "swap_100", title: "Active Trader", description: "Complete 100 token swaps", icon: TrendingUp, category: "trading", requirement: 100, progress: 7, reward: "500 SIG", unlocked: false, rarity: "rare" },
+  { id: "swap_1000", title: "Trading Legend", description: "Complete 1,000 token swaps", icon: Zap, category: "trading", requirement: 1000, progress: 7, reward: "5,000 SIG", unlocked: false, rarity: "legendary" },
+  { id: "first_stake", title: "Staker", description: "Stake your first SIG", icon: Coins, category: "staking", requirement: 1, progress: 1, reward: "25 SIG", unlocked: true, rarity: "common" },
+  { id: "stake_1000", title: "Committed", description: "Stake 1,000+ SIG", icon: Coins, category: "staking", requirement: 1000, progress: 500, reward: "100 SIG", unlocked: false, rarity: "common" },
+  { id: "stake_10000", title: "Whale Staker", description: "Stake 10,000+ SIG", icon: Coins, category: "staking", requirement: 10000, progress: 500, reward: "1,000 SIG", unlocked: false, rarity: "epic" },
+  { id: "stake_30days", title: "Diamond Hands", description: "Stake for 30+ days", icon: Shield, category: "staking", requirement: 30, progress: 12, reward: "500 SIG", unlocked: false, rarity: "rare" },
+  { id: "first_nft", title: "Collector", description: "Own your first NFT", icon: Image, category: "nft", requirement: 1, progress: 0, reward: "50 SIG", unlocked: false, rarity: "common" },
+  { id: "nft_10", title: "Art Enthusiast", description: "Own 10 NFTs", icon: Image, category: "nft", requirement: 10, progress: 0, reward: "200 SIG", unlocked: false, rarity: "rare" },
+  { id: "mint_nft", title: "Creator", description: "Mint your own NFT", icon: Star, category: "nft", requirement: 1, progress: 0, reward: "100 SIG", unlocked: false, rarity: "rare" },
+  { id: "referral_1", title: "Networker", description: "Refer 1 friend", icon: Users, category: "social", requirement: 1, progress: 0, reward: "100 SIG", unlocked: false, rarity: "common" },
+  { id: "referral_10", title: "Influencer", description: "Refer 10 friends", icon: Users, category: "social", requirement: 10, progress: 0, reward: "1,000 SIG", unlocked: false, rarity: "epic" },
   { id: "early_adopter", title: "Early Adopter", description: "Join before mainnet launch", icon: Rocket, category: "explorer", requirement: 1, progress: 1, reward: "Legacy NFT", unlocked: true, rarity: "legendary" },
-  { id: "explorer", title: "Explorer", description: "Visit all major pages", icon: Gift, category: "explorer", requirement: 10, progress: 6, reward: "25 DWC", unlocked: false, rarity: "common" },
+  { id: "explorer", title: "Explorer", description: "Visit all major pages", icon: Gift, category: "explorer", requirement: 10, progress: 6, reward: "25 SIG", unlocked: false, rarity: "common" },
 ];
 
 const RARITY_COLORS = {

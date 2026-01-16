@@ -86,15 +86,15 @@ const statusInfo: Record<ReadinessStatus, { label: string; color: string; bgColo
 const faqItems = [
   {
     q: "What is the DarkWave Bridge?",
-    a: "The DarkWave Bridge enables seamless transfer of DWC tokens between DarkWave Trust Layer and other major blockchains. Lock DWC on our chain to receive wrapped tokens (wDWC) on external networks."
+    a: "The DarkWave Bridge enables seamless transfer of SIG tokens between DarkWave Trust Layer and other major blockchains. Lock SIG on our chain to receive wrapped tokens (wSIG) on external networks."
   },
   {
     q: "How does the lock-and-mint mechanism work?",
-    a: "When you bridge DWC out, your tokens are securely locked in a custody contract on DarkWave. Wrapped tokens (wDWC) are then minted 1:1 on the destination chain. To bridge back, burn the wrapped tokens to release your original DWC."
+    a: "When you bridge SIG out, your tokens are securely locked in a custody contract on DarkWave. Wrapped tokens (wSIG) are then minted 1:1 on the destination chain. To bridge back, burn the wrapped tokens to release your original SIG."
   },
   {
     q: "What are the bridge fees?",
-    a: "Bridge fees are 0.1% of the transferred amount, with a minimum fee of 1 DWC. Network gas fees on the destination chain are paid separately in that chain's native token."
+    a: "Bridge fees are 0.1% of the transferred amount, with a minimum fee of 1 SIG. Network gas fees on the destination chain are paid separately in that chain's native token."
   },
   {
     q: "How long do bridge transfers take?",
@@ -271,7 +271,7 @@ export default function Bridge() {
                           Cross-Chain Bridge
                         </h1>
                         <p className="text-sm text-muted-foreground mt-1">
-                          Transfer DWC across 21+ blockchain networks
+                          Transfer SIG across 21+ blockchain networks
                         </p>
                       </div>
                     </div>
@@ -441,9 +441,9 @@ export default function Bridge() {
                 
                 <div className="space-y-4">
                   {[
-                    { step: "1", title: "Lock DWC", desc: "Securely lock tokens in DarkWave custody", icon: <Lock className="w-4 h-4" /> },
+                    { step: "1", title: "Lock SIG", desc: "Securely lock tokens in DarkWave custody", icon: <Lock className="w-4 h-4" /> },
                     { step: "2", title: "Verify Transaction", desc: "Bridge operators confirm the lock on-chain", icon: <Shield className="w-4 h-4" /> },
-                    { step: "3", title: "Receive wDWC", desc: "Wrapped tokens minted 1:1 on destination", icon: <Sparkles className="w-4 h-4" /> },
+                    { step: "3", title: "Receive wSIG", desc: "Wrapped tokens minted 1:1 on destination", icon: <Sparkles className="w-4 h-4" /> },
                   ].map((item, i) => (
                     <motion.div 
                       key={i}
@@ -487,9 +487,9 @@ export default function Bridge() {
                 
                 <div className="space-y-4">
                   {[
-                    { step: "1", title: "Burn wDWC", desc: "Destroy wrapped tokens on external chain", icon: <Flame className="w-4 h-4" /> },
+                    { step: "1", title: "Burn wSIG", desc: "Destroy wrapped tokens on external chain", icon: <Flame className="w-4 h-4" /> },
                     { step: "2", title: "Verify Burn", desc: "Bridge confirms burn transaction", icon: <Shield className="w-4 h-4" /> },
-                    { step: "3", title: "Release DWC", desc: "Original tokens unlocked on DarkWave", icon: <Zap className="w-4 h-4" /> },
+                    { step: "3", title: "Release SIG", desc: "Original tokens unlocked on DarkWave", icon: <Zap className="w-4 h-4" /> },
                   ].map((item, i) => (
                     <motion.div 
                       key={i}

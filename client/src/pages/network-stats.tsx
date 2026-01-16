@@ -203,7 +203,7 @@ export default function NetworkStats() {
                     { label: "Current Block", value: currentBlock.toLocaleString() },
                     { label: "Consensus", value: "Proof of Authority" },
                     { label: "Finality", value: "Instant (1 block)" },
-                    { label: "Native Token", value: "DWC" },
+                    { label: "Native Token", value: "SIG" },
                     { label: "Decimals", value: "18" },
                   ].map(({ label, value }) => (
                     <div key={label} className="flex justify-between text-sm">

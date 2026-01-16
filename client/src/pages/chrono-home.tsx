@@ -72,7 +72,7 @@ const SOCIAL_STATS = [
   { label: "Eras Available", value: "70+", icon: <Globe className="w-4 h-4 text-purple-400" /> },
   { label: "Founding Members", value: "Join First 1,000", icon: <Users className="w-4 h-4 text-cyan-400" /> },
   { label: "Target Launch", value: "2026", icon: <Rocket className="w-4 h-4 text-pink-400" /> },
-  { label: "Blockchain", value: "DWC", icon: <Coins className="w-4 h-4 text-amber-400" /> },
+  { label: "Blockchain", value: "SIG", icon: <Coins className="w-4 h-4 text-amber-400" /> },
 ];
 
 const EXPERIENCES = [
@@ -369,7 +369,7 @@ export default function ChronoHome() {
                 </Badge>
                 <h3 className="text-2xl font-bold text-white mb-3">Real Currency. Real Value.</h3>
                 <p className="text-white/70 mb-6">
-                  Trade with DarkWave Coin. Every transaction blockchain-verified. 
+                  Trade with Signal. Every transaction blockchain-verified. 
                   Buy, sell, own - with cryptocurrency that has real value.
                 </p>
                 <Link href="/economy">
@@ -556,7 +556,7 @@ export default function ChronoHome() {
 
       <CTABanner
         title="Ready to Live Your Legacy?"
-        subtitle="Join the founding members building the ChronoVerse. Early supporters get exclusive access, bonus DWC tokens, and their name in history."
+        subtitle="Join the founding members building the ChronoVerse. Early supporters get exclusive access, bonus SIG tokens, and their name in history."
         primaryAction={{ label: "Support Development", href: "/crowdfund" }}
         secondaryAction={{ label: "Learn More", href: "/chronicles" }}
         backgroundImage={fantasyWorld}

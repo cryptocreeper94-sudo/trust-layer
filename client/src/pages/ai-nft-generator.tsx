@@ -328,16 +328,16 @@ export default function AINFTGenerator() {
                   <div className="p-3 rounded-lg bg-white/5 mb-4">
                     <div className="flex justify-between text-sm mb-1">
                       <span className="text-muted-foreground">Minting Fee</span>
-                      <span>50 DWC</span>
+                      <span>50 SIG</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Gas Fee</span>
-                      <span>~0.1 DWC</span>
+                      <span>~0.1 SIG</span>
                     </div>
                   </div>
                   <Button className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white">
                     <Zap className="w-4 h-4 mr-2" />
-                    Confirm Mint (50.1 DWC)
+                    Confirm Mint (50.1 SIG)
                   </Button>
                   <Button variant="ghost" className="w-full mt-2" onClick={() => setStep(2)}>
                     Back to Preview

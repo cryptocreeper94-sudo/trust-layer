@@ -62,7 +62,7 @@ export function DwcBagDashboard({ compact = false }: { compact?: boolean }) {
     queryKey: ["/api/user/dwc-bag"],
     queryFn: async () => {
       const res = await fetch("/api/user/dwc-bag");
-      if (!res.ok) throw new Error("Failed to fetch DWC bag");
+      if (!res.ok) throw new Error("Failed to fetch SIG bag");
       return res.json();
     },
     retry: false,
@@ -102,12 +102,12 @@ export function DwcBagDashboard({ compact = false }: { compact?: boolean }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <img src={darkwaveLogo} alt="DWC" className="w-10 h-10 object-contain" />
+              <img src={darkwaveLogo} alt="SIG" className="w-10 h-10 object-contain" />
               <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-md animate-pulse" />
             </div>
             <div>
-              <p className="text-sm text-gray-400">Your DWC Bag</p>
-              <p className="text-xl font-bold text-white">{formatNumber(totalDwc)} DWC</p>
+              <p className="text-sm text-gray-400">Your SIG Bag</p>
+              <p className="text-xl font-bold text-white">{formatNumber(totalDwc)} SIG</p>
             </div>
           </div>
           <div className="text-right">
@@ -131,16 +131,16 @@ export function DwcBagDashboard({ compact = false }: { compact?: boolean }) {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div className="flex items-center gap-4">
             <div className="relative">
-              <img src={darkwaveLogo} alt="DWC" className="w-16 h-16 object-contain" />
+              <img src={darkwaveLogo} alt="SIG" className="w-16 h-16 object-contain" />
               <div className="absolute inset-0 bg-cyan-400/30 rounded-full blur-xl animate-pulse" />
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Wallet className="w-4 h-4 text-cyan-400" />
-                <span className="text-sm text-gray-400">Your DWC Bag</span>
+                <span className="text-sm text-gray-400">Your SIG Bag</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                {formatNumber(totalDwc)} DWC
+                {formatNumber(totalDwc)} SIG
               </h2>
               <p className="text-sm text-gray-400 mt-1">
                 Current Value: <span className="text-white">{formatCurrency(currentValue)}</span>
@@ -154,7 +154,7 @@ export function DwcBagDashboard({ compact = false }: { compact?: boolean }) {
               {potentialMultiplier.toFixed(0)}x Potential
             </Badge>
             <div className="text-right">
-              <p className="text-sm text-gray-400">At Launch ({formatCurrency(launchPrice)}/DWC)</p>
+              <p className="text-sm text-gray-400">At Launch ({formatCurrency(launchPrice)}/SIG)</p>
               <p className="text-2xl font-bold text-green-400">{formatCurrency(launchProjectedValue)}</p>
             </div>
           </div>
@@ -224,7 +224,7 @@ export function DwcBagDashboard({ compact = false }: { compact?: boolean }) {
           <Wallet className="w-12 h-12 text-gray-600 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-white mb-2">Start Building Your Bag</h3>
           <p className="text-gray-400 text-sm mb-4">
-            No wallet needed yet! Purchase DWC tokens or earn Shells - all tracked by your account until TGE.
+            No wallet needed yet! Purchase SIG tokens or earn Shells - all tracked by your account until TGE.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link href="/presale">

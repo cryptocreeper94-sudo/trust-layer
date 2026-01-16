@@ -85,14 +85,14 @@ export default function TokenAnalytics() {
               animate={{ rotate: [0, 5, -5, 0] }}
               transition={{ duration: 4, repeat: Infinity }}
             >
-              <img src={darkwaveLogo} alt="DWC" className="w-10 h-10" />
+              <img src={darkwaveLogo} alt="SIG" className="w-10 h-10" />
             </motion.div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-2xl font-display font-bold">DWC Analytics</h1>
+                <h1 className="text-2xl font-display font-bold">SIG Analytics</h1>
                 <Badge className="bg-green-500/20 text-green-400">Verified</Badge>
               </div>
-              <p className="text-sm text-muted-foreground">DarkWave Coin • Deep token analysis</p>
+              <p className="text-sm text-muted-foreground">Signal • Deep token analysis</p>
             </div>
           </motion.div>
 

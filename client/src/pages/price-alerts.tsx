@@ -27,7 +27,7 @@ interface Alert {
   active: boolean;
 }
 
-const TOKENS = ["DWC", "BTC", "ETH", "SOL", "USDC"];
+const TOKENS = ["SIG", "BTC", "ETH", "SOL", "USDC"];
 
 export default function PriceAlerts() {
   const { user } = useAuth();
@@ -35,7 +35,7 @@ export default function PriceAlerts() {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [showCreate, setShowCreate] = useState(false);
   const [newAlert, setNewAlert] = useState({
-    token: "DWC",
+    token: "SIG",
     condition: "above" as "above" | "below",
     price: "",
   });
@@ -55,13 +55,13 @@ export default function PriceAlerts() {
       token: newAlert.token,
       condition: newAlert.condition,
       price: parseFloat(newAlert.price),
-      currentPrice: newAlert.token === "DWC" ? 0.152 : newAlert.token === "BTC" ? 98500 : 3450,
+      currentPrice: newAlert.token === "SIG" ? 0.152 : newAlert.token === "BTC" ? 98500 : 3450,
       channels: ["push"],
       active: true,
     };
     setAlerts([...alerts, alert]);
     setShowCreate(false);
-    setNewAlert({ token: "DWC", condition: "above", price: "" });
+    setNewAlert({ token: "SIG", condition: "above", price: "" });
   };
 
   if (!isConnected) {

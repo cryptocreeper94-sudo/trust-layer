@@ -26,7 +26,7 @@ const transactionTypes = [
   { type: "Token Swap", gasUnits: 150000, estimatedCost: "$0.02", time: "< 1s" },
   { type: "Add Liquidity", gasUnits: 250000, estimatedCost: "$0.04", time: "< 1s" },
   { type: "NFT Mint", gasUnits: 180000, estimatedCost: "$0.03", time: "< 1s" },
-  { type: "Stake DWC", gasUnits: 120000, estimatedCost: "$0.02", time: "< 1s" },
+  { type: "Stake SIG", gasUnits: 120000, estimatedCost: "$0.02", time: "< 1s" },
   { type: "Contract Deploy", gasUnits: 3000000, estimatedCost: "$0.45", time: "< 2s" },
 ];
 

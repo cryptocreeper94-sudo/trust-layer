@@ -32,14 +32,14 @@ const generateActivity = (): ActivityItem => {
   const users = ["whale.dwc", "satoshi.eth", "defi_king", "alpha_hunter", "0x7a23...f8d1", "0x8b34...c2e5", "crypto_sage"];
   
   const templates: Record<ActivityItem["type"], { desc: string; amount: string; value: string }> = {
-    swap: { desc: "swapped DWC for USDC", amount: `${(1000 + Math.random() * 50000).toFixed(0)} DWC`, value: `$${(150 + Math.random() * 7500).toFixed(0)}` },
-    stake: { desc: "staked DWC", amount: `${(1000 + Math.random() * 20000).toFixed(0)} DWC`, value: `$${(150 + Math.random() * 3000).toFixed(0)}` },
-    unstake: { desc: "unstaked DWC", amount: `${(500 + Math.random() * 10000).toFixed(0)} DWC`, value: `$${(75 + Math.random() * 1500).toFixed(0)}` },
+    swap: { desc: "swapped SIG for USDC", amount: `${(1000 + Math.random() * 50000).toFixed(0)} SIG`, value: `$${(150 + Math.random() * 7500).toFixed(0)}` },
+    stake: { desc: "staked SIG", amount: `${(1000 + Math.random() * 20000).toFixed(0)} SIG`, value: `$${(150 + Math.random() * 3000).toFixed(0)}` },
+    unstake: { desc: "unstaked SIG", amount: `${(500 + Math.random() * 10000).toFixed(0)} SIG`, value: `$${(75 + Math.random() * 1500).toFixed(0)}` },
     mint: { desc: "minted NFT", amount: "Genesis #" + Math.floor(Math.random() * 1000), value: `$${(50 + Math.random() * 500).toFixed(0)}` },
-    transfer: { desc: "transferred DWC", amount: `${(100 + Math.random() * 5000).toFixed(0)} DWC`, value: `$${(15 + Math.random() * 750).toFixed(0)}` },
-    claim: { desc: "claimed rewards", amount: `${(50 + Math.random() * 500).toFixed(0)} DWC`, value: `$${(7.5 + Math.random() * 75).toFixed(0)}` },
+    transfer: { desc: "transferred SIG", amount: `${(100 + Math.random() * 5000).toFixed(0)} SIG`, value: `$${(15 + Math.random() * 750).toFixed(0)}` },
+    claim: { desc: "claimed rewards", amount: `${(50 + Math.random() * 500).toFixed(0)} SIG`, value: `$${(7.5 + Math.random() * 75).toFixed(0)}` },
     liquidity: { desc: "added liquidity", amount: `$${(500 + Math.random() * 10000).toFixed(0)}`, value: "LP Tokens" },
-    nft: { desc: "listed NFT for sale", amount: "DarkWave #" + Math.floor(Math.random() * 500), value: `${(100 + Math.random() * 1000).toFixed(0)} DWC` },
+    nft: { desc: "listed NFT for sale", amount: "DarkWave #" + Math.floor(Math.random() * 500), value: `${(100 + Math.random() * 1000).toFixed(0)} SIG` },
   };
   
   const template = templates[type];

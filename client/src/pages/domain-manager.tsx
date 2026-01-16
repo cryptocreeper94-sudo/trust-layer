@@ -70,7 +70,7 @@ const WALLET_TYPES = [
   { value: "eth", label: "Ethereum (ETH)", placeholder: "0x..." },
   { value: "sol", label: "Solana (SOL)", placeholder: "..." },
   { value: "btc", label: "Bitcoin (BTC)", placeholder: "bc1..." },
-  { value: "dwc", label: "DarkWave (DWC)", placeholder: "0x..." },
+  { value: "sig", label: "Signal (SIG)", placeholder: "0x..." },
 ];
 
 const TTL_OPTIONS = [

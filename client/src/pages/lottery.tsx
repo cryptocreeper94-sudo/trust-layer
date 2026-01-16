@@ -17,10 +17,10 @@ const TICKET_PRICE = 100;
 
 const PRIZE_TIERS = [
   { match: "6 Numbers", prize: "Jackpot", odds: "1:13,983,816" },
-  { match: "5 Numbers", prize: "50,000 DWC", odds: "1:55,492" },
-  { match: "4 Numbers", prize: "1,000 DWC", odds: "1:1,032" },
-  { match: "3 Numbers", prize: "100 DWC", odds: "1:57" },
-  { match: "2 Numbers", prize: "10 DWC", odds: "1:8" },
+  { match: "5 Numbers", prize: "50,000 SIG", odds: "1:55,492" },
+  { match: "4 Numbers", prize: "1,000 SIG", odds: "1:1,032" },
+  { match: "3 Numbers", prize: "100 SIG", odds: "1:57" },
+  { match: "2 Numbers", prize: "10 SIG", odds: "1:8" },
 ];
 
 // Simulated global stats (would come from API)
@@ -29,9 +29,9 @@ const GLOBAL_STATS = {
   ticketsSold: 28475,
   nextDraw: { days: 2, hours: 14, minutes: 32 },
   lastWinners: [
-    { address: "DWC...x7K2", prize: "1,250,000", numbers: [7, 14, 21, 28, 35, 42] },
-    { address: "DWC...m3P8", prize: "50,000", numbers: [3, 12, 24, 31, 39, 45] },
-    { address: "DWC...n9R5", prize: "1,000", numbers: [5, 18, 22, 33, 41, 48] },
+    { address: "SIG...x7K2", prize: "1,250,000", numbers: [7, 14, 21, 28, 35, 42] },
+    { address: "SIG...m3P8", prize: "50,000", numbers: [3, 12, 24, 31, 39, 45] },
+    { address: "SIG...n9R5", prize: "1,000", numbers: [5, 18, 22, 33, 41, 48] },
   ]
 };
 
@@ -127,7 +127,7 @@ export default function Lottery() {
                 animate={{ scale: [1, 1.02, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                {GLOBAL_STATS.jackpot.toLocaleString()} DWC
+                {GLOBAL_STATS.jackpot.toLocaleString()} SIG
               </motion.p>
               <p className="text-sm text-muted-foreground mt-2">≈ ${(GLOBAL_STATS.jackpot * 0.152).toLocaleString()}</p>
               
@@ -201,7 +201,7 @@ export default function Lottery() {
                   <span className="w-8 text-center font-mono">{tickets}</span>
                   <Button variant="outline" size="sm" onClick={() => setTickets(tickets + 1)} data-testid="button-tickets-plus">+</Button>
                 </div>
-                <span className="text-muted-foreground">= {TICKET_PRICE * tickets} DWC</span>
+                <span className="text-muted-foreground">= {TICKET_PRICE * tickets} SIG</span>
               </div>
 
               {isConnected ? (
@@ -211,7 +211,7 @@ export default function Lottery() {
                   data-testid="button-buy-tickets"
                 >
                   <Ticket className="w-5 h-5 mr-2" />
-                  Buy {tickets} Ticket{tickets > 1 ? "s" : ""} for {TICKET_PRICE * tickets} DWC
+                  Buy {tickets} Ticket{tickets > 1 ? "s" : ""} for {TICKET_PRICE * tickets} SIG
                 </Button>
               ) : (
                 <Link href="/wallet" className="block">
@@ -257,7 +257,7 @@ export default function Lottery() {
                     <div key={i} className="p-2 rounded-lg bg-white/5">
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-sm font-mono">{winner.address}</span>
-                        <Badge className="bg-green-500/20 text-green-400">{winner.prize} DWC</Badge>
+                        <Badge className="bg-green-500/20 text-green-400">{winner.prize} SIG</Badge>
                       </div>
                       <div className="flex gap-1">
                         {winner.numbers.map(n => (
@@ -294,9 +294,9 @@ export default function Lottery() {
 
           <GlassCard className="p-4 text-center">
             <Gift className="w-8 h-8 mx-auto mb-2 text-purple-400" />
-            <h3 className="font-bold mb-2">Hold DWC for Free Tickets!</h3>
+            <h3 className="font-bold mb-2">Hold SIG for Free Tickets!</h3>
             <p className="text-sm text-muted-foreground mb-3">
-              Stake 10,000+ DWC to receive 1 free lottery ticket every week.
+              Stake 10,000+ SIG to receive 1 free lottery ticket every week.
               Diamond stakers get 5 free tickets!
             </p>
             <Link href="/staking">

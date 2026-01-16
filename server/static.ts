@@ -40,7 +40,7 @@ const APP_CONFIG: Record<AppDomain, {
     manifest: "/manifest-games.webmanifest",
     themeColor: "#ec4899",
     title: "DarkWave Games",
-    description: "Provably fair blockchain games. Win real DWC with instant payouts.",
+    description: "Provably fair blockchain games. Win real SIG with instant payouts.",
     icon: "/icons/games-512x512.png",
   },
   studios: {

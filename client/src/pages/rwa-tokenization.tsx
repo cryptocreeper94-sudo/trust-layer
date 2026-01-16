@@ -417,7 +417,7 @@ export default function RWATokenization() {
               <Award className="w-16 h-16 mx-auto mb-4 text-blue-400" />
               <h3 className="text-2xl font-bold text-white mb-2">Tokenize Your Assets</h3>
               <p className="text-slate-400 mb-6 max-w-lg mx-auto">
-                Own real estate, art, or IP? Tokenize it on DarkWave Smart Chain and unlock global liquidity while retaining control.
+                Own real estate, art, or IP? Tokenize it on DarkWave Trust Layer and unlock global liquidity while retaining control.
               </p>
               <div className="flex justify-center gap-4">
                 <Button className="bg-gradient-to-r from-blue-500 to-purple-600" data-testid="button-tokenize-cta">

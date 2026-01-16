@@ -204,7 +204,7 @@ export class PayoutService {
         })
         .where(eq(affiliateProfiles.userId, userId));
 
-      console.log(`[Payout] Sent ${amountDwc} DWC to ${walletAddress} for user ${userId}, tx: ${signedTx.hash}, commissions: ${commissionIds.length}`);
+      console.log(`[Payout] Sent ${amountDwc} SIG to ${walletAddress} for user ${userId}, tx: ${signedTx.hash}, commissions: ${commissionIds.length}`);
 
       return { success: true, payoutId, txHash: signedTx.hash, settledAmount: actualAmount, settledDwc: amountDwc };
     } catch (error) {
@@ -243,7 +243,7 @@ export class PayoutService {
         host: affiliate.host,
         amountUsd: affiliate.amountUsd / 100,
         amountDwc: affiliate.amountDwc,
-        currency: "DWC",
+        currency: "SIG",
         status: payoutResult.success ? "completed" : "failed",
         error: payoutResult.error,
       },
@@ -405,7 +405,7 @@ export class PayoutService {
       }
     }
 
-    console.log(`[Payout] Cycle complete: ${processedCount} processed, ${failedCount} failed, ${totalDwc.toFixed(2)} DWC distributed`);
+    console.log(`[Payout] Cycle complete: ${processedCount} processed, ${failedCount} failed, ${totalDwc.toFixed(2)} SIG distributed`);
 
     return {
       batchId: batch.id,
@@ -492,7 +492,7 @@ export class PayoutService {
 
           processedCount++;
           totalDwc += parseFloat(amountDwc);
-          console.log(`[Airdrop] Sent ${amountDwc} DWC to ${affiliate.dwcWalletAddress} (tx: ${txHash})`);
+          console.log(`[Airdrop] Sent ${amountDwc} SIG to ${affiliate.dwcWalletAddress} (tx: ${txHash})`);
         } else {
           failedCount++;
           errors.push(`${affiliate.userId}: Blockchain transfer failed`);
@@ -503,7 +503,7 @@ export class PayoutService {
       }
     }
 
-    console.log(`[Airdrop] Complete: ${processedCount} distributed, ${failedCount} failed, ${totalDwc.toFixed(2)} DWC total`);
+    console.log(`[Airdrop] Complete: ${processedCount} distributed, ${failedCount} failed, ${totalDwc.toFixed(2)} SIG total`);
 
     return {
       batchId,

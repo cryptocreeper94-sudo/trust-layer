@@ -34,7 +34,7 @@ const PARTNER_TIERS = [
       "Monthly analytics reports",
       "Branded promotional materials",
     ],
-    perks: "5,000 DWC Bonus"
+    perks: "5,000 SIG Bonus"
   },
   {
     id: "partner",
@@ -53,7 +53,7 @@ const PARTNER_TIERS = [
       "Custom tracking dashboard",
       "Quarterly strategy calls",
     ],
-    perks: "25,000 DWC Bonus"
+    perks: "25,000 SIG Bonus"
   },
   {
     id: "elite",
@@ -72,7 +72,7 @@ const PARTNER_TIERS = [
       "Event speaking opportunities",
       "Custom integration support",
     ],
-    perks: "100,000 DWC Bonus"
+    perks: "100,000 SIG Bonus"
   },
 ];
 
@@ -88,7 +88,7 @@ const PLATFORMS = [
 const STATS = [
   { label: "Active Partners", value: "150+", icon: Users },
   { label: "Total Reach", value: "50M+", icon: Globe },
-  { label: "DWC Distributed", value: "2.5M", icon: Gift },
+  { label: "SIG Distributed", value: "2.5M", icon: Gift },
   { label: "Avg. Partner ROI", value: "340%", icon: TrendingUp },
 ];
 
@@ -422,7 +422,7 @@ export default function InfluencerPartnershipPage() {
                 <ul className="space-y-3">
                   {[
                     { icon: TrendingUp, text: "Generous commission structure up to 20%" },
-                    { icon: Gift, text: "Exclusive DWC token bonuses at launch (Apr 11, 2026)" },
+                    { icon: Gift, text: "Exclusive SIG token bonuses at launch (Apr 11, 2026)" },
                     { icon: Shield, text: "Guardian-verified smart contracts" },
                     { icon: Users, text: "Growing community of 50K+ members" },
                     { icon: Heart, text: "Long-term partnership focus, not one-offs" },

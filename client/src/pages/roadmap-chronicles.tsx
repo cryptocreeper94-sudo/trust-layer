@@ -412,7 +412,7 @@ export default function RoadmapChronicles() {
             <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/50" />
           </div>
           <div className="relative z-10 p-6">
-            <h3 className="text-lg font-semibold text-white mb-2">DarkWave Smart Chain</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">DarkWave Trust Layer</h3>
             <p className="text-gray-300 text-sm">View the blockchain ecosystem roadmap</p>
           </div>
         </Link>

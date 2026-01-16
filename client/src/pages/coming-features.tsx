@@ -108,7 +108,7 @@ const defaultFeatures = [
   {
     id: "8",
     title: "Verifiable Revenue Sharing",
-    description: "On-chain dividend distribution from real business operations. DWC holders receive actual revenue from Chronicles purchases, Guardian audit fees, and marketplace transactions. Provable, transparent, and automatic.",
+    description: "On-chain dividend distribution from real business operations. SIG holders receive actual revenue from Chronicles purchases, Guardian audit fees, and marketplace transactions. Provable, transparent, and automatic.",
     category: "strategic",
     status: "pending",
     sortOrder: 8,
@@ -135,7 +135,7 @@ const defaultFeatures = [
   {
     id: "11",
     title: "ISO 20022 Banking Compliance",
-    description: "Full ISO 20022 messaging standard integration for DWC. Banks and financial institutions will be able to recognize and interface directly with our coin. Includes Digital Token Identifier (DTI) registration under ISO 24165, compliant API gateways, and institutional-grade payment rails.",
+    description: "Full ISO 20022 messaging standard integration for SIG. Banks and financial institutions will be able to recognize and interface directly with our coin. Includes Digital Token Identifier (DTI) registration under ISO 24165, compliant API gateways, and institutional-grade payment rails.",
     category: "compliance",
     status: "pending",
     sortOrder: 11,

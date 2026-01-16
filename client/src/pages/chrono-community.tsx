@@ -40,7 +40,7 @@ const FOUNDING_TIERS = [
     icon: Star,
     benefits: [
       "Everything in Pioneer",
-      "500 DWC tokens at launch",
+      "500 SIG tokens at launch",
       "Exclusive Founder badge",
       "Early era access (1 week)",
       "Founder-only Discord channel",
@@ -56,7 +56,7 @@ const FOUNDING_TIERS = [
     icon: Crown,
     benefits: [
       "Everything in Founder",
-      "2,500 DWC tokens at launch",
+      "2,500 SIG tokens at launch",
       "Exclusive Patron title",
       "Early era access (1 month)",
       "Direct developer access",
@@ -85,7 +85,7 @@ const BENEFITS = [
   {
     icon: Coins,
     title: "Bonus Tokens",
-    description: "Founding members receive DWC tokens at preferential rates"
+    description: "Founding members receive SIG tokens at preferential rates"
   },
   {
     icon: Shield,

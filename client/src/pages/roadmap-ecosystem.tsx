@@ -47,9 +47,9 @@ const ECOSYSTEM_PHASES: Phase[] = [
     milestones: [
       { id: "e1", title: "Proof-of-Authority Consensus", description: "400ms block time with Founders Validator", status: "completed", isRequired: true },
       { id: "e2", title: "Web Portal Launch", description: "React-based blockchain interface with wallet integration", status: "completed", isRequired: true },
-      { id: "e3", title: "DWC Token Implementation", description: "1B supply, 18 decimals, native coin", status: "completed", isRequired: true },
+      { id: "e3", title: "SIG Token Implementation", description: "1B supply, 18 decimals, native coin", status: "completed", isRequired: true },
       { id: "e4", title: "Block Explorer", description: "Transaction search, block details, account views", status: "completed", isRequired: true },
-      { id: "e5", title: "Testnet Faucet", description: "Free DWC for developers and testers", status: "completed", isRequired: true },
+      { id: "e5", title: "Testnet Faucet", description: "Free SIG for developers and testers", status: "completed", isRequired: true },
       { id: "e6", title: "Transparent Crowdfunding", description: "DWSC stamps for donation verification", status: "completed", isRequired: true },
     ],
   },
@@ -62,13 +62,13 @@ const ECOSYSTEM_PHASES: Phase[] = [
     icon: <Coins className="w-6 h-6" />,
     image: dashboardImg,
     milestones: [
-      { id: "e7", title: "DEX / Token Swap", description: "AMM-style trading for DWC/USDC/wETH/wSOL/USDT pairs", status: "in_progress", isRequired: true },
+      { id: "e7", title: "DEX / Token Swap", description: "AMM-style trading for SIG/USDC/wETH/wSOL/USDT pairs", status: "in_progress", isRequired: true },
       { id: "e8", title: "NFT Marketplace", description: "Mint, buy, sell, and trade digital collectibles", status: "in_progress", isRequired: true },
-      { id: "e9", title: "Liquid Staking (stDWC)", description: "12% APY with liquid staking tokens", status: "in_progress", isRequired: true },
-      { id: "e10", title: "Token Launchpad", description: "Launch new tokens on DarkWave Smart Chain", status: "in_progress", isRequired: true },
+      { id: "e9", title: "Liquid Staking (stSIG)", description: "12% APY with liquid staking tokens", status: "in_progress", isRequired: true },
+      { id: "e10", title: "Token Launchpad", description: "Launch new tokens on DarkWave Trust Layer", status: "in_progress", isRequired: true },
       { id: "e11", title: "Portfolio Dashboard", description: "Track holdings, staking, and transaction history", status: "in_progress", isRequired: true },
       { id: "e12", title: "DarkWave Studio IDE", description: "Monaco-based development environment with 70+ languages", status: "in_progress", isRequired: true },
-      { id: "e13", title: "Cross-Chain Bridge", description: "Lock & mint for DWC ↔ wDWC on Ethereum and Solana", status: "in_progress", isRequired: true },
+      { id: "e13", title: "Cross-Chain Bridge", description: "Lock & mint for SIG ↔ wSIG on Ethereum and Solana", status: "in_progress", isRequired: true },
       { id: "e14", title: "Mobile Wallet App", description: "iOS and Android native applications", status: "pending", isRequired: true },
     ],
   },
@@ -337,7 +337,7 @@ export default function RoadmapEcosystem() {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-6"
             >
               <Server className="w-4 h-4 text-cyan-400" />
-              <span className="text-cyan-300 text-sm font-medium">DarkWave Smart Chain</span>
+              <span className="text-cyan-300 text-sm font-medium">DarkWave Trust Layer</span>
             </motion.div>
             
             <h1 className="text-4xl md:text-5xl font-bold mb-4">

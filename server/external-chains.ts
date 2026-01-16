@@ -6,8 +6,8 @@ const SOLANA_DEVNET_RPC = process.env.HELIUS_API_KEY
   ? `https://devnet.helius-rpc.com/?api-key=${process.env.HELIUS_API_KEY}`
   : "https://api.devnet.solana.com";
 
-const WDWC_ETHEREUM_CONTRACT = process.env.WDWC_ETHEREUM_ADDRESS || "0x0000000000000000000000000000000000000000";
-const WDWC_SOLANA_MINT = process.env.WDWC_SOLANA_ADDRESS || "11111111111111111111111111111111";
+const WSIG_ETHEREUM_CONTRACT = process.env.WSIG_ETHEREUM_ADDRESS || "0x0000000000000000000000000000000000000000";
+const WSIG_SOLANA_MINT = process.env.WSIG_SOLANA_ADDRESS || "11111111111111111111111111111111";
 
 const MINT_FUNCTION_SELECTOR = "0x156e29f6";
 const CHAIN_ID_SEPOLIA = 11155111;
@@ -261,15 +261,15 @@ class ExternalChainsService {
     return [ethStatus, solStatus];
   }
 
-  getWDWCContractAddress(chain: "ethereum" | "solana"): string {
+  getWSIGContractAddress(chain: "ethereum" | "solana"): string {
     if (chain === "ethereum") {
-      return WDWC_ETHEREUM_CONTRACT;
+      return WSIG_ETHEREUM_CONTRACT;
     }
-    return WDWC_SOLANA_MINT;
+    return WSIG_SOLANA_MINT;
   }
 
   isContractDeployed(chain: "ethereum" | "solana"): boolean {
-    const addr = this.getWDWCContractAddress(chain);
+    const addr = this.getWSIGContractAddress(chain);
     if (chain === "ethereum") {
       return addr !== "0x0000000000000000000000000000000000000000";
     }
@@ -297,8 +297,8 @@ class ExternalChainsService {
     isMock?: boolean;
   }> {
     if (!this.isContractDeployed("ethereum")) {
-      console.warn("[External Chains] ⚠️ wDWC contract NOT DEPLOYED - using MOCK mint (testnet development mode)");
-      console.warn("[External Chains] ⚠️ No real tokens minted. Deploy contract and set WDWC_ETHEREUM_ADDRESS to enable real minting.");
+      console.warn("[External Chains] ⚠️ wSIG contract NOT DEPLOYED - using MOCK mint (testnet development mode)");
+      console.warn("[External Chains] ⚠️ No real tokens minted. Deploy contract and set WSIG_ETHEREUM_ADDRESS to enable real minting.");
       return {
         success: true,
         txHash: `0xMOCK_ETH_${lockId.substring(0, 8)}_${Date.now().toString(16)}`,
@@ -312,9 +312,9 @@ class ExternalChainsService {
     }
 
     try {
-      console.log(`[External Chains] 🚀 LIVE TESTNET MINT: ${amount} wDWC to ${to} on Ethereum Sepolia`);
+      console.log(`[External Chains] 🚀 LIVE TESTNET MINT: ${amount} wSIG to ${to} on Ethereum Sepolia`);
       console.log(`[External Chains] Lock ID: ${lockId}`);
-      console.log(`[External Chains] Contract: ${WDWC_ETHEREUM_CONTRACT}`);
+      console.log(`[External Chains] Contract: ${WSIG_ETHEREUM_CONTRACT}`);
 
       const calldata = MINT_FUNCTION_SELECTOR + 
         this.encodeAddress(to) +
@@ -329,7 +329,7 @@ class ExternalChainsService {
           id: 1,
           method: "eth_estimateGas",
           params: [{
-            to: WDWC_ETHEREUM_CONTRACT,
+            to: WSIG_ETHEREUM_CONTRACT,
             data: calldata,
           }],
         }),
@@ -360,8 +360,8 @@ class ExternalChainsService {
     isMock?: boolean;
   }> {
     if (!this.isContractDeployed("solana")) {
-      console.warn("[External Chains] ⚠️ wDWC token NOT DEPLOYED on Solana - using MOCK mint (testnet development mode)");
-      console.warn("[External Chains] ⚠️ No real tokens minted. Deploy SPL token and set WDWC_SOLANA_ADDRESS to enable real minting.");
+      console.warn("[External Chains] ⚠️ wSIG token NOT DEPLOYED on Solana - using MOCK mint (testnet development mode)");
+      console.warn("[External Chains] ⚠️ No real tokens minted. Deploy SPL token and set WSIG_SOLANA_ADDRESS to enable real minting.");
       return {
         success: true,
         txHash: `MOCK_SOL_${lockId.substring(0, 8)}_${Date.now().toString(36)}`,
@@ -375,7 +375,7 @@ class ExternalChainsService {
     }
 
     try {
-      console.log(`[External Chains] Minting ${amount} wDWC to ${to} on Solana Devnet`);
+      console.log(`[External Chains] Minting ${amount} wSIG to ${to} on Solana Devnet`);
       console.log(`[External Chains] Lock ID: ${lockId}`);
 
       return {

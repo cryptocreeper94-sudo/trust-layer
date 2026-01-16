@@ -621,7 +621,7 @@ export default function ChroniclesEstate() {
                 </Button>
                 
                 <p className="text-slate-500 text-xs mt-4">
-                  Shells convert to DWC tokens at launch (100 Shells = 1 DWC)
+                  Shells convert to SIG tokens at launch (100 Shells = 1 SIG)
                 </p>
               </div>
             </motion.div>
@@ -888,7 +888,7 @@ export default function ChroniclesEstate() {
                 {shellsBalance.toLocaleString()} Shells
               </Badge>
               <span className="text-[10px] text-cyan-400/70 mt-0.5">
-                ≈ {(shellsBalance / 100).toFixed(2)} DWC at launch
+                ≈ {(shellsBalance / 100).toFixed(2)} SIG at launch
               </span>
             </div>
             <Badge variant="outline" className="border-cyan-500/50 text-cyan-400">
@@ -938,12 +938,12 @@ export default function ChroniclesEstate() {
         </div>
       )}
 
-      {/* DWC Conversion Banner */}
+      {/* SIG Conversion Banner */}
       <div className="bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 border-y border-cyan-500/20 py-2 px-4 relative z-10">
         <div className="max-w-6xl mx-auto flex items-center justify-center gap-2 text-sm">
           <Sparkles className="w-4 h-4 text-cyan-400" />
           <span className="text-slate-300">
-            <span className="text-cyan-400 font-semibold">Shells → DWC:</span> All Shells convert to DarkWave Coin at <span className="text-white font-bold">100 Shells = 1 DWC</span> on April 11, 2026
+            <span className="text-cyan-400 font-semibold">Shells → SIG:</span> All Shells convert to Signal at <span className="text-white font-bold">100 Shells = 1 SIG</span> on April 11, 2026
           </span>
           <a 
             href="/virtual-currency-terms" 

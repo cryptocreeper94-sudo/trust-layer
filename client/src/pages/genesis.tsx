@@ -15,7 +15,7 @@ const BLOCKCHAIN_SPECS = [
   { icon: Zap, label: "Block Time", value: "400ms", desc: "Ultra-fast finality" },
   { icon: Cpu, label: "TPS", value: "200,000+", desc: "High throughput" },
   { icon: Shield, label: "Consensus", value: "PoA", desc: "Proof of Authority" },
-  { icon: Database, label: "Total Supply", value: "1B DWC", desc: "Fixed supply" },
+  { icon: Database, label: "Total Supply", value: "1B SIG", desc: "Fixed supply" },
 ];
 
 const FOUNDING_PRINCIPLES = [
@@ -77,7 +77,7 @@ export default function GenesisBlock() {
               DarkWave Genesis Block
             </h1>
             <p className="text-sm text-white/60 max-w-xl mx-auto">
-              The founding block of DarkWave Smart Chain. This immutable record marks the birth of our high-performance blockchain ecosystem.
+              The founding block of DarkWave Trust Layer. This immutable record marks the birth of our high-performance blockchain ecosystem.
             </p>
           </motion.div>
 

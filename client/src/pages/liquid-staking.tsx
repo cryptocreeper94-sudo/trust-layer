@@ -92,7 +92,7 @@ export default function LiquidStaking() {
     onSuccess: (data) => {
       toast({
         title: "Staked Successfully!",
-        description: `Received ${formatAmount(data.stDwtMinted)} stDWC`,
+        description: `Received ${formatAmount(data.stDwtMinted)} stSIG`,
       });
       queryClient.invalidateQueries({ queryKey: ["/api/liquid-staking"] });
       setStakeAmount("");
@@ -112,7 +112,7 @@ export default function LiquidStaking() {
     onSuccess: (data) => {
       toast({
         title: "Unstaked Successfully!",
-        description: `Received ${formatAmount(data.dwtReturned)} DWC`,
+        description: `Received ${formatAmount(data.dwtReturned)} SIG`,
       });
       queryClient.invalidateQueries({ queryKey: ["/api/liquid-staking"] });
       setUnstakeAmount("");
@@ -159,7 +159,7 @@ export default function LiquidStaking() {
               </h1>
             </div>
             <p className="text-xs text-muted-foreground">
-              Stake DWC and receive stDWC - earn rewards while keeping liquidity
+              Stake SIG and receive stSIG - earn rewards while keeping liquidity
             </p>
           </motion.div>
 
@@ -186,13 +186,13 @@ export default function LiquidStaking() {
                 <div className="text-center">
                   <p className="text-xs text-muted-foreground mb-1">Total Staked</p>
                   <p className="text-sm font-semibold" data-testid="text-total-staked">
-                    {formatAmount(state?.totalDwtStaked || "0")} DWC
+                    {formatAmount(state?.totalDwtStaked || "0")} SIG
                   </p>
                 </div>
                 <div className="text-center">
                   <p className="text-xs text-muted-foreground mb-1">Exchange Rate</p>
                   <p className="text-sm font-semibold" data-testid="text-exchange-rate">
-                    1 stDWC = {(Number(state?.exchangeRate || "1000000000000000000") / 1e18).toFixed(4)} DWC
+                    1 stSIG = {(Number(state?.exchangeRate || "1000000000000000000") / 1e18).toFixed(4)} SIG
                   </p>
                 </div>
               </div>
@@ -213,13 +213,13 @@ export default function LiquidStaking() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs text-muted-foreground">stDWC Balance</p>
+                    <p className="text-xs text-muted-foreground">stSIG Balance</p>
                     <p className="text-lg font-bold" data-testid="text-stdwt-balance">
                       {formatAmount(position?.stDwtBalance || "0")}
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Withdrawable DWC</p>
+                    <p className="text-xs text-muted-foreground">Withdrawable SIG</p>
                     <p className="text-lg font-bold text-green-400" data-testid="text-withdrawable">
                       {formatAmount(position?.withdrawableDwt || "0")}
                     </p>
@@ -244,7 +244,7 @@ export default function LiquidStaking() {
 
                 <TabsContent value="stake" className="space-y-4">
                   <div>
-                    <label className="text-xs text-muted-foreground mb-2 block">Amount to Stake (DWC)</label>
+                    <label className="text-xs text-muted-foreground mb-2 block">Amount to Stake (SIG)</label>
                     <Input
                       type="number"
                       placeholder="0.0"
@@ -259,7 +259,7 @@ export default function LiquidStaking() {
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-muted-foreground">You will receive</span>
                         <span className="text-cyan-400 font-medium">
-                          ~{(parseFloat(stakeAmount) * 1e18 / Number(state?.exchangeRate || 1e18)).toFixed(4)} stDWC
+                          ~{(parseFloat(stakeAmount) * 1e18 / Number(state?.exchangeRate || 1e18)).toFixed(4)} stSIG
                         </span>
                       </div>
                     </div>
@@ -273,14 +273,14 @@ export default function LiquidStaking() {
                     {stakeMutation.isPending ? (
                       <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Staking...</>
                     ) : (
-                      <><Sparkles className="w-4 h-4 mr-2" /> Stake DWC</>
+                      <><Sparkles className="w-4 h-4 mr-2" /> Stake SIG</>
                     )}
                   </Button>
                 </TabsContent>
 
                 <TabsContent value="unstake" className="space-y-4">
                   <div>
-                    <label className="text-xs text-muted-foreground mb-2 block">Amount to Unstake (stDWC)</label>
+                    <label className="text-xs text-muted-foreground mb-2 block">Amount to Unstake (stSIG)</label>
                     <Input
                       type="number"
                       placeholder="0.0"
@@ -295,7 +295,7 @@ export default function LiquidStaking() {
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-muted-foreground">You will receive</span>
                         <span className="text-green-400 font-medium">
-                          ~{(parseFloat(unstakeAmount) * Number(state?.exchangeRate || 1e18) / 1e18).toFixed(4)} DWC
+                          ~{(parseFloat(unstakeAmount) * Number(state?.exchangeRate || 1e18) / 1e18).toFixed(4)} SIG
                         </span>
                       </div>
                     </div>
@@ -309,7 +309,7 @@ export default function LiquidStaking() {
                     {unstakeMutation.isPending ? (
                       <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Unstaking...</>
                     ) : (
-                      <><ArrowRightLeft className="w-4 h-4 mr-2" /> Unstake stDWC</>
+                      <><ArrowRightLeft className="w-4 h-4 mr-2" /> Unstake stSIG</>
                     )}
                   </Button>
                 </TabsContent>
@@ -330,11 +330,11 @@ export default function LiquidStaking() {
                   <span className="text-sm font-medium">How it works</span>
                 </div>
                 <div className="space-y-2 text-xs text-muted-foreground">
-                  <p>1. Stake DWC to receive stDWC tokens</p>
-                  <p>2. stDWC represents your share of the staking pool</p>
+                  <p>1. Stake SIG to receive stSIG tokens</p>
+                  <p>2. stSIG represents your share of the staking pool</p>
                   <p>3. As rewards accrue, the exchange rate increases</p>
                   <p>4. Unstake anytime - no lock period required</p>
-                  <p>5. Use stDWC in DeFi while earning rewards</p>
+                  <p>5. Use stSIG in DeFi while earning rewards</p>
                 </div>
               </div>
             </GlassCard>
@@ -366,8 +366,8 @@ export default function LiquidStaking() {
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-xs">{formatAmount(event.dwtAmount)} DWC</p>
-                          <p className="text-[10px] text-muted-foreground">{formatAmount(event.stDwtAmount)} stDWC</p>
+                          <p className="text-xs">{formatAmount(event.dwtAmount)} SIG</p>
+                          <p className="text-[10px] text-muted-foreground">{formatAmount(event.stDwtAmount)} stSIG</p>
                         </div>
                       </div>
                     ))

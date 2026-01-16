@@ -29,11 +29,11 @@ const VESTING_SCHEDULE = [
 
 const UTILITY_CASES = [
   { title: "Transaction Fees", description: "Pay gas fees across the DarkWave network", icon: Coins },
-  { title: "Staking Rewards", description: "Stake DWC to earn passive yield and secure the network", icon: TrendingUp },
+  { title: "Staking Rewards", description: "Stake Signal to earn passive yield and secure the network", icon: TrendingUp },
   { title: "Governance", description: "Vote on protocol upgrades and treasury allocation", icon: Users },
   { title: "Chronicles Access", description: "Purchase in-game items, eras, and premium features", icon: Sparkles },
   { title: "DEX Trading", description: "Trade tokens and provide liquidity on DarkWave DEX", icon: BarChart3 },
-  { title: "NFT Marketplace", description: "Buy, sell, and mint NFTs using DWC", icon: Gift },
+  { title: "NFT Marketplace", description: "Buy, sell, and mint NFTs using Signal", icon: Gift },
 ];
 
 export default function Tokenomics() {
@@ -67,7 +67,7 @@ export default function Tokenomics() {
               Token Economics
             </Badge>
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">$DWC Tokenomics</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">Signal Tokenomics</span>
             </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Designed for sustainability, utility, and long-term value. No burn mechanics, no inflation traps.
@@ -155,7 +155,7 @@ export default function Tokenomics() {
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-white">1B</div>
-                  <div className="text-xs text-white/50">DWC</div>
+                  <div className="text-xs text-white/50">SIG</div>
                 </div>
               </div>
             </div>
@@ -263,7 +263,7 @@ export default function Tokenomics() {
               <Sparkles className="w-6 h-6 text-pink-400" />
               Token Utility
             </h2>
-            <p className="text-muted-foreground text-sm">DWC powers every aspect of the DarkWave ecosystem</p>
+            <p className="text-muted-foreground text-sm">Signal powers every aspect of the DarkWave ecosystem</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -306,8 +306,8 @@ export default function Tokenomics() {
                   <div>
                     <h3 className="text-xl font-bold text-white mb-2">No Burn, No Inflation</h3>
                     <p className="text-white/70 text-sm leading-relaxed">
-                      DWC maintains a fixed supply of 1 billion coins. We don't believe in artificial scarcity through burn 
-                      mechanics or hidden inflation through excessive minting. The value of DWC comes from genuine utility and 
+                      Signal maintains a fixed supply of 1 billion units. We don't believe in artificial scarcity through burn 
+                      mechanics or hidden inflation through excessive minting. The value of Signal comes from genuine utility and 
                       ecosystem growth, not tokenomic tricks.
                     </p>
                   </div>
@@ -342,7 +342,7 @@ export default function Tokenomics() {
           >
             <h2 className="text-2xl font-display font-bold mb-4">Ready to Explore?</h2>
             <p className="text-muted-foreground mb-6 max-w-md mx-auto text-sm">
-              Dive deeper into the DarkWave ecosystem and discover how DWC powers everything.
+              Dive deeper into the DarkWave ecosystem and discover how Signal powers everything.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               <Link href="/executive-summary">

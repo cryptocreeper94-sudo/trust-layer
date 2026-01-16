@@ -20,7 +20,7 @@ const DEFAULT_STATS = {
   eraYear: "1247 CE",
   daysLived: 127,
   reputation: 72,
-  wealth: "3,450 DWC",
+  wealth: "3,450 SIG",
   activeQuests: 4,
   completedQuests: 23,
   secretsFound: 7,
@@ -36,7 +36,7 @@ const ACTIVE_QUESTS = [
     progress: 65, 
     era: "Medieval",
     difficulty: "Epic",
-    reward: "500 DWC"
+    reward: "500 SIG"
   },
   { 
     id: 2, 
@@ -45,7 +45,7 @@ const ACTIVE_QUESTS = [
     progress: 30, 
     era: "Medieval",
     difficulty: "Hard",
-    reward: "200 DWC"
+    reward: "200 SIG"
   },
   { 
     id: 3, 
@@ -54,7 +54,7 @@ const ACTIVE_QUESTS = [
     progress: 10, 
     era: "Cross-Era",
     difficulty: "Legendary",
-    reward: "1,000 DWC"
+    reward: "1,000 SIG"
   },
   { 
     id: 4, 
@@ -63,7 +63,7 @@ const ACTIVE_QUESTS = [
     progress: 85, 
     era: "Medieval",
     difficulty: "Medium",
-    reward: "150 DWC"
+    reward: "150 SIG"
   },
 ];
 
@@ -158,7 +158,7 @@ export default function ChronoDashboard() {
                   <span className="text-xs text-white/50">Wealth</span>
                 </div>
                 <p className="text-lg font-bold text-white">{MOCK_STATS.wealth}</p>
-                <p className="text-xs text-amber-400">DarkWave Coin</p>
+                <p className="text-xs text-amber-400">Signal</p>
               </div>
             </motion.div>
             
