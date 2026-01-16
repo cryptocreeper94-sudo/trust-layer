@@ -119,7 +119,7 @@ export default function Dashboard() {
                   <h3 className="font-bold text-sm sm:text-base">API Access</h3>
                 </div>
                 <p className="text-xs text-muted-foreground mb-4">
-                  Generate API keys to integrate with DarkWave Smart Chain
+                  Generate API keys to integrate with DarkWave Trust Layer
                 </p>
                 <Link href="/developers">
                   <Button size="sm" variant="outline" className="w-full border-primary/30 text-primary hover:bg-primary/10">

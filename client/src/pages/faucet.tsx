@@ -142,7 +142,7 @@ export default function Faucet() {
               </h1>
             </div>
             <p className="text-xs text-muted-foreground">
-              Get free test DWC to build and experiment on DarkWave Smart Chain
+              Get free test DWC to build and experiment on DarkWave Trust Layer
             </p>
           </motion.div>
 

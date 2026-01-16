@@ -86,7 +86,7 @@ const statusInfo: Record<ReadinessStatus, { label: string; color: string; bgColo
 const faqItems = [
   {
     q: "What is the DarkWave Bridge?",
-    a: "The DarkWave Bridge enables seamless transfer of DWC tokens between DarkWave Smart Chain and other major blockchains. Lock DWC on our chain to receive wrapped tokens (wDWC) on external networks."
+    a: "The DarkWave Bridge enables seamless transfer of DWC tokens between DarkWave Trust Layer and other major blockchains. Lock DWC on our chain to receive wrapped tokens (wDWC) on external networks."
   },
   {
     q: "How does the lock-and-mint mechanism work?",

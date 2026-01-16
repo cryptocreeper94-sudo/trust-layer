@@ -35,7 +35,7 @@ interface NFT {
 }
 
 const SAMPLE_NFTS: NFT[] = [
-  { id: "1", tokenId: "042", name: "Cosmic Voyager #42", collectionName: "DarkWave Genesis", imageUrl: genesisNft1, description: "Ethereal cosmic orb with swirling galaxies - commemorating the birth of DarkWave Smart Chain" },
+  { id: "1", tokenId: "042", name: "Cosmic Voyager #42", collectionName: "DarkWave Genesis", imageUrl: genesisNft1, description: "Ethereal cosmic orb with swirling galaxies - commemorating the birth of DarkWave Trust Layer" },
   { id: "2", tokenId: "128", name: "Neon Dreams #128", collectionName: "DarkWave Genesis", imageUrl: genesisNft2, description: "Crystalline genesis edition - angular energy formations from the founding collection" },
   { id: "3", tokenId: "089", name: "Cyber Punk #89", collectionName: "Cyber Collective", imageUrl: cyberNft, description: "Elite cyber warrior from the digital frontier" },
   { id: "4", tokenId: "015", name: "Abstract Mind #15", collectionName: "Art Blocks", imageUrl: neonNft, description: "Ethereal dreamscape of flowing neon energy" },

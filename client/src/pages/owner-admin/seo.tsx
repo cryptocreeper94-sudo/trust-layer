@@ -290,7 +290,7 @@ export default function OwnerSeoManager() {
                 type="text"
                 value={form.title || ""}
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
-                placeholder="DarkWave Smart Chain - High Performance Blockchain"
+                placeholder="DarkWave Trust Layer - High Performance Blockchain"
                 className="w-full mt-1 px-4 py-3 bg-slate-800/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/50"
                 data-testid="input-title"
               />

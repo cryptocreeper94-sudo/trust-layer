@@ -14,7 +14,7 @@ import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.pn
 
 const PRODUCTS = [
   {
-    name: "DarkWave Smart Chain",
+    name: "DarkWave Trust Layer",
     description: "Layer 1 blockchain with 400ms blocks and 200K+ TPS capacity",
     url: "https://dwsc.io",
     icon: Zap,

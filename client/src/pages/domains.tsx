@@ -666,7 +666,7 @@ export default function DomainsPage() {
               <Shield className="w-10 h-10 text-cyan-400 mb-4" />
               <h3 className="text-lg font-bold text-white mb-2">Blockchain Verified</h3>
               <p className="text-white/60">
-                Every domain is secured on the DarkWave Smart Chain with tamper-proof ownership records.
+                Every domain is secured on the DarkWave Trust Layer with tamper-proof ownership records.
               </p>
             </GlassCard>
             <GlassCard className="p-6">

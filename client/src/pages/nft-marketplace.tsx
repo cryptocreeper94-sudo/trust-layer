@@ -135,7 +135,7 @@ export default function NftMarketplace() {
               </h1>
             </div>
             <p className="text-xs text-muted-foreground">
-              Buy, sell, and mint unique digital assets on DarkWave Smart Chain
+              Buy, sell, and mint unique digital assets on DarkWave Trust Layer
             </p>
           </motion.div>
 
