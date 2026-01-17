@@ -44,7 +44,9 @@ import {
   Palmtree,
   Target,
   Recycle,
-  Church
+  Church,
+  Building,
+  HeartHandshake
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -434,6 +436,28 @@ const verticals: Vertical[] = [
     description: "Churches, mosques, temples, ministries - transparent finances, verified leadership, accountable stewardship",
     participants: ["Congregations", "Clergy", "Ministries", "Nonprofits", "Media", "Missions"],
     connectsTo: ["events", "realestate", "staffing", "education", "marketing", "hospitality"]
+  },
+  {
+    id: "government",
+    name: "Government Services",
+    icon: <Building className="w-6 h-6" />,
+    color: "from-slate-600 to-blue-700",
+    app: undefined,
+    appStatus: "planned",
+    description: "DMV, licensing, permits, public agencies - reducing waste, fraud, and inefficiency through transparency",
+    participants: ["Agencies", "Licensing", "Permits", "Courts", "Elections", "Public Records"],
+    connectsTo: ["legal", "realestate", "automotive", "construction", "healthcare", "education"]
+  },
+  {
+    id: "nonprofit",
+    name: "Charities & Nonprofits",
+    icon: <HeartHandshake className="w-6 h-6" />,
+    color: "from-rose-500 to-pink-600",
+    app: undefined,
+    appStatus: "planned",
+    description: "Charitable organizations, foundations, mutual aid - transparent donations and verified impact",
+    participants: ["Charities", "Foundations", "Donors", "Volunteers", "Grant Writers", "Auditors"],
+    connectsTo: ["faith", "healthcare", "education", "events", "marketing", "legal"]
   }
 ];
 
