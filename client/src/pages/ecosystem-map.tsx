@@ -36,7 +36,10 @@ import {
   Music,
   Trophy,
   Wrench,
-  PawPrint
+  PawPrint,
+  Plane,
+  Brain,
+  Megaphone
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -338,6 +341,39 @@ const verticals: Vertical[] = [
     description: "Veterinary care for pets and livestock, grooming, boarding, rescue - verified practitioners and transparent care",
     participants: ["Veterinarians", "Groomers", "Boarding", "Pet Retail", "Rescues", "Breeders"],
     connectsTo: ["healthcare", "agriculture", "retail", "insurance"]
+  },
+  {
+    id: "aerospace",
+    name: "Aerospace & Defense",
+    icon: <Plane className="w-6 h-6" />,
+    color: "from-sky-600 to-indigo-600",
+    app: undefined,
+    appStatus: "planned",
+    description: "Aircraft, spacecraft, defense systems - precision manufacturing with verified suppliers and stringent compliance",
+    participants: ["Manufacturers", "Airlines", "Defense", "Suppliers", "Maintenance", "Regulators"],
+    connectsTo: ["manufacturing", "supplychain", "insurance", "legal", "transportation"]
+  },
+  {
+    id: "wellness",
+    name: "Mental Health & Wellness",
+    icon: <Brain className="w-6 h-6" />,
+    color: "from-violet-500 to-fuchsia-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "Therapists, counselors, life coaches, wellness practitioners - verified credentials for mental and emotional care",
+    participants: ["Therapists", "Counselors", "Life Coaches", "Wellness", "Retreats", "Support Groups"],
+    connectsTo: ["healthcare", "insurance", "education", "staffing"]
+  },
+  {
+    id: "marketing",
+    name: "Marketing & Sales",
+    icon: <Megaphone className="w-6 h-6" />,
+    color: "from-orange-500 to-pink-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "The horizontal that drives all business - agencies, sales teams, advertising with verified ROI and transparent metrics",
+    participants: ["Agencies", "Sales Teams", "Advertisers", "PR", "Influencers", "Analytics"],
+    connectsTo: ["creative", "retail", "events", "arts", "sports", "staffing"]
   }
 ];
 
