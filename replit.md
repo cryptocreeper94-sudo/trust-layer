@@ -92,6 +92,42 @@ Every page requires:
 - Cepher as primary source with restored names
 - Connects to "Through The Veil" book content
 
+## Business Model & Go-To-Market Strategy
+
+### Revenue Model
+1. **Signal Token Appreciation** - Founder reserves increase in value as network grows
+2. **Transaction Fees** - Tiny fees on every Trust Layer transaction (volume-based)
+3. **Premium Services** - Guardian Certification audits, priority verification, enterprise API access
+4. **Software Products** - Apps built for each vertical (GarageBot, VedaSolus, Orbit, etc.) with licensing/subscriptions
+
+### Adoption Strategy
+- **Free to Join** - No barrier to entry for businesses. Verify once, join the network.
+- **Value Proposition** - "You're verified, your competitors aren't. Customers see the difference."
+- **NOT "We track you"** - The pitch is trust badge + network access, NOT surveillance
+- **Network Effect Cascade**:
+  1. Early adopters join for competitive edge
+  2. Their suppliers/partners get pressured to join
+  3. Customers start looking for the verification badge
+  4. Non-verified becomes a red flag
+  5. Eventually like not having a website - you look illegitimate
+
+### Key Messaging
+- Like BBB but free and actually meaningful (BBB is pay-to-play)
+- Audit trail is a BENEFIT (never worry about IRS), not surveillance
+- Honest businesses gain advantage; only criminals lose
+- Persistence overcomes resistance - especially for something that's the future of commerce
+
+### Adoption Phases
+1. **Phase 1**: Paint companies (current proof of concept)
+2. **Phase 2**: Small businesses in specific verticals with real products
+3. **Phase 3**: Network pressure brings in suppliers/partners
+4. **Phase 4**: Customer demand for verification badge
+5. **Phase 5**: Government/Religion (the final, hardest fight - requires undeniable proof first)
+
+### 36 Verticals Mapped (Ecosystem Page: /ecosystem)
+Commerce, Property, Mobility, Health, Work, Finance, Living, Events, Business, Community
+Each vertical has defined participants, connections, and eventually industry statistics (waste/fraud numbers)
+
 ## External Dependencies
 - **Database**: PostgreSQL
 - **Authentication**: Firebase Auth
