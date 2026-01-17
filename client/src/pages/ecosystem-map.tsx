@@ -39,7 +39,11 @@ import {
   PawPrint,
   Plane,
   Brain,
-  Megaphone
+  Megaphone,
+  Cpu,
+  Palmtree,
+  Target,
+  Recycle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -374,6 +378,50 @@ const verticals: Vertical[] = [
     description: "The horizontal that drives all business - agencies, sales teams, advertising with verified ROI and transparent metrics",
     participants: ["Agencies", "Sales Teams", "Advertisers", "PR", "Influencers", "Analytics"],
     connectsTo: ["creative", "retail", "events", "arts", "sports", "staffing"]
+  },
+  {
+    id: "technology",
+    name: "Technology",
+    icon: <Cpu className="w-6 h-6" />,
+    color: "from-cyan-600 to-blue-600",
+    app: undefined,
+    appStatus: "planned",
+    description: "IT, software, hardware, data centers, cloud, cybersecurity - the infrastructure powering modern business",
+    participants: ["Software", "Hardware", "Data Centers", "Cloud", "Cybersecurity", "IT Services", "SaaS"],
+    connectsTo: ["communications", "creative", "manufacturing", "banking", "healthcare", "aerospace"]
+  },
+  {
+    id: "tourism",
+    name: "Tourism & Travel",
+    icon: <Palmtree className="w-6 h-6" />,
+    color: "from-teal-500 to-emerald-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "Theme parks, resorts, cruises, travel agencies - verified experiences and transparent booking",
+    participants: ["Resorts", "Theme Parks", "Cruises", "Travel Agents", "Tour Operators", "Hotels"],
+    connectsTo: ["hospitality", "transportation", "events", "insurance", "retail"]
+  },
+  {
+    id: "outdoor",
+    name: "Outdoor & Firearms",
+    icon: <Target className="w-6 h-6" />,
+    color: "from-green-700 to-lime-600",
+    app: undefined,
+    appStatus: "planned",
+    description: "Hunting, shooting sports, outdoor recreation - verified dealers, ranges, and compliance tracking",
+    participants: ["Dealers", "Ranges", "Manufacturers", "Training", "Hunting", "Outdoor Gear"],
+    connectsTo: ["retail", "insurance", "legal", "education", "sports"]
+  },
+  {
+    id: "recycling",
+    name: "Recycling & Scrap",
+    icon: <Recycle className="w-6 h-6" />,
+    color: "from-emerald-600 to-green-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "Metal recycling, e-waste, materials recovery - verified origins and transparent commodity pricing",
+    participants: ["Scrap Yards", "Metal Recyclers", "E-Waste", "Haulers", "Processors", "Commodity Markets"],
+    connectsTo: ["manufacturing", "automotive", "construction", "supplychain", "utilities"]
   }
 ];
 
