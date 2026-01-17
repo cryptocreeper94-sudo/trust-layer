@@ -124,9 +124,51 @@ Every page requires:
 4. **Phase 4**: Customer demand for verification badge
 5. **Phase 5**: Government/Religion (the final, hardest fight - requires undeniable proof first)
 
-### 36 Verticals Mapped (Ecosystem Page: /ecosystem)
-Commerce, Property, Mobility, Health, Work, Finance, Living, Events, Business, Community
+### 36+ Verticals Mapped (Ecosystem Page: /ecosystem)
+Commerce, Property, Mobility, Health, Work, Finance, Living, Events, Business, Community, **Logistics**
 Each vertical has defined participants, connections, and eventually industry statistics (waste/fraud numbers)
+
+**Logistics Vertical** (distinct from Transportation/Mobility):
+- Warehousing & fulfillment centers
+- Inventory management systems
+- Supply chain coordination
+- Freight forwarding & customs
+- Last-mile delivery networks
+- Route optimization services
+- Cold chain management
+- Cross-border logistics
+- 3PL/4PL providers
+
+### Business Tenant Portals (B2B Dashboard)
+Each verified company on the Trust Layer gets their own secure space:
+- **Dashboard** - Verification status, Guardian security score, network activity
+- **Transaction Ledger** - Complete audit trail of trust layer activity
+- **Trusted Network** - Verified business connections, pending verifications, vouched relationships
+- **Team Access** - Sub-accounts with role-based permissions (admin, finance, viewer)
+- **Compliance Center** - Certifications, Guardian badges, audit reports
+- **API Access** - Integration keys for connecting existing business systems
+- **Multi-SIG Treasury** - Organizational wallet requiring multiple approvals
+
+Revenue tiers: Free basic tenant → Paid for more users, API calls, advanced analytics
+
+### Multi-SIG Multi-Chain Wallet
+A major differentiator: M-of-N signature requirements across ALL supported chains.
+
+**Use Cases:**
+- Business treasuries (CFO + CEO approval for large transactions)
+- DAO governance (council votes required)
+- Charity funds (board approval for disbursements)
+- Escrow arrangements (built-in for B2B trust transactions)
+- Family offices (shared accounts with approval workflows)
+
+**Features:**
+- Create vaults with configurable thresholds (2-of-3, 3-of-5, etc.)
+- Propose transactions on any supported chain
+- Signers approve via biometric/passkey authentication
+- Auto-execute when threshold met
+- Full audit trail on Trust Layer
+
+**Adoption Strategy:** Businesses discover multi-sig through Trust Layer onboarding → Learn its value for fund security → Become power users → Evangelize to peers
 
 ## External Dependencies
 - **Database**: PostgreSQL
