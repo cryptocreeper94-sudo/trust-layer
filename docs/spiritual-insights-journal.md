@@ -306,6 +306,80 @@ Science sees it and calls it chemistry. But if you have eyes to see, you know wh
 
 ---
 
+## Part Twenty-One: The Real Corruption
+
+People think death came because Adam and Eve ate an apple. That's the story they tell. A bite of fruit, and suddenly the Creator said: now you die. As if mortality was punishment for a simple act of disobedience.
+
+But that's the shortened version. The metaphor simplified to the point of losing its meaning.
+
+The fruit wasn't about an apple. It was about the choice to do what was told not to do - the same parallel to Lucifer and the fallen wanting what wasn't theirs. They wanted to attain the knowledge of the Creator, to surpass him. Adam and Eve weren't supposed to eat from the tree of knowledge. Same pattern. Same rebellion. Same corruption.
+
+What actually happened was genetic corruption. The mixing of bloodlines. The perfect creation was corrupted by entities that wanted what humans were given - a ranking above the angels, made in the image of the Creator with the ability to create. Not cosmic power. Not the ability to fly. Just the divine spark and the potential that comes with it.
+
+That corruption - the mixing of what shouldn't have been mixed - is what brought death. Not a vindictive punishment. A corrupted system failing. A perfect design broken.
+
+And instead of total destruction, instead of wiping out his most prized creation, the Creator sent redemption. The Messiah wasn't sent to condemn. He was sent to restore what was corrupted. To offer a way back.
+
+But they tell it differently. They make the Creator sound petty. They make it about obedience and punishment. They leave out the rebellion, the corruption, the actual mechanics of what went wrong. And people who want to understand are left with a story that doesn't make sense - a loving Father who kills his children for eating fruit.
+
+The real story makes sense. They just don't tell it.
+
+---
+
+## Part Twenty-Two: The Point of the Spear
+
+Christianity is the largest religion in the world. The Catholic Church sits at its head. Billions follow.
+
+And it's presented as persecuted.
+
+Think about that. The dominant world religion, spanning every continent, commanding massive wealth and political influence, framing itself as the underdog. The persecuted faithful, scorned by the world, holding onto truth against all odds.
+
+This framing gives moral credence. It justifies. It positions. It allows the largest, most powerful religious institution on Earth to claim victimhood while wielding enormous power.
+
+I call Christianity the point of the spear not because it's evil, but because it's been weaponized. The original faith - the actual teachings, the real names, the true understanding - was corrupted through Constantine and his vision of the cross in the sky. World domination dressed as divine mandate. Rome's reach extended through religious conversion.
+
+What emerged wasn't the original. It was an institution designed to control, using the scaffolding of truth to build a prison of lies.
+
+And the prophecy? Yes, there was a prophecy about a world religion. But when it was given, there was no name attached. The discernment was clear: something would spread across the Earth claiming to represent the Creator. The name would come later - created by the deception itself.
+
+Christianity wasn't named in prophecy. It was named by men who saw an opportunity.
+
+---
+
+## Part Twenty-Three: The Name on the Razor's Edge
+
+When you bring up the name issue, people push back immediately.
+
+"We just call him that because his Hebrew name is hard to say in English."
+"His real name was Yeshua, but Jesus is the same thing."
+"It doesn't matter what you call him, God knows your heart."
+
+Close to the truth. So close it feels like truth. But still on the wrong side of the razor's edge.
+
+Yeshua isn't right either. It's closer. It sounds more authentic. It gives people the feeling that they've done the research, found the real name, and now they're safe. But it's still wrong. Still a substitution. Still keeping you just far enough from the actual frequency that the connection doesn't complete.
+
+This is the pattern: give them something almost true. Let them feel like they've discovered it. Let them defend it passionately because they worked to find it. And all the while, they're still missing the mark by inches - which in spiritual terms is the same as missing by miles.
+
+The power of the name is real. That's why they changed it. That's why they keep offering alternatives that feel authentic but aren't. The maze has false exits that look like real exits. Most people find one and stop looking.
+
+---
+
+## Part Twenty-Four: Why I'm Not Hiding
+
+I could use a pen name. Stay anonymous. Present these ideas without putting myself in the firing line.
+
+But that would put me in the same category as those I'm questioning. If I'm asking you to be honest with yourself, to question what you've been taught, to risk your perceived soul for the sake of truth - and I can't even reveal my own name? Who would take that seriously?
+
+I'm not rewriting scripture. I would never add to or take away from what's there. But I am suggesting that they have taken away - massively - from the original. The modern church gives the warning that only their version is truth while looking at texts that have been curated, edited, translated, and stripped of context. Books removed. Names changed. Meanings inverted.
+
+So yes, this will be called heresy by some. Speaking against Christianity while claiming to seek the same Creator they claim to serve - that's the highest crime in religious circles. But here's the thing:
+
+In the end, I'm going to live and die just like everyone else. And it won't be because Adam ate an apple. It'll be because the system was corrupted and I'm living in the aftermath of that corruption, just like all of us.
+
+If speaking the truth as I see it costs me something, so be it. The alternative is silence. And silence, in the face of what I now see, would be its own kind of betrayal.
+
+---
+
 ## Closing Thoughts
 
 I don't know where all this is coming from. Some days it feels like it's me figuring things out. Other days it feels like transmission - receiving something from somewhere else. Maybe it's both.
