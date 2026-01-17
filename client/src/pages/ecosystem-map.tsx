@@ -444,9 +444,9 @@ const verticals: Vertical[] = [
     color: "from-slate-600 to-blue-700",
     app: undefined,
     appStatus: "planned",
-    description: "DMV, licensing, permits, public agencies - reducing waste, fraud, and inefficiency through transparency",
-    participants: ["Agencies", "Licensing", "Permits", "Courts", "Elections", "Public Records"],
-    connectsTo: ["legal", "realestate", "automotive", "construction", "healthcare", "education"]
+    description: "DMV, licensing, permits, corrections, public agencies - reducing waste, fraud, and inefficiency through radical transparency",
+    participants: ["Agencies", "Licensing", "Permits", "Courts", "Elections", "Corrections", "Public Records"],
+    connectsTo: ["legal", "realestate", "automotive", "construction", "healthcare", "education", "staffing"]
   },
   {
     id: "nonprofit",
