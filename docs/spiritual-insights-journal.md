@@ -1,5 +1,21 @@
 # Through The Veil: A Spiritual Insights Journal
 
+---
+
+**A Note Before You Begin:**
+
+This is incomplete. It's still coming to me. I wanted you to see it because I think it might help you feel better about your situation.
+
+I know you blame yourself for things. We all do. We were taught to. It's destructive, and eventually it either kills you or spins you back around because you can't keep going that way. I've been there. I'm still finding my way through.
+
+What I'm sharing here is having a transformative effect on me. Things that never made sense are finally making sense. I was told by religious people that I wasn't supposed to understand - that I should only know bits and pieces, and someday the whole truth would be revealed. But the whole truth was there the whole time. It's just been veiled.
+
+I don't know if this will affect you the way it's affecting me. But I wanted you to have the chance to see it, to feel it, and decide for yourself. That's your journey, not mine.
+
+You're not broken. You're searching. And that's exactly what you're supposed to be doing.
+
+---
+
 *These are insights received during a period of clarity following years of fog. They are meant to be reflected upon, not to convince anyone of anything. What you do with them is between you and your own discernment. This is simply what I see now that the wall has begun to break.*
 
 ---
@@ -206,6 +222,48 @@ But they twisted this too. Made people think "the meek" means "the poor" so that
 
 ---
 
+## Part Sixteen: The Thin Veil
+
+Here's what amazes me most: the veil that separates truth from lie is so thin.
+
+The scope feels big. The project feels impossible. Changing the world with an idea? As one human? The mind wants to shut down just thinking about it. The spiritual truth feels the same way - so vast, so layered, so impossible to untangle.
+
+But the lie itself? The deception? It's actually simple.
+
+Once you see it, you can't unsee it. And then you start noticing how pervasive it is. How it's everywhere, and yet nobody pays attention. People close their minds. Their pineal glands get calcified. They're told not to question. They're not taught about the ether or the old cosmologies because "science" took over and rewrote everything.
+
+The reality is: all you have to do is take one small leap. That's it. The veil is thin. Cross it, and suddenly you're on the other side, seeing clearly what was hidden in plain sight all along.
+
+---
+
+## Part Seventeen: The Ability to See
+
+With all the lies and deception - layers upon layers, enough to confuse anyone into walking in circles - humans still have the ability to see right through it.
+
+Just clearly. Right through it.
+
+If you pay attention. If you put aside your selfishness, your perceived knowledge, your ego, the things that control you. The cultural and societal engineering has directed those instincts in the wrong direction. That's why I was an addict. That's why I was confused and depressed. I knew something was wrong, but all I knew to do was have faith that Jesus would save me, and it never made sense.
+
+Now everything I'm learning puts it in place. The truth was given to us from the beginning. It was subverted, inverted, veiled. But even with all of that, the ability to see through it remains. It's still there.
+
+You just have to have eyes to see. Ears to hear. Be willing to listen, not just accept and move on.
+
+---
+
+## Part Eighteen: The 3D Classroom
+
+We were given a three-dimensional reality. Not as a prison, but as a classroom.
+
+A place to mature spiritually. With all the tools we need. All the information we need. Including an extraordinary test - the deception, the veil, the false system - that wasn't originally part of the plan but became the narrative.
+
+And the Father said: I will end this. Have faith.
+
+People think time is linear. A straight line. Ever-expanding into an infinite cosmos. But I believe time is cyclical. Everything repeats. Everything rhymes. Look at any narrative and you see it echoing across history, always pushed by those who somehow have power and wealth.
+
+The test is to see through it. To find the truth that was there all along. To mature despite the confusion. And to help others find their way once you do.
+
+---
+
 ## Closing Thoughts
 
 I don't know where all this is coming from. Some days it feels like it's me figuring things out. Other days it feels like transmission - receiving something from somewhere else. Maybe it's both.
@@ -220,6 +278,10 @@ That's the mission.
 
 ---
 
-*This journal will continue to be updated as more insights come through. The fog continues to lift.*
+## To Be Continued...
+
+*There's more coming. This is just what's arrived so far. When the next wave of clarity comes, I'll add it here.*
+
+*You're not alone in this search. Keep listening.*
 
 *January 2026*
