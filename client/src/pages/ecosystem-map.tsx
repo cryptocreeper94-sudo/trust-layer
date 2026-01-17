@@ -22,7 +22,16 @@ import {
   Globe,
   Lock,
   Network,
-  Sparkles
+  Sparkles,
+  ShoppingBag,
+  Siren,
+  Lightbulb,
+  Phone,
+  Landmark,
+  Wheat,
+  GraduationCap,
+  Bus,
+  Scale
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -48,7 +57,7 @@ const verticals: Vertical[] = [
     appStatus: "live",
     description: "Verified workers, employers, and agencies connected through trusted credentialing",
     participants: ["Employers", "Workers", "Agencies", "Payroll", "Background Check", "Training"],
-    connectsTo: ["construction", "healthcare", "events", "hospitality", "automotive"]
+    connectsTo: ["construction", "healthcare", "events", "hospitality", "automotive", "retail", "education", "legal"]
   },
   {
     id: "automotive",
@@ -59,7 +68,7 @@ const verticals: Vertical[] = [
     appStatus: "built",
     description: "Parts suppliers, mechanics, dealers, and auctions with transparent pricing and verified service",
     participants: ["Dealers", "Mechanics", "Parts Suppliers", "Auctions", "Fleet Managers", "Insurance"],
-    connectsTo: ["insurance", "staffing", "supplychain"]
+    connectsTo: ["insurance", "staffing", "supplychain", "transportation", "banking"]
   },
   {
     id: "healthcare",
@@ -70,7 +79,7 @@ const verticals: Vertical[] = [
     appStatus: "built",
     description: "Practitioners of all traditions - Western, Eastern, Ayurvedic, Unani - with verified credentials",
     participants: ["Practitioners", "Patients", "Pharmacies", "Labs", "Insurance", "Telemedicine"],
-    connectsTo: ["insurance", "staffing"]
+    connectsTo: ["insurance", "staffing", "emergency", "education"]
   },
   {
     id: "trading",
@@ -92,7 +101,7 @@ const verticals: Vertical[] = [
     appStatus: "planned",
     description: "Transparent comparison across auto, health, property, business - verified quotes from verified providers",
     participants: ["Carriers", "Agents", "Adjusters", "Underwriters", "Policyholders"],
-    connectsTo: ["automotive", "healthcare", "realestate", "construction", "events", "staffing"]
+    connectsTo: ["automotive", "healthcare", "realestate", "construction", "events", "staffing", "agriculture", "retail", "emergency", "banking"]
   },
   {
     id: "construction",
@@ -103,7 +112,7 @@ const verticals: Vertical[] = [
     appStatus: "planned",
     description: "Contractors, subcontractors, inspectors, and suppliers with verified licenses and transparent bids",
     participants: ["Contractors", "Subcontractors", "Inspectors", "Suppliers", "Architects", "Permitting"],
-    connectsTo: ["realestate", "insurance", "staffing", "supplychain"]
+    connectsTo: ["realestate", "insurance", "staffing", "supplychain", "utilities", "legal"]
   },
   {
     id: "realestate",
@@ -114,7 +123,7 @@ const verticals: Vertical[] = [
     appStatus: "planned",
     description: "Agents, buyers, sellers, and property managers with verified transactions and reputation",
     participants: ["Agents", "Buyers", "Sellers", "Property Managers", "Title/Escrow", "Appraisers"],
-    connectsTo: ["construction", "insurance", "trading"]
+    connectsTo: ["construction", "insurance", "trading", "banking", "utilities", "legal"]
   },
   {
     id: "events",
@@ -125,7 +134,7 @@ const verticals: Vertical[] = [
     appStatus: "planned",
     description: "Stadiums, festivals, conferences - verified vendors, security, and transparent ticketing",
     participants: ["Venues", "Promoters", "Vendors", "Security", "Talent", "Ticketing"],
-    connectsTo: ["staffing", "insurance", "hospitality", "supplychain"]
+    connectsTo: ["staffing", "insurance", "hospitality", "supplychain", "transportation", "communications"]
   },
   {
     id: "hospitality",
@@ -136,7 +145,7 @@ const verticals: Vertical[] = [
     appStatus: "planned",
     description: "Restaurants, hotels, catering with verified health standards and supplier transparency",
     participants: ["Restaurants", "Hotels", "Catering", "Suppliers", "Inspectors", "Delivery"],
-    connectsTo: ["events", "staffing", "supplychain", "insurance"]
+    connectsTo: ["events", "staffing", "supplychain", "insurance", "agriculture", "retail"]
   },
   {
     id: "supplychain",
@@ -147,7 +156,7 @@ const verticals: Vertical[] = [
     appStatus: "planned",
     description: "Manufacturers to consumers with verified origins, transparent tracking, and accountability",
     participants: ["Manufacturers", "Distributors", "Warehouses", "Freight", "Customs", "Retail"],
-    connectsTo: ["automotive", "construction", "hospitality", "events"]
+    connectsTo: ["automotive", "construction", "hospitality", "events", "retail", "agriculture"]
   },
   {
     id: "creative",
@@ -170,6 +179,105 @@ const verticals: Vertical[] = [
     description: "Verified economies, fair play, and real ownership of digital assets",
     participants: ["Players", "Creators", "Guilds", "Marketplaces", "Streamers"],
     connectsTo: ["creative", "events"]
+  },
+  {
+    id: "retail",
+    name: "Retail",
+    icon: <ShoppingBag className="w-6 h-6" />,
+    color: "from-rose-500 to-orange-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "Storefronts, franchises, and local shops with verified inventory, transparent pricing, and trusted transactions",
+    participants: ["Stores", "Franchises", "POS Systems", "Inventory", "Loss Prevention", "Customers"],
+    connectsTo: ["supplychain", "staffing", "insurance", "realestate", "banking"]
+  },
+  {
+    id: "emergency",
+    name: "Emergency Services",
+    icon: <Siren className="w-6 h-6" />,
+    color: "from-red-600 to-red-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "Fire, EMS, and law enforcement with verified responders and transparent dispatch",
+    participants: ["Fire Departments", "EMS", "Law Enforcement", "Dispatch", "Hospitals", "Insurance"],
+    connectsTo: ["healthcare", "insurance", "utilities", "communications"]
+  },
+  {
+    id: "utilities",
+    name: "Utilities",
+    icon: <Lightbulb className="w-6 h-6" />,
+    color: "from-yellow-500 to-amber-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "Electric, water, gas, and waste services with transparent billing and verified service",
+    participants: ["Providers", "Technicians", "Meters", "Billing", "Regulators", "Customers"],
+    connectsTo: ["realestate", "construction", "agriculture", "emergency"]
+  },
+  {
+    id: "communications",
+    name: "Communications",
+    icon: <Phone className="w-6 h-6" />,
+    color: "from-sky-500 to-blue-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "Telecom, internet, and satellite services - the infrastructure that connects everything",
+    participants: ["Carriers", "ISPs", "Satellite", "Installers", "Equipment", "Customers"],
+    connectsTo: ["utilities", "retail", "emergency", "creative"]
+  },
+  {
+    id: "banking",
+    name: "Banking & Lending",
+    icon: <Landmark className="w-6 h-6" />,
+    color: "from-emerald-600 to-green-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "Loans, mortgages, and credit with transparent terms and verified participants (ISO compliant)",
+    participants: ["Banks", "Credit Unions", "Lenders", "Underwriters", "Borrowers", "Regulators"],
+    connectsTo: ["realestate", "automotive", "insurance", "retail", "trading"]
+  },
+  {
+    id: "agriculture",
+    name: "Agriculture",
+    icon: <Wheat className="w-6 h-6" />,
+    color: "from-lime-600 to-green-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "Farming, livestock, and equipment with verified origins and transparent supply chains",
+    participants: ["Farmers", "Ranchers", "Equipment", "Seeds/Feed", "Distributors", "Markets"],
+    connectsTo: ["supplychain", "hospitality", "retail", "utilities", "insurance"]
+  },
+  {
+    id: "education",
+    name: "Education & Training",
+    icon: <GraduationCap className="w-6 h-6" />,
+    color: "from-purple-500 to-indigo-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "Schools, certification programs, and training with verified credentials that travel with you",
+    participants: ["Schools", "Trainers", "Students", "Certifications", "Employers", "Licensing"],
+    connectsTo: ["staffing", "healthcare", "legal", "creative"]
+  },
+  {
+    id: "transportation",
+    name: "Transportation",
+    icon: <Bus className="w-6 h-6" />,
+    color: "from-blue-600 to-indigo-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "Rideshare, fleet, and public transit with verified drivers and transparent routing",
+    participants: ["Drivers", "Fleet Managers", "Transit Authorities", "Passengers", "Dispatchers"],
+    connectsTo: ["automotive", "events", "staffing", "insurance"]
+  },
+  {
+    id: "legal",
+    name: "Legal Services",
+    icon: <Scale className="w-6 h-6" />,
+    color: "from-gray-600 to-slate-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "Attorneys, notaries, and mediators with verified bar status and transparent billing",
+    participants: ["Attorneys", "Notaries", "Mediators", "Courts", "Clients", "Paralegals"],
+    connectsTo: ["realestate", "insurance", "banking", "construction", "staffing"]
   }
 ];
 
