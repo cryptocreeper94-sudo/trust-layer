@@ -32,7 +32,8 @@ import {
   CloudOff,
   Loader,
   CreditCard,
-  X
+  X,
+  Fingerprint
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
@@ -59,6 +60,7 @@ import {
   getTestnetName,
   type TestnetBalance 
 } from "@/lib/testnet-service";
+import { startAuthentication as webauthnStartAuthentication } from "@simplewebauthn/browser";
 
 const SUPPORTED_CHAINS = [
   { id: 'darkwave', name: 'DarkWave Trust Layer', symbol: 'SIG', icon: '⚡', color: 'from-purple-500 to-pink-500', explorer: '/explorer' },
@@ -98,13 +100,27 @@ export default function WalletPage() {
   const [showLogin, setShowLogin] = useState(false);
   const [isBackingUp, setIsBackingUp] = useState(false);
   const [isRestoring, setIsRestoring] = useState(false);
+  const [isBiometricUnlocking, setIsBiometricUnlocking] = useState(false);
   
-  // Check if cloud backup exists
+  // Check if user has passkeys registered
+  const { data: passkeysData } = useQuery({
+    queryKey: ["passkeys"],
+    queryFn: async () => {
+      const res = await fetch("/api/webauthn/passkeys", { credentials: "include" });
+      if (!res.ok) return [];
+      return res.json();
+    },
+    enabled: !!user?.id,
+  });
+  const hasPasskeys = passkeysData && passkeysData.length > 0;
+  
+  // Check if cloud backup exists (check whenever user is logged in)
   const { data: backupStatus } = useQuery({
     queryKey: ["wallet-backup-status", user?.id],
     queryFn: () => axios.get("/api/wallet/backup/exists").then(r => r.data),
-    enabled: !!user?.id && walletCreated,
+    enabled: !!user?.id,
   });
+  const hasCloudBackup = backupStatus?.exists;
   
   const handleCloudBackup = async () => {
     if (!user?.id) {
@@ -170,6 +186,75 @@ export default function WalletPage() {
       toast({ title: "Restore failed", description: "Could not restore from cloud backup", variant: "destructive" });
     } finally {
       setIsRestoring(false);
+    }
+  };
+
+  // Biometric/Passkey unlock - authenticates user and restores wallet from cloud backup
+  const handleBiometricUnlock = async () => {
+    if (!user?.id) {
+      toast({ title: "Sign in required", description: "Please sign in first to use biometric unlock", variant: "destructive" });
+      return;
+    }
+    
+    setIsBiometricUnlocking(true);
+    try {
+      // Start passkey authentication
+      const startRes = await fetch("/api/webauthn/authenticate/start", {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!startRes.ok) throw new Error("Failed to start authentication");
+      
+      const { requestId, ...options } = await startRes.json();
+      const credential = await webauthnStartAuthentication({ optionsJSON: options });
+      
+      const finishRes = await fetch("/api/webauthn/authenticate/finish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ ...credential, requestId }),
+      });
+      
+      if (!finishRes.ok) throw new Error("Authentication failed");
+      
+      // Biometric auth succeeded - now restore wallet from cloud
+      const response = await axios.get("/api/wallet/backup");
+      if (!response.data.backup) {
+        toast({ 
+          title: "No cloud backup", 
+          description: "Set up your wallet and enable cloud backup to use biometric unlock", 
+          variant: "destructive" 
+        });
+        return;
+      }
+      
+      const backup = response.data.backup;
+      const addresses = backup.walletAddresses ? JSON.parse(backup.walletAddresses) : {};
+      const encryptedParts = JSON.parse(backup.encryptedData);
+      
+      // Restore wallet to localStorage
+      const restoredWallet: StoredWallet = {
+        encryptedSeed: encryptedParts.encryptedSeed,
+        salt: encryptedParts.salt,
+        iv: encryptedParts.iv,
+        addresses,
+        createdAt: backup.createdAt,
+      };
+      
+      localStorage.setItem('darkwave_wallet', JSON.stringify(restoredWallet));
+      setShowLogin(true);
+      toast({ 
+        title: "Identity verified", 
+        description: "Now enter your wallet password to unlock" 
+      });
+    } catch (error: any) {
+      toast({ 
+        title: "Biometric unlock failed", 
+        description: error.message || "Could not authenticate. Try again or use password.", 
+        variant: "destructive" 
+      });
+    } finally {
+      setIsBiometricUnlocking(false);
     }
   };
 
@@ -572,6 +657,29 @@ export default function WalletPage() {
                     <p className="text-sm text-muted-foreground">
                       Enter your password to unlock your wallet.
                     </p>
+                    
+                    {/* Biometric unlock option */}
+                    {user && hasPasskeys && (
+                      <div className="pb-4 border-b border-white/10">
+                        <Button
+                          onClick={handleBiometricUnlock}
+                          disabled={isBiometricUnlocking}
+                          className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600"
+                          data-testid="button-biometric-unlock"
+                        >
+                          {isBiometricUnlocking ? (
+                            <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                          ) : (
+                            <Fingerprint className="w-4 h-4 mr-2" />
+                          )}
+                          {isBiometricUnlocking ? "Verifying..." : "Restore with Fingerprint"}
+                        </Button>
+                        <div className="text-center mt-3">
+                          <span className="text-xs text-muted-foreground">Verifies identity and restores backup, then enter password</span>
+                        </div>
+                      </div>
+                    )}
+                    
                     <div className="space-y-2">
                       <Label>Password</Label>
                       <Input
@@ -608,6 +716,48 @@ export default function WalletPage() {
                   </div>
                 ) : (
                 <>
+                {/* Cloud restore option for logged-in users with backups */}
+                {user && hasCloudBackup && (
+                  <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Cloud className="w-5 h-5 text-cyan-400" />
+                      <span className="font-medium text-cyan-300">Cloud Backup Found</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      We found your wallet backup. Restore it to continue.
+                    </p>
+                    {hasPasskeys ? (
+                      <Button
+                        onClick={handleBiometricUnlock}
+                        disabled={isBiometricUnlocking}
+                        className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600"
+                        data-testid="button-restore-biometric"
+                      >
+                        {isBiometricUnlocking ? (
+                          <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                        ) : (
+                          <Fingerprint className="w-4 h-4 mr-2" />
+                        )}
+                        {isBiometricUnlocking ? "Verifying..." : "Restore with Fingerprint"}
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={handleCloudRestore}
+                        disabled={isRestoring}
+                        className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600"
+                        data-testid="button-restore-cloud"
+                      >
+                        {isRestoring ? (
+                          <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                        ) : (
+                          <Cloud className="w-4 h-4 mr-2" />
+                        )}
+                        {isRestoring ? "Restoring..." : "Restore from Cloud"}
+                      </Button>
+                    )}
+                  </div>
+                )}
+                
                 <Tabs defaultValue="create" className="w-full">
                   <TabsList className="w-full bg-white/5">
                     <TabsTrigger value="create" className="flex-1">Create New</TabsTrigger>
