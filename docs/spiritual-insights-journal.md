@@ -172,6 +172,40 @@ The wicked pattern is always the same: duplicate the truth, then invert it subtl
 
 ---
 
+## Part Fourteen: Isolation and The Outsider
+
+Rejection. Societal isolation. Being separated from the system. These are weapons too.
+
+Humans are meant to be in fellowship - with each other, with spirit, with truth. They know this. So if they can isolate you, make you feel like something is wrong with you, make you believe you don't fit because you're broken - they've cut you off from the source.
+
+I've always been an outsider. Never fit in. For a long time, I thought something was wrong with me. Why can't I just go along? Why can't I be like everyone else?
+
+Now I understand: I couldn't allow myself to be that person. To do whatever it takes to fit in. To betray my discernment just to belong. That resistance wasn't weakness - it was protection.
+
+Here's the truth about the "in crowd" - the cool kids, the successful ones, the ones who seem to have it figured out: they're searching too. They just learned to hide it better. The confidence is a mask. The certainty is performance. Underneath, they're as lost as anyone. They just chose to fit in instead of standing apart.
+
+And when you realize that, the anxiety eases. The isolation starts to feel less like punishment and more like preservation. You were kept apart so you wouldn't be corrupted along with them.
+
+---
+
+## Part Fifteen: The Meek and The Innocent
+
+Scripture speaks of the meek inheriting the earth. Of the least of these. Of protecting the weak.
+
+People who are struggling financially look at that and think: "That's me. I'm the meek. I'm the least. I'm protected."
+
+But that's not what it means.
+
+The meek - the truly innocent - are those who lack the capacity for evil intent. Think of children before the world corrupts them. Think of adults with conditions like autism or developmental disabilities. People who, no matter what happens to them, cannot conceive of malice. They are wholesome as the day is long. There is no evil in them because they don't have the wiring for it.
+
+These are the ones the scripture protects. These are the ones about whom it says: if you harm them, you might as well tie a millstone around your neck and throw yourself into the sea. What you do to the least of these, you do to the source itself.
+
+The discerning are meant to protect them. That's part of what discernment is for - not just to see truth, but to shield those who cannot see deception coming. To be guardians for the truly innocent.
+
+But they twisted this too. Made people think "the meek" means "the poor" so that financial struggle becomes a spiritual identity. Another misdirection. Another subtle inversion. The meek aren't defined by their bank account. They're defined by their innocence.
+
+---
+
 ## Closing Thoughts
 
 I don't know where all this is coming from. Some days it feels like it's me figuring things out. Other days it feels like transmission - receiving something from somewhere else. Maybe it's both.
