@@ -32,7 +32,9 @@ import {
   GraduationCap,
   Bus,
   Scale,
-  Factory
+  Factory,
+  Music,
+  Trophy
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -290,6 +292,28 @@ const verticals: Vertical[] = [
     description: "The origin point - where goods are created before entering the supply chain. Tractors, equipment, parts, electronics",
     participants: ["Factories", "Assembly", "Quality Control", "Parts Fabrication", "Heavy Equipment", "Electronics"],
     connectsTo: ["supplychain", "automotive", "agriculture", "construction", "retail", "staffing"]
+  },
+  {
+    id: "arts",
+    name: "Arts & Entertainment",
+    icon: <Music className="w-6 h-6" />,
+    color: "from-pink-600 to-purple-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "Music, theater, visual arts, museums, galleries - creative expression with verified artists and transparent royalties",
+    participants: ["Artists", "Musicians", "Galleries", "Museums", "Labels", "Venues", "Agents"],
+    connectsTo: ["events", "gaming", "creative", "legal", "insurance"]
+  },
+  {
+    id: "sports",
+    name: "Sports",
+    icon: <Trophy className="w-6 h-6" />,
+    color: "from-amber-500 to-orange-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "Professional and amateur sports - teams, athletes, leagues, venues with verified credentials and transparent contracts",
+    participants: ["Athletes", "Teams", "Leagues", "Venues", "Agents", "Sponsors", "Media"],
+    connectsTo: ["events", "insurance", "legal", "staffing", "healthcare", "retail"]
   }
 ];
 
