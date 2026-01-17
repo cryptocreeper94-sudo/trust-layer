@@ -122,6 +122,14 @@ export default function WalletPage() {
   });
   const hasCloudBackup = backupStatus?.exists;
   
+  // Check if biometric unlock is set up
+  const { data: biometricStatus, refetch: refetchBiometricStatus } = useQuery({
+    queryKey: ["wallet-biometric-status", user?.id],
+    queryFn: () => axios.get("/api/wallet/biometric/status").then(r => r.data),
+    enabled: !!user?.id,
+  });
+  const hasBiometricSetup = biometricStatus?.enabled;
+  
   const handleCloudBackup = async () => {
     if (!user?.id) {
       toast({ title: "Sign in required", description: "Please sign in to enable cloud backup", variant: "destructive" });
@@ -189,7 +197,7 @@ export default function WalletPage() {
     }
   };
 
-  // Biometric/Passkey unlock - authenticates user and restores wallet from cloud backup
+  // TRUE Biometric/Passkey unlock - Phantom-style, no password after initial setup
   const handleBiometricUnlock = async () => {
     if (!user?.id) {
       toast({ title: "Sign in required", description: "Please sign in first to use biometric unlock", variant: "destructive" });
@@ -217,7 +225,42 @@ export default function WalletPage() {
       
       if (!finishRes.ok) throw new Error("Authentication failed");
       
-      // Biometric auth succeeded - now restore wallet from cloud
+      // If biometric unlock is set up, get decrypted password and unlock automatically
+      if (hasBiometricSetup) {
+        const unlockRes = await axios.post("/api/wallet/biometric/unlock");
+        if (unlockRes.data.walletPassword) {
+          // Restore wallet from cloud first if needed
+          const savedWallet = localStorage.getItem('darkwave_wallet');
+          if (!savedWallet) {
+            const response = await axios.get("/api/wallet/backup");
+            if (response.data.backup) {
+              const backup = response.data.backup;
+              const addresses = backup.walletAddresses ? JSON.parse(backup.walletAddresses) : {};
+              const encryptedParts = JSON.parse(backup.encryptedData);
+              const restoredWallet: StoredWallet = {
+                encryptedSeed: encryptedParts.encryptedSeed,
+                salt: encryptedParts.salt,
+                iv: encryptedParts.iv,
+                addresses,
+                createdAt: backup.createdAt,
+              };
+              localStorage.setItem('darkwave_wallet', JSON.stringify(restoredWallet));
+            }
+          }
+          
+          // Now unlock with the decrypted password
+          const walletData = localStorage.getItem('darkwave_wallet');
+          if (walletData) {
+            await unlockWallet(JSON.parse(walletData) as StoredWallet, unlockRes.data.walletPassword);
+            setWalletCreated(true);
+            setShowLogin(false);
+            toast({ title: "Welcome back!", description: "Wallet unlocked with fingerprint" });
+            return;
+          }
+        }
+      }
+      
+      // Fallback: Biometric not set up, just restore and prompt for password
       const response = await axios.get("/api/wallet/backup");
       if (!response.data.backup) {
         toast({ 
@@ -232,7 +275,6 @@ export default function WalletPage() {
       const addresses = backup.walletAddresses ? JSON.parse(backup.walletAddresses) : {};
       const encryptedParts = JSON.parse(backup.encryptedData);
       
-      // Restore wallet to localStorage
       const restoredWallet: StoredWallet = {
         encryptedSeed: encryptedParts.encryptedSeed,
         salt: encryptedParts.salt,
@@ -255,6 +297,22 @@ export default function WalletPage() {
       });
     } finally {
       setIsBiometricUnlocking(false);
+    }
+  };
+  
+  // Setup biometric unlock - call this after successful password unlock
+  const handleSetupBiometric = async (walletPassword: string) => {
+    if (!user?.id || !hasPasskeys) return;
+    
+    try {
+      await axios.post("/api/wallet/biometric/setup", { walletPassword });
+      refetchBiometricStatus();
+      toast({ 
+        title: "Fingerprint unlock enabled", 
+        description: "Next time you can unlock with just your fingerprint" 
+      });
+    } catch (error) {
+      console.error("Failed to setup biometric:", error);
     }
   };
 
@@ -500,6 +558,12 @@ export default function WalletPage() {
       
       setWalletCreated(true);
       setShowLogin(false);
+      
+      // If user has passkeys but not biometric wallet unlock, set it up automatically
+      if (user && hasPasskeys && !hasBiometricSetup) {
+        handleSetupBiometric(loginPassword);
+      }
+      
       setLoginPassword("");
       toast({ title: "Welcome Back", description: "Wallet unlocked successfully" });
     } catch (error: any) {
@@ -672,10 +736,12 @@ export default function WalletPage() {
                           ) : (
                             <Fingerprint className="w-4 h-4 mr-2" />
                           )}
-                          {isBiometricUnlocking ? "Verifying..." : "Restore with Fingerprint"}
+                          {isBiometricUnlocking ? "Verifying..." : (hasBiometricSetup ? "Unlock with Fingerprint" : "Restore with Fingerprint")}
                         </Button>
                         <div className="text-center mt-3">
-                          <span className="text-xs text-muted-foreground">Verifies identity and restores backup, then enter password</span>
+                          <span className="text-xs text-muted-foreground">
+                            {hasBiometricSetup ? "One tap to unlock your wallet" : "Verifies identity and restores backup, then enter password"}
+                          </span>
                         </div>
                       </div>
                     )}
@@ -738,7 +804,7 @@ export default function WalletPage() {
                         ) : (
                           <Fingerprint className="w-4 h-4 mr-2" />
                         )}
-                        {isBiometricUnlocking ? "Verifying..." : "Restore with Fingerprint"}
+                        {isBiometricUnlocking ? "Verifying..." : (hasBiometricSetup ? "Unlock with Fingerprint" : "Restore with Fingerprint")}
                       </Button>
                     ) : (
                       <Button

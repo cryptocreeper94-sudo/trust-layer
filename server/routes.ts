@@ -111,7 +111,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -6331,6 +6331,152 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Error checking backup:", error);
       res.status(500).json({ error: "Failed to check backup status" });
+    }
+  });
+
+  // === BIOMETRIC WALLET UNLOCK ===
+  // Encryption key for wallet passwords (server-side)
+  const WALLET_ENCRYPTION_KEY = process.env.OWNER_SECRET || 'default-wallet-key-change-in-production';
+  
+  // Setup biometric unlock - stores encrypted wallet password
+  app.post("/api/wallet/biometric/setup", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const schema = z.object({
+        walletPassword: z.string().min(1),
+      });
+      
+      const { walletPassword } = schema.parse(req.body);
+      
+      // Encrypt the wallet password using AES-256-GCM
+      const iv = crypto.randomBytes(16);
+      const key = crypto.scryptSync(WALLET_ENCRYPTION_KEY, 'salt', 32);
+      const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+      
+      let encrypted = cipher.update(walletPassword, 'utf8', 'hex');
+      encrypted += cipher.final('hex');
+      const authTag = cipher.getAuthTag().toString('hex');
+      
+      // Store encrypted password + IV + authTag
+      const encryptedData = encrypted + ':' + authTag;
+      
+      // Upsert biometric credential
+      const [existing] = await db.select()
+        .from(walletBiometricCredentials)
+        .where(eq(walletBiometricCredentials.userId, userId));
+      
+      if (existing) {
+        await db.update(walletBiometricCredentials)
+          .set({ 
+            encryptedPassword: encryptedData, 
+            encryptionIv: iv.toString('hex'),
+            isActive: true,
+          })
+          .where(eq(walletBiometricCredentials.userId, userId));
+      } else {
+        await db.insert(walletBiometricCredentials).values({
+          userId,
+          encryptedPassword: encryptedData,
+          encryptionIv: iv.toString('hex'),
+          isActive: true,
+        });
+      }
+      
+      res.json({ success: true, message: "Biometric unlock enabled" });
+    } catch (error: any) {
+      console.error("Error setting up biometric:", error);
+      res.status(500).json({ error: "Failed to setup biometric unlock" });
+    }
+  });
+  
+  // Get wallet password using biometrics (must be called after passkey auth)
+  app.post("/api/wallet/biometric/unlock", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      // Get biometric credential
+      const [credential] = await db.select()
+        .from(walletBiometricCredentials)
+        .where(and(
+          eq(walletBiometricCredentials.userId, userId),
+          eq(walletBiometricCredentials.isActive, true)
+        ));
+      
+      if (!credential) {
+        return res.status(404).json({ error: "Biometric unlock not set up" });
+      }
+      
+      // Decrypt the wallet password
+      const [encryptedData, authTag] = credential.encryptedPassword.split(':');
+      const iv = Buffer.from(credential.encryptionIv, 'hex');
+      const key = crypto.scryptSync(WALLET_ENCRYPTION_KEY, 'salt', 32);
+      const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
+      decipher.setAuthTag(Buffer.from(authTag, 'hex'));
+      
+      let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
+      decrypted += decipher.final('utf8');
+      
+      // Update last used timestamp
+      await db.update(walletBiometricCredentials)
+        .set({ lastUsedAt: new Date() })
+        .where(eq(walletBiometricCredentials.userId, userId));
+      
+      res.json({ success: true, walletPassword: decrypted });
+    } catch (error: any) {
+      console.error("Error with biometric unlock:", error);
+      res.status(500).json({ error: "Failed to unlock with biometrics" });
+    }
+  });
+  
+  // Check if biometric unlock is set up
+  app.get("/api/wallet/biometric/status", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const [credential] = await db.select({ 
+        id: walletBiometricCredentials.id,
+        isActive: walletBiometricCredentials.isActive,
+        lastUsedAt: walletBiometricCredentials.lastUsedAt,
+      })
+        .from(walletBiometricCredentials)
+        .where(eq(walletBiometricCredentials.userId, userId));
+      
+      res.json({ 
+        enabled: !!credential?.isActive,
+        lastUsedAt: credential?.lastUsedAt || null,
+      });
+    } catch (error) {
+      console.error("Error checking biometric status:", error);
+      res.status(500).json({ error: "Failed to check status" });
+    }
+  });
+  
+  // Disable biometric unlock
+  app.delete("/api/wallet/biometric", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      await db.update(walletBiometricCredentials)
+        .set({ isActive: false })
+        .where(eq(walletBiometricCredentials.userId, userId));
+      
+      res.json({ success: true, message: "Biometric unlock disabled" });
+    } catch (error) {
+      console.error("Error disabling biometric:", error);
+      res.status(500).json({ error: "Failed to disable biometric" });
     }
   });
 

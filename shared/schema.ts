@@ -4304,6 +4304,30 @@ export type WalletBackup = typeof walletBackups.$inferSelect;
 export type InsertWalletBackup = z.infer<typeof insertWalletBackupSchema>;
 
 // ============================================
+// WALLET BIOMETRIC CREDENTIALS
+// Stores encrypted wallet password for fingerprint unlock
+// ============================================
+
+export const walletBiometricCredentials = pgTable("wallet_biometric_credentials", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(), // One biometric credential per user
+  encryptedPassword: text("encrypted_password").notNull(), // AES-256-GCM encrypted wallet password
+  encryptionIv: text("encryption_iv").notNull(), // IV for decryption
+  isActive: boolean("is_active").notNull().default(true),
+  lastUsedAt: timestamp("last_used_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertWalletBiometricCredentialSchema = createInsertSchema(walletBiometricCredentials).omit({
+  id: true,
+  createdAt: true,
+  lastUsedAt: true,
+});
+
+export type WalletBiometricCredential = typeof walletBiometricCredentials.$inferSelect;
+export type InsertWalletBiometricCredential = z.infer<typeof insertWalletBiometricCredentialSchema>;
+
+// ============================================
 // USER EXTERNAL WALLETS (Third-Party Wallets)
 // ============================================
 
