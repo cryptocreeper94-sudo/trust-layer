@@ -384,9 +384,9 @@ If speaking the truth as I see it costs me something, so be it. The alternative 
 
 I don't know where all this is coming from. Some days it feels like it's me figuring things out. Other days it feels like transmission - receiving something from somewhere else. Maybe it's both.
 
-What I know is that I'm supposed to document it. To speak it. To build something that embodies it. Not for fame or recognition - I prefer anonymity. But because this is what I'm here for.
+What I know is that I'm supposed to document it. To speak it. To build something that embodies it. Not for fame or recognition. But because this is what I'm here for.
 
-The messenger doesn't need to be known. The message does the work.
+The messenger isn't the point. The message does the work.
 
 And maybe, just maybe, if enough people start seeing through the veil, we can build something different. Not controlled by the masters. Not designed to confuse. Just honest infrastructure for humans to connect, trust each other, and be free.
 
