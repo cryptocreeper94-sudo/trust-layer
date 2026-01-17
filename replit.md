@@ -1,14 +1,7 @@
 # DarkWave Trust Layer - Replit Agent Guide
 
 ## Overview
-DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (PoA) blockchain ecosystem by DarkWave Studios. Unlike traditional "smart chains" that focus solely on code execution, DWTL is designed as a **Coordinated Trust Layer** - infrastructure that provides verified identity, accountability, and transparent audit trails for real business operations. It features the DarkWave Portal, a comprehensive React web application serving as an ecosystem interface, block explorer, and developer hub. The project also includes "DarkWave Chronicles," a fantasy-themed game focused on a living political simulation and community-driven content. The primary goal is to deliver a fast, feature-rich trust infrastructure with a premium user experience and innovative gaming across four key domains: dwsc.io, darkwavegames.io, darkwavestudios.io, and yourlegacy.io.
-
-### Why "Trust Layer" Instead of "Blockchain"
-- **"Blockchain" has become a hollow buzzword** - it only describes the technical implementation (blocks chained together), not the value proposition
-- **"Smart Chain" implies code execution** - every chain does that now; it's table stakes, not a differentiator
-- **"Trust Layer" describes what we provide** - verified participants, Guardian certifications, ChronoPass identity, audit trails, and accountability
-- **Enterprises need trust infrastructure** - they don't care how it works, they care that it enables trusted business relationships
-- DWTL IS blockchain technology under the hood, but the brand focuses on value delivered, not implementation details
+DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (PoA) blockchain ecosystem designed as a **Coordinated Trust Layer**. Its purpose is to provide verified identity, accountability, and transparent audit trails for real business operations, moving beyond traditional blockchain focuses. The project includes the DarkWave Portal, a comprehensive React web application serving as an ecosystem interface and block explorer, and "DarkWave Chronicles," a fantasy-themed game focused on a living political simulation. The core ambition is to deliver a fast, feature-rich trust infrastructure with a premium user experience and innovative gaming across four key domains: dwsc.io, darkwavegames.io, darkwavestudios.io, and yourlegacy.io. DWTL uses blockchain technology but emphasizes its value proposition as a "Trust Layer" for enterprises seeking trusted business relationships.
 
 ## User Preferences
 - Preferred communication style: Simple, everyday language
@@ -21,154 +14,35 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 ## System Architecture
 
 ### UI/UX Decisions - MANDATORY PREMIUM UI PROTOCOL
-**CRITICAL: Every new page MUST be built with the Ultra-Premium Bento Grid LED Protocol by default. This is the baseline design standard, not an enhancement.**
-
-Every page requires:
-1. **Floating Ambient Orbs**: Absolute-positioned, blurred gradient circles (`bg-cyan-500/10 rounded-full blur-3xl animate-pulse`)
-2. **Glassmorphism**: Use `GlassCard` component or `bg-[rgba(12,18,36,0.65)] backdrop-blur-2xl border-white/[0.08]`
-3. **Holographic Glow**: `shadow-[0_0_40px_rgba(0,255,255,0.15)]` on cards, gradient border glows
-4. **Framer Motion**: Entry animations, hover states, transitions on all interactive elements
-5. **Gradient Headlines**: `bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent`
-6. **Bento Grid Layouts**: Multi-column responsive grids with varied card sizes
-7. **Premium Badges**: Gradient backgrounds with border glows, uppercase tracking
-8. **Mobile-First**: Touch targets ≥48px, horizontal carousels, accordions, optimized for 375px viewport
-9. **Color Palette**: Cyan/Purple/Pink accents; `slate-950`, `slate-900`, `slate-800` backgrounds; white/gray text
-10. **Import `GlassCard`**: From `@/components/glass-card` - use with `glow` prop enabled
+Every new page MUST be built with the Ultra-Premium Bento Grid LED Protocol, incorporating: Floating Ambient Orbs, Glassmorphism, Holographic Glow, Framer Motion animations, Gradient Headlines, Bento Grid Layouts, Premium Badges, and Mobile-First design. The color palette uses Cyan/Purple/Pink accents with dark backgrounds. `GlassCard` component with `glow` prop enabled is required.
 
 ### Technical Implementations
-- **Blockchain**: BFT-PoA consensus with stake-weighted validator selection, PostgreSQL state storage, SHA-256/Merkle trees/HMAC-SHA256, 400ms block time, 200K+ TPS. Features validator staking, slashing, epoch-based finality, and node sync APIs. Native asset: Signal (SIG) - 1B supply, 18 decimals, no burn. Presale price: $0.001 (Month 1), $0.0012 (Month 2), $0.0014 (Month 3).
+- **Blockchain**: BFT-PoA consensus, stake-weighted validator selection, PostgreSQL state, SHA-256/Merkle trees, 400ms block time, 200K+ TPS. Includes validator staking, slashing, epoch-based finality, and node sync APIs. Native asset: Signal (SIG).
 - **Web Portal (Frontend)**: React 18, TypeScript, Vite, Wouter, TanStack Query, Tailwind CSS v4, Framer Motion.
 - **Web Portal (Backend)**: Node.js, Express.js, TypeScript, Drizzle ORM, PostgreSQL.
 - **Authentication**: Firebase Auth (multiple providers), server-side Firebase token verification, WebAuthn/Passkeys, PIN authentication.
 - **Multi-PWA**: Host-based routing for ecosystem domains.
 - **DeFi Features**: Testnet Faucet, AMM-style DEX/Token Swap, NFT Marketplace & Gallery, Portfolio Dashboard, Transaction History, Token Launchpad, Liquidity Pools, NFT Creator Tool, Price Charts (Recharts), Webhook/Events API, Liquid Staking (stSIG).
 - **Cross-Chain Bridge**: Lock & mint (SIG ↔ wSIG) for Ethereum Sepolia and Solana Devnet.
-- **DarkWave Chronicles**: A social experiment and parallel life simulation focusing on self-discovery across eras, with a persistent world and emotion-driven AI. It is narrative-driven and not a traditional RPG. **Full game design document: `docs/chronicles-game-design.md`**
+- **DarkWave Chronicles**: A social experiment and parallel life simulation with a persistent world and emotion-driven AI, focusing on self-discovery.
 - **Credits System**: Manages costs for AI chat, scenario generation, voice cloning, and personality summaries.
-- **Voice Cloning Technology**: Integrates Web Audio API and external APIs.
 - **Owner Admin Portal**: Secure portal (`/owner-admin`) with `OWNER_SECRET` authentication, rate limiting, and lockout.
-- **Marketing Automation System**: Proprietary auto-deployment system for social media (Twitter/X, Facebook, Discord, Telegram).
+- **Marketing Automation System**: Proprietary auto-deployment system for social media.
 - **Payment Infrastructure**: Handles crowdfund donations and token presales with Stripe integration.
 - **Pre-Launch Airdrop System**: Manages affiliate commissions for pre-launch, distributed as Signal, using a dual-ledger design.
-- **ChronoChat Platform**: Standalone community platform at chronochat.io with real-time WebSocket messaging, community features, and bot framework.
-- **Shells Economy System**: Pre-launch virtual currency, convertible to Signal, earned through engagement, purchased via Stripe, and used for tipping/premium features. Features atomic transaction handling.
-- **Subscription System**: Unified subscription management synced with the main Pulse app, with tiers, free trials, and cross-app entitlement checking.
+- **ChronoChat Platform**: Standalone community platform at chronochat.io with real-time WebSocket messaging and bot framework.
+- **Shells Economy System**: Pre-launch virtual currency, convertible to Signal, earned through engagement, purchased via Stripe, and used for tipping/premium features, with atomic transaction handling.
+- **Subscription System**: Unified subscription management synced with the main Pulse app, with tiers and cross-app entitlement checking.
 - **Guardian Certification Program**: In-house blockchain security audit service with tiered offerings and a public registry.
-- **Guardian Shield**: Continuous blockchain security monitoring service with tiers, 24/7 smart contract monitoring, threat detection, multi-chain coverage, and instant alerts.
-- **Security Infrastructure**: Helmet.js security headers, CORS with strict origin allowlist, rate limiting, AES-256-GCM encryption, HMAC-SHA256 signatures, and parameterized SQL via Drizzle ORM.
-- **Early Adopter Rewards System**: Tracks signup positions and tiered crowdfund bonuses for Signal airdrops. API: `/api/user/early-adopter-stats` (authenticated), `/api/early-adopter/counters` (public). Rewards page at `/rewards`.
-- **Backend IDE / Studio Executor**: Docker container orchestration for code execution (`server/studio-executor.ts`), designed for self-hosted deployment (not runnable on Replit). Requires JWT auth, sandboxing, network policies, and resource enforcement.
-- **Innovation Hub Features**:
-    - **Guardian Security Scores**: Real-time project security ratings with 7 components and insurance eligibility tracking.
-    - **ChronoPass Identity**: Unified cross-app identity with a reputation system and Passkey/WebAuthn support.
-    - **Experience Shards**: Dedicated execution lanes for different use cases (gaming, defi, nft, social, ai, custom) with performance SLAs.
-    - **Quest Mining System**: Verifiable contribution rewards with daily/weekly/seasonal/achievement quests.
-    - **Zealy Integration**: Community questing platform integration with HMAC webhook verification, quest-to-Shell reward mapping, idempotent event processing. Endpoint: `POST /api/zealy/webhook`. Database tables: `zealy_quest_mappings`, `zealy_quest_events`.
-    - **Reality Layer Oracles**: On-chain notarization for game outcomes and real-world events with multi-chain verification.
-    - **AI Verified Execution**: Cryptographic proofs for AI decisions from registered models.
-    - **Guardian Studio Copilot**: AI-powered smart contract generator with automatic security audits.
-    - **AI Agent Marketplace**: Autonomous AI agent deployment platform with revenue sharing for creators.
-    - **RWA Tokenization**: Real-world asset tokenization platform for institutional investment with Guardian-verified assets and fractional ownership.
+- **Guardian Shield**: Continuous blockchain security monitoring service with threat detection and instant alerts.
+- **Security Infrastructure**: Helmet.js security headers, CORS, rate limiting, AES-256-GCM encryption, HMAC-SHA256 signatures, and parameterized SQL.
+- **Early Adopter Rewards System**: Tracks signup positions and tiered crowdfund bonuses for Signal airdrops, accessible via `/api/user/early-adopter-stats` and `/api/early-adopter/counters`, with a rewards page at `/rewards`.
+- **Backend IDE / Studio Executor**: Docker container orchestration for code execution (`server/studio-executor.ts`), designed for self-hosted deployment, requiring JWT auth, sandboxing, and resource enforcement.
+- **Innovation Hub Features**: Includes Guardian Security Scores, ChronoPass Identity (unified cross-app identity with reputation and Passkey/WebAuthn), Experience Shards (dedicated execution lanes with performance SLAs), Quest Mining System (verifiable contribution rewards), Zealy Integration (community questing platform), Reality Layer Oracles (on-chain notarization for game/real-world events), AI Verified Execution, Guardian Studio Copilot (AI smart contract generator), AI Agent Marketplace, and RWA Tokenization.
 - **Strategic Marketing Pages**: Competitive Analysis (`/token-compare`), Investor Pitch (`/investor-pitch`), Innovation Hub (`/innovation`) dashboard.
-- **Through The Veil Book**: Spiritual awakening ebook (188 pages) at `/veil` with PDF/EPUB downloads. By Asher Reed.
-
-## Future Roadmap - Scripture & Truth Tools
-
-**What Does The Cepher Say (Living Concordance)**
-- Search scripture topics with Cepher translations (restored Hebrew names)
-- Compare across versions: Cepher vs KJV vs NIV vs Ethiopian Bible
-- Show what words were changed, when, by whom, why
-- Explain frequency/resonance impact of word substitutions
-- Display Father's name count: 6,823+ in Hebrew → replaced with LORD/GOD
-- List removed books with "official reason" vs "pattern reason"
-- Probability section: 40 authors, 1,500 years, astronomical odds of coherence
-- "Why Is Everyone Confused" educational breakdown
-
-**Prophecy Reference Page**
-- Index prophecies by topic (end times, Messiah, tribulation, kingdoms)
-- Pull from Daniel, Ezekiel, Revelation, Matthew, Mark, Isaiah, Zechariah
-- Show verses, who received prophecy, context, meaning
-- Cross-reference where same prophecy appears in multiple books
-- Cepher as primary source with restored names
-- Connects to "Through The Veil" book content
-
-## Business Model & Go-To-Market Strategy
-
-### Revenue Model
-1. **Signal Token Appreciation** - Founder reserves increase in value as network grows
-2. **Transaction Fees** - Tiny fees on every Trust Layer transaction (volume-based)
-3. **Premium Services** - Guardian Certification audits, priority verification, enterprise API access
-4. **Software Products** - Apps built for each vertical (GarageBot, VedaSolus, Orbit, etc.) with licensing/subscriptions
-
-### Adoption Strategy
-- **Free to Join** - No barrier to entry for businesses. Verify once, join the network.
-- **Value Proposition** - "You're verified, your competitors aren't. Customers see the difference."
-- **NOT "We track you"** - The pitch is trust badge + network access, NOT surveillance
-- **Network Effect Cascade**:
-  1. Early adopters join for competitive edge
-  2. Their suppliers/partners get pressured to join
-  3. Customers start looking for the verification badge
-  4. Non-verified becomes a red flag
-  5. Eventually like not having a website - you look illegitimate
-
-### Key Messaging
-- Like BBB but free and actually meaningful (BBB is pay-to-play)
-- Audit trail is a BENEFIT (never worry about IRS), not surveillance
-- Honest businesses gain advantage; only criminals lose
-- Persistence overcomes resistance - especially for something that's the future of commerce
-
-### Adoption Phases
-1. **Phase 1**: Paint companies (current proof of concept)
-2. **Phase 2**: Small businesses in specific verticals with real products
-3. **Phase 3**: Network pressure brings in suppliers/partners
-4. **Phase 4**: Customer demand for verification badge
-5. **Phase 5**: Government/Religion (the final, hardest fight - requires undeniable proof first)
-
-### 36+ Verticals Mapped (Ecosystem Page: /ecosystem)
-Commerce, Property, Mobility, Health, Work, Finance, Living, Events, Business, Community, **Logistics**
-Each vertical has defined participants, connections, and eventually industry statistics (waste/fraud numbers)
-
-**Logistics Vertical** (distinct from Transportation/Mobility):
-- Warehousing & fulfillment centers
-- Inventory management systems
-- Supply chain coordination
-- Freight forwarding & customs
-- Last-mile delivery networks
-- Route optimization services
-- Cold chain management
-- Cross-border logistics
-- 3PL/4PL providers
-
-### Business Tenant Portals (B2B Dashboard)
-Each verified company on the Trust Layer gets their own secure space:
-- **Dashboard** - Verification status, Guardian security score, network activity
-- **Transaction Ledger** - Complete audit trail of trust layer activity
-- **Trusted Network** - Verified business connections, pending verifications, vouched relationships
-- **Team Access** - Sub-accounts with role-based permissions (admin, finance, viewer)
-- **Compliance Center** - Certifications, Guardian badges, audit reports
-- **API Access** - Integration keys for connecting existing business systems
-- **Multi-SIG Treasury** - Organizational wallet requiring multiple approvals
-
-Revenue tiers: Free basic tenant → Paid for more users, API calls, advanced analytics
-
-### Multi-SIG Multi-Chain Wallet
-A major differentiator: M-of-N signature requirements across ALL supported chains.
-
-**Use Cases:**
-- Business treasuries (CFO + CEO approval for large transactions)
-- DAO governance (council votes required)
-- Charity funds (board approval for disbursements)
-- Escrow arrangements (built-in for B2B trust transactions)
-- Family offices (shared accounts with approval workflows)
-
-**Features:**
-- Create vaults with configurable thresholds (2-of-3, 3-of-5, etc.)
-- Propose transactions on any supported chain
-- Signers approve via biometric/passkey authentication
-- Auto-execute when threshold met
-- Full audit trail on Trust Layer
-
-**Adoption Strategy:** Businesses discover multi-sig through Trust Layer onboarding → Learn its value for fund security → Become power users → Evangelize to peers
+- **Business Tenant Portals**: Secure B2B dashboards for verified companies on the Trust Layer, featuring dashboards, transaction ledgers, trusted networks, team access, compliance centers, API access, and Multi-SIG Treasuries.
+- **Multi-SIG Multi-Chain Wallet**: M-of-N signature requirements across all supported chains for business treasuries, DAO governance, charity funds, escrow, and family offices, with configurable thresholds and full audit trails.
+- **DarkWave Academy**: Education and certification platform for crypto fundamentals, multi-chain ecosystems, DeFi, security, bridging, and Trust Layer operations, with Bronze, Silver, Gold certification tiers and a mentor network.
 
 ## External Dependencies
 - **Database**: PostgreSQL
