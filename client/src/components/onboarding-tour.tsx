@@ -11,20 +11,24 @@ interface Step {
 
 const steps: Step[] = [
   {
-    title: "Welcome to DarkWave",
-    description: "The universal ledger for the next web. This quick tour will guide you through the ecosystem.",
+    title: "Welcome to the Trust Layer",
+    description: "DarkWave Trust Layer is infrastructure where accountability is built in. Not another blockchain - a foundation for verified business where trust is the default.",
   },
   {
-    title: "Cross-Chain Vision",
-    description: "We're building toward seamless interoperability with Ethereum, Solana, and other chains. Coming Q2 2026.",
+    title: "Signal, Not Coin",
+    description: "We transmit verified intent, not speculation. When you send a Signal, you're communicating with purpose - a transmission that means something.",
   },
   {
-    title: "Dark Wave Studios Hub",
-    description: "Your central command center. Manage apps, deploy smart contracts, and connect with other developers.",
+    title: "Turnkey Business Rails",
+    description: "Plug into verified networks for staffing, construction, real estate, events, and more. Your reputation follows you. Bad actors have nowhere to hide.",
   },
   {
-    title: "Start Building",
-    description: "Ready to launch? Access the documentation or jump straight into the code explorer.",
+    title: "Build With Us",
+    description: "Use our Studio IDE to build on the Trust Layer. Access documentation, deploy apps, and join a network of verified participants.",
+  },
+  {
+    title: "The Presale is Live",
+    description: "Early supporters get the best Signal pricing. Join now to be part of the foundation - before the wave arrives.",
   }
 ];
 
