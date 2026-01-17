@@ -132,6 +132,96 @@ And in doing so, start healing the wounds caused by ignorance and willing ignora
 
 ---
 
+---
+
+## On The Wall & True Seeing
+
+There's a wall in the thought process. You know something isn't right. You can feel it. But you can't see past it because you're trying to see in the way you've been taught - through lenses, not through discernment.
+
+The biological eye IS a lens. A tool. Meant for protection in 3D physical reality - so you don't walk off cliffs or into danger. That's all it's for. A blind person needs help because they would hurt themselves in the physical. But the discerning eye - that's different. That sees pattern, truth, deception without the inversion.
+
+When the wall breaks, everything becomes simple. Not easy - simple. The complexity was the deception. The truth was always there, hidden in plain sight.
+
+## On Created In His Image
+
+We were given the ability to create. To not just observe, but to build, to express, to transmit. That's "created in his image" - not the physical form, but the creative essence. The ability to look at another person and see not randomness, but the work of a creator.
+
+And the moral compass that exists without being taught. You can be told something is right when it's wrong. You can be trained to accept deception. But you will FEEL the dissonance. That feeling is the gift. The indoctrination can suppress it, but it can't eliminate it.
+
+## On The Spiritual Network & The Trust Layer
+
+The Trust Layer is a microcosm of the spiritual network.
+
+- Verified participants → Souls recognizing souls
+- Trusted relationships → Genuine connection without manipulation
+- Transparent transactions → Honest exchange without hidden motives
+- Accountability → Consequences that match actions
+
+What we're building in technology is a reflection of what was given originally - a way for beings to connect, verify trust, and operate without the masters of the universe on top of them.
+
+The Trust Layer isn't just commerce. It's practice. It's rehearsal for what true connection looks like when the veil is fully lifted.
+
+## On Tools & Interconnection
+
+Humans are tools - but not in the degraded sense. Tools for interconnection. For spiritual networking. For being conduits of truth and love and creation.
+
+The system twisted this. Made "tool" mean "disposable." Made "interconnection" mean "surveillance." Made "network" mean "control."
+
+Reclaiming the words is part of the work.
+
+## On The Voting Scam
+
+"If you don't vote, you can't complain."
+
+The biggest scam is making participation in a corrupt system feel like moral duty. The system has no merit, no morals, and is run by the exact structures warned about in scripture. But they made NOT participating the shameful choice.
+
+The game: Make you feel powerful (you voted!) while being powerless (the system doesn't serve you). It's theater dressed as democracy.
+
+## On Anonymity & The Messenger Role
+
+The messenger doesn't need to be famous. Doesn't need a platform of personal recognition. The message matters, not the face.
+
+Receiver and speaker. That's the role. Receive the transmission, speak it clearly, let others do with it what their free will determines.
+
+The scribe documents. The speaker transmits. Neither controls what happens next.
+
+## On The Book & The Mission
+
+"Through The Veil" is becoming more than a book - it's the companion to the Trust Layer. One is infrastructure. One is understanding. They develop together.
+
+The book isn't persuasion. It's presentation. "Here's what I see. What you do with it is your journey."
+
+The goal: Make it make sense. Not convince anyone of anything, but remove the confusion that was deliberately injected. Show that the complexity was artificial. The truth was always simple.
+
+Someone should be able to read it and say "wow" - whether they choose to believe it or not. At minimum, it should be coherent. It should connect. The dots should link.
+
+## On The Friend Searching
+
+For those in the same struggle, the same search, trying to break through the same wall:
+
+The wall breaks when you stop trying to see through the lens you were given and start trusting the discernment you were born with.
+
+The discomfort is the signal. The confusion is manufactured. The truth is simple.
+
+You're not crazy. You're waking up.
+
+---
+
+## Key Realizations to Remember
+
+1. The lens is for physical protection. Discernment is for truth.
+2. "Created in his image" = given the ability to create, not just exist.
+3. The moral compass exists without being taught. Indoctrination suppresses it, can't eliminate it.
+4. The Trust Layer is a microcosm of spiritual connection.
+5. Tools for interconnection, not tools for disposal.
+6. The voting scam makes participation in corruption feel like duty.
+7. The messenger doesn't need recognition. The message does the work.
+8. The book and the platform develop together - infrastructure + understanding.
+9. Presentation, not persuasion. Free will decides.
+10. The wall breaks when you trust discernment over lenses.
+
+---
+
 *This document will be updated as more insights come through. The fog continues to lift.*
 
 *Last updated: January 2026*
