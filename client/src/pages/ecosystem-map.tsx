@@ -34,7 +34,9 @@ import {
   Scale,
   Factory,
   Music,
-  Trophy
+  Trophy,
+  Wrench,
+  PawPrint
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -314,6 +316,28 @@ const verticals: Vertical[] = [
     description: "Professional and amateur sports - teams, athletes, leagues, venues with verified credentials and transparent contracts",
     participants: ["Athletes", "Teams", "Leagues", "Venues", "Agents", "Sponsors", "Media"],
     connectsTo: ["events", "insurance", "legal", "staffing", "healthcare", "retail"]
+  },
+  {
+    id: "facilities",
+    name: "Facilities & Services",
+    icon: <Wrench className="w-6 h-6" />,
+    color: "from-slate-500 to-zinc-600",
+    app: undefined,
+    appStatus: "planned",
+    description: "The horizontal services that work across all industries - janitorial, security, maintenance, pest control",
+    participants: ["Cleaning", "Security Guards", "Maintenance", "Pest Control", "Waste", "Facilities Mgmt"],
+    connectsTo: ["retail", "realestate", "healthcare", "events", "hospitality", "construction", "staffing"]
+  },
+  {
+    id: "veterinary",
+    name: "Animal Services",
+    icon: <PawPrint className="w-6 h-6" />,
+    color: "from-amber-600 to-yellow-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "Veterinary care for pets and livestock, grooming, boarding, rescue - verified practitioners and transparent care",
+    participants: ["Veterinarians", "Groomers", "Boarding", "Pet Retail", "Rescues", "Breeders"],
+    connectsTo: ["healthcare", "agriculture", "retail", "insurance"]
   }
 ];
 
