@@ -176,6 +176,7 @@ const CompetitiveAnalysis = lazy(() => import("@/pages/competitive-analysis"));
 const InvestorPitch = lazy(() => import("@/pages/investor-pitch"));
 const Vision = lazy(() => import("@/pages/vision"));
 const Learn = lazy(() => import("@/pages/learn"));
+const EcosystemMap = lazy(() => import("@/pages/ecosystem-map"));
 const SecurityPage = lazy(() => import("@/pages/security"));
 const GuardianCertification = lazy(() => import("@/pages/guardian-certification"));
 const GuardianRegistry = lazy(() => import("@/pages/guardian-registry"));
@@ -403,6 +404,7 @@ function DWSCRouter() {
         <Route path="/investor-pitch" component={InvestorPitch} />
         <Route path="/vision" component={Vision} />
         <Route path="/learn" component={Learn} />
+        <Route path="/ecosystem" component={EcosystemMap} />
         <Route path="/code-snippets" component={CodeSnippets} />
         <Route path="/api-usage" component={ApiUsage} />
         <Route path="/referrals" component={Referrals} />
