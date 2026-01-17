@@ -31,7 +31,8 @@ import {
   Wheat,
   GraduationCap,
   Bus,
-  Scale
+  Scale,
+  Factory
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -156,7 +157,7 @@ const verticals: Vertical[] = [
     appStatus: "planned",
     description: "Manufacturers to consumers with verified origins, transparent tracking, and accountability",
     participants: ["Manufacturers", "Distributors", "Warehouses", "Freight", "Customs", "Retail"],
-    connectsTo: ["automotive", "construction", "hospitality", "events", "retail", "agriculture"]
+    connectsTo: ["automotive", "construction", "hospitality", "events", "retail", "agriculture", "manufacturing"]
   },
   {
     id: "creative",
@@ -278,6 +279,17 @@ const verticals: Vertical[] = [
     description: "Attorneys, notaries, and mediators with verified bar status and transparent billing",
     participants: ["Attorneys", "Notaries", "Mediators", "Courts", "Clients", "Paralegals"],
     connectsTo: ["realestate", "insurance", "banking", "construction", "staffing"]
+  },
+  {
+    id: "manufacturing",
+    name: "Manufacturing",
+    icon: <Factory className="w-6 h-6" />,
+    color: "from-zinc-600 to-slate-500",
+    app: undefined,
+    appStatus: "planned",
+    description: "The origin point - where goods are created before entering the supply chain. Tractors, equipment, parts, electronics",
+    participants: ["Factories", "Assembly", "Quality Control", "Parts Fabrication", "Heavy Equipment", "Electronics"],
+    connectsTo: ["supplychain", "automotive", "agriculture", "construction", "retail", "staffing"]
   }
 ];
 
