@@ -45,6 +45,14 @@ const navCategories = [
     ]
   },
   {
+    label: "AI Trading",
+    icon: Zap,
+    defaultOpen: true,
+    items: [
+      { href: "/pulse", label: "Pulse AI", icon: Zap, badge: "Live" },
+    ]
+  },
+  {
     label: "DeFi",
     icon: TrendingUp,
     items: [
