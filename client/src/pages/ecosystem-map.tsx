@@ -43,7 +43,8 @@ import {
   Cpu,
   Palmtree,
   Target,
-  Recycle
+  Recycle,
+  Church
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -422,6 +423,17 @@ const verticals: Vertical[] = [
     description: "Metal recycling, e-waste, materials recovery - verified origins and transparent commodity pricing",
     participants: ["Scrap Yards", "Metal Recyclers", "E-Waste", "Haulers", "Processors", "Commodity Markets"],
     connectsTo: ["manufacturing", "automotive", "construction", "supplychain", "utilities"]
+  },
+  {
+    id: "faith",
+    name: "Faith & Religious Orgs",
+    icon: <Church className="w-6 h-6" />,
+    color: "from-purple-600 to-indigo-600",
+    app: undefined,
+    appStatus: "planned",
+    description: "Churches, mosques, temples, ministries - transparent finances, verified leadership, accountable stewardship",
+    participants: ["Congregations", "Clergy", "Ministries", "Nonprofits", "Media", "Missions"],
+    connectsTo: ["events", "realestate", "staffing", "education", "marketing", "hospitality"]
   }
 ];
 
