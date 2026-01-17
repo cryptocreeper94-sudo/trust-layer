@@ -1,12 +1,18 @@
-# Through The Veil: A Spiritual Insights Journal
+# My Journey Beyond the Veil
+
+### *The Small Step I Never Knew I Needed to Take*
 
 ---
 
-**A Note Before You Begin:**
+**Before You Begin:**
 
 This is incomplete. It's still coming to me. But I wanted to share what's arrived so far.
 
 We've all felt lost. We've all blamed ourselves for things we don't fully understand. We were taught to. It's destructive, and eventually it either kills you or spins you back around because you can't keep going that way. I've been there. I'm still finding my way through.
+
+The step I took was small, but it felt impossible: accepting that everything I'd been taught could very well be meant to deceive me. I'd always had that thought somewhere in the back of my mind. But actually stepping into my own thinking - ignoring what I'd been told, at the risk of losing my soul and going to hell - that took years.
+
+That fear is what keeps people stuck. The threat of eternal damnation for questioning. It's the most effective cage ever built. And I had to walk right through it to find what was on the other side.
 
 What I'm sharing here is having a transformative effect on me. Things that never made sense are finally making sense. I was told by religious people that I wasn't supposed to understand - that I should only know bits and pieces, and someday the whole truth would be revealed. But the whole truth was there the whole time. It's just been veiled.
 
