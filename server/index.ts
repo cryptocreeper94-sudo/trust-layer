@@ -22,6 +22,17 @@ app.use(["/__/auth", "/__/firebase"], createProxyMiddleware({
   secure: true,
   pathRewrite: (_path: string, req: any) => `${req.baseUrl}${req.url}`,
 }));
+
+// Redirect dwsc.io to dwtl.io (primary domain)
+app.use((req, res, next) => {
+  const host = req.headers.host || '';
+  if (host === 'dwsc.io' || host === 'www.dwsc.io') {
+    const newUrl = `https://dwtl.io${req.originalUrl}`;
+    return res.redirect(301, newUrl);
+  }
+  next();
+});
+
 const httpServer = createServer(app);
 
 // Security headers via Helmet - stricter in production
@@ -65,6 +76,8 @@ app.use(helmet({
 
 // CORS headers for API access with strict origin allowlist
 const ALLOWED_ORIGINS = [
+  "https://dwtl.io",
+  "https://www.dwtl.io",
   "https://dwsc.io",
   "https://www.dwsc.io",
   "https://darkwavegames.io",
