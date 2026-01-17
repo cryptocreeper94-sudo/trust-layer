@@ -4,15 +4,15 @@
 
 **A Note Before You Begin:**
 
-This is incomplete. It's still coming to me. I wanted you to see it because I think it might help you feel better about your situation.
+This is incomplete. It's still coming to me. But I wanted to share what's arrived so far.
 
-I know you blame yourself for things. We all do. We were taught to. It's destructive, and eventually it either kills you or spins you back around because you can't keep going that way. I've been there. I'm still finding my way through.
+We've all felt lost. We've all blamed ourselves for things we don't fully understand. We were taught to. It's destructive, and eventually it either kills you or spins you back around because you can't keep going that way. I've been there. I'm still finding my way through.
 
 What I'm sharing here is having a transformative effect on me. Things that never made sense are finally making sense. I was told by religious people that I wasn't supposed to understand - that I should only know bits and pieces, and someday the whole truth would be revealed. But the whole truth was there the whole time. It's just been veiled.
 
 I don't know if this will affect you the way it's affecting me. But I wanted you to have the chance to see it, to feel it, and decide for yourself. That's your journey, not mine.
 
-You're not broken. You're searching. And that's exactly what you're supposed to be doing.
+None of us are broken. We're searching. And that's exactly what we're supposed to be doing.
 
 ---
 
@@ -261,6 +261,42 @@ And the Father said: I will end this. Have faith.
 People think time is linear. A straight line. Ever-expanding into an infinite cosmos. But I believe time is cyclical. Everything repeats. Everything rhymes. Look at any narrative and you see it echoing across history, always pushed by those who somehow have power and wealth.
 
 The test is to see through it. To find the truth that was there all along. To mature despite the confusion. And to help others find their way once you do.
+
+---
+
+## Part Nineteen: Free Will and The Knowing
+
+Someone once told me their theory: if the Creator knows everything and created everything, then he created both good and evil. He knows every move we're going to make. Everything is scripted. Nothing we choose matters because it's all predetermined.
+
+I understand why someone would think this. When what you've been told doesn't make sense, and you try to reconcile an all-knowing God with free will, it can seem like a contradiction.
+
+But here's what I've come to understand:
+
+Knowing is not controlling.
+
+The scripture says he knew every hair on your head before you were born. That doesn't mean he controls your every step. It means he made you carefully - like a master craftsman makes a piece of furniture, only infinitely more complex. A biological suit designed to contain a spirit. A breath. His essence.
+
+We were created as a collective for fellowship under the Creator who gave us this opportunity to exist. With free will, he hopes - not forces - that we will make the right decisions. That we will use our discernment correctly. The whole point of free will is that it's real. The choice is ours. Otherwise, why test? Why create? Why any of it?
+
+The confusion comes from religion telling you it's scripted while also telling you to have faith. Those ideas conflict. The truth is simpler: you were made carefully, given tools, and set free to choose.
+
+---
+
+## Part Twenty: The Spark of Life
+
+Science recently captured something remarkable: when a sperm enters an egg, there is a visible flash of light.
+
+A flash. At the moment of conception.
+
+They call it a zinc spark. They measure it. They explain it in chemical terms. But think about what it is: the moment life begins, there is light.
+
+That's the spark. That's the breath of life entering the biological suit. That's the promise coming to pass.
+
+Originally, we were meant to live eternally. Just follow the law. Fellowship with the Creator. Exist in the garden. But corruption came - the corruption of DNA through the fallen, the mixing of what shouldn't have been mixed - and here we are.
+
+But even now, even in this corrupted state, every new life begins with a flash of light. The signature of the Creator remains, even in a fallen world.
+
+Science sees it and calls it chemistry. But if you have eyes to see, you know what it is. The spark isn't zinc. It's the beginning of a soul.
 
 ---
 
