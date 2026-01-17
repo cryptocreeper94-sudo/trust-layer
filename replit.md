@@ -17,7 +17,7 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 Every new page MUST be built with the Ultra-Premium Bento Grid LED Protocol, incorporating: Floating Ambient Orbs, Glassmorphism, Holographic Glow, Framer Motion animations, Gradient Headlines, Bento Grid Layouts, Premium Badges, and Mobile-First design. The color palette uses Cyan/Purple/Pink accents with dark backgrounds. `GlassCard` component with `glow` prop enabled is required.
 
 ### Technical Implementations
-- **Blockchain**: BFT-PoA consensus, stake-weighted validator selection, PostgreSQL state, SHA-256/Merkle trees, 400ms block time, 200K+ TPS. Includes validator staking, slashing, epoch-based finality, and node sync APIs. Native asset: Signal (SIG).
+- **Blockchain**: BFT-PoA consensus, stake-weighted validator selection, PostgreSQL state, SHA-256/Merkle trees, 400ms block time, 200K+ TPS. Includes validator staking, slashing, epoch-based finality, and node sync APIs. Native asset: Signal (SIG) - NOT a "cryptocurrency" but a transmission of verified intent. Avoid "currency" framing entirely - Signal is acknowledgement, access, and proof of participation in the trust network. The value is the infrastructure it unlocks, not speculation. "Crypto-currency" language alienates spiritual/traditional people and attracts speculators - neither is the target. Signal = Trust Network Access Token.
 - **Web Portal (Frontend)**: React 18, TypeScript, Vite, Wouter, TanStack Query, Tailwind CSS v4, Framer Motion.
 - **Web Portal (Backend)**: Node.js, Express.js, TypeScript, Drizzle ORM, PostgreSQL.
 - **Authentication**: Firebase Auth (multiple providers), server-side Firebase token verification, WebAuthn/Passkeys, PIN authentication.
