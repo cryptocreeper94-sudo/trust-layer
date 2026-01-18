@@ -4,7 +4,7 @@ import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { 
   BookOpen, ChevronLeft, ChevronRight, Menu, X, Home, 
-  BookMarked, ScrollText, FileText, ExternalLink, Volume2, VolumeX, Pause, Play 
+  BookMarked, ScrollText, FileText, ExternalLink, Volume2, VolumeX, Pause, Play, Download 
 } from "lucide-react";
 import { Link } from "wouter";
 
@@ -399,8 +399,54 @@ export default function VeilReader() {
   const [isLoading, setIsLoading] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
   const [useElevenLabs, setUseElevenLabs] = useState(true);
+  const [autoAdvance, setAutoAdvance] = useState(false);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  
+  const handleDownloadPDF = () => {
+    const volumeNum = currentVolume + 1;
+    const volumeTitle = currentVolume === 0 ? "Volume-1-Research" : "Volume-2-Testimony";
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      const volumeData = currentVolume === 0 ? VOLUME_1 : VOLUME_2;
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Through The Veil - ${volumeTitle}</title>
+          <style>
+            body { font-family: Georgia, serif; max-width: 800px; margin: 0 auto; padding: 40px; line-height: 1.8; color: #222; }
+            h1 { font-size: 28px; margin-top: 60px; page-break-before: always; }
+            h1:first-of-type { page-break-before: avoid; }
+            h2 { font-size: 22px; margin-top: 40px; color: #444; }
+            p { margin: 16px 0; text-align: justify; }
+            blockquote { border-left: 3px solid #666; padding-left: 20px; margin: 20px 0; font-style: italic; color: #555; }
+            .title-page { text-align: center; padding: 100px 0; page-break-after: always; }
+            .title-page h1 { page-break-before: avoid; font-size: 36px; }
+            .note { background: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0; }
+            @media print { .no-print { display: none; } }
+          </style>
+        </head>
+        <body>
+          <div class="title-page">
+            <h1>Through The Veil</h1>
+            <p style="font-size: 20px; margin-top: 20px;">${currentVolume === 0 ? 'Volume One: Documented Research' : 'Volume Two: Personal Testimony'}</p>
+            <p style="margin-top: 40px; color: #666;">By Asher Reed</p>
+            <p style="margin-top: 60px; color: #888; font-size: 14px;">Note: This PDF version may not include cross-references and interactive features available at dwtl.io/veil/read</p>
+          </div>
+          <div class="no-print" style="background: #fffbe6; padding: 15px; margin-bottom: 30px; border-radius: 8px;">
+            <strong>To save as PDF:</strong> Press Ctrl+P (or Cmd+P on Mac), then select "Save as PDF" as your printer.
+          </div>
+          ${volumeData.chapters.map(ch => `
+            <h1>${ch.title}</h1>
+            <div>${typeof ch.content === 'string' ? ch.content : 'Content available in web reader'}</div>
+          `).join('')}
+        </body>
+        </html>
+      `);
+      printWindow.document.close();
+    }
+  };
 
   useEffect(() => {
     setSpeechSupported('speechSynthesis' in window);
@@ -509,6 +555,20 @@ export default function VeilReader() {
         setIsPlaying(false);
         setIsPaused(false);
         URL.revokeObjectURL(audioUrl);
+        // Auto-advance to next chapter if enabled
+        if (autoAdvance) {
+          setTimeout(() => {
+            const vol = volumes[currentVolume];
+            if (currentChapter < vol.chapters.length - 1) {
+              setCurrentChapter(currentChapter + 1);
+              window.scrollTo(0, 0);
+            } else if (currentVolume < volumes.length - 1) {
+              setCurrentVolume(currentVolume + 1);
+              setCurrentChapter(0);
+              window.scrollTo(0, 0);
+            }
+          }, 1500); // Short pause before next chapter
+        }
       };
       
       audio.onerror = () => {
@@ -691,8 +751,28 @@ export default function VeilReader() {
                     <VolumeX className="w-4 h-4" />
                   </Button>
                 )}
+                <button
+                  onClick={() => setAutoAdvance(!autoAdvance)}
+                  className={`hidden md:flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${
+                    autoAdvance 
+                      ? 'bg-green-500/20 text-green-400' 
+                      : 'bg-slate-700/50 text-slate-500 hover:text-slate-300'
+                  }`}
+                  title={autoAdvance ? "Auto-advance ON - will play next chapter automatically" : "Auto-advance OFF"}
+                >
+                  <span>Auto</span>
+                </button>
               </div>
             )}
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={handleDownloadPDF}
+              className="text-slate-400 hover:text-white hover:bg-slate-700/50"
+              title="Download as PDF"
+            >
+              <Download className="w-4 h-4" />
+            </Button>
             <span className="text-xs text-slate-500 hidden md:block">
               {currentGlobalIndex + 1} of {totalChapters}
             </span>
