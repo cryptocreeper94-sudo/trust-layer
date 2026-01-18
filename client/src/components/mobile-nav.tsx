@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, ArrowRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart, Gamepad2, Star, Zap, Globe, ChevronDown, ChevronRight, Layers, Gift, Users, LogIn, User } from "lucide-react";
+import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, ArrowRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart, Gamepad2, Star, Zap, Globe, ChevronDown, ChevronRight, Layers, Gift, Users, LogIn, User, Wallet } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { SimpleLoginModal } from "@/components/simple-login";
+import { WalletButton } from "@/components/wallet-button";
 
 import chroniclesImg from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
 import crowdfundImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
@@ -749,8 +750,11 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
           ))}
         </nav>
 
-        {/* Bottom Button */}
-        <div style={{ marginTop: 'auto' }}>
+        {/* Bottom Buttons */}
+        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ padding: '0 4px' }}>
+            <WalletButton />
+          </div>
           <Link href="/ecosystem" style={{ textDecoration: 'none' }}>
             <Button
               className="w-full bg-primary text-background hover:bg-primary/90 font-semibold"
@@ -800,6 +804,9 @@ export function DesktopNav() {
           </Link>
         );
       })}
+      <div className="ml-2 pl-2 border-l border-white/10">
+        <WalletButton />
+      </div>
     </nav>
   );
 }
