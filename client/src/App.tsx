@@ -123,6 +123,7 @@ const Snake = lazy(() => import("@/pages/snake"));
 const Pacman = lazy(() => import("@/pages/pacman"));
 const Genesis = lazy(() => import("@/pages/genesis"));
 const Veil = lazy(() => import("@/pages/veil"));
+const VeilReader = lazy(() => import("@/pages/veil-reader"));
 const ChronoChat = lazy(() => import("@/pages/chronochat"));
 const ChronoChatInvite = lazy(() => import("@/pages/chronochat-invite"));
 const CreatorProgram = lazy(() => import("@/pages/creator-program"));
@@ -232,6 +233,7 @@ function GamesRouter() {
         <Route path="/pacman" component={Pacman} />
         <Route path="/genesis" component={Genesis} />
         <Route path="/veil" component={Veil} />
+        <Route path="/veil/read" component={VeilReader} />
         <Route path="/chronochat" component={ChronoChat} />
         <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
         <Route path="/creator-program" component={CreatorProgram} />
@@ -304,6 +306,7 @@ function ChronoRouter() {
         <Route path="/roadmap" component={ChronoRoadmap} />
         <Route path="/genesis" component={Genesis} />
         <Route path="/veil" component={Veil} />
+        <Route path="/veil/read" component={VeilReader} />
         <Route path="/chronochat" component={ChronoChat} />
         <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
         <Route path="/creator-program" component={CreatorProgram} />
@@ -452,6 +455,7 @@ function DWSCRouter() {
         <Route path="/pacman" component={Pacman} />
         <Route path="/genesis" component={Genesis} />
         <Route path="/veil" component={Veil} />
+        <Route path="/veil/read" component={VeilReader} />
         <Route path="/chronochat" component={ChronoChat} />
         <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
         <Route path="/creator-program" component={CreatorProgram} />

@@ -8,6 +8,10 @@ export default function Veil() {
     window.open('/assets/My-Journey-Beyond-The-Veil-Volume-2.html', '_blank');
   };
 
+  const handleReadOnline = () => {
+    window.location.href = '/veil/read';
+  };
+
   return (
     <div className="min-h-screen bg-slate-950 relative overflow-hidden">
       <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
@@ -72,13 +76,13 @@ export default function Veil() {
             </div>
             
             <div className="text-center">
-              <p className="text-slate-500 text-sm mb-4">Download both volumes below, or read Volume Two online:</p>
+              <p className="text-slate-500 text-sm mb-4">Download both volumes below, or read the complete edition online:</p>
               <Button 
-                onClick={handlePrintVolume2}
+                onClick={handleReadOnline}
                 className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
               >
-                <ExternalLink className="w-4 h-4 mr-2" />
-                Read Volume Two Online
+                <BookOpen className="w-4 h-4 mr-2" />
+                Read Complete Edition Online
               </Button>
             </div>
           </GlassCard>
