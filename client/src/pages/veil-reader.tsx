@@ -1453,11 +1453,10 @@ export default function VeilReader() {
   const currentChunkRef = useRef(0);
   
   const handleDownloadPDF = () => {
-    const volumeNum = currentVolume + 1;
     const volumeTitle = currentVolume === 0 ? "Volume-1-Research" : "Volume-2-Testimony";
     const printWindow = window.open('', '_blank');
     if (printWindow) {
-      const volumeData = currentVolume === 0 ? VOLUME_1 : VOLUME_2;
+      const volumeData = volumes[currentVolume];
       printWindow.document.write(`
         <!DOCTYPE html>
         <html>
@@ -1486,7 +1485,7 @@ export default function VeilReader() {
           <div class="no-print" style="background: #fffbe6; padding: 15px; margin-bottom: 30px; border-radius: 8px;">
             <strong>To save as PDF:</strong> Press Ctrl+P (or Cmd+P on Mac), then select "Save as PDF" as your printer.
           </div>
-          ${volumeData.chapters.map(ch => `
+          ${volumeData.chapters.map((ch: Chapter) => `
             <h1>${ch.title}</h1>
             <div>${typeof ch.content === 'string' ? ch.content : 'Content available in web reader'}</div>
           `).join('')}
