@@ -178,7 +178,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-cepher-666",
-    title: "666 and the Mark",
+    title: "Chi Xi Stigma",
     content: (
       <>
         <p>One of the most interesting corrections in this text is found in Chazon (Revelation) 13:18, which restores the original Greek letters to what has been interpreted for the last 400 years as six hundred threescore and six:</p>
@@ -188,39 +188,7 @@ const volume1Chapters: Chapter[] = [
         </div>
         <p>However, there are no numbers, but rather the three Greek letters χξς (chi xi stigma). These letters found in Strong's Greek Dictionary 5516 are defined as the 22nd, 14th and an obsolete letter (4742 as a cross) of the Greek alphabet, used as numbers: six hundred, 60 and 6.</p>
         <p><strong>Stigma</strong> (στιγμα stig'ma) from Strong's Greek Dictionary 4742, is a word from a primary stizo (to "stick") meaning a mark incised or punched (for recognition of ownership), i.e. figuratively a scar of service: or mark. For example, a <em>stigmata</em> or in another instance, to stigmatize.</p>
-        <p>We elected to restore the actual picture of the mark as it was seen by Yochanon (John): <strong>χξς</strong> - the chi xi stigma.</p>
-        
-        <p className="text-purple-400 font-medium mt-6 mb-2">The Spiritual Mark</p>
-        <p>While many focus on a physical manifestation - a chip, a tattoo, a barcode - we must consider the deeper meaning of the forehead and hand. Scripture uses this same language in Devariym (Deuteronomy) 6:8 regarding the Torah: "And thou shalt bind them for a sign upon thine hand, and they shall be as frontlets between thine eyes."</p>
-        <p>The <strong>forehead</strong> represents the mind - what you believe, who you acknowledge as authority, where your signal comes in. The <strong>hand</strong> represents your works - what you labor for, what you build, whom you serve with your actions. The mark of Yahuah or the mark of the beast is first and foremost a matter of <strong>allegiance</strong>.</p>
-        <p>Consider this: if a physical mark is required to "buy or sell," it may simply be the outward confirmation of a spiritual decision already made. You will not be forced. You will choose. And that choice may have already been made through acceptance of false doctrine in the mind (forehead) and participation in false worship with the body (hand).</p>
-        
-        <p className="text-purple-400 font-medium mt-6 mb-2">The Gematria Connection</p>
-        <p>Greek isopsephy (gematria) assigns numerical values to letters. When calculated:</p>
-        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
-          <p><strong>Ἰησοῦς (Iesous/Jesus)</strong> = 888</p>
-          <p><strong>Χριστός (Christos/Christ)</strong> = 1480</p>
-          <p><strong>Ἰησοῦς Χριστός (Jesus Christ)</strong> = 2368</p>
-        </div>
-        <p>Here is the stunning revelation: The complete Greek phrase from Revelation 13:18 - <strong>"καὶ ὁ ἀριθμὸς αὐτοῦ χξϛ"</strong> (and his number is chi xi stigma) - <em>also equals 2368</em>. The exact same gematria value as "Jesus Christ."</p>
-        <p>Consider this alongside what Yahusha said in Yochanon (John) 5:43: "I am come in my Father's name, and you receive me not: if another shall come in his own name, him you will receive."</p>
-        <p><strong>Yahusha</strong> (יהושע) literally contains <strong>Yahuah</strong> (יהוה) - the Father's name is embedded within the Son's name. He came IN the Father's name. But "Jesus" is a Romanized Greek translation with no connection to Yahuah whatsoever. The Father's name has been removed.</p>
-        
-        <p className="text-purple-400 font-medium mt-6 mb-2">The Symbolism Everywhere</p>
-        <p>The chi xi stigma imagery appears constantly in modern branding, architecture, hand signs, and corporate logos - often disguised but recognizable once you know what to look for. Consider the Monster Energy drink logo - three claw marks that form the Hebrew letter "vav" (ו) repeated three times. Vav has a numerical value of 6. Three vavs: 666. Hidden in plain sight on millions of cans.</p>
-        <p>Observe the hand sign made by countless celebrities - thumb and index finger forming a circle with three fingers extended. It creates 666. Some dismiss this as coincidence or the "OK" sign. But when the same gesture appears across industries, nationalities, and decades, coincidence strains credulity.</p>
-        <p>Corporate emblems from technology giants display circular patterns that, upon inspection, contain interlocking sixes. These are the companies that seemingly control everything - information, communication, commerce. Why would they encode this symbolism unless it meant something?</p>
-        
-        <p className="text-purple-400 font-medium mt-6 mb-2">The Deceived or the Initiated?</p>
-        <p>Perhaps many who display these symbols have themselves been deceived. They may genuinely believe they are part of something chosen - that they have witnessed miracles, that they know who the true messiah is, that the timing simply hasn't been right for his public revelation.</p>
-        <p>When people call them "Illuminati" or "out of touch," they can laugh. The Illuminati as a formal organization may no longer exist. But the spirit behind it continues. And if these initiates truly believe they serve the returning messiah - if they have seen things that convinced them - their confidence makes sense. They're not nervous because they believe they're on the winning side.</p>
-        <p>Some of these people seem to get younger. Inexplicably. They have access to things the public does not. Perhaps their benefactor waits in the wings, building an army of witnesses who will say: "No, you don't understand. I've seen him. I've seen the miracles. This is the one."</p>
-        <p>When that figure finally presents himself - at the right time, with the right narrative - he arrives with an existing network of convinced advocates. The Faustian bargains, the fortune and fame, the symbols hidden in plain sight - all preparation for that moment.</p>
-        
-        <p className="text-purple-400 font-medium mt-6 mb-2">A Call to Action</p>
-        <p>This ubiquitous symbolism may serve as a signal - a call to action for the spirit of the age (Eph'siym 2:2). It normalizes and conditions, so that when the actual choice arrives, people are already aligned with that spirit. Those who display it declare their allegiance. Those who recognize it and still participate signal their acceptance.</p>
-        <p>We cannot be 100% certain how the physical manifestation will unfold. But we believe this: the body is the temple, the vessel of the spirit that gave it life. The mark ultimately resides within each person - in what they believe and whom they serve. Any physical mark would be confirmation of what is already spiritually present, not the origination of it.</p>
-        <p className="text-cyan-400 mt-4">Free will remains paramount. The choice is yours. And if you have sought the Creator with your whole heart, that choice has already been made.</p>
+        <p className="text-cyan-400 mt-4">We elected to restore the actual picture of the mark as it was seen by Yochanon (John): <strong>χξς</strong> - the chi xi stigma.</p>
       </>
     )
   },
@@ -248,7 +216,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-cepher-yasharal",
-    title: "Yashar'el: The True Israel",
+    title: "Yashar'el",
     content: (
       <>
         <p>The name we know as "Israel" (ישראל) is properly understood as <strong>Yashar'el</strong> - a combination of two words:</p>
@@ -258,28 +226,7 @@ const volume1Chapters: Chapter[] = [
           <p className="mt-2"><strong>Yashar'el</strong> = "Straight to the Mighty One" / "Upright with the Almighty"</p>
         </div>
         <p>Consider Jacob's original name - Ya'akov (יעקב) - which comes from "akov" (עקב) meaning <strong>"crooked"</strong> or "heel-grabber." After wrestling with the messenger at Jabbok, he becomes Yashar'el - transformed from crooked to upright. This is a <em>spiritual transformation</em>, not a geographic designation.</p>
-        <p>Scripture also uses <strong>Yeshurun</strong> (ישרון) - "the upright one" - as a poetic name for the true people of the covenant in Devariym (Deuteronomy) and Yesha'yahu (Isaiah).</p>
-        
-        <p className="text-purple-400 font-medium mt-6 mb-2">Spiritual Israel vs. The Geopolitical Nation</p>
-        <p><strong>Spiritual Yashar'el</strong> refers to those living in covenant relationship with Yahuah, walking in righteousness and uprightness before the Creator - the scattered remnant with eyes to see and ears to hear.</p>
-        <p><strong>The modern nation-state of Israel</strong> (established 1948) is a geopolitical entity, created through political powers - the British Mandate, UN Resolution 181, and significant Rothschild financing. If the prophetic "restoration of Israel" refers to <em>Yashar'el</em> - the upright ones aligned with the Creator - then the political nation could be misdirection. Everyone watches a geographic location for prophetic fulfillment while the true Israel is spiritual and scattered.</p>
-        <p>Some have noted that "Israel" as pronounced in English could be heard as a combination of pagan deities: <strong>Isis</strong> (Egyptian goddess) + <strong>Ra</strong> (Egyptian sun god) + <strong>El</strong>. Consider the implications:</p>
-        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
-          <p><strong>Two false deities placed BEFORE El</strong> - directly violating "You shall have no other elohim before me"</p>
-          <p className="mt-2"><strong>The reading order reversed</strong> - Original Ivriyt (Hebrew) reads right to left; English reads left to right. Even the direction of perception is inverted.</p>
-          <p className="mt-2"><strong>The geopolitical confusion</strong> - People passionately debate a word that encapsulates the entire deception</p>
-        </div>
-        <p>The same people who dismiss Scripture as "just allegory" will take heated sides on the geopolitical conflict - arguing over a word that mocks everything encoded in it. The inspired language reduced to phonetics stripped of meaning. The order reversed. The false deities placed before the true. The geographic confusion covering the spiritual reality. And humanity arguing about it all without ever seeing what's hidden in plain sight.</p>
-        
-        <p className="text-purple-400 font-medium mt-6 mb-2">The Question of "El"</p>
-        <p>Here we must acknowledge complexity. Scholars debate whether "El" (אל) is simply a generic Semitic word for "mighty one" - or whether it originally referred to the supreme deity of the Canaanite pantheon, whose attributes were later absorbed by Yahuah.</p>
-        <p>The Dead Sea Scrolls version of Devariym 32:8-9 shows <strong>El Elyon</strong> (the Most High) assigning nations to different elohiym, with <strong>Yahuah</strong> receiving Yashar'el as his portion - implying they may have been understood as distinct beings in the original text.</p>
-        <p>Consider the prevalence of "El" names in positions of power and prominence: Elon, Denzel, Michael, Daniel, Gabriel, Emmanuel. If "El" carries hidden allegiance to the Canaanite deity, these names become signals - a mockery understood only by initiates.</p>
-        <p>Even in fiction, the pattern appears. Superman's Kryptonian name is <strong>Kal-El</strong>. His father is <strong>Jor-El</strong>. The entire house is the House of El. The "S" symbol - often interpreted as the serpent - adorns his chest. A savior figure from the sky, bearing the El name, worshiped by the masses. Coincidence or revelation hiding in entertainment?</p>
-        <p>Consider children's programming: The Smurfs featured a villain named <strong>Gargamel</strong> and his cat <strong>Azrael</strong> - the name of the angel of death in certain traditions. Little blue creatures (blue carries occult significance), an evil wizard with gargoyle imagery in his name, and the death angel as his companion. Children absorbed these names every Saturday morning, internalizing them as harmless cartoon characters. By adulthood, the conditioning is complete - they'd never think twice about what "Azrael" actually represents. Hidden in plain sight, in cartoons, for children.</p>
-        <p>Consider also that celebrities are called <strong>"stars"</strong> - and fallen angels were cast down from heaven as falling stars (Chizayon 12:4, Yesha'yahu 14:12). Many prominent "stars" bear El names. Some appear to reverse-age inexplicably. They're paid to stupefy, distract, mesmerize - to hypnotize the masses while mocking the true Elohiym simultaneously. It's spiritual and subconscious, but it all matters. The physical realm is merely an encasement for spirit, and every nuance - even the ones we never consciously notice - is where the hooks are set.</p>
-        <p>Some suggest that the proper pronunciation should be <strong>"AL"</strong> rather than "EL" - a subtle difference in frequency and sound that may carry significant meaning. If names operate on vibrational frequencies, this small distinction could be the difference between alignment with the Creator and unwitting allegiance to the counterfeit.</p>
-        <p className="text-cyan-400 mt-4">We cannot be dogmatic about this. But the very muddiness around it - the inability to clearly separate truth from deception in the names themselves - may itself be evidence of how deep the confusion runs.</p>
+        <p className="text-cyan-400 mt-4">Scripture also uses <strong>Yeshurun</strong> (ישרון) - "the upright one" - as a poetic name for the true people of the covenant in Devariym (Deuteronomy) and Yesha'yahu (Isaiah).</p>
       </>
     )
   },
@@ -289,7 +236,60 @@ const volume1Chapters: Chapter[] = [
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">THE AUTHOR'S UNDERSTANDING</p>
-        <p className="italic text-slate-400 mb-4">The preceding Cepher preface represents a condensed version of the translators' work. What follows are my own insights - connections I've drawn from years of study and, frankly, from moments of clarity that arrived faster than I could process them. I do not claim these as doctrine. I claim them as the picture that emerged when the dots finally connected. Verify everything. Question what doesn't resonate. But consider the possibility that what's presented here might explain things that never quite made sense before.</p>
+        <p className="italic text-slate-400 mb-4">The preceding Cepher preface represents a condensed version of the translators' work - the names, the letters, the excluded books. What follows are my own insights - connections I drew when looking at what they provided. The Cepher gave the correct language. These are my dots connecting.</p>
+        <p className="italic text-slate-400 mb-4">I do not claim these as doctrine. I claim them as the picture that emerged when the dots finally connected. Verify everything. Question what doesn't resonate. But consider the possibility that what's presented here might explain things that never quite made sense before.</p>
+        
+        <p className="text-purple-400 font-medium mt-6 mb-2">The Gematria Connection</p>
+        <p>The Cepher showed that Revelation 13:18 contains Greek letters - χξς (chi xi stigma) - not the number 666. That's their work. Here's what I found when I looked deeper.</p>
+        <p>Greek isopsephy (gematria) assigns numerical values to letters. When calculated:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
+          <p><strong>Ἰησοῦς (Iesous/Jesus)</strong> = 888</p>
+          <p><strong>Χριστός (Christos/Christ)</strong> = 1480</p>
+          <p><strong>Ἰησοῦς Χριστός (Jesus Christ)</strong> = 2368</p>
+        </div>
+        <p>Here is the stunning revelation: The complete Greek phrase from Revelation 13:18 - <strong>"καὶ ὁ ἀριθμὸς αὐτοῦ χξϛ"</strong> (and his number is chi xi stigma) - <em>also equals 2368</em>. The exact same gematria value as "Jesus Christ."</p>
+        <p>Consider this alongside what Yahusha said in Yochanon (John) 5:43: "I am come in my Father's name, and you receive me not: if another shall come in his own name, him you will receive."</p>
+        <p><strong>Yahusha</strong> (יהושע) literally contains <strong>Yahuah</strong> (יהוה) - the Father's name is embedded within the Son's name. He came IN the Father's name. But "Jesus" is a Romanized Greek translation with no connection to Yahuah whatsoever. The Father's name has been removed.</p>
+        
+        <p className="text-purple-400 font-medium mt-6 mb-2">The Spiritual Mark</p>
+        <p>While many focus on a physical manifestation - a chip, a tattoo, a barcode - consider the deeper meaning of the forehead and hand. Scripture uses this same language in Devariym (Deuteronomy) 6:8 regarding the Torah: "And thou shalt bind them for a sign upon thine hand, and they shall be as frontlets between thine eyes."</p>
+        <p>The <strong>forehead</strong> represents the mind - what you believe, who you acknowledge as authority, where your signal comes in. The <strong>hand</strong> represents your works - what you labor for, what you build, whom you serve with your actions. The mark of Yahuah or the mark of the beast is first and foremost a matter of <strong>allegiance</strong>.</p>
+        <p>If a physical mark is required to "buy or sell," it may simply be the outward confirmation of a spiritual decision already made. You will not be forced. You will choose. And that choice may have already been made through acceptance of false doctrine in the mind (forehead) and participation in false worship with the body (hand).</p>
+        
+        <p className="text-purple-400 font-medium mt-6 mb-2">The Symbolism Everywhere</p>
+        <p>The chi xi stigma imagery appears constantly in modern branding, architecture, hand signs, and corporate logos - often disguised but recognizable once you know what to look for.</p>
+        <p>Consider the Monster Energy drink logo - three claw marks that form the Hebrew letter "vav" (ו) repeated three times. Vav has a numerical value of 6. Three vavs: 666. Hidden in plain sight on millions of cans.</p>
+        <p>Observe the hand sign made by countless celebrities - thumb and index finger forming a circle with three fingers extended. It creates 666. Some dismiss this as coincidence or the "OK" sign. But when the same gesture appears across industries, nationalities, and decades, coincidence strains credulity.</p>
+        <p>Corporate emblems from technology giants display circular patterns that, upon inspection, contain interlocking sixes. These are the companies that seemingly control everything - information, communication, commerce. Why would they encode this symbolism unless it meant something?</p>
+        
+        <p className="text-purple-400 font-medium mt-6 mb-2">The Deceived Initiates</p>
+        <p>Perhaps many who display these symbols have themselves been deceived. They may genuinely believe they are part of something chosen - that they have witnessed miracles, that they know who the true messiah is, that the timing simply hasn't been right for his public revelation.</p>
+        <p>When people call them "Illuminati" or "out of touch," they can laugh. The Illuminati as a formal organization may no longer exist. But the spirit behind it continues. And if these initiates truly believe they serve the returning messiah - if they have seen things that convinced them - their confidence makes sense. They're not nervous because they believe they're on the winning side.</p>
+        <p>Some of these people seem to get younger. Inexplicably. They have access to things the public does not. Perhaps their benefactor waits in the wings, building an army of witnesses who will say: "No, you don't understand. I've seen him. I've seen the miracles. This is the one."</p>
+        <p>When that figure finally presents himself - at the right time, with the right narrative - he arrives with an existing network of convinced advocates. The Faustian bargains, the fortune and fame, the symbols hidden in plain sight - all preparation for that moment.</p>
+        
+        <p className="text-purple-400 font-medium mt-6 mb-2">Stars and Fallen Angels</p>
+        <p>Celebrities are called <strong>"stars"</strong> - and fallen angels were cast down from heaven as falling stars (Chizayon 12:4, Yesha'yahu 14:12). Many prominent "stars" bear El names. Some appear to reverse-age inexplicably. They're paid to stupefy, distract, mesmerize - to hypnotize the masses while mocking the true Elohiym simultaneously. It's spiritual and subconscious, but it all matters. The physical realm is merely an encasement for spirit, and every nuance - even the ones we never consciously notice - is where the hooks are set.</p>
+        
+        <p className="text-purple-400 font-medium mt-6 mb-2">Yashar'el vs. Israel: The Isis-Ra-El Question</p>
+        <p>The Cepher explained that Yashar'el means "Upright with the Almighty" - a spiritual transformation, not a geographic designation. Here's what I saw when I looked at the English word "Israel."</p>
+        <p><strong>Spiritual Yashar'el</strong> refers to those living in covenant relationship with Yahuah - the scattered remnant with eyes to see and ears to hear.</p>
+        <p><strong>The modern nation-state of Israel</strong> (established 1948) is a geopolitical entity, created through political powers - the British Mandate, UN Resolution 181, and significant Rothschild financing. Everyone watches a geographic location for prophetic fulfillment while the true Israel is spiritual and scattered.</p>
+        <p>Some have noted that "Israel" as pronounced in English could be heard as a combination of pagan deities: <strong>Isis</strong> (Egyptian goddess) + <strong>Ra</strong> (Egyptian sun god) + <strong>El</strong>. Consider the implications:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
+          <p><strong>Two false deities placed BEFORE El</strong> - directly violating "You shall have no other elohim before me"</p>
+          <p className="mt-2"><strong>The reading order reversed</strong> - Original Ivriyt (Hebrew) reads right to left; English reads left to right. Even the direction of perception is inverted.</p>
+          <p className="mt-2"><strong>The geopolitical confusion</strong> - People passionately debate a word that encapsulates the entire deception</p>
+        </div>
+        <p>The same people who dismiss Scripture as "just allegory" will take heated sides on the geopolitical conflict - arguing over a word that mocks everything encoded in it.</p>
+        
+        <p className="text-purple-400 font-medium mt-6 mb-2">The Question of "El" Names</p>
+        <p>Scholars debate whether "El" (אל) is simply a generic Semitic word for "mighty one" - or whether it originally referred to the supreme deity of the Canaanite pantheon, whose attributes were later absorbed by Yahuah.</p>
+        <p>The Dead Sea Scrolls version of Devariym 32:8-9 shows <strong>El Elyon</strong> (the Most High) assigning nations to different elohiym, with <strong>Yahuah</strong> receiving Yashar'el as his portion - implying they may have been understood as distinct beings.</p>
+        <p>Consider the prevalence of "El" names in positions of power and prominence: Elon, Denzel, Michael, Daniel, Gabriel, Emmanuel. If "El" carries hidden allegiance to the Canaanite deity, these names become signals - a mockery understood only by initiates.</p>
+        <p>Even in fiction, the pattern appears. Superman's Kryptonian name is <strong>Kal-El</strong>. His father is <strong>Jor-El</strong>. The entire house is the House of El. The "S" symbol - often interpreted as the serpent - adorns his chest. A savior figure from the sky, bearing the El name, worshiped by the masses. Coincidence or revelation hiding in entertainment?</p>
+        <p>Consider children's programming: The Smurfs featured a villain named <strong>Gargamel</strong> and his cat <strong>Azrael</strong> - the name of the angel of death in certain traditions. Little blue creatures, an evil wizard with gargoyle imagery in his name, and the death angel as his companion. Children absorbed these names every Saturday morning, internalizing them as harmless cartoon characters. By adulthood, the conditioning is complete. Hidden in plain sight, in cartoons, for children.</p>
+        <p>Some suggest that the proper pronunciation should be <strong>"AL"</strong> rather than "EL" - a subtle difference in frequency and sound that may carry significant meaning. If names operate on vibrational frequencies, this small distinction could be the difference between alignment with the Creator and unwitting allegiance to the counterfeit.</p>
         
         <p className="text-purple-400 font-medium mt-6 mb-2">The Reordered Timeline</p>
         <p>What if we've been taught the prophetic timeline in the wrong order? Traditional teaching says: Rapture → Tribulation → Second Coming → 1000 Year Reign → Satan Released → Armageddon → Final Judgment.</p>
