@@ -98,7 +98,7 @@ function createTitlePage(doc: typeof PDFDocument.prototype) {
   
   doc.font(FONT_BOLD)
      .fontSize(FONT_SIZE_BODY)
-     .text('by Asher Reed', {
+     .text('by Jason Andrews', {
        width: CONTENT_WIDTH,
        align: 'center'
      });
@@ -305,7 +305,7 @@ async function generatePDF() {
     },
     info: {
       Title: 'Through The Veil',
-      Author: 'Asher Reed',
+      Author: 'Jason Andrews',
       Subject: 'Unraveling the Tapestry of Lies?',
       Keywords: 'spiritual awakening, hidden history, truth seeking, biblical research'
     },

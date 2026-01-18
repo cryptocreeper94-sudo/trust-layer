@@ -44,7 +44,7 @@ export default function Veil() {
             A Journey Through Hidden History, Suppressed Truth, and Spiritual Warfare
           </p>
           
-          <p className="text-cyan-400 mt-4 font-medium">By Asher Reed</p>
+          <p className="text-cyan-400 mt-4 font-medium">By Jason Andrews</p>
         </motion.div>
 
         <motion.div

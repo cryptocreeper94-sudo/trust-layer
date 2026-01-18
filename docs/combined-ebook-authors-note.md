@@ -72,5 +72,5 @@ Read with an open mind. Judge for yourself.
 
 ---
 
-*Asher Reed*
+*Jason Andrews*
 *January 2026*
