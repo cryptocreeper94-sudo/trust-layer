@@ -787,7 +787,24 @@ const volume1Chapters: Chapter[] = [
         <p><strong>A False Prophet:</strong> A religious leader who unifies the world's faiths under a single system that looks like peace but is bondage.</p>
         <p><strong>Technological Mark:</strong> A system that controls buying and selling - but offered willingly, embraced joyfully, by those who believe they're receiving salvation.</p>
         <p>The specifics matter less than the pattern: it will look good. It will offer solutions. It will require something in exchange. And that something will be the rejection of the true Messiah and acceptance of the counterfeit.</p>
-        <p className="text-cyan-400 mt-4">The world is already upside down. The deception won't be introduced - it will be revealed. And by then, the choice will have already been made.</p>
+        
+        <p className="text-purple-400 font-medium mt-6 mb-2">The Complete Inversion</p>
+        <p>Yahusha warned directly about this in Yochanon (John) 16:2:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-cyan-500">
+          <p className="italic">"They shall put you out of the assemblies: yea, the time comes, that whosoever kills you will think that he does Elohiym service."</p>
+        </div>
+        <p>Notice: in the original text, the word is <strong>Elohiym</strong> - not "God." Even the English word "God" traces linguistically to "Gad" (גד), the name of a Canaanite deity of fortune. Another substitution hiding in plain sight, woven into the very language we use to address the Creator.</p>
+        <p>The persecutors will believe they're doing righteous work. They'll think they're protecting peace, defending the messiah, cleansing the world of dangerous dissidents. The ones refusing the mark won't be seen as the faithful remnant - they'll be labeled as the threat, the conspiracy theorists, the danger to the new order.</p>
+        <p>Those handing out judgment will do so with absolute conviction. They've seen the miracles. They know "the truth." The ones resisting are clearly the deceived - probably influenced by the "evil" that their savior came to defeat.</p>
+        <p>This is how discerning people will be deceived. Not by obvious evil - but by convincing good. Not by a monster demanding worship - but by a figure offering peace. The sheep led to slaughter by people who genuinely believe they're shepherds.</p>
+        <div className="bg-slate-800/30 p-4 rounded-lg my-4">
+          <p><strong>The mark</strong> - offered as blessing, not curse</p>
+          <p><strong>The refusers</strong> - seen as the wicked</p>
+          <p><strong>The faithful</strong> - called the deceived</p>
+          <p><strong>Those thinking themselves saved</strong> - are the ones lost</p>
+          <p><strong>The "good people"</strong> - become instruments of judgment against the actual good</p>
+        </div>
+        <p className="text-cyan-400 mt-4">The world is already upside down. The deception won't be introduced - it will be revealed. And by then, the choice will have already been made. But knowing the pattern means you won't be caught unaware. That's what this book is for.</p>
       </>
     )
   },
