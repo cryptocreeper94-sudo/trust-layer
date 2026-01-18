@@ -396,8 +396,11 @@ export default function VeilReader() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
+  const [useElevenLabs, setUseElevenLabs] = useState(true);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     setSpeechSupported('speechSynthesis' in window);
@@ -408,15 +411,24 @@ export default function VeilReader() {
       if (window.speechSynthesis) {
         window.speechSynthesis.cancel();
       }
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
     };
   }, []);
 
   useEffect(() => {
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel();
-      setIsPlaying(false);
-      setIsPaused(false);
     }
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    setIsPlaying(false);
+    setIsPaused(false);
+    setIsLoading(false);
   }, [currentVolume, currentChapter]);
 
   const extractText = (node: React.ReactNode): string => {
@@ -431,19 +443,8 @@ export default function VeilReader() {
     return '';
   };
 
-  const handlePlay = () => {
-    if (!speechSupported) return;
-    
-    if (isPaused && utteranceRef.current) {
-      window.speechSynthesis.resume();
-      setIsPaused(false);
-      setIsPlaying(true);
-      return;
-    }
-
+  const playWithBrowserSpeech = (text: string) => {
     window.speechSynthesis.cancel();
-    
-    const text = extractText(chapter.content);
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.rate = 0.9;
     utterance.pitch = 1;
@@ -471,10 +472,95 @@ export default function VeilReader() {
     window.speechSynthesis.speak(utterance);
     setIsPlaying(true);
     setIsPaused(false);
+    setIsLoading(false);
+  };
+
+  const playWithElevenLabs = async (text: string) => {
+    try {
+      setIsLoading(true);
+      
+      // Truncate to 5000 chars for API limit
+      const truncatedText = text.slice(0, 5000);
+      
+      const response = await fetch('/api/voice/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: truncatedText }),
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        if (error.fallback) {
+          console.log('ElevenLabs unavailable, falling back to browser voice');
+          setUseElevenLabs(false);
+          playWithBrowserSpeech(text);
+          return;
+        }
+        throw new Error(error.error || 'Voice generation failed');
+      }
+      
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
+      
+      audio.onended = () => {
+        setIsPlaying(false);
+        setIsPaused(false);
+        URL.revokeObjectURL(audioUrl);
+      };
+      
+      audio.onerror = () => {
+        console.log('Audio error, falling back to browser voice');
+        setUseElevenLabs(false);
+        playWithBrowserSpeech(text);
+      };
+      
+      await audio.play();
+      setIsPlaying(true);
+      setIsPaused(false);
+      setIsLoading(false);
+      
+    } catch (error) {
+      console.error('ElevenLabs error:', error);
+      setUseElevenLabs(false);
+      playWithBrowserSpeech(text);
+    }
+  };
+
+  const handlePlay = async () => {
+    // Resume if paused
+    if (isPaused) {
+      if (audioRef.current) {
+        await audioRef.current.play();
+        setIsPaused(false);
+        setIsPlaying(true);
+        return;
+      }
+      if (utteranceRef.current) {
+        window.speechSynthesis.resume();
+        setIsPaused(false);
+        setIsPlaying(true);
+        return;
+      }
+    }
+
+    const text = extractText(chapter.content);
+    
+    if (useElevenLabs) {
+      await playWithElevenLabs(text);
+    } else if (speechSupported) {
+      playWithBrowserSpeech(text);
+    }
   };
 
   const handlePause = () => {
-    if (window.speechSynthesis.speaking) {
+    if (audioRef.current && isPlaying) {
+      audioRef.current.pause();
+      setIsPaused(true);
+      setIsPlaying(false);
+    } else if (window.speechSynthesis.speaking) {
       window.speechSynthesis.pause();
       setIsPaused(true);
       setIsPlaying(false);
@@ -482,6 +568,10 @@ export default function VeilReader() {
   };
 
   const handleStop = () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
     window.speechSynthesis.cancel();
     setIsPlaying(false);
     setIsPaused(false);
@@ -543,15 +633,26 @@ export default function VeilReader() {
           </div>
           
           <div className="flex items-center gap-2">
-            {speechSupported && (
+            {(speechSupported || useElevenLabs) && (
               <div className="flex items-center gap-1">
-                {!isPlaying && !isPaused && (
+                {isLoading && (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    disabled
+                    className="text-cyan-400"
+                  >
+                    <div className="w-4 h-4 mr-1 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
+                    <span className="hidden md:inline text-xs">Loading...</span>
+                  </Button>
+                )}
+                {!isPlaying && !isPaused && !isLoading && (
                   <Button 
                     variant="ghost" 
                     size="sm" 
                     onClick={handlePlay}
                     className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10"
-                    title="Listen to this chapter"
+                    title="Listen to this chapter (AI Voice)"
                   >
                     <Volume2 className="w-4 h-4 mr-1" />
                     <span className="hidden md:inline text-xs">Listen</span>

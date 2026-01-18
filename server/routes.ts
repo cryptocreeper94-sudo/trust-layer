@@ -12827,6 +12827,118 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // ElevenLabs Text-to-Speech for book reader (public - no auth required for reading)
+  app.post("/api/voice/tts", async (req: any, res) => {
+    try {
+      const { text, voiceId } = req.body;
+      
+      if (!text || text.length === 0) {
+        return res.status(400).json({ error: "Text is required" });
+      }
+      
+      // Limit text length to prevent abuse (roughly 5 minutes of audio)
+      if (text.length > 5000) {
+        return res.status(400).json({ error: "Text too long. Maximum 5000 characters per request." });
+      }
+      
+      const apiKey = process.env.ELEVENLABS_API_KEY;
+      if (!apiKey) {
+        return res.status(503).json({ error: "Voice service not configured", fallback: true });
+      }
+      
+      // Use a calm, clear voice for book reading - Rachel is good for narration
+      const selectedVoiceId = voiceId || "21m00Tcm4TlvDq8ikWAM"; // Rachel - calm female narrator
+      
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${selectedVoiceId}`, {
+        method: "POST",
+        headers: {
+          "Accept": "audio/mpeg",
+          "Content-Type": "application/json",
+          "xi-api-key": apiKey,
+        },
+        body: JSON.stringify({
+          text,
+          model_id: "eleven_monolingual_v1",
+          voice_settings: {
+            stability: 0.5,
+            similarity_boost: 0.75,
+            style: 0.0,
+            use_speaker_boost: true,
+          },
+        }),
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("[ElevenLabs] TTS error:", response.status, errorText);
+        return res.status(response.status).json({ 
+          error: "Voice generation failed", 
+          fallback: true,
+          details: errorText 
+        });
+      }
+      
+      // Stream the audio response
+      res.set({
+        "Content-Type": "audio/mpeg",
+        "Cache-Control": "public, max-age=86400", // Cache for 24 hours
+      });
+      
+      const arrayBuffer = await response.arrayBuffer();
+      res.send(Buffer.from(arrayBuffer));
+      
+    } catch (error: any) {
+      console.error("[ElevenLabs] TTS error:", error);
+      res.status(500).json({ error: error.message || "Voice generation failed", fallback: true });
+    }
+  });
+
+  // Get available ElevenLabs voices
+  app.get("/api/voice/voices", async (req, res) => {
+    try {
+      const apiKey = process.env.ELEVENLABS_API_KEY;
+      if (!apiKey) {
+        return res.json({ 
+          voices: [],
+          configured: false,
+          defaultVoice: { id: "browser", name: "Browser Voice" }
+        });
+      }
+      
+      const response = await fetch("https://api.elevenlabs.io/v1/voices", {
+        headers: { "xi-api-key": apiKey },
+      });
+      
+      if (!response.ok) {
+        return res.json({ 
+          voices: [],
+          configured: true,
+          error: "Failed to fetch voices",
+          defaultVoice: { id: "21m00Tcm4TlvDq8ikWAM", name: "Rachel" }
+        });
+      }
+      
+      const data = await response.json();
+      res.json({
+        voices: data.voices?.slice(0, 10).map((v: any) => ({
+          id: v.voice_id,
+          name: v.name,
+          category: v.category,
+          preview: v.preview_url,
+        })) || [],
+        configured: true,
+        defaultVoice: { id: "21m00Tcm4TlvDq8ikWAM", name: "Rachel" }
+      });
+    } catch (error: any) {
+      console.error("[ElevenLabs] Get voices error:", error);
+      res.json({ 
+        voices: [],
+        configured: false,
+        defaultVoice: { id: "browser", name: "Browser Voice" }
+      });
+    }
+  });
+
   // =====================================================
   // REFERRAL & AFFILIATE SYSTEM APIs
   // =====================================================
