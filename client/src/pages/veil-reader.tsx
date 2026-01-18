@@ -72,6 +72,149 @@ const volume1Chapters: Chapter[] = [
     )
   },
   {
+    id: "v1-cepher-intro",
+    title: "About the Cepher Translation",
+    content: (
+      <>
+        <p className="text-purple-400 font-medium mb-4">THE CEPHER PREFACE</p>
+        <p>This collection of writings in the את Cepher (pronounced sef'-er) is a restoration of the books traditionally recognized as set-apart Scripture. It includes certain writings retained in the Dead Sea Scrolls (Chanoch and Yovheliym), together with the recaptured writings of the Cepher Ha'Yashar (Yashar) and the Apocalypse of Baruch (2 Baruch), the recapture of books from the Septuagint, and the last two writings of the Makkabiym (3 and 4 Maccabees).</p>
+        <p>Contrary to the ineffable name doctrine created and sustained by rabbinical influences, the את Cepher sets forth the set-apart name and set-apart identities in an English transliteration. It restores the names of people and places found in the original Ivriyt (Hebrew) tongue, all of which have also been transliterated into English.</p>
+        <p>The instructions in scripture itself are directly contrary to this doctrine, including the practice of Mashiach himself who declared the name openly:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-cyan-500">
+          <p className="italic">"Give ear, O you heavens, and I will speak; and hear, O earth, the words of my mouth. My doctrine shall drop as the rain, my speech shall distil as the dew, as the small rain upon the tender herb, and as the showers upon the grass: Because <strong>I will publish the name of Yahuah</strong>: ascribe you greatness unto our Elohiym."</p>
+          <p className="text-cyan-300 font-medium mt-2">Devariym (Deuteronomy) 32:1-3</p>
+        </div>
+      </>
+    )
+  },
+  {
+    id: "v1-cepher-yahuah",
+    title: "The Name of Yahuah",
+    content: (
+      <>
+        <p>We set forth the name Yahuah (יהוה). This name has gone unmentioned for over two millennia based upon the ineffable name doctrine articulated after the destruction of the second temple. However, Yocephus tells us in Wars of the Jews that the name was pronounced by the priests prior to the temple's destruction, and they pronounced it as four vowels.</p>
+        <p>We believe that the demands of the language declare those vowels to be:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
+          <p className="text-xl text-center"><strong>ee</strong> (yod) <strong>ah</strong> (heh) <strong>oo</strong> (vav) <strong>ah</strong> (heh) = <strong className="text-cyan-400">Yahuah</strong></p>
+        </div>
+        <p>This name stands alone as Yah 45 times in the Tanakh: Shemoth 15:2; Yesha'yahu 12:2; 26:4; 38:11; Tehilliym 68:4; 68:18; 77:11; 89:8; 94:7; 94:12; 102:18; 104:35; 105:45; 106:1; 106:48; 111:1; 112:1; 113:1; 113:9; 115:17; 115:18; 116:19; 117:2; 118:5; 118:14; 118:17; 118:18; 118:19; 122:4; 130:3; 135:1; 135:3; 135:4; 135:21; 146:1; 146:10; 147:1; 147:20; 148:1; 148:14; 149:1; 149:9; 150:1; 150:6.</p>
+        <p>Even the King James Bible recognizes this name, writing in Psalm 68:4: "Sing unto God, sing praises to His Name: extoll him that rideth upon the heavens, <strong>by his Name Iah</strong>, and rejoice before him."</p>
+      </>
+    )
+  },
+  {
+    id: "v1-cepher-yahusha",
+    title: "The Name of Yahusha",
+    content: (
+      <>
+        <p>We have set forth the name of the Messiah as Yahusha (יהושע), partly because this name is identical to the name as was set forth in Bemidbar (Numbers) describing Ephrayimiy Husha, the son of Nun, who was selected as one of the twelve to spy out the Promised Land during the beginning of the Exodus:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-cyan-500">
+          <p className="italic">"Of the tribe of Ephrayim, Husha the son of Nun."</p>
+          <p className="text-cyan-300 font-medium">Bemidbar (Numbers) 13:8</p>
+          <p className="italic mt-2">"These are the names of the men which Mosheh sent to spy out the land. And Mosheh called Husha the son of Nun <strong>Yahusha</strong>."</p>
+          <p className="text-cyan-300 font-medium">Bemidbar (Numbers) 13:16</p>
+        </div>
+        <p>The name Yahusha is found 175 times in the Tanakh, and it has a wonderful meaning as the name is constructed from two words: Yahuah (יהוה) and yasha (ישע). The word yasha is a primitive root meaning properly: to be open, wide or free, that is, by implication to be safe; causatively to free or succor: to avenge, defend, deliver, help, preserve, rescue, to be safe, to bring or to have salvation, to save, or to be a Savior, or to get victory.</p>
+        <p>Most persuasively, we found the Septuagint's translation of the name of Joshua to be conclusive that the Mashiach had the same name as both are called Iesous (Ἰησοῦς) in the Greek. The Messiah has the same name as Joshua, son of Nun.</p>
+      </>
+    )
+  },
+  {
+    id: "v1-cepher-ruach",
+    title: "Ruach Ha'Qodesh",
+    content: (
+      <>
+        <p>The translation of the two languages from which scripture is derived - namely Greek (Yavaniy) and Hebrew (Ivriyt) - have been used to render both the phrase Holy Spirit and Holy Ghost. We have elected to use <strong>Ruach</strong> where it appears in the text for the Ivriyt and πνεῦμα (pneuma) for the Greek, as they have identical meaning.</p>
+        <p>Strong's tells us that (רוּחַ) rû-ach H7306 is a primitive root meaning properly, to blow, i.e. breathe; by resemblance breath, i.e. a sensible (or even violent) exhalation. Similarly, Strong's tells us that πνεῦμα (pneuma) G4151 means a current of air, i.e. breath (blast) or a breeze.</p>
+        <p>Rather than distort the meaning using terms which may show pagan beginnings personifying the breath as a ghost or spirit, we use Ruach where it appears in the text both for the Ivriyt and for the Greek, and use the term <strong>Qodesh</strong> for the Greek ἅγιος (hagios), as they have identical meaning. The Ruach is identified by conspicuous characteristics in the text:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
+          <p className="italic">"With him dwells the <strong>Ruach Da'ath v'Chokmah</strong> [Breath of knowledge and wisdom] the <strong>Ruach Ha'Torah</strong> [Breath of Instruction] and <strong>Gevurah</strong> [Breath of Power] and the ruach of those who sleep in righteousness; he shall judge secret things."</p>
+          <p className="text-cyan-300 font-medium mt-2">Chanoch (Enoch) 49:1-4</p>
+        </div>
+      </>
+    )
+  },
+  {
+    id: "v1-cepher-removed",
+    title: "The Removed Books",
+    content: (
+      <>
+        <p>You will find references to books that you may not recognize if you are an adherent to the post-19th Century Protestant Bible and its sixty-six books. These citations include books such as the Cepher Yovheliym (Jubilees), the Cepher Chanoch (Enoch), the Cepher ha'Yashar (Jasher), the Cepheriym Baruch, the Cepheriym Esdras (Ezra), or the Cepheriym Makkabiym (Maccabees).</p>
+        <p>The Apocrypha has been included as part of the Bible since the text was initially assembled in the late 4th Century by Eusibeus. It was canonized at the Council of Trent and included in the 1539 Great Bible of Myles Coverdale, the 1560 Geneva Bible of John Calvin, and the 1611 King James Bible.</p>
+        <p>The sixty-six-book reduction was the result of the Westminster Confession, where Parliament reversed itself as to the Protestant Canon to give favor to Scottish Presbyterians who agitated for the same. The reduction of the text of scripture was exclusively an Anglican political act, not a theological conclusion consistent with the development of scripture.</p>
+        <p>It is believed that in the 2nd Century BC, 70 Rabbis translated 54 books from Ivriyt to Greek, a translation called the Septuagint. The Septuagint did not include the Cepher Chanoch (Enoch) and the Cepher Yovheliym (Jubilees), but did contain all of the Apocrypha.</p>
+      </>
+    )
+  },
+  {
+    id: "v1-cepher-enoch",
+    title: "The Book of Chanoch (Enoch)",
+    content: (
+      <>
+        <p>We have elected to include the Cepher of the Prophet Chanoch (also known as 1 Enoch). While some historians have rejected Chanoch as heresy, Kepha Sheniy (2 Peter) 2:4-5 indicates that one of the believers in Chanoch was Kepha himself, for he states: "For if Elohiym spared not the angels that sinned, but cast them down to She'ol, and delivered them into chains of darkness, to be watched unto the judgment of anguish; And spared not the old world, but saved Noach the eighth person, a preacher of righteousness, bringing in the flood upon the world of the wicked..."</p>
+        <p>While the Ethiopian Bible - the earliest complete collection in the world - has always contained both Chanoch and Yovheliym, the decision to include both of these books was made easier when ancient versions of Chanoch and Yovheliym were found in Cave 4 at Qumran (Dead Sea Scrolls).</p>
+        <p>The Cepher of the Prophet Chanoch was known to the crafters of the Brit Chadasha (New Testament) as the following quote from Chanoch 2:1 in the Cepher Yahudah (Book of Jude) indicates:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-cyan-500">
+          <p className="italic">"And Chanoch also, the seventh generation from A'dam, prophesied of these, saying: 'Behold, <strong>Yahuah</strong> comes with ten thousands of his qodeshiym, to execute judgment upon all, and to convince all that are wicked among them of all their wicked deeds which they have wickedly committed...'"</p>
+          <p className="text-cyan-300 font-medium mt-2">Yahudah (Jude) 14-15</p>
+        </div>
+      </>
+    )
+  },
+  {
+    id: "v1-cepher-jasher",
+    title: "Yovheliym and Yashar",
+    content: (
+      <>
+        <p><strong>Yovheliym (Jubilees)</strong> - also known as "The Little Genesis" - is an ancient text believed to have been initially set forth in the Ivriyt (Hebrew) language and is attributable to Mosheh as the author. The Cepher Yovheliym presents "the history of the division of the days of the Torah, of the events of the years, the year-weeks, and the jubilees of the world" as secretly revealed to Mosheh by Yahuah while Mosheh was on Mount Ciynai for forty days and forty nights. Between 1947 and 1956, approximately 15 Yovheliym scrolls were found in five caves at Qumran.</p>
+        <p><strong>Yashar (Jasher)</strong> is also set forth in this את Cepher. The traditions of construction in the world of the Ivriym was by oral tradition (all scholars readily admitting that the "oral law" was transmitted this way between the generations for centuries). One of those scholars who acknowledged the ancient origin of the cepher, according to M. M. Noah, was Yocephus, who had written in respect of the Cepher Yashar that "by this book are to be understood certain records kept in some safe place on purpose, giving an account of what happened among the Ivriym from year to year, and called 'Jasher' or 'The Upright'..."</p>
+        <p>These are the two places where Yashar is quoted in the Old Testament:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
+          <p className="italic">"And the sun stood still, and the moon stayed, until the people had avenged themselves upon their enemies. Is not this written in the Cepher of Yashar?"</p>
+          <p className="text-cyan-300 font-medium">Yahusha (Joshua) 10:13</p>
+        </div>
+      </>
+    )
+  },
+  {
+    id: "v1-cepher-666",
+    title: "666 and the Mark",
+    content: (
+      <>
+        <p>One of the most interesting corrections in this text is found in Chazon (Revelation) 13:18, which restores the original Greek letters to what has been interpreted for the last 400 years as six hundred threescore and six:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-cyan-500">
+          <p className="italic">"Here is wisdom. Let him that hath understanding count the number of the beast: for it is the number of a man; and his number is Six hundred threescore and six."</p>
+          <p className="text-cyan-300 font-medium">Revelation 13:18 KJV</p>
+        </div>
+        <p>However, there are no numbers, but rather the three Greek letters χξς (chi xi stigma). These letters found in Strong's Greek Dictionary 5516 are defined as the 22nd, 14th and an obsolete letter (4742 as a cross) of the Greek alphabet, used as numbers: six hundred, 60 and 6.</p>
+        <p><strong>Stigma</strong> (στιγμα stig'ma) from Strong's Greek Dictionary 4742, is a word from a primary stizo (to "stick") meaning a mark incised or punched (for recognition of ownership), i.e. figuratively a scar of service: or mark. For example, a <em>stigmata</em> or in another instance, to stigmatize.</p>
+        <p>We elected to restore the actual picture of the mark as it was seen by Yochanon (John): <strong>χξς</strong> - the chi xi stigma.</p>
+      </>
+    )
+  },
+  {
+    id: "v1-cepher-aleph-tav",
+    title: "The Aleph Tav (את)",
+    content: (
+      <>
+        <p>One Ivriyt word which has escaped translation in all English texts is the word "eth" (את), which is spelled in the Ivriyt as <strong>Aleph Tav</strong>. The Aleph א is understood as a representation of the ox head, the symbol of strength and is often construed as a crown of leadership. The Tav ת (an ex or cross) means the mark, or sign, or covenant. It is our election to include all of the stand-alone Aleph Tavs that show up in the text in the Tanakh, and the times the Aleph Tav shows up in the Brit Chadashah without benefit of direct translation.</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
+          <p className="italic">"In the beginning Elohiym created <strong>את</strong> the heavens and <strong>את</strong> the earth."</p>
+          <p className="text-cyan-300 font-medium">Bere'shiyth (Genesis) 1:1</p>
+          <p className="italic mt-4">"In the beginning was the Word, and the Word was with <strong>את</strong> Elohiym, and Elohiym was the Word."</p>
+          <p className="text-cyan-300 font-medium">Yochanon (John) 1:1</p>
+          <p className="italic mt-4">"I am the א (Aleph) and the ת (Tav), the beginning and the ending, says Yahuah Elohiym, which is, and which was, and which is to come, Yahuah Tseva'oth."</p>
+          <p className="text-cyan-300 font-medium">Chazon (Revelation) 1:8</p>
+        </div>
+        <p className="text-cyan-400 mt-4">It is our most fervent prayer that these corrections in the את Cepher are found true and pleasing to <strong>Yahuah Elohaynu</strong> (Yahuah our Elohiym), and that they would come to bless you in your pursuit of the Truth to which you were called.</p>
+        <div className="bg-slate-800/30 p-4 rounded-lg mt-6 text-center italic">
+          <p>"Who has ascended up into heaven, or descended? Who has gathered the wind in his fists? Who has bound the waters in a garment? Who has established all the ends of the earth? What is His name, and what is His Son's name, if you can tell?"</p>
+          <p className="text-cyan-300 font-medium mt-2">Mishlei (Proverbs) 30:4</p>
+        </div>
+      </>
+    )
+  },
+  {
     id: "v1-ch1",
     title: "Chapter 1: The Council and The Fall",
     content: (
