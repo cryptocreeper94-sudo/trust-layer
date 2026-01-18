@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { 
   BookOpen, ChevronLeft, ChevronRight, Menu, X, Home, 
-  BookMarked, ScrollText, FileText, ExternalLink 
+  BookMarked, ScrollText, FileText, ExternalLink, Volume2, VolumeX, Pause, Play 
 } from "lucide-react";
 import { Link } from "wouter";
 
@@ -394,6 +394,98 @@ export default function VeilReader() {
   const [currentVolume, setCurrentVolume] = useState(0);
   const [currentChapter, setCurrentChapter] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [speechSupported, setSpeechSupported] = useState(false);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+
+  useEffect(() => {
+    setSpeechSupported('speechSynthesis' in window);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+      setIsPlaying(false);
+      setIsPaused(false);
+    }
+  }, [currentVolume, currentChapter]);
+
+  const extractText = (node: React.ReactNode): string => {
+    if (typeof node === 'string') return node;
+    if (typeof node === 'number') return String(node);
+    if (!node) return '';
+    if (Array.isArray(node)) return node.map(extractText).join(' ');
+    if (typeof node === 'object' && 'props' in node) {
+      const element = node as React.ReactElement<{ children?: React.ReactNode }>;
+      return extractText(element.props?.children);
+    }
+    return '';
+  };
+
+  const handlePlay = () => {
+    if (!speechSupported) return;
+    
+    if (isPaused && utteranceRef.current) {
+      window.speechSynthesis.resume();
+      setIsPaused(false);
+      setIsPlaying(true);
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    
+    const text = extractText(chapter.content);
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    
+    const voices = window.speechSynthesis.getVoices();
+    const preferredVoice = voices.find(v => 
+      v.name.includes('Samantha') || 
+      v.name.includes('Karen') || 
+      v.name.includes('Google US English') ||
+      v.lang.startsWith('en')
+    );
+    if (preferredVoice) utterance.voice = preferredVoice;
+    
+    utterance.onend = () => {
+      setIsPlaying(false);
+      setIsPaused(false);
+    };
+    
+    utterance.onerror = () => {
+      setIsPlaying(false);
+      setIsPaused(false);
+    };
+    
+    utteranceRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
+    setIsPlaying(true);
+    setIsPaused(false);
+  };
+
+  const handlePause = () => {
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.pause();
+      setIsPaused(true);
+      setIsPlaying(false);
+    }
+  };
+
+  const handleStop = () => {
+    window.speechSynthesis.cancel();
+    setIsPlaying(false);
+    setIsPaused(false);
+  };
 
   const volume = volumes[currentVolume];
   const chapter = volume.chapters[currentChapter];
@@ -451,6 +543,55 @@ export default function VeilReader() {
           </div>
           
           <div className="flex items-center gap-2">
+            {speechSupported && (
+              <div className="flex items-center gap-1">
+                {!isPlaying && !isPaused && (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={handlePlay}
+                    className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10"
+                    title="Listen to this chapter"
+                  >
+                    <Volume2 className="w-4 h-4 mr-1" />
+                    <span className="hidden md:inline text-xs">Listen</span>
+                  </Button>
+                )}
+                {isPlaying && (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={handlePause}
+                    className="text-amber-400 hover:text-amber-300 hover:bg-amber-500/10"
+                    title="Pause"
+                  >
+                    <Pause className="w-4 h-4" />
+                  </Button>
+                )}
+                {isPaused && (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={handlePlay}
+                    className="text-green-400 hover:text-green-300 hover:bg-green-500/10"
+                    title="Resume"
+                  >
+                    <Play className="w-4 h-4" />
+                  </Button>
+                )}
+                {(isPlaying || isPaused) && (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={handleStop}
+                    className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                    title="Stop"
+                  >
+                    <VolumeX className="w-4 h-4" />
+                  </Button>
+                )}
+              </div>
+            )}
             <span className="text-xs text-slate-500 hidden md:block">
               {currentGlobalIndex + 1} of {totalChapters}
             </span>
