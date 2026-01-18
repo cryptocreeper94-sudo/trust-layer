@@ -11,34 +11,78 @@ const hasSolflareExtension = () => !!(window as any).solflare?.isSolflare;
 const hasCoinbaseExtension = () => !!(window as any).ethereum?.isCoinbaseWallet;
 const hasTrustWalletExtension = () => !!(window as any).ethereum?.isTrust || !!(window as any).trustwallet;
 
+const isInWalletBrowser = () => {
+  return hasPhantomExtension() || hasMetaMaskExtension() || hasSolflareExtension() || 
+         hasCoinbaseExtension() || hasTrustWalletExtension();
+};
+
 const openPhantomDeepLink = () => {
-  const url = window.location.href;
-  const phantomDeepLink = `https://phantom.app/ul/browse/${url}`;
+  const currentUrl = window.location.href;
+  const ref = encodeURIComponent(window.location.origin);
+  const encodedUrl = encodeURIComponent(currentUrl);
+  const phantomDeepLink = `phantom://browse/${encodedUrl}?ref=${ref}`;
+  
+  const fallbackUrl = `https://phantom.app/ul/browse/${encodedUrl}?ref=${ref}`;
+  
+  const timeout = setTimeout(() => {
+    window.location.href = fallbackUrl;
+  }, 2500);
+  
   window.location.href = phantomDeepLink;
+  
+  window.addEventListener('blur', () => clearTimeout(timeout), { once: true });
 };
 
 const openMetaMaskDeepLink = () => {
   const currentUrl = window.location.href.replace('https://', '').replace('http://', '');
-  const metamaskDeepLink = `https://metamask.app.link/dapp/${currentUrl}`;
+  const metamaskDeepLink = `metamask://dapp/${currentUrl}`;
+  const fallbackUrl = `https://metamask.app.link/dapp/${currentUrl}`;
+  
+  const timeout = setTimeout(() => {
+    window.location.href = fallbackUrl;
+  }, 2500);
+  
   window.location.href = metamaskDeepLink;
+  window.addEventListener('blur', () => clearTimeout(timeout), { once: true });
 };
 
 const openSolflareDeepLink = () => {
-  const url = encodeURIComponent(window.location.href);
-  const solflareDeepLink = `https://solflare.com/ul/v1/browse/${url}`;
+  const encodedUrl = encodeURIComponent(window.location.href);
+  const solflareDeepLink = `solflare://ul/v1/browse/${encodedUrl}`;
+  const fallbackUrl = `https://solflare.com/ul/v1/browse/${encodedUrl}`;
+  
+  const timeout = setTimeout(() => {
+    window.location.href = fallbackUrl;
+  }, 2500);
+  
   window.location.href = solflareDeepLink;
+  window.addEventListener('blur', () => clearTimeout(timeout), { once: true });
 };
 
 const openCoinbaseDeepLink = () => {
-  const currentUrl = window.location.href.replace('https://', '').replace('http://', '');
-  const coinbaseDeepLink = `https://go.cb-w.com/dapp?cb_url=${encodeURIComponent(window.location.href)}`;
+  const encodedUrl = encodeURIComponent(window.location.href);
+  const coinbaseDeepLink = `cbwallet://dapp?url=${encodedUrl}`;
+  const fallbackUrl = `https://go.cb-w.com/dapp?cb_url=${encodedUrl}`;
+  
+  const timeout = setTimeout(() => {
+    window.location.href = fallbackUrl;
+  }, 2500);
+  
   window.location.href = coinbaseDeepLink;
+  window.addEventListener('blur', () => clearTimeout(timeout), { once: true });
 };
 
 const openTrustWalletDeepLink = () => {
-  const currentUrl = window.location.href.replace('https://', '').replace('http://', '');
-  const trustDeepLink = `https://link.trustwallet.com/open_url?coin_id=60&url=${encodeURIComponent(window.location.href)}`;
+  const encodedUrl = encodeURIComponent(window.location.href);
+  const trustDeepLink = `trust://open_url?coin_id=60&url=${encodedUrl}`;
+  const fallbackUrl = `https://link.trustwallet.com/open_url?coin_id=60&url=${encodedUrl}`;
+  
+  const timeout = setTimeout(() => {
+    window.location.href = fallbackUrl;
+  }, 2500);
+  
   window.location.href = trustDeepLink;
+  window.addEventListener('blur', () => clearTimeout(timeout), { once: true });
 };
 
 interface WalletOption {
@@ -56,10 +100,12 @@ export const WalletConnectModal: React.FC<{ open: boolean; onClose: () => void }
   const eth = useEthereumWallet();
   const sol = useSolanaWallet();
   const [mobile, setMobile] = useState(false);
+  const [inWalletBrowser, setInWalletBrowser] = useState(false);
   const [connecting, setConnecting] = useState<string | null>(null);
 
   useEffect(() => {
     setMobile(isMobile());
+    setInWalletBrowser(isInWalletBrowser());
   }, [open]);
 
   if (!open) return null;
@@ -192,9 +238,17 @@ export const WalletConnectModal: React.FC<{ open: boolean; onClose: () => void }
           </button>
         </div>
 
-        {mobile && (
-          <div className="mb-4 p-3 rounded-lg bg-amber-900/20 border border-amber-600/30 text-amber-200 text-sm">
-            Tap a wallet to open this page in that wallet's browser.
+        {mobile && !inWalletBrowser && (
+          <div className="mb-4 p-3 rounded-lg bg-cyan-900/20 border border-cyan-600/30 text-cyan-200 text-sm">
+            <div className="font-semibold mb-1">Mobile Wallet Connection</div>
+            Tap your wallet to open this site in the wallet's secure browser. Your wallet will be automatically detected and ready to connect.
+          </div>
+        )}
+        
+        {inWalletBrowser && (
+          <div className="mb-4 p-3 rounded-lg bg-emerald-900/20 border border-emerald-600/30 text-emerald-200 text-sm flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Wallet detected! Tap to connect securely.
           </div>
         )}
 
