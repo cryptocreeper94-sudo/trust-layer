@@ -1,4 +1,4 @@
-export type AppDomain = "dwsc" | "games" | "studios" | "chrono" | "chronochat";
+export type AppDomain = "dwsc" | "games" | "studios" | "chrono" | "chronochat" | "strikeagent";
 
 export function getAppFromHost(): AppDomain {
   const host = window.location.hostname.toLowerCase();
@@ -14,6 +14,9 @@ export function getAppFromHost(): AppDomain {
   }
   if (host.includes("yourlegacy") || host.includes("chrono.") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
     return "chrono";
+  }
+  if (host.includes("strikeagent") || host === "strikeagent.io" || host === "www.strikeagent.io") {
+    return "strikeagent";
   }
   return "dwsc";
 }
@@ -65,6 +68,14 @@ export const APP_CONFIG: Record<AppDomain, {
     description: "Connect across timelines. Chat beyond eras.",
     logoText: "Chronochat",
     primaryGradient: "from-cyan-500 to-purple-500",
+  },
+  strikeagent: {
+    name: "Strike Agent",
+    shortName: "Strike",
+    themeColor: "#22c55e",
+    description: "AI-powered token discovery & safety analysis",
+    logoText: "Strike Agent",
+    primaryGradient: "from-emerald-500 to-cyan-500",
   },
 };
 
