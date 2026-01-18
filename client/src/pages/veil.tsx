@@ -5,7 +5,7 @@ import { BookOpen, Download, FileText, Smartphone, BookMarked, ExternalLink } fr
 
 export default function Veil() {
   const handlePrintVolume2 = () => {
-    window.open('/assets/My-Journey-Beyond-The-Veil-Volume-2.html', '_blank');
+    window.open('/veil/print/vol2', '_blank');
   };
 
   const handleReadOnline = () => {
