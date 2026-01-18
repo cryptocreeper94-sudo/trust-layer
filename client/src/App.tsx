@@ -133,6 +133,7 @@ const EraCodex = lazy(() => import("@/pages/era-codex"));
 const ScenarioGenerator = lazy(() => import("@/pages/scenario-generator"));
 const Crowdfund = lazy(() => import("@/pages/crowdfund"));
 const Rewards = lazy(() => import("@/pages/rewards"));
+const MyTokens = lazy(() => import("@/pages/my-tokens"));
 const CommunityHub = lazy(() => import("@/pages/community-hub"));
 const Presale = lazy(() => import("@/pages/presale"));
 const PresaleSuccess = lazy(() => import("@/pages/presale-success"));
@@ -335,6 +336,7 @@ function DWSCRouter() {
         <Route path="/" component={Home} />
         <Route path="/join/:code" component={SyndicateInvite} />
         <Route path="/rewards" component={Rewards} />
+        <Route path="/my-tokens" component={MyTokens} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/developers" component={Developers} />
         <Route path="/developers/register" component={DevelopersRegister} />

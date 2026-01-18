@@ -162,6 +162,14 @@ export default function PresaleSuccess() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/my-tokens">
+                <Button 
+                  className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600"
+                  data-testid="button-view-tokens"
+                >
+                  View My Tokens <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
               <Link href="/">
                 <Button 
                   variant="outline" 
@@ -169,14 +177,6 @@ export default function PresaleSuccess() {
                   data-testid="button-explore-ecosystem"
                 >
                   Explore Ecosystem
-                </Button>
-              </Link>
-              <Link href="/roadmap">
-                <Button 
-                  className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600"
-                  data-testid="button-view-roadmap"
-                >
-                  View Roadmap <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
             </div>
@@ -273,6 +273,14 @@ export default function PresaleSuccess() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/my-tokens">
+                <Button 
+                  className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600"
+                  data-testid="button-view-my-tokens"
+                >
+                  View My Tokens <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
               <Link href="/">
                 <Button 
                   variant="outline" 
@@ -280,14 +288,6 @@ export default function PresaleSuccess() {
                   data-testid="button-explore-ecosystem"
                 >
                   Explore Ecosystem
-                </Button>
-              </Link>
-              <Link href="/roadmap">
-                <Button 
-                  className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600"
-                  data-testid="button-view-roadmap"
-                >
-                  View Roadmap <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
             </div>

@@ -1662,6 +1662,47 @@ export async function registerRoutes(
     }
   });
 
+  // Get user's purchase history
+  app.get("/api/user/purchases", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
+    try {
+      const userId = req.firebaseUser?.uid;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const user = await storage.getFirebaseUser(userId);
+      const email = user?.email;
+
+      // Get all presale purchases for this user
+      const purchases = await db.execute(sql`
+        SELECT 
+          id, token_amount, usd_amount_cents, tier, status, 
+          payment_method, bonus_percentage, created_at
+        FROM presale_purchases 
+        WHERE user_id = ${userId} OR email = ${email}
+        ORDER BY created_at DESC
+        LIMIT 50
+      `);
+
+      res.json({
+        success: true,
+        purchases: purchases.rows.map((p: any) => ({
+          id: p.id,
+          tokenAmount: Number(p.token_amount),
+          usdAmount: Number(p.usd_amount_cents) / 100,
+          tier: p.tier,
+          status: p.status,
+          paymentMethod: p.payment_method,
+          bonusPercentage: p.bonus_percentage,
+          createdAt: p.created_at,
+        })),
+      });
+    } catch (error) {
+      console.error("Purchase history error:", error);
+      res.status(500).json({ error: "Failed to get purchase history" });
+    }
+  });
+
   // Link wallet to reward profile
   app.post("/api/user/reward-profile/link-wallet", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
     try {
