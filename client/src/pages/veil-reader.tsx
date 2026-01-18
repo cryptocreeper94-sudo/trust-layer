@@ -271,6 +271,7 @@ const volume1Chapters: Chapter[] = [
         <p>Consider the prevalence of "El" names in positions of power and prominence: Elon, Denzel, Michael, Daniel, Gabriel, Emmanuel. If "El" carries hidden allegiance to the Canaanite deity, these names become signals - a mockery understood only by initiates.</p>
         <p>Even in fiction, the pattern appears. Superman's Kryptonian name is <strong>Kal-El</strong>. His father is <strong>Jor-El</strong>. The entire house is the House of El. The "S" symbol - often interpreted as the serpent - adorns his chest. A savior figure from the sky, bearing the El name, worshiped by the masses. Coincidence or revelation hiding in entertainment?</p>
         <p>Consider children's programming: The Smurfs featured a villain named <strong>Gargamel</strong> and his cat <strong>Azrael</strong> - the name of the angel of death in certain traditions. Little blue creatures (blue carries occult significance), an evil wizard with gargoyle imagery in his name, and the death angel as his companion. Children absorbed these names every Saturday morning, internalizing them as harmless cartoon characters. By adulthood, the conditioning is complete - they'd never think twice about what "Azrael" actually represents. Hidden in plain sight, in cartoons, for children.</p>
+        <p>Consider also that celebrities are called <strong>"stars"</strong> - and fallen angels were cast down from heaven as falling stars (Chizayon 12:4, Yesha'yahu 14:12). Many prominent "stars" bear El names. Some appear to reverse-age inexplicably. They're paid to stupefy, distract, mesmerize - to hypnotize the masses while mocking the true Elohiym simultaneously. It's spiritual and subconscious, but it all matters. The physical realm is merely an encasement for spirit, and every nuance - even the ones we never consciously notice - is where the hooks are set.</p>
         <p>Some suggest that the proper pronunciation should be <strong>"AL"</strong> rather than "EL" - a subtle difference in frequency and sound that may carry significant meaning. If names operate on vibrational frequencies, this small distinction could be the difference between alignment with the Creator and unwitting allegiance to the counterfeit.</p>
         <p className="text-cyan-400 mt-4">We cannot be dogmatic about this. But the very muddiness around it - the inability to clearly separate truth from deception in the names themselves - may itself be evidence of how deep the confusion runs.</p>
       </>
@@ -834,6 +835,19 @@ const volume1Chapters: Chapter[] = [
           <p><strong>Those thinking themselves saved</strong> - are the ones lost</p>
           <p><strong>The "good people"</strong> - become instruments of judgment against the actual good</p>
         </div>
+        
+        <p className="text-purple-400 font-medium mt-6 mb-2">The Third Temple</p>
+        <p>Many object: "But what about the Third Temple? Doesn't prophecy require it to be rebuilt?" This may be another misdirection. Scripture explicitly states:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-cyan-500">
+          <p className="italic">"Do you not know that your body is the temple of the Ruach Ha'Qodesh who is in you?"</p>
+          <p className="text-cyan-300 font-medium">Qorintiym Aleph (1 Corinthians) 6:19</p>
+          <p className="italic mt-2">"You are being built together to become a dwelling in which Elohiym lives by his Spirit."</p>
+          <p className="text-cyan-300 font-medium">Eph'siym (Ephesians) 2:22</p>
+        </div>
+        <p>Yahusha himself said in Yochanon 2:19: "Destroy this temple and in three days I will raise it up" - speaking of his body, not a building. The temples of old were for worship before the Messiah came. What he changed was not the law but the corruption that had separated humanity from the Father. Direct access was reinstated. You don't have to go to the temple anymore - because it is <em>in you</em>.</p>
+        <p>If the "Third Temple" is the body of believers - and that temple already exists in those who carry the Ruach - then everyone watching for a physical building in Yerushalayim is watching the wrong thing. Another misdirection while the real battle is spiritual.</p>
+        <p>The "man of sin sitting in Elohiym's temple" (2 Thessalonians 2:4) may refer not to someone occupying a building, but to someone taking over the corrupted church - claiming to lead the true temple while actually leading the counterfeit. The worst anti-messiahs arise from within.</p>
+        
         <p className="text-cyan-400 mt-4">The world is already upside down. The deception won't be introduced - it will be revealed. And by then, the choice will have already been made. But knowing the pattern means you won't be caught unaware. That's what this book is for.</p>
       </>
     )
