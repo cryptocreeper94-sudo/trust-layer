@@ -10,25 +10,8 @@ const hasMetaMaskExtension = () => !!(window as any).ethereum?.isMetaMask;
 
 const openPhantomDeepLink = () => {
   const url = window.location.href;
-  const ref = encodeURIComponent(url);
-  const phantomDeepLink = `https://phantom.app/ul/browse/${encodeURIComponent(url)}?ref=${ref}`;
-  
-  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  const isAndroid = /Android/i.test(navigator.userAgent);
-  
-  if (isIOS || isAndroid) {
-    const nativeScheme = `phantom://browse/${encodeURIComponent(url)}`;
-    
-    const timeout = setTimeout(() => {
-      window.location.href = phantomDeepLink;
-    }, 1500);
-    
-    window.location.href = nativeScheme;
-    
-    window.addEventListener('blur', () => clearTimeout(timeout), { once: true });
-  } else {
-    window.location.href = phantomDeepLink;
-  }
+  const phantomDeepLink = `https://phantom.app/ul/browse/${url}`;
+  window.location.href = phantomDeepLink;
 };
 
 const openMetaMaskDeepLink = () => {
