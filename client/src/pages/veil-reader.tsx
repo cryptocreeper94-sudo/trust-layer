@@ -247,6 +247,35 @@ const volume1Chapters: Chapter[] = [
     )
   },
   {
+    id: "v1-cepher-yasharal",
+    title: "Yashar'el: The True Israel",
+    content: (
+      <>
+        <p>The name we know as "Israel" (ישראל) is properly understood as <strong>Yashar'el</strong> - a combination of two words:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
+          <p><strong>Yashar</strong> (ישר) = straight, upright, righteous, just</p>
+          <p><strong>El</strong> (אל) = Mighty One</p>
+          <p className="mt-2"><strong>Yashar'el</strong> = "Straight to the Mighty One" / "Upright with the Almighty"</p>
+        </div>
+        <p>Consider Jacob's original name - Ya'akov (יעקב) - which comes from "akov" (עקב) meaning <strong>"crooked"</strong> or "heel-grabber." After wrestling with the messenger at Jabbok, he becomes Yashar'el - transformed from crooked to upright. This is a <em>spiritual transformation</em>, not a geographic designation.</p>
+        <p>Scripture also uses <strong>Yeshurun</strong> (ישרון) - "the upright one" - as a poetic name for the true people of the covenant in Devariym (Deuteronomy) and Yesha'yahu (Isaiah).</p>
+        
+        <p className="text-purple-400 font-medium mt-6 mb-2">Spiritual Israel vs. The Geopolitical Nation</p>
+        <p><strong>Spiritual Yashar'el</strong> refers to those living in covenant relationship with Yahuah, walking in righteousness and uprightness before the Creator - the scattered remnant with eyes to see and ears to hear.</p>
+        <p><strong>The modern nation-state of Israel</strong> (established 1948) is a geopolitical entity, created through political powers - the British Mandate, UN Resolution 181, and significant Rothschild financing. If the prophetic "restoration of Israel" refers to <em>Yashar'el</em> - the upright ones aligned with the Creator - then the political nation could be misdirection. Everyone watches a geographic location for prophetic fulfillment while the true Israel is spiritual and scattered.</p>
+        <p>Some have even noted that "Israel" as pronounced in English could be heard as a combination of pagan deities: <strong>Isis</strong> (Egyptian goddess) + <strong>Ra</strong> (Egyptian sun god) + <strong>El</strong> (Canaanite deity). Whether intentional or coincidental, even the name as commonly spoken may carry inversions hidden in plain sight.</p>
+        
+        <p className="text-purple-400 font-medium mt-6 mb-2">The Question of "El"</p>
+        <p>Here we must acknowledge complexity. Scholars debate whether "El" (אל) is simply a generic Semitic word for "mighty one" - or whether it originally referred to the supreme deity of the Canaanite pantheon, whose attributes were later absorbed by Yahuah.</p>
+        <p>The Dead Sea Scrolls version of Devariym 32:8-9 shows <strong>El Elyon</strong> (the Most High) assigning nations to different elohiym, with <strong>Yahuah</strong> receiving Yashar'el as his portion - implying they may have been understood as distinct beings in the original text.</p>
+        <p>Consider the prevalence of "El" names in positions of power and prominence: Elon, Denzel, Michael, Daniel, Gabriel, Emmanuel. If "El" carries hidden allegiance to the Canaanite deity, these names become signals - a mockery understood only by initiates.</p>
+        <p>Even in fiction, the pattern appears. Superman's Kryptonian name is <strong>Kal-El</strong>. His father is <strong>Jor-El</strong>. The entire house is the House of El. The "S" symbol - often interpreted as the serpent - adorns his chest. A savior figure from the sky, bearing the El name, worshiped by the masses. Coincidence or revelation hiding in entertainment?</p>
+        <p>Some suggest that the proper pronunciation should be <strong>"AL"</strong> rather than "EL" - a subtle difference in frequency and sound that may carry significant meaning. If names operate on vibrational frequencies, this small distinction could be the difference between alignment with the Creator and unwitting allegiance to the counterfeit.</p>
+        <p className="text-cyan-400 mt-4">We cannot be dogmatic about this. But the very muddiness around it - the inability to clearly separate truth from deception in the names themselves - may itself be evidence of how deep the confusion runs.</p>
+      </>
+    )
+  },
+  {
     id: "v1-ch1",
     title: "Chapter 1: The Council and The Fall",
     content: (
