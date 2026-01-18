@@ -189,6 +189,16 @@ const volume1Chapters: Chapter[] = [
         <p>However, there are no numbers, but rather the three Greek letters χξς (chi xi stigma). These letters found in Strong's Greek Dictionary 5516 are defined as the 22nd, 14th and an obsolete letter (4742 as a cross) of the Greek alphabet, used as numbers: six hundred, 60 and 6.</p>
         <p><strong>Stigma</strong> (στιγμα stig'ma) from Strong's Greek Dictionary 4742, is a word from a primary stizo (to "stick") meaning a mark incised or punched (for recognition of ownership), i.e. figuratively a scar of service: or mark. For example, a <em>stigmata</em> or in another instance, to stigmatize.</p>
         <p>We elected to restore the actual picture of the mark as it was seen by Yochanon (John): <strong>χξς</strong> - the chi xi stigma.</p>
+        
+        <p className="text-purple-400 font-medium mt-6 mb-2">The Spiritual Mark</p>
+        <p>While many focus on a physical manifestation - a chip, a tattoo, a barcode - we must consider the deeper meaning of the forehead and hand. Scripture uses this same language in Devariym (Deuteronomy) 6:8 regarding the Torah: "And thou shalt bind them for a sign upon thine hand, and they shall be as frontlets between thine eyes."</p>
+        <p>The <strong>forehead</strong> represents the mind - what you believe, who you acknowledge as authority, where your signal comes in. The <strong>hand</strong> represents your works - what you labor for, what you build, whom you serve with your actions. The mark of Yahuah or the mark of the beast is first and foremost a matter of <strong>allegiance</strong>.</p>
+        <p>Consider this: if a physical mark is required to "buy or sell," it may simply be the outward confirmation of a spiritual decision already made. You will not be forced. You will choose. And that choice may have already been made through acceptance of false doctrine in the mind (forehead) and participation in false worship with the body (hand).</p>
+        
+        <p className="text-purple-400 font-medium mt-6 mb-2">The Symbolism Everywhere</p>
+        <p>The chi xi stigma imagery appears constantly in modern branding, architecture, hand signs, and corporate logos - often disguised but recognizable once you know what to look for. This ubiquitous symbolism may serve as a signal - a call to action for the spirit of the age (Eph'siym 2:2). It normalizes and conditions, so that when the actual choice arrives, people are already aligned with that spirit.</p>
+        <p>We cannot be 100% certain how the physical manifestation will unfold. But we believe this: the body is the temple, the vessel of the spirit that gave it life. The mark ultimately resides within each person - in what they believe and whom they serve. Any physical mark would be confirmation of what is already spiritually present, not the origination of it.</p>
+        <p className="text-cyan-400 mt-4">Free will remains paramount. The choice is yours. And if you have sought the Creator with your whole heart, that choice has already been made.</p>
       </>
     )
   },
