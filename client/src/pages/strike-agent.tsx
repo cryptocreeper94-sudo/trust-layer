@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { 
   Bot, Target, TrendingUp, TrendingDown, Eye, AlertTriangle,
   Shield, Zap, Activity, RefreshCw, Bell, Settings, Filter,
-  ChevronDown, ExternalLink, Copy, Check, Home
+  ChevronDown, ExternalLink, Copy, Check, Home, X, Volume2, VolumeX,
+  Sliders, Clock, DollarSign, Percent, Star, StarOff, Play, Pause,
+  BarChart3, Users, Droplets, Lock, Unlock, Flame, TrendingUp as Trending,
+  ChevronRight, Info, Smartphone, Wallet
 } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -26,6 +29,32 @@ interface StrikeRecommendation {
   liquidityLocked: boolean | null;
   createdAt: string;
 }
+
+interface StrikeSettings {
+  minScore: number;
+  minMarketCap: number;
+  maxMarketCap: number;
+  refreshInterval: number;
+  soundAlerts: boolean;
+  pushNotifications: boolean;
+  autoRefresh: boolean;
+  showAvoid: boolean;
+  slippage: number;
+  priorityFee: number;
+}
+
+const DEFAULT_SETTINGS: StrikeSettings = {
+  minScore: 0,
+  minMarketCap: 0,
+  maxMarketCap: 10000000,
+  refreshInterval: 30,
+  soundAlerts: false,
+  pushNotifications: false,
+  autoRefresh: true,
+  showAvoid: true,
+  slippage: 1,
+  priorityFee: 0.0001,
+};
 
 const recommendationStyles = {
   snipe: {
@@ -54,7 +83,278 @@ const recommendationStyles = {
   }
 };
 
-function TokenCard({ rec, expanded, onToggle }: { rec: StrikeRecommendation; expanded: boolean; onToggle: () => void }) {
+function SettingsModal({ open, onClose, settings, onSave }: { 
+  open: boolean; 
+  onClose: () => void; 
+  settings: StrikeSettings;
+  onSave: (s: StrikeSettings) => void;
+}) {
+  const [local, setLocal] = useState(settings);
+  
+  useEffect(() => {
+    setLocal(settings);
+  }, [settings, open]);
+
+  if (!open) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ y: '100%' }}
+        animate={{ y: 0 }}
+        exit={{ y: '100%' }}
+        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+        onClick={e => e.stopPropagation()}
+        className="w-full max-w-lg bg-slate-900 rounded-t-3xl sm:rounded-3xl border border-white/10 max-h-[85vh] overflow-hidden"
+      >
+        <div className="sticky top-0 bg-slate-900/95 backdrop-blur-xl border-b border-white/10 px-5 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
+              <Settings className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-white">Settings</h2>
+              <p className="text-xs text-white/40">Configure Strike Agent</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-xl transition-colors">
+            <X className="w-5 h-5 text-white/60" />
+          </button>
+        </div>
+        
+        <div className="overflow-y-auto max-h-[calc(85vh-140px)] p-5 space-y-6">
+          <div>
+            <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+              <Filter className="w-4 h-4 text-cyan-400" />
+              Filters
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs text-white/50 mb-2 block">Minimum AI Score ({local.minScore}/100)</label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={local.minScore}
+                  onChange={e => setLocal({ ...local, minScore: parseInt(e.target.value) })}
+                  className="w-full accent-emerald-500"
+                />
+                <div className="flex justify-between text-[10px] text-white/30 mt-1">
+                  <span>Show All</span>
+                  <span>High Quality Only</span>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-white/50 mb-2 block">Min Market Cap</label>
+                  <select 
+                    value={local.minMarketCap}
+                    onChange={e => setLocal({ ...local, minMarketCap: parseInt(e.target.value) })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white"
+                  >
+                    <option value="0">Any</option>
+                    <option value="1000">$1K+</option>
+                    <option value="10000">$10K+</option>
+                    <option value="50000">$50K+</option>
+                    <option value="100000">$100K+</option>
+                    <option value="500000">$500K+</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs text-white/50 mb-2 block">Max Market Cap</label>
+                  <select 
+                    value={local.maxMarketCap}
+                    onChange={e => setLocal({ ...local, maxMarketCap: parseInt(e.target.value) })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white"
+                  >
+                    <option value="100000">$100K</option>
+                    <option value="500000">$500K</option>
+                    <option value="1000000">$1M</option>
+                    <option value="5000000">$5M</option>
+                    <option value="10000000">$10M</option>
+                    <option value="999999999">Unlimited</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-between py-2">
+                <div>
+                  <div className="text-sm text-white">Show Avoid Tokens</div>
+                  <div className="text-xs text-white/40">Display risky tokens in feed</div>
+                </div>
+                <button
+                  onClick={() => setLocal({ ...local, showAvoid: !local.showAvoid })}
+                  className={`w-12 h-7 rounded-full transition-colors ${local.showAvoid ? 'bg-emerald-500' : 'bg-white/20'}`}
+                >
+                  <div className={`w-5 h-5 rounded-full bg-white shadow-lg transition-transform ${local.showAvoid ? 'translate-x-6' : 'translate-x-1'}`} />
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div className="border-t border-white/10 pt-6">
+            <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+              <Sliders className="w-4 h-4 text-purple-400" />
+              Trading Parameters
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs text-white/50 mb-2 block">Slippage Tolerance ({local.slippage}%)</label>
+                <input
+                  type="range"
+                  min="0.1"
+                  max="10"
+                  step="0.1"
+                  value={local.slippage}
+                  onChange={e => setLocal({ ...local, slippage: parseFloat(e.target.value) })}
+                  className="w-full accent-purple-500"
+                />
+                <div className="flex justify-between text-[10px] text-white/30 mt-1">
+                  <span>0.1%</span>
+                  <span>10%</span>
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-xs text-white/50 mb-2 block">Priority Fee (SOL)</label>
+                <div className="grid grid-cols-4 gap-2">
+                  {[0.0001, 0.0005, 0.001, 0.005].map(fee => (
+                    <button
+                      key={fee}
+                      onClick={() => setLocal({ ...local, priorityFee: fee })}
+                      className={`py-2 rounded-xl text-xs font-medium transition-colors ${
+                        local.priorityFee === fee 
+                          ? 'bg-purple-500/30 text-purple-400 border border-purple-500/40' 
+                          : 'bg-white/5 text-white/60 border border-white/10'
+                      }`}
+                    >
+                      {fee}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="border-t border-white/10 pt-6">
+            <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+              <Bell className="w-4 h-4 text-amber-400" />
+              Notifications
+            </h3>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between py-2">
+                <div className="flex items-center gap-3">
+                  {local.soundAlerts ? <Volume2 className="w-5 h-5 text-amber-400" /> : <VolumeX className="w-5 h-5 text-white/40" />}
+                  <div>
+                    <div className="text-sm text-white">Sound Alerts</div>
+                    <div className="text-xs text-white/40">Play sound for new snipe opportunities</div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setLocal({ ...local, soundAlerts: !local.soundAlerts })}
+                  className={`w-12 h-7 rounded-full transition-colors ${local.soundAlerts ? 'bg-amber-500' : 'bg-white/20'}`}
+                >
+                  <div className={`w-5 h-5 rounded-full bg-white shadow-lg transition-transform ${local.soundAlerts ? 'translate-x-6' : 'translate-x-1'}`} />
+                </button>
+              </div>
+              
+              <div className="flex items-center justify-between py-2">
+                <div className="flex items-center gap-3">
+                  <Smartphone className="w-5 h-5 text-white/40" />
+                  <div>
+                    <div className="text-sm text-white">Push Notifications</div>
+                    <div className="text-xs text-white/40">Get alerts when app is closed</div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setLocal({ ...local, pushNotifications: !local.pushNotifications })}
+                  className={`w-12 h-7 rounded-full transition-colors ${local.pushNotifications ? 'bg-emerald-500' : 'bg-white/20'}`}
+                >
+                  <div className={`w-5 h-5 rounded-full bg-white shadow-lg transition-transform ${local.pushNotifications ? 'translate-x-6' : 'translate-x-1'}`} />
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div className="border-t border-white/10 pt-6">
+            <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+              <Clock className="w-4 h-4 text-cyan-400" />
+              Refresh
+            </h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between py-2">
+                <div className="flex items-center gap-3">
+                  <RefreshCw className={`w-5 h-5 ${local.autoRefresh ? 'text-cyan-400' : 'text-white/40'}`} />
+                  <div>
+                    <div className="text-sm text-white">Auto Refresh</div>
+                    <div className="text-xs text-white/40">Automatically fetch new tokens</div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setLocal({ ...local, autoRefresh: !local.autoRefresh })}
+                  className={`w-12 h-7 rounded-full transition-colors ${local.autoRefresh ? 'bg-cyan-500' : 'bg-white/20'}`}
+                >
+                  <div className={`w-5 h-5 rounded-full bg-white shadow-lg transition-transform ${local.autoRefresh ? 'translate-x-6' : 'translate-x-1'}`} />
+                </button>
+              </div>
+              
+              {local.autoRefresh && (
+                <div>
+                  <label className="text-xs text-white/50 mb-2 block">Refresh Interval</label>
+                  <div className="grid grid-cols-4 gap-2">
+                    {[15, 30, 60, 120].map(sec => (
+                      <button
+                        key={sec}
+                        onClick={() => setLocal({ ...local, refreshInterval: sec })}
+                        className={`py-2 rounded-xl text-xs font-medium transition-colors ${
+                          local.refreshInterval === sec 
+                            ? 'bg-cyan-500/30 text-cyan-400 border border-cyan-500/40' 
+                            : 'bg-white/5 text-white/60 border border-white/10'
+                        }`}
+                      >
+                        {sec}s
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        
+        <div className="sticky bottom-0 bg-slate-900/95 backdrop-blur-xl border-t border-white/10 p-4 flex gap-3">
+          <button
+            onClick={() => { setLocal(DEFAULT_SETTINGS); }}
+            className="flex-1 py-3 rounded-xl bg-white/5 text-white/60 font-medium text-sm hover:bg-white/10 transition-colors"
+          >
+            Reset to Default
+          </button>
+          <button
+            onClick={() => { onSave(local); onClose(); }}
+            className="flex-1 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold text-sm"
+          >
+            Save Settings
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: { 
+  rec: StrikeRecommendation; 
+  expanded: boolean; 
+  onToggle: () => void;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
+}) {
   const style = recommendationStyles[rec.aiRecommendation];
   const Icon = style.icon;
   const [copied, setCopied] = useState(false);
@@ -63,6 +363,15 @@ function TokenCard({ rec, expanded, onToggle }: { rec: StrikeRecommendation; exp
     navigator.clipboard.writeText(rec.tokenAddress);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const tokenAge = () => {
+    const created = new Date(rec.createdAt);
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - created.getTime()) / 1000 / 60);
+    if (diff < 60) return `${diff}m ago`;
+    if (diff < 1440) return `${Math.floor(diff / 60)}h ago`;
+    return `${Math.floor(diff / 1440)}d ago`;
   };
 
   return (
@@ -78,13 +387,35 @@ function TokenCard({ rec, expanded, onToggle }: { rec: StrikeRecommendation; exp
       >
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
-            <div className={`p-2.5 rounded-xl ${style.bg} ${style.border} border`}>
+            <div className={`p-2.5 rounded-xl ${style.bg} ${style.border} border relative`}>
               <Icon className={`w-5 h-5 ${style.text}`} />
+              {rec.aiRecommendation === 'snipe' && (
+                <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping" />
+              )}
             </div>
             <div>
-              <div className="text-lg font-bold text-white">${rec.tokenSymbol}</div>
-              <div className="text-xs text-white/50 truncate max-w-[140px]">
-                {rec.tokenName || rec.tokenAddress.slice(0, 12) + '...'}
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-bold text-white">${rec.tokenSymbol}</span>
+                <button
+                  onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}
+                  className="p-1 hover:bg-white/10 rounded-lg transition-colors"
+                >
+                  {isFavorite ? (
+                    <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                  ) : (
+                    <StarOff className="w-4 h-4 text-white/30" />
+                  )}
+                </button>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-white/50">
+                <span className="truncate max-w-[100px]">
+                  {rec.tokenName || rec.tokenAddress.slice(0, 8) + '...'}
+                </span>
+                <span className="text-white/30">•</span>
+                <span className="flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  {tokenAge()}
+                </span>
               </div>
             </div>
           </div>
@@ -92,46 +423,72 @@ function TokenCard({ rec, expanded, onToggle }: { rec: StrikeRecommendation; exp
             <div className={`px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider ${style.bg} ${style.text} ${style.border} border`}>
               {style.label}
             </div>
-            <div className={`text-lg font-bold ${(rec.aiScore || 0) >= 70 ? 'text-emerald-400' : (rec.aiScore || 0) >= 40 ? 'text-amber-400' : 'text-red-400'}`}>
-              {rec.aiScore || 0}/100
+            <div className="flex items-center gap-1">
+              <BarChart3 className="w-3 h-3 text-white/40" />
+              <span className={`text-lg font-bold ${(rec.aiScore || 0) >= 70 ? 'text-emerald-400' : (rec.aiScore || 0) >= 40 ? 'text-amber-400' : 'text-red-400'}`}>
+                {rec.aiScore || 0}
+              </span>
             </div>
           </div>
         </div>
         
-        <div className="grid grid-cols-2 gap-3">
-          <div className="bg-white/5 rounded-xl p-3 text-center">
-            <div className="text-[10px] text-white/40 uppercase mb-1">Price</div>
+        <div className="grid grid-cols-3 gap-2">
+          <div className="bg-white/5 rounded-xl p-2.5 text-center">
+            <div className="text-[10px] text-white/40 uppercase mb-0.5 flex items-center justify-center gap-1">
+              <DollarSign className="w-3 h-3" />
+              Price
+            </div>
             <div className="text-sm font-semibold text-white">
               ${rec.priceUsd ? parseFloat(rec.priceUsd).toFixed(8) : '0.00'}
             </div>
           </div>
-          <div className="bg-white/5 rounded-xl p-3 text-center">
-            <div className="text-[10px] text-white/40 uppercase mb-1">Market Cap</div>
+          <div className="bg-white/5 rounded-xl p-2.5 text-center">
+            <div className="text-[10px] text-white/40 uppercase mb-0.5 flex items-center justify-center gap-1">
+              <Trending className="w-3 h-3" />
+              MCap
+            </div>
             <div className="text-sm font-semibold text-white">
               {rec.marketCapUsd ? `$${(parseFloat(rec.marketCapUsd) / 1000).toFixed(0)}K` : 'N/A'}
+            </div>
+          </div>
+          <div className="bg-white/5 rounded-xl p-2.5 text-center">
+            <div className="text-[10px] text-white/40 uppercase mb-0.5 flex items-center justify-center gap-1">
+              <Shield className="w-3 h-3" />
+              Safety
+            </div>
+            <div className={`text-sm font-semibold ${
+              rec.isHoneypot ? 'text-red-400' : 
+              (rec.mintAuthorityActive === false && rec.freezeAuthorityActive === false) ? 'text-emerald-400' : 'text-amber-400'
+            }`}>
+              {rec.isHoneypot ? 'Risk' : 
+               (rec.mintAuthorityActive === false && rec.freezeAuthorityActive === false) ? 'Safe' : 'Check'}
             </div>
           </div>
         </div>
         
         <div className="flex gap-1.5 flex-wrap mt-3">
           {rec.mintAuthorityActive === false && (
-            <span className="text-[10px] px-2 py-1 bg-emerald-500/15 text-emerald-400 rounded-lg border border-emerald-500/30">
-              Mint Disabled
+            <span className="text-[10px] px-2 py-1 bg-emerald-500/15 text-emerald-400 rounded-lg border border-emerald-500/30 flex items-center gap-1">
+              <Lock className="w-3 h-3" />
+              Mint Off
             </span>
           )}
           {rec.freezeAuthorityActive === false && (
-            <span className="text-[10px] px-2 py-1 bg-emerald-500/15 text-emerald-400 rounded-lg border border-emerald-500/30">
-              Freeze Disabled
+            <span className="text-[10px] px-2 py-1 bg-emerald-500/15 text-emerald-400 rounded-lg border border-emerald-500/30 flex items-center gap-1">
+              <Lock className="w-3 h-3" />
+              Freeze Off
             </span>
           )}
           {rec.liquidityLocked && (
-            <span className="text-[10px] px-2 py-1 bg-emerald-500/15 text-emerald-400 rounded-lg border border-emerald-500/30">
+            <span className="text-[10px] px-2 py-1 bg-emerald-500/15 text-emerald-400 rounded-lg border border-emerald-500/30 flex items-center gap-1">
+              <Droplets className="w-3 h-3" />
               LP Locked
             </span>
           )}
           {rec.isHoneypot && (
-            <span className="text-[10px] px-2 py-1 bg-red-500/15 text-red-400 rounded-lg border border-red-500/30">
-              Honeypot Risk
+            <span className="text-[10px] px-2 py-1 bg-red-500/15 text-red-400 rounded-lg border border-red-500/30 flex items-center gap-1">
+              <AlertTriangle className="w-3 h-3" />
+              Honeypot
             </span>
           )}
         </div>
@@ -152,7 +509,10 @@ function TokenCard({ rec, expanded, onToggle }: { rec: StrikeRecommendation; exp
             <div className="px-4 pb-4 pt-2 border-t border-white/10">
               {rec.aiReasoning && (
                 <div className="mb-4">
-                  <div className="text-[10px] text-white/40 uppercase mb-2">AI Analysis</div>
+                  <div className="text-[10px] text-white/40 uppercase mb-2 flex items-center gap-1">
+                    <Bot className="w-3 h-3" />
+                    AI Analysis
+                  </div>
                   <p className="text-sm text-white/70 leading-relaxed">{rec.aiReasoning}</p>
                 </div>
               )}
@@ -170,30 +530,59 @@ function TokenCard({ rec, expanded, onToggle }: { rec: StrikeRecommendation; exp
                 </button>
               </div>
               
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-3 gap-2 mb-4">
                 <a
                   href={`https://dexscreener.com/solana/${rec.tokenAddress}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 py-2.5 bg-white/10 rounded-xl text-sm text-white hover:bg-white/20 transition-colors"
+                  className="flex flex-col items-center justify-center gap-1 py-2.5 bg-white/10 rounded-xl text-xs text-white hover:bg-white/20 transition-colors"
                   onClick={(e) => e.stopPropagation()}
                   data-testid="link-dexscreener"
                 >
-                  <ExternalLink className="w-4 h-4" />
+                  <BarChart3 className="w-4 h-4" />
                   DexScreener
                 </a>
                 <a
                   href={`https://solscan.io/token/${rec.tokenAddress}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 py-2.5 bg-white/10 rounded-xl text-sm text-white hover:bg-white/20 transition-colors"
+                  className="flex flex-col items-center justify-center gap-1 py-2.5 bg-white/10 rounded-xl text-xs text-white hover:bg-white/20 transition-colors"
                   onClick={(e) => e.stopPropagation()}
                   data-testid="link-solscan"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Solscan
                 </a>
+                <a
+                  href={`https://birdeye.so/token/${rec.tokenAddress}?chain=solana`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center justify-center gap-1 py-2.5 bg-white/10 rounded-xl text-xs text-white hover:bg-white/20 transition-colors"
+                  onClick={(e) => e.stopPropagation()}
+                  data-testid="link-birdeye"
+                >
+                  <Eye className="w-4 h-4" />
+                  Birdeye
+                </a>
               </div>
+              
+              <a
+                href={`https://raydium.io/swap/?inputMint=sol&outputMint=${rec.tokenAddress}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all ${
+                  rec.aiRecommendation === 'snipe' 
+                    ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white' 
+                    : rec.aiRecommendation === 'watch'
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
+                    : 'bg-white/10 text-white/60'
+                }`}
+                onClick={(e) => e.stopPropagation()}
+                data-testid="button-trade"
+              >
+                <Wallet className="w-4 h-4" />
+                {rec.aiRecommendation === 'snipe' ? 'Trade on Raydium' : 'View on Raydium'}
+              </a>
             </div>
           </motion.div>
         )}
@@ -203,29 +592,65 @@ function TokenCard({ rec, expanded, onToggle }: { rec: StrikeRecommendation; exp
 }
 
 export default function StrikeAgentPage() {
-  const [filter, setFilter] = useState<'all' | 'snipe' | 'watch' | 'avoid'>('all');
+  const [filter, setFilter] = useState<'all' | 'snipe' | 'watch' | 'avoid' | 'favorites'>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('strike-favorites') || '[]');
+    } catch { return []; }
+  });
+  const [settings, setSettings] = useState<StrikeSettings>(() => {
+    try {
+      return { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem('strike-settings') || '{}') };
+    } catch { return DEFAULT_SETTINGS; }
+  });
+  
+  useEffect(() => {
+    localStorage.setItem('strike-favorites', JSON.stringify(favorites));
+  }, [favorites]);
+  
+  useEffect(() => {
+    localStorage.setItem('strike-settings', JSON.stringify(settings));
+  }, [settings]);
   
   const { data, isLoading, error, refetch, isFetching } = useQuery({
     queryKey: ['strike-agent-recommendations-full'],
     queryFn: async () => {
-      const res = await fetch('/api/pulse/strike-agent/recommendations?limit=20');
+      const res = await fetch('/api/pulse/strike-agent/recommendations?limit=30');
       if (!res.ok) throw new Error('Failed to fetch recommendations');
       return res.json();
     },
-    refetchInterval: 30000
+    refetchInterval: settings.autoRefresh ? settings.refreshInterval * 1000 : false
   });
 
   const recommendations = (data?.recommendations || []) as StrikeRecommendation[];
-  const filtered = filter === 'all' 
-    ? recommendations 
-    : recommendations.filter(r => r.aiRecommendation === filter);
+  
+  const filteredRecs = recommendations.filter(r => {
+    if (!settings.showAvoid && r.aiRecommendation === 'avoid') return false;
+    if (r.aiScore < settings.minScore) return false;
+    const mcap = r.marketCapUsd ? parseFloat(r.marketCapUsd) : 0;
+    if (mcap < settings.minMarketCap) return false;
+    if (mcap > settings.maxMarketCap) return false;
+    return true;
+  });
+  
+  const displayRecs = filter === 'all' 
+    ? filteredRecs 
+    : filter === 'favorites'
+    ? filteredRecs.filter(r => favorites.includes(r.id))
+    : filteredRecs.filter(r => r.aiRecommendation === filter);
 
   const counts = {
-    all: recommendations.length,
-    snipe: recommendations.filter(r => r.aiRecommendation === 'snipe').length,
-    watch: recommendations.filter(r => r.aiRecommendation === 'watch').length,
-    avoid: recommendations.filter(r => r.aiRecommendation === 'avoid').length,
+    all: filteredRecs.length,
+    snipe: filteredRecs.filter(r => r.aiRecommendation === 'snipe').length,
+    watch: filteredRecs.filter(r => r.aiRecommendation === 'watch').length,
+    avoid: filteredRecs.filter(r => r.aiRecommendation === 'avoid').length,
+    favorites: filteredRecs.filter(r => favorites.includes(r.id)).length,
+  };
+
+  const toggleFavorite = (id: string) => {
+    setFavorites(prev => prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]);
   };
 
   return (
@@ -246,7 +671,10 @@ export default function StrikeAgentPage() {
             </div>
             <div>
               <h1 className="text-lg font-bold text-white">Strike Agent</h1>
-              <p className="text-[10px] text-white/40">AI Token Discovery</p>
+              <p className="text-[10px] text-white/40 flex items-center gap-1">
+                {settings.autoRefresh && <Activity className="w-3 h-3 text-emerald-400 animate-pulse" />}
+                AI Token Discovery
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -258,6 +686,13 @@ export default function StrikeAgentPage() {
             >
               <RefreshCw className={`w-5 h-5 text-white ${isFetching ? 'animate-spin' : ''}`} />
             </button>
+            <button
+              onClick={() => setSettingsOpen(true)}
+              className="p-2.5 bg-white/10 rounded-xl hover:bg-white/20 transition-colors"
+              data-testid="button-settings"
+            >
+              <Settings className="w-5 h-5 text-white" />
+            </button>
             <Link href="/">
               <a className="p-2.5 bg-white/10 rounded-xl hover:bg-white/20 transition-colors" data-testid="link-home">
                 <Home className="w-5 h-5 text-white" />
@@ -267,7 +702,7 @@ export default function StrikeAgentPage() {
         </div>
         
         <div className="px-4 pb-3 flex gap-2 overflow-x-auto scrollbar-hide">
-          {(['all', 'snipe', 'watch', 'avoid'] as const).map((f) => (
+          {(['all', 'snipe', 'watch', 'avoid', 'favorites'] as const).map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
@@ -276,6 +711,7 @@ export default function StrikeAgentPage() {
                   ? f === 'snipe' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
                   : f === 'watch' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
                   : f === 'avoid' ? 'bg-red-500/20 text-red-400 border border-red-500/40'
+                  : f === 'favorites' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/40'
                   : 'bg-white/20 text-white border border-white/40'
                   : 'bg-white/5 text-white/60 border border-transparent'
               }`}
@@ -285,6 +721,7 @@ export default function StrikeAgentPage() {
               {f === 'snipe' && <Target className="w-4 h-4" />}
               {f === 'watch' && <Eye className="w-4 h-4" />}
               {f === 'avoid' && <AlertTriangle className="w-4 h-4" />}
+              {f === 'favorites' && <Star className="w-4 h-4" />}
               <span className="capitalize">{f}</span>
               <span className="text-xs opacity-70">({counts[f]})</span>
             </button>
@@ -292,28 +729,45 @@ export default function StrikeAgentPage() {
         </div>
       </header>
       
-      <main className="relative z-10 px-4 py-4 pb-24">
+      <main className="relative z-10 px-4 py-4 pb-28">
+        {settings.minScore > 0 || settings.minMarketCap > 0 || settings.maxMarketCap < 10000000 ? (
+          <div className="mb-4 px-3 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-xl flex items-center gap-2 text-xs text-cyan-400">
+            <Filter className="w-4 h-4" />
+            <span>Filters active: </span>
+            {settings.minScore > 0 && <span className="bg-cyan-500/20 px-2 py-0.5 rounded">Score ≥{settings.minScore}</span>}
+            {settings.minMarketCap > 0 && <span className="bg-cyan-500/20 px-2 py-0.5 rounded">MCap ≥${(settings.minMarketCap/1000).toFixed(0)}K</span>}
+            {settings.maxMarketCap < 10000000 && <span className="bg-cyan-500/20 px-2 py-0.5 rounded">MCap ≤${(settings.maxMarketCap/1000000).toFixed(0)}M</span>}
+          </div>
+        ) : null}
+        
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <div className="w-12 h-12 border-3 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin mb-4" />
             <span className="text-sm text-white/50">Scanning tokens...</span>
           </div>
-        ) : error || filtered.length === 0 ? (
+        ) : error || displayRecs.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20">
             <Shield className="w-16 h-16 text-emerald-500/30 mb-4" />
-            <p className="text-lg text-white/50 mb-2">No recommendations</p>
+            <p className="text-lg text-white/50 mb-2">
+              {filter === 'favorites' ? 'No favorites yet' : 'No recommendations'}
+            </p>
             <p className="text-sm text-white/30 text-center max-w-xs">
-              Strike Agent is actively monitoring the market for opportunities
+              {filter === 'favorites' 
+                ? 'Star tokens to add them to your favorites'
+                : 'Strike Agent is actively monitoring the market for opportunities'
+              }
             </p>
           </div>
         ) : (
           <div className="space-y-4">
-            {filtered.map((rec) => (
+            {displayRecs.map((rec) => (
               <TokenCard 
                 key={rec.id} 
                 rec={rec} 
                 expanded={expandedId === rec.id}
                 onToggle={() => setExpandedId(expandedId === rec.id ? null : rec.id)}
+                isFavorite={favorites.includes(rec.id)}
+                onToggleFavorite={() => toggleFavorite(rec.id)}
               />
             ))}
           </div>
@@ -350,6 +804,15 @@ export default function StrikeAgentPage() {
           </Link>
         </div>
       </nav>
+      
+      <AnimatePresence>
+        <SettingsModal 
+          open={settingsOpen} 
+          onClose={() => setSettingsOpen(false)}
+          settings={settings}
+          onSave={setSettings}
+        />
+      </AnimatePresence>
     </div>
   );
 }
