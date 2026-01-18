@@ -19,7 +19,9 @@ interface StrikeRecommendation {
   tokenName: string | null;
   tokenAddress: string;
   priceUsd: string;
+  priceSol: string | null;
   marketCapUsd: string | null;
+  liquidityUsd: string | null;
   aiRecommendation: 'snipe' | 'watch' | 'avoid';
   aiScore: number;
   aiReasoning: string | null;
@@ -28,6 +30,15 @@ interface StrikeRecommendation {
   isHoneypot: boolean | null;
   liquidityLocked: boolean | null;
   createdAt: string;
+  tokenAgeMinutes: number | null;
+  holderCount: number | null;
+  top10HoldersPercent: string | null;
+  botPercent: string | null;
+  bundlePercent: string | null;
+  isPumpFun: boolean | null;
+  creatorWalletRisky: boolean | null;
+  payloadHash: string | null;
+  status: string | null;
 }
 
 interface StrikeSettings {
@@ -485,10 +496,22 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
               LP Locked
             </span>
           )}
+          {rec.isPumpFun && (
+            <span className="text-[10px] px-2 py-1 bg-purple-500/15 text-purple-400 rounded-lg border border-purple-500/30 flex items-center gap-1">
+              <Flame className="w-3 h-3" />
+              Pump.fun
+            </span>
+          )}
           {rec.isHoneypot && (
             <span className="text-[10px] px-2 py-1 bg-red-500/15 text-red-400 rounded-lg border border-red-500/30 flex items-center gap-1">
               <AlertTriangle className="w-3 h-3" />
               Honeypot
+            </span>
+          )}
+          {rec.creatorWalletRisky && (
+            <span className="text-[10px] px-2 py-1 bg-red-500/15 text-red-400 rounded-lg border border-red-500/30 flex items-center gap-1">
+              <AlertTriangle className="w-3 h-3" />
+              Risky Creator
             </span>
           )}
         </div>
@@ -514,6 +537,75 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
                     AI Analysis
                   </div>
                   <p className="text-sm text-white/70 leading-relaxed">{rec.aiReasoning}</p>
+                </div>
+              )}
+              
+              <div className="mb-4">
+                <div className="text-[10px] text-white/40 uppercase mb-2 flex items-center gap-1">
+                  <Shield className="w-3 h-3" />
+                  Advanced Safety Metrics
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {rec.botPercent && (
+                    <div className="bg-white/5 rounded-lg p-2 flex items-center justify-between">
+                      <span className="text-[10px] text-white/50">Bot Activity</span>
+                      <span className={`text-xs font-bold ${parseFloat(rec.botPercent) > 30 ? 'text-red-400' : parseFloat(rec.botPercent) > 15 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                        {parseFloat(rec.botPercent).toFixed(1)}%
+                      </span>
+                    </div>
+                  )}
+                  {rec.bundlePercent && (
+                    <div className="bg-white/5 rounded-lg p-2 flex items-center justify-between">
+                      <span className="text-[10px] text-white/50">Bundle Txns</span>
+                      <span className={`text-xs font-bold ${parseFloat(rec.bundlePercent) > 30 ? 'text-red-400' : parseFloat(rec.bundlePercent) > 15 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                        {parseFloat(rec.bundlePercent).toFixed(1)}%
+                      </span>
+                    </div>
+                  )}
+                  {rec.top10HoldersPercent && (
+                    <div className="bg-white/5 rounded-lg p-2 flex items-center justify-between">
+                      <span className="text-[10px] text-white/50">Top 10 Holders</span>
+                      <span className={`text-xs font-bold ${parseFloat(rec.top10HoldersPercent) > 70 ? 'text-red-400' : parseFloat(rec.top10HoldersPercent) > 50 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                        {parseFloat(rec.top10HoldersPercent).toFixed(1)}%
+                      </span>
+                    </div>
+                  )}
+                  {rec.holderCount && (
+                    <div className="bg-white/5 rounded-lg p-2 flex items-center justify-between">
+                      <span className="text-[10px] text-white/50">Holders</span>
+                      <span className={`text-xs font-bold ${rec.holderCount > 100 ? 'text-emerald-400' : rec.holderCount > 30 ? 'text-amber-400' : 'text-red-400'}`}>
+                        {rec.holderCount.toLocaleString()}
+                      </span>
+                    </div>
+                  )}
+                  {rec.liquidityUsd && (
+                    <div className="bg-white/5 rounded-lg p-2 flex items-center justify-between">
+                      <span className="text-[10px] text-white/50">Liquidity</span>
+                      <span className={`text-xs font-bold ${parseFloat(rec.liquidityUsd) > 10000 ? 'text-emerald-400' : parseFloat(rec.liquidityUsd) > 1000 ? 'text-amber-400' : 'text-red-400'}`}>
+                        ${(parseFloat(rec.liquidityUsd) / 1000).toFixed(1)}K
+                      </span>
+                    </div>
+                  )}
+                  {rec.tokenAgeMinutes && (
+                    <div className="bg-white/5 rounded-lg p-2 flex items-center justify-between">
+                      <span className="text-[10px] text-white/50">Token Age</span>
+                      <span className="text-xs font-bold text-white">
+                        {rec.tokenAgeMinutes < 60 ? `${rec.tokenAgeMinutes}m` : rec.tokenAgeMinutes < 1440 ? `${Math.floor(rec.tokenAgeMinutes / 60)}h` : `${Math.floor(rec.tokenAgeMinutes / 1440)}d`}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              {rec.payloadHash && (
+                <div className="mb-4 bg-cyan-500/10 border border-cyan-500/30 rounded-lg p-2">
+                  <div className="flex items-center gap-2 text-[10px] text-cyan-400">
+                    <Shield className="w-3 h-3" />
+                    <span className="font-semibold">Verified Prediction</span>
+                  </div>
+                  <div className="text-[9px] text-cyan-400/60 font-mono mt-1 truncate">
+                    Hash: {rec.payloadHash.slice(0, 16)}...{rec.payloadHash.slice(-8)}
+                  </div>
                 </div>
               )}
               
