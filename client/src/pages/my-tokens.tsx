@@ -3,23 +3,17 @@ import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { 
-  Coins, Gift, Clock, TrendingUp, Wallet, ChevronRight, 
+  Coins, Gift, Clock, TrendingUp, ChevronRight, 
   ShoppingBag, Sparkles, Users, Award, CheckCircle, AlertCircle,
   Home, RefreshCw, CreditCard, Gamepad2, BookOpen, Shield,
-  MessageSquare, Compass, Star, Zap, Trophy, Globe, History
+  MessageSquare, Compass, Star, Zap, Trophy, Globe
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { WalletButton } from "@/components/wallet-button";
 
-import egyptImage from "@assets/generated_images/ancient_egyptian_kingdom_sunset.png";
-import athensImage from "@assets/generated_images/ancient_greek_athens_parthenon.png";
-import libraryImage from "@assets/generated_images/ancient_wisdom_library_interior.png";
 import samuraiImage from "@assets/generated_images/feudal_japan_samurai_castle.png";
-import medievalImage from "@assets/generated_images/medieval_fantasy_kingdom.png";
-import renaissanceImage from "@assets/generated_images/renaissance_florence_italy_scene.png";
-import vikingImage from "@assets/generated_images/viking_longship_fjord_scene.png";
 
 interface TokenBag {
   totalDwc: number;
@@ -55,14 +49,14 @@ interface EarlyAdopterStats {
 }
 
 const QUICK_LINKS = [
-  { href: "/presale", icon: ShoppingBag, label: "Buy Signal", color: "cyan", image: egyptImage },
+  { href: "/presale", icon: ShoppingBag, label: "Buy Signal", color: "cyan" },
   { href: "/chronicles", icon: Gamepad2, label: "Chronicles", color: "purple", image: samuraiImage },
-  { href: "/rewards", icon: Gift, label: "Rewards", color: "amber", image: athensImage },
-  { href: "/veil", icon: BookOpen, label: "The Veil", color: "pink", image: libraryImage },
-  { href: "/community-hub", icon: Users, label: "Community", color: "emerald", image: medievalImage },
-  { href: "/ecosystem", icon: Globe, label: "Ecosystem", color: "blue", image: renaissanceImage },
-  { href: "/faq", icon: MessageSquare, label: "FAQ", color: "orange", image: vikingImage },
-  { href: "/strike-agent", icon: Zap, label: "Strike Agent", color: "red", image: egyptImage },
+  { href: "/rewards", icon: Gift, label: "Rewards", color: "amber" },
+  { href: "/veil", icon: BookOpen, label: "The Veil", color: "pink" },
+  { href: "/community-hub", icon: Users, label: "Community", color: "emerald" },
+  { href: "/ecosystem", icon: Globe, label: "Ecosystem", color: "blue" },
+  { href: "/faq", icon: MessageSquare, label: "FAQ", color: "slate" },
+  { href: "/strike-agent", icon: Zap, label: "Strike Agent", color: "red" },
 ];
 
 export default function MyTokensPage() {
@@ -287,7 +281,7 @@ export default function MyTokensPage() {
               </motion.div>
             </div>
 
-            {/* Quick Access - Historical Themed Cards */}
+            {/* Quick Access Cards */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -295,7 +289,7 @@ export default function MyTokensPage() {
               className="mb-8"
             >
               <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <History className="w-5 h-5 text-cyan-400" />
+                <Compass className="w-5 h-5 text-cyan-400" />
                 Explore the Ecosystem
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -309,22 +303,31 @@ export default function MyTokensPage() {
                       className="cursor-pointer"
                     >
                       <GlassCard className="overflow-hidden hover:border-white/30 transition-all group">
-                        <div className="relative h-24 md:h-32">
-                          <img 
-                            src={link.image} 
-                            alt={link.label}
-                            className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
-                          <div className="absolute bottom-0 left-0 right-0 p-3">
-                            <div className="flex items-center gap-2">
-                              <div className={`w-8 h-8 rounded-lg bg-${link.color}-500/20 flex items-center justify-center`}>
-                                <link.icon className={`w-4 h-4 text-${link.color}-400`} />
+                        {link.image ? (
+                          <div className="relative h-24 md:h-32">
+                            <img 
+                              src={link.image} 
+                              alt={link.label}
+                              className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
+                            <div className="absolute bottom-0 left-0 right-0 p-3">
+                              <div className="flex items-center gap-2">
+                                <div className={`w-8 h-8 rounded-lg bg-${link.color}-500/20 flex items-center justify-center`}>
+                                  <link.icon className={`w-4 h-4 text-${link.color}-400`} />
+                                </div>
+                                <span className="text-sm font-medium text-white">{link.label}</span>
                               </div>
-                              <span className="text-sm font-medium text-white">{link.label}</span>
                             </div>
                           </div>
-                        </div>
+                        ) : (
+                          <div className="h-24 md:h-32 p-4 flex flex-col items-center justify-center bg-gradient-to-br from-white/5 to-transparent group-hover:from-white/10">
+                            <div className={`w-12 h-12 rounded-xl bg-${link.color}-500/20 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform`}>
+                              <link.icon className={`w-6 h-6 text-${link.color}-400`} />
+                            </div>
+                            <span className="text-sm font-medium text-white">{link.label}</span>
+                          </div>
+                        )}
                       </GlassCard>
                     </motion.div>
                   </Link>
