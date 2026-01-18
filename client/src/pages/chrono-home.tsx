@@ -15,8 +15,8 @@ import { usePageAnalytics } from "@/hooks/use-analytics";
 
 import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
 import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
-import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
-import deepSpace from "@assets/generated_images/deep_space_station.png";
+import ancientLibrary from "@assets/generated_images/ancient_wisdom_library_interior.png";
+import timeVortex from "@assets/generated_images/historical_time_vortex_portal.png";
 import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
 import fantasyHeroes from "@assets/generated_images/fantasy_character_heroes.png";
 import egyptianKingdom from "@assets/generated_images/ancient_egyptian_kingdom_sunset.png";
@@ -43,7 +43,7 @@ const CORE_PILLARS = [
     title: "Real-Time World",
     desc: "24/7 persistent universe. The world moves whether you're there or not.",
     color: "from-cyan-500 to-blue-600",
-    image: deepSpace
+    image: timeVortex
   },
   {
     icon: Eye,
@@ -62,9 +62,9 @@ const CORE_PILLARS = [
   {
     icon: Compass,
     title: "70+ Historical Eras",
-    desc: "From Stone Age to Space Colonies. Every era you've dreamed of.",
+    desc: "From Stone Age to Industrial Revolution. Every era you've dreamed of.",
     color: "from-emerald-500 to-teal-600",
-    image: quantumRealm
+    image: ancientLibrary
   },
 ];
 

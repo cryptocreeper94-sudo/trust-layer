@@ -16,8 +16,8 @@ import { getChroniclesSession } from "@/pages/chronicles-login";
 
 import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
 import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
-import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
-import deepSpace from "@assets/generated_images/deep_space_station.png";
+import ancientLibrary from "@assets/generated_images/ancient_wisdom_library_interior.png";
+import timeVortex from "@assets/generated_images/historical_time_vortex_portal.png";
 import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
 import fantasyHeroes from "@assets/generated_images/fantasy_character_heroes.png";
 import fantasyLands from "@assets/generated_images/fantasy_lands_and_realms.png";
@@ -62,7 +62,7 @@ const CORE_FEATURES = [
     description: "A breathing world with ongoing story arcs. New missions emerge. Alliances shift. Faction wars ignite. Drop in for quick quests or dive deep into epic campaigns.",
     longDescription: "The world evolves with or without you - but that's freedom, not obligation. Jump in for a 10-minute mission or spend hours on campaign arcs. Your legend grows at your pace. Daily raids, seasonal events, and faction battles await.",
     icon: Clock,
-    image: deepSpace,
+    image: timeVortex,
     color: "from-cyan-500 to-blue-600",
     size: "large"
   },
@@ -106,7 +106,7 @@ const CORE_FEATURES = [
     description: "Every character has unique motivations. Build relationships, recruit allies, or create rivalries. Each NPC remembers your history.",
     longDescription: "NPCs aren't quest dispensers. They're potential allies, rivals, and story drivers. Their beliefs, ambitions, and memories of YOU shape every interaction. Recruit them for missions, trade with them, or earn their enmity.",
     icon: Brain,
-    image: quantumRealm,
+    image: ancientLibrary,
     color: "from-violet-500 to-purple-600",
     size: "medium"
   },
@@ -114,7 +114,7 @@ const CORE_FEATURES = [
     id: "eras",
     title: "70+ Mission Theaters",
     subtitle: "All of Human History",
-    description: "From dinosaurs to space colonies. Viking raids to cyberpunk heists. Every era is a new campaign with unique missions and rewards.",
+    description: "From prehistoric times to the Industrial Revolution. Viking raids to Renaissance intrigue. Every era is a new campaign with unique missions and rewards.",
     longDescription: "This isn't 4-6 generic settings. It's EVERY recognizable historical moment as a playable campaign. Egyptian dynasties. Roman gladiators. Wild West outlaws. Renaissance intrigue. Each era offers unique missions, factions, and legend-tier rewards.",
     icon: Compass,
     image: fantasyLands,
@@ -139,7 +139,7 @@ const CORE_FEATURES = [
     description: "Complete missions for SIG tokens. Trade gear with players. Every transaction is blockchain-verified with real value.",
     longDescription: "SIG isn't play money. It's real blockchain currency on DarkWave Trust Layer. Earn through missions, trade with other players, own property with blockchain deeds. A real economy powering epic adventures.",
     icon: Coins,
-    image: deepSpace,
+    image: timeVortex,
     color: "from-yellow-500 to-amber-600",
     size: "medium"
   }
@@ -292,15 +292,15 @@ const EPOCHS = [
   },
   {
     id: "future",
-    name: "Neon Dominion",
-    period: "Tomorrow's World",
-    image: quantumRealm,
-    eras: ["Cyberpunk Cities", "Space Colonies", "AI Revolution", "Interstellar Age"],
-    incentive: "Ultimate technology, space travel",
+    name: "Digital Frontier",
+    period: "Near Future",
+    image: cyberpunkCity,
+    eras: ["Neon Megacities", "Digital Underground", "Corporate Wars", "The Great Awakening"],
+    incentive: "Advanced technology, digital freedom",
     color: "from-cyan-400 to-blue-600",
-    lore: "Humanity reaches for the stars. The Neon Dominion blazes with holographic cities, artificial minds, and colonies scattered across the solar system. In this era of ultimate technology, the line between human and machine blurs, corporations rival nations, and the next frontier lies beyond the edge of known space. The future is here - and it's more beautiful and dangerous than anyone imagined.",
-    highlights: ["Hack megacorporations", "Colonize distant worlds", "Augment your abilities", "Navigate AI politics"],
-    factions: ["Megacorp Executives", "Cyberpunk Hackers", "Space Pioneers", "AI Collective"]
+    lore: "Where technology reshapes society. The Digital Frontier pulses with neon-lit megacities, artificial minds, and a world where information is power. In this era of advanced technology, corporations rival governments, hackers are the new revolutionaries, and truth itself becomes a commodity. Navigate the razor's edge between progress and control.",
+    highlights: ["Hack megacorporations", "Expose hidden agendas", "Augment your abilities", "Lead digital revolutions"],
+    factions: ["Megacorp Executives", "Cyberpunk Hackers", "Truth Seekers", "AI Collective"]
   }
 ];
 
@@ -315,7 +315,7 @@ const DEFINITIONS: Record<string, { term: string; definition: string }> = {
   "many_lenses": { term: "Many Lenses Design", definition: "Our revolutionary approach where reality itself adapts to your beliefs and patterns. No labels, no boxes, no predetermined categories. Your identity emerges through choices, not predefined archetypes. The world sees YOU, not a character type." },
   "lens_markers": { term: "Lens Markers", definition: "Unlike traditional good/evil meters, Lens Markers observe HOW you approach decisions - not whether they're 'right' or 'wrong'. They track patterns like Courage↔Fear, Hope↔Despair, Trust↔Suspicion. These aren't judgments - they're reflections of your emerging journey." },
   "parallel_self": { term: "Parallel Self", definition: "This isn't an avatar you control - it's YOU in another reality. The AI learns your voice, your patterns, your instincts. When your parallel self speaks, it sounds like you, thinks like you, and makes choices aligned with your emerging identity." },
-  "voice_clone": { term: "Voice Cloning", definition: "Record your voice and your parallel self speaks WITH YOUR ACTUAL VOICE across 70+ eras. Your accent, your inflections, your unique sound - brought to life in the game world. Industry first: hear yourself as an ancient warrior, a space captain, or a medieval noble." },
+  "voice_clone": { term: "Voice Cloning", definition: "Record your voice and your parallel self speaks WITH YOUR ACTUAL VOICE across 70+ eras. Your accent, your inflections, your unique sound - brought to life in the game world. Industry first: hear yourself as an ancient warrior, a Renaissance artist, or a medieval noble." },
   "choice_signatures": { term: "Choice Signatures", definition: "Fluid observations of your emerging patterns, not labels. Instead of 'You are a Guardian,' we say 'Your choices reveal an affinity for protection.' Instead of 'Chaotic alignment,' we observe 'You embrace uncertainty.' Your identity remains your own to define." },
   "early_adopter": { term: "Early Adopter Rewards", definition: "Pioneer participants who join before public beta receive SIG token bonuses, exclusive titles, and priority access to new eras. Your early belief in Chronicles is recognized and rewarded." }
 };
