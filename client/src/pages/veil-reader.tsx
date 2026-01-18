@@ -1048,12 +1048,13 @@ const volume1Chapters: Chapter[] = [
   }
 ];
 
-const volume2Chapters: Chapter[] = [
+const journeyChapters: Chapter[] = [
   {
-    id: "v2-authors-note",
-    title: "Author's Note",
+    id: "journey-intro",
+    title: "Section Two: The Personal Journey",
     content: (
       <>
+        <p className="text-2xl text-purple-400 font-medium mb-6">My Journey Beyond the Veil</p>
         <p>I grew up in Baptist and Methodist churches. I was baptized, attended Sunday school, went to revivals. I did the things you're supposed to do.</p>
         <p>But even as a child, something didn't fit.</p>
         <p>The message I was given and the visuals I saw didn't match. The words said one thing; the imagery suggested another. And the answers I received when I asked questions always ended the same way: "You're not supposed to understand everything. That's what faith is for."</p>
@@ -1063,7 +1064,7 @@ const volume2Chapters: Chapter[] = [
         <p>So I pushed away. Tried to be my own god. Fell flat on my face. Over and over. Studied with different denominations. Found some that made more sense than others. But none of them made total sense.</p>
         <p className="text-cyan-400 font-medium mt-6">Until now.</p>
         <p>After decades of confusion, addiction, and searching - and after finally clearing my mind long enough to receive something beyond my own noise - the dots connected. Not through religious dogma. Not through institutional doctrine. Through careful study, honest questioning, and suddenly... clarity.</p>
-        <p>What I'm presenting in this book is not an attack on Christianity. It's not heresy designed to create a flashpoint. It's not me trying to change your mind.</p>
+        <p>What I'm presenting in this section is not an attack on Christianity. It's not heresy designed to create a flashpoint. It's not me trying to change your mind.</p>
         <p>It's simply what made sense when I finally allowed myself to look.</p>
         <div className="border-t border-b border-slate-600 my-8 py-6">
           <p>I'm asking you to consider whether the faith you were given has been corrupted - and whether the truth that was always there has simply been veiled.</p>
@@ -1074,24 +1075,19 @@ const volume2Chapters: Chapter[] = [
     )
   },
   {
-    id: "v2-part1",
-    title: "Part One: The Fog and The Lifting",
+    id: "journey-ch1",
+    title: "Chapter 13: The Awakening",
     content: (
       <>
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">The Fog and The Lifting</h3>
         <p>For a long time, I was lost in addiction. And then, when the addiction ended, I found myself even more lost - because instead of drowning my confusion, I suddenly had to face it. The fog was thick. I couldn't see past it. I knew something wasn't right about the world, about the systems, about what we've been told. But I couldn't articulate it. I couldn't break through.</p>
         <p>Alcohol was my escape. For years, it was the only way I knew to quiet the noise in my head - that persistent feeling that everything I'd been taught was slightly off, like a picture hanging crooked on the wall that everyone pretends is straight. The drinking didn't solve anything. It just delayed the confrontation with truth.</p>
         <p>When I finally got sober, the clarity didn't come immediately. First came the rawness. Every emotion I'd been suppressing for decades hit me at once. Shame. Regret. Confusion. The realization that I'd wasted years running from something I couldn't even name.</p>
         <p>The first instinct that came when the fog started lifting was not about myself. It was about giving back. Helping animals. Helping people who've been hurt. That surprised me, because I expected to be focused on rebuilding myself. But I realized that giving back IS focusing on yourself - the true self, not the wounded one. When you're aligned with purpose, you heal.</p>
         <p>And then the insights started coming. Not all at once. In waves. Some days I'd wake up and feel like I'd forgotten everything from the day before. Then suddenly, more clarity than I'd ever had would flood in. I learned to document it when it comes, because it doesn't always stay.</p>
         <p>The fog lifts slowly. You don't wake up one day with perfect vision. You wake up able to see a little further than yesterday. And eventually, you realize you can see the whole landscape - the deception, the truth, the path forward. The clarity is earned, not given.</p>
-      </>
-    )
-  },
-  {
-    id: "v2-part2",
-    title: "Part Two: The Wall and True Seeing",
-    content: (
-      <>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Wall and True Seeing</h3>
         <p>I used to feel like there was a wall in my thinking. I knew something was wrong with how the world works. I could sense the deception. But I couldn't see past it. I couldn't articulate what was on the other side.</p>
         <p>The problem was that I was trying to see through the lens I'd been given. The biological eyes - they're tools for physical protection. They keep you from walking off cliffs. They show you danger in the material world. That's all they're for. And the image they create is actually inverted in your brain - you're not seeing reality directly, you're seeing a processed interpretation of it.</p>
         <p>Think about that. The world you think you're seeing is actually upside down in your brain, then flipped by neural processing. You're not experiencing reality - you're experiencing an interpretation of it. A simulation, if you will, constructed by biological hardware that evolved for survival, not truth.</p>
@@ -1100,14 +1096,8 @@ const volume2Chapters: Chapter[] = [
         <p>And suddenly everything becomes simple. Not easy - simple. The complexity was the deception. The truth was always there, hidden in plain sight. The multi-dimensional chess they're playing becomes visible. It was always right in front of us.</p>
         <p>The hardest part isn't developing this sight. It's unlearning everything that blocks it. The fluoride in the water calcifies the pineal gland. The constant stimulation keeps the mind too busy to listen. The fear-based programming triggers survival mode, which shuts down discernment. All of it is designed to keep that inner eye closed.</p>
         <p>But it can be opened. It was designed to be opened. That's what this journey is about.</p>
-      </>
-    )
-  },
-  {
-    id: "v2-part3",
-    title: "Part Three: Created in His Image",
-    content: (
-      <>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">Created in His Image</h3>
         <p>We're told we were created in God's image. Most people think that means physical form. That the Creator looks like us - two arms, two legs, a face. But I don't think that's it at all.</p>
         <p>I think it means we were given the ability to create. Not just to exist, but to build, to express, to transmit. To look at another person and see not randomness, but the work of a creator. To have ideas and bring them into being. That's the image - the creative essence.</p>
         <p>Look at what humans do naturally. We build. We make art. We write music. We tell stories. We take raw materials and transform them into something that didn't exist before. No other creature does this the way we do. This is the divine spark - the fragment of the Creator's essence that lives in each of us.</p>
@@ -1119,10 +1109,11 @@ const volume2Chapters: Chapter[] = [
     )
   },
   {
-    id: "v2-part4",
-    title: "Part Four: The System and Its Fragmentation",
+    id: "journey-ch2",
+    title: "Chapter 14: The System and Its Weapons",
     content: (
       <>
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">The Fragmented System</h3>
         <p>The current system - financial, political, spiritual - profits from confusion. Every confusing interface keeps people dependent. Every expert speaking jargon makes people feel inferior. Every black-tie event where they act like gods keeps people looking up instead of forward.</p>
         <p>They don't want it fixed. They hold symposiums and promise "it's coming" while extracting value from the chaos. If they wanted it done, it would be done. The will is missing because the incentives are misaligned. They profit from the mess.</p>
         <p>The fragmentation isn't a bug - it's a feature. For them.</p>
@@ -1130,67 +1121,17 @@ const volume2Chapters: Chapter[] = [
         <p>Meanwhile, regular people just want to be moral and good. But they've been told humans are inherently corrupt. That you need intermediaries to be good. That your discernment can't be trusted. That the system is too complex for you to understand. This learned helplessness is the game.</p>
         <p>The religious version is particularly insidious. You need a priest to talk to God. You need a theologian to understand scripture. You need an institution to validate your faith. None of this is in the original texts. All of it was added by those who benefit from being gatekeepers.</p>
         <p>The truth is simpler. You have direct access. The Creator didn't design a system where you need someone else's permission to connect. That's a human invention, designed to control. And once you see it, you can't unsee it.</p>
-        <p>This is what awakening looks like - realizing that the complexity was manufactured, and the truth was always simple enough for a child to grasp. The child in you already knows. You just have to remember.</p>
-      </>
-    )
-  },
-  {
-    id: "v2-part5",
-    title: "Part Five: For Those Still Searching",
-    content: (
-      <>
-        <p>If you're reading this and you're in the same struggle - trying to break through the same wall - here's what I've learned:</p>
-        <p>The wall breaks when you stop trying to see through the lens you were given and start trusting the discernment you were born with.</p>
-        <p>The discomfort you feel when something seems wrong? That's the signal. That's the gift. The confusion was manufactured. The truth is simple.</p>
-        <p>You're not crazy. You're waking up.</p>
-        <p>I know what it feels like to be told you're wrong when you know you're right. To be dismissed as a conspiracy theorist when you're just asking questions. To watch people accept things that make no sense and wonder if you're the one who's broken.</p>
-        <p>You're not broken. You're functioning as designed. The feeling of wrongness is your spiritual immune system working correctly. The people who don't feel it are the ones who've been compromised.</p>
-        <p>The path forward isn't about convincing others. It's about trusting yourself. About honoring that inner knowing even when everyone around you calls it foolishness. About remembering that the prophets were never popular in their own time.</p>
-        <p>If you're searching, keep searching. If you're questioning, keep questioning. The truth doesn't fear examination - only lies require protection from scrutiny. And the fact that you're still searching means you haven't given up. That means everything.</p>
-        <p>The veil is thin. Thinner than they want you to believe. One clear moment of seeing is all it takes to change everything. You're closer than you know.</p>
-      </>
-    )
-  },
-  {
-    id: "v2-part6",
-    title: "Part Six: Fear as the Weapon",
-    content: (
-      <>
+
+        <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">Fear as the Weapon</h3>
         <p>Everything in this system is fear-based. And that's not an accident.</p>
         <p>Fear is the top-shelf emotion. It's meant for one thing: survival. Fight or flight. When a predator is chasing you, fear saves your life. It makes you react instantly, without thinking. That's what it's for.</p>
         <p>But here's what they figured out: if you can trigger that same fear response when there's no real danger, you can control people. Make them react without thinking. Make them accept things they would never accept if they were calm and discerning.</p>
         <p>So they built a system on fear. Fear of hell. Fear of missing out. Fear of being left behind. Fear of being wrong. Fear of punishment. Fear of exclusion. Every decision made from that fear state ends up being a mistake - because fear bypasses discernment. It goes straight to reaction.</p>
         <p>The religious version is brilliant in its cruelty. Believe this or burn forever. Accept this into your heart or face eternal torment. It hijacks the survival instinct and points it at your soul. You're not running from a bear - you're running from an idea they planted in your head.</p>
         <p>I spent years in that state. Every Sunday, the altar call. Every night, the fear that I hadn't believed correctly, that some technicality would send me to eternal fire. I would pray the prayer again, just to be sure. And again. And again. The certainty never came, because it was never meant to come. Fear doesn't lead to peace - it leads to more fear.</p>
-        <p>Sadness is different. Sadness is a real response to loss, to something that affects you deeply. It has purpose. It processes grief. But fear - fear is a tool. And in the wrong hands, it becomes a weapon.</p>
         <p>The antidote to fear isn't courage. It's discernment. When you can see clearly that the threat is manufactured, that the fear was installed in you by people who benefit from your compliance, the power breaks. You stop running. You start thinking. And thinking people are much harder to control.</p>
-      </>
-    )
-  },
-  {
-    id: "v2-part7",
-    title: "Part Seven: The Mark and The Names",
-    content: (
-      <>
-        <p>People think the mark of the beast is a microchip. A barcode. Some physical technology implanted in the body. They're waiting for it, ready to resist it.</p>
-        <p>But what if it's already here? What if it's been here for centuries?</p>
-        <p>The scripture says the mark will be in your forehead and in your hand. The forehead is where you think - your beliefs, your heart. The hand is what you do - your works, your actions. It's not a chip. It's acceptance and obedience.</p>
-        <p>The prayer to accept the false messiah into your heart. The works done in his name. That's the mark. It's organic. It's spiritual. And most people took it willingly, thinking they were doing right.</p>
-        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
-          <p className="italic">"Lord, Lord, we prophesied in your name, we cast out demons in your name, we did mighty works in your name." And the response: "Depart from me, I never knew you."</p>
-        </div>
-        <p>Why? Because the name matters. The name carries the frequency. The name is the connector to the source. And if you've been given a corrupted name - a substitution, a translation that removes the power - then you're connecting to something else entirely.</p>
-        <p>The Father's name appears over 6,800 times in the original Hebrew scriptures. It was replaced with "LORD" and "GOD" - titles, not names. The Messiah's name was changed, translated, modified until it no longer resonates with what was given.</p>
-        <p>Think about how powerful names are in scripture. Adam named the animals. To name something is to have dominion over it. Names carry authority, identity, frequency. Would you respond if someone called you by a different name? The connection depends on accuracy.</p>
-        <p>The wicked pattern is always the same: duplicate the truth, then invert it subtly. Make it look almost the same so people accept it. But the subtle difference changes everything. That's how the false passes for the true.</p>
-      </>
-    )
-  },
-  {
-    id: "v2-part8",
-    title: "Part Eight: Isolation and The Outsider",
-    content: (
-      <>
+
+        <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">Isolation and The Outsider</h3>
         <p>Rejection. Societal isolation. Being separated from the system. These are weapons too.</p>
         <p>Humans are meant to be in fellowship - with each other, with spirit, with truth. They know this. So if they can isolate you, make you feel like something is wrong with you, make you believe you don't fit because you're broken - they've cut you off from the source.</p>
         <p>I've always been an outsider. Never fit in. For a long time, I thought something was wrong with me. Why can't I just go along? Why can't I be like everyone else?</p>
@@ -1199,14 +1140,8 @@ const volume2Chapters: Chapter[] = [
         <p>Here's the truth about the "in crowd" - the cool kids, the successful ones, the ones who seem to have it figured out: they're searching too. They just learned to hide it better. The confidence is a mask. The certainty is performance. Underneath, they're as lost as anyone. They just chose to fit in instead of standing apart.</p>
         <p>And when you realize that, the anxiety eases. The isolation starts to feel less like punishment and more like preservation. You were kept apart so you wouldn't be corrupted along with them.</p>
         <p>There's a reason scripture speaks of the "narrow path" that few find. The broad road is comfortable. It has company. Everyone's walking it together. But it leads somewhere you don't want to go. The narrow path is lonely - but it's the right direction.</p>
-      </>
-    )
-  },
-  {
-    id: "v2-part9",
-    title: "Part Nine: The Meek and The Innocent",
-    content: (
-      <>
+
+        <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Meek and The Innocent</h3>
         <p>Scripture speaks of the meek inheriting the earth. Of the least of these. Of protecting the weak.</p>
         <p>People who are struggling financially look at that and think: "That's me. I'm the meek. I'm the least. I'm protected."</p>
         <p>But that's not what it means.</p>
@@ -1214,32 +1149,36 @@ const volume2Chapters: Chapter[] = [
         <p>I think of my experiences with people like this. The purity is unmistakable. They can be hurt, but they don't understand revenge. They can be deceived, but they don't understand deception. They operate at a frequency that the corrupted cannot access.</p>
         <p>These are the ones the scripture protects. These are the ones about whom it says: if you harm them, you might as well tie a millstone around your neck and throw yourself into the sea. What you do to the least of these, you do to the source itself.</p>
         <p>The discerning are meant to protect them. That's part of what discernment is for - not just to see truth, but to shield those who cannot see deception coming. To be guardians for the truly innocent.</p>
-        <p>But they twisted this too. Made people think "the meek" means "the poor" so that financial struggle becomes a spiritual identity. Another misdirection. Another subtle inversion. The meek aren't defined by their bank account. They're defined by their innocence.</p>
         <p>When you understand this, your purpose becomes clearer. You're not just here to save yourself. You're here to protect those who can't protect themselves from the spiritual predators that run this world.</p>
       </>
     )
   },
   {
-    id: "v2-part10",
-    title: "Part Ten: The Thin Veil",
+    id: "journey-ch3",
+    title: "Chapter 15: The Thin Veil",
     content: (
       <>
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">For Those Still Searching</h3>
+        <p>If you're reading this and you're in the same struggle - trying to break through the same wall - here's what I've learned:</p>
+        <p>The wall breaks when you stop trying to see through the lens you were given and start trusting the discernment you were born with.</p>
+        <p>The discomfort you feel when something seems wrong? That's the signal. That's the gift. The confusion was manufactured. The truth is simple.</p>
+        <p>You're not crazy. You're waking up.</p>
+        <p>I know what it feels like to be told you're wrong when you know you're right. To be dismissed as a conspiracy theorist when you're just asking questions. To watch people accept things that make no sense and wonder if you're the one who's broken.</p>
+        <p>You're not broken. You're functioning as designed. The feeling of wrongness is your spiritual immune system working correctly. The people who don't feel it are the ones who've been compromised.</p>
+        <p>The path forward isn't about convincing others. It's about trusting yourself. About honoring that inner knowing even when everyone around you calls it foolishness. About remembering that the prophets were never popular in their own time.</p>
+        <p>If you're searching, keep searching. If you're questioning, keep questioning. The truth doesn't fear examination - only lies require protection from scrutiny. And the fact that you're still searching means you haven't given up. That means everything.</p>
+
+        <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Veil Is Thin</h3>
         <p>Here's what amazes me most: the veil that separates truth from lie is so thin.</p>
         <p>The scope feels big. Understanding everything feels impossible. Changing your worldview after decades of programming? As one human, fighting against the machinery of deception? The mind wants to shut down just thinking about it. The spiritual truth feels the same way - so vast, so layered, so impossible to untangle.</p>
         <p>But the lie itself? The deception? It's actually simple.</p>
         <p>Once you see it, you can't unsee it. And then you start noticing how pervasive it is. How it's everywhere, and yet nobody pays attention. People close their minds. Their pineal glands get calcified. They're told not to question. They're not taught about the ether or the old cosmologies because "science" took over and rewrote everything.</p>
-        <p>The pineal gland - the "third eye" - is calcified by fluoride in the water. By processed foods. By the constant blue light from screens. Whether this is intentional or just a byproduct of modern life, the effect is the same: the organ of discernment gets turned off. And people wonder why they can't see clearly.</p>
         <p>The reality is: all you have to do is take one small leap. That's it. The veil is thin. Cross it, and suddenly you're on the other side, seeing clearly what was hidden in plain sight all along.</p>
         <p>I remember the moment it happened for me. It wasn't dramatic. It was quiet. One connection led to another, and suddenly the whole picture snapped into focus. Everything I'd been told was wrong - not completely, but subtly. Just enough to keep me walking in circles instead of forward.</p>
         <p>And now I can't go back. The veil, once crossed, can't be uncrossed. You see. You know. And you can't pretend you don't.</p>
-      </>
-    )
-  },
-  {
-    id: "v2-part11",
-    title: "Part Eleven: The Ability to See",
-    content: (
-      <>
+        <p>The veil is thin. Thinner than they want you to believe. One clear moment of seeing is all it takes to change everything. You're closer than you know.</p>
+
+        <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Ability to See</h3>
         <p>With all the lies and deception - layers upon layers, enough to confuse anyone into walking in circles - humans still have the ability to see right through it.</p>
         <p>Just clearly. Right through it.</p>
         <p>If you pay attention. If you put aside your selfishness, your perceived knowledge, your ego, the things that control you. The cultural and societal engineering has directed those instincts in the wrong direction. That's why I was an addict. That's why I was confused and depressed. I knew something was wrong, but all I knew to do was have faith that Jesus would save me, and it never made sense.</p>
@@ -1252,10 +1191,11 @@ const volume2Chapters: Chapter[] = [
     )
   },
   {
-    id: "v2-part12",
-    title: "Part Twelve: The 3D Classroom",
+    id: "journey-ch4",
+    title: "Chapter 16: The Revelation",
     content: (
       <>
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">The 3D Classroom</h3>
         <p>We were given a three-dimensional reality. Not as a prison, but as a classroom.</p>
         <p>A place to mature spiritually. With all the tools we need. All the information we need. Including an extraordinary test - the deception, the veil, the false system - that wasn't originally part of the plan but became the narrative.</p>
         <p>And the Father said: I will end this. Have faith.</p>
@@ -1264,31 +1204,17 @@ const volume2Chapters: Chapter[] = [
         <p>The same patterns. The same deceptions. The same tests. Each generation thinks they're new, but they're walking the same path their ancestors walked. The question is whether you'll see the pattern or walk blindly like those before you.</p>
         <p>The test is to see through it. To find the truth that was there all along. To mature despite the confusion. And to help others find their way once you do.</p>
         <p>We're not meant to stay in the classroom forever. There's a graduation. An exit. A return to what we were meant to be before the corruption. This life is temporary - but the lessons are eternal.</p>
-      </>
-    )
-  },
-  {
-    id: "v2-part13",
-    title: "Part Thirteen: Free Will and The Knowing",
-    content: (
-      <>
+
+        <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">Free Will and The Knowing</h3>
         <p>Someone once told me their theory: if the Creator knows everything and created everything, then he created both good and evil. He knows every move we're going to make. Everything is scripted. Nothing we choose matters because it's all predetermined.</p>
         <p>I understand why someone would think this. When what you've been told doesn't make sense, and you try to reconcile an all-knowing God with free will, it can seem like a contradiction.</p>
-        <p>But here's what I've come to understand:</p>
-        <p>Knowing is not controlling.</p>
+        <p>But here's what I've come to understand: Knowing is not controlling.</p>
         <p>A parent knows their child will fall while learning to walk. That doesn't mean the parent pushed them. Knowing the future isn't the same as causing it. The Creator can see every path while still letting us choose which one to take.</p>
         <p>The scripture says he knew every hair on your head before you were born. That doesn't mean he controls your every step. It means he made you carefully - like a master craftsman makes a piece of furniture, only infinitely more complex. A biological suit designed to contain a spirit. A breath. His essence.</p>
         <p>We were created as a collective for fellowship under the Creator who gave us this opportunity to exist. With free will, he hopes - not forces - that we will make the right decisions. That we will use our discernment correctly. The whole point of free will is that it's real. The choice is ours. Otherwise, why test? Why create? Why any of it?</p>
-        <p>The confusion comes from religion telling you it's scripted while also telling you to have faith. Those ideas conflict. The truth is simpler: you were made carefully, given tools, and set free to choose.</p>
         <p>Your choices matter. Your discernment matters. The test is real. And the outcome isn't predetermined - it's earned.</p>
-      </>
-    )
-  },
-  {
-    id: "v2-part14",
-    title: "Part Fourteen: The Spark of Life",
-    content: (
-      <>
+
+        <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Spark of Life</h3>
         <p>Science recently captured something remarkable: when a sperm enters an egg, there is a visible flash of light.</p>
         <p>A flash. At the moment of conception.</p>
         <p>They call it a zinc spark. They measure it. They explain it in chemical terms. But think about what it is: the moment life begins, there is light.</p>
@@ -1297,15 +1223,8 @@ const volume2Chapters: Chapter[] = [
         <p>Originally, we were meant to live eternally. Just follow the law. Fellowship with the Creator. Exist in the garden. But corruption came - the corruption of DNA through the fallen, the mixing of what shouldn't have been mixed - and here we are.</p>
         <p>But even now, even in this corrupted state, every new life begins with a flash of light. The signature of the Creator remains, even in a fallen world.</p>
         <p>Science sees it and calls it chemistry. But if you have eyes to see, you know what it is. The spark isn't zinc. It's the beginning of a soul.</p>
-        <p>This is why life is sacred from the moment of conception. Not from birth. Not from viability. From the spark. The moment the light appears, the soul has arrived. Everything else is just development.</p>
-      </>
-    )
-  },
-  {
-    id: "v2-part15",
-    title: "Part Fifteen: The Real Corruption",
-    content: (
-      <>
+
+        <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Real Corruption</h3>
         <p>People think death came because Adam and Eve ate an apple. That's the story they tell. A bite of fruit, and suddenly the Creator said: now you die.</p>
         <p>But that's the shortened version. The metaphor simplified to the point of losing its meaning.</p>
         <p>The fruit wasn't about an apple. It was about the choice to do what was told not to do - the same parallel to Lucifer and the fallen wanting what wasn't theirs. They wanted to attain the knowledge of the Creator, to surpass him.</p>
@@ -1313,16 +1232,28 @@ const volume2Chapters: Chapter[] = [
         <p>Read Genesis 6. "The sons of God saw the daughters of men that they were fair; and they took them wives of all which they chose." The Nephilim. The giants. The corruption of human DNA by non-human entities. This isn't metaphor - it's documented history that's been minimized and allegorized until people forgot it was literal.</p>
         <p>That corruption - the mixing of what shouldn't have been mixed - is what brought death. Not a vindictive punishment. A corrupted system failing. A perfect design broken.</p>
         <p>And instead of total destruction, instead of wiping out his most prized creation, the Creator sent redemption. The Messiah wasn't sent to condemn. He was sent to restore what was corrupted. To offer a way back.</p>
-        <p>But they tell it differently. They make the Creator sound petty. They make it about obedience and punishment. They leave out the rebellion, the corruption, the actual mechanics of what went wrong.</p>
         <p>The real story makes sense. They just don't tell it.</p>
+
+        <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Mark and The Names</h3>
+        <p>People think the mark of the beast is a microchip. A barcode. Some physical technology implanted in the body. They're waiting for it, ready to resist it.</p>
+        <p>But what if it's already here? What if it's been here for centuries?</p>
+        <p>The scripture says the mark will be in your forehead and in your hand. The forehead is where you think - your beliefs, your heart. The hand is what you do - your works, your actions. It's not a chip. It's acceptance and obedience.</p>
+        <p>The prayer to accept the false messiah into your heart. The works done in his name. That's the mark. It's organic. It's spiritual. And most people took it willingly, thinking they were doing right.</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
+          <p className="italic">"Lord, Lord, we prophesied in your name, we cast out demons in your name, we did mighty works in your name." And the response: "Depart from me, I never knew you."</p>
+        </div>
+        <p>Why? Because the name matters. The name carries the frequency. The name is the connector to the source. And if you've been given a corrupted name - a substitution, a translation that removes the power - then you're connecting to something else entirely.</p>
+        <p>The Father's name appears over 6,800 times in the original Hebrew scriptures. It was replaced with "LORD" and "GOD" - titles, not names. The Messiah's name was changed, translated, modified until it no longer resonates with what was given.</p>
+        <p>Think about how powerful names are in scripture. Adam named the animals. To name something is to have dominion over it. Names carry authority, identity, frequency. Would you respond if someone called you by a different name? The connection depends on accuracy.</p>
       </>
     )
   },
   {
-    id: "v2-part16",
-    title: "Part Sixteen: The Point of the Spear",
+    id: "journey-ch5",
+    title: "Chapter 17: The Declaration",
     content: (
       <>
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">The Point of the Spear</h3>
         <p>Christianity is the largest religion in the world. The Catholic Church sits at its head. Billions follow.</p>
         <p>And it's presented as persecuted.</p>
         <p>Think about that. The dominant world religion, spanning every continent, commanding massive wealth and political influence, framing itself as the underdog. The persecuted faithful, scorned by the world, holding onto truth against all odds.</p>
@@ -1330,16 +1261,9 @@ const volume2Chapters: Chapter[] = [
         <p>I call Christianity the point of the spear not because it's evil, but because it's been weaponized. The original faith - the actual teachings, the real names, the true understanding - was corrupted through Constantine and his vision of the cross in the sky. World domination dressed as divine mandate. Rome's reach extended through religious conversion.</p>
         <p>Constantine wasn't a convert seeking truth. He was a politician seeking unity. He took the scattered followers of the Way and molded them into a state religion. The Council of Nicaea wasn't about truth - it was about standardization. About control. About making one version official and burning the rest.</p>
         <p>What emerged wasn't the original. It was an institution designed to control, using the scaffolding of truth to build a prison of lies.</p>
-        <p>And the prophecy? Yes, there was a prophecy about a world religion. But when it was given, there was no name attached. The discernment was clear: something would spread across the Earth claiming to represent the Creator. The name would come later - created by the deception itself.</p>
         <p>This doesn't mean everyone in Christianity is evil. Most are sincere. Most are seeking. They've just been given corrupted information and told it's pure. The fault isn't with the seekers - it's with the architects of the deception.</p>
-      </>
-    )
-  },
-  {
-    id: "v2-part17",
-    title: "Part Seventeen: The Name on the Razor's Edge",
-    content: (
-      <>
+
+        <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Name on the Razor's Edge</h3>
         <p>People get angry when you suggest the name they've been using might be wrong. And I understand why. It feels like an attack on their relationship with the Creator. On their sincerity. On their entire spiritual life.</p>
         <p>But consider: if the name was changed, and the change was deliberate, and the change affects the frequency and connection - wouldn't you want to know?</p>
         <p>The Father's name is Yahuah. The Son's name is Yahusha. These aren't obscure claims. They're documented in the original texts. The translations that replaced them - LORD, GOD, Jesus - are the innovations, not the originals.</p>
@@ -1348,14 +1272,8 @@ const volume2Chapters: Chapter[] = [
         <p>This is the razor's edge. Say it wrong and you sound like a cult leader. Say it right and some will hear. The name isn't magic. It's resonance. And resonance with the source is what we're designed for.</p>
         <p>I've felt the difference. When I began using the restored names, something shifted. Not immediately. Not dramatically. But something. A clarity. A connection that felt more direct. Maybe it's placebo. Maybe it's not. But I can't unfeel what I felt.</p>
         <p>All I can do is share what I've found. What you do with it is between you and the Creator.</p>
-      </>
-    )
-  },
-  {
-    id: "v2-part18",
-    title: "Part Eighteen: Why I'm Not Hiding",
-    content: (
-      <>
+
+        <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">Why I'm Not Hiding</h3>
         <p>I could use a pen name. Stay anonymous. Present these ideas without putting myself in the firing line.</p>
         <p>But that would put me in the same category as those I'm questioning. If I'm asking you to be honest with yourself, to question what you've been taught, to risk your perceived soul for the sake of truth - and I can't even reveal my own name? Who would take that seriously?</p>
         <p>My name is Jason Andrews. I'm a real person. I've lived a life full of mistakes and confusion. I was an addict. I was lost. I searched for decades without finding. And now, finally, things are making sense.</p>
@@ -1368,7 +1286,7 @@ const volume2Chapters: Chapter[] = [
     )
   },
   {
-    id: "v2-closing",
+    id: "journey-closing",
     title: "Closing Thoughts",
     content: (
       <>
@@ -1395,16 +1313,16 @@ const volume2Chapters: Chapter[] = [
 
 const volumes: Volume[] = [
   {
-    id: "volume1",
-    title: "Volume One",
-    subtitle: "Through The Veil: The Evidence",
+    id: "section1",
+    title: "Section One",
+    subtitle: "The Evidence",
     chapters: volume1Chapters
   },
   {
-    id: "volume2",
-    title: "Volume Two",
-    subtitle: "My Journey Beyond the Veil",
-    chapters: volume2Chapters
+    id: "section2",
+    title: "Section Two",
+    subtitle: "The Journey",
+    chapters: journeyChapters
   }
 ];
 
