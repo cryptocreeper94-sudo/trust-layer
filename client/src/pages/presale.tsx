@@ -21,7 +21,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
-import { BuyCryptoModal } from "@/components/buy-crypto-modal";
 import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
 import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
@@ -479,7 +478,7 @@ function PresaleProgress() {
           data-testid="button-buy-tokens"
         >
           <Wallet className="w-5 h-5 mr-2" />
-          {uniqueHolders === 0 ? "Be the First" : "Acquire Signal"}
+          Join Presale
         </Button>
       </HolographicCard>
     </>
@@ -948,8 +947,6 @@ function PurchaseCalculator() {
 }
 
 export default function Presale() {
-  const [showBuyCryptoModal, setShowBuyCryptoModal] = useState(false);
-  
   const { data: tiersData, isLoading: tiersLoading } = useQuery<{ tiers: PresaleTier[] }>({
     queryKey: ["/api/presale/tiers"],
   });
@@ -988,19 +985,8 @@ export default function Presale() {
             Ground floor opportunity - this is where it all begins.
           </p>
           
-          <div className="flex flex-wrap justify-center gap-3 mb-4">
-            <Button
-              onClick={() => setShowBuyCryptoModal(true)}
-              className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-lg py-6 px-8"
-              data-testid="button-buy-crypto-header"
-            >
-              <CreditCard className="w-5 h-5 mr-2" />
-              Buy Crypto with Card (Stripe)
-            </Button>
-          </div>
           <p className="text-sm text-gray-500 max-w-xl mx-auto">
-            No crypto? No problem! Buy USDC, ETH, or SOL with your card via Stripe's secure onramp, 
-            then use it to acquire Signal below.
+            Pay with card or crypto. All purchases are tracked by email for token distribution at launch.
           </p>
         </motion.div>
 
@@ -1127,10 +1113,6 @@ export default function Presale() {
         </div>
       </div>
       
-      <BuyCryptoModal 
-        isOpen={showBuyCryptoModal}
-        onClose={() => setShowBuyCryptoModal(false)}
-      />
     </div>
   );
 }
