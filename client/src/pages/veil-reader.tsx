@@ -400,8 +400,12 @@ export default function VeilReader() {
   const [speechSupported, setSpeechSupported] = useState(false);
   const [useElevenLabs, setUseElevenLabs] = useState(true);
   const [autoAdvance, setAutoAdvance] = useState(false);
+  const [audioQueue, setAudioQueue] = useState<string[]>([]);
+  const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioQueueRef = useRef<string[]>([]);
+  const currentChunkRef = useRef(0);
   
   const handleDownloadPDF = () => {
     const volumeNum = currentVolume + 1;
@@ -431,7 +435,7 @@ export default function VeilReader() {
           <div class="title-page">
             <h1>Through The Veil</h1>
             <p style="font-size: 20px; margin-top: 20px;">${currentVolume === 0 ? 'Volume One: Documented Research' : 'Volume Two: Personal Testimony'}</p>
-            <p style="margin-top: 40px; color: #666;">By Asher Reed</p>
+            <p style="margin-top: 40px; color: #666;">By Jason Andrews</p>
             <p style="margin-top: 60px; color: #888; font-size: 14px;">Note: This PDF version may not include cross-references and interactive features available at dwtl.io/veil/read</p>
           </div>
           <div class="no-print" style="background: #fffbe6; padding: 15px; margin-bottom: 30px; border-radius: 8px;">
@@ -521,17 +525,47 @@ export default function VeilReader() {
     setIsLoading(false);
   };
 
-  const playWithElevenLabs = async (text: string) => {
+  // Split text into chunks at sentence boundaries (roughly 4500 chars to stay under 5000 limit)
+  const splitIntoChunks = (text: string, maxLength: number = 4500): string[] => {
+    const chunks: string[] = [];
+    let remaining = text;
+    
+    while (remaining.length > 0) {
+      if (remaining.length <= maxLength) {
+        chunks.push(remaining);
+        break;
+      }
+      
+      // Find a good break point (end of sentence) near the limit
+      let breakPoint = remaining.lastIndexOf('. ', maxLength);
+      if (breakPoint === -1 || breakPoint < maxLength * 0.5) {
+        breakPoint = remaining.lastIndexOf('? ', maxLength);
+      }
+      if (breakPoint === -1 || breakPoint < maxLength * 0.5) {
+        breakPoint = remaining.lastIndexOf('! ', maxLength);
+      }
+      if (breakPoint === -1 || breakPoint < maxLength * 0.5) {
+        breakPoint = remaining.lastIndexOf('\n', maxLength);
+      }
+      if (breakPoint === -1 || breakPoint < maxLength * 0.3) {
+        breakPoint = maxLength; // Hard cut if no good break point
+      } else {
+        breakPoint += 1; // Include the punctuation
+      }
+      
+      chunks.push(remaining.slice(0, breakPoint).trim());
+      remaining = remaining.slice(breakPoint).trim();
+    }
+    
+    return chunks;
+  };
+
+  const playChunk = async (chunkText: string, isLastChunk: boolean) => {
     try {
-      setIsLoading(true);
-      
-      // Truncate to 5000 chars for API limit
-      const truncatedText = text.slice(0, 5000);
-      
       const response = await fetch('/api/voice/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: truncatedText }),
+        body: JSON.stringify({ text: chunkText }),
       });
       
       if (!response.ok) {
@@ -539,7 +573,8 @@ export default function VeilReader() {
         if (error.fallback) {
           console.log('ElevenLabs unavailable, falling back to browser voice');
           setUseElevenLabs(false);
-          playWithBrowserSpeech(text);
+          const fullText = audioQueueRef.current.join(' ');
+          playWithBrowserSpeech(fullText);
           return;
         }
         throw new Error(error.error || 'Voice generation failed');
@@ -552,35 +587,69 @@ export default function VeilReader() {
       audioRef.current = audio;
       
       audio.onended = () => {
-        setIsPlaying(false);
-        setIsPaused(false);
         URL.revokeObjectURL(audioUrl);
-        // Auto-advance to next chapter if enabled
-        if (autoAdvance) {
-          setTimeout(() => {
-            const vol = volumes[currentVolume];
-            if (currentChapter < vol.chapters.length - 1) {
-              setCurrentChapter(currentChapter + 1);
-              window.scrollTo(0, 0);
-            } else if (currentVolume < volumes.length - 1) {
-              setCurrentVolume(currentVolume + 1);
-              setCurrentChapter(0);
-              window.scrollTo(0, 0);
-            }
-          }, 1500); // Short pause before next chapter
+        
+        // Check if there are more chunks to play
+        const nextChunkIndex = currentChunkRef.current + 1;
+        if (nextChunkIndex < audioQueueRef.current.length) {
+          currentChunkRef.current = nextChunkIndex;
+          setCurrentChunkIndex(nextChunkIndex);
+          playChunk(audioQueueRef.current[nextChunkIndex], nextChunkIndex === audioQueueRef.current.length - 1);
+        } else {
+          // Chapter finished - all chunks played
+          setIsPlaying(false);
+          setIsPaused(false);
+          audioQueueRef.current = [];
+          currentChunkRef.current = 0;
+          
+          // Auto-advance to next chapter if enabled
+          if (autoAdvance) {
+            setTimeout(() => {
+              const vol = volumes[currentVolume];
+              if (currentChapter < vol.chapters.length - 1) {
+                setCurrentChapter(currentChapter + 1);
+                window.scrollTo(0, 0);
+              } else if (currentVolume < volumes.length - 1) {
+                setCurrentVolume(currentVolume + 1);
+                setCurrentChapter(0);
+                window.scrollTo(0, 0);
+              }
+            }, 1500);
+          }
         }
       };
       
       audio.onerror = () => {
         console.log('Audio error, falling back to browser voice');
         setUseElevenLabs(false);
-        playWithBrowserSpeech(text);
+        playWithBrowserSpeech(audioQueueRef.current.join(' '));
       };
       
       await audio.play();
       setIsPlaying(true);
       setIsPaused(false);
       setIsLoading(false);
+      
+    } catch (error) {
+      console.error('ElevenLabs chunk error:', error);
+      setUseElevenLabs(false);
+      playWithBrowserSpeech(audioQueueRef.current.join(' '));
+    }
+  };
+
+  const playWithElevenLabs = async (text: string) => {
+    try {
+      setIsLoading(true);
+      
+      // Split into chunks for long chapters
+      const chunks = splitIntoChunks(text);
+      audioQueueRef.current = chunks;
+      currentChunkRef.current = 0;
+      setAudioQueue(chunks);
+      setCurrentChunkIndex(0);
+      
+      // Start playing first chunk
+      await playChunk(chunks[0], chunks.length === 1);
       
     } catch (error) {
       console.error('ElevenLabs error:', error);
