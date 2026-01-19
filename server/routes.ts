@@ -1283,6 +1283,67 @@ export async function registerRoutes(
     });
   });
 
+  // Phone verification - Send code
+  app.post("/api/auth/phone/send-code", authRateLimit, async (req, res) => {
+    try {
+      const { phoneNumber } = req.body;
+      
+      if (!phoneNumber) {
+        return res.status(400).json({ error: "Phone number is required" });
+      }
+
+      const { sendVerificationCode } = await import('./twilio-service');
+      const result = await sendVerificationCode(phoneNumber);
+      
+      if (!result.success) {
+        return res.status(400).json({ error: result.message });
+      }
+
+      res.json({ success: true, message: result.message });
+    } catch (error) {
+      console.error("Send verification code error:", error);
+      res.status(500).json({ error: "Failed to send verification code" });
+    }
+  });
+
+  // Phone verification - Verify code
+  app.post("/api/auth/phone/verify", authRateLimit, async (req, res) => {
+    try {
+      const { phoneNumber, code } = req.body;
+      
+      if (!phoneNumber || !code) {
+        return res.status(400).json({ error: "Phone number and code are required" });
+      }
+
+      const { verifyCode } = await import('./twilio-service');
+      const result = await verifyCode(phoneNumber, code);
+      
+      if (!result.success) {
+        return res.status(400).json({ error: result.message });
+      }
+
+      // If user is logged in, update their phone verification status
+      const userId = (req.session as any)?.userId;
+      if (userId) {
+        await db.update(users).set({ 
+          phoneNumber,
+          phoneVerified: true 
+        }).where(eq(users.id, userId));
+      }
+
+      res.json({ success: true, message: result.message, verified: true });
+    } catch (error) {
+      console.error("Verify phone error:", error);
+      res.status(500).json({ error: "Failed to verify code" });
+    }
+  });
+
+  // Check Twilio status
+  app.get("/api/auth/phone/status", async (req, res) => {
+    const { isTwilioConfigured } = await import('./twilio-service');
+    res.json({ enabled: isTwilioConfigured() });
+  });
+
   // Forgot Password - send reset email
   app.post("/api/auth/forgot-password", authRateLimit, async (req, res) => {
     try {
