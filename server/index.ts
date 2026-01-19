@@ -196,80 +196,107 @@ app.use((req, res, next) => {
   next();
 });
 
-(async () => {
-  // Initialize Stripe managed webhooks
-  const databaseUrl = process.env.DATABASE_URL;
-  if (databaseUrl) {
-    try {
-      console.log('[Stripe] Initializing managed webhooks...');
-      await runMigrations({ databaseUrl });
-      
-      const stripeSync = await getStripeSync();
-      const domains = process.env.REPLIT_DOMAINS?.split(',') || [];
-      if (domains.length > 0) {
-        const webhookUrl = `https://${domains[0]}/api/stripe/webhook`;
-        const webhook = await stripeSync.findOrCreateManagedWebhook(webhookUrl);
-        console.log(`[Stripe] Managed webhook configured: ${webhook.url || webhookUrl}`);
-      }
-      
-      // Sync existing Stripe data in background
-      stripeSync.syncBackfill().then(() => {
-        console.log('[Stripe] Data sync complete');
-      }).catch((err: Error) => {
-        console.error('[Stripe] Data sync error:', err.message);
-      });
-    } catch (err: any) {
-      console.warn('[Stripe] Initialization skipped:', err.message);
-    }
-  }
+// Track initialization state
+let servicesReady = false;
+let initError: string | null = null;
 
-  await registerRoutes(httpServer, app);
-
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
-
-    res.status(status).json({ message });
-    throw err;
+// Immediate health check endpoint - responds before heavy services load
+app.get('/api/health', (_req, res) => {
+  res.json({ 
+    status: 'ok', 
+    servicesReady,
+    initError,
+    timestamp: new Date().toISOString()
   });
+});
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
-  if (process.env.NODE_ENV === "production") {
-    serveStatic(app);
-  } else {
-    const { setupVite } = await import("./vite");
-    await setupVite(httpServer, app);
+// Start server IMMEDIATELY - opens port 5000 right away
+const port = parseInt(process.env.PORT || "5000", 10);
+httpServer.listen(
+  {
+    port,
+    host: "0.0.0.0",
+    reusePort: true,
+  },
+  () => {
+    console.log(`[Health] Server started and listening on 0.0.0.0:${port}`);
+    console.log(`[Health] Application ready to accept HTTP requests`);
+    log(`serving on port ${port}`);
+    
+    // Initialize heavy services in background AFTER port is open
+    initializeServices().catch(err => {
+      console.error('[Init] Fatal error during service initialization:', err);
+      initError = err.message;
+    });
+  },
+);
+
+// Background initialization of heavy services
+async function initializeServices() {
+  try {
+    // Initialize Stripe managed webhooks
+    const databaseUrl = process.env.DATABASE_URL;
+    if (databaseUrl) {
+      try {
+        console.log('[Stripe] Initializing managed webhooks...');
+        await runMigrations({ databaseUrl });
+        
+        const stripeSync = await getStripeSync();
+        const domains = process.env.REPLIT_DOMAINS?.split(',') || [];
+        if (domains.length > 0) {
+          const webhookUrl = `https://${domains[0]}/api/stripe/webhook`;
+          const webhook = await stripeSync.findOrCreateManagedWebhook(webhookUrl);
+          console.log(`[Stripe] Managed webhook configured: ${webhook.url || webhookUrl}`);
+        }
+        
+        // Sync existing Stripe data in background
+        stripeSync.syncBackfill().then(() => {
+          console.log('[Stripe] Data sync complete');
+        }).catch((err: Error) => {
+          console.error('[Stripe] Data sync error:', err.message);
+        });
+      } catch (err: any) {
+        console.warn('[Stripe] Initialization skipped:', err.message);
+      }
+    }
+
+    await registerRoutes(httpServer, app);
+
+    app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+      const status = err.status || err.statusCode || 500;
+      const message = err.message || "Internal Server Error";
+
+      res.status(status).json({ message });
+      throw err;
+    });
+
+    // importantly only setup vite in development and after
+    // setting up all the other routes so the catch-all route
+    // doesn't interfere with the other routes
+    if (process.env.NODE_ENV === "production") {
+      serveStatic(app);
+    } else {
+      const { setupVite } = await import("./vite");
+      await setupVite(httpServer, app);
+    }
+
+    // Setup ChronoChat WebSocket presence
+    setupPresence(httpServer);
+    
+    // Seed core documents if empty
+    await seedDocuments();
+    
+    // Seed city zones for Chronicles Estate
+    await seedCityZones();
+    
+    // Marketing auto-deploy scheduler - DISABLED (rebrand in progress)
+    // startScheduler();
+    
+    servicesReady = true;
+    console.log('[Init] All services initialized successfully');
+  } catch (err: any) {
+    console.error('[Init] Service initialization error:', err);
+    initError = err.message;
+    throw err;
   }
-
-  // ALWAYS serve the app on the port specified in the environment variable PORT
-  // Other ports are firewalled. Default to 5000 if not specified.
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = parseInt(process.env.PORT || "5000", 10);
-  httpServer.listen(
-    {
-      port,
-      host: "0.0.0.0",
-      reusePort: true,
-    },
-    async () => {
-      console.log(`[Health] Server started and listening on 0.0.0.0:${port}`);
-      console.log(`[Health] Application ready to accept HTTP requests`);
-      log(`serving on port ${port}`);
-      
-      // Setup ChronoChat WebSocket presence
-      setupPresence(httpServer);
-      
-      // Seed core documents if empty
-      await seedDocuments();
-      
-      // Seed city zones for Chronicles Estate
-      await seedCityZones();
-      
-      // Marketing auto-deploy scheduler - DISABLED (rebrand in progress)
-      // startScheduler();
-    },
-  );
-})();
+}
