@@ -423,7 +423,6 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
             </div>
           )}
           
-          {/* Crypto payments temporarily disabled
           <div className="p-3 rounded-lg bg-black/30 border border-white/10">
             <p className="text-xs text-gray-400 mb-2 text-center">Payment Method</p>
             <div className="flex gap-2">
@@ -454,7 +453,6 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
               <p className="text-[10px] text-orange-400/70 text-center mt-2">USDC, BTC, ETH, and more accepted via Coinbase</p>
             )}
           </div>
-          */}
           </div>
           
           <Button
@@ -757,7 +755,6 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
             )}
           </div>
 
-          {/* Crypto payments temporarily disabled
           <div className="mt-3 p-2 rounded-lg bg-black/30 border border-white/10">
             <p className="text-[10px] text-gray-400 mb-2 text-center">Payment Method</p>
             <div className="flex gap-1">
@@ -788,7 +785,6 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
               <p className="text-[9px] text-orange-400/70 text-center mt-1">USDC, BTC, ETH accepted</p>
             )}
           </div>
-          */}
           
           <div className="flex gap-2 mt-3">
             <Button 
