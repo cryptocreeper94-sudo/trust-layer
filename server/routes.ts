@@ -8139,11 +8139,9 @@ export async function registerRoutes(
         const amountPaid = (amountCents / 100).toFixed(2);
         
         const TOKEN_PRICE = 0.001;
-        const TIER_BONUSES: Record<string, number> = {
-          genesis: 25, founder: 15, pioneer: 10, early_bird: 5
-        };
         const tokenAmount = Math.floor((amountCents / 100) / TOKEN_PRICE);
-        const bonusPercent = TIER_BONUSES[tier] || 0;
+        // Match webhook: bonus based on amount, not tier
+        const bonusPercent = amountCents >= 25000 ? 25 : amountCents >= 10000 ? 15 : amountCents >= 5000 ? 10 : amountCents >= 2500 ? 5 : 0;
         const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
         
         const insertResult = await db.execute(sql`
