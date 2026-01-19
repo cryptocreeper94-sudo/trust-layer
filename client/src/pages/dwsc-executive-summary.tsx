@@ -172,7 +172,7 @@ export default function DWSCExecutiveSummary() {
                 </p>
                 <p>
                   <span className="text-pink-400 font-semibold">Signal (SIG)</span> is not a speculative asset — it's a 
-                  <span className="text-amber-400 font-semibold"> Trust Network Access Token</span>. Signal represents 
+                  <span className="text-amber-400 font-semibold"> Trust Network Access</span>. Signal represents 
                   acknowledgement, access, and proof of participation in the trust network. The value is the infrastructure 
                   it unlocks, not speculation.
                 </p>
@@ -231,12 +231,12 @@ export default function DWSCExecutiveSummary() {
                   description: "Proof-of-Authority consensus optimized for gaming. Sub-second finality, high throughput, and native support for complex digital assets.",
                   icon: Database,
                   color: "cyan",
-                  features: ["PoA Consensus", "Native Token (SIG)", "Smart Contracts", "Cross-Chain Bridge"]
+                  features: ["PoA Consensus", "Native Signal (SIG)", "Smart Contracts", "Cross-Chain Bridge"]
                 },
                 {
                   title: "DarkWave Portal",
                   subtitle: "Ecosystem Gateway",
-                  description: "Complete DeFi suite with token swaps, staking, NFT marketplace, and developer tools. The unified interface for the entire ecosystem.",
+                  description: "Complete DeFi suite with Signal swaps, staking, NFT marketplace, and developer tools. The unified interface for the entire ecosystem.",
                   icon: Globe,
                   color: "purple",
                   features: ["DEX & Swaps", "Liquid Staking", "NFT Market", "Dev Studio"]
@@ -244,7 +244,7 @@ export default function DWSCExecutiveSummary() {
                 {
                   title: "AI Trading Suite",
                   subtitle: "Pulse & Strike Agent",
-                  description: "ML-powered market intelligence platform. Pulse provides verified price predictions with transparent accuracy tracking. Strike Agent detects new tokens with AI risk scoring.",
+                  description: "ML-powered market intelligence platform. Pulse provides verified price predictions with transparent accuracy tracking. Strike Agent detects new opportunities with AI risk scoring.",
                   icon: Zap,
                   color: "amber",
                   features: ["Price Predictions", "Risk Scoring", "Memecoin Sniper", "Win Rate Tracking"]
@@ -327,8 +327,8 @@ export default function DWSCExecutiveSummary() {
                   { title: "ChronoChat", desc: "Community platform with real-time messaging, channels, reactions, and Shells virtual currency.", img: chronochatImg, href: "/community-hub", domain: "chronochat.io" },
                   { title: "VedaSolus", desc: "Holistic wellness platform connecting practitioners of all traditions - Western, Eastern, Ayurvedic, energy healing.", img: vedasolusImg, href: "/ecosystem", domain: "vedasolus.io" },
                   { title: "Chronicles", desc: "10 verifiable historical eras. AI-powered parallel life simulation. Not a game - a life. YOUR legend.", img: chroniclesImg, href: "/chronicles", domain: "yourlegacy.io" },
-                  { title: "Token Presale", desc: "Signal at $0.001 per token. Tiered pricing through launch. Up to 25% early adopter bonus.", img: presaleImg, href: "/presale", domain: "dwsc.io" },
-                  { title: "DEX & Swap", desc: "AMM-style decentralized exchange. Trade tokens with low fees and instant settlement on-chain.", img: dexImg, href: "/swap", domain: "dwsc.io" },
+                  { title: "Signal Presale", desc: "Signal at $0.001 each. Tiered pricing through launch. Up to 25% early adopter bonus.", img: presaleImg, href: "/presale", domain: "dwsc.io" },
+                  { title: "DEX & Swap", desc: "AMM-style decentralized exchange. Trade Signal with low fees and instant settlement on-chain.", img: dexImg, href: "/swap", domain: "dwsc.io" },
                   { title: "Liquid Staking", desc: "Stake SIG, receive stSIG. Earn rewards while maintaining full liquidity for DeFi.", img: liquidStakingImg, href: "/liquid-staking", domain: "dwsc.io" },
                   { title: "NFT Marketplace", desc: "Create, buy, sell NFTs. 2.5% transaction fees. Built-in rarity analyzer and collection tools.", img: nftImg, href: "/nft-marketplace", domain: "dwsc.io" },
                   { title: "Cross-Chain Bridge", desc: "Lock & mint SIG ↔ wSIG. Ethereum Sepolia and Solana Devnet bridges live.", img: bridgeImg, href: "/bridge", domain: "dwsc.io" },
@@ -438,7 +438,7 @@ export default function DWSCExecutiveSummary() {
                   desc: "Up to 25% bonus on presale purchases. Position #1-100 gets maximum multiplier on all rewards.",
                   gradient: "from-purple-500 to-pink-500",
                   stat: "25%",
-                  statLabel: "bonus tokens"
+                  statLabel: "bonus Signal"
                 },
                 {
                   title: "Referral Rewards",
@@ -449,10 +449,10 @@ export default function DWSCExecutiveSummary() {
                 },
                 {
                   title: "Shells → Signal",
-                  desc: "Earn Shells through quests and engagement. All Shells convert to Signal at launch — free tokens.",
+                  desc: "Earn Shells through quests and engagement. All Shells convert to Signal at launch — free access.",
                   gradient: "from-cyan-500 to-blue-500",
                   stat: "FREE",
-                  statLabel: "token conversion"
+                  statLabel: "Signal conversion"
                 },
                 {
                   title: "Exclusive Access",
@@ -547,7 +547,7 @@ export default function DWSCExecutiveSummary() {
                     </ul>
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-white/80 mb-2">Native Token: Signal (SIG)</h4>
+                    <h4 className="text-sm font-semibold text-white/80 mb-2">Native Signal (SIG)</h4>
                     <ul className="space-y-1 text-sm text-white/60">
                       <li>• <span className="text-white">1 Billion</span> total supply</li>
                       <li>• <span className="text-white">18 decimals</span> for micro-transactions</li>
@@ -676,9 +676,9 @@ export default function DWSCExecutiveSummary() {
                   icon: Sparkles
                 },
                 {
-                  title: "Token Presale",
+                  title: "Signal Presale",
                   source: "Blockchain",
-                  description: "SIG at $0.001 per coin. 150M allocation (15% of supply). Tiered pricing through $0.0014 launch.",
+                  description: "Signal at $0.001 each. 150M allocation (15% of supply). Tiered pricing through $0.0014 launch.",
                   icon: Coins
                 },
                 {
@@ -696,7 +696,7 @@ export default function DWSCExecutiveSummary() {
                 {
                   title: "DEX Fees",
                   source: "DeFi",
-                  description: "0.3% fee on all token swaps. Liquidity provider incentives and protocol revenue.",
+                  description: "0.3% fee on all Signal swaps. Liquidity provider incentives and protocol revenue.",
                   icon: ArrowRightLeft
                 },
                 {
@@ -754,7 +754,7 @@ export default function DWSCExecutiveSummary() {
                   title: "Foundation",
                   date: "Q1-Q2 2026",
                   status: "in_progress",
-                  blockchain: ["Testnet live", "Token presale", "Bridge development"],
+                  blockchain: ["Testnet live", "Signal presale", "Bridge development"],
                   chronicles: ["Website launch", "Community building", "Single-era sandbox"]
                 },
                 {

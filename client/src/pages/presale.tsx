@@ -114,8 +114,8 @@ const ECOSYSTEM_FEATURES = [
     icon: Users,
     image: communityVisual,
     gradient: "from-amber-500/20 to-orange-600/20",
-    fullDescription: "Your voice matters in DarkWave. Token holders participate in governance decisions that shape the future of the ecosystem through our decentralized autonomous organization.",
-    features: ["Vote on protocol upgrades", "Propose new features", "Treasury allocation decisions", "Transparent on-chain governance", "Voting power based on token holdings"],
+    fullDescription: "Your voice matters in DarkWave. Signal holders participate in governance decisions that shape the future of the ecosystem through our decentralized autonomous organization.",
+    features: ["Vote on protocol upgrades", "Propose new features", "Treasury allocation decisions", "Transparent on-chain governance", "Voting power based on Signal holdings"],
   },
 ];
 
@@ -295,7 +295,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
             <label className="text-sm text-gray-400 mb-2 block">Your Email</label>
             <Input
               type="email"
-              placeholder="Enter your email for token allocation"
+              placeholder="Enter your email for Signal allocation"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={`bg-black/50 border-white/20 text-white placeholder:text-gray-500 ${
@@ -308,7 +308,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
           </div>
           
           <div>
-            <label className="text-sm text-gray-400 mb-2 block">Wallet Address (for token delivery)</label>
+            <label className="text-sm text-gray-400 mb-2 block">Wallet Address (for Signal delivery)</label>
             {isConnected ? (
               <div className="space-y-2">
                 <Input
@@ -414,7 +414,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
               <span className="text-white font-medium">${(amountCents / 100).toLocaleString()}</span>
             </div>
             <div className="flex justify-between text-sm mb-1">
-              <span className="text-gray-400">Base Tokens</span>
+              <span className="text-gray-400">Base Signal</span>
               <span className="text-white">{tokenAmount.toLocaleString()} SIG</span>
             </div>
             {bonusPercent > 0 && (
@@ -424,7 +424,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
               </div>
             )}
             <div className="flex justify-between text-lg font-bold border-t border-white/10 pt-2 mt-2">
-              <span className="text-white">Total Tokens</span>
+              <span className="text-white">Total Signal</span>
               <span className="text-cyan-400">{(tokenAmount + bonusTokens).toLocaleString()} SIG</span>
             </div>
           </div>
@@ -520,7 +520,22 @@ function PresaleProgress() {
         
         <div className="flex items-center gap-4 mb-6">
           <div className="relative">
-            <img src={darkwaveLogo} alt="Signal" className="w-16 h-16 object-contain" />
+            <motion.div
+              className="absolute inset-[-8px] rounded-full border-2 border-cyan-400/40"
+              animate={{ scale: [1, 1.3, 1], opacity: [0.6, 0, 0.6] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+              className="absolute inset-[-16px] rounded-full border border-purple-400/30"
+              animate={{ scale: [1, 1.4, 1], opacity: [0.4, 0, 0.4] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+            />
+            <motion.div
+              className="absolute inset-[-24px] rounded-full border border-pink-400/20"
+              animate={{ scale: [1, 1.5, 1], opacity: [0.3, 0, 0.3] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
+            />
+            <img src={darkwaveLogo} alt="Signal" className="w-16 h-16 object-contain relative z-10" />
             <div className="absolute inset-0 animate-pulse bg-cyan-400/20 rounded-full blur-xl" />
           </div>
           <div>
@@ -547,7 +562,7 @@ function PresaleProgress() {
                 {tokensSold > 0 ? `${(tokensSold / 1000).toFixed(1)}K` : "0"}
               </p>
             )}
-            <p className="text-gray-500 text-xs sm:text-sm">Tokens Sold</p>
+            <p className="text-gray-500 text-xs sm:text-sm">Signals Sold</p>
           </div>
           <div className="text-center p-3 sm:p-4 rounded-xl bg-white/5" data-testid="stat-total-raised">
             {isLoading ? (
@@ -600,7 +615,7 @@ function PresaleProgress() {
         <Button 
           onClick={() => setShowBuyModal(true)}
           className="w-full py-6 text-lg font-bold bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:opacity-90"
-          data-testid="button-buy-tokens"
+          data-testid="button-buy-signal"
         >
           <Wallet className="w-5 h-5 mr-2" />
           Join Presale
@@ -614,19 +629,19 @@ const TIER_DETAILS: Record<string, { benefits: string[]; description: string }> 
   genesis: {
     description: "The Genesis tier is our most exclusive offering, reserved for visionary investors who want maximum impact. As a Genesis holder, you'll receive the highest bonus allocation and priority access to all future DarkWave ecosystem features.",
     benefits: [
-      "50% bonus tokens on your purchase",
+      "50% bonus Signal on your purchase",
       "Exclusive Genesis NFT badge (tradeable)",
       "Priority access to DarkWave Chronicles beta",
       "Direct Discord channel with founding team",
       "First access to staking pools with boosted APY",
       "Governance voting power multiplier (2x)",
-      "Airdrop eligibility for partner tokens",
+      "Airdrop eligibility for partner Signals",
     ],
   },
   founder: {
     description: "The Founder tier recognizes early believers in the DarkWave vision. Founders receive substantial bonuses and special recognition throughout the ecosystem.",
     benefits: [
-      "35% bonus tokens on your purchase",
+      "35% bonus Signal on your purchase",
       "Founder NFT badge with special perks",
       "Early access to new features and products",
       "Dedicated support channel",
@@ -638,7 +653,7 @@ const TIER_DETAILS: Record<string, { benefits: string[]; description: string }> 
   pioneer: {
     description: "Pioneers are the adventurers of DarkWave, joining early to explore the ecosystem's potential. This tier offers great value with meaningful bonuses.",
     benefits: [
-      "25% bonus tokens on your purchase",
+      "25% bonus Signal on your purchase",
       "Pioneer badge in your profile",
       "Access to exclusive Discord channels",
       "Priority customer support",
@@ -647,9 +662,9 @@ const TIER_DETAILS: Record<string, { benefits: string[]; description: string }> 
     ],
   },
   early_bird: {
-    description: "The Early Bird tier is perfect for those who want to get started with DarkWave at an accessible price point while still receiving bonus tokens.",
+    description: "The Early Bird tier is perfect for those who want to get started with DarkWave at an accessible price point while still receiving bonus Signal.",
     benefits: [
-      "15% bonus tokens on your purchase",
+      "15% bonus Signal on your purchase",
       "Early Bird community badge",
       "Access to public Discord channels",
       "Standard support access",
@@ -721,7 +736,7 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
     if (!isValidEmail) {
       toast({
         title: "Email Required",
-        description: "Please enter a valid email to receive your token allocation.",
+        description: "Please enter a valid email to receive your Signal allocation.",
         variant: "destructive",
       });
       return;
@@ -769,13 +784,13 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
             <span className="text-white font-semibold text-2xl">${(tier.amount / 100).toLocaleString()}</span>
           </p>
           <p className="text-sm text-gray-400 mt-2">
-            {tokenAmount.toLocaleString()} tokens + {bonusTokens.toLocaleString()} bonus
+            {tokenAmount.toLocaleString()} Signal + {bonusTokens.toLocaleString()} bonus
           </p>
           
           <div className="mt-4">
             <Input
               type="email"
-              placeholder="Your email for token allocation"
+              placeholder="Your email for Signal allocation"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={`bg-black/50 border-white/20 text-white placeholder:text-gray-500 ${
@@ -867,7 +882,7 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
                 <span className="text-xl sm:text-2xl font-bold text-white">${(tier.amount / 100).toLocaleString()}</span>
               </div>
               <div className="flex justify-between items-center mb-2">
-                <span className="text-gray-400 text-sm">Base Tokens</span>
+                <span className="text-gray-400 text-sm">Base Signal</span>
                 <span className="text-base sm:text-lg text-white">{tokenAmount.toLocaleString()} SIG</span>
               </div>
               <div className="flex justify-between items-center">

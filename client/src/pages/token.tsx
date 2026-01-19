@@ -40,7 +40,7 @@ export default function Token() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div className="space-y-6">
               <Badge variant="outline" className="px-3 py-1 border-cyan-500/50 text-cyan-400 bg-cyan-500/10 rounded-full text-xs tracking-wider uppercase">
-                Trust Network Access Token
+                Trust Network Access
               </Badge>
               <h1 className="text-4xl md:text-5xl font-display font-bold leading-tight">
                 Signal <br />
@@ -93,6 +93,22 @@ export default function Token() {
             <div className="flex justify-center relative">
               <div className="absolute inset-0 bg-gradient-to-r from-secondary/20 to-primary/20 blur-[80px] rounded-full" />
               <div className="relative z-10 w-full max-w-[350px]">
+                {/* Signal broadcasting rings */}
+                <motion.div
+                  className="absolute inset-[-20px] rounded-full border-2 border-cyan-400/40"
+                  animate={{ scale: [1, 1.4, 1], opacity: [0.6, 0, 0.6] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <motion.div
+                  className="absolute inset-[-40px] rounded-full border border-purple-400/30"
+                  animate={{ scale: [1, 1.5, 1], opacity: [0.4, 0, 0.4] }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+                />
+                <motion.div
+                  className="absolute inset-[-60px] rounded-full border border-pink-400/20"
+                  animate={{ scale: [1, 1.6, 1], opacity: [0.3, 0, 0.3] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
+                />
                 <div className="relative w-full rounded-full overflow-hidden">
                   <motion.img 
                     src={tokenBg} 
@@ -241,9 +257,9 @@ export default function Token() {
             </GlassCard>
              
             <div className="order-1 lg:order-2 space-y-5">
-              <h2 className="text-2xl md:text-3xl font-display font-bold">Fair Launch Tokenomics</h2>
+              <h2 className="text-2xl md:text-3xl font-display font-bold">Fair Launch Economics</h2>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                We designed Signal to be fair and sustainable. As your Trust Network Access Token, it powers governance, staking, and all transactions across the DarkWave ecosystem.
+                We designed Signal to be fair and sustainable. As your Trust Network Access, it powers governance, staking, and all transactions across the DarkWave ecosystem.
               </p>
               <div className="grid grid-cols-2 gap-3">
                 <GlassCard hover={false}>
@@ -422,7 +438,7 @@ export default function Token() {
             </GlassCard>
             <GlassCard className="p-5">
               <h4 className="font-bold mb-3 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-green-400" /> No Token Burns
+                <TrendingUp className="w-4 h-4 text-green-400" /> No Burns
               </h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Fixed 1B supply. Protocol fees fund staking rewards and treasury, ensuring sustainable growth without artificial scarcity.
@@ -433,7 +449,7 @@ export default function Token() {
                 <ShieldCheck className="w-4 h-4 text-blue-400" /> Vesting & Lockups
               </h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Team tokens locked with 6-month cliff and 12-month vesting. Long-term alignment prevents early dumping.
+                Team allocation locked with 6-month cliff and 12-month vesting. Long-term alignment prevents early dumping.
               </p>
             </GlassCard>
           </div>
