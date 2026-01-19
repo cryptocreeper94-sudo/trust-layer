@@ -11,6 +11,8 @@ import { seedDocuments, seedCityZones } from "./storage";
 import { setupPresence } from "./chat-presence";
 import { runMigrations } from "stripe-replit-sync";
 import { getStripeSync } from "./stripeClient";
+import { predictionTrackingService } from "./services/pulse/predictionTrackingService";
+import { predictionLearningService } from "./services/pulse/predictionLearningService";
 
 const app = express();
 
@@ -288,6 +290,15 @@ async function initializeServices() {
     
     // Seed city zones for Chronicles Estate
     await seedCityZones();
+    
+    // Initialize Pulse AI Prediction Services
+    try {
+      await predictionTrackingService.initialize();
+      await predictionLearningService.initialize();
+      console.log('[Pulse] Prediction engine started');
+    } catch (err: any) {
+      console.warn('[Pulse] Prediction services skipped:', err.message);
+    }
     
     // Marketing auto-deploy scheduler - DISABLED (rebrand in progress)
     // startScheduler();

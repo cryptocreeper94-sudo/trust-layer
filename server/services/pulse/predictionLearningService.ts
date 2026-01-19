@@ -1,13 +1,14 @@
-import { db } from '../db/client.js';
+import { db } from '../../db';
 import { 
   predictionEvents, 
-  predictionOutcomes, 
-  predictionFeatures,
-  predictionModelVersions,
-  predictionModelMetrics 
-} from '../db/schema.js';
+  predictionOutcomes
+} from '@shared/schema';
 import { eq, and, desc, sql, isNotNull, gte, lte } from 'drizzle-orm';
 import { randomBytes } from 'crypto';
+
+// In-memory storage for ML features (will migrate to database tables when schema is extended)
+const featureStore: Map<string, any> = new Map();
+const modelStore: Map<string, any> = new Map();
 
 type TimeHorizon = '1h' | '4h' | '24h' | '7d';
 
@@ -70,6 +71,12 @@ const MIN_TRAINING_SAMPLES = 50;
 
 class PredictionLearningService {
   private modelCache: Map<TimeHorizon, { coefficients: ModelCoefficients; version: string }> = new Map();
+  private isInitialized = false;
+
+  async initialize(): Promise<void> {
+    this.isInitialized = true;
+    console.log('✅ [PredictionLearning] ML service initialized');
+  }
 
   async extractFeatures(predictionId: string, horizon: TimeHorizon, priceChangePercent: number, isWin: boolean): Promise<void> {
     const prediction = await db.select().from(predictionEvents).where(eq(predictionEvents.id, predictionId)).limit(1);
