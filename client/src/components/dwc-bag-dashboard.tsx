@@ -106,7 +106,7 @@ export function DwcBagDashboard({ compact = false }: { compact?: boolean }) {
               <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-md animate-pulse" />
             </div>
             <div>
-              <p className="text-sm text-gray-400">Your SIG Bag</p>
+              <p className="text-sm text-gray-400">Signals Dashboard</p>
               <p className="text-xl font-bold text-white">{formatNumber(totalDwc)} SIG</p>
             </div>
           </div>
@@ -137,7 +137,7 @@ export function DwcBagDashboard({ compact = false }: { compact?: boolean }) {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <Wallet className="w-4 h-4 text-cyan-400" />
-                <span className="text-sm text-gray-400">Your SIG Bag</span>
+                <span className="text-sm text-gray-400">Signals Dashboard</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 {formatNumber(totalDwc)} SIG
