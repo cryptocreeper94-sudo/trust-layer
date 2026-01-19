@@ -1,6 +1,8 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import crypto from "crypto";
+import fs from "fs";
+import path from "path";
 import QRCode from "qrcode";
 import { WebSocketServer, WebSocket } from "ws";
 import { setupCommunityWebSocket } from "./community-ws";
@@ -1389,7 +1391,7 @@ export async function registerRoutes(
   });
 
   // PIN Registration - set a 4-6 digit PIN for quick login
-  app.post("/api/auth/pin/register", authRateLimit, verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
+  app.post("/api/auth/pin/register", authRateLimit, verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.firebaseUser?.uid;
       if (!userId) {
@@ -1473,7 +1475,7 @@ export async function registerRoutes(
   });
 
   // Check if user has PIN set up
-  app.get("/api/auth/pin/status", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
+  app.get("/api/auth/pin/status", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.firebaseUser?.uid;
       if (!userId) {
@@ -1489,7 +1491,7 @@ export async function registerRoutes(
   });
 
   // Early adopter stats for logged-in user
-  app.get("/api/user/early-adopter-stats", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
+  app.get("/api/user/early-adopter-stats", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.firebaseUser?.uid;
       if (!userId) {
@@ -1529,7 +1531,7 @@ export async function registerRoutes(
   });
 
   // Shell reward profile for authenticated users
-  app.get("/api/user/reward-profile", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
+  app.get("/api/user/reward-profile", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.firebaseUser?.uid;
       if (!userId) {
@@ -1574,7 +1576,7 @@ export async function registerRoutes(
   });
 
   // Get user's SIG bag - all pending SIG tokens from various sources
-  app.get("/api/user/dwc-bag", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
+  app.get("/api/user/dwc-bag", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.firebaseUser?.uid;
       if (!userId) {
@@ -1663,7 +1665,7 @@ export async function registerRoutes(
   });
 
   // Get user's purchase history
-  app.get("/api/user/purchases", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
+  app.get("/api/user/purchases", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.firebaseUser?.uid;
       if (!userId) {
@@ -1704,7 +1706,7 @@ export async function registerRoutes(
   });
 
   // Link wallet to reward profile
-  app.post("/api/user/reward-profile/link-wallet", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
+  app.post("/api/user/reward-profile/link-wallet", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.firebaseUser?.uid;
       if (!userId) {
@@ -1729,7 +1731,7 @@ export async function registerRoutes(
   });
 
   // Check if user can withdraw shells
-  app.get("/api/user/can-withdraw", verifyFirebaseToken, async (req: FirebaseAuthRequest, res) => {
+  app.get("/api/user/can-withdraw", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.firebaseUser?.uid;
       if (!userId) {
