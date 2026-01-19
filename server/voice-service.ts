@@ -159,29 +159,88 @@ class VoiceService {
     }
 
     if (provider === VOICE_PROVIDERS.ELEVENLABS && this.elevenLabsApiKey) {
-      // TODO: Implement ElevenLabs API integration
-      // For now, mark as processing (placeholder)
-      await db
-        .update(voiceSamples)
-        .set({ 
-          cloneStatus: "processing",
-          voiceCloneProvider: VOICE_PROVIDERS.ELEVENLABS,
-          updatedAt: new Date(),
-        })
-        .where(eq(voiceSamples.id, sampleId));
-      
-      // Deduct credits
-      await creditsService.deductCredits(
-        userId,
-        CREDIT_COSTS.VOICE_CLONE_CREATION,
-        "Voice clone creation",
-        "voice_clone"
-      );
-      
-      return { 
-        success: true, 
-        cloneId: `elevenlabs-pending-${sampleId}`,
-      };
+      try {
+        // Get the voice sample
+        const [sample] = await db
+          .select()
+          .from(voiceSamples)
+          .where(eq(voiceSamples.id, sampleId));
+        
+        if (!sample?.sampleUrl) {
+          return { success: false, error: "No voice sample URL found" };
+        }
+
+        // Mark as processing
+        await db
+          .update(voiceSamples)
+          .set({ 
+            cloneStatus: "processing",
+            voiceCloneProvider: VOICE_PROVIDERS.ELEVENLABS,
+            updatedAt: new Date(),
+          })
+          .where(eq(voiceSamples.id, sampleId));
+
+        // Create instant voice clone via ElevenLabs API
+        const formData = new FormData();
+        formData.append("name", `chronicles-${userId.slice(0, 8)}`);
+        formData.append("description", "DarkWave Chronicles parallel self voice clone");
+        
+        // Fetch the audio file and add to form
+        const audioResponse = await fetch(sample.sampleUrl);
+        const audioBlob = await audioResponse.blob();
+        formData.append("files", audioBlob, "voice_sample.wav");
+
+        const cloneResponse = await fetch("https://api.elevenlabs.io/v1/voices/add", {
+          method: "POST",
+          headers: {
+            "xi-api-key": this.elevenLabsApiKey,
+          },
+          body: formData,
+        });
+
+        if (!cloneResponse.ok) {
+          const errorText = await cloneResponse.text();
+          console.error("[ElevenLabs] Clone error:", errorText);
+          await db
+            .update(voiceSamples)
+            .set({ cloneStatus: "failed", updatedAt: new Date() })
+            .where(eq(voiceSamples.id, sampleId));
+          return { success: false, error: `ElevenLabs clone failed: ${cloneResponse.status}` };
+        }
+
+        const cloneData = await cloneResponse.json();
+        const voiceId = cloneData.voice_id;
+
+        // Update sample with clone ID and mark as ready
+        await db
+          .update(voiceSamples)
+          .set({ 
+            cloneStatus: "ready",
+            voiceCloneId: voiceId,
+            updatedAt: new Date(),
+          })
+          .where(eq(voiceSamples.id, sampleId));
+        
+        // Deduct credits
+        await creditsService.deductCredits(
+          userId,
+          CREDIT_COSTS.VOICE_CLONE_CREATION,
+          "Voice clone creation",
+          "voice_clone"
+        );
+        
+        return { 
+          success: true, 
+          cloneId: voiceId,
+        };
+      } catch (error) {
+        console.error("[ElevenLabs] Clone error:", error);
+        await db
+          .update(voiceSamples)
+          .set({ cloneStatus: "failed", updatedAt: new Date() })
+          .where(eq(voiceSamples.id, sampleId));
+        return { success: false, error: "Voice clone creation failed" };
+      }
     }
 
     if (provider === VOICE_PROVIDERS.RESEMBLE && this.resembleApiKey) {
@@ -253,8 +312,46 @@ class VoiceService {
       return { success: true };
     }
 
-    // TODO: Implement ElevenLabs/Resemble API calls
-    // For now, return a placeholder indicating the frontend should use browser TTS
+    // ElevenLabs TTS with cloned voice
+    if (provider === VOICE_PROVIDERS.ELEVENLABS && this.elevenLabsApiKey) {
+      try {
+        // Get user's cloned voice ID if available
+        const sample = await this.getUserVoiceSample(userId);
+        const voiceId = voiceCloneId || sample?.voiceCloneId || "21m00Tcm4TlvDq8ikWAM"; // Default to Rachel voice
+        
+        const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+          method: "POST",
+          headers: {
+            "xi-api-key": this.elevenLabsApiKey,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text,
+            model_id: "eleven_monolingual_v1",
+            voice_settings: {
+              stability: 0.5,
+              similarity_boost: 0.75,
+            },
+          }),
+        });
+
+        if (!response.ok) {
+          console.error("[ElevenLabs] TTS error:", response.status);
+          return { success: false, error: `TTS failed: ${response.status}` };
+        }
+
+        // Convert to base64 data URL for frontend playback
+        const audioBuffer = await response.arrayBuffer();
+        const base64 = Buffer.from(audioBuffer).toString('base64');
+        const audioUrl = `data:audio/mpeg;base64,${base64}`;
+        
+        return { success: true, audioUrl };
+      } catch (error) {
+        console.error("[ElevenLabs] TTS error:", error);
+        return { success: false, error: "Speech generation failed" };
+      }
+    }
+
     return { 
       success: true, 
       audioUrl: undefined, // Frontend falls back to browser TTS
