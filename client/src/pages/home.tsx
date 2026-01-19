@@ -24,8 +24,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { WalletButton } from "@/components/wallet-button";
 import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.png";
 import medievalImg from "@assets/generated_images/medieval_castle_vertical_portrait.png";
-import cyberpunkImg from "@assets/generated_images/cyberpunk_neon_city.png";
-import spaceImg from "@assets/generated_images/deep_space_station.png";
 import egyptImg from "@assets/generated_images/ancient_egyptian_kingdom_sunset.png";
 import greeceImg from "@assets/generated_images/ancient_greek_athens_parthenon.png";
 import samuraiImg from "@assets/generated_images/feudal_japan_samurai_castle.png";
@@ -127,8 +125,6 @@ const CHRONICLES_ERAS = [
   { img: renaissanceImg, era: "Renaissance", desc: "Age of Enlightenment", color: "from-emerald-500/30 to-teal-600/30" },
   { img: wildWestImg, era: "Frontier", desc: "Wild West", color: "from-orange-500/30 to-amber-600/30" },
   { img: steampunkImg, era: "Iron Age", desc: "Industrial Revolution", color: "from-zinc-500/30 to-stone-600/30" },
-  { img: cyberpunkImg, era: "Neon Dominion", desc: "Cyberpunk future", color: "from-pink-500/30 to-cyan-600/30" },
-  { img: spaceImg, era: "Stellar Exodus", desc: "Space exploration", color: "from-blue-500/30 to-purple-600/30" },
 ];
 
 function ChroniclesCarousel() {
