@@ -6826,3 +6826,51 @@ export const strikeAgentOutcomes = pgTable('strikeagent_outcomes', {
 });
 
 export type StrikeAgentOutcome = typeof strikeAgentOutcomes.$inferSelect;
+
+// Blog Posts - AI-generated SEO content
+export const blogPosts = pgTable('blog_posts', {
+  id: varchar('id', { length: 255 }).primaryKey().default(sql`gen_random_uuid()`),
+  slug: varchar('slug', { length: 255 }).notNull().unique(),
+  title: text('title').notNull(),
+  excerpt: text('excerpt').notNull(),
+  content: text('content').notNull(),
+  coverImage: text('cover_image'),
+  
+  // SEO fields
+  metaTitle: text('meta_title'),
+  metaDescription: text('meta_description'),
+  keywords: text('keywords').array(),
+  canonicalUrl: text('canonical_url'),
+  
+  // Organization
+  category: varchar('category', { length: 100 }).notNull().default('general'),
+  tags: text('tags').array(),
+  
+  // Author info
+  authorName: text('author_name').default('DarkWave Team'),
+  authorAvatar: text('author_avatar'),
+  
+  // Status
+  status: varchar('status', { length: 20 }).notNull().default('draft'),
+  featured: boolean('featured').default(false),
+  readTimeMinutes: integer('read_time_minutes').default(5),
+  viewCount: integer('view_count').default(0),
+  
+  // AI generation metadata
+  aiGenerated: boolean('ai_generated').default(true),
+  aiPrompt: text('ai_prompt'),
+  
+  publishedAt: timestamp('published_at'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({
+  id: true,
+  viewCount: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type BlogPost = typeof blogPosts.$inferSelect;
+export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
