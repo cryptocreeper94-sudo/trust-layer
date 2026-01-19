@@ -1,12 +1,68 @@
 import { motion } from "framer-motion";
-import { Heart, Shield, Users, MessageCircle, ArrowRight } from "lucide-react";
+import { Heart, Shield, Users, Copy, Check } from "lucide-react";
 import { Link } from "wouter";
+import { useState } from "react";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
+
+const facebookPost = `Hey there,
+
+My name is Jason, and I lead the team behind DarkWave. I want to have an honest conversation with you — the kind I wish someone had with me years ago.
+
+I UNDERSTAND YOUR SKEPTICISM
+
+Truly, I do. And I don't blame you one bit.
+
+Over the past decade, I've personally lost well over $50,000 in this space. Probably more if I'm being honest. Pump and dumps. Straight-up app scams with beautiful websites and big promises. A market that seems to have an almost supernatural ability to move against you the exact moment you buy in.
+
+If you've been in crypto for any length of time, you probably have similar stories. The wounds are real. The distrust is earned.
+
+That's exactly why we're building this.
+
+WHY WE CALL IT "SIGNAL" — NOT A COIN, NOT A TOKEN
+
+You'll notice we don't call it a "coin" or "token" or "currency." That's very intentional.
+
+Those words have been weaponized. They carry hidden meanings that affect you subconsciously — promises of spending power that never materializes, utility that's always "coming soon," cycles of hype followed by silence. Language has become a tool of manipulation.
+
+How many times have you heard "just wait, you'll see" only to wait... and wait... and nothing ever happens?
+
+We call it Signal because a signal is something pure. It can't be twisted. It can't be demonized. It can't be used against you with clever psychology. A signal simply IS — a transmission of verified intent within a trusted network.
+
+WHAT WE'RE ACTUALLY BUILDING
+
+We're not promising you'll get rich. We're not selling you a dream of easy money.
+
+We're building real infrastructure. Real software. Real tools that real businesses can use. And instead of telling you to wait, we're making strides DAILY to actually show you progress.
+
+DarkWave is a Trusted Network — a place where seeing another member means you're on the same team. A community of builders and people who are just tired of the way things have been.
+
+AN INVITATION, NOT A SALES PITCH
+
+We're not asking you to throw money at us blindly. We're asking you to stick around. Watch what we do. Join the community. See for yourself whether our actions match our words.
+
+That's how trust is built — not with promises, but with consistent action.
+
+It's nice to meet you. We're genuinely glad you're here.
+
+— Jason & The DarkWave Team
+
+Read the full letter: https://dwsc.io/note
+Join the community: https://dwsc.io/community
+
+#DarkWave #TrustNetwork #Signal #Blockchain #Web3 #Community #Builders #CryptoRecovery #RealTalk #TrustLayer #DecentralizedTrust #BlockchainCommunity #CryptoSkepticism #HonestCrypto #NoMoreScams`;
 
 import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
 
 export default function DevelopersNote() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(facebookPost);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
       <div className="absolute inset-0 opacity-20">
@@ -142,12 +198,47 @@ export default function DevelopersNote() {
               </p>
             </div>
           </GlassCard>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mt-8"
+          >
+            <GlassCard className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-white">Share on Social Media</h3>
+                <Button
+                  onClick={handleCopy}
+                  variant="outline"
+                  size="sm"
+                  className={`gap-2 transition-all ${copied ? 'bg-green-500/20 border-green-500 text-green-400' : 'border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10'}`}
+                  data-testid="button-copy-post"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="w-4 h-4" />
+                      Copied!
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4" />
+                      Copy to Clipboard
+                    </>
+                  )}
+                </Button>
+              </div>
+              <div className="bg-slate-900/50 rounded-lg p-4 max-h-64 overflow-y-auto border border-white/10">
+                <pre className="text-white/70 text-sm whitespace-pre-wrap font-sans leading-relaxed">{facebookPost}</pre>
+              </div>
+            </GlassCard>
+          </motion.div>
           
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4"
+            className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4"
           >
             <Link href="/community">
               <GlassCard className="p-6 text-center cursor-pointer hover:border-cyan-500/50 transition-all group">
