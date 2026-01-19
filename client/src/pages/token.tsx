@@ -243,7 +243,7 @@ export default function Token() {
             <div className="order-1 lg:order-2 space-y-5">
               <h2 className="text-2xl md:text-3xl font-display font-bold">Fair Launch Tokenomics</h2>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                We designed Signal to be fair and sustainable. The native asset powers governance, staking, and all transactions across the DarkWave ecosystem.
+                We designed Signal to be fair and sustainable. As your Trust Network Access Token, it powers governance, staking, and all transactions across the DarkWave ecosystem.
               </p>
               <div className="grid grid-cols-2 gap-3">
                 <GlassCard hover={false}>
