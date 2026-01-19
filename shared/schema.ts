@@ -6973,6 +6973,107 @@ export const strikeAgentOutcomes = pgTable('strikeagent_outcomes', {
 
 export type StrikeAgentOutcome = typeof strikeAgentOutcomes.$inferSelect;
 
+// Prediction Features - ML Feature Vectors (16 dimensions)
+export const predictionFeatures = pgTable('prediction_features', {
+  id: varchar('id', { length: 255 }).primaryKey(),
+  predictionId: varchar('prediction_id', { length: 255 }).notNull(),
+  horizon: varchar('horizon', { length: 20 }).notNull(),
+  
+  // Normalized Features (-1 to 1 or 0 to 1)
+  rsiNormalized: varchar('rsi_normalized', { length: 20 }),
+  macdSignal: varchar('macd_signal', { length: 20 }),
+  macdStrength: varchar('macd_strength', { length: 20 }),
+  
+  // EMA Spreads
+  ema9Spread: varchar('ema9_spread', { length: 20 }),
+  ema21Spread: varchar('ema21_spread', { length: 20 }),
+  ema50Spread: varchar('ema50_spread', { length: 20 }),
+  ema200Spread: varchar('ema200_spread', { length: 20 }),
+  
+  // EMA Crossovers
+  ema9Over21: boolean('ema9_over_21'),
+  ema50Over200: boolean('ema50_over_200'),
+  
+  // Bollinger Band Position
+  bbPosition: varchar('bb_position', { length: 20 }),
+  bbWidth: varchar('bb_width', { length: 20 }),
+  
+  // Volume & Momentum
+  volumeDeltaNorm: varchar('volume_delta_norm', { length: 20 }),
+  spikeScoreNorm: varchar('spike_score_norm', { length: 20 }),
+  volatilityNorm: varchar('volatility_norm', { length: 20 }),
+  
+  // Support/Resistance
+  distanceToSupport: varchar('distance_to_support', { length: 20 }),
+  distanceToResistance: varchar('distance_to_resistance', { length: 20 }),
+  
+  // Labels (from outcomes)
+  priceChangePercent: varchar('price_change_percent', { length: 20 }),
+  isWin: boolean('is_win'),
+  
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export type PredictionFeature = typeof predictionFeatures.$inferSelect;
+
+// Prediction Model Versions - Trained ML Models
+export const predictionModelVersions = pgTable('prediction_model_versions', {
+  id: varchar('id', { length: 255 }).primaryKey(),
+  
+  modelName: varchar('model_name', { length: 100 }).notNull().default('logistic_v1'),
+  horizon: varchar('horizon', { length: 20 }).notNull(),
+  version: integer('version').notNull(),
+  
+  // Model Coefficients (JSON)
+  coefficients: text('coefficients').notNull(),
+  featureNames: text('feature_names').notNull(),
+  
+  // Training Metadata
+  trainingSamples: integer('training_samples').notNull(),
+  validationSamples: integer('validation_samples').notNull(),
+  trainingDateRange: text('training_date_range'),
+  
+  // Performance Metrics
+  accuracy: varchar('accuracy', { length: 10 }).notNull(),
+  precision: varchar('precision', { length: 10 }),
+  recall: varchar('recall', { length: 10 }),
+  f1Score: varchar('f1_score', { length: 10 }),
+  auroc: varchar('auroc', { length: 10 }),
+  
+  // Status
+  status: varchar('status', { length: 20 }).notNull().default('training'),
+  isActive: boolean('is_active').notNull().default(false),
+  
+  trainedAt: timestamp('trained_at').defaultNow().notNull(),
+  activatedAt: timestamp('activated_at'),
+  retiredAt: timestamp('retired_at'),
+});
+
+export type PredictionModelVersion = typeof predictionModelVersions.$inferSelect;
+
+// Prediction Model Metrics - Rolling Performance
+export const predictionModelMetrics = pgTable('prediction_model_metrics', {
+  id: varchar('id', { length: 255 }).primaryKey(),
+  modelVersionId: varchar('model_version_id', { length: 255 }).notNull(),
+  
+  // Time Window
+  periodStart: timestamp('period_start').notNull(),
+  periodEnd: timestamp('period_end').notNull(),
+  
+  // Performance
+  predictionsCount: integer('predictions_count').notNull().default(0),
+  correctCount: integer('correct_count').notNull().default(0),
+  rollingAccuracy: varchar('rolling_accuracy', { length: 10 }),
+  
+  // Drift Detection
+  featureDrift: varchar('feature_drift', { length: 20 }),
+  performanceDrift: boolean('performance_drift').default(false),
+  
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export type PredictionModelMetric = typeof predictionModelMetrics.$inferSelect;
+
 // Blog Posts - AI-generated SEO content
 export const blogPosts = pgTable('blog_posts', {
   id: varchar('id', { length: 255 }).primaryKey().default(sql`gen_random_uuid()`),

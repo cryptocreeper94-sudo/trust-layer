@@ -1,14 +1,13 @@
 import { db } from '../../db';
 import { 
   predictionEvents, 
-  predictionOutcomes
+  predictionOutcomes,
+  predictionFeatures,
+  predictionModelVersions,
+  predictionModelMetrics
 } from '@shared/schema';
 import { eq, and, desc, sql, isNotNull, gte, lte } from 'drizzle-orm';
 import { randomBytes } from 'crypto';
-
-// In-memory storage for ML features (will migrate to database tables when schema is extended)
-const featureStore: Map<string, any> = new Map();
-const modelStore: Map<string, any> = new Map();
 
 type TimeHorizon = '1h' | '4h' | '24h' | '7d';
 
@@ -232,7 +231,7 @@ class PredictionLearningService {
     }
 
     const splitIndex = Math.floor(data.features.length * 0.8);
-    const indices = this.shuffleArray([...Array(data.features.length).keys()]);
+    const indices = this.shuffleArray(Array.from({ length: data.features.length }, (_, i) => i));
     
     const trainIndices = indices.slice(0, splitIndex);
     const valIndices = indices.slice(splitIndex);
