@@ -644,10 +644,11 @@ export async function registerRoutes(
           try {
             const shellsAmount = parseInt(metadata.shellsAmount || "0");
             if (shellsAmount > 0) {
-              await shellsService.creditShells(
+              await shellsService.addShells(
+                metadata.userId,
                 metadata.userId,
                 shellsAmount,
-                "coinbase_purchase",
+                "purchase",
                 `Coinbase purchase: $${amountUsd}`,
                 charge.code
               );
@@ -4340,7 +4341,7 @@ export async function registerRoutes(
       const ticket = await storage.createSupportTicket({
         userId: req.user!.id,
         userEmail: req.user!.email || "",
-        userName: req.user!.firstName ? `${req.user!.firstName} ${req.user!.lastName || ""}`.trim() : undefined,
+        userName: (req.user as any)?.displayName || undefined,
         category: category || "general",
         subject,
         message,
@@ -11052,7 +11053,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     });
   }
   
-  function generateSessionToken(): string {
+  function generateChroniclesSessionToken(): string {
     return crypto.randomBytes(32).toString('hex');
   }
   
@@ -11101,7 +11102,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const passwordHash = await hashChroniclePassword(password);
       
       // Generate session
-      const sessionToken = generateSessionToken();
+      const sessionToken = generateChroniclesSessionToken();
       const sessionExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
       
       // Create account
@@ -11181,7 +11182,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       }
       
       // Generate new session
-      const sessionToken = generateSessionToken();
+      const sessionToken = generateChroniclesSessionToken();
       const sessionExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
       
       // Update session
@@ -13804,7 +13805,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId || !amount || amount <= 0) {
         return res.status(400).json({ error: "User ID and positive amount required" });
       }
-      await shellsService.addShells(userId, amount, reason || "Admin award", { type: "admin_award" });
+      await shellsService.addShells(userId, userId, amount, "bonus", reason || "Admin award");
       const newBalance = await shellsService.getBalance(userId);
       res.json({ success: true, awarded: amount, newBalance });
     } catch (error) {
@@ -13818,7 +13819,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const { userId } = req.params;
       const balance = await shellsService.getBalance(userId);
-      const transactions = await shellsService.getUserTransactions(userId, 100);
+      const transactions = await shellsService.getTransactions(userId, 100);
       const profile = await zealyService.getRewardProfile(userId);
       res.json({ userId, balance, transactions, profile });
     } catch (error) {
@@ -16726,7 +16727,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const address = req.params.address;
       
-      const existingRec = await db.query.strikeAgentRecommendations.findFirst({
+      const existingRec = await db.query.strikeAgentPredictions.findFirst({
         where: (r, { eq }) => eq(r.tokenAddress, address),
       });
       
