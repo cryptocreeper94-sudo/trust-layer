@@ -396,6 +396,118 @@ export default function DWSCExecutiveSummary() {
           </div>
         </section>
 
+        {/* Why Join - Benefits Teaser */}
+        <section className="py-16 px-4 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/50 via-purple-950/20 to-slate-900/50" />
+          <div className="container mx-auto max-w-5xl relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <Badge className="mb-4 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-500/30 text-cyan-300">
+                Early Adopter Advantage
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
+                Why Join the <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Trust Layer</span> Now?
+              </h2>
+              <p className="text-white/60 max-w-2xl mx-auto">
+                The earlier you join, the more you benefit. First movers get the best positions, lowest prices, and highest rewards.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                {
+                  title: "Ground Floor Pricing",
+                  desc: "Signal starts at $0.001 — 8x cheaper than launch price. Early investors see massive potential upside.",
+                  gradient: "from-amber-500 to-orange-500",
+                  stat: "8x",
+                  statLabel: "potential gain"
+                },
+                {
+                  title: "Founder Validator Status",
+                  desc: "First 100 validators receive 10,000 SIG airdrop plus permanent 'Founder' badge and governance rights.",
+                  gradient: "from-emerald-500 to-cyan-500",
+                  stat: "10K",
+                  statLabel: "SIG airdrop"
+                },
+                {
+                  title: "Early Adopter Bonuses",
+                  desc: "Up to 25% bonus on presale purchases. Position #1-100 gets maximum multiplier on all rewards.",
+                  gradient: "from-purple-500 to-pink-500",
+                  stat: "25%",
+                  statLabel: "bonus tokens"
+                },
+                {
+                  title: "Referral Rewards",
+                  desc: "Earn Signal for every person you bring. Build a network, earn passive income from their activity.",
+                  gradient: "from-red-500 to-rose-500",
+                  stat: "∞",
+                  statLabel: "earning potential"
+                },
+                {
+                  title: "Shells → Signal",
+                  desc: "Earn Shells through quests and engagement. All Shells convert to Signal at launch — free tokens.",
+                  gradient: "from-cyan-500 to-blue-500",
+                  stat: "FREE",
+                  statLabel: "token conversion"
+                },
+                {
+                  title: "Exclusive Access",
+                  desc: "Early members get beta access to Chronicles, Strike Agent, and upcoming apps before public launch.",
+                  gradient: "from-indigo-500 to-violet-500",
+                  stat: "VIP",
+                  statLabel: "beta access"
+                }
+              ].map((benefit, i) => (
+                <motion.div
+                  key={benefit.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  className="group"
+                >
+                  <div className="h-full bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:border-white/20 transition-all relative overflow-hidden">
+                    <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-br ${benefit.gradient} opacity-10 rounded-full blur-2xl group-hover:opacity-20 transition-opacity`} />
+                    <div className="relative z-10">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className={`font-bold text-lg bg-gradient-to-r ${benefit.gradient} bg-clip-text text-transparent`}>
+                          {benefit.title}
+                        </h3>
+                        <div className="text-right">
+                          <p className={`text-2xl font-bold bg-gradient-to-r ${benefit.gradient} bg-clip-text text-transparent`}>
+                            {benefit.stat}
+                          </p>
+                          <p className="text-[10px] text-white/40">{benefit.statLabel}</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-white/60 leading-relaxed">{benefit.desc}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mt-10 text-center"
+            >
+              <Link href="/presale">
+                <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white px-8 py-6 text-lg font-semibold shadow-lg shadow-purple-500/20">
+                  Join the Presale Now
+                  <ArrowRightLeft className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+              <p className="text-white/40 text-sm mt-4">Limited time. Prices increase with each milestone.</p>
+            </motion.div>
+          </div>
+        </section>
+
         {/* Technical Architecture */}
         <section className="py-12 px-4 bg-slate-900/50">
           <div className="container mx-auto max-w-5xl">

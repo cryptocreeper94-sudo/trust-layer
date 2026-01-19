@@ -5,7 +5,7 @@ import { Link } from "wouter";
 import { 
   Shield, Eye, Lock, Users, Shell, Activity, CheckCircle, XCircle,
   AlertTriangle, Trophy, TrendingUp, ExternalLink, RefreshCw, Clock,
-  Sparkles, Target, ArrowRight
+  Sparkles, Target, ArrowRight, Coins, DollarSign, Wallet, Percent
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -199,6 +199,16 @@ function TeamDashboard() {
     refetchInterval: 60000,
   });
 
+  const { data: presaleStats } = useQuery({
+    queryKey: ["/api/presale/stats"],
+    queryFn: async () => {
+      const res = await fetch("/api/presale/stats");
+      if (!res.ok) return null;
+      return res.json();
+    },
+    refetchInterval: 30000,
+  });
+
   const handleLogout = () => {
     sessionStorage.removeItem("teamAuth");
     sessionStorage.removeItem("teamToken");
@@ -325,35 +335,81 @@ function TeamDashboard() {
 
           <GlassCard className="p-6" glow>
             <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-4">
+              <Coins className="w-5 h-5 text-amber-400" />
+              Presale Status
+            </h3>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                  <p className="text-xs text-gray-400 mb-1">Current Price</p>
+                  <p className="text-lg font-bold text-amber-400">${presaleStats?.currentPrice || "0.001"}</p>
+                </div>
+                <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                  <p className="text-xs text-gray-400 mb-1">Tokens Sold</p>
+                  <p className="text-lg font-bold text-emerald-400">{presaleStats?.tokensSold?.toLocaleString() || "0"}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="p-3 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+                  <p className="text-xs text-gray-400 mb-1">Total Raised</p>
+                  <p className="text-lg font-bold text-cyan-400">${presaleStats?.totalRaised?.toLocaleString() || "0"}</p>
+                </div>
+                <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                  <p className="text-xs text-gray-400 mb-1">Participants</p>
+                  <p className="text-lg font-bold text-purple-400">{presaleStats?.participants || "0"}</p>
+                </div>
+              </div>
+              <div className="p-3 rounded-lg bg-white/5">
+                <div className="flex justify-between text-xs text-gray-400 mb-2">
+                  <span>Presale Progress</span>
+                  <span>{presaleStats?.percentSold || 0}% of 150M</span>
+                </div>
+                <Progress value={presaleStats?.percentSold || 0} className="h-2" />
+              </div>
+              <div className="text-xs text-gray-500 space-y-1">
+                <p>• Current Tier: {presaleStats?.currentTier || "Tier 1"}</p>
+                <p>• Max per wallet: 2% (20M SIG)</p>
+                <p>• Launch price: $0.008</p>
+              </div>
+            </div>
+          </GlassCard>
+
+          <GlassCard className="p-6" glow>
+            <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-4">
               <ExternalLink className="w-5 h-5 text-cyan-400" />
               Quick Links
             </h3>
 
             <div className="space-y-3">
-              <a 
-                href="https://zealy.io/cw/darkwavechain" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group"
-                onClick={(e) => e.stopPropagation()}
+              <button 
+                onClick={() => window.open("https://zealy.io/cw/darkwavechain", "_blank")}
+                className="w-full flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 hover:border-purple-400/50 transition-colors group"
               >
-                <span className="text-sm text-gray-300">Zealy Dashboard</span>
-                <ExternalLink className="w-4 h-4 text-gray-500 group-hover:text-cyan-400" />
-              </a>
-              <a 
+                <span className="text-sm text-white font-medium">Zealy Dashboard</span>
+                <ExternalLink className="w-4 h-4 text-purple-400" />
+              </button>
+              <Link 
                 href="/quests"
                 className="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group cursor-pointer"
               >
                 <span className="text-sm text-gray-300">Public Quests Page</span>
                 <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-cyan-400" />
-              </a>
-              <a 
+              </Link>
+              <Link 
                 href="/rewards"
                 className="flex items-center justify-between p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors group cursor-pointer"
               >
                 <span className="text-sm text-gray-300">Rewards Page</span>
                 <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-cyan-400" />
-              </a>
+              </Link>
+              <Link 
+                href="/presale"
+                className="flex items-center justify-between p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 hover:border-amber-400/40 transition-colors group cursor-pointer"
+              >
+                <span className="text-sm text-amber-300">Presale Page</span>
+                <ArrowRight className="w-4 h-4 text-amber-500 group-hover:text-amber-400" />
+              </Link>
             </div>
           </GlassCard>
         </div>
