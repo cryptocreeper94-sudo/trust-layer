@@ -4,7 +4,7 @@ import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { 
   BookOpen, ChevronLeft, ChevronRight, Menu, X, Home, 
-  BookMarked, ScrollText, FileText, ExternalLink, Volume2, VolumeX, Pause, Play, Download 
+  BookMarked, ScrollText, FileText, ExternalLink, Volume2, VolumeX, Pause, Play, Download, ArrowLeft
 } from "lucide-react";
 import { Link } from "wouter";
 
@@ -1934,10 +1934,30 @@ export default function VeilReader() {
   const [autoAdvance, setAutoAdvance] = useState(false);
   const [audioQueue, setAudioQueue] = useState<string[]>([]);
   const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
+  const [returnLocation, setReturnLocation] = useState<{ volume: number; chapter: number } | null>(null);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioQueueRef = useRef<string[]>([]);
   const currentChunkRef = useRef(0);
+  
+  const navigateToConcordance = () => {
+    setReturnLocation({ volume: currentVolume, chapter: currentChapter });
+    const appendicesIndex = volumes.findIndex(v => v.id === "appendices");
+    if (appendicesIndex !== -1) {
+      setCurrentVolume(appendicesIndex);
+      setCurrentChapter(0);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+  
+  const returnToPreviousLocation = () => {
+    if (returnLocation) {
+      setCurrentVolume(returnLocation.volume);
+      setCurrentChapter(returnLocation.chapter);
+      setReturnLocation(null);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
   
   const extractTextForPdf = (node: React.ReactNode): string => {
     if (typeof node === 'string') return node;
@@ -2497,6 +2517,34 @@ export default function VeilReader() {
             </span>
             <h1 className="text-3xl md:text-4xl font-bold text-white mt-2">{chapter.title}</h1>
           </div>
+
+          {chapter.id === "scripture-cross-reference" && !returnLocation && (
+            <div className="mb-6 p-4 rounded-lg bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-between">
+              <span className="text-cyan-300 text-sm">View full definitions of all terms mentioned</span>
+              <Button
+                size="sm"
+                onClick={navigateToConcordance}
+                className="bg-cyan-600 hover:bg-cyan-500 text-white"
+              >
+                <BookMarked className="w-4 h-4 mr-2" />
+                View Concordance
+              </Button>
+            </div>
+          )}
+
+          {returnLocation && volume.id === "appendices" && (
+            <div className="mb-6 p-4 rounded-lg bg-purple-500/20 border border-purple-500/30 flex items-center justify-between">
+              <span className="text-purple-300 text-sm">You came here from a cross-reference</span>
+              <Button
+                size="sm"
+                onClick={returnToPreviousLocation}
+                className="bg-purple-600 hover:bg-purple-500 text-white"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Return to Reading
+              </Button>
+            </div>
+          )}
 
           <div className="prose prose-invert prose-lg max-w-none 
             prose-p:text-slate-300 prose-p:leading-relaxed prose-p:mb-4
