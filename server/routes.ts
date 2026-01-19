@@ -7875,6 +7875,22 @@ export async function registerRoutes(
       const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
       const totalTokens = tokenAmount + bonusTokens;
       
+      // Whale protection: 2% max per wallet/email (20 million tokens)
+      const WHALE_LIMIT = 20000000;
+      const existingTokensResult = await db.execute(sql`
+        SELECT COALESCE(SUM(token_amount), 0) as total_tokens
+        FROM presale_purchases 
+        WHERE email = ${email.toLowerCase()} AND status = 'completed'
+      `);
+      const existingTokens = parseInt(existingTokensResult.rows[0]?.total_tokens as string || "0");
+      
+      if (existingTokens + totalTokens > WHALE_LIMIT) {
+        const remaining = Math.max(0, WHALE_LIMIT - existingTokens);
+        return res.status(400).json({ 
+          error: `Whale protection: Maximum 2% of total supply (20M SIG) per wallet. You have ${existingTokens.toLocaleString()} tokens and can purchase up to ${remaining.toLocaleString()} more.`
+        });
+      }
+      
       const tierName = !tier || tier === "custom" 
         ? "SIG Token Presale" 
         : `${tier.charAt(0).toUpperCase()}${tier.slice(1).replace("_", " ")} Tier`;
@@ -7953,6 +7969,22 @@ export async function registerRoutes(
       const bonusPercent = tierConfig?.bonus || 0;
       const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
       const totalTokens = tokenAmount + bonusTokens;
+      
+      // Whale protection: 2% max per wallet/email (20 million tokens)
+      const WHALE_LIMIT = 20000000;
+      const existingTokensResult = await db.execute(sql`
+        SELECT COALESCE(SUM(token_amount), 0) as total_tokens
+        FROM presale_purchases 
+        WHERE (email = ${email.toLowerCase()} ${walletAddress ? sql`OR wallet_address = ${walletAddress}` : sql``}) AND status = 'completed'
+      `);
+      const existingTokens = parseInt(existingTokensResult.rows[0]?.total_tokens as string || "0");
+      
+      if (existingTokens + totalTokens > WHALE_LIMIT) {
+        const remaining = Math.max(0, WHALE_LIMIT - existingTokens);
+        return res.status(400).json({ 
+          error: `Whale protection: Maximum 2% of total supply (20M SIG) per wallet. You have ${existingTokens.toLocaleString()} tokens and can purchase up to ${remaining.toLocaleString()} more.`
+        });
+      }
       
       const host = req.get("host") || "dwsc.io";
       const protocol = host.includes("localhost") ? "http" : "https";
