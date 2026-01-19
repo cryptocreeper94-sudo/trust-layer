@@ -486,7 +486,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
 }
 
 function PresaleProgress() {
-  const [showBuyModal, setShowBuyModal] = useState(false);
+  const [showBuyModal, setShowBuyModal] = useState(true);
   const { data: stats, isLoading } = useQuery<PresaleStats>({
     queryKey: ["/api/presale/stats"],
   });
