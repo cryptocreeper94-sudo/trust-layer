@@ -68,7 +68,7 @@ const JOURNEY_CHAPTERS: JourneyChapter[] = [
     subtitle: "Venture Into The Eras",
     status: "locked",
     season: "Season One",
-    description: "Step through time itself. 70+ historical eras await your presence.",
+    description: "Step through history itself. 10 verifiable historical eras await your presence.",
     icon: Compass
   },
   {

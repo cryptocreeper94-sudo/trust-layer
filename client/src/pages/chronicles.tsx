@@ -70,7 +70,7 @@ const CORE_FEATURES = [
     id: "you",
     title: "YOU Are The Hero",
     subtitle: "Not An Avatar. YOU.",
-    description: "This is YOUR parallel self stepping into history. Your instincts, values, and strategic mind - unleashed across 70+ eras. Not puppeteering a character. Being one.",
+    description: "This is YOUR parallel self stepping into history. Your instincts, values, and strategic mind - unleashed across 10 verifiable historical eras. Not puppeteering a character. Being one.",
     longDescription: "What would YOU do in ancient Rome? How would YOUR mind navigate the French Revolution? This isn't role-playing someone else - it's discovering what the real you becomes when placed in extraordinary worlds. Your legend, your way.",
     icon: Eye,
     image: fantasyHeroes,
@@ -112,7 +112,7 @@ const CORE_FEATURES = [
   },
   {
     id: "eras",
-    title: "70+ Mission Theaters",
+    title: "10 Historical Eras",
     subtitle: "All of Human History",
     description: "From prehistoric times to the Industrial Revolution. Viking raids to Renaissance intrigue. Every era is a new campaign with unique missions and rewards.",
     longDescription: "This isn't 4-6 generic settings. It's EVERY recognizable historical moment as a playable campaign. Egyptian dynasties. Roman gladiators. Wild West outlaws. Renaissance intrigue. Each era offers unique missions, factions, and legend-tier rewards.",

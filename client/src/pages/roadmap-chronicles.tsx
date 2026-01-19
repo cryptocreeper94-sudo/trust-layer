@@ -44,7 +44,7 @@ const CHRONICLES_PHASES: Phase[] = [
     icon: <Crown className="w-6 h-6" />,
     image: medievalKingdom,
     milestones: [
-      { id: "sz1", title: "Medieval Era (Age of Crowns)", description: "First of 70+ eras - medieval kingdom with 5 factions", status: "completed", isRequired: true },
+      { id: "sz1", title: "Medieval Era (Age of Crowns)", description: "First of 10 verifiable historical eras - medieval kingdom with 5 factions", status: "completed", isRequired: true },
       { id: "sz2", title: "AI NPC Conversations", description: "Guardian-verified GPT-4o powered NPCs with persistent memory", status: "completed", isRequired: true },
       { id: "sz3", title: "Chronicle Proofs", description: "Soulbound NFTs recording major decisions on-chain", status: "completed", isRequired: true },
       { id: "sz4", title: "Voice Cloning Technology", description: "ElevenLabs/Resemble.ai integration for NPC voices", status: "completed", isRequired: true },
@@ -93,10 +93,10 @@ const CHRONICLES_PHASES: Phase[] = [
     status: "upcoming",
     targetDate: "TBD",
     icon: <Globe className="w-6 h-6" />,
-    image: quantumRealm,
+    image: medievalKingdom,
     milestones: [
-      { id: "m13", title: "Multi-Era Gameplay", description: "Play across different historical periods", status: "pending", isRequired: true },
-      { id: "m14", title: "Time-Travel Echoes", description: "Past actions affect future timelines", status: "pending", isRequired: true },
+      { id: "m13", title: "Multi-Era Gameplay", description: "Play across different verified historical periods", status: "pending", isRequired: true },
+      { id: "m14", title: "Generational Legacy", description: "Your choices echo through family lines and historical records", status: "pending", isRequired: true },
       { id: "m15", title: "Full-Scale World Simulation", description: "Thousands of AI agents, persistent world state", status: "pending", isRequired: true },
       { id: "m16", title: "Community Creation Tools", description: "Build and share your own scenarios, characters, and worlds", status: "pending", isRequired: true },
       { id: "m17", title: "Global Server Infrastructure", description: "Dedicated servers worldwide for smooth experience", status: "pending", isRequired: true },

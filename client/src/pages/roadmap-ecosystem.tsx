@@ -114,7 +114,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
     icon: <Gamepad2 className="w-6 h-6" />,
     image: medievalKingdom,
     milestones: [
-      { id: "sz1", title: "Medieval Era (Age of Crowns)", description: "First of 70+ eras - BETA v0.1 playable now", status: "completed", isRequired: true },
+      { id: "sz1", title: "Medieval Era (Age of Crowns)", description: "First of 10 verifiable historical eras - BETA v0.1 playable now", status: "completed", isRequired: true },
       { id: "sz2", title: "AI NPC Conversations", description: "Guardian-verified GPT-4o powered NPCs", status: "completed", isRequired: true },
       { id: "sz3", title: "Chronicle Proofs", description: "Soulbound NFTs recording major decisions on-chain", status: "completed", isRequired: true },
       { id: "sz4", title: "5-Axis Emotion System", description: "Arousal, Valence, Social Cohesion, Fear, Ambition", status: "completed", isRequired: true },
@@ -135,7 +135,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
       { id: "e22", title: "Token Migration", description: "Testnet to mainnet token conversion", status: "pending", isRequired: true },
       { id: "e23", title: "Chronicles 20+ Eras", description: "Expand from Medieval to 20+ historical eras", status: "pending", isRequired: true },
       { id: "e24", title: "Exchange Listings", description: "CEX and DEX trading availability", status: "pending", isRequired: false },
-      { id: "e25", title: "70+ Eras & Full Scale", description: "Complete neverending world with all eras", status: "pending", isRequired: false },
+      { id: "e25", title: "10 Eras Complete", description: "All verifiable historical eras fully playable", status: "pending", isRequired: false },
       { id: "e26", title: "DarkWave Games Portal", description: "darkwavegames.io gaming ecosystem launch", status: "pending", isRequired: true },
     ],
   },

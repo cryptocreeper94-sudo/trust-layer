@@ -112,7 +112,7 @@ export default function DWSCExecutiveSummary() {
                 The ecosystem comprises three pillars: the <span className="text-purple-400 font-semibold">DWSC blockchain infrastructure</span>, 
                 the <span className="text-pink-400 font-semibold">DarkWave Portal</span> for ecosystem access and DeFi services, 
                 and <span className="text-amber-400 font-semibold">DarkWave Chronicles</span> - an unprecedented adventure platform 
-                spanning 70+ mission theaters where YOU are the hero that serves as the flagship application demonstrating 
+                spanning 10 verifiable historical eras where YOU are the hero that serves as the flagship application demonstrating 
                 the chain's capabilities.
               </p>
               <p className="text-white/80 leading-relaxed">

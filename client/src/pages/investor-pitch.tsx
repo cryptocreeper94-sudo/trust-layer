@@ -64,7 +64,7 @@ const milestones = [
   { date: "Apr 11, 2026", title: "TGE (Token Launch)", desc: "Mainnet launch & token generation", status: "upcoming" },
   { date: "Q2 2026", title: "DeFi Suite Launch", desc: "DEX, Staking, Bridge go live", status: "planned" },
   { date: "Q3 2026", title: "Chronicles Expansion", desc: "20+ eras, full economy, mobile companion", status: "planned" },
-  { date: "Q4 2026", title: "70+ Eras & Scale", desc: "Full neverending world with all eras", status: "planned" }
+  { date: "Q4 2026", title: "10 Eras Complete", desc: "All verifiable historical eras fully playable", status: "planned" }
 ];
 
 const investmentThesis = [
@@ -76,7 +76,7 @@ const investmentThesis = [
   },
   {
     title: "Chronicles: The Parallel Self Game",
-    description: "DarkWave Chronicles (BETA v0.1 live now) - You navigate 70+ eras as YOUR parallel self. AI NPCs, Chronicle Proofs, voice cloning - infrastructure for immersive entertainment.",
+    description: "DarkWave Chronicles (BETA v0.1 live now) - You navigate 10 verifiable historical eras as YOUR parallel self. AI NPCs, Chronicle Proofs, voice cloning - infrastructure for immersive entertainment.",
     icon: Gamepad2,
     gradient: "from-purple-500 to-pink-600"
   },

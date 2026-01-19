@@ -61,7 +61,7 @@ const CORE_PILLARS = [
   },
   {
     icon: Compass,
-    title: "70+ Historical Eras",
+    title: "10 Historical Eras",
     desc: "From Stone Age to Industrial Revolution. Every era you've dreamed of.",
     color: "from-emerald-500 to-teal-600",
     image: ancientLibrary
@@ -69,7 +69,7 @@ const CORE_PILLARS = [
 ];
 
 const SOCIAL_STATS = [
-  { label: "Eras Available", value: "70+", icon: <Globe className="w-4 h-4 text-purple-400" /> },
+  { label: "Eras Available", value: "10", icon: <Globe className="w-4 h-4 text-purple-400" /> },
   { label: "Founding Members", value: "Join First 1,000", icon: <Users className="w-4 h-4 text-cyan-400" /> },
   { label: "Target Launch", value: "2026", icon: <Rocket className="w-4 h-4 text-pink-400" /> },
   { label: "Blockchain", value: "SIG", icon: <Coins className="w-4 h-4 text-amber-400" /> },
