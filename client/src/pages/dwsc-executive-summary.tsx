@@ -29,18 +29,31 @@ import {
   Activity,
   Wallet,
   Gift,
-  BadgeCheck
+  BadgeCheck,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import { Footer } from "@/components/footer";
 import { GamesComingSoonModal } from "@/components/games-coming-soon-modal";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 
 export default function DWSCExecutiveSummary() {
   const [showGamesModal, setShowGamesModal] = useState(false);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  const scrollCarousel = (direction: 'left' | 'right') => {
+    if (carouselRef.current) {
+      const scrollAmount = 280;
+      carouselRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
@@ -273,7 +286,22 @@ export default function DWSCExecutiveSummary() {
               <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none" />
               <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none" />
               
-              <div className="flex gap-4 overflow-x-auto scrollbar-hide px-8 py-4 snap-x snap-mandatory">
+              <button
+                onClick={() => scrollCarousel('left')}
+                className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 items-center justify-center hover:bg-white/20 transition-colors"
+                data-testid="carousel-prev"
+              >
+                <ChevronLeft className="w-5 h-5 text-white" />
+              </button>
+              <button
+                onClick={() => scrollCarousel('right')}
+                className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 items-center justify-center hover:bg-white/20 transition-colors"
+                data-testid="carousel-next"
+              >
+                <ChevronRight className="w-5 h-5 text-white" />
+              </button>
+              
+              <div ref={carouselRef} className="flex gap-4 overflow-x-auto scrollbar-hide px-8 py-4 snap-x snap-mandatory">
                 {[
                   { title: "Pulse AI", desc: "ML-powered market predictions with verified accuracy tracking. Fear & Greed index, multi-timeframe analysis, transparent win/loss tracking.", icon: Zap, color: "amber", href: "/pulse" },
                   { title: "Strike Agent", desc: "Solana memecoin sniper with AI risk scoring. Honeypot detection, liquidity analysis, one-click Phantom integration.", icon: Target, color: "red", href: "/strike-agent" },
@@ -343,7 +371,8 @@ export default function DWSCExecutiveSummary() {
             </div>
             
             <p className="text-center text-white/40 text-xs mt-4">
-              ← Swipe to explore all features →
+              <span className="md:hidden">← Swipe to explore all features →</span>
+              <span className="hidden md:inline">Use arrows or scroll to explore all features</span>
             </p>
           </div>
         </section>
