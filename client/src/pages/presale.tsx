@@ -153,10 +153,18 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
   const [initializedFromWallet, setInitializedFromWallet] = useState(false);
   
   useEffect(() => {
-    if (!initializedFromAuth && authUser) {
-      if (authUser.email) setEmail(authUser.email);
-      if (authUser.displayName) setName(authUser.displayName);
-      else if (authUser.firstName) setName(authUser.firstName);
+    if (!initializedFromAuth) {
+      const savedName = localStorage.getItem("dw_presale_name");
+      const savedEmail = localStorage.getItem("dw_presale_email");
+      if (authUser) {
+        if (authUser.email) setEmail(authUser.email);
+        if (authUser.displayName) setName(authUser.displayName);
+        else if (authUser.firstName) setName(authUser.firstName);
+        else if (savedName) setName(savedName);
+      } else {
+        if (savedName) setName(savedName);
+        if (savedEmail) setEmail(savedEmail);
+      }
       setInitializedFromAuth(true);
     }
   }, [authUser, initializedFromAuth]);
@@ -218,6 +226,8 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
       return res.json();
     },
     onSuccess: (data) => {
+      if (name.trim()) localStorage.setItem("dw_presale_name", name.trim());
+      if (email.trim()) localStorage.setItem("dw_presale_email", email.trim());
       const redirectUrl = data.url || data.checkoutUrl;
       if (redirectUrl) {
         window.location.href = redirectUrl;
@@ -621,7 +631,7 @@ const TIER_DETAILS: Record<string, { benefits: string[]; description: string }> 
 
 function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
   const { toast } = useToast();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(() => localStorage.getItem("dw_presale_email") || "");
   const [showModal, setShowModal] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto">("card");
   const tierImages = [quantumRealm, deepSpace, cyberpunkCity, fantasyWorld];
@@ -658,6 +668,7 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
       return res.json();
     },
     onSuccess: (data) => {
+      if (email.trim()) localStorage.setItem("dw_presale_email", email.trim());
       const redirectUrl = data.url || data.checkoutUrl;
       if (redirectUrl) {
         window.location.href = redirectUrl;

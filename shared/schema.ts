@@ -2373,6 +2373,7 @@ export const presalePurchases = pgTable("presale_purchases", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: text("user_id"),
   walletAddress: text("wallet_address"),
+  buyerName: text("buyer_name"),
   email: text("email"),
   tokenAmount: integer("token_amount").notNull().default(0),
   usdAmountCents: integer("usd_amount_cents").notNull().default(0),

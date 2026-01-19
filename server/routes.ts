@@ -7871,17 +7871,18 @@ export async function registerRoutes(
   // Presale crypto checkout via Coinbase Commerce
   app.post("/api/presale/crypto-checkout", async (req, res) => {
     try {
-      const { email, tier, amountCents } = req.body;
+      const { email, name, walletAddress, tier, amountCents } = req.body;
       
       if (!email || !email.includes("@")) {
         return res.status(400).json({ error: "Valid email required" });
       }
       
       const TIER_CONFIG: Record<string, { amount: number; bonus: number; name: string }> = {
-        genesis: { amount: 100000, bonus: 25, name: "Genesis Tier" },
-        founder: { amount: 50000, bonus: 15, name: "Founder Tier" },
-        pioneer: { amount: 25000, bonus: 10, name: "Pioneer Tier" },
-        early_bird: { amount: 10000, bonus: 5, name: "Early Bird Tier" },
+        starter: { amount: 1000, bonus: 0, name: "Starter Tier" },
+        early_bird: { amount: 2500, bonus: 5, name: "Early Bird Tier" },
+        pioneer: { amount: 5000, bonus: 10, name: "Pioneer Tier" },
+        founder: { amount: 10000, bonus: 15, name: "Founder Tier" },
+        genesis: { amount: 25000, bonus: 25, name: "Genesis Tier" },
       };
       
       const tierConfig = TIER_CONFIG[tier];
@@ -7905,10 +7906,12 @@ export async function registerRoutes(
       
       // Create a pending record first to get an ID we can use in the redirect
       const pendingResult = await db.execute(sql`
-        INSERT INTO presale_purchases (stripe_payment_intent_id, email, usd_amount_cents, token_amount, tier, status, payment_method, created_at)
+        INSERT INTO presale_purchases (stripe_payment_intent_id, email, buyer_name, wallet_address, usd_amount_cents, token_amount, tier, status, payment_method, created_at)
         VALUES (
           ${`coinbase_pending_${Date.now()}`}, 
-          ${email}, 
+          ${email},
+          ${name || null},
+          ${walletAddress || null},
           ${finalAmount}, 
           ${totalTokens},
           ${tier || "custom"},
