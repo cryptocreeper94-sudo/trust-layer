@@ -19,7 +19,7 @@ import { GlassCard } from "@/components/glass-card";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { SimpleLoginModal } from "@/components/simple-login";
 import { GamesComingSoonModal } from "@/components/games-coming-soon-modal";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { WalletButton } from "@/components/wallet-button";
 import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.png";
@@ -343,7 +343,15 @@ export default function Home() {
   const { user, loading: authLoading, isAuthenticated, displayName, username, logout } = useSimpleAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showGamesModal, setShowGamesModal] = useState(false);
+  const [showPresalePopup, setShowPresalePopup] = useState(false);
   usePageAnalytics();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowPresalePopup(true);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, []);
   
   const { data: apps = [], isLoading: appsLoading } = useQuery({
     queryKey: ["ecosystem-apps"],
@@ -1023,6 +1031,63 @@ export default function Home() {
       </section>
 
       <Footer />
+
+      <Dialog open={showPresalePopup} onOpenChange={setShowPresalePopup}>
+        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white max-w-md shadow-[0_0_60px_rgba(0,200,255,0.3)]">
+          <DialogHeader>
+            <DialogTitle className="text-3xl font-bold text-center">
+              <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Signal Presale is LIVE
+              </span>
+            </DialogTitle>
+            <DialogDescription className="text-gray-300 text-center pt-2 text-base">
+              Ground floor opportunity - don't miss out
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="flex items-center justify-center">
+              <img src={darkwaveLogo} alt="Signal" className="w-24 h-24 animate-pulse" />
+            </div>
+            
+            <div className="text-center space-y-2">
+              <p className="text-4xl font-bold text-white">$0.001 <span className="text-lg text-gray-400">per SIG</span></p>
+              <p className="text-lg text-cyan-400 font-medium">Launch price: $0.01 (10x potential)</p>
+            </div>
+            
+            <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg p-4">
+              <p className="text-base text-green-400 text-center font-bold">
+                Up to 20% BONUS tokens for early supporters
+              </p>
+            </div>
+            
+            <div className="text-center text-sm text-gray-400 space-y-1">
+              <p>No wallet needed - just your email</p>
+              <p>Card & crypto payments accepted</p>
+            </div>
+          </div>
+          
+          <div className="space-y-3">
+            <Link href="/presale">
+              <Button 
+                onClick={() => setShowPresalePopup(false)}
+                className="w-full py-6 text-xl font-bold bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg shadow-purple-500/25"
+                data-testid="button-go-to-presale"
+              >
+                <Rocket className="w-6 h-6 mr-2" />
+                Get Your Signal Now
+              </Button>
+            </Link>
+            <button 
+              onClick={() => setShowPresalePopup(false)}
+              className="w-full text-sm text-gray-500 hover:text-gray-300 py-2"
+              data-testid="button-dismiss-presale"
+            >
+              Maybe later
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
