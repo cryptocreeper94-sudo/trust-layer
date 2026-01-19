@@ -2,16 +2,13 @@ import express, { type Express, Request, Response, NextFunction } from "express"
 import fs from "fs";
 import path from "path";
 
-type AppDomain = "dwsc" | "games" | "studios" | "chronicles" | "chronochat";
+type AppDomain = "dwsc" | "games" | "chronicles" | "chronochat";
 
 function getAppFromHost(hostname: string): AppDomain {
   const host = hostname.toLowerCase();
   
   if (host.includes("darkwavegames") || host.includes("games.")) {
     return "games";
-  }
-  if (host.includes("darkwavestudios") || host.includes("studios.")) {
-    return "studios";
   }
   if (host.includes("yourlegacy") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
     return "chronicles";
@@ -42,13 +39,6 @@ const APP_CONFIG: Record<AppDomain, {
     title: "DarkWave Games",
     description: "Provably fair blockchain games. Win real SIG with instant payouts.",
     icon: "/icons/games-512x512.png",
-  },
-  studios: {
-    manifest: "/manifest-studios.webmanifest",
-    themeColor: "#06b6d4",
-    title: "DarkWave Studios",
-    description: "Building the future of blockchain technology. DarkWave Studios, LLC.",
-    icon: "/icons/studios-512x512.png",
   },
   chronicles: {
     manifest: "/manifest-chrono.webmanifest",

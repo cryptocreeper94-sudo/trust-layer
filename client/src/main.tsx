@@ -7,9 +7,6 @@ function getManifestForDomain(): string {
   if (host.includes("darkwavegames") || host.includes("games.")) {
     return "/manifest-games.webmanifest";
   }
-  if (host.includes("darkwavestudios") || host.includes("studios.")) {
-    return "/manifest-studios.webmanifest";
-  }
   if (host.includes("yourlegacy") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
     return "/manifest-chrono.webmanifest";
   }
@@ -23,9 +20,6 @@ function getThemeColorForDomain(): string {
   const host = window.location.hostname.toLowerCase();
   if (host.includes("darkwavegames") || host.includes("games.")) {
     return "#ec4899";
-  }
-  if (host.includes("darkwavestudios") || host.includes("studios.")) {
-    return "#06b6d4";
   }
   if (host.includes("yourlegacy") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
     return "#a855f7";

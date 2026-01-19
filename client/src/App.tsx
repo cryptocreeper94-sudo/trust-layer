@@ -31,7 +31,6 @@ function PageLoader() {
 
 // Lazy-loaded pages - code splitting for smaller initial bundle
 const GamesHome = lazy(() => import("@/pages/games-home"));
-const StudiosHome = lazy(() => import("@/pages/studios-home"));
 const GameDeveloper = lazy(() => import("@/pages/game-developer"));
 const Dashboard = lazy(() => import("@/pages/dashboard"));
 const Developers = lazy(() => import("@/pages/developers"));
@@ -269,19 +268,6 @@ function GamesRouter() {
   );
 }
 
-function StudiosRouter() {
-  return (
-    <Suspense fallback={<PageLoader />}>
-      <ScrollToTop />
-      <Switch>
-        <Route path="/" component={StudiosHome} />
-        <Route path="/terms" component={Terms} />
-        <Route path="/privacy" component={Privacy} />
-        <Route component={NotFound} />
-      </Switch>
-    </Suspense>
-  );
-}
 
 function ChronoRouter() {
   return (
@@ -518,9 +504,6 @@ function Router() {
   
   if (appType === "games") {
     return <GamesRouter />;
-  }
-  if (appType === "studios") {
-    return <StudiosRouter />;
   }
   if (appType === "chrono") {
     return <ChronoRouter />;

@@ -1419,6 +1419,73 @@ const appendicesChapters: Chapter[] = [
             <p className="text-sm text-slate-300 mt-2">Calcifies the pineal gland more than any other soft tissue. Delivered through water supply, toothpaste, dental treatments. Effect: Jams the spiritual receiver, makes population programmable.</p>
             <p className="text-sm text-slate-400 mt-2">See: Chapter 27, Chapter 29</p>
           </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-purple-500">
+            <p className="font-bold text-white">Vanity / The Mirror Trap</p>
+            <p className="text-sm text-slate-400 mt-1">Hebrew: Hevel (הֶבֶל) - vapor, breath, emptiness</p>
+            <p className="text-sm text-slate-300 mt-2">Excessive focus on one's own appearance; redirection of worship from Creator to self. One of the seven deadly sins, enabled by constant reflection (mirrors, screens, cameras). The Narcissus myth - dying while staring at one's own reflection.</p>
+            <p className="text-sm text-slate-400 mt-2">See: Chapter 28</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-cyan-500">
+            <p className="font-bold text-white">Faith / Emunah (אֱמוּנָה)</p>
+            <p className="text-sm text-slate-300 mt-2">NOT blind belief; firmness, steadfastness, fidelity, reliability. Hebrew root: Aman - to confirm, to support, to be established. Trust built on relationship and experience. "Faith is the SUBSTANCE...the EVIDENCE" (Hebrews 11:1) - faith IS evidence, not absence of evidence.</p>
+            <p className="text-sm text-slate-400 mt-2">See: Chapter 28</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-pink-500">
+            <p className="font-bold text-white">Mark of the Father / Mark of the Beast</p>
+            <p className="text-sm text-slate-300 mt-2">Mark of Father: Forehead (where the pineal gland sits) - open connection to Yahuah through functioning pineal. Mark of Beast: Heart and Hand - where the antichrist spirit is invited through prayer to counterfeit name, and hand does the work of whatever spirit resides in the heart. Not microchip - about what you worship and what you do.</p>
+            <p className="text-sm text-slate-400 mt-2">See: Chapter 26</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-red-500">
+            <p className="font-bold text-white">Antichrist Spirit</p>
+            <p className="text-sm text-slate-300 mt-2">NOT a future man; a spirit invited willingly but unknowingly into the heart. Enters through prayer to the substituted name. "Anti-Christ" opposes already-substituted term - even opposition is controlled.</p>
+            <p className="text-sm text-slate-400 mt-2">See: Chapter 26</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-amber-500">
+            <p className="font-bold text-white">Amusement / Television / Black Mirror</p>
+            <p className="text-sm text-slate-300 mt-2">Amusement: A (without) + Muse (to think) = Without thought. Television: "Tell-a-vision" - content literally called "programming." Black Mirror (smartphone): Portable scrying device - average person gazes into black mirror 96-150 times daily, receiving curated "visions."</p>
+            <p className="text-sm text-slate-400 mt-2">See: Chapter 27, Chapter 30</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-purple-500">
+            <p className="font-bold text-white">Spelling / Spellcasting</p>
+            <p className="text-sm text-slate-300 mt-2">The arrangement of letters to create effect. Words shape reality, define thought, control perception. Examples: "Gay" redefined, "vaccine" redefined, "gender" redefined.</p>
+            <p className="text-sm text-slate-400 mt-2">See: Chapter 10</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-cyan-500">
+            <p className="font-bold text-white">False Flag Operations</p>
+            <p className="text-sm text-slate-300 mt-2">Attack or event designed to appear committed by someone other than actual perpetrators. Documented examples: Reichstag Fire (1933), Gulf of Tonkin (1964), Operation Northwoods (1962 - declassified), USS Liberty (1967). Pattern: Shocking event → immediate perpetrator → emergency response → powers expanded → questioners labeled.</p>
+            <p className="text-sm text-slate-400 mt-2">See: Chapter 25B</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-green-500">
+            <p className="font-bold text-white">Gehenna (גֵּי הִנֹּם)</p>
+            <p className="text-sm text-slate-300 mt-2">Valley of Hinnom - garbage dump outside Jerusalem where refuse was burned and destroyed. Mistranslated as "Hell" implying eternal conscious torment. Truth: Destruction, not preservation in torment. "The wages of sin is death" - not eternal life in agony.</p>
+            <p className="text-sm text-slate-400 mt-2">See: Chapter 21</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-pink-500">
+            <p className="font-bold text-white">Days of Noah</p>
+            <p className="text-sm text-slate-300 mt-2">"As the days of Noah were, so shall also the coming of the Son of Adam be" (Matthew 24:37-39). Same patterns repeating: Nephilim activity, genetic manipulation, corruption of flesh, violence, forbidden knowledge. Modern equivalents: CRISPR, mRNA, pharmaceutical sorcery (pharmakeia).</p>
+            <p className="text-sm text-slate-400 mt-2">See: Chapter 35</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-amber-500">
+            <p className="font-bold text-white">Layers of Deception (Seven Identified)</p>
+            <p className="text-sm text-slate-300 mt-2">1) Surface narrative 2) "Conspiracy theory" containment 3) Controlled opposition 4) Institutional religion redirect 5) The 1948 deception 6) The Antichrist redirect (watching for future man instead of present spirit) 7) Hidden in plain sight. Navigation only possible through direct connection to signal.</p>
+            <p className="text-sm text-slate-400 mt-2">See: Chapter 36</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-cyan-500">
+            <p className="font-bold text-white">Tartaria / Mud Flood</p>
+            <p className="text-sm text-slate-300 mt-2">Tartaria: Theorized previous civilization more advanced than officially acknowledged. Evidence: Buried first floors globally, impossibly ornate architecture, orphan trains, World's Fair structures. Mud Flood: Cataclysmic event that buried the lower levels of buildings worldwide.</p>
+            <p className="text-sm text-slate-400 mt-2">See: Chapter 14, 16</p>
+          </div>
         </div>
         
         <h3 className="text-xl font-bold text-cyan-400 mb-4">Language Inversions Summary</h3>
@@ -1449,6 +1516,328 @@ const appendicesChapters: Chapter[] = [
             <span className="text-slate-500">→</span>
             <span className="text-slate-300">Greco-Roman term; original is Qodesh (set-apart)</span>
           </div>
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-red-400 font-medium">Christ</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Greek mystery religion term for "anointed"</span>
+          </div>
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-red-400 font-medium">Church</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Greek "kuriakon" replacing Hebrew "qahal" (assembly)</span>
+          </div>
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-red-400 font-medium">Amen</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Possibly invoking Amun, Egyptian sun god</span>
+          </div>
+        </div>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">Calendar Inversions Summary</h3>
+        <div className="grid gap-3 mb-6">
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-amber-400 font-medium">Sunday</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Day of the sun god, replacing seventh-day Sabbath</span>
+          </div>
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-amber-400 font-medium">Christmas</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Saturnalia/Sol Invictus birthday, replacing actual birth timing</span>
+          </div>
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-amber-400 font-medium">Easter</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Feast of Ishtar/Eostre, replacing Passover/Firstfruits</span>
+          </div>
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-amber-400 font-medium">Halloween</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Samhain, Celtic festival of the dead, normalized</span>
+          </div>
+        </div>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">Historical Inversions Summary</h3>
+        <div className="grid gap-3 mb-6">
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-purple-400 font-medium">Dark Ages</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Possibly the Millennial Reign, deliberately obscured</span>
+          </div>
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-purple-400 font-medium">Tartaria erasure</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Removes evidence of previous advanced civilization</span>
+          </div>
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-purple-400 font-medium">Orphan trains</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Covers population replacement after reset events</span>
+          </div>
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-purple-400 font-medium">Dinosaurs</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Dragons rebranded</span>
+          </div>
+        </div>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">Cosmological Inversions Summary</h3>
+        <div className="grid gap-3 mb-6">
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-cyan-400 font-medium">Globe Earth</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Replaces enclosed realm/plane cosmology</span>
+          </div>
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-cyan-400 font-medium">Millions of years</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Replaces young creation timeline</span>
+          </div>
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-cyan-400 font-medium">Evolution</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Replaces divine creation and design</span>
+          </div>
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-cyan-400 font-medium">Aliens</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Replaces fallen angels as explanation for phenomena</span>
+          </div>
+        </div>
+      </>
+    )
+  },
+  {
+    id: "timeline-deception",
+    title: "Timeline of Deception",
+    content: (
+      <>
+        <p className="text-purple-400 font-medium mb-6">A chronological overview of the patterns traced throughout this work.</p>
+        
+        <div className="space-y-6">
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-red-500">
+            <p className="font-bold text-white text-lg">The Rebellion (Before Time)</p>
+            <ul className="text-sm text-slate-300 mt-2 list-disc list-inside space-y-1">
+              <li>The fall of the Watchers</li>
+              <li>The corruption of humanity through the Nephilim</li>
+              <li>The necessity of the Flood</li>
+            </ul>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-cyan-500">
+            <p className="font-bold text-white text-lg">The Reset (The Flood)</p>
+            <ul className="text-sm text-slate-300 mt-2 list-disc list-inside space-y-1">
+              <li>Destruction of the corrupted world</li>
+              <li>Preservation of Noah and his family</li>
+              <li>The covenant of the rainbow</li>
+            </ul>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-amber-500">
+            <p className="font-bold text-white text-lg">The Babylonian Confusion</p>
+            <ul className="text-sm text-slate-300 mt-2 list-disc list-inside space-y-1">
+              <li>The Tower of Babel</li>
+              <li>The scattering of languages</li>
+              <li>The beginning of diverse deceptions</li>
+            </ul>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-purple-500">
+            <p className="font-bold text-white text-lg">The Roman Hijacking (1st-4th Century AD)</p>
+            <ul className="text-sm text-slate-300 mt-2 list-disc list-inside space-y-1">
+              <li>The crucifixion of the Messiah</li>
+              <li>The substitution of names</li>
+              <li>The merger of Christianity with Roman imperialism under Constantine</li>
+            </ul>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-green-500">
+            <p className="font-bold text-white text-lg">The Dark Ages / Millennial Reign? (5th-15th Century)</p>
+            <ul className="text-sm text-slate-300 mt-2 list-disc list-inside space-y-1">
+              <li>The possible thousand years of peace</li>
+              <li>The erasure from memory</li>
+              <li>The "dark" age that wasn't dark</li>
+            </ul>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-pink-500">
+            <p className="font-bold text-white text-lg">The Modern Reset (15th-19th Century)</p>
+            <ul className="text-sm text-slate-300 mt-2 list-disc list-inside space-y-1">
+              <li>The mud flood events</li>
+              <li>The Tartarian erasure</li>
+              <li>The orphan trains and population replacement</li>
+              <li>The rewriting of history</li>
+            </ul>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-red-500">
+            <p className="font-bold text-white text-lg">Satan's Little Season (Present)</p>
+            <ul className="text-sm text-slate-300 mt-2 list-disc list-inside space-y-1">
+              <li>The bloodline consolidation of power</li>
+              <li>The technological acceleration</li>
+              <li>The spiritual blindness</li>
+              <li>The approaching end</li>
+            </ul>
+          </div>
+        </div>
+      </>
+    )
+  },
+  {
+    id: "scripture-cross-reference",
+    title: "Cross-Reference of Key Scriptures",
+    content: (
+      <>
+        <p className="text-purple-400 font-medium mb-6">All references from Cepher translation where possible.</p>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">On the Name - Why It Matters</h3>
+        <div className="space-y-2 mb-6 text-sm">
+          <p className="text-slate-300"><span className="text-cyan-400">Shemoth (Exodus) 3:15</span> - "This is my name forever, and this is my memorial unto all generations"</p>
+          <p className="text-slate-300"><span className="text-cyan-400">Yo'el (Joel) 2:32</span> - "Whoever calls on the name of Yahuah shall be delivered"</p>
+          <p className="text-slate-300"><span className="text-cyan-400">Yahuchanon (John) 17:6</span> - "I have manifested Your name to the men whom You gave me"</p>
+          <p className="text-slate-300"><span className="text-cyan-400">Yesha'yahu (Isaiah) 42:8</span> - "I am Yahuah: that is my name: and my glory will I not give to another"</p>
+          <p className="text-slate-300"><span className="text-cyan-400">Ma'asiym (Acts) 4:12</span> - "Neither is there salvation in any other: for there is no other name under heaven given among men, whereby we must be saved"</p>
+        </div>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">On the Eye/Pineal - The True Receiver</h3>
+        <div className="space-y-2 mb-6 text-sm">
+          <p className="text-slate-300"><span className="text-purple-400">Mattithyahu (Matthew) 6:22-23</span> - "The light of the body is the eye: if therefore your eye be single, your whole body shall be full of light."</p>
+          <p className="text-slate-300"><span className="text-purple-400">Bere'shiyth (Genesis) 32:30</span> - "And Ya'aqov called the name of the place Peniy'el: for I have seen Elohim face to face"</p>
+          <p className="text-slate-300"><span className="text-purple-400">Yirmeyahu (Jeremiah) 5:21</span> - "Hear now this, O foolish people, and without understanding; which have eyes, and see not"</p>
+        </div>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">On the Watchers and Nephilim</h3>
+        <div className="space-y-2 mb-6 text-sm">
+          <p className="text-slate-300"><span className="text-pink-400">Bere'shiyth (Genesis) 6:1-4</span> - The sons of Elohim and daughters of men; Nephilim on the earth</p>
+          <p className="text-slate-300"><span className="text-pink-400">Yahudah (Jude) 1:6</span> - "The angels which kept not their first estate, but left their own habitation"</p>
+          <p className="text-slate-300"><span className="text-pink-400">Bere'shiyth (Genesis) 6:4</span> - "There were giants in the earth in those days; and also after that" (Nephilim before AND after flood)</p>
+        </div>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">On the Little Season and End Times</h3>
+        <div className="space-y-2 mb-6 text-sm">
+          <p className="text-slate-300"><span className="text-amber-400">Chizayon (Revelation) 20:7-8</span> - "When the thousand years are expired, Satan shall be loosed out of his prison"</p>
+          <p className="text-slate-300"><span className="text-amber-400">Mattithyahu (Matthew) 24:24</span> - "False mashiachs, and false prophets, and shall show great signs and wonders"</p>
+          <p className="text-slate-300"><span className="text-amber-400">Chizayon (Revelation) 12:12</span> - "The devil is come down unto you, having great wrath, because he knows that he has but a short time"</p>
+        </div>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">On Discernment and Testing</h3>
+        <div className="space-y-2 mb-6 text-sm">
+          <p className="text-slate-300"><span className="text-green-400">Yahuchanon Ri'shon (1 John) 4:1</span> - "Beloved, believe not every spirit, but try the spirits whether they are of Elohim"</p>
+          <p className="text-slate-300"><span className="text-green-400">Tasloniqiym Ri'shon (1 Thessalonians) 5:21</span> - "Test all things; hold fast that which is good"</p>
+          <p className="text-slate-300"><span className="text-green-400">Mattithyahu (Matthew) 7:16</span> - "You shall know them by their fruits"</p>
+          <p className="text-slate-300"><span className="text-green-400">Mishlei (Proverbs) 25:2</span> - "It is the glory of Elohim to conceal a thing: but the honour of kings is to search out a matter"</p>
+        </div>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">On the Mark - Forehead and Hand</h3>
+        <div className="space-y-2 mb-6 text-sm">
+          <p className="text-slate-300"><span className="text-red-400">Devariym (Deuteronomy) 6:6-8</span> - "These words... shall be as frontlets between your eyes"</p>
+          <p className="text-slate-300"><span className="text-red-400">Chizayon (Revelation) 13:16-17</span> - "He causes all... to receive a mark in their right hand, or in their foreheads"</p>
+          <p className="text-slate-300"><span className="text-red-400">Chizayon (Revelation) 14:1</span> - "Having his Father's name written in their foreheads"</p>
+        </div>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">On the Inversion of Good and Evil</h3>
+        <div className="space-y-2 mb-6 text-sm">
+          <p className="text-slate-300"><span className="text-purple-400">Yesha'yahu (Isaiah) 5:20</span> - "Woe unto them that call evil good, and good evil; that put darkness for light, and light for darkness"</p>
+          <p className="text-slate-300"><span className="text-purple-400">Romaiym (Romans) 1:25</span> - "Who changed the truth of Elohim into a lie, and worshipped and served the creature more than the Creator"</p>
+        </div>
+      </>
+    )
+  },
+  {
+    id: "research-directions",
+    title: "Research Directions & Documented Sources",
+    content: (
+      <>
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">Research Directions</h3>
+        <p className="text-slate-400 mb-4">For those who wish to investigate further, these areas warrant attention:</p>
+        
+        <div className="grid md:grid-cols-2 gap-4 mb-8">
+          <div className="p-4 rounded-lg bg-slate-800/50">
+            <p className="font-bold text-purple-400 mb-2">Historical Research</p>
+            <ul className="text-sm text-slate-300 list-disc list-inside space-y-1">
+              <li>The Phantom Time Hypothesis</li>
+              <li>Tartaria and the Old World Order</li>
+              <li>The orphan train records</li>
+              <li>The World's Fairs of the late 1800s</li>
+            </ul>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50">
+            <p className="font-bold text-cyan-400 mb-2">Scientific Research</p>
+            <ul className="text-sm text-slate-300 list-disc list-inside space-y-1">
+              <li>Fluoride and pineal gland calcification</li>
+              <li>The effects of 432 Hz vs. 440 Hz tuning</li>
+              <li>Electromagnetic field effects on biology</li>
+              <li>DNA as information storage</li>
+            </ul>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50">
+            <p className="font-bold text-pink-400 mb-2">Scriptural Research</p>
+            <ul className="text-sm text-slate-300 list-disc list-inside space-y-1">
+              <li>The Book of Enoch (complete text)</li>
+              <li>The Book of Jasher</li>
+              <li>Septuagint vs. Masoretic Text differences</li>
+              <li>The original Hebrew names and meanings</li>
+            </ul>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50">
+            <p className="font-bold text-amber-400 mb-2">Alternative History</p>
+            <ul className="text-sm text-slate-300 list-disc list-inside space-y-1">
+              <li>The giants of old and their physical evidence</li>
+              <li>Dragon accounts in historical records</li>
+              <li>The buried first floors globally</li>
+              <li>Timeline and calendar manipulations</li>
+            </ul>
+          </div>
+        </div>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">Documented Sources and Verifiable References</h3>
+        <p className="text-slate-400 mb-4">The following claims made in this book can be verified through publicly available documents, official records, and primary sources.</p>
+        
+        <div className="space-y-4">
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-red-500">
+            <p className="font-bold text-white">CIA Dispatch 1035-960 - "Conspiracy Theorist" Origin</p>
+            <p className="text-sm text-slate-300 mt-1">Document dated April 1, 1967, declassified under FOIA. Available through National Archives, MaryFerrell.org. Instructions to CIA media assets on how to use the term to discredit Warren Commission critics.</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-purple-500">
+            <p className="font-bold text-white">Operation Northwoods</p>
+            <p className="text-sm text-slate-300 mt-1">Declassified 1997 under JFK Assassination Records Act. Available at National Security Archive, George Washington University. Joint Chiefs of Staff proposal to stage terrorist attacks on American soil and blame Cuba.</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-cyan-500">
+            <p className="font-bold text-white">Gulf of Tonkin - Declassified Admission</p>
+            <p className="text-sm text-slate-300 mt-1">NSA Historical Study declassified 2005. NSA historian Robert Hanyok's study confirming the August 4, 1964 attack never occurred.</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-amber-500">
+            <p className="font-bold text-white">Fluoride and Pineal Gland Calcification</p>
+            <p className="text-sm text-slate-300 mt-1">National Research Council (2006), "Fluoride in Drinking Water: A Scientific Review." Luke, J. (2001), "Fluoride Deposition in the Aged Human Pineal Gland," Caries Research 35:125-128.</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-green-500">
+            <p className="font-bold text-white">440 Hz Standard Tuning Change</p>
+            <p className="text-sm text-slate-300 mt-1">1953 ISO adoption (ISO 16). Previous standards varied; 432 Hz was common in classical period. Verification: International Organization for Standardization records.</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-pink-500">
+            <p className="font-bold text-white">Constantine's Sunday Law</p>
+            <p className="text-sm text-slate-300 mt-1">Date: March 7, 321 AD. Source: Codex Justinianus, Book 3, Title 12, Law 3. "On the venerable Day of the Sun let the magistrates and people residing in cities rest."</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-cyan-500">
+            <p className="font-bold text-white">Edward Bernays on Propaganda</p>
+            <p className="text-sm text-slate-300 mt-1">"Propaganda" (1928): "The conscious and intelligent manipulation of the organized habits and opinions of the masses is an important element in democratic society." Book is in public domain.</p>
+          </div>
+        </div>
+        
+        <div className="mt-8 p-6 border border-slate-600 rounded-lg">
+          <h4 className="text-lg font-bold text-white mb-2">Note on Sources</h4>
+          <p className="text-slate-400 text-sm">Where claims are marked as "theory" or "speculation," no sources are provided because they represent questions rather than established facts. The reader is encouraged to investigate these areas independently.</p>
+          <p className="text-slate-400 text-sm mt-2">Where claims are presented as documented history, sources exist and can be verified. The reader is encouraged to obtain and read primary documents rather than relying on secondary interpretations - including this book.</p>
+          <p className="text-cyan-400 text-sm mt-4 font-medium">Truth does not fear investigation. Only lies require protection from scrutiny.</p>
         </div>
       </>
     )
