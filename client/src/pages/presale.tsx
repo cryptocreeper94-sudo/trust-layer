@@ -1146,20 +1146,12 @@ function ReferralBanner({ referrer }: { referrer: string }) {
 export default function Presale() {
   const { user } = useAuth();
   const { evmAddress, solanaAddress } = useWallet();
-  const [showPresalePopup, setShowPresalePopup] = useState(false);
   const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
   const referrer = searchParams.get('ref') || searchParams.get('referrer');
   const emailParam = searchParams.get('email');
   const walletParam = searchParams.get('wallet');
   const purchaseEmail = user?.email || emailParam;
   const purchaseWallet = evmAddress || solanaAddress || walletParam;
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowPresalePopup(true);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
 
   const { data: tiersData, isLoading: tiersLoading } = useQuery<{ tiers: PresaleTier[] }>({
     queryKey: ["/api/presale/tiers"],
@@ -1330,52 +1322,6 @@ export default function Presale() {
           </Link>
         </div>
       </div>
-
-      <Dialog open={showPresalePopup} onOpenChange={setShowPresalePopup}>
-        <DialogContent className="bg-[#0a0f1c] border border-cyan-500/30 text-white max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-center">
-              <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Signal Presale is LIVE
-              </span>
-            </DialogTitle>
-            <DialogDescription className="text-gray-400 text-center pt-2">
-              Get in at the ground floor
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="space-y-4 py-4">
-            <div className="flex items-center justify-center">
-              <img src={darkwaveLogo} alt="Signal" className="w-20 h-20" />
-            </div>
-            
-            <div className="text-center space-y-2">
-              <p className="text-3xl font-bold text-white">$0.001 <span className="text-lg text-gray-400">per SIG</span></p>
-              <p className="text-sm text-cyan-400">Projected launch: $0.01 (10x potential)</p>
-            </div>
-            
-            <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-lg p-3">
-              <p className="text-sm text-green-400 text-center font-medium">
-                Up to 20% bonus tokens for early supporters
-              </p>
-            </div>
-            
-            <div className="text-center text-sm text-gray-400">
-              <p>No wallet needed - just your email</p>
-              <p>Card & crypto payments accepted</p>
-            </div>
-          </div>
-          
-          <Button 
-            onClick={() => setShowPresalePopup(false)}
-            className="w-full py-4 text-lg font-bold bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:opacity-90"
-            data-testid="button-close-presale-popup"
-          >
-            <Rocket className="w-5 h-5 mr-2" />
-            Let's Go!
-          </Button>
-        </DialogContent>
-      </Dialog>
       
     </div>
   );
