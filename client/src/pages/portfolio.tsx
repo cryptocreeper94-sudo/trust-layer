@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { 
   Wallet, TrendingUp, TrendingDown, PieChart, 
-  Coins, Lock, Gift, RefreshCw, ChevronDown, ExternalLink, BarChart3
+  Coins, Lock, Gift, RefreshCw, ChevronDown, ExternalLink, BarChart3, CreditCard
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
@@ -140,6 +140,30 @@ export default function Portfolio() {
                 </div>
               </div>
             </GlassCard>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.12 }}
+            className="mb-6"
+          >
+            <Link href="/dashboard">
+              <GlassCard glow className="cursor-pointer hover:border-primary/50 transition-colors">
+                <div className="p-4 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl bg-primary/20 border border-primary/30">
+                      <CreditCard className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-sm">My Trust Card</p>
+                      <p className="text-[10px] text-muted-foreground">View & download your membership card</p>
+                    </div>
+                  </div>
+                  <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                </div>
+              </GlassCard>
+            </Link>
           </motion.div>
 
           <motion.div
