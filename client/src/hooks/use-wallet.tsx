@@ -96,8 +96,25 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 
   const connectEVM = useCallback(async () => {
     if (!window.ethereum) {
-      setState(prev => ({ ...prev, error: "MetaMask not installed. Please install MetaMask to connect." }));
-      window.open("https://metamask.io/download/", "_blank");
+      // Try deep link to open MetaMask app directly (mobile) or trigger app launch
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const currentUrl = window.location.href.replace('https://', '').replace('http://', '');
+      
+      if (isMobile) {
+        // Mobile deep link - opens MetaMask app with this dApp
+        const metamaskDeepLink = `metamask://dapp/${currentUrl}`;
+        const fallbackUrl = `https://metamask.app.link/dapp/${currentUrl}`;
+        
+        const timeout = setTimeout(() => {
+          window.location.href = fallbackUrl;
+        }, 2500);
+        
+        window.location.href = metamaskDeepLink;
+        window.addEventListener('blur', () => clearTimeout(timeout), { once: true });
+      } else {
+        // Desktop - try the app link which may trigger biometric/login
+        window.location.href = `https://metamask.app.link/dapp/${currentUrl}`;
+      }
       return;
     }
 
@@ -128,8 +145,27 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 
   const connectSolana = useCallback(async () => {
     if (!window.solana?.isPhantom) {
-      setState(prev => ({ ...prev, error: "Phantom not installed. Please install Phantom to connect." }));
-      window.open("https://phantom.app/", "_blank");
+      // Try deep link to open Phantom app directly (mobile) or trigger app launch
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const currentUrl = window.location.href;
+      const ref = encodeURIComponent(window.location.origin);
+      const encodedUrl = encodeURIComponent(currentUrl);
+      
+      if (isMobile) {
+        // Mobile deep link - opens Phantom app with this dApp
+        const phantomDeepLink = `phantom://browse/${encodedUrl}?ref=${ref}`;
+        const fallbackUrl = `https://phantom.app/ul/browse/${encodedUrl}?ref=${ref}`;
+        
+        const timeout = setTimeout(() => {
+          window.location.href = fallbackUrl;
+        }, 2500);
+        
+        window.location.href = phantomDeepLink;
+        window.addEventListener('blur', () => clearTimeout(timeout), { once: true });
+      } else {
+        // Desktop - try the universal link which may trigger biometric/login
+        window.location.href = `https://phantom.app/ul/browse/${encodedUrl}?ref=${ref}`;
+      }
       return;
     }
 

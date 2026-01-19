@@ -167,6 +167,14 @@ export const WalletConnectModal: React.FC<{ open: boolean; onClose: () => void }
     setConnecting(wallet.id);
     
     try {
+      // Mobile: Always try deep links first - this opens the wallet app directly
+      // The app will handle login/biometric authentication
+      if (mobile) {
+        wallet.deepLink();
+        return;
+      }
+      
+      // Desktop: Try to connect if extension exists
       if (wallet.hasExtension()) {
         if (wallet.id === 'metamask' || wallet.id === 'coinbase' || wallet.id === 'trust') {
           await eth.connectMetaMask();
@@ -181,10 +189,10 @@ export const WalletConnectModal: React.FC<{ open: boolean; onClose: () => void }
             onClose();
           }
         }
-      } else if (mobile) {
-        wallet.deepLink();
       } else {
-        window.open(wallet.installUrl, '_blank');
+        // Desktop without extension: Try deep link first (will open app if installed)
+        // This triggers the wallet's login/biometric flow
+        wallet.deepLink();
       }
     } catch (e) {
       console.error(`Failed to connect ${wallet.name}:`, e);
@@ -196,8 +204,7 @@ export const WalletConnectModal: React.FC<{ open: boolean; onClose: () => void }
   const getButtonText = (wallet: WalletOption) => {
     if (connecting === wallet.id) return 'Connecting...';
     if (wallet.hasExtension()) return wallet.name;
-    if (mobile) return `Open in ${wallet.name}`;
-    return `Get ${wallet.name}`;
+    return `Connect ${wallet.name}`;
   };
 
   const getChainBadge = (chain: string) => {
@@ -274,7 +281,7 @@ export const WalletConnectModal: React.FC<{ open: boolean; onClose: () => void }
                 <div className="flex-1 text-left">
                   <div className="font-semibold text-white">{getButtonText(wallet)}</div>
                   <div className="text-xs text-slate-400">
-                    {wallet.hasExtension() ? 'Ready to connect' : mobile ? 'Tap to open' : 'Click to install'}
+                    {wallet.hasExtension() ? 'Ready to connect' : 'Tap to open wallet'}
                   </div>
                 </div>
                 <span className={`text-xs px-2 py-1 rounded-full ${badge.color}`}>
