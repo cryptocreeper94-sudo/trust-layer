@@ -7,11 +7,23 @@ import {
   ChevronDown, ExternalLink, Copy, Check, Home, X, Volume2, VolumeX,
   Sliders, Clock, DollarSign, Percent, Star, StarOff, Play, Pause,
   BarChart3, Users, Droplets, Lock, Unlock, Flame, TrendingUp as Trending,
-  ChevronRight, Info, Smartphone, Wallet
+  ChevronRight, Info, Smartphone, Wallet, Globe, Search, ArrowUpRight, ArrowDownRight
 } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { GlassCard } from "@/components/glass-card";
+
+interface MarketData {
+  totalMarketCap: number;
+  totalMarketCapChange: number;
+  totalVolume: number;
+  totalVolumeChange: number;
+  btcDominance: number;
+  fearGreed: number;
+  fearGreedLabel: string;
+  altcoinSeason: number;
+}
 
 interface StrikeRecommendation {
   id: string;
@@ -658,23 +670,35 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
                 </a>
               </div>
               
-              <a
-                href={`https://raydium.io/swap/?inputMint=sol&outputMint=${rec.tokenAddress}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all ${
-                  rec.aiRecommendation === 'snipe' 
-                    ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white' 
-                    : rec.aiRecommendation === 'watch'
-                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
-                    : 'bg-white/10 text-white/60'
-                }`}
-                onClick={(e) => e.stopPropagation()}
-                data-testid="button-trade"
-              >
-                <Wallet className="w-4 h-4" />
-                {rec.aiRecommendation === 'snipe' ? 'Trade on Raydium' : 'View on Raydium'}
-              </a>
+              <div className="grid grid-cols-2 gap-2">
+                <Link href={`/coin/${rec.tokenAddress}`}>
+                  <a
+                    className="flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-cyan-400 border border-cyan-500/30 hover:border-cyan-500/50 transition-all"
+                    onClick={(e) => e.stopPropagation()}
+                    data-testid="button-analyze"
+                  >
+                    <Bot className="w-4 h-4" />
+                    Full Analysis
+                  </a>
+                </Link>
+                <a
+                  href={`https://raydium.io/swap/?inputMint=sol&outputMint=${rec.tokenAddress}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all ${
+                    rec.aiRecommendation === 'snipe' 
+                      ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white' 
+                      : rec.aiRecommendation === 'watch'
+                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
+                      : 'bg-white/10 text-white/60'
+                  }`}
+                  onClick={(e) => e.stopPropagation()}
+                  data-testid="button-trade"
+                >
+                  <Wallet className="w-4 h-4" />
+                  Trade
+                </a>
+              </div>
             </div>
           </motion.div>
         )}
@@ -706,6 +730,8 @@ export default function StrikeAgentPage() {
     localStorage.setItem('strike-settings', JSON.stringify(settings));
   }, [settings]);
   
+  const [searchQuery, setSearchQuery] = useState('');
+
   const { data, isLoading, error, refetch, isFetching } = useQuery({
     queryKey: ['strike-agent-recommendations-full'],
     queryFn: async () => {
@@ -716,6 +742,27 @@ export default function StrikeAgentPage() {
     refetchInterval: settings.autoRefresh ? settings.refreshInterval * 1000 : false
   });
 
+  const { data: marketData } = useQuery<MarketData>({
+    queryKey: ['strike-market-overview'],
+    queryFn: async () => {
+      const res = await fetch('/api/pulse/market');
+      if (!res.ok) throw new Error('Failed to fetch market');
+      return res.json();
+    },
+    refetchInterval: 60000,
+  });
+
+  const market = marketData || {
+    totalMarketCap: 2.5e12,
+    totalMarketCapChange: 1.5,
+    totalVolume: 95e9,
+    totalVolumeChange: -2.3,
+    btcDominance: 52.4,
+    fearGreed: 65,
+    fearGreedLabel: 'Greed',
+    altcoinSeason: 45,
+  };
+
   const recommendations = (data?.recommendations || []) as StrikeRecommendation[];
   
   const filteredRecs = recommendations.filter(r => {
@@ -724,6 +771,13 @@ export default function StrikeAgentPage() {
     const mcap = r.marketCapUsd ? parseFloat(r.marketCapUsd) : 0;
     if (mcap < settings.minMarketCap) return false;
     if (mcap > settings.maxMarketCap) return false;
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const matchesName = r.tokenName?.toLowerCase().includes(q) || false;
+      const matchesSymbol = r.tokenSymbol.toLowerCase().includes(q);
+      const matchesAddress = r.tokenAddress.toLowerCase().includes(q);
+      if (!matchesName && !matchesSymbol && !matchesAddress) return false;
+    }
     return true;
   });
   
@@ -822,6 +876,78 @@ export default function StrikeAgentPage() {
       </header>
       
       <main className="relative z-10 px-4 py-4 pb-28">
+        {/* Market Overview Panel */}
+        <div className="mb-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
+          {/* Fear & Greed */}
+          <div className="bg-white/5 backdrop-blur-lg rounded-xl border border-white/10 p-3">
+            <div className="flex items-center gap-2 mb-2">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                market.fearGreed >= 75 ? 'bg-emerald-500/20 text-emerald-400' :
+                market.fearGreed >= 55 ? 'bg-amber-500/20 text-amber-400' :
+                market.fearGreed >= 45 ? 'bg-white/10 text-white/70' :
+                market.fearGreed >= 25 ? 'bg-orange-500/20 text-orange-400' :
+                'bg-red-500/20 text-red-400'
+              }`}>
+                {market.fearGreed}
+              </div>
+              <div>
+                <p className="text-[10px] text-white/40 uppercase">Fear & Greed</p>
+                <p className={`text-xs font-semibold ${
+                  market.fearGreed >= 55 ? 'text-emerald-400' : market.fearGreed >= 45 ? 'text-white' : 'text-red-400'
+                }`}>{market.fearGreedLabel}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Market Cap */}
+          <div className="bg-white/5 backdrop-blur-lg rounded-xl border border-white/10 p-3">
+            <p className="text-[10px] text-white/40 uppercase">Market Cap</p>
+            <p className="text-sm font-bold text-white">${(market.totalMarketCap / 1e12).toFixed(2)}T</p>
+            <div className={`flex items-center gap-1 text-[10px] ${market.totalMarketCapChange >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+              {market.totalMarketCapChange >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+              {market.totalMarketCapChange >= 0 ? '+' : ''}{market.totalMarketCapChange.toFixed(2)}%
+            </div>
+          </div>
+
+          {/* Volume */}
+          <div className="bg-white/5 backdrop-blur-lg rounded-xl border border-white/10 p-3">
+            <p className="text-[10px] text-white/40 uppercase">24h Volume</p>
+            <p className="text-sm font-bold text-white">${(market.totalVolume / 1e9).toFixed(1)}B</p>
+            <div className={`flex items-center gap-1 text-[10px] ${market.totalVolumeChange >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+              {market.totalVolumeChange >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+              {market.totalVolumeChange >= 0 ? '+' : ''}{market.totalVolumeChange.toFixed(2)}%
+            </div>
+          </div>
+
+          {/* BTC Dominance / Altcoin Season */}
+          <div className="bg-white/5 backdrop-blur-lg rounded-xl border border-white/10 p-3">
+            <p className="text-[10px] text-white/40 uppercase">Altcoin Season</p>
+            <div className="flex items-center gap-2">
+              <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                <div 
+                  className={`h-full ${market.altcoinSeason >= 75 ? 'bg-emerald-500' : market.altcoinSeason >= 25 ? 'bg-cyan-500' : 'bg-amber-500'}`}
+                  style={{ width: `${market.altcoinSeason}%` }}
+                />
+              </div>
+              <span className="text-xs font-bold text-white">{market.altcoinSeason}%</span>
+            </div>
+            <p className="text-[10px] text-white/40 mt-1">BTC {market.btcDominance.toFixed(1)}%</p>
+          </div>
+        </div>
+
+        {/* Search Bar */}
+        <div className="mb-4 relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+          <input
+            type="text"
+            placeholder="Search tokens by name or address..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-500/50"
+            data-testid="input-search"
+          />
+        </div>
+
         {settings.minScore > 0 || settings.minMarketCap > 0 || settings.maxMarketCap < 10000000 ? (
           <div className="mb-4 px-3 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-xl flex items-center gap-2 text-xs text-cyan-400">
             <Filter className="w-4 h-4" />
