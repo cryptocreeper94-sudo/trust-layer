@@ -1343,6 +1343,31 @@ export default function VeilReader() {
   const audioQueueRef = useRef<string[]>([]);
   const currentChunkRef = useRef(0);
   
+  const extractTextForPdf = (node: React.ReactNode): string => {
+    if (typeof node === 'string') return node;
+    if (typeof node === 'number') return String(node);
+    if (!node) return '';
+    if (Array.isArray(node)) return node.map(extractTextForPdf).join('');
+    if (typeof node === 'object' && 'props' in node) {
+      const element = node as React.ReactElement<{ children?: React.ReactNode; className?: string }>;
+      const children = extractTextForPdf(element.props?.children);
+      const tag = (element.type as string);
+      if (tag === 'p') return `<p>${children}</p>`;
+      if (tag === 'strong' || tag === 'b') return `<strong>${children}</strong>`;
+      if (tag === 'em' || tag === 'i') return `<em>${children}</em>`;
+      if (tag === 'div') {
+        const cls = element.props?.className || '';
+        if (cls.includes('bg-slate-800') || cls.includes('border-l-4')) {
+          return `<blockquote>${children}</blockquote>`;
+        }
+        return `<div>${children}</div>`;
+      }
+      if (tag === 'br') return '<br/>';
+      return children;
+    }
+    return '';
+  };
+
   const handleDownloadPDF = () => {
     const volumeTitle = currentVolume === 0 ? "Volume-1-Research" : "Volume-2-Testimony";
     const printWindow = window.open('', '_blank');
@@ -1378,7 +1403,7 @@ export default function VeilReader() {
           </div>
           ${volumeData.chapters.map((ch: Chapter) => `
             <h1>${ch.title}</h1>
-            <div>${typeof ch.content === 'string' ? ch.content : 'Content available in web reader'}</div>
+            <div>${extractTextForPdf(ch.content)}</div>
           `).join('')}
         </body>
         </html>
