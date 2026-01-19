@@ -7797,42 +7797,60 @@ export async function registerRoutes(
 
   app.get("/api/presale/stats", async (req, res) => {
     try {
+      // Presale allocation: 15% of 1B = 150M tokens
+      const PRESALE_ALLOCATION = 150000000;
+      
       const result = await db.execute(sql`
         SELECT 
           COALESCE(SUM(usd_amount_cents), 0) as total_raised_cents,
+          COALESCE(SUM(token_amount), 0) as total_tokens_sold,
           COALESCE(COUNT(*), 0) as total_purchases,
           COALESCE(COUNT(DISTINCT email), 0) as unique_holders
         FROM presale_purchases 
         WHERE status = 'completed'
       `);
       
-      const stats = result.rows[0] || { total_raised_cents: 0, total_purchases: 0, unique_holders: 0 };
+      const stats = result.rows[0] || { total_raised_cents: 0, total_tokens_sold: 0, total_purchases: 0, unique_holders: 0 };
       const totalRaisedCents = parseInt(stats.total_raised_cents as string || "0");
+      const tokensSold = parseInt(stats.total_tokens_sold as string || "0");
       const { price: tokenPrice, nextMilestone, nextPrice } = getTokenPriceForAmount(totalRaisedCents);
-      const tokensSold = Math.floor((totalRaisedCents / 100) / tokenPrice);
+      const tokensRemaining = Math.max(0, PRESALE_ALLOCATION - tokensSold);
+      const percentSold = (tokensSold / PRESALE_ALLOCATION) * 100;
       
       res.json({
         totalRaisedCents,
         totalRaisedUsd: totalRaisedCents / 100,
         tokensSold,
+        tokensRemaining,
+        presaleAllocation: PRESALE_ALLOCATION,
+        percentSold: Math.min(100, percentSold).toFixed(2),
+        isSoldOut: tokensRemaining <= 0,
         uniqueHolders: parseInt(stats.unique_holders as string || "0"),
         totalPurchases: parseInt(stats.total_purchases as string || "0"),
         currentTokenPrice: tokenPrice,
         nextMilestoneUsd: nextMilestone ? nextMilestone / 100 : null,
         nextTokenPrice: nextPrice,
         milestones: PRESALE_MILESTONES.map(m => ({ thresholdUsd: m.threshold / 100, price: m.price })),
+        whaleLimit: 20000000,
+        whaleLimitPercent: 2,
       });
     } catch (error) {
       res.json({
         totalRaisedCents: 0,
         totalRaisedUsd: 0,
         tokensSold: 0,
+        tokensRemaining: 150000000,
+        presaleAllocation: 150000000,
+        percentSold: "0.00",
+        isSoldOut: false,
         uniqueHolders: 0,
         totalPurchases: 0,
         currentTokenPrice: 0.001,
         nextMilestoneUsd: 50000,
         nextTokenPrice: 0.002,
         milestones: PRESALE_MILESTONES.map(m => ({ thresholdUsd: m.threshold / 100, price: m.price })),
+        whaleLimit: 20000000,
+        whaleLimitPercent: 2,
       });
     }
   });
@@ -7862,18 +7880,35 @@ export async function registerRoutes(
       const protocol = host.includes("localhost") ? "http" : "https";
       const baseUrl = `${protocol}://${host}`;
       
-      // Get current token price based on total raised
+      // Get current token price and tokens sold based on total raised
+      const PRESALE_ALLOCATION = 150000000; // 15% of 1B
       const statsResult = await db.execute(sql`
-        SELECT COALESCE(SUM(usd_amount_cents), 0) as total_raised_cents
+        SELECT 
+          COALESCE(SUM(usd_amount_cents), 0) as total_raised_cents,
+          COALESCE(SUM(token_amount), 0) as total_tokens_sold
         FROM presale_purchases WHERE status = 'completed'
       `);
       const totalRaisedCents = parseInt(statsResult.rows[0]?.total_raised_cents as string || "0");
+      const totalTokensSold = parseInt(statsResult.rows[0]?.total_tokens_sold as string || "0");
+      const tokensRemaining = PRESALE_ALLOCATION - totalTokensSold;
       const { price: TOKEN_PRICE } = getTokenPriceForAmount(totalRaisedCents);
       
       const tokenAmount = Math.floor((finalAmount / 100) / TOKEN_PRICE);
       const bonusPercent = finalAmount >= 25000 ? 25 : finalAmount >= 10000 ? 15 : finalAmount >= 5000 ? 10 : finalAmount >= 2500 ? 5 : 0;
       const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
       const totalTokens = tokenAmount + bonusTokens;
+      
+      // Check if presale is sold out
+      if (tokensRemaining <= 0) {
+        return res.status(400).json({ error: "Presale is sold out! All 150M tokens have been allocated." });
+      }
+      
+      // Check if this purchase exceeds remaining allocation
+      if (totalTokens > tokensRemaining) {
+        return res.status(400).json({ 
+          error: `Only ${tokensRemaining.toLocaleString()} tokens remaining in presale. Please reduce your purchase amount.`
+        });
+      }
       
       // Whale protection: 2% max per wallet/email (20 million tokens)
       const WHALE_LIMIT = 20000000;
@@ -7957,18 +7992,35 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Invalid amount" });
       }
       
-      // Get current token price based on total raised (milestone pricing)
+      // Get current token price and tokens sold based on total raised (milestone pricing)
+      const PRESALE_ALLOCATION = 150000000; // 15% of 1B
       const statsResult = await db.execute(sql`
-        SELECT COALESCE(SUM(usd_amount_cents), 0) as total_raised_cents
+        SELECT 
+          COALESCE(SUM(usd_amount_cents), 0) as total_raised_cents,
+          COALESCE(SUM(token_amount), 0) as total_tokens_sold
         FROM presale_purchases WHERE status = 'completed'
       `);
       const totalRaisedCents = parseInt(statsResult.rows[0]?.total_raised_cents as string || "0");
+      const totalTokensSold = parseInt(statsResult.rows[0]?.total_tokens_sold as string || "0");
+      const tokensRemaining = PRESALE_ALLOCATION - totalTokensSold;
       const TOKEN_PRICE = getTokenPriceForAmount(totalRaisedCents).price;
       
       const tokenAmount = Math.floor((finalAmount / 100) / TOKEN_PRICE);
       const bonusPercent = tierConfig?.bonus || 0;
       const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
       const totalTokens = tokenAmount + bonusTokens;
+      
+      // Check if presale is sold out
+      if (tokensRemaining <= 0) {
+        return res.status(400).json({ error: "Presale is sold out! All 150M tokens have been allocated." });
+      }
+      
+      // Check if this purchase exceeds remaining allocation
+      if (totalTokens > tokensRemaining) {
+        return res.status(400).json({ 
+          error: `Only ${tokensRemaining.toLocaleString()} tokens remaining in presale. Please reduce your purchase amount.`
+        });
+      }
       
       // Whale protection: 2% max per wallet/email (20 million tokens)
       const WHALE_LIMIT = 20000000;
