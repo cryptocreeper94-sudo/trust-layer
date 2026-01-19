@@ -183,6 +183,27 @@ export default function GamesHome() {
       </nav>
 
       <main className="flex-1 pt-14">
+        <div className="bg-gradient-to-r from-purple-600 via-pink-500 to-purple-600 py-3 px-4 text-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIj48cGF0aCBkPSJNMCAwaDQwdjQwSDB6Ii8+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMiIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIi8+PC9nPjwvc3ZnPg==')] opacity-50" />
+          <motion.div 
+            className="relative z-10 flex items-center justify-center gap-3 flex-wrap"
+            animate={{ opacity: [1, 0.8, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <Clock className="w-5 h-5 text-white" />
+            <span className="font-bold text-white text-sm md:text-base">
+              COMING Q2 2026
+            </span>
+            <span className="text-white/80 text-sm hidden sm:inline">|</span>
+            <span className="text-white/90 text-sm">
+              Games are under development
+            </span>
+            <a href="https://dwsc.io/presale" className="ml-2 px-3 py-1 bg-white/20 hover:bg-white/30 rounded-full text-white text-xs font-medium transition-colors">
+              Get Signal Now
+            </a>
+          </motion.div>
+        </div>
+
         <section className="relative py-16 md:py-24 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-pink-500/20 via-purple-500/10 to-transparent" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(236,72,153,0.3),transparent_60%)]" />
@@ -218,18 +239,14 @@ export default function GamesHome() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                <Link href="/arcade">
-                  <Button size="lg" className="h-14 px-10 text-lg bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 shadow-lg shadow-pink-500/25" data-testid="button-play-now">
-                    <Play className="w-5 h-5 mr-2" />
-                    Play Now
-                  </Button>
-                </Link>
-                <Link href="/arcade">
-                  <Button size="lg" variant="outline" className="h-14 px-10 text-lg border-pink-500/30 hover:bg-pink-500/10" data-testid="button-try-demo">
-                    <Gamepad2 className="w-5 h-5 mr-2" />
-                    Try Demo Mode
-                  </Button>
-                </Link>
+                <Button size="lg" disabled className="h-14 px-10 text-lg bg-gradient-to-r from-pink-500/50 to-rose-500/50 cursor-not-allowed opacity-60" data-testid="button-play-now">
+                  <Play className="w-5 h-5 mr-2" />
+                  Play Now
+                </Button>
+                <Button size="lg" variant="outline" disabled className="h-14 px-10 text-lg border-pink-500/30 cursor-not-allowed opacity-60" data-testid="button-try-demo">
+                  <Gamepad2 className="w-5 h-5 mr-2" />
+                  Try Demo Mode
+                </Button>
               </div>
               
               <LiveWinTicker />
