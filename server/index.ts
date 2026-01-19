@@ -26,9 +26,15 @@ app.use(["/__/auth", "/__/firebase"], createProxyMiddleware({
 }));
 
 // Redirect dwsc.io to dwtl.io (primary domain)
+// Exempt webhook endpoints from redirects (they need direct access)
 app.use((req, res, next) => {
   const host = req.headers.host || '';
   if (host === 'dwsc.io' || host === 'www.dwsc.io') {
+    // Don't redirect webhook endpoints - external services need direct access
+    if (req.originalUrl.includes('/api/coinbase/webhook') || 
+        req.originalUrl.includes('/api/stripe/webhook')) {
+      return next();
+    }
     const newUrl = `https://dwtl.io${req.originalUrl}`;
     return res.redirect(301, newUrl);
   }
