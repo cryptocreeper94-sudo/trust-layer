@@ -62,6 +62,20 @@ export default function DevelopersNote() {
               <p className="text-white/80 leading-relaxed mb-6">
                 That's exactly why we're building this.
               </p>
+
+              <h3 className="text-xl font-semibold text-purple-400 mt-10 mb-4">Why We Call It "Signal"</h3>
+              
+              <p className="text-white/80 leading-relaxed mb-6">
+                You'll notice we don't call it a "coin" or "token" or "currency." That's intentional. Those words have been weaponized. They carry hidden meanings that affect you subconsciously — promises of spending power that never materializes, utility that's always "coming soon," cycles of hype followed by silence. How many times have you heard "just wait, you'll see" only to wait... and wait... and nothing ever happens?
+              </p>
+              
+              <p className="text-white/80 leading-relaxed mb-6">
+                We call it <strong className="text-cyan-400">Signal</strong> because a signal is something pure. It can't be twisted. It can't be demonized. It can't be used against you with clever marketing psychology. A signal simply <em>is</em> — a transmission of verified intent within a trusted network.
+              </p>
+              
+              <p className="text-white/80 leading-relaxed mb-6">
+                We're not promising you'll get rich. We're not selling you a dream of easy money. We're building real infrastructure. Real software. Real businesses are using what we create. Every piece connects. And instead of telling you to "just wait," we're making strides daily to actually <em>show</em> you progress. 
+              </p>
               
               <p className="text-white/80 leading-relaxed mb-6">
                 DarkWave isn't just another blockchain project making promises. We're building a <strong className="text-purple-400">Trusted Network</strong> — a place where seeing another member means you're on the same team. Where we're all here to genuinely help each other succeed, not exploit each other for quick gains.
