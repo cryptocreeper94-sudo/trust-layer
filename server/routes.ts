@@ -7765,7 +7765,7 @@ export async function registerRoutes(
     try {
       const result = await db.execute(sql`
         SELECT 
-          COALESCE(SUM(amount_cents), 0) as total_raised_cents,
+          COALESCE(SUM(usd_amount_cents), 0) as total_raised_cents,
           COALESCE(COUNT(*), 0) as total_purchases,
           COALESCE(COUNT(DISTINCT email), 0) as unique_holders
         FROM presale_purchases 

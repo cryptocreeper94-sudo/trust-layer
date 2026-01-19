@@ -509,7 +509,7 @@ function PresaleProgress() {
           </div>
           <div>
             <h2 className="text-2xl font-bold text-white">Signal Presale</h2>
-            <p className="text-gray-400">Launching October 2026</p>
+            <p className="text-gray-400">Live Now</p>
           </div>
         </div>
 
@@ -1287,7 +1287,7 @@ export default function Presale() {
                 <h4 className="text-white font-semibold mb-2">No Wallet Required Until TGE</h4>
                 <p className="text-gray-400 text-sm leading-relaxed">
                   <span className="text-cyan-400 font-medium">Participate now without a wallet!</span> Your presale purchases and Zealy Shell earnings are 
-                  tracked by your account, not your wallet. Before TGE (October 2026), you'll create a DarkWave wallet to receive your tokens.
+                  tracked by your account, not your wallet. Before mainnet launch, you'll create a DarkWave wallet to receive your tokens.
                   At launch, your <span className="text-green-400 font-medium">Signal + converted Shells</span> will be airdropped to your wallet 
                   (20% at TGE, 80% vested over 12 months). Shell conversion rate: 100 Shells = 1 SIG.
                 </p>
