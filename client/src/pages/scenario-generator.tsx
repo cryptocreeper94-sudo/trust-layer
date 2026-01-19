@@ -88,11 +88,15 @@ interface Scenario {
 
 const ERAS = [
   { value: "Dawn Age", label: "Dawn Age (Stone Age)" },
+  { value: "Egyptian Dynasty", label: "Egyptian Dynasty (Ancient Egypt)" },
+  { value: "Roman Empire", label: "Roman Empire (Ancient Rome)" },
+  { value: "Viking Age", label: "Viking Age (Norse)" },
   { value: "Age of Crowns", label: "Age of Crowns (Medieval)" },
+  { value: "Renaissance", label: "Renaissance (Italy)" },
+  { value: "Samurai Era", label: "Samurai Era (Feudal Japan)" },
+  { value: "Wild West", label: "Wild West (American Frontier)" },
+  { value: "Victorian Era", label: "Victorian Era (Industrial)" },
   { value: "Iron Epoch", label: "Iron Epoch (Steampunk)" },
-  { value: "Neon Dominion", label: "Neon Dominion (Cyberpunk)" },
-  { value: "Stellar Exodus", label: "Stellar Exodus (Space)" },
-  { value: "The Infinite", label: "The Infinite (Quantum)" },
 ];
 
 const TONES = [

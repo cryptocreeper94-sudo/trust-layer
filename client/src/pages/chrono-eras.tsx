@@ -201,34 +201,6 @@ const ALL_ERAS: Era[] = [
     classes: ["Engineer", "Aeronaut", "Investigator", "Automancer"],
     governance: "Industrial Parliament"
   },
-  {
-    id: "cyber",
-    name: "Neon Dominion",
-    subtitle: "Chrome and Code",
-    period: "Future",
-    year: "2087 CE",
-    epoch: "Future",
-    image: cyberpunkCity,
-    color: "from-cyan-500 to-blue-600",
-    description: "Megacorporations rule. Hackers fight for freedom. Augment your body, protect your mind. The future is now.",
-    features: ["Hacking", "Cybernetic augmentation", "Corporate espionage", "Street warfare"],
-    classes: ["Netrunner", "Solo", "Fixer", "Corpo"],
-    governance: "Corporate Oligarchy"
-  },
-  {
-    id: "space",
-    name: "Stellar Exodus",
-    subtitle: "Beyond the Stars",
-    period: "Future",
-    year: "2300 CE",
-    epoch: "Future",
-    image: deepSpace,
-    color: "from-indigo-500 to-purple-600",
-    description: "Humanity spreads across the cosmos. Explore strange worlds. Build stellar empires. The final frontier awaits.",
-    features: ["Space exploration", "Alien diplomacy", "Colony building", "Starship combat"],
-    classes: ["Captain", "Explorer", "Diplomat", "Engineer"],
-    governance: "Galactic Federation"
-  },
 ];
 
 function EraModal({ era, onClose }: { era: Era; onClose: () => void }) {

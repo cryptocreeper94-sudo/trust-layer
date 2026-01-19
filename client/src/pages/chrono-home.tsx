@@ -35,7 +35,6 @@ const FEATURED_ERAS = [
   { id: "medieval", name: "Age of Crowns", period: "1200 CE", image: medievalKingdom, color: "from-purple-500 to-violet-600" },
   { id: "wildwest", name: "Wild West", period: "1870 CE", image: wildWest, color: "from-orange-500 to-amber-700" },
   { id: "victorian", name: "Victorian Era", period: "1888 CE", image: victorianLondon, color: "from-gray-500 to-slate-700" },
-  { id: "cyber", name: "Neon Dominion", period: "2087 CE", image: cyberpunkCity, color: "from-cyan-500 to-blue-600" },
 ];
 
 const CORE_PILLARS = [

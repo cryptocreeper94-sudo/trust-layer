@@ -115,7 +115,7 @@ export default function ChronoExecutiveSummary() {
                 },
                 {
                   title: "70+ Mission Theaters",
-                  description: "From Prehistoric tribes to Victorian commerce to cyberpunk futures. Each era offers unique campaigns, factions, and rewards. Your choices ripple across time through our cross-era quest system.",
+                  description: "From Prehistoric tribes to Victorian commerce. Each era offers unique campaigns, factions, and rewards. Your choices ripple across time through our cross-era quest system.",
                   icon: Zap,
                   color: "purple"
                 },
