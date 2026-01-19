@@ -416,6 +416,9 @@ export default function TrustLayerPage() {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 mb-4">
               <Network className="w-4 h-4 text-purple-400" />
               <span className="text-sm text-purple-300">Join the Network</span>
+              <span className="px-2 py-0.5 text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded uppercase">
+                Beta
+              </span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
@@ -540,6 +543,14 @@ export default function TrustLayerPage() {
                       Contact Sales
                     </Button>
                   </Link>
+                </div>
+                <div className="mt-8 p-4 rounded-lg bg-amber-500/10 border border-amber-500/20 max-w-2xl mx-auto">
+                  <p className="text-xs text-amber-400/80 text-center leading-relaxed">
+                    <strong>BETA DISCLAIMER:</strong> The DarkWave Trust Layer is currently in beta. 
+                    All features and functionality are subject to change without notice. 
+                    Do your own research (DYOR). Participation is at your own risk. 
+                    Signal (SIG) is a Trust Network Access Token, not a speculative investment.
+                  </p>
                 </div>
               </motion.div>
             </div>

@@ -163,8 +163,13 @@ export function TrustCard({
               <div className="flex items-center gap-3">
                 <img src={darkwaveLogo} alt="DarkWave" className="w-10 h-10 drop-shadow-lg" />
                 <div>
-                  <div className="text-[10px] uppercase tracking-wider text-purple-400 font-medium">
-                    DarkWave Trust Layer
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] uppercase tracking-wider text-purple-400 font-medium">
+                      DarkWave Trust Layer
+                    </span>
+                    <span className="px-1.5 py-0.5 text-[8px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded uppercase">
+                      Beta
+                    </span>
                   </div>
                   <div className="text-xs text-white/60">Verified Member</div>
                 </div>
@@ -273,6 +278,14 @@ export function TrustCard({
           <Share2 className="w-4 h-4 mr-2" />
           Share
         </Button>
+      </div>
+
+      <div className="max-w-md mx-auto mt-4 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
+        <p className="text-[10px] text-amber-400/80 text-center leading-relaxed">
+          <strong>BETA:</strong> This Trust Card is part of the DarkWave Trust Layer beta program. 
+          Do your own research (DYOR). Participation is at your own risk. 
+          Features and functionality may change without notice.
+        </p>
       </div>
     </div>
   );
