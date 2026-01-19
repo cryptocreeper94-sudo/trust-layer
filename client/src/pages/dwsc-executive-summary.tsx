@@ -40,6 +40,24 @@ import { Footer } from "@/components/footer";
 import { GamesComingSoonModal } from "@/components/games-coming-soon-modal";
 import { useState, useRef } from "react";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
+import pulseImg from "@assets/generated_images/pulse_ai_trading_dashboard.png";
+import strikeImg from "@assets/generated_images/strike_agent_token_sniper.png";
+import guardianImg from "@assets/generated_images/guardian_security_certification.png";
+import chronochatImg from "@assets/generated_images/chronochat_community_platform.png";
+import vedasolusImg from "@assets/generated_images/vedasolus_spiritual_wellness.png";
+import chroniclesImg from "@assets/generated_images/chronicles_historical_adventure.png";
+import dexImg from "@assets/generated_images/dex_token_swap_exchange.png";
+import nftImg from "@assets/generated_images/nft_marketplace_gallery.png";
+import bridgeImg from "@assets/generated_images/cross-chain_bridge_portal.png";
+import validatorImg from "@assets/generated_images/validator_network_servers.png";
+import arcadeImg from "@assets/generated_images/blockchain_arcade_games.png";
+import explorerImg from "@assets/generated_images/block_explorer_dashboard.png";
+import presaleImg from "@assets/generated_images/token_presale_investment.png";
+import subscriptionImg from "@assets/generated_images/premium_subscription_tiers.png";
+import aiNftImg from "@assets/generated_images/ai_nft_art_generator.png";
+import developerImg from "@assets/generated_images/developer_portal_apis.png";
+import referralImg from "@assets/generated_images/referral_rewards_program.png";
+import liquidStakingImg from "@assets/generated_images/liquid_staking_rewards.png";
 
 export default function DWSCExecutiveSummary() {
   const [showGamesModal, setShowGamesModal] = useState(false);
@@ -301,53 +319,54 @@ export default function DWSCExecutiveSummary() {
                 <ChevronRight className="w-5 h-5 text-white" />
               </button>
               
-              <div ref={carouselRef} className="flex gap-4 overflow-x-auto scrollbar-hide px-8 py-4 snap-x snap-mandatory">
+              <div ref={carouselRef} className="flex gap-4 overflow-x-auto scrollbar-hide px-8 py-4 snap-x snap-mandatory touch-pan-x">
                 {[
-                  { title: "Pulse AI", desc: "ML-powered market predictions with verified accuracy tracking. Fear & Greed index, multi-timeframe analysis, transparent win/loss tracking.", icon: Zap, color: "amber", href: "/pulse" },
-                  { title: "Strike Agent", desc: "Solana memecoin sniper with AI risk scoring. Honeypot detection, liquidity analysis, one-click Phantom integration.", icon: Target, color: "red", href: "/strike-agent" },
-                  { title: "Guardian Certification", desc: "Enterprise blockchain security audits at 70% less than competitors. $5,999-$14,999 per audit.", icon: Shield, color: "emerald", href: "/guardian" },
-                  { title: "Guardian Shield", desc: "24/7 smart contract monitoring. Norton for blockchain. $299-$2,999/month.", icon: Activity, color: "blue", href: "/guardian" },
-                  { title: "ChronoChat", desc: "Community platform with real-time messaging, channels, reactions, and Shells integration.", icon: MessageSquare, color: "purple", href: "/community-hub" },
-                  { title: "Shells Economy", desc: "Pre-launch virtual currency. Earn through engagement, purchase via Stripe, converts to Signal.", icon: Sparkles, color: "pink", href: "/coin-store" },
-                  { title: "Validator Program", desc: "Become a network validator. 10,000 SIG airdrop for founders, longevity bonuses.", icon: Server, color: "cyan", href: "/validators" },
-                  { title: "Token Presale", desc: "Signal at $0.001 per coin. Tiered pricing through $0.0014 launch. Up to 25% bonus.", icon: Coins, color: "amber", href: "/presale" },
-                  { title: "DEX & Token Swap", desc: "AMM-style decentralized exchange. Trade tokens with low fees and instant settlement.", icon: ArrowRightLeft, color: "green", href: "/swap" },
-                  { title: "Liquid Staking", desc: "Stake SIG, receive stSIG. Earn rewards while maintaining liquidity.", icon: TrendingUp, color: "teal", href: "/liquid-staking" },
-                  { title: "NFT Marketplace", desc: "Create, buy, sell NFTs. 2.5% transaction fees. Rarity analyzer included.", icon: Store, color: "orange", href: "/nft-marketplace" },
-                  { title: "Cross-Chain Bridge", desc: "Lock & mint SIG ↔ wSIG. Ethereum and Solana bridges.", icon: Layers, color: "indigo", href: "/bridge" },
-                  { title: "Domain Registration", desc: "Premium .dwsc domains. 30% early adopter discount. $12-$350/year.", icon: Globe, color: "violet", href: "/domains" },
-                  { title: "Subscriptions", desc: "Pulse Pro, StrikeAgent, Complete Bundle. Free trials available.", icon: CreditCard, color: "rose", href: "/billing" },
-                  { title: "Arcade Games", desc: "Provably fair casino games: Slots, Crash, Coinflip, Dice.", icon: Gamepad2, color: "fuchsia", href: "#", comingSoon: true },
-                  { title: "AI NFT Generator", desc: "Describe your vision, AI generates artwork, mint as NFT.", icon: Brain, color: "sky", href: "/ai-nft-generator" },
-                  { title: "Developer Portal", desc: "APIs, SDKs, webhooks, testnet faucet. Full documentation.", icon: Code, color: "lime", href: "/developers" },
-                  { title: "Block Explorer", desc: "Real-time blockchain data. Transaction history and network stats.", icon: Database, color: "yellow", href: "/explorer" },
-                  { title: "Referral Program", desc: "Earn Signal for referrals. Fraud detection and automated payouts.", icon: Gift, color: "red", href: "/referrals" },
-                  { title: "Chronicles Game", desc: "70+ eras. AI-powered parallel life experience. YOUR legend.", icon: Gamepad2, color: "slate", href: "/chronicles" }
+                  { title: "Pulse AI", desc: "ML-powered market predictions with verified accuracy tracking. Fear & Greed index, multi-timeframe analysis.", img: pulseImg, href: "/pulse", domain: "dwsc.io" },
+                  { title: "Strike Agent", desc: "Solana memecoin sniper with AI risk scoring. Honeypot detection, liquidity analysis, Phantom integration.", img: strikeImg, href: "/strike-agent", domain: "strikeagent.io" },
+                  { title: "Guardian Security", desc: "Enterprise blockchain security audits at 70% less than competitors. 24/7 monitoring available.", img: guardianImg, href: "/guardian", domain: "dwsc.io" },
+                  { title: "ChronoChat", desc: "Community platform with real-time messaging, channels, reactions, and Shells virtual currency.", img: chronochatImg, href: "/community-hub", domain: "chronochat.io" },
+                  { title: "VedaSolus", desc: "Holistic wellness platform connecting practitioners of all traditions - Western, Eastern, Ayurvedic, energy healing.", img: vedasolusImg, href: "/ecosystem", domain: "vedasolus.io" },
+                  { title: "Chronicles", desc: "10 verifiable historical eras. AI-powered parallel life simulation. Not a game - a life. YOUR legend.", img: chroniclesImg, href: "/chronicles", domain: "yourlegacy.io" },
+                  { title: "Token Presale", desc: "Signal at $0.001 per token. Tiered pricing through launch. Up to 25% early adopter bonus.", img: presaleImg, href: "/presale", domain: "dwsc.io" },
+                  { title: "DEX & Swap", desc: "AMM-style decentralized exchange. Trade tokens with low fees and instant settlement on-chain.", img: dexImg, href: "/swap", domain: "dwsc.io" },
+                  { title: "Liquid Staking", desc: "Stake SIG, receive stSIG. Earn rewards while maintaining full liquidity for DeFi.", img: liquidStakingImg, href: "/liquid-staking", domain: "dwsc.io" },
+                  { title: "NFT Marketplace", desc: "Create, buy, sell NFTs. 2.5% transaction fees. Built-in rarity analyzer and collection tools.", img: nftImg, href: "/nft-marketplace", domain: "dwsc.io" },
+                  { title: "Cross-Chain Bridge", desc: "Lock & mint SIG ↔ wSIG. Ethereum Sepolia and Solana Devnet bridges live.", img: bridgeImg, href: "/bridge", domain: "dwsc.io" },
+                  { title: "Validator Network", desc: "Become a network validator. 10,000 SIG airdrop for founders, longevity bonuses, governance rights.", img: validatorImg, href: "/validators", domain: "dwsc.io" },
+                  { title: "Arcade Games", desc: "Provably fair blockchain games: Slots, Crash, Coinflip, Dice. Transparent odds, instant payouts.", img: arcadeImg, href: "#", comingSoon: true, domain: "darkwavegames.io" },
+                  { title: "AI NFT Generator", desc: "Describe your vision, AI generates unique artwork, mint directly as NFT on the Trust Layer.", img: aiNftImg, href: "/ai-nft-generator", domain: "dwsc.io" },
+                  { title: "Developer Portal", desc: "Full APIs, SDKs, webhooks, testnet faucet. Complete documentation for building on Trust Layer.", img: developerImg, href: "/developers", domain: "dwsc.io" },
+                  { title: "Block Explorer", desc: "Real-time blockchain data. Transaction history, network stats, validator monitoring.", img: explorerImg, href: "/explorer", domain: "dwsc.io" },
+                  { title: "Referral Rewards", desc: "Earn Signal for referrals. Fraud detection, automated payouts, transparent tracking.", img: referralImg, href: "/referrals", domain: "dwsc.io" },
+                  { title: "Subscriptions", desc: "Pulse Pro, Strike Agent, Complete Bundle. Free trials available. Premium tools unlocked.", img: subscriptionImg, href: "/billing", domain: "dwsc.io" }
                 ].map((feature, i) => {
                   const cardContent = (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
-                      transition={{ delay: i * 0.05 }}
-                      whileHover={{ scale: 1.03, y: -4 }}
-                      className="shrink-0 w-[260px] h-[180px] snap-center cursor-pointer group"
+                      transition={{ delay: i * 0.02 }}
+                      whileHover={{ scale: 1.02, y: -4 }}
+                      className="shrink-0 w-[280px] snap-center cursor-pointer group"
                       data-testid={`feature-${i}`}
                     >
-                      <div className="h-full bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-2xl p-5 relative overflow-hidden hover:border-white/30 transition-all duration-300">
-                        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <div className="absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                        
-                        <div className="relative z-10">
-                          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br from-${feature.color}-500/30 to-${feature.color}-600/10 border border-${feature.color}-500/30 flex items-center justify-center mb-3`}>
-                            <feature.icon className={`w-5 h-5 text-${feature.color}-400`} />
+                      <div className="h-full bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden hover:border-cyan-500/50 transition-all duration-300 shadow-xl">
+                        <div className="relative h-32 overflow-hidden">
+                          <img 
+                            src={feature.img} 
+                            alt={feature.title} 
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent" />
+                          <div className="absolute top-2 right-2">
+                            <span className="px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-sm text-[9px] text-cyan-300 font-mono border border-cyan-500/30">
+                              {feature.domain}
+                            </span>
                           </div>
-                          <h3 className="font-semibold text-white text-sm mb-2 group-hover:text-cyan-300 transition-colors">{feature.title}</h3>
-                          <p className="text-xs text-white/50 leading-relaxed line-clamp-3">{feature.desc}</p>
                         </div>
-                        
-                        <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <ArrowRightLeft className="w-4 h-4 text-cyan-400 rotate-45" />
+                        <div className="p-4">
+                          <h3 className="font-bold text-white text-sm mb-1.5 group-hover:text-cyan-300 transition-colors">{feature.title}</h3>
+                          <p className="text-[11px] text-white/60 leading-relaxed line-clamp-3">{feature.desc}</p>
                         </div>
                       </div>
                     </motion.div>
