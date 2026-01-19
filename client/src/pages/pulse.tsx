@@ -235,7 +235,7 @@ function MiniSparkline({ data, color = "cyan" }: { data: number[]; color?: strin
   );
 }
 
-function TopCoinRow({ coin, rank }: { coin: TopCoin; rank: number }) {
+function TopCoinRow({ coin, rank, selected, onSelect }: { coin: TopCoin; rank: number; selected: boolean; onSelect: () => void }) {
   const isUp = coin.priceChange24h >= 0;
   
   return (
@@ -243,7 +243,8 @@ function TopCoinRow({ coin, rank }: { coin: TopCoin; rank: number }) {
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: rank * 0.03 }}
-      className="border-b border-white/5 hover:bg-white/5 transition-colors cursor-pointer"
+      onClick={onSelect}
+      className={`border-b border-white/5 hover:bg-white/10 transition-colors cursor-pointer ${selected ? 'bg-cyan-500/10 border-l-2 border-l-cyan-500' : ''}`}
     >
       <td className="py-3 pr-3">
         <span className="text-xs text-white/40">#{rank}</span>
@@ -290,10 +291,182 @@ function TopCoinRow({ coin, rank }: { coin: TopCoin; rank: number }) {
   );
 }
 
+interface NewsItem {
+  id: string;
+  title: string;
+  source: string;
+  time: string;
+  sentiment: 'bullish' | 'bearish' | 'neutral';
+  url: string;
+}
+
+interface CandleData {
+  time: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+}
+
+function PriceChart({ coin, candles }: { coin: TopCoin | null; candles: CandleData[] }) {
+  if (!coin || candles.length === 0) return null;
+  
+  const minPrice = Math.min(...candles.map(c => c.low));
+  const maxPrice = Math.max(...candles.map(c => c.high));
+  const priceRange = maxPrice - minPrice || 1;
+  const chartHeight = 180;
+  const chartWidth = 100;
+  const candleWidth = chartWidth / candles.length * 0.7;
+  const gapWidth = chartWidth / candles.length * 0.3;
+  
+  return (
+    <GlassCard glow>
+      <div className="p-4">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-sm font-bold text-white">
+              {coin.symbol.slice(0, 2).toUpperCase()}
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-white">{coin.name}</h3>
+              <span className="text-xs text-white/50">{coin.symbol.toUpperCase()}</span>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-xl font-bold text-white">
+              ${coin.price < 1 ? coin.price.toFixed(6) : coin.price.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+            </p>
+            <p className={`text-sm font-medium ${coin.priceChange24h >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+              {coin.priceChange24h >= 0 ? '+' : ''}{coin.priceChange24h.toFixed(2)}%
+            </p>
+          </div>
+        </div>
+        
+        <div className="relative h-[180px] w-full">
+          <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full h-full" preserveAspectRatio="none">
+            {candles.map((candle, i) => {
+              const x = i * (candleWidth + gapWidth / candles.length * candles.length);
+              const isGreen = candle.close >= candle.open;
+              const bodyTop = chartHeight - ((Math.max(candle.open, candle.close) - minPrice) / priceRange) * chartHeight;
+              const bodyBottom = chartHeight - ((Math.min(candle.open, candle.close) - minPrice) / priceRange) * chartHeight;
+              const bodyHeight = Math.max(bodyBottom - bodyTop, 1);
+              const wickTop = chartHeight - ((candle.high - minPrice) / priceRange) * chartHeight;
+              const wickBottom = chartHeight - ((candle.low - minPrice) / priceRange) * chartHeight;
+              const color = isGreen ? '#10b981' : '#ef4444';
+              
+              return (
+                <g key={i}>
+                  <line
+                    x1={x + candleWidth / 2}
+                    y1={wickTop}
+                    x2={x + candleWidth / 2}
+                    y2={wickBottom}
+                    stroke={color}
+                    strokeWidth="0.5"
+                  />
+                  <rect
+                    x={x}
+                    y={bodyTop}
+                    width={candleWidth}
+                    height={bodyHeight}
+                    fill={color}
+                    rx="0.5"
+                  />
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+        
+        <div className="grid grid-cols-4 gap-2 mt-4">
+          <div className="text-center p-2 bg-white/5 rounded-lg">
+            <p className="text-[10px] text-white/40">Market Cap</p>
+            <p className="text-sm font-bold text-white">${(coin.marketCap / 1e9).toFixed(2)}B</p>
+          </div>
+          <div className="text-center p-2 bg-white/5 rounded-lg">
+            <p className="text-[10px] text-white/40">24h Volume</p>
+            <p className="text-sm font-bold text-white">${(coin.volume / 1e9).toFixed(2)}B</p>
+          </div>
+          <div className="text-center p-2 bg-white/5 rounded-lg">
+            <p className="text-[10px] text-white/40">Rank</p>
+            <p className="text-sm font-bold text-white">#{coin.rank}</p>
+          </div>
+          <div className="text-center p-2 bg-white/5 rounded-lg">
+            <p className="text-[10px] text-white/40">7d Trend</p>
+            <MiniSparkline data={coin.sparkline} />
+          </div>
+        </div>
+      </div>
+    </GlassCard>
+  );
+}
+
+function NewsCarousel({ news }: { news: NewsItem[] }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex(i => (i + 1) % news.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [news.length]);
+  
+  if (news.length === 0) return null;
+  
+  return (
+    <GlassCard>
+      <div className="p-4">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Globe className="w-5 h-5 text-cyan-400" />
+            <h3 className="text-sm font-semibold text-white">Crypto News</h3>
+          </div>
+          <div className="flex gap-1">
+            {news.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentIndex(i)}
+                className={`w-2 h-2 rounded-full transition-colors ${i === currentIndex ? 'bg-cyan-400' : 'bg-white/20'}`}
+              />
+            ))}
+          </div>
+        </div>
+        
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIndex}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="min-h-[60px]"
+          >
+            <p className="text-sm text-white mb-2 line-clamp-2">{news[currentIndex].title}</p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-white/40">{news[currentIndex].source}</span>
+                <span className="text-white/20">•</span>
+                <span className="text-xs text-white/40">{news[currentIndex].time}</span>
+              </div>
+              <span className={`text-xs px-2 py-0.5 rounded ${
+                news[currentIndex].sentiment === 'bullish' ? 'bg-emerald-500/20 text-emerald-400' :
+                news[currentIndex].sentiment === 'bearish' ? 'bg-red-500/20 text-red-400' :
+                'bg-gray-500/20 text-gray-400'
+              }`}>
+                {news[currentIndex].sentiment}
+              </span>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </GlassCard>
+  );
+}
+
 export default function PulseDashboard() {
   const [searchTicker, setSearchTicker] = useState('');
   const [category, setCategory] = useState('all');
   const [refreshKey, setRefreshKey] = useState(0);
+  const [selectedCoin, setSelectedCoin] = useState<TopCoin | null>(null);
 
   const { data: marketData, isLoading: marketLoading, refetch: refetchMarket } = useQuery<MarketData>({
     queryKey: ['pulse-market', refreshKey],
@@ -359,6 +532,49 @@ export default function PulseDashboard() {
   };
 
   const coins = topCoins || [];
+  
+  useEffect(() => {
+    if (coins.length > 0) {
+      const currentInList = selectedCoin && coins.find(c => c.id === selectedCoin.id);
+      if (!currentInList) {
+        setSelectedCoin(coins[0]);
+      }
+    }
+  }, [coins, selectedCoin]);
+  
+  const [candles, setCandles] = useState<CandleData[]>([]);
+  
+  useEffect(() => {
+    if (!selectedCoin) {
+      setCandles([]);
+      return;
+    }
+    const basePrice = selectedCoin.price;
+    const newCandles: CandleData[] = [];
+    const seed = selectedCoin.id.charCodeAt(0);
+    for (let i = 0; i < 24; i++) {
+      const pseudoRandom = (n: number) => {
+        const x = Math.sin(seed + n * 9999) * 10000;
+        return x - Math.floor(x);
+      };
+      const volatility = 0.02 + pseudoRandom(i) * 0.03;
+      const trend = selectedCoin.priceChange24h / 100 / 24;
+      const open = basePrice * (1 - (24 - i) * trend + (pseudoRandom(i + 1) - 0.5) * volatility);
+      const close = open * (1 + (pseudoRandom(i + 2) - 0.5) * volatility + trend);
+      const high = Math.max(open, close) * (1 + pseudoRandom(i + 3) * volatility * 0.5);
+      const low = Math.min(open, close) * (1 - pseudoRandom(i + 4) * volatility * 0.5);
+      newCandles.push({ time: Date.now() - (24 - i) * 3600000, open, high, low, close });
+    }
+    setCandles(newCandles);
+  }, [selectedCoin?.id, selectedCoin?.price, selectedCoin?.priceChange24h]);
+  
+  const mockNews: NewsItem[] = [
+    { id: '1', title: 'Bitcoin breaks through key resistance level as institutional buying accelerates', source: 'CoinDesk', time: '2h ago', sentiment: 'bullish', url: '#' },
+    { id: '2', title: 'Ethereum ETF inflows surge to record highs amid growing demand', source: 'The Block', time: '4h ago', sentiment: 'bullish', url: '#' },
+    { id: '3', title: 'SEC signals potential approval for additional crypto products', source: 'Reuters', time: '6h ago', sentiment: 'neutral', url: '#' },
+    { id: '4', title: 'Major crypto exchange reports Q4 trading volume spike', source: 'Bloomberg', time: '8h ago', sentiment: 'bullish', url: '#' },
+    { id: '5', title: 'DeFi TVL reaches new all-time high across multiple chains', source: 'DeFi Pulse', time: '12h ago', sentiment: 'bullish', url: '#' },
+  ];
 
   const getSignalStyle = (signal: string) => {
     switch (signal.toUpperCase()) {
@@ -480,7 +696,7 @@ export default function PulseDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6"
         >
           <FearGreedGauge value={market.fearGreed} label={market.fearGreedLabel} />
           <AltcoinSeasonGauge value={market.altcoinSeason} />
@@ -506,6 +722,21 @@ export default function PulseDashboard() {
               </div>
             </div>
           </GlassCard>
+        </motion.div>
+
+        {/* Price Chart + News Carousel Row */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18 }}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8"
+        >
+          <div className="lg:col-span-2">
+            <PriceChart coin={selectedCoin} candles={candles} />
+          </div>
+          <div>
+            <NewsCarousel news={mockNews} />
+          </div>
         </motion.div>
 
         {/* Top Coins Table */}
@@ -565,7 +796,13 @@ export default function PulseDashboard() {
                     </thead>
                     <tbody>
                       {coins.map((coin, idx) => (
-                        <TopCoinRow key={coin.id} coin={coin} rank={idx + 1} />
+                        <TopCoinRow 
+                          key={coin.id} 
+                          coin={coin} 
+                          rank={idx + 1} 
+                          selected={selectedCoin?.id === coin.id}
+                          onSelect={() => setSelectedCoin(coin)}
+                        />
                       ))}
                     </tbody>
                   </table>
