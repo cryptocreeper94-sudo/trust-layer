@@ -1311,6 +1311,207 @@ const journeyChapters: Chapter[] = [
   }
 ];
 
+const appendicesChapters: Chapter[] = [
+  {
+    id: "concordance",
+    title: "Comprehensive Concordance",
+    content: (
+      <>
+        <p className="text-purple-400 font-medium mb-6">Quick reference guide to key terms, names, and concepts used throughout this work.</p>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">Divine Names and Titles</h3>
+        
+        <div className="space-y-4 mb-8">
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-cyan-500">
+            <p className="font-bold text-white">Yahuah (יָהוָה)</p>
+            <p className="text-sm text-slate-400 mt-1">Paleo-Hebrew: Yod-Hey-Uau-Hey | Pictographic: "Behold the hand, behold the nail"</p>
+            <p className="text-sm text-slate-300 mt-2">Pronunciation: Yah-HOO-ah | Meaning: "I AM that I AM" / Self-Existent One</p>
+            <p className="text-sm text-slate-400 mt-2">The true name of the Most High, replaced over 6,800 times in the KJV with "LORD." Scripture: Exodus 3:14-15; Psalm 68:4</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-purple-500">
+            <p className="font-bold text-white">Yahusha (יָהוּשַׁע)</p>
+            <p className="text-sm text-slate-400 mt-1">Paleo-Hebrew: Yah + Yasha (salvation)</p>
+            <p className="text-sm text-slate-300 mt-2">Pronunciation: Yah-HOO-sha | Meaning: "Yahuah is Salvation"</p>
+            <p className="text-sm text-slate-400 mt-2">The true name of the Messiah. Transliteration path: Hebrew (Yahusha) → Greek (Iesous) → Latin (Iesus) → English (Jesus). Scripture: Matthew 1:21; Acts 4:12</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-pink-500">
+            <p className="font-bold text-white">Yah (יָהּ)</p>
+            <p className="text-sm text-slate-300 mt-2">Meaning: "I AM" / "He Who Is" - Shortened form preserved in praise (HalleluYah = "Praise Yah")</p>
+            <p className="text-sm text-slate-400 mt-2">Also preserved in names: EliYah (Elijah), YeremiYah (Jeremiah), ZecharYah (Zechariah). Scripture: Psalm 68:4</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-cyan-500">
+            <p className="font-bold text-white">Elohiym / Alohiym (אֱלֹהִים)</p>
+            <p className="text-sm text-slate-300 mt-2">Meaning: "Mighty Ones" - Plural form reflecting the echad (unified plurality) nature</p>
+            <p className="text-sm text-slate-400 mt-2">"God" is avoided due to potential connection to Gadre'el. See Chapter 21.</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-purple-500">
+            <p className="font-bold text-white">Ruach Ha'Qodesh (רוּחַ הַקֹּדֶשׁ)</p>
+            <p className="text-sm text-slate-300 mt-2">Meaning: "Set-Apart Breath" or "Set-Apart Spirit"</p>
+            <p className="text-sm text-slate-400 mt-2">"Holy" is a Greco-Roman term with pagan origins. "Qodesh" means set apart, separated, distinct.</p>
+          </div>
+        </div>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">Key Concepts and Terms</h3>
+        
+        <div className="space-y-4 mb-8">
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-red-500">
+            <p className="font-bold text-white">The System / Ancient Intelligence</p>
+            <p className="text-sm text-slate-300 mt-2">The coordinated adversarial council operating through human proxies, institutions, and bloodlines across millennia. Not bureaucracy or random corruption - an organized spiritual hierarchy executing the rebellion.</p>
+            <p className="text-sm text-slate-400 mt-2">See: Chapter 1, Chapter 12, Chapter 26</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-amber-500">
+            <p className="font-bold text-white">Pineal Gland / The "I" / Third Eye</p>
+            <p className="text-sm text-slate-400 mt-1">Hebrew connection: Peniel (פְּנִיאֵל) - "Face of El" (Genesis 32:30)</p>
+            <p className="text-sm text-slate-300 mt-2">Function: Spiritual receiver, discernment center, the "single eye" of Matthew 6:22</p>
+            <p className="text-sm text-slate-400 mt-2">Attack vectors: Fluoride calcification, substances, electromagnetic interference, screen addiction. See: Chapter 27, 29, 30</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-cyan-500">
+            <p className="font-bold text-white">Navigation Lenses (Physical Eyes)</p>
+            <p className="text-sm text-slate-300 mt-2">The two physical eyes designed for movement through space, not discernment of truth. With pineal calcified, these become the sole input - easily manipulated through screens and programming.</p>
+            <p className="text-sm text-slate-400 mt-2">See: Chapter 27, Chapter 28</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-purple-500">
+            <p className="font-bold text-white">"Conspiracy Theorist"</p>
+            <p className="text-sm text-slate-300 mt-2">Term created by CIA in 1967 (Document 1035-960) to discredit those questioning the Warren Commission. Not a description of pathology - a weapon to shut down pattern recognition.</p>
+            <p className="text-sm text-slate-400 mt-2">Antidote: "What specifically in what I said is incorrect?" - force engagement with content. See: Chapter 10, Chapter 25B</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-pink-500">
+            <p className="font-bold text-white">The Nephilim (נְפִילִים)</p>
+            <p className="text-sm text-slate-300 mt-2">Meaning: "Fallen ones" or "Giants" - Offspring of Watchers and human women (Genesis 6:1-4)</p>
+            <p className="text-sm text-slate-400 mt-2">Present before and after the flood. Bloodlines may continue through ruling families. See: Chapter 4, Chapter 13</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-amber-500">
+            <p className="font-bold text-white">The Watchers</p>
+            <p className="text-sm text-slate-400 mt-1">Hebrew: Irin (עִירִין)</p>
+            <p className="text-sm text-slate-300 mt-2">200 angelic beings who abandoned their station and descended to Mount Hermon. Taught metallurgy, cosmetics, astrology, sorcery, weapons.</p>
+            <p className="text-sm text-slate-400 mt-2">Scripture: Genesis 6:1-4; Jude 1:6; Book of Enoch chapters 6-16. See: Chapter 2, 3, 17</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-green-500">
+            <p className="font-bold text-white">Sabbath / Shabbat (שַׁבָּת)</p>
+            <p className="text-sm text-slate-300 mt-2">The seventh day (Friday sunset to Saturday sunset). Replaced with Sunday (day of the sun god) under Constantine.</p>
+            <p className="text-sm text-slate-400 mt-2">Scripture: Genesis 2:2-3; Exodus 20:8-11. See: Chapter 22</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-red-500">
+            <p className="font-bold text-white">The Little Season</p>
+            <p className="text-sm text-slate-300 mt-2">The period after the Millennial Reign when Satan is released to deceive the nations (Revelation 20:7-8). Theory: The present age may be this little season.</p>
+            <p className="text-sm text-slate-400 mt-2">Characteristics: Acceleration, inversion, boldness, convergence of all systems. See: Chapter 34, 35</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-cyan-500">
+            <p className="font-bold text-white">432 Hz vs 440 Hz</p>
+            <p className="text-sm text-slate-300 mt-2">432 Hz: Natural frequency, resonates with body and nature, promotes peace. 440 Hz: Standard tuning adopted 1953, creates subtle dissonance and agitation.</p>
+            <p className="text-sm text-slate-400 mt-2">See: Chapter 30</p>
+          </div>
+          
+          <div className="p-4 rounded-lg bg-slate-800/50 border-l-4 border-amber-500">
+            <p className="font-bold text-white">Fluoride</p>
+            <p className="text-sm text-slate-300 mt-2">Calcifies the pineal gland more than any other soft tissue. Delivered through water supply, toothpaste, dental treatments. Effect: Jams the spiritual receiver, makes population programmable.</p>
+            <p className="text-sm text-slate-400 mt-2">See: Chapter 27, Chapter 29</p>
+          </div>
+        </div>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">Language Inversions Summary</h3>
+        
+        <div className="grid gap-3 mb-6">
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-red-400 font-medium">God</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Generic title that may connect to Gadre'el/the serpent</span>
+          </div>
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-red-400 font-medium">Lord</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Generic title used for Baal and human masters alike</span>
+          </div>
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-red-400 font-medium">Jesus</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Greek/Latin substitute for Yahusha</span>
+          </div>
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-red-400 font-medium">Hell</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Mistranslation of Gehenna (garbage dump) and Sheol (grave)</span>
+          </div>
+          <div className="p-3 rounded bg-slate-800/30 flex justify-between items-center">
+            <span className="text-red-400 font-medium">Holy</span>
+            <span className="text-slate-500">→</span>
+            <span className="text-slate-300">Greco-Roman term; original is Qodesh (set-apart)</span>
+          </div>
+        </div>
+      </>
+    )
+  },
+  {
+    id: "appendix-cepher",
+    title: "Appendix: About the Cepher Translation",
+    content: (
+      <>
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">Why This Book Uses the Cepher</h3>
+        <p>Throughout "Through The Veil," scripture quotations come from the Cepher translation. Many readers will be unfamiliar with this text, as it stands outside the mainstream Bible translations promoted by institutional Christianity. This is not accidental. The Cepher restores what was systematically removed - and that restoration is precisely why it remains relatively unknown.</p>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Restoration of Set-Apart Names</h3>
+        
+        <h4 className="text-lg font-semibold text-purple-400 mt-6 mb-3">The Name of the Father: Yahuah</h4>
+        <p>The Cepher restores the Father's name as <strong>Yahuah</strong> (יהוה). This name went unmentioned for over two millennia based on the "ineffable name doctrine" - a rabbinical teaching that the name was too sacred to pronounce. However, scripture itself directly contradicts this:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-cyan-500">
+          <p className="italic">"I will publish the name of Yahuah: ascribe you greatness unto our Elohiym."</p>
+          <p className="text-cyan-300 font-medium mt-2">Devariym (Deuteronomy) 32:1-3</p>
+        </div>
+        <p>The historian Yocephus (Josephus) records in "Wars of the Jews" that priests pronounced this name prior to the temple's destruction. The pronunciation is constructed from four vowels: <strong>ee (yod) - ah (heh) - oo (vav) - ah (heh)</strong> = Yahuah.</p>
+        
+        <h4 className="text-lg font-semibold text-purple-400 mt-6 mb-3">The Name of the Son: Yahusha</h4>
+        <p>The Messiah's name is restored as <strong>Yahusha</strong> (יהושע), not "Jesus." This name is identical to the Hebrew name of the son of Nun who led Israel into the Promised Land - the one English Bibles call "Joshua."</p>
+        <p>The name Yahusha is constructed from two Hebrew words: <strong>Yahuah</strong> (יהוה) and <strong>yasha</strong> (ישע), meaning "to be open, wide, free; to save, rescue, preserve, help, deliver." Thus, the name literally means "Yahuah saves" or "Yahuah is salvation."</p>
+        <p>The proof is found in Hebrews 4:8-10, where the Greek text uses "Iesous" but clearly refers to Joshua son of Nun, not the Messiah. The NKJV footnotes this, admitting "Hebrews 4:8 Gr. Jesus, same as Heb. Joshua."</p>
+        
+        <h4 className="text-lg font-semibold text-purple-400 mt-6 mb-3">The Name "God" and Elohiym</h4>
+        <p>The Hebrew word <strong>Elohiym</strong> has been translated in most English Bibles as "God." This English word may connect to the Yiddish title "G_d" - avoiding the spelling <strong>Gad</strong> (pronounced "gawd").</p>
+        <p>Scripture warns against this very substitution:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
+          <p className="italic">"But you are they that forsake Yahuah, that forget my holy mountain, that prepare a table for Gad, and that furnish the drink offering to Meniy."</p>
+          <p className="text-purple-300 font-medium mt-2">Yesha'yahu (Isaiah) 65:11</p>
+        </div>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Books That Were Removed</h3>
+        <p>The Cepher includes books that adherents to the post-19th Century Protestant Bible will not recognize:</p>
+        <ul className="list-disc list-inside space-y-1 text-slate-300 my-4">
+          <li>Cepher Yovheliym (Jubilees)</li>
+          <li>Cepher Chanoch (Enoch)</li>
+          <li>Cepher ha'Yashar (Jasher)</li>
+          <li>Cepheriym Baruch</li>
+          <li>Cepheriym Esdras (Ezra)</li>
+          <li>Cepheriym Makkabiym (Maccabees)</li>
+        </ul>
+        <p>The sixty-six-book reduction was the result of the Westminster Confession, where Parliament reversed itself to give favor to Scottish Presbyterians. The reduction of the text of scripture was exclusively an Anglican political act, not a theological conclusion consistent with the development of scripture.</p>
+        
+        <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Prayer of the Cepher</h3>
+        <p>It is the most fervent prayer of the translators that these corrections are found true and pleasing to <strong>Yahuah Elohaynu</strong> (Yahuah our Elohiym), and that they would come to bless you in your pursuit of the Truth to which you were called:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-cyan-500">
+          <p className="italic">"Who has ascended up into heaven, or descended? Who has gathered the wind in his fists? Who has bound the waters in a garment? Who has established all the ends of the earth? What is His name, and what is His Son's name, if you can tell?"</p>
+          <p className="text-cyan-300 font-medium mt-2">Mishlei (Proverbs) 30:4</p>
+        </div>
+        
+        <div className="mt-8 p-6 border border-slate-600 rounded-lg text-center">
+          <p className="text-slate-400 text-sm">This appendix summarizes key points from the Preface of <em>The Cepher</em> (3rd Edition), published by Cepher Publishing Group, LLC.</p>
+          <p className="text-cyan-400 mt-2">For the complete text with all 87 books and restored Hebrew names, visit <strong>cepher.net</strong></p>
+        </div>
+      </>
+    )
+  }
+];
+
 const volumes: Volume[] = [
   {
     id: "section1",
@@ -1323,6 +1524,12 @@ const volumes: Volume[] = [
     title: "Section Two",
     subtitle: "The Journey",
     chapters: journeyChapters
+  },
+  {
+    id: "appendices",
+    title: "Appendices",
+    subtitle: "Reference Materials",
+    chapters: appendicesChapters
   }
 ];
 
@@ -1793,15 +2000,29 @@ export default function VeilReader() {
                 </button>
               </div>
             )}
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={handleDownloadPDF}
-              className="text-slate-400 hover:text-white hover:bg-slate-700/50"
-              title="Download as PDF"
-            >
-              <Download className="w-4 h-4" />
-            </Button>
+            <div className="flex items-center gap-1">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={handleDownloadPDF}
+                className="text-slate-400 hover:text-white hover:bg-slate-700/50"
+                title="Download as PDF"
+              >
+                <Download className="w-4 h-4" />
+                <span className="hidden md:inline text-xs ml-1">PDF</span>
+              </Button>
+              <a href="/assets/Through-The-Veil-EBOOK.epub" download>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="text-slate-400 hover:text-white hover:bg-slate-700/50"
+                  title="Download EPUB for e-readers"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span className="hidden md:inline text-xs ml-1">EPUB</span>
+                </Button>
+              </a>
+            </div>
             <span className="text-xs text-slate-500 hidden md:block">
               {currentGlobalIndex + 1} of {totalChapters}
             </span>

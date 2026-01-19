@@ -65,11 +65,11 @@ export default function Veil() {
             </div>
             
             <div className="grid md:grid-cols-2 gap-6 mb-6">
-              <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700">
+              <div className="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
                 <h4 className="text-cyan-400 font-semibold mb-2">Volume One: The Evidence</h4>
                 <p className="text-slate-400 text-sm">168 pages, 42 chapters, 12 parts. The history, the patterns, the documented substitutions and erasures.</p>
               </div>
-              <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700">
+              <div className="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
                 <h4 className="text-purple-400 font-semibold mb-2">Volume Two: The Journey</h4>
                 <p className="text-slate-400 text-sm">24 parts of personal testimony. What happened when I finally allowed myself to step through the fear.</p>
               </div>
