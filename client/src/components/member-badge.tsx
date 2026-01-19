@@ -164,7 +164,7 @@ export function MemberBadge({ userId }: { userId?: string }) {
         {isOpen && (
           <>
             <div 
-              className="fixed inset-0 z-40" 
+              className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm" 
               onClick={() => setIsOpen(false)}
             />
             <motion.div
@@ -172,9 +172,9 @@ export function MemberBadge({ userId }: { userId?: string }) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="absolute right-0 top-full mt-2 w-72 z-50"
+              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-sm z-50 md:absolute md:left-auto md:top-full md:right-0 md:translate-x-0 md:translate-y-0 md:mt-2 md:w-72"
             >
-              <GlassCard glow className="overflow-hidden">
+              <div className="bg-slate-900 border border-cyan-500/30 rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.2)] overflow-hidden">
                 <div className="p-4">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
@@ -318,7 +318,7 @@ export function MemberBadge({ userId }: { userId?: string }) {
                     </div>
                   </div>
                 </div>
-              </GlassCard>
+              </div>
             </motion.div>
           </>
         )}
