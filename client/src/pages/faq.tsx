@@ -116,7 +116,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       },
       {
         question: "When can I play Chronicles?",
-        answer: "The public beta is targeted for July 4, 2026. Before that, early supporters may receive alpha access and exclusive content based on their participation level."
+        answer: "The Chronicles timeline is community-driven - the more people participate and support the project, the faster we can bring it to life. Early supporters will receive alpha access and exclusive content based on their participation level."
       },
       {
         question: "Do I need Signal to play?",

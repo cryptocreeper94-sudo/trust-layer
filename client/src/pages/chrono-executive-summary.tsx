@@ -395,7 +395,7 @@ export default function ChronoExecutiveSummary() {
                 <Calendar className="w-6 h-6 text-amber-400" />
                 Development Timeline
               </h2>
-              <p className="text-white/60">Target Public Beta: <span className="text-amber-400 font-semibold">July 4th, 2026</span></p>
+              <p className="text-white/60">Timeline: <span className="text-amber-400 font-semibold">Community-Driven</span> - Beta based on participation</p>
             </motion.div>
 
             <div className="relative">
@@ -421,7 +421,7 @@ export default function ChronoExecutiveSummary() {
                   {
                     phase: "Phase 1",
                     title: "Economy & Property Systems",
-                    date: "Q3-Q4 2026 (July - December)",
+                    date: "Phase 1 - After Foundation",
                     status: "upcoming",
                     items: [
                       "Blockchain-backed property registry",
@@ -449,7 +449,7 @@ export default function ChronoExecutiveSummary() {
                   {
                     phase: "Phase 3",
                     title: "Public Beta Launch",
-                    date: "July 4th, 2026",
+                    date: "TBD - Community Driven",
                     status: "target",
                     items: [
                       "Public beta release - yourlegacy.io live",

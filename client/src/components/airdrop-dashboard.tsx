@@ -446,7 +446,7 @@ export function AirdropDashboard() {
           </motion.div>
         </div>
         <p className="text-xs text-muted-foreground mt-3 text-center">
-          Exclusive rewards for joining before public beta (July 4, 2026)
+          Exclusive rewards for early supporters - beta date driven by community participation
         </p>
       </GlassCard>
 

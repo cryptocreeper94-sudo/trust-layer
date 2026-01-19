@@ -933,8 +933,8 @@ function PartnerContent() {
                   <div className="text-xs text-white/50">Mission Theaters</div>
                 </div>
                 <div className="px-6 py-3 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm" data-testid="stat-beta-target">
-                  <div className="text-2xl font-bold text-pink-400">July 2026</div>
-                  <div className="text-xs text-white/50">Beta Target</div>
+                  <div className="text-2xl font-bold text-pink-400">TBD</div>
+                  <div className="text-xs text-white/50">Community Driven</div>
                 </div>
               </div>
             </motion.div>

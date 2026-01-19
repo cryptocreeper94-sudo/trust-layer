@@ -744,7 +744,7 @@ export default function DWSCExecutiveSummary() {
                 <Calendar className="w-6 h-6 text-amber-400" />
                 Development Roadmap
               </h2>
-              <p className="text-white/60">Target: <span className="text-amber-400 font-semibold">July 4th, 2026</span> - Public Beta Launch</p>
+              <p className="text-white/60">Timeline: <span className="text-amber-400 font-semibold">Community-Driven</span> - Beta based on participation</p>
             </motion.div>
 
             <div className="space-y-4">
@@ -776,7 +776,7 @@ export default function DWSCExecutiveSummary() {
                 {
                   phase: "Phase 3",
                   title: "Scale",
-                  date: "July 4th, 2026",
+                  date: "TBD - Community Driven",
                   status: "target",
                   blockchain: ["Full ecosystem operational", "Enterprise partnerships", "Global expansion"],
                   chronicles: ["70+ eras", "Public beta", "Full sponsor network"]

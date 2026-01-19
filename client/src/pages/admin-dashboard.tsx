@@ -283,7 +283,7 @@ export default function AdminDashboard() {
 
         <div className="mt-12 text-center text-gray-500 text-sm">
           <p>DarkWave Studios • Owner Control Center v1.0</p>
-          <p className="text-xs mt-1">July 4, 2026 Public Beta Target</p>
+          <p className="text-xs mt-1">Chronicles Beta: TBD (Community-Driven)</p>
         </div>
       </div>
     </div>
