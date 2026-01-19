@@ -7889,6 +7889,65 @@ export async function registerRoutes(
     }
   });
 
+  // Get user's presale purchase history
+  app.get("/api/presale/my-purchases", async (req, res) => {
+    try {
+      const userId = (req.session as any)?.userId;
+      const userEmail = req.query.email as string;
+      
+      if (!userId && !userEmail) {
+        return res.json({ purchases: [], total: { tokens: 0, spent: 0 } });
+      }
+      
+      // Find purchases by user_id or email
+      let purchases: any[] = [];
+      
+      if (userId) {
+        // First try to find user's email
+        const userResult = await db.execute(sql`SELECT email FROM users WHERE id = ${userId}`);
+        const user = userResult.rows[0] as any;
+        if (user?.email) {
+          const normalizedEmail = user.email.toLowerCase().trim();
+          const result = await db.execute(sql`
+            SELECT id, email, token_amount, usd_amount_cents, tier, status, payment_method, created_at
+            FROM presale_purchases 
+            WHERE LOWER(TRIM(email)) = ${normalizedEmail}
+            ORDER BY created_at DESC
+          `);
+          purchases = result.rows as any[];
+        }
+      } else if (userEmail) {
+        const normalizedEmail = userEmail.toLowerCase().trim();
+        const result = await db.execute(sql`
+          SELECT id, email, token_amount, usd_amount_cents, tier, status, payment_method, created_at
+          FROM presale_purchases 
+          WHERE LOWER(TRIM(email)) = ${normalizedEmail}
+          ORDER BY created_at DESC
+        `);
+        purchases = result.rows as any[];
+      }
+      
+      const totalTokens = purchases.reduce((sum, p) => sum + Number(p.token_amount || 0), 0);
+      const totalSpent = purchases.reduce((sum, p) => sum + Number(p.usd_amount_cents || 0), 0) / 100;
+      
+      res.json({ 
+        purchases: purchases.map(p => ({
+          id: p.id,
+          tokens: Number(p.token_amount),
+          amount: Number(p.usd_amount_cents) / 100,
+          tier: p.tier,
+          status: p.status,
+          method: p.payment_method,
+          date: p.created_at
+        })),
+        total: { tokens: totalTokens, spent: totalSpent }
+      });
+    } catch (error) {
+      console.error("Get my purchases error:", error);
+      res.json({ purchases: [], total: { tokens: 0, spent: 0 } });
+    }
+  });
+
   app.get("/api/presale/verify", async (req, res) => {
     try {
       const sessionId = req.query.session_id as string;

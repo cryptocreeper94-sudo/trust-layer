@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { 
   Zap, Shield, TrendingUp, Users, Gift, Award, Crown, Sparkles,
   ArrowRight, Clock, CheckCircle, Copy, ExternalLink, Wallet,
-  Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator, X, CreditCard
+  Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator, X, CreditCard, History, User, UserCheck
 } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
 import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -136,6 +137,7 @@ function HolographicCard({ children, className = "", glow = "cyan" }: { children
 }
 
 function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { user: authUser } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [customAmount, setCustomAmount] = useState("10");
@@ -144,15 +146,16 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
   const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto">("card");
   const { toast } = useToast();
   
-  const { data: user } = useQuery<{ email?: string; displayName?: string }>({
-    queryKey: ["/api/user/me"],
-    retry: false,
-  });
+  const [initializedFromAuth, setInitializedFromAuth] = useState(false);
   
   useEffect(() => {
-    if (user?.email && !email) setEmail(user.email);
-    if (user?.displayName && !name) setName(user.displayName);
-  }, [user]);
+    if (!initializedFromAuth && authUser) {
+      if (authUser.email) setEmail(authUser.email);
+      if (authUser.displayName) setName(authUser.displayName);
+      else if (authUser.firstName) setName(authUser.firstName);
+      setInitializedFromAuth(true);
+    }
+  }, [authUser, initializedFromAuth]);
   
   const isValidEmail = email.includes("@") && email.includes(".");
   const isValidName = name.trim().length >= 2;
@@ -224,6 +227,15 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
         </DialogHeader>
         
         <div className="space-y-4 mt-3">
+          {authUser && (
+            <div className="bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 rounded-lg p-3 flex items-center gap-2">
+              <UserCheck className="w-4 h-4 text-cyan-400" />
+              <span className="text-sm text-cyan-300">
+                Welcome back, {authUser.displayName || authUser.firstName || authUser.email}! Your info is pre-filled.
+              </span>
+            </div>
+          )}
+          
           <div>
             <label className="text-sm text-gray-400 mb-2 block">Your Name</label>
             <Input
@@ -946,7 +958,96 @@ function PurchaseCalculator() {
   );
 }
 
+interface Purchase {
+  id: string;
+  tokens: number;
+  amount: number;
+  tier: string;
+  status: string;
+  method: string;
+  date: string;
+}
+
+function MyPurchases({ userEmail }: { userEmail?: string }) {
+  const { user } = useAuth();
+  const { data, isLoading } = useQuery<{ purchases: Purchase[]; total: { tokens: number; spent: number } }>({
+    queryKey: ["/api/presale/my-purchases", userEmail],
+    queryFn: async () => {
+      const params = new URLSearchParams();
+      if (userEmail) params.set("email", userEmail);
+      const res = await fetch(`/api/presale/my-purchases?${params}`, { credentials: "include" });
+      return res.json();
+    },
+    enabled: !!(user?.id || userEmail),
+  });
+
+  if (isLoading) return null;
+  if (!data?.purchases?.length) return null;
+
+  return (
+    <HolographicCard className="p-6 mb-8" glow="purple">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="p-2 rounded-lg bg-purple-500/20">
+          <History className="w-5 h-5 text-purple-400" />
+        </div>
+        <div>
+          <h3 className="text-lg font-bold text-white">Your Purchases</h3>
+          <p className="text-sm text-gray-400">Welcome back! Here's your allocation</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="p-3 rounded-xl bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
+          <p className="text-gray-400 text-xs">Total Tokens</p>
+          <p className="text-xl font-bold text-cyan-400">{data.total.tokens.toLocaleString()} SIG</p>
+        </div>
+        <div className="p-3 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20">
+          <p className="text-gray-400 text-xs">Total Spent</p>
+          <p className="text-xl font-bold text-purple-400">${data.total.spent.toLocaleString()}</p>
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        {data.purchases.slice(0, 3).map((purchase) => (
+          <div key={purchase.id} className="flex items-center justify-between p-2 rounded-lg bg-white/5">
+            <div className="flex items-center gap-2">
+              <Badge variant={purchase.status === "completed" ? "default" : "secondary"} className="text-xs">
+                {purchase.status}
+              </Badge>
+              <span className="text-sm text-gray-300">{purchase.tokens.toLocaleString()} SIG</span>
+            </div>
+            <span className="text-sm text-gray-500">${purchase.amount}</span>
+          </div>
+        ))}
+      </div>
+    </HolographicCard>
+  );
+}
+
+function ReferralBanner({ referrer }: { referrer: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 border border-amber-500/30"
+    >
+      <div className="flex items-center justify-center gap-3">
+        <User className="w-5 h-5 text-amber-400" />
+        <span className="text-amber-300 font-medium">
+          You were referred by: <span className="text-white font-bold">{referrer}</span>
+        </span>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function Presale() {
+  const { user } = useAuth();
+  const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+  const referrer = searchParams.get('ref') || searchParams.get('referrer');
+  const emailParam = searchParams.get('email');
+  const purchaseEmail = user?.email || emailParam;
+
   const { data: tiersData, isLoading: tiersLoading } = useQuery<{ tiers: PresaleTier[] }>({
     queryKey: ["/api/presale/tiers"],
   });
@@ -964,6 +1065,8 @@ export default function Presale() {
       
       <div className="relative max-w-7xl mx-auto px-4 py-12">
         <BackButton />
+
+        {referrer && <ReferralBanner referrer={referrer} />}
 
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -989,6 +1092,8 @@ export default function Presale() {
             Pay with card or crypto. All purchases are tracked by email for token distribution at launch.
           </p>
         </motion.div>
+
+        {purchaseEmail && <MyPurchases userEmail={purchaseEmail} />}
 
         <div className="grid lg:grid-cols-2 gap-8 mb-16">
           <PresaleProgress />
