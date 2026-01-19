@@ -26,6 +26,14 @@ import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.png";
 import medievalImg from "@assets/generated_images/medieval_castle_vertical_portrait.png";
 import cyberpunkImg from "@assets/generated_images/cyberpunk_neon_city.png";
 import spaceImg from "@assets/generated_images/deep_space_station.png";
+import egyptImg from "@assets/generated_images/ancient_egyptian_kingdom_sunset.png";
+import greeceImg from "@assets/generated_images/ancient_greek_athens_parthenon.png";
+import samuraiImg from "@assets/generated_images/feudal_japan_samurai_castle.png";
+import steampunkImg from "@assets/generated_images/industrial_steampunk_city.png";
+import renaissanceImg from "@assets/generated_images/renaissance_florence_italy_scene.png";
+import romanImg from "@assets/generated_images/roman_empire_colosseum_gladiators.png";
+import vikingImg from "@assets/generated_images/viking_longship_fjord_scene.png";
+import wildWestImg from "@assets/generated_images/wild_west_frontier_town.png";
 import tradingImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import nftImg from "@assets/generated_images/fantasy_character_heroes.png";
 import toolsImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
@@ -110,7 +118,15 @@ const ecosystemImages: Record<string, string> = {
 
 const CHRONICLES_ERAS = [
   { img: stoneAgeImg, era: "Dawn Age", desc: "Stone Age origins", color: "from-amber-500/30 to-orange-600/30" },
+  { img: egyptImg, era: "Kingdom of Ra", desc: "Ancient Egypt", color: "from-yellow-500/30 to-amber-600/30" },
+  { img: greeceImg, era: "Hellenic Glory", desc: "Ancient Greece", color: "from-sky-500/30 to-blue-600/30" },
+  { img: romanImg, era: "Imperial Rome", desc: "Roman Empire", color: "from-red-500/30 to-orange-600/30" },
+  { img: vikingImg, era: "Norse Saga", desc: "Viking Age", color: "from-slate-500/30 to-blue-600/30" },
   { img: medievalImg, era: "Age of Crowns", desc: "Medieval kingdoms", color: "from-purple-500/30 to-indigo-600/30" },
+  { img: samuraiImg, era: "Shogunate", desc: "Feudal Japan", color: "from-rose-500/30 to-red-600/30" },
+  { img: renaissanceImg, era: "Renaissance", desc: "Age of Enlightenment", color: "from-emerald-500/30 to-teal-600/30" },
+  { img: wildWestImg, era: "Frontier", desc: "Wild West", color: "from-orange-500/30 to-amber-600/30" },
+  { img: steampunkImg, era: "Iron Age", desc: "Industrial Revolution", color: "from-zinc-500/30 to-stone-600/30" },
   { img: cyberpunkImg, era: "Neon Dominion", desc: "Cyberpunk future", color: "from-pink-500/30 to-cyan-600/30" },
   { img: spaceImg, era: "Stellar Exodus", desc: "Space exploration", color: "from-blue-500/30 to-purple-600/30" },
 ];
