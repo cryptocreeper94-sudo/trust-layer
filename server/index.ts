@@ -41,14 +41,15 @@ const isProduction = process.env.NODE_ENV === "production";
 const cspDirectives = {
   defaultSrc: ["'self'"],
   scriptSrc: isProduction 
-    ? ["'self'", "'unsafe-eval'", "https://js.stripe.com", "https://www.googletagmanager.com"]
-    : ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+    ? ["'self'", "'unsafe-eval'", "https://js.stripe.com", "https://www.googletagmanager.com", "https://cdnjs.cloudflare.com"]
+    : ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdnjs.cloudflare.com"],
   styleSrc: isProduction
     ? ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"]
     : ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
   fontSrc: ["'self'", "https://fonts.gstatic.com"],
   imgSrc: ["'self'", "data:", "blob:", "https:"],
-  connectSrc: ["'self'", "wss:", "https:"],
+  connectSrc: ["'self'", "wss:", "https:", "https://cdnjs.cloudflare.com"],
+  workerSrc: ["'self'", "blob:", "https://cdnjs.cloudflare.com"],
   frameSrc: ["'self'", "https://js.stripe.com"],
   objectSrc: ["'none'"],
   baseUri: ["'self'"],
