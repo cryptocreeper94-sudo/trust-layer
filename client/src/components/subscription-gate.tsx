@@ -111,7 +111,7 @@ export function SubscriptionGate({
 
           <p className="text-white/40 text-sm">
             Or get everything with{" "}
-            <Link href="/billing" className="text-cyan-400 hover:underline">
+            <Link href="/pricing" className="text-cyan-400 hover:underline">
               DarkWave Complete ($39.99/mo)
             </Link>
           </p>

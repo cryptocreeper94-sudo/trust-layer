@@ -46,6 +46,7 @@ const Treasury = lazy(() => import("@/pages/treasury"));
 const DeveloperPortal = lazy(() => import("@/pages/developer-portal"));
 const DevStudio = lazy(() => import("@/pages/dev-studio"));
 const Billing = lazy(() => import("@/pages/billing"));
+const Pricing = lazy(() => import("@/pages/pricing"));
 const Studio = lazy(() => import("@/pages/studio"));
 const StudioProjects = lazy(() => import("@/pages/studio-projects"));
 const Team = lazy(() => import("@/pages/team"));
@@ -355,6 +356,7 @@ function DWSCRouter() {
         <Route path="/treasury" component={Treasury} />
         <Route path="/developer-portal" component={DeveloperPortal} />
         <Route path="/billing" component={Billing} />
+        <Route path="/pricing" component={Pricing} />
         <Route path="/dev-studio" component={DevStudio} />
         <Route path="/studio" component={Studio} />
         <Route path="/studio/projects" component={StudioProjects} />
