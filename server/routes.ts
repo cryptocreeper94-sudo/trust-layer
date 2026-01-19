@@ -319,7 +319,14 @@ export async function registerRoutes(
             const tier = metadata.tier || "custom";
             
             // SECURITY: Calculate bonus server-side from verified amount (not tier)
-            const TOKEN_PRICE = 0.001;
+            // Get current token price based on total raised (milestone pricing)
+            const statsResult = await db.execute(sql`
+              SELECT COALESCE(SUM(usd_amount_cents), 0) as total_raised_cents
+              FROM presale_purchases WHERE status = 'completed'
+            `);
+            const totalRaisedCents = parseInt(statsResult.rows[0]?.total_raised_cents as string || "0");
+            const TOKEN_PRICE = getTokenPriceForAmount(totalRaisedCents).price;
+            
             const tokenAmount = Math.floor((amountCents / 100) / TOKEN_PRICE);
             // Bonus thresholds: $250+=25%, $100+=15%, $50+=10%, $25+=5%
             const bonusPercent = amountCents >= 25000 ? 25 : amountCents >= 10000 ? 15 : amountCents >= 5000 ? 10 : amountCents >= 2500 ? 5 : 0;
@@ -7761,6 +7768,33 @@ export async function registerRoutes(
     }
   });
 
+  const PRESALE_MILESTONES = [
+    { threshold: 0, price: 0.001 },      // $0 - $50K: $0.001
+    { threshold: 5000000, price: 0.002 }, // $50K - $100K: $0.002
+    { threshold: 10000000, price: 0.003 }, // $100K - $250K: $0.003
+    { threshold: 25000000, price: 0.005 }, // $250K - $500K: $0.005
+    { threshold: 50000000, price: 0.008 }, // $500K+: $0.008
+  ];
+
+  function getTokenPriceForAmount(totalRaisedCents: number): { price: number; nextMilestone: number | null; nextPrice: number | null } {
+    let currentPrice = PRESALE_MILESTONES[0].price;
+    let nextMilestone: number | null = null;
+    let nextPrice: number | null = null;
+    
+    for (let i = PRESALE_MILESTONES.length - 1; i >= 0; i--) {
+      if (totalRaisedCents >= PRESALE_MILESTONES[i].threshold) {
+        currentPrice = PRESALE_MILESTONES[i].price;
+        if (i < PRESALE_MILESTONES.length - 1) {
+          nextMilestone = PRESALE_MILESTONES[i + 1].threshold;
+          nextPrice = PRESALE_MILESTONES[i + 1].price;
+        }
+        break;
+      }
+    }
+    
+    return { price: currentPrice, nextMilestone, nextPrice };
+  }
+
   app.get("/api/presale/stats", async (req, res) => {
     try {
       const result = await db.execute(sql`
@@ -7773,8 +7807,8 @@ export async function registerRoutes(
       `);
       
       const stats = result.rows[0] || { total_raised_cents: 0, total_purchases: 0, unique_holders: 0 };
-      const tokenPrice = 0.001; // $0.001 per SIG (1B supply)
       const totalRaisedCents = parseInt(stats.total_raised_cents as string || "0");
+      const { price: tokenPrice, nextMilestone, nextPrice } = getTokenPriceForAmount(totalRaisedCents);
       const tokensSold = Math.floor((totalRaisedCents / 100) / tokenPrice);
       
       res.json({
@@ -7783,6 +7817,10 @@ export async function registerRoutes(
         tokensSold,
         uniqueHolders: parseInt(stats.unique_holders as string || "0"),
         totalPurchases: parseInt(stats.total_purchases as string || "0"),
+        currentTokenPrice: tokenPrice,
+        nextMilestoneUsd: nextMilestone ? nextMilestone / 100 : null,
+        nextTokenPrice: nextPrice,
+        milestones: PRESALE_MILESTONES.map(m => ({ thresholdUsd: m.threshold / 100, price: m.price })),
       });
     } catch (error) {
       res.json({
@@ -7791,6 +7829,10 @@ export async function registerRoutes(
         tokensSold: 0,
         uniqueHolders: 0,
         totalPurchases: 0,
+        currentTokenPrice: 0.001,
+        nextMilestoneUsd: 50000,
+        nextTokenPrice: 0.002,
+        milestones: PRESALE_MILESTONES.map(m => ({ thresholdUsd: m.threshold / 100, price: m.price })),
       });
     }
   });
@@ -7820,7 +7862,14 @@ export async function registerRoutes(
       const protocol = host.includes("localhost") ? "http" : "https";
       const baseUrl = `${protocol}://${host}`;
       
-      const TOKEN_PRICE = 0.001;
+      // Get current token price based on total raised
+      const statsResult = await db.execute(sql`
+        SELECT COALESCE(SUM(usd_amount_cents), 0) as total_raised_cents
+        FROM presale_purchases WHERE status = 'completed'
+      `);
+      const totalRaisedCents = parseInt(statsResult.rows[0]?.total_raised_cents as string || "0");
+      const { price: TOKEN_PRICE } = getTokenPriceForAmount(totalRaisedCents);
+      
       const tokenAmount = Math.floor((finalAmount / 100) / TOKEN_PRICE);
       const bonusPercent = finalAmount >= 25000 ? 25 : finalAmount >= 10000 ? 15 : finalAmount >= 5000 ? 10 : finalAmount >= 2500 ? 5 : 0;
       const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
@@ -7892,7 +7941,14 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Invalid amount" });
       }
       
-      const TOKEN_PRICE = 0.001;
+      // Get current token price based on total raised (milestone pricing)
+      const statsResult = await db.execute(sql`
+        SELECT COALESCE(SUM(usd_amount_cents), 0) as total_raised_cents
+        FROM presale_purchases WHERE status = 'completed'
+      `);
+      const totalRaisedCents = parseInt(statsResult.rows[0]?.total_raised_cents as string || "0");
+      const TOKEN_PRICE = getTokenPriceForAmount(totalRaisedCents).price;
+      
       const tokenAmount = Math.floor((finalAmount / 100) / TOKEN_PRICE);
       const bonusPercent = tierConfig?.bonus || 0;
       const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
@@ -8138,7 +8194,14 @@ export async function registerRoutes(
         const tier = session.metadata?.tier || 'unknown';
         const amountPaid = (amountCents / 100).toFixed(2);
         
-        const TOKEN_PRICE = 0.001;
+        // Get current token price based on total raised (milestone pricing)
+        const statsResult = await db.execute(sql`
+          SELECT COALESCE(SUM(usd_amount_cents), 0) as total_raised_cents
+          FROM presale_purchases WHERE status = 'completed'
+        `);
+        const totalRaisedCents = parseInt(statsResult.rows[0]?.total_raised_cents as string || "0");
+        const TOKEN_PRICE = getTokenPriceForAmount(totalRaisedCents).price;
+        
         const tokenAmount = Math.floor((amountCents / 100) / TOKEN_PRICE);
         // Match webhook: bonus based on amount, not tier
         const bonusPercent = amountCents >= 25000 ? 25 : amountCents >= 10000 ? 15 : amountCents >= 5000 ? 10 : amountCents >= 2500 ? 5 : 0;

@@ -33,7 +33,6 @@ import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
 import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
 import deepSpace from "@assets/generated_images/deep_space_station.png";
 
-const TOKEN_PRICE = 0.001;
 const PRESALE_ALLOCATION = 150000000;
 
 interface PresaleTier {
@@ -46,12 +45,21 @@ interface PresaleTier {
   tier: string;
 }
 
+interface PresaleMilestone {
+  thresholdUsd: number;
+  price: number;
+}
+
 interface PresaleStats {
   totalRaisedCents: number;
   totalRaisedUsd: number;
   tokensSold: number;
   uniqueHolders: number;
   totalPurchases: number;
+  currentTokenPrice: number;
+  nextMilestoneUsd: number | null;
+  nextTokenPrice: number | null;
+  milestones: PresaleMilestone[];
 }
 
 const ECOSYSTEM_FEATURES = [
@@ -148,6 +156,12 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto">("card");
   const { toast } = useToast();
+  
+  const { data: presaleStats } = useQuery<PresaleStats>({
+    queryKey: ["/api/presale/stats"],
+    refetchInterval: 30000,
+  });
+  const TOKEN_PRICE = presaleStats?.currentTokenPrice || 0.001;
   
   const [initializedFromAuth, setInitializedFromAuth] = useState(false);
   const [initializedFromWallet, setInitializedFromWallet] = useState(false);
@@ -494,6 +508,9 @@ function PresaleProgress() {
   const totalRaised = stats?.totalRaisedUsd || 0;
   const uniqueHolders = stats?.uniqueHolders || 0;
   const progress = (tokensSold / PRESALE_ALLOCATION) * 100;
+  const currentPrice = stats?.currentTokenPrice || 0.001;
+  const nextMilestone = stats?.nextMilestoneUsd;
+  const nextPrice = stats?.nextTokenPrice;
   
   return (
     <>
@@ -514,8 +531,13 @@ function PresaleProgress() {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
           <div className="text-center p-3 sm:p-4 rounded-xl bg-white/5" data-testid="stat-token-price">
-            <p className="text-xl sm:text-3xl font-bold text-cyan-400">${TOKEN_PRICE}</p>
-            <p className="text-gray-500 text-xs sm:text-sm">Token Price</p>
+            <p className="text-xl sm:text-3xl font-bold text-cyan-400">${currentPrice}</p>
+            <p className="text-gray-500 text-xs sm:text-sm">Current Price</p>
+            {nextMilestone && nextPrice && (
+              <p className="text-xs text-amber-400 mt-1">
+                ${nextPrice} at ${(nextMilestone / 1000).toFixed(0)}K raised
+              </p>
+            )}
           </div>
           <div className="text-center p-3 sm:p-4 rounded-xl bg-white/5" data-testid="stat-tokens-sold">
             {isLoading ? (
@@ -642,6 +664,11 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
     early_bird: "from-green-400 to-emerald-500",
   };
   const tierDetails = TIER_DETAILS[tier.tier] || { benefits: [], description: "" };
+  
+  const { data: presaleStats } = useQuery<PresaleStats>({
+    queryKey: ["/api/presale/stats"],
+  });
+  const TOKEN_PRICE = presaleStats?.currentTokenPrice || 0.001;
   
   const isValidEmail = email.includes("@") && email.includes(".");
   
@@ -982,6 +1009,10 @@ function PurchaseCalculator() {
   const { data: tiers } = useQuery<{ tiers: PresaleTier[] }>({
     queryKey: ["/api/presale/tiers"],
   });
+  const { data: presaleStats } = useQuery<PresaleStats>({
+    queryKey: ["/api/presale/stats"],
+  });
+  const TOKEN_PRICE = presaleStats?.currentTokenPrice || 0.001;
 
   const usdAmount = parseFloat(amount) || 0;
   const tokenAmount = usdAmount / TOKEN_PRICE;
