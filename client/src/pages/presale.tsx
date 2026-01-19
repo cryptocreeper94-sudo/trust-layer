@@ -453,7 +453,6 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
               <p className="text-[10px] text-orange-400/70 text-center mt-2">USDC, BTC, ETH, and more accepted via Coinbase</p>
             )}
           </div>
-          </div>
           
           <Button
             onClick={() => checkoutMutation.mutate()}
