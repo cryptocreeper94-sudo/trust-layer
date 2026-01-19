@@ -151,8 +151,7 @@ const roadmapData: RoadmapPhase[] = [
       {
         title: "Cross-Chain Bridge",
         description: "Lock & mint bridge to Ethereum and Solana",
-        status: "in-progress",
-        eta: "January 2026",
+        status: "completed",
         details: ["Ethereum Sepolia testnet", "Solana Devnet", "UUPS proxy contracts"]
       }
     ]
@@ -165,8 +164,7 @@ const roadmapData: RoadmapPhase[] = [
       {
         title: "Token Deployment Templates",
         description: "Pre-built templates for ERC-20 style tokens",
-        status: "in-progress",
-        eta: "January 2026"
+        status: "completed"
       },
       {
         title: "Guardian Studio Copilot",
