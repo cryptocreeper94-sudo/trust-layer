@@ -11,6 +11,7 @@ import { storage } from "./storage";
 import { db } from "./db";
 import { verifyFirebaseIdToken } from "./firebase-admin";
 import { zealyService, type ZealyWebhookPayload } from "./zealy-service";
+import * as blogService from "./blog-service";
 
 // Auth request interface for session-based authentication
 interface AuthenticatedRequest extends Request {
@@ -8145,6 +8146,121 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Crypto verification error:", error);
       res.status(500).json({ error: "Failed to verify crypto payment" });
+    }
+  });
+
+  // ===== Blog API Routes (AI-Generated SEO Content) =====
+  
+  async function isBlogAdmin(req: any): Promise<boolean> {
+    const sessionUserId = (req.session as any)?.userId;
+    if (!sessionUserId) return false;
+    const user = await storage.getUser(sessionUserId);
+    if (!user?.email) return false;
+    const adminEmails = (process.env.BLOG_ADMIN_EMAILS || "").toLowerCase().split(",").map(e => e.trim()).filter(Boolean);
+    return adminEmails.includes(user.email.toLowerCase());
+  }
+
+  app.get("/api/blog/posts", async (req, res) => {
+    try {
+      const isAdmin = await isBlogAdmin(req);
+      const requestedStatus = req.query.status as string | undefined;
+      const status = isAdmin ? requestedStatus : "published";
+      const limit = Math.min(parseInt(req.query.limit as string) || 20, 50);
+      const offset = parseInt(req.query.offset as string) || 0;
+      const posts = await blogService.getAllPosts(status, limit, offset);
+      res.json({ posts });
+    } catch (error) {
+      console.error("Get blog posts error:", error);
+      res.status(500).json({ error: "Failed to fetch posts" });
+    }
+  });
+
+  app.get("/api/blog/posts/:slug", async (req, res) => {
+    try {
+      const isAdmin = await isBlogAdmin(req);
+      const post = await blogService.getPostBySlug(req.params.slug, !isAdmin);
+      if (!post) {
+        return res.status(404).json({ error: "Post not found" });
+      }
+      if (!isAdmin && post.status !== "published") {
+        return res.status(404).json({ error: "Post not found" });
+      }
+      res.json({ post });
+    } catch (error) {
+      console.error("Get blog post error:", error);
+      res.status(500).json({ error: "Failed to fetch post" });
+    }
+  });
+
+  app.get("/api/blog/categories", async (req, res) => {
+    try {
+      const categories = await blogService.getCategories();
+      res.json({ categories });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch categories" });
+    }
+  });
+
+  app.get("/api/blog/topic-suggestions", async (req, res) => {
+    try {
+      const category = req.query.category as string | undefined;
+      const topics = await blogService.getTopicSuggestions(category);
+      res.json({ topics });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch topics" });
+    }
+  });
+
+  app.post("/api/blog/generate", isAuthenticated, async (req: any, res) => {
+    try {
+      if (!(await isBlogAdmin(req))) {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+      const { topic, category } = req.body;
+      const post = await blogService.generateBlogPost(topic, category);
+      res.json({ post, message: "Blog post generated successfully" });
+    } catch (error) {
+      console.error("Generate blog post error:", error);
+      res.status(500).json({ error: "Failed to generate blog post" });
+    }
+  });
+
+  app.put("/api/blog/posts/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      if (!(await isBlogAdmin(req))) {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+      const post = await blogService.updatePost(req.params.id, req.body);
+      res.json({ post });
+    } catch (error) {
+      console.error("Update blog post error:", error);
+      res.status(500).json({ error: "Failed to update post" });
+    }
+  });
+
+  app.post("/api/blog/posts/:id/publish", isAuthenticated, async (req: any, res) => {
+    try {
+      if (!(await isBlogAdmin(req))) {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+      const post = await blogService.publishPost(req.params.id);
+      res.json({ post, message: "Post published successfully" });
+    } catch (error) {
+      console.error("Publish blog post error:", error);
+      res.status(500).json({ error: "Failed to publish post" });
+    }
+  });
+
+  app.delete("/api/blog/posts/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      if (!(await isBlogAdmin(req))) {
+        return res.status(403).json({ error: "Admin access required" });
+      }
+      await blogService.deletePost(req.params.id);
+      res.json({ success: true, message: "Post deleted" });
+    } catch (error) {
+      console.error("Delete blog post error:", error);
+      res.status(500).json({ error: "Failed to delete post" });
     }
   });
 

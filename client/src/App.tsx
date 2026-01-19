@@ -202,6 +202,9 @@ const AIAgentMarketplace = lazy(() => import("@/pages/ai-agent-marketplace"));
 const RWATokenization = lazy(() => import("@/pages/rwa-tokenization"));
 const InfluencerPartnership = lazy(() => import("@/pages/influencer-partnership"));
 const ComingFeatures = lazy(() => import("@/pages/coming-features"));
+const Blog = lazy(() => import("@/pages/blog"));
+const BlogPost = lazy(() => import("@/pages/blog-post"));
+const BlogAdmin = lazy(() => import("@/pages/blog-admin"));
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -345,6 +348,9 @@ function DWSCRouter() {
         <Route path="/token" component={Token} />
         <Route path="/tokenomics" component={Tokenomics} />
         <Route path="/faq" component={FAQ} />
+        <Route path="/blog" component={Blog} />
+        <Route path="/blog/:slug" component={BlogPost} />
+        <Route path="/blog-admin" component={BlogAdmin} />
         <Route path="/support" component={SupportPage} />
         <Route path="/competitive-analysis" component={CompetitiveAnalysis} />
         <Route path="/security" component={SecurityPage} />
