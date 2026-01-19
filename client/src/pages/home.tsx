@@ -4,6 +4,7 @@ import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, H
 import { InfoTooltip } from "@/components/info-tooltip";
 import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.png";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
+import signalEmblem from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { OnboardingTour } from "@/components/onboarding-tour";
@@ -1051,7 +1052,7 @@ export default function Home() {
           
           <div className="space-y-4 py-4">
             <div className="flex items-center justify-center">
-              <img src={darkwaveLogo} alt="Signal" className="w-24 h-24 animate-pulse" />
+              <img src={signalEmblem} alt="Signal" className="w-28 h-28 animate-pulse" />
             </div>
             
             <div className="text-center space-y-2">
