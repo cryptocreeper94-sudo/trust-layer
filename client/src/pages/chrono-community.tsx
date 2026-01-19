@@ -73,7 +73,7 @@ const COMMUNITY_STATS = [
   { label: "Discord Members", value: "Join First!", icon: <MessageCircle className="w-4 h-4 text-purple-400" /> },
   { label: "Founding Members", value: "Be #1", icon: <Crown className="w-4 h-4 text-amber-400" /> },
   { label: "Eras Planned", value: "70+", icon: <Globe className="w-4 h-4 text-cyan-400" /> },
-  { label: "Target Launch", value: "2026", icon: <Rocket className="w-4 h-4 text-pink-400" /> },
+  { label: "Target Launch", value: "TBD", icon: <Rocket className="w-4 h-4 text-pink-400" /> },
 ];
 
 const BENEFITS = [

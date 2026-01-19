@@ -110,7 +110,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
     name: "Season Zero: Chronicles BETA",
     description: "First playable era - Medieval Kingdom with AI NPCs",
     status: "in_progress",
-    targetDate: "NOW - Apr 11, 2026",
+    targetDate: "NOW - Community Driven",
     icon: <Gamepad2 className="w-6 h-6" />,
     image: medievalKingdom,
     milestones: [
@@ -133,9 +133,9 @@ const ECOSYSTEM_PHASES: Phase[] = [
     milestones: [
       { id: "e21", title: "Mainnet Genesis Block", description: "Official network launch on April 11, 2026", status: "pending", isRequired: true },
       { id: "e22", title: "Token Migration", description: "Testnet to mainnet token conversion", status: "pending", isRequired: true },
-      { id: "e23", title: "Chronicles 20+ Eras", description: "Expand from Medieval to 20+ historical eras", status: "pending", isRequired: true },
+      { id: "e23", title: "Chronicles 20+ Eras", description: "Expand from Medieval to 20+ historical eras (community-driven timeline)", status: "pending", isRequired: true },
       { id: "e24", title: "Exchange Listings", description: "CEX and DEX trading availability", status: "pending", isRequired: false },
-      { id: "e25", title: "10 Eras Complete", description: "All verifiable historical eras fully playable", status: "pending", isRequired: false },
+      { id: "e25", title: "10 Eras Complete", description: "All verifiable historical eras fully playable (community-driven timeline)", status: "pending", isRequired: false },
       { id: "e26", title: "DarkWave Games Portal", description: "darkwavegames.io gaming ecosystem launch", status: "pending", isRequired: true },
     ],
   },

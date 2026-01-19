@@ -20,7 +20,7 @@ const ROADMAP_PHASES = [
   {
     phase: "Phase 0",
     title: "Foundation",
-    timeline: "Q1-Q2 2026",
+    timeline: "Now - Community Driven",
     status: "in_progress",
     progress: 35,
     description: "Core infrastructure, community building, database schema, single-era sandbox.",
@@ -38,7 +38,7 @@ const ROADMAP_PHASES = [
   {
     phase: "Phase 1",
     title: "Economy & Property",
-    timeline: "Q3-Q4 2026",
+    timeline: "TBD - Community Driven",
     status: "planned",
     progress: 0,
     description: "Property ownership, storefront infrastructure, economy systems, business partnerships.",
@@ -54,7 +54,7 @@ const ROADMAP_PHASES = [
   {
     phase: "Phase 2",
     title: "Multi-Era Launch",
-    timeline: "Q1-Q2 2026",
+    timeline: "TBD - Community Driven",
     status: "planned",
     progress: 0,
     description: "10+ eras live, storefronts operational, time-travel mechanics, public alpha.",
@@ -70,7 +70,7 @@ const ROADMAP_PHASES = [
   {
     phase: "Phase 3",
     title: "Full ChronoVerse",
-    timeline: "Q3-Q4 2026",
+    timeline: "TBD - Community Driven",
     status: "future",
     progress: 0,
     description: "70+ eras, city districts, premium storefronts, advanced AI, public beta.",

@@ -407,7 +407,7 @@ export default function ChronoExecutiveSummary() {
                   {
                     phase: "Phase 0",
                     title: "Foundation",
-                    date: "Q1-Q2 2026 (Now - June)",
+                    date: "Now - Community Driven",
                     status: "in_progress",
                     items: [
                       "Website & branding launch ✓",
@@ -435,7 +435,7 @@ export default function ChronoExecutiveSummary() {
                   {
                     phase: "Phase 2",
                     title: "Multi-Era Launch",
-                    date: "Q1-Q2 2026 (January - June)",
+                    date: "Phase 2 - TBD",
                     status: "upcoming",
                     items: [
                       "10 historical eras live with full AI simulation",

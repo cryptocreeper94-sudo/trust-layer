@@ -72,7 +72,7 @@ const CORE_PILLARS = [
 const SOCIAL_STATS = [
   { label: "Eras Available", value: "10", icon: <Globe className="w-4 h-4 text-purple-400" /> },
   { label: "Founding Members", value: "Join First 1,000", icon: <Users className="w-4 h-4 text-cyan-400" /> },
-  { label: "Target Launch", value: "2026", icon: <Rocket className="w-4 h-4 text-pink-400" /> },
+  { label: "Target Launch", value: "TBD", icon: <Rocket className="w-4 h-4 text-pink-400" /> },
   { label: "Blockchain", value: "SIG", icon: <Coins className="w-4 h-4 text-amber-400" /> },
 ];
 
@@ -428,7 +428,7 @@ export default function ChronoHome() {
               {
                 icon: Store,
                 title: "Storefront Sponsorships",
-                timeline: "Phase 1-2 (2026-2026)",
+                timeline: "Phase 1-2",
                 desc: "Businesses sponsor in-game locations. Premium real estate in every era. Location-based advertising with real ROI.",
                 cta: "Pre-Register Business",
                 href: "/creators#business",
@@ -437,7 +437,7 @@ export default function ChronoHome() {
               {
                 icon: Users,
                 title: "Creator Marketplace",
-                timeline: "Phase 2 (Q1 2026)",
+                timeline: "Phase 2",
                 desc: "Own your creations as digital real estate. Earn royalties. Trade properties. Build your legacy.",
                 cta: "Join Creator Waitlist",
                 href: "/creators",
@@ -446,7 +446,7 @@ export default function ChronoHome() {
               {
                 icon: Globe,
                 title: "Mobile Apps",
-                timeline: "Phase 2 (Q2 2026)",
+                timeline: "Phase 2",
                 desc: "Android & iOS apps. Live your legacy on the go. Push notifications for world events.",
                 cta: "Get Notified",
                 href: "/crowdfund",

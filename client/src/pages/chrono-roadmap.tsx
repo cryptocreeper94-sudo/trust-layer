@@ -31,7 +31,7 @@ const PHASES: Phase[] = [
   {
     id: "season-zero",
     name: "Season Zero: The Awakening",
-    period: "NOW - Apr 11, 2026",
+    period: "NOW - Community Driven",
     status: "current",
     description: "BETA v0.1 - First playable era with AI NPCs, factions, and Chronicle Proofs.",
     milestones: [
@@ -64,7 +64,7 @@ const PHASES: Phase[] = [
   {
     id: "prototype",
     name: "Prototype",
-    period: "Q2 - Q3 2026",
+    period: "Phase 2 - TBD",
     status: "upcoming",
     description: "Building the first playable prototype with core systems.",
     milestones: [
@@ -80,7 +80,7 @@ const PHASES: Phase[] = [
   {
     id: "expansion",
     name: "Era Expansion",
-    period: "Q4 2026 - Q1 2026",
+    period: "Phase 3 - TBD",
     status: "upcoming",
     description: "Adding more eras and expanding the ChronoVerse.",
     milestones: [
@@ -96,7 +96,7 @@ const PHASES: Phase[] = [
   {
     id: "launch",
     name: "Public Launch",
-    period: "Q2 2026",
+    period: "Community Driven",
     status: "upcoming",
     description: "Opening the ChronoVerse to the world.",
     milestones: [
@@ -112,7 +112,7 @@ const PHASES: Phase[] = [
   {
     id: "scale",
     name: "Scale & Evolve",
-    period: "Q3 2026+",
+    period: "Future - TBD",
     status: "upcoming",
     description: "Growing the universe and community indefinitely.",
     milestones: [

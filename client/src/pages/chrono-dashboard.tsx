@@ -105,7 +105,7 @@ export default function ChronoDashboard() {
                 <Activity className="w-3 h-3 mr-1" /> Dashboard Preview
               </Badge>
               <Badge variant="outline" className="border-amber-500/30 text-amber-400 animate-pulse">
-                Coming 2026
+                Coming Soon
               </Badge>
             </div>
             <h1 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">
