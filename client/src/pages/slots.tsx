@@ -574,7 +574,7 @@ export default function Slots() {
 
         {/* Quick Links */}
         <div className="flex justify-center gap-4 text-sm text-gray-400">
-          <a href="/coin-store" className="hover:text-white transition-colors">Buy Coins</a>
+          <a href="/coin-store" className="hover:text-white transition-colors">Get Chips</a>
           <span>•</span>
           <a href="/daily-bonus" className="hover:text-white transition-colors">Daily Bonus</a>
           <span>•</span>

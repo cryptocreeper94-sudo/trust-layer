@@ -220,7 +220,7 @@ export default function ChronoEconomy() {
               viewport={{ once: true }}
             >
               <Badge className="mb-4 bg-purple-500/20 text-purple-400 border-purple-500/30">
-                <Layers className="w-3 h-3 mr-1" /> Token Utility
+                <Layers className="w-3 h-3 mr-1" /> Signal Utility
               </Badge>
               <h2 className="text-3xl md:text-4xl font-display font-bold mb-6 text-white">
                 What Can You Do With SIG?

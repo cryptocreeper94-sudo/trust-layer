@@ -15,7 +15,7 @@ const TOKEN_ALLOCATION = [
   { name: "Team & Advisors", value: 15, color: "#a855f7", icon: Building, description: "Core team and strategic advisors (4-year vesting)" },
   { name: "Development Fund", value: 20, color: "#ec4899", icon: Rocket, description: "Protocol development, infrastructure, security audits" },
   { name: "Treasury Reserve", value: 15, color: "#f59e0b", icon: Shield, description: "Strategic reserves, partnerships, emergency fund" },
-  { name: "Public Sale", value: 10, color: "#22c55e", icon: Gift, description: "Initial token offering and exchange listings" },
+  { name: "Public Sale", value: 10, color: "#22c55e", icon: Gift, description: "Initial Signal offering and exchange listings" },
 ];
 
 const VESTING_SCHEDULE = [
@@ -64,7 +64,7 @@ export default function Tokenomics() {
             className="text-center mb-12"
           >
             <Badge variant="outline" className="px-3 py-1 border-purple-500/50 text-purple-400 bg-purple-500/10 rounded-full text-xs tracking-wider uppercase mb-4">
-              Token Economics
+              Signal Economics
             </Badge>
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">Signal Tokenomics</span>
@@ -113,7 +113,7 @@ export default function Tokenomics() {
           >
             <h2 className="text-2xl font-display font-bold mb-2 flex items-center gap-3">
               <BarChart3 className="w-6 h-6 text-cyan-400" />
-              Token Allocation
+              Signal Allocation
             </h2>
             <p className="text-muted-foreground text-sm">Distribution designed for ecosystem growth and long-term sustainability</p>
           </motion.div>
@@ -261,7 +261,7 @@ export default function Tokenomics() {
           >
             <h2 className="text-2xl font-display font-bold mb-2 flex items-center gap-3">
               <Sparkles className="w-6 h-6 text-pink-400" />
-              Token Utility
+              Signal Utility
             </h2>
             <p className="text-muted-foreground text-sm">Signal powers every aspect of the DarkWave ecosystem</p>
           </motion.div>

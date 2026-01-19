@@ -420,7 +420,7 @@ export default function Swap() {
                   className="w-full max-w-sm bg-background rounded-2xl border border-white/10 p-4"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <h3 className="font-bold text-lg mb-4">Select Token</h3>
+                  <h3 className="font-bold text-lg mb-4">Select Asset</h3>
                   <div className="space-y-2">
                     {TOKENS.map((token) => (
                       <button

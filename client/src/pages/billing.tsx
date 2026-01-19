@@ -222,7 +222,7 @@ export default function Billing() {
                     <li className="flex items-center gap-2 text-white/70"><Check className="w-3 h-3 text-primary shrink-0" /> 50,000 API calls/month</li>
                     <li className="flex items-center gap-2 text-white/70"><Check className="w-3 h-3 text-primary shrink-0" /> DarkWave Studio</li>
                     <li className="flex items-center gap-2 text-white/70"><Check className="w-3 h-3 text-primary shrink-0" /> Priority support</li>
-                    <li className="flex items-center gap-2 text-white/70"><Check className="w-3 h-3 text-primary shrink-0" /> Early token access</li>
+                    <li className="flex items-center gap-2 text-white/70"><Check className="w-3 h-3 text-primary shrink-0" /> Early Signal access</li>
                   </ul>
                   <Button size="sm" className="w-full mt-4 bg-primary text-background hover:bg-primary/90 text-xs h-9 font-semibold" data-testid="button-plan-builder" onClick={handleUpgradeToBuilder} disabled={upgradeLoading}>{upgradeLoading ? "Loading..." : "Upgrade Now"}</Button>
                 </div>

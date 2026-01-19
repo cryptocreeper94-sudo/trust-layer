@@ -273,7 +273,7 @@ export default function DCABot() {
                 </DialogHeader>
                 <div className="space-y-4 mt-4">
                   <div>
-                    <label className="text-sm mb-2 block">Token to Buy</label>
+                    <label className="text-sm mb-2 block">Asset to Buy</label>
                     <Select value={selectedToken} onValueChange={setSelectedToken}>
                       <SelectTrigger className="bg-white/5 border-white/10">
                         <SelectValue />

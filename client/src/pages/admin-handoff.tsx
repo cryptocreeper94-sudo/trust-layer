@@ -168,7 +168,7 @@ The DarkWave blockchain is running at impressive speed:
 • BFT-PoA consensus with stake-weighted validator selection
 • SHA-256 hashing with Merkle tree verification
 • Epoch-based finality
-• Native asset: Signal (SIG) - Trust Network Access Token
+• Native asset: Signal (SIG) - Trust Network Access
 • NOT positioned as cryptocurrency - it's verified intent transmission
 
 --------------------------------------------------------------------------------
