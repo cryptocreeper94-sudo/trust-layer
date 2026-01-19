@@ -140,7 +140,7 @@ function SparkleEffect() {
 export default function GamesHome() {
   const [jackpot, setJackpot] = useState(125847);
   const [playersOnline, setPlayersOnline] = useState(247);
-  const [showGamesModal, setShowGamesModal] = useState(true);
+  const [showGamesModal, setShowGamesModal] = useState(false);
   
   useEffect(() => {
     const interval = setInterval(() => {
@@ -443,6 +443,138 @@ export default function GamesHome() {
                 </Link>
               </div>
             </GlassCard>
+          </div>
+        </section>
+
+        <section className="py-16 px-4 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/5 to-purple-500/10" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(6,182,212,0.2),transparent_60%)]" />
+          
+          <div className="container mx-auto relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="text-center mb-10"
+            >
+              <Badge className="mb-4 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-400 border-cyan-500/30">
+                <Flame className="w-3 h-3 mr-1" /> Get In Early
+              </Badge>
+              <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
+                Power Your Gaming With <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Signal</span>
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Signal is the backbone of DarkWave Games. Get yours before prices increase.
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0 }}
+              >
+                <a href="https://dwsc.io/presale">
+                  <GlassCard glow className="p-6 h-full text-center group hover:border-cyan-500/50 transition-all cursor-pointer">
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-cyan-500/30">
+                      <Coins className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="font-bold text-xl mb-2">Signal Presale</h3>
+                    <p className="text-sm text-muted-foreground mb-4">Starting at $0.001 per SIG. Early adopters get the best rates.</p>
+                    <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+                      Buy Signal <ArrowRight className="w-3 h-3 ml-1" />
+                    </Badge>
+                  </GlassCard>
+                </a>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <a href="https://dwsc.io/crowdfund">
+                  <GlassCard glow className="p-6 h-full text-center group hover:border-purple-500/50 transition-all cursor-pointer">
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/30">
+                      <Gift className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="font-bold text-xl mb-2">Support the Project</h3>
+                    <p className="text-sm text-muted-foreground mb-4">Back the mission and receive exclusive founder rewards.</p>
+                    <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
+                      Crowdfund <ArrowRight className="w-3 h-3 ml-1" />
+                    </Badge>
+                  </GlassCard>
+                </a>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <a href="https://dwsc.io">
+                  <GlassCard glow className="p-6 h-full text-center group hover:border-pink-500/50 transition-all cursor-pointer">
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-pink-500/30">
+                      <Shield className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="font-bold text-xl mb-2">DarkWave Ecosystem</h3>
+                    <p className="text-sm text-muted-foreground mb-4">Explore the full Trust Layer - blockchain, apps, and more.</p>
+                    <Badge className="bg-pink-500/20 text-pink-400 border-pink-500/30">
+                      Visit Portal <ArrowRight className="w-3 h-3 ml-1" />
+                    </Badge>
+                  </GlassCard>
+                </a>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-8 px-4">
+          <div className="container mx-auto">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              className="relative overflow-hidden rounded-3xl"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-pink-600 via-purple-600 to-cyan-600" />
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMtOS45NCAwLTE4IDguMDYtMTggMThzOC4wNiAxOCAxOCAxOCAxOC04LjA2IDE4LTE4LTguMDYtMTgtMTgtMTh6bTAgMzJjLTcuNzMyIDAtMTQtNi4yNjgtMTQtMTRzNi4yNjgtMTQgMTQtMTQgMTQgNi4yNjggMTQgMTQtNi4yNjggMTQtMTQgMTR6IiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDUpIi8+PC9nPjwvc3ZnPg==')] opacity-30" />
+              
+              <div className="relative z-10 p-8 md:p-12 text-center">
+                <motion.div
+                  animate={{ 
+                    scale: [1, 1.05, 1],
+                    rotate: [0, 2, -2, 0]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="inline-block mb-6"
+                >
+                  <div className="w-20 h-20 mx-auto rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center">
+                    <Flame className="w-10 h-10 text-white" />
+                  </div>
+                </motion.div>
+                
+                <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
+                  Games Launch Q2 2026
+                </h2>
+                <p className="text-white/80 max-w-xl mx-auto mb-6">
+                  Get Signal now and be ready to play, earn, and win when DarkWave Games goes live.
+                </p>
+                
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <a href="https://dwsc.io/presale">
+                    <Button size="lg" className="h-14 px-10 bg-white text-purple-600 font-bold hover:bg-white/90 shadow-xl" data-testid="button-cta-presale">
+                      <Coins className="w-5 h-5 mr-2" />
+                      Get Signal Now
+                    </Button>
+                  </a>
+                  <a href="https://dwsc.io/waitlist">
+                    <Button size="lg" variant="outline" className="h-14 px-10 border-white/30 text-white hover:bg-white/10" data-testid="button-cta-waitlist">
+                      <Clock className="w-5 h-5 mr-2" />
+                      Join Waitlist
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </section>
       </main>
