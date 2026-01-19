@@ -25,6 +25,7 @@ import victorianLondon from "@assets/generated_images/victorian_london_street_sc
 import vikingFjord from "@assets/generated_images/viking_longship_fjord_scene.png";
 import romanColosseum from "@assets/generated_images/roman_empire_colosseum_gladiators.png";
 import stoneAgeVillage from "@assets/generated_images/stone_age_village_scene.png";
+import deepSpace from "@assets/generated_images/deep_space_station.png";
 
 const FEATURED_ERAS = [
   { id: "stone", name: "Dawn Age", period: "50,000 BCE", image: stoneAgeVillage, color: "from-amber-500 to-orange-600" },
