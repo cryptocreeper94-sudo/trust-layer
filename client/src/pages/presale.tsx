@@ -141,7 +141,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
   const [customAmount, setCustomAmount] = useState("10");
   const [useCustom, setUseCustom] = useState(true);
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto">("crypto");
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto">("card");
   const { toast } = useToast();
   
   const { data: user } = useQuery<{ email?: string; displayName?: string }>({
@@ -537,7 +537,7 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
   const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto">("crypto");
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto">("card");
   const tierImages = [quantumRealm, deepSpace, cyberpunkCity, fantasyWorld];
   const tierColors: Record<string, string> = {
     genesis: "from-yellow-400 to-amber-500",
