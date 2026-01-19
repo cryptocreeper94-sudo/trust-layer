@@ -70,6 +70,7 @@ const MultiSig = lazy(() => import("@/pages/multisig"));
 const ProofOfReserve = lazy(() => import("@/pages/proof-of-reserve"));
 const LiquidStaking = lazy(() => import("@/pages/liquid-staking"));
 const AdminRewards = lazy(() => import("@/pages/admin-rewards"));
+const AdminHandoff = lazy(() => import("@/pages/admin-handoff"));
 const AirdropClaim = lazy(() => import("@/pages/airdrop-claim"));
 const Quests = lazy(() => import("@/pages/quests"));
 const NetworkStats = lazy(() => import("@/pages/network-stats"));
@@ -379,6 +380,7 @@ function DWSCRouter() {
         <Route path="/proof-of-reserve" component={ProofOfReserve} />
         <Route path="/liquid-staking" component={LiquidStaking} />
         <Route path="/admin/rewards" component={AdminRewards} />
+        <Route path="/admin/handoff" component={AdminHandoff} />
         <Route path="/airdrop" component={AirdropClaim} />
         <Route path="/quests" component={Quests} />
         <Route path="/network" component={NetworkStats} />
