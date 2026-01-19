@@ -442,6 +442,37 @@ export type HallmarkProfile = typeof hallmarkProfiles.$inferSelect;
 export type InsertHallmarkMint = z.infer<typeof insertHallmarkMintSchema>;
 export type HallmarkMint = typeof hallmarkMints.$inferSelect;
 
+// Member Trust Cards - for business and individual memberships
+export const memberTrustCards = pgTable("member_trust_cards", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull(),
+  trustNumber: varchar("trust_number", { length: 20 }).notNull().unique(),
+  memberType: text("member_type").notNull().default("individual"), // individual, business
+  memberTier: text("member_tier").notNull().default("pioneer"), // pioneer, guardian, enterprise
+  displayName: text("display_name").notNull(),
+  organizationName: text("organization_name"),
+  dataHash: varchar("data_hash", { length: 128 }).notNull(),
+  qrCodeSvg: text("qr_code_svg"),
+  cardImageUrl: text("card_image_url"),
+  darkwaveTxHash: varchar("darkwave_tx_hash", { length: 128 }),
+  darkwaveBlockHeight: text("darkwave_block_height"),
+  totalTransactions: integer("total_transactions").notNull().default(0),
+  rewardPoints: integer("reward_points").notNull().default(0),
+  verifiedAt: timestamp("verified_at"),
+  status: text("status").notNull().default("active"), // active, suspended, expired
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  expiresAt: timestamp("expires_at"),
+});
+
+export const insertMemberTrustCardSchema = createInsertSchema(memberTrustCards).omit({
+  id: true,
+  createdAt: true,
+  verifiedAt: true,
+});
+
+export type InsertMemberTrustCard = z.infer<typeof insertMemberTrustCardSchema>;
+export type MemberTrustCard = typeof memberTrustCards.$inferSelect;
+
 // Genesis Hallmark (the flagship first hallmark)
 export const genesisHallmarkSchema = z.object({
   id: z.string(),
