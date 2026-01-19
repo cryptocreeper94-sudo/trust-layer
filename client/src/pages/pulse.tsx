@@ -13,6 +13,7 @@ import {
 import { GlassCard, StatCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { SubscriptionGate } from "@/components/subscription-gate";
 
 interface MarketData {
   totalMarketCap: number;
@@ -599,6 +600,14 @@ export default function PulseDashboard() {
   };
 
   return (
+    <SubscriptionGate
+      requiredPlans={["pulse_pro"]}
+      productName="Pulse Pro"
+      productDescription="AI-powered market intelligence with ML predictions, Fear & Greed tracking, and verified accuracy analytics."
+      price="$14.99"
+      checkoutPath="/billing"
+      icon={<Zap className="w-10 h-10 text-amber-400" />}
+    >
     <div className="min-h-screen bg-slate-950 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl" />
@@ -966,6 +975,7 @@ export default function PulseDashboard() {
         </motion.div>
       </div>
     </div>
+    </SubscriptionGate>
   );
 }
 

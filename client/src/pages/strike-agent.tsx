@@ -13,6 +13,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
+import { SubscriptionGate } from "@/components/subscription-gate";
 
 interface MarketData {
   totalMarketCap: number;
@@ -800,6 +801,14 @@ export default function StrikeAgentPage() {
   };
 
   return (
+    <SubscriptionGate
+      requiredPlans={["strike_agent"]}
+      productName="Strike Agent"
+      productDescription="Solana memecoin sniper with AI risk scoring, honeypot detection, and one-click Phantom wallet integration."
+      price="$30"
+      checkoutPath="/billing"
+      icon={<Target className="w-10 h-10 text-red-400" />}
+    >
     <div className="min-h-screen bg-slate-950">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
@@ -1032,5 +1041,6 @@ export default function StrikeAgentPage() {
         />
       </AnimatePresence>
     </div>
+    </SubscriptionGate>
   );
 }
