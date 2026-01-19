@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { 
   BadgeCheck, CreditCard, Coins, Trophy, Gift, 
-  ChevronDown, Sparkles, X, ExternalLink
+  ChevronDown, Sparkles, X, ExternalLink, QrCode, Hash, Copy, Check
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/glass-card";
+import QRCode from "qrcode";
 
 interface MemberStats {
   signupPosition: number | null;
@@ -34,8 +35,22 @@ interface TokenBalance {
   totalPendingTokens: number;
 }
 
+function generateTrustHash(userId: string, memberNumber: number): string {
+  const data = `DWTL-${userId}-${memberNumber}-TRUST`;
+  let hash = 0;
+  for (let i = 0; i < data.length; i++) {
+    const char = data.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  const hexHash = Math.abs(hash).toString(16).padStart(8, '0');
+  return `0x${hexHash}${memberNumber.toString(16).padStart(4, '0')}`;
+}
+
 export function MemberBadge({ userId }: { userId?: string }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const { data: userStats } = useQuery<MemberStats>({
     queryKey: ["/api/user/early-adopter-stats"],
@@ -54,6 +69,30 @@ export function MemberBadge({ userId }: { userId?: string }) {
   const memberNumber = userStats?.signupPosition ?? null;
   const totalMembers = counters?.signupPosition ? parseInt(counters.signupPosition) : 0;
   const isEarlyAdopter = memberNumber !== null && memberNumber !== undefined && memberNumber <= 500;
+  
+  const trustHash = userId && memberNumber ? generateTrustHash(userId, memberNumber) : null;
+  const verifyUrl = trustHash ? `${window.location.origin}/verify/${trustHash}` : null;
+
+  useEffect(() => {
+    if (verifyUrl && isOpen) {
+      QRCode.toDataURL(verifyUrl, {
+        width: 80,
+        margin: 1,
+        color: {
+          dark: '#22d3ee',
+          light: '#00000000',
+        },
+      }).then(setQrCodeUrl).catch(() => {});
+    }
+  }, [verifyUrl, isOpen]);
+
+  const copyHash = async () => {
+    if (trustHash) {
+      await navigator.clipboard.writeText(trustHash);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   if (!userId || memberNumber === null || memberNumber === undefined) return null;
 
@@ -115,6 +154,47 @@ export function MemberBadge({ userId }: { userId?: string }) {
                       <X className="w-4 h-4 text-white/60" />
                     </button>
                   </div>
+
+                  {trustHash && (
+                    <div className="mb-4 p-3 rounded-lg bg-white/5 border border-white/10">
+                      <div className="flex items-start gap-3">
+                        {qrCodeUrl && (
+                          <div className="shrink-0 p-1 rounded-lg bg-black/40 border border-cyan-500/30">
+                            <img src={qrCodeUrl} alt="QR Code" className="w-16 h-16" />
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1 mb-1">
+                            <Hash className="w-3 h-3 text-cyan-400" />
+                            <span className="text-[10px] text-muted-foreground">Trust Hash</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <code className="text-[10px] font-mono text-cyan-400 truncate block">
+                              {trustHash}
+                            </code>
+                            <button 
+                              onClick={copyHash}
+                              className="p-1 rounded hover:bg-white/10 transition-colors shrink-0"
+                            >
+                              {copied ? (
+                                <Check className="w-3 h-3 text-green-400" />
+                              ) : (
+                                <Copy className="w-3 h-3 text-white/60" />
+                              )}
+                            </button>
+                          </div>
+                          <Link 
+                            href={`/explorer?address=${trustHash}`}
+                            onClick={() => setIsOpen(false)}
+                            className="text-[10px] text-primary hover:underline mt-1 inline-flex items-center gap-1"
+                          >
+                            View on Explorer
+                            <ExternalLink className="w-2.5 h-2.5" />
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   {isEarlyAdopter && (
                     <div className="mb-4 p-2 rounded-lg bg-amber-500/10 border border-amber-500/30">
