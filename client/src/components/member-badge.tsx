@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { 
   BadgeCheck, CreditCard, Coins, Trophy, Gift, 
-  ChevronDown, Sparkles, X, ExternalLink, QrCode, Hash, Copy, Check
+  ChevronDown, Sparkles, X, ExternalLink, QrCode, Hash, Copy, Check, Download
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -92,6 +92,58 @@ export function MemberBadge({ userId }: { userId?: string }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
+  };
+
+  const downloadMemberInfo = async () => {
+    if (!trustHash || !memberNumber) return;
+    
+    const memberInfo = {
+      memberNumber,
+      trustHash,
+      isEarlyAdopter,
+      totalMembers,
+      signalBalance: tokenBalance?.totalTokens || 0,
+      pendingAirdrop: tokenBalance?.totalPendingTokens || 0,
+      contributed: userStats?.crowdfundTotalCents ? (userStats.crowdfundTotalCents / 100) : 0,
+      verifyUrl,
+      generatedAt: new Date().toISOString(),
+    };
+
+    const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250" viewBox="0 0 400 250">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#22d3ee"/>
+      <stop offset="100%" style="stop-color:#a855f7"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="250" rx="16" fill="url(#bg)"/>
+  <rect x="0" y="0" width="400" height="4" fill="url(#accent)"/>
+  <text x="24" y="40" font-family="system-ui, sans-serif" font-size="18" font-weight="bold" fill="#22d3ee">DarkWave Trust Layer</text>
+  <text x="24" y="70" font-family="system-ui, sans-serif" font-size="12" fill="#94a3b8">VERIFIED MEMBER</text>
+  <text x="24" y="105" font-family="system-ui, sans-serif" font-size="32" font-weight="bold" fill="white">#${memberNumber}</text>
+  ${isEarlyAdopter ? '<text x="24" y="130" font-family="system-ui, sans-serif" font-size="11" fill="#fbbf24">★ Early Adopter</text>' : ''}
+  <text x="24" y="165" font-family="monospace" font-size="10" fill="#94a3b8">Trust Hash</text>
+  <text x="24" y="182" font-family="monospace" font-size="12" fill="#22d3ee">${trustHash}</text>
+  <text x="24" y="210" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Signal Balance: ${(tokenBalance?.totalTokens || 0).toLocaleString()} SIG</text>
+  <text x="24" y="230" font-family="system-ui, sans-serif" font-size="9" fill="#475569">Generated: ${new Date().toLocaleDateString()}</text>
+  <circle cx="360" cy="125" r="30" fill="none" stroke="url(#accent)" stroke-width="2"/>
+  <text x="360" y="130" font-family="system-ui, sans-serif" font-size="10" fill="#22d3ee" text-anchor="middle">✓</text>
+</svg>`;
+
+    const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `darkwave-member-${memberNumber}.svg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   if (!userId || memberNumber === null || memberNumber === undefined) return null;
@@ -245,25 +297,36 @@ export function MemberBadge({ userId }: { userId?: string }) {
                   </div>
 
                   <div className="space-y-2">
-                    <Link href="/dashboard" onClick={() => setIsOpen(false)}>
-                      <Button 
-                        className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white text-xs h-9"
-                        data-testid="button-view-trust-card"
-                      >
-                        <CreditCard className="w-4 h-4 mr-2" />
-                        View Trust Card
-                        <ExternalLink className="w-3 h-3 ml-2" />
-                      </Button>
-                    </Link>
-                    <Link href="/my-tokens" onClick={() => setIsOpen(false)}>
-                      <Button 
-                        variant="outline"
-                        className="w-full border-white/20 text-white text-xs h-8"
-                        data-testid="button-view-tokens"
-                      >
-                        View All Tokens & Rewards
-                      </Button>
-                    </Link>
+                    <Button 
+                      onClick={downloadMemberInfo}
+                      className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white text-xs h-9"
+                      data-testid="button-download-member-info"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Download Member Card
+                    </Button>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Link href="/dashboard" onClick={() => setIsOpen(false)}>
+                        <Button 
+                          variant="outline"
+                          className="w-full border-white/20 text-white text-xs h-8"
+                          data-testid="button-view-trust-card"
+                        >
+                          <CreditCard className="w-3 h-3 mr-1" />
+                          Trust Card
+                        </Button>
+                      </Link>
+                      <Link href="/my-tokens" onClick={() => setIsOpen(false)}>
+                        <Button 
+                          variant="outline"
+                          className="w-full border-white/20 text-white text-xs h-8"
+                          data-testid="button-view-tokens"
+                        >
+                          <Coins className="w-3 h-3 mr-1" />
+                          Tokens
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </GlassCard>
