@@ -1085,13 +1085,29 @@ function MyPurchases({ userEmail, walletAddress }: { userEmail?: string; walletA
 
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div className="p-3 rounded-xl bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
-          <p className="text-gray-400 text-xs">Total Tokens</p>
+          <p className="text-gray-400 text-xs">Total Signal Tokens</p>
           <p className="text-xl font-bold text-cyan-400">{data.total.tokens.toLocaleString()} SIG</p>
+          <p className="text-[10px] text-cyan-400/60 mt-1">Delivered at mainnet launch</p>
         </div>
         <div className="p-3 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20">
-          <p className="text-gray-400 text-xs">Total Spent</p>
+          <p className="text-gray-400 text-xs">Total Invested</p>
           <p className="text-xl font-bold text-purple-400">${data.total.spent.toLocaleString()}</p>
+          <p className="text-[10px] text-purple-400/60 mt-1">@ $0.001 per SIG</p>
         </div>
+      </div>
+
+      <div className="p-3 rounded-xl bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 mb-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-gray-400 text-xs">Estimated Value at Launch</p>
+            <p className="text-lg font-bold text-green-400">${(data.total.tokens * 0.01).toLocaleString()}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-gray-400 text-xs">Potential ROI</p>
+            <p className="text-lg font-bold text-green-400">+{((0.01 / 0.001 - 1) * 100).toFixed(0)}%</p>
+          </div>
+        </div>
+        <p className="text-[10px] text-green-400/60 mt-2 text-center">Based on projected launch price of $0.01 per SIG</p>
       </div>
 
       <div className="space-y-2">
