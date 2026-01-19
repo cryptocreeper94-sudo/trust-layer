@@ -205,6 +205,7 @@ const ComingFeatures = lazy(() => import("@/pages/coming-features"));
 const Blog = lazy(() => import("@/pages/blog"));
 const BlogPost = lazy(() => import("@/pages/blog-post"));
 const BlogAdmin = lazy(() => import("@/pages/blog-admin"));
+const TrustLayer = lazy(() => import("@/pages/trust-layer"));
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -409,6 +410,7 @@ function DWSCRouter() {
         <Route path="/token-compare" component={TokenCompare} />
         <Route path="/investor-pitch" component={InvestorPitch} />
         <Route path="/vision" component={Vision} />
+        <Route path="/trust-layer" component={TrustLayer} />
         <Route path="/learn" component={Learn} />
         <Route path="/ecosystem" component={EcosystemMap} />
         <Route path="/code-snippets" component={CodeSnippets} />

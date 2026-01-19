@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { User, Wallet, Code, Key, Activity, LogOut, Settings, Copy, Check } from "lucide-react";
+import { User, Wallet, Code, Key, Activity, LogOut, Settings, Copy, Check, Award, Shield, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -10,11 +12,63 @@ import { useAuth } from "@/hooks/use-auth";
 import { PasskeyManager } from "@/components/passkey-manager";
 import { WalletButton } from "@/components/wallet-button";
 import { useWallet, shortenAddress } from "@/hooks/use-wallet";
+import { TrustCard, TrustCardPlaceholder } from "@/components/trust-card";
+
+interface TrustCardData {
+  trustNumber: string;
+  displayName: string;
+  memberType: "individual" | "business";
+  memberTier: string;
+  qrCodeSvg?: string;
+  totalTransactions: number;
+  rewardPoints: number;
+  verifiedAt?: string;
+  organizationName?: string;
+}
 
 export default function Dashboard() {
   const { user, isLoading, isAuthenticated } = useAuth();
   const { evmAddress, solanaAddress, isConnected: walletConnected } = useWallet();
   const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const activateMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch("/api/member/trust-card", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ memberType: "individual", memberTier: "pioneer" }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to create trust card");
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["trust-card"] });
+      toast({ title: "Welcome to the Trust Layer!", description: "Your Trust Card has been activated" });
+    },
+    onError: (error: Error) => {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const { data: trustCard, isLoading: trustCardLoading} = useQuery<TrustCardData | null>({
+    queryKey: ["trust-card", user?.id],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      const res = await fetch("/api/member/trust-card");
+      if (!res.ok) {
+        if (res.status === 404) return null;
+        throw new Error("Failed to fetch trust card");
+      }
+      return res.json();
+    },
+    enabled: !!user?.id,
+    staleTime: 60000,
+  });
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -79,6 +133,48 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
+
+          <GlassCard glow className="mb-6">
+            <div className="p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-purple-400" />
+                  <h3 className="font-bold text-sm sm:text-base">Your Trust Card</h3>
+                </div>
+                {!trustCard && !trustCardLoading && (
+                  <Link href="/trust-layer">
+                    <Button size="sm" variant="outline" className="gap-1 border-purple-500/30 text-purple-400 hover:bg-purple-500/10">
+                      <Sparkles className="w-3 h-3" />
+                      Get Started
+                    </Button>
+                  </Link>
+                )}
+              </div>
+              
+              {trustCardLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="animate-pulse text-muted-foreground">Loading trust card...</div>
+                </div>
+              ) : trustCard ? (
+                <TrustCard
+                  trustNumber={trustCard.trustNumber}
+                  displayName={trustCard.displayName}
+                  memberType={trustCard.memberType}
+                  memberTier={trustCard.memberTier}
+                  qrCodeSvg={trustCard.qrCodeSvg}
+                  totalTransactions={trustCard.totalTransactions}
+                  rewardPoints={trustCard.rewardPoints}
+                  verifiedAt={trustCard.verifiedAt}
+                  organizationName={trustCard.organizationName}
+                />
+              ) : (
+                <TrustCardPlaceholder 
+                  onActivate={() => activateMutation.mutate()} 
+                  isActivating={activateMutation.isPending} 
+                />
+              )}
+            </div>
+          </GlassCard>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             <GlassCard glow>

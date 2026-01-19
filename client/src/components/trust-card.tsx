@@ -61,25 +61,53 @@ export function TrustCard({
   };
 
   const downloadCard = async () => {
-    if (!cardRef.current) return;
+    const svgContent = generateCardSVG();
+    const blob = new Blob([svgContent], { type: "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement("a");
+    link.download = `darkwave-trust-card-${trustNumber}.svg`;
+    link.href = url;
+    link.click();
+    
+    URL.revokeObjectURL(url);
+    toast({ title: "Downloaded!", description: "Your Trust Card has been saved as SVG" });
+  };
 
-    try {
-      const html2canvas = (await import("html2canvas")).default;
-      const canvas = await html2canvas(cardRef.current, {
-        backgroundColor: null,
-        scale: 2,
-        useCORS: true,
-      });
-      
-      const link = document.createElement("a");
-      link.download = `darkwave-trust-card-${trustNumber}.png`;
-      link.href = canvas.toDataURL("image/png");
-      link.click();
-      
-      toast({ title: "Downloaded!", description: "Your Trust Card has been saved" });
-    } catch (error) {
-      toast({ title: "Error", description: "Failed to download card", variant: "destructive" });
-    }
+  const generateCardSVG = () => {
+    const qrEmbedded = qrCodeSvg 
+      ? `<g transform="translate(305, 145) scale(0.6)">${qrCodeSvg.replace(/<\?xml[^?]*\?>/g, '').replace(/<!DOCTYPE[^>]*>/g, '').replace(/<svg[^>]*>/, '').replace(/<\/svg>/, '')}</g>`
+      : `<rect x="300" y="140" width="80" height="80" rx="8" fill="white"/><text x="320" y="185" font-family="system-ui, sans-serif" font-size="8" fill="#64748b">QR</text>`;
+    
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250" viewBox="0 0 400 250">
+      <defs>
+        <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#0f172a"/>
+          <stop offset="50%" style="stop-color:#1e1b4b"/>
+          <stop offset="100%" style="stop-color:#0f172a"/>
+        </linearGradient>
+        <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#a855f7"/>
+          <stop offset="50%" style="stop-color:#ec4899"/>
+          <stop offset="100%" style="stop-color:#3b82f6"/>
+        </linearGradient>
+      </defs>
+      <rect width="400" height="250" rx="16" fill="url(#bg)"/>
+      <rect x="1" y="1" width="398" height="248" rx="15" fill="none" stroke="url(#glow)" stroke-width="2" opacity="0.5"/>
+      <text x="20" y="35" font-family="system-ui, sans-serif" font-size="10" fill="#a855f7" text-transform="uppercase" letter-spacing="1">DarkWave Trust Layer</text>
+      <text x="20" y="50" font-family="system-ui, sans-serif" font-size="8" fill="#94a3b8">Verified Member</text>
+      <text x="20" y="100" font-family="system-ui, sans-serif" font-size="18" font-weight="bold" fill="white">${displayName}</text>
+      ${organizationName ? `<text x="20" y="120" font-family="system-ui, sans-serif" font-size="12" fill="#94a3b8">${organizationName}</text>` : ''}
+      <text x="20" y="160" font-family="system-ui, sans-serif" font-size="8" fill="#64748b" text-transform="uppercase">Trust Number</text>
+      <rect x="15" y="165" width="180" height="30" rx="6" fill="rgba(0,0,0,0.4)"/>
+      <text x="25" y="185" font-family="monospace" font-size="14" font-weight="bold" fill="#c084fc">${trustNumber}</text>
+      <text x="20" y="230" font-family="system-ui, sans-serif" font-size="10" fill="white">${totalTransactions} Transactions</text>
+      <text x="150" y="230" font-family="system-ui, sans-serif" font-size="10" fill="#a855f7">${rewardPoints} Rewards</text>
+      <rect x="298" y="138" width="84" height="84" rx="8" fill="white"/>
+      ${qrEmbedded}
+      <circle cx="370" cy="30" r="15" fill="url(#glow)" opacity="0.3"/>
+      <text x="362" y="35" font-family="system-ui, sans-serif" font-size="10" fill="white" font-weight="bold">${memberTier.charAt(0).toUpperCase()}</text>
+    </svg>`;
   };
 
   const shareCard = async () => {
@@ -250,7 +278,12 @@ export function TrustCard({
   );
 }
 
-export function TrustCardPlaceholder() {
+interface TrustCardPlaceholderProps {
+  onActivate?: () => void;
+  isActivating?: boolean;
+}
+
+export function TrustCardPlaceholder({ onActivate, isActivating }: TrustCardPlaceholderProps = {}) {
   return (
     <div className="w-full max-w-md mx-auto">
       <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-900 via-purple-950/50 to-slate-900 aspect-[1.6/1] p-6">
@@ -262,9 +295,23 @@ export function TrustCardPlaceholder() {
           <p className="text-sm text-muted-foreground mb-4">
             Join the Trust Layer to receive your unique Trust Number
           </p>
-          <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500">
-            <Sparkles className="w-4 h-4 mr-2" />
-            Activate Membership
+          <Button 
+            onClick={onActivate}
+            disabled={isActivating}
+            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500"
+            data-testid="button-activate-membership"
+          >
+            {isActivating ? (
+              <>
+                <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                Activating...
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-4 h-4 mr-2" />
+                Activate Membership
+              </>
+            )}
           </Button>
         </div>
       </div>

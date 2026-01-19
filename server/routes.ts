@@ -114,7 +114,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and, gte } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -1550,6 +1550,130 @@ export async function registerRoutes(
     } catch (error) {
       console.error("PIN status error:", error);
       res.status(500).json({ error: "Failed to check PIN status" });
+    }
+  });
+
+  // Member Trust Card endpoints
+  app.get("/api/member/trust-card", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.firebaseUser?.uid;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const [card] = await db.select().from(memberTrustCards).where(eq(memberTrustCards.userId, userId));
+      
+      if (!card) {
+        return res.status(404).json({ error: "Trust card not found" });
+      }
+
+      res.json({
+        trustNumber: card.trustNumber,
+        displayName: card.displayName,
+        memberType: card.memberType,
+        memberTier: card.memberTier,
+        qrCodeSvg: card.qrCodeSvg,
+        totalTransactions: card.totalTransactions,
+        rewardPoints: card.rewardPoints,
+        verifiedAt: card.verifiedAt?.toISOString(),
+        organizationName: card.organizationName,
+      });
+    } catch (error) {
+      console.error("Trust card fetch error:", error);
+      res.status(500).json({ error: "Failed to fetch trust card" });
+    }
+  });
+
+  app.post("/api/member/trust-card", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.firebaseUser?.uid;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const user = await storage.getFirebaseUser(userId);
+      if (!user) {
+        return res.status(401).json({ error: "User not found" });
+      }
+
+      const [existing] = await db.select().from(memberTrustCards).where(eq(memberTrustCards.userId, userId));
+      if (existing) {
+        return res.status(400).json({ error: "Trust card already exists" });
+      }
+
+      const { memberType = "individual", memberTier = "pioneer", organizationName } = req.body;
+
+      const newCard = await db.transaction(async (tx) => {
+        const [counter] = await tx.select().from(hallmarkGlobalCounter).where(eq(hallmarkGlobalCounter.id, "member")).for("update");
+        let nextSerial = 1;
+        if (counter) {
+          nextSerial = parseInt(counter.currentGlobalSerial) + 1;
+          await tx.update(hallmarkGlobalCounter)
+            .set({ currentGlobalSerial: nextSerial.toString(), lastUpdated: new Date() })
+            .where(eq(hallmarkGlobalCounter.id, "member"));
+        } else {
+          await tx.insert(hallmarkGlobalCounter).values({
+            id: "member",
+            currentGlobalSerial: "1",
+          });
+        }
+
+        const trustNumber = `TN-${nextSerial.toString().padStart(10, '0')}`;
+        const displayName = user.displayName || user.firstName || user.email?.split('@')[0] || 'Member';
+        
+        const payload = {
+          userId,
+          trustNumber,
+          displayName,
+          memberType,
+          memberTier,
+          createdAt: new Date().toISOString(),
+        };
+        const dataHash = crypto.createHash('sha256').update(JSON.stringify(payload)).digest('hex');
+
+        const dwResult = await submitHashToDarkWave({
+          dataHash: "0x" + dataHash,
+          appId: "trust-layer-member",
+          category: "member-trust-card",
+          metadata: payload,
+        });
+
+        const qrData = JSON.stringify({ tn: trustNumber, v: dataHash.slice(0, 8), tx: dwResult.txHash?.slice(0, 10) });
+        const qrCodeSvg = await QRCode.toString(qrData, { type: 'svg', width: 128 });
+
+        const [card] = await tx.insert(memberTrustCards).values({
+          userId,
+          trustNumber,
+          memberType,
+          memberTier,
+          displayName,
+          organizationName: organizationName || null,
+          dataHash,
+          qrCodeSvg,
+          darkwaveTxHash: dwResult.txHash || null,
+          darkwaveBlockHeight: dwResult.blockHeight?.toString() || null,
+          verifiedAt: new Date(),
+          status: "active",
+        }).returning();
+
+        return card;
+      });
+
+      res.json({
+        trustNumber: newCard.trustNumber,
+        displayName: newCard.displayName,
+        memberType: newCard.memberType,
+        memberTier: newCard.memberTier,
+        qrCodeSvg: newCard.qrCodeSvg,
+        totalTransactions: newCard.totalTransactions,
+        rewardPoints: newCard.rewardPoints,
+        verifiedAt: newCard.verifiedAt?.toISOString(),
+        organizationName: newCard.organizationName,
+        darkwaveTxHash: newCard.darkwaveTxHash,
+      });
+    } catch (error) {
+      console.error("Trust card creation error:", error);
+      res.status(500).json({ error: "Failed to create trust card" });
     }
   });
 
