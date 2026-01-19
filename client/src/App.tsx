@@ -15,6 +15,7 @@ import { FirstLoginModal } from "@/components/first-login-modal";
 import Home from "@/pages/home";
 import NotFound from "@/pages/not-found";
 import Terms from "@/pages/terms";
+import DevelopersNote from "@/pages/developers-note";
 import VirtualCurrencyTerms from "@/pages/virtual-currency-terms";
 import Privacy from "@/pages/privacy";
 
@@ -330,6 +331,7 @@ function DWSCRouter() {
       <ScrollToTop />
       <Switch>
         <Route path="/" component={Home} />
+        <Route path="/note" component={DevelopersNote} />
         <Route path="/join/:code" component={SyndicateInvite} />
         <Route path="/rewards" component={Rewards} />
         <Route path="/my-tokens" component={MyTokens} />

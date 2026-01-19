@@ -25,6 +25,7 @@ const navCategories = [
     defaultOpen: true,
     items: [
       { href: "/", label: "Home", icon: Home },
+      { href: "/note", label: "Our Story", icon: Heart },
       { href: "/wallet", label: "Wallet", icon: Coins },
       { href: "/ecosystem", label: "Ecosystem", icon: Box },
       { href: "/arcade", label: "Games", icon: Rocket, badge: "Soon", comingSoon: true },
