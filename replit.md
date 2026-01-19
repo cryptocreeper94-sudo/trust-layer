@@ -45,6 +45,10 @@ Every new page MUST be built with the Ultra-Premium Bento Grid LED Protocol, inc
 - **DarkWave Academy**: Education and certification platform for crypto fundamentals, multi-chain ecosystems, DeFi, security, bridging, and Trust Layer operations, with Bronze, Silver, Gold certification tiers and a mentor network. Also marketed as standalone acquisition channel - "unbiased crypto education" leads people into Trust Layer ecosystem upon certification. Seek influencer endorsements for credibility. Pricing strategy: near-free (loss leader) - course is the acquisition funnel, not the profit center. Covers all personas: scared newcomers, burned learners, experienced users wanting verification badge.
 - **Signal Foundation (Charitable Arm)**: Trust Layer-native charity infrastructure proving where every donation goes. Initial focus: no-kill animal shelters (chronically underfunded, volunteer-dependent). Expands to multiple causes. Key differentiator: 95%+ donation-to-cause ratio with on-chain proof. Solves the charity trust problem - donors see exactly where funds go. Verified recipients through Guardian certification. Model after Salvation Army's efficiency. Name options: "Signals," "Signal Foundation," "Trust Layer Giving." Mission: healing wounds caused by ignorance and indifference, giving back as core value.
 
+## Next Session Priorities
+1. **Veil ebook download cards** - Fix padding on `/veil` landing page (text pushed against edges)
+2. **Ebook expansion** - Research more details to lengthen chapters, add historical context and background explanations
+
 ## External Dependencies
 - **Database**: PostgreSQL
 - **Authentication**: Firebase Auth
