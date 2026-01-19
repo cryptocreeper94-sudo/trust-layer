@@ -22,6 +22,7 @@ import { GamesComingSoonModal } from "@/components/games-coming-soon-modal";
 import { useState, useRef, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { WalletButton } from "@/components/wallet-button";
+import { MemberBadge } from "@/components/member-badge";
 import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.png";
 import medievalImg from "@assets/generated_images/medieval_castle_vertical_portrait.png";
 import egyptImg from "@assets/generated_images/ancient_egyptian_kingdom_sunset.png";
@@ -383,6 +384,9 @@ export default function Home() {
             <span className="font-display font-bold text-xl tracking-tight">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2 sm:gap-3">
+            {isAuthenticated && user?.id && (
+              <MemberBadge userId={user.id.toString()} />
+            )}
             <Link href="/executive-summary">
               <Button 
                 size="sm" 
