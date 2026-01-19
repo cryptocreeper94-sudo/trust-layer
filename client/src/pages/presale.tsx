@@ -8,6 +8,7 @@ import {
   Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator, X, CreditCard, History, User, UserCheck
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { useWallet } from "@/hooks/use-wallet";
 import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -138,8 +139,10 @@ function HolographicCard({ children, className = "", glow = "cyan" }: { children
 
 function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { user: authUser } = useAuth();
+  const { evmAddress, solanaAddress, isConnected, connectEVM, connectSolana, hasMetaMask, hasPhantom } = useWallet();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [walletAddress, setWalletAddress] = useState("");
   const [customAmount, setCustomAmount] = useState("10");
   const [useCustom, setUseCustom] = useState(true);
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
@@ -147,6 +150,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
   const { toast } = useToast();
   
   const [initializedFromAuth, setInitializedFromAuth] = useState(false);
+  const [initializedFromWallet, setInitializedFromWallet] = useState(false);
   
   useEffect(() => {
     if (!initializedFromAuth && authUser) {
@@ -156,6 +160,19 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
       setInitializedFromAuth(true);
     }
   }, [authUser, initializedFromAuth]);
+  
+  useEffect(() => {
+    if (!initializedFromWallet && (evmAddress || solanaAddress)) {
+      setWalletAddress(evmAddress || solanaAddress || "");
+      setInitializedFromWallet(true);
+    }
+  }, [evmAddress, solanaAddress, initializedFromWallet]);
+  
+  useEffect(() => {
+    if (evmAddress || solanaAddress) {
+      setWalletAddress(evmAddress || solanaAddress || "");
+    }
+  }, [evmAddress, solanaAddress]);
   
   const isValidEmail = email.includes("@") && email.includes(".");
   const isValidName = name.trim().length >= 2;
@@ -190,6 +207,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
           tier: useCustom ? "custom" : selectedTier,
           name: name.trim(),
           email: email.trim(),
+          walletAddress: walletAddress.trim(),
           amountCents: amountCents,
         }),
       });
@@ -262,6 +280,62 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
             />
             {email && !isValidEmail && (
               <p className="text-xs text-red-400 mt-1">Please enter a valid email</p>
+            )}
+          </div>
+          
+          <div>
+            <label className="text-sm text-gray-400 mb-2 block">Wallet Address (for token delivery)</label>
+            {isConnected ? (
+              <div className="space-y-2">
+                <Input
+                  type="text"
+                  placeholder="Your wallet address"
+                  value={walletAddress}
+                  onChange={(e) => setWalletAddress(e.target.value)}
+                  className={`bg-black/50 border-white/20 text-white placeholder:text-gray-500 font-mono text-sm ${
+                    walletAddress ? "border-green-500/50" : ""
+                  }`}
+                />
+                <p className="text-xs text-green-400 flex items-center gap-1">
+                  <Wallet className="w-3 h-3" />
+                  Wallet connected - address auto-filled
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <Input
+                  type="text"
+                  placeholder="Enter your wallet address or connect below"
+                  value={walletAddress}
+                  onChange={(e) => setWalletAddress(e.target.value)}
+                  className="bg-black/50 border-white/20 text-white placeholder:text-gray-500 font-mono text-sm"
+                />
+                <div className="flex gap-2">
+                  {hasMetaMask && (
+                    <button
+                      type="button"
+                      onClick={connectEVM}
+                      className="flex-1 py-2 px-3 rounded-lg bg-orange-500/20 border border-orange-500/30 text-orange-400 text-xs font-medium hover:bg-orange-500/30 transition-colors flex items-center justify-center gap-1"
+                    >
+                      <Wallet className="w-3 h-3" />
+                      Connect MetaMask
+                    </button>
+                  )}
+                  {hasPhantom && (
+                    <button
+                      type="button"
+                      onClick={connectSolana}
+                      className="flex-1 py-2 px-3 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 text-xs font-medium hover:bg-purple-500/30 transition-colors flex items-center justify-center gap-1"
+                    >
+                      <Wallet className="w-3 h-3" />
+                      Connect Phantom
+                    </button>
+                  )}
+                </div>
+                {!hasMetaMask && !hasPhantom && (
+                  <p className="text-xs text-gray-500">No wallet detected. Enter your address manually.</p>
+                )}
+              </div>
             )}
           </div>
           
