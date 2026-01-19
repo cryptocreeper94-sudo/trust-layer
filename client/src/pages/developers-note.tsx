@@ -228,7 +228,7 @@ export default function DevelopersNote() {
                   )}
                 </Button>
               </div>
-              <div className="bg-slate-900/50 rounded-lg p-4 max-h-64 overflow-y-auto border border-white/10">
+              <div className="bg-slate-900/50 rounded-lg p-4 border border-white/10">
                 <pre className="text-white/70 text-sm whitespace-pre-wrap font-sans leading-relaxed">{facebookPost}</pre>
               </div>
             </GlassCard>
