@@ -14,7 +14,7 @@ import presaleImg from "@assets/generated_images/darkwave_crypto_token_coin_holo
 
 const featuredItems = [
   { href: "/crowdfund", label: "Fund Development", icon: Heart, badge: "Support", image: crowdfundImg, overlayGradient: "linear-gradient(135deg, rgba(6,182,212,0.85) 0%, rgba(59,130,246,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#06b6d4, #3b82f6", badgeClass: "bg-cyan-500/30 text-cyan-300", description: "Help Build the Future", external: false },
-  { href: "/presale", label: "Token Presale", icon: Coins, badge: "Live", image: presaleImg, overlayGradient: "linear-gradient(135deg, rgba(245,158,11,0.85) 0%, rgba(239,68,68,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#f59e0b, #ef4444", badgeClass: "bg-amber-500/30 text-amber-300", description: "Get SIG at Best Price", external: false },
+  { href: "/presale", label: "Acquire Signal", icon: Coins, badge: "Live", image: presaleImg, overlayGradient: "linear-gradient(135deg, rgba(245,158,11,0.85) 0%, rgba(239,68,68,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#f59e0b, #ef4444", badgeClass: "bg-amber-500/30 text-amber-300", description: "Get SIG at Best Price", external: false },
 ];
 
 // Organized nav categories for cleaner menu

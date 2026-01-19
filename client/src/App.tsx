@@ -9,6 +9,7 @@ import { WalletProvider } from "@/hooks/use-wallet";
 import { AIAssistant } from "@/components/ai-assistant";
 import { getAppFromHost } from "@/lib/app-config";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
+import { FirstLoginModal } from "@/components/first-login-modal";
 
 // Critical pages - load immediately
 import Home from "@/pages/home";
@@ -531,6 +532,7 @@ function App() {
                 <Toaster />
                 <Router />
                 {showAIAssistant && <AIAssistant />}
+                {showAIAssistant && <FirstLoginModal />}
               </TooltipProvider>
             </FavoritesProvider>
           </NotificationsProvider>
