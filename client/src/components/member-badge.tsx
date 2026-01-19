@@ -9,7 +9,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/glass-card";
-import QRCode from "qrcode";
 
 interface MemberStats {
   signupPosition: number | null;
@@ -49,7 +48,6 @@ function generateTrustHash(userId: string, memberNumber: number): string {
 
 export function MemberBadge({ userId }: { userId?: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
   const { data: userStats } = useQuery<MemberStats>({
@@ -72,19 +70,10 @@ export function MemberBadge({ userId }: { userId?: string }) {
   
   const trustHash = userId && memberNumber ? generateTrustHash(userId, memberNumber) : null;
   const verifyUrl = trustHash ? `${window.location.origin}/verify/${trustHash}` : null;
-
-  useEffect(() => {
-    if (verifyUrl && isOpen) {
-      QRCode.toDataURL(verifyUrl, {
-        width: 80,
-        margin: 1,
-        color: {
-          dark: '#22d3ee',
-          light: '#00000000',
-        },
-      }).then(setQrCodeUrl).catch(() => {});
-    }
-  }, [verifyUrl, isOpen]);
+  
+  const qrCodeUrl = verifyUrl 
+    ? `https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(verifyUrl)}&bgcolor=00000000&color=22d3ee`
+    : null;
 
   const copyHash = async () => {
     if (trustHash) {
