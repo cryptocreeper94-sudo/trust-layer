@@ -120,7 +120,29 @@ Flagship gaming application demonstrating chain capabilities:
 - Real-time multiplayer interactions
 - On-chain asset ownership
 - Dynamic economy
-- 70+ playable eras
+- 10 verifiable historical eras
+
+### 5.3 Pulse - AI Market Intelligence
+
+AI-powered market prediction and analytics platform:
+
+- Real-time crypto market monitoring with Fear & Greed index
+- ML-based price predictions with verified accuracy tracking
+- Multi-timeframe analysis (1H, 4H, 24H, 7D)
+- Transparent win/loss tracking with historical performance
+- Live signals for BTC, ETH, SOL, and top altcoins
+- Integration with Trust Layer for prediction verification
+
+### 5.4 Strike Agent - Token Sniper
+
+Intelligent Solana memecoin detection and analysis tool:
+
+- Real-time new token discovery on Solana/pump.fun
+- AI risk scoring with snipe/watch/avoid recommendations
+- Honeypot detection and rug-pull warning system
+- Liquidity lock verification and mint authority checks
+- Holder distribution analysis and bot detection
+- One-click integration with Phantom wallet for execution
 
 ## 6. Roadmap
 
