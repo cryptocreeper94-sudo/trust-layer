@@ -37,12 +37,30 @@ const PRODUCTS: ProductConfig[] = [
     ],
   },
   {
+    name: "Pulse Pro",
+    description: "AI-powered market intelligence - ML predictions, Fear & Greed tracking, accuracy analytics",
+    metadata: { category: "subscription", tier: "pulse_pro" },
+    prices: [
+      { nickname: "Pulse Pro Monthly", unit_amount: 1499, currency: "usd", recurring: { interval: "month" } },
+      { nickname: "Pulse Pro Yearly", unit_amount: 14999, currency: "usd", recurring: { interval: "year" } },
+    ],
+  },
+  {
+    name: "Strike Agent",
+    description: "Solana memecoin sniper - AI risk scoring, honeypot detection, one-click Phantom integration",
+    metadata: { category: "subscription", tier: "strike_agent" },
+    prices: [
+      { nickname: "Strike Agent Monthly", unit_amount: 3000, currency: "usd", recurring: { interval: "month" } },
+      { nickname: "Strike Agent Yearly", unit_amount: 30000, currency: "usd", recurring: { interval: "year" } },
+    ],
+  },
+  {
     name: "DarkWave Complete",
-    description: "Full access to the entire DarkWave ecosystem - Blockchain, Chronicles, and all premium features",
+    description: "Full access bundle - Pulse Pro + Strike Agent + Chronicles Pro at discounted rate",
     metadata: { category: "subscription", tier: "complete" },
     prices: [
-      { nickname: "DarkWave Complete Monthly", unit_amount: 4999, currency: "usd", recurring: { interval: "month" } },
-      { nickname: "DarkWave Complete Yearly", unit_amount: 49999, currency: "usd", recurring: { interval: "year" } },
+      { nickname: "DarkWave Complete Monthly", unit_amount: 3999, currency: "usd", recurring: { interval: "month" } },
+      { nickname: "DarkWave Complete Yearly", unit_amount: 39999, currency: "usd", recurring: { interval: "year" } },
     ],
   },
   {
