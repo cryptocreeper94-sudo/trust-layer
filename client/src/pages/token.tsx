@@ -4,7 +4,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
-import tokenBg from "@assets/generated_images/platinum_darkwave_token_holographic_fill.png";
+import tokenBg from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
@@ -39,15 +39,15 @@ export default function Token() {
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div className="space-y-6">
-              <Badge variant="outline" className="px-3 py-1 border-secondary/50 text-secondary bg-secondary/10 rounded-full text-xs tracking-wider uppercase">
-                Native Utility Coin
+              <Badge variant="outline" className="px-3 py-1 border-cyan-500/50 text-cyan-400 bg-cyan-500/10 rounded-full text-xs tracking-wider uppercase">
+                Trust Network Access Token
               </Badge>
               <h1 className="text-4xl md:text-5xl font-display font-bold leading-tight">
-                DarkWave <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-purple-400 to-primary">(Signal)</span>
+                Signal <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400">(SIG)</span>
               </h1>
               <p className="text-sm text-muted-foreground leading-relaxed max-w-md">
-                The fuel of the DarkWave Ecosystem. Not just a currency; it's the governance, security, and utility layer for the next generation of decentralized apps.
+                Signal is not a cryptocurrency — it's a transmission of verified intent. Your acknowledgment, access, and proof of participation in the Trust Network. The value is the infrastructure it unlocks, not speculation.
               </p>
               
               <div className="flex flex-wrap gap-3">
@@ -160,7 +160,7 @@ export default function Token() {
           <div className="text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-display font-bold mb-3">Real Utility. No Fluff.</h2>
             <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-              Unlike meme coins, Signal is required to use every app in the DarkWave ecosystem.
+              Signal is required to access every app in the DarkWave ecosystem — it's your key to the Trust Network.
             </p>
           </div>
 
@@ -422,7 +422,7 @@ export default function Token() {
             </GlassCard>
             <GlassCard className="p-5">
               <h4 className="font-bold mb-3 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-green-400" /> No Coin Burns
+                <TrendingUp className="w-4 h-4 text-green-400" /> No Token Burns
               </h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Fixed 1B supply. Protocol fees fund staking rewards and treasury, ensuring sustainable growth without artificial scarcity.
