@@ -1042,17 +1042,18 @@ interface Purchase {
   date: string;
 }
 
-function MyPurchases({ userEmail }: { userEmail?: string }) {
+function MyPurchases({ userEmail, walletAddress }: { userEmail?: string; walletAddress?: string }) {
   const { user } = useAuth();
   const { data, isLoading } = useQuery<{ purchases: Purchase[]; total: { tokens: number; spent: number } }>({
-    queryKey: ["/api/presale/my-purchases", userEmail],
+    queryKey: ["/api/presale/my-purchases", userEmail, walletAddress],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (userEmail) params.set("email", userEmail);
+      if (walletAddress) params.set("wallet", walletAddress);
       const res = await fetch(`/api/presale/my-purchases?${params}`, { credentials: "include" });
       return res.json();
     },
-    enabled: !!(user?.id || userEmail),
+    enabled: !!(user?.id || userEmail || walletAddress),
   });
 
   if (isLoading) return null;
@@ -1117,10 +1118,13 @@ function ReferralBanner({ referrer }: { referrer: string }) {
 
 export default function Presale() {
   const { user } = useAuth();
+  const { evmAddress, solanaAddress } = useWallet();
   const searchParams = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
   const referrer = searchParams.get('ref') || searchParams.get('referrer');
   const emailParam = searchParams.get('email');
+  const walletParam = searchParams.get('wallet');
   const purchaseEmail = user?.email || emailParam;
+  const purchaseWallet = evmAddress || solanaAddress || walletParam;
 
   const { data: tiersData, isLoading: tiersLoading } = useQuery<{ tiers: PresaleTier[] }>({
     queryKey: ["/api/presale/tiers"],
@@ -1167,7 +1171,7 @@ export default function Presale() {
           </p>
         </motion.div>
 
-        {purchaseEmail && <MyPurchases userEmail={purchaseEmail} />}
+        {(purchaseEmail || purchaseWallet) && <MyPurchases userEmail={purchaseEmail || undefined} walletAddress={purchaseWallet || undefined} />}
 
         <div className="grid lg:grid-cols-2 gap-8 mb-16">
           <PresaleProgress />

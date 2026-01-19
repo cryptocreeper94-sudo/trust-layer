@@ -8019,12 +8019,13 @@ export async function registerRoutes(
     try {
       const userId = (req.session as any)?.userId;
       const userEmail = req.query.email as string;
+      const walletAddress = req.query.wallet as string;
       
-      if (!userId && !userEmail) {
+      if (!userId && !userEmail && !walletAddress) {
         return res.json({ purchases: [], total: { tokens: 0, spent: 0 } });
       }
       
-      // Find purchases by user_id or email
+      // Find purchases by user_id, email, or wallet address
       let purchases: any[] = [];
       
       if (userId) {
@@ -8034,19 +8035,34 @@ export async function registerRoutes(
         if (user?.email) {
           const normalizedEmail = user.email.toLowerCase().trim();
           const result = await db.execute(sql`
-            SELECT id, email, token_amount, usd_amount_cents, tier, status, payment_method, created_at
+            SELECT id, email, wallet_address, token_amount, usd_amount_cents, tier, status, payment_method, created_at
             FROM presale_purchases 
             WHERE LOWER(TRIM(email)) = ${normalizedEmail}
             ORDER BY created_at DESC
           `);
           purchases = result.rows as any[];
         }
-      } else if (userEmail) {
+      }
+      
+      // Also check by email if provided and no results yet
+      if (purchases.length === 0 && userEmail) {
         const normalizedEmail = userEmail.toLowerCase().trim();
         const result = await db.execute(sql`
-          SELECT id, email, token_amount, usd_amount_cents, tier, status, payment_method, created_at
+          SELECT id, email, wallet_address, token_amount, usd_amount_cents, tier, status, payment_method, created_at
           FROM presale_purchases 
           WHERE LOWER(TRIM(email)) = ${normalizedEmail}
+          ORDER BY created_at DESC
+        `);
+        purchases = result.rows as any[];
+      }
+      
+      // Also check by wallet address if provided
+      if (purchases.length === 0 && walletAddress) {
+        const normalizedWallet = walletAddress.toLowerCase().trim();
+        const result = await db.execute(sql`
+          SELECT id, email, wallet_address, token_amount, usd_amount_cents, tier, status, payment_method, created_at
+          FROM presale_purchases 
+          WHERE LOWER(TRIM(wallet_address)) = ${normalizedWallet}
           ORDER BY created_at DESC
         `);
         purchases = result.rows as any[];
