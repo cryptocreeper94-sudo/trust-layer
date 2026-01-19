@@ -61,6 +61,7 @@ import {
   type TestnetBalance 
 } from "@/lib/testnet-service";
 import { startAuthentication as webauthnStartAuthentication } from "@simplewebauthn/browser";
+import { PhoneVerification } from "@/components/phone-verification";
 
 const SUPPORTED_CHAINS = [
   { id: 'darkwave', name: 'DarkWave Trust Layer', symbol: 'SIG', icon: '⚡', color: 'from-purple-500 to-pink-500', explorer: '/explorer' },
@@ -1322,6 +1323,12 @@ export default function WalletPage() {
                         <p className="text-xs text-muted-foreground">Sign in to enable cloud backup</p>
                       )}
                     </div>
+                    
+                    {user?.id && (
+                      <div className="pt-3 border-t border-white/10">
+                        <PhoneVerification compact />
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
                 
