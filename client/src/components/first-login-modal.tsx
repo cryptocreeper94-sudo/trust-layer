@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Coins, Gift, Zap, ArrowRight, Sparkles, Shield, TrendingUp } from "lucide-react";
-import { Link } from "wouter";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
@@ -10,6 +10,7 @@ const FIRST_LOGIN_KEY = "dw_first_login_seen";
 
 export function FirstLoginModal() {
   const { user } = useAuth();
+  const [, setLocation] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -29,9 +30,10 @@ export function FirstLoginModal() {
     setIsOpen(false);
   };
 
-  const handleAction = () => {
+  const handleGoToPresale = () => {
     localStorage.setItem(FIRST_LOGIN_KEY, "true");
     setIsOpen(false);
+    setLocation("/presale");
   };
 
   if (!isOpen) return null;
@@ -128,16 +130,15 @@ export function FirstLoginModal() {
             </div>
 
             <div className="space-y-2">
-              <Link href="/presale" onClick={handleAction}>
-                <Button 
-                  className="w-full py-5 text-base font-bold bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 hover:opacity-90 border-0"
-                  data-testid="button-first-login-presale"
-                >
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Acquire Signal Now
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
+              <Button 
+                onClick={handleGoToPresale}
+                className="w-full py-5 text-base font-bold bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 hover:opacity-90 border-0"
+                data-testid="button-first-login-presale"
+              >
+                <Sparkles className="w-5 h-5 mr-2" />
+                Acquire Signal Now
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
               
               <button
                 onClick={handleClose}
