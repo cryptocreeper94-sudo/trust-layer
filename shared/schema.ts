@@ -3328,6 +3328,152 @@ export const voiceUsage = pgTable("voice_usage", {
 export type VoiceUsage = typeof voiceUsage.$inferSelect;
 
 // =====================================================
+// VOICE COMMUNICATION SYSTEM
+// =====================================================
+// Real-time voice messaging between users and NPCs
+// =====================================================
+
+export const voiceChannelTypes = ["direct", "room", "npc_dialogue", "broadcast"] as const;
+export type VoiceChannelType = typeof voiceChannelTypes[number];
+
+export const voiceChannels = pgTable("voice_channels", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  type: text("type").notNull().default("direct"),
+  title: text("title"),
+  description: text("description"),
+  contextJson: text("context_json"),
+  permissionsJson: text("permissions_json"),
+  isActive: boolean("is_active").notNull().default(true),
+  createdBy: text("created_by"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertVoiceChannelSchema = createInsertSchema(voiceChannels).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type VoiceChannel = typeof voiceChannels.$inferSelect;
+export type InsertVoiceChannel = z.infer<typeof insertVoiceChannelSchema>;
+
+export const voiceChannelMembers = pgTable("voice_channel_members", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  channelId: text("channel_id").notNull(),
+  memberType: text("member_type").notNull().default("user"),
+  memberId: text("member_id").notNull(),
+  memberName: text("member_name"),
+  role: text("role").notNull().default("speaker"),
+  isMuted: boolean("is_muted").notNull().default(false),
+  joinedAt: timestamp("joined_at").defaultNow().notNull(),
+  leftAt: timestamp("left_at"),
+});
+
+export const insertVoiceChannelMemberSchema = createInsertSchema(voiceChannelMembers).omit({
+  id: true,
+  joinedAt: true,
+  leftAt: true,
+});
+
+export type VoiceChannelMember = typeof voiceChannelMembers.$inferSelect;
+export type InsertVoiceChannelMember = z.infer<typeof insertVoiceChannelMemberSchema>;
+
+export const voiceMessageStatuses = ["draft", "queued", "processing", "ready", "failed", "expired"] as const;
+export type VoiceMessageStatus = typeof voiceMessageStatuses[number];
+
+export const voiceMessages = pgTable("voice_messages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  channelId: text("channel_id"),
+  conversationId: text("conversation_id"),
+  senderType: text("sender_type").notNull().default("user"),
+  senderId: text("sender_id").notNull(),
+  senderName: text("sender_name"),
+  recipientId: text("recipient_id"),
+  transcript: text("transcript").notNull(),
+  audioUrl: text("audio_url"),
+  durationMs: integer("duration_ms"),
+  voiceProvider: text("voice_provider"),
+  voiceCloneId: text("voice_clone_id"),
+  creditsSpent: integer("credits_spent").notNull().default(0),
+  status: text("status").notNull().default("queued"),
+  errorMessage: text("error_message"),
+  metadata: text("metadata"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  playedAt: timestamp("played_at"),
+  expiresAt: timestamp("expires_at"),
+});
+
+export const insertVoiceMessageSchema = createInsertSchema(voiceMessages).omit({
+  id: true,
+  audioUrl: true,
+  durationMs: true,
+  status: true,
+  errorMessage: true,
+  createdAt: true,
+  playedAt: true,
+});
+
+export type VoiceMessage = typeof voiceMessages.$inferSelect;
+export type InsertVoiceMessage = z.infer<typeof insertVoiceMessageSchema>;
+
+export const npcVoiceQueues = pgTable("npc_voice_queues", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  npcId: text("npc_id").notNull(),
+  npcName: text("npc_name"),
+  userId: text("user_id").notNull(),
+  channelId: text("channel_id"),
+  promptText: text("prompt_text").notNull(),
+  userContextJson: text("user_context_json"),
+  responseText: text("response_text"),
+  audioUrl: text("audio_url"),
+  voiceConfigId: text("voice_config_id"),
+  status: text("status").notNull().default("pending"),
+  priority: integer("priority").notNull().default(0),
+  creditsSpent: integer("credits_spent").notNull().default(0),
+  scheduledFor: timestamp("scheduled_for"),
+  processedAt: timestamp("processed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertNpcVoiceQueueSchema = createInsertSchema(npcVoiceQueues).omit({
+  id: true,
+  responseText: true,
+  audioUrl: true,
+  status: true,
+  processedAt: true,
+  createdAt: true,
+});
+
+export type NpcVoiceQueue = typeof npcVoiceQueues.$inferSelect;
+export type InsertNpcVoiceQueue = z.infer<typeof insertNpcVoiceQueueSchema>;
+
+export const voiceSessions = pgTable("voice_sessions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  channelId: text("channel_id").notNull(),
+  provider: text("provider").notNull().default("webrtc"),
+  state: text("state").notNull().default("idle"),
+  participantCount: integer("participant_count").notNull().default(0),
+  recordingUrl: text("recording_url"),
+  startedAt: timestamp("started_at"),
+  endedAt: timestamp("ended_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertVoiceSessionSchema = createInsertSchema(voiceSessions).omit({
+  id: true,
+  state: true,
+  participantCount: true,
+  recordingUrl: true,
+  startedAt: true,
+  endedAt: true,
+  createdAt: true,
+});
+
+export type VoiceSession = typeof voiceSessions.$inferSelect;
+export type InsertVoiceSession = z.infer<typeof insertVoiceSessionSchema>;
+
+// =====================================================
 // TREASURY ALLOCATION SYSTEM
 // =====================================================
 // Transparent allocation tracking for SIG treasury funds
