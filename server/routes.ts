@@ -111,7 +111,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
     return res.status(401).json({ error: "Authentication required" });
   }
 }
-import { sql, eq, desc, and } from "drizzle-orm";
+import { sql, eq, desc, and, gte } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
 import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes } from "@shared/schema";
@@ -17004,6 +17004,253 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error) {
       console.error("Pulse coin analysis error:", error);
       res.status(500).json({ error: "Failed to fetch coin data" });
+    }
+  });
+
+  // ==============================================
+  // ML STATS & MONITORING ENDPOINTS
+  // ==============================================
+  
+  // ML Stats - Overall prediction system statistics
+  app.get("/api/ml/stats", pulseDataRateLimit, async (req: any, res) => {
+    try {
+      // Get total predictions count
+      const totalPredictions = await db.select({ count: sql`count(*)` })
+        .from(predictionEvents);
+      
+      // Get outcomes count
+      const totalOutcomes = await db.select({ count: sql`count(*)` })
+        .from(predictionOutcomes);
+      
+      // Get overall accuracy
+      const accuracyStats = await db.select({
+        total: sql`count(*)`,
+        wins: sql`count(*) filter (where is_correct = true)`,
+        avgReturn: sql`avg(cast(price_change_percent as decimal))`
+      }).from(predictionOutcomes);
+      
+      // Get accuracy by horizon
+      const horizonStats = await db.select({
+        horizon: predictionOutcomes.horizon,
+        count: sql`count(*)`,
+        wins: sql`count(*) filter (where is_correct = true)`,
+        avgReturn: sql`avg(cast(price_change_percent as decimal))`
+      })
+        .from(predictionOutcomes)
+        .groupBy(predictionOutcomes.horizon);
+      
+      // Get recent performance (last 24h, 7d, 30d)
+      const now = new Date();
+      const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+      const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      
+      const last24h = await db.select({
+        total: sql`count(*)`,
+        wins: sql`count(*) filter (where is_correct = true)`
+      })
+        .from(predictionOutcomes)
+        .where(gte(predictionOutcomes.evaluatedAt, oneDayAgo));
+      
+      const last7d = await db.select({
+        total: sql`count(*)`,
+        wins: sql`count(*) filter (where is_correct = true)`
+      })
+        .from(predictionOutcomes)
+        .where(gte(predictionOutcomes.evaluatedAt, sevenDaysAgo));
+      
+      const last30d = await db.select({
+        total: sql`count(*)`,
+        wins: sql`count(*) filter (where is_correct = true)`
+      })
+        .from(predictionOutcomes)
+        .where(gte(predictionOutcomes.evaluatedAt, thirtyDaysAgo));
+      
+      // Get top performing tokens by joining with predictionEvents for ticker
+      const topTokens = await db.select({
+        ticker: predictionEvents.ticker,
+        count: sql`count(*)`,
+        wins: sql`count(*) filter (where ${predictionOutcomes.isCorrect} = true)`,
+        avgReturn: sql`avg(cast(${predictionOutcomes.priceChangePercent} as decimal))`
+      })
+        .from(predictionOutcomes)
+        .innerJoin(predictionEvents, eq(predictionOutcomes.predictionId, predictionEvents.id))
+        .groupBy(predictionEvents.ticker)
+        .having(sql`count(*) >= 3`)
+        .orderBy(sql`count(*) filter (where ${predictionOutcomes.isCorrect} = true)::float / nullif(count(*), 0) desc`)
+        .limit(10);
+      
+      // Helper to safely compute accuracy percentage
+      const computeAccuracy = (wins: any, total: any): string => {
+        const numTotal = Number(total || 0);
+        const numWins = Number(wins || 0);
+        return numTotal > 0 ? ((numWins / numTotal) * 100).toFixed(1) : '0.0';
+      };
+      
+      const stats = {
+        overview: {
+          totalPredictions: Number(totalPredictions[0]?.count || 0),
+          totalResolved: Number(totalOutcomes[0]?.count || 0),
+          pendingResolution: Number(totalPredictions[0]?.count || 0) - Number(totalOutcomes[0]?.count || 0),
+          overallAccuracy: computeAccuracy(accuracyStats[0]?.wins, accuracyStats[0]?.total),
+          avgReturn: Number(accuracyStats[0]?.avgReturn || 0).toFixed(2)
+        },
+        byHorizon: horizonStats.map(h => ({
+          horizon: h.horizon,
+          predictions: Number(h.count || 0),
+          wins: Number(h.wins || 0),
+          accuracy: computeAccuracy(h.wins, h.count),
+          avgReturn: Number(h.avgReturn || 0).toFixed(2)
+        })),
+        recentPerformance: {
+          last24h: {
+            predictions: Number(last24h[0]?.total || 0),
+            accuracy: computeAccuracy(last24h[0]?.wins, last24h[0]?.total)
+          },
+          last7d: {
+            predictions: Number(last7d[0]?.total || 0),
+            accuracy: computeAccuracy(last7d[0]?.wins, last7d[0]?.total)
+          },
+          last30d: {
+            predictions: Number(last30d[0]?.total || 0),
+            accuracy: computeAccuracy(last30d[0]?.wins, last30d[0]?.total)
+          }
+        },
+        topTokens: topTokens.map(t => ({
+          symbol: t.ticker,
+          predictions: Number(t.count || 0),
+          wins: Number(t.wins || 0),
+          accuracy: computeAccuracy(t.wins, t.count),
+          avgReturn: Number(t.avgReturn || 0).toFixed(2)
+        })),
+        generatedAt: new Date().toISOString()
+      };
+      
+      res.json(stats);
+    } catch (error) {
+      console.error("ML stats error:", error);
+      res.status(500).json({ error: "Failed to fetch ML statistics" });
+    }
+  });
+  
+  // ML User History - Prediction history for a specific user
+  app.get("/api/ml/user-history", pulseDataRateLimit, isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const limit = Math.min(parseInt(req.query.limit) || 50, 100);
+      const offset = parseInt(req.query.offset) || 0;
+      
+      // Get user's predictions with outcomes
+      const predictions = await db.select({
+        id: predictionEvents.id,
+        ticker: predictionEvents.ticker,
+        signal: predictionEvents.signal,
+        confidence: predictionEvents.confidence,
+        priceAtPrediction: predictionEvents.priceAtPrediction,
+        createdAt: predictionEvents.createdAt,
+        horizon: predictionOutcomes.horizon,
+        isCorrect: predictionOutcomes.isCorrect,
+        priceChangePercent: predictionOutcomes.priceChangePercent,
+        evaluatedAt: predictionOutcomes.evaluatedAt,
+      })
+        .from(predictionEvents)
+        .leftJoin(predictionOutcomes, eq(predictionEvents.id, predictionOutcomes.predictionId))
+        .where(eq(predictionEvents.userId, userId))
+        .orderBy(desc(predictionEvents.createdAt))
+        .limit(limit)
+        .offset(offset);
+      
+      // Get user's overall stats
+      const userStats = await db.select({
+        total: sql`count(*)`,
+        wins: sql`count(*) filter (where ${predictionOutcomes.isCorrect} = true)`,
+        avgReturn: sql`avg(cast(${predictionOutcomes.priceChangePercent} as decimal))`
+      })
+        .from(predictionEvents)
+        .leftJoin(predictionOutcomes, eq(predictionEvents.id, predictionOutcomes.predictionId))
+        .where(eq(predictionEvents.userId, userId));
+      
+      res.json({
+        predictions: predictions.map(p => ({
+          id: p.id,
+          ticker: p.ticker,
+          signal: p.signal,
+          confidence: Number(p.confidence || 0),
+          priceAtPrediction: p.priceAtPrediction,
+          createdAt: p.createdAt?.toISOString(),
+          outcome: p.isCorrect !== null ? {
+            horizon: p.horizon,
+            isCorrect: p.isCorrect,
+            priceChangePercent: p.priceChangePercent,
+            evaluatedAt: p.evaluatedAt?.toISOString()
+          } : null
+        })),
+        userStats: {
+          totalPredictions: Number(userStats[0]?.total || 0),
+          wins: Number(userStats[0]?.wins || 0),
+          accuracy: userStats[0]?.total ? 
+            (Number(userStats[0].wins) / Number(userStats[0].total) * 100).toFixed(1) : '0.0',
+          avgReturn: Number(userStats[0]?.avgReturn || 0).toFixed(2)
+        },
+        pagination: {
+          limit,
+          offset,
+          hasMore: predictions.length === limit
+        }
+      });
+    } catch (error) {
+      console.error("ML user history error:", error);
+      res.status(500).json({ error: "Failed to fetch user history" });
+    }
+  });
+  
+  // Health Check Endpoint - System monitoring
+  app.get("/api/health", async (_req, res) => {
+    try {
+      const checks: Record<string, { status: string; latency?: number; details?: any }> = {};
+      
+      // Database check
+      const dbStart = Date.now();
+      try {
+        await db.execute(sql`SELECT 1`);
+        checks.database = { status: 'healthy', latency: Date.now() - dbStart };
+      } catch (e) {
+        checks.database = { status: 'unhealthy', details: 'Connection failed' };
+      }
+      
+      // Prediction system check
+      const predStart = Date.now();
+      try {
+        const recentPrediction = await db.select({ id: predictionEvents.id })
+          .from(predictionEvents)
+          .orderBy(desc(predictionEvents.createdAt))
+          .limit(1);
+        checks.predictionEngine = { 
+          status: 'healthy', 
+          latency: Date.now() - predStart,
+          details: { hasPredictions: recentPrediction.length > 0 }
+        };
+      } catch (e) {
+        checks.predictionEngine = { status: 'unhealthy', details: 'Query failed' };
+      }
+      
+      // Check overall status
+      const allHealthy = Object.values(checks).every(c => c.status === 'healthy');
+      
+      res.status(allHealthy ? 200 : 503).json({
+        status: allHealthy ? 'healthy' : 'degraded',
+        version: '1.0.0',
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+        checks
+      });
+    } catch (error) {
+      console.error("Health check error:", error);
+      res.status(503).json({ 
+        status: 'unhealthy',
+        timestamp: new Date().toISOString(),
+        error: 'Health check failed'
+      });
     }
   });
 

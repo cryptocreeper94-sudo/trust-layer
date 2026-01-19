@@ -54,6 +54,7 @@ const Faucet = lazy(() => import("@/pages/faucet"));
 const Swap = lazy(() => import("@/pages/swap"));
 const Markets = lazy(() => import("@/pages/markets"));
 const Pulse = lazy(() => import("@/pages/pulse"));
+const MLDashboard = lazy(() => import("@/pages/ml-dashboard"));
 const StrikeAgent = lazy(() => import("@/pages/strike-agent"));
 const CoinAnalysis = lazy(() => import("@/pages/coin-analysis"));
 const NftMarketplace = lazy(() => import("@/pages/nft-marketplace"));
@@ -361,6 +362,7 @@ function DWSCRouter() {
         <Route path="/swap" component={Swap} />
         <Route path="/markets" component={Markets} />
         <Route path="/pulse" component={Pulse} />
+        <Route path="/ml-dashboard" component={MLDashboard} />
         <Route path="/strike-agent" component={StrikeAgent} />
         <Route path="/coin/:id" component={CoinAnalysis} />
         <Route path="/nft" component={NftMarketplace} />
