@@ -384,19 +384,18 @@ export default function Home() {
           <Link href="/" className="flex items-center">
             <span className="font-display font-bold text-xl tracking-tight">DarkWave</span>
           </Link>
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1 sm:gap-3">
             {isAuthenticated && user?.id && (
               <MemberBadge userId={user.id.toString()} />
             )}
             <Link href="/executive-summary">
               <Button 
                 size="sm" 
-                className="h-8 px-2 sm:px-3 text-xs font-semibold bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white border-0"
+                className="h-7 sm:h-8 px-1.5 sm:px-3 text-[10px] sm:text-xs font-semibold bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white border-0"
                 data-testid="button-transmission"
               >
-                <Zap className="w-3 h-3 mr-1" />
-                <span className="hidden sm:inline">The Transmission</span>
-                <span className="sm:hidden">Vision</span>
+                <Zap className="w-3 h-3 sm:mr-1" />
+                <span className="hidden sm:inline">Vision</span>
               </Button>
             </Link>
             <WalletButton />

@@ -41,12 +41,13 @@ export function WalletButton() {
           variant="outline"
           size="sm"
           onClick={() => setShowDropdown(!showDropdown)}
-          className="gap-2 border-primary/30 bg-primary/10 text-primary hover:bg-primary/20"
+          className="gap-1 sm:gap-2 h-7 sm:h-8 px-1.5 sm:px-3 text-[10px] sm:text-xs border-primary/30 bg-primary/10 text-primary hover:bg-primary/20"
           data-testid="button-wallet-connected"
         >
-          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-          {shortenAddress(activeAddress)}
-          <ChevronDown className="w-3 h-3" />
+          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full animate-pulse" />
+          <span className="hidden sm:inline">{shortenAddress(activeAddress)}</span>
+          <Wallet className="w-3 h-3 sm:hidden" />
+          <ChevronDown className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
         </Button>
 
         <AnimatePresence>
@@ -161,13 +162,13 @@ export function WalletButton() {
       <Button
         size="sm"
         onClick={() => setShowModal(true)}
-        className="gap-2 bg-primary text-background hover:bg-primary/90 px-2 sm:px-3"
+        className="gap-1 sm:gap-2 h-7 sm:h-8 px-1.5 sm:px-3 text-[10px] sm:text-xs bg-primary text-background hover:bg-primary/90"
         disabled={isConnecting}
         data-testid="button-connect-wallet"
       >
-        <Wallet className="w-4 h-4 flex-shrink-0" />
+        <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
         <span className="hidden sm:inline">
-          {isConnecting ? "Connecting..." : "Connect Wallet"}
+          {isConnecting ? "..." : "Wallet"}
         </span>
       </Button>
 

@@ -147,17 +147,17 @@ export function MemberBadge({ userId }: { userId?: string }) {
     <div className="relative">
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 hover:border-cyan-400/50 transition-all"
+        className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 hover:border-cyan-400/50 transition-all"
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         data-testid="button-member-badge"
       >
-        <BadgeCheck className="w-4 h-4 text-cyan-400" />
-        <span className="text-xs font-bold text-white">#{memberNumber}</span>
+        <BadgeCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400" />
+        <span className="text-[10px] sm:text-xs font-bold text-white">#{memberNumber}</span>
         {isEarlyAdopter && (
-          <Sparkles className="w-3 h-3 text-amber-400" />
+          <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-400" />
         )}
-        <ChevronDown className={`w-3 h-3 text-white/60 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-2.5 h-2.5 sm:w-3 sm:h-3 text-white/60 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </motion.button>
 
       <AnimatePresence>
