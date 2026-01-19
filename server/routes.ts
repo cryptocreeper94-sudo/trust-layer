@@ -6920,7 +6920,12 @@ export async function registerRoutes(
   });
 
   // Reserved ecosystem prefixes - these domains are not for public sale
-  const RESERVED_ECOSYSTEM_PREFIXES = ["darkwave", "dw", "dwsc", "chronochat", "chrono"];
+  const RESERVED_ECOSYSTEM_PREFIXES = [
+    "darkwave", "dw", "dwsc", "chronochat", "chrono", "vedasolus", "veda", 
+    "strikeagent", "strike", "yourlegacy", "legacy", "signal", "sig",
+    "guardian", "pulse", "jason", "team", "admin", "owner", "official",
+    "darkwavestudios", "darkwavegames", "trustlayer", "trust"
+  ];
 
   app.get("/api/domains/search/:name", async (req, res) => {
     try {
@@ -7033,7 +7038,12 @@ export async function registerRoutes(
       
       // Block DarkWave ecosystem reserved domains - unless owner bypass
       const normalizedName = data.name.toLowerCase();
-      const RESERVED_PREFIXES = ["darkwave", "dw", "dwsc", "chronochat", "chrono"];
+      const RESERVED_PREFIXES = [
+        "darkwave", "dw", "dwsc", "chronochat", "chrono", "vedasolus", "veda", 
+        "strikeagent", "strike", "yourlegacy", "legacy", "signal", "sig",
+        "guardian", "pulse", "jason", "team", "admin", "owner", "official",
+        "darkwavestudios", "darkwavegames", "trustlayer", "trust"
+      ];
       const isEcosystemReserved = RESERVED_PREFIXES.some(prefix => normalizedName.startsWith(prefix));
       
       if (isEcosystemReserved && !isOwnerBypass) {
