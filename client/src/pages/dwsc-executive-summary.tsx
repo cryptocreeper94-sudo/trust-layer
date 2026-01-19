@@ -120,10 +120,63 @@ export default function DWSCExecutiveSummary() {
                 ensuring tight integration and optimal performance across all layers.
               </p>
             </motion.div>
+
+            {/* Network Vision */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-gradient-to-r from-purple-950/50 to-pink-950/30 border border-purple-500/20 rounded-2xl p-8"
+            >
+              <h2 className="text-2xl font-display font-bold text-white mb-4 flex items-center gap-3">
+                <Globe className="w-6 h-6 text-purple-400" />
+                The Trust Layer Vision
+              </h2>
+              <div className="space-y-4 text-white/80 leading-relaxed">
+                <p>
+                  <span className="text-purple-400 font-semibold">Beyond "cryptocurrency"</span> — DarkWave Trust Layer is a 
+                  <span className="text-cyan-400 font-semibold"> Coordinated Trust Infrastructure</span> designed for real 
+                  business operations. We provide verified identity, accountability, and transparent audit trails that 
+                  enterprises need for trusted relationships.
+                </p>
+                <p>
+                  <span className="text-pink-400 font-semibold">Signal (SIG)</span> is not a speculative asset — it's a 
+                  <span className="text-amber-400 font-semibold"> Trust Network Access Token</span>. Signal represents 
+                  acknowledgement, access, and proof of participation in the trust network. The value is the infrastructure 
+                  it unlocks, not speculation.
+                </p>
+                <p>
+                  <span className="text-cyan-400 font-semibold">Four domains, one ecosystem:</span>
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+                  <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
+                    <p className="text-cyan-400 font-semibold text-sm">dwsc.io</p>
+                    <p className="text-white/50 text-xs">Trust Infrastructure</p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
+                    <p className="text-purple-400 font-semibold text-sm">darkwavegames.io</p>
+                    <p className="text-white/50 text-xs">Gaming & Entertainment</p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
+                    <p className="text-pink-400 font-semibold text-sm">darkwavestudios.io</p>
+                    <p className="text-white/50 text-xs">Creative Development</p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
+                    <p className="text-amber-400 font-semibold text-sm">yourlegacy.io</p>
+                    <p className="text-white/50 text-xs">Personal Identity</p>
+                  </div>
+                </div>
+                <p className="mt-4">
+                  Our mission: deliver fast, feature-rich trust infrastructure with a premium user experience — serving 
+                  enterprises seeking trusted business relationships, creators building digital legacies, and communities 
+                  looking for transparent, accountable platforms.
+                </p>
+              </div>
+            </motion.div>
           </div>
         </section>
 
-        {/* Three Pillars */}
+        {/* Four Pillars */}
         <section className="py-12 px-4 bg-slate-900/50">
           <div className="container mx-auto max-w-5xl">
             <motion.div
@@ -158,12 +211,20 @@ export default function DWSCExecutiveSummary() {
                   features: ["DEX & Swaps", "Liquid Staking", "NFT Market", "Dev Studio"]
                 },
                 {
+                  title: "AI Trading Suite",
+                  subtitle: "Pulse & Strike Agent",
+                  description: "ML-powered market intelligence platform. Pulse provides verified price predictions with transparent accuracy tracking. Strike Agent detects new tokens with AI risk scoring.",
+                  icon: Zap,
+                  color: "amber",
+                  features: ["Price Predictions", "Risk Scoring", "Memecoin Sniper", "Win Rate Tracking"]
+                },
+                {
                   title: "DarkWave Chronicles",
                   subtitle: "Flagship Application",
-                  description: "Unprecedented adventure platform across 70+ mission theaters. Real-time AI-driven world where YOU are the hero. Revenue through creator licensing and brand sponsorships.",
+                  description: "Unprecedented adventure platform across 10 verifiable historical eras. Real-time AI-driven world where YOU are the hero. Revenue through creator licensing and brand sponsorships.",
                   icon: Gamepad2,
                   color: "pink",
-                  features: ["70+ Eras", "AI NPCs", "Creator Economy", "Brand Sponsorships"]
+                  features: ["10 Eras", "AI NPCs", "Creator Economy", "Brand Sponsorships"]
                 }
               ].map((pillar, i) => (
                 <motion.div
@@ -214,6 +275,8 @@ export default function DWSCExecutiveSummary() {
               
               <div className="flex gap-4 overflow-x-auto scrollbar-hide px-8 py-4 snap-x snap-mandatory">
                 {[
+                  { title: "Pulse AI", desc: "ML-powered market predictions with verified accuracy tracking. Fear & Greed index, multi-timeframe analysis, transparent win/loss tracking.", icon: Zap, color: "amber", href: "/pulse" },
+                  { title: "Strike Agent", desc: "Solana memecoin sniper with AI risk scoring. Honeypot detection, liquidity analysis, one-click Phantom integration.", icon: Target, color: "red", href: "/strike-agent" },
                   { title: "Guardian Certification", desc: "Enterprise blockchain security audits at 70% less than competitors. $5,999-$14,999 per audit.", icon: Shield, color: "emerald", href: "/guardian" },
                   { title: "Guardian Shield", desc: "24/7 smart contract monitoring. Norton for blockchain. $299-$2,999/month.", icon: Activity, color: "blue", href: "/guardian" },
                   { title: "ChronoChat", desc: "Community platform with real-time messaging, channels, reactions, and Shells integration.", icon: MessageSquare, color: "purple", href: "/community-hub" },
