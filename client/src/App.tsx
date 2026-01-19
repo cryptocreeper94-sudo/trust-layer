@@ -200,6 +200,7 @@ const OwnerFaucet = lazy(() => import("@/pages/owner-admin/faucet"));
 const OwnerKyc = lazy(() => import("@/pages/owner-admin/kyc"));
 const OwnerZealy = lazy(() => import("@/pages/owner-admin/zealy"));
 const TeamAdminPortal = lazy(() => import("@/pages/team-admin"));
+const TeamOperations = lazy(() => import("@/pages/team-operations"));
 const GatewayError = lazy(() => import("@/pages/gateway-error"));
 const AIAgentMarketplace = lazy(() => import("@/pages/ai-agent-marketplace"));
 const RWATokenization = lazy(() => import("@/pages/rwa-tokenization"));
@@ -407,6 +408,7 @@ function DWSCRouter() {
         <Route path="/owner-admin/kyc" component={OwnerKyc} />
         <Route path="/owner-admin/zealy" component={OwnerZealy} />
         <Route path="/team-admin" component={TeamAdminPortal} />
+        <Route path="/ops-center" component={TeamOperations} />
         <Route path="/chronicles-admin" component={ChroniclesAdmin} />
         <Route path="/terms" component={Terms} />
         <Route path="/virtual-currency-terms" component={VirtualCurrencyTerms} />

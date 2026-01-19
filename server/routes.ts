@@ -13799,6 +13799,102 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // Team daily report - shows pending items to airdrop
+  app.get("/api/team/daily-report", teamAuthMiddleware, async (_req, res) => {
+    try {
+      // Get pending quest rewards (shells not yet converted to signal)
+      const pendingQuestsResult = await db.execute(sql`
+        SELECT COUNT(*) as count, COALESCE(SUM(shells_granted), 0) as total_shells
+        FROM zealy_quest_events 
+        WHERE status = 'granted' AND airdrop_status IS NULL OR airdrop_status = 'pending'
+      `);
+      
+      // Get pending shell conversions (users with shells ready to convert)
+      const pendingShellsResult = await db.execute(sql`
+        SELECT COUNT(*) as count, COALESCE(SUM(shell_balance), 0) as total_shells
+        FROM shell_balances 
+        WHERE shell_balance > 0
+      `);
+      
+      // Get pending referral bonuses
+      const pendingReferralsResult = await db.execute(sql`
+        SELECT COUNT(*) as count, COALESCE(SUM(pending_commission), 0) as total_cents
+        FROM affiliate_profiles 
+        WHERE pending_commission > 0
+      `);
+
+      const pendingQuests = Number(pendingQuestsResult.rows[0]?.count || 0);
+      const pendingShells = Number(pendingShellsResult.rows[0]?.count || 0);
+      const pendingReferrals = Number(pendingReferralsResult.rows[0]?.count || 0);
+      
+      // Calculate total signal to distribute
+      const questShells = Number(pendingQuestsResult.rows[0]?.total_shells || 0);
+      const userShells = Number(pendingShellsResult.rows[0]?.total_shells || 0);
+      const referralCents = Number(pendingReferralsResult.rows[0]?.total_cents || 0);
+      
+      // Shells convert at 100:1, referrals at $0.001 per SIG
+      const questSignal = questShells / 100;
+      const shellSignal = userShells / 100;
+      const referralSignal = (referralCents / 100) / 0.001; // cents to USD to SIG
+      
+      res.json({
+        pendingQuests,
+        pendingShells,
+        pendingReferrals,
+        pendingTotal: pendingQuests + pendingShells + pendingReferrals,
+        totalSignal: Math.round(questSignal + shellSignal + referralSignal),
+        breakdown: {
+          questSignal: Math.round(questSignal),
+          shellSignal: Math.round(shellSignal),
+          referralSignal: Math.round(referralSignal),
+        },
+        date: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error("Team daily report error:", error);
+      res.status(500).json({ error: "Failed to generate daily report" });
+    }
+  });
+
+  // Team submit daily airdrop - processes all pending rewards
+  app.post("/api/team/submit-daily-airdrop", teamAuthMiddleware, async (_req, res) => {
+    try {
+      console.log("[Team] Daily airdrop submission started");
+      
+      // Mark quest events as processed
+      const questUpdate = await db.execute(sql`
+        UPDATE zealy_quest_events 
+        SET airdrop_status = 'submitted', updated_at = NOW()
+        WHERE status = 'granted' AND (airdrop_status IS NULL OR airdrop_status = 'pending')
+        RETURNING id
+      `);
+      
+      const processedQuests = questUpdate.rows.length;
+      
+      // Log the submission
+      await db.execute(sql`
+        INSERT INTO audit_logs (event_type, event_data, created_at)
+        VALUES ('daily_airdrop_submitted', ${JSON.stringify({
+          processedQuests,
+          submittedAt: new Date().toISOString(),
+          submittedBy: 'team_admin'
+        })}, NOW())
+      `).catch(() => {});
+      
+      console.log(`[Team] Daily airdrop submitted: ${processedQuests} quest rewards marked for processing`);
+      
+      res.json({
+        success: true,
+        processed: processedQuests,
+        message: `Submitted ${processedQuests} rewards for airdrop processing`,
+        submittedAt: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error("Team daily airdrop error:", error);
+      res.status(500).json({ error: "Failed to submit daily airdrop" });
+    }
+  });
+
   // Owner can reset team PIN
   app.post("/api/owner/team/reset-pin", ownerAuthMiddleware, async (req, res) => {
     const { newPin } = req.body;
