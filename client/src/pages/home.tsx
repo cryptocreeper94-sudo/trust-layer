@@ -142,7 +142,8 @@ function ChroniclesCarousel() {
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const cardWidth = 240;
+      const isMobile = window.innerWidth < 768;
+      const cardWidth = isMobile ? 180 : 240;
       const scrollAmount = direction === 'left' ? -cardWidth : cardWidth;
       scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
@@ -181,7 +182,7 @@ function ChroniclesCarousel() {
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
             whileHover={{ scale: 1.02, y: -4 }}
-            className="relative group shrink-0 w-[220px] h-[300px] rounded-2xl overflow-hidden snap-center border border-white/10 bg-black/40 backdrop-blur-xl"
+            className="relative group shrink-0 w-[160px] h-[220px] md:w-[220px] md:h-[300px] rounded-2xl overflow-hidden snap-center border border-white/10 bg-black/40 backdrop-blur-xl"
             style={{ boxShadow: '0 0 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)' }}
             data-testid={`card-era-${item.era.toLowerCase().replace(/\s+/g, '-')}`}
           >
@@ -195,8 +196,8 @@ function ChroniclesCarousel() {
             <div className="absolute inset-0 opacity-30 pointer-events-none" style={{
               background: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.02) 10px, rgba(255,255,255,0.02) 20px)",
             }} />
-            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-              <p className="font-bold text-white text-lg">{item.era}</p>
+            <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 bg-gradient-to-t from-black/80 to-transparent">
+              <p className="font-bold text-white text-sm md:text-lg">{item.era}</p>
               <p className="text-xs text-gray-300">{item.desc}</p>
             </div>
           </motion.div>
