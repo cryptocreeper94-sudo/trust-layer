@@ -590,6 +590,13 @@ function PresaleProgress() {
           </div>
         )}
 
+        <div className="mb-4 p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-center">
+          <p className="text-cyan-400 text-sm">
+            <Shield className="w-4 h-4 inline mr-2" />
+            Fair Launch Protection: Max 2% of supply per wallet
+          </p>
+        </div>
+
         <Button 
           onClick={() => setShowBuyModal(true)}
           className="w-full py-6 text-lg font-bold bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:opacity-90"
