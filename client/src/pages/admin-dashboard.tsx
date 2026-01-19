@@ -135,6 +135,7 @@ export default function AdminDashboard() {
     { id: "analytics", title: "Analytics Dashboard", description: "Traffic, engagement, conversions", icon: <BarChart3 className="w-6 h-6" />, href: "/admin/analytics", glow: "cyan" as const, status: "active" },
     { id: "rewards", title: "Rewards Management", description: "Early Adopter program, token allocations", icon: <Gift className="w-6 h-6" />, href: "/admin/rewards", glow: "pink" as const, status: "active" },
     { id: "partners", title: "Partner Requests", description: "Studio applications, NDA approvals", icon: <Handshake className="w-6 h-6" />, href: "/admin/partner-requests", glow: "amber" as const, status: "active" },
+    { id: "handoff", title: "Dev Handoff", description: "Latest changes & system summary", icon: <Activity className="w-6 h-6" />, href: "/admin/handoff", glow: "cyan" as const, status: "active" },
   ];
 
   const ecosystemLinks = [
@@ -143,6 +144,9 @@ export default function AdminDashboard() {
     { title: "YourLegacy.io", description: "Chronicles standalone", url: "/legacy", icon: <Crown className="w-5 h-5" /> },
     { title: "Presale", description: "Token presale page", url: "/presale", icon: <Zap className="w-5 h-5" /> },
     { title: "Crowdfund", description: "Donation campaign", url: "/crowdfund", icon: <DollarSign className="w-5 h-5" /> },
+    { title: "Pulse AI", description: "Trading intelligence", url: "/pulse", icon: <TrendingUp className="w-5 h-5" /> },
+    { title: "Strike Agent", description: "Token analysis AI", url: "/strike-agent", icon: <Activity className="w-5 h-5" /> },
+    { title: "Trust Layer", description: "Membership & Trust Cards", url: "/trust-layer", icon: <Users className="w-5 h-5" /> },
   ];
 
   return (
@@ -186,7 +190,7 @@ export default function AdminDashboard() {
                 All Systems Operational
               </span>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-green-400" />
                 <span className="text-sm text-gray-300">Blockchain</span>
@@ -194,6 +198,14 @@ export default function AdminDashboard() {
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-green-400" />
                 <span className="text-sm text-gray-300">Payments</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-green-400" />
+                <span className="text-sm text-gray-300">AI/OpenAI</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-green-400" />
+                <span className="text-sm text-gray-300">ElevenLabs</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-yellow-400" />
