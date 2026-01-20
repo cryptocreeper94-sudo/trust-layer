@@ -90,41 +90,41 @@ export default function Veil() {
 
         <h3 className="text-2xl font-bold text-white mb-8 text-center">Download Individual Volumes</h3>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto mb-16 px-2">
+        <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-16 px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <GlassCard className="p-8 h-full" glow>
-              <div className="flex items-center gap-4 mb-6">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/30">
-                  <FileText className="w-6 h-6 text-red-400" />
+            <GlassCard className="p-6 md:p-8 h-full" glow>
+              <div className="flex items-center gap-3 mb-5">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/30 flex-shrink-0">
+                  <FileText className="w-5 h-5 text-red-400" />
                 </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white">Vol 1 - PDF</h3>
+                <div className="min-w-0">
+                  <h3 className="text-base font-bold text-white leading-tight">Vol 1 - PDF</h3>
                   <p className="text-xs text-slate-400">Desktop reading</p>
                 </div>
               </div>
               
-              <ul className="space-y-2 mb-6 text-slate-300 text-sm">
+              <ul className="space-y-2.5 mb-6 text-slate-300 text-sm">
                 <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                  168 pages
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0" />
+                  <span>168 pages</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                  163+ scripture refs
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0" />
+                  <span>163+ scripture refs</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                  Print-ready
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0" />
+                  <span>Print-ready</span>
                 </li>
               </ul>
               
               <a href="/assets/Through-The-Veil-EBOOK.pdf" download className="block mt-auto">
-                <Button className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 py-5">
-                  <Download className="w-5 h-5 mr-2" />
+                <Button className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 py-4">
+                  <Download className="w-4 h-4 mr-2" />
                   PDF (7 MB)
                 </Button>
               </a>
@@ -136,35 +136,35 @@ export default function Veil() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.25 }}
           >
-            <GlassCard className="p-8 h-full" glow>
-              <div className="flex items-center gap-4 mb-6">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30">
-                  <Smartphone className="w-6 h-6 text-cyan-400" />
+            <GlassCard className="p-6 md:p-8 h-full" glow>
+              <div className="flex items-center gap-3 mb-5">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 flex-shrink-0">
+                  <Smartphone className="w-5 h-5 text-cyan-400" />
                 </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white">Vol 1 - EPUB</h3>
+                <div className="min-w-0">
+                  <h3 className="text-base font-bold text-white leading-tight">Vol 1 - EPUB</h3>
                   <p className="text-xs text-slate-400">E-readers</p>
                 </div>
               </div>
               
-              <ul className="space-y-2 mb-6 text-slate-300 text-sm">
+              <ul className="space-y-2.5 mb-6 text-slate-300 text-sm">
                 <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
-                  58 chapters
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400 flex-shrink-0" />
+                  <span>58 chapters</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
-                  Mobile optimized
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400 flex-shrink-0" />
+                  <span>Mobile optimized</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
-                  Kindle/Kobo/Nook
+                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400 flex-shrink-0" />
+                  <span>Kindle/Kobo/Nook</span>
                 </li>
               </ul>
               
               <a href="/assets/Through-The-Veil-EBOOK.epub" download className="block mt-auto">
-                <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 py-5">
-                  <Download className="w-5 h-5 mr-2" />
+                <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 py-4">
+                  <Download className="w-4 h-4 mr-2" />
                   EPUB (147 KB)
                 </Button>
               </a>
@@ -176,82 +176,39 @@ export default function Veil() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <GlassCard className="p-8 h-full border-2 border-purple-500/20" glow>
-              <div className="flex items-center gap-4 mb-6">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
-                  <BookMarked className="w-6 h-6 text-purple-400" />
+            <GlassCard className="p-6 md:p-8 h-full border-2 border-purple-500/20" glow>
+              <div className="flex items-center gap-3 mb-5">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 flex-shrink-0">
+                  <BookMarked className="w-5 h-5 text-purple-400" />
                 </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white">Vol 2 - HTML</h3>
+                <div className="min-w-0">
+                  <h3 className="text-base font-bold text-white leading-tight">Vol 2 - HTML</h3>
                   <p className="text-xs text-slate-400">Read & Print</p>
                 </div>
               </div>
               
-              <ul className="space-y-2 mb-6 text-slate-300 text-sm">
+              <ul className="space-y-2.5 mb-6 text-slate-300 text-sm">
                 <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
-                  24 parts
+                  <span className="w-1.5 h-1.5 rounded-full bg-pink-400 flex-shrink-0" />
+                  <span>24 parts</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
-                  Author's Note
+                  <span className="w-1.5 h-1.5 rounded-full bg-pink-400 flex-shrink-0" />
+                  <span>Author's Note</span>
                 </li>
                 <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
-                  Print to PDF
+                  <span className="w-1.5 h-1.5 rounded-full bg-pink-400 flex-shrink-0" />
+                  <span>Print to PDF</span>
                 </li>
               </ul>
               
               <Button 
                 onClick={handlePrintVolume2}
-                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 py-5 mt-auto"
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 py-4 mt-auto"
               >
-                <ExternalLink className="w-5 h-5 mr-2" />
+                <ExternalLink className="w-4 h-4 mr-2" />
                 Open & Print
               </Button>
-            </GlassCard>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-          >
-            <GlassCard className="p-8 h-full bg-gradient-to-br from-slate-900/80 to-slate-800/50" glow>
-              <div className="flex items-center gap-4 mb-6">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30">
-                  <BookOpen className="w-6 h-6 text-green-400" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white">Combine</h3>
-                  <p className="text-xs text-slate-400">Both volumes</p>
-                </div>
-              </div>
-              
-              <p className="text-slate-400 text-sm mb-4">
-                To create one complete PDF:
-              </p>
-              <ol className="text-slate-300 text-sm space-y-2 mb-6">
-                <li className="flex items-center gap-3">
-                  <span className="w-5 h-5 rounded-full bg-green-500/20 text-green-400 text-xs flex items-center justify-center font-bold">1</span>
-                  Download Vol 1 PDF
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-5 h-5 rounded-full bg-green-500/20 text-green-400 text-xs flex items-center justify-center font-bold">2</span>
-                  Open Vol 2, print to PDF
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-5 h-5 rounded-full bg-green-500/20 text-green-400 text-xs flex items-center justify-center font-bold">3</span>
-                  Merge at ilovepdf.com
-                </li>
-              </ol>
-              
-              <a href="https://www.ilovepdf.com/merge_pdf" target="_blank" rel="noopener noreferrer" className="block mt-auto">
-                <Button className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 py-5">
-                  <ExternalLink className="w-5 h-5 mr-2" />
-                  PDF Merger
-                </Button>
-              </a>
             </GlassCard>
           </motion.div>
         </div>
