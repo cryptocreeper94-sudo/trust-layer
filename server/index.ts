@@ -7,6 +7,7 @@ import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
 import { startScheduler } from "./marketing-scheduler";
+import { startShellsAirdropScheduler } from "./shells-airdrop-scheduler";
 import { seedDocuments, seedCityZones } from "./storage";
 import { setupPresence } from "./chat-presence";
 import { runMigrations } from "stripe-replit-sync";
@@ -308,6 +309,9 @@ async function initializeServices() {
     
     // Marketing auto-deploy scheduler - DISABLED (rebrand in progress)
     // startScheduler();
+    
+    // Shells airdrop scheduler - runs at 7 AM and 7 PM UTC (1 AM and 1 PM CST)
+    startShellsAirdropScheduler();
     
     servicesReady = true;
     console.log('[Init] All services initialized successfully');

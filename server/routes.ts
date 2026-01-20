@@ -14623,6 +14623,29 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // Shells Airdrop Scheduler Status & Control (Owner only)
+  app.get("/api/owner/shells-airdrop/status", ownerAuthMiddleware, async (_req, res) => {
+    try {
+      const { getShellsAirdropStatus } = await import("./shells-airdrop-scheduler");
+      const status = getShellsAirdropStatus();
+      res.json(status);
+    } catch (error) {
+      console.error("Get shells airdrop status error:", error);
+      res.status(500).json({ error: "Failed to get shells airdrop status" });
+    }
+  });
+
+  app.post("/api/owner/shells-airdrop/trigger", ownerAuthMiddleware, async (_req, res) => {
+    try {
+      const { manualAirdropTrigger } = await import("./shells-airdrop-scheduler");
+      const result = await manualAirdropTrigger();
+      res.json(result);
+    } catch (error) {
+      console.error("Manual shells airdrop trigger error:", error);
+      res.status(500).json({ error: "Failed to trigger shells airdrop" });
+    }
+  });
+
   app.get("/api/referrals/my-airdrop", isAuthenticated, async (req, res) => {
     try {
       const userId = (req as any).user?.id;
