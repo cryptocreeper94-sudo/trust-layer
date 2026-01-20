@@ -204,6 +204,8 @@ const OwnerDomains = lazy(() => import("@/pages/owner-admin/domains"));
 const OwnerFaucet = lazy(() => import("@/pages/owner-admin/faucet"));
 const OwnerKyc = lazy(() => import("@/pages/owner-admin/kyc"));
 const OwnerZealy = lazy(() => import("@/pages/owner-admin/zealy"));
+const OwnerFeedback = lazy(() => import("@/pages/owner-admin/feedback"));
+const Feedback = lazy(() => import("@/pages/feedback"));
 const TeamAdminPortal = lazy(() => import("@/pages/team-admin"));
 const TeamOperations = lazy(() => import("@/pages/team-operations"));
 const GatewayError = lazy(() => import("@/pages/gateway-error"));
@@ -416,6 +418,8 @@ function DWSCRouter() {
         <Route path="/owner-admin/faucet" component={OwnerFaucet} />
         <Route path="/owner-admin/kyc" component={OwnerKyc} />
         <Route path="/owner-admin/zealy" component={OwnerZealy} />
+        <Route path="/owner-admin/feedback" component={OwnerFeedback} />
+        <Route path="/feedback" component={Feedback} />
         <Route path="/team-admin" component={TeamAdminPortal} />
         <Route path="/ops-center" component={TeamOperations} />
         <Route path="/chronicles-admin" component={ChroniclesAdmin} />

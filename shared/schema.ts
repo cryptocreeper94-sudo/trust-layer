@@ -7153,3 +7153,58 @@ export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({
 
 export type BlogPost = typeof blogPosts.$inferSelect;
 export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
+
+// Bug Reports / Feedback System
+export const feedbackReports = pgTable('feedback_reports', {
+  id: serial('id').primaryKey(),
+  userId: text('user_id'),
+  userEmail: text('user_email'),
+  userName: text('user_name'),
+  
+  // Report details
+  type: varchar('type', { length: 50 }).notNull().default('bug'),
+  category: varchar('category', { length: 100 }).notNull().default('general'),
+  title: text('title').notNull(),
+  description: text('description').notNull(),
+  
+  // For bug reports
+  stepsToReproduce: text('steps_to_reproduce'),
+  expectedBehavior: text('expected_behavior'),
+  actualBehavior: text('actual_behavior'),
+  
+  // Screenshots/attachments (URLs)
+  screenshots: text('screenshots').array(),
+  
+  // Context
+  pageUrl: text('page_url'),
+  browserInfo: text('browser_info'),
+  deviceInfo: text('device_info'),
+  
+  // Status tracking
+  status: varchar('status', { length: 30 }).notNull().default('new'),
+  priority: varchar('priority', { length: 20 }).default('medium'),
+  assignedTo: text('assigned_to'),
+  
+  // Admin notes
+  adminNotes: text('admin_notes'),
+  resolution: text('resolution'),
+  resolvedAt: timestamp('resolved_at'),
+  
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const insertFeedbackReportSchema = createInsertSchema(feedbackReports).omit({
+  id: true,
+  status: true,
+  priority: true,
+  assignedTo: true,
+  adminNotes: true,
+  resolution: true,
+  resolvedAt: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type FeedbackReport = typeof feedbackReports.$inferSelect;
+export type InsertFeedbackReport = z.infer<typeof insertFeedbackReportSchema>;

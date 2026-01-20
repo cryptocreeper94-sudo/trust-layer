@@ -114,7 +114,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and, gte } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -1826,6 +1826,134 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Early adopter stats error:", error);
       res.status(500).json({ error: "Failed to get stats" });
+    }
+  });
+
+  // ======================
+  // FEEDBACK & BUG REPORTS
+  // ======================
+  
+  // Submit a feedback report (authenticated users)
+  app.post("/api/feedback", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.firebaseUser?.uid;
+      const { type, category, title, description, stepsToReproduce, expectedBehavior, actualBehavior, pageUrl, screenshots } = req.body;
+      
+      if (!title || !description) {
+        return res.status(400).json({ error: "Title and description are required" });
+      }
+      
+      // Get user info
+      let userEmail = null;
+      let userName = null;
+      if (userId) {
+        const user = await storage.getFirebaseUser(userId);
+        if (user) {
+          userEmail = user.email;
+          userName = user.username;
+        }
+      }
+      
+      // Get browser/device info from request
+      const userAgent = req.headers['user-agent'] || 'Unknown';
+      
+      const [report] = await db.insert(feedbackReports).values({
+        userId: userId || null,
+        userEmail,
+        userName,
+        type: type || 'bug',
+        category: category || 'general',
+        title,
+        description,
+        stepsToReproduce: stepsToReproduce || null,
+        expectedBehavior: expectedBehavior || null,
+        actualBehavior: actualBehavior || null,
+        pageUrl: pageUrl || null,
+        screenshots: screenshots || [],
+        browserInfo: userAgent,
+        deviceInfo: null,
+      }).returning();
+      
+      res.json({ success: true, reportId: report.id, message: "Thank you for your feedback!" });
+    } catch (error) {
+      console.error("Feedback submit error:", error);
+      res.status(500).json({ error: "Failed to submit feedback" });
+    }
+  });
+  
+  // Get all feedback reports (owner admin only)
+  app.get("/api/owner/feedback", async (req, res) => {
+    try {
+      // Verify owner token
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      if (!token) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      
+      // Simple token verification (in production, use proper JWT)
+      const ownerSecret = process.env.OWNER_SECRET;
+      if (!ownerSecret || token !== Buffer.from(ownerSecret).toString('base64')) {
+        return res.status(401).json({ error: "Invalid token" });
+      }
+      
+      const { status, type, limit = 50 } = req.query;
+      
+      let query = db.select().from(feedbackReports).orderBy(sql`created_at DESC`);
+      
+      const reports = await query.limit(Number(limit));
+      
+      // Filter by status/type if provided
+      let filteredReports = reports;
+      if (status && typeof status === 'string') {
+        filteredReports = filteredReports.filter(r => r.status === status);
+      }
+      if (type && typeof type === 'string') {
+        filteredReports = filteredReports.filter(r => r.type === type);
+      }
+      
+      res.json({ reports: filteredReports });
+    } catch (error) {
+      console.error("Feedback list error:", error);
+      res.status(500).json({ error: "Failed to get feedback reports" });
+    }
+  });
+  
+  // Update feedback report status (owner admin only)
+  app.patch("/api/owner/feedback/:id", async (req, res) => {
+    try {
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      if (!token) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      
+      const ownerSecret = process.env.OWNER_SECRET;
+      if (!ownerSecret || token !== Buffer.from(ownerSecret).toString('base64')) {
+        return res.status(401).json({ error: "Invalid token" });
+      }
+      
+      const { id } = req.params;
+      const { status, priority, adminNotes, resolution } = req.body;
+      
+      const updateData: Record<string, any> = { updatedAt: new Date() };
+      if (status) updateData.status = status;
+      if (priority) updateData.priority = priority;
+      if (adminNotes !== undefined) updateData.adminNotes = adminNotes;
+      if (resolution !== undefined) {
+        updateData.resolution = resolution;
+        if (status === 'resolved') {
+          updateData.resolvedAt = new Date();
+        }
+      }
+      
+      const [updated] = await db.update(feedbackReports)
+        .set(updateData)
+        .where(eq(feedbackReports.id, Number(id)))
+        .returning();
+      
+      res.json({ success: true, report: updated });
+    } catch (error) {
+      console.error("Feedback update error:", error);
+      res.status(500).json({ error: "Failed to update feedback" });
     }
   });
 

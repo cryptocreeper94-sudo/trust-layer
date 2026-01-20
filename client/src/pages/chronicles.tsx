@@ -922,7 +922,21 @@ export default function Chronicles() {
               </span>
               <br />
               <span className="text-white drop-shadow-2xl">Chronicles</span>
+              <Badge className="ml-3 px-3 py-1 bg-amber-500/30 border-amber-500/50 text-amber-300 text-sm font-bold align-middle animate-pulse">
+                BETA
+              </Badge>
             </h1>
+            
+            <div className="mb-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/30 backdrop-blur-sm">
+              <Info className="w-4 h-4 text-amber-400" />
+              <span className="text-amber-300 text-sm font-medium">Currently in Beta Testing</span>
+              <span className="text-white/50 text-sm">•</span>
+              <Link href="/feedback">
+                <span className="text-cyan-400 hover:text-cyan-300 text-sm font-medium cursor-pointer underline underline-offset-2">
+                  Report Bugs & Feedback
+                </span>
+              </Link>
+            </div>
             
             <motion.div
               initial={{ opacity: 0 }}
@@ -1110,7 +1124,7 @@ export default function Chronicles() {
             style={{ boxShadow: '0 0 80px rgba(245,158,11,0.15)' }}
           >
             <img 
-              src={deepSpace} 
+              src={cyberpunkCity} 
               alt="SIG Economy"
               className="absolute inset-0 w-full h-full object-cover"
             />
