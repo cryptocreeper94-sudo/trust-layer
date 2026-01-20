@@ -1,0 +1,209 @@
+import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { Crown, Zap, Shield, Gift, Users, Clock, ArrowRight, Star, CheckCircle, Sparkles } from "lucide-react";
+import { Link } from "wouter";
+import { GlassCard } from "@/components/glass-card";
+import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
+
+export default function FoundersPage() {
+  const [spotsRemaining, setSpotsRemaining] = useState(50);
+
+  const { data: foundersData } = useQuery({
+    queryKey: ["/api/founders/stats"],
+    queryFn: async () => {
+      try {
+        const res = await fetch("/api/founders/stats");
+        if (res.ok) return res.json();
+        return { spotsTaken: 0, totalSpots: 50 };
+      } catch {
+        return { spotsTaken: 0, totalSpots: 50 };
+      }
+    },
+    refetchInterval: 30000,
+  });
+
+  useEffect(() => {
+    if (foundersData) {
+      setSpotsRemaining(foundersData.totalSpots - foundersData.spotsTaken);
+    }
+  }, [foundersData]);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+      <div className="absolute top-20 left-10 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-40 right-10 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-3xl" />
+
+      <div className="relative z-10 container mx-auto px-4 py-12 md:py-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-4xl mx-auto"
+        >
+          <div className="text-center mb-12">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, type: "spring" }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 mb-6"
+            >
+              <Crown className="w-5 h-5 text-amber-400" />
+              <span className="text-amber-300 font-medium">Exclusive Telegram Offer</span>
+            </motion.div>
+
+            <h1 className="text-4xl md:text-6xl font-display font-bold mb-6">
+              <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-red-400 bg-clip-text text-transparent">
+                Founders Circle
+              </span>
+            </h1>
+
+            <p className="text-xl md:text-2xl text-white/80 mb-4 max-w-2xl mx-auto">
+              The first <span className="text-amber-400 font-bold">50 members</span> who secure their position get{" "}
+              <span className="text-green-400 font-bold">100% bonus Signal</span> at TGE
+            </p>
+
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/20 border border-red-500/30">
+                <Clock className="w-5 h-5 text-red-400 animate-pulse" />
+                <span className="text-red-300 font-bold">{spotsRemaining} spots remaining</span>
+              </div>
+            </div>
+          </div>
+
+          <GlassCard glow className="p-8 md:p-12 mb-8">
+            <div className="grid md:grid-cols-2 gap-8 mb-8">
+              <div>
+                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+                  <Gift className="w-6 h-6 text-amber-400" />
+                  The Founders Deal
+                </h2>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
+                    <div>
+                      <p className="text-white font-medium">Purchase 25,000+ Signal</p>
+                      <p className="text-white/60 text-sm">Minimum entry for Founders Circle</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
+                    <div>
+                      <p className="text-white font-medium">Get 100% Bonus at TGE</p>
+                      <p className="text-white/60 text-sm">Buy 25K, receive 50K. Buy 100K, receive 200K.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
+                    <div>
+                      <p className="text-white font-medium">Exclusive Founders Badge</p>
+                      <p className="text-white/60 text-sm">Permanent recognition in the community</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
+                    <div>
+                      <p className="text-white font-medium">Priority Access</p>
+                      <p className="text-white/60 text-sm">First access to new features & products</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-2xl p-6 border border-amber-500/20">
+                <h3 className="text-lg font-semibold text-amber-400 mb-4 flex items-center gap-2">
+                  <Sparkles className="w-5 h-5" />
+                  Example Rewards
+                </h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center py-2 border-b border-white/10">
+                    <span className="text-white/70">Buy 25,000 SIG</span>
+                    <span className="text-green-400 font-bold">→ Receive 50,000 SIG</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-white/10">
+                    <span className="text-white/70">Buy 50,000 SIG</span>
+                    <span className="text-green-400 font-bold">→ Receive 100,000 SIG</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2 border-b border-white/10">
+                    <span className="text-white/70">Buy 100,000 SIG</span>
+                    <span className="text-green-400 font-bold">→ Receive 200,000 SIG</span>
+                  </div>
+                  <div className="flex justify-between items-center py-2">
+                    <span className="text-white/70">Buy 500,000 SIG</span>
+                    <span className="text-green-400 font-bold">→ Receive 1,000,000 SIG</span>
+                  </div>
+                </div>
+                <p className="text-white/50 text-xs mt-4">*Bonus distributed at Token Generation Event</p>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <Link href="/presale?ref=founders">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-lg px-12 py-6 h-auto"
+                  data-testid="button-claim-founders-spot"
+                >
+                  <Crown className="w-5 h-5 mr-2" />
+                  Claim Your Founders Spot
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+              <p className="text-white/50 text-sm mt-4">Minimum purchase: 25,000 Signal ($25)</p>
+            </div>
+          </GlassCard>
+
+          <div className="grid md:grid-cols-3 gap-4 mb-8">
+            <GlassCard className="p-6 text-center">
+              <Shield className="w-10 h-10 text-cyan-400 mx-auto mb-3" />
+              <h3 className="font-semibold text-white mb-2">Secure & Verified</h3>
+              <p className="text-white/60 text-sm">All purchases tracked on-chain with full transparency</p>
+            </GlassCard>
+            <GlassCard className="p-6 text-center">
+              <Users className="w-10 h-10 text-purple-400 mx-auto mb-3" />
+              <h3 className="font-semibold text-white mb-2">Limited to 50</h3>
+              <p className="text-white/60 text-sm">Once spots are filled, this offer closes permanently</p>
+            </GlassCard>
+            <GlassCard className="p-6 text-center">
+              <Zap className="w-10 h-10 text-amber-400 mx-auto mb-3" />
+              <h3 className="font-semibold text-white mb-2">Instant Confirmation</h3>
+              <p className="text-white/60 text-sm">Your Founders status is confirmed immediately</p>
+            </GlassCard>
+          </div>
+
+          <GlassCard className="p-6 mb-8">
+            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <Star className="w-5 h-5 text-amber-400" />
+              Why Signal? Why Now?
+            </h3>
+            <div className="prose prose-invert max-w-none text-white/70">
+              <p className="mb-4">
+                Signal isn't just another token — it's your access key to the DarkWave Trust Network. 
+                While others chase hype, we're building real infrastructure that businesses actually use.
+              </p>
+              <p className="mb-4">
+                The Founders Circle is for those who see the vision early. You're not just buying Signal — 
+                you're becoming a founding member of something we're building together. Your 100% bonus 
+                is our way of saying thank you for believing in what we're creating.
+              </p>
+              <p className="mb-0">
+                <Link href="/note" className="text-cyan-400 hover:underline">Read our story →</Link>
+              </p>
+            </div>
+          </GlassCard>
+
+          <div className="text-center">
+            <p className="text-white/50 text-sm">
+              Questions? Join our{" "}
+              <a href="https://t.me/darkwavestudios" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">
+                Telegram community
+              </a>{" "}
+              or read the{" "}
+              <Link href="/note" className="text-cyan-400 hover:underline">Developer's Note</Link>
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}

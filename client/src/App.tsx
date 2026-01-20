@@ -142,6 +142,7 @@ const MyTokens = lazy(() => import("@/pages/my-tokens"));
 const CommunityHub = lazy(() => import("@/pages/community-hub"));
 const Presale = lazy(() => import("@/pages/presale"));
 const PresaleSuccess = lazy(() => import("@/pages/presale-success"));
+const Founders = lazy(() => import("@/pages/founders"));
 const InvestmentSimulator = lazy(() => import("@/pages/investment-simulator"));
 const RoadmapChronicles = lazy(() => import("@/pages/roadmap-chronicles"));
 const RoadmapEcosystem = lazy(() => import("@/pages/roadmap-ecosystem"));
@@ -257,6 +258,7 @@ function GamesRouter() {
         <Route path="/community" component={CommunityHub} />
         <Route path="/presale" component={Presale} />
         <Route path="/presale/success" component={PresaleSuccess} />
+        <Route path="/founders" component={Founders} />
         <Route path="/investment-simulator" component={InvestmentSimulator} />
         <Route path="/roadmap" component={RoadmapEcosystem} />
         <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
@@ -480,6 +482,7 @@ function DWSCRouter() {
         <Route path="/community" component={CommunityHub} />
         <Route path="/presale" component={Presale} />
         <Route path="/presale/success" component={PresaleSuccess} />
+        <Route path="/founders" component={Founders} />
         <Route path="/investment-simulator" component={InvestmentSimulator} />
         <Route path="/roadmap" component={RoadmapEcosystem} />
         <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
