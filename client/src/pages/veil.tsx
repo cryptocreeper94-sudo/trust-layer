@@ -102,8 +102,8 @@ export default function Veil() {
                   <FileText className="w-5 h-5 text-red-400" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-base font-bold text-white leading-tight">Vol 1 - PDF</h3>
-                  <p className="text-xs text-slate-400">Desktop reading</p>
+                  <h3 className="text-base font-bold text-white leading-tight">PDF Download</h3>
+                  <p className="text-xs text-slate-400">Desktop & Print</p>
                 </div>
               </div>
               
@@ -142,8 +142,8 @@ export default function Veil() {
                   <Smartphone className="w-5 h-5 text-cyan-400" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-base font-bold text-white leading-tight">Vol 1 - EPUB</h3>
-                  <p className="text-xs text-slate-400">E-readers</p>
+                  <h3 className="text-base font-bold text-white leading-tight">EPUB Download</h3>
+                  <p className="text-xs text-slate-400">E-readers & Mobile</p>
                 </div>
               </div>
               
@@ -182,8 +182,8 @@ export default function Veil() {
                   <BookMarked className="w-5 h-5 text-purple-400" />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-base font-bold text-white leading-tight">Vol 2 - HTML</h3>
-                  <p className="text-xs text-slate-400">Read & Print</p>
+                  <h3 className="text-base font-bold text-white leading-tight">Read Online</h3>
+                  <p className="text-xs text-slate-400">Browser & Print</p>
                 </div>
               </div>
               
