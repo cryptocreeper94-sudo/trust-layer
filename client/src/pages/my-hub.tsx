@@ -5,7 +5,8 @@ import {
   Wallet, TrendingUp, Zap, Calendar, ArrowUpRight, Shield, Target,
   Gamepad2, MessageCircle, Globe, Code, ImageIcon, PieChart, 
   ArrowLeftRight, Droplets, Rocket, Download, ExternalLink, Star,
-  Crown, Activity, Bell, Settings, ChevronRight, Award, MapPin
+  Crown, Activity, Bell, Settings, ChevronRight, Award, MapPin,
+  Newspaper, Clock, Megaphone
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -76,6 +77,36 @@ export default function MyHub() {
     enabled: !!user,
   });
 
+  const { data: newsData } = useQuery<{
+    announcements: Array<{
+      id: number;
+      title: string;
+      content: string;
+      type: 'announcement' | 'update' | 'upcoming';
+      date: string;
+      version?: string;
+    }>;
+    currentVersion: string;
+    upcomingVersion: string;
+  }>({
+    queryKey: ["/api/trust-layer/news"],
+    queryFn: async () => {
+      const res = await fetch("/api/trust-layer/news");
+      if (!res.ok) {
+        return {
+          announcements: [
+            { id: 1, title: "Welcome to Trust Layer", content: "Your personal hub in the DarkWave ecosystem is now live!", type: "announcement" as const, date: new Date().toISOString() },
+            { id: 2, title: "Race to 200 Active", content: "Complete daily Zealy missions to earn shells and compete for Founders tier!", type: "update" as const, date: new Date().toISOString() },
+            { id: 3, title: "Coming Soon: v2.5", content: "Enhanced member profiles, location-based trust circles, and governance voting.", type: "upcoming" as const, date: new Date().toISOString(), version: "2.5" },
+          ],
+          currentVersion: "2.4",
+          upcomingVersion: "2.5",
+        };
+      }
+      return res.json();
+    },
+  });
+
   const ecosystemLinks = [
     { href: "/wallet", label: "Wallet", icon: Wallet, color: "cyan", description: "Manage your assets" },
     { href: "/swap", label: "Swap", icon: ArrowLeftRight, color: "purple", description: "Trade tokens" },
@@ -95,6 +126,35 @@ export default function MyHub() {
   const progressToFounders = rewardProfile?.profile?.totalQuestsCompleted 
     ? Math.min((rewardProfile.profile.totalQuestsCompleted / 50) * 100, 100) 
     : 0;
+
+  // Calculate member tenure badge with explicit Tailwind classes
+  const getTenureBadge = () => {
+    const memberNum = memberData?.memberNumber || 9999;
+    
+    if (memberNum <= 10) return { 
+      label: "Founder", 
+      icon: "🏆",
+      className: "bg-amber-500/20 text-amber-400 border-amber-500/30"
+    };
+    if (memberNum <= 50) return { 
+      label: "Pioneer", 
+      icon: "🌟",
+      className: "bg-purple-500/20 text-purple-400 border-purple-500/30"
+    };
+    if (memberNum <= 100) return { 
+      label: "Trailblazer", 
+      icon: "⚡",
+      className: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30"
+    };
+    if (memberNum <= 500) return { 
+      label: "Early Adopter", 
+      icon: "✨",
+      className: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
+    };
+    return null;
+  };
+  
+  const tenureBadge = getTenureBadge();
 
   const generateTrustHash = () => {
     if (!memberData?.trustHash) return "Generating...";
@@ -199,10 +259,15 @@ export default function MyHub() {
                         <h1 className="text-3xl md:text-4xl font-bold">
                           Welcome, Member <span className="text-cyan-400">#{memberData?.memberNumber || '...'}</span>
                         </h1>
-                        <p className="text-white/60 flex items-center gap-2">
+                        <p className="text-white/60 flex flex-wrap items-center gap-2">
                           <Shield className="w-4 h-4 text-emerald-400" />
                           Verified Trust Layer Member
-                          {memberData?.isEarlyAdopter && (
+                          {tenureBadge && (
+                            <Badge className={`${tenureBadge.className} ml-2`}>
+                              <span className="mr-1">{tenureBadge.icon}</span> {tenureBadge.label}
+                            </Badge>
+                          )}
+                          {memberData?.isEarlyAdopter && !tenureBadge && (
                             <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 ml-2">
                               <Star className="w-3 h-3 mr-1" /> Early Adopter
                             </Badge>
@@ -331,6 +396,88 @@ export default function MyHub() {
                 </Link>
               ))}
             </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.12 }}
+            className="mb-8"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold flex items-center gap-2">
+                <Newspaper className="w-5 h-5 text-cyan-400" />
+                Trust Layer News
+              </h2>
+              <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+                v{newsData?.currentVersion || '2.4'}
+              </Badge>
+            </div>
+            <GlassCard className="p-0 overflow-hidden" glow>
+              <div className="divide-y divide-white/5">
+                {newsData?.announcements?.map((item, idx) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 + idx * 0.05 }}
+                    className="p-4 hover:bg-white/5 transition-colors"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className={`p-2 rounded-xl ${
+                        item.type === 'announcement' ? 'bg-cyan-500/20' :
+                        item.type === 'update' ? 'bg-emerald-500/20' :
+                        'bg-purple-500/20'
+                      }`}>
+                        {item.type === 'announcement' ? <Megaphone className="w-4 h-4 text-cyan-400" /> :
+                         item.type === 'update' ? <Activity className="w-4 h-4 text-emerald-400" /> :
+                         <Clock className="w-4 h-4 text-purple-400" />}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h4 className="font-semibold text-sm">{item.title}</h4>
+                          {item.version && (
+                            <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-[10px]">
+                              v{item.version}
+                            </Badge>
+                          )}
+                          <Badge className={`text-[10px] ${
+                            item.type === 'announcement' ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30' :
+                            item.type === 'update' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
+                            'bg-purple-500/20 text-purple-400 border-purple-500/30'
+                          }`}>
+                            {item.type === 'announcement' ? 'News' : item.type === 'update' ? 'Update' : 'Coming Soon'}
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-white/60">{item.content}</p>
+                        <p className="text-xs text-white/30 mt-1">
+                          {new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+              
+              <div className="p-4 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border-t border-white/5">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl bg-purple-500/20">
+                      <Rocket className="w-5 h-5 text-purple-400" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold">Version {newsData?.upcomingVersion || '2.5'} Coming Soon</p>
+                      <p className="text-xs text-white/50">Enhanced profiles, governance, and more</p>
+                    </div>
+                  </div>
+                  <Link href="/roadmap">
+                    <Button variant="outline" size="sm" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/20">
+                      View Roadmap <ChevronRight className="w-4 h-4 ml-1" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </GlassCard>
           </motion.div>
 
           <motion.div

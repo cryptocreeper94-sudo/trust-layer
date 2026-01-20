@@ -1696,6 +1696,60 @@ export async function registerRoutes(
     }
   });
 
+  // Trust Layer News API - for My Hub dashboard
+  app.get("/api/trust-layer/news", async (req, res) => {
+    try {
+      // For now, return static news items that can be updated here
+      // In production, this would come from a database table
+      const announcements = [
+        {
+          id: 1,
+          title: "Welcome to Trust Layer",
+          content: "Your personal hub in the DarkWave ecosystem is now live! Access your rewards, ecosystem tools, and community all in one place.",
+          type: "announcement" as const,
+          date: new Date().toISOString(),
+        },
+        {
+          id: 2,
+          title: "Race to 200 Active",
+          content: "Complete daily Zealy missions to earn shells and compete for Founders tier! Top 10 get 2x multiplier and $750-$1,500 value.",
+          type: "update" as const,
+          date: new Date().toISOString(),
+        },
+        {
+          id: 3,
+          title: "Automatic Airdrops Live",
+          content: "Shell airdrops now run automatically twice daily at 7AM and 7PM UTC. 25 shells per eligible user!",
+          type: "update" as const,
+          date: new Date().toISOString(),
+        },
+        {
+          id: 4,
+          title: "Coming in v2.5",
+          content: "Enhanced member profiles with location, governance voting, anniversary badges, and improved Trust Circle discovery.",
+          type: "upcoming" as const,
+          date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+          version: "2.5",
+        },
+      ];
+
+      res.json({
+        announcements,
+        currentVersion: "2.4",
+        upcomingVersion: "2.5",
+        lastUpdated: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error("Trust Layer news error:", error);
+      res.json({
+        announcements: [],
+        currentVersion: "2.4",
+        upcomingVersion: "2.5",
+        lastUpdated: new Date().toISOString(),
+      });
+    }
+  });
+
   // Members Directory - Trust Circle
   app.get("/api/members/directory", async (req, res) => {
     try {
