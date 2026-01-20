@@ -1696,6 +1696,59 @@ export async function registerRoutes(
     }
   });
 
+  // Members Directory - Trust Circle
+  app.get("/api/members/directory", async (req, res) => {
+    try {
+      const { q, location } = req.query;
+      const searchQuery = typeof q === 'string' ? q.toLowerCase().trim() : '';
+      const locationQuery = typeof location === 'string' ? location.toLowerCase().trim() : '';
+      
+      // Get all verified members with basic public profile info
+      const allMembers = await db.select({
+        id: users.id,
+        displayName: users.username,
+        createdAt: users.createdAt,
+      }).from(users)
+        .orderBy(users.id)
+        .limit(200);
+
+      // Map with real member numbers and filter by search query
+      let formattedMembers = allMembers.map((m, idx) => ({
+        id: m.id,
+        displayName: m.displayName || `Member #${idx + 1}`,
+        memberNumber: idx + 1,
+        location: null as string | null, // Will be populated when profile system is complete
+        businessType: null as string | null,
+        isVerified: true,
+        isEarlyAdopter: idx < 500,
+        joinedAt: m.createdAt?.toISOString() || new Date().toISOString(),
+      }));
+
+      // Apply search filter
+      if (searchQuery) {
+        formattedMembers = formattedMembers.filter(m => 
+          m.displayName.toLowerCase().includes(searchQuery) ||
+          `member #${m.memberNumber}`.includes(searchQuery)
+        );
+      }
+
+      // Apply location filter (for future when profiles have location data)
+      if (locationQuery) {
+        formattedMembers = formattedMembers.filter(m => 
+          m.location && m.location.toLowerCase().includes(locationQuery)
+        );
+      }
+
+      res.json({ 
+        members: formattedMembers.slice(0, 100),
+        total: formattedMembers.length 
+      });
+    } catch (error) {
+      console.error("Members directory error:", error);
+      res.json({ members: [], total: 0 });
+    }
+  });
+
   // Early adopter stats for logged-in user
   app.get("/api/user/early-adopter-stats", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
     try {

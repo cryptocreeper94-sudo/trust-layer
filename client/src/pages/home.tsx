@@ -389,14 +389,14 @@ export default function Home() {
               <MemberBadge userId={user.id.toString()} />
             )}
             {isAuthenticated && (
-              <Link href="/rewards">
+              <Link href="/my-hub">
                 <Button 
                   size="sm" 
                   className="h-8 px-2.5 sm:px-3 text-xs font-semibold bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-400 border border-amber-500/30 hover:border-amber-400/50"
-                  data-testid="button-rewards"
+                  data-testid="button-my-hub"
                 >
                   <Gift className="w-3.5 h-3.5 sm:mr-1" />
-                  <span className="hidden sm:inline">Rewards</span>
+                  <span className="hidden sm:inline">My Hub</span>
                 </Button>
               </Link>
             )}
