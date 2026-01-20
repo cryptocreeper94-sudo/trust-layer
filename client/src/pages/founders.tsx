@@ -1,13 +1,39 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Crown, Zap, Shield, Gift, Users, Clock, ArrowRight, Star, CheckCircle, Sparkles } from "lucide-react";
+import { Crown, Zap, Shield, Gift, Users, Clock, ArrowRight, Star, CheckCircle, Sparkles, Copy, Check, Send } from "lucide-react";
 import { Link } from "wouter";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 
+const TELEGRAM_MESSAGE = `🏆 FOUNDERS CIRCLE ANNOUNCEMENT 🏆
+
+The first 50 members who secure at least 25,000 Signal will receive a 100% BONUS at TGE.
+
+💰 How it works:
+• Buy 25,000 SIG → Get 50,000 at TGE
+• Buy 50,000 SIG → Get 100,000 at TGE
+• Buy 100,000 SIG → Get 200,000 at TGE
+
+✅ Exclusive Founders Badge
+✅ Priority access to new features
+✅ Permanent community recognition
+
+This is NOT about hype. It's about rewarding the people who believed early.
+
+👉 Claim your spot: https://dwsc.io/founders
+
+Only 50 spots. Once they're gone, they're gone.`;
+
 export default function FoundersPage() {
   const [spotsRemaining, setSpotsRemaining] = useState(50);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(TELEGRAM_MESSAGE);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const { data: foundersData } = useQuery({
     queryKey: ["/api/founders/stats"],
@@ -189,6 +215,38 @@ export default function FoundersPage() {
               <p className="mb-0">
                 <Link href="/note" className="text-cyan-400 hover:underline">Read our story →</Link>
               </p>
+            </div>
+          </GlassCard>
+
+          <GlassCard className="p-6 mb-8">
+            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <Send className="w-5 h-5 text-cyan-400" />
+              Share on Telegram
+            </h3>
+            <p className="text-white/60 text-sm mb-4">
+              Click the box below to copy the announcement, then paste it in your Telegram group:
+            </p>
+            <div
+              onClick={handleCopy}
+              className="relative cursor-pointer group"
+              data-testid="button-copy-telegram"
+            >
+              <pre className="bg-slate-800/80 border border-slate-700 rounded-xl p-4 text-sm text-white/80 whitespace-pre-wrap overflow-x-auto hover:border-cyan-500/50 transition-colors">
+                {TELEGRAM_MESSAGE}
+              </pre>
+              <div className="absolute top-3 right-3 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-700/80 text-xs text-white/70 group-hover:bg-cyan-500/20 group-hover:text-cyan-400 transition-colors">
+                {copied ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    Copied!
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4" />
+                    Click to copy
+                  </>
+                )}
+              </div>
             </div>
           </GlassCard>
 
