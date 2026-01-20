@@ -309,7 +309,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
           
           <div>
             <label className="text-sm text-gray-400 mb-2 block">Wallet Address (for Signal delivery)</label>
-            {isConnected ? (
+            {isConnected && walletAddress ? (
               <div className="space-y-2">
                 <Input
                   type="text"
@@ -326,39 +326,50 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
                 </p>
               </div>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-3">
+                <div className="p-3 rounded-lg bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
+                  <p className="text-xs text-cyan-300 mb-3 text-center font-medium">
+                    Connect your wallet for easy checkout
+                  </p>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={connectEVM}
+                      className="flex-1 py-2.5 px-3 rounded-lg bg-orange-500/20 border border-orange-500/30 text-orange-400 text-sm font-medium hover:bg-orange-500/30 transition-colors flex items-center justify-center gap-2"
+                    >
+                      <Wallet className="w-4 h-4" />
+                      MetaMask
+                    </button>
+                    <button
+                      type="button"
+                      onClick={connectSolana}
+                      className="flex-1 py-2.5 px-3 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 text-sm font-medium hover:bg-purple-500/30 transition-colors flex items-center justify-center gap-2"
+                    >
+                      <Wallet className="w-4 h-4" />
+                      Phantom
+                    </button>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2 text-center">
+                    On mobile? This will open your wallet app
+                  </p>
+                </div>
+                
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-white/10"></div>
+                  </div>
+                  <div className="relative flex justify-center text-xs">
+                    <span className="px-2 bg-slate-900 text-gray-500">or enter manually</span>
+                  </div>
+                </div>
+                
                 <Input
                   type="text"
-                  placeholder="Enter your wallet address or connect below"
+                  placeholder="Paste your wallet address here"
                   value={walletAddress}
                   onChange={(e) => setWalletAddress(e.target.value)}
                   className="bg-black/50 border-white/20 text-white placeholder:text-gray-500 font-mono text-sm"
                 />
-                <div className="flex gap-2">
-                  {hasMetaMask && (
-                    <button
-                      type="button"
-                      onClick={connectEVM}
-                      className="flex-1 py-2 px-3 rounded-lg bg-orange-500/20 border border-orange-500/30 text-orange-400 text-xs font-medium hover:bg-orange-500/30 transition-colors flex items-center justify-center gap-1"
-                    >
-                      <Wallet className="w-3 h-3" />
-                      Connect MetaMask
-                    </button>
-                  )}
-                  {hasPhantom && (
-                    <button
-                      type="button"
-                      onClick={connectSolana}
-                      className="flex-1 py-2 px-3 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 text-xs font-medium hover:bg-purple-500/30 transition-colors flex items-center justify-center gap-1"
-                    >
-                      <Wallet className="w-3 h-3" />
-                      Connect Phantom
-                    </button>
-                  )}
-                </div>
-                {!hasMetaMask && !hasPhantom && (
-                  <p className="text-xs text-gray-500">No wallet detected. Enter your address manually.</p>
-                )}
               </div>
             )}
           </div>
