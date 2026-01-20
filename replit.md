@@ -45,6 +45,59 @@ Every new page MUST be built with the Ultra-Premium Bento Grid LED Protocol, inc
 - **DarkWave Academy**: Education and certification platform for crypto fundamentals, multi-chain ecosystems, DeFi, security, bridging, and Trust Layer operations, with Bronze, Silver, Gold certification tiers and a mentor network. Also marketed as standalone acquisition channel - "unbiased crypto education" leads people into Trust Layer ecosystem upon certification. Seek influencer endorsements for credibility. Pricing strategy: near-free (loss leader) - course is the acquisition funnel, not the profit center. Covers all personas: scared newcomers, burned learners, experienced users wanting verification badge.
 - **Signal Foundation (Charitable Arm)**: Trust Layer-native charity infrastructure proving where every donation goes. Initial focus: no-kill animal shelters (chronically underfunded, volunteer-dependent). Expands to multiple causes. Key differentiator: 95%+ donation-to-cause ratio with on-chain proof. Solves the charity trust problem - donors see exactly where funds go. Verified recipients through Guardian certification. Model after Salvation Army's efficiency. Name options: "Signals," "Signal Foundation," "Trust Layer Giving." Mission: healing wounds caused by ignorance and indifference, giving back as core value.
 
+## LOCKED-IN REWARD STRUCTURE (DO NOT CHANGE WITHOUT OWNER APPROVAL)
+
+This is the official, finalized reward structure for the 90-day presale campaign. These values are permanent commitments to the community.
+
+### Shell Value (PERMANENT)
+- **1 Shell = $0.001** (one-tenth of a cent)
+- 1,000 Shells = $1
+- 10,000 Shells = $10
+- 100,000 Shells = $100
+- 1,000,000 Shells = $1,000
+- At TGE: 100 Shells = 1 SIG (when SIG = $0.01)
+
+### Reward Tiers (LOCKED IN)
+
+**FOUNDERS CIRCLE (Top 1–3%)**
+- Shell Range: 750,000–1,500,000 Shells
+- Dollar Value: **$750–$1,500**
+- Multiplier: **2.0×**
+- Perks: Guaranteed whitelist, premium presale allocation, Founder badge
+
+**CORE CONTRIBUTORS (Top 10–15%)**
+- Shell Range: 150,000–500,000 Shells
+- Dollar Value: **$150–$500**
+- Multiplier: **1.5×**
+- Perks: Whitelist spot
+
+**ACTIVE PARTICIPANTS (90-Day Minimum)**
+- Shell Range: 25,000–100,000 Shells
+- Dollar Value: **$25–$100**
+- Multiplier: **1.2×**
+- Perks: Raffle and bonus access
+
+**PARTICIPANTS (Base Tier)**
+- Multiplier: **1.0×**
+- All verified members
+
+**90-DAY COMPLETION BONUS**
+- Amount: 50,000 Shells
+- Value: **$50**
+- Given to anyone who completes the full 90-day presale period
+
+### Automatic Shells Airdrop (ACTIVE)
+- **Schedule**: Twice daily at 1 AM and 1 PM CST (7 AM and 7 PM UTC)
+- **Amount**: 25 shells per eligible user per airdrop (50 shells/day max)
+- **Eligibility**: Anyone with an active shells wallet who's been active in last 7 days
+- **Fully automatic** - no manual intervention needed
+
+### Founders Circle Presale Bonuses (First 100 Buyers)
+- $25 purchase = 25% bonus
+- $50 purchase = 50% bonus
+- $75 purchase = 75% bonus
+- $100 purchase = 100% bonus (cap to prevent whales)
+
 ## Next Session Priorities
 1. **Veil ebook download cards** - Fix padding on `/veil` landing page (text pushed against edges)
 2. **Ebook expansion** - Research more details to lengthen chapters, add historical context and background explanations
