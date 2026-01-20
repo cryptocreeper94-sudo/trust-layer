@@ -1230,6 +1230,16 @@ export async function registerRoutes(
         return res.json({ user: null });
       }
 
+      // Check if user is an owner/admin (bypasses all premium gates)
+      const ownerCheck = await db.execute(sql`
+        SELECT role FROM owner_admins 
+        WHERE user_id = ${userId.toString()} AND is_active = true
+        LIMIT 1
+      `);
+      const ownerRole = ownerCheck.rows[0]?.role as string | undefined;
+      const isOwner = ownerRole === 'owner';
+      const isAdmin = ownerRole === 'admin' || ownerRole === 'owner';
+
       res.json({ 
         user: {
           id: user.id,
@@ -1237,6 +1247,8 @@ export async function registerRoutes(
           displayName: user.displayName,
           username: user.username,
           profileImageUrl: user.profileImageUrl,
+          isOwner,
+          isAdmin,
         }
       });
     } catch (error) {

@@ -36,7 +36,10 @@ export function SubscriptionGate({
     );
   }
 
-  const hasAccess = !user ? false : (isWhitelisted || isPremium || hasPlanAccess(plan, requiredPlans));
+  // Owner bypass - owners have full access to everything
+  const isOwner = (user as any)?.isOwner === true;
+  const isAdmin = (user as any)?.isAdmin === true;
+  const hasAccess = !user ? false : (isOwner || isAdmin || isWhitelisted || isPremium || hasPlanAccess(plan, requiredPlans));
 
   if (hasAccess) {
     return <>{children}</>;
