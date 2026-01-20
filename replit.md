@@ -57,34 +57,34 @@ This is the official, finalized reward structure for the 90-day presale campaign
 - 1,000,000 Shells = $1,000
 - At TGE: 100 Shells = 1 SIG (when SIG = $0.01)
 
-### Reward Tiers (LOCKED IN)
+### RACE TO 200 - Zealy Mission Campaign (ACTIVE NOW)
 
-**FOUNDERS CIRCLE (Top 1–3%)**
-- Shell Range: 750,000–1,500,000 Shells
-- Dollar Value: **$750–$1,500**
-- Multiplier: **2.0×**
-- Perks: Guaranteed whitelist, premium presale allocation, Founder badge
+**How It Works:**
+- This is a PRODUCTION race, not a signup race
+- First 200 participants who complete missions are eligible
+- 2 missions available daily via Zealy
+- Shells auto-deposited to DarkWave wallet when missions verified
+- Rankings based on TOTAL MISSIONS COMPLETED, not signup order
+- Race ends when we hit 200 participants OR April 8 (presale end)
 
-**CORE CONTRIBUTORS (Top 10–15%)**
-- Shell Range: 150,000–500,000 Shells
-- Dollar Value: **$150–$500**
-- Multiplier: **1.5×**
-- Perks: Whitelist spot
+**Daily Rewards:**
+- ~$2.50 worth of Shells per mission
+- ~$5/day potential (if both daily missions completed)
+- Must have DarkWave wallet connected to receive rewards
 
-**ACTIVE PARTICIPANTS (90-Day Minimum)**
-- Shell Range: 25,000–100,000 Shells
-- Dollar Value: **$25–$100**
-- Multiplier: **1.2×**
-- Perks: Raffle and bonus access
+**Race End Bonuses (Based on Final Ranking):**
 
-**PARTICIPANTS (Base Tier)**
-- Multiplier: **1.0×**
-- All verified members
+| Rank | Badge | Bonus | Shell Value |
+|------|-------|-------|-------------|
+| **Top 10** | Founders Badge | 2.0× multiplier | $750–$1,500 |
+| **11-50** | Core Badge | 1.5× multiplier | $150–$500 |
+| **51-200** | Participant Badge | 1.0× (base rewards) | $25–$100 |
 
-**90-DAY COMPLETION BONUS**
-- Amount: 50,000 Shells
-- Value: **$50**
-- Given to anyone who completes the full 90-day presale period
+**Founders Badge Perks:**
+- Lifetime VIP status
+- 2× governance weight
+- Guaranteed whitelist
+- Premium presale allocation
 
 ### Automatic Shells Airdrop (ACTIVE)
 - **Schedule**: Twice daily at 1 AM and 1 PM CST (7 AM and 7 PM UTC)
