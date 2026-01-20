@@ -8,25 +8,26 @@ import { useQuery } from "@tanstack/react-query";
 
 const TELEGRAM_MESSAGE = `🏆 FOUNDERS CIRCLE ANNOUNCEMENT 🏆
 
-The first 50 members who secure at least 25,000 Signal will receive a 100% BONUS at TGE.
+The first 100 buyers get BONUS Signal based on their tier!
 
-💰 How it works:
-• Buy 25,000 SIG → Get 50,000 at TGE
-• Buy 50,000 SIG → Get 100,000 at TGE
-• Buy 100,000 SIG → Get 200,000 at TGE
+💰 Tiered Bonus Structure:
+• Spend $25 → Get 25% bonus
+• Spend $50 → Get 50% bonus
+• Spend $75 → Get 75% bonus
+• Spend $100 → Get 100% bonus (DOUBLE your Signal!)
+
+This keeps it fair for everyone - no whales, just believers.
 
 ✅ Exclusive Founders Badge
 ✅ Priority access to new features
 ✅ Permanent community recognition
 
-This is NOT about hype. It's about rewarding the people who believed early.
-
 👉 Claim your spot: https://dwsc.io/founders
 
-Only 50 spots. Once they're gone, they're gone.`;
+Only 100 spots. First come, first served.`;
 
 export default function FoundersPage() {
-  const [spotsRemaining, setSpotsRemaining] = useState(50);
+  const [spotsRemaining, setSpotsRemaining] = useState(100);
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -41,9 +42,9 @@ export default function FoundersPage() {
       try {
         const res = await fetch("/api/founders/stats");
         if (res.ok) return res.json();
-        return { spotsTaken: 0, totalSpots: 50 };
+        return { spotsTaken: 0, totalSpots: 100 };
       } catch {
-        return { spotsTaken: 0, totalSpots: 50 };
+        return { spotsTaken: 0, totalSpots: 100 };
       }
     },
     refetchInterval: 30000,
@@ -85,8 +86,8 @@ export default function FoundersPage() {
             </h1>
 
             <p className="text-xl md:text-2xl text-white/80 mb-4 max-w-2xl mx-auto">
-              The first <span className="text-amber-400 font-bold">50 members</span> who secure their position get{" "}
-              <span className="text-green-400 font-bold">100% bonus Signal</span> at TGE
+              The first <span className="text-amber-400 font-bold">100 buyers</span> get up to{" "}
+              <span className="text-green-400 font-bold">100% bonus Signal</span> based on their tier
             </p>
 
             <div className="flex items-center justify-center gap-4 mb-8">
@@ -108,15 +109,15 @@ export default function FoundersPage() {
                   <div className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
                     <div>
-                      <p className="text-white font-medium">Purchase 25,000+ Signal</p>
-                      <p className="text-white/60 text-sm">Minimum entry for Founders Circle</p>
+                      <p className="text-white font-medium">Tiered Bonus System</p>
+                      <p className="text-white/60 text-sm">The more you commit, the bigger your bonus</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
                     <div>
-                      <p className="text-white font-medium">Get 100% Bonus at TGE</p>
-                      <p className="text-white/60 text-sm">Buy 25K, receive 50K. Buy 100K, receive 200K.</p>
+                      <p className="text-white font-medium">Capped at $100</p>
+                      <p className="text-white/60 text-sm">Fair for everyone — no whale advantages</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -139,27 +140,27 @@ export default function FoundersPage() {
               <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-2xl p-6 border border-amber-500/20">
                 <h3 className="text-lg font-semibold text-amber-400 mb-4 flex items-center gap-2">
                   <Sparkles className="w-5 h-5" />
-                  Example Rewards
+                  Bonus Tiers
                 </h3>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center py-2 border-b border-white/10">
-                    <span className="text-white/70">Buy 25,000 SIG</span>
-                    <span className="text-green-400 font-bold">→ Receive 50,000 SIG</span>
+                    <span className="text-white/70">Spend $25</span>
+                    <span className="text-green-400 font-bold">+25% bonus → $31.25 value</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-white/10">
-                    <span className="text-white/70">Buy 50,000 SIG</span>
-                    <span className="text-green-400 font-bold">→ Receive 100,000 SIG</span>
+                    <span className="text-white/70">Spend $50</span>
+                    <span className="text-green-400 font-bold">+50% bonus → $75 value</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-white/10">
-                    <span className="text-white/70">Buy 100,000 SIG</span>
-                    <span className="text-green-400 font-bold">→ Receive 200,000 SIG</span>
+                    <span className="text-white/70">Spend $75</span>
+                    <span className="text-green-400 font-bold">+75% bonus → $131.25 value</span>
                   </div>
-                  <div className="flex justify-between items-center py-2">
-                    <span className="text-white/70">Buy 500,000 SIG</span>
-                    <span className="text-green-400 font-bold">→ Receive 1,000,000 SIG</span>
+                  <div className="flex justify-between items-center py-2 bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-lg px-2 -mx-2">
+                    <span className="text-white font-medium">Spend $100</span>
+                    <span className="text-green-400 font-bold">+100% bonus → $200 value</span>
                   </div>
                 </div>
-                <p className="text-white/50 text-xs mt-4">*Bonus distributed at Token Generation Event</p>
+                <p className="text-white/50 text-xs mt-4">*Bonus distributed at Token Generation Event. Max tier: $100.</p>
               </div>
             </div>
 
@@ -175,7 +176,7 @@ export default function FoundersPage() {
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
-              <p className="text-white/50 text-sm mt-4">Minimum purchase: 25,000 Signal ($25)</p>
+              <p className="text-white/50 text-sm mt-4">Only 4 tiers: $25, $50, $75, or $100</p>
             </div>
           </GlassCard>
 

@@ -1736,28 +1736,24 @@ export async function registerRoutes(
     }
   });
 
-  // Founders Circle stats - first 50 buyers of 25K+ tokens get 100% bonus
+  // Founders Circle stats - first 100 buyers with tiered bonuses ($25/$50/$75/$100)
   app.get("/api/founders/stats", async (req, res) => {
     try {
-      // Count distinct users with purchases totaling 25,000+ tokens
+      // Count distinct users with any qualifying purchase ($25+ = 2500 cents)
       const result = await db.execute(sql`
-        SELECT COUNT(*) as founders_count FROM (
-          SELECT user_id 
-          FROM presale_purchases 
-          WHERE user_id IS NOT NULL
-          GROUP BY user_id 
-          HAVING SUM(token_amount) >= 25000
-        ) qualified_founders
+        SELECT COUNT(DISTINCT user_id) as founders_count 
+        FROM presale_purchases 
+        WHERE user_id IS NOT NULL 
+        AND usd_amount_cents >= 2500
       `);
       const spotsTaken = Number(result.rows[0]?.founders_count) || 0;
       res.json({
-        spotsTaken: Math.min(spotsTaken, 50),
-        totalSpots: 50,
-        bonusPercent: 100
+        spotsTaken: Math.min(spotsTaken, 100),
+        totalSpots: 100
       });
     } catch (error) {
       console.error("Founders stats error:", error);
-      res.json({ spotsTaken: 0, totalSpots: 50, bonusPercent: 100 });
+      res.json({ spotsTaken: 0, totalSpots: 100 });
     }
   });
 
