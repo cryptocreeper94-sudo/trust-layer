@@ -1757,6 +1757,54 @@ export async function registerRoutes(
     }
   });
 
+  // Check if authenticated user is a founder and their tier
+  app.get("/api/user/founders-status", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.firebaseUser?.uid;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      // Check user's highest qualifying purchase
+      const result = await db.execute(sql`
+        SELECT MAX(usd_amount_cents) as max_purchase
+        FROM presale_purchases
+        WHERE user_id = ${userId}
+        AND usd_amount_cents >= 2500
+      `);
+      
+      const maxPurchase = Number(result.rows[0]?.max_purchase) || 0;
+      
+      // Determine tier based on purchase amount
+      let tier: string | null = null;
+      let bonusPercent = 0;
+      
+      if (maxPurchase >= 10000) {
+        tier = 'diamond';
+        bonusPercent = 100;
+      } else if (maxPurchase >= 7500) {
+        tier = 'gold';
+        bonusPercent = 75;
+      } else if (maxPurchase >= 5000) {
+        tier = 'silver';
+        bonusPercent = 50;
+      } else if (maxPurchase >= 2500) {
+        tier = 'bronze';
+        bonusPercent = 25;
+      }
+
+      res.json({
+        isFounder: tier !== null,
+        tier,
+        bonusPercent,
+        maxPurchaseCents: maxPurchase
+      });
+    } catch (error) {
+      console.error("Founders status error:", error);
+      res.json({ isFounder: false, tier: null, bonusPercent: 0, maxPurchaseCents: 0 });
+    }
+  });
+
   // Shell reward profile for authenticated users
   app.get("/api/user/reward-profile", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
     try {

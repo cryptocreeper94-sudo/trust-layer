@@ -10,6 +10,7 @@ import { AIAssistant } from "@/components/ai-assistant";
 import { getAppFromHost } from "@/lib/app-config";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
 import { FirstLoginModal } from "@/components/first-login-modal";
+import { FloatingChat } from "@/components/floating-chat";
 
 // Critical pages - load immediately
 import Home from "@/pages/home";
@@ -542,6 +543,7 @@ function App() {
                 <Router />
                 {showAIAssistant && <AIAssistant />}
                 {showAIAssistant && <FirstLoginModal />}
+                <FloatingChat />
               </TooltipProvider>
             </FavoritesProvider>
           </NotificationsProvider>
