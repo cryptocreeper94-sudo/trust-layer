@@ -55,7 +55,7 @@ function ReportCard({ report, onUpdate }: { report: FeedbackReport; onUpdate: ()
   const updateMutation = useMutation({
     mutationFn: async (updates: { status?: string; priority?: string; adminNotes?: string; resolution?: string }) => {
       const token = sessionStorage.getItem("ownerToken");
-      const res = await fetch(`/api/owner/feedback/${report.id}`, {
+      const res = await fetch(`/api/owner-admin/feedback/${report.id}`, {
         method: "PATCH",
         headers: { 
           "Content-Type": "application/json",
@@ -67,7 +67,7 @@ function ReportCard({ report, onUpdate }: { report: FeedbackReport; onUpdate: ()
       return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/owner/feedback"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/owner-admin/feedback"] });
       onUpdate();
     },
   });
@@ -247,7 +247,7 @@ export default function OwnerFeedback() {
   const [typeFilter, setTypeFilter] = useState<string | null>(null);
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["/api/owner/feedback", statusFilter, typeFilter],
+    queryKey: ["/api/owner-admin/feedback", statusFilter, typeFilter],
     queryFn: async () => {
       const token = sessionStorage.getItem("ownerToken");
       if (!token) throw new Error("Not authenticated");
@@ -256,7 +256,7 @@ export default function OwnerFeedback() {
       if (statusFilter) params.set("status", statusFilter);
       if (typeFilter) params.set("type", typeFilter);
       
-      const res = await fetch(`/api/owner/feedback?${params}`, {
+      const res = await fetch(`/api/owner-admin/feedback?${params}`, {
         headers: { "Authorization": `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to fetch");
