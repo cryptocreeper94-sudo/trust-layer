@@ -1,12 +1,13 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
+import { useState, useEffect } from "react";
 import { 
   ArrowLeft, Gift, Users, Coins, Heart, Trophy, Sparkles, Check, 
   Wallet, TrendingUp, Zap, Calendar, ArrowUpRight, Shield, Target,
   Gamepad2, MessageCircle, Globe, Code, ImageIcon, PieChart, 
   ArrowLeftRight, Droplets, Rocket, Download, ExternalLink, Star,
   Crown, Activity, Bell, Settings, ChevronRight, Award, MapPin,
-  Newspaper, Clock, Megaphone
+  Newspaper, Clock, Megaphone, X, Compass, BookOpen, HelpCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -155,6 +156,56 @@ export default function MyHub() {
   };
   
   const tenureBadge = getTenureBadge();
+
+  // Welcome experience state - show for first 24 hours or until dismissed
+  const [showWelcome, setShowWelcome] = useState(false);
+  const [welcomeDismissed, setWelcomeDismissed] = useState(false);
+  
+  useEffect(() => {
+    if (!user?.id) return;
+    
+    const storageKey = `dwtl_welcome_seen_${user.id}`;
+    const welcomeData = localStorage.getItem(storageKey);
+    
+    if (!welcomeData) {
+      // First visit - show welcome and save timestamp
+      localStorage.setItem(storageKey, JSON.stringify({ 
+        firstSeen: Date.now(),
+        dismissed: false 
+      }));
+      setShowWelcome(true);
+    } else {
+      const data = JSON.parse(welcomeData);
+      const hoursSinceFirst = (Date.now() - data.firstSeen) / (1000 * 60 * 60);
+      
+      // Show welcome if within 24 hours and not dismissed
+      if (hoursSinceFirst < 24 && !data.dismissed) {
+        setShowWelcome(true);
+      } else {
+        setShowWelcome(false);
+      }
+      setWelcomeDismissed(data.dismissed);
+    }
+  }, [user?.id]);
+
+  const dismissWelcome = () => {
+    if (!user?.id) return;
+    const storageKey = `dwtl_welcome_seen_${user.id}`;
+    const welcomeData = localStorage.getItem(storageKey);
+    if (welcomeData) {
+      const data = JSON.parse(welcomeData);
+      localStorage.setItem(storageKey, JSON.stringify({ ...data, dismissed: true }));
+    }
+    setShowWelcome(false);
+    setWelcomeDismissed(true);
+  };
+
+  // Get user's display name
+  const getUserName = () => {
+    if (user?.displayName) return user.displayName.split(' ')[0];
+    if (user?.email) return user.email.split('@')[0];
+    return 'Friend';
+  };
 
   const generateTrustHash = () => {
     if (!memberData?.trustHash) return "Generating...";
@@ -398,24 +449,143 @@ export default function MyHub() {
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.12 }}
-            className="mb-8"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold flex items-center gap-2">
-                <Newspaper className="w-5 h-5 text-cyan-400" />
-                Trust Layer News
-              </h2>
-              <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
-                v{newsData?.currentVersion || '2.4'}
-              </Badge>
-            </div>
-            <GlassCard className="p-0 overflow-hidden" glow>
-              <div className="divide-y divide-white/5">
-                {newsData?.announcements?.map((item, idx) => (
+          {showWelcome ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.12 }}
+              className="mb-8"
+            >
+              <GlassCard className="p-0 overflow-hidden relative" glow>
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500" />
+                <button 
+                  onClick={dismissWelcome}
+                  className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
+                >
+                  <X className="w-4 h-4 text-white/60" />
+                </button>
+                
+                <div className="p-6 md:p-8 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-3 rounded-2xl bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30">
+                      <Heart className="w-8 h-8 text-cyan-400" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl md:text-3xl font-bold">
+                        Welcome, <span className="text-cyan-400">{getUserName()}</span>!
+                      </h2>
+                      <p className="text-white/60">Thanks for joining the Trust Circle</p>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-slate-900/50 rounded-2xl p-5 border border-white/10 mb-6">
+                    <h3 className="font-semibold text-lg mb-3 flex items-center gap-2">
+                      <Compass className="w-5 h-5 text-purple-400" />
+                      This Is Your Personal Dashboard
+                    </h3>
+                    <p className="text-white/70 leading-relaxed mb-4">
+                      Everything you need in one place. Track your Shells earnings, view your member status, 
+                      connect with the community, and explore the entire DarkWave ecosystem. This dashboard 
+                      grows with you – as you participate more, you'll unlock new features and rewards.
+                    </p>
+                    <p className="text-white/60 text-sm">
+                      You're now Member <span className="text-cyan-400 font-semibold">#{memberData?.memberNumber || '...'}</span> – 
+                      that number is yours forever and represents your place in our story.
+                    </p>
+                  </div>
+                  
+                  <h3 className="font-semibold mb-4 flex items-center gap-2">
+                    <BookOpen className="w-5 h-5 text-emerald-400" />
+                    Quick Start Guide
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-3 mb-6">
+                    <Link href="/wallet">
+                      <div className="p-4 rounded-xl bg-slate-800/50 border border-white/10 hover:border-cyan-500/30 transition-all cursor-pointer group">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 rounded-lg bg-cyan-500/20">
+                            <Wallet className="w-5 h-5 text-cyan-400" />
+                          </div>
+                          <div>
+                            <p className="font-medium group-hover:text-cyan-400 transition-colors">Set Up Your Wallet</p>
+                            <p className="text-xs text-white/50">Connect to start earning Shells</p>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                    <Link href="/quests">
+                      <div className="p-4 rounded-xl bg-slate-800/50 border border-white/10 hover:border-emerald-500/30 transition-all cursor-pointer group">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 rounded-lg bg-emerald-500/20">
+                            <Target className="w-5 h-5 text-emerald-400" />
+                          </div>
+                          <div>
+                            <p className="font-medium group-hover:text-emerald-400 transition-colors">Complete Daily Quests</p>
+                            <p className="text-xs text-white/50">Earn Shells for missions on Zealy</p>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                    <Link href="/community">
+                      <div className="p-4 rounded-xl bg-slate-800/50 border border-white/10 hover:border-purple-500/30 transition-all cursor-pointer group">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 rounded-lg bg-purple-500/20">
+                            <MessageCircle className="w-5 h-5 text-purple-400" />
+                          </div>
+                          <div>
+                            <p className="font-medium group-hover:text-purple-400 transition-colors">Join ChronoChat</p>
+                            <p className="text-xs text-white/50">Meet the community, get help</p>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                    <Link href="/members">
+                      <div className="p-4 rounded-xl bg-slate-800/50 border border-white/10 hover:border-amber-500/30 transition-all cursor-pointer group">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 rounded-lg bg-amber-500/20">
+                            <Users className="w-5 h-5 text-amber-400" />
+                          </div>
+                          <div>
+                            <p className="font-medium group-hover:text-amber-400 transition-colors">Explore Trust Circle</p>
+                            <p className="text-xs text-white/50">Find trusted members near you</p>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                  
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20">
+                    <div className="flex items-center gap-3">
+                      <HelpCircle className="w-5 h-5 text-purple-400" />
+                      <p className="text-sm text-white/70">Questions? The community is here to help.</p>
+                    </div>
+                    <Link href="/community">
+                      <Button size="sm" className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:opacity-90">
+                        Ask in ChronoChat <ArrowUpRight className="w-4 h-4 ml-1" />
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </GlassCard>
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.12 }}
+              className="mb-8"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold flex items-center gap-2">
+                  <Newspaper className="w-5 h-5 text-cyan-400" />
+                  Trust Layer News
+                </h2>
+                <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+                  v{newsData?.currentVersion || '2.4'}
+                </Badge>
+              </div>
+              <GlassCard className="p-0 overflow-hidden" glow>
+                <div className="divide-y divide-white/5">
+                  {newsData?.announcements?.map((item, idx) => (
                   <motion.div
                     key={item.id}
                     initial={{ opacity: 0, x: -10 }}
@@ -478,7 +648,8 @@ export default function MyHub() {
                 </div>
               </div>
             </GlassCard>
-          </motion.div>
+            </motion.div>
+          )}
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
