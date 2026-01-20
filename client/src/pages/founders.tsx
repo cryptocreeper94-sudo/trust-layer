@@ -100,44 +100,44 @@ export default function FoundersPage() {
 
           <GlassCard glow className="p-8 md:p-12 mb-8">
             <div className="grid md:grid-cols-2 gap-8 mb-8">
-              <div>
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-6 md:p-8 border border-white/10">
+                <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
                   <Gift className="w-6 h-6 text-amber-400" />
                   The Founders Deal
                 </h2>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
+                <div className="space-y-5">
+                  <div className="flex items-start gap-4">
                     <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
                     <div>
                       <p className="text-white font-medium">Tiered Bonus System</p>
-                      <p className="text-white/60 text-sm">The more you commit, the bigger your bonus</p>
+                      <p className="text-white/60 text-sm leading-relaxed">The more you commit, the bigger your bonus</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-4">
                     <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
                     <div>
                       <p className="text-white font-medium">Capped at $100</p>
-                      <p className="text-white/60 text-sm">Fair for everyone — no whale advantages</p>
+                      <p className="text-white/60 text-sm leading-relaxed">Fair for everyone — no whale advantages</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-4">
                     <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
                     <div>
                       <p className="text-white font-medium">Exclusive Founders Badge</p>
-                      <p className="text-white/60 text-sm">Permanent recognition in the community</p>
+                      <p className="text-white/60 text-sm leading-relaxed">Permanent recognition in the community</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
+                  <div className="flex items-start gap-4">
                     <CheckCircle className="w-5 h-5 text-green-400 mt-1 flex-shrink-0" />
                     <div>
                       <p className="text-white font-medium">Priority Access</p>
-                      <p className="text-white/60 text-sm">First access to new features & products</p>
+                      <p className="text-white/60 text-sm leading-relaxed">First access to new features & products</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-2xl p-6 border border-amber-500/20">
+              <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-2xl p-6 md:p-8 border border-amber-500/20">
                 <h3 className="text-lg font-semibold text-amber-400 mb-4 flex items-center gap-2">
                   <Sparkles className="w-5 h-5" />
                   Bonus Tiers
