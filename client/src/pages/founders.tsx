@@ -180,35 +180,35 @@ export default function FoundersPage() {
             </div>
           </GlassCard>
 
-          <div className="grid md:grid-cols-3 gap-4 mb-8">
-            <GlassCard className="p-6 text-center">
-              <Shield className="w-10 h-10 text-cyan-400 mx-auto mb-3" />
-              <h3 className="font-semibold text-white mb-2">Secure & Verified</h3>
-              <p className="text-white/60 text-sm">All purchases tracked on-chain with full transparency</p>
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            <GlassCard className="p-8 text-center">
+              <Shield className="w-10 h-10 text-cyan-400 mx-auto mb-4" />
+              <h3 className="font-semibold text-white mb-3">Secure & Verified</h3>
+              <p className="text-white/60 text-sm leading-relaxed">All purchases tracked on-chain with full transparency</p>
             </GlassCard>
-            <GlassCard className="p-6 text-center">
-              <Users className="w-10 h-10 text-purple-400 mx-auto mb-3" />
-              <h3 className="font-semibold text-white mb-2">Limited to 50</h3>
-              <p className="text-white/60 text-sm">Once spots are filled, this offer closes permanently</p>
+            <GlassCard className="p-8 text-center">
+              <Users className="w-10 h-10 text-purple-400 mx-auto mb-4" />
+              <h3 className="font-semibold text-white mb-3">Limited to 100</h3>
+              <p className="text-white/60 text-sm leading-relaxed">Once spots are filled, this offer closes permanently</p>
             </GlassCard>
-            <GlassCard className="p-6 text-center">
-              <Zap className="w-10 h-10 text-amber-400 mx-auto mb-3" />
-              <h3 className="font-semibold text-white mb-2">Instant Confirmation</h3>
-              <p className="text-white/60 text-sm">Your Founders status is confirmed immediately</p>
+            <GlassCard className="p-8 text-center">
+              <Zap className="w-10 h-10 text-amber-400 mx-auto mb-4" />
+              <h3 className="font-semibold text-white mb-3">Instant Confirmation</h3>
+              <p className="text-white/60 text-sm leading-relaxed">Your Founders status is confirmed immediately</p>
             </GlassCard>
           </div>
 
-          <GlassCard className="p-6 mb-8">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <GlassCard className="p-8 md:p-10 mb-8">
+            <h3 className="text-lg font-semibold text-white mb-5 flex items-center gap-2">
               <Star className="w-5 h-5 text-amber-400" />
               Why Signal? Why Now?
             </h3>
             <div className="prose prose-invert max-w-none text-white/70">
-              <p className="mb-4">
+              <p className="mb-5 leading-relaxed">
                 Signal isn't just another token — it's your access key to the DarkWave Trust Network. 
                 While others chase hype, we're building real infrastructure that businesses actually use.
               </p>
-              <p className="mb-4">
+              <p className="mb-5 leading-relaxed">
                 The Founders Circle is for those who see the vision early. You're not just buying Signal — 
                 you're becoming a founding member of something we're building together. Your 100% bonus 
                 is our way of saying thank you for believing in what we're creating.
@@ -219,12 +219,12 @@ export default function FoundersPage() {
             </div>
           </GlassCard>
 
-          <GlassCard className="p-6 mb-8">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <GlassCard className="p-8 md:p-10 mb-8">
+            <h3 className="text-lg font-semibold text-white mb-5 flex items-center gap-2">
               <Send className="w-5 h-5 text-cyan-400" />
               Share on Telegram
             </h3>
-            <p className="text-white/60 text-sm mb-4">
+            <p className="text-white/60 text-sm mb-5 leading-relaxed">
               Click the box below to copy the announcement, then paste it in your Telegram group:
             </p>
             <div
@@ -232,7 +232,7 @@ export default function FoundersPage() {
               className="relative cursor-pointer group"
               data-testid="button-copy-telegram"
             >
-              <pre className="bg-slate-800/80 border border-slate-700 rounded-xl p-4 text-sm text-white/80 whitespace-pre-wrap overflow-x-auto hover:border-cyan-500/50 transition-colors">
+              <pre className="bg-slate-800/80 border border-slate-700 rounded-xl p-6 text-sm text-white/80 whitespace-pre-wrap overflow-x-auto hover:border-cyan-500/50 transition-colors">
                 {TELEGRAM_MESSAGE}
               </pre>
               <div className="absolute top-3 right-3 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-700/80 text-xs text-white/70 group-hover:bg-cyan-500/20 group-hover:text-cyan-400 transition-colors">
