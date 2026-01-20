@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Trophy, Target, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Trophy, Target, ChevronDown, ChevronLeft, ChevronRight, Gift } from "lucide-react";
 import { InfoTooltip } from "@/components/info-tooltip";
 import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.png";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
@@ -387,6 +387,18 @@ export default function Home() {
           <div className="flex items-center gap-2 sm:gap-3">
             {isAuthenticated && user?.id && (
               <MemberBadge userId={user.id.toString()} />
+            )}
+            {isAuthenticated && (
+              <Link href="/rewards">
+                <Button 
+                  size="sm" 
+                  className="h-8 px-2.5 sm:px-3 text-xs font-semibold bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-400 border border-amber-500/30 hover:border-amber-400/50"
+                  data-testid="button-rewards"
+                >
+                  <Gift className="w-3.5 h-3.5 sm:mr-1" />
+                  <span className="hidden sm:inline">Rewards</span>
+                </Button>
+              </Link>
             )}
             <Link href="/executive-summary" className="hidden sm:block">
               <Button 
