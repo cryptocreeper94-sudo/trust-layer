@@ -43,8 +43,16 @@ import {
   Wallet,
   ArrowUpRight,
   ArrowDownRight,
-  RefreshCw
+  RefreshCw,
+  ThumbsUp,
+  ThumbsDown,
+  Flag,
+  UserCheck,
+  Send,
+  History,
+  Sparkles
 } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 
 const GLOSSARY: Record<string, string> = {
   "Market Cap": "Total value of all tokens in circulation. Calculated as price × total supply.",
@@ -281,6 +289,271 @@ function RiskIndicator({ label, safe, tooltip }: { label: string; safe: boolean;
   );
 }
 
+interface Comment {
+  id: string;
+  userId: string;
+  userName: string;
+  userAvatar: string | null;
+  content: string;
+  sentiment: "bullish" | "bearish" | "warning" | "neutral";
+  upvotes: number;
+  downvotes: number;
+  trustLevel: "new" | "member" | "trusted" | "expert";
+  isVerifiedUser: boolean;
+  createdAt: string;
+  isAiFlagged: boolean;
+}
+
+const MOCK_COMMENTS: Comment[] = [
+  {
+    id: "1",
+    userId: "user1",
+    userName: "CryptoWhale42",
+    userAvatar: null,
+    content: "Been holding this since launch. Dev is active in TG, liquidity locked for 6 months. Solid project IMO.",
+    sentiment: "bullish",
+    upvotes: 24,
+    downvotes: 3,
+    trustLevel: "trusted",
+    isVerifiedUser: true,
+    createdAt: "2h ago",
+    isAiFlagged: false,
+  },
+  {
+    id: "2",
+    userId: "user2",
+    userName: "SafetyFirst",
+    userAvatar: null,
+    content: "Warning: Same dev wallet that launched $RUGME last month. Check the creator history - 2 previous rugs.",
+    sentiment: "warning",
+    upvotes: 156,
+    downvotes: 12,
+    trustLevel: "expert",
+    isVerifiedUser: true,
+    createdAt: "4h ago",
+    isAiFlagged: false,
+  },
+  {
+    id: "3",
+    userId: "user3",
+    userName: "NewTrader99",
+    userAvatar: null,
+    content: "Chart looking bullish! 🚀🚀🚀",
+    sentiment: "bullish",
+    upvotes: 5,
+    downvotes: 8,
+    trustLevel: "new",
+    isVerifiedUser: false,
+    createdAt: "1h ago",
+    isAiFlagged: false,
+  },
+];
+
+function TrustBadge({ level }: { level: Comment["trustLevel"] }) {
+  const config = {
+    new: { label: "New", color: "bg-white/10 text-white/50 border-white/10" },
+    member: { label: "Member", color: "bg-blue-500/20 text-blue-400 border-blue-500/30" },
+    trusted: { label: "Trusted", color: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" },
+    expert: { label: "Expert", color: "bg-purple-500/20 text-purple-400 border-purple-500/30" },
+  };
+  
+  return (
+    <Badge className={`${config[level].color} border text-[10px] px-1.5 py-0`}>
+      {config[level].label}
+    </Badge>
+  );
+}
+
+function SentimentBadge({ sentiment }: { sentiment: Comment["sentiment"] }) {
+  const config = {
+    bullish: { label: "Bullish", color: "bg-emerald-500/20 text-emerald-400" },
+    bearish: { label: "Bearish", color: "bg-red-500/20 text-red-400" },
+    warning: { label: "Warning", color: "bg-orange-500/20 text-orange-400" },
+    neutral: { label: "Neutral", color: "bg-white/10 text-white/50" },
+  };
+  
+  return (
+    <span className={`${config[sentiment].color} text-[10px] px-2 py-0.5 rounded-full`}>
+      {config[sentiment].label}
+    </span>
+  );
+}
+
+function CommunityComments({ tokenAddress, chain }: { tokenAddress: string; chain: string }) {
+  const [comments, setComments] = useState<Comment[]>(MOCK_COMMENTS);
+  const [newComment, setNewComment] = useState("");
+  const [selectedSentiment, setSelectedSentiment] = useState<Comment["sentiment"]>("neutral");
+  
+  const handleVote = (id: string, type: "up" | "down") => {
+    setComments(prev => prev.map(c => {
+      if (c.id === id) {
+        return type === "up" 
+          ? { ...c, upvotes: c.upvotes + 1 }
+          : { ...c, downvotes: c.downvotes + 1 };
+      }
+      return c;
+    }));
+  };
+  
+  const handleSubmit = () => {
+    if (!newComment.trim()) return;
+    
+    const comment: Comment = {
+      id: Date.now().toString(),
+      userId: "current-user",
+      userName: "You",
+      userAvatar: null,
+      content: newComment,
+      sentiment: selectedSentiment,
+      upvotes: 0,
+      downvotes: 0,
+      trustLevel: "new",
+      isVerifiedUser: false,
+      createdAt: "Just now",
+      isAiFlagged: false,
+    };
+    
+    setComments(prev => [comment, ...prev]);
+    setNewComment("");
+  };
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2 }}
+      className="mt-8"
+    >
+      <GlassCard glow>
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <MessageCircle className="w-5 h-5 text-cyan-400" />
+              Community Intel
+            </h3>
+            <div className="flex items-center gap-2 text-xs text-white/40">
+              <Sparkles className="w-4 h-4" />
+              <span>AI Moderated</span>
+            </div>
+          </div>
+          
+          <div className="mb-6 p-4 rounded-xl bg-white/5 border border-white/10">
+            <Textarea
+              placeholder="Share your insights about this token... (Be helpful - your reputation depends on it)"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              className="bg-transparent border-0 resize-none focus-visible:ring-0 p-0 text-sm"
+              rows={3}
+              data-testid="comment-input"
+            />
+            <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/10">
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-white/40">Sentiment:</span>
+                {(["bullish", "bearish", "warning", "neutral"] as const).map(s => (
+                  <button
+                    key={s}
+                    onClick={() => setSelectedSentiment(s)}
+                    className={`text-xs px-2 py-1 rounded transition-all ${
+                      selectedSentiment === s
+                        ? s === "bullish" ? "bg-emerald-500/30 text-emerald-400"
+                        : s === "bearish" ? "bg-red-500/30 text-red-400"
+                        : s === "warning" ? "bg-orange-500/30 text-orange-400"
+                        : "bg-white/20 text-white"
+                        : "bg-white/5 text-white/40 hover:bg-white/10"
+                    }`}
+                    data-testid={`sentiment-${s}`}
+                  >
+                    {s.charAt(0).toUpperCase() + s.slice(1)}
+                  </button>
+                ))}
+              </div>
+              <Button
+                size="sm"
+                onClick={handleSubmit}
+                disabled={!newComment.trim()}
+                className="bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/30 border border-cyan-500/30"
+                data-testid="submit-comment"
+              >
+                <Send className="w-4 h-4 mr-1" />
+                Post
+              </Button>
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            {comments.map(comment => (
+              <motion.div
+                key={comment.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`p-4 rounded-xl border ${
+                  comment.sentiment === "warning" 
+                    ? "bg-orange-500/5 border-orange-500/20"
+                    : "bg-white/5 border-white/10"
+                }`}
+                data-testid={`comment-${comment.id}`}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-xs font-bold text-white shrink-0">
+                      {comment.userName.slice(0, 2).toUpperCase()}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <span className="font-medium text-white text-sm">{comment.userName}</span>
+                        <TrustBadge level={comment.trustLevel} />
+                        {comment.isVerifiedUser && (
+                          <UserCheck className="w-3.5 h-3.5 text-cyan-400" />
+                        )}
+                        <SentimentBadge sentiment={comment.sentiment} />
+                        <span className="text-xs text-white/30">{comment.createdAt}</span>
+                      </div>
+                      <p className="text-sm text-white/80 leading-relaxed">{comment.content}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-1 shrink-0">
+                    <button
+                      onClick={() => handleVote(comment.id, "up")}
+                      className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-emerald-400 transition-colors"
+                      data-testid={`upvote-${comment.id}`}
+                    >
+                      <ThumbsUp className="w-4 h-4" />
+                    </button>
+                    <span className={`text-xs min-w-[24px] text-center ${
+                      comment.upvotes > comment.downvotes ? "text-emerald-400" : 
+                      comment.downvotes > comment.upvotes ? "text-red-400" : "text-white/40"
+                    }`}>
+                      {comment.upvotes - comment.downvotes}
+                    </span>
+                    <button
+                      onClick={() => handleVote(comment.id, "down")}
+                      className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-red-400 transition-colors"
+                      data-testid={`downvote-${comment.id}`}
+                    >
+                      <ThumbsDown className="w-4 h-4" />
+                    </button>
+                    <button
+                      className="p-1.5 rounded hover:bg-white/10 text-white/40 hover:text-orange-400 transition-colors ml-2"
+                      data-testid={`flag-${comment.id}`}
+                    >
+                      <Flag className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          
+          <p className="text-[10px] text-white/30 mt-4 text-center">
+            Comments are community-sourced and AI-moderated. Build your reputation by providing accurate, helpful insights.
+          </p>
+        </div>
+      </GlassCard>
+    </motion.div>
+  );
+}
+
 function SimpleCandlestickChart({ timeRange }: { timeRange: string }) {
   const candles = Array.from({ length: 30 }, (_, i) => ({
     open: 100 + Math.random() * 20 - 10,
@@ -401,14 +674,26 @@ export default function GuardianScannerDetail() {
                           <h1 className="text-2xl font-bold text-white">{token.name}</h1>
                           <Badge className="bg-white/10 text-white/70 border-0">{token.symbol}</Badge>
                         </div>
-                        <div className="flex items-center gap-2 mt-1">
+                        <div className="flex items-center gap-2 mt-1 flex-wrap">
                           <button
                             onClick={copyAddress}
                             className="flex items-center gap-1 text-xs text-white/40 hover:text-white transition-colors"
                             data-testid="copy-address"
                           >
+                            <span className="text-white/20">CA:</span>
                             {token.contractAddress.slice(0, 6)}...{token.contractAddress.slice(-4)}
                             {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                          </button>
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText("0x" + Math.random().toString(16).slice(2, 42));
+                            }}
+                            className="flex items-center gap-1 text-xs text-white/40 hover:text-white transition-colors"
+                            data-testid="copy-pair"
+                          >
+                            <span className="text-white/20">Pair:</span>
+                            {"0x" + Math.random().toString(16).slice(2, 8)}...
+                            <Copy className="w-3 h-3" />
                           </button>
                           <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 border text-[10px]">
                             {chain.toUpperCase()}
@@ -781,6 +1066,8 @@ export default function GuardianScannerDetail() {
               </GlassCard>
             </div>
           </div>
+
+          <CommunityComments tokenAddress={token.contractAddress} chain={chain} />
 
           <motion.div
             initial={{ opacity: 0 }}
