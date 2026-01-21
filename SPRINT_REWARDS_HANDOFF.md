@@ -1,9 +1,20 @@
-# DarkWave Sprint Rewards Guide
+# DarkWave Referral Rewards Guide
 
 ## How You Earn
 
 **BASE** = Get someone to sign up using your referral link
 **BONUS** = They make a purchase (minimum $5)
+
+---
+
+## Presale vs Post-Launch Rates
+
+| Period | Signup Reward |
+|--------|---------------|
+| **PRESALE** (Now) | 1,000 Shells per signup |
+| Post-Launch | 500 Shells per signup |
+
+Get in now for double the rewards!
 
 ---
 

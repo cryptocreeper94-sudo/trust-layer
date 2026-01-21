@@ -37,6 +37,7 @@ function PageLoader() {
 const GamesHome = lazy(() => import("@/pages/games-home"));
 const GameDeveloper = lazy(() => import("@/pages/game-developer"));
 const Dashboard = lazy(() => import("@/pages/dashboard"));
+const ReferralProgram = lazy(() => import("@/pages/referral-program"));
 const Developers = lazy(() => import("@/pages/developers"));
 const DevelopersRegister = lazy(() => import("@/pages/developers-register"));
 const Ecosystem = lazy(() => import("@/pages/ecosystem"));
@@ -344,6 +345,8 @@ function DWSCRouter() {
         <Route path="/note" component={DevelopersNote} />
         <Route path="/join/:code" component={SyndicateInvite} />
         <Route path="/rewards" component={Rewards} />
+        <Route path="/referral-program" component={ReferralProgram} />
+        <Route path="/referrals" component={ReferralProgram} />
         <Route path="/my-hub" component={MyHub} />
         <Route path="/members" component={Members} />
         <Route path="/my-tokens" component={MyTokens} />
