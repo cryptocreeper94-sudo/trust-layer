@@ -396,7 +396,7 @@ export default function MyHub() {
                 )}
               </button>
               {showNotifications && (
-                <div className="absolute right-0 top-12 w-80 max-w-[calc(100vw-2rem)] bg-slate-900 border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden">
+                <div className="fixed sm:absolute right-4 sm:right-0 left-4 sm:left-auto top-16 sm:top-12 sm:w-80 bg-slate-900 border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden">
                   <div className="p-3 border-b border-white/10 flex items-center justify-between">
                     <span className="font-semibold text-sm">Notifications</span>
                     <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-xs">

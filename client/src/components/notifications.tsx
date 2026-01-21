@@ -52,7 +52,7 @@ export function NotificationsDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="w-80 bg-black/95 border-white/20 backdrop-blur-xl p-0"
+        className="w-80 max-w-[calc(100vw-2rem)] bg-black/95 border-white/20 backdrop-blur-xl p-0"
       >
         <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
           <h3 className="font-semibold text-white">Notifications</h3>
