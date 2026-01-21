@@ -67,10 +67,12 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **SIG at TGE**: $0.01 (10x from presale $0.001)
 - **Total Supply**: 1,000,000,000 SIG
 - **Presale Reward Pool**: 10,000,000 SIG (1% of supply)
-- **Shell Value**: 1 Shell = $0.001
+- **Shell Value**: 1 Shell = $0.001 (pre-launch currency, converts to SIG)
+- **Echo Value**: 1 Echo = $0.0001 (Chronicles in-game currency, NOT convertible)
+- **Conversion**: 10 Echoes = 1 Shell = 0.1 SIG
 - **Allocation**: Treasury Reserve (50%), Staking Rewards (15%), Development & Team (15%), Ecosystem Growth (10%), Community Rewards (10%).
 - **Signal Foundation**: 0% - Will be a separate initiative with its own funding/asset.
-- **Chronicles Game Economy**: 0% - Game will have its own separate currency system.
+- **Chronicles Game Economy**: 0% - Uses Echoes (separate, non-convertible currency).
 
 ## External Dependencies
 - **Database**: PostgreSQL
