@@ -10,6 +10,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
+import { SimpleLoginModal } from "@/components/simple-login";
 
 interface SweepsBalance {
   goldCoins: string;
@@ -48,6 +49,7 @@ export default function Coinflip() {
   const [coinRotation, setCoinRotation] = useState(0);
   const [currentSide, setCurrentSide] = useState<"heads" | "tails">("heads");
   const [demoBalance, setDemoBalance] = useState(DEMO_BALANCE);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const isDemo = !user;
   
   const coinControls = useAnimation();
@@ -246,10 +248,11 @@ export default function Coinflip() {
             <p className="text-purple-300 text-sm">
               <Sparkles className="w-4 h-4 inline mr-1" />
               <strong>Demo Mode</strong> - Playing with free demo coins! 
-              <a href="/api/login" className="underline ml-2 text-purple-200 hover:text-white">Sign up</a> to save your winnings.
+              <button onClick={() => setShowLoginModal(true)} className="underline ml-2 text-purple-200 hover:text-white">Sign up</button> to save your winnings.
             </p>
           </div>
         )}
+        <SimpleLoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
 
         {/* Balance */}
         {currentBalance && (

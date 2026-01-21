@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { Footer } from "@/components/footer";
 import { useAuth } from "@/hooks/use-auth";
+import { SimpleLoginModal } from "@/components/simple-login";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 
 const individualMilestones = [
@@ -36,6 +37,7 @@ export default function ReferralProgram() {
   const { isAuthenticated } = useAuth();
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<"individual" | "business">("individual");
+  const [showLoginModal, setShowLoginModal] = useState(false);
   
   const [signups, setSignups] = useState(25);
   const [buyers5, setBuyers5] = useState(5);
@@ -80,9 +82,7 @@ export default function ReferralProgram() {
                 <Button size="sm" variant="outline" className="border-primary/30">Dashboard</Button>
               </Link>
             ) : (
-              <a href="/api/login">
-                <Button size="sm" className="bg-primary hover:bg-primary/90">Sign In</Button>
-              </a>
+              <Button size="sm" className="bg-primary hover:bg-primary/90" onClick={() => setShowLoginModal(true)}>Sign In</Button>
             )}
           </div>
         </div>
@@ -427,11 +427,9 @@ export default function ReferralProgram() {
                 </Button>
               </Link>
             ) : (
-              <a href="/api/login">
-                <Button size="lg" className="gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600">
-                  Start Earning Now <ArrowRight className="w-4 h-4" />
-                </Button>
-              </a>
+              <Button size="lg" className="gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600" onClick={() => setShowLoginModal(true)}>
+                Start Earning Now <ArrowRight className="w-4 h-4" />
+              </Button>
             )}
             <p className="text-sm text-muted-foreground mt-4">
               No limits. No caps. Earn what you bring.
@@ -441,6 +439,7 @@ export default function ReferralProgram() {
       </main>
 
       <Footer />
+      <SimpleLoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
     </div>
   );
 }

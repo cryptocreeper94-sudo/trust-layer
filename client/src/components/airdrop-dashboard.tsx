@@ -26,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import { SimpleLoginModal } from "@/components/simple-login";
 
 interface AirdropData {
   airdropBalance: number;
@@ -155,6 +156,7 @@ export function AirdropDashboard() {
   const queryClient = useQueryClient();
   const [walletInput, setWalletInput] = useState("");
   const [copied, setCopied] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const countdown = useCountdown(DWC_LAUNCH_DATE);
 
   const { data: airdrop, isLoading } = useQuery<AirdropData>({
@@ -193,9 +195,10 @@ export function AirdropDashboard() {
         <p className="text-sm text-muted-foreground mb-4">
           Connect your account to see your accumulated SIG rewards
         </p>
-        <Button asChild data-testid="button-signin-airdrop">
-          <a href="/api/login">Sign In to Continue</a>
+        <Button onClick={() => setShowLoginModal(true)} data-testid="button-signin-airdrop">
+          Sign In to Continue
         </Button>
+        <SimpleLoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
       </GlassCard>
     );
   }

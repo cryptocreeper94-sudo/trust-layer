@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
+import { SimpleLoginModal } from "@/components/simple-login";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 
 export default function DevelopersRegister() {
@@ -20,6 +21,7 @@ export default function DevelopersRegister() {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const handleRegister = async () => {
     const finalName = devName.trim() || (user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}`.trim() : "");
@@ -117,11 +119,10 @@ export default function DevelopersRegister() {
                     <p className="text-sm text-muted-foreground mb-6">
                       Sign in with your account to register as a developer
                     </p>
-                    <a href="/api/login">
-                      <Button className="w-full bg-primary text-background hover:bg-primary/90 font-semibold" data-testid="button-login-register">
-                        Sign In to Continue
-                      </Button>
-                    </a>
+                    <Button className="w-full bg-primary text-background hover:bg-primary/90 font-semibold" data-testid="button-login-register" onClick={() => setShowLoginModal(true)}>
+                      Sign In to Continue
+                    </Button>
+                    <SimpleLoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
                   </div>
 
                   <div className="border-t border-white/10 pt-6">

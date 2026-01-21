@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
+import { SimpleLoginModal } from "@/components/simple-login";
 
 interface ReferralStats {
   profile: {
@@ -92,6 +93,7 @@ async function fetchAffiliateTiers(): Promise<{ tiers: AffiliateTier[] }> {
 
 export function ReferralTracker() {
   const [copied, setCopied] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const { isAuthenticated } = useAuth();
   
   const { data: stats, isLoading } = useQuery<ReferralStats>({
@@ -142,16 +144,19 @@ export function ReferralTracker() {
 
   if (!isAuthenticated) {
     return (
+      <>
       <GlassCard className="p-6 text-center">
         <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
         <h3 className="text-lg font-bold mb-2">Sign In Required</h3>
         <p className="text-sm text-muted-foreground mb-4">
           Connect your account to access your referral dashboard and start earning rewards.
         </p>
-        <Button asChild data-testid="button-signin-referrals">
-          <a href="/api/login">Sign In to Continue</a>
+        <Button onClick={() => setShowLoginModal(true)} data-testid="button-signin-referrals">
+          Sign In to Continue
         </Button>
       </GlassCard>
+      <SimpleLoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
+    </>
     );
   }
 
