@@ -7,7 +7,8 @@ import {
   Gamepad2, MessageCircle, Globe, Code, ImageIcon, PieChart, 
   ArrowLeftRight, Droplets, Rocket, Download, ExternalLink, Star,
   Crown, Activity, Bell, Settings, ChevronRight, Award, MapPin,
-  Newspaper, Clock, Megaphone, X, Compass, BookOpen, HelpCircle
+  Newspaper, Clock, Megaphone, X, Compass, BookOpen, HelpCircle,
+  CheckCircle, AlertCircle, CircleDot, ArrowUp, ArrowDown, Headphones
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -107,6 +108,37 @@ export default function MyHub() {
       return res.json();
     },
   });
+
+  const [showNotifications, setShowNotifications] = useState(false);
+  
+  const notifications = [
+    { id: 1, type: 'reward', title: 'Daily airdrop received!', message: '+25 Shells added to your wallet', time: '2 hours ago', read: false },
+    { id: 2, type: 'quest', title: 'New quest available', message: 'Complete today\'s mission to earn Shells', time: '4 hours ago', read: false },
+    { id: 3, type: 'system', title: 'Welcome to Trust Layer', message: 'Your account is ready to explore', time: '1 day ago', read: true },
+  ];
+
+  const recentActivity = [
+    { id: 1, type: 'airdrop', title: 'Shells Airdrop', amount: '+25', time: 'Today, 1:00 PM', icon: Gift },
+    { id: 2, type: 'quest', title: 'Quest Completed', amount: '+50', time: 'Yesterday', icon: Target },
+    { id: 3, type: 'referral', title: 'Referral Bonus', amount: '+100', time: '2 days ago', icon: Users },
+  ];
+
+  const sigPrice = 0.01;
+  const sigChange24h = 0;
+
+  const accountCompletionSteps = [
+    { id: 'wallet', label: 'Connect wallet', completed: rewardProfile?.profile?.hasWallet || false, href: '/wallet' },
+    { id: 'quest', label: 'Complete first quest', completed: (rewardProfile?.profile?.totalQuestsCompleted || 0) > 0, href: '/quests' },
+    { id: 'referral', label: 'Refer a friend', completed: false, href: '/referrals' },
+    { id: 'chat', label: 'Join ChronoChat', completed: false, href: '/community' },
+  ];
+  const completedSteps = accountCompletionSteps.filter(s => s.completed).length;
+  const accountProgress = (completedSteps / accountCompletionSteps.length) * 100;
+
+  const pendingActions = [
+    ...(!(rewardProfile?.profile?.hasWallet) ? [{ id: 'wallet', title: 'Connect your wallet', description: 'Link a wallet to receive rewards', href: '/wallet', priority: 'high' as const }] : []),
+    ...((rewardProfile?.profile?.totalQuestsCompleted || 0) === 0 ? [{ id: 'quest', title: 'Complete your first quest', description: 'Start earning Shells today', href: '/quests', priority: 'medium' as const }] : []),
+  ];
 
   const ecosystemLinks = [
     { href: "/wallet", label: "Wallet", icon: Wallet, color: "cyan", description: "Manage your assets" },
@@ -322,6 +354,57 @@ export default function MyHub() {
             <span className="font-display font-bold text-xl tracking-tight">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2 sm:gap-3">
+            <div className="relative">
+              <button 
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="p-2 rounded-lg hover:bg-white/10 transition-colors relative"
+                data-testid="button-notifications"
+              >
+                <Bell className="w-5 h-5 text-white/70" />
+                {notifications.filter(n => !n.read).length > 0 && (
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+                )}
+              </button>
+              {showNotifications && (
+                <div className="absolute right-0 top-12 w-80 bg-slate-900 border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden">
+                  <div className="p-3 border-b border-white/10 flex items-center justify-between">
+                    <span className="font-semibold text-sm">Notifications</span>
+                    <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-xs">
+                      {notifications.filter(n => !n.read).length} new
+                    </Badge>
+                  </div>
+                  <div className="max-h-64 overflow-y-auto">
+                    {notifications.map(notif => (
+                      <div key={notif.id} className={`p-3 border-b border-white/5 hover:bg-white/5 transition-colors ${!notif.read ? 'bg-cyan-500/5' : ''}`}>
+                        <div className="flex items-start gap-2">
+                          <div className={`p-1.5 rounded-lg ${notif.type === 'reward' ? 'bg-emerald-500/20' : notif.type === 'quest' ? 'bg-amber-500/20' : 'bg-cyan-500/20'}`}>
+                            {notif.type === 'reward' ? <Gift className="w-3 h-3 text-emerald-400" /> : 
+                             notif.type === 'quest' ? <Target className="w-3 h-3 text-amber-400" /> : 
+                             <Bell className="w-3 h-3 text-cyan-400" />}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium truncate">{notif.title}</p>
+                            <p className="text-xs text-white/50 truncate">{notif.message}</p>
+                            <p className="text-[10px] text-white/30 mt-1">{notif.time}</p>
+                          </div>
+                          {!notif.read && <div className="w-2 h-2 bg-cyan-400 rounded-full mt-1" />}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="p-2 border-t border-white/10">
+                    <Button variant="ghost" size="sm" className="w-full text-xs text-white/60">
+                      View all notifications
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+            <Link href="/feedback">
+              <button className="p-2 rounded-lg hover:bg-white/10 transition-colors" data-testid="button-help">
+                <Headphones className="w-5 h-5 text-white/70" />
+              </button>
+            </Link>
             {user?.id && <MemberBadge userId={user.id.toString()} />}
             <WalletButton />
             <MobileNav />
@@ -329,7 +412,35 @@ export default function MyHub() {
         </div>
       </nav>
 
-      <main className="pt-20 pb-12">
+      <div className="fixed top-14 left-0 right-0 z-40 bg-slate-900/80 backdrop-blur-sm border-b border-white/5">
+          <div className="container mx-auto px-4 py-2 flex items-center justify-between text-sm">
+            <div className="flex items-center gap-6 overflow-x-auto">
+              <div className="flex items-center gap-2 whitespace-nowrap">
+                <span className="text-white/50">SIG</span>
+                <span className="font-semibold text-white">${sigPrice.toFixed(4)}</span>
+                <span className={`flex items-center text-xs ${sigChange24h >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                  {sigChange24h >= 0 ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
+                  {Math.abs(sigChange24h).toFixed(2)}%
+                </span>
+              </div>
+              <div className="h-4 w-px bg-white/10" />
+              <div className="flex items-center gap-2 whitespace-nowrap">
+                <span className="text-white/50">Your Portfolio</span>
+                <span className="font-semibold text-cyan-400">${((tokenBalance?.totalTokens || 0) * sigPrice).toFixed(2)}</span>
+              </div>
+              <div className="h-4 w-px bg-white/10 hidden sm:block" />
+              <div className="hidden sm:flex items-center gap-2 whitespace-nowrap">
+                <span className="text-white/50">Shells</span>
+                <span className="font-semibold text-purple-400">{(rewardProfile?.shellBalance || 0).toLocaleString()}</span>
+              </div>
+            </div>
+            <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs hidden md:flex">
+              <CircleDot className="w-3 h-3 mr-1 animate-pulse" /> Mainnet Live
+            </Badge>
+          </div>
+        </div>
+
+      <main className="pt-32 pb-12">
         <div className="container mx-auto px-4">
           
           <motion.div
@@ -491,6 +602,107 @@ export default function MyHub() {
               ))}
             </div>
           </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            {pendingActions.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.12 }}
+              >
+                <GlassCard className="p-5 h-full" glow>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="font-semibold flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 text-amber-400" />
+                      Action Needed
+                    </h3>
+                    <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">
+                      {pendingActions.length}
+                    </Badge>
+                  </div>
+                  <div className="space-y-3">
+                    {pendingActions.map(action => (
+                      <Link key={action.id} href={action.href}>
+                        <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 hover:bg-amber-500/20 transition-colors cursor-pointer">
+                          <p className="font-medium text-sm">{action.title}</p>
+                          <p className="text-xs text-white/50">{action.description}</p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </GlassCard>
+              </motion.div>
+            )}
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.14 }}
+              className={pendingActions.length > 0 ? "" : "lg:col-span-2"}
+            >
+              <GlassCard className="p-5 h-full">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold flex items-center gap-2">
+                    <Activity className="w-4 h-4 text-cyan-400" />
+                    Recent Activity
+                  </h3>
+                  <Link href="/wallet">
+                    <Button variant="ghost" size="sm" className="text-xs text-white/50 hover:text-white">
+                      View all <ChevronRight className="w-3 h-3 ml-1" />
+                    </Button>
+                  </Link>
+                </div>
+                <div className="space-y-3">
+                  {recentActivity.map(item => (
+                    <div key={item.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors">
+                      <div className="p-2 rounded-lg bg-emerald-500/20">
+                        <item.icon className="w-4 h-4 text-emerald-400" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium">{item.title}</p>
+                        <p className="text-xs text-white/40">{item.time}</p>
+                      </div>
+                      <span className="text-sm font-semibold text-emerald-400">{item.amount}</span>
+                    </div>
+                  ))}
+                </div>
+              </GlassCard>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.16 }}
+            >
+              <GlassCard className="p-5 h-full">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-purple-400" />
+                    Account Progress
+                  </h3>
+                  <span className="text-sm text-white/50">{completedSteps}/{accountCompletionSteps.length}</span>
+                </div>
+                <div className="mb-4">
+                  <Progress value={accountProgress} className="h-2" />
+                  <p className="text-xs text-white/40 mt-2">
+                    {accountProgress === 100 ? "All set! You're ready to go." : "Complete these steps to unlock all features"}
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  {accountCompletionSteps.map(step => (
+                    <Link key={step.id} href={step.href}>
+                      <div className={`flex items-center gap-3 p-2 rounded-lg transition-colors ${step.completed ? 'opacity-60' : 'hover:bg-white/5 cursor-pointer'}`}>
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center ${step.completed ? 'bg-emerald-500' : 'border border-white/30'}`}>
+                          {step.completed && <Check className="w-3 h-3 text-white" />}
+                        </div>
+                        <span className={`text-sm ${step.completed ? 'line-through text-white/40' : ''}`}>{step.label}</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </GlassCard>
+            </motion.div>
+          </div>
 
           {showWelcome ? (
             <motion.div
