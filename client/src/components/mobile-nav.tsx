@@ -51,6 +51,7 @@ const navCategories = [
     icon: Zap,
     defaultOpen: true,
     items: [
+      { href: "/guardian-scanner", label: "Guardian Scanner", icon: Shield, badge: "New" },
       { href: "/pulse", label: "Pulse AI", icon: Zap, badge: "Live" },
       { href: "/strike-agent", label: "Strike Agent", icon: Target, badge: "New" },
     ]
