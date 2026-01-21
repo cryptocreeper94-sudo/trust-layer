@@ -124,6 +124,49 @@ export default function MyHub() {
     { href: "/referrals", label: "Refer & Earn", icon: Users, badge: "Bonus" },
   ];
 
+  const exploreCategories = [
+    {
+      title: "Get Started",
+      color: "cyan",
+      links: [
+        { href: "/learn", label: "Learn the Basics", icon: BookOpen },
+        { href: "/academy", label: "Academy", icon: Award },
+        { href: "/feedback", label: "Give Feedback", icon: HelpCircle },
+        { href: "/faq", label: "FAQ", icon: MessageCircle },
+      ]
+    },
+    {
+      title: "Community",
+      color: "emerald",
+      links: [
+        { href: "/community", label: "ChronoChat", icon: MessageCircle },
+        { href: "/members", label: "Member Directory", icon: Users },
+        { href: "/referrals", label: "Refer Friends", icon: Gift },
+        { href: "/quests", label: "Daily Quests", icon: Target },
+      ]
+    },
+    {
+      title: "Games & Fun",
+      color: "purple",
+      links: [
+        { href: "/chronicles", label: "Chronicles", icon: Gamepad2 },
+        { href: "/nft", label: "NFT Gallery", icon: ImageIcon },
+        { href: "/launchpad", label: "Token Launchpad", icon: Rocket },
+        { href: "/leaderboard", label: "Leaderboard", icon: Trophy },
+      ]
+    },
+    {
+      title: "About Us",
+      color: "amber",
+      links: [
+        { href: "/vision", label: "Our Vision", icon: Sparkles },
+        { href: "/ecosystem", label: "Ecosystem Map", icon: Globe },
+        { href: "/team", label: "Meet the Team", icon: Users },
+        { href: "/trust-layer", label: "Trust Layer", icon: Shield },
+      ]
+    },
+  ];
+
   const progressToFounders = rewardProfile?.profile?.totalQuestsCompleted 
     ? Math.min((rewardProfile.profile.totalQuestsCompleted / 50) * 100, 100) 
     : 0;
@@ -650,6 +693,44 @@ export default function MyHub() {
             </GlassCard>
             </motion.div>
           )}
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.13 }}
+            className="mb-8"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold flex items-center gap-2">
+                <Compass className="w-5 h-5 text-pink-400" />
+                Explore DarkWave
+              </h2>
+              <Badge className="bg-pink-500/20 text-pink-400 border-pink-500/30">
+                Quick Links
+              </Badge>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {exploreCategories.map((category) => (
+                <GlassCard key={category.title} className="p-4">
+                  <h3 className={`font-semibold text-sm mb-3 text-${category.color}-400 flex items-center gap-2`}>
+                    <div className={`w-2 h-2 rounded-full bg-${category.color}-400`} />
+                    {category.title}
+                  </h3>
+                  <div className="space-y-2">
+                    {category.links.map((link) => (
+                      <Link key={link.href} href={link.href}>
+                        <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group">
+                          <link.icon className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors" />
+                          <span className="text-sm text-white/70 group-hover:text-white transition-colors">{link.label}</span>
+                          <ChevronRight className="w-3 h-3 text-white/20 group-hover:text-white/50 ml-auto transition-colors" />
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </GlassCard>
+              ))}
+            </div>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
