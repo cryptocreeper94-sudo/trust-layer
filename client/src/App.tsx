@@ -11,6 +11,7 @@ import { getAppFromHost } from "@/lib/app-config";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
 import { FirstLoginModal } from "@/components/first-login-modal";
 import { FloatingChat } from "@/components/floating-chat";
+import { GlobalSearch } from "@/components/global-search";
 
 // Critical pages - load immediately
 import Home from "@/pages/home";
@@ -552,6 +553,9 @@ function App() {
                 {showAIAssistant && <AIAssistant />}
                 {showAIAssistant && <FirstLoginModal />}
                 <FloatingChat />
+                <div className="fixed top-4 right-4 z-[100]">
+                  <GlobalSearch />
+                </div>
               </TooltipProvider>
             </FavoritesProvider>
           </NotificationsProvider>
