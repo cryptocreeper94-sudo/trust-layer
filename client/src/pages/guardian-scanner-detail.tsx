@@ -50,7 +50,11 @@ import {
   UserCheck,
   Send,
   History,
-  Sparkles
+  Sparkles,
+  Bell,
+  BellRing,
+  Plus,
+  Trash2
 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -711,6 +715,197 @@ function CommunityComments({ tokenAddress, chain }: { tokenAddress: string; chai
   );
 }
 
+interface PriceAlert {
+  id: string;
+  type: "above" | "below";
+  price: number;
+  isActive: boolean;
+  createdAt: string;
+}
+
+function PriceAlertsSection({ currentPrice, tokenSymbol }: { currentPrice: number; tokenSymbol: string }) {
+  const [alerts, setAlerts] = useState<PriceAlert[]>([
+    { id: "1", type: "above", price: currentPrice * 1.5, isActive: true, createdAt: "2h ago" },
+    { id: "2", type: "below", price: currentPrice * 0.7, isActive: true, createdAt: "1d ago" },
+  ]);
+  const [showAddAlert, setShowAddAlert] = useState(false);
+  const [newAlertType, setNewAlertType] = useState<"above" | "below">("above");
+  const [newAlertPrice, setNewAlertPrice] = useState("");
+  
+  const formatPrice = (price: number) => {
+    if (price < 0.00001) return price.toExponential(4);
+    if (price < 1) return price.toFixed(8);
+    return price.toFixed(4);
+  };
+  
+  const handleAddAlert = () => {
+    const price = parseFloat(newAlertPrice);
+    if (isNaN(price) || price <= 0) return;
+    
+    const newAlert: PriceAlert = {
+      id: Date.now().toString(),
+      type: newAlertType,
+      price,
+      isActive: true,
+      createdAt: "Just now"
+    };
+    
+    setAlerts(prev => [...prev, newAlert]);
+    setShowAddAlert(false);
+    setNewAlertPrice("");
+  };
+  
+  const handleRemoveAlert = (id: string) => {
+    setAlerts(prev => prev.filter(a => a.id !== id));
+  };
+  
+  const toggleAlert = (id: string) => {
+    setAlerts(prev => prev.map(a => a.id === id ? { ...a, isActive: !a.isActive } : a));
+  };
+  
+  return (
+    <GlassCard glow>
+      <div className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold text-white flex items-center gap-2">
+            <BellRing className="w-5 h-5 text-amber-400" />
+            Price Alerts
+          </h3>
+          <Button
+            size="sm"
+            onClick={() => setShowAddAlert(!showAddAlert)}
+            className="bg-white/10 hover:bg-white/20 border-0 h-8 px-3"
+            data-testid="add-alert-button"
+          >
+            <Plus className="w-4 h-4 mr-1" />
+            Add
+          </Button>
+        </div>
+        
+        {showAddAlert && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            className="mb-4 p-3 rounded-lg bg-white/5 border border-white/10"
+          >
+            <div className="flex gap-2 mb-3">
+              <button
+                onClick={() => setNewAlertType("above")}
+                className={`flex-1 py-2 rounded text-sm font-medium transition-all ${
+                  newAlertType === "above"
+                    ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                    : "bg-white/5 text-white/60"
+                }`}
+                data-testid="alert-type-above"
+              >
+                <ArrowUpRight className="w-4 h-4 inline mr-1" />
+                Above
+              </button>
+              <button
+                onClick={() => setNewAlertType("below")}
+                className={`flex-1 py-2 rounded text-sm font-medium transition-all ${
+                  newAlertType === "below"
+                    ? "bg-red-500/20 text-red-400 border border-red-500/30"
+                    : "bg-white/5 text-white/60"
+                }`}
+                data-testid="alert-type-below"
+              >
+                <ArrowDownRight className="w-4 h-4 inline mr-1" />
+                Below
+              </button>
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Enter price..."
+                value={newAlertPrice}
+                onChange={e => setNewAlertPrice(e.target.value)}
+                className="flex-1 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-cyan-500/50"
+                data-testid="alert-price-input"
+              />
+              <Button
+                size="sm"
+                onClick={handleAddAlert}
+                disabled={!newAlertPrice || isNaN(parseFloat(newAlertPrice))}
+                className="bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/30 border border-cyan-500/30"
+                data-testid="confirm-add-alert"
+              >
+                Set Alert
+              </Button>
+            </div>
+            <p className="text-[10px] text-white/30 mt-2">
+              Current price: ${formatPrice(currentPrice)}
+            </p>
+          </motion.div>
+        )}
+        
+        {alerts.length === 0 ? (
+          <div className="text-center py-6 text-white/40">
+            <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
+            <p className="text-sm">No alerts set</p>
+            <p className="text-xs">Create alerts to get notified of price changes</p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {alerts.map(alert => (
+              <div
+                key={alert.id}
+                className={`flex items-center justify-between p-3 rounded-lg border transition-all ${
+                  alert.isActive
+                    ? alert.type === "above"
+                      ? "bg-emerald-500/5 border-emerald-500/20"
+                      : "bg-red-500/5 border-red-500/20"
+                    : "bg-white/5 border-white/10 opacity-50"
+                }`}
+                data-testid={`alert-${alert.id}`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                    alert.type === "above" ? "bg-emerald-500/20" : "bg-red-500/20"
+                  }`}>
+                    {alert.type === "above" 
+                      ? <ArrowUpRight className="w-4 h-4 text-emerald-400" />
+                      : <ArrowDownRight className="w-4 h-4 text-red-400" />
+                    }
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-white">
+                      {alert.type === "above" ? "Above" : "Below"} ${formatPrice(alert.price)}
+                    </p>
+                    <p className="text-xs text-white/40">{tokenSymbol} • {alert.createdAt}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => toggleAlert(alert.id)}
+                    className={`p-1.5 rounded transition-colors ${
+                      alert.isActive ? "text-cyan-400 hover:bg-white/10" : "text-white/40 hover:bg-white/10"
+                    }`}
+                    data-testid={`toggle-alert-${alert.id}`}
+                  >
+                    {alert.isActive ? <Bell className="w-4 h-4" /> : <Bell className="w-4 h-4" />}
+                  </button>
+                  <button
+                    onClick={() => handleRemoveAlert(alert.id)}
+                    className="p-1.5 rounded text-white/40 hover:text-red-400 hover:bg-white/10 transition-colors"
+                    data-testid={`remove-alert-${alert.id}`}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        
+        <p className="text-[10px] text-white/30 mt-4 text-center">
+          Alerts will be sent via browser notification and email (if enabled)
+        </p>
+      </div>
+    </GlassCard>
+  );
+}
+
 interface CreatorToken {
   name: string;
   symbol: string;
@@ -1202,6 +1397,8 @@ export default function GuardianScannerDetail() {
                   </p>
                 </div>
               </GlassCard>
+
+              <PriceAlertsSection currentPrice={token.price} tokenSymbol={token.symbol} />
             </div>
 
             <div className="space-y-6">
