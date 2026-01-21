@@ -1007,29 +1007,39 @@ console.log('All successful:', result.allSuccessful);`}
                   <div className="space-y-3">
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="text-2xl font-bold text-primary">40%</div>
-                        <div className="text-xs">Ecosystem Growth</div>
-                        <div className="text-xs text-muted-foreground">400M SIG - Grants, hackathons</div>
+                        <div className="text-2xl font-bold text-primary">25%</div>
+                        <div className="text-xs">Chronicles Economy</div>
+                        <div className="text-xs text-muted-foreground">250M SIG - Game rewards</div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="text-2xl font-bold text-secondary">20%</div>
-                        <div className="text-xs">Community & Liquidity</div>
-                        <div className="text-xs text-muted-foreground">200M SIG - DEX, airdrops</div>
+                        <div className="text-2xl font-bold text-amber-400">25%</div>
+                        <div className="text-xs">Treasury Reserve</div>
+                        <div className="text-xs text-muted-foreground">250M SIG - Sustainability</div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="text-2xl font-bold text-cyan-400">20%</div>
-                        <div className="text-xs">Core Team</div>
-                        <div className="text-xs text-muted-foreground">200M SIG - 4yr vest, 1yr cliff</div>
+                        <div className="text-2xl font-bold text-emerald-400">15%</div>
+                        <div className="text-xs">Staking Rewards</div>
+                        <div className="text-xs text-muted-foreground">150M SIG - APY pool</div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="text-2xl font-bold text-amber-400">10%</div>
-                        <div className="text-xs">Strategic Partners</div>
-                        <div className="text-xs text-muted-foreground">100M SIG - Advisors</div>
+                        <div className="text-2xl font-bold text-purple-400">15%</div>
+                        <div className="text-xs">Development & Team</div>
+                        <div className="text-xs text-muted-foreground">150M SIG - 4yr vest</div>
                       </div>
                     </div>
-                    <div className="p-3 bg-white/5 rounded-lg text-center">
-                      <div className="text-2xl font-bold text-emerald-400">10%</div>
-                      <div className="text-xs">Treasury Reserve - 100M SIG</div>
+                    <div className="grid grid-cols-3 gap-2 text-sm">
+                      <div className="p-3 bg-white/5 rounded-lg text-center">
+                        <div className="text-xl font-bold text-secondary">10%</div>
+                        <div className="text-xs">Ecosystem</div>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg text-center">
+                        <div className="text-xl font-bold text-cyan-400">5%</div>
+                        <div className="text-xs">Community</div>
+                      </div>
+                      <div className="p-3 bg-white/5 rounded-lg text-center">
+                        <div className="text-xl font-bold text-pink-400">5%</div>
+                        <div className="text-xs">Foundation</div>
+                      </div>
                     </div>
                   </div>
                 </AccordionContent>

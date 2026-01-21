@@ -246,12 +246,12 @@ export default function Token() {
                   Distribution
                 </h3>
                 <div className="space-y-4">
-                  <DistributionItem label="Public Sale" percent="40%" color="bg-primary" desc="Fair launch, no vesting" />
-                  <DistributionItem label="Development" percent="20%" color="bg-secondary" desc="Unlocked as needed for ecosystem growth" />
-                  <DistributionItem label="Team & Advisors" percent="15%" color="bg-purple-500" desc="6-month cliff, 12-month vesting" />
-                  <DistributionItem label="Marketing" percent="10%" color="bg-amber-500" desc="Partnerships, community airdrops" />
-                  <DistributionItem label="Liquidity Pool" percent="10%" color="bg-blue-500" desc="Locked in DEX for price stability" />
-                  <DistributionItem label="Reserve" percent="5%" color="bg-emerald-500" desc="12-month lock for emergencies" />
+                  <DistributionItem label="Chronicles Economy" percent="25%" color="bg-primary" desc="In-game rewards and player economy" />
+                  <DistributionItem label="Treasury Reserve" percent="25%" color="bg-amber-500" desc="Long-term sustainability fund" />
+                  <DistributionItem label="Staking Rewards" percent="15%" color="bg-emerald-500" desc="Validator and liquid staking APY" />
+                  <DistributionItem label="Development & Team" percent="15%" color="bg-purple-500" desc="4-year vesting for alignment" />
+                  <DistributionItem label="Ecosystem Growth" percent="10%" color="bg-secondary" desc="Partnerships, listings, grants" />
+                  <DistributionItem label="Community + Foundation" percent="10%" color="bg-blue-500" desc="Presale rewards, airdrops, charity" />
                 </div>
               </div>
             </GlassCard>

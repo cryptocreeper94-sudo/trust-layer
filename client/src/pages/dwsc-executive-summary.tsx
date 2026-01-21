@@ -678,7 +678,7 @@ export default function DWSCExecutiveSummary() {
                 {
                   title: "Signal Presale",
                   source: "Blockchain",
-                  description: "Signal at $0.001 each. 150M allocation (15% of supply). Tiered pricing through $0.0014 launch.",
+                  description: "Signal at $0.001 each. Community rewards capped at 1% of supply. TGE price $0.01 (10x).",
                   icon: Coins
                 },
                 {

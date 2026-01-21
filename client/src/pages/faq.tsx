@@ -64,7 +64,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       },
       {
         question: "What is the token allocation?",
-        answer: "40% Community & Ecosystem (rewards, airdrops, grants), 20% Development Fund, 15% Team & Advisors (4-year vesting), 15% Treasury Reserve, and 10% Public Sale."
+        answer: "25% Chronicles Game Economy, 25% Treasury Reserve, 15% Staking Rewards, 15% Development & Team (4-year vesting), 10% Ecosystem Growth, 5% Community Rewards (presale + airdrops), and 5% Signal Foundation (charity)."
       },
       {
         question: "Is there a vesting schedule for team tokens?",

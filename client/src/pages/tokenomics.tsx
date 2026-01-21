@@ -11,20 +11,23 @@ import { GlassCard } from "@/components/glass-card";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 
 const TOKEN_ALLOCATION = [
-  { name: "Community & Ecosystem", value: 40, color: "#06b6d4", icon: Users, description: "Rewards, airdrops, liquidity mining, ecosystem grants" },
-  { name: "Team & Advisors", value: 15, color: "#a855f7", icon: Building, description: "Core team and strategic advisors (4-year vesting)" },
-  { name: "Development Fund", value: 20, color: "#ec4899", icon: Rocket, description: "Protocol development, infrastructure, security audits" },
-  { name: "Treasury Reserve", value: 15, color: "#f59e0b", icon: Shield, description: "Strategic reserves, partnerships, emergency fund" },
-  { name: "Public Sale", value: 10, color: "#22c55e", icon: Gift, description: "Initial Signal offering and exchange listings" },
+  { name: "Chronicles Game Economy", value: 25, color: "#06b6d4", icon: Sparkles, description: "In-game rewards, quests, items, and player economy" },
+  { name: "Treasury Reserve", value: 25, color: "#f59e0b", icon: Shield, description: "Long-term sustainability, emergency fund, future growth" },
+  { name: "Staking Rewards", value: 15, color: "#22c55e", icon: TrendingUp, description: "Validator and liquid staking APY distributions" },
+  { name: "Development & Team", value: 15, color: "#a855f7", icon: Building, description: "Core team, advisors, operations (4-year vesting)" },
+  { name: "Ecosystem Growth", value: 10, color: "#ec4899", icon: Rocket, description: "Partnerships, grants, exchange listings, integrations" },
+  { name: "Community Rewards", value: 5, color: "#3b82f6", icon: Gift, description: "Presale rewards (1%), airdrops, community events (4%)" },
+  { name: "Signal Foundation", value: 5, color: "#f43f5e", icon: Users, description: "Charitable initiatives seed funding" },
 ];
 
 const VESTING_SCHEDULE = [
-  { category: "Community", cliff: "None", vesting: "Released on milestones", unlock: "10% at TGE, 90% over 24 months" },
+  { category: "Chronicles", cliff: "None", vesting: "Released as game features launch", unlock: "10% at TGE, 90% over game lifecycle" },
+  { category: "Treasury", cliff: "12 months", vesting: "60 months linear", unlock: "0% at TGE, long-term sustainability" },
+  { category: "Staking", cliff: "None", vesting: "Distributed as staking rewards", unlock: "Released proportionally to stakers" },
   { category: "Team", cliff: "12 months", vesting: "48 months linear", unlock: "0% at TGE, unlocks monthly after cliff" },
-  { category: "Advisors", cliff: "6 months", vesting: "24 months linear", unlock: "0% at TGE, unlocks monthly after cliff" },
-  { category: "Development", cliff: "None", vesting: "As needed for development", unlock: "Controlled by multisig DAO" },
-  { category: "Treasury", cliff: "6 months", vesting: "36 months linear", unlock: "5% at TGE for liquidity" },
-  { category: "Public Sale", cliff: "None", vesting: "Immediate", unlock: "100% at TGE" },
+  { category: "Ecosystem", cliff: "6 months", vesting: "36 months linear", unlock: "5% at TGE for initial listings" },
+  { category: "Community", cliff: "None", vesting: "Event-based releases", unlock: "1% presale, 4% future airdrops" },
+  { category: "Foundation", cliff: "6 months", vesting: "24 months linear", unlock: "Seeds Signal Foundation charity" },
 ];
 
 const UTILITY_CASES = [

@@ -50,11 +50,12 @@ const keyMetrics = [
 
 const tokenomics = [
   { label: "Total Supply", value: "1,000,000,000 SIG", color: "from-cyan-500 to-blue-600" },
-  { label: "Presale Allocation", value: "15% (150M)", color: "from-purple-500 to-pink-600" },
-  { label: "Ecosystem & Rewards", value: "40%", color: "from-amber-500 to-orange-600" },
-  { label: "Team & Advisors", value: "15%", color: "from-emerald-500 to-teal-600" },
-  { label: "Treasury", value: "20%", color: "from-indigo-500 to-violet-600" },
-  { label: "Liquidity", value: "10%", color: "from-pink-500 to-rose-600" }
+  { label: "Chronicles Economy", value: "25%", color: "from-purple-500 to-pink-600" },
+  { label: "Treasury Reserve", value: "25%", color: "from-amber-500 to-orange-600" },
+  { label: "Staking Rewards", value: "15%", color: "from-emerald-500 to-teal-600" },
+  { label: "Development & Team", value: "15%", color: "from-indigo-500 to-violet-600" },
+  { label: "Ecosystem Growth", value: "10%", color: "from-pink-500 to-rose-600" },
+  { label: "Community + Foundation", value: "10%", color: "from-cyan-400 to-teal-500" }
 ];
 
 const milestones = [
