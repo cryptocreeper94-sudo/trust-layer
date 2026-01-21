@@ -14380,8 +14380,138 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   // =====================================================
-  // GUARDIAN SCANNER - COMMENT MODERATION API
+  // GUARDIAN SCANNER API - Token Scanner, Alerts, Comments
   // =====================================================
+  
+  const { tokenDataCache, CACHE_TTL } = await import("./services/guardian-scanner-cache");
+  
+  app.get("/api/guardian-scanner/tokens", guardianScannerRateLimit, async (req, res) => {
+    try {
+      const { chain, search, sortBy, limit = 50 } = req.query;
+      const cacheKey = `tokens:${chain || 'all'}:${search || ''}:${sortBy || 'default'}:${limit}`;
+      
+      const cached = tokenDataCache.get(cacheKey);
+      if (cached) {
+        return res.json({ tokens: cached, fromCache: true });
+      }
+      
+      const mockTokens = [
+        { id: "api-token-1", symbol: "PEPE", name: "Pepe", price: 0.0000089, change24h: 12.5 },
+        { id: "api-token-2", symbol: "DOGE", name: "Dogecoin", price: 0.082, change24h: -3.2 },
+      ];
+      
+      tokenDataCache.set(cacheKey, mockTokens, CACHE_TTL.TOKEN_LIST);
+      
+      res.json({ 
+        tokens: mockTokens,
+        message: "API provides minimal data - see frontend for full mock experience",
+        fromCache: false
+      });
+    } catch (error) {
+      console.error("Guardian scanner tokens error:", error);
+      res.status(500).json({ error: "Failed to fetch tokens" });
+    }
+  });
+  
+  app.get("/api/guardian-scanner/token/:id", guardianScannerRateLimit, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const cacheKey = `token:${id}`;
+      
+      const cached = tokenDataCache.get(cacheKey);
+      if (cached) {
+        return res.json({ token: cached, fromCache: true });
+      }
+      
+      const mockToken = {
+        id,
+        symbol: "TOKEN",
+        name: `Token ${id}`,
+        price: 0.001,
+        change24h: 5.5,
+        guardianScore: 75,
+        volume24h: 1000000
+      };
+      
+      tokenDataCache.set(cacheKey, mockToken, CACHE_TTL.TOKEN_DETAIL);
+      
+      res.json({ 
+        token: mockToken,
+        message: "API provides minimal data - see frontend for full mock experience",
+        fromCache: false 
+      });
+    } catch (error) {
+      console.error("Guardian scanner token detail error:", error);
+      res.status(500).json({ error: "Failed to fetch token" });
+    }
+  });
+  
+  app.get("/api/guardian-scanner/alerts", guardianAlertRateLimit, async (req, res) => {
+    try {
+      const userId = req.headers["x-user-id"] as string || "anonymous";
+      const cacheKey = `alerts:${userId}`;
+      
+      const cached = tokenDataCache.get(cacheKey);
+      if (cached) {
+        return res.json({ alerts: cached, fromCache: true });
+      }
+      
+      const alerts: any[] = [];
+      tokenDataCache.set(cacheKey, alerts, CACHE_TTL.USER_ALERTS);
+      
+      res.json({ alerts, fromCache: false });
+    } catch (error) {
+      console.error("Guardian scanner alerts error:", error);
+      res.status(500).json({ error: "Failed to fetch alerts" });
+    }
+  });
+  
+  app.post("/api/guardian-scanner/alerts", guardianAlertRateLimit, async (req, res) => {
+    try {
+      const { tokenId, type, price, tokenSymbol } = req.body;
+      const userId = req.headers["x-user-id"] as string || "anonymous";
+      
+      if (!tokenId || !type || typeof price !== "number") {
+        return res.status(400).json({ error: "tokenId, type, and price are required" });
+      }
+      
+      if (!["above", "below"].includes(type)) {
+        return res.status(400).json({ error: "type must be 'above' or 'below'" });
+      }
+      
+      const alert = {
+        id: `alert-${Date.now()}`,
+        userId,
+        tokenId,
+        tokenSymbol: tokenSymbol || "UNKNOWN",
+        type,
+        price,
+        isActive: true,
+        createdAt: new Date().toISOString()
+      };
+      
+      tokenDataCache.invalidate(`alerts:${userId}`);
+      
+      res.json({ success: true, alert });
+    } catch (error) {
+      console.error("Guardian scanner create alert error:", error);
+      res.status(500).json({ error: "Failed to create alert" });
+    }
+  });
+  
+  app.delete("/api/guardian-scanner/alerts/:id", guardianAlertRateLimit, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const userId = req.headers["x-user-id"] as string || "anonymous";
+      
+      tokenDataCache.invalidate(`alerts:${userId}`);
+      
+      res.json({ success: true, deletedId: id });
+    } catch (error) {
+      console.error("Guardian scanner delete alert error:", error);
+      res.status(500).json({ error: "Failed to delete alert" });
+    }
+  });
 
   app.post("/api/guardian-scanner/moderate-comment", guardianCommentRateLimit, async (req, res) => {
     try {
