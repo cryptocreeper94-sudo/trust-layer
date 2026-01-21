@@ -288,7 +288,7 @@ export function AIAssistant() {
       <AnimatePresence>
         {!isMinimized && (
           <motion.button
-            className="fixed bottom-14 right-6 z-50 w-16 h-16 rounded-full overflow-hidden shadow-[0_0_30px_rgba(0,255,255,0.4)] hover:shadow-[0_0_50px_rgba(0,255,255,0.6)] transition-shadow duration-300 border-2 border-cyan-500/50 hover:border-cyan-400"
+            className="fixed bottom-48 right-4 z-50 w-14 h-14 rounded-full overflow-hidden shadow-[0_0_30px_rgba(0,255,255,0.4)] hover:shadow-[0_0_50px_rgba(0,255,255,0.6)] transition-shadow duration-300 border-2 border-cyan-500/50 hover:border-cyan-400"
             onClick={() => setIsOpen(!isOpen)}
             onContextMenu={(e) => { e.preventDefault(); toggleMinimized(); }}
             initial={{ scale: 0, opacity: 0 }}
@@ -327,7 +327,7 @@ export function AIAssistant() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed bottom-32 right-6 z-50 w-[360px] max-w-[calc(100vw-48px)] h-[500px] max-h-[70vh] bg-gray-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden"
+            className="fixed bottom-64 right-4 z-50 w-[360px] max-w-[calc(100vw-32px)] h-[400px] max-h-[60vh] bg-gray-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden"
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
