@@ -8,7 +8,8 @@ import {
   ArrowLeftRight, Droplets, Rocket, Download, ExternalLink, Star,
   Crown, Activity, Bell, Settings, ChevronRight, Award, MapPin,
   Newspaper, Clock, Megaphone, X, Compass, BookOpen, HelpCircle,
-  CheckCircle, AlertCircle, CircleDot, ArrowUp, ArrowDown, Headphones
+  CheckCircle, AlertCircle, CircleDot, ArrowUp, ArrowDown, Headphones,
+  Copy, Share2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -122,6 +123,35 @@ export default function MyHub() {
     { id: 2, type: 'quest', title: 'Quest Completed', amount: '+50', time: 'Yesterday', icon: Target },
     { id: 3, type: 'referral', title: 'Referral Bonus', amount: '+100', time: '2 days ago', icon: Users },
   ];
+
+  const { data: referralStats } = useQuery<{
+    referralCode: { code: string; host: string; clickCount: number; signupCount: number } | null;
+    totalClicks: number;
+    totalSignups: number;
+    totalConversions: number;
+    pendingCommission: number;
+    lifetimeEarnings: number;
+  }>({
+    queryKey: ["/api/referrals/stats", user?.id],
+    queryFn: async () => {
+      const res = await fetch("/api/referrals/stats", { credentials: "include" });
+      if (!res.ok) return null;
+      return res.json();
+    },
+    enabled: !!user,
+  });
+
+  const [referralCopied, setReferralCopied] = useState(false);
+  
+  const copyReferralLink = () => {
+    if (referralStats?.referralCode?.code) {
+      const host = referralStats.referralCode.host || "dwsc.io";
+      const link = `https://${host}?ref=${referralStats.referralCode.code}`;
+      navigator.clipboard.writeText(link);
+      setReferralCopied(true);
+      setTimeout(() => setReferralCopied(false), 2000);
+    }
+  };
 
   const sigPrice = 0.01;
   const sigChange24h = 0;
@@ -601,6 +631,75 @@ export default function MyHub() {
                 </Link>
               ))}
             </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.11 }}
+            className="mb-8"
+          >
+            <GlassCard className="p-5 relative overflow-hidden" glow>
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-amber-500" />
+              <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+                <div className="flex items-center gap-3 flex-1">
+                  <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
+                    <Share2 className="w-6 h-6 text-purple-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg flex items-center gap-2">
+                      Refer Friends & Earn
+                      <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">Earn Shells</Badge>
+                    </h3>
+                    <p className="text-sm text-white/60">Share your link and earn rewards when friends join</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3 w-full md:w-auto">
+                  <div className="flex-1 md:flex-none">
+                    {referralStats?.referralCode?.code ? (
+                      <div className="flex items-center gap-2">
+                        <div className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 font-mono text-sm text-cyan-400 truncate max-w-[200px]">
+                          dwsc.io?ref={referralStats.referralCode.code}
+                        </div>
+                        <Button 
+                          size="sm" 
+                          onClick={copyReferralLink}
+                          className={referralCopied ? "bg-emerald-500/20 text-emerald-400" : "bg-purple-500/20 text-purple-400 hover:bg-purple-500/30"}
+                          data-testid="button-copy-referral"
+                        >
+                          {referralCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                        </Button>
+                      </div>
+                    ) : (
+                      <Link href="/referrals">
+                        <Button size="sm" className="bg-purple-500/20 text-purple-400 hover:bg-purple-500/30" data-testid="button-get-referral-link">
+                          Get Your Link
+                        </Button>
+                      </Link>
+                    )}
+                  </div>
+                  
+                  <div className="hidden md:flex items-center gap-4 px-4 py-2 rounded-lg bg-white/5 border border-white/10">
+                    <div className="text-center">
+                      <p className="text-lg font-bold text-white">{referralStats?.totalSignups || 0}</p>
+                      <p className="text-[10px] text-white/50">Signups</p>
+                    </div>
+                    <div className="h-8 w-px bg-white/10" />
+                    <div className="text-center">
+                      <p className="text-lg font-bold text-emerald-400">+{referralStats?.lifetimeEarnings || 0}</p>
+                      <p className="text-[10px] text-white/50">Earned</p>
+                    </div>
+                  </div>
+                  
+                  <Link href="/referrals">
+                    <Button variant="ghost" size="sm" className="text-xs text-white/50 hover:text-purple-400" data-testid="button-view-referrals">
+                      Details <ChevronRight className="w-3 h-3 ml-1" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </GlassCard>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
