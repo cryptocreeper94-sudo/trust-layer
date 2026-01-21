@@ -10,6 +10,18 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - Mobile: Mobile-first design with self-contained carousels, accordions, dropdowns
 - Branding: White-labeled, no Replit branding, dark theme only
 - Stripe: FULLY CONFIGURATED - do not ask about Stripe keys, payments are ready
+- **App Store Target**: Build for eventual React Native + Expo port - iOS App Store & Google Play as standalone ecosystem apps
+
+## React Native Portability Guidelines
+To ensure smooth transition to React Native + Expo:
+- **Business Logic**: Keep in `shared/` folder, platform-agnostic TypeScript
+- **Data Fetching**: TanStack Query patterns transfer directly
+- **State Management**: React hooks and context - portable as-is
+- **Styling**: Tailwind concepts → NativeWind (same class names)
+- **Components**: Keep logic separate from presentation when possible
+- **Avoid**: Direct DOM manipulation, web-only APIs in shared code
+- **Navigation**: Wouter patterns map to React Navigation
+- **Assets**: Use import paths, not public folder URLs
 
 ## System Architecture
 
