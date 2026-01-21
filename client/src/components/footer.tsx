@@ -123,62 +123,6 @@ export function Footer() {
               </svg>
               <span className="text-[10px] text-white/40">Apps Coming Soon</span>
             </span>
-            <Link 
-              href="/presale"
-              className="text-white/40 hover:text-cyan-400 transition-colors"
-              data-testid="link-presale"
-            >
-              Presale
-            </Link>
-            <Link 
-              href="/investor-pitch"
-              className="text-white/40 hover:text-amber-400 transition-colors"
-              data-testid="link-investors"
-            >
-              Investors
-            </Link>
-            <Link 
-              href="/token-compare"
-              className="text-white/40 hover:text-emerald-400 transition-colors"
-              data-testid="link-compare"
-            >
-              Why DarkWave
-            </Link>
-            <Link 
-              href="/innovation"
-              className="text-white/40 hover:text-purple-400 transition-colors"
-              data-testid="link-innovation"
-            >
-              Innovation
-            </Link>
-            <Link 
-              href="/ai-agents"
-              className="text-white/40 hover:text-cyan-400 transition-colors"
-              data-testid="link-ai-agents"
-            >
-              AI Agents
-            </Link>
-            <Link 
-              href="/rwa"
-              className="text-white/40 hover:text-blue-400 transition-colors"
-              data-testid="link-rwa"
-            >
-              RWA
-            </Link>
-            <Link 
-              href="/roadmap"
-              className="text-white/40 hover:text-cyan-400 transition-colors"
-              data-testid="link-roadmap"
-            >
-              Roadmap
-            </Link>
-            <Link 
-              href="/roadmap-chronicles"
-              className="text-white/40 hover:text-purple-400 transition-colors"
-              data-testid="link-roadmap-chronicles"
-            >
-              Chronicles
-            </Link>
             <button 
               onClick={() => openModal("admin")}
               className="text-white/30 hover:text-white/60 transition-colors"
