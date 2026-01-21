@@ -253,16 +253,16 @@ export async function sendPresaleConfirmationEmail(to: string, amountPaid: strin
   
   return sendEmail({
     to,
-    subject: `SIG Token Purchase Confirmed - ${tierName} Tier`,
+    subject: `Signal (SIG) Purchase Confirmed - ${tierName} Tier`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #ffffff; padding: 30px; border-radius: 12px;">
         <h1 style="color: #00FFFF; margin-bottom: 20px; text-align: center;">Purchase Confirmed!</h1>
         <p style="text-align: center; color: #888;">Welcome to the DarkWave ecosystem, early adopter!</p>
         
         <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 25px; border-radius: 10px; text-align: center; margin: 20px 0;">
-          <p style="color: #888; margin: 0 0 10px 0; font-size: 14px;">Your Token Allocation</p>
+          <p style="color: #888; margin: 0 0 10px 0; font-size: 14px;">Your Signal Allocation</p>
           <p style="color: #00FFFF; font-size: 36px; font-weight: bold; margin: 0;">${totalTokens.toLocaleString()} SIG</p>
-          <p style="color: #00ff88; margin-top: 10px; font-size: 14px;">Includes +${bonusTokens.toLocaleString()} bonus tokens</p>
+          <p style="color: #00ff88; margin-top: 10px; font-size: 14px;">Includes +${bonusTokens.toLocaleString()} bonus Signal</p>
         </div>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
@@ -279,7 +279,7 @@ export async function sendPresaleConfirmationEmail(to: string, amountPaid: strin
         <div style="background: #1a1a2e; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #00FFFF;">
           <h3 style="color: #00FFFF; margin: 0 0 10px 0;">What's Next?</h3>
           <ul style="color: #888; margin: 0; padding-left: 20px; line-height: 1.8;">
-            <li>Your tokens will be available at mainnet launch (October 2026)</li>
+            <li>Your Signal (SIG) will be available at mainnet launch (April 11, 2026)</li>
             <li>20% released at TGE, 80% vested over 12 months</li>
             <li>You'll receive updates and early access announcements</li>
             <li>Join our community to stay connected</li>
@@ -319,7 +319,7 @@ export async function sendBridgeCompletionEmail(to: string, amount: string, from
           <p style="color: #888; margin: 0; font-size: 12px;">Transaction Hash</p>
           <p style="color: #00FFFF; margin: 5px 0 0 0; font-size: 12px; word-break: break-all; font-family: monospace;">${txHash}</p>
         </div>
-        <p style="color: #888; font-size: 12px; text-align: center;">Your tokens have been successfully bridged and are now available on ${toChain}.</p>
+        <p style="color: #888; font-size: 12px; text-align: center;">Your Signal has been successfully bridged and is now available on ${toChain}.</p>
         <p style="color: #888; margin-top: 20px; text-align: center;">— The DarkWave Team</p>
       </div>
     `,
