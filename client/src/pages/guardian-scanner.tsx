@@ -43,8 +43,11 @@ import {
   Bot,
   Activity,
   Globe,
-  BookOpen
+  BookOpen,
+  Radio,
+  Wifi
 } from "lucide-react";
+import { useGuardianWS } from "@/hooks/use-guardian-ws";
 
 const CHAINS = [
   { id: "solana", name: "Solana", icon: "◎", color: "from-purple-500 to-green-400" },
@@ -434,6 +437,24 @@ export default function GuardianScanner() {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const [priceFlash, setPriceFlash] = useState<Record<string, 'up' | 'down' | null>>({});
+  
+  const { connected, lastUpdate } = useGuardianWS({ 
+    chains: selectedChain === 'all' ? ['all'] : [selectedChain],
+    enabled: true 
+  });
+
+  useEffect(() => {
+    if (lastUpdate) {
+      const tokenId = lastUpdate.tokenId;
+      const direction = lastUpdate.priceChange24h >= 0 ? 'up' : 'down';
+      setPriceFlash(prev => ({ ...prev, [tokenId]: direction }));
+      
+      setTimeout(() => {
+        setPriceFlash(prev => ({ ...prev, [tokenId]: null }));
+      }, 1000);
+    }
+  }, [lastUpdate]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -512,11 +533,20 @@ export default function GuardianScanner() {
         >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Guardian Scanner
-              </h1>
+              <div className="flex items-center gap-3">
+                <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  Guardian Scanner
+                </h1>
+                <Badge 
+                  className={`${connected ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-white/10 text-white/40 border-white/10'} border text-[10px] flex items-center gap-1`}
+                  data-testid="live-status"
+                >
+                  <span className={`w-2 h-2 rounded-full ${connected ? 'bg-emerald-400 animate-pulse' : 'bg-white/30'}`} />
+                  {connected ? 'LIVE' : 'OFFLINE'}
+                </Badge>
+              </div>
               <p className="text-white/50 text-sm mt-1">
-                AI-powered token analysis with trust scores
+                AI-powered token analysis with real-time price updates
               </p>
             </div>
             

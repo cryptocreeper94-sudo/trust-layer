@@ -10,6 +10,7 @@ import { startScheduler } from "./marketing-scheduler";
 import { startShellsAirdropScheduler } from "./shells-airdrop-scheduler";
 import { seedDocuments, seedCityZones } from "./storage";
 import { setupPresence } from "./chat-presence";
+import { setupGuardianScannerWS } from "./guardian-scanner-ws";
 import { runMigrations } from "stripe-replit-sync";
 import { getStripeSync } from "./stripeClient";
 import { predictionTrackingService } from "./services/pulse/predictionTrackingService";
@@ -291,6 +292,9 @@ async function initializeServices() {
 
     // Setup ChronoChat WebSocket presence
     setupPresence(httpServer);
+    
+    // Setup Guardian Scanner WebSocket for live price updates
+    setupGuardianScannerWS(httpServer);
     
     // Seed core documents if empty
     await seedDocuments();
