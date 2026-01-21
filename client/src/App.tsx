@@ -218,6 +218,8 @@ const Blog = lazy(() => import("@/pages/blog"));
 const BlogPost = lazy(() => import("@/pages/blog-post"));
 const BlogAdmin = lazy(() => import("@/pages/blog-admin"));
 const TrustLayer = lazy(() => import("@/pages/trust-layer"));
+const GuardianScanner = lazy(() => import("@/pages/guardian-scanner"));
+const GuardianScannerDetail = lazy(() => import("@/pages/guardian-scanner-detail"));
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -382,6 +384,8 @@ function DWSCRouter() {
         <Route path="/pulse" component={Pulse} />
         <Route path="/ml-dashboard" component={MLDashboard} />
         <Route path="/strike-agent" component={StrikeAgent} />
+        <Route path="/guardian-scanner" component={GuardianScanner} />
+        <Route path="/guardian-scanner/:chain/:symbol" component={GuardianScannerDetail} />
         <Route path="/coin/:id" component={CoinAnalysis} />
         <Route path="/nft" component={NftMarketplace} />
         <Route path="/portfolio" component={Portfolio} />
