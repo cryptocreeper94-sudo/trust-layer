@@ -14454,6 +14454,52 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
   
+  app.get("/api/guardian-scanner/safety/:chain/:address", guardianScannerRateLimit, async (req, res) => {
+    try {
+      const { chain, address } = req.params;
+      
+      if (!chain || !address) {
+        return res.status(400).json({ error: "Chain and address are required" });
+      }
+      
+      const safety = await guardianScannerService.runSafetyCheckForToken(chain, address);
+      
+      if (!safety) {
+        return res.status(404).json({ error: "Safety check not available for this chain" });
+      }
+      
+      res.json({ safety, chain, address });
+    } catch (error) {
+      console.error("Guardian scanner safety check error:", error);
+      res.status(500).json({ error: "Failed to run safety check" });
+    }
+  });
+  
+  app.get("/api/guardian-scanner/token-detail/:address", guardianScannerRateLimit, async (req, res) => {
+    try {
+      const { address } = req.params;
+      const { chain, safety } = req.query;
+      const includeSafety = safety === 'true';
+      
+      let token;
+      
+      if (chain && typeof chain === 'string') {
+        token = await guardianScannerService.getPairByAddress(address, chain, includeSafety);
+      } else {
+        token = await guardianScannerService.getTokenByAddress(address, includeSafety);
+      }
+      
+      if (!token) {
+        return res.status(404).json({ error: "Token not found" });
+      }
+      
+      res.json({ token });
+    } catch (error) {
+      console.error("Guardian scanner token detail error:", error);
+      res.status(500).json({ error: "Failed to fetch token details" });
+    }
+  });
+  
   app.get("/api/guardian-scanner/alerts", guardianAlertRateLimit, async (req, res) => {
     try {
       const userId = req.headers["x-user-id"] as string || "anonymous";

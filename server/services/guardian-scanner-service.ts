@@ -1,5 +1,22 @@
 import axios from 'axios';
 import { tokenDataCache, CACHE_TTL } from './guardian-scanner-cache';
+import { safetyEngineService, TokenSafetyReport } from './pulse/safetyEngineService';
+import { evmSafetyEngine, EvmTokenSafetyReport, EvmChainId } from './pulse/evmSafetyEngine';
+
+const EVM_CHAINS: EvmChainId[] = ['ethereum', 'bsc', 'polygon', 'arbitrum', 'base', 'avalanche', 'fantom', 'optimism', 'cronos'];
+
+interface SafetyData {
+  honeypotRisk: boolean;
+  mintAuthority: boolean;
+  freezeAuthority: boolean;
+  liquidityLocked: boolean;
+  holderCount: number;
+  whaleConcentration: number;
+  safetyScore: number;
+  safetyGrade: string;
+  risks: string[];
+  warnings: string[];
+}
 
 const DEX_SCREENER_API = 'https://api.dexscreener.com/latest/dex';
 
@@ -90,10 +107,59 @@ export interface GuardianToken {
     shortTerm: { direction: 'up' | 'down'; percent: number };
     longTerm: { direction: 'up' | 'down'; percent: number };
   };
+  safety?: SafetyData;
   imageUrl?: string;
   websites?: string[];
   twitter?: string;
   telegram?: string;
+}
+
+async function runSafetyCheck(chain: string, tokenAddress: string): Promise<SafetyData | null> {
+  const cacheKey = `safety:${chain}:${tokenAddress}`;
+  const cached = tokenDataCache.get<SafetyData>(cacheKey);
+  if (cached) return cached;
+  
+  try {
+    let safetyData: SafetyData;
+    
+    if (chain === 'solana') {
+      const report = await safetyEngineService.runFullSafetyCheck(tokenAddress);
+      safetyData = {
+        honeypotRisk: report.honeypotResult?.isHoneypot || false,
+        mintAuthority: report.hasMintAuthority,
+        freezeAuthority: report.hasFreezeAuthority,
+        liquidityLocked: report.liquidityLocked || report.liquidityBurned,
+        holderCount: report.holderCount || 0,
+        whaleConcentration: report.top10HoldersPercent || 0,
+        safetyScore: report.safetyScore,
+        safetyGrade: report.safetyGrade,
+        risks: report.risks || [],
+        warnings: report.warnings || []
+      };
+    } else if (EVM_CHAINS.includes(chain as EvmChainId)) {
+      const report = await evmSafetyEngine.runFullSafetyCheck(chain as EvmChainId, tokenAddress);
+      safetyData = {
+        honeypotRisk: report.honeypotResult?.isHoneypot || false,
+        mintAuthority: report.ownerCanMint,
+        freezeAuthority: report.ownerCanPause || report.ownerCanBlacklist,
+        liquidityLocked: report.liquidityLocked || report.liquidityBurned,
+        holderCount: report.holderCount || 0,
+        whaleConcentration: report.top10HoldersPercent || 0,
+        safetyScore: report.safetyScore,
+        safetyGrade: report.safetyGrade,
+        risks: report.risks || [],
+        warnings: report.warnings || []
+      };
+    } else {
+      return null;
+    }
+    
+    tokenDataCache.set(cacheKey, safetyData, 5 * 60 * 1000);
+    return safetyData;
+  } catch (error) {
+    console.warn(`[GuardianScanner] Safety check failed for ${chain}:${tokenAddress}:`, error);
+    return null;
+  }
 }
 
 function calculateGuardianScore(pair: DexScreenerPair): number {
@@ -323,10 +389,10 @@ class GuardianScannerService {
     }
   }
   
-  async getTokenByAddress(address: string): Promise<GuardianToken | null> {
+  async getTokenByAddress(address: string, includeSafety = false): Promise<GuardianToken | null> {
     if (!address) return null;
     
-    const cacheKey = `token:${address}`;
+    const cacheKey = `token:${address}:${includeSafety}`;
     const cached = tokenDataCache.get<GuardianToken>(cacheKey);
     if (cached) return cached;
     
@@ -342,6 +408,14 @@ class GuardianScannerService {
       const bestPair = pairs.sort((a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0))[0];
       const token = transformPairToToken(bestPair);
       
+      if (includeSafety) {
+        const safety = await runSafetyCheck(token.chain, token.contractAddress);
+        if (safety) {
+          token.safety = safety;
+          token.guardianScore = Math.round((token.guardianScore + safety.safetyScore) / 2);
+        }
+      }
+      
       tokenDataCache.set(cacheKey, token, CACHE_TTL.TOKEN_DETAIL);
       return token;
     } catch (error) {
@@ -350,10 +424,10 @@ class GuardianScannerService {
     }
   }
   
-  async getPairByAddress(pairAddress: string, chain: string): Promise<GuardianToken | null> {
+  async getPairByAddress(pairAddress: string, chain: string, includeSafety = false): Promise<GuardianToken | null> {
     if (!pairAddress || !chain) return null;
     
-    const cacheKey = `pair:${chain}:${pairAddress}`;
+    const cacheKey = `pair:${chain}:${pairAddress}:${includeSafety}`;
     const cached = tokenDataCache.get<GuardianToken>(cacheKey);
     if (cached) return cached;
     
@@ -367,12 +441,25 @@ class GuardianScannerService {
       if (!pair) return null;
       
       const token = transformPairToToken(pair);
+      
+      if (includeSafety) {
+        const safety = await runSafetyCheck(token.chain, token.contractAddress);
+        if (safety) {
+          token.safety = safety;
+          token.guardianScore = Math.round((token.guardianScore + safety.safetyScore) / 2);
+        }
+      }
+      
       tokenDataCache.set(cacheKey, token, CACHE_TTL.TOKEN_DETAIL);
       return token;
     } catch (error) {
       console.error('[GuardianScanner] getPairByAddress error:', error);
       return null;
     }
+  }
+  
+  async runSafetyCheckForToken(chain: string, tokenAddress: string): Promise<SafetyData | null> {
+    return runSafetyCheck(chain, tokenAddress);
   }
 }
 
