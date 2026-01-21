@@ -14,7 +14,67 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 ## System Architecture
 
 ### UI/UX Decisions - MANDATORY PREMIUM UI PROTOCOL
-Every new page MUST be built with the Ultra-Premium Bento Grid LED Protocol, incorporating: Floating Ambient Orbs, Glassmorphism, Holographic Glow, Framer Motion animations, Gradient Headlines, Bento Grid Layouts, Premium Badges, and Mobile-First design. The color palette uses Cyan/Purple/Pink accents with dark backgrounds. `GlassCard` component with `glow` prop enabled is required.
+
+**⚠️ PRE-BUILD CHECKLIST - VERIFY BEFORE WRITING ANY PAGE CODE ⚠️**
+
+Every new page MUST pass ALL items before development begins:
+
+#### 1. LAYOUT - True Bento Grid (3-Column)
+- [ ] Desktop: 3-column grid with `grid-cols-1 md:grid-cols-2 lg:grid-cols-3`
+- [ ] Cards span appropriately: `col-span-1`, `col-span-2`, or `lg:col-span-3` for full-width
+- [ ] Gap spacing: `gap-4` minimum, `gap-6` preferred
+- [ ] Container: `container mx-auto px-4 sm:px-6 lg:px-8`
+
+#### 2. GLASSMORPHISM - Every Card
+- [ ] Use `<GlassCard glow>` component - NEVER plain divs for content sections
+- [ ] Background: `bg-slate-900/50` or `bg-white/5` with `backdrop-blur-xl`
+- [ ] Border: `border border-white/10` minimum
+- [ ] Padding: `p-4 sm:p-6` - NOTHING touching edges
+
+#### 3. GLOW & 3D EFFECTS
+- [ ] Cards have `glow` prop enabled on GlassCard
+- [ ] Hover states: `hover:border-cyan-500/30` transitions
+- [ ] Shadow depth: `shadow-2xl` or `shadow-[0_0_30px_rgba(0,255,255,0.1)]`
+- [ ] Framer Motion: `whileHover={{ scale: 1.02, y: -2 }}` on interactive cards
+
+#### 4. SPACING & PADDING (CRITICAL)
+- [ ] Page padding: `pt-20 pb-12` minimum (account for nav)
+- [ ] Section margins: `mb-8` between major sections
+- [ ] Card padding: `p-4` minimum, `p-6` preferred
+- [ ] Text never touches card edges - always has internal padding
+- [ ] Mobile: Extra care with `px-4` on all containers
+
+#### 5. MOBILE-FIRST RESPONSIVE
+- [ ] Base styles are mobile, then scale up (`md:`, `lg:`, `xl:`)
+- [ ] Touch targets: 44px minimum (buttons, links)
+- [ ] Font sizes: `text-sm` base, scale with `md:text-base lg:text-lg`
+- [ ] Horizontal scroll content wrapped in carousels, NOT overflow-x-auto
+
+#### 6. CAROUSELS & ACCORDIONS
+- [ ] Long horizontal content: Use Swiper or custom carousel, NOT scroll
+- [ ] FAQ/expandable: Use Accordion component
+- [ ] Navigation items: Collapsible drawer on mobile
+
+#### 7. ANIMATIONS & POLISH
+- [ ] Page entrance: `motion.div` with `initial={{ opacity: 0, y: 20 }}`
+- [ ] Staggered children: `transition={{ delay: 0.1 * index }}`
+- [ ] Premium badges with glow: `bg-cyan-500/20 text-cyan-400 border-cyan-500/30`
+- [ ] Gradient text for headlines: `bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent`
+
+#### 8. COLOR PALETTE (DARK THEME ONLY)
+- Background: `bg-slate-950`, `bg-slate-900`
+- Primary: Cyan `cyan-400`, `cyan-500`
+- Secondary: Purple `purple-400`, `purple-500`
+- Accent: Pink `pink-400`, `pink-500`
+- Text: `text-white`, `text-white/70`, `text-white/50`
+- Success: `emerald-400` | Warning: `amber-400` | Error: `red-400`
+
+**Component Requirements:**
+- `GlassCard` with `glow` prop = REQUIRED
+- `Badge` for status/labels = REQUIRED
+- `Button` from UI library = REQUIRED (no custom buttons)
+- `motion.div` wrapper = REQUIRED for sections
+- `data-testid` on all interactive elements = REQUIRED
 
 ### Technical Implementations
 - **Blockchain**: BFT-PoA consensus, stake-weighted validator selection, PostgreSQL state, SHA-256/Merkle trees, 400ms block time, 200K+ TPS. Includes validator staking, slashing, epoch-based finality, and node sync APIs. Native asset: Signal (SIG) - NOT a "cryptocurrency" but a transmission of verified intent. Avoid "currency" framing entirely - Signal is acknowledgement, access, and proof of participation in the trust network. The value is the infrastructure it unlocks, not speculation. "Crypto-currency" language alienates spiritual/traditional people and attracts speculators - neither is the target. Signal = Trust Network Access Token.
