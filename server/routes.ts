@@ -1131,23 +1131,16 @@ export async function registerRoutes(
       // Store password hash
       await db.update(users).set({ passwordHash }).where(eq(users.id, userId));
 
-      // Generate and send email verification code
-      const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+      // Mark email as verified immediately - no email verification required
+      await db.update(users).set({ emailVerified: true }).where(eq(users.id, userId));
       
-      await db.delete(emailVerificationCodes).where(eq(emailVerificationCodes.userId, userId));
-      await db.insert(emailVerificationCodes).values({
-        userId,
-        email: normalizedEmail,
-        code: verificationCode,
-        expiresAt,
-      });
-      
+      // Award welcome bonus shells
       try {
-        await sendEmailVerificationCode(normalizedEmail, verificationCode, displayName || username);
-        console.log(`[Email Verification] Code sent to ${normalizedEmail}`);
-      } catch (emailError) {
-        console.error("[Email Verification] Failed to send code:", emailError);
+        const { awardShells } = await import("./shells-service");
+        await awardShells(userId, 1000, "signup_bonus", "Welcome bonus!");
+        console.log(`[Welcome Bonus] Awarded 1000 Shells to user ${userId}`);
+      } catch (shellError) {
+        console.error("[Welcome Bonus] Failed:", shellError);
       }
 
       // Set session
@@ -1158,7 +1151,7 @@ export async function registerRoutes(
         req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
       }
 
-      res.json({ success: true, userId, signupPosition, emailVerificationRequired: true });
+      res.json({ success: true, userId, signupPosition, emailVerificationRequired: false });
     } catch (error) {
       console.error("Registration error:", error);
       res.status(500).json({ error: "Registration failed" });
