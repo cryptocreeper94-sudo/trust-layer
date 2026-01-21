@@ -285,7 +285,8 @@ class ZealyService {
   private async findInternalUser(accounts: ZealyWebhookPayload["accounts"]): Promise<string | null> {
     if (accounts.email) {
       const user = await storage.getUserByEmail(accounts.email);
-      if (user) {
+      // Only return user if their email is verified - prevents bot/fake accounts
+      if (user && (user as any).emailVerified) {
         return user.id;
       }
     }

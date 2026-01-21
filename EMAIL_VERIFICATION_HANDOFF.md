@@ -17,6 +17,8 @@ Now when someone signs up:
 
 This ensures every account is tied to a real email address. No bots can slip through and steal Shell rewards.
 
+**Zealy crew members** must also verify their email before receiving any quest rewards. The Zealy webhook checks for email verification before awarding shells.
+
 ---
 
 ## Coming Soon: Phone Verification
