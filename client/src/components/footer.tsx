@@ -43,11 +43,19 @@ const socialLinks = [
 
 export function Footer() {
   const [showPinModal, setShowPinModal] = useState(false);
+  const [modalType, setModalType] = useState<"developer" | "admin">("developer");
   const [pin, setPin] = useState("");
   const [error, setError] = useState(false);
   const [, setLocation] = useLocation();
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const openModal = (type: "developer" | "admin") => {
+    setModalType(type);
+    setShowPinModal(true);
+    setPin("");
+    setError(false);
+  };
 
   const handlePinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,17 +63,20 @@ export function Footer() {
     setError(false);
     
     try {
-      const response = await fetch("/api/team/verify-pin", {
+      const response = await fetch("/api/portal/verify-pin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pin }),
+        body: JSON.stringify({ pin, portalType: modalType }),
       });
       
-      if (response.ok) {
+      const data = await response.json();
+      
+      if (response.ok && data.success) {
         setShowPinModal(false);
         setPin("");
         setError(false);
-        setLocation("/team");
+        sessionStorage.setItem(`${modalType}Auth`, "true");
+        setLocation(data.redirect);
       } else {
         setError(true);
         setPin("");
@@ -169,19 +180,19 @@ export function Footer() {
               Chronicles
             </Link>
             <button 
-              onClick={() => setShowPinModal(true)}
+              onClick={() => openModal("admin")}
               className="text-white/30 hover:text-white/60 transition-colors"
-              data-testid="link-team"
-            >
-              Team
-            </button>
-            <Link 
-              href="/admin"
-              className="text-white/20 hover:text-amber-400 transition-colors"
               data-testid="link-admin"
             >
               Admin
-            </Link>
+            </button>
+            <button 
+              onClick={() => openModal("developer")}
+              className="text-white/30 hover:text-white/60 transition-colors"
+              data-testid="link-developer"
+            >
+              Developer
+            </button>
             <span className="text-white/20">|</span>
             <Link 
               href="/privacy"
@@ -204,7 +215,7 @@ export function Footer() {
       {showPinModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => setShowPinModal(false)}>
           <div className="bg-[rgba(12,18,36,0.95)] border border-white/10 rounded-xl p-6 w-full max-w-xs" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-lg font-bold mb-4 text-center">Team Access</h3>
+            <h3 className="text-lg font-bold mb-4 text-center">{modalType === "developer" ? "Developer Access" : "Admin Access"}</h3>
             <form onSubmit={handlePinSubmit}>
               <input
                 type="password"

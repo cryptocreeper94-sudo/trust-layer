@@ -2498,7 +2498,64 @@ export async function registerRoutes(
     }
   });
 
-  // Team page PIN verification (server-side, secure)
+  // Portal PIN verification - supports both Admin and Developer access
+  const portalPinAttempts = new Map<string, { count: number; lastAttempt: number }>();
+  app.post("/api/portal/verify-pin", rateLimit("portal-pin", 5, 60000), async (req, res) => {
+    try {
+      const { pin, portalType } = req.body;
+      const clientIp = req.ip || req.connection.remoteAddress || "unknown";
+      
+      // Check for lockout
+      const attempts = portalPinAttempts.get(clientIp);
+      if (attempts && attempts.count >= 5) {
+        const lockoutDuration = 15 * 60 * 1000;
+        if (Date.now() - attempts.lastAttempt < lockoutDuration) {
+          return res.status(429).json({ error: "Too many attempts. Try again later." });
+        }
+        portalPinAttempts.delete(clientIp);
+      }
+      
+      if (!pin || typeof pin !== "string" || pin.length < 4) {
+        return res.status(400).json({ error: "Invalid PIN format" });
+      }
+      
+      // Developer PIN - owner full access (0424)
+      const developerPin = process.env.DEVELOPER_PIN || "0424";
+      // Admin PIN - limited access (keep existing)
+      const adminPin = process.env.ADMIN_PIN || process.env.TEAM_ACCESS_PIN || "1234";
+      
+      let isValid = false;
+      let redirect = "";
+      
+      if (portalType === "developer") {
+        const pinBuffer = Buffer.from(pin);
+        const devPinBuffer = Buffer.from(developerPin);
+        isValid = pinBuffer.length === devPinBuffer.length && 
+                  crypto.timingSafeEqual(pinBuffer, devPinBuffer);
+        redirect = "/owner-admin";
+      } else if (portalType === "admin") {
+        const pinBuffer = Buffer.from(pin);
+        const adminPinBuffer = Buffer.from(adminPin);
+        isValid = pinBuffer.length === adminPinBuffer.length && 
+                  crypto.timingSafeEqual(pinBuffer, adminPinBuffer);
+        redirect = "/admin";
+      }
+      
+      if (isValid) {
+        portalPinAttempts.delete(clientIp);
+        res.json({ success: true, redirect });
+      } else {
+        const current = portalPinAttempts.get(clientIp) || { count: 0, lastAttempt: 0 };
+        portalPinAttempts.set(clientIp, { count: current.count + 1, lastAttempt: Date.now() });
+        res.status(401).json({ error: "Invalid PIN" });
+      }
+    } catch (error) {
+      console.error("Portal PIN verification error:", error);
+      res.status(500).json({ error: "Verification failed" });
+    }
+  });
+
+  // Team page PIN verification (server-side, secure) - legacy endpoint
   const teamPinAttempts = new Map<string, { count: number; lastAttempt: number }>();
   app.post("/api/team/verify-pin", rateLimit("team-pin", 5, 60000), async (req, res) => {
     try {
