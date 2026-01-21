@@ -63,12 +63,14 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **Navigation**: Wouter patterns map to React Navigation.
 - **Assets**: Use import paths.
 
-### Tokenomics (LOCKED)
+### Tokenomics (LOCKED - January 21, 2026)
 - **SIG at TGE**: $0.01 (10x from presale $0.001)
 - **Total Supply**: 1,000,000,000 SIG
 - **Presale Reward Pool**: 10,000,000 SIG (1% of supply)
 - **Shell Value**: 1 Shell = $0.001
-- **Allocation**: Treasury Reserve (45%), Staking Rewards (15%), Development & Team (15%), Ecosystem Growth (10%), Community Rewards (10%), Signal Foundation (5%).
+- **Allocation**: Treasury Reserve (50%), Staking Rewards (15%), Development & Team (15%), Ecosystem Growth (10%), Community Rewards (10%).
+- **Signal Foundation**: 0% - Will be a separate initiative with its own funding/asset.
+- **Chronicles Game Economy**: 0% - Game will have its own separate currency system.
 
 ## External Dependencies
 - **Database**: PostgreSQL

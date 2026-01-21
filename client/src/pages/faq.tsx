@@ -64,7 +64,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       },
       {
         question: "What is the token allocation?",
-        answer: "45% Treasury Reserve (long-term stability), 15% Staking Rewards, 15% Development & Team (4-year vesting), 10% Ecosystem Growth, 10% Community Rewards (presale + airdrops), and 5% Signal Foundation (charity)."
+        answer: "50% Treasury Reserve (long-term stability), 15% Staking Rewards, 15% Development & Team (4-year vesting), 10% Ecosystem Growth, and 10% Community Rewards (presale + airdrops)."
       },
       {
         question: "Is there a vesting schedule for team tokens?",
