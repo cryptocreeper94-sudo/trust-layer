@@ -143,74 +143,6 @@ interface TokenDetail {
   isWatchlisted: boolean;
 }
 
-function generateMockTokenDetail(chain: string, symbol: string): TokenDetail {
-  const score = Math.floor(Math.random() * 40) + 60;
-  const badges: Array<"new" | "verified" | "trusted" | "certified" | "flagged"> = ["verified", "trusted", "certified"];
-  
-  return {
-    id: `${chain}-${symbol}`,
-    name: symbol === "bonk" ? "Bonk" : symbol === "wif" ? "dogwifhat" : symbol.toUpperCase(),
-    symbol: symbol.toUpperCase(),
-    logo: null,
-    banner: null,
-    description: "A community-driven meme token with strong holder base and active development. Built for the culture.",
-    price: Math.random() * 0.001,
-    priceChange5m: (Math.random() - 0.5) * 10,
-    priceChange1h: (Math.random() - 0.5) * 20,
-    priceChange6h: (Math.random() - 0.5) * 30,
-    priceChange24h: (Math.random() - 0.5) * 50,
-    priceChange7d: (Math.random() - 0.5) * 100,
-    marketCap: Math.random() * 500000000,
-    fdv: Math.random() * 1000000000,
-    volume24h: Math.random() * 20000000,
-    liquidity: Math.random() * 5000000,
-    holders: Math.floor(Math.random() * 50000) + 10000,
-    totalSupply: 1000000000000,
-    circulatingSupply: 900000000000,
-    contractAddress: "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgHsU",
-    chain,
-    createdAt: "2024-01-15",
-    txns24h: Math.floor(Math.random() * 10000) + 1000,
-    buys24h: Math.floor(Math.random() * 6000) + 500,
-    sells24h: Math.floor(Math.random() * 4000) + 500,
-    guardianScore: score,
-    whaleConcentration: Math.random() * 30 + 10,
-    top10Holders: [
-      { address: "8xK...3hF", percent: 8.5, label: "Raydium LP" },
-      { address: "4jL...9mN", percent: 5.2 },
-      { address: "2pQ...7rT", percent: 4.1 },
-      { address: "9sW...1vX", percent: 3.8, label: "Dev Wallet" },
-      { address: "5yZ...6aB", percent: 2.9 },
-    ],
-    liquidityLocked: true,
-    lockDuration: "180 days",
-    lockPlatform: "Raydium",
-    honeypotRisk: false,
-    mintAuthority: false,
-    freezeAuthority: false,
-    botActivity: Math.random() * 15,
-    bundleBuy: Math.random() * 10,
-    devWalletHolding: Math.random() * 5,
-    devSoldPercent: Math.random() * 20,
-    creatorVerified: true,
-    creatorBadge: badges[Math.floor(Math.random() * badges.length)],
-    creatorName: "@cryptodev",
-    creatorHistory: { launches: 3, rugs: 0 },
-    socials: {
-      website: "https://example.com",
-      twitter: "https://twitter.com/example",
-      telegram: "https://t.me/example",
-    },
-    mlPrediction: {
-      signal: Math.random() > 0.5 ? "bullish" : Math.random() > 0.5 ? "bearish" : "neutral",
-      confidence: Math.floor(Math.random() * 30) + 60,
-      shortTerm: { direction: Math.random() > 0.5 ? "up" : "down", percent: Math.random() * 20 },
-      longTerm: { direction: Math.random() > 0.5 ? "up" : "down", percent: Math.random() * 50 },
-      accuracy: Math.floor(Math.random() * 20) + 70,
-    },
-    isWatchlisted: Math.random() > 0.5,
-  };
-}
 
 function formatPrice(price: number): string {
   if (price < 0.00001) return price.toExponential(2);
@@ -1117,14 +1049,85 @@ export default function GuardianScannerDetail() {
   const [showRugReport, setShowRugReport] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      const data = generateMockTokenDetail(chain, symbol);
-      setToken(data);
-      setIsWatchlisted(data.isWatchlisted);
-      setIsLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
+    async function fetchTokenData() {
+      setIsLoading(true);
+      try {
+        const response = await fetch(`/api/guardian-scanner/token-detail/${symbol}?chain=${chain}&safety=true`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.token) {
+            const t = data.token;
+            setToken({
+              id: t.id,
+              name: t.name,
+              symbol: t.symbol,
+              logo: t.imageUrl || null,
+              banner: null,
+              description: "Token data powered by DexScreener with Guardian safety analysis.",
+              price: t.price,
+              priceChange5m: t.priceChange5m,
+              priceChange1h: t.priceChange1h,
+              priceChange6h: t.priceChange6h,
+              priceChange24h: t.priceChange24h,
+              priceChange7d: 0,
+              marketCap: t.marketCap,
+              fdv: t.fdv,
+              volume24h: t.volume24h,
+              liquidity: t.liquidity,
+              holders: t.safety?.holderCount || 0,
+              totalSupply: 0,
+              circulatingSupply: 0,
+              contractAddress: t.contractAddress,
+              chain: t.chain,
+              createdAt: new Date(t.createdAt).toLocaleDateString(),
+              txns24h: t.txns24h?.buys + t.txns24h?.sells || 0,
+              buys24h: t.txns24h?.buys || 0,
+              sells24h: t.txns24h?.sells || 0,
+              guardianScore: t.guardianScore,
+              whaleConcentration: t.safety?.whaleConcentration || 0,
+              top10Holders: [],
+              liquidityLocked: t.safety?.liquidityLocked || false,
+              lockDuration: null,
+              lockPlatform: null,
+              honeypotRisk: t.safety?.honeypotRisk || false,
+              mintAuthority: t.safety?.mintAuthority || false,
+              freezeAuthority: t.safety?.freezeAuthority || false,
+              botActivity: 0,
+              bundleBuy: 0,
+              devWalletHolding: 0,
+              devSoldPercent: 0,
+              creatorVerified: false,
+              creatorBadge: "new",
+              creatorName: null,
+              creatorHistory: { launches: 0, rugs: 0 },
+              socials: {
+                website: t.websites?.[0],
+                twitter: t.twitter,
+                telegram: t.telegram,
+              },
+              mlPrediction: {
+                signal: t.mlPrediction?.direction === 'up' ? 'bullish' : t.mlPrediction?.direction === 'down' ? 'bearish' : 'neutral',
+                confidence: t.mlPrediction?.confidence || 50,
+                shortTerm: t.mlPrediction?.shortTerm || { direction: 'neutral', percent: 0 },
+                longTerm: t.mlPrediction?.longTerm || { direction: 'neutral', percent: 0 },
+                accuracy: t.mlPrediction?.accuracy || 50,
+              },
+              isWatchlisted: false,
+            });
+          } else {
+            setToken(null);
+          }
+        } else {
+          setToken(null);
+        }
+      } catch (error) {
+        console.error('Error fetching token detail:', error);
+        setToken(null);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchTokenData();
   }, [chain, symbol]);
 
   const copyAddress = () => {
@@ -1135,12 +1138,34 @@ export default function GuardianScannerDetail() {
     }
   };
 
-  if (isLoading || !token) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-950 pt-20 pb-12 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <RefreshCw className="w-10 h-10 text-cyan-400 animate-spin" />
           <p className="text-white/50">Loading token data...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  if (!token) {
+    return (
+      <div className="min-h-screen bg-slate-950 pt-20 pb-12 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-6">
+          <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center">
+            <AlertTriangle className="w-8 h-8 text-red-400" />
+          </div>
+          <div className="text-center">
+            <h2 className="text-xl font-bold text-white mb-2">Token Not Found</h2>
+            <p className="text-white/50 mb-4">Unable to fetch token data for {symbol.toUpperCase()} on {chain}</p>
+          </div>
+          <Link href="/guardian-scanner">
+            <Button className="bg-cyan-500 hover:bg-cyan-600">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Scanner
+            </Button>
+          </Link>
         </div>
       </div>
     );
