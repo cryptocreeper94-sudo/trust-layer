@@ -370,7 +370,7 @@ function TeamDashboard() {
               <div className="text-xs text-gray-500 space-y-1">
                 <p>• Current Tier: {presaleStats?.currentTier || "Tier 1"}</p>
                 <p>• Max per wallet: 2% (20M SIG)</p>
-                <p>• Launch price: $0.008</p>
+                <p>• Launch price: $0.01</p>
               </div>
             </div>
           </GlassCard>

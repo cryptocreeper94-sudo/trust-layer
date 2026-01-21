@@ -542,7 +542,7 @@ export default function MyTokensPage() {
                         </div>
                         <div>
                           <h4 className="text-sm font-semibold text-white">Get Signal Tokens</h4>
-                          <p className="text-xs text-white/50">Purchase during presale at $0.001 (launches at $0.10)</p>
+                          <p className="text-xs text-white/50">Purchase during presale at $0.001 (launches at $0.01)</p>
                           <Link href="/presale">
                             <Button size="sm" variant="outline" className="mt-2 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10">
                               Go to Presale <ChevronRight className="w-3 h-3 ml-1" />
