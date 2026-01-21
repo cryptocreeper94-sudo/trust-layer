@@ -112,7 +112,10 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
       if (!response.ok) {
         throw new Error(data.error || "Verification failed");
       }
-      toast({ title: "Email verified!", description: "Welcome to DarkWave!" });
+      toast({ 
+        title: "Congrats! Your first signup bonus is YOU!", 
+        description: `You just earned ${data.shellsAwarded || 1000} Shells! Check your wallet to see them.` 
+      });
       onSuccess?.();
       handleClose();
       window.location.reload();

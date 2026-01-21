@@ -1208,8 +1208,24 @@ export async function registerRoutes(
       await db.update(users).set({ emailVerified: true }).where(eq(users.id, userId));
       await db.delete(emailVerificationCodes).where(eq(emailVerificationCodes.id, verification.id));
 
+      // Award 1000 shells welcome bonus for verified email
+      const user = await storage.getUser(userId);
+      if (user) {
+        await shellsService.addShells(
+          userId,
+          user.username || user.email || 'user',
+          1000,
+          'bonus',
+          'Welcome bonus for email verification',
+          `email_verify_${userId}`,
+          'email_verification',
+          true // bypass caps for bonus
+        );
+        console.log(`[Email Verification] User ${userId} received 1000 shells welcome bonus`);
+      }
+
       console.log(`[Email Verification] User ${userId} verified email`);
-      res.json({ success: true, message: "Email verified successfully" });
+      res.json({ success: true, message: "Email verified successfully", shellsAwarded: 1000 });
     } catch (error) {
       console.error("Email verification error:", error);
       res.status(500).json({ error: "Verification failed" });
