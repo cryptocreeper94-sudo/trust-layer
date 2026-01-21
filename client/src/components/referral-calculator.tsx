@@ -82,6 +82,51 @@ export function ReferralCalculator() {
           </Link>
         </div>
 
+        <div className="mb-6 p-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/5 rounded-xl border border-yellow-500/20">
+          <p className="text-sm text-muted-foreground mb-4 italic">
+            "A couple posts a day. That's all it takes. Share your link, grow the network, build your bag."
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div className="p-4 bg-gradient-to-br from-yellow-500/20 to-orange-500/10 rounded-xl border border-yellow-500/30">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <Coins className="w-5 h-5 text-yellow-400" />
+                <span className="text-sm font-semibold">Your Shell Balance</span>
+              </div>
+            </div>
+            <div className="text-3xl font-bold font-mono text-yellow-400 mb-2" data-testid="shell-balance">
+              {(stats?.totalEarnings || 0).toLocaleString()} Shells
+            </div>
+            <div className="text-xs text-muted-foreground">
+              = {((stats?.totalEarnings || 0) / 10).toLocaleString()} SIG at TGE
+            </div>
+          </div>
+
+          <div className="p-4 bg-white/5 rounded-xl border border-white/10">
+            <div className="text-sm font-semibold mb-3">What Can You Do With Shells?</div>
+            <div className="space-y-2 text-xs">
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                <span>Convert to <strong className="text-cyan-400">Signal (SIG)</strong> at TGE</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                <span>Exchange for <strong className="text-purple-400">Echoes</strong> in Chronicles</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-green-400" />
+                <span>Unlock <strong className="text-green-400">Premium Features</strong></span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-pink-400" />
+                <span>Redeem for <strong className="text-pink-400">Exclusive NFTs</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="mb-6 p-4 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-xl border border-cyan-500/20">
           <div className="text-xs text-muted-foreground mb-2">Your Referral Link</div>
           {codeLoading ? (
