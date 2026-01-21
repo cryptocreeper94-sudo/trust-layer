@@ -143,6 +143,87 @@ DarkWave Trust Layer is a worldwide fractal pattern trust network connecting all
 
 ---
 
+---
+
+## DARKWAVE ACADEMY - FULL DOCUMENTATION
+
+### VISION
+A comprehensive, affordable crypto education platform that creates informed participants. Not a money grab - a loss leader to bring people into the ecosystem. Goal: People complete the course, understand crypto, and become trusted verified members of the Trust Layer.
+
+### PRICING STRATEGY
+- **Near-free**: ~$20 for full course (loss leader)
+- **Free modules**: Basics available to everyone
+- **Certification**: Included in course price
+- **Value**: Course is the acquisition funnel, not the profit center
+
+### COURSE STRUCTURE
+
+**LEVEL 1: Crypto Fundamentals (Free)**
+- What is blockchain? (simple explanation)
+- What are wallets? (keys, addresses, security)
+- What are tokens vs coins?
+- What is DeFi? (decentralized finance basics)
+- Common scams and how to avoid them
+- Quiz + completion badge
+
+**LEVEL 2: Navigating the Space ($10)**
+- Reading charts (candlesticks, volume, trends)
+- Understanding market cap, liquidity, volume
+- What makes a token valuable vs worthless
+- Meme coins: the reality
+- Launchpads and presales
+- Quiz + completion badge
+
+**LEVEL 3: DeFi Deep Dive ($10)**
+- Staking and yield
+- Liquidity pools
+- Swaps and DEXs
+- Bridges (cross-chain)
+- Risks: impermanent loss, smart contract bugs
+- Quiz + completion badge
+
+**LEVEL 4: Advanced Topics (Included)**
+- Tokenomics analysis
+- Reading smart contracts (basics)
+- Security practices
+- Tax implications
+- Building a portfolio
+- Final exam
+
+**CERTIFICATION**
+- Complete all levels + pass final exam
+- Receive "Trust Layer Certified" badge
+- Badge displays on profile
+- Verified as educated participant
+- Optional: Display certificate on LinkedIn, etc.
+
+### TARGET PERSONAS
+1. **Scared Newcomers** - Never touched crypto, afraid of losing money
+2. **Burned Learners** - Lost money before, want to understand what went wrong
+3. **Experienced Users** - Know crypto but want verification badge for credibility
+
+### INTEGRATION WITH GUARDIAN SCANNER
+- Glossary tooltips link to relevant course modules
+- "Learn more" buttons on analysis pages
+- Certification badge visible on user profiles
+- Certified users may get enhanced features
+
+### CURRENT STATE
+- `/learn` page exists (481 lines) - Documentation/FAQ style content
+- Not yet structured as progressive course with quizzes
+- No certification system implemented yet
+
+### NEEDED FOR FULL ACADEMY
+- [ ] Course module system (progressive unlocking)
+- [ ] Quiz/assessment engine
+- [ ] Certification generation
+- [ ] Payment for premium modules ($20)
+- [ ] Badge display on profiles
+- [ ] Progress tracking
+- [ ] Completion certificates (PDF/image)
+
+---
+
 ## POST-LAUNCH ROADMAP
 
 ### Q2 2026 (April - June)
@@ -150,7 +231,7 @@ DarkWave Trust Layer is a worldwide fractal pattern trust network connecting all
 - [ ] RWA Tokenization backend completion
 - [ ] Hardware wallet support
 - [ ] Chronicles full release
-- [ ] Academy course expansion
+- [ ] **DarkWave Academy full launch**
 
 ### Q3 2026 (July - September)
 - [ ] Social platform expansion
