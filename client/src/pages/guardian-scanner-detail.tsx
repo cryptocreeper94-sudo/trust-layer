@@ -268,6 +268,163 @@ function GlossaryTooltip({ term, children }: { term: string; children: React.Rea
   );
 }
 
+const RUG_TYPES = [
+  { id: "liquidity_pull", label: "Liquidity Pulled", description: "Dev removed liquidity from the pool" },
+  { id: "mint_exploit", label: "Mint Exploit", description: "Dev minted extra tokens and sold" },
+  { id: "honeypot", label: "Honeypot", description: "Buyers could not sell tokens" },
+  { id: "stealth_dump", label: "Stealth Dump", description: "Team dumped tokens slowly" },
+  { id: "contract_switch", label: "Contract Changed", description: "Malicious contract upgrade" },
+  { id: "other", label: "Other Scam", description: "Other type of rug pull" },
+];
+
+function RugReportModal({ 
+  isOpen, 
+  onClose, 
+  tokenName, 
+  tokenAddress 
+}: { 
+  isOpen: boolean; 
+  onClose: () => void; 
+  tokenName: string; 
+  tokenAddress: string;
+}) {
+  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [evidence, setEvidence] = useState("");
+  const [txHash, setTxHash] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  
+  if (!isOpen) return null;
+  
+  const handleSubmit = () => {
+    if (!selectedType) return;
+    console.log("Rug report submitted:", { tokenAddress, rugType: selectedType, evidence, txHash });
+    setSubmitted(true);
+    setTimeout(() => {
+      onClose();
+      setSubmitted(false);
+      setSelectedType(null);
+      setEvidence("");
+      setTxHash("");
+    }, 2000);
+  };
+  
+  if (submitted) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" onClick={onClose}>
+        <motion.div 
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="bg-slate-900 border border-emerald-500/30 rounded-xl p-8 max-w-md mx-4 text-center"
+          onClick={e => e.stopPropagation()}
+        >
+          <div className="w-16 h-16 rounded-full bg-emerald-500/20 flex items-center justify-center mx-auto mb-4">
+            <CheckCircle className="w-8 h-8 text-emerald-400" />
+          </div>
+          <h3 className="text-xl font-bold text-white mb-2">Report Submitted</h3>
+          <p className="text-white/60 text-sm">
+            Thank you for protecting the community. Your report will be reviewed and the creator's permanent record will be updated.
+          </p>
+        </motion.div>
+      </div>
+    );
+  }
+  
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" onClick={onClose}>
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="bg-slate-900 border border-red-500/30 rounded-xl p-6 max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto"
+        onClick={e => e.stopPropagation()}
+        data-testid="rug-report-modal"
+      >
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center">
+            <Skull className="w-6 h-6 text-red-400" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-white">Report Rug Pull</h3>
+            <p className="text-sm text-white/50">{tokenName}</p>
+          </div>
+        </div>
+        
+        <div className="bg-orange-500/10 border border-orange-500/20 rounded-lg p-3 mb-4">
+          <div className="flex items-start gap-2">
+            <AlertTriangle className="w-4 h-4 text-orange-400 shrink-0 mt-0.5" />
+            <p className="text-xs text-orange-400">
+              False reports damage your reputation score. Only report verified scams with evidence. Reports are permanently recorded on-chain.
+            </p>
+          </div>
+        </div>
+        
+        <div className="mb-4">
+          <label className="text-sm font-medium text-white mb-2 block">Type of Rug</label>
+          <div className="grid grid-cols-2 gap-2">
+            {RUG_TYPES.map(type => (
+              <button
+                key={type.id}
+                onClick={() => setSelectedType(type.id)}
+                className={`p-3 rounded-lg border text-left transition-all ${
+                  selectedType === type.id
+                    ? "border-red-500/50 bg-red-500/10"
+                    : "border-white/10 bg-white/5 hover:border-white/20"
+                }`}
+                data-testid={`rug-type-${type.id}`}
+              >
+                <p className="text-sm font-medium text-white">{type.label}</p>
+                <p className="text-[10px] text-white/40">{type.description}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+        
+        <div className="mb-4">
+          <label className="text-sm font-medium text-white mb-2 block">Transaction Hash (Optional)</label>
+          <input
+            type="text"
+            placeholder="0x... or the rug transaction hash"
+            value={txHash}
+            onChange={e => setTxHash(e.target.value)}
+            className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-cyan-500/50"
+            data-testid="rug-tx-hash"
+          />
+        </div>
+        
+        <div className="mb-6">
+          <label className="text-sm font-medium text-white mb-2 block">Evidence & Details</label>
+          <Textarea
+            placeholder="Describe what happened, links to proof, screenshots, etc..."
+            value={evidence}
+            onChange={e => setEvidence(e.target.value)}
+            className="bg-white/5 border-white/10 resize-none min-h-[100px]"
+            data-testid="rug-evidence"
+          />
+        </div>
+        
+        <div className="flex gap-3">
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="flex-1 border-white/10"
+            data-testid="rug-cancel"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            disabled={!selectedType}
+            className="flex-1 bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/30"
+            data-testid="rug-submit"
+          >
+            <Skull className="w-4 h-4 mr-2" />
+            Submit Report
+          </Button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 function RiskIndicator({ label, safe, tooltip }: { label: string; safe: boolean; tooltip: string }) {
   return (
     <div className="flex items-center justify-between py-2 border-b border-white/5 last:border-0">
@@ -762,6 +919,7 @@ export default function GuardianScannerDetail() {
   const [timeRange, setTimeRange] = useState("1d");
   const [copied, setCopied] = useState(false);
   const [isWatchlisted, setIsWatchlisted] = useState(false);
+  const [showRugReport, setShowRugReport] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -797,6 +955,12 @@ export default function GuardianScannerDetail() {
 
   return (
     <div className="min-h-screen bg-slate-950 pt-20 pb-12">
+      <RugReportModal 
+        isOpen={showRugReport} 
+        onClose={() => setShowRugReport(false)}
+        tokenName={token.name}
+        tokenAddress={token.contractAddress}
+      />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -862,6 +1026,14 @@ export default function GuardianScannerDetail() {
                         data-testid="watchlist-toggle"
                       >
                         {isWatchlisted ? <Star className="w-5 h-5 fill-current" /> : <StarOff className="w-5 h-5" />}
+                      </button>
+                      <button
+                        onClick={() => setShowRugReport(true)}
+                        className="p-2 rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
+                        title="Report Rug Pull"
+                        data-testid="report-rug-button"
+                      >
+                        <Skull className="w-5 h-5" />
                       </button>
                       {token.socials.twitter && (
                         <a href={token.socials.twitter} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-white/5 text-white/40 hover:text-white transition-colors" data-testid="social-twitter">
