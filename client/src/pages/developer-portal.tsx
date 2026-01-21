@@ -1007,14 +1007,9 @@ console.log('All successful:', result.allSuccessful);`}
                   <div className="space-y-3">
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="text-2xl font-bold text-amber-400">35%</div>
+                        <div className="text-2xl font-bold text-amber-400">45%</div>
                         <div className="text-xs">Treasury Reserve</div>
-                        <div className="text-xs text-muted-foreground">350M SIG - Sustainability</div>
-                      </div>
-                      <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="text-2xl font-bold text-primary">15%</div>
-                        <div className="text-xs">Chronicles Economy</div>
-                        <div className="text-xs text-muted-foreground">150M SIG - Game rewards</div>
+                        <div className="text-xs text-muted-foreground">450M SIG - Sustainability</div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="text-2xl font-bold text-emerald-400">15%</div>
@@ -1026,19 +1021,20 @@ console.log('All successful:', result.allSuccessful);`}
                         <div className="text-xs">Development & Team</div>
                         <div className="text-xs text-muted-foreground">150M SIG - 4yr vest</div>
                       </div>
-                    </div>
-                    <div className="grid grid-cols-3 gap-2 text-sm">
-                      <div className="p-3 bg-white/5 rounded-lg text-center">
-                        <div className="text-xl font-bold text-secondary">10%</div>
-                        <div className="text-xs">Ecosystem</div>
+                      <div className="p-3 bg-white/5 rounded-lg">
+                        <div className="text-2xl font-bold text-secondary">10%</div>
+                        <div className="text-xs">Ecosystem Growth</div>
+                        <div className="text-xs text-muted-foreground">100M SIG - Partnerships</div>
                       </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 text-sm">
                       <div className="p-3 bg-white/5 rounded-lg text-center">
-                        <div className="text-xl font-bold text-cyan-400">5%</div>
-                        <div className="text-xs">Community</div>
+                        <div className="text-xl font-bold text-cyan-400">10%</div>
+                        <div className="text-xs">Community Rewards</div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg text-center">
                         <div className="text-xl font-bold text-pink-400">5%</div>
-                        <div className="text-xs">Foundation</div>
+                        <div className="text-xs">Signal Foundation</div>
                       </div>
                     </div>
                   </div>
