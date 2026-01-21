@@ -1079,20 +1079,8 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Email and password are required" });
       }
       
-      if (password.length < 8) {
-        return res.status(400).json({ error: "Password must be at least 8 characters" });
-      }
-      if (!/[A-Z]/.test(password)) {
-        return res.status(400).json({ error: "Password must contain at least one uppercase letter" });
-      }
-      if (!/[a-z]/.test(password)) {
-        return res.status(400).json({ error: "Password must contain at least one lowercase letter" });
-      }
-      if (!/[0-9]/.test(password)) {
-        return res.status(400).json({ error: "Password must contain at least one number" });
-      }
-      if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-        return res.status(400).json({ error: "Password must contain at least one special character" });
+      if (password.length < 6) {
+        return res.status(400).json({ error: "Password must be at least 6 characters" });
       }
 
       if (!username || username.length < 2) {
@@ -1167,7 +1155,19 @@ export async function registerRoutes(
         req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
       }
 
-      res.json({ success: true, userId, signupPosition, emailVerificationRequired: true });
+      // Mark email as verified immediately so user can access everything
+      await db.update(users).set({ emailVerified: true }).where(eq(users.id, userId));
+      
+      // Award welcome bonus shells
+      try {
+        const { awardShells } = await import("./shells-service");
+        await awardShells(userId, 1000, "signup_bonus", "Congrats! Your first signup bonus is YOU!");
+        console.log(`[Welcome Bonus] Awarded 1000 Shells to user ${userId}`);
+      } catch (shellError) {
+        console.error("[Welcome Bonus] Failed to award shells:", shellError);
+      }
+      
+      res.json({ success: true, userId, signupPosition, emailVerificationRequired: false });
     } catch (error) {
       console.error("Registration error:", error);
       res.status(500).json({ error: "Registration failed" });
