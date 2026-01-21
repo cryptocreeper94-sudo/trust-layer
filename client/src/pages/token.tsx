@@ -246,8 +246,8 @@ export default function Token() {
                   Distribution
                 </h3>
                 <div className="space-y-4">
-                  <DistributionItem label="Chronicles Economy" percent="25%" color="bg-primary" desc="In-game rewards and player economy" />
-                  <DistributionItem label="Treasury Reserve" percent="25%" color="bg-amber-500" desc="Long-term sustainability fund" />
+                  <DistributionItem label="Treasury Reserve" percent="35%" color="bg-amber-500" desc="Long-term sustainability fund" />
+                  <DistributionItem label="Chronicles Economy" percent="15%" color="bg-primary" desc="In-game rewards and player economy" />
                   <DistributionItem label="Staking Rewards" percent="15%" color="bg-emerald-500" desc="Validator and liquid staking APY" />
                   <DistributionItem label="Development & Team" percent="15%" color="bg-purple-500" desc="4-year vesting for alignment" />
                   <DistributionItem label="Ecosystem Growth" percent="10%" color="bg-secondary" desc="Partnerships, listings, grants" />

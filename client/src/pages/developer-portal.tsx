@@ -1007,14 +1007,14 @@ console.log('All successful:', result.allSuccessful);`}
                   <div className="space-y-3">
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="text-2xl font-bold text-primary">25%</div>
-                        <div className="text-xs">Chronicles Economy</div>
-                        <div className="text-xs text-muted-foreground">250M SIG - Game rewards</div>
+                        <div className="text-2xl font-bold text-amber-400">35%</div>
+                        <div className="text-xs">Treasury Reserve</div>
+                        <div className="text-xs text-muted-foreground">350M SIG - Sustainability</div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="text-2xl font-bold text-amber-400">25%</div>
-                        <div className="text-xs">Treasury Reserve</div>
-                        <div className="text-xs text-muted-foreground">250M SIG - Sustainability</div>
+                        <div className="text-2xl font-bold text-primary">15%</div>
+                        <div className="text-xs">Chronicles Economy</div>
+                        <div className="text-xs text-muted-foreground">150M SIG - Game rewards</div>
                       </div>
                       <div className="p-3 bg-white/5 rounded-lg">
                         <div className="text-2xl font-bold text-emerald-400">15%</div>
