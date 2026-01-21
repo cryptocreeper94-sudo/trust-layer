@@ -554,6 +554,159 @@ function CommunityComments({ tokenAddress, chain }: { tokenAddress: string; chai
   );
 }
 
+interface CreatorToken {
+  name: string;
+  symbol: string;
+  chain: string;
+  launchDate: string;
+  status: "active" | "rugged" | "abandoned" | "exit_scam";
+  peakMcap: string;
+  currentMcap: string | null;
+  txHash: string;
+}
+
+const MOCK_CREATOR_HISTORY: CreatorToken[] = [
+  {
+    name: "SafeMoon Clone",
+    symbol: "$SMC",
+    chain: "BSC",
+    launchDate: "2024-01-15",
+    status: "rugged",
+    peakMcap: "$2.4M",
+    currentMcap: null,
+    txHash: "0x1234...abcd",
+  },
+  {
+    name: "PepeMax",
+    symbol: "$PMAX",
+    chain: "Ethereum",
+    launchDate: "2024-02-20",
+    status: "exit_scam",
+    peakMcap: "$890K",
+    currentMcap: null,
+    txHash: "0x5678...efgh",
+  },
+  {
+    name: "Current Token",
+    symbol: "$CURRENT",
+    chain: "Solana",
+    launchDate: "2024-03-10",
+    status: "active",
+    peakMcap: "$1.2M",
+    currentMcap: "$780K",
+    txHash: "0x9abc...ijkl",
+  },
+];
+
+function CreatorHistory({ creatorAddress }: { creatorAddress: string }) {
+  const tokens = MOCK_CREATOR_HISTORY;
+  const rugCount = tokens.filter(t => t.status === "rugged" || t.status === "exit_scam").length;
+  const totalCount = tokens.length;
+  
+  const statusConfig = {
+    active: { label: "Active", color: "text-emerald-400 bg-emerald-500/20", icon: CheckCircle },
+    rugged: { label: "Rugged", color: "text-red-400 bg-red-500/20", icon: Skull },
+    abandoned: { label: "Abandoned", color: "text-orange-400 bg-orange-500/20", icon: AlertTriangle },
+    exit_scam: { label: "Exit Scam", color: "text-red-500 bg-red-600/20", icon: Flame },
+  };
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.25 }}
+      className="mt-6"
+    >
+      <GlassCard glow>
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <History className="w-5 h-5 text-purple-400" />
+              Creator History
+            </h3>
+            {rugCount > 0 && (
+              <Badge className="bg-red-500/20 text-red-400 border border-red-500/30 animate-pulse">
+                <Skull className="w-3 h-3 mr-1" />
+                {rugCount}/{totalCount} Rugged
+              </Badge>
+            )}
+          </div>
+          
+          <div className="flex items-center gap-4 mb-6 p-3 rounded-lg bg-white/5 border border-white/10">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center">
+              <Wallet className="w-6 h-6 text-white" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-white">Creator Wallet</span>
+                {rugCount > 0 && (
+                  <Badge className="bg-red-500/20 text-red-400 border-red-500/30 text-[10px]">
+                    <AlertTriangle className="w-3 h-3 mr-0.5" />
+                    Rug History
+                  </Badge>
+                )}
+              </div>
+              <p className="text-xs text-white/50 font-mono truncate">{creatorAddress}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-xs text-white/40">Trust Score</p>
+              <p className={`text-lg font-bold ${rugCount > 0 ? "text-red-400" : "text-emerald-400"}`}>
+                {rugCount > 0 ? Math.max(0, 100 - rugCount * 40) : 85}/100
+              </p>
+            </div>
+          </div>
+          
+          <div className="space-y-3">
+            {tokens.map((token, idx) => {
+              const StatusIcon = statusConfig[token.status].icon;
+              return (
+                <div
+                  key={idx}
+                  className={`p-3 rounded-lg border ${
+                    token.status === "rugged" || token.status === "exit_scam"
+                      ? "bg-red-500/5 border-red-500/20"
+                      : "bg-white/5 border-white/10"
+                  }`}
+                  data-testid={`creator-token-${idx}`}
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${statusConfig[token.status].color}`}>
+                        <StatusIcon className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-medium text-white text-sm">{token.name}</span>
+                          <span className="text-xs text-white/40">{token.symbol}</span>
+                          <Badge className="bg-white/10 text-white/50 border-white/10 text-[10px]">
+                            {token.chain}
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-white/40">Launched {token.launchDate}</p>
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-xs text-white/40">Peak MCap</p>
+                      <p className="text-sm font-medium text-white">{token.peakMcap}</p>
+                      {token.status === "active" && token.currentMcap && (
+                        <p className="text-xs text-emerald-400">Now: {token.currentMcap}</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          
+          <p className="text-[10px] text-white/30 mt-4 text-center">
+            Creator history is permanent and on-chain verifiable. Past rugs are forever tracked.
+          </p>
+        </div>
+      </GlassCard>
+    </motion.div>
+  );
+}
+
 function SimpleCandlestickChart({ timeRange }: { timeRange: string }) {
   const candles = Array.from({ length: 30 }, (_, i) => ({
     open: 100 + Math.random() * 20 - 10,
@@ -1068,6 +1221,8 @@ export default function GuardianScannerDetail() {
           </div>
 
           <CommunityComments tokenAddress={token.contractAddress} chain={chain} />
+          
+          <CreatorHistory creatorAddress={token.contractAddress.slice(0, 10) + "...creator"} />
 
           <motion.div
             initial={{ opacity: 0 }}
