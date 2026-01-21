@@ -353,3 +353,29 @@ export async function sendPasswordResetEmail(to: string, resetLink: string) {
     `,
   });
 }
+
+export async function sendEmailVerificationCode(to: string, code: string, name: string) {
+  return sendEmail({
+    to,
+    subject: `Your DarkWave Verification Code: ${code}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #ffffff; padding: 30px; border-radius: 12px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h1 style="color: #00FFFF; margin-bottom: 10px;">Verify Your Email</h1>
+          <p style="color: #888;">Welcome to DarkWave, ${name}!</p>
+        </div>
+        <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 30px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
+          <p style="color: #888; margin: 0 0 15px 0; font-size: 14px;">Your verification code is:</p>
+          <p style="color: #00FFFF; font-size: 42px; font-weight: bold; letter-spacing: 8px; margin: 0; font-family: monospace;">${code}</p>
+        </div>
+        <p style="color: #888; font-size: 14px; text-align: center;">
+          Enter this code on the verification page to complete your registration.
+        </p>
+        <p style="color: #ff6b6b; font-size: 12px; text-align: center; margin-top: 20px;">
+          This code expires in 10 minutes. If you didn't create an account, you can ignore this email.
+        </p>
+        <p style="color: #888; margin-top: 20px; text-align: center;">— The DarkWave Team</p>
+      </div>
+    `,
+  });
+}

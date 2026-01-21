@@ -28,9 +28,22 @@ export const users = pgTable("users", {
   passwordHash: varchar("password_hash"),
   phoneNumber: varchar("phone_number"),
   phoneVerified: boolean("phone_verified").default(false),
+  emailVerified: boolean("email_verified").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
+
+export const emailVerificationCodes = pgTable("email_verification_codes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  email: varchar("email").notNull(),
+  code: varchar("code").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  attempts: varchar("attempts").notNull().default("0"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export type EmailVerificationCode = typeof emailVerificationCodes.$inferSelect;
 
 // Early Adopter Tracking - cumulative purchases and donations
 export const earlyAdopterStats = pgTable("early_adopter_stats", {

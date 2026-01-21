@@ -114,12 +114,12 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and, gte } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
 import { blockchain } from "./blockchain-engine";
-import { sendEmail, sendApiKeyEmail, sendHallmarkEmail, sendPresaleConfirmationEmail } from "./email";
+import { sendEmail, sendApiKeyEmail, sendHallmarkEmail, sendPresaleConfirmationEmail, sendEmailVerificationCode } from "./email";
 import { submitMemoToSolana, isHeliusConfigured, getSolanaTreasuryAddress, getSolanaBalance } from "./helius";
 import { startRegistration, finishRegistration, startAuthentication, finishAuthentication, getUserPasskeys, deletePasskey } from "./webauthn";
 import { bridge } from "./bridge-engine";
@@ -1140,6 +1140,25 @@ export async function registerRoutes(
       // Store password hash
       await db.update(users).set({ passwordHash }).where(eq(users.id, userId));
 
+      // Generate and send email verification code
+      const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+      
+      await db.delete(emailVerificationCodes).where(eq(emailVerificationCodes.userId, userId));
+      await db.insert(emailVerificationCodes).values({
+        userId,
+        email,
+        code: verificationCode,
+        expiresAt,
+      });
+      
+      try {
+        await sendEmailVerificationCode(email, verificationCode, displayName || username);
+        console.log(`[Email Verification] Code sent to ${email}`);
+      } catch (emailError) {
+        console.error("[Email Verification] Failed to send code:", emailError);
+      }
+
       // Set session
       (req.session as any).userId = userId;
       
@@ -1148,10 +1167,91 @@ export async function registerRoutes(
         req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
       }
 
-      res.json({ success: true, userId, signupPosition });
+      res.json({ success: true, userId, signupPosition, emailVerificationRequired: true });
     } catch (error) {
       console.error("Registration error:", error);
       res.status(500).json({ error: "Registration failed" });
+    }
+  });
+
+  // Verify email with code
+  app.post("/api/auth/verify-email", async (req, res) => {
+    try {
+      const userId = (req.session as any)?.userId;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const { code } = req.body;
+      if (!code) {
+        return res.status(400).json({ error: "Verification code is required" });
+      }
+
+      const [verification] = await db.select()
+        .from(emailVerificationCodes)
+        .where(and(
+          eq(emailVerificationCodes.userId, userId),
+          eq(emailVerificationCodes.code, code)
+        ))
+        .limit(1);
+
+      if (!verification) {
+        return res.status(400).json({ error: "Invalid verification code" });
+      }
+
+      if (new Date() > verification.expiresAt) {
+        await db.delete(emailVerificationCodes).where(eq(emailVerificationCodes.id, verification.id));
+        return res.status(400).json({ error: "Verification code has expired. Please request a new one." });
+      }
+
+      // Mark email as verified
+      await db.update(users).set({ emailVerified: true }).where(eq(users.id, userId));
+      await db.delete(emailVerificationCodes).where(eq(emailVerificationCodes.id, verification.id));
+
+      console.log(`[Email Verification] User ${userId} verified email`);
+      res.json({ success: true, message: "Email verified successfully" });
+    } catch (error) {
+      console.error("Email verification error:", error);
+      res.status(500).json({ error: "Verification failed" });
+    }
+  });
+
+  // Resend verification code
+  app.post("/api/auth/resend-verification", authRateLimit, async (req, res) => {
+    try {
+      const userId = (req.session as any)?.userId;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const user = await storage.getUser(userId);
+      if (!user || !user.email) {
+        return res.status(400).json({ error: "User not found" });
+      }
+
+      if ((user as any).emailVerified) {
+        return res.status(400).json({ error: "Email is already verified" });
+      }
+
+      // Generate new code
+      const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+      
+      await db.delete(emailVerificationCodes).where(eq(emailVerificationCodes.userId, userId));
+      await db.insert(emailVerificationCodes).values({
+        userId,
+        email: user.email,
+        code: verificationCode,
+        expiresAt,
+      });
+      
+      await sendEmailVerificationCode(user.email, verificationCode, user.displayName || user.username || "User");
+      console.log(`[Email Verification] Code resent to ${user.email}`);
+      
+      res.json({ success: true, message: "Verification code sent" });
+    } catch (error) {
+      console.error("Resend verification error:", error);
+      res.status(500).json({ error: "Failed to resend verification code" });
     }
   });
 

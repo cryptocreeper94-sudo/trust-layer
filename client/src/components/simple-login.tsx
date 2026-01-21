@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Loader2, Mail, ArrowLeft, Eye, EyeOff, AlertTriangle } from "lucide-react";
+import { X, Loader2, Mail, ArrowLeft, Eye, EyeOff, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
@@ -13,7 +13,7 @@ interface SimpleLoginModalProps {
   onSuccess?: () => void;
 }
 
-type View = "login" | "signup";
+type View = "login" | "signup" | "verify";
 
 export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModalProps) {
   const { toast } = useToast();
@@ -26,6 +26,8 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
   const [username, setUsername] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
+  const [resendDisabled, setResendDisabled] = useState(false);
 
   const resetForm = () => {
     setEmail("");
@@ -35,6 +37,7 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
     setView("login");
     setShowPassword(false);
     setRememberMe(false);
+    setVerificationCode("");
   };
 
   const handleClose = () => {
@@ -83,14 +86,59 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
     setLoading(true);
     try {
       await register(email, password, name, username, rememberMe);
-      toast({ title: "Account created!", description: "Welcome to DarkWave!" });
-      onSuccess?.();
-      handleClose();
-      window.location.reload();
+      toast({ title: "Check your email!", description: "We sent you a verification code." });
+      setView("verify");
     } catch (error: any) {
       toast({ title: "Registration failed", description: error.message, variant: "destructive" });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!verificationCode || verificationCode.length !== 6) {
+      toast({ title: "Invalid code", description: "Please enter the 6-digit code from your email", variant: "destructive" });
+      return;
+    }
+    setLoading(true);
+    try {
+      const response = await fetch("/api/auth/verify-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: verificationCode }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Verification failed");
+      }
+      toast({ title: "Email verified!", description: "Welcome to DarkWave!" });
+      onSuccess?.();
+      handleClose();
+      window.location.reload();
+    } catch (error: any) {
+      toast({ title: "Verification failed", description: error.message, variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendCode = async () => {
+    setResendDisabled(true);
+    try {
+      const response = await fetch("/api/auth/resend-verification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to resend code");
+      }
+      toast({ title: "Code sent!", description: "Check your email for the new code." });
+      setTimeout(() => setResendDisabled(false), 60000);
+    } catch (error: any) {
+      toast({ title: "Failed to resend", description: error.message, variant: "destructive" });
+      setResendDisabled(false);
     }
   };
 
@@ -121,9 +169,9 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
             <X className="w-5 h-5" />
           </button>
 
-          {view === "signup" && (
+          {(view === "signup" || view === "verify") && (
             <button
-              onClick={() => setView("login")}
+              onClick={() => view === "verify" ? setView("signup") : setView("login")}
               className="absolute top-4 left-4 text-muted-foreground hover:text-white transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
@@ -132,13 +180,50 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
 
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-white mb-2">
-              {view === "login" ? "Welcome Back" : "Create Account"}
+              {view === "login" ? "Welcome Back" : view === "signup" ? "Create Account" : "Verify Email"}
             </h2>
             <p className="text-muted-foreground text-sm">
-              {view === "login" ? "Sign in to your account" : "Join DarkWave today"}
+              {view === "login" ? "Sign in to your account" : view === "signup" ? "Join DarkWave today" : `Enter the 6-digit code sent to ${email}`}
             </p>
           </div>
 
+          {view === "verify" ? (
+            <form onSubmit={handleVerify} className="space-y-4">
+              <div className="flex justify-center mb-4">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 flex items-center justify-center">
+                  <Mail className="w-8 h-8 text-white" />
+                </div>
+              </div>
+              <Input
+                type="text"
+                placeholder="Enter 6-digit code"
+                value={verificationCode}
+                onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                className="bg-white/5 border-white/10 h-14 text-center text-2xl tracking-widest font-mono"
+                maxLength={6}
+                data-testid="input-verification-code"
+              />
+              <Button
+                type="submit"
+                className="w-full h-12 bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white font-bold"
+                disabled={loading || verificationCode.length !== 6}
+                data-testid="button-verify-email"
+              >
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Verify Email"}
+              </Button>
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={handleResendCode}
+                  disabled={resendDisabled}
+                  className="text-sm text-muted-foreground hover:text-cyan-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  data-testid="button-resend-code"
+                >
+                  {resendDisabled ? "Wait 60 seconds to resend" : "Didn't receive the code? Resend"}
+                </button>
+              </div>
+            </form>
+          ) : (
           <form onSubmit={view === "login" ? handleLogin : handleSignup} className="space-y-4">
             {view === "signup" && (
               <>
@@ -229,8 +314,10 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
               )}
             </Button>
           </form>
+          )}
 
-          <div className="mt-6 text-center space-y-3">
+          {view !== "verify" ? (
+            <div className="mt-6 text-center space-y-3">
             {view === "login" && (
               <a
                 href="/forgot-password"
@@ -263,7 +350,8 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
                 </button>
               </p>
             )}
-          </div>
+            </div>
+          ) : null}
         </motion.div>
       </div>
     </AnimatePresence>
