@@ -1364,8 +1364,10 @@ export async function registerRoutes(
           id: user.id,
           email: user.email,
           displayName: user.displayName,
+          firstName: user.displayName?.split(' ')[0] || user.username,
           username: user.username,
           profileImageUrl: user.profileImageUrl,
+          emailVerified: (user as any).emailVerified || false,
           isOwner,
           isAdmin,
         }
