@@ -286,14 +286,15 @@ export function MemberBadge({ userId }: { userId?: string }) {
                   </div>
 
                   <div className="space-y-2">
-                    <Button 
-                      onClick={downloadMemberInfo}
-                      className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white text-xs h-9"
-                      data-testid="button-download-member-info"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Download Member Card
-                    </Button>
+                    <Link href="/my-hub" onClick={() => setIsOpen(false)}>
+                      <Button 
+                        className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black text-xs h-9 font-semibold"
+                        data-testid="button-my-hub"
+                      >
+                        <Gift className="w-4 h-4 mr-2" />
+                        Go to My Hub
+                      </Button>
+                    </Link>
                     <div className="grid grid-cols-2 gap-2">
                       <Link href="/dashboard" onClick={() => setIsOpen(false)}>
                         <Button 
@@ -305,16 +306,15 @@ export function MemberBadge({ userId }: { userId?: string }) {
                           Trust Card
                         </Button>
                       </Link>
-                      <Link href="/my-tokens" onClick={() => setIsOpen(false)}>
-                        <Button 
-                          variant="outline"
-                          className="w-full border-white/20 text-white text-xs h-8"
-                          data-testid="button-view-tokens"
-                        >
-                          <Coins className="w-3 h-3 mr-1" />
-                          Tokens
-                        </Button>
-                      </Link>
+                      <Button 
+                        variant="outline"
+                        onClick={downloadMemberInfo}
+                        className="w-full border-white/20 text-white text-xs h-8"
+                        data-testid="button-download-member-card"
+                      >
+                        <Download className="w-3 h-3 mr-1" />
+                        Save Card
+                      </Button>
                     </div>
                   </div>
                 </div>
