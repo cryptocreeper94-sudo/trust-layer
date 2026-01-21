@@ -1,8 +1,25 @@
 import { useState } from "react";
-import { Calculator, Users, DollarSign, Coins, Gift } from "lucide-react";
+import { Link } from "wouter";
+import { Calculator, Users, DollarSign, Coins, Gift, Copy, Check, ExternalLink, Loader2 } from "lucide-react";
 import { GlassCard } from "./glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { useQuery } from "@tanstack/react-query";
+
+interface ReferralCodeData {
+  code: string;
+  totalClicks: number;
+  totalSignups: number;
+  totalConversions: number;
+}
+
+interface ReferralStats {
+  totalReferrals: number;
+  totalConversions: number;
+  totalEarnings: number;
+  pendingEarnings: number;
+}
 
 export function ReferralCalculator() {
   const [signups, setSignups] = useState(10);
@@ -10,6 +27,35 @@ export function ReferralCalculator() {
   const [buyers25, setBuyers25] = useState(1);
   const [buyers50, setBuyers50] = useState(1);
   const [buyers100, setBuyers100] = useState(0);
+  const [copied, setCopied] = useState(false);
+
+  const { data: referralCode, isLoading: codeLoading } = useQuery<ReferralCodeData>({
+    queryKey: ["referral-code"],
+    queryFn: async () => {
+      const res = await fetch("/api/referrals/code");
+      if (!res.ok) throw new Error("Failed to fetch referral code");
+      return res.json();
+    },
+  });
+
+  const { data: stats } = useQuery<ReferralStats>({
+    queryKey: ["referral-stats"],
+    queryFn: async () => {
+      const res = await fetch("/api/referrals/stats");
+      if (!res.ok) throw new Error("Failed to fetch stats");
+      return res.json();
+    },
+  });
+
+  const referralLink = referralCode ? `https://dwtl.io/join/${referralCode.code}` : "";
+
+  const handleCopy = async () => {
+    if (referralLink) {
+      await navigator.clipboard.writeText(referralLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   const baseShells = signups * 1000;
   const bonus5 = buyers5 * 5000;
@@ -23,9 +69,67 @@ export function ReferralCalculator() {
   return (
     <GlassCard glow className="col-span-full">
       <div className="p-4 sm:p-6">
-        <div className="flex items-center gap-2 mb-6">
-          <Calculator className="w-5 h-5 text-yellow-400" />
-          <h3 className="font-bold text-sm sm:text-base">Referral Rewards Calculator</h3>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2">
+            <Gift className="w-5 h-5 text-yellow-400" />
+            <h3 className="font-bold text-sm sm:text-base">Your Referral Program</h3>
+            <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 text-xs">PRESALE BONUS</Badge>
+          </div>
+          <Link href="/referrals">
+            <Button variant="ghost" size="sm" className="text-xs gap-1">
+              Full Details <ExternalLink className="w-3 h-3" />
+            </Button>
+          </Link>
+        </div>
+
+        <div className="mb-6 p-4 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-xl border border-cyan-500/20">
+          <div className="text-xs text-muted-foreground mb-2">Your Referral Link</div>
+          {codeLoading ? (
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span>Generating your link...</span>
+            </div>
+          ) : referralCode ? (
+            <div className="flex items-center gap-2">
+              <code className="flex-1 bg-white/5 px-3 py-2 rounded-lg text-sm font-mono truncate" data-testid="referral-link">
+                {referralLink}
+              </code>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleCopy}
+                className="shrink-0 gap-1 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"
+                data-testid="copy-referral-link"
+              >
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                {copied ? "Copied!" : "Copy"}
+              </Button>
+            </div>
+          ) : (
+            <div className="text-sm text-muted-foreground">Sign in to get your referral link</div>
+          )}
+          
+          {stats && (
+            <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-white/10">
+              <div className="text-center">
+                <div className="text-lg font-bold">{stats.totalReferrals || 0}</div>
+                <div className="text-xs text-muted-foreground">Signups</div>
+              </div>
+              <div className="text-center">
+                <div className="text-lg font-bold">{stats.totalConversions || 0}</div>
+                <div className="text-xs text-muted-foreground">Purchases</div>
+              </div>
+              <div className="text-center">
+                <div className="text-lg font-bold text-yellow-400">{(stats.totalEarnings || 0).toLocaleString()}</div>
+                <div className="text-xs text-muted-foreground">Shells Earned</div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="flex items-center gap-2 mb-4">
+          <Calculator className="w-4 h-4 text-muted-foreground" />
+          <span className="text-xs text-muted-foreground uppercase tracking-wide">Earnings Calculator</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
