@@ -4,6 +4,7 @@ import { Link, useParams } from "wouter";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { GuardianSwapModal } from "@/components/guardian-swap-modal";
 import {
   Tooltip,
   TooltipContent,
@@ -1047,6 +1048,7 @@ export default function GuardianScannerDetail() {
   const [copied, setCopied] = useState(false);
   const [isWatchlisted, setIsWatchlisted] = useState(false);
   const [showRugReport, setShowRugReport] = useState(false);
+  const [showSwapModal, setShowSwapModal] = useState(false);
 
   useEffect(() => {
     async function fetchTokenData() {
@@ -1181,6 +1183,19 @@ export default function GuardianScannerDetail() {
         tokenName={token.name}
         tokenAddress={token.contractAddress}
       />
+      <GuardianSwapModal
+        isOpen={showSwapModal}
+        onClose={() => setShowSwapModal(false)}
+        token={{
+          symbol: token.symbol,
+          name: token.name,
+          contractAddress: token.contractAddress,
+          chain: token.chain,
+          price: token.price,
+          imageUrl: token.logo || undefined,
+          guardianScore: token.guardianScore,
+        }}
+      />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -1240,6 +1255,14 @@ export default function GuardianScannerDetail() {
                     </div>
                     
                     <div className="flex items-center gap-2">
+                      <Button
+                        onClick={() => setShowSwapModal(true)}
+                        className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white font-semibold px-4"
+                        data-testid="buy-button"
+                      >
+                        <Zap className="w-4 h-4 mr-1.5" />
+                        Buy
+                      </Button>
                       <button
                         onClick={() => setIsWatchlisted(!isWatchlisted)}
                         className={`p-2 rounded-lg transition-colors ${isWatchlisted ? 'bg-yellow-500/20 text-yellow-400' : 'bg-white/5 text-white/40 hover:text-white'}`}
