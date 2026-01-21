@@ -51,6 +51,14 @@ const CHAINS = [
   { id: "ethereum", name: "Ethereum", icon: "Ξ", color: "from-blue-500 to-purple-500" },
   { id: "base", name: "Base", icon: "🔵", color: "from-blue-400 to-blue-600" },
   { id: "bsc", name: "BSC", icon: "🟡", color: "from-yellow-400 to-yellow-600" },
+  { id: "arbitrum", name: "Arbitrum", icon: "🔷", color: "from-blue-400 to-cyan-500" },
+  { id: "polygon", name: "Polygon", icon: "🟣", color: "from-purple-500 to-purple-700" },
+  { id: "avalanche", name: "Avalanche", icon: "🔺", color: "from-red-500 to-red-700" },
+  { id: "fantom", name: "Fantom", icon: "👻", color: "from-blue-600 to-indigo-600" },
+  { id: "optimism", name: "Optimism", icon: "🔴", color: "from-red-400 to-red-600" },
+  { id: "zksync", name: "zkSync", icon: "⚡", color: "from-violet-500 to-purple-600" },
+  { id: "cronos", name: "Cronos", icon: "🌀", color: "from-blue-800 to-indigo-900" },
+  { id: "tron", name: "Tron", icon: "💎", color: "from-red-600 to-red-800" },
   { id: "darkwave", name: "DarkWave", icon: "◆", color: "from-cyan-400 to-purple-500" },
 ];
 
@@ -94,6 +102,8 @@ interface Token {
   name: string;
   symbol: string;
   logo: string | null;
+  contractAddress: string;
+  pairAddress: string;
   price: number;
   priceChange5m: number;
   priceChange1h: number;
@@ -148,11 +158,16 @@ function generateMockTokens(chain: string): Token[] {
     const isNew = Math.random() > 0.7;
     const badges: Array<"new" | "verified" | "trusted" | "certified" | "flagged"> = ["new", "verified", "trusted", "certified", "flagged"];
     
+    const chars = '0123456789abcdef';
+    const genAddr = () => Array.from({ length: 40 }, () => chars[Math.floor(Math.random() * 16)]).join('');
+    
     return {
       id: `${chain}-${token.symbol.toLowerCase()}-${i}`,
       name: token.name,
       symbol: token.symbol,
       logo: null,
+      contractAddress: `0x${genAddr()}`,
+      pairAddress: `0x${genAddr()}`,
       price: Math.random() * (Math.random() > 0.5 ? 1 : 0.0001),
       priceChange5m: (Math.random() - 0.5) * 20,
       priceChange1h: (Math.random() - 0.5) * 30,
@@ -354,6 +369,22 @@ function TokenRow({ token, onToggleWatchlist }: { token: Token; onToggleWatchlis
         <span className="text-xs text-white/70">${formatNumber(token.volume24h)}</span>
       </td>
       
+      <td className="py-3 pr-4 hidden lg:table-cell">
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-1 text-[10px]">
+            <span className="text-emerald-400">{token.buys24h}</span>
+            <span className="text-white/30">/</span>
+            <span className="text-red-400">{token.sells24h}</span>
+          </div>
+          <div className="w-16 h-1.5 rounded-full bg-white/10 overflow-hidden">
+            <div 
+              className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full"
+              style={{ width: `${(token.buys24h / (token.buys24h + token.sells24h)) * 100}%` }}
+            />
+          </div>
+        </div>
+      </td>
+      
       <td className="py-3 pr-4 text-right hidden lg:table-cell">
         <div className="flex items-center justify-end gap-1">
           <span className="text-xs text-white/70">${formatNumber(token.liquidity)}</span>
@@ -417,10 +448,12 @@ export default function GuardianScanner() {
     let result = [...tokens];
     
     if (searchQuery) {
-      const query = searchQuery.toLowerCase();
+      const query = searchQuery.toLowerCase().trim();
       result = result.filter(t => 
         t.name.toLowerCase().includes(query) || 
-        t.symbol.toLowerCase().includes(query)
+        t.symbol.toLowerCase().includes(query) ||
+        t.contractAddress.toLowerCase().includes(query) ||
+        t.pairAddress.toLowerCase().includes(query)
       );
     }
     
@@ -648,6 +681,9 @@ export default function GuardianScanner() {
                     <th className="py-3 pr-4 text-right text-xs font-medium text-white/50 uppercase tracking-wider hidden md:table-cell">
                       <GlossaryTooltip term="Volume (24h)">Vol</GlossaryTooltip>
                     </th>
+                    <th className="py-3 pr-4 text-xs font-medium text-white/50 uppercase tracking-wider hidden lg:table-cell">
+                      Buys/Sells
+                    </th>
                     <th className="py-3 pr-4 text-right text-xs font-medium text-white/50 uppercase tracking-wider hidden lg:table-cell">
                       <GlossaryTooltip term="Liquidity">Liq</GlossaryTooltip>
                     </th>
@@ -666,7 +702,7 @@ export default function GuardianScanner() {
                 <tbody>
                   {isLoading ? (
                     <tr>
-                      <td colSpan={13} className="py-20 text-center">
+                      <td colSpan={14} className="py-20 text-center">
                         <div className="flex flex-col items-center gap-3">
                           <RefreshCw className="w-8 h-8 text-cyan-400 animate-spin" />
                           <p className="text-white/50 text-sm">Loading tokens...</p>
@@ -675,7 +711,7 @@ export default function GuardianScanner() {
                     </tr>
                   ) : filteredTokens.length === 0 ? (
                     <tr>
-                      <td colSpan={13} className="py-20 text-center">
+                      <td colSpan={14} className="py-20 text-center">
                         <div className="flex flex-col items-center gap-3">
                           <Search className="w-8 h-8 text-white/20" />
                           <p className="text-white/50 text-sm">No tokens found</p>

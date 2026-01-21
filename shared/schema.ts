@@ -7208,3 +7208,236 @@ export const insertFeedbackReportSchema = createInsertSchema(feedbackReports).om
 
 export type FeedbackReport = typeof feedbackReports.$inferSelect;
 export type InsertFeedbackReport = z.infer<typeof insertFeedbackReportSchema>;
+
+// ============================================
+// GUARDIAN SCANNER - Community Intelligence
+// ============================================
+
+// Token Comments - Community feedback on tokens
+export const tokenComments = pgTable('token_comments', {
+  id: serial('id').primaryKey(),
+  tokenAddress: text('token_address').notNull(),
+  chain: varchar('chain', { length: 50 }).notNull(),
+  userId: text('user_id').notNull(),
+  userName: text('user_name'),
+  userAvatar: text('user_avatar'),
+  
+  // Comment content
+  content: text('content').notNull(),
+  sentiment: varchar('sentiment', { length: 20 }), // bullish, bearish, warning, neutral
+  
+  // Voting
+  upvotes: integer('upvotes').default(0).notNull(),
+  downvotes: integer('downvotes').default(0).notNull(),
+  
+  // Moderation
+  isHidden: boolean('is_hidden').default(false),
+  hiddenReason: text('hidden_reason'),
+  isAiFlagged: boolean('is_ai_flagged').default(false),
+  aiFlagReason: text('ai_flag_reason'),
+  
+  // Status
+  isVerifiedUser: boolean('is_verified_user').default(false),
+  
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const insertTokenCommentSchema = createInsertSchema(tokenComments).omit({
+  id: true,
+  upvotes: true,
+  downvotes: true,
+  isHidden: true,
+  hiddenReason: true,
+  isAiFlagged: true,
+  aiFlagReason: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type TokenComment = typeof tokenComments.$inferSelect;
+export type InsertTokenComment = z.infer<typeof insertTokenCommentSchema>;
+
+// Comment Votes - Track who voted on what
+export const commentVotes = pgTable('comment_votes', {
+  id: serial('id').primaryKey(),
+  commentId: integer('comment_id').notNull().references(() => tokenComments.id, { onDelete: 'cascade' }),
+  userId: text('user_id').notNull(),
+  voteType: varchar('vote_type', { length: 10 }).notNull(), // up, down
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export type CommentVote = typeof commentVotes.$inferSelect;
+
+// User Reputation - Track community standing
+export const userReputation = pgTable('user_reputation', {
+  id: serial('id').primaryKey(),
+  userId: text('user_id').notNull().unique(),
+  
+  // Reputation scores
+  reputationScore: integer('reputation_score').default(0).notNull(),
+  accurateCalls: integer('accurate_calls').default(0).notNull(), // Correct warnings
+  totalComments: integer('total_comments').default(0).notNull(),
+  helpfulVotes: integer('helpful_votes').default(0).notNull(), // Upvotes received
+  
+  // Trust level
+  trustLevel: varchar('trust_level', { length: 20 }).default('new').notNull(), // new, member, trusted, expert, flagged
+  
+  // Badges
+  badges: text('badges').array(),
+  
+  // Moderation
+  warningsReceived: integer('warnings_received').default(0),
+  isShadowbanned: boolean('is_shadowbanned').default(false),
+  
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type UserReputation = typeof userReputation.$inferSelect;
+
+// Token Creators - Track creators across launches
+export const tokenCreators = pgTable('token_creators', {
+  id: serial('id').primaryKey(),
+  walletAddress: text('wallet_address').notNull(),
+  chain: varchar('chain', { length: 50 }).notNull(),
+  
+  // Profile
+  displayName: text('display_name'),
+  isVerified: boolean('is_verified').default(false),
+  
+  // Stats
+  totalLaunches: integer('total_launches').default(0).notNull(),
+  successfulLaunches: integer('successful_launches').default(0).notNull(),
+  ruggedLaunches: integer('rugged_launches').default(0).notNull(),
+  
+  // Trust
+  trustScore: integer('trust_score').default(50).notNull(),
+  badge: varchar('badge', { length: 20 }).default('new').notNull(), // new, verified, trusted, certified, flagged
+  
+  // Community reports
+  totalReports: integer('total_reports').default(0),
+  
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type TokenCreator = typeof tokenCreators.$inferSelect;
+
+// Creator Token History - All tokens launched by creator
+export const creatorTokenHistory = pgTable('creator_token_history', {
+  id: serial('id').primaryKey(),
+  creatorId: integer('creator_id').notNull().references(() => tokenCreators.id, { onDelete: 'cascade' }),
+  tokenAddress: text('token_address').notNull(),
+  tokenName: text('token_name').notNull(),
+  tokenSymbol: text('token_symbol').notNull(),
+  chain: varchar('chain', { length: 50 }).notNull(),
+  
+  // Status
+  status: varchar('status', { length: 20 }).notNull().default('active'), // active, rugged, abandoned, successful
+  
+  // Peak stats
+  peakMarketCap: real('peak_market_cap'),
+  peakHolders: integer('peak_holders'),
+  
+  // Rug details if applicable
+  ruggedAt: timestamp('rugged_at'),
+  rugType: varchar('rug_type', { length: 50 }), // liquidity_pull, slow_rug, honeypot, mint_dump
+  
+  launchedAt: timestamp('launched_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export type CreatorTokenHistory = typeof creatorTokenHistory.$inferSelect;
+
+// Rug Reports - Community rug pull reports
+export const rugReports = pgTable('rug_reports', {
+  id: serial('id').primaryKey(),
+  tokenAddress: text('token_address').notNull(),
+  chain: varchar('chain', { length: 50 }).notNull(),
+  reporterId: text('reporter_id').notNull(),
+  
+  // Report details
+  rugType: varchar('rug_type', { length: 50 }).notNull(), // liquidity_pull, slow_rug, honeypot, mint_dump, other
+  description: text('description').notNull(),
+  evidenceLinks: text('evidence_links').array(),
+  
+  // Verification
+  isVerified: boolean('is_verified').default(false),
+  verifiedBy: text('verified_by'),
+  verifiedAt: timestamp('verified_at'),
+  
+  // Community validation
+  confirmations: integer('confirmations').default(0),
+  disputes: integer('disputes').default(0),
+  
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const insertRugReportSchema = createInsertSchema(rugReports).omit({
+  id: true,
+  isVerified: true,
+  verifiedBy: true,
+  verifiedAt: true,
+  confirmations: true,
+  disputes: true,
+  createdAt: true,
+});
+
+export type RugReport = typeof rugReports.$inferSelect;
+export type InsertRugReport = z.infer<typeof insertRugReportSchema>;
+
+// Price Alerts - User-set price notifications
+export const priceAlerts = pgTable('price_alerts', {
+  id: serial('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  tokenAddress: text('token_address').notNull(),
+  chain: varchar('chain', { length: 50 }).notNull(),
+  tokenSymbol: text('token_symbol').notNull(),
+  
+  // Alert conditions
+  alertType: varchar('alert_type', { length: 20 }).notNull(), // above, below, percent_up, percent_down
+  targetPrice: real('target_price'),
+  percentChange: real('percent_change'),
+  
+  // Current state
+  priceAtCreation: real('price_at_creation').notNull(),
+  
+  // Status
+  isActive: boolean('is_active').default(true).notNull(),
+  isTriggered: boolean('is_triggered').default(false),
+  triggeredAt: timestamp('triggered_at'),
+  priceAtTrigger: real('price_at_trigger'),
+  
+  // Notification
+  notifyEmail: boolean('notify_email').default(true),
+  notifyPush: boolean('notify_push').default(false),
+  
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const insertPriceAlertSchema = createInsertSchema(priceAlerts).omit({
+  id: true,
+  isActive: true,
+  isTriggered: true,
+  triggeredAt: true,
+  priceAtTrigger: true,
+  createdAt: true,
+});
+
+export type PriceAlert = typeof priceAlerts.$inferSelect;
+export type InsertPriceAlert = z.infer<typeof insertPriceAlertSchema>;
+
+// Token Watchlist - User's saved tokens
+export const tokenWatchlist = pgTable('token_watchlist', {
+  id: serial('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  tokenAddress: text('token_address').notNull(),
+  chain: varchar('chain', { length: 50 }).notNull(),
+  tokenSymbol: text('token_symbol').notNull(),
+  tokenName: text('token_name').notNull(),
+  notes: text('notes'),
+  addedAt: timestamp('added_at').defaultNow().notNull(),
+});
+
+export type TokenWatchlist = typeof tokenWatchlist.$inferSelect;
