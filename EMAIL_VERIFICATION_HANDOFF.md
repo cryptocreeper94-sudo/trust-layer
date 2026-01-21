@@ -8,16 +8,26 @@
 
 We added **email verification** to protect the ecosystem from fake accounts and bots.
 
-Now when someone signs up:
+### Regular Signup Flow
+
+When someone signs up:
 1. They enter their details and click "Create Account"
 2. A screen appears asking for a 6-digit code
-3. They check their email for the code
+3. They check their email for the code (sent via Resend)
 4. They enter the code to complete signup
 5. They receive **1,000 Shells** as a welcome bonus
+6. Message shown: **"Congrats! Your first signup bonus is YOU!"**
 
-This ensures every account is tied to a real email address. No bots can slip through and steal Shell rewards.
+### Zealy Crew Verification
 
-**Zealy crew members** must also verify their email before receiving any quest rewards. The Zealy webhook checks for email verification before awarding shells.
+Zealy members must also verify their email before receiving quest rewards:
+1. Complete quests on Zealy as normal
+2. Sign up on DarkWave with the **same email** used on Zealy
+3. Verify their email with the 6-digit code
+4. Now their Zealy quest rewards will be credited to their wallet
+5. Unverified accounts get: "Link your DarkWave account to receive Shells"
+
+This ensures every account is tied to a real email address. No bots can slip through and steal Shell rewards - not through regular signup, not through referral links, not through Zealy quests.
 
 ---
 
@@ -30,8 +40,6 @@ We will add **phone verification** as an extra option. This gives users another 
 ## Signup Bonus
 
 Every new verified user gets **1,000 Shells** deposited into their wallet immediately.
-
-They will see a message: **"Congrats! Your first signup bonus is YOU!"**
 
 ---
 
