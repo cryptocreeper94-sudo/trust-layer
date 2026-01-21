@@ -14377,6 +14377,26 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   // =====================================================
+  // GUARDIAN SCANNER - COMMENT MODERATION API
+  // =====================================================
+
+  app.post("/api/guardian-scanner/moderate-comment", async (req, res) => {
+    try {
+      const { content } = req.body;
+      if (!content || typeof content !== "string") {
+        return res.status(400).json({ error: "Comment content is required" });
+      }
+      const { moderateComment, getSentimentFromContent } = await import("./services/comment-moderation");
+      const result = moderateComment(content);
+      const detectedSentiment = getSentimentFromContent(content);
+      res.json({ ...result, detectedSentiment });
+    } catch (error) {
+      console.error("Comment moderation error:", error);
+      res.status(500).json({ error: "Failed to moderate comment" });
+    }
+  });
+
+  // =====================================================
   // OWNER ADMIN - GUARDIAN CERTIFICATION APIs
   // =====================================================
 
