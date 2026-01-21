@@ -210,6 +210,9 @@ const liquidityRateLimit = rateLimit("liquidity", 10, 60 * 1000);
 const bridgeRateLimit = rateLimit("bridge", 5, 60 * 1000);
 const pulseSafetyRateLimit = rateLimit("pulse-safety", 10, 60 * 1000); // 10 safety checks per minute
 const pulseDataRateLimit = rateLimit("pulse-data", 30, 60 * 1000); // 30 data requests per minute
+const guardianScannerRateLimit = rateLimit("guardian-scanner", 60, 60 * 1000); // 60 requests per minute for scanner
+const guardianCommentRateLimit = rateLimit("guardian-comment", 20, 60 * 1000); // 20 comments per minute
+const guardianAlertRateLimit = rateLimit("guardian-alert", 30, 60 * 1000); // 30 alert operations per minute
 
 interface PresenceUser {
   id: string;
@@ -14380,7 +14383,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   // GUARDIAN SCANNER - COMMENT MODERATION API
   // =====================================================
 
-  app.post("/api/guardian-scanner/moderate-comment", async (req, res) => {
+  app.post("/api/guardian-scanner/moderate-comment", guardianCommentRateLimit, async (req, res) => {
     try {
       const { content } = req.body;
       if (!content || typeof content !== "string") {
