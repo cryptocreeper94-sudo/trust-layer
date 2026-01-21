@@ -86,10 +86,8 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
     setLoading(true);
     try {
       await register(email, password, name, username, rememberMe);
-      toast({ title: "Account created!", description: "Welcome to DarkWave! You've earned 1,000 Shells." });
-      onSuccess?.();
-      handleClose();
-      window.location.reload();
+      toast({ title: "Check your email!", description: "We sent you a verification code." });
+      setView("verify");
     } catch (error: any) {
       toast({ title: "Registration failed", description: error.message, variant: "destructive" });
     } finally {
