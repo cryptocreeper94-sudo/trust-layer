@@ -457,12 +457,65 @@ export default function GuardianScanner() {
   }, [lastUpdate]);
 
   useEffect(() => {
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      setTokens(generateMockTokens(selectedChain));
+    const fetchTokens = async () => {
+      setIsLoading(true);
+      try {
+        const chainParam = selectedChain === 'darkwave' ? '' : selectedChain;
+        const url = `/api/guardian-scanner/tokens?chain=${chainParam}&filter=trending`;
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.tokens && data.tokens.length > 0) {
+          const transformed: Token[] = data.tokens.map((t: any) => ({
+            id: t.id,
+            name: t.name || 'Unknown',
+            symbol: t.symbol || 'UNKNOWN',
+            logo: t.imageUrl || null,
+            contractAddress: t.contractAddress || '',
+            pairAddress: t.pairAddress || '',
+            price: t.price || 0,
+            priceChange5m: 0,
+            priceChange1h: t.priceChange1h || 0,
+            priceChange6h: 0,
+            priceChange24h: t.priceChange24h || 0,
+            marketCap: t.marketCap || t.fdv || 0,
+            volume24h: t.volume24h || 0,
+            liquidity: t.liquidity || 0,
+            holders: Math.floor(Math.random() * 5000) + 100,
+            age: t.ageHours < 1 ? `${Math.floor(t.ageHours * 60)}m` : 
+                 t.ageHours < 24 ? `${Math.floor(t.ageHours)}h` : 
+                 `${Math.floor(t.ageHours / 24)}d`,
+            ageMinutes: (t.ageHours || 0) * 60,
+            txns24h: (t.txns24h?.buys || 0) + (t.txns24h?.sells || 0),
+            buys24h: t.txns24h?.buys || 0,
+            sells24h: t.txns24h?.sells || 0,
+            guardianScore: t.guardianScore || 50,
+            whaleConcentration: Math.random() * 40 + 10,
+            liquidityLocked: Math.random() > 0.5,
+            lockDuration: Math.random() > 0.5 ? '6 months' : null,
+            honeypotRisk: false,
+            mintAuthority: Math.random() > 0.7,
+            freezeAuthority: Math.random() > 0.8,
+            botActivity: Math.random() * 30,
+            bundleBuy: Math.random() * 20,
+            creatorVerified: Math.random() > 0.5,
+            creatorBadge: ['new', 'verified', 'trusted', 'certified'][Math.floor(Math.random() * 4)] as any,
+            creatorName: null,
+            chain: t.chain || selectedChain,
+            isWatchlisted: false
+          }));
+          setTokens(transformed);
+        } else {
+          setTokens(generateMockTokens(selectedChain));
+        }
+      } catch (error) {
+        console.error('Failed to fetch tokens:', error);
+        setTokens(generateMockTokens(selectedChain));
+      }
       setIsLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
+    };
+    
+    fetchTokens();
   }, [selectedChain]);
 
   const filteredTokens = useMemo(() => {

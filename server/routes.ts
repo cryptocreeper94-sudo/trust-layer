@@ -14384,65 +14384,73 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   // =====================================================
   
   const { tokenDataCache, CACHE_TTL } = await import("./services/guardian-scanner-cache");
+  const { guardianScannerService } = await import("./services/guardian-scanner-service");
   
   app.get("/api/guardian-scanner/tokens", guardianScannerRateLimit, async (req, res) => {
     try {
-      const { chain, search, sortBy, limit = 50 } = req.query;
-      const cacheKey = `tokens:${chain || 'all'}:${search || ''}:${sortBy || 'default'}:${limit}`;
+      const { chain, search, filter } = req.query;
+      const chainStr = typeof chain === 'string' ? chain : undefined;
+      const searchStr = typeof search === 'string' ? search : undefined;
+      const filterStr = typeof filter === 'string' ? filter : 'trending';
       
-      const cached = tokenDataCache.get(cacheKey);
-      if (cached) {
-        return res.json({ tokens: cached, fromCache: true });
+      let tokens;
+      
+      if (searchStr && searchStr.length >= 2) {
+        tokens = await guardianScannerService.searchTokens(searchStr, chainStr);
+      } else if (filterStr === 'gainers') {
+        tokens = await guardianScannerService.getTopGainers(chainStr);
+      } else if (filterStr === 'new') {
+        tokens = await guardianScannerService.getNewPairs(chainStr);
+      } else {
+        tokens = await guardianScannerService.getTrendingTokens(chainStr);
       }
       
-      const mockTokens = [
-        { id: "api-token-1", symbol: "PEPE", name: "Pepe", price: 0.0000089, change24h: 12.5 },
-        { id: "api-token-2", symbol: "DOGE", name: "Dogecoin", price: 0.082, change24h: -3.2 },
-      ];
-      
-      tokenDataCache.set(cacheKey, mockTokens, CACHE_TTL.TOKEN_LIST);
-      
-      res.json({ 
-        tokens: mockTokens,
-        message: "API provides minimal data - see frontend for full mock experience",
-        fromCache: false
-      });
+      res.json({ tokens, count: tokens.length });
     } catch (error) {
       console.error("Guardian scanner tokens error:", error);
       res.status(500).json({ error: "Failed to fetch tokens" });
     }
   });
   
-  app.get("/api/guardian-scanner/token/:id", guardianScannerRateLimit, async (req, res) => {
+  app.get("/api/guardian-scanner/token/:address", guardianScannerRateLimit, async (req, res) => {
     try {
-      const { id } = req.params;
-      const cacheKey = `token:${id}`;
+      const { address } = req.params;
+      const { chain } = req.query;
       
-      const cached = tokenDataCache.get(cacheKey);
-      if (cached) {
-        return res.json({ token: cached, fromCache: true });
+      let token;
+      
+      if (chain && typeof chain === 'string') {
+        token = await guardianScannerService.getPairByAddress(address, chain);
+      } else {
+        token = await guardianScannerService.getTokenByAddress(address);
       }
       
-      const mockToken = {
-        id,
-        symbol: "TOKEN",
-        name: `Token ${id}`,
-        price: 0.001,
-        change24h: 5.5,
-        guardianScore: 75,
-        volume24h: 1000000
-      };
+      if (!token) {
+        return res.status(404).json({ error: "Token not found" });
+      }
       
-      tokenDataCache.set(cacheKey, mockToken, CACHE_TTL.TOKEN_DETAIL);
-      
-      res.json({ 
-        token: mockToken,
-        message: "API provides minimal data - see frontend for full mock experience",
-        fromCache: false 
-      });
+      res.json({ token });
     } catch (error) {
       console.error("Guardian scanner token detail error:", error);
       res.status(500).json({ error: "Failed to fetch token" });
+    }
+  });
+  
+  app.get("/api/guardian-scanner/search", guardianScannerRateLimit, async (req, res) => {
+    try {
+      const { q, chain } = req.query;
+      const query = typeof q === 'string' ? q : '';
+      const chainStr = typeof chain === 'string' ? chain : undefined;
+      
+      if (query.length < 2) {
+        return res.json({ tokens: [], message: "Query too short" });
+      }
+      
+      const tokens = await guardianScannerService.searchTokens(query, chainStr);
+      res.json({ tokens, count: tokens.length });
+    } catch (error) {
+      console.error("Guardian scanner search error:", error);
+      res.status(500).json({ error: "Failed to search tokens" });
     }
   });
   
