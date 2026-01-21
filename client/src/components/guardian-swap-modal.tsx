@@ -99,7 +99,73 @@ const CHAIN_CONFIG: Record<string, {
     walletType: 'evm',
     color: 'from-red-500 to-rose-500'
   },
+  cronos: { 
+    name: 'Cronos', 
+    nativeSymbol: 'CRO', 
+    chainId: '0x19',
+    dexUrl: 'https://mm.finance/swap',
+    walletType: 'evm',
+    color: 'from-blue-600 to-blue-800'
+  },
+  fantom: { 
+    name: 'Fantom', 
+    nativeSymbol: 'FTM', 
+    chainId: '0xfa',
+    dexUrl: 'https://spooky.fi/swap',
+    walletType: 'evm',
+    color: 'from-blue-400 to-blue-600'
+  },
+  linea: { 
+    name: 'Linea', 
+    nativeSymbol: 'ETH', 
+    chainId: '0xe708',
+    dexUrl: 'https://syncswap.xyz/swap',
+    walletType: 'evm',
+    color: 'from-slate-400 to-slate-600'
+  },
+  zksync: { 
+    name: 'zkSync', 
+    nativeSymbol: 'ETH', 
+    chainId: '0x144',
+    dexUrl: 'https://syncswap.xyz/swap',
+    walletType: 'evm',
+    color: 'from-purple-500 to-purple-700'
+  },
+  scroll: { 
+    name: 'Scroll', 
+    nativeSymbol: 'ETH', 
+    chainId: '0x82750',
+    dexUrl: 'https://syncswap.xyz/swap',
+    walletType: 'evm',
+    color: 'from-orange-400 to-orange-600'
+  },
+  mantle: { 
+    name: 'Mantle', 
+    nativeSymbol: 'MNT', 
+    chainId: '0x1388',
+    dexUrl: 'https://agni.finance/swap',
+    walletType: 'evm',
+    color: 'from-emerald-400 to-emerald-600'
+  },
+  blast: { 
+    name: 'Blast', 
+    nativeSymbol: 'ETH', 
+    chainId: '0x13e31',
+    dexUrl: 'https://thruster.finance/swap',
+    walletType: 'evm',
+    color: 'from-yellow-500 to-yellow-600'
+  },
 };
+
+function getChainConfig(chain: string) {
+  return CHAIN_CONFIG[chain] || {
+    name: chain.charAt(0).toUpperCase() + chain.slice(1),
+    nativeSymbol: 'ETH',
+    dexUrl: 'https://app.1inch.io/swap',
+    walletType: 'evm' as const,
+    color: 'from-gray-400 to-gray-600'
+  };
+}
 
 export function GuardianSwapModal({ isOpen, onClose, token }: GuardianSwapModalProps) {
   const { 
@@ -119,7 +185,7 @@ export function GuardianSwapModal({ isOpen, onClose, token }: GuardianSwapModalP
   const [quote, setQuote] = useState<{ amountOut: string; priceImpact: string } | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(false);
   
-  const chainConfig = CHAIN_CONFIG[token.chain] || CHAIN_CONFIG.ethereum;
+  const chainConfig = getChainConfig(token.chain);
   const isSolana = token.chain === 'solana';
   const connectedAddress = isSolana ? solanaAddress : evmAddress;
   const isWalletConnected = isSolana ? !!solanaAddress : !!evmAddress;
