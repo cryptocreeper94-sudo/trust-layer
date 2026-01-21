@@ -119,40 +119,53 @@ Every new page MUST pass ALL items before development begins:
 
 ## LOCKED-IN REWARD STRUCTURE (DO NOT CHANGE WITHOUT OWNER APPROVAL)
 
-This is the official, finalized reward structure for the 90-day presale campaign. These values are permanent commitments to the community.
+This is the official, finalized reward structure for the presale campaign. These values are permanent commitments to the community.
+
+### Token Economics
+- **SIG at TGE**: $0.01 (one cent) - 10x from presale price of $0.001
+- **Total Supply**: 1,000,000,000 SIG
+- **Presale Reward Pool**: 10,000,000 SIG (1% of supply) - HARD CAP
 
 ### Shell Value (PERMANENT)
 - **1 Shell = $0.001** (one-tenth of a cent)
-- 1,000 Shells = $1
-- 10,000 Shells = $10
-- 100,000 Shells = $100
-- 1,000,000 Shells = $1,000
-- At TGE: 100 Shells = 1 SIG (when SIG = $0.01)
+- Shells are used as campaign scoring - final SIG rewards based on tier placement
 
-### RACE TO 200 - Zealy Mission Campaign (ACTIVE NOW)
+### PRESALE REWARD TIERS (Based on Final Ranking)
+
+**Total Pool: 10,000,000 SIG (1% of supply) = $100,000 value at TGE**
+
+| Tier | Rank | SIG Per Person | $ Value @ $0.01 | Group Total |
+|------|------|----------------|-----------------|-------------|
+| **Founders** | Top 10 | 100,000 SIG | **$1,000** | 1,000,000 SIG |
+| **Core** | 11-50 (40 ppl) | 40,000 SIG | **$400** | 1,600,000 SIG |
+| **Active** | 51-100 (50 ppl) | 15,000 SIG | **$150** | 750,000 SIG |
+
+**Fixed Tier Total: 3,350,000 SIG ($33,500)**
+
+### Participation Rewards (Rank 101+, Mission-Based)
+
+**Remaining Pool: 6,650,000 SIG** for mission-based rewards
+
+| Missions Completed | SIG Earned | $ Value @ $0.01 |
+|-------------------|------------|-----------------|
+| 1 mission | 100 SIG | $1 |
+| 5 missions | 500 SIG | $5 |
+| 10 missions | 1,000 SIG | $10 |
+| 25 missions | 2,500 SIG | $25 |
+| 50 missions | 5,000 SIG | $50 |
+
+**Nobody gets left out** - even 1 completed mission = $1 at TGE.
+
+### Zealy Campaign (ACTIVE NOW)
 
 **How It Works:**
-- This is a PRODUCTION race, not a signup race
-- First 200 participants who complete missions are eligible
-- 2 missions available daily via Zealy
+- Rankings based on TOTAL MISSIONS COMPLETED
 - Shells auto-deposited to DarkWave wallet when missions verified
-- Rankings based on TOTAL MISSIONS COMPLETED, not signup order
-- Race ends when we hit 200 participants OR April 8 (presale end)
-
-**Daily Rewards:**
-- ~$2.50 worth of Shells per mission
-- ~$5/day potential (if both daily missions completed)
+- 2 missions available daily via Zealy
+- Campaign ends April 8 (presale end)
 - Must have DarkWave wallet connected to receive rewards
 
-**Race End Bonuses (Based on Final Ranking):**
-
-| Rank | Badge | Bonus | Shell Value |
-|------|-------|-------|-------------|
-| **Top 10** | Founders Badge | 2.0× multiplier | $750–$1,500 |
-| **11-50** | Core Badge | 1.5× multiplier | $150–$500 |
-| **51-200** | Participant Badge | 1.0× (base rewards) | $25–$100 |
-
-**Founders Badge Perks:**
+**Founders Badge Perks (Top 10):**
 - Lifetime VIP status
 - 2× governance weight
 - Guaranteed whitelist
