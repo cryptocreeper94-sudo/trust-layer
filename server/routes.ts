@@ -11783,6 +11783,84 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // Check presale eligibility by email or wallet (public endpoint)
+  app.post("/api/airdrop/check-eligibility", async (req, res) => {
+    try {
+      const { email, wallet } = req.body;
+      
+      if (!email && !wallet) {
+        return res.status(400).json({ eligible: false, message: "Email or wallet address required" });
+      }
+      
+      // Check presale purchases by email or wallet
+      let result;
+      if (email) {
+        result = await db.execute(sql`
+          SELECT 
+            COALESCE(SUM(token_amount), 0) as total_tokens,
+            COALESCE(SUM(usd_amount_cents), 0) as total_spent,
+            COUNT(*) as purchase_count,
+            MAX(tier) as tier,
+            MAX(wallet_address) as wallet_address
+          FROM presale_purchases 
+          WHERE LOWER(email) = LOWER(${email}) AND status = 'completed'
+        `);
+      } else {
+        result = await db.execute(sql`
+          SELECT 
+            COALESCE(SUM(token_amount), 0) as total_tokens,
+            COALESCE(SUM(usd_amount_cents), 0) as total_spent,
+            COUNT(*) as purchase_count,
+            MAX(tier) as tier,
+            MAX(email) as email
+          FROM presale_purchases 
+          WHERE LOWER(wallet_address) = LOWER(${wallet}) AND status = 'completed'
+        `);
+      }
+      
+      const data = result.rows[0];
+      const totalTokens = parseInt(data?.total_tokens as string) || 0;
+      const purchaseCount = parseInt(data?.purchase_count as string) || 0;
+      
+      if (totalTokens === 0 || purchaseCount === 0) {
+        return res.json({
+          eligible: false,
+          message: "No presale purchases found for this address. Purchase Signal during presale to qualify!"
+        });
+      }
+      
+      // Determine tier label based on total spent
+      const totalSpent = parseInt(data?.total_spent as string) || 0;
+      let tierLabel = data?.tier || "Participant";
+      if (totalSpent >= 1000000) tierLabel = "Genesis Founder";
+      else if (totalSpent >= 500000) tierLabel = "Trust Pioneer";
+      else if (totalSpent >= 100000) tierLabel = "Community Builder";
+      else if (totalSpent >= 25000) tierLabel = "Early Supporter";
+      
+      // Check if already claimed
+      const identifier = email || wallet;
+      const claimCheck = await db.execute(sql`
+        SELECT id FROM airdrop_claims 
+        WHERE (LOWER(wallet_address) = LOWER(${identifier}) OR user_id = ${identifier})
+        AND status IN ('pending', 'completed')
+      `);
+      const alreadyClaimed = claimCheck.rows.length > 0;
+      
+      res.json({
+        eligible: true,
+        allocation: totalTokens.toString(),
+        claimableAmount: totalTokens.toString(),
+        tier: tierLabel,
+        alreadyClaimed,
+        purchaseCount,
+        walletAddress: data?.wallet_address || null
+      });
+    } catch (error: any) {
+      console.error("Check eligibility error:", error);
+      res.status(500).json({ eligible: false, message: "Failed to check eligibility" });
+    }
+  });
+
   // Public airdrop claim check
   app.get("/api/airdrop/check", isAuthenticated, async (req: any, res) => {
     try {
