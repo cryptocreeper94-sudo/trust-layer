@@ -1,0 +1,201 @@
+import { useState } from "react";
+import { Calculator, Users, DollarSign, Coins, Gift } from "lucide-react";
+import { GlassCard } from "./glass-card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+export function ReferralCalculator() {
+  const [signups, setSignups] = useState(10);
+  const [buyers5, setBuyers5] = useState(2);
+  const [buyers25, setBuyers25] = useState(1);
+  const [buyers50, setBuyers50] = useState(1);
+  const [buyers100, setBuyers100] = useState(0);
+
+  const baseShells = signups * 1000;
+  const bonus5 = buyers5 * 5000;
+  const bonus25 = buyers25 * 10000;
+  const bonus50 = buyers50 * 20000;
+  const bonus100 = buyers100 * 50000;
+  const totalShells = baseShells + bonus5 + bonus25 + bonus50 + bonus100;
+  const totalSig = totalShells / 10;
+  const totalValue = totalSig * 0.01;
+
+  return (
+    <GlassCard glow className="col-span-full">
+      <div className="p-4 sm:p-6">
+        <div className="flex items-center gap-2 mb-6">
+          <Calculator className="w-5 h-5 text-yellow-400" />
+          <h3 className="font-bold text-sm sm:text-base">Referral Rewards Calculator</h3>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Your Referrals</div>
+            
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="flex-1">
+                  <label className="text-xs text-muted-foreground block mb-1">Total Signups</label>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={signups}
+                    onChange={(e) => setSignups(Math.max(0, parseInt(e.target.value) || 0))}
+                    className="bg-white/5 border-white/10 h-10"
+                    data-testid="input-signups"
+                  />
+                </div>
+                <div className="text-right pt-5">
+                  <span className="text-xs text-muted-foreground">× 1,000 Shells</span>
+                </div>
+              </div>
+
+              <div className="border-t border-white/10 pt-3">
+                <div className="text-xs text-muted-foreground mb-2">How many purchased:</div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="flex-1">
+                  <label className="text-xs text-muted-foreground block mb-1">$5 - $24</label>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={buyers5}
+                    onChange={(e) => setBuyers5(Math.max(0, parseInt(e.target.value) || 0))}
+                    className="bg-white/5 border-white/10 h-10"
+                    data-testid="input-buyers-5"
+                  />
+                </div>
+                <div className="text-right pt-5">
+                  <span className="text-xs text-green-400">+5,000 each</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="flex-1">
+                  <label className="text-xs text-muted-foreground block mb-1">$25 - $49</label>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={buyers25}
+                    onChange={(e) => setBuyers25(Math.max(0, parseInt(e.target.value) || 0))}
+                    className="bg-white/5 border-white/10 h-10"
+                    data-testid="input-buyers-25"
+                  />
+                </div>
+                <div className="text-right pt-5">
+                  <span className="text-xs text-green-400">+10,000 each</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="flex-1">
+                  <label className="text-xs text-muted-foreground block mb-1">$50 - $99</label>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={buyers50}
+                    onChange={(e) => setBuyers50(Math.max(0, parseInt(e.target.value) || 0))}
+                    className="bg-white/5 border-white/10 h-10"
+                    data-testid="input-buyers-50"
+                  />
+                </div>
+                <div className="text-right pt-5">
+                  <span className="text-xs text-green-400">+20,000 each</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="flex-1">
+                  <label className="text-xs text-muted-foreground block mb-1">$100+</label>
+                  <Input
+                    type="number"
+                    min={0}
+                    value={buyers100}
+                    onChange={(e) => setBuyers100(Math.max(0, parseInt(e.target.value) || 0))}
+                    className="bg-white/5 border-white/10 h-10"
+                    data-testid="input-buyers-100"
+                  />
+                </div>
+                <div className="text-right pt-5">
+                  <span className="text-xs text-green-400">+50,000 each</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="text-xs text-muted-foreground uppercase tracking-wide mb-2">Your Earnings</div>
+            
+            <div className="space-y-3 bg-white/5 rounded-xl p-4">
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-muted-foreground">Base (signups)</span>
+                <span className="font-mono">{baseShells.toLocaleString()} Shells</span>
+              </div>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-muted-foreground">Bonus ($5-$24)</span>
+                <span className="font-mono text-green-400">+{bonus5.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-muted-foreground">Bonus ($25-$49)</span>
+                <span className="font-mono text-green-400">+{bonus25.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-muted-foreground">Bonus ($50-$99)</span>
+                <span className="font-mono text-green-400">+{bonus50.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-muted-foreground">Bonus ($100+)</span>
+                <span className="font-mono text-green-400">+{bonus100.toLocaleString()}</span>
+              </div>
+              
+              <div className="border-t border-white/10 pt-3 mt-3">
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold">Total Shells</span>
+                  <span className="font-mono text-lg font-bold text-yellow-400">{totalShells.toLocaleString()}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-gradient-to-br from-cyan-500/20 to-cyan-600/10 rounded-xl p-4 border border-cyan-500/20">
+                <div className="flex items-center gap-2 mb-1">
+                  <Coins className="w-4 h-4 text-cyan-400" />
+                  <span className="text-xs text-cyan-400">Converts To</span>
+                </div>
+                <div className="text-xl font-bold font-mono">{totalSig.toLocaleString()} SIG</div>
+              </div>
+              <div className="bg-gradient-to-br from-green-500/20 to-green-600/10 rounded-xl p-4 border border-green-500/20">
+                <div className="flex items-center gap-2 mb-1">
+                  <DollarSign className="w-4 h-4 text-green-400" />
+                  <span className="text-xs text-green-400">Value at TGE</span>
+                </div>
+                <div className="text-xl font-bold font-mono">${totalValue.toLocaleString()}</div>
+              </div>
+            </div>
+
+            <div className="text-xs text-center text-muted-foreground mt-4">
+              TGE price: 1 SIG = $0.01 · 10 Shells = 1 SIG
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-6 p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl border border-purple-500/20">
+          <div className="flex items-start gap-3">
+            <Gift className="w-5 h-5 text-purple-400 mt-0.5" />
+            <div>
+              <div className="font-semibold text-sm mb-1">How It Works</div>
+              <div className="text-xs text-muted-foreground space-y-1">
+                <p>• Get your referral link from your dashboard</p>
+                <p>• Share it anywhere - Zealy, social media, friends, anywhere</p>
+                <p>• Earn 1,000 Shells for every signup using your link</p>
+                <p>• Earn bonus Shells when they make a purchase (min $5)</p>
+                <p>• No cap - earn as much as you can bring in</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </GlassCard>
+  );
+}

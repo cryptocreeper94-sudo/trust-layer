@@ -13,6 +13,7 @@ import { PasskeyManager } from "@/components/passkey-manager";
 import { WalletButton } from "@/components/wallet-button";
 import { useWallet, shortenAddress } from "@/hooks/use-wallet";
 import { TrustCard, TrustCardPlaceholder } from "@/components/trust-card";
+import { ReferralCalculator } from "@/components/referral-calculator";
 
 interface TrustCardData {
   trustNumber: string;
@@ -275,6 +276,8 @@ export default function Dashboard() {
             </GlassCard>
 
             <PasskeyManager />
+
+            <ReferralCalculator />
 
             <GlassCard glow className="sm:col-span-2 lg:col-span-2">
               <div className="p-4 sm:p-5">
