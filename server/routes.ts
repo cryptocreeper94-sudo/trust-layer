@@ -1079,6 +1079,9 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Email and password are required" });
       }
       
+      // Normalize email to lowercase for consistent storage and lookups
+      const normalizedEmail = email.toLowerCase().trim();
+      
       if (password.length < 6) {
         return res.status(400).json({ error: "Password must be at least 6 characters" });
       }
@@ -1094,7 +1097,7 @@ export async function registerRoutes(
       }
 
       // Check if user already exists
-      const existingUser = await storage.getUserByEmail(email);
+      const existingUser = await storage.getUserByEmail(normalizedEmail);
       if (existingUser) {
         return res.status(400).json({ error: "An account with this email already exists" });
       }
@@ -1116,7 +1119,7 @@ export async function registerRoutes(
       const userId = crypto.randomUUID();
       await storage.upsertFirebaseUser({
         id: userId,
-        email: email,
+        email: normalizedEmail,
         username: username,
         displayName: displayName || username,
         firstName: displayName?.split(' ')[0] || null,
@@ -1135,14 +1138,14 @@ export async function registerRoutes(
       await db.delete(emailVerificationCodes).where(eq(emailVerificationCodes.userId, userId));
       await db.insert(emailVerificationCodes).values({
         userId,
-        email,
+        email: normalizedEmail,
         code: verificationCode,
         expiresAt,
       });
       
       try {
-        await sendEmailVerificationCode(email, verificationCode, displayName || username);
-        console.log(`[Email Verification] Code sent to ${email}`);
+        await sendEmailVerificationCode(normalizedEmail, verificationCode, displayName || username);
+        console.log(`[Email Verification] Code sent to ${normalizedEmail}`);
       } catch (emailError) {
         console.error("[Email Verification] Failed to send code:", emailError);
       }
@@ -1268,8 +1271,11 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Email and password are required" });
       }
 
+      // Normalize email to lowercase for consistent lookups
+      const normalizedEmail = email.toLowerCase().trim();
+      
       // Find user
-      const user = await storage.getUserByEmail(email);
+      const user = await storage.getUserByEmail(normalizedEmail);
       if (!user) {
         return res.status(401).json({ error: "Invalid email or password" });
       }
