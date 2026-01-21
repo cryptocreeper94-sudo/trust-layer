@@ -14837,6 +14837,72 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // Owner Presale Dashboard - all purchases and analytics
+  app.get("/api/owner/presale/purchases", ownerAuthMiddleware, async (_req, res) => {
+    try {
+      const result = await db.execute(`
+        SELECT 
+          id, email, buyer_name, wallet_address, 
+          usd_amount_cents, token_amount, tier, status, 
+          payment_method, created_at
+        FROM presale_purchases 
+        ORDER BY created_at DESC
+      `);
+      res.json({ purchases: result.rows });
+    } catch (error) {
+      console.error("Get presale purchases error:", error);
+      res.status(500).json({ error: "Failed to fetch purchases" });
+    }
+  });
+
+  app.get("/api/owner/presale/stats", ownerAuthMiddleware, async (_req, res) => {
+    try {
+      const statsResult = await db.execute(`
+        SELECT 
+          COUNT(*) as total_purchases,
+          COUNT(DISTINCT email) as unique_buyers,
+          SUM(CASE WHEN status = 'completed' THEN usd_amount_cents ELSE 0 END) as total_raised_cents,
+          SUM(CASE WHEN status = 'completed' THEN token_amount ELSE 0 END) as total_tokens_sold,
+          AVG(CASE WHEN status = 'completed' THEN usd_amount_cents ELSE NULL END) as avg_purchase_cents
+        FROM presale_purchases
+      `);
+      
+      const tierResult = await db.execute(`
+        SELECT tier, COUNT(*) as count, SUM(usd_amount_cents) as total_cents
+        FROM presale_purchases 
+        WHERE status = 'completed'
+        GROUP BY tier
+        ORDER BY total_cents DESC
+      `);
+
+      const dailyResult = await db.execute(`
+        SELECT 
+          DATE(created_at) as date,
+          COUNT(*) as purchases,
+          SUM(usd_amount_cents) as total_cents
+        FROM presale_purchases 
+        WHERE status = 'completed'
+        GROUP BY DATE(created_at)
+        ORDER BY date DESC
+        LIMIT 30
+      `);
+
+      const stats = statsResult.rows[0] || {};
+      res.json({
+        totalPurchases: parseInt(stats.total_purchases as string) || 0,
+        uniqueBuyers: parseInt(stats.unique_buyers as string) || 0,
+        totalRaisedCents: parseInt(stats.total_raised_cents as string) || 0,
+        totalTokensSold: parseInt(stats.total_tokens_sold as string) || 0,
+        avgPurchaseCents: Math.round(parseFloat(stats.avg_purchase_cents as string) || 0),
+        tierBreakdown: tierResult.rows,
+        dailyPurchases: dailyResult.rows.reverse()
+      });
+    } catch (error) {
+      console.error("Get presale stats error:", error);
+      res.status(500).json({ error: "Failed to fetch presale stats" });
+    }
+  });
+
   app.get("/api/owner/payouts/stats", ownerAuthMiddleware, async (req, res) => {
     try {
       const stats = await payoutService.getPayoutStats();

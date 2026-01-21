@@ -351,6 +351,7 @@ function OwnerDashboard() {
   ];
 
   const portalModules = [
+    { id: "presale", title: "Presale Dashboard", description: "All purchases, revenue analytics, buyer insights", icon: <DollarSign className="w-6 h-6" />, href: "/owner-admin/presale", glow: "emerald" as const },
     { id: "ops-center", title: "Operations Center", description: "Daily reports, airdrop processing, team dashboard", icon: <Activity className="w-6 h-6" />, href: "/ops-center", glow: "amber" as const },
     { id: "guardian", title: "Guardian Admin", description: "Security certifications, audits, revenue tracking", icon: <Shield className="w-6 h-6" />, href: "/owner-admin/guardian", glow: "emerald" as const },
     { id: "users", title: "User Management", description: "Waitlist, beta testers, whitelist, payments", icon: <Users className="w-6 h-6" />, href: "/owner-admin/users", glow: "cyan" as const },
