@@ -67,10 +67,13 @@ export function FloatingChat() {
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
   const [input, setInput] = useState('');
   const [activeChannel, setActiveChannel] = useState<string | null>(null);
   const [unreadCount, setUnreadCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const toggleHidden = () => setIsHidden(!isHidden);
 
   const { data: foundersStatus } = useQuery<{ isFounder: boolean; tier: string | null }>({
     queryKey: ['/api/user/founders-status'],
@@ -290,29 +293,55 @@ export function FloatingChat() {
         )}
       </AnimatePresence>
 
-      <motion.button
-        onClick={() => {
-          setIsOpen(!isOpen);
-          setIsMinimized(false);
-        }}
-        className="fixed bottom-28 right-4 w-14 h-14 bg-gradient-to-r from-cyan-600 to-purple-600 rounded-full shadow-lg flex items-center justify-center z-50 hover:scale-110 transition-transform"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        data-testid="button-toggle-chat"
-      >
-        {isOpen ? (
-          <X className="w-6 h-6 text-white" />
-        ) : (
-          <>
-            <MessageCircle className="w-6 h-6 text-white" />
-            {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs font-bold text-white flex items-center justify-center">
-                {unreadCount > 9 ? '9+' : unreadCount}
-              </span>
-            )}
-          </>
+      {/* Hidden state - small restore button */}
+      <AnimatePresence>
+        {isHidden && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.5 }}
+            onClick={toggleHidden}
+            className="fixed bottom-28 right-4 w-8 h-8 bg-slate-800/90 backdrop-blur-sm border border-slate-600/50 rounded-full shadow-lg flex items-center justify-center z-50 hover:bg-slate-700/90 transition-colors"
+            data-testid="button-restore-chat"
+            aria-label="Restore Chat"
+          >
+            <MessageCircle className="w-4 h-4 text-cyan-400" />
+          </motion.button>
         )}
-      </motion.button>
+      </AnimatePresence>
+
+      {/* Main floating button */}
+      <AnimatePresence>
+        {!isHidden && (
+          <motion.button
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            onClick={() => {
+              setIsOpen(!isOpen);
+              setIsMinimized(false);
+            }}
+            onContextMenu={(e) => { e.preventDefault(); toggleHidden(); }}
+            className="fixed bottom-28 right-4 w-14 h-14 bg-gradient-to-r from-cyan-600 to-purple-600 rounded-full shadow-lg flex items-center justify-center z-50 hover:scale-110 transition-transform"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            data-testid="button-toggle-chat"
+          >
+            {isOpen ? (
+              <X className="w-6 h-6 text-white" />
+            ) : (
+              <>
+                <MessageCircle className="w-6 h-6 text-white" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs font-bold text-white flex items-center justify-center">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </>
+            )}
+          </motion.button>
+        )}
+      </AnimatePresence>
     </>
   );
 }

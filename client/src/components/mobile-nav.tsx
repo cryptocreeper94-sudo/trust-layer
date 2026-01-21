@@ -540,6 +540,48 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
           )}
         </div>
 
+        {/* Search Bar */}
+        <div style={{ 
+          marginBottom: '16px', 
+          position: 'relative'
+        }}>
+          <input
+            type="text"
+            placeholder="Search DarkWave..."
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                const query = (e.target as HTMLInputElement).value;
+                if (query.trim()) {
+                  onClose();
+                  window.location.href = `/search?q=${encodeURIComponent(query)}`;
+                }
+              }
+            }}
+            style={{
+              width: '100%',
+              padding: '12px 12px 12px 40px',
+              borderRadius: '12px',
+              border: '1px solid rgba(255,255,255,0.1)',
+              backgroundColor: 'rgba(255,255,255,0.05)',
+              color: '#fff',
+              fontSize: '14px',
+              outline: 'none',
+            }}
+            data-testid="input-mobile-search"
+          />
+          <SearchIcon 
+            style={{ 
+              position: 'absolute', 
+              left: '12px', 
+              top: '50%', 
+              transform: 'translateY(-50%)', 
+              width: '18px', 
+              height: '18px', 
+              color: 'rgba(255,255,255,0.5)' 
+            }} 
+          />
+        </div>
+
         {/* Chronicles CTA - Top of Menu */}
         <Link href="/chronicles" style={{ textDecoration: 'none' }}>
           <div
