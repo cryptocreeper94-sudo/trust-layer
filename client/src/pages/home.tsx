@@ -537,7 +537,93 @@ export default function Home() {
               Where trust becomes the layer of truth.
             </p>
 
-            <img src={signalEmblem} alt="Signal Emblem" className="w-48 h-48 md:w-56 md:h-56 mx-auto mt-6" />
+            {/* Signal Emblem with Animated Wave */}
+            <div className="relative w-full mt-2 h-52 md:h-60 flex items-center justify-center">
+              {/* Animated Sound Wave Background - spans full width */}
+              <div className="absolute inset-0 flex items-center">
+                <svg 
+                  viewBox="0 0 1200 200" 
+                  className="w-full h-full"
+                  preserveAspectRatio="none"
+                >
+                  <defs>
+                    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.6" />
+                      <stop offset="35%" stopColor="#8b5cf6" stopOpacity="0.7" />
+                      <stop offset="65%" stopColor="#a855f7" stopOpacity="0.7" />
+                      <stop offset="100%" stopColor="#ec4899" stopOpacity="0.5" />
+                    </linearGradient>
+                    <linearGradient id="waveGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.3" />
+                      <stop offset="50%" stopColor="#a855f7" stopOpacity="0.4" />
+                      <stop offset="100%" stopColor="#f472b6" stopOpacity="0.3" />
+                    </linearGradient>
+                  </defs>
+                  {/* Wave 1 - Primary flowing wave */}
+                  <path
+                    d="M0,100 Q50,60 100,100 T200,100 T300,100 T400,100 T500,100 T600,100 T700,100 T800,100 T900,100 T1000,100 T1100,100 T1200,100"
+                    fill="none"
+                    stroke="url(#waveGradient)"
+                    strokeWidth="2"
+                    className="animate-pulse"
+                  />
+                  {/* Wave 2 - Secondary offset wave */}
+                  <path
+                    d="M0,100 Q75,130 150,100 T300,100 T450,100 T600,100 T750,100 T900,100 T1050,100 T1200,100"
+                    fill="none"
+                    stroke="url(#waveGradient2)"
+                    strokeWidth="1.5"
+                  />
+                  {/* Frequency bars - left side (cyan) */}
+                  {[...Array(35)].map((_, i) => {
+                    const baseHeight = 15 + Math.sin(i * 0.4) * 25;
+                    const x = 20 + i * 14;
+                    const opacity = 0.2 + (i / 35) * 0.5;
+                    return (
+                      <rect
+                        key={`bar-left-${i}`}
+                        x={x}
+                        y={100 - baseHeight / 2}
+                        width="4"
+                        height={baseHeight}
+                        fill={`rgba(6, 182, 212, ${opacity})`}
+                        rx="2"
+                        className="animate-pulse"
+                        style={{ animationDelay: `${i * 0.05}s` }}
+                      />
+                    );
+                  })}
+                  {/* Frequency bars - right side (purple to pink) */}
+                  {[...Array(35)].map((_, i) => {
+                    const baseHeight = 15 + Math.sin(i * 0.4) * 25;
+                    const x = 700 + i * 14;
+                    const opacity = 0.2 + ((35 - i) / 35) * 0.5;
+                    const r = 168 + Math.floor(i * 2);
+                    const g = 85 - Math.floor(i * 0.5);
+                    const b = 247 - Math.floor(i * 3);
+                    return (
+                      <rect
+                        key={`bar-right-${i}`}
+                        x={x}
+                        y={100 - baseHeight / 2}
+                        width="4"
+                        height={baseHeight}
+                        fill={`rgba(${r}, ${g}, ${Math.max(b, 153)}, ${opacity})`}
+                        rx="2"
+                        className="animate-pulse"
+                        style={{ animationDelay: `${(35 - i) * 0.05}s` }}
+                      />
+                    );
+                  })}
+                </svg>
+              </div>
+              {/* Signal Emblem - Perfectly Centered */}
+              <img 
+                src={signalEmblem} 
+                alt="Signal Emblem" 
+                className="w-44 h-44 md:w-52 md:h-52 relative z-10 drop-shadow-[0_0_40px_rgba(6,182,212,0.5)]" 
+              />
+            </div>
 
           </motion.div>
         </div>
