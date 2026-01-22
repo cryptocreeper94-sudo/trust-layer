@@ -263,7 +263,7 @@ export default function ChroniclesAIDemo() {
             </p>
             <Button 
               className="bg-gradient-to-r from-purple-600 to-pink-600"
-              onClick={() => window.location.href = "/api/login"}
+              onClick={() => window.location.href = "/?login=true"}
             >
               Sign In to Begin
             </Button>

@@ -73,7 +73,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      window.location.href = "/api/login";
+      window.location.href = "/?login=true";
     }
   }, [isLoading, isAuthenticated]);
 

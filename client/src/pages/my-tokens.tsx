@@ -64,7 +64,7 @@ export default function MyTokensPage() {
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      window.location.href = "/api/login";
+      window.location.href = "/?login=true";
     }
   }, [authLoading, isAuthenticated]);
 
