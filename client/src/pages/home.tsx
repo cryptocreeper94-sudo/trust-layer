@@ -457,26 +457,23 @@ export default function Home() {
               </Link>
             </div>
 
-            <Link href="/chronicles">
-              <motion.div
+            <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.8 }}
-                whileHover={{ scale: 1.02 }}
-                className="mt-6 px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-600/30 via-pink-600/30 to-purple-600/30 border border-purple-500/40 backdrop-blur-sm cursor-pointer group"
-                data-testid="banner-chronicles-live"
+                className="mt-6 px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-600/20 via-orange-600/20 to-amber-600/20 border border-amber-500/40 backdrop-blur-sm"
+                data-testid="banner-chronicles-construction"
               >
                 <div className="flex items-center justify-center gap-3">
                   <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">LIVE NOW</Badge>
+                    <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                    <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">UNDER CONSTRUCTION</Badge>
                   </div>
-                  <span className="text-white font-bold text-sm md:text-base">Chronicles Season Zero Beta</span>
-                  <Sparkles className="w-4 h-4 text-purple-400 group-hover:text-pink-400 transition-colors" />
+                  <span className="text-white font-bold text-sm md:text-base">Chronicles Season Zero</span>
+                  <Sparkles className="w-4 h-4 text-amber-400" />
                 </div>
-                <p className="text-xs text-white/60 text-center mt-1">Play the parallel life simulation - Begin your legacy today</p>
+                <p className="text-xs text-white/60 text-center mt-1">We're building something epic - Check back soon!</p>
               </motion.div>
-            </Link>
 
             <div className="flex items-center justify-center gap-4 pt-4">
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
