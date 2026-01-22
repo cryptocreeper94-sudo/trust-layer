@@ -1037,7 +1037,7 @@ export default function Home() {
       <Footer />
 
       <Dialog open={showPresalePopup} onOpenChange={setShowPresalePopup}>
-        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white max-w-md shadow-[0_0_60px_rgba(0,200,255,0.3)]">
+        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white w-[85vw] max-w-[340px] max-h-[85vh] overflow-y-auto shadow-[0_0_60px_rgba(0,200,255,0.3)]">
           <DialogHeader>
             <DialogTitle className="text-3xl font-bold text-center">
               <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
