@@ -10,45 +10,48 @@
 
 | Detail | Value |
 |--------|-------|
-| **Allocated Amount** | 5,000,000 SIG |
+| **Total Allocated Amount** | 5,000,000 SIG |
 | **Percentage of Supply** | 0.5% |
 | **Source** | Team & Operations Reserve |
-| **Vesting Period** | 12 months after milestone |
+| **Structure** | Graduated milestones |
 
 ---
 
-## Milestone Trigger
+## Graduated Milestone Structure
 
-This allocation becomes available when the DarkWave ecosystem reaches:
+Tokens unlock progressively as the ecosystem grows. Each milestone unlocks a portion of the total allocation:
 
-**$10,000,000 USD Market Capitalization**
+| Milestone | Market Cap | SIG Unlocked | Cumulative Total | Est. Value |
+|-----------|------------|--------------|------------------|------------|
+| **Tier 1** | $1,000,000 | 500,000 SIG | 500,000 SIG | $5,000 |
+| **Tier 2** | $2,500,000 | 750,000 SIG | 1,250,000 SIG | $31,250 |
+| **Tier 3** | $5,000,000 | 1,000,000 SIG | 2,250,000 SIG | $112,500 |
+| **Tier 4** | $7,500,000 | 1,250,000 SIG | 3,500,000 SIG | $262,500 |
+| **Tier 5** | $10,000,000 | 1,500,000 SIG | 5,000,000 SIG | $500,000 |
 
-This is measured by:
-- SIG token price × circulating supply
-- Verified through CoinGecko, CoinMarketCap, or DEX liquidity pools
-
----
-
-## Value Projections
-
-| SIG Price | Allocation Value |
-|-----------|------------------|
-| $0.01 (TGE) | $50,000 |
-| $0.05 | $250,000 |
-| $0.10 ($10M cap trigger) | $500,000 |
-| $0.25 | $1,250,000 |
-| $1.00 | $5,000,000 |
+*Estimated values based on proportional token price at each market cap level*
 
 ---
 
-## Vesting Schedule
+## How It Works
 
-Once the $10M market cap milestone is reached:
+1. **Tier 1 ($1M):** First 500K SIG unlocks - proof the ecosystem has real traction
+2. **Tier 2 ($2.5M):** Another 750K SIG - community is growing
+3. **Tier 3 ($5M):** 1M more SIG - we're established and sustainable
+4. **Tier 4 ($7.5M):** 1.25M SIG - scaling and thriving
+5. **Tier 5 ($10M):** Final 1.5M SIG - full allocation complete
 
-- **Month 1-3:** 25% unlocked (1,250,000 SIG)
-- **Month 4-6:** 25% unlocked (1,250,000 SIG)
-- **Month 7-9:** 25% unlocked (1,250,000 SIG)
-- **Month 10-12:** 25% unlocked (1,250,000 SIG)
+Each tier unlocks immediately when the market cap milestone is reached and sustained for 7 consecutive days.
+
+---
+
+## Vesting Per Tier
+
+Once a tier is reached, that tier's tokens vest over 3 months:
+- **Month 1:** 50% available
+- **Month 2-3:** Remaining 50% available
+
+This ensures continued commitment while providing meaningful rewards along the way.
 
 ---
 
@@ -60,9 +63,19 @@ Once the $10M market cap milestone is reached:
 
 ---
 
+## Why Graduated?
+
+We don't know how fast we'll grow. Could be months, could be years. This structure ensures:
+- You benefit from every step of progress, not just the finish line
+- Motivation stays high at every stage
+- Even if we plateau at $7M, you've still earned 3.5M SIG
+- Success is shared progressively, not all-or-nothing
+
+---
+
 ## Purpose
 
-This allocation recognizes the critical role of operations leadership in building and scaling the DarkWave ecosystem. It ensures that those who help build this community share meaningfully in its success.
+This allocation recognizes the critical role of operations leadership in building and scaling the DarkWave ecosystem. Those who help build this community share meaningfully in its success - at every stage of the journey.
 
 We build together. We succeed together.
 
