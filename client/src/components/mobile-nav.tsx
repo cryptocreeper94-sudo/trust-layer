@@ -22,7 +22,6 @@ const navCategories = [
   {
     label: "Explore",
     icon: Home,
-    defaultOpen: true,
     items: [
       { href: "/", label: "Home", icon: Home },
       { href: "/note", label: "Our Story", icon: Heart },
@@ -35,7 +34,6 @@ const navCategories = [
   {
     label: "AI & Trading",
     icon: Zap,
-    defaultOpen: true,
     items: [
       { href: "/guardian-scanner", label: "Guardian Scanner", icon: Shield, badge: "New" },
       { href: "/pulse", label: "Pulse AI", icon: Zap, badge: "Live" },
@@ -72,7 +70,6 @@ const navCategories = [
   {
     label: "Rewards & Earn",
     icon: Gift,
-    defaultOpen: true,
     items: [
       { href: "/rewards", label: "Early Adopter Rewards", icon: Gift, badge: "Hot" },
       { href: "/founder-program", label: "Founders Program", icon: Sparkles, badge: "VIP" },
@@ -124,7 +121,7 @@ function NavCategory({ category, location, onClose, onShowComingSoon }: {
   onClose: () => void;
   onShowComingSoon: (title: string) => void;
 }) {
-  const [isOpen, setIsOpen] = useState(category.defaultOpen || false);
+  const [isOpen, setIsOpen] = useState(false);
   const Icon = category.icon;
   const hasActiveItem = category.items.some(item => location === item.href);
   
@@ -551,9 +548,9 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
           <div
             onClick={onClose}
             style={{
-              marginBottom: '16px',
-              padding: '16px',
-              borderRadius: '16px',
+              marginBottom: '12px',
+              padding: '10px',
+              borderRadius: '12px',
               background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(236, 72, 153, 0.3) 100%)',
               border: '1px solid rgba(168, 85, 247, 0.4)',
               cursor: 'pointer',
@@ -562,30 +559,22 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
             }}
             data-testid="button-chronicles-top-menu"
           >
-            <div style={{
-              position: 'absolute',
-              top: '-50%',
-              left: '-50%',
-              right: '-50%',
-              bottom: '-50%',
-              background: 'radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 70%)',
-              animation: 'pulse 2s infinite',
-            }} />
-            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: '12px',
+                width: '32px',
+                height: '32px',
+                borderRadius: '8px',
                 background: 'linear-gradient(135deg, #a855f7, #ec4899)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                flexShrink: 0,
               }}>
-                <Gamepad2 style={{ width: '24px', height: '24px', color: '#fff' }} />
+                <Gamepad2 style={{ width: '16px', height: '16px', color: '#fff' }} />
               </div>
               <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                  <span style={{ fontSize: '16px', fontWeight: 700, color: '#fff' }}>DarkWave Chronicles</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#fff' }}>DarkWave Chronicles</span>
                   <span style={{
                     padding: '2px 8px',
                     borderRadius: '12px',
@@ -601,9 +590,9 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
                     LIVE
                   </span>
                 </div>
-                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>Season Zero Beta - Play Now!</span>
+                <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.7)' }}>Play Now!</span>
               </div>
-              <ArrowRight style={{ width: '20px', height: '20px', color: 'rgba(255,255,255,0.6)' }} />
+              <ArrowRight style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.6)' }} />
             </div>
           </div>
         </Link>
@@ -656,12 +645,12 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
                   data-testid={`featured-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                   style={{
                     position: 'relative',
-                    padding: '14px',
-                    borderRadius: '16px',
+                    padding: '10px',
+                    borderRadius: '12px',
                     border: isActive ? '2px solid rgba(168, 85, 247, 0.6)' : '1px solid rgba(255, 255, 255, 0.2)',
                     overflow: 'hidden',
                     cursor: 'pointer',
-                    minHeight: '70px',
+                    minHeight: '50px',
                     boxSizing: 'border-box',
                   }}
                 >
@@ -689,29 +678,28 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
                     background: item.overlayGradient,
                     pointerEvents: 'none'
                   }} />
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', position: 'relative', zIndex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative', zIndex: 1 }}>
                     <div style={{
-                      width: '38px',
-                      height: '38px',
-                      minWidth: '38px',
-                      borderRadius: '10px',
+                      width: '28px',
+                      height: '28px',
+                      minWidth: '28px',
+                      borderRadius: '8px',
                       background: `linear-gradient(135deg, ${item.iconGradient})`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
                       flexShrink: 0,
                     }}>
-                      <Icon style={{ width: '18px', height: '18px', color: '#ffffff' }} />
+                      <Icon style={{ width: '14px', height: '14px', color: '#ffffff' }} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ marginBottom: '2px' }}>
-                        <span style={{ fontWeight: 600, fontSize: '13px', color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{item.label}</span>
-                        <Badge className={`text-[9px] px-1 py-0 ml-2 ${item.badgeClass}`}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{ fontWeight: 600, fontSize: '12px', color: '#ffffff', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>{item.label}</span>
+                        <Badge className={`text-[8px] px-1 py-0 ${item.badgeClass}`}>
                           {item.badge}
                         </Badge>
                       </div>
-                      <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.8)', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>{item.description}</span>
                     </div>
                   </div>
                 </div>
