@@ -259,7 +259,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-slate-900 border-white/10 w-[95vw] max-w-md p-5 rounded-xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-slate-900 border-white/10 w-[92vw] max-w-md p-4 rounded-xl max-h-[70vh] overflow-y-auto mt-16">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
             Acquire Signal
