@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Trophy, Target, ChevronDown, ChevronLeft, ChevronRight, Gift } from "lucide-react";
+import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Trophy, Target, ChevronDown, ChevronLeft, ChevronRight, Gift, Search, MessageCircle } from "lucide-react";
+import { openGlobalSearch } from "@/components/global-search";
 import { InfoTooltip } from "@/components/info-tooltip";
 import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.png";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
@@ -482,6 +483,25 @@ export default function Home() {
             {isAuthenticated && user?.id && (
               <MemberBadge userId={user.id.toString()} />
             )}
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={openGlobalSearch}
+              className="h-7 sm:h-8 w-7 sm:w-8 p-0 text-white/70 hover:text-white hover:bg-white/10"
+              data-testid="button-global-search"
+            >
+              <Search className="w-4 h-4" />
+            </Button>
+            <Link href="/community">
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-7 sm:h-8 w-7 sm:w-8 p-0 text-white/70 hover:text-white hover:bg-white/10"
+                data-testid="button-messenger"
+              >
+                <MessageCircle className="w-4 h-4" />
+              </Button>
+            </Link>
             <Link href="/executive-summary">
               <Button 
                 size="sm" 

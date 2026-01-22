@@ -55,11 +55,23 @@ const staticPages: SearchResult[] = [
   { type: "page", id: "shop", title: "Shells Shop", description: "Buy Shells with card", href: "/shop", icon: Crown, category: "Buy" },
 ];
 
+// Export function to open search from anywhere
+export function openGlobalSearch() {
+  window.dispatchEvent(new CustomEvent('openGlobalSearch'));
+}
+
 export function GlobalSearch() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const { preferences, addRecentSearch } = usePreferences();
+
+  // Listen for custom event to open search
+  useEffect(() => {
+    const handleOpenSearch = () => setIsOpen(true);
+    window.addEventListener('openGlobalSearch', handleOpenSearch);
+    return () => window.removeEventListener('openGlobalSearch', handleOpenSearch);
+  }, []);
 
   const { data: apps = [] } = useQuery({
     queryKey: ["ecosystem-apps"],
