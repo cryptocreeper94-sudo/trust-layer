@@ -44,7 +44,7 @@ import prehistoricVideo from "@assets/generated_videos/prehistoric_dinosaur_jung
 import biblicalVideo from "@assets/generated_videos/biblical_jerusalem_temple_scene.mp4";
 
 const HERO_VIDEOS = [
-  { src: heroVideo, label: "Fantasy Realm" },
+  { src: heroVideo, label: "Historical Journey" },
   { src: wildWestVideo, label: "Wild West" },
   { src: ancientRomeVideo, label: "Ancient Rome" },
   { src: medievalCastleVideo, label: "Medieval Era" },
@@ -112,10 +112,10 @@ const CORE_FEATURES = [
   },
   {
     id: "eras",
-    title: "10 Historical Eras",
+    title: "70+ Historical Eras",
     subtitle: "All of Human History",
-    description: "From prehistoric times to the Industrial Revolution. Viking raids to Renaissance intrigue. Every era is a new campaign with unique missions and rewards.",
-    longDescription: "This isn't 4-6 generic settings. It's EVERY recognizable historical moment as a playable campaign. Egyptian dynasties. Roman gladiators. Wild West outlaws. Renaissance intrigue. Each era offers unique missions, factions, and legend-tier rewards.",
+    description: "From prehistoric times to the 20th century. Viking raids to Renaissance intrigue. Every era is a new campaign with unique missions and rewards.",
+    longDescription: "Over 70 verified historical periods as playable campaigns. Egyptian dynasties. Roman gladiators. Wild West outlaws. Renaissance intrigue. Civil War battles. Each era offers unique missions, factions, and rewards based on real history.",
     icon: Compass,
     image: fantasyLands,
     color: "from-emerald-500 to-teal-600",
@@ -199,12 +199,12 @@ const EPOCHS = [
     name: "Viking Age",
     period: "Norse Raiders",
     image: vikingFjord,
-    eras: ["Fjord Settlements", "Raider Voyages", "Valhalla Legends", "Norse Exploration"],
-    incentive: "Exploration, combat, mythology",
+    eras: ["Fjord Settlements", "Raider Voyages", "Great Expeditions", "Norse Exploration"],
+    incentive: "Exploration, combat, trade",
     color: "from-slate-500 to-gray-700",
-    lore: "From frozen fjords, the dragon ships emerge. The Viking Age calls to those who hear the thunder of Thor and dream of Valhalla's halls. Raid distant shores, explore uncharted waters, and forge sagas that will be sung for a thousand years. The gods watch, and only the bold earn their place among legends.",
-    highlights: ["Command longship raids", "Discover new continents", "Earn passage to Valhalla", "Forge legendary weapons"],
-    factions: ["Odin's Ravens", "Shieldmaiden Sisterhood", "Berserker Lodge", "Seafarer Guild"]
+    lore: "From frozen fjords, the dragon ships emerge. The Viking Age calls to those who seek glory and adventure. Raid distant shores, explore uncharted waters, and forge sagas that will be remembered for a thousand years. Only the bold earn their place among legends.",
+    highlights: ["Command longship raids", "Discover new continents", "Build trading empires", "Forge legendary weapons"],
+    factions: ["The Raven Scouts", "Shieldmaiden Sisterhood", "Berserker Lodge", "Seafarer Guild"]
   },
   {
     id: "medieval",
@@ -291,16 +291,16 @@ const EPOCHS = [
     factions: ["Intelligence Agencies", "Cultural Revolutionaries", "Space Programs", "Media Empires"]
   },
   {
-    id: "future",
-    name: "Digital Frontier",
-    period: "Near Future",
+    id: "modern",
+    name: "Modern Era",
+    period: "1900 - Present",
     image: cyberpunkCity,
-    eras: ["Neon Megacities", "Digital Underground", "Corporate Wars", "The Great Awakening"],
-    incentive: "Advanced technology, digital freedom",
+    eras: ["World Wars", "Cold War", "Civil Rights Movement", "Information Age"],
+    incentive: "Global impact, historical turning points",
     color: "from-cyan-400 to-blue-600",
-    lore: "Where technology reshapes society. The Digital Frontier pulses with neon-lit megacities, artificial minds, and a world where information is power. In this era of advanced technology, corporations rival governments, hackers are the new revolutionaries, and truth itself becomes a commodity. Navigate the razor's edge between progress and control.",
-    highlights: ["Hack megacorporations", "Expose hidden agendas", "Augment your abilities", "Lead digital revolutions"],
-    factions: ["Megacorp Executives", "Cyberpunk Hackers", "Truth Seekers", "AI Collective"]
+    lore: "The modern era shaped our world through unprecedented change. From the trenches of world wars to the space race and civil rights movements, experience the pivotal moments that defined the 20th and 21st centuries. Navigate political upheaval, technological revolution, and social transformation.",
+    highlights: ["Experience world-changing events", "Shape political movements", "Witness technological breakthroughs", "Lead social revolutions"],
+    factions: ["Allied Forces", "Civil Rights Activists", "Space Pioneers", "Tech Innovators"]
   }
 ];
 
@@ -311,7 +311,7 @@ const DEFINITIONS: Record<string, { term: string; definition: string }> = {
   "epoch": { term: "Epoch", definition: "A major division of historical time containing multiple mission theaters. Example: The Medieval Epoch contains Dark Ages, Crusades, and High Medieval campaigns." },
   "echoes": { term: "Cross-Era Echoes", definition: "Narrative connections between eras - legendary artifacts and story arcs that span multiple time periods, creating epic cross-campaign quests." },
   "lens": { term: "Your Lens", definition: "Every legend brings their own lens. The world adapts to what you seek, what you question, and what you accept. No two experiences are identical." },
-  "veil": { term: "The Veil", definition: "Some truths hide in plain sight. Spelling is casting a spell. A-muse means 'not to think.' The deeper you look, the more you see." },
+  "veil": { term: "Hidden History", definition: "Beyond the textbooks lie untold stories. The deeper you explore historical records, the more perspectives you discover. History is written by the victors - but you can uncover all sides." },
   "many_lenses": { term: "Many Lenses Design", definition: "Our revolutionary approach where reality itself adapts to your beliefs and patterns. No labels, no boxes, no predetermined categories. Your identity emerges through choices, not predefined archetypes. The world sees YOU, not a character type." },
   "lens_markers": { term: "Lens Markers", definition: "Unlike traditional good/evil meters, Lens Markers observe HOW you approach decisions - not whether they're 'right' or 'wrong'. They track patterns like Courage↔Fear, Hope↔Despair, Trust↔Suspicion. These aren't judgments - they're reflections of your emerging journey." },
   "parallel_self": { term: "Parallel Self", definition: "This isn't an avatar you control - it's YOU in another reality. The AI learns your voice, your patterns, your instincts. When your parallel self speaks, it sounds like you, thinks like you, and makes choices aligned with your emerging identity." },
@@ -1044,8 +1044,8 @@ export default function Chronicles() {
                 <p className="text-sm text-white/60">No A/B choices. The world responds to how you play, what you question.</p>
               </div>
               <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                <h4 className="font-semibold text-pink-400 mb-2">The <InfoTooltip termKey="veil">Veil</InfoTooltip> Drops</h4>
-                <p className="text-sm text-white/60">Some truths hide in plain sight. Look deeper. Discover more.</p>
+                <h4 className="font-semibold text-pink-400 mb-2"><InfoTooltip termKey="veil">Hidden History</InfoTooltip> Revealed</h4>
+                <p className="text-sm text-white/60">Explore untold stories from every era. Discover perspectives history forgot.</p>
               </div>
             </div>
           </motion.div>
