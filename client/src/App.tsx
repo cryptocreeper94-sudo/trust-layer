@@ -211,6 +211,7 @@ const OwnerFaucet = lazy(() => import("@/pages/owner-admin/faucet"));
 const OwnerKyc = lazy(() => import("@/pages/owner-admin/kyc"));
 const OwnerZealy = lazy(() => import("@/pages/owner-admin/zealy"));
 const OwnerFeedback = lazy(() => import("@/pages/owner-admin/feedback"));
+const OwnerMessaging = lazy(() => import("@/pages/owner-admin/messaging"));
 const OwnerPresale = lazy(() => import("@/pages/owner-admin/presale"));
 const Feedback = lazy(() => import("@/pages/feedback"));
 const TeamAdminPortal = lazy(() => import("@/pages/team-admin"));
@@ -437,6 +438,7 @@ function DWSCRouter() {
         <Route path="/owner-admin/kyc" component={OwnerKyc} />
         <Route path="/owner-admin/zealy" component={OwnerZealy} />
         <Route path="/owner-admin/feedback" component={OwnerFeedback} />
+        <Route path="/owner-admin/messaging" component={OwnerMessaging} />
         <Route path="/owner-admin/presale" component={OwnerPresale} />
         <Route path="/feedback" component={Feedback} />
         <Route path="/team-admin" component={TeamAdminPortal} />

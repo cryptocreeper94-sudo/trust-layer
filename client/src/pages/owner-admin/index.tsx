@@ -363,6 +363,7 @@ function OwnerDashboard() {
     { id: "marketing", title: "Marketing Automation", description: `${marketingStats?.totalPosts || 0} branded posts, auto-deployment`, icon: <Megaphone className="w-6 h-6" />, href: "/admin/marketing", glow: "cyan" as const },
     { id: "zealy", title: "Zealy Quests", description: "Community questing, Shell rewards, activity logs", icon: <Gamepad2 className="w-6 h-6" />, href: "/owner-admin/zealy", glow: "purple" as const },
     { id: "feedback", title: "Bug Reports & Feedback", description: "User-submitted bugs, feature requests, feedback", icon: <Activity className="w-6 h-6" />, href: "/owner-admin/feedback", glow: "emerald" as const },
+    { id: "messaging", title: "Messaging Catalog", description: "Pre-approved social media copy & images", icon: <Megaphone className="w-6 h-6" />, href: "/owner-admin/messaging", glow: "purple" as const },
   ];
 
   const hosts = [
