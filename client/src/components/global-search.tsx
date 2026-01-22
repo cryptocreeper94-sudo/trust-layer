@@ -57,7 +57,9 @@ const staticPages: SearchResult[] = [
 
 // Export function to open search from anywhere
 export function openGlobalSearch() {
-  window.dispatchEvent(new CustomEvent('openGlobalSearch'));
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event('openGlobalSearch'));
+  }
 }
 
 export function GlobalSearch() {
