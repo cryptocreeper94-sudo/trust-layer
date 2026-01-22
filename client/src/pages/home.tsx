@@ -533,15 +533,31 @@ export default function Home() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary">DarkWave Trust Layer</span>
             </h1>
 
-            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-              A high-performance Layer 1 blockchain built on Proof-of-Authority consensus. 
-              200,000+ TPS, 400ms finality, and near-zero transaction costs. 
-              The foundation for verified identity, trusted business relationships, and transparent audit trails.
+            <p className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto font-medium">
+              Where business trust becomes blockchain truth.
             </p>
+
+            <img src={signalEmblem} alt="Signal Emblem" className="w-20 h-20 mx-auto mt-4 opacity-80" />
 
           </motion.div>
         </div>
       </section>
+
+      {/* Gradient Divider Bar */}
+      <Link href="/explorer">
+        <div className="relative py-4 cursor-pointer group">
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-purple-900/60 to-slate-950" />
+          <div className="container mx-auto px-4 relative z-10 flex items-center justify-center gap-3">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
+            <Badge className="bg-purple-500/20 border-purple-500/50 text-purple-300 hover:bg-purple-500/30 transition-colors px-4 py-1.5">
+              <Activity className="w-3 h-3 mr-2" />
+              Explore Live Network Activity
+              <ArrowRight className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
+            </Badge>
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
+          </div>
+        </div>
+      </Link>
 
       {/* DeFi Section - Premium Protocol Style */}
       <section className="py-16 px-4 relative overflow-hidden">
