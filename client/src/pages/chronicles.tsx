@@ -155,8 +155,8 @@ const EPOCHS = [
     incentive: "Pristine resources, untouched elements",
     color: "from-amber-600 to-orange-700",
     lore: "In the beginning, before words carved meaning into stone, humanity walked among giants. The Dawn Age is a time of primal survival where your instincts are your greatest weapon. Hunt mammoths across frozen tundras, discover fire's secrets, and forge the first tools that would shape civilization. Here, legends are born not from books, but from the stories whispered around campfires.",
-    highlights: ["Tame prehistoric beasts", "Discover ancient cave systems", "Lead your tribe to dominance", "Unlock primal crafting recipes"],
-    factions: ["The Bone Carvers", "Fire Keepers", "Beast Tamers", "Star Watchers"]
+    highlights: ["Master prehistoric survival", "Discover ancient cave systems", "Lead your tribe to dominance", "Unlock primal crafting techniques"],
+    factions: ["The Bone Carvers", "Fire Keepers", "Master Hunters", "Star Watchers"]
   },
   {
     id: "ancient",
@@ -164,9 +164,9 @@ const EPOCHS = [
     period: "3000 BCE - 500 CE",
     image: egyptianKingdom,
     eras: ["Egyptian Dynasties", "Greek Golden Age", "Roman Empire", "Persian Empire", "Han Dynasty"],
-    incentive: "Lost knowledge, mystical artifacts",
+    incentive: "Lost knowledge, ancient artifacts",
     color: "from-yellow-500 to-amber-600",
-    lore: "The pyramids rise against the desert sun. Pharaohs speak with gods, and empires stretch across continents. In the Ancient World, you walk among the architects of civilization itself. Decode hieroglyphics, navigate the political courts of mighty empires, and uncover artifacts that hold power beyond mortal understanding.",
+    lore: "The pyramids rise against the desert sun. Pharaohs command vast kingdoms, and empires stretch across continents. In the Ancient World, you walk among the architects of civilization itself. Decode hieroglyphics, navigate the political courts of mighty empires, and uncover artifacts that shaped history.",
     highlights: ["Serve pharaohs or become one", "Explore legendary tombs", "Master ancient technologies", "Trade along the Silk Road"],
     factions: ["Temple of Ra", "Senate of Rome", "Persian Immortals", "Han Dynasty Court"]
   },
