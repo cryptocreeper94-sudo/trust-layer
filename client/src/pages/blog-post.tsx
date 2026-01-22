@@ -11,7 +11,6 @@ import { useState } from "react";
 import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { GlassCard } from "@/components/glass-card";
 import { useToast } from "@/hooks/use-toast";
 
 interface BlogPost {
@@ -264,9 +263,9 @@ export default function BlogPost() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <GlassCard glow className="p-8 md:p-12">
+          <div className="bg-slate-900/60 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 md:p-12 shadow-2xl">
             <MarkdownContent content={post.content} />
-          </GlassCard>
+          </div>
         </motion.div>
 
         {post.tags && post.tags.length > 0 && (

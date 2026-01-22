@@ -65,19 +65,19 @@ export default function DevelopersNote() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-20">
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
         <img src={fantasyWorld} alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/90 to-slate-950" />
       </div>
       
-      <div className="absolute top-20 left-10 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-40 right-10 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl" />
+      <div className="absolute top-20 left-10 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-40 right-10 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
       
-      <div className="relative z-10 container mx-auto px-4 py-16 md:py-24">
+      <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 pt-20 pb-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-3xl mx-auto"
+          className="max-w-4xl mx-auto"
         >
           <div className="text-center mb-12">
             <motion.div
@@ -97,7 +97,7 @@ export default function DevelopersNote() {
             </h1>
           </div>
           
-          <GlassCard glow className="p-8 md:p-12">
+          <div className="bg-slate-900/60 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 md:p-12 shadow-2xl">
             <div className="prose prose-invert max-w-none">
               <p className="text-lg md:text-xl text-white/90 leading-relaxed mb-6">
                 Hey there,
@@ -197,7 +197,7 @@ export default function DevelopersNote() {
                 — Jason & The DarkWave Team
               </p>
             </div>
-          </GlassCard>
+          </div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -98,7 +98,7 @@ export default function FoundersPage() {
             </div>
           </div>
 
-          <GlassCard glow className="p-8 md:p-12 mb-8">
+          <div className="bg-slate-900/60 backdrop-blur-xl rounded-2xl border border-white/10 p-6 sm:p-8 md:p-12 shadow-2xl mb-8">
             <div className="grid md:grid-cols-2 gap-8 mb-8">
               <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-6 md:p-8 border border-white/10">
                 <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
@@ -178,7 +178,7 @@ export default function FoundersPage() {
               </Link>
               <p className="text-white/50 text-sm mt-4">Only 4 tiers: $25, $50, $75, or $100</p>
             </div>
-          </GlassCard>
+          </div>
 
           <div className="grid md:grid-cols-3 gap-6 mb-8">
             <GlassCard className="p-8 text-center">
