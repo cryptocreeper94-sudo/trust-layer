@@ -652,7 +652,7 @@ export default function WalletPage() {
         <div className="container mx-auto px-4 py-3 flex flex-col items-center gap-1 text-center">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-white flex-shrink-0" />
-            <span className="text-xs sm:text-sm font-bold text-white">DarkWave Wallet — Shells Only Until June 1st Launch</span>
+            <span className="text-xs sm:text-sm font-bold text-white">DarkWave Wallet — Shells Only Until Launch</span>
           </div>
           <span className="text-[10px] sm:text-xs text-white/80">Use your preferred wallet (MetaMask, Phantom, etc.) for presale crypto purchases</span>
         </div>
@@ -680,7 +680,7 @@ export default function WalletPage() {
             </span>
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-4">
-            Collect and manage your Shells before mainnet launch on June 1st, 2026.
+            Collect and manage your Shells before mainnet launch.
           </p>
           <div className="max-w-xl mx-auto p-4 rounded-xl bg-slate-800/50 border border-white/10">
             <p className="text-sm text-gray-300">

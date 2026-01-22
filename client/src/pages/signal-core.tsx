@@ -109,7 +109,7 @@ export default function SignalCore() {
     {
       seat: "Guardian Seat",
       role: "Fresh perspective, term-limited rotation",
-      selection: "Rotating, 6-month terms",
+      selection: "Rotating terms",
       holder: "Future implementation",
       color: "from-rose-500 to-red-500"
     }
@@ -347,7 +347,7 @@ export default function SignalCore() {
             </p>
             <div className="flex items-center justify-center gap-2 text-sm text-slate-500">
               <Lock className="w-4 h-4" />
-              <span>Established 2026 — Permanent & Unchangeable</span>
+              <span>Permanent & Unchangeable — From Genesis Forward</span>
             </div>
           </GlassCard>
         </motion.div>

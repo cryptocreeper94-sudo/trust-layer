@@ -502,7 +502,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
           
           <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
             <p className="text-xs text-amber-400 text-center">
-              No wallet needed now! Your allocation is tracked by email. You'll create a DarkWave wallet before TGE to receive your Signal.
+              No wallet needed now! Your allocation is tracked by email. You'll create a DarkWave wallet before launch to receive your Signal.
             </p>
           </div>
         </div>
@@ -1307,7 +1307,7 @@ export default function Presale() {
             <HolographicCard className="p-6 text-center relative" glow="pink">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm">3</div>
               <Users className="w-8 h-8 text-pink-400 mx-auto mb-4 mt-2" />
-              <h3 className="text-lg font-bold text-white mb-2">Create Wallet at TGE</h3>
+              <h3 className="text-lg font-bold text-white mb-2">Create Wallet at Launch</h3>
               <p className="text-gray-400 text-sm">Before launch, create your DarkWave wallet to claim tokens</p>
             </HolographicCard>
             
@@ -1325,12 +1325,12 @@ export default function Presale() {
                 <Shield className="w-5 h-5 text-blue-400" />
               </div>
               <div>
-                <h4 className="text-white font-semibold mb-2">No Wallet Required Until TGE</h4>
+                <h4 className="text-white font-semibold mb-2">No Wallet Required Until Launch</h4>
                 <p className="text-gray-400 text-sm leading-relaxed">
                   <span className="text-cyan-400 font-medium">Participate now without a wallet!</span> Your presale purchases and Zealy Shell earnings are 
                   tracked by your account, not your wallet. Before mainnet launch, you'll create a DarkWave wallet to receive your tokens.
                   At launch, your <span className="text-green-400 font-medium">Signal + converted Shells</span> will be airdropped to your wallet 
-                  (20% at TGE, 80% vested over 12 months). Shell conversion rate: 100 Shells = 1 SIG.
+                  (20% at launch, 80% vested). Shell conversion rate: 100 Shells = 1 SIG.
                 </p>
               </div>
             </div>
@@ -1346,7 +1346,7 @@ export default function Presale() {
           <HolographicCard className="p-6 text-center">
             <Clock className="w-8 h-8 text-purple-400 mx-auto mb-4" />
             <h3 className="text-lg font-bold text-white mb-2">Vesting Schedule</h3>
-            <p className="text-gray-400 text-sm">20% at TGE, 80% vested over 12 months</p>
+            <p className="text-gray-400 text-sm">20% at launch, 80% vested</p>
           </HolographicCard>
           <HolographicCard className="p-6 text-center">
             <Gift className="w-8 h-8 text-pink-400 mx-auto mb-4" />

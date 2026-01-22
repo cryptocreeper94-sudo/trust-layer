@@ -571,7 +571,7 @@ export default function Token() {
               </h2>
               <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
                 Pay $24 once. Get lifetime access. Receive 35,000 Signal on launch day.
-                Only 10,000 spots available - program closes June 1, 2026.
+                Only 10,000 spots available — limited time offer.
               </p>
               <Link href="/founder-program">
                 <Button size="lg" className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-full gap-2" data-testid="button-founder-program">

@@ -372,7 +372,7 @@ export default function Rewards() {
                   <span className="font-medium">Token Generation Event</span>
                 </div>
                 <p className="text-white/70">
-                  <span className="text-cyan-400 font-bold">June 1, 2026</span> — Your {rewardProfile.shellBalance.toLocaleString()} Shells will convert to{' '}
+                  <span className="text-cyan-400 font-bold">At Launch</span> — Your {rewardProfile.shellBalance.toLocaleString()} Shells will convert to{' '}
                   <span className="text-amber-400 font-bold">{rewardProfile.conversion.estimatedDwc.toLocaleString()} SIG</span>
                   {!rewardProfile.profile.hasWallet && (
                     <span className="text-rose-400 ml-2">(Connect wallet to receive tokens)</span>
@@ -429,7 +429,7 @@ export default function Rewards() {
                   <span className="text-lg font-bold text-emerald-400">4</span>
                 </div>
                 <h4 className="font-semibold mb-1">Receive SIG</h4>
-                <p className="text-sm text-white/60">At TGE (June 1, 2026), your Shells convert to real SIG tokens</p>
+                <p className="text-sm text-white/60">At launch, your Shells convert to real SIG tokens</p>
               </div>
             </div>
             
@@ -618,7 +618,7 @@ export default function Rewards() {
                 <AccordionContent className="text-white/70 pb-4">
                   DarkWave is a real blockchain project with active development, a working testnet, and a clear roadmap. 
                   The Shell reward system is live and operational right now — you can see your balance update immediately 
-                  when you complete quests. At TGE (June 1, 2026), Shells convert to SIG tokens at a fixed rate of 
+                  when you complete quests. At launch, Shells convert to SIG tokens at a fixed rate of 
                   100:1. Early adopters who participate now get the best tier multipliers and the largest airdrops.
                 </AccordionContent>
               </AccordionItem>
@@ -631,7 +631,7 @@ export default function Rewards() {
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="text-white/70 pb-4">
-                  TGE is when SIG tokens officially launch on June 1, 2026. At this point:
+                  TGE is when SIG tokens officially launch. At this point:
                   <ul className="list-disc list-inside mt-2 space-y-1">
                     <li>Your Shell balance is snapshot and frozen</li>
                     <li>Shells are converted to SIG at 100:1 ratio</li>
@@ -685,7 +685,7 @@ export default function Rewards() {
           <GlassCard className="p-8 max-w-2xl mx-auto">
             <h2 className="text-2xl font-bold mb-4">Ready to Claim Your Rewards?</h2>
             <p className="text-white/60 mb-6">
-              All bonuses will be distributed as SIG tokens at the Token Generation Event (June 1, 2026).
+              All bonuses will be distributed as SIG tokens at the Token Generation Event — coming soon.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {!user && (

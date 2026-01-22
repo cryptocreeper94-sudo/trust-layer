@@ -27,7 +27,7 @@ export default function GovernanceCharter() {
       phase: "Phase 1",
       title: "Foundation",
       status: "current",
-      milestone: "Pre-Launch",
+      milestone: "Now — Building",
       description: "Establishing the core principles and infrastructure",
       items: [
         "Signal Core document ratified and published",
@@ -41,7 +41,7 @@ export default function GovernanceCharter() {
       phase: "Phase 2",
       title: "Community Building",
       status: "upcoming",
-      milestone: "Post-TGE",
+      milestone: "Coming Soon",
       description: "Growing the community and establishing first governance processes",
       items: [
         "First Community Seat election held",
@@ -55,7 +55,7 @@ export default function GovernanceCharter() {
       phase: "Phase 3",
       title: "Decentralized Governance",
       status: "future",
-      milestone: "10,000+ Verified Members",
+      milestone: "Community Threshold",
       description: "Full governance power transferred to the community",
       items: [
         "Guardian Seat rotation begins",
@@ -152,7 +152,7 @@ export default function GovernanceCharter() {
         "External partnership evaluation"
       ],
       limitations: [
-        "6-month rotating terms",
+        "Periodic rotating terms",
         "Cannot serve consecutive terms",
         "Selected by council consensus"
       ]
@@ -194,25 +194,25 @@ export default function GovernanceCharter() {
       type: "Standard Proposals",
       threshold: "Simple majority (51%)",
       quorum: "10% of verified members",
-      duration: "7 days voting period"
+      duration: "Standard voting window"
     },
     {
       type: "Treasury Proposals",
       threshold: "Supermajority (67%)",
       quorum: "15% of verified members",
-      duration: "14 days voting period"
+      duration: "Extended voting window"
     },
     {
       type: "Constitutional Amendments",
       threshold: "Supermajority (75%)",
       quorum: "25% of verified members",
-      duration: "30 days voting period"
+      duration: "Full deliberation period"
     },
     {
       type: "Emergency Actions",
       threshold: "4-of-5 Council",
       quorum: "Council only",
-      duration: "Immediate with 72hr community review"
+      duration: "Immediate with community review"
     }
   ];
 

@@ -528,9 +528,9 @@ export default function MyHub() {
                         <p className="text-xs text-white/40">{rewardProfile?.profile?.multiplier || 1}x multiplier</p>
                       </div>
                       <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                        <p className="text-white/50 text-sm mb-1">Est. SIG at TGE</p>
+                        <p className="text-white/50 text-sm mb-1">Est. SIG at Launch</p>
                         <p className="text-2xl font-bold text-emerald-400">{rewardProfile?.conversion?.estimatedDwc?.toLocaleString() || 0}</p>
-                        <p className="text-xs text-white/40">June 1, 2026</p>
+                        <p className="text-xs text-white/40">Coming Soon</p>
                       </div>
                     </div>
                   </div>

@@ -41,7 +41,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
     name: "Foundations",
     description: "Core blockchain infrastructure and portal development",
     status: "completed",
-    targetDate: "Q1-Q2 2026",
+    targetDate: "Completed",
     icon: <Layers className="w-6 h-6" />,
     image: blockchainBg,
     milestones: [
@@ -58,7 +58,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
     name: "Ecosystem Build",
     description: "DeFi features, NFT marketplace, and developer tools",
     status: "in_progress",
-    targetDate: "Q3-Q4 2026",
+    targetDate: "In Progress",
     icon: <Coins className="w-6 h-6" />,
     image: dashboardImg,
     milestones: [
@@ -81,7 +81,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
     name: "ChronoChat Platform",
     description: "Community hub with tiered product offerings",
     status: "in_progress",
-    targetDate: "Q4 2026 - Q2 2026",
+    targetDate: "Active Development",
     icon: <MessageCircle className="w-6 h-6" />,
     image: cyberpunkCity,
     milestones: [
@@ -97,7 +97,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
     name: "Network Hardening",
     description: "Security audits, scaling, and global infrastructure",
     status: "upcoming",
-    targetDate: "Q1 2026",
+    targetDate: "Coming Soon",
     icon: <Shield className="w-6 h-6" />,
     image: deepSpace,
     milestones: [
@@ -131,11 +131,11 @@ const ECOSYSTEM_PHASES: Phase[] = [
     name: "Mainnet Launch",
     description: "Public launch and live operations",
     status: "upcoming",
-    targetDate: "Jun 1, 2026",
+    targetDate: "Approaching",
     icon: <Rocket className="w-6 h-6" />,
     image: quantumRealm,
     milestones: [
-      { id: "e21", title: "Mainnet Genesis Block", description: "Official network launch on June 1, 2026", status: "pending", isRequired: true },
+      { id: "e21", title: "Mainnet Genesis Block", description: "Official network launch — date to be announced", status: "pending", isRequired: true },
       { id: "e22", title: "Token Migration", description: "Testnet to mainnet token conversion", status: "pending", isRequired: true },
       { id: "e23", title: "Chronicles 20+ Eras", description: "Expand from Medieval to 20+ historical eras (community-driven timeline)", status: "pending", isRequired: true },
       { id: "e24", title: "Exchange Listings", description: "CEX and DEX trading availability", status: "pending", isRequired: false },
@@ -350,7 +350,7 @@ export default function RoadmapEcosystem() {
               </span>
             </h1>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Our path to mainnet launch on June 1, 2026. 
+              Our path to mainnet launch — coming soon. 
               A Layer 1 blockchain built to surpass Solana and Ethereum.
             </p>
           </div>
