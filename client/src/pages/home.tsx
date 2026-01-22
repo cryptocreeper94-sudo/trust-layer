@@ -1035,14 +1035,14 @@ export default function Home() {
       <Footer />
 
       <Dialog open={showPresalePopup} onOpenChange={setShowPresalePopup}>
-        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white w-[85vw] max-w-[340px] shadow-[0_0_60px_rgba(0,200,255,0.3)]">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-center">
+        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white w-[85vw] max-w-[340px] shadow-[0_0_60px_rgba(0,200,255,0.3)] p-6">
+          <DialogHeader className="text-center">
+            <DialogTitle className="text-xl font-bold text-center mx-auto">
               <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 Signal Presale is LIVE
               </span>
             </DialogTitle>
-            <DialogDescription className="text-gray-300 text-center pt-1 text-sm">
+            <DialogDescription className="text-gray-300 text-center pt-1 text-sm mx-auto">
               Ground floor opportunity
             </DialogDescription>
           </DialogHeader>
@@ -1068,16 +1068,18 @@ export default function Home() {
             </div>
           </div>
           
-          <Link href="/presale" className="w-full">
-            <Button 
-              onClick={() => setShowPresalePopup(false)}
-              className="w-full py-3 text-base font-bold bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg shadow-purple-500/25"
-              data-testid="button-go-to-presale"
-            >
-              <Rocket className="w-5 h-5 mr-2" />
-              Get Your Signal Now
-            </Button>
-          </Link>
+          <div className="w-full">
+            <Link href="/presale" className="block w-full">
+              <Button 
+                onClick={() => setShowPresalePopup(false)}
+                className="w-full py-3 text-base font-bold bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg shadow-purple-500/25"
+                data-testid="button-go-to-presale"
+              >
+                <Rocket className="w-5 h-5 mr-2" />
+                Get Your Signal Now
+              </Button>
+            </Link>
+          </div>
         </DialogContent>
       </Dialog>
     </div>
