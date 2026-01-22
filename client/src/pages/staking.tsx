@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Coins, Lock, Unlock, TrendingUp, Trophy, Zap, Gift, Clock, ChevronRight, Sparkles, Shield, Star, LogIn, Crown, Medal, Award, Flame, Wallet, ArrowUpRight } from "lucide-react";
+import { Coins, Lock, Unlock, TrendingUp, Trophy, Zap, Gift, Clock, ChevronRight, Sparkles, Shield, Star, LogIn, Crown, Medal, Award, Flame, Wallet, ArrowUpRight, Home } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -244,18 +244,17 @@ export default function Staking() {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
-            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="border-emerald-500/50 text-emerald-400 bg-emerald-500/10 text-[10px] sm:text-xs whitespace-nowrap animate-pulse">
-              <Sparkles className="w-3 h-3 mr-1" /> Staking Live
-            </Badge>
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center">
+          <div className="flex items-center gap-3">
             <BackButton />
+            <h1 className="text-lg font-bold text-white">Staking</h1>
           </div>
+          <Link href="/" className="ml-auto">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-white/10">
+              <Home className="w-4 h-4" />
+            </Button>
+          </Link>
         </div>
       </nav>
 
