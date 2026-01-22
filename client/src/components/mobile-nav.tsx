@@ -12,9 +12,31 @@ import chroniclesImg from "@assets/generated_images/fantasy_sci-fi_world_landsca
 import crowdfundImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import presaleImg from "@assets/generated_images/darkwave_crypto_token_coin_holographic.png";
 
-const featuredItems = [
-  { href: "/presale", label: "Incoming Signal", icon: Coins, badge: "Live", image: presaleImg, overlayGradient: "linear-gradient(135deg, rgba(245,158,11,0.85) 0%, rgba(239,68,68,0.7) 50%, rgba(0,0,0,0.6) 100%)", iconGradient: "#f59e0b, #ef4444", badgeClass: "bg-amber-500/30 text-amber-300", description: "Acquire SIG at Best Price", external: false },
-];
+const featuredSquareItem = { 
+  href: "/presale", 
+  label: "Incoming Signal", 
+  icon: Coins, 
+  badge: "Live", 
+  image: presaleImg, 
+  overlayGradient: "linear-gradient(135deg, rgba(245,158,11,0.85) 0%, rgba(239,68,68,0.7) 50%, rgba(0,0,0,0.6) 100%)", 
+  iconGradient: "#f59e0b, #ef4444", 
+  badgeClass: "bg-amber-500/30 text-amber-300", 
+  description: "Presale", 
+  external: false 
+};
+
+const crowdfundItem = { 
+  href: "/crowdfund", 
+  label: "Crowdfunding", 
+  icon: Heart, 
+  badge: "Support", 
+  image: crowdfundImg, 
+  overlayGradient: "linear-gradient(135deg, rgba(168,85,247,0.85) 0%, rgba(236,72,153,0.7) 50%, rgba(0,0,0,0.6) 100%)", 
+  iconGradient: "#a855f7, #ec4899", 
+  badgeClass: "bg-purple-500/30 text-purple-300", 
+  description: "Support the Project", 
+  external: false 
+};
 
 // Streamlined nav categories - consolidated for cleaner mobile experience
 const navCategories = [
@@ -596,8 +618,8 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
           </div>
         </Link>
 
-        {/* Featured Section */}
-        <div style={{ marginBottom: '24px' }}>
+        {/* Featured Section - Presale Square + Crowdfund */}
+        <div style={{ marginBottom: '16px' }}>
           <span style={{ 
             fontSize: '11px', 
             fontWeight: 600, 
@@ -609,101 +631,146 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
           }}>
             Featured
           </span>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {featuredItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = !item.external && location === item.href;
-              
-              const cardContent = (
-                <div
-                  onClick={item.external ? undefined : onClose}
-                  data-testid={`featured-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
-                  style={{
-                    position: 'relative',
-                    padding: '10px',
-                    borderRadius: '12px',
-                    border: isActive ? '2px solid rgba(168, 85, 247, 0.6)' : '1px solid rgba(255, 255, 255, 0.2)',
-                    overflow: 'hidden',
-                    cursor: 'pointer',
-                    minHeight: '50px',
-                    boxSizing: 'border-box',
-                  }}
-                >
-                  <img 
-                    src={item.image} 
-                    alt=""
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      objectPosition: 'center',
-                    }}
-                  />
-                  <div style={{ 
-                    position: 'absolute', 
-                    top: 0, 
-                    left: 0, 
-                    right: 0, 
-                    bottom: 0, 
-                    background: item.overlayGradient,
-                    pointerEvents: 'none'
-                  }} />
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative', zIndex: 1 }}>
-                    <div style={{
-                      width: '28px',
-                      height: '28px',
-                      minWidth: '28px',
-                      borderRadius: '8px',
-                      background: `linear-gradient(135deg, ${item.iconGradient})`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
-                      flexShrink: 0,
-                    }}>
-                      <Icon style={{ width: '14px', height: '14px', color: '#ffffff' }} />
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <span style={{ fontWeight: 600, fontSize: '12px', color: '#ffffff', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>{item.label}</span>
-                        <Badge className={`text-[8px] px-1 py-0 ${item.badgeClass}`}>
-                          {item.badge}
-                        </Badge>
-                      </div>
-                    </div>
-                  </div>
+          
+          {/* Presale - Square Featured Item */}
+          <Link href={featuredSquareItem.href} style={{ textDecoration: 'none', display: 'block' }}>
+            <div
+              onClick={onClose}
+              data-testid="featured-presale-square"
+              style={{
+                position: 'relative',
+                width: '100%',
+                aspectRatio: '1',
+                maxWidth: '220px',
+                borderRadius: '16px',
+                border: '2px solid rgba(245, 158, 11, 0.5)',
+                overflow: 'hidden',
+                cursor: 'pointer',
+                marginBottom: '10px',
+                boxShadow: '0 0 30px rgba(245, 158, 11, 0.2)',
+              }}
+            >
+              <img 
+                src={featuredSquareItem.image} 
+                alt=""
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+              <div style={{ 
+                position: 'absolute', 
+                top: 0, 
+                left: 0, 
+                right: 0, 
+                bottom: 0, 
+                background: featuredSquareItem.overlayGradient,
+              }} />
+              <div style={{ 
+                position: 'absolute',
+                bottom: '12px',
+                left: '12px',
+                right: '12px',
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '10px',
+                zIndex: 1 
+              }}>
+                <div style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '10px',
+                  background: `linear-gradient(135deg, ${featuredSquareItem.iconGradient})`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+                }}>
+                  <Coins style={{ width: '18px', height: '18px', color: '#ffffff' }} />
                 </div>
-              );
-              
-              if (item.external) {
-                return (
-                  <a 
-                    key={item.href} 
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    style={{ textDecoration: 'none', display: 'block' }}
-                  >
-                    {cardContent}
-                  </a>
-                );
-              }
-              
-              return (
-                <Link key={item.href} href={item.href} style={{ textDecoration: 'none', display: 'block' }}>
-                  {cardContent}
-                </Link>
-              );
-            })}
-          </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ fontWeight: 700, fontSize: '14px', color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+                      {featuredSquareItem.label}
+                    </span>
+                    <Badge className={`text-[9px] px-1.5 py-0 ${featuredSquareItem.badgeClass}`}>
+                      {featuredSquareItem.badge}
+                    </Badge>
+                  </div>
+                  <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.8)' }}>{featuredSquareItem.description}</span>
+                </div>
+              </div>
+            </div>
+          </Link>
+
+          {/* Crowdfunding - Normal sized colored button */}
+          <Link href={crowdfundItem.href} style={{ textDecoration: 'none', display: 'block' }}>
+            <div
+              onClick={onClose}
+              data-testid="featured-crowdfund"
+              style={{
+                position: 'relative',
+                padding: '12px',
+                borderRadius: '12px',
+                border: '1px solid rgba(168, 85, 247, 0.4)',
+                overflow: 'hidden',
+                cursor: 'pointer',
+              }}
+            >
+              <img 
+                src={crowdfundItem.image} 
+                alt=""
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+              <div style={{ 
+                position: 'absolute', 
+                top: 0, 
+                left: 0, 
+                right: 0, 
+                bottom: 0, 
+                background: crowdfundItem.overlayGradient,
+              }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', position: 'relative', zIndex: 1 }}>
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '10px',
+                  background: `linear-gradient(135deg, ${crowdfundItem.iconGradient})`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+                }}>
+                  <Heart style={{ width: '16px', height: '16px', color: '#ffffff' }} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ fontWeight: 600, fontSize: '13px', color: '#ffffff', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
+                      {crowdfundItem.label}
+                    </span>
+                    <Badge className={`text-[8px] px-1.5 py-0 ${crowdfundItem.badgeClass}`}>
+                      {crowdfundItem.badge}
+                    </Badge>
+                  </div>
+                  <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.7)' }}>{crowdfundItem.description}</span>
+                </div>
+                <ArrowRight style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.6)' }} />
+              </div>
+            </div>
+          </Link>
         </div>
 
         {/* Divider */}
@@ -722,20 +789,6 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
           ))}
         </nav>
 
-        {/* Bottom Buttons */}
-        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <div style={{ padding: '0 4px' }}>
-            <WalletButton />
-          </div>
-          <Link href="/ecosystem" style={{ textDecoration: 'none' }}>
-            <Button
-              className="w-full bg-primary text-background hover:bg-primary/90 font-semibold"
-              onClick={onClose}
-            >
-              Launch App
-            </Button>
-          </Link>
-        </div>
       </div>
     </>,
     document.body

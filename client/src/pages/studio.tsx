@@ -1835,15 +1835,16 @@ console.log('DarkWave Studio loaded!');`,
     <div className="h-screen flex flex-col bg-[#0a0a0f] text-foreground overflow-hidden">
       {/* View-Only Banner for non-logged-in users */}
       {isViewOnly && (
-        <div className="bg-gradient-to-r from-amber-600/20 via-orange-600/20 to-amber-600/20 border-b border-amber-500/30 px-4 py-2 flex items-center justify-between shrink-0">
+        <div className="bg-slate-900/80 border-b border-white/5 px-4 py-1.5 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2">
-            <Eye className="w-4 h-4 text-amber-400" />
-            <span className="text-sm text-amber-200">View-Only Mode - Sign in to create and save projects</span>
+            <Eye className="w-3 h-3 text-slate-400" />
+            <span className="text-xs text-slate-400">View-Only Mode</span>
           </div>
           <Button
             size="sm"
+            variant="ghost"
             onClick={() => setShowLoginModal(true)}
-            className="bg-amber-500 hover:bg-amber-600 text-black text-xs h-7"
+            className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 text-xs h-6 px-3"
             data-testid="button-login-banner"
           >
             Sign In

@@ -914,26 +914,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-16 px-4">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-4">Ready to Launch?</h2>
-          <p className="text-sm text-muted-foreground max-w-lg mx-auto mb-8">
-            Join thousands of developers building the future of finance, gaming, and social on DarkWave Trust Layer.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link href="/developers">
-              <Button size="lg" className="h-12 px-8 bg-primary text-background hover:bg-primary/90 font-bold rounded-full" data-testid="button-start-building-now">
-                Start Building Now
-              </Button>
-            </Link>
-            <Link href="/doc-hub">
-              <Button size="lg" variant="ghost" className="h-12 px-8 hover:bg-white/5 rounded-full" data-testid="button-explore-docs">
-                Explore Docs
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
 
       <Footer />
 
