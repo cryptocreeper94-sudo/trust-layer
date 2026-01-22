@@ -233,7 +233,7 @@ export default function Staking() {
 
   const openStakeModal = (pool: StakingPool) => {
     if (!isAuthenticated) {
-      window.location.href = "/api/login";
+      window.location.href = "/?login=true";
       return;
     }
     setSelectedPool(pool);
@@ -304,8 +304,8 @@ export default function Staking() {
             </Link>
           </motion.div>
 
-          {/* Premium Stats Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+          {/* Premium Stats Cards - 2x2 grid for consistent sizing */}
+          <div className="grid grid-cols-2 gap-4">
             {[
               { value: formatNumber(stats?.totalValueLocked || "0"), label: "Total Value Locked", color: "text-primary", icon: Lock },
               { value: stats?.totalStakers || 0, label: "Active Stakers", color: "text-white", icon: Wallet },
