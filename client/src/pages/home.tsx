@@ -501,6 +501,86 @@ export default function Home() {
         <div className="absolute inset-0 z-0">
           <img src={heroBg} alt="" className="w-full h-full object-cover opacity-30" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/80 to-background" />
+          {/* Blockchain Network Lattice */}
+          <svg className="absolute inset-0 w-full h-full opacity-40" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#06b6d4" stopOpacity="1" />
+                <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
+              </radialGradient>
+              <radialGradient id="nodeGlowPurple" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#a855f7" stopOpacity="1" />
+                <stop offset="100%" stopColor="#a855f7" stopOpacity="0" />
+              </radialGradient>
+            </defs>
+            {/* Connection lines */}
+            {[
+              { x1: '10%', y1: '20%', x2: '25%', y2: '35%' },
+              { x1: '25%', y1: '35%', x2: '15%', y2: '55%' },
+              { x1: '25%', y1: '35%', x2: '40%', y2: '25%' },
+              { x1: '40%', y1: '25%', x2: '55%', y2: '40%' },
+              { x1: '55%', y1: '40%', x2: '70%', y2: '30%' },
+              { x1: '70%', y1: '30%', x2: '85%', y2: '45%' },
+              { x1: '85%', y1: '45%', x2: '90%', y2: '25%' },
+              { x1: '15%', y1: '55%', x2: '30%', y2: '70%' },
+              { x1: '30%', y1: '70%', x2: '50%', y2: '65%' },
+              { x1: '50%', y1: '65%', x2: '55%', y2: '40%' },
+              { x1: '50%', y1: '65%', x2: '70%', y2: '75%' },
+              { x1: '70%', y1: '75%', x2: '85%', y2: '60%' },
+              { x1: '85%', y1: '60%', x2: '85%', y2: '45%' },
+              { x1: '20%', y1: '85%', x2: '30%', y2: '70%' },
+              { x1: '70%', y1: '75%', x2: '80%', y2: '90%' },
+            ].map((line, i) => (
+              <line
+                key={`line-${i}`}
+                x1={line.x1}
+                y1={line.y1}
+                x2={line.x2}
+                y2={line.y2}
+                stroke="url(#waveGradient)"
+                strokeWidth="1"
+                strokeOpacity="0.4"
+                className="animate-pulse"
+                style={{ animationDelay: `${i * 0.2}s` }}
+              />
+            ))}
+            {/* Nodes */}
+            {[
+              { cx: '10%', cy: '20%', size: 6 },
+              { cx: '25%', cy: '35%', size: 8 },
+              { cx: '15%', cy: '55%', size: 5 },
+              { cx: '40%', cy: '25%', size: 7 },
+              { cx: '55%', cy: '40%', size: 9 },
+              { cx: '70%', cy: '30%', size: 6 },
+              { cx: '85%', cy: '45%', size: 8 },
+              { cx: '90%', cy: '25%', size: 5 },
+              { cx: '30%', cy: '70%', size: 7 },
+              { cx: '50%', cy: '65%', size: 6 },
+              { cx: '70%', cy: '75%', size: 8 },
+              { cx: '85%', cy: '60%', size: 5 },
+              { cx: '20%', cy: '85%', size: 6 },
+              { cx: '80%', cy: '90%', size: 7 },
+            ].map((node, i) => (
+              <g key={`node-${i}`}>
+                <circle
+                  cx={node.cx}
+                  cy={node.cy}
+                  r={node.size * 2}
+                  fill={i % 2 === 0 ? 'url(#nodeGlow)' : 'url(#nodeGlowPurple)'}
+                  className="animate-pulse"
+                  style={{ animationDelay: `${i * 0.15}s` }}
+                />
+                <circle
+                  cx={node.cx}
+                  cy={node.cy}
+                  r={node.size}
+                  fill={i % 2 === 0 ? '#06b6d4' : '#a855f7'}
+                  className="animate-pulse"
+                  style={{ animationDelay: `${i * 0.15}s` }}
+                />
+              </g>
+            ))}
+          </svg>
         </div>
 
         <div className="container relative z-10 px-4 text-center">
@@ -548,68 +628,76 @@ export default function Home() {
                 >
                   <defs>
                     <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.6" />
-                      <stop offset="35%" stopColor="#8b5cf6" stopOpacity="0.7" />
-                      <stop offset="65%" stopColor="#a855f7" stopOpacity="0.7" />
-                      <stop offset="100%" stopColor="#ec4899" stopOpacity="0.5" />
+                      <stop offset="0%" stopColor="#22d3ee" stopOpacity="1" />
+                      <stop offset="30%" stopColor="#06b6d4" stopOpacity="1" />
+                      <stop offset="50%" stopColor="#a855f7" stopOpacity="1" />
+                      <stop offset="70%" stopColor="#ec4899" stopOpacity="1" />
+                      <stop offset="100%" stopColor="#f472b6" stopOpacity="1" />
                     </linearGradient>
                     <linearGradient id="waveGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.3" />
-                      <stop offset="50%" stopColor="#a855f7" stopOpacity="0.4" />
-                      <stop offset="100%" stopColor="#f472b6" stopOpacity="0.3" />
+                      <stop offset="0%" stopColor="#67e8f9" stopOpacity="0.8" />
+                      <stop offset="50%" stopColor="#c084fc" stopOpacity="0.8" />
+                      <stop offset="100%" stopColor="#f9a8d4" stopOpacity="0.8" />
                     </linearGradient>
+                    <filter id="glow">
+                      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                      <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                      </feMerge>
+                    </filter>
                   </defs>
                   {/* Wave 1 - Primary flowing wave */}
                   <path
-                    d="M0,100 Q50,60 100,100 T200,100 T300,100 T400,100 T500,100 T600,100 T700,100 T800,100 T900,100 T1000,100 T1100,100 T1200,100"
+                    d="M0,100 Q50,50 100,100 T200,100 T300,100 T400,100 T500,100 T600,100 T700,100 T800,100 T900,100 T1000,100 T1100,100 T1200,100"
                     fill="none"
                     stroke="url(#waveGradient)"
-                    strokeWidth="2"
+                    strokeWidth="3"
+                    filter="url(#glow)"
                     className="animate-pulse"
                   />
                   {/* Wave 2 - Secondary offset wave */}
                   <path
-                    d="M0,100 Q75,130 150,100 T300,100 T450,100 T600,100 T750,100 T900,100 T1050,100 T1200,100"
+                    d="M0,100 Q75,140 150,100 T300,100 T450,100 T600,100 T750,100 T900,100 T1050,100 T1200,100"
                     fill="none"
                     stroke="url(#waveGradient2)"
-                    strokeWidth="1.5"
+                    strokeWidth="2"
+                    filter="url(#glow)"
                   />
-                  {/* Frequency bars - left side (cyan) */}
+                  {/* Frequency bars - left side (bright cyan) */}
                   {[...Array(35)].map((_, i) => {
-                    const baseHeight = 15 + Math.sin(i * 0.4) * 25;
+                    const baseHeight = 25 + Math.sin(i * 0.4) * 45;
                     const x = 20 + i * 14;
-                    const opacity = 0.2 + (i / 35) * 0.5;
                     return (
                       <rect
                         key={`bar-left-${i}`}
                         x={x}
                         y={100 - baseHeight / 2}
-                        width="4"
+                        width="6"
                         height={baseHeight}
-                        fill={`rgba(6, 182, 212, ${opacity})`}
-                        rx="2"
+                        fill="#22d3ee"
+                        rx="3"
+                        filter="url(#glow)"
                         className="animate-pulse"
                         style={{ animationDelay: `${i * 0.05}s` }}
                       />
                     );
                   })}
-                  {/* Frequency bars - right side (purple to pink) */}
+                  {/* Frequency bars - right side (bright purple to pink) */}
                   {[...Array(35)].map((_, i) => {
-                    const baseHeight = 15 + Math.sin(i * 0.4) * 25;
+                    const baseHeight = 25 + Math.sin(i * 0.4) * 45;
                     const x = 700 + i * 14;
-                    const opacity = 0.2 + ((35 - i) / 35) * 0.5;
-                    const r = 168 + Math.floor(i * 2);
-                    const g = 85 - Math.floor(i * 0.5);
-                    const b = 247 - Math.floor(i * 3);
+                    const color = i < 18 ? '#a855f7' : '#ec4899';
                     return (
                       <rect
                         key={`bar-right-${i}`}
                         x={x}
                         y={100 - baseHeight / 2}
-                        width="4"
+                        width="6"
                         height={baseHeight}
-                        fill={`rgba(${r}, ${g}, ${Math.max(b, 153)}, ${opacity})`}
-                        rx="2"
+                        fill={color}
+                        rx="3"
+                        filter="url(#glow)"
                         className="animate-pulse"
                         style={{ animationDelay: `${(35 - i) * 0.05}s` }}
                       />
@@ -617,12 +705,18 @@ export default function Home() {
                   })}
                 </svg>
               </div>
-              {/* Signal Emblem - Perfectly Centered */}
-              <img 
-                src={signalEmblem} 
-                alt="Signal Emblem" 
-                className="w-44 h-44 md:w-52 md:h-52 relative z-10 drop-shadow-[0_0_40px_rgba(6,182,212,0.5)]" 
-              />
+              {/* Signal Emblem - Perfectly Centered, background removed via blend mode */}
+              <div className="relative z-10 w-44 h-44 md:w-52 md:h-52 flex items-center justify-center">
+                <img 
+                  src={signalEmblem} 
+                  alt="Signal Emblem" 
+                  className="w-full h-full object-contain drop-shadow-[0_0_50px_rgba(6,182,212,0.7)]"
+                  style={{ 
+                    mixBlendMode: 'screen',
+                    filter: 'drop-shadow(0 0 30px rgba(6, 182, 212, 0.8))'
+                  }}
+                />
+              </div>
             </div>
 
           </motion.div>
