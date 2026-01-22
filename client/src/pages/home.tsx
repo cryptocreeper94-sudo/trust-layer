@@ -160,30 +160,29 @@ function ChroniclesCarousel() {
     }
   };
 
-  return (
-    <div className="relative mb-8">
-      <button
-        onClick={() => scroll('left')}
-        className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/60 backdrop-blur-xl border border-white/20 flex items-center justify-center transition-all ${canScrollLeft ? 'opacity-100 hover:bg-white/10' : 'opacity-30 cursor-not-allowed'}`}
-        disabled={!canScrollLeft}
-        data-testid="button-carousel-left"
-      >
-        <ChevronLeft className="w-5 h-5 text-white" />
-      </button>
-      
-      <button
-        onClick={() => scroll('right')}
-        className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/60 backdrop-blur-xl border border-white/20 flex items-center justify-center transition-all ${canScrollRight ? 'opacity-100 hover:bg-white/10' : 'opacity-30 cursor-not-allowed'}`}
-        disabled={!canScrollRight}
-        data-testid="button-carousel-right"
-      >
-        <ChevronRight className="w-5 h-5 text-white" />
-      </button>
+  const [activeIndex, setActiveIndex] = useState(Math.floor(CHRONICLES_ERAS.length / 2));
 
+  const updateActiveIndex = () => {
+    if (scrollRef.current) {
+      const isMobile = window.innerWidth < 768;
+      const cardWidth = isMobile ? 176 : 236;
+      const scrollLeft = scrollRef.current.scrollLeft;
+      const newIndex = Math.round(scrollLeft / cardWidth);
+      setActiveIndex(Math.min(Math.max(0, newIndex), CHRONICLES_ERAS.length - 1));
+    }
+  };
+
+  const handleScroll = () => {
+    checkScroll();
+    updateActiveIndex();
+  };
+
+  return (
+    <div className="mb-8">
       <div 
         ref={scrollRef}
-        onScroll={checkScroll}
-        className="flex gap-4 overflow-x-auto scrollbar-hide px-12 py-2 snap-x snap-mandatory"
+        onScroll={handleScroll}
+        className="flex gap-4 overflow-x-auto scrollbar-hide px-4 py-2 snap-x snap-mandatory"
       >
         {CHRONICLES_ERAS.map((item, i) => (
           <motion.div
@@ -213,6 +212,37 @@ function ChroniclesCarousel() {
             </div>
           </motion.div>
         ))}
+      </div>
+      
+      {/* Navigation controls below carousel */}
+      <div className="flex items-center justify-center gap-4 mt-4">
+        <button
+          onClick={() => scroll('left')}
+          className={`w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center transition-all ${canScrollLeft ? 'hover:bg-white/10 hover:border-white/20' : 'opacity-30 cursor-not-allowed'}`}
+          disabled={!canScrollLeft}
+          data-testid="button-carousel-left"
+        >
+          <ChevronLeft className="w-4 h-4 text-white" />
+        </button>
+        
+        {/* Dots indicator */}
+        <div className="flex items-center gap-1.5">
+          {CHRONICLES_ERAS.map((_, i) => (
+            <div 
+              key={i}
+              className={`w-1.5 h-1.5 rounded-full transition-all ${i === activeIndex ? 'bg-cyan-400 w-3' : 'bg-white/30'}`}
+            />
+          ))}
+        </div>
+        
+        <button
+          onClick={() => scroll('right')}
+          className={`w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center transition-all ${canScrollRight ? 'hover:bg-white/10 hover:border-white/20' : 'opacity-30 cursor-not-allowed'}`}
+          disabled={!canScrollRight}
+          data-testid="button-carousel-right"
+        >
+          <ChevronRight className="w-4 h-4 text-white" />
+        </button>
       </div>
     </div>
   );
@@ -746,10 +776,10 @@ export default function Home() {
           )}
           
           <div className="mt-6 flex justify-center">
-            <Link href="/developers">
+            <Link href="/launchpad">
               <Button className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-black font-bold gap-2">
-                <Code className="w-4 h-4" />
-                Submit Your App
+                <Rocket className="w-4 h-4" />
+                Submit Your Project
               </Button>
             </Link>
           </div>

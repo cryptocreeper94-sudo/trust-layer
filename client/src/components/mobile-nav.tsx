@@ -8,35 +8,8 @@ import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { SimpleLoginModal } from "@/components/simple-login";
 import { WalletButton } from "@/components/wallet-button";
 
-import chroniclesImg from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
+import signalEmblem from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
 import crowdfundImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
-import presaleImg from "@assets/generated_images/darkwave_crypto_token_coin_holographic.png";
-
-const featuredSquareItem = { 
-  href: "/presale", 
-  label: "Incoming Signal", 
-  icon: Coins, 
-  badge: "Live", 
-  image: presaleImg, 
-  overlayGradient: "linear-gradient(135deg, rgba(245,158,11,0.85) 0%, rgba(239,68,68,0.7) 50%, rgba(0,0,0,0.6) 100%)", 
-  iconGradient: "#f59e0b, #ef4444", 
-  badgeClass: "bg-amber-500/30 text-amber-300", 
-  description: "Presale", 
-  external: false 
-};
-
-const crowdfundItem = { 
-  href: "/crowdfund", 
-  label: "Crowdfunding", 
-  icon: Heart, 
-  badge: "Support", 
-  image: crowdfundImg, 
-  overlayGradient: "linear-gradient(135deg, rgba(168,85,247,0.85) 0%, rgba(236,72,153,0.7) 50%, rgba(0,0,0,0.6) 100%)", 
-  iconGradient: "#a855f7, #ec4899", 
-  badgeClass: "bg-purple-500/30 text-purple-300", 
-  description: "Support the Project", 
-  external: false 
-};
 
 // Streamlined nav categories - consolidated for cleaner mobile experience
 const navCategories = [
@@ -564,214 +537,80 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
           />
         </div>
 
-        {/* Chronicles CTA - Top of Menu */}
-        <Link href="/chronicles" style={{ textDecoration: 'none' }}>
+        {/* Presale Featured - Shield at Top */}
+        <Link href="/presale" style={{ textDecoration: 'none', display: 'block' }}>
           <div
             onClick={onClose}
+            data-testid="featured-presale"
             style={{
               marginBottom: '12px',
-              padding: '10px',
-              borderRadius: '12px',
-              background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(236, 72, 153, 0.3) 100%)',
-              border: '1px solid rgba(168, 85, 247, 0.4)',
+              padding: '16px',
+              borderRadius: '16px',
+              background: 'linear-gradient(135deg, rgba(6,182,212,0.15) 0%, rgba(168,85,247,0.15) 100%)',
+              border: '2px solid rgba(6,182,212,0.4)',
               cursor: 'pointer',
-              position: 'relative',
-              overflow: 'hidden',
+              boxShadow: '0 0 40px rgba(6,182,212,0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '14px',
             }}
-            data-testid="button-chronicles-top-menu"
           >
-            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, #a855f7, #ec4899)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}>
-                <Gamepad2 style={{ width: '16px', height: '16px', color: '#fff' }} />
+            <img 
+              src={signalEmblem} 
+              alt="Signal"
+              style={{
+                width: '56px',
+                height: '56px',
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 0 10px rgba(6,182,212,0.5))',
+              }}
+            />
+            <div style={{ flex: 1 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                <span style={{ fontWeight: 700, fontSize: '15px', color: '#ffffff' }}>Incoming Signal</span>
+                <Badge className="text-[9px] px-1.5 py-0 bg-cyan-500/30 text-cyan-300 animate-pulse">Live</Badge>
               </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#fff' }}>DarkWave Chronicles</span>
-                  <span style={{
-                    padding: '2px 8px',
-                    borderRadius: '12px',
-                    background: 'rgba(34, 197, 94, 0.2)',
-                    color: '#22c55e',
-                    fontSize: '10px',
-                    fontWeight: 600,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                  }}>
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', animation: 'pulse 1s infinite' }} />
-                    LIVE
-                  </span>
-                </div>
-                <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.7)' }}>Play Now!</span>
-              </div>
-              <ArrowRight style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.6)' }} />
+              <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>Presale Now Open</span>
             </div>
+            <ArrowRight style={{ width: '18px', height: '18px', color: 'rgba(6,182,212,0.8)' }} />
           </div>
         </Link>
 
-        {/* Featured Section - Presale Square + Crowdfund */}
-        <div style={{ marginBottom: '16px' }}>
-          <span style={{ 
-            fontSize: '11px', 
-            fontWeight: 600, 
-            color: '#a855f7', 
-            textTransform: 'uppercase', 
-            letterSpacing: '0.1em',
-            marginBottom: '12px',
-            display: 'block'
-          }}>
-            Featured
-          </span>
-          
-          {/* Presale - Square Featured Item */}
-          <Link href={featuredSquareItem.href} style={{ textDecoration: 'none', display: 'block' }}>
-            <div
-              onClick={onClose}
-              data-testid="featured-presale-square"
-              style={{
-                position: 'relative',
-                width: '100%',
-                aspectRatio: '1',
-                maxWidth: '220px',
-                borderRadius: '16px',
-                border: '2px solid rgba(245, 158, 11, 0.5)',
-                overflow: 'hidden',
-                cursor: 'pointer',
-                marginBottom: '10px',
-                boxShadow: '0 0 30px rgba(245, 158, 11, 0.2)',
-              }}
-            >
-              <img 
-                src={featuredSquareItem.image} 
-                alt=""
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
-              />
-              <div style={{ 
-                position: 'absolute', 
-                top: 0, 
-                left: 0, 
-                right: 0, 
-                bottom: 0, 
-                background: featuredSquareItem.overlayGradient,
-              }} />
-              <div style={{ 
-                position: 'absolute',
-                bottom: '12px',
-                left: '12px',
-                right: '12px',
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '10px',
-                zIndex: 1 
-              }}>
-                <div style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '10px',
-                  background: `linear-gradient(135deg, ${featuredSquareItem.iconGradient})`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
-                }}>
-                  <Coins style={{ width: '18px', height: '18px', color: '#ffffff' }} />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ fontWeight: 700, fontSize: '14px', color: '#ffffff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
-                      {featuredSquareItem.label}
-                    </span>
-                    <Badge className={`text-[9px] px-1.5 py-0 ${featuredSquareItem.badgeClass}`}>
-                      {featuredSquareItem.badge}
-                    </Badge>
-                  </div>
-                  <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.8)' }}>{featuredSquareItem.description}</span>
-                </div>
-              </div>
+        {/* Crowdfunding Button */}
+        <Link href="/crowdfund" style={{ textDecoration: 'none', display: 'block' }}>
+          <div
+            onClick={onClose}
+            data-testid="featured-crowdfund"
+            style={{
+              marginBottom: '16px',
+              padding: '12px',
+              borderRadius: '12px',
+              background: 'linear-gradient(135deg, rgba(168,85,247,0.2) 0%, rgba(236,72,153,0.2) 100%)',
+              border: '1px solid rgba(168,85,247,0.3)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+            }}
+          >
+            <div style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '10px',
+              background: 'linear-gradient(135deg, #a855f7, #ec4899)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <Heart style={{ width: '18px', height: '18px', color: '#ffffff' }} />
             </div>
-          </Link>
-
-          {/* Crowdfunding - Normal sized colored button */}
-          <Link href={crowdfundItem.href} style={{ textDecoration: 'none', display: 'block' }}>
-            <div
-              onClick={onClose}
-              data-testid="featured-crowdfund"
-              style={{
-                position: 'relative',
-                padding: '12px',
-                borderRadius: '12px',
-                border: '1px solid rgba(168, 85, 247, 0.4)',
-                overflow: 'hidden',
-                cursor: 'pointer',
-              }}
-            >
-              <img 
-                src={crowdfundItem.image} 
-                alt=""
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
-              />
-              <div style={{ 
-                position: 'absolute', 
-                top: 0, 
-                left: 0, 
-                right: 0, 
-                bottom: 0, 
-                background: crowdfundItem.overlayGradient,
-              }} />
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', position: 'relative', zIndex: 1 }}>
-                <div style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '10px',
-                  background: `linear-gradient(135deg, ${crowdfundItem.iconGradient})`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
-                }}>
-                  <Heart style={{ width: '16px', height: '16px', color: '#ffffff' }} />
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ fontWeight: 600, fontSize: '13px', color: '#ffffff', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
-                      {crowdfundItem.label}
-                    </span>
-                    <Badge className={`text-[8px] px-1.5 py-0 ${crowdfundItem.badgeClass}`}>
-                      {crowdfundItem.badge}
-                    </Badge>
-                  </div>
-                  <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.7)' }}>{crowdfundItem.description}</span>
-                </div>
-                <ArrowRight style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.6)' }} />
-              </div>
+            <div style={{ flex: 1 }}>
+              <span style={{ fontWeight: 600, fontSize: '13px', color: '#ffffff', display: 'block' }}>Crowdfunding</span>
+              <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>Support the Project</span>
             </div>
-          </Link>
-        </div>
+            <ArrowRight style={{ width: '16px', height: '16px', color: 'rgba(255,255,255,0.5)' }} />
+          </div>
+        </Link>
 
         {/* Divider */}
         <div style={{ height: '1px', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)', marginBottom: '16px' }} />

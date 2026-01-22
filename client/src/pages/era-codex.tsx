@@ -13,9 +13,6 @@ import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.pn
 import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.png";
 import medievalImg from "@assets/generated_images/medieval_fantasy_kingdom.png";
 import industrialImg from "@assets/generated_images/industrial_steampunk_city.png";
-import cyberpunkImg from "@assets/generated_images/cyberpunk_neon_city.png";
-import spaceImg from "@assets/generated_images/deep_space_station.png";
-import quantumImg from "@assets/generated_images/quantum_dimension_realm.png";
 
 interface Era {
   id: string;
@@ -45,7 +42,7 @@ const ERAS: Era[] = [
     icon: Map,
     color: "from-amber-600 to-orange-700",
     description: "Humanity's earliest chapter. Primitive tribes struggle for survival against megafauna and the elements. Master fire, craft basic tools, and shape the dawn of civilization.",
-    mechanics: ["Survival crafting", "Tribal politics", "Beast taming", "Cave exploration"],
+    mechanics: ["Survival crafting", "Tribal politics", "Animal husbandry", "Territory exploration"],
     resources: ["Flint", "Hide", "Bone", "Sacred herbs"],
     classes: ["Hunter", "Shaman", "Chieftain"],
     governance: "Tribal Councils",
@@ -56,15 +53,15 @@ const ERAS: Era[] = [
   {
     id: "medieval",
     name: "Age of Crowns",
-    subtitle: "Steel and Sorcery",
+    subtitle: "Steel and Strategy",
     year: "1200 CE",
     img: medievalImg,
     icon: Sword,
     color: "from-violet-600 to-purple-700",
-    description: "Kingdoms rise and fall. Magic awakens in ancient bloodlines. Navigate court intrigue while dark forces gather in shadow. Choose your allegiance wisely.",
-    mechanics: ["Political intrigue", "Ancient magic", "War and peace", "Mythical encounters"],
-    resources: ["Gold", "Iron", "Mana crystals", "Dragon scales"],
-    classes: ["Knight", "Mage", "Assassin", "Cleric"],
+    description: "Kingdoms rise and fall. Navigate court intrigue, forge alliances, and lead your house to dominance. Every decision shapes the fate of nations.",
+    mechanics: ["Political intrigue", "Diplomacy", "War and peace", "Trade networks"],
+    resources: ["Gold", "Iron", "Silk", "Grain"],
+    classes: ["Knight", "Merchant", "Diplomat", "Cleric"],
     governance: "Feudal Monarchy",
     politics: ["Royal succession", "Noble houses", "Holy orders", "Peasant revolts"],
     unlockRequirement: "Time-Warp Available",
@@ -78,10 +75,10 @@ const ERAS: Era[] = [
     img: industrialImg,
     icon: Cog,
     color: "from-amber-500 to-yellow-600",
-    description: "Steam power transforms civilization. Clockwork automatons walk alongside humans. Airship pirates rule the skies while inventors pursue forbidden sciences.",
-    mechanics: ["Invention crafting", "Airship combat", "Factory management", "Automaton companions"],
-    resources: ["Coal", "Brass", "Aether", "Cogwheels"],
-    classes: ["Engineer", "Aeronaut", "Investigator", "Automancer"],
+    description: "Steam power transforms civilization. Railways connect empires. Navigate labor movements, industrial espionage, and the race for technological supremacy.",
+    mechanics: ["Invention development", "Railway networks", "Factory management", "Patent wars"],
+    resources: ["Coal", "Steel", "Oil", "Machinery"],
+    classes: ["Engineer", "Industrialist", "Journalist", "Detective"],
     governance: "Industrial Parliament",
     politics: ["Labor unions", "Trade wars", "Colonial powers", "Revolutionary cells"],
     unlockRequirement: "Time-Warp Available",

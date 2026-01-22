@@ -18830,7 +18830,6 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 const APP_URL_MAP: Record<string, string> = {
   "orbitstaffing": "https://orbitstaffing.io",
   "darkwave-staffing": "https://orbitstaffing.io",
-  "darkwave-chain": "https://dwsc.io",
   "lotopspro": "https://lotopspro.io",
   "lotops-pro": "https://lotopspro.io",
   "orby": "https://getorby.io",

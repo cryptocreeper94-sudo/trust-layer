@@ -202,7 +202,7 @@ const EPOCHS = [
     eras: ["Fjord Settlements", "Raider Voyages", "Great Expeditions", "Norse Exploration"],
     incentive: "Exploration, combat, trade",
     color: "from-slate-500 to-gray-700",
-    lore: "From frozen fjords, the dragon ships emerge. The Viking Age calls to those who seek glory and adventure. Raid distant shores, explore uncharted waters, and forge sagas that will be remembered for a thousand years. Only the bold earn their place among legends.",
+    lore: "From frozen fjords, the longships emerge. The Viking Age calls to those who seek glory and adventure. Raid distant shores, explore uncharted waters, and forge sagas that will be remembered for a thousand years. Only the bold earn their place among legends.",
     highlights: ["Command longship raids", "Discover new continents", "Build trading empires", "Forge legendary weapons"],
     factions: ["The Raven Scouts", "Shieldmaiden Sisterhood", "Berserker Lodge", "Seafarer Guild"]
   },
