@@ -1051,7 +1051,7 @@ export default function Home() {
           
           <div className="space-y-3 py-2">
             <div className="flex items-center justify-center">
-              <img src={signalEmblem} alt="Signal" className="w-16 h-16 animate-pulse" />
+              <img src={signalEmblem} alt="Signal" className="w-24 h-24 animate-pulse" />
             </div>
             
             <div className="text-center space-y-1">
