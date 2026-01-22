@@ -287,7 +287,7 @@ function EcosystemCarousel({ apps }: { apps: EcosystemApp[] }) {
       <div 
         ref={scrollRef}
         onScroll={checkScroll}
-        className="flex gap-4 overflow-x-auto scrollbar-hide py-2 snap-x snap-mandatory"
+        className="flex gap-4 overflow-x-auto scrollbar-hide py-2 snap-x snap-mandatory px-1"
       >
         {apps.map((app, i) => {
           const imageSrc = ecosystemImages[app.id] || "";
@@ -300,17 +300,17 @@ function EcosystemCarousel({ apps }: { apps: EcosystemApp[] }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="shrink-0 w-[calc(50%-8px)] snap-start"
+              className="shrink-0 w-[calc(100%-16px)] md:w-[calc(25%-12px)] lg:w-[calc(20%-13px)] snap-center"
               data-testid={`card-ecosystem-${app.id}`}
             >
-              <GlassCard className="h-full overflow-hidden hover:border-primary/30 transition-all duration-300">
+              <GlassCard className="h-full overflow-hidden hover:border-emerald-500/30 transition-all duration-300">
                 <div className="flex flex-col h-full">
-                  <div className="aspect-[4/3] relative overflow-hidden bg-black">
+                  <div className="aspect-[3/4] md:aspect-[4/3] relative overflow-hidden bg-black">
                     {imageSrc ? (
                       <img 
                         src={imageSrc} 
                         alt={app.name}
-                        className="w-full h-full object-contain"
+                        className="w-full h-full object-cover md:object-contain"
                       />
                     ) : (
                       <div 
@@ -326,10 +326,10 @@ function EcosystemCarousel({ apps }: { apps: EcosystemApp[] }) {
                       <h3 className="text-lg font-bold text-white leading-tight">{app.name}</h3>
                       <FavoriteButton appId={app.id} />
                     </div>
-                    <Badge variant="secondary" className="w-fit text-[10px] uppercase bg-primary/20 text-primary mb-2">
+                    <Badge variant="secondary" className="w-fit text-[10px] uppercase bg-emerald-500/20 text-emerald-400 mb-2">
                       {app.category}
                     </Badge>
-                    <p className="text-xs text-white/60 line-clamp-2 mb-4 flex-1">{app.description}</p>
+                    <p className="text-xs text-white/60 line-clamp-3 md:line-clamp-2 mb-4 flex-1">{app.description}</p>
                     <ExploreButton url={app.url} appName={app.name} />
                   </div>
                 </div>
@@ -484,117 +484,6 @@ export default function Home() {
               </motion.div>
 
           </motion.div>
-        </div>
-      </section>
-
-      <section className="py-12 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 auto-rows-[120px]">
-            {statsLoading ? (
-              <>
-                <GlassCard><div className="p-4 animate-pulse bg-white/5 h-full rounded-xl" /></GlassCard>
-                <GlassCard><div className="p-4 animate-pulse bg-white/5 h-full rounded-xl" /></GlassCard>
-                <GlassCard><div className="p-4 animate-pulse bg-white/5 h-full rounded-xl" /></GlassCard>
-                <GlassCard><div className="p-4 animate-pulse bg-white/5 h-full rounded-xl" /></GlassCard>
-              </>
-            ) : (
-              <>
-                <GlassCard hover={false}>
-                  <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
-                    <div className="flex items-center gap-1 md:gap-2 mb-2 flex-wrap">
-                      <Zap className="w-3 h-3 md:w-4 md:h-4 text-primary/60 shrink-0" />
-                      <div className="flex items-center gap-1">
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                        <span className="text-[8px] md:text-[9px] text-green-400/80 uppercase">Live</span>
-                      </div>
-                      <InfoTooltip content="Transactions Per Second - how many transactions the network can process each second. Higher is better!" label="TPS info" />
-                    </div>
-                    <div className="text-xl md:text-2xl font-bold text-white">{stats?.tps || "200K+"}</div>
-                    <div className="text-[9px] md:text-[10px] text-white/50 uppercase tracking-wider">TPS</div>
-                  </div>
-                </GlassCard>
-                <GlassCard hover={false}>
-                  <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
-                    <div className="flex items-center gap-1 md:gap-2 mb-2 flex-wrap">
-                      <Activity className="w-3 h-3 md:w-4 md:h-4 text-cyan-400/60 shrink-0" />
-                      <div className="flex items-center gap-1">
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                        <span className="text-[8px] md:text-[9px] text-green-400/80 uppercase">Live</span>
-                      </div>
-                      <InfoTooltip content="Time for a transaction to be permanently confirmed on the blockchain. 400ms means near-instant confirmations!" label="Finality time info" />
-                    </div>
-                    <div className="text-xl md:text-2xl font-bold text-white">{stats?.finalityTime || "0.4s"}</div>
-                    <div className="text-[9px] md:text-[10px] text-white/50 uppercase tracking-wider">Finality</div>
-                  </div>
-                </GlassCard>
-                <GlassCard hover={false}>
-                  <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
-                    <div className="flex items-center gap-1 md:gap-2 mb-2">
-                      <Cpu className="w-3 h-3 md:w-4 md:h-4 text-purple-400/60 shrink-0" />
-                      <InfoTooltip content="Average cost per transaction. DarkWave Trust Layer keeps fees extremely low compared to other blockchains." label="Transaction cost info" />
-                    </div>
-                    <div className="text-xl md:text-2xl font-bold text-white">{stats?.avgCost || "$0.0001"}</div>
-                    <div className="text-[9px] md:text-[10px] text-white/50 uppercase tracking-wider">Avg Cost</div>
-                  </div>
-                </GlassCard>
-                <GlassCard hover={false}>
-                  <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
-                    <div className="flex items-center gap-1 md:gap-2 mb-2 flex-wrap">
-                      <Server className="w-3 h-3 md:w-4 md:h-4 text-cyan-400/60 shrink-0" />
-                      <div className="flex items-center gap-1">
-                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                        <span className="text-[8px] md:text-[9px] text-cyan-400/80 uppercase">TESTNET</span>
-                      </div>
-                      <InfoTooltip content="DarkWave Trust Layer runs on a Proof-of-Authority (PoA) consensus. The Founders Validator secures the network with enterprise-grade infrastructure." label="Validator info" />
-                    </div>
-                    <div className="text-base md:text-2xl font-bold text-white leading-tight">
-                      <span className="hidden md:inline">{stats?.activeNodes?.includes("Founder") ? stats.activeNodes : "Founders Validator"}</span>
-                      <span className="md:hidden">Founders</span>
-                    </div>
-                    <div className="text-[10px] text-white/50 uppercase tracking-wider">Network</div>
-                  </div>
-                </GlassCard>
-              </>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* DarkWave Chronicles - Coming Soon */}
-      <section className="py-16 px-4 relative overflow-hidden bg-gradient-to-b from-purple-950/20 via-black to-black">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent" />
-        <div className="container mx-auto max-w-6xl relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-8"
-          >
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
-                DarkWave Chronicles
-              </span>
-            </h2>
-            <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
-              An unprecedented adventure platform where YOU are the hero. Emotions drive behavior, consequences ripple through time, and every perspective matters.
-            </p>
-          </motion.div>
-
-          <ChroniclesCarousel />
-
-          <div className="flex flex-row items-center justify-center gap-3">
-            <Link href="/era-codex">
-              <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500" data-testid="button-explore-eras">
-                <Sparkles className="w-4 h-4 mr-2" />
-                View Eras
-              </Button>
-            </Link>
-            <Link href="/chronicles">
-              <Button variant="outline" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10" data-testid="button-play-chronicles">
-                Play Chronicles
-              </Button>
-            </Link>
-          </div>
         </div>
       </section>
 
@@ -766,134 +655,76 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* Earn & Track Card */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-            >
-              <div className="relative h-full overflow-hidden rounded-2xl border border-white/10 hover:border-amber-500/50 transition-all duration-300 group" style={{ boxShadow: '0 0 40px rgba(245,158,11,0.15)' }}>
-                <img src={earnImg} alt="" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-amber-900/40" />
-                <div className="relative z-10 p-5">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/40 to-orange-500/40 backdrop-blur-sm flex items-center justify-center group-hover:shadow-[0_0_30px_rgba(245,158,11,0.4)] transition-shadow">
-                      <Trophy className="w-6 h-6 text-amber-300" />
-                    </div>
-                    <div>
-                      <h3 className="text-base font-bold text-white text-shadow">Earn & Track</h3>
-                      <p className="text-[11px] text-white/70">XP, quests & network</p>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Link href="/quests">
-                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-amber-500/40 hover:bg-amber-500/20 transition-all text-center group/item" data-testid="link-quests">
-                        <Target className="w-4 h-4 mx-auto mb-1 text-amber-400" />
-                        <span className="text-[10px] text-gray-200 group-hover/item:text-white">Quests</span>
-                      </div>
-                    </Link>
-                    <Link href="/network">
-                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-green-500/40 hover:bg-green-500/20 transition-all text-center group/item" data-testid="link-network">
-                        <Activity className="w-4 h-4 mx-auto mb-1 text-green-400" />
-                        <span className="text-[10px] text-gray-200 group-hover/item:text-white">Network</span>
-                      </div>
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
           </div>
         </div>
       </section>
 
-      <section className="py-16 px-4">
+      {/* Builders Suite - Dev IDE + Launchpad */}
+      <section className="py-12 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="space-y-6">
-              <div className="flex items-center gap-2 mb-2">
-                <Badge variant="outline" className="border-amber-500/50 text-amber-400 text-[10px]">Roadmap</Badge>
-              </div>
-              <h2 className="text-3xl md:text-4xl font-display font-bold">
-                Chain Abstraction <br/>
-                <span className="text-primary">Native Interop.</span>
-              </h2>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                We're building toward <strong>Omnichain Interoperability</strong>.
-                Our vision is to abstract the chain entirely - no bridges, just seamless transfers.
-              </p>
-              
-              <div className="grid grid-cols-1 gap-3">
-                <GlassCard>
-                  <div className="p-4 flex items-start gap-3">
-                    <div className="p-2 rounded-lg bg-primary/20 text-primary shrink-0">
-                      <Zap className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-sm font-bold text-white">Instant Consensus</h3>
-                        <InfoTooltip content="DAG (Directed Acyclic Graph) allows multiple blocks to be processed in parallel, achieving much faster confirmation times." label="Instant consensus info" />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-8"
+          >
+            <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 text-[10px] mb-3">Builders Suite</Badge>
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">
+                Build on DarkWave
+              </span>
+            </h2>
+            <p className="text-sm text-muted-foreground max-w-lg mx-auto">
+              Everything you need to create and launch your decentralized applications.
+            </p>
+          </motion.div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Link href="/studio">
+              <GlassCard glow hover={false} className="h-full">
+                <div className="p-5 relative overflow-hidden h-full">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-cyan-500/5" />
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
+                        <Code className="w-6 h-6 text-primary" />
                       </div>
-                      <p className="text-xs text-white/50">Advanced DAG protocols for sub-second finality</p>
-                    </div>
-                  </div>
-                </GlassCard>
-                <GlassCard>
-                  <div className="p-4 flex items-start gap-3">
-                    <div className="p-2 rounded-lg bg-cyan-500/20 text-cyan-400 shrink-0">
-                      <Shield className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-sm font-bold text-white">Chain Abstraction</h3>
-                        <Badge variant="outline" className="text-[9px] border-amber-500/50 text-amber-400 px-1">Q2 2026</Badge>
+                      <div>
+                        <Badge variant="outline" className="border-green-500/50 text-green-400 text-[10px] mb-1">Live</Badge>
+                        <h3 className="text-lg font-bold text-white">Dev Studio</h3>
                       </div>
-                      <p className="text-xs text-white/50">Manage assets across Ethereum, Solana, and more from one account</p>
                     </div>
+                    <p className="text-xs text-white/60 mb-4 flex-1">Cloud IDE for blockchain development with Monaco editor, templates, and deployment tools.</p>
+                    <Button className="w-full bg-primary text-background hover:bg-primary/90 font-semibold" data-testid="button-open-dev-studio">
+                      Open Studio <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
                   </div>
-                </GlassCard>
-                <GlassCard>
-                  <div className="p-4 flex items-start gap-3">
-                    <div className="p-2 rounded-lg bg-purple-500/20 text-purple-400 shrink-0">
-                      <Layers className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-sm font-bold text-white">Cross-Chain Messaging</h3>
-                        <Badge variant="outline" className="text-[9px] border-amber-500/50 text-amber-400 px-1">In Development</Badge>
-                      </div>
-                      <p className="text-xs text-white/50">Native protocols for secure asset transfers between networks</p>
-                    </div>
-                  </div>
-                </GlassCard>
-              </div>
-            </div>
+                </div>
+              </GlassCard>
+            </Link>
             
-            <GlassCard glow className="h-full">
-              <div className="p-5 h-full flex flex-col">
-                <div className="flex items-center gap-2 mb-4">
-                  <Database className="w-4 h-4 text-primary" />
-                  <span className="text-xs font-tech text-primary uppercase tracking-wider">Node Status: Online</span>
-                </div>
-                <div className="flex-1 bg-black/40 rounded-lg p-4 font-mono text-[11px] text-green-400/80 space-y-2 mb-4">
-                  <p>{`> Connecting to DarkWave Mainnet...`}</p>
-                  <p>{`> Synchronizing ledger state... OK`}</p>
-                  <p>{`> Verifying Proof of History... OK`}</p>
-                  <p>{`> Established connection to 152 peers.`}</p>
-                  <p className="animate-pulse">{`> Awaiting transaction block...`}</p>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 rounded-lg bg-white/5">
-                    <div className="text-[10px] text-white/40 uppercase mb-1">Current Block</div>
-                    <div className="text-lg font-bold text-white">{stats?.currentBlock || "#8,921,042"}</div>
-                  </div>
-                  <div className="p-3 rounded-lg bg-white/5">
-                    <div className="text-[10px] text-white/40 uppercase mb-1">Network Hash</div>
-                    <div className="text-lg font-bold text-white">{stats?.networkHash || "42.8 EH/s"}</div>
+            <Link href="/launchpad">
+              <GlassCard glow hover={false} className="h-full">
+                <div className="p-5 relative overflow-hidden h-full">
+                  <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 via-transparent to-amber-500/5" />
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center shrink-0">
+                        <Rocket className="w-6 h-6 text-orange-400" />
+                      </div>
+                      <div>
+                        <Badge variant="outline" className="border-green-500/50 text-green-400 text-[10px] mb-1">Live</Badge>
+                        <h3 className="text-lg font-bold text-white">Launchpad</h3>
+                      </div>
+                    </div>
+                    <p className="text-xs text-white/60 mb-4 flex-1">Launch your own tokens with fair distribution, vesting schedules, and community tools.</p>
+                    <Button className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-black font-semibold" data-testid="button-open-launchpad">
+                      Launch Now <Rocket className="w-4 h-4 ml-2" />
+                    </Button>
                   </div>
                 </div>
-              </div>
-            </GlassCard>
+              </GlassCard>
+            </Link>
           </div>
         </div>
       </section>
@@ -923,19 +754,19 @@ export default function Home() {
         </section>
       )}
 
+      {/* Ecosystem - App Store */}
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">DarkWave Ecosystem</h2>
+            <Badge variant="outline" className="border-emerald-500/50 text-emerald-400 text-[10px] mb-3">App Store</Badge>
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">Ecosystem</h2>
             <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-              A thriving ecosystem of decentralized applications. Everything lives on the same universal ledger.
+              Join our thriving ecosystem of decentralized applications. Everything lives on the same universal ledger.
             </p>
           </div>
 
           {appsLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <SkeletonCard />
-              <SkeletonCard />
+            <div className="flex justify-center">
               <SkeletonCard />
             </div>
           ) : (
@@ -944,7 +775,7 @@ export default function Home() {
           
           <div className="mt-6 flex justify-center">
             <Link href="/developers">
-              <Button variant="outline" className="border-primary/30 hover:bg-primary/10 gap-2">
+              <Button className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-black font-bold gap-2">
                 <Code className="w-4 h-4" />
                 Submit Your App
               </Button>
@@ -953,30 +784,161 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-12 px-4">
+      {/* Chronicles */}
+      <section className="py-16 px-4 relative overflow-hidden bg-gradient-to-b from-purple-950/20 via-black to-black">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent" />
+        <div className="container mx-auto max-w-6xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-8"
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-600/20 via-purple-600/20 to-pink-600/20 border border-purple-400/40 backdrop-blur-sm mb-4">
+              <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
+              <span className="text-xs text-purple-300 font-medium">Season Zero</span>
+              <span className="text-white/40">•</span>
+              <span className="text-xs text-pink-300">Coming Soon</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
+                Chronicles
+              </span>
+            </h2>
+            <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
+              An unprecedented adventure platform where YOU are the hero. Emotions drive behavior, consequences ripple through time, and every perspective matters.
+            </p>
+          </motion.div>
+
+          <ChroniclesCarousel />
+
+          <div className="flex flex-row items-center justify-center gap-3">
+            <Link href="/era-codex">
+              <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500" data-testid="button-explore-eras">
+                <Sparkles className="w-4 h-4 mr-2" />
+                View Eras
+              </Button>
+            </Link>
+            <Link href="/chronicles">
+              <Button variant="outline" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10" data-testid="button-play-chronicles">
+                Play Chronicles
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Network Section */}
+      <section className="py-16 px-4">
         <div className="container mx-auto max-w-6xl">
-          <Link href="/studio">
-            <GlassCard glow hover={false} className="w-full">
-              <div className="p-6 md:p-8 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5" />
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
-                      <Sparkles className="w-6 h-6 text-primary" />
-                    </div>
-                    <div>
-                      <Badge variant="outline" className="border-green-500/50 text-green-400 text-[10px] mb-1">Now Live</Badge>
-                      <h3 className="text-xl md:text-2xl font-display font-bold text-white">DarkWave Dev Studio</h3>
-                      <p className="text-xs text-muted-foreground mt-0.5">Cloud IDE for blockchain development with Monaco editor</p>
-                    </div>
-                  </div>
-                  <Button className="bg-primary text-background hover:bg-primary/90 font-semibold px-6 shrink-0" data-testid="button-open-dev-studio">
-                    Open Studio <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10"
+          >
+            <Badge variant="outline" className="border-green-500/50 text-green-400 text-[10px] mb-3">Network</Badge>
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-cyan-400 to-blue-400">
+                Chain Infrastructure
+              </span>
+            </h2>
+            <p className="text-sm text-muted-foreground max-w-lg mx-auto">
+              Building toward omnichain interoperability - no bridges, just seamless transfers.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <GlassCard hover={false}>
+              <div className="p-4 text-center">
+                <div className="flex items-center justify-center gap-1 mb-2">
+                  <Zap className="w-4 h-4 text-primary" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                </div>
+                <div className="text-2xl font-bold text-white">{stats?.tps || "200K+"}</div>
+                <div className="text-[10px] text-white/50 uppercase">TPS</div>
+              </div>
+            </GlassCard>
+            <GlassCard hover={false}>
+              <div className="p-4 text-center">
+                <div className="flex items-center justify-center gap-1 mb-2">
+                  <Activity className="w-4 h-4 text-cyan-400" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                </div>
+                <div className="text-2xl font-bold text-white">{stats?.finalityTime || "0.4s"}</div>
+                <div className="text-[10px] text-white/50 uppercase">Finality</div>
+              </div>
+            </GlassCard>
+            <GlassCard hover={false}>
+              <div className="p-4 text-center">
+                <Cpu className="w-4 h-4 text-purple-400 mx-auto mb-2" />
+                <div className="text-2xl font-bold text-white">{stats?.avgCost || "$0.0001"}</div>
+                <div className="text-[10px] text-white/50 uppercase">Avg Cost</div>
+              </div>
+            </GlassCard>
+            <GlassCard hover={false}>
+              <div className="p-4 text-center">
+                <div className="flex items-center justify-center gap-1 mb-2">
+                  <Server className="w-4 h-4 text-cyan-400" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                  <span className="text-[8px] text-cyan-400 uppercase">TESTNET</span>
+                </div>
+                <div className="text-lg font-bold text-white">Founders</div>
+                <div className="text-[10px] text-white/50 uppercase">Validator</div>
+              </div>
+            </GlassCard>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <GlassCard>
+              <div className="p-4 flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-primary/20 text-primary shrink-0">
+                  <Zap className="w-4 h-4" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-sm font-bold text-white mb-1">Instant Consensus</h3>
+                  <p className="text-xs text-white/50">Advanced DAG protocols for sub-second finality</p>
                 </div>
               </div>
             </GlassCard>
-          </Link>
+            <GlassCard>
+              <div className="p-4 flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-cyan-500/20 text-cyan-400 shrink-0">
+                  <Shield className="w-4 h-4" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-sm font-bold text-white">Chain Abstraction</h3>
+                    <Badge variant="outline" className="text-[9px] border-amber-500/50 text-amber-400 px-1">Q2 2026</Badge>
+                  </div>
+                  <p className="text-xs text-white/50">Manage assets across chains from one account</p>
+                </div>
+              </div>
+            </GlassCard>
+            <GlassCard>
+              <div className="p-4 flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-purple-500/20 text-purple-400 shrink-0">
+                  <Layers className="w-4 h-4" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="text-sm font-bold text-white">Cross-Chain</h3>
+                    <Badge variant="outline" className="text-[9px] border-amber-500/50 text-amber-400 px-1">In Dev</Badge>
+                  </div>
+                  <p className="text-xs text-white/50">Native protocols for secure asset transfers</p>
+                </div>
+              </div>
+            </GlassCard>
+          </div>
+
+          <div className="mt-6 flex justify-center">
+            <Link href="/network">
+              <Button variant="outline" className="border-green-500/30 text-green-400 hover:bg-green-500/10 gap-2">
+                <Activity className="w-4 h-4" />
+                View Network Status
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 

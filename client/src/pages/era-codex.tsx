@@ -259,95 +259,105 @@ export default function EraCodex() {
           <div className="max-w-6xl mx-auto">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
               {/* Era Experiences */}
-              <GlassCard className="p-5">
-                <div className="flex items-center gap-2 mb-4">
-                  <Cog className="w-5 h-5 text-cyan-400" />
-                  <h3 className="font-bold">Era Experiences</h3>
+              <GlassCard className={era.isLocked ? "opacity-60" : ""}>
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Cog className="w-5 h-5 text-cyan-400" />
+                    <h3 className="font-bold">Era Experiences</h3>
+                  </div>
+                  <ul className="space-y-2">
+                    {era.mechanics.map((m, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm text-gray-400">
+                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0" />
+                        {m}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="space-y-2">
-                  {era.mechanics.map((m, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-gray-400">
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                      {m}
-                    </li>
-                  ))}
-                </ul>
               </GlassCard>
 
               {/* Era Elements */}
-              <GlassCard className="p-5">
-                <div className="flex items-center gap-2 mb-4">
-                  <Star className="w-5 h-5 text-amber-400" />
-                  <h3 className="font-bold">Era Elements</h3>
+              <GlassCard className={era.isLocked ? "opacity-60" : ""}>
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Star className="w-5 h-5 text-amber-400" />
+                    <h3 className="font-bold">Era Elements</h3>
+                  </div>
+                  <ul className="space-y-2">
+                    {era.resources.map((r, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm text-gray-400">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                        {r}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="space-y-2">
-                  {era.resources.map((r, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-gray-400">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                      {r}
-                    </li>
-                  ))}
-                </ul>
               </GlassCard>
 
               {/* Life Paths */}
-              <GlassCard className="p-5">
-                <div className="flex items-center gap-2 mb-4">
-                  <Users className="w-5 h-5 text-purple-400" />
-                  <h3 className="font-bold">Life Paths</h3>
+              <GlassCard className={era.isLocked ? "opacity-60" : ""}>
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Users className="w-5 h-5 text-purple-400" />
+                    <h3 className="font-bold">Life Paths</h3>
+                  </div>
+                  <ul className="space-y-2">
+                    {era.classes.map((c, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm text-gray-400">
+                        <span className="w-1.5 h-1.5 rounded-full bg-purple-400 shrink-0" />
+                        {c}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="space-y-2">
-                  {era.classes.map((c, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-gray-400">
-                      <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
-                      {c}
-                    </li>
-                  ))}
-                </ul>
               </GlassCard>
 
               {/* Governance */}
-              <GlassCard className="p-5">
-                <div className="flex items-center gap-2 mb-4">
-                  <Scale className="w-5 h-5 text-pink-400" />
-                  <h3 className="font-bold">{era.governance}</h3>
+              <GlassCard className={era.isLocked ? "opacity-60" : ""}>
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Scale className="w-5 h-5 text-pink-400" />
+                    <h3 className="font-bold">{era.governance}</h3>
+                  </div>
+                  <ul className="space-y-2">
+                    {era.politics.map((p, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm text-gray-400">
+                        <span className="w-1.5 h-1.5 rounded-full bg-pink-400 shrink-0" />
+                        {p}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="space-y-2">
-                  {era.politics.map((p, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-gray-400">
-                      <span className="w-1.5 h-1.5 rounded-full bg-pink-400" />
-                      {p}
-                    </li>
-                  ))}
-                </ul>
               </GlassCard>
 
               {/* Status */}
-              <GlassCard className={`p-5 ${era.isLocked ? "opacity-60" : ""}`}>
-                <div className="flex items-center gap-2 mb-4">
+              <GlassCard className={era.isLocked ? "opacity-60" : ""}>
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-4">
+                    {era.isLocked ? (
+                      <Lock className="w-5 h-5 text-gray-500" />
+                    ) : (
+                      <Unlock className="w-5 h-5 text-green-400" />
+                    )}
+                    <h3 className="font-bold">Status</h3>
+                  </div>
                   {era.isLocked ? (
-                    <Lock className="w-5 h-5 text-gray-500" />
-                  ) : (
-                    <Unlock className="w-5 h-5 text-green-400" />
-                  )}
-                  <h3 className="font-bold">Status</h3>
-                </div>
-                {era.isLocked ? (
-                  <div className="space-y-3">
-                    <p className="text-sm text-gray-500">This era is locked</p>
-                    <div className="bg-gray-800/50 rounded-lg p-3">
-                      <p className="text-xs text-gray-400">{era.unlockRequirement}</p>
+                    <div className="space-y-3">
+                      <p className="text-sm text-gray-500">This era is locked</p>
+                      <div className="bg-gray-800/50 rounded-lg p-3">
+                        <p className="text-xs text-gray-400">{era.unlockRequirement}</p>
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <p className="text-sm text-green-400">Ready to explore!</p>
-                    <Button className={`w-full bg-gradient-to-r ${era.color}`} disabled>
-                      <Sparkles className="w-4 h-4 mr-2" />
-                      Coming Soon
-                    </Button>
-                  </div>
-                )}
+                  ) : (
+                    <div className="space-y-3">
+                      <p className="text-sm text-green-400">Ready to explore!</p>
+                      <Button className={`w-full bg-gradient-to-r ${era.color}`} disabled>
+                        <Sparkles className="w-4 h-4 mr-2" />
+                        Coming Soon
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </GlassCard>
             </div>
           </div>
@@ -412,36 +422,44 @@ export default function EraCodex() {
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <GlassCard className="p-5 text-center">
-                <Vote className="w-8 h-8 mx-auto mb-3 text-cyan-400" />
-                <h3 className="font-bold mb-2">Player Councils</h3>
-                <p className="text-sm text-gray-400">
-                  Elected governing bodies run each realm. Campaign, vote, and shape policy.
-                </p>
+              <GlassCard>
+                <div className="p-5 text-center">
+                  <Vote className="w-8 h-8 mx-auto mb-3 text-cyan-400" />
+                  <h3 className="font-bold mb-2">Player Councils</h3>
+                  <p className="text-sm text-gray-400">
+                    Elected governing bodies run each realm. Campaign, vote, and shape policy.
+                  </p>
+                </div>
               </GlassCard>
 
-              <GlassCard className="p-5 text-center">
-                <Handshake className="w-8 h-8 mx-auto mb-3 text-green-400" />
-                <h3 className="font-bold mb-2">Treaties & Alliances</h3>
-                <p className="text-sm text-gray-400">
-                  Formal agreements between factions. Trade pacts, non-aggression, or full alliance.
-                </p>
+              <GlassCard>
+                <div className="p-5 text-center">
+                  <Handshake className="w-8 h-8 mx-auto mb-3 text-green-400" />
+                  <h3 className="font-bold mb-2">Treaties & Alliances</h3>
+                  <p className="text-sm text-gray-400">
+                    Formal agreements between factions. Trade pacts, non-aggression, or full alliance.
+                  </p>
+                </div>
               </GlassCard>
 
-              <GlassCard className="p-5 text-center">
-                <Swords className="w-8 h-8 mx-auto mb-3 text-red-400" />
-                <h3 className="font-bold mb-2">Coups & Revolutions</h3>
-                <p className="text-sm text-gray-400">
-                  Overthrow corrupt leaders. Nothing is permanent. Power must be earned and defended.
-                </p>
+              <GlassCard>
+                <div className="p-5 text-center">
+                  <Swords className="w-8 h-8 mx-auto mb-3 text-red-400" />
+                  <h3 className="font-bold mb-2">Coups & Revolutions</h3>
+                  <p className="text-sm text-gray-400">
+                    Overthrow corrupt leaders. Nothing is permanent. Power must be earned and defended.
+                  </p>
+                </div>
               </GlassCard>
 
-              <GlassCard className="p-5 text-center">
-                <Crown className="w-8 h-8 mx-auto mb-3 text-amber-400" />
-                <h3 className="font-bold mb-2">Peace Summits</h3>
-                <p className="text-sm text-gray-400">
-                  Multi-faction negotiations. Work towards lasting peace - or plot the next war.
-                </p>
+              <GlassCard>
+                <div className="p-5 text-center">
+                  <Crown className="w-8 h-8 mx-auto mb-3 text-amber-400" />
+                  <h3 className="font-bold mb-2">Peace Summits</h3>
+                  <p className="text-sm text-gray-400">
+                    Multi-faction negotiations. Work towards lasting peace - or plot the next war.
+                  </p>
+                </div>
               </GlassCard>
             </div>
 
@@ -456,35 +474,37 @@ export default function EraCodex() {
         {/* Chrono Key Teaser */}
         <section className="px-4 py-16 bg-gradient-to-b from-black to-purple-950/30">
           <div className="max-w-2xl mx-auto text-center">
-            <GlassCard className="p-8 border-2 border-purple-500/30">
-              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                <Crown className="w-10 h-10 text-white" />
+            <GlassCard className="border-2 border-purple-500/30">
+              <div className="p-8">
+                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                  <Crown className="w-10 h-10 text-white" />
+                </div>
+                <h2 className="text-2xl font-display font-bold mb-4">Chrono Keys</h2>
+                <p className="text-gray-400 mb-6">
+                  Achievements that grant passage through time. 
+                  Earn them through your choices and actions, carrying your legacy across all of history.
+                </p>
+                <div className="grid grid-cols-3 gap-4 mb-6">
+                  <div className="bg-black/30 rounded-lg p-3">
+                    <Shield className="w-6 h-6 mx-auto mb-2 text-amber-400" />
+                    <p className="text-xs text-gray-500">Permanent NFT</p>
+                  </div>
+                  <div className="bg-black/30 rounded-lg p-3">
+                    <Zap className="w-6 h-6 mx-auto mb-2 text-cyan-400" />
+                    <p className="text-xs text-gray-500">Era Access</p>
+                  </div>
+                  <div className="bg-black/30 rounded-lg p-3">
+                    <Star className="w-6 h-6 mx-auto mb-2 text-purple-400" />
+                    <p className="text-xs text-gray-500">Unique Powers</p>
+                  </div>
+                </div>
+                <Link href="/creator-program">
+                  <Button className="bg-gradient-to-r from-purple-600 to-pink-600">
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Become a Founding Creator
+                  </Button>
+                </Link>
               </div>
-              <h2 className="text-2xl font-display font-bold mb-4">Chrono Keys</h2>
-              <p className="text-gray-400 mb-6">
-                Achievements that grant passage through time. 
-                Earn them through your choices and actions, carrying your legacy across all of history.
-              </p>
-              <div className="grid grid-cols-3 gap-4 mb-6">
-                <div className="bg-black/30 rounded-lg p-3">
-                  <Shield className="w-6 h-6 mx-auto mb-2 text-amber-400" />
-                  <p className="text-xs text-gray-500">Permanent NFT</p>
-                </div>
-                <div className="bg-black/30 rounded-lg p-3">
-                  <Zap className="w-6 h-6 mx-auto mb-2 text-cyan-400" />
-                  <p className="text-xs text-gray-500">Era Access</p>
-                </div>
-                <div className="bg-black/30 rounded-lg p-3">
-                  <Star className="w-6 h-6 mx-auto mb-2 text-purple-400" />
-                  <p className="text-xs text-gray-500">Unique Powers</p>
-                </div>
-              </div>
-              <Link href="/creator-program">
-                <Button className="bg-gradient-to-r from-purple-600 to-pink-600">
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Become a Founding Creator
-                </Button>
-              </Link>
             </GlassCard>
           </div>
         </section>
