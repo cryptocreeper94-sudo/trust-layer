@@ -1079,6 +1079,74 @@ console.log('All successful:', result.allSuccessful);`}
             </Accordion>
           </BentoCard>
 
+          {/* Governance & Foundation Documents */}
+          <BentoCard span={3}>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 flex items-center justify-center">
+                <Shield className="w-6 h-6 text-purple-400" />
+              </div>
+              <div>
+                <h3 className="font-display font-bold text-xl text-white">Governance & Foundation</h3>
+                <p className="text-sm text-muted-foreground">Review our governance structure and core principles</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <Link href="/signal-core">
+                <div className="p-4 rounded-xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 hover:border-cyan-500/40 transition-all cursor-pointer group">
+                  <Zap className="w-6 h-6 text-cyan-400 mb-3 group-hover:scale-110 transition-transform" />
+                  <h4 className="font-semibold text-white mb-1">Signal Core</h4>
+                  <p className="text-xs text-muted-foreground">The immutable principles that define who we are. Cannot be changed or voted away.</p>
+                </div>
+              </Link>
+              
+              <Link href="/governance-charter">
+                <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20 hover:border-purple-500/40 transition-all cursor-pointer group">
+                  <BookOpen className="w-6 h-6 text-purple-400 mb-3 group-hover:scale-110 transition-transform" />
+                  <h4 className="font-semibold text-white mb-1">Governance Charter</h4>
+                  <p className="text-xs text-muted-foreground">How we transition from founding to full community ownership over time.</p>
+                </div>
+              </Link>
+              
+              <Link href="/governance-treasury">
+                <div className="p-4 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20 hover:border-amber-500/40 transition-all cursor-pointer group">
+                  <Database className="w-6 h-6 text-amber-400 mb-3 group-hover:scale-110 transition-transform" />
+                  <h4 className="font-semibold text-white mb-1">Governance Treasury</h4>
+                  <p className="text-xs text-muted-foreground">Multi-sig treasury with 3-of-5 council approval. No single person controls funds.</p>
+                </div>
+              </Link>
+            </div>
+
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+              <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
+                <Target className="w-4 h-4 text-green-400" />
+                Governance Implementation Milestones
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                <div className="text-center p-3 rounded-lg bg-slate-500/10">
+                  <p className="text-xs text-muted-foreground mb-1">Phase 1: Now</p>
+                  <p className="font-medium text-white">Founder Stewardship</p>
+                  <p className="text-xs text-slate-400 mt-1">Building foundation</p>
+                </div>
+                <div className="text-center p-3 rounded-lg bg-white/5">
+                  <p className="text-xs text-muted-foreground mb-1">Phase 2: 1,000 Members</p>
+                  <p className="font-medium text-white">Operations Seat Filled</p>
+                  <p className="text-xs text-slate-400 mt-1">Appoint Ops Lead</p>
+                </div>
+                <div className="text-center p-3 rounded-lg bg-white/5">
+                  <p className="text-xs text-muted-foreground mb-1">Phase 3: 5,000 Members</p>
+                  <p className="font-medium text-white">Community Elections</p>
+                  <p className="text-xs text-slate-400 mt-1">First elected seat</p>
+                </div>
+                <div className="text-center p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                  <p className="text-xs text-muted-foreground mb-1">Phase 4: 25,000 Members</p>
+                  <p className="font-medium text-green-400">Full Council Active</p>
+                  <p className="text-xs text-slate-400 mt-1">All 5 seats filled</p>
+                </div>
+              </div>
+            </div>
+          </BentoCard>
+
           {/* Operations Lead Allocation */}
           <BentoCard span={3} glow>
             <div className="flex items-center gap-3 mb-6">
