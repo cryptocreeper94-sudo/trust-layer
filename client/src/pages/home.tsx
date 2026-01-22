@@ -706,14 +706,14 @@ export default function Home() {
                 </svg>
               </div>
               {/* Signal Emblem - Perfectly Centered, background removed via blend mode */}
-              <div className="relative z-10 w-44 h-44 md:w-52 md:h-52 flex items-center justify-center">
+              <div className="relative z-10 w-44 h-44 md:w-52 md:h-52 flex items-center justify-center" style={{ isolation: 'isolate' }}>
                 <img 
                   src={signalEmblem} 
                   alt="Signal Emblem" 
-                  className="w-full h-full object-contain drop-shadow-[0_0_50px_rgba(6,182,212,0.7)]"
+                  className="w-full h-full object-contain"
                   style={{ 
-                    mixBlendMode: 'screen',
-                    filter: 'drop-shadow(0 0 30px rgba(6, 182, 212, 0.8))'
+                    mixBlendMode: 'lighten',
+                    filter: 'drop-shadow(0 0 40px rgba(6, 182, 212, 0.9)) drop-shadow(0 0 20px rgba(168, 85, 247, 0.6))'
                   }}
                 />
               </div>
