@@ -87,13 +87,13 @@ export default function WelcomePage() {
             </h1>
             
             <p className="text-xl text-slate-300 max-w-2xl mx-auto mb-6">
-              A new kind of digital ecosystem where trust is built-in, 
-              not bolted on.
+              A new way of doing business — for individuals and organizations alike. 
+              Where trust is built-in, not bolted on.
             </p>
 
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30">
               <Sparkles className="w-4 h-4 text-cyan-400" />
-              <span className="text-sm text-cyan-300">Launching June 1, 2026</span>
+              <span className="text-sm text-cyan-300">Join Free — Build With Us</span>
             </div>
           </motion.div>
 
@@ -109,17 +109,18 @@ export default function WelcomePage() {
               </h2>
               <div className="space-y-4 text-slate-300">
                 <p>
-                  <strong className="text-white">DarkWave Trust Layer</strong> is a complete digital ecosystem 
-                  designed to transform how people and businesses build trust online. 
+                  <strong className="text-white">DarkWave Trust Layer</strong> is a new concept — a digital ecosystem 
+                  designed to transform how people and businesses build trust and conduct business online. 
                 </p>
                 <p>
                   Unlike traditional platforms where you're the product, DarkWave puts <strong className="text-cyan-400">you in control</strong>. 
-                  Your identity is verified but private. Your transactions are transparent but secure. 
-                  Your participation is rewarded, not exploited.
+                  Your identity is verified but private. Your interactions are transparent but secure. 
+                  Your participation builds real value — for you and the community.
                 </p>
                 <p>
-                  Whether you're an individual looking to invest, a business seeking trusted partnerships, 
-                  or simply curious about the future of digital trust — you're in the right place.
+                  Whether you're an individual looking to connect with verified people, a business seeking trusted partnerships, 
+                  or simply curious about a better way to do things online — you're in the right place. 
+                  <strong className="text-white"> Signing up is free.</strong> Get verified, get your membership, and start building with us.
                 </p>
               </div>
             </GlassCard>
@@ -207,8 +208,8 @@ export default function WelcomePage() {
                   <p className="text-slate-300 text-sm leading-relaxed">
                     We're building DarkWave for the long haul. No shortcuts, no empty promises. 
                     We're taking our time to get it right because you deserve a platform that 
-                    actually works — not just another crypto project that disappears. 
-                    Join us early, and grow with us.
+                    actually works — one that puts community first and grows alongside you. 
+                    Join us now, and let's build something meaningful together.
                   </p>
                 </div>
               </div>
