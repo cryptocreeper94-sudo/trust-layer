@@ -444,14 +444,14 @@ export default function Home() {
               A universal ledger for the next web. Scalable, secure, and built for decentralized applications.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
+            <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 pt-4">
               <Link href="/developers">
-                <Button size="lg" className="h-12 px-6 bg-primary text-background hover:bg-primary/90 font-bold rounded-full shadow-[0_0_20px_rgba(0,255,255,0.3)]" data-testid="button-start-building">
-                  Start Building <ArrowRight className="ml-2 w-4 h-4" />
+                <Button size="lg" className="h-10 sm:h-12 px-4 sm:px-6 text-sm sm:text-base bg-primary text-background hover:bg-primary/90 font-bold rounded-full shadow-[0_0_20px_rgba(0,255,255,0.3)]" data-testid="button-start-building">
+                  Start Building <ArrowRight className="ml-1 sm:ml-2 w-3 h-3 sm:w-4 sm:h-4" />
                 </Button>
               </Link>
               <Link href="/explorer">
-                <Button size="lg" variant="outline" className="h-12 px-6 border-primary/50 text-primary hover:bg-primary/10 rounded-full" data-testid="button-explore-chain">
+                <Button size="lg" variant="outline" className="h-10 sm:h-12 px-4 sm:px-6 text-sm sm:text-base border-primary/50 text-primary hover:bg-primary/10 rounded-full" data-testid="button-explore-chain">
                   DarkWaveScan
                 </Button>
               </Link>
