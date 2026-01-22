@@ -619,7 +619,7 @@ export default function Home() {
             </p>
 
             {/* Signal Emblem with Prism Light Beam Effect */}
-            <div className="relative w-full mt-2 h-64 md:h-72 flex items-center justify-center">
+            <div className="relative w-full mt-2 h-80 md:h-96 flex items-center justify-center">
               {/* Prism Light Beam - danger from upper-left, transformed into flowing DarkWave below */}
               <svg 
                 viewBox="0 0 1200 500" 
@@ -762,14 +762,14 @@ export default function Home() {
               </svg>
               
               {/* Shield - Platinum rim with cosmic black hole center */}
-              <div className="relative z-10 w-44 h-52 md:w-52 md:h-60 flex items-center justify-center" style={{ marginTop: '-30px' }}>
+              <div className="relative z-10 w-72 h-80 md:w-80 md:h-96 flex items-center justify-center" style={{ marginTop: '-40px' }}>
                 <img 
                   src={shieldImage} 
                   alt="DarkWave Shield" 
                   className="w-full h-full object-contain"
                   style={{ 
                     mixBlendMode: 'lighten',
-                    filter: 'drop-shadow(0 0 25px rgba(6, 182, 212, 0.6)) drop-shadow(0 0 12px rgba(168, 85, 247, 0.4))'
+                    filter: 'drop-shadow(0 0 35px rgba(6, 182, 212, 0.7)) drop-shadow(0 0 18px rgba(168, 85, 247, 0.5))'
                   }}
                 />
               </div>
