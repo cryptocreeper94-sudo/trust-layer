@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/glass-card";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "wouter";
 import { 
   Shield, 
   Lock, 
@@ -14,7 +15,8 @@ import {
   Fingerprint,
   Vote,
   Wallet,
-  Eye
+  Eye,
+  FileText
 } from "lucide-react";
 
 export default function SignalCore() {
@@ -168,10 +170,18 @@ export default function SignalCore() {
             Break the Core, and the Signal dies.
           </p>
 
-          <Badge className="bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-500/30 text-cyan-300">
-            <Lock className="w-3 h-3 mr-1" />
-            Permanent & Immutable
-          </Badge>
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Badge className="bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-500/30 text-cyan-300">
+              <Lock className="w-3 h-3 mr-1" />
+              Permanent & Immutable
+            </Badge>
+            <Link href="/signal-core/official">
+              <Badge className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-500/30 text-purple-300 cursor-pointer hover:bg-purple-500/30 transition-colors" data-testid="badge-official-document">
+                <FileText className="w-3 h-3 mr-1" />
+                View Official Document
+              </Badge>
+            </Link>
+          </div>
         </motion.div>
 
         <motion.div

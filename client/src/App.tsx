@@ -36,6 +36,8 @@ function PageLoader() {
 // Lazy-loaded pages - code splitting for smaller initial bundle
 const Welcome = lazy(() => import("@/pages/welcome"));
 const SignalCore = lazy(() => import("@/pages/signal-core"));
+const SignalCoreOfficial = lazy(() => import("@/pages/signal-core-official"));
+const Verify = lazy(() => import("@/pages/verify"));
 const GovernanceCharter = lazy(() => import("@/pages/governance-charter"));
 const Philosophy = lazy(() => import("@/pages/philosophy"));
 const GamesHome = lazy(() => import("@/pages/games-home"));
@@ -365,6 +367,8 @@ function DWSCRouter() {
         <Route path="/faq" component={FAQ} />
         <Route path="/welcome" component={Welcome} />
         <Route path="/signal-core" component={SignalCore} />
+        <Route path="/signal-core/official" component={SignalCoreOfficial} />
+        <Route path="/verify" component={Verify} />
         <Route path="/governance" component={SignalCore} />
         <Route path="/governance-charter" component={GovernanceCharter} />
         <Route path="/philosophy" component={Philosophy} />
