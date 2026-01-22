@@ -617,95 +617,116 @@ export default function Home() {
               Where trust becomes the layer of truth.
             </p>
 
-            {/* Signal Emblem with Animated Wave */}
-            <div className="relative w-full mt-2 h-52 md:h-60 flex items-center justify-center">
-              {/* Animated Sound Wave Background - spans full width */}
-              <div className="absolute inset-0 flex items-center">
-                <svg 
-                  viewBox="0 0 1200 200" 
-                  className="w-full h-full"
-                  preserveAspectRatio="none"
-                >
-                  <defs>
-                    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#22d3ee" stopOpacity="1" />
-                      <stop offset="30%" stopColor="#06b6d4" stopOpacity="1" />
-                      <stop offset="50%" stopColor="#a855f7" stopOpacity="1" />
-                      <stop offset="70%" stopColor="#ec4899" stopOpacity="1" />
-                      <stop offset="100%" stopColor="#f472b6" stopOpacity="1" />
-                    </linearGradient>
-                    <linearGradient id="waveGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#67e8f9" stopOpacity="0.8" />
-                      <stop offset="50%" stopColor="#c084fc" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="#f9a8d4" stopOpacity="0.8" />
-                    </linearGradient>
-                    <filter id="glow">
-                      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                      <feMerge>
-                        <feMergeNode in="coloredBlur"/>
-                        <feMergeNode in="SourceGraphic"/>
-                      </feMerge>
-                    </filter>
-                  </defs>
-                  {/* Wave 1 - Primary flowing wave */}
-                  <path
-                    d="M0,100 Q50,50 100,100 T200,100 T300,100 T400,100 T500,100 T600,100 T700,100 T800,100 T900,100 T1000,100 T1100,100 T1200,100"
-                    fill="none"
-                    stroke="url(#waveGradient)"
-                    strokeWidth="3"
-                    filter="url(#glow)"
+            {/* Signal Emblem with Prism Light Beam Effect */}
+            <div className="relative w-full mt-2 h-56 md:h-64 flex items-center justify-center">
+              {/* Prism Light Beam - enters from left, refracts through shield, exits upward-right */}
+              <svg 
+                viewBox="0 0 1200 300" 
+                className="absolute inset-0 w-full h-full"
+                preserveAspectRatio="xMidYMid meet"
+              >
+                <defs>
+                  {/* Incoming beam gradient - rich cyan that glows in darkness */}
+                  <linearGradient id="incomingBeam" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#06b6d4" stopOpacity="0" />
+                    <stop offset="20%" stopColor="#06b6d4" stopOpacity="0.9" />
+                    <stop offset="60%" stopColor="#22d3ee" stopOpacity="1" />
+                    <stop offset="100%" stopColor="#67e8f9" stopOpacity="1" />
+                  </linearGradient>
+                  {/* Refracted beam gradient - vivid spectrum that pops against dark */}
+                  <linearGradient id="refractedBeam" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#22d3ee" stopOpacity="1" />
+                    <stop offset="25%" stopColor="#8b5cf6" stopOpacity="1" />
+                    <stop offset="50%" stopColor="#a855f7" stopOpacity="1" />
+                    <stop offset="75%" stopColor="#d946ef" stopOpacity="0.9" />
+                    <stop offset="100%" stopColor="#ec4899" stopOpacity="0.7" />
+                  </linearGradient>
+                  {/* Strong glow filter for dark theme contrast */}
+                  <filter id="beamGlow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur stdDeviation="5" result="blur"/>
+                    <feMerge>
+                      <feMergeNode in="blur"/>
+                      <feMergeNode in="blur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                  <filter id="particleGlow" x="-100%" y="-100%" width="300%" height="300%">
+                    <feGaussianBlur stdDeviation="3" result="blur"/>
+                    <feMerge>
+                      <feMergeNode in="blur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                </defs>
+                
+                {/* Incoming light beam from left */}
+                <path
+                  d="M0,160 L540,160"
+                  stroke="url(#incomingBeam)"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  filter="url(#beamGlow)"
+                  className="animate-pulse"
+                />
+                {/* Secondary incoming beam strands */}
+                <path d="M0,152 L530,152" stroke="#22d3ee" strokeWidth="3" strokeOpacity="0.8" filter="url(#beamGlow)" />
+                <path d="M0,168 L530,168" stroke="#22d3ee" strokeWidth="3" strokeOpacity="0.8" filter="url(#beamGlow)" />
+                
+                {/* Refracted beam going up-right (spectrum split) */}
+                <path
+                  d="M660,160 Q750,120 850,60 T1050,10"
+                  stroke="url(#refractedBeam)"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                  fill="none"
+                  filter="url(#beamGlow)"
+                  className="animate-pulse"
+                />
+                {/* Secondary refracted strands - vivid spectrum colors */}
+                <path d="M665,152 Q760,95 900,30" stroke="#a855f7" strokeWidth="4" strokeOpacity="0.9" fill="none" filter="url(#beamGlow)" />
+                <path d="M670,168 Q790,125 940,70" stroke="#d946ef" strokeWidth="4" strokeOpacity="0.85" fill="none" filter="url(#beamGlow)" />
+                <path d="M675,175 Q810,145 970,95" stroke="#ec4899" strokeWidth="3" strokeOpacity="0.75" fill="none" filter="url(#beamGlow)" />
+                
+                {/* Photon particles on incoming beam */}
+                {[...Array(12)].map((_, i) => (
+                  <circle
+                    key={`photon-in-${i}`}
+                    cx={50 + i * 40}
+                    cy={160}
+                    r={3 + Math.random() * 2}
+                    fill="#22d3ee"
+                    filter="url(#particleGlow)"
                     className="animate-pulse"
+                    style={{ animationDelay: `${i * 0.1}s`, animationDuration: '1.5s' }}
                   />
-                  {/* Wave 2 - Secondary offset wave */}
-                  <path
-                    d="M0,100 Q75,140 150,100 T300,100 T450,100 T600,100 T750,100 T900,100 T1050,100 T1200,100"
-                    fill="none"
-                    stroke="url(#waveGradient2)"
-                    strokeWidth="2"
-                    filter="url(#glow)"
-                  />
-                  {/* Frequency bars - left side (bright cyan) */}
-                  {[...Array(35)].map((_, i) => {
-                    const baseHeight = 25 + Math.sin(i * 0.4) * 45;
-                    const x = 20 + i * 14;
-                    return (
-                      <rect
-                        key={`bar-left-${i}`}
-                        x={x}
-                        y={100 - baseHeight / 2}
-                        width="6"
-                        height={baseHeight}
-                        fill="#22d3ee"
-                        rx="3"
-                        filter="url(#glow)"
-                        className="animate-pulse"
-                        style={{ animationDelay: `${i * 0.05}s` }}
-                      />
-                    );
-                  })}
-                  {/* Frequency bars - right side (bright purple to pink) */}
-                  {[...Array(35)].map((_, i) => {
-                    const baseHeight = 25 + Math.sin(i * 0.4) * 45;
-                    const x = 700 + i * 14;
-                    const color = i < 18 ? '#a855f7' : '#ec4899';
-                    return (
-                      <rect
-                        key={`bar-right-${i}`}
-                        x={x}
-                        y={100 - baseHeight / 2}
-                        width="6"
-                        height={baseHeight}
-                        fill={color}
-                        rx="3"
-                        filter="url(#glow)"
-                        className="animate-pulse"
-                        style={{ animationDelay: `${(35 - i) * 0.05}s` }}
-                      />
-                    );
-                  })}
-                </svg>
-              </div>
-              {/* Signal Emblem - Perfectly Centered, background removed via blend mode */}
+                ))}
+                
+                {/* Photon particles on refracted beam */}
+                {[...Array(10)].map((_, i) => {
+                  const t = i / 10;
+                  const x = 660 + t * 300;
+                  const y = 160 - t * 120;
+                  const colors = ['#06b6d4', '#8b5cf6', '#a855f7', '#ec4899', '#f472b6'];
+                  return (
+                    <circle
+                      key={`photon-out-${i}`}
+                      cx={x}
+                      cy={y}
+                      r={2 + Math.random() * 2}
+                      fill={colors[i % colors.length]}
+                      filter="url(#particleGlow)"
+                      className="animate-pulse"
+                      style={{ animationDelay: `${i * 0.12}s`, animationDuration: '1.2s' }}
+                    />
+                  );
+                })}
+                
+                {/* Sparkle at refraction point */}
+                <circle cx="600" cy="160" r="12" fill="#ffffff" fillOpacity="0.4" filter="url(#beamGlow)" className="animate-ping" style={{ animationDuration: '2s' }} />
+                <circle cx="600" cy="160" r="6" fill="#ffffff" fillOpacity="0.8" filter="url(#particleGlow)" />
+              </svg>
+              
+              {/* Signal Emblem - Perfectly Centered (the prism) */}
               <div className="relative z-10 w-44 h-44 md:w-52 md:h-52 flex items-center justify-center" style={{ isolation: 'isolate' }}>
                 <img 
                   src={signalEmblem} 
