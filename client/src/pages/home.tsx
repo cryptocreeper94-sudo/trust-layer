@@ -134,6 +134,15 @@ function ChroniclesCarousel() {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
+  useEffect(() => {
+    if (scrollRef.current) {
+      const { scrollWidth, clientWidth } = scrollRef.current;
+      const centerPosition = (scrollWidth - clientWidth) / 2;
+      scrollRef.current.scrollLeft = centerPosition;
+      checkScroll();
+    }
+  }, []);
+
   const checkScroll = () => {
     if (scrollRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
@@ -174,7 +183,7 @@ function ChroniclesCarousel() {
       <div 
         ref={scrollRef}
         onScroll={checkScroll}
-        className="flex gap-4 overflow-x-auto scrollbar-hide px-12 py-2 snap-x snap-mandatory justify-center"
+        className="flex gap-4 overflow-x-auto scrollbar-hide px-12 py-2 snap-x snap-mandatory"
       >
         {CHRONICLES_ERAS.map((item, i) => (
           <motion.div
