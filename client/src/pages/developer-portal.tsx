@@ -5,7 +5,8 @@ import {
   Lock, Eye, Users, TrendingUp, Globe, Code, 
   ChevronDown, ChevronRight, BarChart3, Activity, Layers, 
   Zap, Database, Shield, Terminal, FileCode, BookOpen,
-  ExternalLink, Copy, Check, RefreshCw, Key, AlertTriangle
+  ExternalLink, Copy, Check, RefreshCw, Key, AlertTriangle,
+  Gift, Coins, Target, CheckCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/page-nav";
@@ -1076,6 +1077,115 @@ console.log('All successful:', result.allSuccessful);`}
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
+          </BentoCard>
+
+          {/* Operations Lead Allocation */}
+          <BentoCard span={3} glow>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 flex items-center justify-center">
+                <Gift className="w-6 h-6 text-amber-400" />
+              </div>
+              <div>
+                <h3 className="font-display font-bold text-xl text-white">Operations Lead Allocation</h3>
+                <p className="text-sm text-muted-foreground">Milestone-based token allocation for your contributions</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div className="space-y-4">
+                <h4 className="font-semibold text-white flex items-center gap-2">
+                  <Coins className="w-4 h-4 text-cyan-400" />
+                  Allocation Summary
+                </h4>
+                <div className="space-y-2">
+                  <div className="flex justify-between p-3 rounded-lg bg-white/5">
+                    <span className="text-muted-foreground">Total Allocation</span>
+                    <span className="font-bold text-amber-400">5,000,000 SIG</span>
+                  </div>
+                  <div className="flex justify-between p-3 rounded-lg bg-white/5">
+                    <span className="text-muted-foreground">% of Supply</span>
+                    <span className="font-bold">0.5%</span>
+                  </div>
+                  <div className="flex justify-between p-3 rounded-lg bg-white/5">
+                    <span className="text-muted-foreground">Structure</span>
+                    <span className="font-bold text-green-400">Graduated Milestones</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h4 className="font-semibold text-white flex items-center gap-2">
+                  <Target className="w-4 h-4 text-purple-400" />
+                  Graduated Milestones
+                </h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-white/5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-slate-500" />
+                      <span className="text-muted-foreground">$1M Market Cap</span>
+                    </div>
+                    <span className="text-white">500K SIG</span>
+                  </div>
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-white/5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-slate-500" />
+                      <span className="text-muted-foreground">$2.5M Market Cap</span>
+                    </div>
+                    <span className="text-white">+750K SIG</span>
+                  </div>
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-white/5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-slate-500" />
+                      <span className="text-muted-foreground">$5M Market Cap</span>
+                    </div>
+                    <span className="text-white">+1M SIG</span>
+                  </div>
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-white/5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-slate-500" />
+                      <span className="text-muted-foreground">$7.5M Market Cap</span>
+                    </div>
+                    <span className="text-white">+1.25M SIG</span>
+                  </div>
+                  <div className="flex items-center justify-between p-2 rounded-lg bg-white/5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-amber-500" />
+                      <span className="text-muted-foreground">$10M Market Cap</span>
+                    </div>
+                    <span className="text-amber-400 font-bold">+1.5M SIG (Full)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20">
+              <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-green-400" />
+                Value Projections
+              </h4>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">At $0.01 (TGE)</p>
+                  <p className="font-bold text-white">$50,000</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">At $0.05</p>
+                  <p className="font-bold text-white">$250,000</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">At $0.10</p>
+                  <p className="font-bold text-green-400">$500,000</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">At $1.00</p>
+                  <p className="font-bold text-amber-400">$5,000,000</p>
+                </div>
+              </div>
+            </div>
+
+            <p className="text-xs text-muted-foreground mt-4 text-center">
+              Each tier vests over 3 months (50% immediately, 50% over following 2 months). Requires continued active contribution and alignment with Signal Core principles.
+            </p>
           </BentoCard>
         </motion.div>
       </main>
