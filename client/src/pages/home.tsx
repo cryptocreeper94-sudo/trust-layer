@@ -174,7 +174,7 @@ function ChroniclesCarousel() {
       <div 
         ref={scrollRef}
         onScroll={checkScroll}
-        className="flex gap-4 overflow-x-auto scrollbar-hide px-12 py-2 snap-x snap-mandatory"
+        className="flex gap-4 overflow-x-auto scrollbar-hide px-12 py-2 snap-x snap-mandatory justify-center"
       >
         {CHRONICLES_ERAS.map((item, i) => (
           <motion.div
@@ -573,16 +573,16 @@ export default function Home() {
 
           <ChroniclesCarousel />
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <div className="flex flex-row items-center justify-center gap-3">
             <Link href="/era-codex">
               <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500" data-testid="button-explore-eras">
                 <Sparkles className="w-4 h-4 mr-2" />
-                Explore All Eras
+                View Eras
               </Button>
             </Link>
-            <Link href="/creator-program">
-              <Button variant="outline" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10" data-testid="button-genesis-page">
-                Learn About Genesis
+            <Link href="/chronicles">
+              <Button variant="outline" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10" data-testid="button-play-chronicles">
+                Play Chronicles
               </Button>
             </Link>
           </div>
