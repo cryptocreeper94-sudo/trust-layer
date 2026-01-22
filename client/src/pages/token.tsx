@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import tokenBg from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
+const shieldImage = "/shield-reference.jpg";
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
@@ -111,9 +112,10 @@ export default function Token() {
                 />
                 <div className="relative w-full rounded-full overflow-hidden">
                   <motion.img 
-                    src={tokenBg} 
+                    src={shieldImage} 
                     alt="Signal" 
                     className="w-full drop-shadow-2xl scale-110"
+                    style={{ mixBlendMode: 'lighten' }}
                     animate={{ y: [0, -10, 0], rotate: [0, 2, 0] }}
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                   />

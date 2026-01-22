@@ -9,6 +9,7 @@ import { SimpleLoginModal } from "@/components/simple-login";
 import { WalletButton } from "@/components/wallet-button";
 
 import signalEmblem from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
+import shieldImage from "/shield-reference.jpg";
 import crowdfundImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 
 // Streamlined nav categories - consolidated for cleaner mobile experience
@@ -556,12 +557,13 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
             }}
           >
             <img 
-              src={signalEmblem} 
+              src={shieldImage} 
               alt="Signal"
               style={{
                 width: '56px',
                 height: '56px',
                 objectFit: 'contain',
+                mixBlendMode: 'lighten',
                 filter: 'drop-shadow(0 0 10px rgba(6,182,212,0.5))',
               }}
             />

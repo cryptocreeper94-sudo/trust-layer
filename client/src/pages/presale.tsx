@@ -23,6 +23,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import darkwaveLogo from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
+const shieldImage = "/shield-reference.jpg";
 import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
 import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
@@ -547,7 +548,7 @@ function PresaleProgress() {
               animate={{ scale: [1, 1.5, 1], opacity: [0.3, 0, 0.3] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
             />
-            <img src={darkwaveLogo} alt="Signal" className="w-16 h-16 object-contain relative z-10" />
+            <img src={shieldImage} alt="Signal" className="w-16 h-16 object-contain relative z-10" style={{ mixBlendMode: 'lighten' }} />
             <div className="absolute inset-0 animate-pulse bg-cyan-400/20 rounded-full blur-xl" />
           </div>
           <div>
