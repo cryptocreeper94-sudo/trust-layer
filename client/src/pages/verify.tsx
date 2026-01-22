@@ -15,7 +15,7 @@ import {
   AlertCircle,
   Loader2
 } from "lucide-react";
-import signalEmblem from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
+import shieldImage from "/shield-reference.jpg";
 
 interface VerificationResult {
   verified: boolean;
@@ -115,11 +115,14 @@ export default function Verify() {
               animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
               transition={{ duration: 3, repeat: Infinity }}
             />
-            <div className="relative w-24 h-24 mx-auto flex items-center justify-center">
+            <div className="relative w-28 h-32 mx-auto flex items-center justify-center">
               <img 
-                src={signalEmblem} 
-                alt="DarkWave Trust Layer" 
-                className="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(139,92,246,0.5)]"
+                src={shieldImage} 
+                alt="DarkWave Shield" 
+                className="w-full h-full object-contain"
+                style={{ 
+                  filter: 'drop-shadow(0 0 20px rgba(6, 182, 212, 0.5)) drop-shadow(0 0 12px rgba(168, 85, 247, 0.4))'
+                }}
               />
             </div>
           </div>

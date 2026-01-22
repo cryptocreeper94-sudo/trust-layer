@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Link } from "wouter";
 import { useRef } from "react";
-import signalEmblem from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
+import shieldImage from "/shield-reference.jpg";
 
 const DOCUMENT_HASH = "0x7a3f8c2e1b9d4a6f5c8e3b2a1d9f7e6c4b3a2d1e";
 const RATIFICATION_BLOCK = "Genesis";
@@ -113,11 +113,14 @@ export default function SignalCoreOfficial() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="inline-block mb-6"
               >
-                <div className="w-28 h-28 mx-auto flex items-center justify-center">
+                <div className="w-36 h-40 mx-auto flex items-center justify-center">
                   <img 
-                    src={signalEmblem} 
-                    alt="DarkWave Trust Layer Emblem" 
-                    className="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]"
+                    src={shieldImage} 
+                    alt="DarkWave Shield" 
+                    className="w-full h-full object-contain"
+                    style={{ 
+                      filter: 'drop-shadow(0 0 25px rgba(6, 182, 212, 0.6)) drop-shadow(0 0 15px rgba(168, 85, 247, 0.4))'
+                    }}
                   />
                 </div>
               </motion.div>
