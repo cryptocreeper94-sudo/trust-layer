@@ -34,6 +34,7 @@ function PageLoader() {
 }
 
 // Lazy-loaded pages - code splitting for smaller initial bundle
+const Welcome = lazy(() => import("@/pages/welcome"));
 const GamesHome = lazy(() => import("@/pages/games-home"));
 const GameDeveloper = lazy(() => import("@/pages/game-developer"));
 const Dashboard = lazy(() => import("@/pages/dashboard"));
@@ -358,6 +359,7 @@ function DWSCRouter() {
         <Route path="/token" component={Token} />
         <Route path="/tokenomics" component={Tokenomics} />
         <Route path="/faq" component={FAQ} />
+        <Route path="/welcome" component={Welcome} />
         <Route path="/blog" component={Blog} />
         <Route path="/blog/:slug" component={BlogPost} />
         <Route path="/blog-admin" component={BlogAdmin} />
