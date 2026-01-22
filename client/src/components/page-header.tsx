@@ -1,14 +1,12 @@
-import { ArrowLeft, Home, Search } from "lucide-react";
+import { ArrowLeft, Home } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { GlobalSearch } from "@/components/global-search";
 
 interface PageHeaderProps {
   title: string;
   subtitle?: string;
   showBack?: boolean;
   showHome?: boolean;
-  showSearch?: boolean;
   rightContent?: React.ReactNode;
   className?: string;
 }
@@ -18,7 +16,6 @@ export function PageHeader({
   subtitle,
   showBack = true,
   showHome = true,
-  showSearch = true,
   rightContent,
   className = ""
 }: PageHeaderProps) {
@@ -31,8 +28,8 @@ export function PageHeader({
   };
 
   return (
-    <header className={`sticky top-0 z-50 bg-slate-950/90 backdrop-blur-xl border-b border-white/10 ${className}`}>
-      <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+    <nav className={`fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl ${className}`}>
+      <div className="container mx-auto px-4 h-14 flex items-center">
         <div className="flex items-center gap-3">
           {showBack && (
             <Button
@@ -45,6 +42,15 @@ export function PageHeader({
               <ArrowLeft className="w-4 h-4" />
             </Button>
           )}
+          <div>
+            <h1 className="text-lg font-bold text-white leading-tight">{title}</h1>
+            {subtitle && (
+              <p className="text-xs text-white/50">{subtitle}</p>
+            )}
+          </div>
+        </div>
+        <div className="ml-auto flex items-center gap-2">
+          {rightContent}
           {showHome && (
             <Link href="/">
               <Button
@@ -57,18 +63,8 @@ export function PageHeader({
               </Button>
             </Link>
           )}
-          <div className="ml-2">
-            <h1 className="text-lg font-bold text-white leading-tight">{title}</h1>
-            {subtitle && (
-              <p className="text-xs text-white/50">{subtitle}</p>
-            )}
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          {showSearch && <GlobalSearch />}
-          {rightContent}
         </div>
       </div>
-    </header>
+    </nav>
   );
 }

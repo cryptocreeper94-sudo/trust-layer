@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
   Droplets, Plus, TrendingUp, Percent, DollarSign,
-  ArrowUpDown, ChevronDown, Loader2, Info, Minus, BarChart3
+  ArrowUpDown, ChevronDown, Loader2, Info, Minus, BarChart3, Home
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
@@ -229,16 +229,17 @@ export default function Liquidity() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
-            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="border-green-500/50 text-green-400 text-[10px]">Liquidity</Badge>
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center">
+          <div className="flex items-center gap-3">
             <BackButton />
+            <h1 className="text-lg font-bold text-white">Liquidity Pools</h1>
           </div>
+          <Link href="/" className="ml-auto">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-white/10">
+              <Home className="w-4 h-4" />
+            </Button>
+          </Link>
         </div>
       </nav>
 

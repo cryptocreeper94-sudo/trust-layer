@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { HelpCircle, Send, Clock, CheckCircle, AlertCircle, MessageSquare, ChevronDown, ChevronUp, Sparkles, Shield, Zap, HeartHandshake } from "lucide-react";
+import { HelpCircle, Send, Clock, CheckCircle, AlertCircle, MessageSquare, ChevronDown, ChevronUp, Sparkles, Shield, Zap, HeartHandshake, Home } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -125,18 +125,17 @@ export default function SupportPage() {
         <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "0.5s" }} />
       </div>
 
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/80 backdrop-blur-xl">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center">
-          <Link href="/" className="flex items-center gap-2 mr-auto">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
-            <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
-          </Link>
           <div className="flex items-center gap-3">
-            <Badge variant="outline" className="border-primary/20 text-primary bg-primary/5 text-[10px]">
-              <Sparkles className="w-3 h-3 mr-1" /> Support Center
-            </Badge>
             <BackButton />
+            <h1 className="text-lg font-bold text-white">Support Center</h1>
           </div>
+          <Link href="/" className="ml-auto">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-white/10">
+              <Home className="w-4 h-4" />
+            </Button>
+          </Link>
         </div>
       </nav>
 

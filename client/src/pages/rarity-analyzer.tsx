@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
   Diamond, Search, TrendingUp, TrendingDown, Star,
-  BarChart3, Info, ExternalLink, Filter, ChevronDown
+  BarChart3, Info, ExternalLink, Filter, ChevronDown, Home
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, Cell } from "recharts";
@@ -60,13 +60,17 @@ export default function RarityAnalyzer() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
-            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center">
+          <div className="flex items-center gap-3">
+            <BackButton />
+            <h1 className="text-lg font-bold text-white">Rarity Analyzer</h1>
+          </div>
+          <Link href="/" className="ml-auto">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-white/10">
+              <Home className="w-4 h-4" />
+            </Button>
           </Link>
-          <BackButton />
         </div>
       </nav>
 
