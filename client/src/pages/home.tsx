@@ -36,6 +36,8 @@ import vikingImg from "@assets/generated_images/viking_longship_fjord_scene.png"
 import wildWestImg from "@assets/generated_images/wild_west_frontier_town.png";
 import tradingImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import nftImg from "@assets/generated_images/fantasy_character_heroes.png";
+import devStudioImg from "@assets/generated_images/developer_portal_apis.png";
+import launchpadImg from "@assets/generated_images/rocket_launching_growth.png";
 import toolsImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
 import earnImg from "@assets/generated_images/darkwave_crypto_token_coin_holographic.png";
 
@@ -735,12 +737,15 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link href="/studio">
-              <GlassCard glow hover={false} className="h-full">
-                <div className="p-5 relative overflow-hidden h-full">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-cyan-500/5" />
-                  <div className="relative z-10 flex flex-col h-full">
+              <GlassCard glow hover={false} className="h-full overflow-hidden">
+                <div className="relative h-full">
+                  <div className="aspect-[16/9] relative overflow-hidden">
+                    <img src={devStudioImg} alt="Dev Studio" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
+                  </div>
+                  <div className="p-5 relative z-10 -mt-16">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
+                      <div className="w-12 h-12 rounded-xl bg-primary/20 backdrop-blur-sm flex items-center justify-center shrink-0 border border-primary/30">
                         <Code className="w-6 h-6 text-primary" />
                       </div>
                       <div>
@@ -748,7 +753,7 @@ export default function Home() {
                         <h3 className="text-lg font-bold text-white">Dev Studio</h3>
                       </div>
                     </div>
-                    <p className="text-xs text-white/60 mb-4 flex-1">Cloud IDE for blockchain development with Monaco editor, templates, and deployment tools.</p>
+                    <p className="text-xs text-white/60 mb-4">Cloud IDE for blockchain development with Monaco editor, templates, and deployment tools.</p>
                     <Button className="w-full bg-primary text-background hover:bg-primary/90 font-semibold" data-testid="button-open-dev-studio">
                       Open Studio <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
@@ -758,12 +763,15 @@ export default function Home() {
             </Link>
             
             <Link href="/launchpad">
-              <GlassCard glow hover={false} className="h-full">
-                <div className="p-5 relative overflow-hidden h-full">
-                  <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 via-transparent to-amber-500/5" />
-                  <div className="relative z-10 flex flex-col h-full">
+              <GlassCard glow hover={false} className="h-full overflow-hidden">
+                <div className="relative h-full">
+                  <div className="aspect-[16/9] relative overflow-hidden">
+                    <img src={launchpadImg} alt="Launchpad" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent" />
+                  </div>
+                  <div className="p-5 relative z-10 -mt-16">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center shrink-0">
+                      <div className="w-12 h-12 rounded-xl bg-orange-500/20 backdrop-blur-sm flex items-center justify-center shrink-0 border border-orange-500/30">
                         <Rocket className="w-6 h-6 text-orange-400" />
                       </div>
                       <div>
@@ -771,7 +779,7 @@ export default function Home() {
                         <h3 className="text-lg font-bold text-white">Launchpad</h3>
                       </div>
                     </div>
-                    <p className="text-xs text-white/60 mb-4 flex-1">Launch your own tokens with fair distribution, vesting schedules, and community tools.</p>
+                    <p className="text-xs text-white/60 mb-4">Launch your own tokens with fair distribution, vesting schedules, and community tools.</p>
                     <Button className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-black font-semibold" data-testid="button-open-launchpad">
                       Launch Now <Rocket className="w-4 h-4 ml-2" />
                     </Button>
@@ -824,11 +832,7 @@ export default function Home() {
               <SkeletonCard />
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {apps.slice(0, 6).map((app) => (
-                <EcosystemAppCard key={app.id} app={app} />
-              ))}
-            </div>
+            <EcosystemCarousel apps={apps} />
           )}
           
           <div className="mt-6 flex justify-center">
