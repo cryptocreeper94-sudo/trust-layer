@@ -2543,6 +2543,25 @@ export async function registerRoutes(
       
       if (isValid) {
         portalPinAttempts.delete(clientIp);
+        
+        // For developer PIN, also create a session so they're logged in everywhere
+        if (portalType === "developer") {
+          // Find or create owner account
+          let ownerUser = await storage.getUserByEmail("owner@darkwave.io");
+          if (!ownerUser) {
+            ownerUser = await storage.createUser({
+              email: "owner@darkwave.io",
+              displayName: "Owner",
+              username: "owner",
+              role: "owner",
+            });
+          }
+          // Create session
+          if (ownerUser) {
+            (req.session as any).userId = ownerUser.id;
+          }
+        }
+        
         res.json({ success: true, redirect });
       } else {
         const current = portalPinAttempts.get(clientIp) || { count: 0, lastAttempt: 0 };
