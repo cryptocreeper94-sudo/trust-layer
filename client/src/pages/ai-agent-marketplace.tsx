@@ -255,6 +255,7 @@ export default function AIAgentMarketplace() {
                     transition={{ delay: 0.1 * index }}
                   >
                     <GlassCard className="h-full hover:border-cyan-500/50 transition-all group cursor-pointer" data-testid={`card-agent-${agent.id}`}>
+                      <div className="p-5">
                       <div className="flex items-start justify-between mb-4">
                         <div className={`p-3 rounded-xl bg-gradient-to-br ${gradient}`}>
                           <Icon className="w-6 h-6 text-white" />
@@ -300,10 +301,13 @@ export default function AIAgentMarketplace() {
                             {formatPrice(agent.pricePerExecution)}
                           </p>
                         </div>
-                        <Button size="sm" className="bg-gradient-to-r from-cyan-500 to-purple-600" data-testid={`button-deploy-${agent.id}`}>
-                          <Play className="w-4 h-4 mr-1" />
-                          Deploy
-                        </Button>
+                        <Link href={`/ai-agents/${agent.id}`}>
+                          <Button size="sm" className="bg-gradient-to-r from-cyan-500 to-purple-600" data-testid={`button-deploy-${agent.id}`}>
+                            <Play className="w-4 h-4 mr-1" />
+                            Deploy
+                          </Button>
+                        </Link>
+                      </div>
                       </div>
                     </GlassCard>
                   </motion.div>
@@ -318,6 +322,7 @@ export default function AIAgentMarketplace() {
             transition={{ delay: 0.3 }}
           >
             <GlassCard className="text-center" data-testid="card-create-cta">
+              <div className="p-8">
               <Brain className="w-16 h-16 mx-auto mb-4 text-cyan-400" />
               <h3 className="text-2xl font-bold text-white mb-2">Build Your Own Agent</h3>
               <p className="text-slate-400 mb-6 max-w-lg mx-auto">
@@ -328,10 +333,13 @@ export default function AIAgentMarketplace() {
                   <Plus className="w-4 h-4 mr-2" />
                   Create Agent
                 </Button>
-                <Button variant="outline" className="border-slate-600 text-slate-300" data-testid="button-learn-more">
-                  Learn More
-                  <ChevronRight className="w-4 h-4 ml-2" />
-                </Button>
+                <Link href="/docs">
+                  <Button variant="outline" className="border-slate-600 text-slate-300" data-testid="button-learn-more">
+                    Learn More
+                    <ChevronRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              </div>
               </div>
             </GlassCard>
           </motion.div>

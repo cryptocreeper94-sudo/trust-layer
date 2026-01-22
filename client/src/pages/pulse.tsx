@@ -619,9 +619,9 @@ export default function PulseDashboard() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mb-6"
         >
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-[0_0_30px_rgba(0,255,255,0.3)]">
                 <Brain className="w-6 h-6 text-white" />
@@ -642,6 +642,33 @@ export default function PulseDashboard() {
             >
               <RefreshCw className={`w-5 h-5 text-white ${marketLoading ? 'animate-spin' : ''}`} />
             </button>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <Link href="/strike-agent">
+              <div className="flex items-center gap-2 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-500/50 transition-colors cursor-pointer">
+                <Target className="w-4 h-4 text-cyan-400" />
+                <span className="text-xs font-medium text-white">Strike Agent</span>
+              </div>
+            </Link>
+            <Link href="/charts">
+              <div className="flex items-center gap-2 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-purple-500/50 transition-colors cursor-pointer">
+                <LineChart className="w-4 h-4 text-purple-400" />
+                <span className="text-xs font-medium text-white">Charts</span>
+              </div>
+            </Link>
+            <Link href="/swap">
+              <div className="flex items-center gap-2 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-emerald-500/50 transition-colors cursor-pointer">
+                <Zap className="w-4 h-4 text-emerald-400" />
+                <span className="text-xs font-medium text-white">Swap</span>
+              </div>
+            </Link>
+            <Link href="/portfolio">
+              <div className="flex items-center gap-2 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-500/50 transition-colors cursor-pointer">
+                <PieChart className="w-4 h-4 text-cyan-400" />
+                <span className="text-xs font-medium text-white">Portfolio</span>
+              </div>
+            </Link>
           </div>
         </motion.div>
 
@@ -913,66 +940,6 @@ export default function PulseDashboard() {
           </GlassCard>
         </motion.div>
 
-        {/* Quick Links */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4"
-        >
-          <Link href="/strike-agent">
-            <GlassCard className="hover:border-cyan-500/50 transition-colors cursor-pointer">
-              <div className="p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center">
-                  <Target className="w-5 h-5 text-cyan-400" />
-                </div>
-                <div>
-                  <span className="text-sm font-medium text-white">Strike Agent</span>
-                  <span className="text-[10px] text-white/40 block">Token Scanner</span>
-                </div>
-              </div>
-            </GlassCard>
-          </Link>
-          <Link href="/charts">
-            <GlassCard className="hover:border-purple-500/50 transition-colors cursor-pointer">
-              <div className="p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
-                  <LineChart className="w-5 h-5 text-purple-400" />
-                </div>
-                <div>
-                  <span className="text-sm font-medium text-white">Charts</span>
-                  <span className="text-[10px] text-white/40 block">Price Analysis</span>
-                </div>
-              </div>
-            </GlassCard>
-          </Link>
-          <Link href="/swap">
-            <GlassCard className="hover:border-emerald-500/50 transition-colors cursor-pointer">
-              <div className="p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-                  <Zap className="w-5 h-5 text-emerald-400" />
-                </div>
-                <div>
-                  <span className="text-sm font-medium text-white">Swap</span>
-                  <span className="text-[10px] text-white/40 block">Trade Tokens</span>
-                </div>
-              </div>
-            </GlassCard>
-          </Link>
-          <Link href="/portfolio">
-            <GlassCard className="hover:border-amber-500/50 transition-colors cursor-pointer">
-              <div className="p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                  <PieChart className="w-5 h-5 text-amber-400" />
-                </div>
-                <div>
-                  <span className="text-sm font-medium text-white">Portfolio</span>
-                  <span className="text-[10px] text-white/40 block">Track Holdings</span>
-                </div>
-              </div>
-            </GlassCard>
-          </Link>
-        </motion.div>
       </div>
     </div>
     </SubscriptionGate>

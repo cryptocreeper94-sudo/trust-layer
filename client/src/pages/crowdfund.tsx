@@ -379,7 +379,10 @@ function FeatureCard({ feature }: { feature: CrowdfundFeature }) {
                 Fund This Feature
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-gray-900 border-gray-800">
+            <DialogContent className="bg-gray-900 border-gray-800 max-w-md">
+              <DialogHeader>
+                <DialogTitle className="sr-only">Fund Feature</DialogTitle>
+              </DialogHeader>
               <DonationModal feature={feature} onSuccess={() => {}} />
             </DialogContent>
           </Dialog>
@@ -600,7 +603,10 @@ export default function CrowdfundPage() {
                       Support Development
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="bg-gray-900 border-gray-800">
+                  <DialogContent className="bg-gray-900 border-gray-800 max-w-md">
+                    <DialogHeader>
+                      <DialogTitle className="sr-only">Support DarkWave Development</DialogTitle>
+                    </DialogHeader>
                     <DonationModal onSuccess={() => {}} />
                   </DialogContent>
                 </Dialog>
@@ -752,7 +758,7 @@ export default function CrowdfundPage() {
           <GlassCard className="p-6 inline-block">
             <div className="flex items-center gap-2 text-sm text-gray-400">
               <Shield className="w-4 h-4 text-cyan-400" />
-              <span>All contributions are verified with DWSC transparency stamps</span>
+              <span>All contributions are verified with DarkWave Trust Layer transparency stamps</span>
               <ExternalLink className="w-4 h-4 ml-2" />
             </div>
           </GlassCard>

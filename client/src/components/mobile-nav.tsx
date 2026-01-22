@@ -174,7 +174,7 @@ function NavCategory({ category, location, onClose, onShowComingSoon }: {
                   <ItemIcon style={{ width: '16px', height: '16px', flexShrink: 0 }} />
                   <span style={{ fontWeight: 500, flex: 1, fontSize: '13px', fontFamily: 'Inter, sans-serif' }}>{item.label}</span>
                   {'badge' in item && (item as any).badge && (
-                    <Badge className="text-[9px] bg-amber-500/20 text-amber-400 px-1.5 py-0">
+                    <Badge className="text-[9px] bg-cyan-500/20 text-cyan-400 px-1.5 py-0">
                       {(item as any).badge}
                     </Badge>
                   )}
@@ -201,7 +201,7 @@ function NavCategory({ category, location, onClose, onShowComingSoon }: {
                   <ItemIcon style={{ width: '16px', height: '16px', flexShrink: 0 }} />
                   <span style={{ fontWeight: 500, flex: 1, fontSize: '13px', fontFamily: 'Inter, sans-serif' }}>{item.label}</span>
                   {'badge' in item && (item as any).badge && (
-                    <Badge className="text-[9px] bg-pink-500/20 text-pink-400 px-1.5 py-0">
+                    <Badge className="text-[9px] bg-cyan-500/20 text-cyan-400 px-1.5 py-0">
                       {(item as any).badge}
                     </Badge>
                   )}
