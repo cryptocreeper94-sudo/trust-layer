@@ -124,24 +124,39 @@ interface Token {
   creatorBadge: "new" | "verified" | "trusted" | "certified" | "flagged";
 }
 
-// Generate realistic mock data
+// Generate realistic mock data - 30 tokens for scrolling
 function generateMockTokens(chain: string): Token[] {
   const tokens = [
     { name: "Nietzschean Penguin", symbol: "PENGUIN", boosts: 200 },
     { name: "Seeker", symbol: "SKR", boosts: 0 },
-    { name: "Rare Earth", symbol: "REEsCoin", boosts: 500 },
-    { name: "Xoge", symbol: "Xoge", boosts: 10 },
-    { name: "BALLSCOIN", symbol: "BALLSCOIN", boosts: 150 },
-    { name: "United States", symbol: "USR", boosts: 500 },
-    { name: "Ralph Wiggun", symbol: "RALPH", boosts: 0 },
-    { name: "memes will cc", symbol: "memes", boosts: 0 },
-    { name: "The White Whale", symbol: "WhiteWhale", boosts: 0 },
-    { name: "Fitcoin", symbol: "Fitcoin", boosts: 100 },
+    { name: "Rare Earth", symbol: "REES", boosts: 500 },
+    { name: "Xoge", symbol: "XOGE", boosts: 10 },
+    { name: "Ballscoin", symbol: "BALLS", boosts: 150 },
+    { name: "United States Reserve", symbol: "USR", boosts: 500 },
+    { name: "Ralph Wiggum", symbol: "RALPH", boosts: 0 },
+    { name: "Memes Will CC", symbol: "MEMES", boosts: 0 },
+    { name: "White Whale", symbol: "WHALE", boosts: 0 },
+    { name: "Fitcoin", symbol: "FIT", boosts: 100 },
     { name: "Bonk Killer", symbol: "BONKILL", boosts: 75 },
     { name: "Doge Rising", symbol: "DOGER", boosts: 250 },
     { name: "Pepe Classic", symbol: "PEPEC", boosts: 180 },
     { name: "Moon Shot", symbol: "MOON", boosts: 50 },
     { name: "SafeGem", symbol: "SGEM", boosts: 300 },
+    { name: "Wojak Finance", symbol: "WOJAK", boosts: 120 },
+    { name: "Chad Token", symbol: "CHAD", boosts: 90 },
+    { name: "Based AI", symbol: "BAI", boosts: 400 },
+    { name: "Frog Nation", symbol: "FROG", boosts: 60 },
+    { name: "Diamond Hands", symbol: "DMD", boosts: 200 },
+    { name: "Ape Together", symbol: "APE2", boosts: 150 },
+    { name: "Rocket Pool", symbol: "RCKT", boosts: 80 },
+    { name: "Gem Hunter", symbol: "GEM", boosts: 110 },
+    { name: "Alpha Call", symbol: "ALPHA", boosts: 350 },
+    { name: "Degen Protocol", symbol: "DEGEN", boosts: 220 },
+    { name: "Wen Moon", symbol: "WEN", boosts: 45 },
+    { name: "Rugged Not", symbol: "SAFE", boosts: 500 },
+    { name: "Paper Hands", symbol: "PAPER", boosts: 0 },
+    { name: "Gigachad", symbol: "GIGA", boosts: 280 },
+    { name: "Cope Token", symbol: "COPE", boosts: 35 },
   ];
 
   const chains = chain === "all" ? ["solana", "ethereum", "base", "bsc"] : [chain];
@@ -149,6 +164,9 @@ function generateMockTokens(chain: string): Token[] {
     solana: "◎", ethereum: "Ξ", base: "🔵", bsc: "🟡",
     arbitrum: "🔷", polygon: "🟣", avalanche: "🔺", darkwave: "◆"
   };
+  
+  // Color palette for token logos
+  const colors = ["22d3ee", "a855f7", "ec4899", "f59e0b", "10b981", "3b82f6", "ef4444", "8b5cf6"];
 
   return tokens.map((t, i) => {
     const tokenChain = chains[Math.floor(Math.random() * chains.length)];
@@ -158,13 +176,14 @@ function generateMockTokens(chain: string): Token[] {
     
     const price = Math.random() * (Math.random() > 0.5 ? 0.1 : 0.00001);
     const isNew = Math.random() > 0.6;
+    const color = colors[i % colors.length];
     
     return {
       id: `${tokenChain}-${t.symbol.toLowerCase()}-${i}`,
       rank: i + 1,
       name: t.name,
       symbol: t.symbol,
-      logo: null,
+      logo: `https://api.dicebear.com/7.x/shapes/svg?seed=${t.symbol}&backgroundColor=${color}`,
       contractAddress: `0x${Array.from({length: 40}, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('')}`,
       pairAddress: `0x${Array.from({length: 40}, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('')}`,
       chain: tokenChain,
@@ -302,72 +321,48 @@ function SecurityIcons({ token }: { token: Token }) {
   );
 }
 
-// Mobile Token Card (no horizontal scroll)
+// Mobile Token Card - ultra compact (no horizontal scroll)
 function TokenCard({ token, onToggleWatchlist }: { token: Token; onToggleWatchlist: (id: string) => void }) {
   return (
     <Link href={`/guardian-scanner/${token.chain}/${token.symbol.toLowerCase()}`}>
       <div 
-        className="p-3 bg-white/[0.02] hover:bg-white/[0.04] border-b border-white/5 transition-colors"
+        className="px-2 py-1.5 hover:bg-white/[0.03] border-b border-white/5 transition-colors flex items-center gap-2"
         data-testid={`token-card-${token.id}`}
       >
-        <div className="flex items-center gap-3 mb-2">
-          {/* Rank */}
-          <span className="text-xs text-white/30 w-5">#{token.rank}</span>
-          
-          {/* Logo */}
-          <div className="relative shrink-0">
-            {token.logo ? (
-              <img src={token.logo} alt={token.symbol} className="w-9 h-9 rounded-full" />
-            ) : (
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-xs font-bold text-white">
-                {token.symbol.slice(0, 2)}
-              </div>
-            )}
-            <span className="absolute -bottom-0.5 -right-0.5 text-[9px]">{token.chainIcon}</span>
-          </div>
-          
-          {/* Name & Symbol */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="font-semibold text-white text-sm">{token.symbol}</span>
-              <span className="text-[9px] text-white/30 bg-white/5 px-1 rounded">{token.chain.toUpperCase()}</span>
-              {token.boosts > 0 && (
-                <span className="text-[9px] text-yellow-400 flex items-center">
-                  <Zap className="w-2.5 h-2.5" />{token.boosts}
-                </span>
-              )}
-              <SecurityIcons token={token} />
-            </div>
-            <span className="text-[10px] text-white/40 truncate block">{token.name}</span>
-          </div>
-          
-          {/* Price */}
-          <div className="text-right shrink-0">
-            <div className="text-sm font-medium text-white">{token.priceUsd}</div>
-            <PriceChange value={token.priceChange24h} className="text-[10px]" />
-          </div>
+        {/* Rank */}
+        <span className="text-[10px] text-white/30 w-4 shrink-0">{token.rank}</span>
+        
+        {/* Logo */}
+        <div className="relative shrink-0">
+          <img src={token.logo || ''} alt={token.symbol} className="w-6 h-6 rounded-full bg-white/10" />
+          <span className="absolute -bottom-0.5 -right-0.5 text-[8px]">{token.chainIcon}</span>
         </div>
         
-        {/* Stats Row */}
-        <div className="flex items-center justify-between text-[10px] text-white/50 mt-1">
-          <div className="flex items-center gap-3">
-            <span>Age: {token.age}</span>
-            <span>Vol: {formatNumber(token.volume24h)}</span>
-            <span>Liq: {formatNumber(token.liquidity)}</span>
+        {/* Symbol & Name */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1">
+            <span className="font-medium text-white text-xs">{token.symbol}</span>
+            {token.boosts > 0 && <span className="text-[8px] text-yellow-400">⚡{token.boosts}</span>}
+            <SecurityIcons token={token} />
           </div>
-          <div className="flex items-center gap-2">
-            <GuardianScoreBadge score={token.guardianScore} />
-            <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleWatchlist(token.id); }}
-              className="p-1"
-            >
-              {token.isWatchlisted ? (
-                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-              ) : (
-                <Star className="w-4 h-4 text-white/20" />
-              )}
-            </button>
-          </div>
+          <span className="text-[9px] text-white/30 truncate block">{token.name}</span>
+        </div>
+        
+        {/* Price & Change */}
+        <div className="text-right shrink-0">
+          <div className="text-xs font-medium text-white">{token.priceUsd}</div>
+          <PriceChange value={token.priceChange24h} className="text-[9px]" />
+        </div>
+        
+        {/* Volume */}
+        <div className="text-right shrink-0 hidden xs:block">
+          <div className="text-[9px] text-white/40">Vol</div>
+          <div className="text-[10px] text-white/70">{formatNumber(token.volume24h)}</div>
+        </div>
+        
+        {/* Guardian Score */}
+        <div className="shrink-0">
+          <GuardianScoreBadge score={token.guardianScore} />
         </div>
       </div>
     </Link>
