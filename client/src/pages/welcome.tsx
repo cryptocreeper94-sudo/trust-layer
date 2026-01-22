@@ -12,11 +12,11 @@ import signalEmblem from "@assets/generated_images/signal_emblem_platinum.png";
 const PATHWAYS = [
   {
     icon: Rocket,
-    title: "I Want to Invest Early",
-    description: "Join the presale and become a founding member. Early supporters get the best rates and exclusive rewards.",
+    title: "I Want to Join Early",
+    description: "Become a founding member and help shape the ecosystem from the ground up. Early supporters get exclusive access and community rewards.",
     color: "from-cyan-500 to-blue-500",
     link: "/presale",
-    linkText: "View Presale"
+    linkText: "Learn More"
   },
   {
     icon: GraduationCap,
@@ -252,9 +252,26 @@ export default function WelcomePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1 }}
-            className="text-center text-slate-500 text-sm"
+            className="text-center text-slate-500 text-sm mb-8"
           >
             <p>Questions? Reach out on <a href="https://t.me/DarkWaveStudios" className="text-cyan-400 hover:underline">Telegram</a> or <a href="https://discord.gg/darkwave" className="text-cyan-400 hover:underline">Discord</a></p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2 }}
+            className="max-w-3xl mx-auto"
+          >
+            <div className="p-4 rounded-xl bg-slate-800/30 border border-slate-700/30 text-center">
+              <p className="text-xs text-slate-500 leading-relaxed">
+                <strong className="text-slate-400">Important Notice:</strong> DarkWave Studios LLC is a technology company building digital infrastructure and community tools. 
+                We are <strong>not</strong> a financial services company, investment advisor, or broker. Nothing on this website constitutes financial, legal, or tax advice. 
+                Any references to tokens, digital assets, or ecosystem participation are for informational purposes only. 
+                Always do your own research (DYOR) and consult with qualified professionals before making any decisions. 
+                Participation in digital ecosystems involves risk — never participate with more than you can afford to lose.
+              </p>
+            </div>
           </motion.div>
         </div>
       </div>
