@@ -1,181 +1,119 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Eye, Building, Activity, AlertTriangle, Globe, Zap } from 'lucide-react';
+import { Shield, Lock, Sparkles, Radar, Brain, TrendingUp, Calendar, ArrowLeft, Home } from 'lucide-react';
 import { Link } from 'wouter';
-
-const SHIELD_TIERS = [
-  {
-    name: "Guardian Watch",
-    price: "$299",
-    priceNote: "per month",
-    features: [
-      "24/7 automated smart contract monitoring",
-      "Unusual transaction pattern alerts",
-      "Weekly security reports",
-      "Email & Discord notifications",
-      "Up to 5 contracts monitored",
-      "Basic threat intelligence feed"
-    ],
-    icon: Eye,
-    color: "cyan"
-  },
-  {
-    name: "Guardian Shield",
-    price: "$999",
-    priceNote: "per month",
-    features: [
-      "Everything in Guardian Watch",
-      "Real-time incident alerts (< 1 min)",
-      "Governance attack detection",
-      "Bridge & liquidity pool monitoring",
-      "Whale movement tracking",
-      "Up to 25 contracts monitored",
-      "Dedicated Slack channel",
-      "Monthly security review calls"
-    ],
-    highlight: true,
-    icon: Shield,
-    color: "purple"
-  },
-  {
-    name: "Guardian Command",
-    price: "$2,999",
-    priceNote: "per month",
-    features: [
-      "Everything in Guardian Shield",
-      "24/7 Security Operations Center",
-      "Active threat mitigation",
-      "Rug pull early warning system",
-      "Unlimited contract monitoring",
-      "Custom detection rules",
-      "Incident response team",
-      "Quarterly penetration testing",
-      "Executive security briefings"
-    ],
-    icon: Building,
-    color: "pink"
-  }
-];
-
-const FEATURES = [
-  { icon: Activity, title: "Real-Time Monitoring", description: "24/7 surveillance of your smart contracts and on-chain activity" },
-  { icon: AlertTriangle, title: "Threat Detection", description: "AI-powered anomaly detection for unusual patterns and attacks" },
-  { icon: Globe, title: "Multi-Chain Coverage", description: "Monitor assets across Ethereum, BSC, Polygon, and 20+ chains" },
-  { icon: Zap, title: "Instant Alerts", description: "Sub-minute notifications via email, Slack, Discord, and SMS" }
-];
+import { Button } from '@/components/ui/button';
 
 export default function GuardianShieldPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 p-4" data-testid="guardian-shield-page">
-      <section className="max-w-6xl mx-auto py-8 text-white">
-        <div className="mb-4">
-          <Link href="/" className="text-cyan-400 hover:text-cyan-300 text-sm">← Back to Portal</Link>
+    <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950" data-testid="guardian-shield-page">
+      <nav className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-white/5">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Link href="/">
+              <Button variant="ghost" size="sm" className="text-white/70 hover:text-white h-8 px-2">
+                <ArrowLeft className="w-4 h-4 mr-1" />
+                Back
+              </Button>
+            </Link>
+            <span className="text-white font-semibold">Guardian Shield</span>
+          </div>
+          <Link href="/">
+            <Button variant="ghost" size="sm" className="text-white/70 hover:text-white h-8 w-8 p-0">
+              <Home className="w-4 h-4" />
+            </Button>
+          </Link>
         </div>
-        
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">Guardian Shield — Monitoring & Response</h1>
-            <p className="text-slate-400 mt-2">Continuous security monitoring and alerting for your smart contracts and infrastructure.</p>
-          </div>
-          <div className="hidden sm:block">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500 text-black text-xs font-semibold">
-              <Shield className="w-4 h-4" />
-              Coming Soon
+      </nav>
+
+      <div className="flex flex-col items-center justify-center min-h-[85vh] px-4 py-12">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="relative"
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20 blur-3xl rounded-full" />
+          
+          <div className="relative bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-3xl p-8 sm:p-12 max-w-2xl text-center">
+            <motion.div
+              animate={{ 
+                boxShadow: [
+                  '0 0 30px rgba(6, 182, 212, 0.3)',
+                  '0 0 60px rgba(168, 85, 247, 0.3)',
+                  '0 0 30px rgba(236, 72, 153, 0.3)',
+                  '0 0 60px rgba(6, 182, 212, 0.3)'
+                ]
+              }}
+              transition={{ duration: 4, repeat: Infinity }}
+              className="w-24 h-24 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 p-[2px]"
+            >
+              <div className="w-full h-full rounded-2xl bg-slate-900 flex items-center justify-center">
+                <Shield className="w-12 h-12 text-cyan-400" />
+              </div>
+            </motion.div>
+
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 mb-6">
+              <Lock className="w-4 h-4 text-cyan-400" />
+              <span className="text-sm font-semibold text-cyan-400">Under Development</span>
             </div>
-          </div>
-        </div>
 
-        <div className="grid gap-6">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="grid sm:grid-cols-2 md:grid-cols-4 gap-4"
-          >
-            {FEATURES.map((feature, i) => (
-              <div key={i} className="p-4 rounded-xl bg-slate-950/30 border border-slate-800/40">
-                <feature.icon className="w-8 h-8 text-cyan-400 mb-3" />
-                <h3 className="text-sm font-semibold text-white">{feature.title}</h3>
-                <p className="text-xs text-slate-400 mt-1">{feature.description}</p>
-              </div>
-            ))}
-          </motion.div>
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+              Guardian Shield
+            </h1>
+            
+            <p className="text-xl text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400 font-semibold mb-6">
+              Advanced DEX Screener & Security Monitor
+            </p>
 
-          <div className="p-4 rounded-xl bg-slate-950/30 border border-slate-800/40">
-            <h3 className="text-lg font-semibold mb-4">Tier Comparison</h3>
-            <div className="overflow-auto">
-              <table className="w-full text-left text-sm">
-                <thead>
-                  <tr className="text-slate-400 border-b border-slate-800">
-                    <th className="p-3">Feature</th>
-                    <th className="p-3">Watch $299</th>
-                    <th className="p-3">Shield $999</th>
-                    <th className="p-3">Command $2,999</th>
-                  </tr>
-                </thead>
-                <tbody className="text-white">
-                  <tr className="border-b border-slate-800/40"><td className="p-3">Contracts Monitored</td><td className="p-3">5</td><td className="p-3">25</td><td className="p-3">Unlimited</td></tr>
-                  <tr className="border-b border-slate-800/40"><td className="p-3">Alert Speed</td><td className="p-3">5 min</td><td className="p-3">&lt; 1 min</td><td className="p-3">Real-time</td></tr>
-                  <tr className="border-b border-slate-800/40"><td className="p-3">Incident Response</td><td className="p-3">—</td><td className="p-3">Included</td><td className="p-3">24/7 Team</td></tr>
-                  <tr className="border-b border-slate-800/40"><td className="p-3">Custom Rules</td><td className="p-3">—</td><td className="p-3">—</td><td className="p-3">✓</td></tr>
-                  <tr><td className="p-3">Pen Testing</td><td className="p-3">—</td><td className="p-3">—</td><td className="p-3">Quarterly</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+            <p className="text-slate-300 mb-8 leading-relaxed">
+              We're building something special. Guardian Shield will be a high-powered DEX screener with 
+              AI-driven threat detection, predictive market intelligence, and real-time security monitoring. 
+              We're taking the time to get this right — so when it launches, it will be exactly what 
+              the DarkWave community deserves.
+            </p>
 
-          <div className="grid sm:grid-cols-3 gap-4">
-            {SHIELD_TIERS.map((tier, i) => (
-              <motion.div
-                key={tier.name}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                className={`p-4 rounded-xl border ${tier.highlight ? 'bg-gradient-to-br from-purple-950/30 to-slate-950/30 border-purple-500/40' : 'bg-slate-950/30 border-slate-800/40'}`}
-              >
-                <tier.icon className={`w-8 h-8 mb-3 ${tier.color === 'cyan' ? 'text-cyan-400' : tier.color === 'purple' ? 'text-purple-400' : 'text-pink-400'}`} />
-                <h3 className="text-lg font-semibold text-white">{tier.name}</h3>
-                <div className="mt-2">
-                  <span className="text-2xl font-bold text-white">{tier.price}</span>
-                  <span className="text-slate-400 text-sm">/{tier.priceNote}</span>
-                </div>
-                <ul className="mt-4 space-y-2">
-                  {tier.features.slice(0, 5).map((f, j) => (
-                    <li key={j} className="text-xs text-slate-300 flex items-start gap-2">
-                      <span className="text-cyan-400 mt-0.5">✓</span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <button className="w-full mt-4 py-2 rounded-md bg-slate-800/60 text-slate-400 text-sm cursor-not-allowed">
-                  Coming Soon
-                </button>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-950/30 border border-slate-800/40">
-            <h3 className="text-lg font-semibold mb-2">Live Stats</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
-              <div>
-                <div className="text-2xl font-bold text-cyan-400">99.99%</div>
-                <div className="text-xs text-slate-400">Uptime</div>
+            <div className="grid sm:grid-cols-3 gap-4 mb-8">
+              <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                <Brain className="w-8 h-8 text-cyan-400 mx-auto mb-2" />
+                <p className="text-sm font-semibold text-white">AI Capabilities</p>
+                <p className="text-xs text-slate-400">Smart pattern detection</p>
               </div>
-              <div>
-                <div className="text-2xl font-bold text-green-400">0</div>
-                <div className="text-xs text-slate-400">Active Alerts</div>
+              <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                <TrendingUp className="w-8 h-8 text-purple-400 mx-auto mb-2" />
+                <p className="text-sm font-semibold text-white">Predictive Analytics</p>
+                <p className="text-xs text-slate-400">Market intelligence</p>
               </div>
-              <div>
-                <div className="text-2xl font-bold text-purple-400">24/7</div>
-                <div className="text-xs text-slate-400">Monitoring</div>
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-pink-400">&lt;1m</div>
-                <div className="text-xs text-slate-400">Alert Time</div>
+              <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                <Radar className="w-8 h-8 text-pink-400 mx-auto mb-2" />
+                <p className="text-sm font-semibold text-white">Real-Time Scanning</p>
+                <p className="text-xs text-slate-400">24/7 monitoring</p>
               </div>
             </div>
+
+            <div className="p-6 rounded-2xl bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 border border-purple-500/30 mb-6">
+              <div className="flex items-center justify-center gap-3 mb-2">
+                <Calendar className="w-5 h-5 text-purple-400" />
+                <span className="text-lg font-bold text-white">Launching at TGE</span>
+              </div>
+              <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400">
+                April 11, 2026
+              </p>
+              <p className="text-sm text-slate-400 mt-2">Token Generation Event</p>
+            </div>
+
+            <motion.div 
+              className="flex items-center justify-center gap-2 text-slate-400"
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <Sparkles className="w-4 h-4 text-cyan-400" />
+              <span className="text-sm">Hang tight — it's going to be worth the wait</span>
+              <Sparkles className="w-4 h-4 text-purple-400" />
+            </motion.div>
           </div>
-        </div>
-      </section>
+        </motion.div>
+      </div>
     </main>
   );
 }
