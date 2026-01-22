@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
+  GithubAuthProvider,
   signOut,
   onAuthStateChanged,
   updateProfile,
@@ -39,12 +40,15 @@ googleProvider.setCustomParameters({
   prompt: 'select_account'
 });
 
+const githubProvider = new GithubAuthProvider();
+
 export { 
   auth, 
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInWithPopup,
   googleProvider,
+  githubProvider,
   signOut,
   onAuthStateChanged,
   updateProfile,

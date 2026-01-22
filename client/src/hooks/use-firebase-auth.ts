@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   googleProvider,
+  githubProvider,
   signOut,
   updateProfile,
   sendPasswordResetEmail,
@@ -144,6 +145,18 @@ export function useFirebaseAuth() {
     }
   }, []);
 
+  const loginWithGithub = useCallback(async () => {
+    setError(null);
+    try {
+      const result = await signInWithPopup(auth, githubProvider);
+      return { success: true, user: mapFirebaseUser(result.user) };
+    } catch (err: any) {
+      const message = getErrorMessage(err);
+      setError(message);
+      return { success: false, error: message };
+    }
+  }, []);
+
   const logout = useCallback(async () => {
     setIsLoggingOut(true);
     try {
@@ -186,6 +199,7 @@ export function useFirebaseAuth() {
     login,
     signup,
     loginWithGoogle,
+    loginWithGithub,
     logout,
     isLoggingOut,
     resetPassword,
