@@ -65,10 +65,22 @@ const CHAINS = [
 const SIDEBAR_NAV = [
   { id: "watchlist", name: "Watchlist", icon: Star },
   { id: "alerts", name: "Alerts", icon: Bell },
-  { id: "multicharts", name: "Multicharts", icon: Grid3X3 },
+  { id: "multicharts", name: "Multi Charts", icon: Grid3X3 },
   { id: "new-pairs", name: "New Pairs", icon: Rocket },
-  { id: "gainers-losers", name: "Gainers & Losers", icon: TrendingUp },
+  { id: "gainers", name: "Gainers", icon: TrendingUp },
+  { id: "losers", name: "Losers", icon: TrendingDown },
   { id: "portfolio", name: "Portfolio", icon: Wallet },
+  { id: "advertise", name: "Advertise", icon: Zap },
+];
+
+const DEX_OPTIONS = [
+  { id: "raydium", name: "Raydium", chain: "solana" },
+  { id: "pumpfun", name: "Pump.fun", chain: "solana" },
+  { id: "orca", name: "Orca", chain: "solana" },
+  { id: "uniswap", name: "Uniswap", chain: "ethereum" },
+  { id: "sushiswap", name: "SushiSwap", chain: "ethereum" },
+  { id: "pancakeswap", name: "PancakeSwap", chain: "bsc" },
+  { id: "baseswap", name: "BaseSwap", chain: "base" },
 ];
 
 const TIME_FILTERS = [
@@ -93,16 +105,20 @@ interface Token {
   rank: number;
   name: string;
   symbol: string;
-  logo: string | null;
+  logo: string;
   contractAddress: string;
   pairAddress: string;
   chain: string;
   chainIcon: string;
+  dex: string;
+  dexShort: string;
   price: number;
   priceUsd: string;
   age: string;
   ageMinutes: number;
   txns: number;
+  buys: number;
+  sells: number;
   volume24h: number;
   makers: number;
   priceChange5m: number;
@@ -114,7 +130,8 @@ interface Token {
   guardianScore: number;
   boosts: number;
   isWatchlisted: boolean;
-  // Guardian-specific
+  hasProfile: boolean;
+  isAdvertising: boolean;
   honeypotRisk: boolean;
   mintAuthority: boolean;
   freezeAuthority: boolean;
@@ -124,40 +141,28 @@ interface Token {
   creatorBadge: "new" | "verified" | "trusted" | "certified" | "flagged";
 }
 
-// Generate realistic mock data - 30 tokens for scrolling
+// Generate 100 tokens for scrolling
 function generateMockTokens(chain: string): Token[] {
-  const tokens = [
-    { name: "Nietzschean Penguin", symbol: "PENGUIN", boosts: 200 },
-    { name: "Seeker", symbol: "SKR", boosts: 0 },
-    { name: "Rare Earth", symbol: "REES", boosts: 500 },
-    { name: "Xoge", symbol: "XOGE", boosts: 10 },
-    { name: "Ballscoin", symbol: "BALLS", boosts: 150 },
-    { name: "United States Reserve", symbol: "USR", boosts: 500 },
-    { name: "Ralph Wiggum", symbol: "RALPH", boosts: 0 },
-    { name: "Memes Will CC", symbol: "MEMES", boosts: 0 },
-    { name: "White Whale", symbol: "WHALE", boosts: 0 },
-    { name: "Fitcoin", symbol: "FIT", boosts: 100 },
-    { name: "Bonk Killer", symbol: "BONKILL", boosts: 75 },
-    { name: "Doge Rising", symbol: "DOGER", boosts: 250 },
-    { name: "Pepe Classic", symbol: "PEPEC", boosts: 180 },
-    { name: "Moon Shot", symbol: "MOON", boosts: 50 },
-    { name: "SafeGem", symbol: "SGEM", boosts: 300 },
-    { name: "Wojak Finance", symbol: "WOJAK", boosts: 120 },
-    { name: "Chad Token", symbol: "CHAD", boosts: 90 },
-    { name: "Based AI", symbol: "BAI", boosts: 400 },
-    { name: "Frog Nation", symbol: "FROG", boosts: 60 },
-    { name: "Diamond Hands", symbol: "DMD", boosts: 200 },
-    { name: "Ape Together", symbol: "APE2", boosts: 150 },
-    { name: "Rocket Pool", symbol: "RCKT", boosts: 80 },
-    { name: "Gem Hunter", symbol: "GEM", boosts: 110 },
-    { name: "Alpha Call", symbol: "ALPHA", boosts: 350 },
-    { name: "Degen Protocol", symbol: "DEGEN", boosts: 220 },
-    { name: "Wen Moon", symbol: "WEN", boosts: 45 },
-    { name: "Rugged Not", symbol: "SAFE", boosts: 500 },
-    { name: "Paper Hands", symbol: "PAPER", boosts: 0 },
-    { name: "Gigachad", symbol: "GIGA", boosts: 280 },
-    { name: "Cope Token", symbol: "COPE", boosts: 35 },
+  const baseTokens = [
+    "PENGUIN", "SKR", "REES", "XOGE", "BALLS", "USR", "RALPH", "MEMES", "WHALE", "FIT",
+    "BONKILL", "DOGER", "PEPEC", "MOON", "SGEM", "WOJAK", "CHAD", "BAI", "FROG", "DMD",
+    "APE2", "RCKT", "GEM", "ALPHA", "DEGEN", "WEN", "SAFE", "PAPER", "GIGA", "COPE",
+    "SHIB2", "FLOKI2", "BONK2", "SAMO", "ORCA", "JUP", "RAY", "STEP", "MANGO", "TULIP",
+    "SRM", "ATLAS", "POLIS", "GENE", "SLIM", "LIKE", "MNGO", "PORT", "SLND", "SHDW",
+    "DUST", "HONEY", "FORGE", "CROWN", "KING", "QUEEN", "ACE", "JOKER", "WILD", "LUCKY",
+    "MAGIC", "SPELL", "WAND", "STAFF", "RUNE", "SIGIL", "GLYPH", "MARK", "SEAL", "CREST",
+    "BLADE", "SWORD", "AXE", "MACE", "SPEAR", "ARROW", "BOLT", "SHOT", "DART", "LANCE",
+    "HELM", "ARMOR", "GUARD", "WARD", "AEGIS", "VEIL", "CLOAK", "SHROUD", "MASK", "FACE",
+    "HEART", "SOUL", "MIND", "WILL", "HOPE", "DREAM", "WISH", "STAR2", "SUN2", "NOVA"
   ];
+  
+  const names: Record<string, string> = {
+    PENGUIN: "Nietzschean Penguin", SKR: "Seeker", REES: "Rare Earth", XOGE: "Xoge Token",
+    BALLS: "Ballscoin", USR: "US Reserve", RALPH: "Ralph Wiggum", MEMES: "Memes CC",
+    WHALE: "White Whale", FIT: "Fitcoin", BONKILL: "Bonk Killer", DOGER: "Doge Rising",
+    PEPEC: "Pepe Classic", MOON: "Moon Shot", SGEM: "SafeGem", WOJAK: "Wojak Finance",
+    CHAD: "Chad Token", BAI: "Based AI", FROG: "Frog Nation", DMD: "Diamond Hands"
+  };
 
   const chains = chain === "all" ? ["solana", "ethereum", "base", "bsc"] : [chain];
   const chainIcons: Record<string, string> = {
@@ -165,10 +170,20 @@ function generateMockTokens(chain: string): Token[] {
     arbitrum: "🔷", polygon: "🟣", avalanche: "🔺", darkwave: "◆"
   };
   
-  // Color palette for token logos
+  const dexByChain: Record<string, string[]> = {
+    solana: ["Raydium", "Pump.fun", "Orca"],
+    ethereum: ["Uniswap", "SushiSwap"],
+    base: ["BaseSwap", "Aerodrome"],
+    bsc: ["PancakeSwap"],
+    arbitrum: ["Camelot", "GMX"],
+    polygon: ["QuickSwap"],
+    avalanche: ["TraderJoe"],
+    darkwave: ["DarkSwap"]
+  };
+  
   const colors = ["22d3ee", "a855f7", "ec4899", "f59e0b", "10b981", "3b82f6", "ef4444", "8b5cf6"];
 
-  return tokens.map((t, i) => {
+  return baseTokens.map((symbol, i) => {
     const tokenChain = chains[Math.floor(Math.random() * chains.length)];
     const score = Math.floor(Math.random() * 100);
     const badges: Array<"new" | "verified" | "trusted" | "certified" | "flagged"> = 
@@ -177,22 +192,30 @@ function generateMockTokens(chain: string): Token[] {
     const price = Math.random() * (Math.random() > 0.5 ? 0.1 : 0.00001);
     const isNew = Math.random() > 0.6;
     const color = colors[i % colors.length];
+    const chainDexes = dexByChain[tokenChain] || ["DEX"];
+    const dex = chainDexes[Math.floor(Math.random() * chainDexes.length)];
+    const txns = Math.floor(Math.random() * 250000) + 1000;
+    const buyRatio = 0.4 + Math.random() * 0.2;
     
     return {
-      id: `${tokenChain}-${t.symbol.toLowerCase()}-${i}`,
+      id: `${tokenChain}-${symbol.toLowerCase()}-${i}`,
       rank: i + 1,
-      name: t.name,
-      symbol: t.symbol,
-      logo: `https://api.dicebear.com/7.x/shapes/svg?seed=${t.symbol}&backgroundColor=${color}`,
+      name: names[symbol] || symbol.charAt(0) + symbol.slice(1).toLowerCase() + " Token",
+      symbol,
+      logo: `https://api.dicebear.com/7.x/shapes/svg?seed=${symbol}&backgroundColor=${color}`,
       contractAddress: `0x${Array.from({length: 40}, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('')}`,
       pairAddress: `0x${Array.from({length: 40}, () => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('')}`,
       chain: tokenChain,
       chainIcon: chainIcons[tokenChain] || "◎",
+      dex,
+      dexShort: dex.length > 8 ? dex.slice(0, 6) + ".." : dex,
       price,
       priceUsd: formatPrice(price),
       age: isNew ? `${Math.floor(Math.random() * 23) + 1}h` : `${Math.floor(Math.random() * 30) + 1}d`,
       ageMinutes: isNew ? Math.floor(Math.random() * 1440) : Math.floor(Math.random() * 43200),
-      txns: Math.floor(Math.random() * 250000) + 1000,
+      txns,
+      buys: Math.floor(txns * buyRatio),
+      sells: Math.floor(txns * (1 - buyRatio)),
       volume24h: Math.random() * 70000000 + 100000,
       makers: Math.floor(Math.random() * 25000) + 100,
       priceChange5m: (Math.random() - 0.5) * 20,
@@ -202,8 +225,10 @@ function generateMockTokens(chain: string): Token[] {
       liquidity: Math.random() * 2000000 + 10000,
       marketCap: Math.random() * 100000000 + 100000,
       guardianScore: score,
-      boosts: t.boosts,
-      isWatchlisted: Math.random() > 0.85,
+      boosts: Math.random() > 0.7 ? Math.floor(Math.random() * 500) : 0,
+      isWatchlisted: Math.random() > 0.9,
+      hasProfile: Math.random() > 0.5,
+      isAdvertising: Math.random() > 0.85,
       honeypotRisk: Math.random() > 0.95,
       mintAuthority: Math.random() > 0.7,
       freezeAuthority: Math.random() > 0.8,
@@ -371,7 +396,6 @@ function TokenCard({ token, onToggleWatchlist }: { token: Token; onToggleWatchli
 
 function TokenRow({ token, onToggleWatchlist }: { token: Token; onToggleWatchlist: (id: string) => void }) {
   const [copied, setCopied] = useState(false);
-  
   const copyAddress = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -379,109 +403,73 @@ function TokenRow({ token, onToggleWatchlist }: { token: Token; onToggleWatchlis
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   };
-
+  
   return (
     <tr 
-      className="border-b border-white/5 hover:bg-white/[0.02] transition-colors group cursor-pointer"
+      className="border-b border-white/5 hover:bg-white/[0.02] transition-colors group cursor-pointer h-9"
       data-testid={`token-row-${token.id}`}
     >
       {/* Rank */}
-      <td className="py-2.5 pl-3 pr-2 text-xs text-white/40 font-medium">
-        #{token.rank}
-      </td>
+      <td className="py-1 pl-2 pr-1 text-[10px] text-white/40 w-7">{token.rank}</td>
       
-      {/* Token Info */}
-      <td className="py-2.5 pr-3">
+      {/* Token: Chain + DEX + Logo + Symbol */}
+      <td className="py-1 pr-2">
         <Link href={`/guardian-scanner/${token.chain}/${token.symbol.toLowerCase()}`} data-testid={`token-link-${token.id}`}>
-          <div className="flex items-center gap-2.5">
-            {/* Logo */}
-            <div className="relative">
-              {token.logo ? (
-                <img src={token.logo} alt={token.symbol} className="w-8 h-8 rounded-full" />
-              ) : (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center text-[10px] font-bold text-white">
-                  {token.symbol.slice(0, 2)}
-                </div>
-              )}
-              <span className="absolute -bottom-0.5 -right-0.5 text-[10px]">{token.chainIcon}</span>
-            </div>
-            
-            {/* Name & Symbol */}
+          <div className="flex items-center gap-1.5">
+            <span className="text-[10px] w-4">{token.chainIcon}</span>
+            <span className="text-[9px] text-white/40 w-12 truncate">{token.dexShort}</span>
+            <img src={token.logo} alt={token.symbol} className="w-5 h-5 rounded-full bg-white/10" />
             <div className="flex flex-col min-w-0">
-              <div className="flex items-center gap-1.5">
-                <span className="text-sm font-semibold text-white group-hover:text-cyan-400 transition-colors truncate max-w-[120px]">
-                  {token.symbol}
-                </span>
-                <span className="text-[10px] text-white/30 bg-white/5 px-1 rounded">{token.chain.toUpperCase()}</span>
-                <BoostBadge boosts={token.boosts} />
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="text-[11px] text-white/40 truncate max-w-[100px]">{token.name}</span>
+              <div className="flex items-center gap-1">
+                <span className="text-xs font-medium text-white group-hover:text-cyan-400">{token.symbol}</span>
+                {token.boosts > 0 && <span className="text-[8px] text-yellow-400">⚡{token.boosts}</span>}
                 <SecurityIcons token={token} />
               </div>
+              <span className="text-[9px] text-white/30 truncate max-w-[80px]">{token.name}</span>
             </div>
           </div>
         </Link>
       </td>
       
       {/* Price */}
-      <td className="py-2.5 pr-3 text-right">
-        <span className="text-sm font-medium text-white tabular-nums">{token.priceUsd}</span>
-      </td>
+      <td className="py-1 pr-2 text-right text-xs font-medium text-white tabular-nums">{token.priceUsd}</td>
       
       {/* Age */}
-      <td className="py-2.5 pr-3 text-right text-xs text-white/50 hidden sm:table-cell">
-        {token.age}
-      </td>
+      <td className="py-1 pr-2 text-right text-[10px] text-white/50">{token.age}</td>
       
       {/* Txns */}
-      <td className="py-2.5 pr-3 text-right text-xs text-white/60 hidden md:table-cell tabular-nums">
-        {formatCompact(token.txns)}
-      </td>
+      <td className="py-1 pr-2 text-right text-[10px] text-white/60 tabular-nums">{formatCompact(token.txns)}</td>
       
       {/* Volume */}
-      <td className="py-2.5 pr-3 text-right text-xs text-white/60 hidden md:table-cell">
-        {formatNumber(token.volume24h)}
-      </td>
+      <td className="py-1 pr-2 text-right text-[10px] text-white/60">{formatNumber(token.volume24h)}</td>
       
       {/* Makers */}
-      <td className="py-2.5 pr-3 text-right text-xs text-white/60 hidden lg:table-cell tabular-nums">
-        {formatCompact(token.makers)}
-      </td>
+      <td className="py-1 pr-2 text-right text-[10px] text-white/60 tabular-nums hidden lg:table-cell">{formatCompact(token.makers)}</td>
       
       {/* 5M % */}
-      <td className="py-2.5 pr-3 text-right text-xs hidden lg:table-cell">
-        <PriceChange value={token.priceChange5m} />
-      </td>
+      <td className="py-1 pr-2 text-right text-[10px] hidden lg:table-cell"><PriceChange value={token.priceChange5m} /></td>
       
       {/* 1H % */}
-      <td className="py-2.5 pr-3 text-right text-xs hidden md:table-cell">
-        <PriceChange value={token.priceChange1h} />
-      </td>
+      <td className="py-1 pr-2 text-right text-[10px]"><PriceChange value={token.priceChange1h} /></td>
       
       {/* 6H % */}
-      <td className="py-2.5 pr-3 text-right text-xs hidden lg:table-cell">
-        <PriceChange value={token.priceChange6h} />
-      </td>
+      <td className="py-1 pr-2 text-right text-[10px] hidden lg:table-cell"><PriceChange value={token.priceChange6h} /></td>
       
       {/* 24H % */}
-      <td className="py-2.5 pr-3 text-right text-xs">
-        <PriceChange value={token.priceChange24h} />
-      </td>
+      <td className="py-1 pr-2 text-right text-[10px]"><PriceChange value={token.priceChange24h} /></td>
       
       {/* Liquidity */}
-      <td className="py-2.5 pr-3 text-right text-xs text-white/60 hidden xl:table-cell">
-        {formatNumber(token.liquidity)}
+      <td className="py-1 pr-2 text-right text-[10px] text-white/60 hidden xl:table-cell">{formatNumber(token.liquidity)}
       </td>
       
       {/* Guardian Score */}
-      <td className="py-2.5 pr-3 hidden sm:table-cell">
+      <td className="py-1 pr-2">
         <GuardianScoreBadge score={token.guardianScore} />
       </td>
       
       {/* Actions */}
-      <td className="py-2.5 pr-3">
-        <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+      <td className="py-1 pr-2">
+        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleWatchlist(token.id); }}
             className="p-1 hover:bg-white/10 rounded transition-colors"
@@ -521,6 +509,11 @@ export default function GuardianScanner() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeSidebarItem, setActiveSidebarItem] = useState<string | null>(null);
   const [showChainDropdown, setShowChainDropdown] = useState(false);
+  const [sortAscending, setSortAscending] = useState(false);
+  // Filter checkboxes
+  const [filterProfile, setFilterProfile] = useState(false);
+  const [filterBoosted, setFilterBoosted] = useState(false);
+  const [filterAdvertising, setFilterAdvertising] = useState(false);
   
   // Stats
   const [stats, setStats] = useState({ volume24h: 26150000000, txns24h: 46104946 });
@@ -593,6 +586,7 @@ export default function GuardianScanner() {
   const filteredTokens = useMemo(() => {
     let result = [...tokens];
     
+    // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase().trim();
       result = result.filter(t => 
@@ -601,15 +595,24 @@ export default function GuardianScanner() {
         t.contractAddress.toLowerCase().includes(query)
       );
     }
+    
+    // Checkbox filters
+    if (filterProfile) result = result.filter(t => t.hasProfile);
+    if (filterBoosted) result = result.filter(t => t.boosts > 0);
+    if (filterAdvertising) result = result.filter(t => t.isAdvertising);
 
+    // Sidebar filters
     if (activeSidebarItem === "watchlist") {
       result = result.filter(t => t.isWatchlisted);
     } else if (activeSidebarItem === "new-pairs") {
       result = result.filter(t => t.ageMinutes < 1440);
-    } else if (activeSidebarItem === "gainers-losers") {
-      result.sort((a, b) => Math.abs(b.priceChange24h) - Math.abs(a.priceChange24h));
+    } else if (activeSidebarItem === "gainers") {
+      result = result.filter(t => t.priceChange24h > 0);
+    } else if (activeSidebarItem === "losers") {
+      result = result.filter(t => t.priceChange24h < 0);
     }
     
+    // Sorting
     switch (rankBy) {
       case "volume":
         result.sort((a, b) => b.volume24h - a.volume24h);
@@ -630,12 +633,14 @@ export default function GuardianScanner() {
         result.sort((a, b) => b.liquidity - a.liquidity);
         break;
       default:
-        // trending - by volume and change
         result.sort((a, b) => (b.volume24h * Math.abs(b.priceChange24h)) - (a.volume24h * Math.abs(a.priceChange24h)));
     }
     
+    // Apply sort direction
+    if (sortAscending) result.reverse();
+    
     return result.map((t, i) => ({ ...t, rank: i + 1 }));
-  }, [tokens, searchQuery, rankBy, activeSidebarItem]);
+  }, [tokens, searchQuery, rankBy, activeSidebarItem, filterProfile, filterBoosted, filterAdvertising, sortAscending]);
 
   const toggleWatchlist = (id: string) => {
     setTokens(prev => prev.map(t => 
@@ -689,48 +694,61 @@ export default function GuardianScanner() {
         )}
         
         {/* Navigation */}
-        <nav className="flex-1 p-2">
+        <nav className="p-2">
           {SIDEBAR_NAV.map(item => (
             <button
               key={item.id}
               onClick={() => setActiveSidebarItem(activeSidebarItem === item.id ? null : item.id)}
-              className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors mb-1 ${
+              className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-xs transition-colors mb-0.5 ${
                 activeSidebarItem === item.id
                   ? 'bg-cyan-500/10 text-cyan-400'
                   : 'text-white/60 hover:bg-white/5 hover:text-white'
               }`}
               data-testid={`nav-${item.id}`}
             >
-              <item.icon className="w-4 h-4 flex-shrink-0" />
+              <item.icon className="w-3.5 h-3.5 flex-shrink-0" />
               {!sidebarCollapsed && <span>{item.name}</span>}
             </button>
           ))}
         </nav>
         
-        {/* Collapse Button */}
-        <div className="p-3 border-t border-white/5">
-          <button
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="w-full flex items-center justify-center p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/5 transition-colors"
-            data-testid="collapse-sidebar"
-          >
-            <ChevronRight className={`w-4 h-4 transition-transform ${sidebarCollapsed ? '' : 'rotate-180'}`} />
-          </button>
-        </div>
-        
-        {/* Watchlist Section */}
+        {/* Chains List */}
         {!sidebarCollapsed && (
-          <div className="border-t border-white/5 p-3">
-            <div className="flex items-center gap-2 text-xs text-white/40 mb-2">
+          <div className="border-t border-white/5 p-2 flex-1 overflow-y-auto">
+            <div className="text-[9px] text-white/30 uppercase tracking-wider px-2 mb-1">Chains</div>
+            {CHAINS.filter(c => c.id !== 'all').map(chain => (
+              <button
+                key={chain.id}
+                onClick={() => setSelectedChain(chain.id)}
+                className={`w-full flex items-center gap-2 px-2 py-1 rounded text-xs transition-colors ${
+                  selectedChain === chain.id
+                    ? 'bg-white/10 text-white'
+                    : 'text-white/50 hover:bg-white/5 hover:text-white'
+                }`}
+                data-testid={`chain-${chain.id}`}
+              >
+                <span className="text-sm">{chain.icon}</span>
+                <span>{chain.name}</span>
+              </button>
+            ))}
+          </div>
+        )}
+        
+        {/* Watchlist Count */}
+        {!sidebarCollapsed && (
+          <div className="border-t border-white/5 p-2">
+            <div className="flex items-center gap-1.5 px-2 py-1 text-[10px] text-white/40">
               <Star className="w-3 h-3" />
-              <span>WATCHLIST</span>
+              <span>{tokens.filter(t => t.isWatchlisted).length} in watchlist</span>
             </div>
-            <div className="text-xs text-white/30 italic">
-              {tokens.filter(t => t.isWatchlisted).length === 0 
-                ? "Nothing in list yet..." 
-                : `${tokens.filter(t => t.isWatchlisted).length} tokens`
-              }
-            </div>
+          </div>
+        )}
+        
+        {/* Socials */}
+        {!sidebarCollapsed && (
+          <div className="border-t border-white/5 p-2 flex items-center justify-center gap-3">
+            <a href="#" className="text-white/30 hover:text-white transition-colors"><Globe className="w-3.5 h-3.5" /></a>
+            <a href="#" className="text-white/30 hover:text-white transition-colors"><Activity className="w-3.5 h-3.5" /></a>
           </div>
         )}
       </aside>
@@ -828,28 +846,72 @@ export default function GuardianScanner() {
           </div>
           
           {/* Quick Filters */}
-          <div className="flex items-center gap-2 ml-auto">
-            <button className="flex items-center gap-1 px-2.5 py-1.5 text-xs text-white/50 hover:text-white transition-colors" data-testid="filter-top">
-              <BarChart3 className="w-3.5 h-3.5" /> Top
-            </button>
-            <button className="flex items-center gap-1 px-2.5 py-1.5 text-xs text-white/50 hover:text-white transition-colors" data-testid="filter-gainers">
-              <ArrowUpRight className="w-3.5 h-3.5" /> Gainers
-            </button>
-            <button className="flex items-center gap-1 px-2.5 py-1.5 text-xs text-white/50 hover:text-white transition-colors" data-testid="filter-new">
-              <Zap className="w-3.5 h-3.5" /> New Pairs
-            </button>
+          <div className="flex items-center gap-1">
+            <button 
+              onClick={() => setRankBy("volume")}
+              className={`px-2 py-1 text-[10px] transition-colors ${rankBy === "volume" ? "text-cyan-400" : "text-white/50 hover:text-white"}`} 
+              data-testid="filter-top"
+            >Top</button>
+            <button 
+              onClick={() => setRankBy("gainers")}
+              className={`px-2 py-1 text-[10px] transition-colors ${rankBy === "gainers" ? "text-cyan-400" : "text-white/50 hover:text-white"}`}
+              data-testid="filter-gainers"
+            >Gainers</button>
+            <button 
+              onClick={() => setActiveSidebarItem("new-pairs")}
+              className={`px-2 py-1 text-[10px] transition-colors ${activeSidebarItem === "new-pairs" ? "text-cyan-400" : "text-white/50 hover:text-white"}`}
+              data-testid="filter-new"
+            >New Pairs</button>
+          </div>
+          
+          {/* Checkbox Filters */}
+          <div className="flex items-center gap-3 bg-white/5 rounded-lg px-2 py-1">
+            <label className="flex items-center gap-1.5 cursor-pointer">
+              <input 
+                type="checkbox" 
+                checked={filterProfile} 
+                onChange={(e) => setFilterProfile(e.target.checked)}
+                className="w-3 h-3 rounded border-white/30 bg-transparent accent-cyan-500"
+              />
+              <span className="text-[10px] text-white/60">Profile</span>
+            </label>
+            <label className="flex items-center gap-1.5 cursor-pointer">
+              <input 
+                type="checkbox" 
+                checked={filterBoosted} 
+                onChange={(e) => setFilterBoosted(e.target.checked)}
+                className="w-3 h-3 rounded border-white/30 bg-transparent accent-cyan-500"
+              />
+              <span className="text-[10px] text-white/60">Boosted</span>
+            </label>
+            <label className="flex items-center gap-1.5 cursor-pointer">
+              <input 
+                type="checkbox" 
+                checked={filterAdvertising} 
+                onChange={(e) => setFilterAdvertising(e.target.checked)}
+                className="w-3 h-3 rounded border-white/30 bg-transparent accent-cyan-500"
+              />
+              <span className="text-[10px] text-white/60">Ads</span>
+            </label>
           </div>
           
           {/* Rank Dropdown */}
-          <div className="relative">
+          <div className="relative flex items-center gap-1">
             <button
               onClick={() => setShowRankDropdown(!showRankDropdown)}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white/60 hover:text-white bg-white/5 rounded-lg transition-colors"
+              className="flex items-center gap-1 px-2 py-1 text-[10px] font-medium text-white/60 hover:text-white bg-white/5 rounded transition-colors"
               data-testid="rank-dropdown"
             >
-              <span>Rank by:</span>
-              <span className="text-white">{RANK_OPTIONS.find(r => r.id === rankBy)?.name}</span>
-              <ChevronDown className="w-3 h-3" />
+              <span>Rank:</span>
+              <span className="text-white">{RANK_OPTIONS.find(r => r.id === rankBy)?.name?.split(' ')[0]}</span>
+              <ChevronDown className="w-2.5 h-2.5" />
+            </button>
+            <button
+              onClick={() => setSortAscending(!sortAscending)}
+              className="px-1.5 py-1 text-[10px] text-white/60 hover:text-white bg-white/5 rounded transition-colors"
+              data-testid="sort-direction"
+            >
+              {sortAscending ? '↑' : '↓'}
             </button>
             
             <AnimatePresence>
@@ -858,13 +920,13 @@ export default function GuardianScanner() {
                   initial={{ opacity: 0, y: -5 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -5 }}
-                  className="absolute right-0 top-full mt-1 z-50 bg-[#1a1a1a] border border-white/10 rounded-lg shadow-xl overflow-hidden min-w-[160px]"
+                  className="absolute right-0 top-full mt-1 z-50 bg-[#1a1a1a] border border-white/10 rounded-lg shadow-xl overflow-hidden min-w-[140px]"
                 >
                   {RANK_OPTIONS.map(option => (
                     <button
                       key={option.id}
                       onClick={() => { setRankBy(option.id); setShowRankDropdown(false); }}
-                      className={`w-full px-4 py-2 text-left text-xs transition-colors ${
+                      className={`w-full px-3 py-1.5 text-left text-[10px] transition-colors ${
                         rankBy === option.id
                           ? 'bg-cyan-500/20 text-cyan-400'
                           : 'text-white/70 hover:bg-white/5 hover:text-white'
@@ -922,26 +984,21 @@ export default function GuardianScanner() {
         <div className="flex-1 overflow-auto hidden md:block">
           <table className="w-full" data-testid="token-table">
             <thead className="sticky top-0 bg-[#0d0d0d] z-10">
-              <tr className="border-b border-white/10">
-                <th className="py-2.5 pl-3 pr-2 text-left text-[10px] font-medium text-white/40 uppercase tracking-wider w-10">#</th>
-                <th className="py-2.5 pr-3 text-left text-[10px] font-medium text-white/40 uppercase tracking-wider min-w-[180px]">TOKEN</th>
-                <th className="py-2.5 pr-3 text-right text-[10px] font-medium text-white/40 uppercase tracking-wider">PRICE</th>
-                <th className="py-2.5 pr-3 text-right text-[10px] font-medium text-white/40 uppercase tracking-wider">AGE</th>
-                <th className="py-2.5 pr-3 text-right text-[10px] font-medium text-white/40 uppercase tracking-wider">TXNS</th>
-                <th className="py-2.5 pr-3 text-right text-[10px] font-medium text-white/40 uppercase tracking-wider">VOLUME</th>
-                <th className="py-2.5 pr-3 text-right text-[10px] font-medium text-white/40 uppercase tracking-wider hidden lg:table-cell">MAKERS</th>
-                <th className="py-2.5 pr-3 text-right text-[10px] font-medium text-white/40 uppercase tracking-wider hidden lg:table-cell">5M</th>
-                <th className="py-2.5 pr-3 text-right text-[10px] font-medium text-white/40 uppercase tracking-wider">1H</th>
-                <th className="py-2.5 pr-3 text-right text-[10px] font-medium text-white/40 uppercase tracking-wider hidden lg:table-cell">6H</th>
-                <th className="py-2.5 pr-3 text-right text-[10px] font-medium text-white/40 uppercase tracking-wider">24H</th>
-                <th className="py-2.5 pr-3 text-right text-[10px] font-medium text-white/40 uppercase tracking-wider hidden xl:table-cell">LIQUIDITY</th>
-                <th className="py-2.5 pr-3 text-[10px] font-medium text-white/40 uppercase tracking-wider">
-                  <div className="flex items-center gap-1">
-                    <Shield className="w-3 h-3" />
-                    SCORE
-                  </div>
-                </th>
-                <th className="py-2.5 pr-3 w-16"></th>
+              <tr className="border-b border-white/10 h-7">
+                <th className="py-1 pl-2 pr-1 text-left text-[9px] font-medium text-white/40 w-7">#</th>
+                <th className="py-1 pr-2 text-left text-[9px] font-medium text-white/40 min-w-[160px]">TOKEN</th>
+                <th className="py-1 pr-2 text-right text-[9px] font-medium text-white/40">PRICE</th>
+                <th className="py-1 pr-2 text-right text-[9px] font-medium text-white/40">AGE</th>
+                <th className="py-1 pr-2 text-right text-[9px] font-medium text-white/40">TXNS</th>
+                <th className="py-1 pr-2 text-right text-[9px] font-medium text-white/40">VOLUME</th>
+                <th className="py-1 pr-2 text-right text-[9px] font-medium text-white/40 hidden lg:table-cell">MAKERS</th>
+                <th className="py-1 pr-2 text-right text-[9px] font-medium text-white/40 hidden lg:table-cell">5M</th>
+                <th className="py-1 pr-2 text-right text-[9px] font-medium text-white/40">1H</th>
+                <th className="py-1 pr-2 text-right text-[9px] font-medium text-white/40 hidden lg:table-cell">6H</th>
+                <th className="py-1 pr-2 text-right text-[9px] font-medium text-white/40">24H</th>
+                <th className="py-1 pr-2 text-right text-[9px] font-medium text-white/40 hidden xl:table-cell">LIQ</th>
+                <th className="py-1 pr-2 text-[9px] font-medium text-white/40"><Shield className="w-3 h-3 inline" /></th>
+                <th className="py-1 pr-2 w-12"></th>
               </tr>
             </thead>
             <tbody>
