@@ -516,7 +516,7 @@ export default function Home() {
 
       <section className="py-12 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 auto-rows-[120px]">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 auto-rows-[120px]">
             {statsLoading ? (
               <>
                 <GlassCard><div className="p-4 animate-pulse bg-white/5 h-full rounded-xl" /></GlassCard>
@@ -840,7 +840,7 @@ export default function Home() {
 
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="space-y-6">
               <div className="flex items-center gap-2 mb-2">
                 <Badge variant="outline" className="border-amber-500/50 text-amber-400 text-[10px]">Roadmap</Badge>
@@ -936,7 +936,7 @@ export default function Home() {
               <Heart className="w-5 h-5 text-red-400 fill-current" />
               <h2 className="text-xl font-display font-bold">Your Favorites</h2>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {favoriteApps.map((app) => (
                 <AppCard 
                   key={app.id}
@@ -964,7 +964,8 @@ export default function Home() {
           </div>
 
           {appsLoading ? (
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <SkeletonCard />
               <SkeletonCard />
               <SkeletonCard />
             </div>

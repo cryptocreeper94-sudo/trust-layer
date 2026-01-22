@@ -1005,7 +1005,7 @@ export default function Chronicles() {
             </p>
           </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-fr">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
             {CORE_FEATURES.map((feature, i) => (
               <FeatureCard key={feature.id} feature={feature} index={i} />
             ))}
@@ -1347,12 +1347,12 @@ export default function Chronicles() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="p-8 rounded-2xl bg-slate-900/50 border border-purple-500/20"
+              className="p-6 rounded-2xl bg-slate-900/50 border border-purple-500/20"
               style={{ boxShadow: "0 0 60px rgba(168, 85, 247, 0.1)" }}
             >
               <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
