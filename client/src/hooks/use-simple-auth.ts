@@ -1,72 +1,48 @@
-import { useState, useEffect, useCallback } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-
-interface User {
-  id: string;
-  email: string | null;
-  displayName: string | null;
-  username: string | null;
-  profileImageUrl: string | null;
-}
+import { useFirebaseAuth } from "./use-firebase-auth";
 
 export function useSimpleAuth() {
-  const queryClient = useQueryClient();
+  const {
+    user,
+    isLoading,
+    isAuthenticated,
+    login: firebaseLogin,
+    signup,
+    loginWithGoogle,
+    logout,
+    resetPassword,
+    error,
+  } = useFirebaseAuth();
 
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ["auth-session"],
-    queryFn: async () => {
-      const response = await fetch("/api/auth/me");
-      const data = await response.json();
-      return data.user as User | null;
-    },
-    staleTime: 30000,
-  });
-
-  const login = useCallback(async (email: string, password: string, rememberMe?: boolean) => {
-    const response = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, rememberMe }),
-    });
-    const result = await response.json();
-    if (!response.ok) {
+  const login = async (email: string, password: string, _rememberMe?: boolean) => {
+    const result = await firebaseLogin(email, password);
+    if (!result.success) {
       throw new Error(result.error || "Login failed");
     }
-    await refetch();
     return result;
-  }, [refetch]);
+  };
 
-  const register = useCallback(async (email: string, password: string, displayName?: string, username?: string, rememberMe?: boolean) => {
-    const response = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, displayName, username, rememberMe }),
-    });
-    const result = await response.json();
-    if (!response.ok) {
+  const register = async (email: string, password: string, displayName?: string, _username?: string, _rememberMe?: boolean) => {
+    const result = await signup(email, password, displayName);
+    if (!result.success) {
       throw new Error(result.error || "Registration failed");
     }
-    await refetch();
     return result;
-  }, [refetch]);
-
-  const logout = useCallback(async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    queryClient.setQueryData(["auth-session"], null);
-    window.location.href = "/";
-  }, [queryClient]);
+  };
 
   return {
-    user: data,
+    user,
     loading: isLoading,
-    isAuthenticated: !!data,
-    displayName: data?.displayName || data?.username || data?.email?.split("@")[0] || "User",
-    username: data?.username || data?.displayName || data?.email?.split("@")[0] || "User",
-    email: data?.email,
-    photoURL: data?.profileImageUrl,
+    isAuthenticated,
+    displayName: user?.displayName || user?.email?.split("@")[0] || "User",
+    username: user?.username || user?.displayName || user?.email?.split("@")[0] || "User",
+    email: user?.email,
+    photoURL: user?.profileImageUrl,
     login,
     register,
+    loginWithGoogle,
     logout,
-    refetch,
+    resetPassword,
+    refetch: () => {},
+    error,
   };
 }
