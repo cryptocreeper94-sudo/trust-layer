@@ -619,29 +619,40 @@ export default function Home() {
 
             {/* Signal Emblem with Prism Light Beam Effect */}
             <div className="relative w-full mt-2 h-56 md:h-64 flex items-center justify-center">
-              {/* Prism Light Beam - enters from left, refracts through shield, exits upward-right */}
+              {/* Prism Light Beam - danger from above, transformed into DarkWave colors below */}
               <svg 
-                viewBox="0 0 1200 300" 
+                viewBox="0 0 1200 400" 
                 className="absolute inset-0 w-full h-full"
                 preserveAspectRatio="xMidYMid meet"
               >
                 <defs>
-                  {/* Incoming beam gradient - rich cyan that glows in darkness */}
-                  <linearGradient id="incomingBeam" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#06b6d4" stopOpacity="0" />
-                    <stop offset="20%" stopColor="#06b6d4" stopOpacity="0.9" />
-                    <stop offset="60%" stopColor="#22d3ee" stopOpacity="1" />
-                    <stop offset="100%" stopColor="#67e8f9" stopOpacity="1" />
+                  {/* Incoming beam gradient - threatening red/orange from above */}
+                  <linearGradient id="dangerBeam" x1="50%" y1="0%" x2="50%" y2="100%">
+                    <stop offset="0%" stopColor="#ef4444" stopOpacity="0" />
+                    <stop offset="15%" stopColor="#ef4444" stopOpacity="0.7" />
+                    <stop offset="40%" stopColor="#f97316" stopOpacity="0.9" />
+                    <stop offset="70%" stopColor="#fbbf24" stopOpacity="1" />
+                    <stop offset="100%" stopColor="#fcd34d" stopOpacity="1" />
                   </linearGradient>
-                  {/* Refracted beam gradient - vivid spectrum that pops against dark */}
-                  <linearGradient id="refractedBeam" x1="0%" y1="100%" x2="100%" y2="0%">
+                  {/* Refracted beam gradient - calming DarkWave colors going down */}
+                  <linearGradient id="darkwaveBeamLeft" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#06b6d4" stopOpacity="1" />
+                    <stop offset="40%" stopColor="#0891b2" stopOpacity="0.9" />
+                    <stop offset="70%" stopColor="#0e7490" stopOpacity="0.7" />
+                    <stop offset="100%" stopColor="#164e63" stopOpacity="0.4" />
+                  </linearGradient>
+                  <linearGradient id="darkwaveBeamRight" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#8b5cf6" stopOpacity="1" />
+                    <stop offset="40%" stopColor="#7c3aed" stopOpacity="0.9" />
+                    <stop offset="70%" stopColor="#6d28d9" stopOpacity="0.7" />
+                    <stop offset="100%" stopColor="#4c1d95" stopOpacity="0.4" />
+                  </linearGradient>
+                  <linearGradient id="darkwaveBeamCenter" x1="50%" y1="0%" x2="50%" y2="100%">
                     <stop offset="0%" stopColor="#22d3ee" stopOpacity="1" />
-                    <stop offset="25%" stopColor="#8b5cf6" stopOpacity="1" />
-                    <stop offset="50%" stopColor="#a855f7" stopOpacity="1" />
-                    <stop offset="75%" stopColor="#d946ef" stopOpacity="0.9" />
-                    <stop offset="100%" stopColor="#ec4899" stopOpacity="0.7" />
+                    <stop offset="50%" stopColor="#a855f7" stopOpacity="0.8" />
+                    <stop offset="100%" stopColor="#6366f1" stopOpacity="0.5" />
                   </linearGradient>
-                  {/* Strong glow filter for dark theme contrast */}
+                  {/* Strong glow filter */}
                   <filter id="beamGlow" x="-50%" y="-50%" width="200%" height="200%">
                     <feGaussianBlur stdDeviation="5" result="blur"/>
                     <feMerge>
@@ -659,82 +670,115 @@ export default function Home() {
                   </filter>
                 </defs>
                 
-                {/* Incoming light beam from left */}
+                {/* Incoming danger beam from above */}
                 <path
-                  d="M0,160 L540,160"
-                  stroke="url(#incomingBeam)"
-                  strokeWidth="8"
+                  d="M600,0 L600,140"
+                  stroke="url(#dangerBeam)"
+                  strokeWidth="10"
                   strokeLinecap="round"
                   filter="url(#beamGlow)"
                   className="animate-pulse"
                 />
-                {/* Secondary incoming beam strands */}
-                <path d="M0,152 L530,152" stroke="#22d3ee" strokeWidth="3" strokeOpacity="0.8" filter="url(#beamGlow)" />
-                <path d="M0,168 L530,168" stroke="#22d3ee" strokeWidth="3" strokeOpacity="0.8" filter="url(#beamGlow)" />
+                {/* Secondary danger strands */}
+                <path d="M592,0 L595,130" stroke="#ef4444" strokeWidth="3" strokeOpacity="0.7" filter="url(#beamGlow)" />
+                <path d="M608,0 L605,130" stroke="#f97316" strokeWidth="3" strokeOpacity="0.7" filter="url(#beamGlow)" />
                 
-                {/* Refracted beam going up-right (spectrum split) */}
+                {/* Refracted beams going down-left (cyan) */}
                 <path
-                  d="M660,160 Q750,120 850,60 T1050,10"
-                  stroke="url(#refractedBeam)"
+                  d="M560,220 Q480,280 350,350"
+                  stroke="url(#darkwaveBeamLeft)"
                   strokeWidth="6"
                   strokeLinecap="round"
                   fill="none"
                   filter="url(#beamGlow)"
                   className="animate-pulse"
                 />
-                {/* Secondary refracted strands - vivid spectrum colors */}
-                <path d="M665,152 Q760,95 900,30" stroke="#a855f7" strokeWidth="4" strokeOpacity="0.9" fill="none" filter="url(#beamGlow)" />
-                <path d="M670,168 Q790,125 940,70" stroke="#d946ef" strokeWidth="4" strokeOpacity="0.85" fill="none" filter="url(#beamGlow)" />
-                <path d="M675,175 Q810,145 970,95" stroke="#ec4899" strokeWidth="3" strokeOpacity="0.75" fill="none" filter="url(#beamGlow)" />
+                <path d="M555,225 Q460,290 300,370" stroke="#22d3ee" strokeWidth="4" strokeOpacity="0.8" fill="none" filter="url(#beamGlow)" />
+                <path d="M550,230 Q440,300 250,390" stroke="#06b6d4" strokeWidth="3" strokeOpacity="0.6" fill="none" filter="url(#beamGlow)" />
                 
-                {/* Photon particles on incoming beam */}
-                {[...Array(12)].map((_, i) => (
+                {/* Refracted beams going down-right (purple) */}
+                <path
+                  d="M640,220 Q720,280 850,350"
+                  stroke="url(#darkwaveBeamRight)"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                  fill="none"
+                  filter="url(#beamGlow)"
+                  className="animate-pulse"
+                />
+                <path d="M645,225 Q740,290 900,370" stroke="#a855f7" strokeWidth="4" strokeOpacity="0.8" fill="none" filter="url(#beamGlow)" />
+                <path d="M650,230 Q760,300 950,390" stroke="#8b5cf6" strokeWidth="3" strokeOpacity="0.6" fill="none" filter="url(#beamGlow)" />
+                
+                {/* Center beam going straight down */}
+                <path
+                  d="M600,220 L600,400"
+                  stroke="url(#darkwaveBeamCenter)"
+                  strokeWidth="5"
+                  strokeLinecap="round"
+                  filter="url(#beamGlow)"
+                  className="animate-pulse"
+                />
+                
+                {/* Danger photons falling from above */}
+                {[...Array(8)].map((_, i) => (
                   <circle
-                    key={`photon-in-${i}`}
-                    cx={50 + i * 40}
-                    cy={160}
-                    r={3 + Math.random() * 2}
-                    fill="#22d3ee"
+                    key={`photon-danger-${i}`}
+                    cx={600 + (Math.random() - 0.5) * 20}
+                    cy={20 + i * 15}
+                    r={2 + Math.random() * 2}
+                    fill={i % 2 === 0 ? '#ef4444' : '#f97316'}
                     filter="url(#particleGlow)"
                     className="animate-pulse"
                     style={{ animationDelay: `${i * 0.1}s`, animationDuration: '1.5s' }}
                   />
                 ))}
                 
-                {/* Photon particles on refracted beam */}
-                {[...Array(10)].map((_, i) => {
-                  const t = i / 10;
-                  const x = 660 + t * 300;
-                  const y = 160 - t * 120;
-                  const colors = ['#06b6d4', '#8b5cf6', '#a855f7', '#ec4899', '#f472b6'];
+                {/* DarkWave photons spreading downward */}
+                {[...Array(6)].map((_, i) => {
+                  const t = (i + 1) / 7;
                   return (
                     <circle
-                      key={`photon-out-${i}`}
-                      cx={x}
-                      cy={y}
-                      r={2 + Math.random() * 2}
-                      fill={colors[i % colors.length]}
+                      key={`photon-left-${i}`}
+                      cx={560 - t * 180}
+                      cy={220 + t * 120}
+                      r={3 + Math.random() * 2}
+                      fill="#22d3ee"
                       filter="url(#particleGlow)"
                       className="animate-pulse"
-                      style={{ animationDelay: `${i * 0.12}s`, animationDuration: '1.2s' }}
+                      style={{ animationDelay: `${i * 0.15}s` }}
+                    />
+                  );
+                })}
+                {[...Array(6)].map((_, i) => {
+                  const t = (i + 1) / 7;
+                  return (
+                    <circle
+                      key={`photon-right-${i}`}
+                      cx={640 + t * 180}
+                      cy={220 + t * 120}
+                      r={3 + Math.random() * 2}
+                      fill="#a855f7"
+                      filter="url(#particleGlow)"
+                      className="animate-pulse"
+                      style={{ animationDelay: `${i * 0.15}s` }}
                     />
                   );
                 })}
                 
-                {/* Sparkle at refraction point */}
-                <circle cx="600" cy="160" r="12" fill="#ffffff" fillOpacity="0.4" filter="url(#beamGlow)" className="animate-ping" style={{ animationDuration: '2s' }} />
-                <circle cx="600" cy="160" r="6" fill="#ffffff" fillOpacity="0.8" filter="url(#particleGlow)" />
+                {/* Transformation sparkle at shield center */}
+                <circle cx="600" cy="180" r="15" fill="#ffffff" fillOpacity="0.5" filter="url(#beamGlow)" className="animate-ping" style={{ animationDuration: '2s' }} />
+                <circle cx="600" cy="180" r="8" fill="#ffffff" fillOpacity="0.9" filter="url(#particleGlow)" />
               </svg>
               
-              {/* Signal Emblem - Perfectly Centered (the prism) */}
-              <div className="relative z-10 w-44 h-44 md:w-52 md:h-52 flex items-center justify-center" style={{ isolation: 'isolate' }}>
+              {/* Signal Emblem - The Shield that transforms danger into trust */}
+              <div className="relative z-10 w-44 h-44 md:w-52 md:h-52 flex items-center justify-center">
                 <img 
                   src={signalEmblem} 
                   alt="Signal Emblem" 
                   className="w-full h-full object-contain"
                   style={{ 
-                    mixBlendMode: 'lighten',
-                    filter: 'drop-shadow(0 0 40px rgba(6, 182, 212, 0.9)) drop-shadow(0 0 20px rgba(168, 85, 247, 0.6))'
+                    mixBlendMode: 'screen',
+                    filter: 'drop-shadow(0 0 35px rgba(6, 182, 212, 0.8)) drop-shadow(0 0 15px rgba(168, 85, 247, 0.5)) brightness(1.1) contrast(1.05)'
                   }}
                 />
               </div>
