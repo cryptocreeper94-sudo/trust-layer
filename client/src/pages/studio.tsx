@@ -8,7 +8,7 @@ import {
   GitBranch, GitCommit, History, RotateCcw, Terminal,
   Rocket, Cloud, Link2, Users, Info, Zap, Shield, Database,
   ExternalLink, Copy, CheckCircle, Loader2, Send, Search, Replace, Keyboard,
-  Upload, Download, Filter, Mic, MicOff, Bot, Sparkles, MessageSquare
+  Upload, Download, Filter, Mic, MicOff, Bot, Sparkles, MessageSquare, Eye
 } from "lucide-react";
 import { MonacoEditor } from "@/components/monaco-editor";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -555,6 +555,141 @@ export default function Studio() {
 
   useEffect(() => {
     if (!user) {
+      // Set up demo project for view-only mode
+      setProjectName("Demo Project");
+      setFiles([
+        {
+          id: "demo-1",
+          name: "index.html",
+          path: "index.html",
+          isFolder: false,
+          content: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DarkWave Demo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to DarkWave Studio</h1>
+    <p>Sign in to create your own projects!</p>
+    <button onclick="showMessage()">Click Me</button>
+    <div id="output"></div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>`,
+          language: "html"
+        },
+        {
+          id: "demo-2",
+          name: "style.css",
+          path: "style.css",
+          isFolder: false,
+          content: `* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.container {
+  text-align: center;
+  padding: 2rem;
+}
+
+h1 {
+  background: linear-gradient(90deg, #00d4ff, #9b59b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+}
+
+button {
+  padding: 0.75rem 2rem;
+  background: linear-gradient(90deg, #6366f1, #a855f7);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+button:hover {
+  transform: scale(1.05);
+}`,
+          language: "css"
+        },
+        {
+          id: "demo-3",
+          name: "app.js",
+          path: "app.js",
+          isFolder: false,
+          content: `// DarkWave Studio Demo
+function showMessage() {
+  const output = document.getElementById('output');
+  output.innerHTML = '<p style="margin-top: 1rem; color: #00d4ff;">✨ Welcome to DarkWave!</p>';
+}
+
+console.log('DarkWave Studio loaded!');`,
+          language: "javascript"
+        }
+      ]);
+      setActiveFile({
+        id: "demo-1",
+        name: "index.html",
+        path: "index.html",
+        isFolder: false,
+        content: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DarkWave Demo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to DarkWave Studio</h1>
+    <p>Sign in to create your own projects!</p>
+    <button onclick="showMessage()">Click Me</button>
+    <div id="output"></div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>`,
+        language: "html"
+      });
+      setEditorContent(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DarkWave Demo</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to DarkWave Studio</h1>
+    <p>Sign in to create your own projects!</p>
+    <button onclick="showMessage()">Click Me</button>
+    <div id="output"></div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>`);
       setLoading(false);
       return;
     }
@@ -1693,31 +1828,29 @@ export default function Studio() {
     );
   }
 
-  if (!user) {
-    return (
-      <div className="h-screen flex items-center justify-center bg-[#0a0a0f]">
-        <GlassCard className="p-8 max-w-md text-center">
-          <img src={orbitLogo} alt="DarkWave" className="w-16 h-16 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold mb-2">DarkWave Studio</h1>
-          <p className="text-muted-foreground mb-6">Sign in to create and manage your projects</p>
-          <Button
-            onClick={() => setShowLoginModal(true)}
-            className="bg-primary text-background hover:bg-primary/90"
-            data-testid="button-login"
-          >
-            Sign In to Continue
-          </Button>
-        </GlassCard>
-        <SimpleLoginModal 
-          isOpen={showLoginModal} 
-          onClose={() => setShowLoginModal(false)} 
-        />
-      </div>
-    );
-  }
+  // Demo mode for non-logged-in users - they can view but not save/run
+  const isViewOnly = !user;
 
   return (
     <div className="h-screen flex flex-col bg-[#0a0a0f] text-foreground overflow-hidden">
+      {/* View-Only Banner for non-logged-in users */}
+      {isViewOnly && (
+        <div className="bg-gradient-to-r from-amber-600/20 via-orange-600/20 to-amber-600/20 border-b border-amber-500/30 px-4 py-2 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-2">
+            <Eye className="w-4 h-4 text-amber-400" />
+            <span className="text-sm text-amber-200">View-Only Mode - Sign in to create and save projects</span>
+          </div>
+          <Button
+            size="sm"
+            onClick={() => setShowLoginModal(true)}
+            className="bg-amber-500 hover:bg-amber-600 text-black text-xs h-7"
+            data-testid="button-login-banner"
+          >
+            Sign In
+          </Button>
+        </div>
+      )}
+      
       {/* Top Bar - Desktop */}
       <header className="hidden md:flex h-12 border-b border-white/5 bg-background/95 items-center justify-between px-4 shrink-0">
         <div className="flex items-center gap-3">
@@ -1806,9 +1939,10 @@ export default function Studio() {
             size="sm"
             variant="ghost"
             onClick={handleSave}
-            disabled={saving}
+            disabled={saving || isViewOnly}
             className="gap-2 text-xs"
             data-testid="button-save"
+            title={isViewOnly ? "Sign in to save" : undefined}
           >
             <Save className="w-3.5 h-3.5" />
             {saving ? "Saving..." : "Save"}
@@ -1834,8 +1968,9 @@ export default function Studio() {
             size="sm"
             className="gap-2 bg-green-600 hover:bg-green-700 text-xs transition-all duration-300 hover:shadow-[0_0_15px_rgba(34,197,94,0.5)] hover:scale-105"
             onClick={handleRun}
-            disabled={running}
+            disabled={running || isViewOnly}
             data-testid="button-run"
+            title={isViewOnly ? "Sign in to run" : undefined}
           >
             <Play className="w-3.5 h-3.5" />
             {running ? "Running..." : "Run"}
@@ -1844,8 +1979,9 @@ export default function Studio() {
             size="sm"
             className="gap-2 bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-xs transition-all duration-300 hover:shadow-[0_0_20px_rgba(139,92,246,0.6)] hover:scale-105"
             onClick={handleDeploy}
-            disabled={deploying}
+            disabled={deploying || isViewOnly}
             data-testid="button-deploy"
+            title={isViewOnly ? "Sign in to deploy" : undefined}
           >
             <Rocket className="w-3.5 h-3.5" />
             {deploying ? "Deploying..." : "Deploy"}
@@ -1899,7 +2035,7 @@ export default function Studio() {
               size="sm"
               variant="ghost"
               onClick={handleSave}
-              disabled={saving}
+              disabled={saving || isViewOnly}
               className="h-8 w-8 p-0"
               data-testid="button-save-mobile"
             >
@@ -1909,7 +2045,7 @@ export default function Studio() {
               size="sm"
               className="h-8 px-3 bg-green-600 hover:bg-green-700 text-xs"
               onClick={handleRun}
-              disabled={running}
+              disabled={running || isViewOnly}
               data-testid="button-run-mobile"
             >
               <Play className="w-3.5 h-3.5 mr-1" />
@@ -3371,6 +3507,12 @@ export default function Studio() {
           </motion.div>
         )}
       </AnimatePresence>
+      
+      {/* Login Modal for view-only users */}
+      <SimpleLoginModal 
+        isOpen={showLoginModal} 
+        onClose={() => setShowLoginModal(false)} 
+      />
     </div>
   );
 }
