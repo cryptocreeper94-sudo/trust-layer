@@ -317,19 +317,20 @@ export default function Staking() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.1 * i }}
+                className="h-full"
               >
-                <GlassCard glow hover={false} className="relative overflow-hidden group">
+                <GlassCard glow hover={false} className="relative overflow-hidden group h-full">
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="p-4 md:p-5 text-center relative">
+                  <div className="p-4 md:p-5 text-center relative h-full flex flex-col items-center justify-center min-h-[120px]">
                     <stat.icon className={`w-5 h-5 ${stat.color} mx-auto mb-2 opacity-60`} />
                     <motion.div 
-                      className={`text-2xl md:text-3xl font-bold ${stat.color}`}
+                      className={`text-2xl md:text-3xl font-bold ${stat.color} truncate max-w-full`}
                       animate={{ scale: [1, 1.02, 1] }}
                       transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
                     >
                       {stat.value}
                     </motion.div>
-                    <div className="text-[10px] md:text-xs text-white/50 uppercase tracking-wider mt-1">{stat.label}</div>
+                    <div className="text-[10px] md:text-xs text-white/50 uppercase tracking-wider mt-1 line-clamp-1">{stat.label}</div>
                   </div>
                 </GlassCard>
               </motion.div>
