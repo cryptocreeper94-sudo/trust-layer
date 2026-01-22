@@ -1068,7 +1068,7 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="w-full">
+          <div className="w-full px-2">
             <Link href="/presale" className="block w-full">
               <Button 
                 onClick={() => setShowPresalePopup(false)}
