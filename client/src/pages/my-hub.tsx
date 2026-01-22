@@ -530,7 +530,7 @@ export default function MyHub() {
                       <div className="p-4 rounded-xl bg-white/5 border border-white/10">
                         <p className="text-white/50 text-sm mb-1">Est. SIG at TGE</p>
                         <p className="text-2xl font-bold text-emerald-400">{rewardProfile?.conversion?.estimatedDwc?.toLocaleString() || 0}</p>
-                        <p className="text-xs text-white/40">April 11, 2026</p>
+                        <p className="text-xs text-white/40">June 1, 2026</p>
                       </div>
                     </div>
                   </div>

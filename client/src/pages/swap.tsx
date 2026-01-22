@@ -180,7 +180,7 @@ export default function Swap() {
       <div className="fixed top-14 left-0 right-0 z-40 bg-gradient-to-r from-cyan-500/90 via-purple-500/90 to-pink-500/90 backdrop-blur-sm border-b border-white/20">
         <div className="container mx-auto px-4 py-2 flex items-center justify-center gap-2">
           <Clock className="w-4 h-4 text-white" />
-          <span className="text-xs sm:text-sm font-medium text-white">DEX Trading Launches April 11, 2026 with Mainnet</span>
+          <span className="text-xs sm:text-sm font-medium text-white">DEX Trading Launches June 1, 2026 with Mainnet</span>
         </div>
       </div>
 
@@ -379,7 +379,7 @@ export default function Swap() {
                   >
                     <span className="flex items-center gap-2 text-white/70">
                       <Clock className="w-4 h-4" />
-                      Trading Opens April 11, 2026
+                      Trading Opens June 1, 2026
                     </span>
                   </Button>
                   </>

@@ -61,7 +61,7 @@ const milestones = [
   { date: "Q4 2025", title: "Testnet Launch", desc: "Full testnet with all core features", status: "completed" },
   { date: "NOW", title: "Season Zero BETA v0.1", desc: "Chronicles playable - Medieval Era, AI NPCs, Chronicle Proofs", status: "in_progress" },
   { date: "Q1 2026", title: "Security Audits", desc: "Guardian Protocol + external audits", status: "upcoming" },
-  { date: "Apr 11, 2026", title: "TGE (Token Launch)", desc: "Mainnet launch & token generation", status: "upcoming" },
+  { date: "Jun 1, 2026", title: "TGE (Token Launch)", desc: "Mainnet launch & token generation", status: "upcoming" },
   { date: "Q2 2026", title: "DeFi Suite Launch", desc: "DEX, Staking, Bridge go live", status: "planned" },
   { date: "Q3 2026", title: "Chronicles Expansion", desc: "20+ eras, full economy, mobile companion", status: "planned" },
   { date: "Q4 2026", title: "10 Eras Complete", desc: "All verifiable historical eras fully playable", status: "planned" }
@@ -179,7 +179,7 @@ export default function InvestorPitch() {
                 className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-amber-500/20 via-cyan-500/20 to-purple-500/20 border border-white/10 text-amber-400 text-sm font-medium mb-6 shadow-[0_0_30px_rgba(245,158,11,0.2)]"
               >
                 <Rocket className="w-4 h-4" />
-                Token Generation Event: April 11, 2026
+                Token Generation Event: June 1, 2026
                 <Calendar className="w-4 h-4" />
               </motion.div>
               
@@ -680,7 +680,7 @@ export default function InvestorPitch() {
                     </h2>
                     <p className="text-white/60 mb-8 max-w-2xl mx-auto text-lg">
                       The presale is open. Secure your position in the Guardian-Assured Entertainment Superchain 
-                      before TGE on April 11, 2026.
+                      before TGE on June 1, 2026.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                       <Link href="/presale">

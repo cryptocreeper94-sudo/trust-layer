@@ -977,7 +977,7 @@ export default function CommunityHub() {
                   {isAuthenticated && (
                     <div 
                       className="flex flex-col items-end px-2 py-1 sm:px-3 sm:py-1.5 bg-amber-500/10 border border-amber-500/30 rounded-full flex-shrink-0 group relative cursor-help"
-                      title={`≈ ${((shellsData?.balance || 0) / 100).toFixed(2)} SIG at launch (April 11, 2026)`}
+                      title={`≈ ${((shellsData?.balance || 0) / 100).toFixed(2)} SIG at launch (June 1, 2026)`}
                     >
                       <div className="flex items-center gap-1">
                         <Coins className="w-3 h-3 sm:w-4 sm:h-4 text-amber-400" />

@@ -346,7 +346,7 @@ export function AirdropDashboard() {
               </div>
             </div>
             <p className="text-xs text-muted-foreground mt-4">
-              April 11, 2026 • Spring Launch 🌸
+              June 1, 2026 • Spring Launch 🌸
             </p>
           </div>
         </div>

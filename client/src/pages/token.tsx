@@ -29,7 +29,7 @@ export default function Token() {
           </Link>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="border-amber-500/50 text-amber-400 bg-amber-500/10 text-[10px] sm:text-xs whitespace-nowrap">
-              <Lock className="w-3 h-3 mr-1 hidden sm:inline" /> Apr 11, 2026
+              <Lock className="w-3 h-3 mr-1 hidden sm:inline" /> Jun 1, 2026
             </Badge>
             <BackButton />
           </div>
@@ -279,7 +279,7 @@ export default function Token() {
               <div className="flex items-center gap-2 pt-2">
                 <Badge className="bg-primary/20 text-primary border-primary/30 text-xs">
                   <Sparkles className="w-3 h-3 mr-1" />
-                  Launch: Apr 11, 2026
+                  Launch: Jun 1, 2026
                 </Badge>
               </div>
             </div>
@@ -571,7 +571,7 @@ export default function Token() {
               </h2>
               <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
                 Pay $24 once. Get lifetime access. Receive 35,000 Signal on launch day.
-                Only 10,000 spots available - program closes April 11, 2026.
+                Only 10,000 spots available - program closes June 1, 2026.
               </p>
               <Link href="/founder-program">
                 <Button size="lg" className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-full gap-2" data-testid="button-founder-program">

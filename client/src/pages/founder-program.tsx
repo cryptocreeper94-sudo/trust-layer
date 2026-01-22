@@ -203,7 +203,7 @@ export default function FounderProgram() {
                 <Gift className="w-6 h-6 text-primary" />
                 <div>
                   <div className="font-semibold text-white">35,000 Signal Airdrop</div>
-                  <div className="text-xs text-muted-foreground">Delivered to your wallet on April 11, 2026</div>
+                  <div className="text-xs text-muted-foreground">Delivered to your wallet on June 1, 2026</div>
                 </div>
               </div>
             </div>
@@ -299,7 +299,7 @@ export default function FounderProgram() {
         </div>
 
         <GlassCard className="p-6 text-center max-w-2xl mx-auto">
-          <h3 className="text-xl font-semibold text-white mb-2">Program Closes April 11, 2026</h3>
+          <h3 className="text-xl font-semibold text-white mb-2">Program Closes June 1, 2026</h3>
           <p className="text-muted-foreground">
             After this date, the Legacy Founder program ends. Regular pricing of $20/month begins.
             Don't miss your chance to lock in lifetime access and receive 35,000 Signal.

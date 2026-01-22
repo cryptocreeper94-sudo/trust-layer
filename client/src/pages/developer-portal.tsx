@@ -801,7 +801,7 @@ console.log('All successful:', result.allSuccessful);`}
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-display font-bold text-lg flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-primary" />
-                Launch Roadmap - April 11, 2026
+                Launch Roadmap - June 1, 2026
               </h3>
               <Badge className="bg-primary/20 text-primary border-primary/30">INTERNAL</Badge>
             </div>
@@ -956,7 +956,7 @@ console.log('All successful:', result.allSuccessful);`}
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-primary mb-2">April 11: LAUNCH DAY</h4>
+                      <h4 className="font-semibold text-primary mb-2">June 1: LAUNCH DAY</h4>
                       <ul className="list-disc list-inside space-y-1 text-sm">
                         <li>Lift press embargo (6:00 AM UTC)</li>
                         <li>Execute genesis block ceremony</li>
@@ -1054,7 +1054,7 @@ console.log('All successful:', result.allSuccessful);`}
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-white mb-2">Launch Day (Apr 11, 2026)</h4>
+                      <h4 className="font-semibold text-white mb-2">Launch Day (Jun 1, 2026)</h4>
                       <ul className="list-disc list-inside space-y-1 text-sm">
                         <li>Coordinated press release at 6:00 AM UTC</li>
                         <li>Live event on YouTube/Twitter Spaces</li>

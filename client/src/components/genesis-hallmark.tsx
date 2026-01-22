@@ -238,7 +238,7 @@ export function GenesisHallmarkCard() {
                     <Clock className="w-3 h-3 text-blue-400" />
                     <span className="text-[10px] text-white/50 uppercase">Launch</span>
                   </div>
-                  <div className="text-sm font-bold text-white">Apr 11, 2026</div>
+                  <div className="text-sm font-bold text-white">Jun 1, 2026</div>
                 </div>
               </div>
               
