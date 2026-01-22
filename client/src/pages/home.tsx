@@ -5,6 +5,7 @@ import { InfoTooltip } from "@/components/info-tooltip";
 import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.png";
 import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import signalEmblem from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
+import shieldImage from "/shield-reference.jpg";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { OnboardingTour } from "@/components/onboarding-tour";
@@ -760,15 +761,15 @@ export default function Home() {
                 })}
               </svg>
               
-              {/* Signal Emblem - The Shield that transforms danger into trust */}
-              <div className="relative z-10 w-40 h-40 md:w-48 md:h-48 flex items-center justify-center" style={{ marginTop: '-20px' }}>
+              {/* Shield - Platinum rim with cosmic black hole center */}
+              <div className="relative z-10 w-44 h-52 md:w-52 md:h-60 flex items-center justify-center" style={{ marginTop: '-30px' }}>
                 <img 
-                  src={signalEmblem} 
-                  alt="Signal Emblem" 
+                  src={shieldImage} 
+                  alt="DarkWave Shield" 
                   className="w-full h-full object-contain"
                   style={{ 
-                    mixBlendMode: 'screen',
-                    filter: 'drop-shadow(0 0 30px rgba(6, 182, 212, 0.7)) drop-shadow(0 0 15px rgba(168, 85, 247, 0.5)) brightness(1.15) contrast(1.1)'
+                    mixBlendMode: 'lighten',
+                    filter: 'drop-shadow(0 0 25px rgba(6, 182, 212, 0.6)) drop-shadow(0 0 12px rgba(168, 85, 247, 0.4))'
                   }}
                 />
               </div>
