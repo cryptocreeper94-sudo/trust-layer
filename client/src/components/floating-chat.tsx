@@ -67,7 +67,7 @@ export function FloatingChat() {
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [isHidden, setIsHidden] = useState(false);
+  const [isHidden, setIsHidden] = useState(true); // Hidden by default
   const [input, setInput] = useState('');
   const [activeChannel, setActiveChannel] = useState<string | null>(null);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -159,7 +159,7 @@ export function FloatingChat() {
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="fixed bottom-44 right-4 w-80 sm:w-96 h-[400px] bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden"
+            className="fixed bottom-44 left-4 w-80 sm:w-96 h-[400px] bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden"
             data-testid="floating-chat-window"
           >
             <div className="bg-gradient-to-r from-cyan-600 to-purple-600 px-4 py-3 flex items-center justify-between">
@@ -272,7 +272,7 @@ export function FloatingChat() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="fixed bottom-44 right-4 bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-xl px-4 py-2 flex items-center gap-3 z-50"
+            className="fixed bottom-44 left-4 bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-xl px-4 py-2 flex items-center gap-3 z-50"
           >
             <MessageCircle className="w-5 h-5 text-cyan-400" />
             <span className="text-white text-sm font-medium">ChronoChat</span>
@@ -301,7 +301,7 @@ export function FloatingChat() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5 }}
             onClick={toggleHidden}
-            className="fixed bottom-28 right-4 w-8 h-8 bg-slate-800/90 backdrop-blur-sm border border-slate-600/50 rounded-full shadow-lg flex items-center justify-center z-50 hover:bg-slate-700/90 transition-colors"
+            className="fixed bottom-28 left-4 w-8 h-8 bg-slate-800/90 backdrop-blur-sm border border-slate-600/50 rounded-full shadow-lg flex items-center justify-center z-50 hover:bg-slate-700/90 transition-colors"
             data-testid="button-restore-chat"
             aria-label="Restore Chat"
           >
@@ -322,7 +322,7 @@ export function FloatingChat() {
               setIsMinimized(false);
             }}
             onContextMenu={(e) => { e.preventDefault(); toggleHidden(); }}
-            className="fixed bottom-28 right-4 w-14 h-14 bg-gradient-to-r from-cyan-600 to-purple-600 rounded-full shadow-lg flex items-center justify-center z-50 hover:scale-110 transition-transform"
+            className="fixed bottom-28 left-4 w-14 h-14 bg-gradient-to-r from-cyan-600 to-purple-600 rounded-full shadow-lg flex items-center justify-center z-50 hover:scale-110 transition-transform"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             data-testid="button-toggle-chat"

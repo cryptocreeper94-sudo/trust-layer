@@ -562,6 +562,7 @@ function App() {
                 {showAIAssistant && <AIAssistant />}
                 {showAIAssistant && <FirstLoginModal />}
                 <FloatingChat />
+                <GlobalSearch />
               </TooltipProvider>
             </FavoritesProvider>
           </NotificationsProvider>
