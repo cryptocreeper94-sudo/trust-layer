@@ -91,10 +91,10 @@ export function Footer() {
 
   return (
     <>
-      <footer className="bg-black/90 backdrop-blur-xl border-t border-white/10 mt-auto">
-        <div className="container mx-auto px-4 py-8">
-          {/* Main Footer Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+      {/* Site Links Section - Above Footer */}
+      <section className="bg-slate-950/80 border-t border-white/5">
+        <div className="container mx-auto px-4 py-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {/* About */}
             <div>
               <h4 className="font-bold text-white mb-4 text-sm">About DarkWave</h4>
@@ -149,36 +149,37 @@ export function Footer() {
               <p className="text-xs text-white/40">Join our growing community</p>
             </div>
           </div>
-          
-          {/* Bottom Bar */}
-          <div className="pt-6 border-t border-white/10">
-            <div className="flex flex-col items-center gap-3">
-              <div className="flex items-center justify-center gap-2 text-xs text-white/50">
-                <span className="font-semibold text-white">DarkWave Studios, LLC</span>
-                <span className="text-white/30">•</span>
-                <span>© 2025-2026</span>
-                <span className="text-white/30">•</span>
-                <span className="px-2 py-0.5 rounded bg-white/5 font-mono">v{APP_VERSION}</span>
-              </div>
-              
-              <div className="flex items-center justify-center gap-4 text-xs">
-                <Link href="/terms" className="text-white/40 hover:text-cyan-400 transition-colors" data-testid="link-terms">
-                  Terms
-                </Link>
-                <Link href="/privacy" className="text-white/40 hover:text-cyan-400 transition-colors" data-testid="link-privacy">
-                  Privacy
-                </Link>
-                <Link href="/investor-pitch" className="text-white/40 hover:text-cyan-400 transition-colors" data-testid="link-investors">
-                  Investors
-                </Link>
-                <button onClick={() => openModal("admin")} className="text-white/30 hover:text-white/60 transition-colors" data-testid="link-admin">
-                  Admin
-                </button>
-                <button onClick={() => openModal("developer")} className="text-white/30 hover:text-white/60 transition-colors" data-testid="link-developer">
-                  Developer
-                </button>
-              </div>
-            </div>
+        </div>
+      </section>
+
+      {/* Clean Single-Line Footer */}
+      <footer className="bg-black border-t border-white/10">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs text-white/50">
+            <span className="text-white/70">DarkWave Studios, LLC</span>
+            <span className="text-white/30">•</span>
+            <span>© 2026</span>
+            <span className="text-white/30">•</span>
+            <Link href="/terms" className="hover:text-cyan-400 transition-colors" data-testid="link-terms">
+              Terms
+            </Link>
+            <span className="text-white/30">•</span>
+            <Link href="/privacy" className="hover:text-cyan-400 transition-colors" data-testid="link-privacy">
+              Privacy
+            </Link>
+            <span className="text-white/30 hidden md:inline">•</span>
+            <button onClick={() => openModal("admin")} className="hidden md:inline text-white/30 hover:text-white/50 transition-colors" data-testid="link-admin">
+              Admin
+            </button>
+            <span className="text-white/30 hidden md:inline">•</span>
+            <button onClick={() => openModal("developer")} className="hidden md:inline text-white/30 hover:text-white/50 transition-colors" data-testid="link-developer">
+              Developer
+            </button>
+            {/* Mobile: Single Team button */}
+            <span className="text-white/30 md:hidden">•</span>
+            <button onClick={() => openModal("admin")} className="md:hidden text-white/30 hover:text-white/50 transition-colors" data-testid="link-team-mobile">
+              Team
+            </button>
           </div>
         </div>
       </footer>
