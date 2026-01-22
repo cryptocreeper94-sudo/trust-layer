@@ -531,10 +531,10 @@ export default function Home() {
                 <GlassCard hover={false}>
                   <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
                     <div className="flex items-center gap-1 md:gap-2 mb-2 flex-wrap">
-                      <Server className="w-3 h-3 md:w-4 md:h-4 text-green-400/60 shrink-0" />
+                      <Server className="w-3 h-3 md:w-4 md:h-4 text-cyan-400/60 shrink-0" />
                       <div className="flex items-center gap-1">
-                        <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                        <span className="text-[8px] md:text-[9px] text-green-400/80 uppercase">MAINNET</span>
+                        <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                        <span className="text-[8px] md:text-[9px] text-cyan-400/80 uppercase">TESTNET</span>
                       </div>
                       <InfoTooltip content="DarkWave Trust Layer runs on a Proof-of-Authority (PoA) consensus. The Founders Validator secures the network with enterprise-grade infrastructure." label="Validator info" />
                     </div>
@@ -561,10 +561,6 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-8"
           >
-            <Badge variant="outline" className="border-purple-500/50 text-purple-400 text-[10px] mb-3">
-              <Sparkles className="w-3 h-3 mr-1" />
-              Coming 2026
-            </Badge>
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
                 DarkWave Chronicles
