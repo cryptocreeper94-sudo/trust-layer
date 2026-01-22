@@ -461,14 +461,16 @@ export default function Home() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.8 }}
-                className="mt-4 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-cyan-500/10 border border-cyan-500/30 backdrop-blur-sm"
+                className="mt-4 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-600/20 via-purple-600/20 to-pink-600/20 border border-cyan-400/40 backdrop-blur-sm"
                 data-testid="banner-chronicles-construction"
               >
                 <div className="flex items-center justify-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                  <span className="text-xs text-cyan-300/80">Season Zero</span>
+                  <span className="text-xs text-cyan-300 font-medium">Chronicles</span>
                   <span className="text-white/40">•</span>
-                  <span className="text-xs text-purple-300/80">Coming Soon</span>
+                  <span className="text-xs text-purple-300">Season Zero</span>
+                  <span className="text-white/40">•</span>
+                  <span className="text-xs text-pink-300">Coming Soon</span>
                 </div>
               </motion.div>
 
