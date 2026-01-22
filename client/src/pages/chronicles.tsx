@@ -291,8 +291,8 @@ const EPOCHS = [
     factions: ["Intelligence Agencies", "Cultural Revolutionaries", "Space Programs", "Media Empires"]
   },
   {
-    id: "modern",
-    name: "Modern Era",
+    id: "contemporary",
+    name: "Contemporary Era",
     period: "1900 - Present",
     image: cyberpunkCity,
     eras: ["World Wars", "Cold War", "Civil Rights Movement", "Information Age"],
