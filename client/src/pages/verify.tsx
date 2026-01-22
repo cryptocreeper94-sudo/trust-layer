@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { 
-  Shield, 
   Search, 
   CheckCircle2, 
   XCircle, 
@@ -16,6 +15,7 @@ import {
   AlertCircle,
   Loader2
 } from "lucide-react";
+import signalEmblem from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
 
 interface VerificationResult {
   verified: boolean;
@@ -115,8 +115,12 @@ export default function Verify() {
               animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
               transition={{ duration: 3, repeat: Infinity }}
             />
-            <div className="relative w-20 h-20 mx-auto bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-              <Shield className="w-10 h-10 text-white" />
+            <div className="relative w-24 h-24 mx-auto flex items-center justify-center">
+              <img 
+                src={signalEmblem} 
+                alt="DarkWave Trust Layer" 
+                className="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(139,92,246,0.5)]"
+              />
             </div>
           </div>
 

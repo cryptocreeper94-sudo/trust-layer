@@ -4,15 +4,16 @@ import { Badge } from "@/components/ui/badge";
 import { 
   Download, 
   Printer, 
-  Shield, 
   Lock,
   CheckCircle2,
   ArrowLeft,
   Fingerprint,
-  FileText
+  FileText,
+  Shield
 } from "lucide-react";
 import { Link } from "wouter";
 import { useRef } from "react";
+import signalEmblem from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
 
 const DOCUMENT_HASH = "0x7a3f8c2e1b9d4a6f5c8e3b2a1d9f7e6c4b3a2d1e";
 const RATIFICATION_BLOCK = "Genesis";
@@ -112,8 +113,12 @@ export default function SignalCoreOfficial() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="inline-block mb-6"
               >
-                <div className="w-24 h-24 mx-auto bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 rounded-full flex items-center justify-center print:border-4 print:border-gray-800 print:bg-white">
-                  <Shield className="w-12 h-12 text-white print:text-gray-800" />
+                <div className="w-28 h-28 mx-auto flex items-center justify-center">
+                  <img 
+                    src={signalEmblem} 
+                    alt="DarkWave Trust Layer Emblem" 
+                    className="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]"
+                  />
                 </div>
               </motion.div>
 
