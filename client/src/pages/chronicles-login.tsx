@@ -394,16 +394,9 @@ export default function ChroniclesLogin() {
                     )}
 
                     <button
-                      type="button"
+                      type="submit"
                       disabled={isLoading}
-                      onClick={() => {
-                        if (mode === "login") {
-                          handleLogin();
-                        } else {
-                          handleSignup();
-                        }
-                      }}
-                      className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-4 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50 active:scale-95 transition-transform"
+                      className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-4 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50 active:scale-95 transition-transform min-h-[56px] touch-manipulation"
                       data-testid="button-submit"
                     >
                       {isLoading ? (
