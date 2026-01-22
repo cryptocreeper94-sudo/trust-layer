@@ -1035,20 +1035,20 @@ export default function Home() {
       <Footer />
 
       <Dialog open={showPresalePopup} onOpenChange={setShowPresalePopup}>
-        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white w-[85vw] max-w-[340px] shadow-[0_0_60px_rgba(0,200,255,0.3)] !p-4 !pr-4">
-          <div className="flex flex-col items-center w-full">
-            <DialogHeader className="text-center w-full">
-              <DialogTitle className="text-xl font-bold text-center w-full">
+        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white w-[85vw] max-w-[340px] shadow-[0_0_60px_rgba(0,200,255,0.3)] overflow-hidden">
+          <div className="flex flex-col items-center px-4 pb-4 pt-2">
+            <DialogHeader className="text-center">
+              <DialogTitle className="text-xl font-bold text-center">
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                   Signal Presale is LIVE
                 </span>
               </DialogTitle>
-              <DialogDescription className="text-gray-300 text-center pt-1 text-sm w-full">
+              <DialogDescription className="text-gray-300 text-center pt-1 text-sm">
                 Ground floor opportunity
               </DialogDescription>
             </DialogHeader>
             
-            <div className="space-y-3 py-2 w-full">
+            <div className="space-y-3 py-2">
               <div className="flex items-center justify-center">
                 <img src={signalEmblem} alt="Signal" className="w-24 h-24 animate-pulse" />
               </div>
@@ -1058,7 +1058,7 @@ export default function Home() {
                 <p className="text-sm text-cyan-400 font-medium">Launch: $0.01 (10x potential)</p>
               </div>
               
-              <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg p-2">
+              <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg p-2 mx-auto max-w-[280px]">
                 <p className="text-sm text-green-400 text-center font-bold">
                   Up to 20% BONUS for early supporters
                 </p>
@@ -1069,7 +1069,7 @@ export default function Home() {
               </div>
             </div>
             
-            <Link href="/presale" className="block w-full">
+            <Link href="/presale" className="block max-w-[280px] w-full mx-auto">
               <Button 
                 onClick={() => setShowPresalePopup(false)}
                 className="w-full py-3 text-base font-bold bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg shadow-purple-500/25"
