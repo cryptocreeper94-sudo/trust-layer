@@ -379,7 +379,7 @@ export default function Swap() {
                   >
                     <span className="flex items-center gap-2 text-white/70">
                       <Clock className="w-4 h-4" />
-                      Trading Opens June 1, 2026
+                      Trading Opens at Mainnet Launch
                     </span>
                   </Button>
                   </>

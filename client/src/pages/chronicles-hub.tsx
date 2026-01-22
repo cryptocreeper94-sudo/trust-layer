@@ -1217,7 +1217,7 @@ export default function ChroniclesHub() {
                 <span>Early Adopter Rewards</span>
               </div>
             </div>
-            <p className="text-slate-600 text-xs mt-4">Season 1 & 2 features arriving throughout 2026</p>
+            <p className="text-slate-600 text-xs mt-4">Season 1 & 2 features coming soon</p>
           </div>
         </Card>
       </div>

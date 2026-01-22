@@ -731,7 +731,7 @@ export default function DWSCExecutiveSummary() {
                 {
                   phase: "Phase 0",
                   title: "Foundation",
-                  date: "Q1-Q2 2026",
+                  date: "Current",
                   status: "in_progress",
                   blockchain: ["Testnet live", "Signal presale", "Bridge development"],
                   chronicles: ["Website launch", "Community building", "Single-era sandbox"]
@@ -739,7 +739,7 @@ export default function DWSCExecutiveSummary() {
                 {
                   phase: "Phase 1",
                   title: "Infrastructure",
-                  date: "Q3-Q4 2026",
+                  date: "Coming Soon",
                   status: "upcoming",
                   blockchain: ["Mainnet preparation", "Validator onboarding", "DeFi launch"],
                   chronicles: ["Property registry", "Storefront system", "Creator licensing"]
@@ -747,7 +747,7 @@ export default function DWSCExecutiveSummary() {
                 {
                   phase: "Phase 2",
                   title: "Expansion",
-                  date: "Q1-Q2 2026",
+                  date: "After Launch",
                   status: "upcoming",
                   blockchain: ["Mainnet launch", "Cross-chain bridges live", "Developer grants"],
                   chronicles: ["10 eras live", "Storefront marketplace", "Mobile apps"]
@@ -755,7 +755,7 @@ export default function DWSCExecutiveSummary() {
                 {
                   phase: "Phase 3",
                   title: "Scale",
-                  date: "TBD - Community Driven",
+                  date: "Community Driven",
                   status: "target",
                   blockchain: ["Full ecosystem operational", "Enterprise partnerships", "Global expansion"],
                   chronicles: ["70+ eras", "Public beta", "Full sponsor network"]

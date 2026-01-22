@@ -39,7 +39,7 @@ function EmptyChartPlaceholder() {
       <div className="text-center">
         <BarChart3 className="w-16 h-16 text-white/20 mx-auto mb-4" />
         <p className="text-muted-foreground text-sm">Live chart data available at mainnet launch</p>
-        <p className="text-muted-foreground/60 text-xs mt-1">June 1, 2026</p>
+        <p className="text-muted-foreground/60 text-xs mt-1">Coming Soon</p>
       </div>
     </div>
   );
@@ -128,7 +128,7 @@ export default function Trading() {
             <div className="mb-4 p-3 rounded-xl bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 border border-white/10">
               <div className="flex items-center justify-center gap-2 text-primary">
                 <Clock className="w-4 h-4" />
-                <span className="text-sm font-semibold">Live Trading Available June 1, 2026</span>
+                <span className="text-sm font-semibold">Live Trading Available at Launch</span>
               </div>
             </div>
 

@@ -801,7 +801,7 @@ console.log('All successful:', result.allSuccessful);`}
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-display font-bold text-lg flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-primary" />
-                Launch Roadmap - June 1, 2026
+                Launch Roadmap
               </h3>
               <Badge className="bg-primary/20 text-primary border-primary/30">INTERNAL</Badge>
             </div>
@@ -811,7 +811,7 @@ console.log('All successful:', result.allSuccessful);`}
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="phase1" className="border-white/10">
                 <AccordionTrigger className="text-sm font-medium hover:text-primary">
-                  Phase 1: Foundation (December 2026)
+                  Phase 1: Foundation (Completed)
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
                   <div className="space-y-4">
@@ -851,7 +851,7 @@ console.log('All successful:', result.allSuccessful);`}
               </AccordionItem>
               <AccordionItem value="phase2" className="border-white/10">
                 <AccordionTrigger className="text-sm font-medium hover:text-primary">
-                  Phase 2: Testnet & Community (January 2026)
+                  Phase 2: Testnet & Community (In Progress)
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
                   <div className="space-y-4">
@@ -902,7 +902,7 @@ console.log('All successful:', result.allSuccessful);`}
               </AccordionItem>
               <AccordionItem value="phase3" className="border-white/10">
                 <AccordionTrigger className="text-sm font-medium hover:text-primary">
-                  Phase 3: Pre-Launch (February 1-7, 2026)
+                  Phase 3: Pre-Launch (Coming Soon)
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
                   <div className="space-y-4">
@@ -941,12 +941,12 @@ console.log('All successful:', result.allSuccessful);`}
               </AccordionItem>
               <AccordionItem value="phase4" className="border-white/10">
                 <AccordionTrigger className="text-sm font-medium hover:text-primary">
-                  Phase 4: Launch Week (April 5-11, 2026)
+                  Phase 4: Launch Week (Approaching)
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
                   <div className="space-y-4">
                     <div>
-                      <h4 className="font-semibold text-white mb-2">April 5-10: Final Preparations</h4>
+                      <h4 className="font-semibold text-white mb-2">Final Preparations</h4>
                       <ul className="list-disc list-inside space-y-1 text-sm">
                         <li>Go-live rehearsals</li>
                         <li>Final testnet verification</li>
@@ -956,7 +956,7 @@ console.log('All successful:', result.allSuccessful);`}
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-primary mb-2">June 1: LAUNCH DAY</h4>
+                      <h4 className="font-semibold text-primary mb-2">LAUNCH DAY</h4>
                       <ul className="list-disc list-inside space-y-1 text-sm">
                         <li>Lift press embargo (6:00 AM UTC)</li>
                         <li>Execute genesis block ceremony</li>
@@ -1044,7 +1044,7 @@ console.log('All successful:', result.allSuccessful);`}
                 <AccordionContent className="text-muted-foreground">
                   <div className="space-y-4">
                     <div>
-                      <h4 className="font-semibold text-white mb-2">Pre-Launch (Dec 2026 - Feb 7, 2026)</h4>
+                      <h4 className="font-semibold text-white mb-2">Pre-Launch Phase</h4>
                       <ul className="list-disc list-inside space-y-1 text-sm">
                         <li>Brand Awareness: Position as next-gen L1 solution</li>
                         <li>Developer Focus: Technical content marketing</li>
@@ -1054,7 +1054,7 @@ console.log('All successful:', result.allSuccessful);`}
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-white mb-2">Launch Day (Jun 1, 2026)</h4>
+                      <h4 className="font-semibold text-white mb-2">Launch Day</h4>
                       <ul className="list-disc list-inside space-y-1 text-sm">
                         <li>Coordinated press release at 6:00 AM UTC</li>
                         <li>Live event on YouTube/Twitter Spaces</li>
@@ -1064,7 +1064,7 @@ console.log('All successful:', result.allSuccessful);`}
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-white mb-2">Post-Launch (Feb 15+)</h4>
+                      <h4 className="font-semibold text-white mb-2">Post-Launch</h4>
                       <ul className="list-disc list-inside space-y-1 text-sm">
                         <li>Daily/weekly performance metrics</li>
                         <li>Developer testimonials</li>

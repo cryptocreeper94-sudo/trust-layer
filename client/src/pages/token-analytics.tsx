@@ -68,7 +68,7 @@ export default function TokenAnalytics() {
           >
             <div className="flex items-center justify-center gap-2 text-purple-400">
               <Clock className="w-5 h-5" />
-              <span className="font-semibold">Analytics Launch June 1, 2026</span>
+              <span className="font-semibold">Analytics — Coming at Mainnet Launch</span>
             </div>
             <p className="text-center text-xs text-muted-foreground mt-2">
               Live token analytics will be available after mainnet launch

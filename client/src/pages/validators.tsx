@@ -317,7 +317,7 @@ export default function Validators() {
                     <div className="flex-1 pb-4">
                       <div className="flex items-center gap-2 mb-1">
                         <span className="font-bold text-cyan-400">Phase 2: Community Validators</span>
-                        <Badge className="bg-cyan-500/20 text-cyan-400 text-[10px]">Q3 2026</Badge>
+                        <Badge className="bg-cyan-500/20 text-cyan-400 text-[10px]">Coming Soon</Badge>
                       </div>
                       <p className="text-sm text-muted-foreground">Open applications for community validators. Approved members run nodes and stake SIG. On-chain governance for validator approval.</p>
                       <div className="mt-2 text-xs text-white/60">Target: 15-25 Active Validators</div>
@@ -330,7 +330,7 @@ export default function Validators() {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <span className="font-bold text-purple-400">Phase 3: PoSA Hybrid</span>
-                        <Badge className="bg-purple-500/20 text-purple-400 text-[10px]">2027</Badge>
+                        <Badge className="bg-purple-500/20 text-purple-400 text-[10px]">Future</Badge>
                       </div>
                       <p className="text-sm text-muted-foreground">Transition to Proof of Staked Authority. Any SIG holder can stake to become a validator candidate. Community votes on validator set.</p>
                       <div className="mt-2 text-xs text-white/60">Target: 50+ Decentralized Validators</div>

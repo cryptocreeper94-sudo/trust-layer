@@ -94,7 +94,7 @@ export default function Tokenomics() {
             </GlassCard>
             <GlassCard glow hover={false}>
               <div className="p-4 text-center">
-                <div className="text-2xl md:text-3xl font-bold text-pink-400">Feb 2026</div>
+                <div className="text-2xl md:text-3xl font-bold text-pink-400">TBA</div>
                 <div className="text-[10px] text-white/50 uppercase tracking-wider">TGE Date</div>
               </div>
             </GlassCard>

@@ -52,7 +52,7 @@ export default function TokenCompare() {
                 
                 <div>
                   <h2 className="text-2xl font-display font-bold mb-2 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    Launching June 1, 2026
+                    Launching Soon
                   </h2>
                   <p className="text-muted-foreground max-w-md mx-auto">
                     Real-time token comparison with live price feeds, volume data, and market analytics 

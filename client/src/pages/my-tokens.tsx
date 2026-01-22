@@ -268,7 +268,7 @@ export default function MyTokensPage() {
                       <span className="text-sm font-medium text-white/70">Token Launch</span>
                     </div>
                     <div className="text-2xl font-bold text-white mb-1">
-                      {bag?.tgeDate || 'Q2 2026'}
+                      {bag?.tgeDate || 'Coming Soon'}
                     </div>
                     <p className="text-sm text-white/50 mb-4">
                       Tokens distributed to connected wallet

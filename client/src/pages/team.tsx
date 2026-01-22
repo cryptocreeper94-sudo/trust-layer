@@ -340,7 +340,7 @@ function BusinessPlanSection() {
                   <div className="absolute -left-[21px] w-4 h-4 rounded-full bg-green-500 border-2 border-background" />
                   <div>
                     <Badge className="bg-green-500/20 text-green-400 mb-2">Completed</Badge>
-                    <h5 className="font-semibold text-white">Q4 2024 - Foundation</h5>
+                    <h5 className="font-semibold text-white">Foundation</h5>
                     <p className="text-xs text-muted-foreground">Core blockchain, portal, DEX, staking, NFT marketplace</p>
                   </div>
                 </div>
@@ -348,7 +348,7 @@ function BusinessPlanSection() {
                   <div className="absolute -left-[21px] w-4 h-4 rounded-full bg-primary border-2 border-background animate-pulse" />
                   <div>
                     <Badge className="bg-primary/20 text-primary mb-2">In Progress</Badge>
-                    <h5 className="font-semibold text-white">Q1 2026 - Launch</h5>
+                    <h5 className="font-semibold text-white">Launch Preparation</h5>
                     <p className="text-xs text-muted-foreground">Mainnet launch, bridge deployment, founder program</p>
                   </div>
                 </div>
@@ -356,7 +356,7 @@ function BusinessPlanSection() {
                   <div className="absolute -left-[21px] w-4 h-4 rounded-full bg-white/20 border-2 border-background" />
                   <div>
                     <Badge variant="outline" className="mb-2">Planned</Badge>
-                    <h5 className="font-semibold text-white">Q2 2026 - Growth</h5>
+                    <h5 className="font-semibold text-white">Growth Phase</h5>
                     <p className="text-xs text-muted-foreground">Mobile wallet, governance DAO, enterprise partnerships</p>
                   </div>
                 </div>
@@ -364,7 +364,7 @@ function BusinessPlanSection() {
                   <div className="absolute -left-[21px] w-4 h-4 rounded-full bg-white/20 border-2 border-background" />
                   <div>
                     <Badge variant="outline" className="mb-2">Planned</Badge>
-                    <h5 className="font-semibold text-white">Q3-Q4 2026 - Scale</h5>
+                    <h5 className="font-semibold text-white">Scale Phase</h5>
                     <p className="text-xs text-muted-foreground">Cross-chain expansion, DEX aggregation, institutional tools</p>
                   </div>
                 </div>
@@ -424,7 +424,7 @@ function ExecutiveSummary() {
               <div>
                 <h4 className="text-sm font-semibold text-cyan-400 mb-2">Launch Strategy</h4>
                 <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• June 1, 2026: Public mainnet launch</li>
+                  <li>• Public mainnet launch approaching</li>
                   <li>• 10,000 Legacy Founder spots ($24 each)</li>
                   <li>• 35,000 SIG airdrop per founder</li>
                   <li>• Community-driven growth</li>

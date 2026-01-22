@@ -222,7 +222,7 @@ export default function DevStudio() {
           <div className="flex items-center gap-3">
             <Badge variant="outline" className="border-primary/50 text-primary text-[10px] px-2 py-0.5">
               <Sparkles className="w-2.5 h-2.5 mr-1" />
-              Q2 2026
+              Coming Soon
             </Badge>
             <BackButton />
           </div>

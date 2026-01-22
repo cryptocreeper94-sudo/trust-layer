@@ -107,7 +107,7 @@ export default function Charts() {
           <div className="mb-6 p-4 rounded-xl bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 border border-white/10">
             <div className="flex items-center justify-center gap-2 text-primary">
               <Clock className="w-5 h-5" />
-              <span className="font-semibold">Live Price Data Available June 1, 2026</span>
+              <span className="font-semibold">Live Price Data — Available at Mainnet Launch</span>
             </div>
             <p className="text-center text-xs text-muted-foreground mt-2">
               Real-time charts, volume, and market data will be available when mainnet launches

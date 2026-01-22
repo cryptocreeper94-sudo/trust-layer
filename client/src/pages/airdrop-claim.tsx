@@ -187,7 +187,7 @@ export default function AirdropClaim() {
                     )}
 
                     <p className="text-xs text-muted-foreground text-center mt-4">
-                      Tokens will be distributed at mainnet launch (Jun 1, 2026)
+                      Tokens will be distributed at mainnet launch
                     </p>
                   </GlassCard>
                 ) : (
@@ -243,7 +243,7 @@ export default function AirdropClaim() {
                   <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm shrink-0">3</div>
                   <div>
                     <h4 className="font-medium text-sm">Receive Tokens</h4>
-                    <p className="text-xs text-muted-foreground">Tokens are distributed automatically at mainnet launch on June 1, 2026.</p>
+                    <p className="text-xs text-muted-foreground">Tokens are distributed automatically at mainnet launch.</p>
                   </div>
                 </div>
               </GlassCard>

@@ -1243,7 +1243,7 @@ export default function Home() {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="text-sm font-bold text-white">Chain Abstraction</h3>
-                    <Badge variant="outline" className="text-[9px] border-amber-500/50 text-amber-400 px-1">Q2 2026</Badge>
+                    <Badge variant="outline" className="text-[9px] border-amber-500/50 text-amber-400 px-1">Coming Soon</Badge>
                   </div>
                   <p className="text-xs text-white/50">Manage assets across chains from one account</p>
                 </div>

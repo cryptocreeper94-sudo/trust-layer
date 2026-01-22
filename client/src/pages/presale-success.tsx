@@ -263,7 +263,7 @@ export default function PresaleSuccess() {
                     <span className="text-purple-400 font-bold text-xs">3</span>
                   </div>
                   <p className="text-gray-300 text-sm">
-                    <span className="text-purple-400 font-medium">At Launch (Oct 2026):</span> Tokens automatically distributed to your wallet
+                    <span className="text-purple-400 font-medium">At Launch:</span> Tokens automatically distributed to your wallet
                   </p>
                 </div>
               </div>

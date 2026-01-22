@@ -34,7 +34,7 @@ const ROADMAP_PHASES = [
     phase: "Phase 1",
     title: "Foundation",
     status: "active",
-    quarter: "Q1 2026",
+    quarter: "Current",
     items: [
       "Core blockchain infrastructure",
       "Trust Layer consensus mechanism",
@@ -46,7 +46,7 @@ const ROADMAP_PHASES = [
     phase: "Phase 2",
     title: "Expansion",
     status: "upcoming",
-    quarter: "Q2 2026",
+    quarter: "Coming Soon",
     items: [
       "Business verification portal",
       "Multi-signature treasuries",
@@ -58,7 +58,7 @@ const ROADMAP_PHASES = [
     phase: "Phase 3",
     title: "Ecosystem",
     status: "upcoming",
-    quarter: "Q3 2026",
+    quarter: "After Launch",
     items: [
       "DarkWave Academy launch",
       "Signal Foundation charitable arm",
@@ -70,7 +70,7 @@ const ROADMAP_PHASES = [
     phase: "Phase 4",
     title: "Scale",
     status: "upcoming",
-    quarter: "Q4 2026",
+    quarter: "Future",
     items: [
       "Global trust network expansion",
       "RWA tokenization platform",

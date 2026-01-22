@@ -53,7 +53,7 @@ const competitors = [
     liquidStaking: true,
     dex: true,
     gasless: "Optional",
-    launchDate: "Feb 2026"
+    launchDate: "Coming Soon"
   },
   {
     name: "Solana",
@@ -654,7 +654,7 @@ export default function CompetitiveAnalysis() {
                     </h2>
                     <p className="text-white/60 mb-8 max-w-2xl mx-auto text-lg">
                       Join the chain that doesn't just promise features — we deliver them. 
-                      Token launch June 1, 2026.
+                      Token launch approaching.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                       <Link href="/presale">

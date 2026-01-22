@@ -975,7 +975,7 @@ export default function ChroniclesEstate() {
         <div className="max-w-6xl mx-auto flex items-center justify-center gap-2 text-sm">
           <Sparkles className="w-4 h-4 text-cyan-400" />
           <span className="text-slate-300">
-            <span className="text-cyan-400 font-semibold">Shells → SIG:</span> All Shells convert to Signal at <span className="text-white font-bold">100 Shells = 1 SIG</span> on June 1, 2026
+            <span className="text-cyan-400 font-semibold">Shells → SIG:</span> All Shells convert to Signal at <span className="text-white font-bold">100 Shells = 1 SIG</span> at launch
           </span>
           <a 
             href="/virtual-currency-terms" 

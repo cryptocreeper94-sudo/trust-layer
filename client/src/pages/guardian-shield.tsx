@@ -97,7 +97,7 @@ export default function GuardianShieldPage() {
                 <span className="text-lg font-bold text-white">Launching at TGE</span>
               </div>
               <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400">
-                May 1, 2026
+                Coming Soon
               </p>
               <p className="text-sm text-slate-400 mt-2">Token Generation Event</p>
             </div>

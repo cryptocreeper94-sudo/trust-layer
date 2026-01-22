@@ -4,7 +4,7 @@ import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 
 export default function VirtualCurrencyTerms() {
-  const lastUpdated = "January 8, 2026";
+  const lastUpdated = "Current Version";
   const tosVersion = "1.0.0";
   
   const sections = [
@@ -16,7 +16,7 @@ export default function VirtualCurrencyTerms() {
     {
       icon: ArrowRightLeft,
       title: "2. Signal (SIG) Conversion",
-      content: `On June 1, 2026, Signal (SIG) will launch as the native cryptocurrency of DarkWave Trust Layer. All Shells in your account will be eligible for conversion to SIG at a rate of 100 Shells = 1 SIG. This conversion rate is fixed and guaranteed for all Shells purchased before launch. After conversion, Shells will no longer be available as SIG will serve as the primary currency. You acknowledge that SIG is a cryptocurrency subject to market volatility, and its value may fluctuate significantly after launch.`
+      content: `At mainnet launch, Signal (SIG) will launch as the native cryptocurrency of DarkWave Trust Layer. All Shells in your account will be eligible for conversion to SIG at a rate of 100 Shells = 1 SIG. This conversion rate is fixed and guaranteed for all Shells purchased before launch. After conversion, Shells will no longer be available as SIG will serve as the primary currency. You acknowledge that SIG is a cryptocurrency subject to market volatility, and its value may fluctuate significantly after launch.`
     },
     {
       icon: AlertTriangle,
@@ -93,7 +93,7 @@ export default function VirtualCurrencyTerms() {
               <div>
                 <h3 className="font-semibold text-cyan-400 text-lg">SIG Conversion Promise</h3>
                 <p className="text-gray-300 mt-1">
-                  All Shells purchased before June 1, 2026 will convert to Signal (SIG) at a guaranteed rate of <span className="text-cyan-400 font-bold">100 Shells = 1 SIG</span>. Your purchase history is permanently recorded and your conversion eligibility is guaranteed.
+                  All Shells purchased before launch will convert to Signal (SIG) at a guaranteed rate of <span className="text-cyan-400 font-bold">100 Shells = 1 SIG</span>. Your purchase history is permanently recorded and your conversion eligibility is guaranteed.
                 </p>
               </div>
             </div>

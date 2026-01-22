@@ -60,7 +60,7 @@ const roadmapData: RoadmapPhase[] = [
         title: "Business Storefront Program",
         description: "Real businesses claim in-game real estate across all eras",
         status: "in-progress",
-        eta: "Q1 2026"
+        eta: "Coming Soon"
       }
     ]
   },
@@ -119,7 +119,7 @@ const roadmapData: RoadmapPhase[] = [
         title: "Hardware Wallet Support",
         description: "Ledger and Trezor integration",
         status: "planned",
-        eta: "Q1 2026"
+        eta: "Coming Soon"
       }
     ]
   },
@@ -175,14 +175,14 @@ const roadmapData: RoadmapPhase[] = [
         title: "EVM-Compatible Execution Layer",
         description: "Full Solidity smart contract support",
         status: "planned",
-        eta: "Q2 2026",
+        eta: "Coming Soon",
         details: ["Deploy existing Solidity contracts", "Remix IDE support", "Hardhat/Foundry integration"]
       },
       {
         title: "Developer SDK",
         description: "JavaScript/TypeScript SDK for dApp development",
         status: "planned",
-        eta: "Q2 2026"
+        eta: "Coming Soon"
       }
     ]
   },
@@ -201,19 +201,19 @@ const roadmapData: RoadmapPhase[] = [
         title: "External Validator Program",
         description: "Open validator registration with stake delegation",
         status: "in-progress",
-        eta: "February 2026"
+        eta: "Coming Soon"
       },
       {
         title: "Security Audit",
         description: "Third-party consensus and smart contract audits",
         status: "planned",
-        eta: "Q1 2026"
+        eta: "Coming Soon"
       },
       {
         title: "Bug Bounty Program",
         description: "Rewards for responsible vulnerability disclosure",
         status: "planned",
-        eta: "Q1 2026"
+        eta: "Coming Soon"
       }
     ]
   },
@@ -231,19 +231,19 @@ const roadmapData: RoadmapPhase[] = [
         title: "Airdrop Distribution",
         description: "SIG airdrop to early supporters",
         status: "planned",
-        eta: "June 1, 2026"
+        eta: "At Launch"
       },
       {
         title: "DEX Listing",
         description: "Initial liquidity on Uniswap/Raydium",
         status: "planned",
-        eta: "February 2026"
+        eta: "Coming Soon"
       },
       {
         title: "CEX Listings",
         description: "Tier 2 and Tier 1 exchange listings",
         status: "planned",
-        eta: "Q2-Q3 2026"
+        eta: "After Launch"
       }
     ]
   }
@@ -361,7 +361,7 @@ export default function TechnicalRoadmap() {
           <div className="bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 border border-cyan-500/30 rounded-2xl p-8">
             <h2 className="text-2xl font-bold text-white mb-4">Token Generation Event</h2>
             <p className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-2">
-              June 1, 2026
+              Coming Soon
             </p>
             <p className="text-slate-400 mb-6">Mainnet launch with full token distribution</p>
             <div className="flex flex-wrap justify-center gap-4">

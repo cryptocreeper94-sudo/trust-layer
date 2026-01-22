@@ -29,7 +29,7 @@ export default function Token() {
           </Link>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="border-amber-500/50 text-amber-400 bg-amber-500/10 text-[10px] sm:text-xs whitespace-nowrap">
-              <Lock className="w-3 h-3 mr-1 hidden sm:inline" /> Jun 1, 2026
+              <Lock className="w-3 h-3 mr-1 hidden sm:inline" /> Coming Soon
             </Badge>
             <BackButton />
           </div>
@@ -84,7 +84,7 @@ export default function Token() {
                 </GlassCard>
                 <GlassCard hover={false}>
                   <div className="p-3 text-center">
-                    <div className="text-lg font-bold text-primary">Feb 2026</div>
+                    <div className="text-lg font-bold text-primary">TBA</div>
                     <div className="text-[10px] text-white/50">Launch Date</div>
                   </div>
                 </GlassCard>
@@ -279,7 +279,7 @@ export default function Token() {
               <div className="flex items-center gap-2 pt-2">
                 <Badge className="bg-primary/20 text-primary border-primary/30 text-xs">
                   <Sparkles className="w-3 h-3 mr-1" />
-                  Launch: Jun 1, 2026
+                  Launch: Coming Soon
                 </Badge>
               </div>
             </div>

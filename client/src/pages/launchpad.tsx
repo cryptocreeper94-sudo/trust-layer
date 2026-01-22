@@ -541,7 +541,7 @@ export default function Launchpad() {
                 <div className="text-center py-12">
                   <Rocket className="w-12 h-12 text-white/20 mx-auto mb-3" />
                   <p className="text-sm text-muted-foreground mb-2">Token launchpad coming at mainnet</p>
-                  <p className="text-xs text-muted-foreground/60 mb-4">June 1, 2026</p>
+                  <p className="text-xs text-muted-foreground/60 mb-4">Coming Soon</p>
                   <Button onClick={() => setCreateOpen(true)} className="bg-pink-500 hover:bg-pink-600">
                     <Plus className="w-4 h-4 mr-2" /> Create Token (Preview)
                   </Button>

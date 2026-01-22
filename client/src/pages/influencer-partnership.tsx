@@ -422,7 +422,7 @@ export default function InfluencerPartnershipPage() {
                 <ul className="space-y-3">
                   {[
                     { icon: TrendingUp, text: "Generous commission structure up to 20%" },
-                    { icon: Gift, text: "Exclusive SIG token bonuses at launch (Jun 1, 2026)" },
+                    { icon: Gift, text: "Exclusive SIG token bonuses at launch" },
                     { icon: Shield, text: "Guardian-verified smart contracts" },
                     { icon: Users, text: "Growing community of 50K+ members" },
                     { icon: Heart, text: "Long-term partnership focus, not one-offs" },
@@ -461,7 +461,7 @@ export default function InfluencerPartnershipPage() {
                   </Badge>
                   <h3 className="text-lg font-bold mb-2">Early Partner Bonus</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Partners who join before June 1, 2026 receive a 2x token bonus on launch day.
+                    Early partners receive a 2x token bonus on launch day.
                   </p>
                   <div className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                     Double Your Rewards
