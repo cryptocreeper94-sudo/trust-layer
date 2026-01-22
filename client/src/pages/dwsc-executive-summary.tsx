@@ -80,7 +80,7 @@ export default function DWSCExecutiveSummary() {
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
-            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DWSC</span>
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 bg-cyan-500/10 text-[10px] sm:text-xs whitespace-nowrap">
@@ -134,13 +134,13 @@ export default function DWSCExecutiveSummary() {
                 Executive Overview
               </h2>
               <p className="text-white/80 leading-relaxed mb-4">
-                <span className="text-cyan-400 font-semibold">DarkWave Trust Layer (DWSC)</span> is a purpose-built 
+                <span className="text-cyan-400 font-semibold">DarkWave Trust Layer</span> is a purpose-built 
                 Layer 1 blockchain ecosystem designed for high-performance gaming, digital asset ownership, and 
-                decentralized applications. Unlike general-purpose chains, DWSC is optimized from the ground up 
+                decentralized applications. Unlike general-purpose chains, DarkWave is optimized from the ground up 
                 for real-time interactive experiences and seamless digital commerce.
               </p>
               <p className="text-white/80 leading-relaxed mb-4">
-                The ecosystem comprises three pillars: the <span className="text-purple-400 font-semibold">DWSC blockchain infrastructure</span>, 
+                The ecosystem comprises three pillars: the <span className="text-purple-400 font-semibold">DarkWave blockchain infrastructure</span>, 
                 the <span className="text-pink-400 font-semibold">DarkWave Portal</span> for ecosystem access and DeFi services, 
                 and <span className="text-amber-400 font-semibold">DarkWave Chronicles</span> - an unprecedented adventure platform 
                 spanning 10 verifiable historical eras where YOU are the hero that serves as the flagship application demonstrating 
@@ -172,32 +172,11 @@ export default function DWSCExecutiveSummary() {
                 </p>
                 <p>
                   <span className="text-pink-400 font-semibold">Signal (SIG)</span> is not a speculative asset — it's a 
-                  <span className="text-amber-400 font-semibold"> Trust Network Access</span>. Signal represents 
-                  acknowledgement, access, and proof of participation in the trust network. The value is the infrastructure 
+                  <span className="text-amber-400 font-semibold"> Trust Network Access Token</span>. Signal represents 
+                  acknowledgement and proof of participation in the trust network. The value is the infrastructure 
                   it unlocks, not speculation.
                 </p>
                 <p>
-                  <span className="text-cyan-400 font-semibold">Four domains, one ecosystem:</span>
-                </p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
-                    <p className="text-cyan-400 font-semibold text-sm">dwsc.io</p>
-                    <p className="text-white/50 text-xs">Trust Infrastructure</p>
-                  </div>
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
-                    <p className="text-purple-400 font-semibold text-sm">darkwavegames.io</p>
-                    <p className="text-white/50 text-xs">Gaming & Entertainment</p>
-                  </div>
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
-                    <p className="text-pink-400 font-semibold text-sm">darkwavestudios.io</p>
-                    <p className="text-white/50 text-xs">Creative Development</p>
-                  </div>
-                  <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
-                    <p className="text-amber-400 font-semibold text-sm">yourlegacy.io</p>
-                    <p className="text-white/50 text-xs">Personal Identity</p>
-                  </div>
-                </div>
-                <p className="mt-4">
                   Our mission: deliver fast, feature-rich trust infrastructure with a premium user experience — serving 
                   enterprises seeking trusted business relationships, creators building digital legacies, and communities 
                   looking for transparent, accountable platforms.
