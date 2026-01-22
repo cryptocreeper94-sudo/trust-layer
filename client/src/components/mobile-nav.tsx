@@ -86,7 +86,7 @@ const navCategories = [
     label: "Blockchain",
     icon: Box,
     items: [
-      { href: "/token", label: "SIG Token", icon: Coins },
+      { href: "/token", label: "Signal", icon: Coins },
       { href: "/genesis", label: "Genesis Block", icon: Star },
       { href: "/explorer", label: "Block Explorer", icon: SearchIcon },
       { href: "/network", label: "Network Stats", icon: TrendingUp },

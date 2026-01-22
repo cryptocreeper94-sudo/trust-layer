@@ -110,7 +110,7 @@ export function Footer() {
             <div>
               <h4 className="font-bold text-white mb-4 text-sm">Ecosystem</h4>
               <ul className="space-y-2 text-xs text-white/60">
-                <li><Link href="/token" className="hover:text-cyan-400 transition-colors">SIG Token</Link></li>
+                <li><Link href="/token" className="hover:text-cyan-400 transition-colors">Signal</Link></li>
                 <li><Link href="/staking" className="hover:text-cyan-400 transition-colors">Staking</Link></li>
                 <li><Link href="/bridge" className="hover:text-cyan-400 transition-colors">Bridge</Link></li>
                 <li><Link href="/explorer" className="hover:text-cyan-400 transition-colors">Block Explorer</Link></li>
@@ -146,7 +146,7 @@ export function Footer() {
                   </a>
                 ))}
               </div>
-              <p className="text-xs text-white/40">Join 150K+ community members</p>
+              <p className="text-xs text-white/40">Join our growing community</p>
             </div>
           </div>
           

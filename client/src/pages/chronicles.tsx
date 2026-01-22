@@ -488,6 +488,75 @@ function FeatureCard({ feature, index }: { feature: typeof CORE_FEATURES[0]; ind
   );
 }
 
+function FeaturesCarousel({ features }: { features: typeof CORE_FEATURES }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const totalSlides = features.length;
+  
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const cardWidth = 320;
+      const scrollAmount = direction === 'left' ? -cardWidth : cardWidth;
+      scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+  
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      const cardWidth = 320;
+      const newIndex = Math.round(scrollLeft / cardWidth);
+      setCurrentIndex(Math.min(newIndex, totalSlides - 1));
+    }
+  };
+
+  return (
+    <div className="relative">
+      <div 
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="flex gap-4 overflow-x-auto scrollbar-hide py-4 px-2 snap-x snap-mandatory"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
+        {features.map((feature, i) => (
+          <div key={feature.id} className="flex-shrink-0 w-[300px] snap-start">
+            <FeatureCard feature={feature} index={i} />
+          </div>
+        ))}
+      </div>
+      
+      <div className="flex items-center justify-center gap-4 mt-6">
+        <button
+          onClick={() => scroll('left')}
+          className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-xl border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors"
+          data-testid="button-features-carousel-left"
+        >
+          <ChevronLeft className="w-5 h-5 text-white" />
+        </button>
+        
+        <div className="flex gap-2">
+          {features.map((_, i) => (
+            <div
+              key={i}
+              className={`w-2 h-2 rounded-full transition-all ${
+                i === currentIndex ? 'bg-cyan-400 w-4' : 'bg-white/30'
+              }`}
+            />
+          ))}
+        </div>
+        
+        <button
+          onClick={() => scroll('right')}
+          className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-xl border border-white/20 flex items-center justify-center hover:bg-white/10 transition-colors"
+          data-testid="button-features-carousel-right"
+        >
+          <ChevronRight className="w-5 h-5 text-white" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function EpochCard({ epoch, index, onClick }: { epoch: typeof EPOCHS[0]; index: number; onClick?: () => void }) {
   return (
     <motion.div
@@ -1005,11 +1074,7 @@ export default function Chronicles() {
             </p>
           </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr">
-            {CORE_FEATURES.map((feature, i) => (
-              <FeatureCard key={feature.id} feature={feature} index={i} />
-            ))}
-          </div>
+          <FeaturesCarousel features={CORE_FEATURES} />
         </div>
       </section>
 
@@ -1308,13 +1373,13 @@ export default function Chronicles() {
             viewport={{ once: true }}
             className="text-center"
           >
-            <Link href="/legacy">
-              <Button size="lg" className="rounded-full gap-2 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white shadow-lg" data-testid="button-build-legacy">
-                <Volume2 className="w-5 h-5" />
-                Build Your Legacy Now
+            <Link href="/chronicles-demo">
+              <Button size="lg" className="rounded-full gap-2 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white shadow-lg" data-testid="button-try-demo">
+                <Sparkles className="w-5 h-5" />
+                Try the Demo
               </Button>
             </Link>
-            <p className="mt-4 text-sm text-white/40">Start recording voice samples today - be ready when the game launches</p>
+            <p className="mt-4 text-sm text-white/40">Experience Chronicles gameplay today</p>
           </motion.div>
         </div>
       </section>
@@ -1403,64 +1468,6 @@ export default function Chronicles() {
         </div>
       </section>
 
-      {/* Early Adopter Rewards */}
-      <section className="py-24 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-amber-950/10 via-slate-950 to-slate-950" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-3xl" />
-        
-        <div className="container mx-auto max-w-4xl relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center"
-          >
-            <Badge className="mb-4 bg-amber-500/20 text-amber-400 border-amber-500/30">
-              <Coins className="w-3 h-3 mr-1" /> Limited Time Offer
-            </Badge>
-            
-            <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">
-              <span className="bg-gradient-to-r from-amber-400 via-yellow-400 to-orange-400 bg-clip-text text-transparent">
-                Early Adopter Rewards
-              </span>
-            </h2>
-            
-            <p className="text-xl text-white/70 max-w-2xl mx-auto mb-12">
-              Join before public beta and receive <InfoTooltip termKey="dwc">SIG</InfoTooltip> coin bonuses, 
-              exclusive titles, and priority access to new eras.
-            </p>
-
-            <div className="grid sm:grid-cols-3 gap-6 mb-12">
-              {[
-                { reward: "500 SIG", desc: "Bonus coins for early signup", icon: Coins },
-                { reward: "Pioneer Title", desc: "Exclusive in-game recognition", icon: Crown },
-                { reward: "Era Access", desc: "First to explore new theaters", icon: Compass }
-              ].map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="p-6 rounded-2xl bg-slate-900/80 border border-amber-500/20"
-                  style={{ boxShadow: "0 0 40px rgba(245, 158, 11, 0.1)" }}
-                >
-                  <item.icon className="w-10 h-10 text-amber-400 mx-auto mb-3" />
-                  <div className="text-2xl font-bold text-amber-400 mb-1">{item.reward}</div>
-                  <div className="text-white/50 text-sm">{item.desc}</div>
-                </motion.div>
-              ))}
-            </div>
-
-            <Link href="/legacy">
-              <Button size="lg" className="rounded-full gap-2 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white shadow-lg" data-testid="button-claim-rewards">
-                <Sparkles className="w-5 h-5" />
-                Claim Your Rewards
-              </Button>
-            </Link>
-          </motion.div>
-        </div>
-      </section>
 
       <section className="py-24 px-4 bg-gradient-to-b from-transparent via-cyan-950/10 to-transparent">
         <div className="container mx-auto max-w-4xl text-center">

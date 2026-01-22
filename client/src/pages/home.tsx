@@ -257,6 +257,58 @@ interface EcosystemApp {
   url?: string;
 }
 
+function EcosystemAppCard({ app }: { app: EcosystemApp }) {
+  const imageSrc = ecosystemImages[app.id] || "";
+  const colors: Record<string, { from: string; to: string }> = {
+    "from-gray-500 to-gray-700": { from: "#6b7280", to: "#374151" },
+    "from-indigo-600 to-violet-800": { from: "#4f46e5", to: "#5b21b6" },
+    "from-cyan-400 to-blue-500": { from: "#22d3ee", to: "#3b82f6" },
+    "from-slate-600 to-zinc-800": { from: "#475569", to: "#27272a" },
+    "from-emerald-600 to-teal-800": { from: "#059669", to: "#115e59" },
+    "from-emerald-500 to-teal-600": { from: "#10b981", to: "#0d9488" },
+    "from-amber-600 to-yellow-800": { from: "#d97706", to: "#854d0e" },
+    "from-cyan-600 to-blue-700": { from: "#0891b2", to: "#1d4ed8" },
+    "from-cyan-500 to-blue-600": { from: "#06b6d4", to: "#2563eb" },
+    "from-orange-500 to-red-600": { from: "#f97316", to: "#dc2626" },
+    "from-red-600 to-rose-700": { from: "#dc2626", to: "#be123c" },
+  };
+  const gradColors = colors[app.gradient] || { from: "#0891b2", to: "#1d4ed8" };
+
+  return (
+    <GlassCard glow className="h-full overflow-hidden hover:border-emerald-500/30 transition-all duration-300">
+      <div className="flex flex-col h-full">
+        <div className="aspect-video relative overflow-hidden bg-black">
+          {imageSrc ? (
+            <img 
+              src={imageSrc} 
+              alt={app.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div 
+              className="w-full h-full flex items-center justify-center"
+              style={{ background: `linear-gradient(to bottom right, ${gradColors.from}, ${gradColors.to})` }}
+            >
+              <span className="text-5xl font-bold text-white/80">{app.name.charAt(0)}</span>
+            </div>
+          )}
+        </div>
+        <div className="p-4 flex-1 flex flex-col">
+          <div className="flex items-start justify-between gap-2 mb-2">
+            <h3 className="text-lg font-bold text-white leading-tight">{app.name}</h3>
+            <FavoriteButton appId={app.id} />
+          </div>
+          <Badge variant="secondary" className="w-fit text-[10px] uppercase bg-emerald-500/20 text-emerald-400 mb-2">
+            {app.category}
+          </Badge>
+          <p className="text-xs text-white/60 line-clamp-2 mb-4 flex-1">{app.description}</p>
+          <ExploreButton url={app.url} appName={app.name} />
+        </div>
+      </div>
+    </GlassCard>
+  );
+}
+
 function EcosystemCarousel({ apps }: { apps: EcosystemApp[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -772,7 +824,11 @@ export default function Home() {
               <SkeletonCard />
             </div>
           ) : (
-            <EcosystemCarousel apps={apps} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {apps.slice(0, 6).map((app) => (
+                <EcosystemAppCard key={app.id} app={app} />
+              ))}
+            </div>
           )}
           
           <div className="mt-6 flex justify-center">
@@ -796,17 +852,17 @@ export default function Home() {
             viewport={{ once: true }}
             className="text-center mb-8"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-cyan-600/20 via-purple-600/20 to-pink-600/20 border border-purple-400/40 backdrop-blur-sm mb-4">
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-2">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
+                Chronicles
+              </span>
+            </h2>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-cyan-600/20 via-purple-600/20 to-pink-600/20 border border-purple-400/40 backdrop-blur-sm mb-3">
               <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
               <span className="text-xs text-purple-300 font-medium">Season Zero</span>
               <span className="text-white/40">•</span>
               <span className="text-xs text-pink-300">Coming Soon</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
-                Chronicles
-              </span>
-            </h2>
             <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
               An unprecedented adventure platform where YOU are the hero. Emotions drive behavior, consequences ripple through time, and every perspective matters.
             </p>
