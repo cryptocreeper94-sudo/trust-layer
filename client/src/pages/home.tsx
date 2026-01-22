@@ -1012,7 +1012,7 @@ export default function Home() {
 
       <Dialog open={showPresalePopup} onOpenChange={setShowPresalePopup}>
         <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white w-[80vw] max-w-[320px] shadow-[0_0_60px_rgba(0,200,255,0.3)] overflow-hidden !p-0">
-          <div className="flex flex-col items-center p-4 w-full box-border">
+          <div className="flex flex-col items-center p-4 pt-8 w-full box-border">
             <DialogHeader className="text-center w-full">
               <DialogTitle className="text-xl font-bold text-center">
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
