@@ -161,22 +161,22 @@ export default function Explorer() {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center">
-          <Link href="/" className="flex items-center gap-2 mr-auto">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
-            <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
-          </Link>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
-              <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-              <span className="text-[10px] font-mono text-amber-400 font-medium">TESTNET</span>
-            </div>
             <BackButton />
+            <div>
+              <h1 className="text-lg font-bold text-white">DarkWaveScan</h1>
+              <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                <span className="text-[10px] text-amber-400">Testnet</span>
+              </div>
+            </div>
+          </div>
+          <div className="ml-auto flex items-center gap-2">
             <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1.5 hover:bg-white/5">
-                <Home className="w-3 h-3" />
-                Home
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-white/10">
+                <Home className="w-4 h-4" />
               </Button>
             </Link>
           </div>
