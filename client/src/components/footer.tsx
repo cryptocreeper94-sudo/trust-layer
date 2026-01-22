@@ -152,14 +152,16 @@ export function Footer() {
           
           {/* Bottom Bar */}
           <div className="pt-6 border-t border-white/10">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-4 text-xs text-white/50">
+            <div className="flex flex-col items-center gap-3">
+              <div className="flex items-center justify-center gap-2 text-xs text-white/50">
                 <span className="font-semibold text-white">DarkWave Studios, LLC</span>
+                <span className="text-white/30">•</span>
                 <span>© 2025-2026</span>
+                <span className="text-white/30">•</span>
                 <span className="px-2 py-0.5 rounded bg-white/5 font-mono">v{APP_VERSION}</span>
               </div>
               
-              <div className="flex items-center gap-4 text-xs">
+              <div className="flex items-center justify-center gap-4 text-xs">
                 <Link href="/terms" className="text-white/40 hover:text-cyan-400 transition-colors" data-testid="link-terms">
                   Terms
                 </Link>
