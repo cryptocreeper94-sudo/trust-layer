@@ -1219,12 +1219,6 @@ export default function Presale() {
   const purchaseEmail = user?.email || emailParam;
   const purchaseWallet = evmAddress || solanaAddress || walletParam;
 
-  const { data: tiersData, isLoading: tiersLoading } = useQuery<{ tiers: PresaleTier[] }>({
-    queryKey: ["/api/presale/tiers"],
-  });
-
-  const tiers = tiersData?.tiers || [];
-
   return (
     <div className="min-h-screen bg-[#080c18] text-white">
       <div 
@@ -1271,24 +1265,6 @@ export default function Presale() {
           <PurchaseCalculator />
         </div>
 
-        <div id="tiers" className="mb-16">
-          <h2 className="text-3xl font-bold text-center mb-8">
-            <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
-              Early Adopter Tiers
-            </span>
-          </h2>
-          {tiersLoading ? (
-            <div className="flex justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-cyan-400" />
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {tiers.map((tier, index) => (
-                <TierCard key={tier.id} tier={tier} index={index} />
-              ))}
-            </div>
-          )}
-        </div>
 
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-center mb-8">
