@@ -1070,25 +1070,16 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="space-y-2">
-            <Link href="/presale">
-              <Button 
-                onClick={() => setShowPresalePopup(false)}
-                className="w-full py-3 text-base font-bold bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg shadow-purple-500/25"
-                data-testid="button-go-to-presale"
-              >
-                <Rocket className="w-5 h-5 mr-2" />
-                Get Your Signal Now
-              </Button>
-            </Link>
-            <button 
+          <Link href="/presale">
+            <Button 
               onClick={() => setShowPresalePopup(false)}
-              className="w-full text-xs text-gray-500 hover:text-gray-300 py-1"
-              data-testid="button-dismiss-presale"
+              className="w-full py-3 text-base font-bold bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg shadow-purple-500/25"
+              data-testid="button-go-to-presale"
             >
-              Maybe later
-            </button>
-          </div>
+              <Rocket className="w-5 h-5 mr-2" />
+              Get Your Signal Now
+            </Button>
+          </Link>
         </DialogContent>
       </Dialog>
     </div>
