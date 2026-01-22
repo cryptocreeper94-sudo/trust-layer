@@ -212,23 +212,6 @@ export default function Dashboard() {
             <GlassCard glow>
               <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-4">
-                  <Key className="w-5 h-5 text-cyan-400 shrink-0" />
-                  <h3 className="font-bold text-sm sm:text-base">API Access</h3>
-                </div>
-                <p className="text-xs text-muted-foreground mb-4">
-                  Generate API keys to integrate with DarkWave Trust Layer
-                </p>
-                <Link href="/developers">
-                  <Button size="sm" variant="outline" className="w-full border-primary/30 text-primary hover:bg-primary/10">
-                    Get API Key
-                  </Button>
-                </Link>
-              </div>
-            </GlassCard>
-
-            <GlassCard glow>
-              <div className="p-4 sm:p-5">
-                <div className="flex items-center gap-2 mb-4">
                   <Activity className="w-5 h-5 text-green-400 shrink-0" />
                   <h3 className="font-bold text-sm sm:text-base">Recent Activity</h3>
                 </div>
