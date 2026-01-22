@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import { 
   Home, DoorOpen, Sofa, Tv, Flame, ArrowLeft, Plus, X, Move,
   Sparkles, Timer, Coins, Crown, BookOpen, Music, Utensils,
@@ -255,6 +255,16 @@ export default function ChroniclesInterior() {
               <ArrowLeft className="w-5 h-5 mr-2" />
               Estate
             </Button>
+            <Link href="/">
+              <Button
+                variant="ghost"
+                className="text-white/70 hover:text-white hover:bg-white/10"
+                data-testid="button-home"
+              >
+                <Home className="w-5 h-5 mr-2" />
+                Home
+              </Button>
+            </Link>
             <div>
               <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 Your Home Interior

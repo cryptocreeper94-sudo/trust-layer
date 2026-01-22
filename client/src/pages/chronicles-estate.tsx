@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useLocation } from "wouter";
+import { Link, useLocation } from "wouter";
 import { 
-  Home, TreeDeciduous, Mountain, Droplets, Store, Hammer,
+  Home, TreeDeciduous, Mountain, Droplets, Store, Hammer, ArrowLeft,
   Plus, Minus, RotateCcw, Save, Coins, Lock, Sparkles,
   ChevronRight, User, Grid3X3, Eye, ShoppingBag, Crown,
   Rocket, Building2, MapPin, Gift, Briefcase, Calendar, X,
@@ -546,6 +546,38 @@ export default function ChroniclesEstate() {
 
   return (
     <div className="min-h-screen bg-slate-950 relative overflow-hidden">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-40 bg-black/80 backdrop-blur-xl border-b border-white/5">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => window.history.back()}
+              className="h-8 text-xs gap-1 hover:bg-white/5 px-2 text-muted-foreground hover:text-white"
+              data-testid="button-back"
+            >
+              <ArrowLeft className="w-3 h-3" />
+              <span className="hidden sm:inline">Back</span>
+            </Button>
+            <Link href="/">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 text-xs gap-1 hover:bg-white/5 px-2 text-muted-foreground hover:text-white"
+                data-testid="button-home"
+              >
+                <Home className="w-3 h-3" />
+                <span className="hidden sm:inline">Home</span>
+              </Button>
+            </Link>
+          </div>
+          <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 text-xs">
+            Estate
+          </Badge>
+        </div>
+      </nav>
+
       {/* Floating Ambient Orbs */}
       <div className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse pointer-events-none" />
       <div className="absolute bottom-40 right-10 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse pointer-events-none" style={{ animationDelay: "1s" }} />

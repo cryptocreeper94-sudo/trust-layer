@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { BackButton, HomeButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -155,8 +157,21 @@ export default function ChroniclesDemo() {
 
   return (
     <div className="min-h-screen bg-slate-950 overflow-hidden">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <BackButton />
+            <HomeButton />
+          </div>
+          <Badge variant="outline" className="border-purple-500/50 text-purple-400 text-xs">
+            Chronicles Demo
+          </Badge>
+        </div>
+      </nav>
+
       {/* Video Hero Section */}
-      <section className="relative h-[70vh] min-h-[500px] overflow-hidden">
+      <section className="relative h-[70vh] min-h-[500px] overflow-hidden pt-14">
         <video
           ref={videoRef}
           autoPlay

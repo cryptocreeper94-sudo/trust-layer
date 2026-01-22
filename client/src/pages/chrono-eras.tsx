@@ -4,13 +4,14 @@ import { Link } from "wouter";
 import { 
   Clock, Users, Sword, Crown, Cog, Cpu, Rocket, Map, Sparkles,
   Filter, Grid, List, X, ChevronRight, Lock, Unlock, Star, Flame,
-  Building, Heart, Coins, Shield, Brain, Globe, Compass, Search
+  Building, Heart, Coins, Shield, Brain, Globe, Compass, Search, Home, ArrowLeft
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Footer } from "@/components/footer";
 import { ChronoLayout, HoloCard, CTABanner, chronoStyles } from "@/components/chrono-ui";
+import { BackButton, HomeButton } from "@/components/page-nav";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 
 import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";

@@ -280,8 +280,7 @@ export default function NftMarketplace() {
                           </Button>
                         </div>
                         <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded-full bg-black/50 backdrop-blur-sm">
-                          <Heart className="w-3 h-3 text-pink-400" />
-                          <span className="text-[10px]">{nft.likes || 0}</span>
+                          <Heart className="w-3 h-3 text-pink-400 cursor-pointer hover:fill-pink-400 transition-colors" />
                         </div>
                       </div>
                       <div className="p-3">
