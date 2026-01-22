@@ -537,28 +537,23 @@ export default function Home() {
               Where trust becomes the layer of truth.
             </p>
 
-            <img src={signalEmblem} alt="Signal Emblem" className="w-36 h-36 md:w-44 md:h-44 mx-auto mt-6 opacity-90" />
+            <img src={signalEmblem} alt="Signal Emblem" className="w-48 h-48 md:w-56 md:h-56 mx-auto mt-6" />
 
           </motion.div>
         </div>
       </section>
 
-      {/* Gradient Divider - Presale Promo Banner */}
+      {/* Thin Gradient Divider with Glow */}
       <Link href="/presale">
-        <div className="relative py-6 cursor-pointer group overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-purple-800/80 to-slate-900" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/40" />
-          <div className="container mx-auto px-4 relative z-10 flex flex-col md:flex-row items-center justify-center gap-4">
-            <div className="flex items-center gap-3">
-              <img src={signalEmblem} alt="Signal" className="w-10 h-10" />
-              <div className="text-center md:text-left">
-                <p className="text-white font-bold text-lg">Signal Token Presale Live</p>
-                <p className="text-purple-200 text-sm">Early adopters get 10x value at launch</p>
-              </div>
-            </div>
-            <Badge className="bg-white/10 border-white/30 text-white hover:bg-white/20 transition-colors px-5 py-2 text-sm font-bold">
-              Join Presale Now
-              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+        <div className="relative py-3 cursor-pointer group">
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-purple-600/40 to-slate-950" />
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-purple-400/60 to-transparent shadow-[0_0_20px_rgba(168,85,247,0.5)]" />
+          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-purple-400/60 to-transparent shadow-[0_0_20px_rgba(168,85,247,0.5)]" />
+          <div className="container mx-auto px-4 relative z-10 flex items-center justify-center">
+            <Badge className="bg-purple-500/20 border-purple-400/50 text-purple-200 hover:bg-purple-500/30 transition-colors px-6 py-1.5 text-sm font-medium">
+              <Sparkles className="w-3 h-3 mr-2" />
+              Signal Token Presale Live — Join Now
+              <ArrowRight className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
             </Badge>
           </div>
         </div>
