@@ -82,18 +82,20 @@ export default function WelcomePage() {
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
               Welcome to{" "}
               <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                DarkWave
-              </span>
+                Your
+              </span>{" "}
+              Trust Layer
             </h1>
             
             <p className="text-xl text-slate-300 max-w-2xl mx-auto mb-6">
-              A new way of doing business — for individuals and organizations alike. 
-              Where trust is built-in, not bolted on.
+              This isn't our project — it's yours. A community-owned space where 
+              your identity is verified, your voice matters, and your participation 
+              shapes everything we build together.
             </p>
 
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30">
               <Sparkles className="w-4 h-4 text-cyan-400" />
-              <span className="text-sm text-cyan-300">Join Free — Build With Us</span>
+              <span className="text-sm text-cyan-300">Disrupting the Noise — Join Free</span>
             </div>
           </motion.div>
 
@@ -105,22 +107,25 @@ export default function WelcomePage() {
           >
             <GlassCard glow className="p-6 sm:p-8">
               <h2 className="text-xl font-bold text-white mb-4 text-center">
-                What is DarkWave?
+                What is This Place?
               </h2>
               <div className="space-y-4 text-slate-300">
                 <p>
-                  <strong className="text-white">DarkWave Trust Layer</strong> is a new concept — a digital ecosystem 
-                  designed to transform how people and businesses build trust and conduct business online. 
+                  <strong className="text-white">DarkWave Trust Layer</strong> is your space — a community-owned ecosystem 
+                  where individuals and businesses build trust and do business differently. No hype. No empty promises. 
+                  Just real people building something real.
                 </p>
                 <p>
-                  Unlike traditional platforms where you're the product, DarkWave puts <strong className="text-cyan-400">you in control</strong>. 
-                  Your identity is verified but private. Your interactions are transparent but secure. 
-                  Your participation builds real value — for you and the community.
+                  Unlike platforms where you're the product, here <strong className="text-cyan-400">you're the owner</strong>. 
+                  Your identity is verified but private. Your voice shapes the community. 
+                  Your participation matters — because this belongs to all of us.
                 </p>
                 <p>
-                  Whether you're an individual looking to connect with verified people, a business seeking trusted partnerships, 
-                  or simply curious about a better way to do things online — you're in the right place. 
-                  <strong className="text-white"> Signing up is free.</strong> Get verified, get your membership, and start building with us.
+                  <strong className="text-white">Signal</strong> isn't just a token — it's <strong className="text-cyan-400">your signal</strong>. 
+                  Your stake. Your voice. Your proof that you're part of something built to last.
+                </p>
+                <p>
+                  <strong className="text-white">Joining is free.</strong> Get verified, claim your membership, and help us build your community.
                 </p>
               </div>
             </GlassCard>
@@ -204,12 +209,12 @@ export default function WelcomePage() {
                   <Heart className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white mb-2">Our Promise</h3>
+                  <h3 className="text-lg font-bold text-white mb-2">Disrupting the Noise</h3>
                   <p className="text-slate-300 text-sm leading-relaxed">
-                    We're building DarkWave for the long haul. No shortcuts, no empty promises. 
-                    We're taking our time to get it right because you deserve a platform that 
-                    actually works — one that puts community first and grows alongside you. 
-                    Join us now, and let's build something meaningful together.
+                    The noise is everywhere — projects that promise everything and deliver nothing. 
+                    We're different. We're building your Trust Layer for the long haul. No hype cycles. 
+                    No shortcuts. Just a community that grows together, at the right pace, 
+                    building something that actually lasts. This is your space. Let's build it together.
                   </p>
                 </div>
               </div>
