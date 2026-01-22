@@ -449,39 +449,11 @@ export default function Home() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary">DarkWave Trust Layer</span>
             </h1>
 
-            <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto">
-              A universal ledger for the next web. Scalable, secure, and built for decentralized applications.
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
+              A high-performance Layer 1 blockchain built on Proof-of-Authority consensus. 
+              200,000+ TPS, 400ms finality, and near-zero transaction costs. 
+              The foundation for verified identity, trusted business relationships, and transparent audit trails.
             </p>
-
-            <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 pt-4">
-              <Link href="/developers">
-                <Button size="lg" className="h-10 sm:h-12 px-3 sm:px-6 text-sm sm:text-base bg-primary text-background hover:bg-primary/90 font-bold rounded-full shadow-[0_0_20px_rgba(0,255,255,0.3)]" data-testid="button-start-building">
-                  Start Building <ArrowRight className="ml-1 sm:ml-2 w-3 h-3 sm:w-4 sm:h-4" />
-                </Button>
-              </Link>
-              <Link href="/explorer">
-                <Button size="lg" variant="outline" className="h-10 sm:h-12 px-3 sm:px-6 text-sm sm:text-base border-primary/50 text-primary hover:bg-primary/10 rounded-full" data-testid="button-explore-chain">
-                  DarkWaveScan
-                </Button>
-              </Link>
-            </div>
-
-            <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.8 }}
-                className="mt-4 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-600/20 via-purple-600/20 to-pink-600/20 border border-cyan-400/40 backdrop-blur-sm"
-                data-testid="banner-chronicles-construction"
-              >
-                <div className="flex items-center justify-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                  <span className="text-xs text-cyan-300 font-medium">Chronicles</span>
-                  <span className="text-white/40">•</span>
-                  <span className="text-xs text-purple-300">Season Zero</span>
-                  <span className="text-white/40">•</span>
-                  <span className="text-xs text-pink-300">Coming Soon</span>
-                </div>
-              </motion.div>
 
           </motion.div>
         </div>
