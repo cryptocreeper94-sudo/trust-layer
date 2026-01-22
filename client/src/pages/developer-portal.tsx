@@ -6,7 +6,7 @@ import {
   ChevronDown, ChevronRight, BarChart3, Activity, Layers, 
   Zap, Database, Shield, Terminal, FileCode, BookOpen,
   ExternalLink, Copy, Check, RefreshCw, Key, AlertTriangle,
-  Gift, Coins, Target, CheckCircle
+  Gift, Coins, Target, CheckCircle, Network, Handshake
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/page-nav";
@@ -1079,6 +1079,88 @@ console.log('All successful:', result.allSuccessful);`}
             </Accordion>
           </BentoCard>
 
+          {/* Executive Briefing for Operations Lead */}
+          <BentoCard span={3} glow className="border-2 border-cyan-500/30 bg-gradient-to-br from-slate-900/80 to-slate-800/50">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500/30 to-purple-500/30 border border-cyan-500/40 flex items-center justify-center">
+                <Eye className="w-7 h-7 text-cyan-400" />
+              </div>
+              <div>
+                <h3 className="font-display font-bold text-2xl text-white">Executive Briefing</h3>
+                <p className="text-sm text-cyan-400">What's new and what we're building together</p>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div className="p-5 rounded-xl bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
+                <h4 className="font-semibold text-lg text-white mb-3 flex items-center gap-2">
+                  <Network className="w-5 h-5 text-cyan-400" />
+                  The Fractal Trust Network
+                </h4>
+                <p className="text-muted-foreground text-sm mb-4">
+                  DarkWave isn't just a blockchain - it's a <span className="text-white font-medium">Trust Cooperative</span>. 
+                  We're building a fractal pattern of interwoven trust nodes where each community is a centralized point 
+                  that connects to the larger network through lattice-work communication lines.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                  <div className="text-center p-3 rounded-lg bg-white/5">
+                    <p className="text-xs text-muted-foreground">Local Nodes</p>
+                    <p className="text-sm font-medium text-white">Communities of real people who know each other</p>
+                  </div>
+                  <div className="text-center p-3 rounded-lg bg-white/5">
+                    <p className="text-xs text-muted-foreground">Lattice Connections</p>
+                    <p className="text-sm font-medium text-white">Trust lines between nodes via vouching</p>
+                  </div>
+                  <div className="text-center p-3 rounded-lg bg-white/5">
+                    <p className="text-xs text-muted-foreground">Fractal Pattern</p>
+                    <p className="text-sm font-medium text-white">Each node mirrors the whole network structure</p>
+                  </div>
+                </div>
+                <p className="text-muted-foreground text-sm">
+                  Everyone agrees to the same <span className="text-cyan-400">Signal Core</span> principles. 
+                  That's why you don't have to worry - bad actors get identified and excluded. 
+                  Trust compounds through real human relationships, not algorithms.
+                </p>
+                <Link href="/trust-cooperative">
+                  <Button variant="outline" size="sm" className="mt-4 border-cyan-500/30 hover:bg-cyan-500/10" data-testid="button-read-coop-philosophy">
+                    Read Full Co-op Philosophy
+                    <ExternalLink className="w-3 h-3 ml-2" />
+                  </Button>
+                </Link>
+              </div>
+
+              <div className="p-5 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20">
+                <h4 className="font-semibold text-lg text-white mb-3 flex items-center gap-2">
+                  <Users className="w-5 h-5 text-purple-400" />
+                  Your Role: Operations Lead
+                </h4>
+                <p className="text-muted-foreground text-sm mb-3">
+                  You're being brought in at the ground floor to help build this. The <span className="text-white font-medium">Operations Seat</span> on 
+                  the Governance Council is designated for you once we hit 1,000 members. Until then, you're building 
+                  alongside the founder during the Stewardship Phase.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs">Council Seat Reserved</span>
+                  <span className="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-400 text-xs">5M SIG Allocation</span>
+                  <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-xs">Milestone-Based Vesting</span>
+                </div>
+              </div>
+
+              <div className="p-5 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20">
+                <h4 className="font-semibold text-lg text-white mb-3 flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-amber-400" />
+                  Accountability & Transparency
+                </h4>
+                <p className="text-muted-foreground text-sm">
+                  Everything we commit to is public and verifiable. The governance documents, treasury multi-sig, 
+                  allocation terms - it's all on-chain or documented where the community can hold us accountable. 
+                  We're not asking for blind trust. We're building systems that make trust unnecessary because 
+                  everything is transparent.
+                </p>
+              </div>
+            </div>
+          </BentoCard>
+
           {/* Governance & Foundation Documents */}
           <BentoCard span={3}>
             <div className="flex items-center gap-3 mb-6">
@@ -1091,12 +1173,20 @@ console.log('All successful:', result.allSuccessful);`}
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              <Link href="/trust-cooperative">
+                <div className="p-4 rounded-xl bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/20 hover:border-green-500/40 transition-all cursor-pointer group">
+                  <Handshake className="w-6 h-6 text-green-400 mb-3 group-hover:scale-110 transition-transform" />
+                  <h4 className="font-semibold text-white mb-1">Trust Cooperative</h4>
+                  <p className="text-xs text-muted-foreground">Our co-op philosophy and the fractal network vision.</p>
+                </div>
+              </Link>
+              
               <Link href="/signal-core">
                 <div className="p-4 rounded-xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 hover:border-cyan-500/40 transition-all cursor-pointer group">
                   <Zap className="w-6 h-6 text-cyan-400 mb-3 group-hover:scale-110 transition-transform" />
                   <h4 className="font-semibold text-white mb-1">Signal Core</h4>
-                  <p className="text-xs text-muted-foreground">The immutable principles that define who we are. Cannot be changed or voted away.</p>
+                  <p className="text-xs text-muted-foreground">The immutable principles that define who we are.</p>
                 </div>
               </Link>
               
@@ -1104,7 +1194,7 @@ console.log('All successful:', result.allSuccessful);`}
                 <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20 hover:border-purple-500/40 transition-all cursor-pointer group">
                   <BookOpen className="w-6 h-6 text-purple-400 mb-3 group-hover:scale-110 transition-transform" />
                   <h4 className="font-semibold text-white mb-1">Governance Charter</h4>
-                  <p className="text-xs text-muted-foreground">How we transition from founding to full community ownership over time.</p>
+                  <p className="text-xs text-muted-foreground">How we transition to full community control.</p>
                 </div>
               </Link>
               
