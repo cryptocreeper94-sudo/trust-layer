@@ -461,18 +461,15 @@ export default function Home() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.8 }}
-                className="mt-6 px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-600/20 via-orange-600/20 to-amber-600/20 border border-amber-500/40 backdrop-blur-sm"
+                className="mt-4 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-cyan-500/10 border border-cyan-500/30 backdrop-blur-sm"
                 data-testid="banner-chronicles-construction"
               >
-                <div className="flex items-center justify-center gap-3">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-                    <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">UNDER CONSTRUCTION</Badge>
-                  </div>
-                  <span className="text-white font-bold text-sm md:text-base">Chronicles Season Zero</span>
-                  <Sparkles className="w-4 h-4 text-amber-400" />
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                  <span className="text-xs text-cyan-300/80">Season Zero</span>
+                  <span className="text-white/40">•</span>
+                  <span className="text-xs text-purple-300/80">Coming Soon</span>
                 </div>
-                <p className="text-xs text-white/60 text-center mt-1">We're building something epic - Check back soon!</p>
               </motion.div>
 
             <div className="flex items-center justify-center gap-4 pt-4">
@@ -1035,9 +1032,9 @@ export default function Home() {
       <Footer />
 
       <Dialog open={showPresalePopup} onOpenChange={setShowPresalePopup}>
-        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white w-[85vw] max-w-[340px] shadow-[0_0_60px_rgba(0,200,255,0.3)] overflow-hidden">
-          <div className="flex flex-col items-center px-4 pb-4 pt-2">
-            <DialogHeader className="text-center">
+        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white w-[80vw] max-w-[320px] shadow-[0_0_60px_rgba(0,200,255,0.3)] overflow-hidden !p-0">
+          <div className="flex flex-col items-center p-4 w-full box-border">
+            <DialogHeader className="text-center w-full">
               <DialogTitle className="text-xl font-bold text-center">
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                   Signal Presale is LIVE
@@ -1048,9 +1045,9 @@ export default function Home() {
               </DialogDescription>
             </DialogHeader>
             
-            <div className="space-y-3 py-2">
+            <div className="space-y-3 py-2 w-full">
               <div className="flex items-center justify-center">
-                <img src={signalEmblem} alt="Signal" className="w-24 h-24 animate-pulse" />
+                <img src={signalEmblem} alt="Signal" className="w-20 h-20 animate-pulse" />
               </div>
               
               <div className="text-center space-y-1">
@@ -1058,7 +1055,7 @@ export default function Home() {
                 <p className="text-sm text-cyan-400 font-medium">Launch: $0.01 (10x potential)</p>
               </div>
               
-              <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg p-2 mx-auto max-w-[280px]">
+              <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg p-2 w-full">
                 <p className="text-sm text-green-400 text-center font-bold">
                   Up to 20% BONUS for early supporters
                 </p>
@@ -1069,7 +1066,7 @@ export default function Home() {
               </div>
             </div>
             
-            <Link href="/presale" className="block max-w-[280px] w-full mx-auto">
+            <Link href="/presale" className="block w-full">
               <Button 
                 onClick={() => setShowPresalePopup(false)}
                 className="w-full py-3 text-base font-bold bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg shadow-purple-500/25"
