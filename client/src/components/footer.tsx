@@ -91,67 +91,99 @@ export function Footer() {
 
   return (
     <>
-      <footer className="bg-black/80 backdrop-blur-xl border-t border-white/10 mt-auto">
-        <div className="container mx-auto px-4 py-3">
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
-            {/* Social Icons */}
-            <div className="flex items-center gap-3">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.name}
-                  href={social.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white/30 hover:text-cyan-400 transition-all duration-300 hover:scale-110"
-                  data-testid={`link-social-${social.name.toLowerCase()}`}
-                  title={social.name}
-                >
-                  {social.icon}
-                </a>
-              ))}
+      <footer className="bg-black/90 backdrop-blur-xl border-t border-white/10 mt-auto">
+        <div className="container mx-auto px-4 py-8">
+          {/* Main Footer Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+            {/* About */}
+            <div>
+              <h4 className="font-bold text-white mb-4 text-sm">About DarkWave</h4>
+              <ul className="space-y-2 text-xs text-white/60">
+                <li><Link href="/note" className="hover:text-cyan-400 transition-colors">Our Story</Link></li>
+                <li><Link href="/vision" className="hover:text-cyan-400 transition-colors">Vision</Link></li>
+                <li><Link href="/team" className="hover:text-cyan-400 transition-colors">Team</Link></li>
+                <li><Link href="/trust-layer" className="hover:text-cyan-400 transition-colors">Trust Layer</Link></li>
+              </ul>
             </div>
-            <span className="text-white/20">|</span>
-            <span className="font-semibold text-white">DarkWave Studios, LLC</span>
-            <span>© 2025-2026</span>
-            <span className="px-2 py-0.5 rounded bg-white/5 font-mono">v{APP_VERSION}</span>
-            <span className="flex items-center gap-1 px-2 py-0.5 rounded bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-white/10">
-              <svg viewBox="0 0 24 24" className="w-3 h-3 text-white/50" fill="currentColor">
-                <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
-              </svg>
-              <svg viewBox="0 0 24 24" className="w-3 h-3 text-white/50" fill="currentColor">
-                <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 010 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.8 8.99l-2.302 2.302-8.634-8.634z"/>
-              </svg>
-              <span className="text-[10px] text-white/40">Apps Coming Soon</span>
-            </span>
-            <button 
-              onClick={() => openModal("admin")}
-              className="text-white/30 hover:text-white/60 transition-colors"
-              data-testid="link-admin"
-            >
-              Admin
-            </button>
-            <button 
-              onClick={() => openModal("developer")}
-              className="text-white/30 hover:text-white/60 transition-colors"
-              data-testid="link-developer"
-            >
-              Developer
-            </button>
-            <span className="text-white/20">|</span>
-            <Link 
-              href="/privacy"
-              className="text-white/40 hover:text-cyan-400 transition-colors"
-              data-testid="link-privacy"
-            >
-              Privacy Policy
-            </Link>
-            <Link 
-              href="/terms"
-              className="text-white/40 hover:text-cyan-400 transition-colors"
-              data-testid="link-terms"
-            >
-              Terms of Service
-            </Link>
+            
+            {/* Ecosystem */}
+            <div>
+              <h4 className="font-bold text-white mb-4 text-sm">Ecosystem</h4>
+              <ul className="space-y-2 text-xs text-white/60">
+                <li><Link href="/token" className="hover:text-cyan-400 transition-colors">SIG Token</Link></li>
+                <li><Link href="/staking" className="hover:text-cyan-400 transition-colors">Staking</Link></li>
+                <li><Link href="/bridge" className="hover:text-cyan-400 transition-colors">Bridge</Link></li>
+                <li><Link href="/explorer" className="hover:text-cyan-400 transition-colors">Block Explorer</Link></li>
+              </ul>
+            </div>
+            
+            {/* Resources */}
+            <div>
+              <h4 className="font-bold text-white mb-4 text-sm">Resources</h4>
+              <ul className="space-y-2 text-xs text-white/60">
+                <li><Link href="/academy" className="hover:text-cyan-400 transition-colors">Academy</Link></li>
+                <li><Link href="/api-docs" className="hover:text-cyan-400 transition-colors">API Docs</Link></li>
+                <li><Link href="/faq" className="hover:text-cyan-400 transition-colors">FAQ</Link></li>
+                <li><Link href="/feedback" className="hover:text-cyan-400 transition-colors">Feedback</Link></li>
+              </ul>
+            </div>
+            
+            {/* Community */}
+            <div>
+              <h4 className="font-bold text-white mb-4 text-sm">Community</h4>
+              <div className="flex gap-3 mb-4">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.name}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/40 hover:text-cyan-400 transition-all duration-300 hover:scale-110"
+                    data-testid={`link-social-${social.name.toLowerCase()}`}
+                    title={social.name}
+                  >
+                    {social.icon}
+                  </a>
+                ))}
+              </div>
+              <p className="text-xs text-white/40">Join 150K+ community members</p>
+            </div>
+          </div>
+          
+          {/* Bottom Bar */}
+          <div className="pt-6 border-t border-white/10">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-4 text-xs text-white/50">
+                <span className="font-semibold text-white">DarkWave Studios, LLC</span>
+                <span>© 2025-2026</span>
+                <span className="px-2 py-0.5 rounded bg-white/5 font-mono">v{APP_VERSION}</span>
+              </div>
+              
+              <div className="flex items-center gap-4 text-xs">
+                <span className="flex items-center gap-1 px-2 py-1 rounded bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-white/10">
+                  <svg viewBox="0 0 24 24" className="w-3 h-3 text-white/50" fill="currentColor">
+                    <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+                  </svg>
+                  <svg viewBox="0 0 24 24" className="w-3 h-3 text-white/50" fill="currentColor">
+                    <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 010 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.8 8.99l-2.302 2.302-8.634-8.634z"/>
+                  </svg>
+                  <span className="text-white/40">Apps Coming Soon</span>
+                </span>
+                
+                <Link href="/privacy" className="text-white/40 hover:text-cyan-400 transition-colors" data-testid="link-privacy">
+                  Privacy
+                </Link>
+                <Link href="/terms" className="text-white/40 hover:text-cyan-400 transition-colors" data-testid="link-terms">
+                  Terms
+                </Link>
+                <button onClick={() => openModal("admin")} className="text-white/30 hover:text-white/60 transition-colors" data-testid="link-admin">
+                  Admin
+                </button>
+                <button onClick={() => openModal("developer")} className="text-white/30 hover:text-white/60 transition-colors" data-testid="link-developer">
+                  Developer
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
