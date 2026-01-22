@@ -486,31 +486,8 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex items-center justify-center pt-2 text-xs text-muted-foreground">
-              <a href="https://darkwavechain.io" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">darkwavechain.io</a>
-            </div>
           </motion.div>
         </div>
-        
-        <motion.div 
-          className="absolute bottom-20 left-4 flex flex-col items-center cursor-pointer z-20"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-          data-testid="button-scroll-down-left"
-        >
-          <ChevronDown className="w-6 h-6 text-primary" />
-        </motion.div>
-        
-        <motion.div 
-          className="absolute bottom-20 right-4 flex flex-col items-center cursor-pointer z-20"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
-          onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-          data-testid="button-scroll-down-right"
-        >
-          <ChevronDown className="w-6 h-6 text-primary" />
-        </motion.div>
       </section>
 
       <section className="py-12 px-4">
