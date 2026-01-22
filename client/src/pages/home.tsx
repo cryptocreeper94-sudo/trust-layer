@@ -1011,10 +1011,10 @@ export default function Home() {
       <Footer />
 
       <Dialog open={showPresalePopup} onOpenChange={setShowPresalePopup}>
-        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white w-[80vw] max-w-[320px] shadow-[0_0_60px_rgba(0,200,255,0.3)] overflow-hidden !p-0">
-          <div className="flex flex-col items-center p-4 pt-8 w-full box-border">
-            <DialogHeader className="text-center w-full">
-              <DialogTitle className="text-xl font-bold text-center">
+        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white max-w-[300px] shadow-[0_0_60px_rgba(0,200,255,0.3)] overflow-hidden [&>button]:top-2 [&>button]:right-2">
+          <div className="flex flex-col items-center pt-4">
+            <DialogHeader className="text-center">
+              <DialogTitle className="text-lg font-bold text-center">
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                   Signal Presale is LIVE
                 </span>
@@ -1024,35 +1024,35 @@ export default function Home() {
               </DialogDescription>
             </DialogHeader>
             
-            <div className="space-y-3 py-2 w-full">
+            <div className="space-y-3 py-2">
               <div className="flex items-center justify-center">
-                <img src={signalEmblem} alt="Signal" className="w-20 h-20 animate-pulse" />
+                <img src={signalEmblem} alt="Signal" className="w-16 h-16 animate-pulse" />
               </div>
               
               <div className="text-center space-y-1">
-                <p className="text-2xl font-bold text-white">$0.001 <span className="text-sm text-gray-400">per SIG</span></p>
-                <p className="text-sm text-cyan-400 font-medium">Launch: $0.01 (10x potential)</p>
+                <p className="text-xl font-bold text-white">$0.001 <span className="text-sm text-gray-400">per SIG</span></p>
+                <p className="text-sm text-cyan-400 font-medium">Launch: $0.01 (10x)</p>
               </div>
               
-              <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg p-2 w-full">
+              <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg p-2">
                 <p className="text-sm text-green-400 text-center font-bold">
-                  Up to 20% BONUS for early supporters
+                  Up to 20% BONUS
                 </p>
               </div>
               
               <div className="text-center text-xs text-gray-400">
-                <p>No wallet needed • Card & crypto accepted</p>
+                <p>No wallet needed</p>
               </div>
             </div>
             
-            <Link href="/presale" className="block w-full">
+            <Link href="/presale" className="block w-full mt-2">
               <Button 
                 onClick={() => setShowPresalePopup(false)}
-                className="w-full py-3 text-base font-bold bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg shadow-purple-500/25"
+                className="w-full py-2.5 text-sm font-bold bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg shadow-purple-500/25"
                 data-testid="button-go-to-presale"
               >
-                <Rocket className="w-5 h-5 mr-2" />
-                Get Your Signal Now
+                <Rocket className="w-4 h-4 mr-2" />
+                Get Signal Now
               </Button>
             </Link>
           </div>
