@@ -220,8 +220,38 @@ app.get('/api/health', (_req, res) => {
   });
 });
 
+// Graceful shutdown handler
+function gracefulShutdown(signal: string) {
+  console.log(`[Shutdown] Received ${signal}, closing server gracefully...`);
+  httpServer.close(() => {
+    console.log('[Shutdown] Server closed');
+    process.exit(0);
+  });
+  setTimeout(() => {
+    console.error('[Shutdown] Forced exit after timeout');
+    process.exit(1);
+  }, 5000);
+}
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+
 // Start server IMMEDIATELY - opens port 5000 right away
 const port = parseInt(process.env.PORT || "5000", 10);
+
+httpServer.on('error', (err: any) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`[Error] Port ${port} is already in use. Waiting 2s and retrying...`);
+    setTimeout(() => {
+      httpServer.close();
+      httpServer.listen({ port, host: "0.0.0.0", reusePort: true });
+    }, 2000);
+  } else {
+    console.error('[Error] Server error:', err);
+    process.exit(1);
+  }
+});
+
 httpServer.listen(
   {
     port,
