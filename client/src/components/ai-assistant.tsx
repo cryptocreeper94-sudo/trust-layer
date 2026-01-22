@@ -284,42 +284,32 @@ export function AIAssistant() {
         )}
       </AnimatePresence>
 
-      {/* Main floating button */}
+      {/* Main floating button - docked on right edge */}
       <AnimatePresence>
         {!isMinimized && (
           <motion.button
-            className="fixed bottom-48 right-4 z-50 w-14 h-14 rounded-full overflow-hidden shadow-[0_0_30px_rgba(0,255,255,0.4)] hover:shadow-[0_0_50px_rgba(0,255,255,0.6)] transition-shadow duration-300 border-2 border-cyan-500/50 hover:border-cyan-400"
+            className="fixed bottom-32 right-0 z-50 bg-gradient-to-l from-cyan-500 to-purple-500 text-white px-2 py-4 rounded-l-lg shadow-lg"
             onClick={() => setIsOpen(!isOpen)}
             onContextMenu={(e) => { e.preventDefault(); toggleMinimized(); }}
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
+            initial={{ x: 50 }}
+            animate={{ x: 0 }}
+            exit={{ x: 50 }}
+            whileHover={{ x: -4 }}
             data-testid="button-ai-assistant"
             aria-label="Open AI Assistant"
           >
-            <img 
-              src="/icons/icon-192x192.png" 
-              alt="DarkWave AI" 
-              className="w-full h-full object-cover"
-            />
-            {isOpen && (
-              <motion.div
-                className="absolute inset-0 bg-black/60 flex items-center justify-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                <X className="w-6 h-6 text-white" />
-              </motion.div>
-            )}
-            {!isOpen && (
-              <motion.div
-                className="absolute -top-1 -right-1 w-4 h-4 bg-cyan-400 rounded-full"
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ repeat: Infinity, duration: 2 }}
+            <div className="flex flex-col items-center gap-1">
+              <img 
+                src="/icons/icon-192x192.png" 
+                alt="DarkWave AI" 
+                className="w-8 h-8 rounded-full"
               />
-            )}
+              {isOpen ? (
+                <X className="w-4 h-4" />
+              ) : (
+                <span className="text-[10px] font-bold" style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}>AI</span>
+              )}
+            </div>
           </motion.button>
         )}
       </AnimatePresence>
@@ -327,10 +317,10 @@ export function AIAssistant() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed bottom-64 right-4 z-50 w-[360px] max-w-[calc(100vw-32px)] h-[400px] max-h-[60vh] bg-gray-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_60px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden"
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.9 }}
+            className="fixed bottom-48 right-0 z-50 w-[360px] max-w-[calc(100vw-16px)] h-[400px] max-h-[60vh] bg-gray-900/95 backdrop-blur-xl border border-white/10 rounded-l-2xl shadow-[0_0_60px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 50 }}
             transition={{ duration: 0.2 }}
             data-testid="ai-assistant-panel"
           >
