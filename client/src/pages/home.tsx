@@ -475,7 +475,7 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="w-full px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center">
-            <span className="font-display font-bold text-xl tracking-tight">DarkWave</span>
+            <img src={signalEmblem} alt="Home" className="w-8 h-8" />
           </Link>
           <div className="flex items-center gap-2 sm:gap-3">
             {isAuthenticated && user?.id && (
@@ -522,7 +522,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="max-w-3xl mx-auto space-y-6"
+            className="max-w-3xl mx-auto space-y-6 mt-6"
           >
             <Badge variant="outline" className="px-3 py-1 border-primary/50 text-primary bg-primary/10 rounded-full text-xs font-tech tracking-wider uppercase">
               The Next Generation Ecosystem
