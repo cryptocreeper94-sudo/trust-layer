@@ -38,15 +38,31 @@ async function isAuthenticated(req: any, res: Response, next: NextFunction) {
       }
     }
     
-    // Priority 2: Check Bearer token with PROPER Firebase signature verification
+    // Priority 2: Check session token in Authorization header (cross-domain support)
     const authHeader = req.headers.authorization;
     if (authHeader?.startsWith('Bearer ')) {
-      const idToken = authHeader.substring(7);
+      const token = authHeader.substring(7);
       
-      // SECURITY: Properly verify Firebase token signature using Admin SDK
-      const decodedToken = await verifyFirebaseIdToken(idToken);
+      // Check if it's a session token (64 char hex string)
+      if (/^[a-f0-9]{64}$/.test(token)) {
+        const [user] = await db.select().from(users)
+          .where(eq(users.sessionToken, token))
+          .limit(1);
+        
+        if (user && user.sessionTokenExpiry && new Date(user.sessionTokenExpiry) > new Date()) {
+          req.user = { 
+            claims: { sub: user.id },
+            id: user.id,
+            email: user.email 
+          };
+          req.firebaseUser = { uid: user.id, email: user.email || undefined };
+          return next();
+        }
+      }
+      
+      // Try Firebase token verification
+      const decodedToken = await verifyFirebaseIdToken(token);
       if (decodedToken) {
-        // Token is cryptographically verified - look up user in our database
         const user = await storage.getUser(decodedToken.uid);
         if (user) {
           req.user = { 
@@ -1507,15 +1523,25 @@ export async function registerRoutes(
         req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
       }
 
-      // Explicitly save session before sending response
+      // Generate a session token for cross-domain auth
+      const sessionToken = crypto.randomBytes(32).toString('hex');
+      const tokenExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+      
+      // Store token in user record
+      await db.update(users).set({
+        sessionToken,
+        sessionTokenExpiry: tokenExpiry,
+      }).where(eq(users.id, user.id));
+      
+      // Also save to session for cookie-based auth (backup)
       req.session.save((err) => {
         if (err) {
           console.error("[Login] Session save error:", err);
-          return res.status(500).json({ error: "Failed to save session" });
         }
         console.log("[Login] Session saved for user:", user.id, "sessionID:", req.sessionID);
         res.json({ 
           success: true, 
+          sessionToken,
           user: {
             id: user.id,
             email: user.email,
@@ -1533,9 +1559,27 @@ export async function registerRoutes(
   // Get current user session
   app.get("/api/auth/me", async (req, res) => {
     try {
-      console.log("[Auth/Me] Session check - sessionID:", req.sessionID, "cookie:", req.headers.cookie?.substring(0, 100));
-      const userId = (req.session as any)?.userId;
-      console.log("[Auth/Me] userId from session:", userId);
+      let userId = (req.session as any)?.userId;
+      
+      // Check Authorization header for token-based auth (cross-domain support)
+      if (!userId) {
+        const authHeader = req.headers.authorization;
+        if (authHeader?.startsWith('Bearer ')) {
+          const token = authHeader.substring(7);
+          
+          // Check if it's a session token (64 char hex string)
+          if (/^[a-f0-9]{64}$/.test(token)) {
+            const [tokenUser] = await db.select().from(users)
+              .where(eq(users.sessionToken, token))
+              .limit(1);
+            
+            if (tokenUser && tokenUser.sessionTokenExpiry && new Date(tokenUser.sessionTokenExpiry) > new Date()) {
+              userId = tokenUser.id;
+            }
+          }
+        }
+      }
+      
       if (!userId) {
         return res.json({ user: null });
       }

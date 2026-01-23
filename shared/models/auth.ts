@@ -29,6 +29,8 @@ export const users = pgTable("users", {
   phoneNumber: varchar("phone_number"),
   phoneVerified: boolean("phone_verified").default(false),
   emailVerified: boolean("email_verified").default(false),
+  sessionToken: varchar("session_token"),
+  sessionTokenExpiry: timestamp("session_token_expiry"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

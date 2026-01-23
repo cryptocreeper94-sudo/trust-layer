@@ -75,6 +75,27 @@ function mapFirebaseUser(firebaseUser: FirebaseUser): User {
 }
 
 const USER_STORAGE_KEY = 'dwtl_user';
+const SESSION_TOKEN_KEY = 'dwtl_session_token';
+
+function saveSessionToken(token: string | null) {
+  try {
+    if (token) {
+      localStorage.setItem(SESSION_TOKEN_KEY, token);
+    } else {
+      localStorage.removeItem(SESSION_TOKEN_KEY);
+    }
+  } catch (e) {
+    console.warn('Failed to save session token:', e);
+  }
+}
+
+function getSessionToken(): string | null {
+  try {
+    return localStorage.getItem(SESSION_TOKEN_KEY);
+  } catch (e) {
+    return null;
+  }
+}
 
 function saveUserToStorage(userData: User | null) {
   try {
@@ -83,6 +104,7 @@ function saveUserToStorage(userData: User | null) {
       localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(storable));
     } else {
       localStorage.removeItem(USER_STORAGE_KEY);
+      localStorage.removeItem(SESSION_TOKEN_KEY);
     }
   } catch (e) {
     console.warn('Failed to save user to storage:', e);
@@ -102,6 +124,22 @@ function loadUserFromStorage(): User | null {
   return null;
 }
 
+// Helper to make authenticated fetch requests
+export function authFetch(url: string, options: RequestInit = {}): Promise<Response> {
+  const token = getSessionToken();
+  const headers = new Headers(options.headers);
+  
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`);
+  }
+  
+  return fetch(url, {
+    ...options,
+    headers,
+    credentials: 'include',
+  });
+}
+
 export function useFirebaseAuth() {
   const queryClient = useQueryClient();
   const [user, setUser] = useState<User | null>(() => loadUserFromStorage());
@@ -112,7 +150,8 @@ export function useFirebaseAuth() {
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await fetch("/api/auth/me", { credentials: 'include' });
+        // Use authFetch to include the session token if available
+        const response = await authFetch("/api/auth/me");
         const data = await response.json();
         if (data.user) {
           const userData: User = {
@@ -128,9 +167,14 @@ export function useFirebaseAuth() {
           setUser(userData);
           saveUserToStorage(userData);
         } else {
+          // If server says no user but we have stored data and token, keep using it
           const stored = loadUserFromStorage();
-          if (stored) {
+          const token = getSessionToken();
+          if (stored && token) {
             setUser(stored);
+          } else {
+            setUser(null);
+            saveUserToStorage(null);
           }
         }
       } catch (err) {
@@ -187,6 +231,11 @@ export function useFirebaseAuth() {
       
       if (!response.ok) {
         throw new Error(data.error || "Login failed");
+      }
+      
+      // Save the session token for cross-domain auth
+      if (data.sessionToken) {
+        saveSessionToken(data.sessionToken);
       }
       
       // Create a simple user object from the API response
