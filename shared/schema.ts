@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, boolean, serial, integer, real } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, boolean, serial, integer, real, jsonb } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -7441,3 +7441,22 @@ export const tokenWatchlist = pgTable('token_watchlist', {
 });
 
 export type TokenWatchlist = typeof tokenWatchlist.$inferSelect;
+
+// Trust Documents - Official agreements recorded on-chain
+export const trustDocuments = pgTable('trust_documents', {
+  id: serial('id').primaryKey(),
+  documentId: varchar('document_id', { length: 50 }).notNull().unique(),
+  documentTitle: text('document_title').notNull(),
+  partyA: text('party_a').notNull(),
+  partyB: text('party_b').notNull(),
+  partyBRole: text('party_b_role').notNull(),
+  terms: jsonb('terms').notNull(),
+  documentHash: text('document_hash').notNull(),
+  acknowledgedAt: timestamp('acknowledged_at').defaultNow().notNull(),
+  acknowledgedBy: text('acknowledged_by'),
+  acknowledgedByUserId: text('acknowledged_by_user_id'),
+  ipAddress: text('ip_address'),
+  userAgent: text('user_agent'),
+});
+
+export type TrustDocument = typeof trustDocuments.$inferSelect;

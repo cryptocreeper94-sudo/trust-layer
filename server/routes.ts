@@ -803,6 +803,93 @@ export async function registerRoutes(
     }
   });
 
+  // Trust Documents - Acknowledge and record official agreements
+  app.post("/api/trust-documents/acknowledge", async (req: Request, res: Response) => {
+    try {
+      const { documentId, documentTitle, role, allocation, terms } = req.body;
+      
+      if (!documentId || !documentTitle || !role) {
+        return res.status(400).json({ error: "Missing required document fields" });
+      }
+
+      // Check if already acknowledged
+      const existing = await db.execute(sql`
+        SELECT * FROM trust_documents WHERE document_id = ${documentId} LIMIT 1
+      `);
+
+      if (existing.rows.length > 0) {
+        return res.status(400).json({ 
+          error: "This document has already been acknowledged",
+          hash: existing.rows[0].document_hash 
+        });
+      }
+
+      // Create document content for hashing
+      const documentContent = JSON.stringify({
+        documentId,
+        documentTitle,
+        partyA: "DarkWave Studios LLC",
+        partyB: "Operations Lead Designate",
+        role,
+        allocation,
+        terms,
+        acknowledgedAt: new Date().toISOString()
+      });
+
+      // Generate hash
+      const documentHash = crypto.createHash('sha256').update(documentContent).digest('hex');
+
+      // Store in database
+      await db.execute(sql`
+        INSERT INTO trust_documents (
+          document_id, document_title, party_a, party_b, party_b_role, 
+          terms, document_hash, ip_address, user_agent
+        ) VALUES (
+          ${documentId}, 
+          ${documentTitle}, 
+          'DarkWave Studios LLC', 
+          'Kan',
+          ${role},
+          ${JSON.stringify({ allocation, terms })}::jsonb,
+          ${documentHash},
+          ${req.ip || 'unknown'},
+          ${req.get('User-Agent') || 'unknown'}
+        )
+      `);
+
+      console.log(`[Trust Document] ${documentId} acknowledged - Hash: ${documentHash.substring(0, 16)}...`);
+
+      return res.json({ 
+        success: true, 
+        hash: documentHash,
+        message: "Document acknowledged and recorded"
+      });
+    } catch (error) {
+      console.error("Trust document error:", error);
+      return res.status(500).json({ error: "Failed to record acknowledgment" });
+    }
+  });
+
+  // Get trust document by ID
+  app.get("/api/trust-documents/:documentId", async (req: Request, res: Response) => {
+    try {
+      const { documentId } = req.params;
+      
+      const result = await db.execute(sql`
+        SELECT * FROM trust_documents WHERE document_id = ${documentId} LIMIT 1
+      `);
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: "Document not found" });
+      }
+
+      return res.json({ success: true, document: result.rows[0] });
+    } catch (error) {
+      console.error("Get trust document error:", error);
+      return res.status(500).json({ error: "Failed to fetch document" });
+    }
+  });
+
   // Admin: Get all partner requests
   app.get("/api/partner/requests", isAuthenticated, async (req: Request, res: Response) => {
     try {

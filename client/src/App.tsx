@@ -41,6 +41,7 @@ const Verify = lazy(() => import("@/pages/verify"));
 const GovernanceCharter = lazy(() => import("@/pages/governance-charter"));
 const GovernanceTreasury = lazy(() => import("@/pages/governance-treasury"));
 const TrustCooperative = lazy(() => import("@/pages/trust-cooperative"));
+const TrustDocumentOps = lazy(() => import("@/pages/trust-document-ops"));
 const Philosophy = lazy(() => import("@/pages/philosophy"));
 const GamesHome = lazy(() => import("@/pages/games-home"));
 const GameDeveloper = lazy(() => import("@/pages/game-developer"));
@@ -376,6 +377,7 @@ function DWSCRouter() {
         <Route path="/governance-treasury" component={GovernanceTreasury} />
         <Route path="/trust-cooperative" component={TrustCooperative} />
         <Route path="/cooperative" component={TrustCooperative} />
+        <Route path="/trust-document/ops-lead" component={TrustDocumentOps} />
         <Route path="/philosophy" component={Philosophy} />
         <Route path="/blog" component={Blog} />
         <Route path="/blog/:slug" component={BlogPost} />
