@@ -1322,7 +1322,7 @@ export default function Home() {
         setShowPresalePopup(open);
         if (!open) sessionStorage.setItem("presale_popup_seen", "true");
       }}>
-        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white max-w-[340px] shadow-[0_0_60px_rgba(0,200,255,0.3)] overflow-hidden [&>button]:top-2 [&>button]:right-2">
+        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white max-w-[420px] shadow-[0_0_60px_rgba(0,200,255,0.3)] overflow-hidden [&>button]:top-2 [&>button]:right-2">
           <div className="flex flex-col items-center pt-4">
             <DialogHeader className="text-center">
               <DialogTitle className="text-lg font-bold text-center">
@@ -1337,7 +1337,7 @@ export default function Home() {
             
             <div className="space-y-3 py-2 w-full">
               <div className="flex items-center justify-center">
-                <img src={signalEmblem} alt="Signal" className="w-14 h-14 animate-pulse" />
+                <img src={signalEmblem} alt="Signal" className="w-72 h-72 animate-pulse" />
               </div>
               
               <div className="text-center space-y-1">
@@ -1389,17 +1389,6 @@ export default function Home() {
                     </>
                   )}
                 </Button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    sessionStorage.setItem("presale_popup_seen", "true");
-                    setShowPresalePopup(false);
-                  }}
-                  className="w-full text-xs text-gray-500 hover:text-gray-400 py-1"
-                  data-testid="button-skip-registration"
-                >
-                  Skip for now
-                </button>
               </form>
             )}
 
