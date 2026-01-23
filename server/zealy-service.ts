@@ -12,6 +12,10 @@ import {
 import { shellsService } from "./shells-service";
 import { storage } from "./storage";
 
+// Zealy API configuration
+const ZEALY_API_BASE = "https://api-v2.zealy.io/public/communities";
+const ZEALY_SUBDOMAIN = "darkwave";
+
 // Tier multipliers for 90-day campaign
 const TIER_CONFIG = {
   founders: { multiplier: 2.0, minQuests: 50, minDays: 30 },
@@ -552,6 +556,260 @@ class ZealyService {
       .from(zealyQuestEvents)
       .orderBy(zealyQuestEvents.createdAt)
       .limit(limit);
+  }
+
+  // ============================================
+  // ZEALY API SYNC - Pulls quest completions directly
+  // ============================================
+
+  async syncFromApi(): Promise<{ processed: number; awarded: number; errors: string[] }> {
+    const apiKey = process.env.ZEALY_API_KEY;
+    if (!apiKey) {
+      console.error("[Zealy API] ZEALY_API_KEY not configured");
+      return { processed: 0, awarded: 0, errors: ["ZEALY_API_KEY not configured"] };
+    }
+
+    const results = { processed: 0, awarded: 0, errors: [] as string[] };
+    let cursor: string | null = null;
+    let hasMore = true;
+
+    try {
+      while (hasMore) {
+        const url = cursor 
+          ? `${ZEALY_API_BASE}/${ZEALY_SUBDOMAIN}/reviews?cursor=${encodeURIComponent(cursor)}`
+          : `${ZEALY_API_BASE}/${ZEALY_SUBDOMAIN}/reviews`;
+
+        console.log(`[Zealy API] Fetching: ${url}`);
+
+        const response = await fetch(url, {
+          headers: {
+            "x-api-key": apiKey,
+            "Accept": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(`[Zealy API] Error ${response.status}: ${errorText}`);
+          results.errors.push(`API error ${response.status}: ${errorText}`);
+          break;
+        }
+
+        const data = await response.json() as {
+          items: Array<{
+            id: string;
+            user: {
+              id: string;
+              name: string;
+              avatar?: string;
+              verifiedAddresses?: {
+                email?: string;
+                wallet?: string;
+              };
+            };
+            quest: {
+              id: string;
+              name: string;
+            };
+            status: string;
+            createdAt: string;
+          }>;
+          nextCursor?: string;
+        };
+
+        console.log(`[Zealy API] Got ${data.items?.length || 0} reviews`);
+
+        if (!data.items || data.items.length === 0) {
+          hasMore = false;
+          break;
+        }
+
+        for (const review of data.items) {
+          // Only process approved quests
+          if (review.status !== "success" && review.status !== "approved") {
+            continue;
+          }
+
+          results.processed++;
+
+          try {
+            await this.processApiReview(review);
+            results.awarded++;
+          } catch (error: any) {
+            const errMsg = `Failed to process review ${review.id}: ${error.message}`;
+            console.error(`[Zealy API] ${errMsg}`);
+            results.errors.push(errMsg);
+          }
+        }
+
+        cursor = data.nextCursor || null;
+        hasMore = !!cursor;
+
+        // Rate limit protection - 50 req/sec max
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
+    } catch (error: any) {
+      console.error(`[Zealy API] Sync failed:`, error);
+      results.errors.push(`Sync failed: ${error.message}`);
+    }
+
+    console.log(`[Zealy API] Sync complete: ${results.processed} processed, ${results.awarded} awarded, ${results.errors.length} errors`);
+    return results;
+  }
+
+  private async processApiReview(review: {
+    id: string;
+    user: {
+      id: string;
+      name: string;
+      verifiedAddresses?: {
+        email?: string;
+        wallet?: string;
+      };
+    };
+    quest: {
+      id: string;
+      name: string;
+    };
+    createdAt: string;
+  }): Promise<void> {
+    const zealyUserId = review.user.id;
+    const questId = review.quest.id;
+    const requestId = review.id; // Use review ID as unique request ID
+
+    // Check if already processed
+    const existingEvent = await db
+      .select()
+      .from(zealyQuestEvents)
+      .where(eq(zealyQuestEvents.zealyRequestId, requestId))
+      .limit(1);
+
+    if (existingEvent.length > 0) {
+      return; // Already processed
+    }
+
+    // Get or create quest mapping
+    let mapping = await db
+      .select()
+      .from(zealyQuestMappings)
+      .where(
+        and(
+          eq(zealyQuestMappings.zealyQuestId, questId),
+          eq(zealyQuestMappings.isActive, true)
+        )
+      )
+      .limit(1)
+      .then((r) => r[0]);
+
+    if (!mapping) {
+      console.log(`[Zealy API] Auto-creating quest mapping for ${questId}: ${review.quest.name}`);
+      const [newMapping] = await db.insert(zealyQuestMappings).values({
+        zealyQuestId: questId,
+        zealyQuestName: review.quest.name || `Zealy Quest ${questId}`,
+        shellsReward: RECOMMENDED_QUEST_REWARD,
+        isActive: true,
+      }).returning();
+      mapping = newMapping;
+    }
+
+    // Find DarkWave user by email
+    const email = review.user.verifiedAddresses?.email;
+    let userId: string | null = null;
+
+    if (email) {
+      const user = await storage.getUserByEmail(email);
+      if (user) {
+        userId = user.id;
+      }
+    }
+
+    // Record the event
+    await db.insert(zealyQuestEvents).values({
+      zealyUserId,
+      zealyQuestId: questId,
+      zealyRequestId: requestId,
+      zealyCommunityId: ZEALY_SUBDOMAIN,
+      userId: userId || null,
+      email: email || null,
+      status: userId ? "processed" : "pending_user_match",
+      shellsGranted: userId ? mapping.shellsReward : 0,
+      rawPayload: JSON.stringify(review),
+      processedAt: userId ? new Date() : null,
+    });
+
+    // Award shells if user found
+    if (userId && mapping.shellsReward > 0) {
+      await shellsService.addShells(
+        userId,
+        review.user.name || "Zealy User",
+        mapping.shellsReward,
+        "bonus",
+        `Zealy Quest: ${review.quest.name || questId}`,
+        requestId,
+        "zealy_quest",
+        true // bypass caps for Zealy rewards
+      );
+      console.log(`[Zealy API] Awarded ${mapping.shellsReward} shells to user ${userId} for quest ${review.quest.name}`);
+    }
+  }
+
+  // Get pending events that need user matching
+  async getPendingUserMatches(): Promise<ZealyQuestEvent[]> {
+    return db
+      .select()
+      .from(zealyQuestEvents)
+      .where(eq(zealyQuestEvents.status, "pending_user_match"));
+  }
+
+  // Retry matching pending events to users
+  async retryPendingMatches(): Promise<{ matched: number; stillPending: number }> {
+    const pending = await this.getPendingUserMatches();
+    let matched = 0;
+
+    for (const event of pending) {
+      if (!event.email) continue;
+
+      const user = await storage.getUserByEmail(event.email);
+      if (user) {
+        // Get the quest mapping for shell reward
+        const mapping = await db
+          .select()
+          .from(zealyQuestMappings)
+          .where(eq(zealyQuestMappings.zealyQuestId, event.zealyQuestId))
+          .limit(1)
+          .then((r) => r[0]);
+
+        const shellReward = mapping?.shellsReward || RECOMMENDED_QUEST_REWARD;
+
+        // Update event with user match
+        await db
+          .update(zealyQuestEvents)
+          .set({
+            userId: user.id,
+            status: "processed",
+            shellsGranted: shellReward,
+            processedAt: new Date(),
+          })
+          .where(eq(zealyQuestEvents.id, event.id));
+
+        // Award shells
+        await shellsService.addShells(
+          user.id,
+          user.username || "Zealy User",
+          shellReward,
+          "bonus",
+          `Zealy Quest: ${mapping?.zealyQuestName || event.zealyQuestId}`,
+          event.zealyRequestId,
+          "zealy_quest",
+          true
+        );
+
+        matched++;
+        console.log(`[Zealy API] Matched pending event to user ${user.id}, awarded ${shellReward} shells`);
+      }
+    }
+
+    return { matched, stillPending: pending.length - matched };
   }
 }
 

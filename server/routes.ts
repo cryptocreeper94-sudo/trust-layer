@@ -15560,6 +15560,37 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // Sync Zealy quest completions via API (bypasses webhooks)
+  app.post("/api/owner/zealy/sync", ownerAuthMiddleware, async (req, res) => {
+    try {
+      console.log("[Zealy API Sync] Manual sync triggered");
+      const results = await zealyService.syncFromApi();
+      res.json({ 
+        success: true, 
+        message: `Synced ${results.processed} quests, awarded shells to ${results.awarded}`,
+        ...results 
+      });
+    } catch (error: any) {
+      console.error("Zealy API sync error:", error);
+      res.status(500).json({ error: "Failed to sync from Zealy API", details: error.message });
+    }
+  });
+
+  // Retry matching pending Zealy events to users
+  app.post("/api/owner/zealy/retry-matches", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const results = await zealyService.retryPendingMatches();
+      res.json({ 
+        success: true, 
+        message: `Matched ${results.matched} pending events, ${results.stillPending} still pending`,
+        ...results 
+      });
+    } catch (error: any) {
+      console.error("Zealy retry matches error:", error);
+      res.status(500).json({ error: "Failed to retry matches", details: error.message });
+    }
+  });
+
   // Get Shell reward stats
   app.get("/api/owner/shells/stats", ownerAuthMiddleware, async (req, res) => {
     try {
