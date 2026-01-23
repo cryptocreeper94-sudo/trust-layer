@@ -5,7 +5,8 @@ import { Link } from "wouter";
 import { 
   BarChart3, Users, Megaphone, Gift, Handshake, DollarSign, 
   Zap, TrendingUp, Activity, Globe, Gamepad2, Crown, Settings,
-  ArrowRight, ExternalLink, Clock, CheckCircle2, AlertTriangle
+  ArrowRight, ExternalLink, Clock, CheckCircle2, AlertTriangle,
+  Target, Coins, Rocket, Lock, Unlock
 } from "lucide-react";
 import { MobileNav } from "@/components/mobile-nav";
 
@@ -218,6 +219,109 @@ export default function AdminDashboard() {
             </div>
           </BentoCard>
         </div>
+
+        {/* Operations Lead Allocation Tracker */}
+        <BentoCard span="row" glow="purple" className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <Target className="w-5 h-5 text-purple-400" />
+              Operations Lead Allocation Progress
+            </h2>
+            <div className="flex items-center gap-2">
+              <Coins className="w-4 h-4 text-yellow-400" />
+              <span className="text-yellow-400 font-bold">5,000,000 SIG</span>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Progress Visualization */}
+            <div>
+              <p className="text-sm text-gray-400 mb-4">
+                Allocation unlocks progressively as market cap milestones are reached. 
+                Each tier vests over 3 months (50% immediate, 50% over next 2 months).
+              </p>
+              
+              <div className="space-y-3">
+                {[
+                  { tier: 1, marketCap: "$1M", sig: "500K", value: "$5,000", progress: 0 },
+                  { tier: 2, marketCap: "$2.5M", sig: "750K", value: "$18,750", progress: 0 },
+                  { tier: 3, marketCap: "$5M", sig: "1M", value: "$50,000", progress: 0 },
+                  { tier: 4, marketCap: "$7.5M", sig: "1.25M", value: "$93,750", progress: 0 },
+                  { tier: 5, marketCap: "$10M", sig: "1.5M", value: "$150,000", progress: 0 },
+                ].map((tier, i) => (
+                  <div key={tier.tier} className="relative">
+                    <div className="flex items-center justify-between text-sm mb-1">
+                      <div className="flex items-center gap-2">
+                        {tier.progress >= 100 ? (
+                          <Unlock className="w-4 h-4 text-green-400" />
+                        ) : (
+                          <Lock className="w-4 h-4 text-gray-500" />
+                        )}
+                        <span className={tier.progress >= 100 ? "text-green-400" : "text-gray-400"}>
+                          Tier {tier.tier}: {tier.marketCap} Market Cap
+                        </span>
+                      </div>
+                      <span className="text-cyan-400 font-mono">{tier.sig} SIG</span>
+                    </div>
+                    <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                      <motion.div 
+                        className="h-full bg-gradient-to-r from-purple-500 to-cyan-500"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${tier.progress}%` }}
+                        transition={{ duration: 1, delay: i * 0.2 }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Value Projection */}
+            <div className="bg-slate-800/50 rounded-xl p-4 border border-white/5">
+              <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                <Rocket className="w-5 h-5 text-pink-400" />
+                Potential Value at Scale
+              </h3>
+              <div className="space-y-2">
+                {[
+                  { price: "$0.01", label: "TGE", value: "$50,000", mcap: "$10M" },
+                  { price: "$0.05", label: "Growth", value: "$250,000", mcap: "$50M" },
+                  { price: "$0.10", label: "Milestone", value: "$500,000", mcap: "$100M" },
+                  { price: "$0.25", label: "Expansion", value: "$1,250,000", mcap: "$250M" },
+                  { price: "$0.50", label: "Scale", value: "$2,500,000", mcap: "$500M" },
+                  { price: "$1.00", label: "Vision", value: "$5,000,000", mcap: "$1B" },
+                ].map((proj, i) => (
+                  <motion.div 
+                    key={proj.price}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 + i * 0.1 }}
+                    className="flex items-center justify-between py-2 border-b border-white/5 last:border-0"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-gray-500 w-16">{proj.label}</span>
+                      <span className="text-sm text-gray-300">{proj.price}/SIG</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-green-400 font-bold">{proj.value}</span>
+                      <span className="text-xs text-gray-500 ml-2">({proj.mcap})</span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+              <p className="text-xs text-gray-500 mt-4 italic">
+                * Values shown assume full 5M SIG allocation is vested. Actual value depends on milestone completion and market conditions.
+              </p>
+            </div>
+          </div>
+          
+          <div className="mt-6 p-4 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 rounded-lg border border-purple-500/20">
+            <p className="text-sm text-gray-300">
+              <span className="text-purple-400 font-semibold">Remember:</span> This allocation is earned through consistent contribution, loyalty, and results. 
+              Review your <Link href="/trust-document/ops-lead" className="text-cyan-400 hover:underline">Trust Document</Link> for full terms.
+            </p>
+          </div>
+        </BentoCard>
 
         <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
           <Settings className="w-6 h-6 text-purple-400" />
