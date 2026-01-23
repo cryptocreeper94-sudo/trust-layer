@@ -58,7 +58,7 @@ export default function WelcomePage() {
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
 
-        <div className="relative z-10 container mx-auto px-4 py-12">
+        <div className="relative z-10 container mx-auto px-6 sm:px-8 py-16 pt-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -104,11 +104,11 @@ export default function WelcomePage() {
             transition={{ delay: 0.2 }}
             className="max-w-3xl mx-auto mb-16"
           >
-            <GlassCard glow className="p-6 sm:p-8">
-              <h2 className="text-xl font-bold text-white mb-4 text-center">
+            <GlassCard glow className="p-8 sm:p-10 shadow-2xl shadow-cyan-500/10">
+              <h2 className="text-xl font-bold text-white mb-6 text-center">
                 What is This Place?
               </h2>
-              <div className="space-y-4 text-slate-300">
+              <div className="space-y-5 text-slate-300 leading-relaxed">
                 <p>
                   <strong className="text-white">DarkWave Trust Layer</strong> is your space — a community-owned ecosystem 
                   where individuals and businesses build trust and do business differently. No hype. No empty promises. 
@@ -140,7 +140,7 @@ export default function WelcomePage() {
               Where Would You Like to Start?
             </h2>
             
-            <div className="grid sm:grid-cols-2 gap-4 max-w-4xl mx-auto">
+            <div className="grid sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
               {PATHWAYS.map((path, i) => (
                 <motion.div
                   key={path.title}
@@ -151,13 +151,13 @@ export default function WelcomePage() {
                   <Link href={path.link}>
                     <GlassCard 
                       glow 
-                      className="p-6 h-full cursor-pointer hover:border-white/20 transition-all group"
+                      className="p-8 h-full cursor-pointer hover:border-white/20 hover:shadow-xl hover:shadow-cyan-500/10 transition-all group shadow-lg shadow-black/20"
                     >
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${path.color} flex items-center justify-center mb-4`}>
-                        <path.icon className="w-6 h-6 text-white" />
+                      <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${path.color} flex items-center justify-center mb-5 shadow-lg`}>
+                        <path.icon className="w-7 h-7 text-white" />
                       </div>
-                      <h3 className="text-lg font-semibold text-white mb-2">{path.title}</h3>
-                      <p className="text-sm text-slate-400 mb-4">{path.description}</p>
+                      <h3 className="text-lg font-semibold text-white mb-3">{path.title}</h3>
+                      <p className="text-sm text-slate-400 mb-5 leading-relaxed">{path.description}</p>
                       <div className="flex items-center gap-2 text-cyan-400 text-sm font-medium group-hover:gap-3 transition-all">
                         {path.linkText}
                         <ChevronRight className="w-4 h-4" />
@@ -179,18 +179,18 @@ export default function WelcomePage() {
               The DarkWave Ecosystem
             </h2>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-5 max-w-4xl mx-auto">
               {ECOSYSTEM_HIGHLIGHTS.map((item, i) => (
                 <motion.div
                   key={item.label}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.7 + i * 0.1 }}
-                  className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 text-center"
+                  className="p-6 rounded-xl bg-slate-800/50 border border-slate-700/50 text-center shadow-lg shadow-black/20 backdrop-blur-sm"
                 >
-                  <item.icon className="w-8 h-8 text-cyan-400 mx-auto mb-2" />
-                  <p className="text-sm font-semibold text-white">{item.label}</p>
-                  <p className="text-xs text-slate-400">{item.desc}</p>
+                  <item.icon className="w-10 h-10 text-cyan-400 mx-auto mb-3" />
+                  <p className="text-sm font-semibold text-white mb-1">{item.label}</p>
+                  <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -202,13 +202,13 @@ export default function WelcomePage() {
             transition={{ delay: 0.8 }}
             className="max-w-3xl mx-auto mb-16"
           >
-            <GlassCard className="p-6 sm:p-8 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/30">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
-                  <Heart className="w-6 h-6 text-white" />
+            <GlassCard className="p-8 sm:p-10 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/30 shadow-2xl shadow-purple-500/10">
+              <div className="flex items-start gap-5">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0 shadow-lg">
+                  <Heart className="w-7 h-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white mb-2">Disrupting the Noise</h3>
+                  <h3 className="text-lg font-bold text-white mb-3">Disrupting the Noise</h3>
                   <p className="text-slate-300 text-sm leading-relaxed">
                     The noise is everywhere — projects that promise everything and deliver nothing. 
                     We're different. We're building your Trust Layer for the long haul. No hype cycles. 
