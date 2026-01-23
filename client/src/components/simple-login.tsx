@@ -325,19 +325,14 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
                     className="bg-white/5 border-white/10 h-12"
                     data-testid="input-name"
                   />
-                  <div>
-                    <Input
-                      type="text"
-                      placeholder="Username"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
-                      className="bg-white/5 border-white/10 h-12"
-                      data-testid="input-username"
-                    />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Lowercase letters, numbers, underscores only (min 2 characters)
-                    </p>
-                  </div>
+                  <Input
+                    type="text"
+                    placeholder="Username (your ecosystem identity)"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
+                    className="bg-white/5 border-white/10 h-12"
+                    data-testid="input-username"
+                  />
                 </>
               )}
 
