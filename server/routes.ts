@@ -2809,7 +2809,6 @@ export async function registerRoutes(
             email: "owner@darkwave.io",
             displayName: "Owner",
             username: "owner",
-            role: "owner",
           });
         }
         if (ownerUser) {
