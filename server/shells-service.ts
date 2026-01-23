@@ -14,8 +14,8 @@ import {
 } from "@shared/schema";
 import { getUncachableStripeClient } from "./stripeClient";
 
-// SIG Conversion rate: 1 SIG = 100 Shells (launches April 11, 2026)
-export const DWC_CONVERSION_RATE = 100;
+// SIG Conversion rate: 1 SIG = 10 Shells (launches April 11, 2026)
+export const DWC_CONVERSION_RATE = 10;
 export const DWC_LAUNCH_DATE = "2026-04-11";
 
 // Earning caps to protect SIG supply (1B total = 100B Shells max)

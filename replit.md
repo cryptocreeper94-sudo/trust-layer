@@ -74,6 +74,17 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **Signal Foundation**: 0% - Will be a separate initiative with its own funding/asset.
 - **Chronicles Game Economy**: 0% - Uses Echoes (separate, non-convertible currency).
 
+### Referral Rewards System (LOCKED - January 21, 2026)
+- **Base Reward**: 1,000 Shells per signup (guaranteed)
+- **Purchase Bonus Tiers** (if referral buys, minimum $5):
+  - $5-$24 = +5,000 Shells
+  - $25-$49 = +10,000 Shells
+  - $50-$99 = +20,000 Shells
+  - $100+ = +50,000 Shells
+- **Payout Schedule**: Automatic scans twice daily at 8:00 AM and 8:00 PM Central
+- **No Limits**: Unlimited referrals, no caps on earnings
+- **Claim Window**: Wallet required before launch; 30 days after TGE to claim (unclaimed returns to treasury)
+
 ### Launch Philosophy
 - **Milestone-Based, Not Date-Based**: No fixed TGE date. Launch when community, product, and presale targets are met.
 - **Sustainable Growth**: $10M market cap at TGE is intentionally conservative. Leaves room for organic growth vs pump-and-dump.
