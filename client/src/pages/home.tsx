@@ -441,14 +441,53 @@ export default function Home() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showGamesModal, setShowGamesModal] = useState(false);
   const [showPresalePopup, setShowPresalePopup] = useState(false);
+  const [quickRegFirstName, setQuickRegFirstName] = useState("");
+  const [quickRegEmail, setQuickRegEmail] = useState("");
+  const [quickRegLoading, setQuickRegLoading] = useState(false);
+  const [quickRegSuccess, setQuickRegSuccess] = useState(false);
+  const [quickRegError, setQuickRegError] = useState("");
   usePageAnalytics();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setShowPresalePopup(true);
+      const hasSeenPopup = sessionStorage.getItem("presale_popup_seen");
+      if (!hasSeenPopup) {
+        setShowPresalePopup(true);
+      }
     }, 800);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleQuickRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!quickRegFirstName.trim() || !quickRegEmail.trim()) {
+      setQuickRegError("Please enter your name and email");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(quickRegEmail)) {
+      setQuickRegError("Please enter a valid email address");
+      return;
+    }
+    setQuickRegLoading(true);
+    setQuickRegError("");
+    try {
+      const response = await fetch("/api/auth/quick-register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ firstName: quickRegFirstName.trim(), email: quickRegEmail.trim().toLowerCase() }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Registration failed");
+      }
+      setQuickRegSuccess(true);
+      sessionStorage.setItem("presale_popup_seen", "true");
+    } catch (err: any) {
+      setQuickRegError(err.message || "Something went wrong");
+    } finally {
+      setQuickRegLoading(false);
+    }
+  };
   
   const { data: apps = [], isLoading: appsLoading } = useQuery({
     queryKey: ["ecosystem-apps"],
@@ -1279,8 +1318,11 @@ export default function Home() {
 
       <Footer />
 
-      <Dialog open={showPresalePopup} onOpenChange={setShowPresalePopup}>
-        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white max-w-[300px] shadow-[0_0_60px_rgba(0,200,255,0.3)] overflow-hidden [&>button]:top-2 [&>button]:right-2">
+      <Dialog open={showPresalePopup} onOpenChange={(open) => {
+        setShowPresalePopup(open);
+        if (!open) sessionStorage.setItem("presale_popup_seen", "true");
+      }}>
+        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white max-w-[340px] shadow-[0_0_60px_rgba(0,200,255,0.3)] overflow-hidden [&>button]:top-2 [&>button]:right-2">
           <div className="flex flex-col items-center pt-4">
             <DialogHeader className="text-center">
               <DialogTitle className="text-lg font-bold text-center">
@@ -1293,9 +1335,9 @@ export default function Home() {
               </DialogDescription>
             </DialogHeader>
             
-            <div className="space-y-3 py-2">
+            <div className="space-y-3 py-2 w-full">
               <div className="flex items-center justify-center">
-                <img src={signalEmblem} alt="Signal" className="w-16 h-16 animate-pulse" />
+                <img src={signalEmblem} alt="Signal" className="w-14 h-14 animate-pulse" />
               </div>
               
               <div className="text-center space-y-1">
@@ -1308,22 +1350,79 @@ export default function Home() {
                   Up to 20% BONUS
                 </p>
               </div>
-              
-              <div className="text-center text-xs text-gray-400">
-                <p>No wallet needed</p>
-              </div>
             </div>
-            
-            <Link href="/presale" className="block w-full mt-2">
-              <Button 
-                onClick={() => setShowPresalePopup(false)}
-                className="w-full py-2.5 text-sm font-bold bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg shadow-purple-500/25"
-                data-testid="button-go-to-presale"
-              >
-                <Rocket className="w-4 h-4 mr-2" />
-                Get Signal Now
-              </Button>
-            </Link>
+
+            {!isAuthenticated && !quickRegSuccess && (
+              <form onSubmit={handleQuickRegister} className="w-full space-y-2 mt-2 border-t border-white/10 pt-3">
+                <p className="text-xs text-gray-400 text-center mb-2">Register to get started</p>
+                <input
+                  type="text"
+                  placeholder="First Name"
+                  value={quickRegFirstName}
+                  onChange={(e) => setQuickRegFirstName(e.target.value)}
+                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder:text-gray-500 focus:outline-none focus:border-cyan-500/50"
+                  data-testid="input-quick-reg-firstname"
+                />
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  value={quickRegEmail}
+                  onChange={(e) => setQuickRegEmail(e.target.value)}
+                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder:text-gray-500 focus:outline-none focus:border-cyan-500/50"
+                  data-testid="input-quick-reg-email"
+                />
+                {quickRegError && (
+                  <p className="text-xs text-red-400 text-center">{quickRegError}</p>
+                )}
+                <Button 
+                  type="submit"
+                  disabled={quickRegLoading}
+                  className="w-full py-2.5 text-sm font-bold bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg shadow-purple-500/25"
+                  data-testid="button-quick-register"
+                >
+                  {quickRegLoading ? (
+                    <span className="animate-pulse">Registering...</span>
+                  ) : (
+                    <>
+                      <Rocket className="w-4 h-4 mr-2" />
+                      Register & View Presale
+                    </>
+                  )}
+                </Button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    sessionStorage.setItem("presale_popup_seen", "true");
+                    setShowPresalePopup(false);
+                  }}
+                  className="w-full text-xs text-gray-500 hover:text-gray-400 py-1"
+                  data-testid="button-skip-registration"
+                >
+                  Skip for now
+                </button>
+              </form>
+            )}
+
+            {(isAuthenticated || quickRegSuccess) && (
+              <div className="w-full mt-2">
+                {quickRegSuccess && (
+                  <div className="flex items-center justify-center gap-2 text-green-400 text-sm mb-2">
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Welcome aboard!</span>
+                  </div>
+                )}
+                <Link href="/presale" className="block w-full">
+                  <Button 
+                    onClick={() => setShowPresalePopup(false)}
+                    className="w-full py-2.5 text-sm font-bold bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg shadow-purple-500/25"
+                    data-testid="button-go-to-presale"
+                  >
+                    <Rocket className="w-4 h-4 mr-2" />
+                    Get Signal Now
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>

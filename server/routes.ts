@@ -1342,6 +1342,57 @@ export async function registerRoutes(
     }
   });
 
+  // Quick Registration (name + email only, for lead capture)
+  app.post("/api/auth/quick-register", authRateLimit, async (req, res) => {
+    try {
+      const { firstName, email } = req.body;
+      
+      if (!firstName || !email) {
+        return res.status(400).json({ error: "Name and email are required" });
+      }
+
+      const normalizedEmail = email.toLowerCase().trim();
+      
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(normalizedEmail);
+      if (existingUser) {
+        // User already exists, just return success (they're already registered)
+        return res.json({ 
+          success: true, 
+          message: "Welcome back!",
+          isExisting: true,
+          user: { id: existingUser.id, email: existingUser.email, firstName: existingUser.firstName }
+        });
+      }
+
+      // Create new user with just name and email (no password - they'll set one later if they want full access)
+      const newUser = await storage.createUser({
+        email: normalizedEmail,
+        firstName: firstName.trim(),
+        lastName: null,
+        username: normalizedEmail.split('@')[0],
+        passwordHash: null, // No password yet - quick registration only
+        isEmailVerified: false,
+        profileImageUrl: null,
+      });
+      
+      console.log(`[Quick Register] New lead captured: ${normalizedEmail}`);
+      
+      res.json({ 
+        success: true, 
+        message: "Registration successful",
+        isExisting: false,
+        user: { id: newUser.id, email: newUser.email, firstName: newUser.firstName }
+      });
+    } catch (error: any) {
+      console.error("Quick register error:", error);
+      if (error.message?.includes("duplicate") || error.code === "23505") {
+        return res.json({ success: true, message: "Welcome back!", isExisting: true });
+      }
+      res.status(500).json({ error: "Registration failed. Please try again." });
+    }
+  });
+
   // Simple Email/Password Login (no Firebase required)
   app.post("/api/auth/login", authRateLimit, async (req, res) => {
     try {
