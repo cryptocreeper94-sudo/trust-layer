@@ -426,8 +426,8 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
           border: '1px solid rgba(168, 85, 247, 0.2)'
         }}>
           {isAuthenticated ? (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: 0 }}>
                 <div style={{
                   width: '36px',
                   height: '36px',
@@ -436,14 +436,15 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  flexShrink: 0,
                 }}>
                   <User style={{ width: '18px', height: '18px', color: '#fff' }} />
                 </div>
-                <div>
-                  <div style={{ fontSize: '13px', fontWeight: 600, color: '#fff' }}>
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div style={{ fontSize: '13px', fontWeight: 600, color: '#fff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {displayName || 'Welcome back!'}
                   </div>
-                  <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)' }}>
+                  <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {user?.email || 'Logged in'}
                   </div>
                 </div>
@@ -461,6 +462,8 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
                   color: 'rgba(255,255,255,0.7)',
                   fontSize: '12px',
                   cursor: 'pointer',
+                  flexShrink: 0,
+                  whiteSpace: 'nowrap',
                 }}
                 data-testid="button-mobile-signout"
               >
