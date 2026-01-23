@@ -125,7 +125,7 @@ export default function WelcomePage() {
               Trust Layer
             </h1>
             
-            <p className="text-xl text-slate-300 max-w-2xl mx-auto mb-6">
+            <p className="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto mb-6 leading-relaxed">
               This isn't our project — it's yours. A community-owned space where 
               your identity is verified, your voice matters, and your participation 
               shapes everything we build together.
@@ -263,8 +263,8 @@ export default function WelcomePage() {
                       <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${path.color} flex items-center justify-center mb-5 shadow-lg`}>
                         <path.icon className="w-7 h-7 text-white" />
                       </div>
-                      <h3 className="text-lg font-semibold text-white mb-3">{path.title}</h3>
-                      <p className="text-sm text-slate-400 mb-5 leading-relaxed">{path.description}</p>
+                      <h3 className="text-lg font-semibold text-white mb-4">{path.title}</h3>
+                      <p className="text-base text-slate-400 mb-5 leading-relaxed">{path.description}</p>
                       <div className="flex items-center gap-2 text-cyan-400 text-sm font-medium group-hover:gap-3 transition-all">
                         {path.linkText}
                         <ChevronRight className="w-4 h-4" />
@@ -295,9 +295,9 @@ export default function WelcomePage() {
                   transition={{ delay: 0.7 + i * 0.1 }}
                   className="p-6 rounded-xl bg-slate-800/50 border border-slate-700/50 text-center shadow-lg shadow-black/20 backdrop-blur-sm"
                 >
-                  <item.icon className="w-10 h-10 text-cyan-400 mx-auto mb-3" />
-                  <p className="text-sm font-semibold text-white mb-1">{item.label}</p>
-                  <p className="text-xs text-slate-400 leading-relaxed">{item.desc}</p>
+                  <item.icon className="w-10 h-10 text-cyan-400 mx-auto mb-4" />
+                  <p className="text-base font-semibold text-white mb-2">{item.label}</p>
+                  <p className="text-sm text-slate-400 leading-relaxed">{item.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -309,14 +309,14 @@ export default function WelcomePage() {
             transition={{ delay: 0.8 }}
             className="max-w-3xl mx-auto mb-16"
           >
-            <GlassCard className="p-8 sm:p-10 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/30 shadow-2xl shadow-purple-500/10">
-              <div className="flex items-start gap-5">
+            <GlassCard className="p-6 sm:p-8 md:p-10 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/30 shadow-2xl shadow-purple-500/10">
+              <div className="flex flex-col sm:flex-row items-start gap-5">
                 <div className="w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0 shadow-lg">
                   <Heart className="w-7 h-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white mb-3">Disrupting the Noise</h3>
-                  <p className="text-slate-300 text-sm leading-relaxed">
+                  <h3 className="text-xl font-bold text-white mb-4">Disrupting the Noise</h3>
+                  <p className="text-slate-300 text-base leading-relaxed">
                     The noise is everywhere — projects that promise everything and deliver nothing. 
                     We're different. We're building your Trust Layer for the long haul. No hype cycles. 
                     No shortcuts. Just a community that grows together, at the right pace, 
@@ -333,8 +333,8 @@ export default function WelcomePage() {
             transition={{ delay: 0.9 }}
             className="text-center mb-12"
           >
-            <h2 className="text-2xl font-bold text-white mb-4">Ready to Explore?</h2>
-            <p className="text-slate-400 mb-6 max-w-xl mx-auto">
+            <h2 className="text-2xl font-bold text-white mb-5">Ready to Explore?</h2>
+            <p className="text-base sm:text-lg text-slate-400 mb-8 max-w-xl mx-auto leading-relaxed">
               Create a free account to save your progress, earn rewards, and become part of the community.
             </p>
             
