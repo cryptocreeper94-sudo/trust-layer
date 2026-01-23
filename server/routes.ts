@@ -1449,7 +1449,7 @@ export async function registerRoutes(
         lastName: null,
         username: normalizedEmail.split('@')[0],
         passwordHash: null, // No password yet - quick registration only
-        isEmailVerified: false,
+        emailVerified: false,
         profileImageUrl: null,
       });
       
