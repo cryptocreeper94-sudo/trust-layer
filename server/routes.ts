@@ -8672,9 +8672,7 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Valid email required" });
       }
       
-      if (!name || name.trim().length < 2) {
-        return res.status(400).json({ error: "Name required (at least 2 characters)" });
-      }
+      const customerName = (name && name.trim().length >= 2) ? name.trim() : email.split("@")[0];
       
       const finalAmount = amountCents || 1000;
       
@@ -8761,7 +8759,7 @@ export async function registerRoutes(
         metadata: {
           type: "presale",
           tier: tier || "custom",
-          name: name.trim(),
+          name: customerName,
           email: email,
           tokenAmount: String(tokenAmount),
           bonusTokens: String(bonusTokens),
