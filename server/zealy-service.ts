@@ -23,13 +23,13 @@ const TIER_CONFIG = {
 // Cap on Founders tier (first 10 only)
 const FOUNDERS_TIER_CAP = 10;
 
-// Recommended base reward per quest for 90-day campaign
-// At 10,000 Shells per quest:
-// - Founders (2x): 50 quests × 10,000 × 2 = 1,000,000 Shells = $1,000 at launch
-// - Core (1.5x): 50 quests × 10,000 × 1.5 = 750,000 Shells = $750 at launch
-// - Active (1.2x): 50 quests × 10,000 × 1.2 = 600,000 Shells = $600 at launch
-// - Participant (1x): 50 quests × 10,000 × 1 = 500,000 Shells = $500 at launch
-export const RECOMMENDED_QUEST_REWARD = 10000;
+// Base reward per quest for 90-day campaign
+// At 1,000 Shells per quest:
+// - Founders (2x): 50 quests × 1,000 × 2 = 100,000 Shells = $100 at launch
+// - Core (1.5x): 50 quests × 1,000 × 1.5 = 75,000 Shells = $75 at launch
+// - Active (1.2x): 50 quests × 1,000 × 1.2 = 60,000 Shells = $60 at launch
+// - Participant (1x): 50 quests × 1,000 × 1 = 50,000 Shells = $50 at launch
+export const RECOMMENDED_QUEST_REWARD = 1000;
 
 export interface ZealyWebhookPayload {
   userId: string;
