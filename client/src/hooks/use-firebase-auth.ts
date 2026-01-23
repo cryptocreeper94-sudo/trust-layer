@@ -143,14 +143,14 @@ export function useFirebaseAuth() {
     }
   }, []);
 
-  const signup = useCallback(async (email: string, password: string, displayName?: string) => {
+  const signup = useCallback(async (email: string, password: string, displayName?: string, username?: string) => {
     setError(null);
     try {
       // Use local API for registration (more reliable than Firebase)
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, firstName: displayName }),
+        body: JSON.stringify({ email, password, displayName, username }),
       });
       
       const data = await response.json();

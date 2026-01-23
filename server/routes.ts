@@ -1186,20 +1186,11 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Password must contain at least one special character (!@#$%^&*)" });
       }
 
-      if (!username || username.length < 2) {
-        return res.status(400).json({ error: "Username must be at least 2 characters" });
-      }
-
-      // Validate username format: lowercase letters, numbers, underscores only
-      const usernameRegex = /^[a-z0-9_]+$/;
-      if (!usernameRegex.test(username)) {
-        return res.status(400).json({ error: "Username can only contain lowercase letters, numbers, and underscores" });
-      }
-
-      // Check if user already exists
+      // Check if user already exists FIRST (before username validation)
       const existingUser = await storage.getUserByEmail(normalizedEmail);
       if (existingUser) {
         // If user exists but has no password, allow them to set one (upgrade from quick-register)
+        // Skip username validation for existing accounts - they already have an account
         if (!existingUser.passwordHash) {
           // Hash password with SHA-256 + salt
           const salt = crypto.randomBytes(16).toString('hex');
@@ -1231,6 +1222,17 @@ export async function registerRoutes(
           });
         }
         return res.status(400).json({ error: "An account with this email already exists. Please log in instead." });
+      }
+
+      // Username validation for new users only
+      if (!username || username.length < 2) {
+        return res.status(400).json({ error: "Username must be at least 2 characters" });
+      }
+
+      // Validate username format: lowercase letters, numbers, underscores only
+      const usernameRegex = /^[a-z0-9_]+$/;
+      if (!usernameRegex.test(username)) {
+        return res.status(400).json({ error: "Username can only contain lowercase letters, numbers, and underscores" });
       }
 
       // Check if username is taken
