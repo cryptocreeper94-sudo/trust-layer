@@ -102,15 +102,21 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
     }
     setLoading(true);
     try {
+      console.log("[Signup] Attempting registration for:", email, username);
       const result = await signup(email, password, name || undefined, username);
+      console.log("[Signup] Result:", result);
       if (result.success) {
         toast({ title: "Account created!", description: "Welcome to DarkWave!" });
         onSuccess?.();
         handleClose();
         window.location.reload();
       } else {
-        toast({ title: "Registration failed", description: result.error, variant: "destructive" });
+        console.error("[Signup] Failed:", result.error);
+        toast({ title: "Registration failed", description: result.error || "Unknown error occurred", variant: "destructive" });
       }
+    } catch (err: any) {
+      console.error("[Signup] Exception:", err);
+      toast({ title: "Registration error", description: err?.message || "Something went wrong", variant: "destructive" });
     } finally {
       setLoading(false);
     }

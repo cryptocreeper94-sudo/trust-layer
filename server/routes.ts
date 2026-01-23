@@ -1161,8 +1161,10 @@ export async function registerRoutes(
   app.post("/api/auth/register", authRateLimit, async (req, res) => {
     try {
       const { email, password, displayName, username, rememberMe } = req.body;
+      console.log("[Auth/Register] Request received for:", email, "username:", username);
       
       if (!email || !password) {
+        console.log("[Auth/Register] Validation failed: missing email or password");
         return res.status(400).json({ error: "Email and password are required" });
       }
       
