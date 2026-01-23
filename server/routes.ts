@@ -2589,7 +2589,7 @@ export async function registerRoutes(
   const portalPinAttempts = new Map<string, { count: number; lastAttempt: number }>();
   app.post("/api/portal/verify-pin", rateLimit("portal-pin", 5, 60000), async (req, res) => {
     try {
-      const { pin, portalType } = req.body;
+      const { pin } = req.body;
       const clientIp = req.ip || req.connection.remoteAddress || "unknown";
       
       // Check for lockout
@@ -2606,50 +2606,47 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Invalid PIN format" });
       }
       
-      // Developer PIN - owner full access (0424)
+      // Developer PIN - owner full access (Jason) -> Developer portal
       const developerPin = process.env.DEVELOPER_PIN || "0424";
-      // Admin PIN - limited access (keep existing)
+      // Admin PIN - limited access (Kan) -> Admin portal
       const adminPin = process.env.ADMIN_PIN || process.env.TEAM_ACCESS_PIN || "1234";
       
-      let isValid = false;
-      let redirect = "";
+      const pinBuffer = Buffer.from(pin);
       
-      if (portalType === "developer") {
-        const pinBuffer = Buffer.from(pin);
-        const devPinBuffer = Buffer.from(developerPin);
-        isValid = pinBuffer.length === devPinBuffer.length && 
-                  crypto.timingSafeEqual(pinBuffer, devPinBuffer);
-        redirect = "/owner-admin";
-      } else if (portalType === "admin") {
-        const pinBuffer = Buffer.from(pin);
-        const adminPinBuffer = Buffer.from(adminPin);
-        isValid = pinBuffer.length === adminPinBuffer.length && 
-                  crypto.timingSafeEqual(pinBuffer, adminPinBuffer);
-        redirect = "/admin";
-      }
+      // Check Developer PIN first (Jason -> full access)
+      const devPinBuffer = Buffer.from(developerPin);
+      const isDeveloper = pinBuffer.length === devPinBuffer.length && 
+                crypto.timingSafeEqual(pinBuffer, devPinBuffer);
       
-      if (isValid) {
+      // Check Admin PIN (Kan -> limited access)
+      const adminPinBuffer = Buffer.from(adminPin);
+      const isAdmin = pinBuffer.length === adminPinBuffer.length && 
+                crypto.timingSafeEqual(pinBuffer, adminPinBuffer);
+      
+      if (isDeveloper) {
         portalPinAttempts.delete(clientIp);
         
-        // For developer PIN, also create a session so they're logged in everywhere
-        if (portalType === "developer") {
-          // Find or create owner account
-          let ownerUser = await storage.getUserByEmail("owner@darkwave.io");
-          if (!ownerUser) {
-            ownerUser = await storage.createUser({
-              email: "owner@darkwave.io",
-              displayName: "Owner",
-              username: "owner",
-              role: "owner",
-            });
-          }
-          // Create session
-          if (ownerUser) {
-            (req.session as any).userId = ownerUser.id;
-          }
+        // Create owner session for full access
+        let ownerUser = await storage.getUserByEmail("owner@darkwave.io");
+        if (!ownerUser) {
+          ownerUser = await storage.createUser({
+            email: "owner@darkwave.io",
+            displayName: "Owner",
+            username: "owner",
+            role: "owner",
+          });
+        }
+        if (ownerUser) {
+          (req.session as any).userId = ownerUser.id;
         }
         
-        res.json({ success: true, redirect });
+        console.log(`[Team Access] Developer login from ${clientIp}`);
+        res.json({ success: true, redirect: "/owner-admin", portalType: "developer" });
+      } else if (isAdmin) {
+        portalPinAttempts.delete(clientIp);
+        
+        console.log(`[Team Access] Admin login from ${clientIp}`);
+        res.json({ success: true, redirect: "/admin", portalType: "admin" });
       } else {
         const current = portalPinAttempts.get(clientIp) || { count: 0, lastAttempt: 0 };
         portalPinAttempts.set(clientIp, { count: current.count + 1, lastAttempt: Date.now() });
