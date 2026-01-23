@@ -2768,10 +2768,12 @@ export async function registerRoutes(
         portalPinAttempts.delete(clientIp);
       }
       
-      if (!pin || typeof pin !== "string" || pin.length < 4) {
-        return res.status(400).json({ error: "Invalid PIN format" });
+      if (!pin || typeof pin !== "string" || pin.length < 1) {
+        return res.status(400).json({ error: "Invalid access code" });
       }
       
+      // OWNER_SECRET - full owner access (highest priority)
+      const ownerSecret = process.env.OWNER_SECRET;
       // Developer PIN - owner full access (Jason) -> Developer portal
       const developerPin = process.env.DEVELOPER_PIN || "0424";
       // Admin PIN - limited access (Kan) -> Admin portal
@@ -2779,7 +2781,15 @@ export async function registerRoutes(
       
       const pinBuffer = Buffer.from(pin);
       
-      // Check Developer PIN first (Jason -> full access)
+      // Check OWNER_SECRET first (highest priority - full owner access)
+      let isOwner = false;
+      if (ownerSecret) {
+        const ownerBuffer = Buffer.from(ownerSecret);
+        isOwner = pinBuffer.length === ownerBuffer.length && 
+                  crypto.timingSafeEqual(pinBuffer, ownerBuffer);
+      }
+      
+      // Check Developer PIN (Jason -> full access)
       const devPinBuffer = Buffer.from(developerPin);
       const isDeveloper = pinBuffer.length === devPinBuffer.length && 
                 crypto.timingSafeEqual(pinBuffer, devPinBuffer);
@@ -2789,7 +2799,7 @@ export async function registerRoutes(
       const isAdmin = pinBuffer.length === adminPinBuffer.length && 
                 crypto.timingSafeEqual(pinBuffer, adminPinBuffer);
       
-      if (isDeveloper) {
+      if (isOwner || isDeveloper) {
         portalPinAttempts.delete(clientIp);
         
         // Create owner session for full access
@@ -2806,8 +2816,9 @@ export async function registerRoutes(
           (req.session as any).userId = ownerUser.id;
         }
         
-        console.log(`[Team Access] Developer login from ${clientIp}`);
-        res.json({ success: true, redirect: "/owner-admin", portalType: "developer" });
+        const accessType = isOwner ? "Owner" : "Developer";
+        console.log(`[Team Access] ${accessType} login from ${clientIp}`);
+        res.json({ success: true, redirect: "/owner-admin", portalType: "owner" });
       } else if (isAdmin) {
         portalPinAttempts.delete(clientIp);
         

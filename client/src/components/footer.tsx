@@ -212,8 +212,7 @@ export function Footer() {
                 type="password"
                 value={pin}
                 onChange={(e) => { setPin(e.target.value); setError(false); }}
-                placeholder="Enter PIN"
-                maxLength={4}
+                placeholder="Enter Access Code"
                 className="w-full px-4 py-3 bg-black/30 border border-white/10 rounded-lg text-center text-xl tracking-widest font-mono mb-3"
                 autoFocus
                 data-testid="input-team-pin"
