@@ -102,7 +102,7 @@ class ZealyService {
       };
     }
 
-    const [questMapping] = await db
+    let [questMapping] = await db
       .select()
       .from(zealyQuestMappings)
       .where(
@@ -112,28 +112,21 @@ class ZealyService {
         )
       );
 
+    // AUTO-CREATE mapping if it doesn't exist - use default reward
     if (!questMapping) {
-      await this.logEvent({
-        zealyUserId,
+      console.log(`[Zealy] Auto-creating quest mapping for ${questId} with default ${RECOMMENDED_QUEST_REWARD} shells`);
+      const [newMapping] = await db.insert(zealyQuestMappings).values({
         zealyQuestId: questId,
-        zealyRequestId: requestId,
-        zealyCommunityId: communityId || null,
-        userId: null,
-        walletAddress: accounts.wallet || null,
-        email: accounts.email || null,
-        discordId: accounts.discord?.id || null,
-        twitterHandle: accounts.twitter?.username || null,
-        status: "rejected",
-        errorMessage: "Quest mapping not found",
-        shellsGranted: 0,
-        dwcGranted: "0",
-        rawPayload: JSON.stringify(payload),
-      });
-
-      return {
-        success: false,
-        error: "Quest not configured for rewards",
-      };
+        zealyQuestName: `Zealy Quest ${questId}`,
+        shellsReward: RECOMMENDED_QUEST_REWARD,
+        dwcReward: "0",
+        reputationReward: 0,
+        maxRewardsPerUser: 1,
+        totalRewardsCap: null,
+        currentRewards: 0,
+        isActive: true,
+      }).returning();
+      questMapping = newMapping;
     }
 
     if (
