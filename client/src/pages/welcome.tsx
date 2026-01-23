@@ -64,19 +64,19 @@ export default function WelcomePage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-12"
           >
-            <motion.div 
-              className="w-24 h-24 mx-auto mb-6 flex items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-white/20"
+            <motion.img 
+              src="/images/darkwave_emblem.png"
+              alt="DarkWave" 
+              className="w-24 h-24 mx-auto mb-6"
               animate={{ 
-                boxShadow: [
-                  '0 0 20px rgba(6, 182, 212, 0.5)',
-                  '0 0 40px rgba(168, 85, 247, 0.5)',
-                  '0 0 20px rgba(6, 182, 212, 0.5)'
+                filter: [
+                  'drop-shadow(0 0 20px rgba(6, 182, 212, 0.5))',
+                  'drop-shadow(0 0 40px rgba(168, 85, 247, 0.5))',
+                  'drop-shadow(0 0 20px rgba(6, 182, 212, 0.5))'
                 ]
               }}
               transition={{ duration: 3, repeat: Infinity }}
-            >
-              <Shield className="w-12 h-12 text-cyan-400" />
-            </motion.div>
+            />
             
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
               Welcome to{" "}
