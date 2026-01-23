@@ -712,10 +712,19 @@ class ZealyService {
       mapping = newMapping;
     }
 
-    // Find DarkWave user by email
-    const email = review.user.verifiedAddresses?.email;
+    // Extract email and wallet from Zealy data
+    const verifiedAddresses = (review.user.verifiedAddresses || {}) as Record<string, string>;
+    const email = verifiedAddresses.email || null;
+    
+    // Get first wallet address (prefer eth-mainnet, then any *-mainnet)
+    const walletKeys = Object.keys(verifiedAddresses).filter(k => k.includes('mainnet'));
+    const primaryWallet = verifiedAddresses['eth-mainnet'] || 
+                          verifiedAddresses['sol-mainnet'] || 
+                          (walletKeys.length > 0 ? verifiedAddresses[walletKeys[0]] : null);
+    
     let userId: string | null = null;
 
+    // Try to find DarkWave user by email first
     if (email) {
       const user = await storage.getUserByEmail(email);
       if (user) {
@@ -723,13 +732,31 @@ class ZealyService {
       }
     }
 
-    // Record the event
+    // If no email match, try wallet match via affiliate profiles
+    if (!userId && primaryWallet) {
+      try {
+        const result = await db.execute(sql`
+          SELECT user_id FROM user_affiliate_profiles 
+          WHERE LOWER(dwc_wallet_address) = ${primaryWallet.toLowerCase()}
+          LIMIT 1
+        `);
+        const rows = result.rows as Array<{ user_id: string }>;
+        if (rows.length > 0 && rows[0].user_id) {
+          userId = rows[0].user_id;
+        }
+      } catch (e) {
+        // Table might not exist or no match, continue
+      }
+    }
+
+    // Record the event with all available data
     await db.insert(zealyQuestEvents).values({
       zealyUserId,
       zealyQuestId: questId,
       zealyRequestId: requestId,
       zealyCommunityId: ZEALY_SUBDOMAIN,
       userId: userId || null,
+      walletAddress: primaryWallet || null,
       email: email || null,
       status: userId ? "processed" : "pending_user_match",
       shellsGranted: userId ? mapping.shellsReward : 0,
