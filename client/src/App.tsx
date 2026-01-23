@@ -9,7 +9,6 @@ import { WalletProvider } from "@/hooks/use-wallet";
 import { AIAssistant } from "@/components/ai-assistant";
 import { getAppFromHost } from "@/lib/app-config";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
-import { FirstLoginModal } from "@/components/first-login-modal";
 import { FloatingChat } from "@/components/floating-chat";
 import { GlobalSearch } from "@/components/global-search";
 
@@ -584,7 +583,6 @@ function App() {
                 <Toaster />
                 <Router />
                 {showAIAssistant && <AIAssistant />}
-                {showAIAssistant && <FirstLoginModal />}
                 <FloatingChat />
                 <GlobalSearch />
               </TooltipProvider>
