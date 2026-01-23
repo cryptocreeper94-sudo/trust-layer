@@ -1507,14 +1507,22 @@ export async function registerRoutes(
         req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
       }
 
-      res.json({ 
-        success: true, 
-        user: {
-          id: user.id,
-          email: user.email,
-          displayName: user.displayName,
-          profileImageUrl: user.profileImageUrl,
+      // Explicitly save session before sending response
+      req.session.save((err) => {
+        if (err) {
+          console.error("[Login] Session save error:", err);
+          return res.status(500).json({ error: "Failed to save session" });
         }
+        console.log("[Login] Session saved for user:", user.id, "sessionID:", req.sessionID);
+        res.json({ 
+          success: true, 
+          user: {
+            id: user.id,
+            email: user.email,
+            displayName: user.displayName,
+            profileImageUrl: user.profileImageUrl,
+          }
+        });
       });
     } catch (error) {
       console.error("Login error:", error);
@@ -1525,7 +1533,9 @@ export async function registerRoutes(
   // Get current user session
   app.get("/api/auth/me", async (req, res) => {
     try {
+      console.log("[Auth/Me] Session check - sessionID:", req.sessionID, "cookie:", req.headers.cookie?.substring(0, 100));
       const userId = (req.session as any)?.userId;
+      console.log("[Auth/Me] userId from session:", userId);
       if (!userId) {
         return res.json({ user: null });
       }

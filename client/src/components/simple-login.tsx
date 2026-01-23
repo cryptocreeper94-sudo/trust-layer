@@ -64,20 +64,31 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
-      toast({ title: "Missing info", description: "Please enter email and password", variant: "destructive" });
+      setFormError("Please enter email and password");
       return;
     }
     setLoading(true);
+    setFormError(null);
     try {
+      console.log("[Login] Attempting login for:", email);
       const result = await login(email, password);
+      console.log("[Login] Result:", result);
       if (result.success) {
         toast({ title: "Welcome back!", description: "You've successfully signed in." });
         onSuccess?.();
         handleClose();
         window.location.reload();
       } else {
-        toast({ title: "Sign in failed", description: result.error, variant: "destructive" });
+        const errorMsg = result.error || "Sign in failed. Please check your email and password.";
+        console.error("[Login] Failed:", errorMsg);
+        setFormError(errorMsg);
+        toast({ title: "Sign in failed", description: errorMsg, variant: "destructive" });
       }
+    } catch (err: any) {
+      const errorMsg = err?.message || "Something went wrong. Please try again.";
+      console.error("[Login] Exception:", err);
+      setFormError(errorMsg);
+      toast({ title: "Sign in error", description: errorMsg, variant: "destructive" });
     } finally {
       setLoading(false);
     }
