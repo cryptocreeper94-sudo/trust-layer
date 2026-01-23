@@ -149,6 +149,37 @@ export function Footer() {
         </div>
       </section>
 
+      {/* Legal Disclaimer Section - Pre-Footer */}
+      <section className="bg-slate-950 border-t border-white/5">
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-4xl mx-auto">
+            <h4 className="text-xs font-bold text-white/60 uppercase tracking-wider mb-4 text-center">
+              Important Legal Disclaimer
+            </h4>
+            <div className="text-[10px] leading-relaxed text-white/40 space-y-3">
+              <p>
+                <strong className="text-white/60">DO YOUR OWN RESEARCH (DYOR):</strong> The information provided on this website is for general informational and educational purposes only. It does not constitute financial advice, investment advice, trading advice, or any other sort of advice, and you should not treat any of the website's content as such. DarkWave Studios, LLC does not recommend that any cryptocurrency, token, or digital asset should be bought, sold, or held by you. Before making any financial decisions, you should conduct your own research and consult with a qualified financial advisor.
+              </p>
+              <p>
+                <strong className="text-white/60">NO GUARANTEES:</strong> Cryptocurrency and digital asset investments are highly volatile and speculative. Past performance is not indicative of future results. There is no guarantee that any investment will achieve its objectives, generate positive returns, or avoid losses. You could lose some or all of your investment. Never invest more than you can afford to lose.
+              </p>
+              <p>
+                <strong className="text-white/60">ENTERTAINMENT & EDUCATION:</strong> This platform is provided for entertainment and educational purposes. Any simulations, games, demonstrations, or projections shown on this site are for illustrative purposes only and should not be relied upon as predictions of actual performance or outcomes.
+              </p>
+              <p>
+                <strong className="text-white/60">NO LIABILITY:</strong> DarkWave Studios, LLC, its affiliates, officers, directors, employees, agents, and licensors shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages arising from your access to or use of (or inability to access or use) this website, any content on the website, or any actions taken in reliance on information provided. You use this website and participate in any activities at your own risk. By using this site, you acknowledge that you are solely responsible for your own decisions and actions.
+              </p>
+              <p>
+                <strong className="text-white/60">REGULATORY NOTICE:</strong> Signal (SIG) is a utility token and is not intended to be a security, investment contract, or financial instrument. Regulations regarding cryptocurrencies and digital assets vary by jurisdiction. It is your responsibility to ensure compliance with applicable laws in your region. DarkWave Studios, LLC makes no representations regarding the legality of this platform or its tokens in any jurisdiction.
+              </p>
+              <p className="text-center pt-2 text-white/30">
+                By using this website, you agree to these terms. If you do not agree, please discontinue use immediately.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Clean Single-Line Footer */}
       <footer className="bg-black border-t border-white/10">
         <div className="container mx-auto px-4 py-4">

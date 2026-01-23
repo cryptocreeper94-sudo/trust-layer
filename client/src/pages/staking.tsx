@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Footer } from "@/components/footer";
+import { DYORDisclaimer } from "@/components/dyor-disclaimer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 import { apiRequest } from "@/lib/queryClient";
@@ -814,6 +815,12 @@ export default function Staking() {
           </div>
         </DialogContent>
       </Dialog>
+
+      <section className="py-8 bg-slate-950/50">
+        <div className="container mx-auto px-4">
+          <DYORDisclaimer variant="compact" />
+        </div>
+      </section>
 
       <Footer />
     </div>

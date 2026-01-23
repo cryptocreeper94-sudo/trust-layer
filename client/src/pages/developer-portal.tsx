@@ -6,7 +6,7 @@ import {
   ChevronDown, ChevronRight, BarChart3, Activity, Layers, 
   Zap, Database, Shield, Terminal, FileCode, BookOpen,
   ExternalLink, Copy, Check, RefreshCw, Key, AlertTriangle,
-  Gift, Coins, Target, CheckCircle, Network, Handshake
+  Gift, Coins, Target, CheckCircle, Network, Handshake, Megaphone
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/page-nav";

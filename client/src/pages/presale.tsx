@@ -23,6 +23,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import darkwaveLogo from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
+import { DYORDisclaimer } from "@/components/dyor-disclaimer";
 const shieldImage = "/shield-reference.jpg";
 import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
@@ -1355,7 +1356,7 @@ export default function Presale() {
           </HolographicCard>
         </div>
 
-        <div className="text-center space-x-6">
+        <div className="text-center space-x-6 mb-8">
           <Link href="/investment-simulator" className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300" data-testid="link-simulator">
             <Calculator className="w-4 h-4" /> Investment Simulator
           </Link>
@@ -1363,6 +1364,9 @@ export default function Presale() {
             View Full Roadmap <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
+
+        <DYORDisclaimer variant="full" className="max-w-2xl mx-auto mb-8" />
+        <DYORDisclaimer variant="compact" className="mb-4" />
       </div>
       
     </div>

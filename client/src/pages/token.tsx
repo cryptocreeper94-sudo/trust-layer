@@ -14,6 +14,7 @@ import spaceImg from "@assets/generated_images/deep_space_station.png";
 import cyberpunkImg from "@assets/generated_images/cyberpunk_neon_city.png";
 import quantumImg from "@assets/generated_images/quantum_dimension_realm.png";
 import { Footer } from "@/components/footer";
+import { DYORDisclaimer } from "@/components/dyor-disclaimer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 
@@ -580,6 +581,12 @@ export default function Token() {
               </Link>
             </div>
           </GlassCard>
+        </div>
+      </section>
+
+      <section className="py-8 bg-slate-950/50">
+        <div className="container mx-auto px-4">
+          <DYORDisclaimer variant="compact" />
         </div>
       </section>
 
