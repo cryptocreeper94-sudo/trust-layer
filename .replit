@@ -55,6 +55,7 @@ SITE_BASE_URL = "https://dwsc.io"
 PULSE_API_BASE_URL = "https://darkwavepulse.com"
 TEAM_ACCESS_PIN = "0424"
 BLOG_ADMIN_EMAILS = "team@dwsc.io"
+ADMIN_PIN = "1111"
 
 [objectStorage]
 defaultBucketID = "replit-objstore-74fd6bf8-9216-4c07-bca9-46f4b21dc323"
