@@ -56,6 +56,7 @@ const navCategories = [
     label: "Wallet & Portfolio",
     icon: Coins,
     items: [
+      { href: "/my-hub", label: "My Hub", icon: User, badge: "You" },
       { href: "/wallet", label: "Wallet", icon: Coins },
       { href: "/portfolio", label: "Portfolio Dashboard", icon: PieChart },
       { href: "/transactions", label: "Transaction History", icon: History },
