@@ -44,6 +44,7 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
   const [username, setUsername] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const resetForm = () => {
     setEmail("");
@@ -101,6 +102,7 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
       return;
     }
     setLoading(true);
+    setFormError(null);
     try {
       console.log("[Signup] Attempting registration for:", email, username);
       const result = await signup(email, password, name || undefined, username);
@@ -112,11 +114,15 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
         window.location.reload();
       } else {
         console.error("[Signup] Failed:", result.error);
-        toast({ title: "Registration failed", description: result.error || "Unknown error occurred", variant: "destructive" });
+        const errorMsg = result.error || "Registration failed. Please try again.";
+        setFormError(errorMsg);
+        toast({ title: "Registration failed", description: errorMsg, variant: "destructive" });
       }
     } catch (err: any) {
       console.error("[Signup] Exception:", err);
-      toast({ title: "Registration error", description: err?.message || "Something went wrong", variant: "destructive" });
+      const errorMsg = err?.message || "Something went wrong. Please try again.";
+      setFormError(errorMsg);
+      toast({ title: "Registration error", description: errorMsg, variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -414,6 +420,12 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
                   </div>
                 )}
               </div>
+
+              {formError && (
+                <div className="p-4 bg-red-600 border-2 border-red-400 rounded-lg text-white text-center font-medium">
+                  {formError}
+                </div>
+              )}
 
               <Button
                 type="submit"
