@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
+import { useState } from "react";
 import { 
   Shield, Rocket, GraduationCap, Coins, Users, Gamepad2, 
   Building2, ChevronRight, Sparkles, Globe, Lock, TrendingUp,
-  Heart, Zap, Star, ArrowRight
+  Heart, Zap, Star, ArrowRight, CheckCircle2, Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/glass-card";
@@ -51,6 +52,44 @@ const ECOSYSTEM_HIGHLIGHTS = [
 ];
 
 export default function WelcomePage() {
+  const [, navigate] = useLocation();
+  const [firstName, setFirstName] = useState("");
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleQuickRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!firstName.trim() || !email.trim()) {
+      setError("Please enter your name and email");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+    setLoading(true);
+    setError("");
+    try {
+      const response = await fetch("/api/auth/quick-register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ firstName: firstName.trim(), email: email.trim().toLowerCase() }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Registration failed");
+      }
+      setSuccess(true);
+      setTimeout(() => navigate("/"), 1500);
+    } catch (err: any) {
+      setError(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950" data-testid="welcome-page">
       <div className="relative overflow-hidden">
@@ -96,6 +135,74 @@ export default function WelcomePage() {
               <Sparkles className="w-4 h-4 text-cyan-400" />
               <span className="text-sm text-cyan-300">Disrupting the Noise — Join Free</span>
             </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="max-w-md mx-auto mb-12"
+          >
+            <GlassCard glow className="p-6 sm:p-8 shadow-2xl shadow-purple-500/20 border-2 border-cyan-500/30">
+              {success ? (
+                <div className="text-center py-4">
+                  <CheckCircle2 className="w-12 h-12 text-green-400 mx-auto mb-3" />
+                  <h3 className="text-xl font-bold text-white mb-2">Welcome Aboard!</h3>
+                  <p className="text-slate-300 text-sm">Taking you to your new home...</p>
+                </div>
+              ) : (
+                <>
+                  <h2 className="text-xl font-bold text-white mb-2 text-center">
+                    Get Started Now
+                  </h2>
+                  <p className="text-sm text-slate-400 text-center mb-5">
+                    Enter your info to join the community
+                  </p>
+                  <form onSubmit={handleQuickRegister} className="space-y-3">
+                    <input
+                      type="text"
+                      placeholder="First Name"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/30"
+                      data-testid="input-welcome-firstname"
+                    />
+                    <input
+                      type="email"
+                      placeholder="Email Address"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-gray-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/30"
+                      data-testid="input-welcome-email"
+                    />
+                    {error && (
+                      <p className="text-xs text-red-400 text-center">{error}</p>
+                    )}
+                    <Button 
+                      type="submit"
+                      disabled={loading}
+                      className="w-full py-3 text-base font-bold bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:opacity-90 shadow-lg shadow-purple-500/25"
+                      data-testid="button-welcome-register"
+                    >
+                      {loading ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <>
+                          <Rocket className="w-5 h-5 mr-2" />
+                          Join the Community
+                        </>
+                      )}
+                    </Button>
+                  </form>
+                  <p className="text-xs text-slate-500 text-center mt-4">
+                    Already a member?{" "}
+                    <Link href="/" className="text-cyan-400 hover:underline">
+                      Sign In
+                    </Link>
+                  </p>
+                </>
+              )}
+            </GlassCard>
           </motion.div>
 
           <motion.div
