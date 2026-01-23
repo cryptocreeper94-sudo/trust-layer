@@ -109,10 +109,35 @@ export function useFirebaseAuth() {
   const login = useCallback(async (email: string, password: string) => {
     setError(null);
     try {
-      const result = await signInWithEmailAndPassword(auth, email, password);
-      return { success: true, user: mapFirebaseUser(result.user) };
+      // Use local API for email/password login (more reliable than Firebase)
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || "Login failed");
+      }
+      
+      // Create a simple user object from the API response
+      const userData: User = {
+        id: data.user.id,
+        email: data.user.email,
+        displayName: data.user.firstName || data.user.email?.split("@")[0] || null,
+        firstName: data.user.firstName || null,
+        lastName: data.user.lastName || null,
+        profileImageUrl: data.user.profileImageUrl || null,
+        username: data.user.username || data.user.email?.split("@")[0] || null,
+        firebaseUser: null as any, // No Firebase user for local auth
+      };
+      
+      setUser(userData);
+      return { success: true, user: userData };
     } catch (err: any) {
-      const message = getErrorMessage(err);
+      const message = err.message || "Login failed";
       setError(message);
       return { success: false, error: message };
     }
@@ -121,13 +146,35 @@ export function useFirebaseAuth() {
   const signup = useCallback(async (email: string, password: string, displayName?: string) => {
     setError(null);
     try {
-      const result = await createUserWithEmailAndPassword(auth, email, password);
-      if (displayName) {
-        await updateProfile(result.user, { displayName });
+      // Use local API for registration (more reliable than Firebase)
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, firstName: displayName }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || "Registration failed");
       }
-      return { success: true, user: mapFirebaseUser(result.user) };
+      
+      // Create a simple user object from the API response
+      const userData: User = {
+        id: data.user.id,
+        email: data.user.email,
+        displayName: data.user.firstName || data.user.email?.split("@")[0] || null,
+        firstName: data.user.firstName || null,
+        lastName: data.user.lastName || null,
+        profileImageUrl: data.user.profileImageUrl || null,
+        username: data.user.username || data.user.email?.split("@")[0] || null,
+        firebaseUser: null as any, // No Firebase user for local auth
+      };
+      
+      setUser(userData);
+      return { success: true, user: userData };
     } catch (err: any) {
-      const message = getErrorMessage(err);
+      const message = err.message || "Registration failed";
       setError(message);
       return { success: false, error: message };
     }
