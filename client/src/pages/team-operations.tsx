@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
@@ -675,12 +675,11 @@ function OperationsDashboard() {
 }
 
 export default function TeamOperationsPage() {
-  const [authenticated, setAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const isAuth = sessionStorage.getItem("teamAuth") === "true";
-    setAuthenticated(isAuth);
-  }, []);
+  const [authenticated, setAuthenticated] = useState(() => {
+    return sessionStorage.getItem("ownerAuth") === "true" || 
+           sessionStorage.getItem("teamAuth") === "true" ||
+           sessionStorage.getItem("developerAuth") === "true";
+  });
 
   if (!authenticated) {
     return <PinEntry onSuccess={() => setAuthenticated(true)} />;
