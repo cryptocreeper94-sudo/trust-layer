@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
@@ -553,12 +553,9 @@ function OwnerDashboard() {
 }
 
 export default function OwnerAdminPortal() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const auth = sessionStorage.getItem("ownerAuth");
-    if (auth === "true") setIsAuthenticated(true);
-  }, []);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return sessionStorage.getItem("ownerAuth") === "true";
+  });
 
   if (!isAuthenticated) {
     return <SecretEntry onSuccess={() => setIsAuthenticated(true)} />;

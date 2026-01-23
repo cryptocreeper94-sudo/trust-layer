@@ -73,6 +73,9 @@ export function Footer() {
         setPin("");
         setError(false);
         sessionStorage.setItem(`${data.portalType}Auth`, "true");
+        if (data.token) {
+          sessionStorage.setItem("ownerToken", data.token);
+        }
         setLocation(data.redirect);
       } else {
         setError(true);
