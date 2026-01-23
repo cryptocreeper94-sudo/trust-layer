@@ -114,16 +114,10 @@ export default function MyHub() {
   const [showNotifications, setShowNotifications] = useState(false);
   
   const notifications = [
-    { id: 1, type: 'reward', title: 'Daily airdrop received!', message: '+25 Shells added to your wallet', time: '2 hours ago', read: false },
-    { id: 2, type: 'quest', title: 'New quest available', message: 'Complete today\'s mission to earn Shells', time: '4 hours ago', read: false },
-    { id: 3, type: 'system', title: 'Welcome to Trust Layer', message: 'Your account is ready to explore', time: '1 day ago', read: true },
+    { id: 1, type: 'system', title: 'Welcome to Trust Layer', message: 'Your account is ready to explore', time: 'Just now', read: true },
   ];
 
-  const recentActivity = [
-    { id: 1, type: 'airdrop', title: 'Shells Airdrop', amount: '+25', time: 'Today, 1:00 PM', icon: Gift },
-    { id: 2, type: 'quest', title: 'Quest Completed', amount: '+50', time: 'Yesterday', icon: Target },
-    { id: 3, type: 'referral', title: 'Referral Bonus', amount: '+100', time: '2 days ago', icon: Users },
-  ];
+  const recentActivity: { id: number; type: string; title: string; amount: string; time: string; icon: any }[] = [];
 
   const { data: referralStats } = useQuery<{
     referralCode: { code: string; host: string; clickCount: number; signupCount: number } | null;
