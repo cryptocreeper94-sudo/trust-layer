@@ -157,6 +157,7 @@ export function useFirebaseAuth() {
           await fetch("/api/auth/firebase-sync", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
+            credentials: 'include',
             body: JSON.stringify({ idToken }),
           });
         } catch (err) {
@@ -178,6 +179,7 @@ export function useFirebaseAuth() {
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: 'include',
         body: JSON.stringify({ email, password }),
       });
       
@@ -216,6 +218,7 @@ export function useFirebaseAuth() {
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: 'include',
         body: JSON.stringify({ email, password, displayName, username }),
       });
       
@@ -275,7 +278,7 @@ export function useFirebaseAuth() {
     setIsLoggingOut(true);
     try {
       await signOut(auth);
-      await fetch("/api/auth/logout", { method: "POST" });
+      await fetch("/api/auth/logout", { method: "POST", credentials: 'include' });
       queryClient.clear();
       setUser(null);
       saveUserToStorage(null);
