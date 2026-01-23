@@ -77,7 +77,11 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
         toast({ title: "Welcome back!", description: "You've successfully signed in." });
         onSuccess?.();
         handleClose();
-        window.location.reload();
+        // Don't reload - let the auth context update naturally
+        // The queryClient will refetch user data
+        setTimeout(() => {
+          window.location.href = window.location.pathname;
+        }, 500);
       } else {
         const errorMsg = result.error || "Sign in failed. Please check your email and password.";
         console.error("[Login] Failed:", errorMsg);

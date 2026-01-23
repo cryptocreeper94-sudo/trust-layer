@@ -156,6 +156,9 @@ const sessionStore = new pgStore({
 });
 
 app.set("trust proxy", 1);
+// Use secure cookies when running on Replit (always HTTPS)
+const isReplitDeployment = process.env.REPLIT_DEPLOYMENT === '1';
+console.log('[Session] Config: isProduction=', isProduction, 'isReplitDeployment=', isReplitDeployment);
 app.use(session({
   store: sessionStore,
   secret: process.env.SESSION_SECRET || process.env.OWNER_SECRET || 'darkwave-session-secret-dev',
@@ -163,9 +166,9 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: true, // Always true on Replit (HTTPS)
     maxAge: sessionTtl,
-    sameSite: 'lax',
+    sameSite: 'none', // Required for cross-site cookies on deployed apps
   },
 }));
 
