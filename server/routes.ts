@@ -2469,7 +2469,7 @@ export async function registerRoutes(
           COALESCE(SUM(usd_amount_cents), 0) as total_spent_cents,
           COUNT(*) as purchase_count
         FROM presale_purchases 
-        WHERE status = 'confirmed' 
+        WHERE status = 'completed' 
         AND (user_id = ${userId} OR email = ${email})
       `);
       const presaleTokens = Number(presaleResult.rows[0]?.total_tokens || 0);
