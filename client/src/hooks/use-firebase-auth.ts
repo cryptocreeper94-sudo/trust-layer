@@ -159,20 +159,21 @@ export function useFirebaseAuth() {
         throw new Error(data.error || "Registration failed");
       }
       
-      // Create a simple user object from the API response
+      // Server returns { success, userId, signupPosition, emailVerificationRequired }
+      // or { success, userId, signupPosition, emailVerificationRequired, passwordSet, message } for existing accounts
       const userData: User = {
-        id: data.user.id,
-        email: data.user.email,
-        displayName: data.user.firstName || data.user.email?.split("@")[0] || null,
-        firstName: data.user.firstName || null,
-        lastName: data.user.lastName || null,
-        profileImageUrl: data.user.profileImageUrl || null,
-        username: data.user.username || data.user.email?.split("@")[0] || null,
+        id: data.userId,
+        email: email,
+        displayName: displayName || username || email.split("@")[0] || null,
+        firstName: displayName?.split(' ')[0] || null,
+        lastName: displayName?.split(' ').slice(1).join(' ') || null,
+        profileImageUrl: null,
+        username: username || email.split("@")[0] || null,
         firebaseUser: null as any, // No Firebase user for local auth
       };
       
       setUser(userData);
-      return { success: true, user: userData };
+      return { success: true, user: userData, emailVerificationRequired: data.emailVerificationRequired };
     } catch (err: any) {
       const message = err.message || "Registration failed";
       setError(message);

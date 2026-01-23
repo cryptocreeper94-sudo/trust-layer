@@ -191,24 +191,25 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] max-w-sm bg-slate-900 border border-white/10 rounded-2xl p-6 shadow-2xl"
+          className="fixed top-4 bottom-4 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-sm bg-slate-900 border border-white/10 rounded-2xl p-6 shadow-2xl overflow-y-auto"
         >
-          <button
-            onClick={handleClose}
-            className="absolute top-4 right-4 text-muted-foreground hover:text-white transition-colors"
-            data-testid="button-close-login"
-          >
-            <X className="w-5 h-5" />
-          </button>
-
-          {(view === "signup" || view === "forgot") && (
+          <div className="sticky top-0 right-0 flex justify-between items-center mb-2 -mt-2 -mx-2 px-2 py-2 bg-slate-900/95 backdrop-blur-sm z-10">
+            {(view === "signup" || view === "forgot") ? (
+              <button
+                onClick={() => setView("login")}
+                className="text-muted-foreground hover:text-white transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+            ) : <div />}
             <button
-              onClick={() => setView("login")}
-              className="absolute top-4 left-4 text-muted-foreground hover:text-white transition-colors"
+              onClick={handleClose}
+              className="text-muted-foreground hover:text-white transition-colors"
+              data-testid="button-close-login"
             >
-              <ArrowLeft className="w-5 h-5" />
+              <X className="w-5 h-5" />
             </button>
-          )}
+          </div>
 
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-white mb-2">
