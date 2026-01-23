@@ -211,11 +211,11 @@ export default function WelcomePage() {
             transition={{ delay: 0.2 }}
             className="max-w-3xl mx-auto mb-16"
           >
-            <GlassCard glow className="p-8 sm:p-10 shadow-2xl shadow-cyan-500/10">
-              <h2 className="text-xl font-bold text-white mb-6 text-center">
+            <GlassCard glow className="p-6 sm:p-8 md:p-10 shadow-2xl shadow-cyan-500/10">
+              <h2 className="text-2xl font-bold text-white mb-8 text-center">
                 What is This Place?
               </h2>
-              <div className="space-y-5 text-slate-300 leading-relaxed">
+              <div className="space-y-6 text-slate-300 text-base sm:text-lg leading-relaxed">
                 <p>
                   <strong className="text-white">DarkWave Trust Layer</strong> is your space — a community-owned ecosystem 
                   where individuals and businesses build trust and do business differently. No hype. No empty promises. 
