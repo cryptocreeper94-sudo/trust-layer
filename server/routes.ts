@@ -1249,19 +1249,32 @@ export async function registerRoutes(
       // Store password hash
       await db.update(users).set({ passwordHash }).where(eq(users.id, userId));
 
-      // Mark email as verified immediately - no email verification required
-      await db.update(users).set({ emailVerified: true }).where(eq(users.id, userId));
+      // Generate and send email verification code
+      const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
       
-      // Award welcome bonus shells
+      // Clear any existing codes for this user
+      await db.delete(emailVerificationCodes).where(eq(emailVerificationCodes.userId, userId));
+      
+      // Store the new code
+      await db.insert(emailVerificationCodes).values({
+        userId,
+        email: normalizedEmail,
+        code: verificationCode,
+        expiresAt,
+      });
+      
+      // Send verification email
       try {
-        const { awardShells } = await import("./shells-service");
-        await awardShells(userId, 1000, "signup_bonus", "Welcome bonus!");
-        console.log(`[Welcome Bonus] Awarded 1000 Shells to user ${userId}`);
-      } catch (shellError) {
-        console.error("[Welcome Bonus] Failed:", shellError);
+        const { sendEmailVerificationCode } = await import("./email");
+        await sendEmailVerificationCode(normalizedEmail, verificationCode, displayName || username);
+        console.log(`[Email Verification] Sent code to ${normalizedEmail}`);
+      } catch (emailError) {
+        console.error("[Email Verification] Failed to send:", emailError);
+        // Continue anyway - user can request resend
       }
 
-      // Set session
+      // Set session (user is logged in but email not verified yet)
       (req.session as any).userId = userId;
       
       // Extend session to 30 days if rememberMe is checked
@@ -1269,7 +1282,7 @@ export async function registerRoutes(
         req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
       }
 
-      res.json({ success: true, userId, signupPosition, emailVerificationRequired: false });
+      res.json({ success: true, userId, signupPosition, emailVerificationRequired: true });
     } catch (error) {
       console.error("Registration error:", error);
       res.status(500).json({ error: "Registration failed" });
