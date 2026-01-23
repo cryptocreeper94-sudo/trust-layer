@@ -74,6 +74,14 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **Signal Foundation**: 0% - Will be a separate initiative with its own funding/asset.
 - **Chronicles Game Economy**: 0% - Uses Echoes (separate, non-convertible currency).
 
+### Launch Philosophy
+- **Milestone-Based, Not Date-Based**: No fixed TGE date. Launch when community, product, and presale targets are met.
+- **Sustainable Growth**: $10M market cap at TGE is intentionally conservative. Leaves room for organic growth vs pump-and-dump.
+- **Long-Term Vision**: Building real infrastructure, not a meme coin. Value comes from utility and adoption.
+
+### Roadmap Items (Future Implementation)
+- **Legacy Top 10 Loyalty Program**: After presale closes, identify top 10 contributors by total contribution amount. Offer ongoing loyalty incentives (smaller than team allocations) to reward continued engagement and advocacy. Details TBD - could include bonus SIG, exclusive access, governance weight, or ambassador status.
+
 ## External Dependencies
 - **Database**: PostgreSQL
 - **Authentication**: Firebase Auth
