@@ -1322,30 +1322,30 @@ export default function Home() {
         setShowPresalePopup(open);
         if (!open) sessionStorage.setItem("presale_popup_seen", "true");
       }}>
-        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white max-w-[400px] max-h-[90vh] overflow-y-auto shadow-[0_0_60px_rgba(0,200,255,0.3)] [&>button]:top-2 [&>button]:right-2">
-          <div className="flex flex-col items-center pt-4">
+        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white max-w-[380px] shadow-[0_0_60px_rgba(0,200,255,0.3)] [&>button]:top-2 [&>button]:right-2">
+          <div className="flex flex-col items-center pt-2">
             <DialogHeader className="text-center">
               <DialogTitle className="text-lg font-bold text-center">
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                   Signal Presale is LIVE
                 </span>
               </DialogTitle>
-              <DialogDescription className="text-gray-300 text-center pt-1 text-sm">
+              <DialogDescription className="text-gray-300 text-center text-sm">
                 Ground floor opportunity
               </DialogDescription>
             </DialogHeader>
             
-            <div className="space-y-3 py-2 w-full">
+            <div className="space-y-2 py-1 w-full">
               <div className="flex items-center justify-center">
-                <img src={signalEmblem} alt="Signal" className="w-48 h-48 animate-pulse" />
+                <img src={signalEmblem} alt="Signal" className="w-40 h-40 animate-pulse" />
               </div>
               
-              <div className="text-center space-y-1">
+              <div className="text-center">
                 <p className="text-xl font-bold text-white">$0.001 <span className="text-sm text-gray-400">per SIG</span></p>
                 <p className="text-sm text-cyan-400 font-medium">Launch: $0.01 (10x)</p>
               </div>
               
-              <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg p-2">
+              <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg px-2 py-1">
                 <p className="text-sm text-green-400 text-center font-bold">
                   Up to 20% BONUS
                 </p>
@@ -1353,8 +1353,8 @@ export default function Home() {
             </div>
 
             {!isAuthenticated && !quickRegSuccess && (
-              <form onSubmit={handleQuickRegister} className="w-full space-y-2 mt-2 border-t border-white/10 pt-3">
-                <p className="text-xs text-gray-400 text-center mb-2">Register to get started</p>
+              <form onSubmit={handleQuickRegister} className="w-full space-y-2 mt-1 border-t border-white/10 pt-2">
+                <p className="text-xs text-gray-400 text-center">Register to get started</p>
                 <input
                   type="text"
                   placeholder="First Name"
