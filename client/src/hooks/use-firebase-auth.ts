@@ -74,12 +74,77 @@ function mapFirebaseUser(firebaseUser: FirebaseUser): User {
   };
 }
 
+const USER_STORAGE_KEY = 'dwtl_user';
+
+function saveUserToStorage(userData: User | null) {
+  try {
+    if (userData) {
+      const storable = { ...userData, firebaseUser: null };
+      localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(storable));
+    } else {
+      localStorage.removeItem(USER_STORAGE_KEY);
+    }
+  } catch (e) {
+    console.warn('Failed to save user to storage:', e);
+  }
+}
+
+function loadUserFromStorage(): User | null {
+  try {
+    const stored = localStorage.getItem(USER_STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      return { ...parsed, firebaseUser: null };
+    }
+  } catch (e) {
+    console.warn('Failed to load user from storage:', e);
+  }
+  return null;
+}
+
 export function useFirebaseAuth() {
   const queryClient = useQueryClient();
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => loadUserFromStorage());
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await fetch("/api/auth/me", { credentials: 'include' });
+        const data = await response.json();
+        if (data.user) {
+          const userData: User = {
+            id: data.user.id,
+            email: data.user.email,
+            displayName: data.user.displayName || data.user.firstName || data.user.email?.split("@")[0] || null,
+            firstName: data.user.firstName || null,
+            lastName: data.user.lastName || null,
+            profileImageUrl: data.user.profileImageUrl || null,
+            username: data.user.username || data.user.email?.split("@")[0] || null,
+            firebaseUser: null as any,
+          };
+          setUser(userData);
+          saveUserToStorage(userData);
+        } else {
+          const stored = loadUserFromStorage();
+          if (stored) {
+            setUser(stored);
+          }
+        }
+      } catch (err) {
+        console.warn('Session check failed:', err);
+        const stored = loadUserFromStorage();
+        if (stored) {
+          setUser(stored);
+        }
+      }
+      setIsLoading(false);
+    };
+    
+    checkSession();
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -135,6 +200,7 @@ export function useFirebaseAuth() {
       };
       
       setUser(userData);
+      saveUserToStorage(userData);
       return { success: true, user: userData };
     } catch (err: any) {
       const message = err.message || "Login failed";
@@ -212,6 +278,7 @@ export function useFirebaseAuth() {
       await fetch("/api/auth/logout", { method: "POST" });
       queryClient.clear();
       setUser(null);
+      saveUserToStorage(null);
     } finally {
       setIsLoggingOut(false);
     }
