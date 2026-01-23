@@ -15,6 +15,22 @@ interface SimpleLoginModalProps {
 
 type View = "login" | "signup" | "forgot";
 
+// Password validation helper
+const validatePassword = (pwd: string) => {
+  return {
+    minLength: pwd.length >= 8,
+    hasUpper: /[A-Z]/.test(pwd),
+    hasLower: /[a-z]/.test(pwd),
+    hasNumber: /[0-9]/.test(pwd),
+    hasSpecial: /[!@#$%^&*(),.?":{}|<>]/.test(pwd),
+  };
+};
+
+const isPasswordValid = (pwd: string) => {
+  const v = validatePassword(pwd);
+  return v.minLength && v.hasUpper && v.hasLower && v.hasNumber && v.hasSpecial;
+};
+
 export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModalProps) {
   const { toast } = useToast();
   const { login, signup, loginWithGoogle, loginWithGithub, resetPassword } = useFirebaseAuth();
@@ -70,8 +86,8 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
       toast({ title: "Missing info", description: "Please enter email and password", variant: "destructive" });
       return;
     }
-    if (password.length < 6) {
-      toast({ title: "Weak password", description: "Password must be at least 6 characters", variant: "destructive" });
+    if (!isPasswordValid(password)) {
+      toast({ title: "Weak password", description: "Password must meet all requirements below", variant: "destructive" });
       return;
     }
     setLoading(true);
@@ -327,6 +343,27 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
+
+              {view === "signup" && password.length > 0 && (
+                <div className="p-3 bg-slate-800/50 rounded-lg border border-white/10 text-xs space-y-1">
+                  <p className="text-muted-foreground font-medium mb-2">Password must have:</p>
+                  <p className={validatePassword(password).minLength ? "text-green-400" : "text-muted-foreground"}>
+                    {validatePassword(password).minLength ? "✓" : "○"} At least 8 characters
+                  </p>
+                  <p className={validatePassword(password).hasUpper ? "text-green-400" : "text-muted-foreground"}>
+                    {validatePassword(password).hasUpper ? "✓" : "○"} One uppercase letter (A-Z)
+                  </p>
+                  <p className={validatePassword(password).hasLower ? "text-green-400" : "text-muted-foreground"}>
+                    {validatePassword(password).hasLower ? "✓" : "○"} One lowercase letter (a-z)
+                  </p>
+                  <p className={validatePassword(password).hasNumber ? "text-green-400" : "text-muted-foreground"}>
+                    {validatePassword(password).hasNumber ? "✓" : "○"} One number (0-9)
+                  </p>
+                  <p className={validatePassword(password).hasSpecial ? "text-green-400" : "text-muted-foreground"}>
+                    {validatePassword(password).hasSpecial ? "✓" : "○"} One special character (!@#$%^&*)
+                  </p>
+                </div>
+              )}
 
               <div className="space-y-2">
                 <label className="flex items-center gap-3 cursor-pointer group">
