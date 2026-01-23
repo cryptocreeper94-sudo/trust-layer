@@ -528,7 +528,6 @@ function DWSCRouter() {
         <Route path="/community" component={CommunityHub} />
         <Route path="/presale" component={Presale} />
         <Route path="/presale/success" component={PresaleSuccess} />
-        <Route path="/founders" component={Founders} />
         <Route path="/investment-simulator" component={InvestmentSimulator} />
         <Route path="/roadmap" component={RoadmapEcosystem} />
         <Route path="/roadmap-chronicles" component={RoadmapChronicles} />

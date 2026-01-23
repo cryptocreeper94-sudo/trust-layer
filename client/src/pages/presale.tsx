@@ -8,6 +8,7 @@ import {
   Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator, X, CreditCard, History, User, UserCheck
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { authFetch } from "@/hooks/use-firebase-auth";
 import { useWallet } from "@/hooks/use-wallet";
 import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
@@ -1128,7 +1129,7 @@ function MyPurchases({ userEmail, walletAddress }: { userEmail?: string; walletA
       const params = new URLSearchParams();
       if (userEmail) params.set("email", userEmail);
       if (walletAddress) params.set("wallet", walletAddress);
-      const res = await fetch(`/api/presale/my-purchases?${params}`, { credentials: "include" });
+      const res = await authFetch(`/api/presale/my-purchases?${params}`);
       return res.json();
     },
     enabled: !!(user?.id || userEmail || walletAddress),

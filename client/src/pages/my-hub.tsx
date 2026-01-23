@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { Footer } from "@/components/footer";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
+import { authFetch } from "@/hooks/use-firebase-auth";
 import { useQuery } from "@tanstack/react-query";
 import { Progress } from "@/components/ui/progress";
 import { MemberBadge } from "@/components/member-badge";
@@ -33,7 +34,7 @@ export default function MyHub() {
   }>({
     queryKey: ["/api/user/member-number", user?.id],
     queryFn: async () => {
-      const res = await fetch("/api/user/member-number", { credentials: 'include' });
+      const res = await authFetch("/api/user/member-number");
       if (!res.ok) throw new Error("Failed to fetch member data");
       return res.json();
     },
@@ -59,7 +60,7 @@ export default function MyHub() {
   }>({
     queryKey: ["/api/user/reward-profile", user?.id],
     queryFn: async () => {
-      const res = await fetch("/api/user/reward-profile", { credentials: 'include' });
+      const res = await authFetch("/api/user/reward-profile");
       if (!res.ok) throw new Error("Failed to fetch reward profile");
       return res.json();
     },
@@ -73,7 +74,7 @@ export default function MyHub() {
   }>({
     queryKey: ["/api/balance", user?.id],
     queryFn: async () => {
-      const res = await fetch("/api/balance", { credentials: 'include' });
+      const res = await authFetch("/api/balance");
       if (!res.ok) return { totalTokens: 0, stakedTokens: 0, liquidTokens: 0 };
       return res.json();
     },

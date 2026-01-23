@@ -8969,7 +8969,24 @@ export async function registerRoutes(
   // Get user's presale purchase history
   app.get("/api/presale/my-purchases", async (req, res) => {
     try {
-      const userId = (req.session as any)?.userId;
+      let userId = (req.session as any)?.userId;
+      
+      // Check for session token in Authorization header (cross-domain support)
+      if (!userId) {
+        const authHeader = req.headers.authorization;
+        if (authHeader?.startsWith('Bearer ')) {
+          const token = authHeader.substring(7);
+          if (/^[a-f0-9]{64}$/.test(token)) {
+            const [tokenUser] = await db.select().from(users)
+              .where(eq(users.sessionToken, token))
+              .limit(1);
+            if (tokenUser && tokenUser.sessionTokenExpiry && new Date(tokenUser.sessionTokenExpiry) > new Date()) {
+              userId = tokenUser.id;
+            }
+          }
+        }
+      }
+      
       const userEmail = req.query.email as string;
       const walletAddress = req.query.wallet as string;
       

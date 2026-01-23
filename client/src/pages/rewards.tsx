@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { Footer } from "@/components/footer";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
+import { authFetch } from "@/hooks/use-firebase-auth";
 import { useQuery } from "@tanstack/react-query";
 import { Progress } from "@/components/ui/progress";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -38,7 +39,7 @@ export default function Rewards() {
     queryKey: ["/api/user/early-adopter-stats", user?.id],
     queryFn: async () => {
       if (!user) return { signupPosition: null, crowdfundTotalCents: 0, tokenPurchasePosition: null };
-      const res = await fetch("/api/user/early-adopter-stats", { credentials: 'include' });
+      const res = await authFetch("/api/user/early-adopter-stats");
       if (!res.ok) throw new Error("Failed to fetch stats");
       return res.json();
     },
@@ -50,7 +51,7 @@ export default function Rewards() {
   }>({
     queryKey: ["/api/early-adopter/counters"],
     queryFn: async () => {
-      const res = await fetch("/api/early-adopter/counters", { credentials: 'include' });
+      const res = await authFetch("/api/early-adopter/counters");
       return res.json();
     },
   });
@@ -81,7 +82,7 @@ export default function Rewards() {
   }>({
     queryKey: ["/api/user/reward-profile", user?.id],
     queryFn: async () => {
-      const res = await fetch("/api/user/reward-profile", { credentials: 'include' });
+      const res = await authFetch("/api/user/reward-profile");
       if (!res.ok) throw new Error("Failed to fetch reward profile");
       return res.json();
     },
