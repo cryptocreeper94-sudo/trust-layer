@@ -1322,7 +1322,7 @@ export default function Home() {
         setShowPresalePopup(open);
         if (!open) sessionStorage.setItem("presale_popup_seen", "true");
       }}>
-        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white max-w-[420px] shadow-[0_0_60px_rgba(0,200,255,0.3)] overflow-hidden [&>button]:top-2 [&>button]:right-2">
+        <DialogContent className="bg-[#0a0f1c] border-2 border-cyan-500/50 text-white max-w-[400px] max-h-[90vh] overflow-y-auto shadow-[0_0_60px_rgba(0,200,255,0.3)] [&>button]:top-2 [&>button]:right-2">
           <div className="flex flex-col items-center pt-4">
             <DialogHeader className="text-center">
               <DialogTitle className="text-lg font-bold text-center">
@@ -1337,7 +1337,7 @@ export default function Home() {
             
             <div className="space-y-3 py-2 w-full">
               <div className="flex items-center justify-center">
-                <img src={signalEmblem} alt="Signal" className="w-72 h-72 animate-pulse" />
+                <img src={signalEmblem} alt="Signal" className="w-48 h-48 animate-pulse" />
               </div>
               
               <div className="text-center space-y-1">
