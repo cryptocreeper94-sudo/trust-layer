@@ -28,7 +28,7 @@ export default function FounderProgram() {
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    const target = new Date("2099-12-31T00:00:00Z").getTime();
+    const target = new Date("2026-09-01T00:00:00Z").getTime();
     const interval = setInterval(() => {
       const now = Date.now();
       const diff = target - now;
