@@ -149,6 +149,7 @@ export default function AdminDashboard() {
     { title: "Strike Agent", description: "Token analysis AI", url: "/strike-agent", icon: <Activity className="w-5 h-5" /> },
     { title: "Trust Layer", description: "Membership & Trust Cards", url: "/trust-layer", icon: <Users className="w-5 h-5" /> },
     { title: "Project Milestones", description: "Governance & allocation", url: "/team-message", icon: <FileText className="w-5 h-5" /> },
+    { title: "Marketing Catalog", description: "Discord & Telegram content", url: "/marketing-catalog/admin", icon: <Megaphone className="w-5 h-5" /> },
   ];
 
   return (

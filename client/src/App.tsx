@@ -57,6 +57,8 @@ const DWSCExecutiveSummary = lazy(() => import("@/pages/dwsc-executive-summary")
 const ApiPlayground = lazy(() => import("@/pages/api-playground"));
 const Treasury = lazy(() => import("@/pages/treasury"));
 const DeveloperPortal = lazy(() => import("@/pages/developer-portal"));
+const MarketingCatalogDev = lazy(() => import("@/pages/marketing-catalog-dev"));
+const MarketingCatalogAdmin = lazy(() => import("@/pages/marketing-catalog-admin"));
 const DevStudio = lazy(() => import("@/pages/dev-studio"));
 const Billing = lazy(() => import("@/pages/billing"));
 const Pricing = lazy(() => import("@/pages/pricing"));
@@ -395,6 +397,8 @@ function DWSCRouter() {
         <Route path="/executive-summary" component={DWSCExecutiveSummary} />
         <Route path="/api-playground" component={ApiPlayground} />
         <Route path="/treasury" component={Treasury} />
+        <Route path="/marketing-catalog/dev" component={MarketingCatalogDev} />
+        <Route path="/marketing-catalog/admin" component={MarketingCatalogAdmin} />
         <Route path="/developer-portal" component={DeveloperPortal} />
         <Route path="/billing" component={Billing} />
         <Route path="/pricing" component={Pricing} />

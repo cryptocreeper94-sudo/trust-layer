@@ -317,6 +317,7 @@ export default function DeveloperPortal() {
     { title: "Block Explorer", description: "View chain activity", icon: Database },
     { title: "Smart Contracts", description: "Contract templates", icon: Layers },
     { title: "Security Audits", description: "Security reports", icon: Shield },
+    { title: "Marketing Catalog", description: "X & Facebook content", icon: Megaphone, href: "/marketing-catalog/dev" },
   ];
 
   const codeSnippets = [
