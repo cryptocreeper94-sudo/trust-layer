@@ -33,7 +33,7 @@ export default function MyHub() {
   }>({
     queryKey: ["/api/user/member-number", user?.id],
     queryFn: async () => {
-      const res = await fetch("/api/user/member-number");
+      const res = await fetch("/api/user/member-number", { credentials: 'include' });
       if (!res.ok) throw new Error("Failed to fetch member data");
       return res.json();
     },
@@ -59,7 +59,7 @@ export default function MyHub() {
   }>({
     queryKey: ["/api/user/reward-profile", user?.id],
     queryFn: async () => {
-      const res = await fetch("/api/user/reward-profile");
+      const res = await fetch("/api/user/reward-profile", { credentials: 'include' });
       if (!res.ok) throw new Error("Failed to fetch reward profile");
       return res.json();
     },
@@ -73,7 +73,7 @@ export default function MyHub() {
   }>({
     queryKey: ["/api/balance", user?.id],
     queryFn: async () => {
-      const res = await fetch("/api/balance");
+      const res = await fetch("/api/balance", { credentials: 'include' });
       if (!res.ok) return { totalTokens: 0, stakedTokens: 0, liquidTokens: 0 };
       return res.json();
     },

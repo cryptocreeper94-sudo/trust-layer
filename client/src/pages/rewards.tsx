@@ -38,7 +38,7 @@ export default function Rewards() {
     queryKey: ["/api/user/early-adopter-stats", user?.id],
     queryFn: async () => {
       if (!user) return { signupPosition: null, crowdfundTotalCents: 0, tokenPurchasePosition: null };
-      const res = await fetch("/api/user/early-adopter-stats");
+      const res = await fetch("/api/user/early-adopter-stats", { credentials: 'include' });
       if (!res.ok) throw new Error("Failed to fetch stats");
       return res.json();
     },
@@ -50,7 +50,7 @@ export default function Rewards() {
   }>({
     queryKey: ["/api/early-adopter/counters"],
     queryFn: async () => {
-      const res = await fetch("/api/early-adopter/counters");
+      const res = await fetch("/api/early-adopter/counters", { credentials: 'include' });
       return res.json();
     },
   });
@@ -81,7 +81,7 @@ export default function Rewards() {
   }>({
     queryKey: ["/api/user/reward-profile", user?.id],
     queryFn: async () => {
-      const res = await fetch("/api/user/reward-profile");
+      const res = await fetch("/api/user/reward-profile", { credentials: 'include' });
       if (!res.ok) throw new Error("Failed to fetch reward profile");
       return res.json();
     },
