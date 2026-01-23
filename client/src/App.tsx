@@ -37,6 +37,7 @@ const Welcome = lazy(() => import("@/pages/welcome"));
 const SignalCore = lazy(() => import("@/pages/signal-core"));
 const SignalCoreOfficial = lazy(() => import("@/pages/signal-core-official"));
 const Verify = lazy(() => import("@/pages/verify"));
+const VerifyEmail = lazy(() => import("@/pages/verify-email"));
 const GovernanceCharter = lazy(() => import("@/pages/governance-charter"));
 const GovernanceTreasury = lazy(() => import("@/pages/governance-treasury"));
 const TrustCooperative = lazy(() => import("@/pages/trust-cooperative"));
@@ -374,6 +375,7 @@ function DWSCRouter() {
         <Route path="/signal-core" component={SignalCore} />
         <Route path="/signal-core/official" component={SignalCoreOfficial} />
         <Route path="/verify" component={Verify} />
+        <Route path="/verify-email" component={VerifyEmail} />
         <Route path="/governance" component={SignalCore} />
         <Route path="/governance-charter" component={GovernanceCharter} />
         <Route path="/governance-treasury" component={GovernanceTreasury} />

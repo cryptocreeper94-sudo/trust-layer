@@ -123,10 +123,16 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
       const result = await signup(email, password, name || undefined, username);
       console.log("[Signup] Result:", result);
       if (result.success) {
-        toast({ title: "Account created!", description: "Welcome to DarkWave!" });
-        onSuccess?.();
-        handleClose();
-        window.location.reload();
+        if (result.emailVerificationRequired) {
+          toast({ title: "Account created!", description: "Please verify your email to get 1,000 Shells!" });
+          handleClose();
+          window.location.href = "/verify-email";
+        } else {
+          toast({ title: "Account created!", description: "Welcome to DarkWave!" });
+          onSuccess?.();
+          handleClose();
+          window.location.reload();
+        }
       } else {
         console.error("[Signup] Failed:", result.error);
         const errorMsg = result.error || "Registration failed. Please try again.";
