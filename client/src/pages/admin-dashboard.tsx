@@ -6,7 +6,7 @@ import {
   BarChart3, Users, Megaphone, Gift, Handshake, DollarSign, 
   Zap, TrendingUp, Activity, Globe, Gamepad2, Crown, Settings,
   ArrowRight, ExternalLink, Clock, CheckCircle2, AlertTriangle,
-  Target, Coins, Rocket, Lock, Unlock
+  Target, Coins, Rocket, Lock, Unlock, FileText
 } from "lucide-react";
 import { MobileNav } from "@/components/mobile-nav";
 
@@ -148,6 +148,7 @@ export default function AdminDashboard() {
     { title: "Pulse AI", description: "Trading intelligence", url: "/pulse", icon: <TrendingUp className="w-5 h-5" /> },
     { title: "Strike Agent", description: "Token analysis AI", url: "/strike-agent", icon: <Activity className="w-5 h-5" /> },
     { title: "Trust Layer", description: "Membership & Trust Cards", url: "/trust-layer", icon: <Users className="w-5 h-5" /> },
+    { title: "Project Milestones", description: "Governance & allocation", url: "/team-message", icon: <FileText className="w-5 h-5" /> },
   ];
 
   return (
