@@ -1186,7 +1186,38 @@ export async function registerRoutes(
       // Check if user already exists
       const existingUser = await storage.getUserByEmail(normalizedEmail);
       if (existingUser) {
-        return res.status(400).json({ error: "An account with this email already exists" });
+        // If user exists but has no password, allow them to set one (upgrade from quick-register)
+        if (!existingUser.passwordHash) {
+          // Hash password with SHA-256 + salt
+          const salt = crypto.randomBytes(16).toString('hex');
+          const passwordHash = crypto.createHash('sha256').update(password + salt).digest('hex') + ':' + salt;
+          
+          // Update the existing user with password and optional username/displayName
+          await db.update(users).set({ 
+            passwordHash,
+            emailVerified: true,
+            ...(username && !existingUser.username ? { username } : {}),
+            ...(displayName && !existingUser.displayName ? { displayName } : {}),
+          }).where(eq(users.id, existingUser.id));
+          
+          // Set session
+          (req.session as any).userId = existingUser.id;
+          
+          // Extend session to 30 days if rememberMe is checked
+          if (rememberMe) {
+            req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
+          }
+          
+          return res.json({ 
+            success: true, 
+            userId: existingUser.id, 
+            signupPosition: existingUser.signupPosition,
+            emailVerificationRequired: false,
+            passwordSet: true,
+            message: "Password set successfully! You can now log in."
+          });
+        }
+        return res.status(400).json({ error: "An account with this email already exists. Please log in instead." });
       }
 
       // Check if username is taken
@@ -1412,7 +1443,7 @@ export async function registerRoutes(
       }
 
       if (!user.passwordHash) {
-        return res.status(401).json({ error: "Please sign in with your original method (Google/GitHub)" });
+        return res.status(401).json({ error: "No password set. Please sign up to create a password." });
       }
 
       // Verify password - passwordHash format: "hash:salt"
