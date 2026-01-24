@@ -2774,10 +2774,10 @@ export async function registerRoutes(
       
       // OWNER_SECRET - full owner access (highest priority)
       const ownerSecret = process.env.OWNER_SECRET;
-      // Developer PIN - owner full access (Jason) -> Developer portal
-      const developerPin = process.env.DEVELOPER_PIN || "0424";
-      // Admin PIN - limited access (Kan) -> Admin portal
-      const adminPin = process.env.ADMIN_PIN || process.env.TEAM_ACCESS_PIN || "1234";
+      // Developer PIN - disabled (no default)
+      const developerPin = process.env.DEVELOPER_PIN || null;
+      // Admin PIN - disabled (no default)
+      const adminPin = process.env.ADMIN_PIN || null;
       
       const pinBuffer = Buffer.from(pin);
       
@@ -2789,15 +2789,21 @@ export async function registerRoutes(
                   crypto.timingSafeEqual(pinBuffer, ownerBuffer);
       }
       
-      // Check Developer PIN (Jason -> full access)
-      const devPinBuffer = Buffer.from(developerPin);
-      const isDeveloper = pinBuffer.length === devPinBuffer.length && 
-                crypto.timingSafeEqual(pinBuffer, devPinBuffer);
+      // Check Developer PIN (disabled if not set)
+      let isDeveloper = false;
+      if (developerPin) {
+        const devPinBuffer = Buffer.from(developerPin);
+        isDeveloper = pinBuffer.length === devPinBuffer.length && 
+                  crypto.timingSafeEqual(pinBuffer, devPinBuffer);
+      }
       
-      // Check Admin PIN (Kan -> limited access)
-      const adminPinBuffer = Buffer.from(adminPin);
-      const isAdmin = pinBuffer.length === adminPinBuffer.length && 
-                crypto.timingSafeEqual(pinBuffer, adminPinBuffer);
+      // Check Admin PIN (disabled if not set)
+      let isAdmin = false;
+      if (adminPin) {
+        const adminPinBuffer = Buffer.from(adminPin);
+        isAdmin = pinBuffer.length === adminPinBuffer.length && 
+                  crypto.timingSafeEqual(pinBuffer, adminPinBuffer);
+      }
       
       if (isOwner || isDeveloper) {
         portalPinAttempts.delete(clientIp);
@@ -14636,8 +14642,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  // Team Admin Authentication (separate from owner)
-  const TEAM_PIN = process.env.TEAM_ADMIN_PIN || "1111";
+  // Team Admin Authentication (disabled - no default PIN)
+  const TEAM_PIN = process.env.TEAM_ADMIN_PIN || null;
   const teamAuthLockouts = new Map<string, { attempts: number; lockedUntil: number }>();
 
   const teamAuthMiddleware = (req: any, res: any, next: any) => {
@@ -14659,7 +14665,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
     
     const { pin } = req.body;
-    if (pin && pin === TEAM_PIN) {
+    // Team auth is disabled if TEAM_PIN is not set
+    if (TEAM_PIN && pin && pin === TEAM_PIN) {
       teamAuthLockouts.delete(ip);
       const innerToken = generateOwnerToken();
       const token = "team_" + innerToken;
