@@ -5,7 +5,7 @@ import { Link } from "wouter";
 import { 
   ArrowLeft, Plus, Edit2, ToggleLeft, ToggleRight, 
   Shell, Trophy, Users, Clock, CheckCircle, XCircle, AlertCircle,
-  Lightbulb, ChevronDown, ChevronUp, Sparkles
+  Lightbulb, ChevronDown, ChevronUp, Sparkles, RefreshCw, Download
 } from "lucide-react";
 import { MobileNav } from "@/components/mobile-nav";
 
@@ -176,6 +176,26 @@ export default function ZealyAdmin() {
     updateMutation.mutate({ id: mapping.id, data: { isActive: !mapping.isActive } });
   };
 
+  // Zealy API Sync - Pull completed quests and award shells
+  const [syncResult, setSyncResult] = useState<{ processed: number; awarded: number; pending: number; message?: string } | null>(null);
+  const syncMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch("/api/owner/zealy/sync", {
+        method: "POST",
+        headers: getOwnerHeaders(),
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || "Failed to sync");
+      }
+      return res.json();
+    },
+    onSuccess: (data) => {
+      setSyncResult(data);
+      queryClient.invalidateQueries({ queryKey: ["/api/owner/zealy/events"] });
+    },
+  });
+
   const resetForm = () => {
     setFormData({
       zealyQuestId: "",
@@ -255,6 +275,70 @@ export default function ZealyAdmin() {
               {showSuggestions ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </motion.button>
           </div>
+        </motion.div>
+
+        {/* ZEALY API SYNC SECTION */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8 bg-gradient-to-r from-green-500/10 to-cyan-500/10 border border-green-500/30 rounded-2xl p-6"
+        >
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                <Download className="w-5 h-5 text-green-400" />
+                Zealy API Sync
+              </h2>
+              <p className="text-gray-400 text-sm mt-1">
+                Pull completed quests from Zealy and award Shells to matched users
+              </p>
+            </div>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => syncMutation.mutate()}
+              disabled={syncMutation.isPending}
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-cyan-500 rounded-xl text-white font-bold disabled:opacity-50 shadow-lg shadow-green-500/20"
+              data-testid="button-sync-zealy"
+            >
+              <RefreshCw className={`w-5 h-5 ${syncMutation.isPending ? 'animate-spin' : ''}`} />
+              {syncMutation.isPending ? 'Syncing...' : 'Sync from Zealy'}
+            </motion.button>
+          </div>
+
+          {syncMutation.isError && (
+            <div className="mt-4 p-3 bg-red-500/20 border border-red-500/30 rounded-xl text-red-400 text-sm">
+              Error: {(syncMutation.error as Error).message}
+            </div>
+          )}
+
+          {syncResult && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              className="mt-4"
+            >
+              {syncResult.message && (
+                <div className="mb-4 p-3 bg-green-500/20 border border-green-500/30 rounded-xl text-green-400 text-sm">
+                  {syncResult.message}
+                </div>
+              )}
+              <div className="grid grid-cols-3 gap-4">
+                <div className="bg-slate-800/50 rounded-xl p-4 text-center">
+                  <div className="text-3xl font-bold text-white">{syncResult.processed || 0}</div>
+                  <div className="text-sm text-gray-400">Quests Processed</div>
+                </div>
+                <div className="bg-slate-800/50 rounded-xl p-4 text-center">
+                  <div className="text-3xl font-bold text-green-400">{syncResult.awarded || 0}</div>
+                  <div className="text-sm text-gray-400">Shells Awarded</div>
+                </div>
+                <div className="bg-slate-800/50 rounded-xl p-4 text-center">
+                  <div className="text-3xl font-bold text-yellow-400">{syncResult.pending || 0}</div>
+                  <div className="text-sm text-gray-400">Pending Match</div>
+                </div>
+              </div>
+            </motion.div>
+          )}
         </motion.div>
 
         <AnimatePresence>
