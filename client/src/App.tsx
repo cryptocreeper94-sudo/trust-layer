@@ -431,8 +431,6 @@ function DWSCRouter() {
         <Route path="/multisig" component={MultiSig} />
         <Route path="/proof-of-reserve" component={ProofOfReserve} />
         <Route path="/liquid-staking" component={LiquidStaking} />
-        <Route path="/admin/rewards" component={AdminRewards} />
-        <Route path="/admin/handoff" component={AdminHandoff} />
         <Route path="/airdrop" component={AirdropClaim} />
         <Route path="/quests" component={Quests} />
         <Route path="/network" component={NetworkStats} />
@@ -441,10 +439,6 @@ function DWSCRouter() {
         <Route path="/wallet" component={Wallet} />
         <Route path="/status" component={Status} />
         <Route path="/api-docs" component={ApiDocs} />
-        <Route path="/admin" component={AdminDashboard} />
-        <Route path="/admin/analytics" component={AdminAnalytics} />
-        <Route path="/admin/partner-requests" component={AdminPartnerRequests} />
-        <Route path="/admin/marketing" component={AdminMarketing} />
         <Route path="/owner-admin" component={OwnerAdminPortal} />
         <Route path="/owner-admin/analytics" component={OwnerAnalytics} />
         <Route path="/owner-admin/seo" component={OwnerSeoManager} />
