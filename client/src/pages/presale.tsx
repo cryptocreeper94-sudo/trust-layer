@@ -553,8 +553,8 @@ function PresaleProgress() {
             <div className="absolute inset-0 animate-pulse bg-cyan-400/20 rounded-full blur-xl" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-white">Signal Presale</h2>
-            <p className="text-gray-400">Live Now</p>
+            <h2 className="text-xl font-bold text-white">Signal Presale</h2>
+            <p className="text-gray-400 text-sm">Live Now</p>
           </div>
         </div>
 
