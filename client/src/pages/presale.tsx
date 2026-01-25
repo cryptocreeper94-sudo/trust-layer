@@ -637,13 +637,19 @@ function PresaleProgress() {
             The blockchain is live. The portal is live. The ecosystem apps are live. 
             Signal Generation Event happens when milestones are complete, not on an arbitrary date.
           </p>
-          <div className="flex flex-wrap gap-2 text-[10px]">
+          <div className="flex flex-wrap gap-2 text-[10px] mb-3">
             <span className="px-2 py-1 rounded-full bg-green-500/20 text-green-400 border border-green-500/30">Blockchain Live</span>
             <span className="px-2 py-1 rounded-full bg-green-500/20 text-green-400 border border-green-500/30">Portal Live</span>
             <span className="px-2 py-1 rounded-full bg-green-500/20 text-green-400 border border-green-500/30">DEX Live</span>
             <span className="px-2 py-1 rounded-full bg-green-500/20 text-green-400 border border-green-500/30">Staking Live</span>
             <span className="px-2 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">Chronicles Building</span>
+            <span className="px-2 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">Guardian Scanner Building</span>
+            <span className="px-2 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">Arcade Building</span>
           </div>
+          <p className="text-gray-400 text-[10px] leading-relaxed">
+            Have an idea for a web app or website? We're building an ecosystem of connected applications. 
+            Reach out to suggest a project, or ask how you can build your own and join the network.
+          </p>
         </div>
 
         <Button 
