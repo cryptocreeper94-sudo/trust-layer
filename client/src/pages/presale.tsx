@@ -1324,34 +1324,37 @@ export default function Presale() {
             Your tokens are allocated immediately upon purchase and will be distributed to your Trust Layer wallet at mainnet launch.
           </p>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <HolographicCard className="p-6 text-center relative" glow="cyan">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm">1</div>
-              <CreditCard className="w-8 h-8 text-cyan-400 mx-auto mb-4 mt-2" />
-              <h3 className="text-lg font-bold text-white mb-2">Get Crypto</h3>
-              <p className="text-gray-400 text-sm">Use existing crypto or buy with card via Stripe's secure onramp</p>
-            </HolographicCard>
-            
-            <HolographicCard className="p-6 text-center relative" glow="purple">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm">2</div>
-              <Wallet className="w-8 h-8 text-purple-400 mx-auto mb-4 mt-2" />
-              <h3 className="text-lg font-bold text-white mb-2">Pay with Crypto</h3>
-              <p className="text-gray-400 text-sm">Complete checkout via Coinbase - BTC, ETH, USDC accepted</p>
-            </HolographicCard>
-            
-            <HolographicCard className="p-6 text-center relative" glow="pink">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm">3</div>
-              <Users className="w-8 h-8 text-pink-400 mx-auto mb-4 mt-2" />
-              <h3 className="text-lg font-bold text-white mb-2">Create Wallet</h3>
-              <p className="text-gray-400 text-sm">Before launch, create your Trust Layer wallet to claim tokens</p>
-            </HolographicCard>
-            
-            <HolographicCard className="p-6 text-center relative" glow="amber">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm">4</div>
-              <Coins className="w-8 h-8 text-amber-400 mx-auto mb-4 mt-2" />
-              <h3 className="text-lg font-bold text-white mb-2">Receive Signal</h3>
-              <p className="text-gray-400 text-sm">Signal + converted Shells airdropped to your wallet</p>
-            </HolographicCard>
+          <div className="overflow-x-auto pb-4 -mx-4 px-4 mb-8">
+            <div className="flex gap-4 pt-6 min-w-max lg:min-w-0 lg:grid lg:grid-cols-4">
+              <HolographicCard className="p-6 text-center relative w-64 lg:w-auto flex-shrink-0" glow="cyan">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">1</div>
+                <CreditCard className="w-8 h-8 text-cyan-400 mx-auto mb-4 mt-2" />
+                <h3 className="text-lg font-bold text-white mb-2">Get Crypto</h3>
+                <p className="text-gray-400 text-sm">Use existing crypto or buy with card via Stripe's secure onramp</p>
+              </HolographicCard>
+              
+              <HolographicCard className="p-6 text-center relative w-64 lg:w-auto flex-shrink-0" glow="purple">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">2</div>
+                <Wallet className="w-8 h-8 text-purple-400 mx-auto mb-4 mt-2" />
+                <h3 className="text-lg font-bold text-white mb-2">Pay with Crypto</h3>
+                <p className="text-gray-400 text-sm">Complete checkout via Coinbase - BTC, ETH, USDC accepted</p>
+              </HolographicCard>
+              
+              <HolographicCard className="p-6 text-center relative w-64 lg:w-auto flex-shrink-0" glow="pink">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">3</div>
+                <Users className="w-8 h-8 text-pink-400 mx-auto mb-4 mt-2" />
+                <h3 className="text-lg font-bold text-white mb-2">Create Wallet</h3>
+                <p className="text-gray-400 text-sm">Before launch, create your Trust Layer wallet to claim tokens</p>
+              </HolographicCard>
+              
+              <HolographicCard className="p-6 text-center relative w-64 lg:w-auto flex-shrink-0" glow="amber">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">4</div>
+                <Coins className="w-8 h-8 text-amber-400 mx-auto mb-4 mt-2" />
+                <h3 className="text-lg font-bold text-white mb-2">Receive Signal</h3>
+                <p className="text-gray-400 text-sm">Signal + converted Shells airdropped to your wallet</p>
+              </HolographicCard>
+            </div>
+            <p className="text-center text-gray-500 text-xs mt-3 lg:hidden">Swipe to see all steps →</p>
           </div>
           
           <div className="max-w-3xl mx-auto p-6 rounded-2xl bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 border border-white/10">
