@@ -659,6 +659,203 @@ export default function StudioDocs() {
         </div>
       ),
     },
+    {
+      id: "resources",
+      title: "Learning Resources",
+      icon: <Lightbulb className="w-5 h-5" />,
+      subsections: [
+        { id: "free-courses", title: "Free Courses & Tutorials" },
+        { id: "recommended-reading", title: "Recommended Reading" },
+        { id: "practice-projects", title: "Practice Projects" },
+      ],
+      content: (
+        <div className="space-y-8">
+          <section id="free-courses">
+            <h3 className="text-2xl font-bold text-white mb-4">Free Courses & Tutorials</h3>
+            <p className="text-white/70 mb-4">
+              The best way to learn coding is through structured courses. Here are some excellent free resources:
+            </p>
+            <div className="space-y-4">
+              <GlassCard className="p-4 hover:border-cyan-500/30 transition-colors">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center flex-shrink-0">
+                    <Code className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <a href="https://www.freecodecamp.org" target="_blank" rel="noopener noreferrer" className="text-white font-medium hover:text-cyan-400 transition-colors">
+                      freeCodeCamp
+                    </a>
+                    <p className="text-white/60 text-sm mt-1">
+                      Free, self-paced courses covering HTML, CSS, JavaScript, Python, and more. 
+                      Earn certifications as you complete projects.
+                    </p>
+                    <Badge className="mt-2 bg-green-500/20 text-green-400 border-green-500/30">Beginner Friendly</Badge>
+                  </div>
+                </div>
+              </GlassCard>
+              <GlassCard className="p-4 hover:border-cyan-500/30 transition-colors">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
+                    <BookOpen className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <a href="https://www.theodinproject.com" target="_blank" rel="noopener noreferrer" className="text-white font-medium hover:text-cyan-400 transition-colors">
+                      The Odin Project
+                    </a>
+                    <p className="text-white/60 text-sm mt-1">
+                      A full-stack curriculum that takes you from zero to job-ready. 
+                      Covers web development fundamentals, JavaScript, React, and Node.js.
+                    </p>
+                    <Badge className="mt-2 bg-blue-500/20 text-blue-400 border-blue-500/30">Full Stack</Badge>
+                  </div>
+                </div>
+              </GlassCard>
+              <GlassCard className="p-4 hover:border-cyan-500/30 transition-colors">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center flex-shrink-0">
+                    <Zap className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <a href="https://javascript.info" target="_blank" rel="noopener noreferrer" className="text-white font-medium hover:text-cyan-400 transition-colors">
+                      JavaScript.info
+                    </a>
+                    <p className="text-white/60 text-sm mt-1">
+                      The most comprehensive JavaScript tutorial on the web. 
+                      From basics to advanced topics, with interactive examples.
+                    </p>
+                    <Badge className="mt-2 bg-yellow-500/20 text-yellow-400 border-yellow-500/30">JavaScript Deep Dive</Badge>
+                  </div>
+                </div>
+              </GlassCard>
+              <GlassCard className="p-4 hover:border-cyan-500/30 transition-colors">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center flex-shrink-0">
+                    <Terminal className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <a href="https://www.codecademy.com" target="_blank" rel="noopener noreferrer" className="text-white font-medium hover:text-cyan-400 transition-colors">
+                      Codecademy
+                    </a>
+                    <p className="text-white/60 text-sm mt-1">
+                      Interactive coding lessons in Python, JavaScript, SQL, and more. 
+                      Free tier available with many courses.
+                    </p>
+                    <Badge className="mt-2 bg-purple-500/20 text-purple-400 border-purple-500/30">Interactive</Badge>
+                  </div>
+                </div>
+              </GlassCard>
+            </div>
+          </section>
+
+          <section id="recommended-reading" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Recommended Reading</h3>
+            <p className="text-white/70 mb-4">
+              Books and articles that will deepen your understanding:
+            </p>
+            <div className="space-y-3">
+              <GlassCard className="p-4">
+                <p className="text-white font-medium">"Eloquent JavaScript" by Marijn Haverbeke</p>
+                <p className="text-white/60 text-sm mt-1">Free online book covering JavaScript from the ground up. Great for understanding the language deeply.</p>
+                <a href="https://eloquentjavascript.net" target="_blank" rel="noopener noreferrer" className="text-cyan-400 text-sm hover:underline mt-2 inline-block">
+                  Read free online →
+                </a>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium">"You Don't Know JS" by Kyle Simpson</p>
+                <p className="text-white/60 text-sm mt-1">A deep dive into JavaScript mechanics. Perfect for intermediate developers wanting to level up.</p>
+                <a href="https://github.com/getify/You-Dont-Know-JS" target="_blank" rel="noopener noreferrer" className="text-cyan-400 text-sm hover:underline mt-2 inline-block">
+                  Read on GitHub →
+                </a>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium">"The Missing Semester of Your CS Education" - MIT</p>
+                <p className="text-white/60 text-sm mt-1">Learn essential developer tools: command line, Git, debugging, and more. Skills every developer needs.</p>
+                <a href="https://missing.csail.mit.edu" target="_blank" rel="noopener noreferrer" className="text-cyan-400 text-sm hover:underline mt-2 inline-block">
+                  View course →
+                </a>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium">"React Documentation"</p>
+                <p className="text-white/60 text-sm mt-1">The official React docs are excellent. Interactive tutorials and in-depth guides from the React team.</p>
+                <a href="https://react.dev/learn" target="_blank" rel="noopener noreferrer" className="text-cyan-400 text-sm hover:underline mt-2 inline-block">
+                  Start learning React →
+                </a>
+              </GlassCard>
+            </div>
+          </section>
+
+          <section id="practice-projects" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Practice Projects</h3>
+            <p className="text-white/70 mb-4">
+              The best way to learn is by building. Start with these project ideas:
+            </p>
+            <div className="grid gap-4 md:grid-cols-2">
+              <GlassCard className="p-4 bg-gradient-to-br from-cyan-500/10 to-transparent">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                  <span className="text-green-400 text-xs font-medium">BEGINNER</span>
+                </div>
+                <p className="text-white font-medium">Todo List App</p>
+                <p className="text-white/60 text-sm mt-1">Add, complete, and delete tasks. Learn state management basics.</p>
+              </GlassCard>
+              <GlassCard className="p-4 bg-gradient-to-br from-cyan-500/10 to-transparent">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                  <span className="text-green-400 text-xs font-medium">BEGINNER</span>
+                </div>
+                <p className="text-white font-medium">Weather App</p>
+                <p className="text-white/60 text-sm mt-1">Fetch data from an API and display it beautifully.</p>
+              </GlassCard>
+              <GlassCard className="p-4 bg-gradient-to-br from-yellow-500/10 to-transparent">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                  <span className="text-yellow-400 text-xs font-medium">INTERMEDIATE</span>
+                </div>
+                <p className="text-white font-medium">Blog Platform</p>
+                <p className="text-white/60 text-sm mt-1">Create, edit, and display blog posts with a database backend.</p>
+              </GlassCard>
+              <GlassCard className="p-4 bg-gradient-to-br from-yellow-500/10 to-transparent">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                  <span className="text-yellow-400 text-xs font-medium">INTERMEDIATE</span>
+                </div>
+                <p className="text-white font-medium">E-commerce Store</p>
+                <p className="text-white/60 text-sm mt-1">Product listings, cart, and checkout flow with payments.</p>
+              </GlassCard>
+              <GlassCard className="p-4 bg-gradient-to-br from-purple-500/10 to-transparent">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+                  <span className="text-purple-400 text-xs font-medium">ADVANCED</span>
+                </div>
+                <p className="text-white font-medium">Real-time Chat App</p>
+                <p className="text-white/60 text-sm mt-1">WebSocket connections, user authentication, message history.</p>
+              </GlassCard>
+              <GlassCard className="p-4 bg-gradient-to-br from-purple-500/10 to-transparent">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+                  <span className="text-purple-400 text-xs font-medium">ADVANCED</span>
+                </div>
+                <p className="text-white font-medium">AI-Powered Tool</p>
+                <p className="text-white/60 text-sm mt-1">Integrate OpenAI API to build something intelligent.</p>
+              </GlassCard>
+            </div>
+
+            <GlassCard className="mt-6 p-4 bg-cyan-500/10 border-cyan-500/30">
+              <div className="flex items-start gap-3">
+                <Lightbulb className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-white font-medium">Pro Tip: Build in Public</p>
+                  <p className="text-white/60 text-sm mt-1">
+                    Share your progress on social media as you build. You'll stay motivated, 
+                    get feedback, and connect with other developers. Use #BuildInPublic and #TrustLayerStudio!
+                  </p>
+                </div>
+              </div>
+            </GlassCard>
+          </section>
+        </div>
+      ),
+    },
   ];
 
   return (
