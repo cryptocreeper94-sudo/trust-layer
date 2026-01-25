@@ -648,7 +648,7 @@ function PresaleProgress() {
           </div>
           <p className="text-gray-400 text-[10px] leading-relaxed">
             Have an idea for a web app or website? We're building an ecosystem of connected applications. 
-            Reach out to suggest a project, or ask how you can build your own and join the network.
+            <a href="/support" className="text-cyan-400 hover:text-cyan-300 underline">Submit a suggestion</a> or ask how you can build your own and join the network.
           </p>
         </div>
 
