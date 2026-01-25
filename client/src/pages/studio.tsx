@@ -1903,12 +1903,12 @@ console.log('Trust Layer Studio loaded!');`,
                       <p className="text-xs text-white/40">Ctrl+Shift+P for commands</p>
                     </div>
                   </button>
-                  <Link href="/studio" onClick={() => setShowHelpMenu(false)}>
+                  <Link href="/studio/docs" onClick={() => setShowHelpMenu(false)}>
                     <div className="w-full flex items-center gap-3 px-3 py-2 text-sm text-left hover:bg-white/5 transition-colors">
                       <BookOpen className="w-4 h-4 text-purple-400" />
                       <div>
-                        <p className="font-medium">Getting Started Guide</p>
-                        <p className="text-xs text-white/40">Learn the basics</p>
+                        <p className="font-medium">Full Documentation</p>
+                        <p className="text-xs text-white/40">Learn how to use the IDE</p>
                       </div>
                     </div>
                   </Link>

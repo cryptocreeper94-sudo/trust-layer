@@ -66,6 +66,7 @@ const Pricing = lazy(() => import("@/pages/pricing"));
 const Studio = lazy(() => import("@/pages/studio"));
 const StudioLanding = lazy(() => import("@/pages/studio-landing"));
 const StudioProjects = lazy(() => import("@/pages/studio-projects"));
+const StudioDocs = lazy(() => import("@/pages/studio-docs"));
 const Team = lazy(() => import("@/pages/team"));
 const Bridge = lazy(() => import("@/pages/bridge"));
 const Staking = lazy(() => import("@/pages/staking"));
@@ -411,6 +412,7 @@ function DWSCRouter() {
         <Route path="/studio" component={StudioLanding} />
         <Route path="/studio/editor" component={Studio} />
         <Route path="/studio/projects" component={StudioProjects} />
+        <Route path="/studio/docs" component={StudioDocs} />
         <Route path="/team" component={Team} />
         <Route path="/bridge" component={Bridge} />
         <Route path="/staking" component={Staking} />
@@ -568,6 +570,7 @@ function StudiosRouter() {
         <Route path="/" component={StudioLanding} />
         <Route path="/studio" component={StudioLanding} />
         <Route path="/studio/editor" component={Studio} />
+        <Route path="/studio/docs" component={StudioDocs} />
         <Route path="/dev-studio" component={DevStudio} />
         <Route path="/studio/projects" component={StudioProjects} />
         <Route path="/code-snippets" component={CodeSnippets} />

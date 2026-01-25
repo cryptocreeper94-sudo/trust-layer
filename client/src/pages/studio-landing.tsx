@@ -73,7 +73,7 @@ const quickStartSteps = [
 ];
 
 const helpResources = [
-  { icon: BookOpen, title: "Documentation", description: "Detailed guides and API reference", link: "/docs" },
+  { icon: BookOpen, title: "Documentation", description: "Detailed guides and API reference", link: "/studio/docs" },
   { icon: Video, title: "Video Tutorials", description: "Step-by-step video walkthroughs", link: "/tutorials" },
   { icon: MessageSquare, title: "Community", description: "Get help from other developers", link: "/community" },
   { icon: Keyboard, title: "Keyboard Shortcuts", description: "Master the IDE with shortcuts", link: "#shortcuts" }
