@@ -91,7 +91,7 @@ export default function StudioProjects() {
         setProjects(prev => [project, ...prev]);
         setCreateOpen(false);
         setNewProject({ name: "", description: "", language: "javascript" });
-        setLocation(`/studio?project=${project.id}`);
+        setLocation(`/studio/editor?project=${project.id}`);
       }
     } catch (error) {
       console.error("Failed to create project:", error);
@@ -128,7 +128,7 @@ export default function StudioProjects() {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center gap-6">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-white mb-2">DarkWave Studio</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">Trust Layer Studio</h1>
           <p className="text-muted-foreground">Sign in to access your projects</p>
         </div>
         <Button 
@@ -152,7 +152,7 @@ export default function StudioProjects() {
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 text-cyan-400 font-bold text-xl" data-testid="link-logo">
             <Code2 className="w-6 h-6" />
-            DarkWave Studio
+            Trust Layer Studio
           </Link>
           <div className="flex items-center gap-4">
             <span className="text-sm text-muted-foreground">{user?.displayName || user?.email}</span>
@@ -299,7 +299,7 @@ export default function StudioProjects() {
                       Updated {format(new Date(project.updatedAt), "MMM d, yyyy")}
                     </div>
                     <div className="flex gap-2">
-                      <Link href={`/studio?project=${project.id}`} className="flex-1">
+                      <Link href={`/studio/editor?project=${project.id}`} className="flex-1">
                         <Button className="w-full bg-cyan-500/10 text-cyan-400 hover:bg-cyan-500/20 border border-cyan-500/30" data-testid={`button-open-project-${project.id}`}>
                           <FolderOpen className="w-4 h-4 mr-2" />
                           Open

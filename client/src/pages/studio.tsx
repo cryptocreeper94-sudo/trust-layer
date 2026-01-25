@@ -8,7 +8,8 @@ import {
   GitBranch, GitCommit, History, RotateCcw, Terminal,
   Rocket, Cloud, Link2, Users, Info, Zap, Shield, Database,
   ExternalLink, Copy, CheckCircle, Loader2, Send, Search, Replace, Keyboard,
-  Upload, Download, Filter, Mic, MicOff, Bot, Sparkles, MessageSquare, Eye
+  Upload, Download, Filter, Mic, MicOff, Bot, Sparkles, MessageSquare, Eye,
+  HelpCircle, BookOpen, Video, GraduationCap
 } from "lucide-react";
 import { MonacoEditor } from "@/components/monaco-editor";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -468,7 +469,7 @@ export default function Studio() {
   const [presence, setPresence] = useState<PresenceUser[]>([]);
   const wsRef = useRef<WebSocket | null>(null);
   const [commits, setCommits] = useState<Commit[]>([]);
-  const [consoleOutput, setConsoleOutput] = useState<string[]>(["> DarkWave Studio v1.0.0", "> Ready"]);
+  const [consoleOutput, setConsoleOutput] = useState<string[]>(["> Trust Layer Studio v1.0.0", "> Ready"]);
   const [running, setRunning] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [commitMessage, setCommitMessage] = useState("");
@@ -636,13 +637,13 @@ button:hover {
           name: "app.js",
           path: "app.js",
           isFolder: false,
-          content: `// DarkWave Studio Demo
+          content: `// Trust Layer Studio Demo
 function showMessage() {
   const output = document.getElementById('output');
   output.innerHTML = '<p style="margin-top: 1rem; color: #00d4ff;">✨ Welcome to Trust Layer!</p>';
 }
 
-console.log('DarkWave Studio loaded!');`,
+console.log('Trust Layer Studio loaded!');`,
           language: "javascript"
         }
       ]);
@@ -1784,6 +1785,7 @@ console.log('DarkWave Studio loaded!');`,
   }, [activeFile, projectId]);
 
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [showHelpMenu, setShowHelpMenu] = useState(false);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     const isCmd = e.metaKey || e.ctrlKey;
@@ -1821,7 +1823,7 @@ console.log('DarkWave Studio loaded!');`,
       <div className="h-screen flex items-center justify-center bg-[#0a0a0f]">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading DarkWave Studio...</p>
+          <p className="text-muted-foreground">Loading Trust Layer Studio...</p>
         </div>
       </div>
     );
@@ -1868,6 +1870,76 @@ console.log('DarkWave Studio loaded!');`,
           >
             <Settings className="w-3.5 h-3.5" />
           </Button>
+          
+          {/* Help Menu Button */}
+          <div className="relative">
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setShowHelpMenu(!showHelpMenu)}
+              className="h-6 px-2 gap-1 text-xs"
+              data-testid="button-help-menu"
+            >
+              <HelpCircle className="w-3.5 h-3.5" />
+              Help
+            </Button>
+            {showHelpMenu && (
+              <div 
+                className="absolute top-full left-0 mt-1 w-56 bg-slate-900 border border-white/10 rounded-lg shadow-xl z-50 overflow-hidden"
+                onMouseLeave={() => setShowHelpMenu(false)}
+              >
+                <div className="p-2 border-b border-white/5">
+                  <p className="text-xs text-white/40 uppercase">Help & Resources</p>
+                </div>
+                <div className="py-1">
+                  <button
+                    onClick={() => { setShowShortcuts(true); setShowHelpMenu(false); }}
+                    className="w-full flex items-center gap-3 px-3 py-2 text-sm text-left hover:bg-white/5 transition-colors"
+                    data-testid="help-shortcuts"
+                  >
+                    <Keyboard className="w-4 h-4 text-cyan-400" />
+                    <div>
+                      <p className="font-medium">Keyboard Shortcuts</p>
+                      <p className="text-xs text-white/40">Ctrl+Shift+P for commands</p>
+                    </div>
+                  </button>
+                  <Link href="/studio" onClick={() => setShowHelpMenu(false)}>
+                    <div className="w-full flex items-center gap-3 px-3 py-2 text-sm text-left hover:bg-white/5 transition-colors">
+                      <BookOpen className="w-4 h-4 text-purple-400" />
+                      <div>
+                        <p className="font-medium">Getting Started Guide</p>
+                        <p className="text-xs text-white/40">Learn the basics</p>
+                      </div>
+                    </div>
+                  </Link>
+                  <a href="https://discord.gg/trustlayer" target="_blank" rel="noopener noreferrer" onClick={() => setShowHelpMenu(false)}>
+                    <div className="w-full flex items-center gap-3 px-3 py-2 text-sm text-left hover:bg-white/5 transition-colors">
+                      <MessageSquare className="w-4 h-4 text-green-400" />
+                      <div>
+                        <p className="font-medium">Community Discord</p>
+                        <p className="text-xs text-white/40">Get help from developers</p>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="/tutorials" onClick={() => setShowHelpMenu(false)}>
+                    <div className="w-full flex items-center gap-3 px-3 py-2 text-sm text-left hover:bg-white/5 transition-colors">
+                      <Video className="w-4 h-4 text-amber-400" />
+                      <div>
+                        <p className="font-medium">Video Tutorials</p>
+                        <p className="text-xs text-white/40">Watch step-by-step guides</p>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+                <div className="p-2 border-t border-white/5 bg-white/5">
+                  <div className="flex items-center gap-2 text-xs text-white/40">
+                    <GraduationCap className="w-3 h-3" />
+                    <span>Press F1 in editor for quick help</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
           
           {presence.length > 0 && (
             <div className="flex items-center gap-1 ml-3">
