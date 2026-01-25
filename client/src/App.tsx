@@ -355,7 +355,9 @@ function DWSCRouter() {
     <Suspense fallback={<PageLoader />}>
       <ScrollToTop />
       <Switch>
-        <Route path="/" component={Home} />
+        <Route path="/" component={Presale} />
+        <Route path="/portal" component={Home} />
+        <Route path="/home" component={Home} />
         <Route path="/note" component={DevelopersNote} />
         <Route path="/join/:code" component={SyndicateInvite} />
         <Route path="/rewards" component={Rewards} />
