@@ -636,14 +636,14 @@ function PresaleProgress() {
             The blockchain is live. The portal is live. The ecosystem apps are live. 
             Signal Generation Event happens when milestones are complete, not on an arbitrary date.
           </p>
-          <div className="flex flex-wrap gap-2 text-[10px] mb-3">
-            <span className="px-2 py-1 rounded-full bg-green-500/20 text-green-400 border border-green-500/30">Blockchain Live</span>
-            <span className="px-2 py-1 rounded-full bg-green-500/20 text-green-400 border border-green-500/30">Portal Live</span>
-            <span className="px-2 py-1 rounded-full bg-green-500/20 text-green-400 border border-green-500/30">DEX Live</span>
-            <span className="px-2 py-1 rounded-full bg-green-500/20 text-green-400 border border-green-500/30">Staking Live</span>
-            <span className="px-2 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">Chronicles Building</span>
-            <span className="px-2 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">Guardian Scanner Building</span>
-            <span className="px-2 py-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30">Arcade Building</span>
+          <div className="grid grid-cols-2 gap-2 text-[10px] mb-3">
+            <span className="px-3 py-1.5 rounded-full bg-green-500/20 text-green-400 border border-green-500/30 text-center whitespace-nowrap">Blockchain Live</span>
+            <span className="px-3 py-1.5 rounded-full bg-green-500/20 text-green-400 border border-green-500/30 text-center whitespace-nowrap">Portal Live</span>
+            <span className="px-3 py-1.5 rounded-full bg-green-500/20 text-green-400 border border-green-500/30 text-center whitespace-nowrap">DEX Live</span>
+            <span className="px-3 py-1.5 rounded-full bg-green-500/20 text-green-400 border border-green-500/30 text-center whitespace-nowrap">Staking Live</span>
+            <span className="px-3 py-1.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 text-center whitespace-nowrap">Chronicles</span>
+            <span className="px-3 py-1.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 text-center whitespace-nowrap">Scanner</span>
+            <span className="px-3 py-1.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 text-center whitespace-nowrap col-span-2">Arcade Building</span>
           </div>
           <p className="text-gray-400 text-[10px] leading-relaxed">
             Have an idea for a web app or website? We're building an ecosystem of connected applications. 
@@ -1326,7 +1326,7 @@ export default function Presale() {
             Your tokens are allocated immediately upon purchase and will be distributed to your Trust Layer wallet at mainnet launch.
           </p>
           
-          <div className="grid md:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <HolographicCard className="p-6 text-center relative" glow="cyan">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm">1</div>
               <CreditCard className="w-8 h-8 text-cyan-400 mx-auto mb-4 mt-2" />
@@ -1344,7 +1344,7 @@ export default function Presale() {
             <HolographicCard className="p-6 text-center relative" glow="pink">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm">3</div>
               <Users className="w-8 h-8 text-pink-400 mx-auto mb-4 mt-2" />
-              <h3 className="text-lg font-bold text-white mb-2">Create Wallet at Launch</h3>
+              <h3 className="text-lg font-bold text-white mb-2">Create Wallet</h3>
               <p className="text-gray-400 text-sm">Before launch, create your Trust Layer wallet to claim tokens</p>
             </HolographicCard>
             
