@@ -1,6 +1,6 @@
 /**
  * Seed Marketing Posts Library
- * DarkWave Chronicles - Auto-deployment content
+ * Chronicles - Auto-deployment content
  */
 
 import { db } from './db';
@@ -10,7 +10,7 @@ const SEED_POSTS = [
   // Discord Posts (longer, community-focused)
   {
     platform: 'discord',
-    content: `🌌 **DarkWave Chronicles** is more than a game—it's YOUR legend across time.
+    content: `🌌 **Chronicles** is more than a game—it's YOUR legend across time.
 
 70+ mission theaters. One parallel self. Infinite possibilities.
 
@@ -24,7 +24,7 @@ It's HOW LEGENDARY will you become?
   },
   {
     platform: 'discord',
-    content: `⚡ **BREAKING**: DarkWave Chronicles introduces "Many Lenses" design
+    content: `⚡ **BREAKING**: Chronicles introduces "Many Lenses" design
 
 The world ADAPTS to your beliefs. Your choices don't just affect outcomes—they reshape REALITY itself.
 
@@ -45,7 +45,7 @@ This isn't just gameplay. This is awakening.`,
 • A parallel self that grows with YOU
 • 70+ eras to conquer
 
-DarkWave Chronicles isn't asking you to play a character.
+Chronicles isn't asking you to play a character.
 
 We're asking: **Who will YOU become?**`,
     category: 'hype',
@@ -80,7 +80,7 @@ Are you ready to be a Founder?`,
   // Telegram Posts (medium length, announcement style)
   {
     platform: 'telegram',
-    content: `🌊 <b>DarkWave Chronicles Update</b>
+    content: `🌊 <b>Chronicles Update</b>
 
 We're not building a game.
 We're building a LEGEND FACTORY.
@@ -100,7 +100,7 @@ Join the journey → darkwavegames.io`,
 
 What if the game world adapted to YOUR beliefs?
 
-DarkWave Chronicles introduces a system where:
+Chronicles introduces a system where:
 • Reality shifts based on player perspective
 • Your worldview affects NPC behavior
 • History itself becomes personal
@@ -110,7 +110,7 @@ This is next-gen storytelling.`,
   },
   {
     platform: 'telegram',
-    content: `🔥 <b>Why DarkWave Chronicles is Different</b>
+    content: `🔥 <b>Why Chronicles is Different</b>
 
 No grind. Just glory.
 No leveling. Just legends.
@@ -145,14 +145,14 @@ Ancient empires. Future frontiers. Everything in between.
 Each era is a new chance to prove yourself.
 Each mission is a step toward your legend.
 
-DarkWave Chronicles - Where YOU are the prime hero.`,
+Chronicles - Where YOU are the prime hero.`,
     category: 'hype',
   },
 
   // Twitter/X Posts (280 chars max)
   {
     platform: 'twitter',
-    content: `🌊 DarkWave Chronicles isn't a game.
+    content: `🌊 Chronicles isn't a game.
 
 It's a legend factory.
 
@@ -167,14 +167,14 @@ Coming Beta LIVE now ⚡`,
 
 Introducing "Many Lenses" design—where reality itself shifts based on player perspective.
 
-DarkWave Chronicles. Awakening disguised as entertainment. 🎮`,
+Chronicles. Awakening disguised as entertainment. 🎮`,
     category: 'tech',
   },
   {
     platform: 'twitter',
     content: `No grind. No filler. Just legend-building.
 
-DarkWave Chronicles puts YOU at the center of 70+ mission theaters.
+Chronicles puts YOU at the center of 70+ mission theaters.
 
 Every choice echoes. Every action matters. 🔥`,
     category: 'hype',
@@ -205,7 +205,7 @@ Join the origin story → dwsc.io/founder-program 💎`,
     platform: 'twitter',
     content: `YOUR parallel self. 70+ eras. One legendary campaign.
 
-DarkWave Chronicles.
+Chronicles.
 
 Not life simulation. LEGEND building. ⚔️`,
     category: 'hype',
@@ -216,7 +216,7 @@ Not life simulation. LEGEND building. ⚔️`,
 
 Choices that matter. Consequences that echo.
 
-DarkWave Chronicles - Beta LIVE 🌌`,
+Chronicles - Beta LIVE 🌌`,
     category: 'vision',
   },
   {
@@ -232,7 +232,7 @@ Yours to shape. Yours to own. Yours to legend.
   // Facebook Posts (longer, storytelling style)
   {
     platform: 'facebook',
-    content: `🌊 We're building DarkWave Chronicles—and it's unlike anything you've played before.
+    content: `🌊 We're building Chronicles—and it's unlike anything you've played before.
 
 Imagine stepping into 70+ mission theaters across history as YOUR parallel self. Every choice matters. Every action shapes your legend. The world itself adapts to your beliefs through our revolutionary "Many Lenses" design.
 
@@ -245,7 +245,7 @@ Learn more at darkwavegames.io 🎮`,
   },
   {
     platform: 'facebook',
-    content: `What makes DarkWave Chronicles different?
+    content: `What makes Chronicles different?
 
 ⚡ YOU are the prime hero—not following someone else's story
 🎯 70+ mission theaters across every era imaginable  
@@ -274,7 +274,7 @@ Join us: dwsc.io/founder-program`,
   },
   {
     platform: 'facebook',
-    content: `🎮 DarkWave Chronicles: 70+ Mission Theaters
+    content: `🎮 Chronicles: 70+ Mission Theaters
 
 Ancient empires rising and falling. Future frontiers waiting to be conquered. Medieval courts where words are weapons. Modern cities where every choice ripples outward.
 

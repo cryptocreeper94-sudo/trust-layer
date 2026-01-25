@@ -81,7 +81,7 @@ const ECOSYSTEM_FEATURES = [
     icon: TrendingUp,
     image: dashboardImg,
     gradient: "from-green-500/20 to-emerald-600/20",
-    fullDescription: "Access a complete suite of decentralized finance tools built natively on DarkWave. Trade, stake, and earn rewards all within our integrated ecosystem.",
+    fullDescription: "Access a complete suite of decentralized finance tools built natively on Trust Layer. Trade, stake, and earn rewards all within our integrated ecosystem.",
     features: ["Decentralized Exchange (DEX) with low slippage", "Flexible staking with competitive APY", "Liquidity pool participation rewards", "Yield farming strategies", "Portfolio dashboard and analytics"],
   },
   {
@@ -99,7 +99,7 @@ const ECOSYSTEM_FEATURES = [
     icon: Globe,
     image: bridgeVisual,
     gradient: "from-orange-500/20 to-red-600/20",
-    fullDescription: "Move assets freely between DarkWave, Ethereum, and Solana with our secure cross-chain bridge. Lock and mint technology ensures your assets are always backed 1:1.",
+    fullDescription: "Move assets freely between Trust Layer, Ethereum, and Solana with our secure cross-chain bridge. Lock and mint technology ensures your assets are always backed 1:1.",
     features: ["Bridge to Ethereum and Solana", "Secure lock-and-mint mechanism", "Fast transfer times", "Low bridging fees", "Wrapped asset support (wSIG)"],
   },
   {
@@ -108,7 +108,7 @@ const ECOSYSTEM_FEATURES = [
     icon: Award,
     image: nftGallery,
     gradient: "from-pink-500/20 to-rose-600/20",
-    fullDescription: "Create, discover, and trade unique digital collectibles on our NFT marketplace. From art to in-game items, the DarkWave NFT ecosystem connects creators with collectors.",
+    fullDescription: "Create, discover, and trade unique digital collectibles on our NFT marketplace. From art to in-game items, the Trust Layer NFT ecosystem connects creators with collectors.",
     features: ["Mint NFTs with low gas fees", "Royalty support for creators", "Stake NFTs for rewards", "Integration with Chronicles", "Rarity analysis tools"],
   },
   {
@@ -117,7 +117,7 @@ const ECOSYSTEM_FEATURES = [
     icon: Users,
     image: communityVisual,
     gradient: "from-amber-500/20 to-orange-600/20",
-    fullDescription: "Your voice matters in DarkWave. Signal holders participate in governance decisions that shape the future of the ecosystem through our decentralized autonomous organization.",
+    fullDescription: "Your voice matters in Trust Layer. Signal holders participate in governance decisions that shape the future of the ecosystem through our decentralized autonomous organization.",
     features: ["Vote on protocol upgrades", "Propose new features", "Treasury allocation decisions", "Transparent on-chain governance", "Voting power based on Signal holdings"],
   },
 ];
@@ -504,7 +504,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
           
           <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
             <p className="text-xs text-amber-400 text-center">
-              No wallet needed now! Your allocation is tracked by email. You'll create a DarkWave wallet before launch to receive your Signal.
+              No wallet needed now! Your allocation is tracked by email. You'll create a Trust Layer wallet before launch to receive your Signal.
             </p>
           </div>
         </div>
@@ -678,7 +678,7 @@ function PresaleProgress() {
 
 const TIER_DETAILS: Record<string, { benefits: string[]; description: string }> = {
   genesis: {
-    description: "The Genesis tier is our most exclusive offering, reserved for visionary investors who want maximum impact. As a Genesis holder, you'll receive the highest bonus allocation and priority access to all future DarkWave ecosystem features.",
+    description: "The Genesis tier is our most exclusive offering, reserved for visionary investors who want maximum impact. As a Genesis holder, you'll receive the highest bonus allocation and priority access to all future Trust Layer ecosystem features.",
     benefits: [
       "50% bonus Signal on your purchase",
       "Exclusive Genesis NFT badge (tradeable)",
@@ -690,7 +690,7 @@ const TIER_DETAILS: Record<string, { benefits: string[]; description: string }> 
     ],
   },
   founder: {
-    description: "The Founder tier recognizes early believers in the DarkWave vision. Founders receive substantial bonuses and special recognition throughout the ecosystem.",
+    description: "The Founder tier recognizes early believers in the Trust Layer vision. Founders receive substantial bonuses and special recognition throughout the ecosystem.",
     benefits: [
       "35% bonus Signal on your purchase",
       "Founder NFT badge with special perks",
@@ -702,7 +702,7 @@ const TIER_DETAILS: Record<string, { benefits: string[]; description: string }> 
     ],
   },
   pioneer: {
-    description: "Pioneers are the adventurers of DarkWave, joining early to explore the ecosystem's potential. This tier offers great value with meaningful bonuses.",
+    description: "Pioneers are the adventurers of Trust Layer, joining early to explore the ecosystem's potential. This tier offers great value with meaningful bonuses.",
     benefits: [
       "25% bonus Signal on your purchase",
       "Pioneer badge in your profile",
@@ -713,7 +713,7 @@ const TIER_DETAILS: Record<string, { benefits: string[]; description: string }> 
     ],
   },
   early_bird: {
-    description: "The Early Bird tier is perfect for those who want to get started with DarkWave at an accessible price point while still receiving bonus Signal.",
+    description: "The Early Bird tier is perfect for those who want to get started with Trust Layer at an accessible price point while still receiving bonus Signal.",
     benefits: [
       "15% bonus Signal on your purchase",
       "Early Bird community badge",
@@ -1283,7 +1283,7 @@ export default function Presale() {
           
           <h1 className="text-5xl md:text-7xl font-bold mb-6">
             <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Join the DarkWave Revolution
+              Join the Trust Layer Revolution
             </span>
           </h1>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-6">
@@ -1307,7 +1307,7 @@ export default function Presale() {
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-center mb-8">
             <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-              The DarkWave Ecosystem
+              The Trust Layer Ecosystem
             </span>
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1324,7 +1324,7 @@ export default function Presale() {
             </span>
           </h2>
           <p className="text-gray-400 text-center mb-8 max-w-2xl mx-auto">
-            Your tokens are allocated immediately upon purchase and will be distributed to your DarkWave wallet at mainnet launch.
+            Your tokens are allocated immediately upon purchase and will be distributed to your Trust Layer wallet at mainnet launch.
           </p>
           
           <div className="grid md:grid-cols-4 gap-4 mb-8">
@@ -1346,7 +1346,7 @@ export default function Presale() {
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm">3</div>
               <Users className="w-8 h-8 text-pink-400 mx-auto mb-4 mt-2" />
               <h3 className="text-lg font-bold text-white mb-2">Create Wallet at Launch</h3>
-              <p className="text-gray-400 text-sm">Before launch, create your DarkWave wallet to claim tokens</p>
+              <p className="text-gray-400 text-sm">Before launch, create your Trust Layer wallet to claim tokens</p>
             </HolographicCard>
             
             <HolographicCard className="p-6 text-center relative" glow="amber">
@@ -1366,7 +1366,7 @@ export default function Presale() {
                 <h4 className="text-white font-semibold mb-2">No Wallet Required Until Launch</h4>
                 <p className="text-gray-400 text-sm leading-relaxed">
                   <span className="text-cyan-400 font-medium">Participate now without a wallet!</span> Your presale purchases and Zealy Shell earnings are 
-                  tracked by your account, not your wallet. Before mainnet launch, you'll create a DarkWave wallet to receive your tokens.
+                  tracked by your account, not your wallet. Before mainnet launch, you'll create a Trust Layer wallet to receive your tokens.
                   At launch, your <span className="text-green-400 font-medium">Signal + converted Shells</span> will be airdropped to your wallet 
                   (20% at launch, 80% vested). Shell conversion rate: 100 Shells = 1 SIG.
                 </p>

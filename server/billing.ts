@@ -115,7 +115,7 @@ export class BillingService {
         price_data: {
           currency: "usd",
           product_data: {
-            name: "DarkWave API Usage",
+            name: "Trust Layer API Usage",
             description: `API usage charges - ${amountCents / 100} USD`,
           },
           unit_amount: amountCents,

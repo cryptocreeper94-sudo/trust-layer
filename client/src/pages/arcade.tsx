@@ -69,7 +69,7 @@ export default function Arcade() {
             </p>
 
             <p className="text-slate-300 mb-8 leading-relaxed">
-              The DarkWave Entertainment Hub is where our community comes to play, watch, and connect. 
+              The Trust Layer Entertainment Hub is where our community comes to play, watch, and connect. 
               We're building a complete entertainment ecosystem — classic arcade games, original content, 
               creator channels, and community experiences. We're taking the time to make sure everything 
               works perfectly before launch.

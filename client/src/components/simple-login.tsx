@@ -128,7 +128,7 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
           handleClose();
           window.location.href = "/verify-email";
         } else {
-          toast({ title: "Account created!", description: "Welcome to DarkWave!" });
+          toast({ title: "Account created!", description: "Welcome to Trust Layer!" });
           onSuccess?.();
           handleClose();
           window.location.reload();

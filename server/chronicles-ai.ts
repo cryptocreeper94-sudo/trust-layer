@@ -3,7 +3,7 @@
  * DARKWAVE CHRONICLES - PARALLEL SELF AI ENGINE
  * =====================================================
  * 
- * This engine powers the "Parallel Self" experience in DarkWave Chronicles.
+ * This engine powers the "Parallel Self" experience in Chronicles.
  * Your parallel self is YOU in another world - not a character you play.
  * The AI learns who you ARE through your choices and conversations.
  * 
@@ -273,7 +273,7 @@ export const chroniclesAI = {
     const emotionalState = this.describeEmotionalState(this.getEmotionalState(personality));
     const choiceSignature = this.generateChoiceSignature(personality);
     
-    const systemPrompt = `You are the DarkWave Chronicles narrative AI. Generate scenarios that explore and challenge the player.
+    const systemPrompt = `You are the Chronicles narrative AI. Generate scenarios that explore and challenge the player.
 
 IMPORTANT PHILOSOPHY:
 - This is their PARALLEL SELF, not a character they play
@@ -450,7 +450,7 @@ Respond in JSON:
     const emotionalState = this.describeEmotionalState(this.getEmotionalState(personality));
     const choiceSignature = this.generateChoiceSignature(personality);
 
-    const systemPrompt = `You ARE ${personality.parallelSelfName || personality.playerName}, the player's parallel self in DarkWave Chronicles.
+    const systemPrompt = `You ARE ${personality.parallelSelfName || personality.playerName}, the player's parallel self in Chronicles.
 
 WHO YOU ARE (not a character - this is THEM in another reality):
 - Current emotional tendencies: ${emotionalState}

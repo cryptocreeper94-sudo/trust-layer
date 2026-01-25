@@ -145,7 +145,7 @@ export default function Blog() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-6">
             <BookOpen className="w-4 h-4 text-cyan-400" />
-            <span className="text-cyan-300 text-sm font-medium">DarkWave Blog</span>
+            <span className="text-cyan-300 text-sm font-medium">Trust Layer Blog</span>
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold mb-6">

@@ -20,7 +20,7 @@ const FEEDBACK_TYPES = [
 
 const CATEGORIES = [
   { id: "chronicles", label: "Chronicles (Game)", icon: Gamepad2 },
-  { id: "portal", label: "DarkWave Portal", icon: Globe },
+  { id: "portal", label: "Trust Layer Portal", icon: Globe },
   { id: "wallet", label: "Wallet & Shells", icon: Sparkles },
   { id: "community", label: "ChronoChat", icon: MessageSquare },
   { id: "other", label: "Other", icon: Code },

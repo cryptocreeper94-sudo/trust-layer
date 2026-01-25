@@ -139,7 +139,7 @@ export async function verifyHallmark(hallmarkId: string): Promise<{
     hallmark: result.hallmark,
     onChain,
     message: onChain
-      ? `Verified on DarkWave Trust Layer (Block ${result.hallmark.darkwaveBlockHeight})`
+      ? `Verified on Trust Layer (Block ${result.hallmark.darkwaveBlockHeight})`
       : "Hallmark registered but not yet confirmed on chain",
   };
 }

@@ -95,7 +95,7 @@ export default function GuardianRegistry() {
           </h1>
           <p className="text-lg text-white/60 max-w-2xl mx-auto">
             Every project in this registry has been audited by Guardian Security.
-            Certifications are immutably recorded on the DarkWave blockchain.
+            Certifications are immutably recorded on the Trust Layer.
           </p>
         </motion.div>
 

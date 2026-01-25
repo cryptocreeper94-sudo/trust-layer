@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 const facebookPost = `Hey there,
 
-My name is Jason, and I lead the team behind DarkWave. I want to have an honest conversation with you — the kind I wish someone had with me years ago.
+My name is Jason, and I lead the team behind Trust Layer. I want to have an honest conversation with you — the kind I wish someone had with me years ago.
 
 I UNDERSTAND YOUR SKEPTICISM
 
@@ -35,7 +35,7 @@ We're not promising you'll get rich. We're not selling you a dream of easy money
 
 We're building real infrastructure. Real software. Real tools that real businesses can use. And instead of telling you to wait, we're making strides DAILY to actually show you progress.
 
-DarkWave is a Trusted Network — a place where seeing another member means you're on the same team. A community of builders and people who are just tired of the way things have been.
+Trust Layer is a Trusted Network — a place where seeing another member means you're on the same team. A community of builders and people who are just tired of the way things have been.
 
 AN INVITATION, NOT A SALES PITCH
 
@@ -45,7 +45,7 @@ That's how trust is built — not with promises, but with consistent action.
 
 It's nice to meet you. We're genuinely glad you're here.
 
-— Jason & The DarkWave Team
+— Jason & The Trust Layer Team
 
 Read the full letter: https://dwsc.io/note
 Join the community: https://dwsc.io/community
@@ -104,7 +104,7 @@ export default function DevelopersNote() {
               </p>
               
               <p className="text-white/80 leading-relaxed mb-6">
-                My name is Jason, and I lead the team behind DarkWave. Before you go any further, I want to have an honest conversation with you — the kind of conversation I wish someone had with me years ago.
+                My name is Jason, and I lead the team behind Trust Layer. Before you go any further, I want to have an honest conversation with you — the kind of conversation I wish someone had with me years ago.
               </p>
               
               <h3 className="text-xl font-semibold text-cyan-400 mt-8 mb-4">I Understand Your Skepticism</h3>
@@ -122,7 +122,7 @@ export default function DevelopersNote() {
               </p>
               
               <p className="text-white/80 leading-relaxed mb-6">
-                So when you look at DarkWave and feel that familiar hesitation, that voice in your head saying "here we go again" — I get it. I've felt that same thing a hundred times.
+                So when you look at Trust Layer and feel that familiar hesitation, that voice in your head saying "here we go again" — I get it. I've felt that same thing a hundred times.
               </p>
               
               <p className="text-white/80 leading-relaxed mb-6">
@@ -162,7 +162,7 @@ export default function DevelopersNote() {
               </p>
               
               <p className="text-white/80 leading-relaxed mb-6">
-                DarkWave is a <strong className="text-purple-400">Trusted Network</strong> — a place where seeing another member means you're on the same team. Where we're all here to genuinely help each other succeed instead of trying to exploit each other for quick gains. A community of builders, creators, and people who are just tired of the way things have been.
+                Trust Layer is a <strong className="text-purple-400">Trusted Network</strong> — a place where seeing another member means you're on the same team. Where we're all here to genuinely help each other succeed instead of trying to exploit each other for quick gains. A community of builders, creators, and people who are just tired of the way things have been.
               </p>
               
               <p className="text-white/80 leading-relaxed mb-6">
@@ -186,7 +186,7 @@ export default function DevelopersNote() {
               </div>
               
               <p className="text-white/80 leading-relaxed mb-6">
-                So from all of us here at DarkWave — it's nice to meet you. We're genuinely glad you're here, whether you decide to participate or just watch from the sidelines for now. Either way, you're welcome.
+                So from all of us here at Trust Layer — it's nice to meet you. We're genuinely glad you're here, whether you decide to participate or just watch from the sidelines for now. Either way, you're welcome.
               </p>
               
               <p className="text-white/80 leading-relaxed mb-8">
@@ -194,7 +194,7 @@ export default function DevelopersNote() {
               </p>
               
               <p className="text-cyan-400 font-medium text-lg">
-                — Jason & The DarkWave Team
+                — Jason & The Trust Layer Team
               </p>
             </div>
           </div>

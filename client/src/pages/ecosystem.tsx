@@ -196,7 +196,7 @@ export default function Ecosystem() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2 mr-auto">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2 sm:gap-3">
@@ -213,7 +213,7 @@ export default function Ecosystem() {
       <section className="pt-20 pb-8 px-4">
         <div className="container mx-auto max-w-6xl text-center">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold mb-3">
-            The DarkWave <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">App Store</span>
+            The Trust Layer <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">App Store</span>
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground max-w-lg mx-auto mb-6">
             One wallet, one login, infinite possibilities.
@@ -265,7 +265,7 @@ export default function Ecosystem() {
                   <div className="flex items-center gap-2 mb-2">
                     <ShieldCheck className="w-4 h-4 text-primary" />
                     <span className="text-xs font-bold text-white">Verified Apps</span>
-                    <InfoTooltip content="Verified apps have passed DarkWave security audits and are safe to use with your wallet." label="Verified apps info" />
+                    <InfoTooltip content="Verified apps have passed Trust Layer security audits and are safe to use with your wallet." label="Verified apps info" />
                   </div>
                   <p className="text-[10px] text-white/50 leading-relaxed">
                     Look for the <CheckCircle2 className="w-3 h-3 inline text-primary mx-0.5" /> badge. 

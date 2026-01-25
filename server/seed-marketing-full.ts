@@ -19,26 +19,26 @@ import { marketingPosts } from '@shared/schema';
 // ============================================
 const TWITTER_POSTS = [
   // Chronicles Game (10 posts)
-  { content: `🎮 DarkWave Chronicles: 70+ mission theaters. One parallel self. YOUR legend.\n\nNot a life sim. A LEGEND FACTORY.\n\nBeta LIVE ⚡`, category: 'chronicles' },
-  { content: `What if the game adapted to YOUR beliefs?\n\n"Many Lenses" design—where reality shifts based on player perspective.\n\nDarkWave Chronicles. Coming 2026 🌌`, category: 'chronicles' },
-  { content: `No grind. No filler. Just legend-building.\n\nDarkWave Chronicles puts YOU at the center.\n\nEvery choice echoes. Every action matters. 🔥`, category: 'chronicles' },
-  { content: `YOUR parallel self. 70+ eras. One legendary campaign.\n\nDarkWave Chronicles.\n\nNot life simulation. LEGEND building. ⚔️`, category: 'chronicles' },
-  { content: `The game that asks: Who will YOU become?\n\nChoices that matter. Consequences that echo.\n\nDarkWave Chronicles 🌊`, category: 'chronicles' },
+  { content: `🎮 Chronicles: 70+ mission theaters. One parallel self. YOUR legend.\n\nNot a life sim. A LEGEND FACTORY.\n\nBeta LIVE ⚡`, category: 'chronicles' },
+  { content: `What if the game adapted to YOUR beliefs?\n\n"Many Lenses" design—where reality shifts based on player perspective.\n\nChronicles. Coming 2026 🌌`, category: 'chronicles' },
+  { content: `No grind. No filler. Just legend-building.\n\nChronicles puts YOU at the center.\n\nEvery choice echoes. Every action matters. 🔥`, category: 'chronicles' },
+  { content: `YOUR parallel self. 70+ eras. One legendary campaign.\n\nChronicles.\n\nNot life simulation. LEGEND building. ⚔️`, category: 'chronicles' },
+  { content: `The game that asks: Who will YOU become?\n\nChoices that matter. Consequences that echo.\n\nChronicles 🌊`, category: 'chronicles' },
   { content: `Ancient empires. Future frontiers. Everything between.\n\nEach era is YOUR chance to prove yourself.\n\n#DarkWaveChronicles 🎯`, category: 'chronicles' },
-  { content: `NPCs that remember. Worlds that evolve. Stories that matter.\n\nDarkWave Chronicles redefines adventure gaming.\n\nComing Beta LIVE 🚀`, category: 'chronicles' },
+  { content: `NPCs that remember. Worlds that evolve. Stories that matter.\n\nChronicles redefines adventure gaming.\n\nComing Beta LIVE 🚀`, category: 'chronicles' },
   { content: `Every campaign. Every decision. Every moment.\n\nYours to shape. Yours to own. Yours to legend.\n\n#DarkWaveChronicles ⚡`, category: 'chronicles' },
-  { content: `Awakening disguised as entertainment.\n\nDarkWave Chronicles challenges how you see the world.\n\nAre you ready? 🌌`, category: 'chronicles' },
-  { content: `70+ historical eras await your parallel self.\n\nWrite history. Build legend. Become eternal.\n\nDarkWave Chronicles 🎮`, category: 'chronicles' },
+  { content: `Awakening disguised as entertainment.\n\nChronicles challenges how you see the world.\n\nAre you ready? 🌌`, category: 'chronicles' },
+  { content: `70+ historical eras await your parallel self.\n\nWrite history. Build legend. Become eternal.\n\nChronicles 🎮`, category: 'chronicles' },
   
   // DWSC Blockchain (8 posts)
-  { content: `⚡ DarkWave Trust Layer\n\n• 400ms block time\n• 200K+ TPS\n• Proof-of-Authority\n• Built for the future\n\nThis is next-gen blockchain. dwsc.io`, category: 'blockchain' },
+  { content: `⚡ Trust Layer\n\n• 400ms block time\n• 200K+ TPS\n• Proof-of-Authority\n• Built for the future\n\nThis is next-gen blockchain. dwsc.io`, category: 'blockchain' },
   { content: `Why build on slow chains?\n\nDWSC: 400ms blocks. 200K TPS. Real speed.\n\nThe blockchain built for serious builders 🔗`, category: 'blockchain' },
   { content: `Proof-of-Authority. Founders Validation. Real security.\n\nDWSC isn't just fast—it's RELIABLE.\n\ndwsc.io ⚡`, category: 'blockchain' },
   { content: `1 billion SIG. No burn. Pure utility.\n\nThe native coin powering an entire ecosystem.\n\nLearn more: dwsc.io 💎`, category: 'blockchain' },
   { content: `Block explorer live. Network stats real-time.\n\nDWSC: Transparent. Fast. Ready.\n\ndwsc.io/explorer 🔍`, category: 'blockchain' },
   { content: `Building something unprecedented.\n\nPropriety blockchain. Next-gen gaming. Player-first design.\n\nDarkWave Studios 🚀`, category: 'blockchain' },
   { content: `No compromises. No shortcuts. Just vision.\n\nDWSC is the foundation for everything we're building.\n\ndwsc.io 🌊`, category: 'blockchain' },
-  { content: `The chain that powers legends.\n\nSIG token. DarkWave Chronicles. An entire ecosystem.\n\nAll connected. All fast. ⚡`, category: 'blockchain' },
+  { content: `The chain that powers legends.\n\nSIG token. Chronicles. An entire ecosystem.\n\nAll connected. All fast. ⚡`, category: 'blockchain' },
   
   // Staking (6 posts)
   { content: `💎 Stake SIG. Earn rewards. Build wealth.\n\nLiquid staking now live with stSIG.\n\nYour tokens work while you play.\n\ndwsc.io/staking`, category: 'staking' },
@@ -79,7 +79,7 @@ const TWITTER_POSTS = [
   
   // DEX & Swap (4 posts)
   { content: `🔄 Token Swap live on DWSC.\n\nFast trades. Low fees. No middlemen.\n\ndwsc.io/swap`, category: 'defi' },
-  { content: `Liquidity pools open. Earn while you provide.\n\nDeFi done right on DarkWave Trust Layer.\n\ndwsc.io/liquidity 💧`, category: 'defi' },
+  { content: `Liquidity pools open. Earn while you provide.\n\nDeFi done right on Trust Layer.\n\ndwsc.io/liquidity 💧`, category: 'defi' },
   { content: `Swap tokens instantly. Add liquidity. Earn rewards.\n\nDWSC DeFi is live.\n\ndwsc.io/swap 🔄`, category: 'defi' },
   { content: `Real DeFi. Real speed. Real utility.\n\nDWSC swap and liquidity pools now live.\n\n#DeFi ⚡`, category: 'defi' },
   
@@ -92,7 +92,7 @@ const TWITTER_POSTS = [
   { content: `🛠️ Build on DWSC.\n\nAPIs. SDKs. Full documentation.\n\nDeveloper Portal: dwsc.io/developers`, category: 'developer' },
   { content: `Webhooks. Events API. Real-time data.\n\nEverything developers need to build on DWSC.\n\ndwsc.io/api-docs 📚`, category: 'developer' },
   { content: `Testnet faucet live. Get test tokens. Build freely.\n\ndwsc.io/faucet\n\n#BuildOnDWSC 🔧`, category: 'developer' },
-  { content: `Code snippets. API playground. Full docs.\n\nStart building on DarkWave today.\n\ndwsc.io/developers 🛠️`, category: 'developer' },
+  { content: `Code snippets. API playground. Full docs.\n\nStart building on Trust Layer today.\n\ndwsc.io/developers 🛠️`, category: 'developer' },
   
   // Roadmap (4 posts)
   { content: `📍 Roadmap update:\n\n✅ Blockchain live\n✅ Portal complete\n🔄 Chronicles in development\n🎯 Public beta: Beta LIVE`, category: 'roadmap' },
@@ -134,7 +134,7 @@ const TWITTER_POSTS = [
   // Validator Program (4 posts)
   { content: `🖥️ Become a DWSC Validator!\n\nEarn rewards. Secure the network. Build the future.\n\nJoin the waitlist: dwsc.io/validators 🚀`, category: 'validator' },
   { content: `Validator Program coming soon:\n\n• Raspberry Pi or old laptop = enough\n• Earn share of transaction fees\n• First 10 get Founder Validator badge\n\ndwsc.io/validators 🛡️`, category: 'validator' },
-  { content: `Want to secure DarkWave Chain?\n\nValidators run lightweight software. Earn rewards 24/7.\n\nNo expensive hardware needed.\n\nJoin waitlist: dwsc.io/validators ⚡`, category: 'validator' },
+  { content: `Want to secure Trust Layer?\n\nValidators run lightweight software. Earn rewards 24/7.\n\nNo expensive hardware needed.\n\nJoin waitlist: dwsc.io/validators ⚡`, category: 'validator' },
   { content: `🔥 First 10 validators get FOUNDER status.\n\nPermanent recognition. Priority rewards. Governance rights.\n\nSign up before spots fill.\n\ndwsc.io/validators`, category: 'validator' },
 ];
 
@@ -143,7 +143,7 @@ const TWITTER_POSTS = [
 // ============================================
 const FACEBOOK_POSTS = [
   // Chronicles Game (10 posts)
-  { content: `🎮 DarkWave Chronicles isn't just a game—it's a LEGEND FACTORY.
+  { content: `🎮 Chronicles isn't just a game—it's a LEGEND FACTORY.
 
 Imagine stepping into 70+ mission theaters across history as YOUR parallel self. Not as a preset character. As YOU.
 
@@ -154,7 +154,7 @@ This is awakening disguised as entertainment.
 Public beta: Beta LIVE now 🚀
 
 Learn more: darkwavegames.io`, category: 'chronicles' },
-  { content: `What makes DarkWave Chronicles different?
+  { content: `What makes Chronicles different?
 
 ⚡ YOU are the prime hero—your parallel self
 🎯 70+ mission theaters across every era
@@ -168,7 +168,7 @@ Coming 2026.`, category: 'chronicles' },
 
 What if a game world adapted to YOUR beliefs? Your worldview? Your perspective?
 
-In DarkWave Chronicles, NPCs remember your choices. History bends to your interpretation. Reality itself shifts.
+In Chronicles, NPCs remember your choices. History bends to your interpretation. Reality itself shifts.
 
 This isn't passive entertainment. This is interactive awakening.
 
@@ -185,7 +185,7 @@ Each era is YOUR chance to prove yourself. Each mission builds YOUR legend.
 #DarkWaveChronicles`, category: 'chronicles' },
   { content: `Not a life simulator. A LEGEND BUILDER.
 
-DarkWave Chronicles asks the question: Who will YOU become?
+Chronicles asks the question: Who will YOU become?
 
 • Missions, not errands
 • Campaigns, not grinding
@@ -196,7 +196,7 @@ Your story. Your choices. Your eternal legacy.
 Coming Beta LIVE now 🎮`, category: 'chronicles' },
   { content: `🎯 NPCs That Remember. Worlds That Evolve.
 
-In DarkWave Chronicles, your actions have real consequences. Characters remember what you've done. Alliances shift. Enemies emerge.
+In Chronicles, your actions have real consequences. Characters remember what you've done. Alliances shift. Enemies emerge.
 
 The world is ALIVE—and it's watching you.
 
@@ -211,8 +211,8 @@ Not someone else's story.
 Not a predefined path.
 YOUR legend. YOUR way.
 
-DarkWave Chronicles. Beta LIVE ⚡`, category: 'chronicles' },
-  { content: `We're building DarkWave Chronicles with one philosophy: YOU are the hero.
+Chronicles. Beta LIVE ⚡`, category: 'chronicles' },
+  { content: `We're building Chronicles with one philosophy: YOU are the hero.
 
 Not following a protagonist. Not playing a role. Being the center of an epic that spans time itself.
 
@@ -221,7 +221,7 @@ Every campaign you complete adds to YOUR legend. Forever.
 Join the journey: darkwavegames.io 🌊`, category: 'chronicles' },
   { content: `🔥 The Game That Challenges Your Worldview
 
-DarkWave Chronicles isn't just entertainment—it's a tool for awakening.
+Chronicles isn't just entertainment—it's a tool for awakening.
 
 "Many Lenses" design means the world responds to YOUR beliefs, YOUR choices, YOUR perspective.
 
@@ -230,7 +230,7 @@ What will you discover about yourself?
 Public beta: Beta LIVE now`, category: 'chronicles' },
   { content: `Ancient. Medieval. Modern. Future.
 
-DarkWave Chronicles spans ALL of human experience. Every era is a new battlefield. Every mission is a step toward legend.
+Chronicles spans ALL of human experience. Every era is a new battlefield. Every mission is a step toward legend.
 
 70+ theaters. One parallel self. Infinite possibilities.
 
@@ -239,7 +239,7 @@ Are you ready to discover who you could become?
 #DarkWaveChronicles 🎮`, category: 'chronicles' },
   
   // DWSC Blockchain (8 posts)
-  { content: `⚡ DarkWave Trust Layer: The Foundation of Everything
+  { content: `⚡ Trust Layer: The Foundation of Everything
 
 • 400ms block time—near-instant finality
 • 200,000+ TPS—enterprise-grade throughput
@@ -262,7 +262,7 @@ dwsc.io 🔗`, category: 'blockchain' },
 
 Track every transaction. Monitor network health. Verify everything.
 
-DarkWave Trust Layer is fully transparent and ready for builders.
+Trust Layer is fully transparent and ready for builders.
 
 Explorer: dwsc.io/explorer
 Network Stats: dwsc.io/network-stats
@@ -306,7 +306,7 @@ Status: dwsc.io/status
 Explorer: dwsc.io/explorer`, category: 'blockchain' },
   { content: `🌐 Built Different. Built Better.
 
-DarkWave Trust Layer was engineered from day one to power games, DeFi, NFTs, and more—all at enterprise scale.
+Trust Layer was engineered from day one to power games, DeFi, NFTs, and more—all at enterprise scale.
 
 No compromises. No shortcuts. Just pure technical excellence.
 
@@ -604,7 +604,7 @@ Liquidity: dwsc.io/liquidity 🔄`, category: 'defi' },
   { content: `🌉 Cross-Chain Bridge LIVE
 
 Move tokens between:
-• DarkWave Trust Layer
+• Trust Layer
 • Ethereum (Sepolia)
 • Solana (Devnet)
 
@@ -680,7 +680,7 @@ Chronicles: 🔄 Building
 dwsc.io/roadmap`, category: 'roadmap' },
   { content: `🎯 Mark Your Calendar: Beta LIVE now
 
-DarkWave Chronicles public beta launches.
+Chronicles public beta launches.
 
 70+ mission theaters. Your parallel self. Legendary campaigns.
 
@@ -856,7 +856,7 @@ dwsc.io 🔮`, category: 'economy' },
   // Validator Program (2 posts)
   { content: `🖥️ Become a DWSC Validator - Coming Soon!
 
-Want to help secure DarkWave Chain and earn rewards?
+Want to help secure Trust Layer and earn rewards?
 
 What You'll Need:
 • Any computer, Raspberry Pi, or cloud VPS
@@ -892,7 +892,7 @@ Sign up before spots fill: dwsc.io/validators`, category: 'validator' },
 // ============================================
 const DISCORD_POSTS = [
   // Chronicles Game (10 posts)
-  { content: `🌌 **DarkWave Chronicles** - Where YOU Become the Legend
+  { content: `🌌 **Chronicles** - Where YOU Become the Legend
 
 We're not building a game where you follow someone else's story. We're building a game where **YOU are the prime hero**.
 
@@ -913,7 +913,7 @@ This isn't entertainment. This is awakening in game form.
 www.darkwavegames.io`, category: 'chronicles' },
   { content: `⚔️ **70+ Mission Theaters Await**
 
-DarkWave Chronicles spans the entirety of human experience:
+Chronicles spans the entirety of human experience:
 
 🏛️ **Ancient Eras** - Rome, Greece, Egypt, Persia, China
 ⚔️ **Medieval Realms** - Castles, courts, crusades, conquest
@@ -929,7 +929,7 @@ Not grinding. Not leveling. **LEGEND BUILDING.**
 Your parallel self awaits. Will you answer the call?`, category: 'chronicles' },
   { content: `🧠 **Introducing "Many Lenses" Design**
 
-What makes DarkWave Chronicles truly revolutionary?
+What makes Chronicles truly revolutionary?
 
 **The world adapts to YOUR perspective.**
 
@@ -946,7 +946,7 @@ This isn't a feature. This is the future of storytelling.
 We're building a game that challenges you to understand yourself while you play.
 
 **Awakening disguised as entertainment.** 🌌`, category: 'chronicles' },
-  { content: `🎮 **Why DarkWave Chronicles is Different**
+  { content: `🎮 **Why Chronicles is Different**
 
 Every other game:
 ❌ You follow a protagonist
@@ -954,7 +954,7 @@ Every other game:
 ❌ NPCs are static
 ❌ Choices are illusions
 
-**DarkWave Chronicles:**
+**Chronicles:**
 ✅ YOU are the prime hero
 ✅ You complete missions that matter
 ✅ NPCs remember and evolve
@@ -971,7 +971,7 @@ Coming Beta LIVE 🔥`, category: 'chronicles' },
 
 In quantum theory, parallel versions of ourselves exist across infinite possibilities.
 
-DarkWave Chronicles asks: What if you could BE that other you?
+Chronicles asks: What if you could BE that other you?
 
 The you who conquered empires.
 The you who changed history.
@@ -989,7 +989,7 @@ This is the game that changes everything.
 
 We've watched gaming become about numbers. XP bars. Loot drops. Daily logins.
 
-DarkWave Chronicles rejects all of it.
+Chronicles rejects all of it.
 
 **Our Philosophy:**
 • Every mission should feel meaningful
@@ -1004,7 +1004,7 @@ You become part of the story. Forever.
 Your achievements. Your choices. Your legend.
 
 **Coming 2026** ⚡`, category: 'chronicles' },
-  { content: `🎯 **DarkWave Chronicles Development Update**
+  { content: `🎯 **Chronicles Development Update**
 
 The team is heads-down building your legendary experience:
 
@@ -1028,7 +1028,7 @@ We've seen the trend: "Life simulation games" where you do virtual chores.
 
 That's not us.
 
-DarkWave Chronicles is about:
+Chronicles is about:
 • **Missions** - Not errands
 • **Campaigns** - Not daily tasks
 • **Legends** - Not life simulators
@@ -1050,7 +1050,7 @@ We wanted to build something different:
 • A game that challenges your worldview
 • A game that leaves you changed
 
-**DarkWave Chronicles is entertainment with purpose.**
+**Chronicles is entertainment with purpose.**
 
 An awakening tool that looks like an adventure.
 
@@ -1062,7 +1062,7 @@ That's the vision. That's the mission.
 **Are you ready?** 🌌`, category: 'chronicles' },
   { content: `🏆 **Your Legacy. Forever.**
 
-Every campaign you complete in DarkWave Chronicles becomes part of your permanent record.
+Every campaign you complete in Chronicles becomes part of your permanent record.
 
 Not just achievements. **LEGACY.**
 
@@ -1072,14 +1072,14 @@ Not just achievements. **LEGACY.**
 
 Future players might look back at your campaigns and wonder: "How did they do that?"
 
-You won't just play DarkWave Chronicles.
+You won't just play Chronicles.
 
 You'll become part of its history.
 
 **Coming Beta LIVE now** 💎`, category: 'chronicles' },
   
   // DWSC Blockchain (8 posts)
-  { content: `⚡ **DarkWave Trust Layer: Technical Overview**
+  { content: `⚡ **Trust Layer: Technical Overview**
 
 **Why We Built Our Own Blockchain:**
 
@@ -1205,7 +1205,7 @@ Security isn't an afterthought—it's the foundation.
 **Build with confidence on DWSC.** ⚡`, category: 'blockchain' },
   { content: `🌐 **DWSC Ecosystem Overview**
 
-**What's Running on DarkWave Trust Layer:**
+**What's Running on Trust Layer:**
 
 ✅ Native SIG token
 ✅ Token Swap DEX
@@ -1217,7 +1217,7 @@ Security isn't an afterthought—it's the foundation.
 ✅ Block Explorer
 
 **Coming Soon:**
-🔄 DarkWave Chronicles
+🔄 Chronicles
 🔄 AI NFT Generator
 🔄 Advanced Trading Tools
 
@@ -1608,7 +1608,7 @@ Register: dwsc.io ⚡`, category: 'early_adopter' },
 **Explore:** dwsc.io/nft-marketplace`, category: 'nft' },
   { content: `🎮 **Chronicles NFTs: Gaming Meets Ownership**
 
-When DarkWave Chronicles launches:
+When Chronicles launches:
 
 **In-Game Items:**
 • Legendary weapons
@@ -1728,8 +1728,8 @@ Analytics: dwsc.io/token-analytics`, category: 'defi' },
   { content: `🌉 **Cross-Chain Bridge: Complete Guide**
 
 **Supported Chains:**
-• DarkWave Trust Layer ↔ Ethereum
-• DarkWave Trust Layer ↔ Solana
+• Trust Layer ↔ Ethereum
+• Trust Layer ↔ Solana
 
 **How It Works:**
 1. Connect source chain wallet
@@ -1867,7 +1867,7 @@ No vaporware. Real progress. Constant delivery.
 Track everything: dwsc.io/roadmap`, category: 'roadmap' },
   { content: `🎯 **Beta LIVE now: Mark Your Calendar**
 
-**DarkWave Chronicles Public Beta Launch**
+**Chronicles Public Beta Launch**
 
 • 70+ mission theaters ready
 • Your parallel self awaits
@@ -2166,7 +2166,7 @@ Get in early. Earn now. Redeem later.
 // ============================================
 const TELEGRAM_POSTS = [
   // Chronicles Game (10 posts)
-  { content: `🌌 <b>DarkWave Chronicles: The Vision</b>
+  { content: `🌌 <b>Chronicles: The Vision</b>
 
 We're building something unprecedented. A game where YOU are the hero—not following someone else's story, but writing your own across 70+ mission theaters spanning all of human history.
 
@@ -2193,7 +2193,7 @@ This isn't just entertainment. This is awakening in game form.
 
 What if the game world adapted to YOUR perspective?
 
-DarkWave Chronicles introduces a revolutionary system where your beliefs, values, and worldview actively shape gameplay.
+Chronicles introduces a revolutionary system where your beliefs, values, and worldview actively shape gameplay.
 
 <b>How It Works:</b>
 • Your character's perspective is tracked
@@ -2242,7 +2242,7 @@ Every era of human history. Every type of adventure. Every chance to prove yours
 <b>Each era is a complete world.</b> Each mission builds YOUR legend.
 
 Coming Beta LIVE 🎮`, category: 'chronicles' },
-  { content: `🎮 <b>DarkWave Chronicles: Development Update</b>
+  { content: `🎮 <b>Chronicles: Development Update</b>
 
 <b>Current Progress:</b>
 
@@ -2272,7 +2272,7 @@ Follow progress: Discord & Telegram`, category: 'chronicles' },
 
 We've seen the trend of "life simulation" games. Virtual chores. Daily tasks. Endless grinding.
 
-<b>That's not DarkWave Chronicles.</b>
+<b>That's not Chronicles.</b>
 
 <b>What We ARE:</b>
 • <b>Missions</b> - Not errands
@@ -2292,7 +2292,7 @@ Coming Beta LIVE ⚡`, category: 'chronicles' },
 
 In quantum theory, parallel versions of ourselves exist across infinite possibilities.
 
-<b>DarkWave Chronicles asks:</b> What if you could BE that other you?
+<b>Chronicles asks:</b> What if you could BE that other you?
 
 The you who conquered empires.
 The you who changed history.
@@ -2333,7 +2333,7 @@ Not playing a character someone else created. Being the version of YOU that hist
 Coming Beta LIVE`, category: 'chronicles' },
   { content: `🏆 <b>Your Legacy. Forever.</b>
 
-Every campaign you complete in DarkWave Chronicles becomes part of your permanent record.
+Every campaign you complete in Chronicles becomes part of your permanent record.
 
 <b>How Legacy Works:</b>
 • Choices recorded on-chain
@@ -2344,7 +2344,7 @@ Every campaign you complete in DarkWave Chronicles becomes part of your permanen
 <b>Imagine:</b>
 Future players looking at leaderboards, seeing YOUR name, wondering: "How did they complete that campaign on legendary difficulty?"
 
-You won't just play DarkWave Chronicles.
+You won't just play Chronicles.
 You'll become part of its history.
 
 <b>Your story. Forever preserved.</b>
@@ -2364,7 +2364,7 @@ Games have become about:
 • A game that challenges your worldview
 • A game that leaves you CHANGED
 
-<b>DarkWave Chronicles is entertainment with purpose.</b>
+<b>Chronicles is entertainment with purpose.</b>
 
 An awakening tool that looks like an adventure.
 
@@ -2393,7 +2393,7 @@ Join thousands of future legends waiting for launch.
 <b>Your legend begins soon.</b> 🎮`, category: 'chronicles' },
   
   // DWSC Blockchain (8 posts)
-  { content: `⚡ <b>DarkWave Trust Layer: Technical Deep Dive</b>
+  { content: `⚡ <b>Trust Layer: Technical Deep Dive</b>
 
 <b>Why We Built DWSC:</b>
 
@@ -2593,7 +2593,7 @@ A blockchain that does exactly what we need, exactly how we need it.
 👉 dwsc.io`, category: 'blockchain' },
   { content: `🌐 <b>DWSC Ecosystem Overview</b>
 
-<b>What's Running on DarkWave Trust Layer:</b>
+<b>What's Running on Trust Layer:</b>
 
 ✅ <b>Core:</b>
 • Native SIG token
@@ -2616,7 +2616,7 @@ A blockchain that does exactly what we need, exactly how we need it.
 • Webhooks API
 
 🔄 <b>Coming Soon:</b>
-• DarkWave Chronicles
+• Chronicles
 • AI NFT Generator
 • Advanced Trading
 
@@ -3186,7 +3186,7 @@ Becoming #10,001 and missing everything.
 👉 dwsc.io/nft-marketplace`, category: 'nft' },
   { content: `🎮 <b>Chronicles NFTs: Gaming Meets Ownership</b>
 
-<b>When DarkWave Chronicles Launches:</b>
+<b>When Chronicles Launches:</b>
 
 <b>In-Game Items as NFTs:</b>
 • Legendary weapons
@@ -3362,7 +3362,7 @@ Preview transaction outcomes
   { content: `🌉 <b>Cross-Chain Bridge: Complete Guide</b>
 
 <b>Supported Chains:</b>
-• DarkWave Trust Layer
+• Trust Layer
 • Ethereum (Sepolia testnet)
 • Solana (Devnet)
 
@@ -3563,7 +3563,7 @@ Save hours of development time.
 Progress updates in Discord.`, category: 'roadmap' },
   { content: `🎯 <b>Beta LIVE now: The Date That Matters</b>
 
-<b>DarkWave Chronicles Public Beta Launch</b>
+<b>Chronicles Public Beta Launch</b>
 
 <b>What's Ready at Launch:</b>
 • 70+ mission theaters

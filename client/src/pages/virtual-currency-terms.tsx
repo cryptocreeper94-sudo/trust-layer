@@ -11,7 +11,7 @@ export default function VirtualCurrencyTerms() {
     {
       icon: Coins,
       title: "1. Virtual Currency Definition",
-      content: `"Shells" are a virtual currency used within the DarkWave ecosystem, including Chronicles, ChronoChat, and related applications. Shells have no intrinsic value outside the DarkWave platform and are not legal tender, securities, or commodities. Shells are licensed, not sold, and remain the property of DarkWave Studios. Your purchase grants you a limited, non-transferable license to use Shells within our platform.`
+      content: `"Shells" are a virtual currency used within the Trust Layer ecosystem, including Chronicles, ChronoChat, and related applications. Shells have no intrinsic value outside the Trust Layer platform and are not legal tender, securities, or commodities. Shells are licensed, not sold, and remain the property of Trust Layer Studios. Your purchase grants you a limited, non-transferable license to use Shells within our platform.`
     },
     {
       icon: ArrowRightLeft,
@@ -26,27 +26,27 @@ export default function VirtualCurrencyTerms() {
     {
       icon: Shield,
       title: "4. Custody & Security",
-      content: `Your Shells are linked to your DarkWave account and secured by your account credentials. You are responsible for maintaining the security of your account. DarkWave is not liable for unauthorized access resulting from your failure to secure your credentials. We employ industry-standard security measures but cannot guarantee absolute security. In the event of a security breach, we will notify affected users as required by law.`
+      content: `Your Shells are linked to your Trust Layer account and secured by your account credentials. You are responsible for maintaining the security of your account. Trust Layer is not liable for unauthorized access resulting from your failure to secure your credentials. We employ industry-standard security measures but cannot guarantee absolute security. In the event of a security breach, we will notify affected users as required by law.`
     },
     {
       icon: Scale,
       title: "5. Risk Disclosures",
-      content: `IMPORTANT: Virtual currencies and cryptocurrencies involve significant risks including but not limited to: (a) complete loss of value; (b) high price volatility; (c) regulatory changes that may affect legality or usability; (d) technical failures, bugs, or security vulnerabilities; (e) network congestion or downtime; (f) changes to the DarkWave platform or services. Past performance does not guarantee future results. You should only purchase what you can afford to lose entirely. This is not financial advice.`
+      content: `IMPORTANT: Virtual currencies and cryptocurrencies involve significant risks including but not limited to: (a) complete loss of value; (b) high price volatility; (c) regulatory changes that may affect legality or usability; (d) technical failures, bugs, or security vulnerabilities; (e) network congestion or downtime; (f) changes to the Trust Layer platform or services. Past performance does not guarantee future results. You should only purchase what you can afford to lose entirely. This is not financial advice.`
     },
     {
       icon: FileText,
       title: "6. Crypto Payment Onboarding",
-      content: `DarkWave uses Stripe for crypto payment processing. When using cryptocurrency payments, you agree to Stripe's terms of service and acknowledge that: (a) you may be subject to identity verification (KYC); (b) certain jurisdictions may be restricted; (c) crypto transactions may be considered taxable events in your jurisdiction - consult a tax professional; (d) transaction fees may apply; (e) processing times may vary based on network conditions.`
+      content: `Trust Layer uses Stripe for crypto payment processing. When using cryptocurrency payments, you agree to Stripe's terms of service and acknowledge that: (a) you may be subject to identity verification (KYC); (b) certain jurisdictions may be restricted; (c) crypto transactions may be considered taxable events in your jurisdiction - consult a tax professional; (d) transaction fees may apply; (e) processing times may vary based on network conditions.`
     },
     {
       icon: Clock,
       title: "7. Service Availability",
-      content: `Shell purchases and usage depend on the availability of DarkWave services. We do not guarantee uninterrupted access. Scheduled maintenance, updates, or unforeseen issues may temporarily affect your ability to purchase or use Shells. We will make reasonable efforts to provide advance notice of scheduled downtime.`
+      content: `Shell purchases and usage depend on the availability of Trust Layer services. We do not guarantee uninterrupted access. Scheduled maintenance, updates, or unforeseen issues may temporarily affect your ability to purchase or use Shells. We will make reasonable efforts to provide advance notice of scheduled downtime.`
     },
     {
       icon: AlertTriangle,
       title: "8. Regulatory Compliance",
-      content: `You acknowledge that cryptocurrency and virtual currency regulations vary by jurisdiction and may change. You are solely responsible for complying with applicable laws in your jurisdiction. DarkWave reserves the right to restrict or terminate services in any jurisdiction due to regulatory requirements. Users in prohibited jurisdictions are not permitted to use our services.`
+      content: `You acknowledge that cryptocurrency and virtual currency regulations vary by jurisdiction and may change. You are solely responsible for complying with applicable laws in your jurisdiction. Trust Layer reserves the right to restrict or terminate services in any jurisdiction due to regulatory requirements. Users in prohibited jurisdictions are not permitted to use our services.`
     },
     {
       icon: Scale,
@@ -56,7 +56,7 @@ export default function VirtualCurrencyTerms() {
     {
       icon: FileText,
       title: "10. Modifications",
-      content: `DarkWave may modify these terms at any time. Material changes will be communicated through the platform and/or email at least 30 days before taking effect. Continued use of Shell purchasing or services after modifications constitute acceptance. If you disagree with changes, you should cease using our services. Your existing Shell balance will remain subject to the terms at time of purchase.`
+      content: `Trust Layer may modify these terms at any time. Material changes will be communicated through the platform and/or email at least 30 days before taking effect. Continued use of Shell purchasing or services after modifications constitute acceptance. If you disagree with changes, you should cease using our services. Your existing Shell balance will remain subject to the terms at time of purchase.`
     }
   ];
 

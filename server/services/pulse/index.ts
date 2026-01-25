@@ -1,6 +1,6 @@
 /**
  * Pulse AI Trading Intelligence
- * Integrated from DarkWave Pulse for Guardian Security and Quantum Predictions
+ * Integrated from Trust Layer Pulse for Guardian Security and Quantum Predictions
  */
 
 export { safetyEngineService, TokenSafetyReport, SafetyCheckConfig, DEFAULT_SAFETY_CONFIG } from './safetyEngineService';

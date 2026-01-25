@@ -31,7 +31,7 @@ const transactionTypes = [
 ];
 
 const networkComparison = [
-  { network: "DarkWave", avgFee: 0.02, time: "400ms", color: "#8b5cf6" },
+  { network: "Trust Layer", avgFee: 0.02, time: "400ms", color: "#8b5cf6" },
   { network: "Solana", avgFee: 0.00025, time: "400ms", color: "#14f195" },
   { network: "Ethereum", avgFee: 2.50, time: "12s", color: "#627eea" },
   { network: "BSC", avgFee: 0.10, time: "3s", color: "#f0b90b" },
@@ -269,7 +269,7 @@ export default function GasEstimator() {
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
                         <span className="font-medium">{network.network}</span>
-                        <span className={`font-bold ${network.network === 'DarkWave' ? 'text-primary' : ''}`}>
+                        <span className={`font-bold ${network.network === 'Trust Layer' ? 'text-primary' : ''}`}>
                           ${network.avgFee.toFixed(network.avgFee < 0.01 ? 5 : 2)}
                         </span>
                       </div>
@@ -292,7 +292,7 @@ export default function GasEstimator() {
                 <div className="flex items-center gap-2">
                   <Info className="w-4 h-4 text-green-400" />
                   <span className="text-xs text-green-400">
-                    DarkWave offers competitive fees with near-instant finality
+                    Trust Layer offers competitive fees with near-instant finality
                   </span>
                 </div>
               </div>

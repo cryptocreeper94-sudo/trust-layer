@@ -113,7 +113,7 @@ export default function Launchpad() {
     autoLiquidityPercent: 75, lpLockDays: 90, softCap: "1000", hardCap: "100000"
   });
   
-  const PLATFORM_FEE = 2.5; // DarkWave platform fee %
+  const PLATFORM_FEE = 2.5; // Trust Layer platform fee %
   const creatorReceives = 100 - PLATFORM_FEE - formData.autoLiquidityPercent;
 
   const { data: tokensData, isLoading } = useQuery<{ tokens: LaunchedToken[] }>({
@@ -281,7 +281,7 @@ export default function Launchpad() {
                       <AlertTriangle className="w-12 h-12 text-amber-400 mx-auto mb-3" />
                       <h3 className="font-semibold text-white mb-2">Sign In Required</h3>
                       <p className="text-sm text-muted-foreground mb-4">
-                        Please sign in to launch a token on DarkWave.
+                        Please sign in to launch a token on Trust Layer.
                       </p>
                       <Button 
                         className="bg-pink-500 hover:bg-pink-600"
@@ -302,7 +302,7 @@ export default function Launchpad() {
                         <p className="text-sm text-muted-foreground">
                           {isKycPending 
                             ? "Your verification is pending review. We'll notify you when approved."
-                            : "Complete identity verification to launch tokens on DarkWave."
+                            : "Complete identity verification to launch tokens on Trust Layer."
                           }
                         </p>
                       </div>

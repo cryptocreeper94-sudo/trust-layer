@@ -76,7 +76,7 @@ const sections: Section[] = [
       {
         id: "first-wallet",
         title: "Setting Up Your Wallet",
-        content: "Your wallet is automatically created when you join. Unlike traditional crypto wallets that require browser extensions or separate apps, your DarkWave wallet is built into your account. You can view your balance, send and receive Signal, and track all your transactions from your Dashboard. Your wallet address is a unique identifier on the Trust Layer - share it with others to receive Signal.",
+        content: "Your wallet is automatically created when you join. Unlike traditional crypto wallets that require browser extensions or separate apps, your Trust Layer wallet is built into your account. You can view your balance, send and receive Signal, and track all your transactions from your Dashboard. Your wallet address is a unique identifier on the Trust Layer - share it with others to receive Signal.",
         links: [{ label: "Go to Wallet", href: "/wallet" }]
       },
       {
@@ -161,13 +161,13 @@ const sections: Section[] = [
       {
         id: "how-bridge-works",
         title: "How Bridging Works",
-        content: "1) Connect your external wallet (MetaMask, Phantom, etc.). 2) Choose source network (Ethereum, Solana) and destination (DarkWave). 3) Select the asset and amount. 4) Approve the transaction in your external wallet. 5) Wait for confirmation (usually 5-15 minutes depending on the source network). Your wrapped assets will appear in your DarkWave wallet.",
+        content: "1) Connect your external wallet (MetaMask, Phantom, etc.). 2) Choose source network (Ethereum, Solana) and destination (Trust Layer). 3) Select the asset and amount. 4) Approve the transaction in your external wallet. 5) Wait for confirmation (usually 5-15 minutes depending on the source network). Your wrapped assets will appear in your Trust Layer wallet.",
         links: [{ label: "Use Bridge", href: "/bridge" }]
       },
       {
         id: "wrapped-tokens",
         title: "Understanding Wrapped Tokens",
-        content: "When you bridge assets, you receive 'wrapped' versions. For example, bridging USDC from Ethereum gives you wUSDC on DarkWave. Wrapped tokens are 1:1 backed by the original assets locked in the bridge contract. You can always bridge back to unwrap and retrieve your original tokens.",
+        content: "When you bridge assets, you receive 'wrapped' versions. For example, bridging USDC from Ethereum gives you wUSDC on Trust Layer. Wrapped tokens are 1:1 backed by the original assets locked in the bridge contract. You can always bridge back to unwrap and retrieve your original tokens.",
       }
     ]
   },
@@ -242,7 +242,7 @@ const sections: Section[] = [
       {
         id: "account-security",
         title: "Securing Your Account",
-        content: "Protect your account with: Strong unique password, Two-factor authentication (2FA), Passkey/WebAuthn for passwordless login, and regular security checkups. Never share your recovery phrase or private keys. DarkWave staff will never ask for these.",
+        content: "Protect your account with: Strong unique password, Two-factor authentication (2FA), Passkey/WebAuthn for passwordless login, and regular security checkups. Never share your recovery phrase or private keys. Trust Layer staff will never ask for these.",
       },
       {
         id: "verified-participants",

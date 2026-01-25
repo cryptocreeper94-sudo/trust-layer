@@ -38,7 +38,7 @@ export const SUBSCRIPTION_PLANS = {
     ],
   },
   complete_bundle: {
-    name: "DarkWave Complete",
+    name: "Trust Layer Complete",
     monthlyPrice: 3999,
     annualPrice: 39999,
     trialDays: 2,

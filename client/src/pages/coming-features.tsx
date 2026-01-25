@@ -90,7 +90,7 @@ const defaultFeatures = [
   {
     id: "6",
     title: "Proof of Impact Dashboard",
-    description: "Public real-time metrics showing actual platform usage. Active players, transactions processed, businesses onboarded, and community growth. No vanity metrics - just real data proving DarkWave delivers.",
+    description: "Public real-time metrics showing actual platform usage. Active players, transactions processed, businesses onboarded, and community growth. No vanity metrics - just real data proving Trust Layer delivers.",
     category: "strategic",
     status: "pending",
     sortOrder: 6,
@@ -264,7 +264,7 @@ export default function ComingFeatures() {
         {/* Strategic Features Section */}
         <FeatureSection
           title="Strategic Platform Features"
-          subtitle="What sets DarkWave apart"
+          subtitle="What sets Trust Layer apart"
           config={categoryConfig["strategic"]}
           features={strategicFeatures}
         />

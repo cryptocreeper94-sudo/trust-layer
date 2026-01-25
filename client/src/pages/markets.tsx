@@ -411,7 +411,7 @@ export default function MarketsPage() {
               <BarChart3 className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              DarkWave Markets
+              Trust Layer Markets
             </h1>
           </div>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-2">
@@ -445,7 +445,7 @@ export default function MarketsPage() {
                     <div className="flex-1">
                       <h3 className="font-semibold text-amber-400 mb-1">Risk Disclosure</h3>
                       <p className="text-sm text-muted-foreground">
-                        DarkWave Markets provides intelligence, not financial advice. Guardian scores indicate security audits, not investment quality. 
+                        Trust Layer Markets provides intelligence, not financial advice. Guardian scores indicate security audits, not investment quality. 
                         Pulse predictions are probabilistic, not guarantees. <strong className="text-amber-300">DYOR. You can still lose everything.</strong> 
                         But at least you'll know what you're walking into.
                       </p>

@@ -25,7 +25,7 @@ export default function Token() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">
@@ -179,7 +179,7 @@ export default function Token() {
           <div className="text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-display font-bold mb-3">Real Utility. No Fluff.</h2>
             <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-              Signal is required to access every app in the DarkWave ecosystem — it's your key to the Trust Network.
+              Signal is required to access every app in the Trust Layer ecosystem — it's your key to the Trust Network.
             </p>
           </div>
 
@@ -261,7 +261,7 @@ export default function Token() {
             <div className="order-1 lg:order-2 space-y-5">
               <h2 className="text-2xl md:text-3xl font-display font-bold">Fair Launch Economics</h2>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                We designed Signal to be fair and sustainable. As your Trust Network Access, it powers governance, staking, and all transactions across the DarkWave ecosystem.
+                We designed Signal to be fair and sustainable. As your Trust Network Access, it powers governance, staking, and all transactions across the Trust Layer ecosystem.
               </p>
               <div className="grid grid-cols-2 gap-3">
                 <GlassCard hover={false}>
@@ -273,7 +273,7 @@ export default function Token() {
                 <GlassCard hover={false}>
                   <div className="p-4">
                     <div className="text-[10px] text-white/40 uppercase tracking-wider mb-1">Network</div>
-                    <div className="text-lg font-bold font-mono text-white">DarkWave L1</div>
+                    <div className="text-lg font-bold font-mono text-white">Trust Layer L1</div>
                   </div>
                 </GlassCard>
               </div>
@@ -398,7 +398,7 @@ export default function Token() {
           <div className="text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-display font-bold mb-3">Protocol Revenue Model</h2>
             <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-              No buy or sell taxes. DarkWave generates sustainable revenue through protocol fees across the ecosystem.
+              No buy or sell taxes. Trust Layer generates sustainable revenue through protocol fees across the ecosystem.
             </p>
           </div>
 

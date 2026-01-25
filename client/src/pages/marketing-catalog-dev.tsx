@@ -23,7 +23,7 @@ const X_FACEBOOK_MESSAGES = {
     {
       id: "ev2", 
       title: "Community Ownership",
-      message: "This isn't our project — it's YOURS. DarkWave is 100% community-owned. No VCs calling shots. No faceless corporations. Just real people with real stakes building real value together. Governance transitions fully to YOU as we grow. Ready to own something? 🚀",
+      message: "This isn't our project — it's YOURS. Trust Layer is 100% community-owned. No VCs calling shots. No faceless corporations. Just real people with real stakes building real value together. Governance transitions fully to YOU as we grow. Ready to own something? 🚀",
       platforms: ["x", "facebook"],
       theme: "community"
     },
@@ -37,14 +37,14 @@ const X_FACEBOOK_MESSAGES = {
     {
       id: "ev4",
       title: "DeFi Suite",
-      message: "DarkWave DeFi isn't about gambling — it's about building. Swap tokens with minimal fees. Stake SIG for passive rewards. Provide liquidity and earn. All powered by verified participants, not anonymous bots. DeFi the way it should be: transparent, accountable, and rewarding. 📈",
+      message: "Trust Layer DeFi isn't about gambling — it's about building. Swap tokens with minimal fees. Stake SIG for passive rewards. Provide liquidity and earn. All powered by verified participants, not anonymous bots. DeFi the way it should be: transparent, accountable, and rewarding. 📈",
       platforms: ["x", "facebook"],
       theme: "defi"
     },
     {
       id: "ev5",
       title: "Academy Learning",
-      message: "New to crypto? No worries. DarkWave Academy explains everything in plain English — no jargon, no gatekeeping. Learn at your own pace. Earn credentials. Join confident, not confused. Education should unlock doors, not create barriers. Start learning free today. 🎓",
+      message: "New to crypto? No worries. Trust Layer Academy explains everything in plain English — no jargon, no gatekeeping. Learn at your own pace. Earn credentials. Join confident, not confused. Education should unlock doors, not create barriers. Start learning free today. 🎓",
       platforms: ["x", "facebook"],
       theme: "education"
     },

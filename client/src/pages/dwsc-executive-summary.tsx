@@ -79,7 +79,7 @@ export default function DWSCExecutiveSummary() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">
@@ -136,12 +136,12 @@ export default function DWSCExecutiveSummary() {
               <p className="text-white/80 leading-relaxed mb-4">
                 <span className="text-cyan-400 font-semibold">Trust Layer</span> is a purpose-built 
                 Layer 1 blockchain ecosystem designed for high-performance gaming, digital asset ownership, and 
-                decentralized applications. Unlike general-purpose chains, DarkWave is optimized from the ground up 
+                decentralized applications. Unlike general-purpose chains, Trust Layer is optimized from the ground up 
                 for real-time interactive experiences and seamless digital commerce.
               </p>
               <p className="text-white/80 leading-relaxed mb-4">
-                The ecosystem comprises three pillars: the <span className="text-purple-400 font-semibold">DarkWave blockchain infrastructure</span>, 
-                the <span className="text-pink-400 font-semibold">DarkWave Portal</span> for ecosystem access and DeFi services, 
+                The ecosystem comprises three pillars: the <span className="text-purple-400 font-semibold">Trust Layer infrastructure</span>, 
+                the <span className="text-pink-400 font-semibold">Trust Layer Portal</span> for ecosystem access and DeFi services, 
                 and <span className="text-amber-400 font-semibold">Chronicles</span> - an unprecedented adventure platform 
                 spanning 10 verifiable historical eras where YOU are the hero that serves as the flagship application demonstrating 
                 the chain's capabilities.
@@ -199,7 +199,7 @@ export default function DWSCExecutiveSummary() {
                 <Layers className="w-6 h-6 text-purple-400" />
                 The Ecosystem
               </h2>
-              <p className="text-white/60">Three integrated pillars powering the DarkWave vision</p>
+              <p className="text-white/60">Three integrated pillars powering the Trust Layer vision</p>
             </motion.div>
 
             <div className="grid md:grid-cols-3 gap-6">
@@ -213,7 +213,7 @@ export default function DWSCExecutiveSummary() {
                   features: ["PoA Consensus", "Native Signal (SIG)", "Smart Contracts", "Cross-Chain Bridge"]
                 },
                 {
-                  title: "DarkWave Portal",
+                  title: "Trust Layer Portal",
                   subtitle: "Ecosystem Gateway",
                   description: "Complete DeFi suite with Signal swaps, staking, NFT marketplace, and developer tools. The unified interface for the entire ecosystem.",
                   icon: Globe,
@@ -276,7 +276,7 @@ export default function DWSCExecutiveSummary() {
                 <Sparkles className="w-6 h-6 text-amber-400" />
                 Complete Platform Features
               </h2>
-              <p className="text-white/60">Swipe to explore everything built and operational in the DarkWave ecosystem</p>
+              <p className="text-white/60">Swipe to explore everything built and operational in the Trust Layer ecosystem</p>
             </motion.div>
 
             <div className="relative">
@@ -835,7 +835,7 @@ export default function DWSCExecutiveSummary() {
               className="bg-gradient-to-r from-cyan-950/30 via-purple-950/30 to-pink-950/30 border border-white/10 rounded-xl p-8 text-center"
             >
               <h2 className="text-2xl font-display font-bold text-white mb-2">
-                Partner With DarkWave Studios
+                Partner With Trust Layer Studios
               </h2>
               <p className="text-white/60 mb-6 max-w-2xl mx-auto">
                 We're building the future of blockchain gaming. Join us as an investor, developer, or strategic partner.

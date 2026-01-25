@@ -166,7 +166,7 @@ export default function Explorer() {
           <div className="flex items-center gap-3">
             <BackButton />
             <div>
-              <h1 className="text-lg font-bold text-white">DarkWaveScan</h1>
+              <h1 className="text-lg font-bold text-white">TrustLayerScan</h1>
               <div className="flex items-center gap-1.5">
                 <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
                 <span className="text-[10px] text-amber-400">Testnet</span>
@@ -187,7 +187,7 @@ export default function Explorer() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-display font-bold mb-2">
-              DarkWave<span className="text-primary">Scan</span>
+              TrustLayer<span className="text-primary">Scan</span>
             </h1>
             <p className="text-sm text-muted-foreground">Track every block, transaction, and contract in real-time</p>
           </div>
@@ -235,7 +235,7 @@ export default function Explorer() {
                 <div className="flex items-center gap-1 mb-1 flex-wrap">
                   <Server className="w-3 h-3 text-purple-400/60 shrink-0" />
                   <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse shrink-0" />
-                  <InfoTooltip content="DarkWave uses Proof-of-Authority consensus. The Founders Validator runs enterprise-grade infrastructure for maximum uptime." label="Network info" />
+                  <InfoTooltip content="Trust Layer uses Proof-of-Authority consensus. The Founders Validator runs enterprise-grade infrastructure for maximum uptime." label="Network info" />
                 </div>
                 <div className="text-sm md:text-xl font-bold text-white leading-tight">
                   <span className="hidden md:inline">{chainStats?.activeNodes || "—"}</span>

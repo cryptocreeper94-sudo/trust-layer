@@ -87,7 +87,7 @@ export default function AINFTGenerator() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={darkwaveLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <BackButton />
@@ -323,7 +323,7 @@ export default function AINFTGenerator() {
                   </motion.div>
                   <h2 className="text-xl font-bold mb-2">Ready to Mint!</h2>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Your AI-generated NFT is ready to be minted on the DarkWave blockchain.
+                    Your AI-generated NFT is ready to be minted on the Trust Layer.
                   </p>
                   <div className="p-3 rounded-lg bg-white/5 mb-4">
                     <div className="flex justify-between text-sm mb-1">

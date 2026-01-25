@@ -250,7 +250,7 @@ export default function Philosophy() {
           <GlassCard glow className="p-8 text-center border-cyan-500/30">
             <Zap className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-white mb-4">
-              We Are the DarkWave
+              We Are Trust Layer
             </h2>
             <p className="text-slate-300 max-w-2xl mx-auto mb-6">
               Not "our" project. Not "our" community. <strong className="text-cyan-400">Yours</strong>. 

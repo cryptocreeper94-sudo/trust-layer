@@ -86,7 +86,7 @@ export default function GatewayError() {
           <div className="bg-slate-950/50 border border-slate-700/50 rounded-lg p-4 mb-6">
             <p className="text-sm text-slate-400">
               {errorType === "not-found" && (
-                "This domain is not yet registered on the DarkWave ecosystem. Search and register your .dwsc domain at "
+                "This domain is not yet registered on the Trust Layer ecosystem. Search and register your .dwsc domain at "
               )}
               {errorType === "no-website" && (
                 "Domain owners can configure their website in the Domain Manager. This domain hasn't been set up yet. "

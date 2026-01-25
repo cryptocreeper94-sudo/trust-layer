@@ -51,7 +51,7 @@ const PROPOSALS: Proposal[] = [
   {
     id: "DWP-002",
     title: "Launch Community Grant Program",
-    description: "Allocate 1M SIG from treasury to fund developer grants and community projects building on DarkWave.",
+    description: "Allocate 1M SIG from treasury to fund developer grants and community projects building on Trust Layer.",
     author: "defi_king",
     status: "active",
     votesFor: 1800000,
@@ -177,7 +177,7 @@ export default function DAOGovernance() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={darkwaveLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <BackButton />
@@ -206,7 +206,7 @@ export default function DAOGovernance() {
               DAO <span className="text-indigo-400">Governance</span>
             </h1>
             <p className="text-sm text-muted-foreground">
-              Shape the future of DarkWave through community voting
+              Shape the future of Trust Layer through community voting
             </p>
           </motion.div>
 

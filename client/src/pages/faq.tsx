@@ -32,10 +32,10 @@ const FAQ_CATEGORIES: FAQCategory[] = [
     items: [
       {
         question: "What is Trust Layer?",
-        answer: "Trust Layer is a purpose-built Layer 1 trust infrastructure designed for high-performance gaming, digital asset ownership, and decentralized applications. Unlike general-purpose chains, DarkWave is optimized for real-time interactive experiences with 400ms block times and 200K+ TPS."
+        answer: "Trust Layer is a purpose-built Layer 1 trust infrastructure designed for high-performance gaming, digital asset ownership, and decentralized applications. Unlike general-purpose chains, Trust Layer is optimized for real-time interactive experiences with 400ms block times and 200K+ TPS."
       },
       {
-        question: "Who is behind DarkWave?",
+        question: "Who is behind Trust Layer?",
         answer: "DarkWave Studios is the parent company building the entire vertical stack - from blockchain infrastructure to end-user applications. The team includes experienced developers, gaming industry veterans, and blockchain specialists committed to building a sustainable ecosystem."
       },
       {
@@ -139,7 +139,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
         answer: "The treasury is controlled by a multisig wallet requiring multiple team signatures for any transaction. This prevents any single point of failure or unauthorized access to funds."
       },
       {
-        question: "Is DarkWave registered as a company?",
+        question: "Is Trust Layer registered as a company?",
         answer: "DarkWave Studios operates as a legitimate business entity with proper legal structure. We're committed to regulatory compliance as the crypto landscape evolves."
       },
       {
@@ -163,12 +163,12 @@ const FAQ_CATEGORIES: FAQCategory[] = [
         answer: "DWSC is designed for optimal performance with its native infrastructure. Cross-chain bridges allow interoperability with Ethereum and Solana ecosystems."
       },
       {
-        question: "Can I build on DarkWave?",
+        question: "Can I build on Trust Layer?",
         answer: "Yes! The Developer Portal provides SDKs, APIs, documentation, and grants for building on DWSC. We welcome developers to join the ecosystem and build innovative applications."
       },
       {
         question: "What wallets are supported?",
-        answer: "The native DarkWave Wallet is integrated into the portal. We also support popular wallets through our wallet connection system. Hardware wallet support is planned for mainnet launch."
+        answer: "The native Trust Layer Wallet is integrated into the portal. We also support popular wallets through our wallet connection system. Hardware wallet support is planned for mainnet launch."
       }
     ]
   }
@@ -228,7 +228,7 @@ export default function FAQ() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">

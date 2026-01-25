@@ -31,7 +31,7 @@ const predictionLearningService = {
 /**
  * Prediction Tracking Service
  * Logs every signal, tracks outcomes, calculates accuracy
- * Stamps predictions to DarkWave Trust Layer for immutable proof
+ * Stamps predictions to Trust Layer for immutable proof
  */
 
 interface IndicatorSnapshot {
@@ -176,7 +176,7 @@ class PredictionTrackingService {
   }
 
   /**
-   * Stamp prediction to Solana blockchain via audit trail + DarkWave Trust Layer L1
+   * Stamp prediction to Solana blockchain via audit trail + Trust Layer L1
    */
   private async stampToBlockchain(predictionId: string, payload: object): Promise<void> {
     try {
@@ -204,9 +204,9 @@ class PredictionTrackingService {
         console.log(`⛓️ [PredictionTracking] Prediction ${predictionId} stamped to Solana: ${result.onchainSignature.substring(0, 20)}...`);
       }
 
-      // Also submit to DarkWave Trust Layer L1 for dual verification
+      // Also submit to Trust Layer L1 for dual verification
       this.stampToDarkWaveChain(predictionId, payload as any).catch(err => {
-        console.warn('⚠️ [PredictionTracking] DarkWave Trust Layer stamp failed (non-critical):', err.message);
+        console.warn('⚠️ [PredictionTracking] Trust Layer stamp failed (non-critical):', err.message);
       });
     } catch (error) {
       console.error('❌ [PredictionTracking] Blockchain stamp error:', error);
@@ -214,7 +214,7 @@ class PredictionTrackingService {
   }
 
   /**
-   * Submit prediction hash to DarkWave Trust Layer (DSC) L1 for additional verification
+   * Submit prediction hash to Trust Layer (DSC) L1 for additional verification
    */
   private async stampToDarkWaveChain(predictionId: string, payload: {
     id: string;
@@ -235,10 +235,10 @@ class PredictionTrackingService {
       });
 
       if (result.success) {
-        console.log(`🔗 [PredictionTracking] Prediction ${predictionId} verified on DarkWave Trust Layer: ${result.verificationId?.substring(0, 16)}...`);
+        console.log(`🔗 [PredictionTracking] Prediction ${predictionId} verified on Trust Layer: ${result.verificationId?.substring(0, 16)}...`);
       }
     } catch (error: any) {
-      console.warn('⚠️ [PredictionTracking] DarkWave Trust Layer not configured or unavailable:', error.message);
+      console.warn('⚠️ [PredictionTracking] Trust Layer not configured or unavailable:', error.message);
     }
   }
 

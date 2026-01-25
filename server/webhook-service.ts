@@ -62,7 +62,7 @@ class WebhookService {
           'bridge.released'
         ]
       });
-      console.log('[Webhooks] DarkWave Pulse webhook registered');
+      console.log('[Webhooks] Trust Layer Pulse webhook registered');
     }
     
     // Hydrate from database

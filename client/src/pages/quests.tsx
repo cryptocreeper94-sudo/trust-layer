@@ -25,7 +25,7 @@ const SAMPLE_QUESTS = [
   { id: "1", name: "First Stake", description: "Stake any amount of SIG", xpReward: 50, tokenReward: "10", difficulty: "easy", category: "staking", progress: 0, target: 1, icon: "zap", completed: false },
   { id: "2", name: "Bridge Pioneer", description: "Complete your first cross-chain bridge", xpReward: 100, tokenReward: "25", difficulty: "medium", category: "bridge", progress: 0, target: 1, icon: "link", completed: false },
   { id: "3", name: "Swap Master", description: "Complete 10 Signal swaps", xpReward: 150, tokenReward: "50", difficulty: "medium", category: "defi", progress: 3, target: 10, icon: "repeat", completed: false },
-  { id: "4", name: "NFT Collector", description: "Own 5 DarkWave NFTs", xpReward: 200, tokenReward: "100", difficulty: "hard", category: "nft", progress: 1, target: 5, icon: "image", completed: false },
+  { id: "4", name: "NFT Collector", description: "Own 5 Trust Layer NFTs", xpReward: 200, tokenReward: "100", difficulty: "hard", category: "nft", progress: 1, target: 5, icon: "image", completed: false },
   { id: "5", name: "Daily Login", description: "Login 7 days in a row", xpReward: 75, tokenReward: "20", difficulty: "easy", category: "engagement", progress: 4, target: 7, icon: "calendar", completed: false },
   { id: "6", name: "Liquidity Provider", description: "Provide liquidity to any pool", xpReward: 250, tokenReward: "75", difficulty: "hard", category: "defi", progress: 1, target: 1, icon: "droplet", completed: true },
 ];
@@ -83,7 +83,7 @@ export default function Quests() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">

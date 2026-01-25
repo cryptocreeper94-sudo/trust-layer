@@ -110,7 +110,7 @@ export default function DashboardPro() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/80 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={darkwaveLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg">DarkWave</span>
             <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 text-[9px]">PRO</Badge>
           </Link>
@@ -137,7 +137,7 @@ export default function DashboardPro() {
             <h1 className="text-2xl md:text-3xl font-display font-bold mb-1">
               Welcome back, <span className="text-primary">Trader</span>
             </h1>
-            <p className="text-sm text-muted-foreground">Here's your DarkWave ecosystem at a glance</p>
+            <p className="text-sm text-muted-foreground">Here's your Trust Layer ecosystem at a glance</p>
           </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4 auto-rows-[120px] md:auto-rows-[140px]">

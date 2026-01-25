@@ -81,7 +81,7 @@ export async function submitMemoToSolana(
     const conn = getConnection();
     
     const memoContent = JSON.stringify({
-      protocol: "DarkWave",
+      protocol: "Trust Layer",
       version: "1.0",
       stampId,
       dataHash,

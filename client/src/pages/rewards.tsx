@@ -175,7 +175,7 @@ export default function Rewards() {
             Early Adopter Rewards
           </h1>
           <p className="text-xl text-white/70 max-w-2xl mx-auto">
-            Be among the first to join DarkWave and receive exclusive token bonuses at launch
+            Be among the first to join Trust Layer and receive exclusive token bonuses at launch
           </p>
         </motion.div>
 
@@ -422,7 +422,7 @@ export default function Rewards() {
                   <span className="text-lg font-bold text-amber-400">3</span>
                 </div>
                 <h4 className="font-semibold mb-1">Connect Wallet</h4>
-                <p className="text-sm text-white/60">Link your DarkWave wallet to be eligible for TGE airdrop</p>
+                <p className="text-sm text-white/60">Link your Trust Layer wallet to be eligible for TGE airdrop</p>
               </div>
               
               <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
@@ -603,7 +603,7 @@ export default function Rewards() {
                 </AccordionTrigger>
                 <AccordionContent className="text-white/70 pb-4">
                   No problem! You can earn Shells without a wallet — your balance is tracked by your account. 
-                  However, to receive your SIG tokens at TGE, you'll need to connect a DarkWave wallet before the 
+                  However, to receive your SIG tokens at TGE, you'll need to connect a Trust Layer wallet before the 
                   snapshot date. We'll send reminders as the deadline approaches. Your earned Shells are safe and 
                   waiting for you.
                 </AccordionContent>
@@ -617,7 +617,7 @@ export default function Rewards() {
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="text-white/70 pb-4">
-                  DarkWave is a real blockchain project with active development, a working testnet, and a clear roadmap. 
+                  Trust Layer is a real blockchain project with active development, a working testnet, and a clear roadmap. 
                   The Shell reward system is live and operational right now — you can see your balance update immediately 
                   when you complete quests. At launch, Shells convert to SIG tokens at a fixed rate of 
                   100:1. Early adopters who participate now get the best tier multipliers and the largest airdrops.

@@ -101,7 +101,7 @@ const roadmapData: RoadmapPhase[] = [
     items: [
       {
         title: "MetaMask Integration",
-        description: "Connect wallet and add DarkWave chain to MetaMask",
+        description: "Connect wallet and add Trust Layer chain to MetaMask",
         status: "completed",
         details: ["Chain ID: 8453", "One-click chain addition", "Transaction signing"]
       },

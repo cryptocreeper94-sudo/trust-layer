@@ -85,7 +85,7 @@ Guidelines:
 - Write in a professional but accessible tone
 - Explain complex concepts simply without being condescending
 - Include practical examples and real-world applications
-- Naturally mention DarkWave's Trust Layer where relevant (but don't be overly promotional)
+- Naturally mention Trust Layer's Trust Layer where relevant (but don't be overly promotional)
 - Focus on providing genuine value to readers
 - Use proper markdown formatting with headers, bullet points, and emphasis
 - Target length: 800-1200 words

@@ -158,13 +158,13 @@ export default function GamesHome() {
           <div className="flex items-center gap-2 shrink-0">
             <motion.img 
               src={darkwaveLogo} 
-              alt="DarkWave" 
+              alt="Trust Layer" 
               className="w-7 h-7"
               animate={{ rotate: [0, 5, -5, 0] }}
               transition={{ duration: 4, repeat: Infinity }}
             />
             <span className="font-display font-bold text-lg tracking-tight">
-              DarkWave <span className="text-pink-400">Games</span>
+              The <span className="text-pink-400">Arcade</span>
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -235,7 +235,7 @@ export default function GamesHome() {
               </h1>
               
               <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Provably fair games with instant on-chain payouts. Every outcome is verifiable on the DarkWave blockchain.
+                Provably fair games with instant on-chain payouts. Every outcome is verifiable on the Trust Layer.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
@@ -533,7 +533,7 @@ export default function GamesHome() {
                     <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg shadow-pink-500/30">
                       <Shield className="w-8 h-8 text-white" />
                     </div>
-                    <h3 className="font-bold text-xl mb-2">DarkWave Ecosystem</h3>
+                    <h3 className="font-bold text-xl mb-2">Trust Layer Ecosystem</h3>
                     <p className="text-sm text-muted-foreground mb-4">Explore the full Trust Layer - blockchain, apps, and more.</p>
                     <Badge className="bg-pink-500/20 text-pink-400 border-pink-500/30">
                       Visit Portal <ArrowRight className="w-3 h-3 ml-1" />

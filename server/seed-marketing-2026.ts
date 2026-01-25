@@ -190,7 +190,7 @@ Full launch date TBD. Play what's ready NOW.
 Not theoretical. Not "up to."
 Real throughput on a real chain.
 
-DarkWave Trust Layer launches April 11, 2026.
+Trust Layer launches April 11, 2026.
 
 See the metrics live → dwsc.io/explorer`,
     category: 'tech',
@@ -245,7 +245,7 @@ $0.0001 fees.
 
 Not promises. Metrics.
 
-DarkWave Trust Layer. April 11, 2026. ⚡`,
+Trust Layer. April 11, 2026. ⚡`,
     category: 'tech',
   },
   {
@@ -263,7 +263,7 @@ dwsc.io/presale`,
   },
   {
     platform: 'twitter',
-    content: `DarkWave Chronicles Beta is LIVE. 🎮
+    content: `Chronicles Beta is LIVE. 🎮
 
 AI companions. Era exploration. Voice cloning. Shells economy.
 
@@ -300,7 +300,7 @@ dwsc.io/guardian-registry 🛡️`,
 
 April 11, 2026.
 
-Signal. DarkWave Chain. DarkWave Future.
+Signal. Trust Layer. DarkWave Future.
 
 Presale live → dwsc.io/presale 🚀`,
     category: 'tge',
@@ -329,7 +329,7 @@ dwsc.io/guardian-registry 🔒`,
     platform: 'twitter',
     content: `70+ eras. One parallel self. Your legend.
 
-DarkWave Chronicles Beta is LIVE now.
+Chronicles Beta is LIVE now.
 
 AI-powered. Voice cloning. Shells economy.
 

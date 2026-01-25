@@ -45,7 +45,7 @@ const mockValidators: Validator[] = [
   {
     id: "v2",
     address: "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
-    name: "DarkWave DAO",
+    name: "Trust Layer DAO",
     status: "active",
     votes: 89,
     lastActive: "15 minutes ago",
@@ -91,7 +91,7 @@ const mockPendingOps: PendingOperation[] = [
     description: "Add Community Rep #1 to validator set",
     requiredSignatures: 2,
     currentSignatures: 2,
-    signers: ["Founders Validator", "DarkWave DAO"],
+    signers: ["Founders Validator", "Trust Layer DAO"],
     createdAt: "2 hours ago",
     expiresAt: "22 hours",
     status: "pending"

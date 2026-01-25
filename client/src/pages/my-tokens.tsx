@@ -168,7 +168,7 @@ export default function MyTokensPage() {
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
                 Welcome back{user?.displayName ? `, ${user.displayName.split(' ')[0]}` : ''}!
               </h2>
-              <p className="text-white/60">Your DarkWave ecosystem hub</p>
+              <p className="text-white/60">Your Trust Layer ecosystem hub</p>
             </motion.div>
 
             {/* Account Status Cards - Desktop Grid */}
@@ -242,7 +242,7 @@ export default function MyTokensPage() {
                           </span>
                         </div>
                         <p className="text-sm text-white/50 mb-3">
-                          Welcome to DarkWave! Explore the ecosystem and earn rewards.
+                          Welcome to Trust Layer! Explore the ecosystem and earn rewards.
                         </p>
                         <Link href="/rewards">
                           <Button size="sm" variant="outline" className="border-white/20 text-white">

@@ -75,10 +75,10 @@ export async function sendEmail(options: EmailOptions) {
 export async function sendWelcomeEmail(to: string, name: string) {
   return sendEmail({
     to,
-    subject: "Welcome to DarkWave Trust Layer",
+    subject: "Welcome to Trust Layer",
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h1 style="color: #00FFFF;">Welcome to DarkWave Trust Layer!</h1>
+        <h1 style="color: #00FFFF;">Welcome to Trust Layer!</h1>
         <p>Hi ${name},</p>
         <p>Thank you for joining the DarkWave ecosystem. You're now part of the next generation of blockchain technology.</p>
         <p>Here's what you can do:</p>
@@ -109,7 +109,7 @@ export async function sendApiKeyEmail(to: string, name: string, apiKey: string, 
         <p style="color: #ff6b6b; margin-top: 15px;"><strong>Important:</strong> Keep this key secure and never share it publicly.</p>
         <p>You can now use this key to:</p>
         <ul>
-          <li>Submit hashes to the DarkWave Trust Layer</li>
+          <li>Submit hashes to the Trust Layer</li>
           <li>Generate hallmarks for your products</li>
           <li>Access the DarkWave API</li>
         </ul>
@@ -131,7 +131,7 @@ export async function sendHallmarkEmail(to: string, hallmarkId: string, productN
         <div style="background: #1a1a2e; color: #00FFFF; padding: 20px; border-radius: 8px; text-align: center;">
           <span style="font-size: 24px; font-weight: bold;">${hallmarkId}</span>
         </div>
-        <p style="margin-top: 15px;">This hallmark is now recorded on the DarkWave Trust Layer and can be verified at:</p>
+        <p style="margin-top: 15px;">This hallmark is now recorded on the Trust Layer and can be verified at:</p>
         <p><a href="https://darkwavechain.io/explorer" style="color: #00FFFF;">https://darkwavechain.io/explorer</a></p>
         <p>— The DarkWave Team</p>
       </div>
@@ -212,7 +212,7 @@ export async function sendFounderWelcomeEmail(to: string, founderNumber: number,
           <p style="color: #00FFFF; font-size: 24px; font-weight: bold; margin: 0; font-family: monospace;">${referralCode}</p>
           <p style="color: #888; margin: 10px 0 0 0; font-size: 12px;">Share this code and earn bonus rewards for each referral!</p>
         </div>
-        <p style="color: #888; font-size: 12px; text-align: center;">Thank you for believing in DarkWave Trust Layer. Together, we're building the future of trust infrastructure.</p>
+        <p style="color: #888; font-size: 12px; text-align: center;">Thank you for believing in Trust Layer. Together, we're building the future of trust infrastructure.</p>
         <p style="color: #888; margin-top: 20px; text-align: center;">— The DarkWave Team</p>
       </div>
     `,
@@ -286,7 +286,7 @@ export async function sendPresaleConfirmationEmail(to: string, amountPaid: strin
           </ul>
         </div>
         
-        <p style="color: #888; font-size: 12px; text-align: center;">Thank you for being an early supporter of DarkWave Trust Layer!</p>
+        <p style="color: #888; font-size: 12px; text-align: center;">Thank you for being an early supporter of Trust Layer!</p>
         <p style="color: #888; margin-top: 20px; text-align: center;">— The DarkWave Team</p>
       </div>
     `,

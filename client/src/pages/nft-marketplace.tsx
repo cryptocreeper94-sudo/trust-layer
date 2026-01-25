@@ -35,7 +35,7 @@ const formatPrice = (price: string) => {
 };
 
 const SAMPLE_COLLECTIONS = [
-  { id: "1", name: "DarkWave Genesis", symbol: "DWG", imageUrl: genesisNft1, itemCount: 1000, floorPrice: "100000000000000000000", isVerified: true },
+  { id: "1", name: "Trust Layer Genesis", symbol: "DWG", imageUrl: genesisNft1, itemCount: 1000, floorPrice: "100000000000000000000", isVerified: true },
   { id: "2", name: "Cyber Collective", symbol: "CYBER", imageUrl: cyberNft, itemCount: 500, floorPrice: "50000000000000000000", isVerified: true },
   { id: "3", name: "Golden Aura", symbol: "AURA", imageUrl: goldenNft, itemCount: 2500, floorPrice: "25000000000000000000", isVerified: true },
   { id: "4", name: "Neon Dreams", symbol: "NEON", imageUrl: neonNft, itemCount: 888, floorPrice: "75000000000000000000", isVerified: true },
@@ -103,7 +103,7 @@ export default function NftMarketplace() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">
@@ -404,7 +404,7 @@ export default function NftMarketplace() {
               <div className="flex items-start gap-2">
                 <Sparkles className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
                 <p className="text-[10px] text-purple-200">
-                  <strong className="text-purple-300">Testnet:</strong> This marketplace operates on DarkWave testnet. NFTs here are for testing only.
+                  <strong className="text-purple-300">Testnet:</strong> This marketplace operates on Trust Layer testnet. NFTs here are for testing only.
                 </p>
               </div>
             </div>

@@ -183,7 +183,7 @@ class VoiceService {
         // Create instant voice clone via ElevenLabs API
         const formData = new FormData();
         formData.append("name", `chronicles-${userId.slice(0, 8)}`);
-        formData.append("description", "DarkWave Chronicles parallel self voice clone");
+        formData.append("description", "Chronicles parallel self voice clone");
         
         // Fetch the audio file and add to form
         const audioResponse = await fetch(sample.sampleUrl);

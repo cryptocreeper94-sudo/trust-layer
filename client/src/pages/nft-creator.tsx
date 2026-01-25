@@ -100,7 +100,7 @@ export default function NftCreator() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">
@@ -306,7 +306,7 @@ export default function NftCreator() {
                     <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
                   </motion.div>
                   <h2 className="text-2xl font-bold mb-2">NFT Minted Successfully!</h2>
-                  <p className="text-muted-foreground mb-6">Your NFT is now on the DarkWave blockchain</p>
+                  <p className="text-muted-foreground mb-6">Your NFT is now on the Trust Layer</p>
                   
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <Link href="/nft">

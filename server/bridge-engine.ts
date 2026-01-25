@@ -225,7 +225,7 @@ class DarkWaveBridge {
         .set({ status: "confirmed", confirmedAt: new Date() })
         .where(eq(bridgeBurns.id, burnId));
 
-      // Release SIG on DarkWave Trust Layer
+      // Release SIG on Trust Layer
       const tx = blockchain.submitTransaction(
         BRIDGE_CUSTODY_ADDRESS,
         burn.targetAddress,

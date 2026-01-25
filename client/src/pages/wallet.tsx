@@ -634,7 +634,7 @@ export default function WalletPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={darkwaveLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">
@@ -652,7 +652,7 @@ export default function WalletPage() {
         <div className="container mx-auto px-4 py-3 flex flex-col items-center gap-1 text-center">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-white flex-shrink-0" />
-            <span className="text-xs sm:text-sm font-bold text-white">DarkWave Wallet — Shells Only Until Launch</span>
+            <span className="text-xs sm:text-sm font-bold text-white">Trust Layer Wallet — Shells Only Until Launch</span>
           </div>
           <span className="text-[10px] sm:text-xs text-white/80">Use your preferred wallet (MetaMask, Phantom, etc.) for presale crypto purchases</span>
         </div>
@@ -676,7 +676,7 @@ export default function WalletPage() {
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
-              DarkWave Wallet
+              Trust Layer Wallet
             </span>
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-4">

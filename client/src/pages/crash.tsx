@@ -1074,7 +1074,7 @@ export default function CrashGame() {
           <div className="flex items-center gap-3">
             <BackButton />
             <div className="flex items-center gap-2">
-              <img src={darkwaveLogo} alt="DarkWave" className="w-6 h-6" />
+              <img src={darkwaveLogo} alt="Trust Layer" className="w-6 h-6" />
               <span className="font-display font-bold">Crash</span>
               <Badge variant="outline" className="text-[10px] hidden sm:flex">
                 Max {MAX_MULTIPLIER}x

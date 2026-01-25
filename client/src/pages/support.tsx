@@ -156,7 +156,7 @@ export default function SupportPage() {
               </span>
             </h1>
             <p className="text-lg text-white/60 max-w-2xl mx-auto">
-              Get help from the DarkWave team. Submit a ticket and we'll respond as quickly as possible.
+              Get help from the Trust Layer team. Submit a ticket and we'll respond as quickly as possible.
             </p>
           </motion.div>
 

@@ -324,18 +324,18 @@ export default function DeveloperPortal() {
     {
       title: "1. Install SDK",
       language: "bash",
-      code: `# Install DarkWave SDK
+      code: `# Install Trust Layer SDK
 npm install @darkwave/sdk
 
 # Or use the built-in SDK from your server
-import { DarkWaveClient } from '@shared/darkwave-sdk';`,
+import { TrustLayerClient } from '@shared/darkwave-sdk';`,
     },
     {
       title: "2. Initialize Client with API Key",
       language: "typescript",
-      code: `import { DarkWaveClient } from '@shared/darkwave-sdk';
+      code: `import { TrustLayerClient } from '@shared/darkwave-sdk';
 
-const client = new DarkWaveClient({
+const client = new TrustLayerClient({
   rpcUrl: 'https://api.darkwavechain.io',
   apiKey: 'dwc_your_api_key_here',
   chainId: 8453
@@ -391,7 +391,7 @@ console.log({
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2 mr-auto">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
           <div className="flex items-center gap-3">
@@ -668,7 +668,7 @@ console.log({
                   <ol className="list-decimal list-inside space-y-2">
                     <li><strong>Register for an API Key</strong> - Use the form above to get your unique API key</li>
                     <li><strong>Install the SDK</strong> - Run <code className="bg-black/40 px-1 rounded">npm install @darkwave/sdk</code></li>
-                    <li><strong>Initialize the client</strong> - Create a DarkWaveClient with your RPC URL and API key</li>
+                    <li><strong>Initialize the client</strong> - Create a TrustLayerClient with your RPC URL and API key</li>
                     <li><strong>Start hashing</strong> - Submit your application data hashes to the chain</li>
                   </ol>
                 </AccordionContent>
@@ -721,7 +721,7 @@ console.log({
               </AccordionItem>
               <AccordionItem value="dual-chain" className="border-white/10">
                 <AccordionTrigger className="text-sm font-medium hover:text-primary">
-                  Dual-Chain Hashing (Solana + DarkWave)
+                  Dual-Chain Hashing (Solana + Trust Layer)
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
                   <p className="mb-2">Hash your data to both chains simultaneously for maximum reliability:</p>
@@ -1099,7 +1099,7 @@ console.log('All successful:', result.allSuccessful);`}
                   The Fractal Trust Network
                 </h4>
                 <p className="text-muted-foreground text-sm mb-4">
-                  DarkWave isn't just a blockchain - it's a <span className="text-white font-medium">Trust Cooperative</span>. 
+                  Trust Layer isn't just a blockchain - it's a <span className="text-white font-medium">Trust Cooperative</span>. 
                   We're building a fractal pattern of interwoven trust nodes where each community is a centralized point 
                   that connects to the larger network through lattice-work communication lines.
                 </p>

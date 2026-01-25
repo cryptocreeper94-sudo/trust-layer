@@ -156,7 +156,7 @@ export class DarkWaveBlockchain {
   constructor() {
     this.config = {
       chainId: 8453,
-      chainName: "DarkWave Trust Layer",
+      chainName: "Trust Layer",
       symbol: "SIG",
       decimals: 18,
       blockTimeMs: 400,

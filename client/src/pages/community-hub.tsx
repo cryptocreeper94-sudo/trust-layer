@@ -1485,7 +1485,7 @@ export default function CommunityHub() {
           </DialogHeader>
           <div className="space-y-4 mt-4 text-sm sm:text-base">
             <p className="text-gray-300 leading-relaxed">
-              ChronoChat is the community hub for the DarkWave ecosystem. Connect with fellow community members, share ideas, and stay updated on the latest developments.
+              ChronoChat is the community hub for the Trust Layer ecosystem. Connect with fellow community members, share ideas, and stay updated on the latest developments.
             </p>
             
             <div className="p-3 rounded-lg bg-white/5 border border-white/10">

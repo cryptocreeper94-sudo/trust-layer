@@ -284,7 +284,7 @@ function BusinessPlanSection() {
                   <p className="text-xs text-secondary">Fast Finality Chains</p>
                 </Card>
               </div>
-              <p><strong className="text-white">Competitive Landscape:</strong> Ethereum, Solana, Avalanche, and newer L1s compete for market share. DarkWave differentiates with PoA consensus, Hallmark verification, and integrated development tools.</p>
+              <p><strong className="text-white">Competitive Landscape:</strong> Ethereum, Solana, Avalanche, and newer L1s compete for market share. Trust Layer differentiates with PoA consensus, Hallmark verification, and integrated development tools.</p>
             </div>
           </AccordionContent>
         </AccordionItem>
@@ -514,7 +514,7 @@ export default function Team() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
           <BackButton />

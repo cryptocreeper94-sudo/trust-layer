@@ -200,7 +200,7 @@ export default function ChroniclesLogin() {
             data-testid="button-back-home"
           >
             <ChevronLeft className="w-4 h-4 mr-1" />
-            Back to DarkWave
+            Back to Trust Layer
           </Button>
         </div>
 

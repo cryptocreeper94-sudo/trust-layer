@@ -203,12 +203,12 @@ export default function PresaleSuccess() {
 
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Welcome to DarkWave!
+                Welcome to Trust Layer!
               </span>
             </h1>
             
             <p className="text-xl text-gray-400 mb-8">
-              You're now an early adopter of the DarkWave ecosystem.
+              You're now an early adopter of the Trust Layer ecosystem.
             </p>
 
             <div className="bg-gradient-to-br from-gray-900/90 to-black/80 rounded-2xl border border-white/10 p-8 mb-8 backdrop-blur-xl" style={{
@@ -255,7 +255,7 @@ export default function PresaleSuccess() {
                     <span className="text-cyan-400 font-bold text-xs">2</span>
                   </div>
                   <p className="text-gray-300 text-sm">
-                    <span className="text-cyan-400 font-medium">Before Launch:</span> Create your DarkWave wallet using the same email
+                    <span className="text-cyan-400 font-medium">Before Launch:</span> Create your Trust Layer wallet using the same email
                   </p>
                 </div>
                 <div className="flex items-start gap-3">

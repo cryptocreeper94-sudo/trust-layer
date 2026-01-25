@@ -679,7 +679,7 @@ export default function Home() {
 
             {/* Signal Emblem with Prism Light Beam Effect */}
             <div className="relative w-full mt-2 h-80 md:h-96 flex items-center justify-center">
-              {/* Prism Light Beam - danger from upper-left, transformed into flowing DarkWave below */}
+              {/* Prism Light Beam - danger from upper-left, transformed into flowing Trust Layer below */}
               <svg 
                 viewBox="0 0 1200 500" 
                 className="absolute inset-0 w-full h-full"
@@ -824,7 +824,7 @@ export default function Home() {
               <div className="relative z-10 w-72 h-80 md:w-80 md:h-96 flex items-center justify-center" style={{ marginTop: '-40px' }}>
                 <img 
                   src={shieldImage} 
-                  alt="DarkWave Shield" 
+                  alt="Trust Layer Shield" 
                   className="w-full h-full object-contain"
                   style={{ 
                     mixBlendMode: 'lighten',
@@ -871,7 +871,7 @@ export default function Home() {
               </span>
             </h2>
             <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-              Trade, stake, and explore the DarkWave DeFi ecosystem. Built for speed, designed for you.
+              Trade, stake, and explore the Trust Layer DeFi ecosystem. Built for speed, designed for you.
             </p>
           </motion.div>
 
@@ -1038,7 +1038,7 @@ export default function Home() {
             <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 text-[10px] mb-3">Builders Suite</Badge>
             <h2 className="text-3xl md:text-4xl font-display font-bold mb-3">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400">
-                Build on DarkWave
+                Build on Trust Layer
               </span>
             </h2>
             <p className="text-sm text-muted-foreground max-w-lg mx-auto">

@@ -143,7 +143,7 @@ export default function InfluencerPartnershipPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0" data-testid="link-home">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">
@@ -167,7 +167,7 @@ export default function InfluencerPartnershipPage() {
             </Badge>
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
               <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Partner With DarkWave
+                Partner With Trust Layer
               </span>
             </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
@@ -379,7 +379,7 @@ export default function InfluencerPartnershipPage() {
                   </div>
 
                   <div>
-                    <label className="text-sm text-muted-foreground mb-1 block">Why partner with DarkWave?</label>
+                    <label className="text-sm text-muted-foreground mb-1 block">Why partner with Trust Layer?</label>
                     <Textarea
                       placeholder="Tell us about yourself and why you'd be a great fit..."
                       value={formData.message}
@@ -481,7 +481,7 @@ export default function InfluencerPartnershipPage() {
               <div className="relative z-10">
                 <Crown className="w-12 h-12 text-amber-400 mx-auto mb-4" />
                 <h2 className="text-2xl font-display font-bold mb-3">
-                  Already a DarkWave Partner?
+                  Already a Trust Layer Partner?
                 </h2>
                 <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
                   Access your partner dashboard to track performance, get promotional materials, and manage your referrals.

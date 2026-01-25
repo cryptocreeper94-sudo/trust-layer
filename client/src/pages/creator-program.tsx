@@ -117,7 +117,7 @@ export default function CreatorProgram() {
         <nav className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-xl border-b border-white/5">
           <div className="container mx-auto px-4 h-14 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2">
-              <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
+              <img src={darkwaveLogo} alt="Trust Layer" className="w-7 h-7" />
               <span className="font-display font-bold hidden sm:inline">DarkWave</span>
             </Link>
             <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30 animate-pulse">
@@ -498,7 +498,7 @@ export default function CreatorProgram() {
       <footer className="py-8 px-4 border-t border-white/5">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <img src={darkwaveLogo} alt="DarkWave" className="w-6 h-6" />
+            <img src={darkwaveLogo} alt="Trust Layer" className="w-6 h-6" />
             <span className="text-sm text-gray-500">DarkWave Studios, LLC</span>
           </div>
           <div className="flex items-center gap-4">

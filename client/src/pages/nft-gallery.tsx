@@ -36,11 +36,11 @@ interface NFT {
 
 const SAMPLE_NFTS: NFT[] = [
   { id: "1", tokenId: "042", name: "Roman Centurion #42", collectionName: "Ancient Warriors", imageUrl: genesisNft1, description: "Legendary Roman commander from the height of the Empire - Historical Era Collection" },
-  { id: "2", tokenId: "128", name: "Egyptian Pharaoh #128", collectionName: "DarkWave Genesis", imageUrl: genesisNft2, description: "Royal dynasty edition - commemorating the great rulers of ancient Egypt" },
+  { id: "2", tokenId: "128", name: "Egyptian Pharaoh #128", collectionName: "Trust Layer Genesis", imageUrl: genesisNft2, description: "Royal dynasty edition - commemorating the great rulers of ancient Egypt" },
   { id: "3", tokenId: "089", name: "Viking Chieftain #89", collectionName: "Norse Legends", imageUrl: cyberNft, description: "Legendary Norse warrior from the age of exploration" },
   { id: "4", tokenId: "015", name: "Renaissance Scholar #15", collectionName: "Art Masters", imageUrl: neonNft, description: "Illuminated manuscript from the golden age of learning" },
   { id: "5", tokenId: "007", name: "Byzantine Emperor #7", collectionName: "Eastern Empire", imageUrl: goldenNft, description: "Imperial seal of Constantinople - ultra rare golden edition" },
-  { id: "6", tokenId: "003", name: "Samurai Warlord #3", collectionName: "DarkWave Genesis", imageUrl: genesisNft3, description: "Feudal Japan's elite warrior class - legendary genesis NFT" },
+  { id: "6", tokenId: "003", name: "Samurai Warlord #3", collectionName: "Trust Layer Genesis", imageUrl: genesisNft3, description: "Feudal Japan's elite warrior class - legendary genesis NFT" },
 ];
 
 function NFTCard({ nft, onClick }: { nft: NFT; onClick: () => void }) {
@@ -91,7 +91,7 @@ export default function NftGallery() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">
@@ -113,7 +113,7 @@ export default function NftGallery() {
               NFT <span className="text-purple-400">Gallery</span>
             </h1>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              View NFT collections by wallet address. Explore the DarkWave NFT ecosystem.
+              View NFT collections by wallet address. Explore the Trust Layer NFT ecosystem.
             </p>
           </motion.div>
 

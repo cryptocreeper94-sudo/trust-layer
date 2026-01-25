@@ -886,7 +886,7 @@ export default function Chronicles() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/80 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0" data-testid="link-home">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">
@@ -982,7 +982,7 @@ export default function Chronicles() {
             <Badge className="mb-6 px-3 py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-500/30 text-white text-xs sm:text-sm backdrop-blur-sm max-w-full whitespace-normal text-center leading-tight">
               <Flame className="w-4 h-4 mr-2 text-orange-400 animate-pulse flex-shrink-0" />
               <span className="hidden sm:inline">The Flagship Product of Trust Layer</span>
-              <span className="sm:hidden">DarkWave Flagship Product</span>
+              <span className="sm:hidden">Trust Layer Flagship Product</span>
             </Badge>
             
             <h1 className="text-5xl sm:text-6xl md:text-8xl font-display font-black mb-6 leading-tight">
@@ -990,7 +990,7 @@ export default function Chronicles() {
                 DarkWave
               </span>
               <br />
-              <span className="text-white drop-shadow-2xl">Chronicles</span>
+              <span className="text-white drop-shadow-2xl">The Game</span>
               <Badge className="ml-3 px-3 py-1 bg-amber-500/30 border-amber-500/50 text-amber-300 text-sm font-bold align-middle animate-pulse">
                 BETA
               </Badge>

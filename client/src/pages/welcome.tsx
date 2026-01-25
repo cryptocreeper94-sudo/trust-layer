@@ -29,7 +29,7 @@ const PATHWAYS = [
   {
     icon: Building2,
     title: "I Represent a Business",
-    description: "DarkWave provides verified identity and trust infrastructure for B2B relationships. See how we can help your organization.",
+    description: "Trust Layer provides verified identity and trust infrastructure for B2B relationships. See how we can help your organization.",
     color: "from-emerald-500 to-teal-500",
     link: "/trust-layer",
     linkText: "Business Solutions"
@@ -105,7 +105,7 @@ export default function WelcomePage() {
           >
             <motion.img 
               src="/images/darkwave_emblem.png"
-              alt="DarkWave" 
+              alt="Trust Layer" 
               className="w-24 h-24 mx-auto mb-6"
               animate={{ 
                 filter: [
@@ -283,7 +283,7 @@ export default function WelcomePage() {
             className="mb-16"
           >
             <h2 className="text-2xl font-bold text-white text-center mb-8">
-              The DarkWave Ecosystem
+              The Trust Layer Ecosystem
             </h2>
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-5 max-w-4xl mx-auto">

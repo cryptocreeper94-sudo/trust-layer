@@ -181,7 +181,7 @@ export default function StudioProjects() {
             <DialogContent className="bg-zinc-900 border-white/10">
               <DialogHeader>
                 <DialogTitle>Create New Project</DialogTitle>
-                <DialogDescription>Start a new coding project in DarkWave Studio</DialogDescription>
+                <DialogDescription>Start a new coding project in Trust Layer Studio</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 mt-4">
                 <div className="space-y-2">

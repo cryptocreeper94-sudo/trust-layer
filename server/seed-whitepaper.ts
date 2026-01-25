@@ -7,14 +7,14 @@ import { storage } from './storage';
 
 const WHITEPAPER_DOCS = [
   {
-    title: "DarkWave Trust Layer - Technical Whitepaper",
+    title: "Trust Layer - Technical Whitepaper",
     category: "general",
     isPublic: true,
-    content: `# DarkWave Trust Layer Technical Whitepaper
+    content: `# Trust Layer Technical Whitepaper
 
 ## Abstract
 
-DarkWave Trust Layer (DWSC) is a purpose-built Layer 1 blockchain optimized for high-performance gaming, digital asset ownership, and decentralized applications. This whitepaper outlines the technical architecture, consensus mechanism, and economic model that powers the DarkWave ecosystem.
+Trust Layer (DWSC) is a purpose-built Layer 1 blockchain optimized for high-performance gaming, digital asset ownership, and decentralized applications. This whitepaper outlines the technical architecture, consensus mechanism, and economic model that powers the DarkWave ecosystem.
 
 ## 1. Introduction
 
@@ -103,7 +103,7 @@ DWSC provides a custom smart contract runtime optimized for:
 
 ## 5. Ecosystem Applications
 
-### 5.1 DarkWave Portal
+### 5.1 Trust Layer Portal
 
 Central hub for ecosystem access including:
 
@@ -113,7 +113,7 @@ Central hub for ecosystem access including:
 - Staking interface
 - Bridge to external chains
 
-### 5.2 DarkWave Chronicles
+### 5.2 Chronicles
 
 Flagship gaming application demonstrating chain capabilities:
 
@@ -163,7 +163,7 @@ Intelligent Solana memecoin detection and analysis tool:
 
 ## 7. Conclusion
 
-DarkWave Trust Layer represents a purpose-built solution for the next generation of interactive blockchain applications. By optimizing for gaming use cases while maintaining security and decentralization principles, DWSC enables experiences previously impossible on existing platforms.
+Trust Layer represents a purpose-built solution for the next generation of interactive blockchain applications. By optimizing for gaming use cases while maintaining security and decentralization principles, DWSC enables experiences previously impossible on existing platforms.
 
 ---
 
@@ -179,7 +179,7 @@ DarkWave Trust Layer represents a purpose-built solution for the next generation
 
 ## Overview
 
-The Signal (SIG) serves as the native utility token of the DarkWave Trust Layer ecosystem. This document details the various use cases and utility functions of SIG.
+The Signal (SIG) serves as the native utility token of the Trust Layer ecosystem. This document details the various use cases and utility functions of SIG.
 
 ## Primary Utilities
 
@@ -205,7 +205,7 @@ SIG holders can vote on:
 - Fee structure changes
 - Ecosystem grants
 
-### 4. DarkWave Chronicles
+### 4. Chronicles
 
 In-game utility includes:
 - Era purchases and unlocks
@@ -253,7 +253,7 @@ Users → Transaction Fees → Validators + Ecosystem Fund
     title: "API Reference - Getting Started",
     category: "api-specs",
     isPublic: true,
-    content: `# DarkWave API Reference
+    content: `# Trust Layer API Reference
 
 ## Base URL
 
@@ -401,7 +401,7 @@ await tx.wait(); // Wait for confirmation
 ### Sign Message
 
 \`\`\`typescript
-const signature = await wallet.signMessage('Hello DarkWave!');
+const signature = await wallet.signMessage('Hello Trust Layer!');
 console.log('Signature:', signature);
 \`\`\`
 

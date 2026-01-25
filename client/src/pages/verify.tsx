@@ -39,7 +39,7 @@ const KNOWN_DOCUMENTS = [
     hash: "0x7a3f8c2e1b9d4a6f5c8e3b2a1d9f7e6c4b3a2d1e",
     blockNumber: 1,
     timestamp: "Genesis Block",
-    issuer: "DarkWave Foundation"
+    issuer: "Trust Layer Foundation"
   },
   {
     id: "governance-charter-v1",
@@ -48,7 +48,7 @@ const KNOWN_DOCUMENTS = [
     hash: "0x9b4e7d3c2a1f6e5d8c7b4a3e2d1f9e8c7b6a5d4e",
     blockNumber: 1,
     timestamp: "Genesis Block",
-    issuer: "DarkWave Foundation"
+    issuer: "Trust Layer Foundation"
   }
 ];
 
@@ -118,7 +118,7 @@ export default function Verify() {
             <div className="relative w-28 h-32 mx-auto flex items-center justify-center">
               <img 
                 src={shieldImage} 
-                alt="DarkWave Shield" 
+                alt="Trust Layer Shield" 
                 className="w-full h-full object-contain"
                 style={{ 
                   filter: 'drop-shadow(0 0 20px rgba(6, 182, 212, 0.5)) drop-shadow(0 0 12px rgba(168, 85, 247, 0.4))'
@@ -135,7 +135,7 @@ export default function Verify() {
           </h1>
           
           <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-            Verify the authenticity of any official DarkWave document using its blockchain hash.
+            Verify the authenticity of any official Trust Layer document using its blockchain hash.
             Every official document is cryptographically signed and recorded on-chain.
           </p>
         </motion.div>

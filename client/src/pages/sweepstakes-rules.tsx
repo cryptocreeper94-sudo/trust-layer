@@ -201,7 +201,7 @@ export default function SweepstakesRules() {
                     <li>Be at least 18 years of age (or the age of majority in your jurisdiction)</li>
                     <li>Be a legal resident of an eligible U.S. state or territory</li>
                     <li>Have a valid The Arcade account</li>
-                    <li>Not be an employee, contractor, or immediate family member of DarkWave Studios, LLC</li>
+                    <li>Not be an employee, contractor, or immediate family member of Trust Layer Studios, LLC</li>
                   </ul>
                   <div className="bg-red-900/30 border border-red-500/30 rounded-lg p-3 mt-4">
                     <p className="text-red-300 text-sm flex items-start gap-2">
@@ -365,7 +365,7 @@ export default function SweepstakesRules() {
           </p>
           <p>
             By participating in The Arcade, you agree to be bound by these Official Rules 
-            and the decisions of DarkWave Studios, LLC, which are final and binding in all respects.
+            and the decisions of Trust Layer Studios, LLC, which are final and binding in all respects.
           </p>
         </div>
       </div>

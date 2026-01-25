@@ -99,7 +99,7 @@ export default function MyHub() {
       if (!res.ok) {
         return {
           announcements: [
-            { id: 1, title: "Welcome to Trust Layer", content: "Your personal hub in the DarkWave ecosystem is now live!", type: "announcement" as const, date: new Date().toISOString() },
+            { id: 1, title: "Welcome to Trust Layer", content: "Your personal hub in the Trust Layer ecosystem is now live!", type: "announcement" as const, date: new Date().toISOString() },
             { id: 2, title: "Race to 200 Active", content: "Complete daily Zealy missions to earn shells and compete for Founders tier!", type: "update" as const, date: new Date().toISOString() },
             { id: 3, title: "Coming Soon: v2.5", content: "Enhanced member profiles, location-based trust circles, and governance voting.", type: "upcoming" as const, date: new Date().toISOString(), version: "2.5" },
           ],
@@ -834,7 +834,7 @@ export default function MyHub() {
                     </h3>
                     <p className="text-white/70 leading-relaxed mb-4">
                       Everything you need in one place. Track your Shells earnings, view your member status, 
-                      connect with the community, and explore the entire DarkWave ecosystem. This dashboard 
+                      connect with the community, and explore the entire Trust Layer ecosystem. This dashboard 
                       grows with you – as you participate more, you'll unlock new features and rewards.
                     </p>
                     <p className="text-white/60 text-sm">
@@ -1009,7 +1009,7 @@ export default function MyHub() {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold flex items-center gap-2">
                 <Compass className="w-5 h-5 text-pink-400" />
-                Explore DarkWave
+                Explore Trust Layer
               </h2>
               <Badge className="bg-pink-500/20 text-pink-400 border-pink-500/30">
                 Quick Links

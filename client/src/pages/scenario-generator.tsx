@@ -298,7 +298,7 @@ export default function ScenarioGenerator() {
         <div className="container mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-2">
           <BackButton />
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-            <img src={darkwaveLogo} alt="DarkWave" className="w-5 h-5 sm:w-6 sm:h-6" />
+            <img src={darkwaveLogo} alt="Trust Layer" className="w-5 h-5 sm:w-6 sm:h-6" />
             <span className="font-display font-bold text-sm sm:text-base truncate max-w-[120px] sm:max-w-none">Scenario Generator</span>
           </div>
           <Badge className="bg-pink-500/20 text-pink-300 border-pink-500/30 text-[10px] sm:text-xs shrink-0">

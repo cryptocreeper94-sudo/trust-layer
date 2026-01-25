@@ -636,7 +636,7 @@ export default function ChronoExecutiveSummary() {
               <h2 className="text-2xl font-display font-bold text-white mb-2">
                 Ready to Shape the ChronoVerse?
               </h2>
-              <p className="text-white/60">Connect with DarkWave Studios to explore partnership opportunities</p>
+              <p className="text-white/60">Connect with Trust Layer Studios to explore partnership opportunities</p>
             </motion.div>
 
             <motion.div

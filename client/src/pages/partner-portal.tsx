@@ -510,7 +510,7 @@ function AccessRequestForm({ onBack }: { onBack: () => void }) {
           </div>
           <h2 className="text-2xl font-bold text-white mb-4">Request Submitted!</h2>
           <p className="text-white/60 mb-8">
-            Thank you for your interest in partnering with DarkWave Studios. 
+            Thank you for your interest in partnering with Trust Layer Studios. 
             Our team will review your application and send your access code via email within 2-3 business days.
           </p>
           <Link href="/">
@@ -668,7 +668,7 @@ function AccessRequestForm({ onBack }: { onBack: () => void }) {
                 <span className="text-sm text-white/80">
                   I agree to keep all information shared in the Partner Portal confidential. 
                   I understand that all materials, technical details, and business information 
-                  are proprietary to DarkWave Studios and may not be shared without written consent.
+                  are proprietary to Trust Layer Studios and may not be shared without written consent.
                 </span>
               </label>
             </div>
@@ -751,7 +751,7 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
             className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-white/10 flex items-center justify-center backdrop-blur-sm"
             style={{ boxShadow: "0 0 60px rgba(6, 182, 212, 0.2)" }}
           >
-            <img src={orbitLogo} alt="DarkWave" className="w-12 h-12" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-12 h-12" />
           </motion.div>
           
           <h1 className="text-3xl font-display font-bold text-white mb-2">Partner Portal</h1>
@@ -867,7 +867,7 @@ function PartnerContent() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-8 h-8" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-8 h-8" />
             <span className="font-display font-bold text-lg tracking-tight">DarkWave Studios</span>
           </Link>
           <div className="flex items-center gap-3">

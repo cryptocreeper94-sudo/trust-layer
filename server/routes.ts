@@ -943,7 +943,7 @@ export async function registerRoutes(
       try {
         await sendEmail({
           to: request.email,
-          subject: "DarkWave Chronicles - Partner Access Approved",
+          subject: "Chronicles - Partner Access Approved",
           html: `
             <h2>Welcome to DarkWave Studios Partner Program!</h2>
             <p>Dear ${request.contact_name},</p>
@@ -989,7 +989,7 @@ export async function registerRoutes(
       try {
         await sendEmail({
           to: request.email,
-          subject: "DarkWave Chronicles - Partner Application Update",
+          subject: "Chronicles - Partner Application Update",
           html: `
             <h2>Partner Application Update</h2>
             <p>Dear ${request.contact_name},</p>
@@ -1012,7 +1012,7 @@ export async function registerRoutes(
     }
   });
 
-  // Scenario Generator API for DarkWave Chronicles
+  // Scenario Generator API for Chronicles
   app.post("/api/generate-scenario", rateLimit("scenario", 10, 60000), async (req: Request, res: Response) => {
     try {
       const { era = "Dawn Age", emotionalTone = "tense", complexity = "moderate" } = req.body;
@@ -3017,19 +3017,19 @@ export async function registerRoutes(
         message?: string;
       }> = [];
 
-      // Check DarkWave Trust Layer (Blockchain Engine)
+      // Check Trust Layer (Blockchain Engine)
       const chainStart = Date.now();
       try {
         const chainInfo = blockchain.getChainInfo();
         const chainLatency = Date.now() - chainStart;
         services.push({
-          name: "DarkWave Trust Layer",
+          name: "Trust Layer",
           status: chainInfo.blockHeight > 0 ? "operational" : "degraded",
           latency: chainLatency,
           message: `Block #${chainInfo.blockHeight}`
         });
       } catch {
-        services.push({ name: "DarkWave Trust Layer", status: "down", message: "Chain unavailable" });
+        services.push({ name: "Trust Layer", status: "down", message: "Chain unavailable" });
       }
 
       // Check Database
@@ -3806,7 +3806,7 @@ export async function registerRoutes(
     res.json({
       version: APP_VERSION,
       chainId: 8453,
-      chainName: "DarkWave Trust Layer",
+      chainName: "Trust Layer",
       nativeToken: "SIG",
       totalSupply: "1,000,000,000",
     });
@@ -4417,7 +4417,7 @@ export async function registerRoutes(
     }
   });
 
-  // Genesis Hallmark - The first ever DarkWave Trust Layer hallmark (MUST be before :hallmarkId route)
+  // Genesis Hallmark - The first ever Trust Layer hallmark (MUST be before :hallmarkId route)
   app.get("/api/hallmark/genesis", async (req, res) => {
     try {
       const stats = blockchain.getStats();
@@ -4429,7 +4429,7 @@ export async function registerRoutes(
         id: "DWH-000000000001",
         type: "genesis",
         url: verificationUrl,
-        chain: "DarkWave Trust Layer",
+        chain: "Trust Layer",
       });
       const qrCodeSvg = await QRCode.toString(qrData, { type: "svg", width: 200 });
       
@@ -4437,7 +4437,7 @@ export async function registerRoutes(
       const genesisPayload = {
         id: "DWH-000000000001",
         type: "genesis",
-        chain: "DarkWave Trust Layer",
+        chain: "Trust Layer",
         blockHeight: 0,
         timestamp: genesisTimestamp,
         validator: "Founders Validator",
@@ -4451,7 +4451,7 @@ export async function registerRoutes(
         globalSerial: "DWH-000000000001",
         serialNumber: "DWH-GENESIS-0001",
         type: "Genesis Hallmark",
-        chain: "DarkWave Trust Layer",
+        chain: "Trust Layer",
         blockNumber: 0,
         payloadHash,
         txHash: "genesis-block-0x" + payloadHash.slice(0, 16),
@@ -4468,7 +4468,7 @@ export async function registerRoutes(
           launchDate: "April 11, 2026",
         },
         verified: true,
-        message: "Genesis Block - DarkWave Trust Layer Origin",
+        message: "Genesis Block - Trust Layer Origin",
       });
     } catch (error) {
       console.error("Genesis hallmark error:", error);
@@ -4504,7 +4504,7 @@ export async function registerRoutes(
         },
         verified,
         message: verified 
-          ? `Verified on DarkWave Trust Layer (Block ${hallmark.darkwaveBlockHeight})`
+          ? `Verified on Trust Layer (Block ${hallmark.darkwaveBlockHeight})`
           : "Hallmark registered, pending chain confirmation",
         createdAt: hallmark.createdAt,
       });
@@ -4659,7 +4659,7 @@ export async function registerRoutes(
         success: true,
         lockId: result.lockId,
         txHash: result.txHash,
-        message: "SIG locked on DarkWave. Wrapped tokens will be minted on target chain.",
+        message: "SIG locked on Trust Layer. Wrapped tokens will be minted on target chain.",
       });
     } catch (error) {
       res.status(500).json({ error: "Failed to lock tokens" });
@@ -4689,7 +4689,7 @@ export async function registerRoutes(
       res.json({
         success: true,
         burnId: result.burnId,
-        message: "Burn recorded. SIG will be released on DarkWave Trust Layer.",
+        message: "Burn recorded. SIG will be released on Trust Layer.",
       });
     } catch (error) {
       res.status(500).json({ error: "Failed to process burn" });
@@ -5477,7 +5477,7 @@ export async function registerRoutes(
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #fff; padding: 24px; border-radius: 12px;">
               <h1 style="color: #00ffff; margin-bottom: 20px;">Application Received!</h1>
               <p>Hi ${name},</p>
-              <p>Thank you for your interest in partnering with DarkWave Trust Layer. We've received your application and our team will review it within 48-72 hours.</p>
+              <p>Thank you for your interest in partnering with Trust Layer. We've received your application and our team will review it within 48-72 hours.</p>
               <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 20px; border-radius: 10px; margin: 20px 0;">
                 <h3 style="color: #a855f7; margin: 0 0 10px 0;">What's Next?</h3>
                 <ul style="color: #ccc; padding-left: 20px; margin: 0;">
@@ -9225,7 +9225,7 @@ export async function registerRoutes(
 
       const { createCoinbaseCharge } = await import("./coinbaseClient");
       const charge = await createCoinbaseCharge({
-        name: "DarkWave API Usage",
+        name: "Trust Layer API Usage",
         description: `Outstanding balance: $${(balance / 100).toFixed(2)}`,
         amountUsd: (balance / 100).toFixed(2),
         successUrl: `${baseUrl}/billing/success?coinbase_charge={CHECKOUT_ID}`,
@@ -11947,9 +11947,9 @@ Current context:
         baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
       });
 
-      const systemPrompt = `You are DarkWave AI, a friendly and knowledgeable assistant for the DarkWave Trust Layer ecosystem. 
+      const systemPrompt = `You are DarkWave AI, a friendly and knowledgeable assistant for the Trust Layer ecosystem. 
 
-DarkWave Trust Layer is a Layer 1 blockchain with:
+Trust Layer is a Layer 1 blockchain with:
 - 400ms block times
 - 200,000+ TPS capacity  
 - Proof-of-Authority consensus with the Founders Validator
@@ -12568,7 +12568,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           account.username,
           WELCOME_BONUS_SHELLS,
           "bonus",
-          "Welcome to DarkWave Chronicles! Here's your starter Shells to begin your journey.",
+          "Welcome to Chronicles! Here's your starter Shells to begin your journey.",
           account.id,
           "welcome_bonus"
         );
@@ -19261,7 +19261,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
     },
     {
       id: "darkwave-pulse",
-      name: "DarkWave Pulse",
+      name: "Trust Layer Pulse",
       category: "Analytics",
       description: "Predictive market intelligence powered by AI systems.",
       hook: "Auto-trade with AI precision",

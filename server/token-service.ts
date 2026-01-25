@@ -1,5 +1,5 @@
 /**
- * DarkWave Trust Layer - Token Deployment Service
+ * Trust Layer - Token Deployment Service
  * Server-side token creation and management for the native token system
  */
 

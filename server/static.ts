@@ -29,7 +29,7 @@ const APP_CONFIG: Record<AppDomain, {
   dwsc: {
     manifest: "/manifest-dwsc.webmanifest",
     themeColor: "#00ffff",
-    title: "DarkWave Trust Layer",
+    title: "Trust Layer",
     description: "The next-generation Layer 1 blockchain. DeFi, staking, NFTs, and developer tools.",
     icon: "/icons/dwsc-512x512.png",
   },
@@ -43,7 +43,7 @@ const APP_CONFIG: Record<AppDomain, {
   chronicles: {
     manifest: "/manifest-chrono.webmanifest",
     themeColor: "#a855f7",
-    title: "DarkWave Chronicles",
+    title: "Chronicles",
     description: "Not a game. A life. Live your legacy across 70+ historical eras in the ChronoVerse.",
     icon: "/marketing/darkwave_games_app_icon.png",
   },
@@ -101,7 +101,7 @@ export function serveStatic(app: Express) {
       
       let modifiedHtml = html
         .replace(/<title>.*?<\/title>/, `<title>${appConfig.title}</title>`)
-        .replace(/content="DarkWave Chain[^"]*"/g, `content="${appConfig.title}"`)
+        .replace(/content="Trust Layer[^"]*"/g, `content="${appConfig.title}"`)
         .replace(/<meta name="theme-color" content="[^"]*"/, `<meta name="theme-color" content="${appConfig.themeColor}"`)
         .replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${appConfig.description}"`)
         .replace(/href="\/manifest\.webmanifest"/, `href="${appConfig.manifest}"`);

@@ -21,7 +21,7 @@ export default function Developers() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2 mr-auto shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-1 sm:gap-2">
@@ -49,7 +49,7 @@ export default function Developers() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary">On Trust Layer</span>
             </h1>
             <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-              DarkWave combines the speed of a DAG with the security of Proof-of-History. 
+              Trust Layer combines the speed of a DAG with the security of Proof-of-History. 
               Write in Rust, deploy with one click, and scale to millions of users.
             </p>
             <div className="flex gap-3">
@@ -85,10 +85,10 @@ export default function Developers() {
                       <Layers className="w-4 h-4" />
                     </div>
                     <h2 className="text-sm font-bold">Hybrid Consensus Architecture</h2>
-                    <InfoTooltip content="DarkWave combines DAG (for speed) with Proof-of-History (for ordering) to achieve both high throughput and security." label="Hybrid consensus info" />
+                    <InfoTooltip content="Trust Layer combines DAG (for speed) with Proof-of-History (for ordering) to achieve both high throughput and security." label="Hybrid consensus info" />
                   </div>
                   <p className="text-[11px] text-white/50 leading-relaxed mb-3">
-                    Unlike traditional blockchains that process blocks sequentially, DarkWave uses a 
+                    Unlike traditional blockchains that process blocks sequentially, Trust Layer uses a 
                     <strong className="text-primary"> Directed Acyclic Graph (DAG)</strong> structure for parallel transaction processing.
                   </p>
                   <div className="p-3 rounded-lg bg-black/30 border border-white/5">
@@ -101,7 +101,7 @@ export default function Developers() {
                         <div className="w-1/3 h-full bg-red-500/50" />
                       </div>
                       <div className="flex items-center justify-between text-[10px] mt-3">
-                        <span className="text-white/50">DarkWave (DAG)</span>
+                        <span className="text-white/50">Trust Layer (DAG)</span>
                         <span className="text-primary">Parallel</span>
                       </div>
                       <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
@@ -128,7 +128,7 @@ export default function Developers() {
                     <InfoTooltip content="Choose your preferred language. Rust offers best performance, while TypeScript SDK makes web development easy." label="Development stack info" />
                   </div>
                   <p className="text-[11px] text-white/50 leading-relaxed mb-3">
-                    <strong>Rust</strong> is the primary language for DarkWave smart contracts ("Starships"). 
+                    <strong>Rust</strong> is the primary language for Trust Layer smart contracts ("Starships"). 
                     WebAssembly (WASM) support enables C++, Go, or TypeScript development.
                   </p>
                   <div className="grid grid-cols-2 gap-2">

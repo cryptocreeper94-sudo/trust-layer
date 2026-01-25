@@ -2565,10 +2565,10 @@ export const storage = new DatabaseStorage();
 // Core documents to seed on startup
 const SEED_DOCUMENTS = [
   {
-    title: "Welcome to DarkWave Chain",
-    content: `# Welcome to DarkWave Chain
+    title: "Welcome to Trust Layer",
+    content: `# Welcome to Trust Layer
 
-DarkWave Chain is a next-generation Layer 1 blockchain designed for speed, security, and scalability. Our Proof-of-Authority consensus mechanism delivers 200,000+ transactions per second with sub-second finality.
+Trust Layer is a next-generation Layer 1 blockchain designed for speed, security, and scalability. Our Proof-of-Authority consensus mechanism delivers 200,000+ transactions per second with sub-second finality.
 
 ## Key Features
 
@@ -2588,12 +2588,12 @@ Visit our developer documentation to learn more.`,
     isPublic: true,
   },
   {
-    title: "DarkWave Trust Layer - Technical Whitepaper",
-    content: `# DarkWave Trust Layer Technical Whitepaper
+    title: "Trust Layer - Technical Whitepaper",
+    content: `# Trust Layer Technical Whitepaper
 
 ## Abstract
 
-DarkWave Trust Layer (DWSC) is a purpose-built Layer 1 blockchain optimized for high-performance gaming, digital asset ownership, and decentralized applications.
+Trust Layer (DWSC) is a purpose-built Layer 1 blockchain optimized for high-performance gaming, digital asset ownership, and decentralized applications.
 
 ## Key Specifications
 
@@ -2612,13 +2612,13 @@ DarkWave Trust Layer (DWSC) is a purpose-built Layer 1 blockchain optimized for 
 
 - Q1 2025: Testnet Launch
 - Apr 11, 2026: Token Generation Event
-- Beta LIVE now: DarkWave Chronicles Public Beta`,
+- Beta LIVE now: Chronicles Public Beta`,
     category: "general",
     isPublic: true,
   },
   {
     title: "API Reference - Getting Started",
-    content: `# DarkWave API Reference
+    content: `# Trust Layer API Reference
 
 ## Base URL
 
@@ -2655,7 +2655,7 @@ X-API-Key: your_api_key_here
     title: "JavaScript SDK",
     content: `# JavaScript SDK
 
-Official JavaScript/TypeScript SDK for DarkWave Chain.
+Official JavaScript/TypeScript SDK for Trust Layer.
 
 ## Installation
 
@@ -2686,11 +2686,11 @@ const balance = await sdk.getBalance(wallet.address);
     title: "Wallet Integration Guide",
     content: `# Wallet Integration Guide
 
-Integrate DarkWave wallets into your application.
+Integrate Trust Layer wallets into your application.
 
 ## Web Applications
 
-### Using DarkWave Connect
+### Using Trust Layer Connect
 
 \`\`\`javascript
 const connect = new DarkWaveConnect();
@@ -2700,7 +2700,7 @@ const wallet = await connect.connect();
 console.log('Connected:', wallet.address);
 
 // Sign message
-const signature = await connect.signMessage('Hello DarkWave!');
+const signature = await connect.signMessage('Hello Trust Layer!');
 
 // Send transaction
 const tx = await connect.sendTransaction({
@@ -2715,11 +2715,11 @@ const tx = await connect.sendTransaction({
     title: "Ecosystem Apps Overview",
     content: `# Ecosystem Apps Overview
 
-DarkWave Chain powers a growing ecosystem of applications.
+Trust Layer powers a growing ecosystem of applications.
 
 ## Verified Apps
 
-### DarkWave Pulse
+### Trust Layer Pulse
 AI-powered predictive market intelligence and auto-trading platform.
 
 ### Orbit Staffing
@@ -2751,7 +2751,7 @@ Community platform for coffee shops with rewards.
 
 ### New Features
 
-- **DarkWave Portal**: Complete ecosystem interface
+- **Trust Layer Portal**: Complete ecosystem interface
 - **Block Explorer**: Real-time blockchain data
 - **DEX & Token Swaps**: AMM-style trading
 - **NFT Marketplace**: Digital asset trading

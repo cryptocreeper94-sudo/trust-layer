@@ -168,7 +168,7 @@ export default function GovernanceTreasury() {
             <div className="relative w-24 h-28 mx-auto flex items-center justify-center">
               <img 
                 src={shieldImage} 
-                alt="DarkWave Shield" 
+                alt="Trust Layer Shield" 
                 className="w-full h-full object-contain"
                 style={{ 
                   filter: 'drop-shadow(0 0 20px rgba(168, 85, 247, 0.5))'

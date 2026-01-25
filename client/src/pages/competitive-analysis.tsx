@@ -34,7 +34,7 @@ import { GlassCard, StatCard } from "@/components/glass-card";
 
 const competitors = [
   {
-    name: "DarkWave",
+    name: "Trust Layer",
     logo: "🌊",
     color: "from-cyan-500 to-purple-600",
     highlight: true,
@@ -226,7 +226,7 @@ export default function CompetitiveAnalysis() {
               <div className="absolute inset-0 bg-cyan-400/30 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
             <span className="font-display font-bold text-lg tracking-tight bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-              Why DarkWave Wins
+              Why Trust Layer Wins
             </span>
           </Link>
           <div className="flex items-center gap-3">
@@ -310,7 +310,7 @@ export default function CompetitiveAnalysis() {
                   <h2 className="text-2xl md:text-3xl font-display font-bold text-white">
                     Feature Comparison Matrix
                   </h2>
-                  <p className="text-white/50">See how DarkWave stacks up against the competition</p>
+                  <p className="text-white/50">See how Trust Layer stacks up against the competition</p>
                 </div>
               </div>
             </motion.div>
@@ -509,7 +509,7 @@ export default function CompetitiveAnalysis() {
                   <h2 className="text-2xl md:text-3xl font-display font-bold text-white">
                     Features Nobody Else Has
                   </h2>
-                  <p className="text-white/50">7 innovations that make DarkWave the obvious choice</p>
+                  <p className="text-white/50">7 innovations that make Trust Layer the obvious choice</p>
                 </div>
               </div>
             </motion.div>
@@ -568,7 +568,7 @@ export default function CompetitiveAnalysis() {
                   <h2 className="text-2xl md:text-3xl font-display font-bold text-white">
                     The Bottom Line
                   </h2>
-                  <p className="text-white/50">Why smart builders are choosing DarkWave</p>
+                  <p className="text-white/50">Why smart builders are choosing Trust Layer</p>
                 </div>
               </div>
             </motion.div>

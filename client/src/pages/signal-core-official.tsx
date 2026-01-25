@@ -116,7 +116,7 @@ export default function SignalCoreOfficial() {
                 <div className="w-36 h-40 mx-auto flex items-center justify-center">
                   <img 
                     src={shieldImage} 
-                    alt="DarkWave Shield" 
+                    alt="Trust Layer Shield" 
                     className="w-full h-full object-contain"
                     style={{ 
                       filter: 'drop-shadow(0 0 25px rgba(6, 182, 212, 0.6)) drop-shadow(0 0 15px rgba(168, 85, 247, 0.4))'

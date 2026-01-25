@@ -28,7 +28,7 @@ const ROADMAP_PHASES = [
       { text: "Website & branding launch", done: true },
       { text: "Crowdfunding infrastructure", done: true },
       { text: "Discord setup & community launch", done: false },
-      { text: "Telegram re-engagement & DarkWave Pulse", done: false },
+      { text: "Telegram re-engagement & Trust Layer Pulse", done: false },
       { text: "Social media presence (Twitter/X)", done: false },
       { text: "Core database schema design", done: false },
       { text: "Basic AI agent framework", done: false },

@@ -108,7 +108,7 @@ const ALL_ACHIEVEMENTS: Achievement[] = [
   {
     id: "referral_king",
     name: "Referral King",
-    description: "Refer 50 users to DarkWave",
+    description: "Refer 50 users to Trust Layer",
     icon: <Gift className="w-6 h-6" />,
     category: "Referrals",
     rarity: "legendary",
@@ -184,7 +184,7 @@ export default function Achievements() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={darkwaveLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <BackButton />
@@ -248,7 +248,7 @@ export default function Achievements() {
               <Sparkles className="w-8 h-8 mx-auto mb-2 text-purple-400" />
               <h3 className="font-bold mb-1">Track Your Achievements</h3>
               <p className="text-sm text-muted-foreground mb-3">
-                Connect your wallet to track progress and earn rewards as you use DarkWave.
+                Connect your wallet to track progress and earn rewards as you use Trust Layer.
               </p>
               <Link href="/wallet">
                 <Button className="bg-gradient-to-r from-amber-500 to-orange-500" data-testid="button-connect-achievements">

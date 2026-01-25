@@ -164,7 +164,7 @@ export class PayoutService {
       });
 
       if (!recipientAccount) {
-        throw new Error("Recipient wallet not found on DarkWave chain");
+        throw new Error("Recipient wallet not found on Trust Layer chain");
       }
 
       const signedTx = blockchain.createSignedTransaction(

@@ -1,5 +1,5 @@
 /**
- * DarkWave Chronicles - Game Service
+ * Chronicles - Game Service
  * Backend service for the Chronicles parallel life experience
  */
 
@@ -392,7 +392,7 @@ Stay in character. Be concise (2-3 sentences max). Your faction is important to 
     return {
       id: "season_zero",
       name: "Season Zero: The Awakening",
-      description: "The first season of DarkWave Chronicles. Establish your legacy.",
+      description: "The first season of Chronicles. Establish your legacy.",
       seasonNumber: 0,
       startDate: new Date("2026-01-01"),
       endDate: new Date("2026-04-11"),

@@ -49,7 +49,7 @@ export default function TrustCooperative() {
             </h1>
             
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-              DarkWave isn't something you use. It's something you're part of. 
+              Trust Layer isn't something you use. It's something you're part of. 
               Member-owned, member-governed, member-benefited.
             </p>
           </motion.div>
@@ -177,7 +177,7 @@ export default function TrustCooperative() {
                   <tr className="border-b border-white/10">
                     <th className="text-left py-3 px-4 text-muted-foreground font-medium"></th>
                     <th className="text-center py-3 px-4 text-red-400 font-medium">Traditional Crypto</th>
-                    <th className="text-center py-3 px-4 text-cyan-400 font-medium">DarkWave Co-op</th>
+                    <th className="text-center py-3 px-4 text-cyan-400 font-medium">Trust Layer Co-op</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">

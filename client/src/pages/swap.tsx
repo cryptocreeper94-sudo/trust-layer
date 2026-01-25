@@ -166,7 +166,7 @@ export default function Swap() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">
@@ -202,7 +202,7 @@ export default function Swap() {
                 <ArrowUpDown className="w-5 h-5 text-primary" />
               </motion.div>
               <h1 className="text-2xl md:text-3xl font-display font-bold">
-                DarkWave Swap
+                Trust Layer Swap
               </h1>
             </div>
             <p className="text-xs text-muted-foreground">
@@ -507,7 +507,7 @@ export default function Swap() {
               <div className="flex items-start gap-2">
                 <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
                 <p className="text-[10px] text-amber-200">
-                  <strong className="text-amber-300">Testnet:</strong> This DEX operates on DarkWave testnet. Trade with test tokens only.
+                  <strong className="text-amber-300">Testnet:</strong> This DEX operates on Trust Layer testnet. Trade with test tokens only.
                 </p>
               </div>
             </div>

@@ -85,12 +85,12 @@ const statusInfo: Record<ReadinessStatus, { label: string; color: string; bgColo
 
 const faqItems = [
   {
-    q: "What is the DarkWave Bridge?",
-    a: "The DarkWave Bridge enables seamless transfer of SIG tokens between Trust Layer and other major blockchains. Lock SIG on our chain to receive wrapped tokens (wSIG) on external networks."
+    q: "What is the Trust Layer Bridge?",
+    a: "The Trust Layer Bridge enables seamless transfer of SIG tokens between Trust Layer and other major blockchains. Lock SIG on our chain to receive wrapped tokens (wSIG) on external networks."
   },
   {
     q: "How does the lock-and-mint mechanism work?",
-    a: "When you bridge SIG out, your tokens are securely locked in a custody contract on DarkWave. Wrapped tokens (wSIG) are then minted 1:1 on the destination chain. To bridge back, burn the wrapped tokens to release your original SIG."
+    a: "When you bridge SIG out, your tokens are securely locked in a custody contract on Trust Layer. Wrapped tokens (wSIG) are then minted 1:1 on the destination chain. To bridge back, burn the wrapped tokens to release your original SIG."
   },
   {
     q: "What are the bridge fees?",
@@ -229,7 +229,7 @@ export default function Bridge() {
         <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
           <div className="container mx-auto px-4 h-14 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2 shrink-0">
-              <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+              <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
               <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
             </Link>
             <div className="flex items-center gap-2">
@@ -441,7 +441,7 @@ export default function Bridge() {
                 
                 <div className="space-y-4">
                   {[
-                    { step: "1", title: "Lock SIG", desc: "Securely lock tokens in DarkWave custody", icon: <Lock className="w-4 h-4" /> },
+                    { step: "1", title: "Lock SIG", desc: "Securely lock tokens in Trust Layer custody", icon: <Lock className="w-4 h-4" /> },
                     { step: "2", title: "Verify Transaction", desc: "Bridge operators confirm the lock on-chain", icon: <Shield className="w-4 h-4" /> },
                     { step: "3", title: "Receive wSIG", desc: "Wrapped tokens minted 1:1 on destination", icon: <Sparkles className="w-4 h-4" /> },
                   ].map((item, i) => (
@@ -489,7 +489,7 @@ export default function Bridge() {
                   {[
                     { step: "1", title: "Burn wSIG", desc: "Destroy wrapped tokens on external chain", icon: <Flame className="w-4 h-4" /> },
                     { step: "2", title: "Verify Burn", desc: "Bridge confirms burn transaction", icon: <Shield className="w-4 h-4" /> },
-                    { step: "3", title: "Release SIG", desc: "Original tokens unlocked on DarkWave", icon: <Zap className="w-4 h-4" /> },
+                    { step: "3", title: "Release SIG", desc: "Original tokens unlocked on Trust Layer", icon: <Zap className="w-4 h-4" /> },
                   ].map((item, i) => (
                     <motion.div 
                       key={i}

@@ -52,7 +52,7 @@ const MARKETS: Market[] = [
   {
     id: "dwc-price",
     question: "Will SIG reach $1 by February launch?",
-    category: "DarkWave",
+    category: "Trust Layer",
     endsIn: "52 days",
     yesOdds: 75.8,
     totalPool: 512000,
@@ -207,7 +207,7 @@ export default function Predictions() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={darkwaveLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <BackButton />
@@ -319,7 +319,7 @@ export default function Predictions() {
             </TabsContent>
 
             <TabsContent value="darkwave" className="space-y-4">
-              {MARKETS.filter(m => m.category === "DarkWave" && m.status === "active").map((market, i) => (
+              {MARKETS.filter(m => m.category === "Trust Layer" && m.status === "active").map((market, i) => (
                 <motion.div
                   key={market.id}
                   initial={{ opacity: 0, y: 20 }}

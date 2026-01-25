@@ -143,7 +143,7 @@ export default function Treasury() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2 mr-auto">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-3">
@@ -171,7 +171,7 @@ export default function Treasury() {
               </span>
             </h1>
             <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
-              See exactly how DarkWave funds are allocated. No hidden fees, no surprises. 
+              See exactly how Trust Layer funds are allocated. No hidden fees, no surprises. 
               0% buy/sell tax — sustainable revenue from protocol fees.
             </p>
           </motion.div>
@@ -346,7 +346,7 @@ export default function Treasury() {
                       Our Commitment
                     </h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                      DarkWave operates with full transparency. No hidden fees, no surprise taxes, no rug pulls. 
+                      Trust Layer operates with full transparency. No hidden fees, no surprise taxes, no rug pulls. 
                       All treasury movements are recorded on-chain and visible to everyone. 
                       We build sustainable revenue through real ecosystem activity, not by taxing our community.
                     </p>

@@ -24,7 +24,7 @@ const SNIPPETS: CodeSnippet[] = [
   {
     id: "connect-wallet",
     title: "Connect Wallet",
-    description: "Initialize and connect to DarkWave wallet",
+    description: "Initialize and connect to Trust Layer wallet",
     language: "javascript",
     category: "wallet",
     code: `import { DarkWaveSDK } from '@darkwave/sdk';
@@ -140,7 +140,7 @@ console.log('Bridge Status:', status);`
   {
     id: "python-sdk",
     title: "Python SDK Setup",
-    description: "Initialize DarkWave Python SDK",
+    description: "Initialize Trust Layer Python SDK",
     language: "python",
     category: "api",
     code: `from darkwave import DarkWaveSDK
@@ -233,7 +233,7 @@ export default function CodeSnippets() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg hidden sm:inline">DarkWave</span>
           </Link>
           <BackButton />

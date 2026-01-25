@@ -310,7 +310,7 @@ export default function ChronoCommunity() {
             </div>
             
             <a 
-              href="https://twitter.com/DarkWaveChain" 
+              href="https://twitter.com/TrustLayerHQ" 
               target="_blank" 
               rel="noopener noreferrer"
               className="group"

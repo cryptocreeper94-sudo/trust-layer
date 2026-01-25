@@ -104,7 +104,7 @@ export default function Faucet() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">
@@ -345,7 +345,7 @@ export default function Faucet() {
                 How it works
               </h3>
               <ul className="text-[10px] text-muted-foreground space-y-1">
-                <li>1. Enter your DarkWave wallet address above</li>
+                <li>1. Enter your Trust Layer wallet address above</li>
                 <li>2. Click "Get Free SIG" to receive test tokens</li>
                 <li>3. Use tokens to test staking, bridging, or dApps</li>
                 <li>4. Come back in 24 hours for more</li>

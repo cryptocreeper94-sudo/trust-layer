@@ -75,7 +75,7 @@ export default function SocialFeed() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={darkwaveLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <BackButton />
@@ -104,7 +104,7 @@ export default function SocialFeed() {
               Social <span className="text-blue-400">Feed</span>
             </h1>
             <p className="text-sm text-muted-foreground">
-              Connect with the DarkWave community • Share insights • Tip creators
+              Connect with the Trust Layer community • Share insights • Tip creators
             </p>
           </motion.div>
 
@@ -120,7 +120,7 @@ export default function SocialFeed() {
                   </Avatar>
                   <div className="flex-1">
                     <Textarea
-                      placeholder={isConnected ? "What's happening in DarkWave?" : "Connect wallet to post..."}
+                      placeholder={isConnected ? "What's happening in Trust Layer?" : "Connect wallet to post..."}
                       value={newPost}
                       onChange={(e) => setNewPost(e.target.value)}
                       className="bg-white/5 border-white/10 min-h-[80px] resize-none mb-3"

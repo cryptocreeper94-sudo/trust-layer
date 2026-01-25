@@ -133,7 +133,7 @@ TRUST CARDS (BETA)
 • Unique Trust Number assigned to each member (format: TL-XXXXXX)
 • Beautiful SVG cards with gradient design and QR code
 • QR code embedded directly in downloadable SVG
-• Blockchain-anchored: Each card creation logged to DarkWave chain
+• Blockchain-anchored: Each card creation logged to Trust Layer chain
 • Data hash verification for authenticity
 • Transaction counter with atomic locking (FOR UPDATE)
 
@@ -155,14 +155,14 @@ TECHNICAL IMPLEMENTATION
 • Database table: memberTrustCards with all fields
 • Atomic transaction wrapping for card creation
 • Counter locked with FOR UPDATE to prevent race conditions
-• DarkWave blockchain hash submission for immutability
+• Trust Layer hash submission for immutability
 • QR code SVG stored for instant retrieval
 
 --------------------------------------------------------------------------------
                       4. BLOCKCHAIN ENGINE (400ms BLOCKS)
 --------------------------------------------------------------------------------
 
-The DarkWave blockchain is running at impressive speed:
+The Trust Layer is running at impressive speed:
 
 • Block time: 400ms (2.5 blocks per second)
 • BFT-PoA consensus with stake-weighted validator selection

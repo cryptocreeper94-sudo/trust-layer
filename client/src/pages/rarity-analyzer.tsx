@@ -17,8 +17,8 @@ import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.pn
 
 const SAMPLE_NFT = {
   id: "DWG-247",
-  name: "DarkWave Genesis #247",
-  collection: "DarkWave Genesis",
+  name: "Trust Layer Genesis #247",
+  collection: "Trust Layer Genesis",
   image: null,
   rarityScore: 892,
   rarityRank: 24,

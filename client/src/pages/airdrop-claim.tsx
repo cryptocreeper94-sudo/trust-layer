@@ -64,7 +64,7 @@ export default function AirdropClaim() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">
@@ -87,10 +87,10 @@ export default function AirdropClaim() {
               <Gift className="w-10 h-10 text-white" />
             </motion.div>
             <h1 className="text-3xl md:text-4xl font-display font-bold mb-3">
-              DarkWave <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Airdrop</span>
+              Trust Layer <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Airdrop</span>
             </h1>
             <p className="text-muted-foreground max-w-md mx-auto">
-              Check your eligibility for the DarkWave genesis airdrop. Early adopters and beta testers receive bonus allocations.
+              Check your eligibility for the Trust Layer genesis airdrop. Early adopters and beta testers receive bonus allocations.
             </p>
           </div>
 
@@ -234,7 +234,7 @@ export default function AirdropClaim() {
                   <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm shrink-0">2</div>
                   <div>
                     <h4 className="font-medium text-sm">Connect Wallet</h4>
-                    <p className="text-xs text-muted-foreground">Link your DarkWave wallet to receive your token allocation at launch.</p>
+                    <p className="text-xs text-muted-foreground">Link your Trust Layer wallet to receive your token allocation at launch.</p>
                   </div>
                 </div>
               </GlassCard>

@@ -92,7 +92,7 @@ export default function App() {
   
   return (
     <div style={{ padding: '2rem', fontFamily: 'system-ui' }}>
-      <h1>Hello DarkWave!</h1>
+      <h1>Hello Trust Layer!</h1>
       <button onClick={() => setCount(c => c + 1)}>
         Count: {count}
       </button>
@@ -129,7 +129,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to DarkWave API!' });
+  res.json({ message: 'Welcome to Trust Layer API!' });
 });
 
 app.get('/api/health', (req, res) => {
@@ -163,7 +163,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return jsonify(message='Welcome to DarkWave API!')
+    return jsonify(message='Welcome to Trust Layer API!')
 
 @app.route('/api/health')
 def health():
@@ -201,7 +201,7 @@ const count = ref(0)
 
 <template>
   <div style="padding: 2rem; font-family: system-ui;">
-    <h1>Hello DarkWave!</h1>
+    <h1>Hello Trust Layer!</h1>
     <button @click="count++">Count: {{ count }}</button>
   </div>
 </template>` },
@@ -234,8 +234,8 @@ export default function Home() {
   
   return (
     <div style={{ padding: '2rem', fontFamily: 'system-ui' }}>
-      <h1>Hello DarkWave!</h1>
-      <p>Welcome to Next.js on DarkWave Studio</p>
+      <h1>Hello Trust Layer!</h1>
+      <p>Welcome to Next.js on Trust Layer Studio</p>
       <button onClick={() => setCount(c => c + 1)}>
         Count: {count}
       </button>
@@ -290,7 +290,7 @@ urlpatterns = [
       { name: "api/views.py", content: `from django.http import JsonResponse
 
 def home(request):
-    return JsonResponse({'message': 'Welcome to DarkWave API!'})
+    return JsonResponse({'message': 'Welcome to Trust Layer API!'})
 
 def health(request):
     return JsonResponse({'status': 'ok'})` },
@@ -319,7 +319,7 @@ func main() {
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(w).Encode(map[string]string{"message": "Welcome to DarkWave API!"})
+    json.NewEncoder(w).Encode(map[string]string{"message": "Welcome to Trust Layer API!"})
 }
 
 func healthHandler(w http.ResponseWriter, r *http.Request) {
@@ -339,7 +339,7 @@ go 1.21` },
 use serde_json::json;
 
 async fn home() -> impl Responder {
-    HttpResponse::Ok().json(json!({"message": "Welcome to DarkWave API!"}))
+    HttpResponse::Ok().json(json!({"message": "Welcome to Trust Layer API!"}))
 }
 
 async fn health() -> impl Responder {
@@ -484,7 +484,7 @@ export default function Studio() {
   const [newPipelineTrigger, setNewPipelineTrigger] = useState("on_push");
   const [mobileView, setMobileView] = useState<"editor" | "files" | "console" | "preview">("editor");
   const [terminalHistory, setTerminalHistory] = useState<TerminalLine[]>([
-    { type: "output", content: "DarkWave Terminal v1.0.0" },
+    { type: "output", content: "Trust Layer Terminal v1.0.0" },
     { type: "output", content: "Type 'help' for available commands" },
   ]);
   const [terminalInput, setTerminalInput] = useState("");
@@ -568,12 +568,12 @@ export default function Studio() {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DarkWave Demo</title>
+  <title>Trust Layer Demo</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Welcome to DarkWave Studio</h1>
+    <h1>Welcome to Trust Layer Studio</h1>
     <p>Sign in to create your own projects!</p>
     <button onclick="showMessage()">Click Me</button>
     <div id="output"></div>
@@ -640,7 +640,7 @@ button:hover {
           content: `// DarkWave Studio Demo
 function showMessage() {
   const output = document.getElementById('output');
-  output.innerHTML = '<p style="margin-top: 1rem; color: #00d4ff;">✨ Welcome to DarkWave!</p>';
+  output.innerHTML = '<p style="margin-top: 1rem; color: #00d4ff;">✨ Welcome to Trust Layer!</p>';
 }
 
 console.log('DarkWave Studio loaded!');`,
@@ -657,12 +657,12 @@ console.log('DarkWave Studio loaded!');`,
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DarkWave Demo</title>
+  <title>Trust Layer Demo</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Welcome to DarkWave Studio</h1>
+    <h1>Welcome to Trust Layer Studio</h1>
     <p>Sign in to create your own projects!</p>
     <button onclick="showMessage()">Click Me</button>
     <div id="output"></div>
@@ -677,12 +677,12 @@ console.log('DarkWave Studio loaded!');`,
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DarkWave Demo</title>
+  <title>Trust Layer Demo</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>Welcome to DarkWave Studio</h1>
+    <h1>Welcome to Trust Layer Studio</h1>
     <p>Sign in to create your own projects!</p>
     <button onclick="showMessage()">Click Me</button>
     <div id="output"></div>
@@ -1576,7 +1576,7 @@ console.log('DarkWave Studio loaded!');`,
     setTerminalInput("");
     if (command === "clear") {
       setTerminalHistory([
-        { type: "output", content: "DarkWave Terminal v1.0.0" },
+        { type: "output", content: "Trust Layer Terminal v1.0.0" },
         { type: "output", content: "Type 'help' for available commands" },
       ]);
       return;
@@ -1856,7 +1856,7 @@ console.log('DarkWave Studio loaded!');`,
       <header className="hidden md:flex h-12 border-b border-white/5 bg-background/95 items-center justify-between px-4 shrink-0">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2" data-testid="link-home">
-            <img src={orbitLogo} alt="DarkWave" className="w-6 h-6" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-6 h-6" />
           </Link>
           <span className="text-white/30">/</span>
           <span className="font-mono text-sm">{projectName}</span>
@@ -1996,7 +1996,7 @@ console.log('DarkWave Studio loaded!');`,
         <div className="flex items-center justify-between px-3 py-2 border-b border-white/5">
           <div className="flex items-center gap-2 min-w-0">
             <Link href="/" className="shrink-0" data-testid="link-home-mobile">
-              <img src={orbitLogo} alt="DarkWave" className="w-5 h-5" />
+              <img src={orbitLogo} alt="Trust Layer" className="w-5 h-5" />
             </Link>
             <span className="font-mono text-sm truncate">{projectName}</span>
             <Button

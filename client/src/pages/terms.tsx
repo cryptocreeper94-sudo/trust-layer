@@ -11,7 +11,7 @@ export default function Terms() {
   const sections = [
     {
       title: "1. Acceptance of Terms",
-      content: `By accessing or using the Trust Layer platform, including the DarkWave Portal, APIs, and related services (collectively, the "Services"), you agree to be bound by these Terms of Service. If you do not agree to these terms, do not use our Services.`
+      content: `By accessing or using the Trust Layer platform, including the Trust Layer Portal, APIs, and related services (collectively, the "Services"), you agree to be bound by these Terms of Service. If you do not agree to these terms, do not use our Services.`
     },
     {
       title: "2. Description of Services",
@@ -23,7 +23,7 @@ export default function Terms() {
     },
     {
       title: "4. Prohibited Activities",
-      content: `You agree not to: (a) use the Services for any illegal purpose; (b) attempt to hack, disrupt, or exploit the platform; (c) engage in market manipulation or fraudulent activities; (d) distribute malware or malicious code; (e) violate intellectual property rights; (f) harass other users or DarkWave staff.`
+      content: `You agree not to: (a) use the Services for any illegal purpose; (b) attempt to hack, disrupt, or exploit the platform; (c) engage in market manipulation or fraudulent activities; (d) distribute malware or malicious code; (e) violate intellectual property rights; (f) harass other users or Trust Layer staff.`
     },
     {
       title: "5. Digital Assets & Risks",
@@ -43,7 +43,7 @@ export default function Terms() {
     },
     {
       title: "9. Intellectual Property",
-      content: `The DarkWave name, logo, and related marks are trademarks of DarkWave Studios. You may not use our branding without written permission. User-generated content remains the property of the respective users.`
+      content: `The Trust Layer name, logo, and related marks are trademarks of Trust Layer Studios. You may not use our branding without written permission. User-generated content remains the property of the respective users.`
     },
     {
       title: "10. Limitation of Liability",

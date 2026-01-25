@@ -73,7 +73,7 @@ const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
   },
   {
     id: "complete_bundle",
-    name: "DarkWave Complete",
+    name: "Trust Layer Complete",
     description: "Everything included - the ultimate trading arsenal",
     monthlyPrice: 39.99,
     annualPrice: 399.99,
@@ -264,7 +264,7 @@ export default function Pricing() {
             </h1>
             
             <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-8">
-              Unlock the full power of DarkWave with our premium subscriptions. 
+              Unlock the full power of Trust Layer with our premium subscriptions. 
               Get AI-powered predictions, professional trading tools, and exclusive features.
             </p>
 

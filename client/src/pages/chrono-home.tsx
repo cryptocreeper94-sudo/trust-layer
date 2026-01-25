@@ -136,7 +136,7 @@ export default function ChronoHome() {
               DarkWave
             </span>
             <br />
-            <span className="text-white drop-shadow-2xl">Chronicles</span>
+            <span className="text-white drop-shadow-2xl">The Game</span>
           </h1>
           
           <motion.div

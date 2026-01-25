@@ -205,7 +205,7 @@ export default function FoundersPage() {
             </h3>
             <div className="prose prose-invert max-w-none text-white/70">
               <p className="mb-5 leading-relaxed">
-                Signal isn't just another token — it's your access key to the DarkWave Trust Network. 
+                Signal isn't just another token — it's your access key to the Trust Layer Network. 
                 While others chase hype, we're building real infrastructure that businesses actually use.
               </p>
               <p className="mb-5 leading-relaxed">

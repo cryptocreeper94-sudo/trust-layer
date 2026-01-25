@@ -93,7 +93,7 @@ DMs open for business inquiries. 🤝`,
       title: "Community Governance",
       message: `🗳️ **YOUR Voice. YOUR Governance.**
 
-DarkWave isn't controlled by VCs or insiders. It's controlled by YOU.
+Trust Layer isn't controlled by VCs or insiders. It's controlled by YOU.
 
 **Governance Phases:**
 📍 Phase 1 (Now): Founder stewardship
@@ -110,7 +110,7 @@ Your voice matters here. Use it. 🎯`,
     {
       id: "ev5",
       title: "DeFi Suite Overview",
-      message: `📈 **DarkWave DeFi Suite**
+      message: `📈 **Trust Layer DeFi Suite**
 
 DeFi built on trust, not chaos.
 
@@ -134,7 +134,7 @@ DeFi the way it should be. 🛡️`,
     {
       id: "ev6",
       title: "Academy Introduction",
-      message: `🎓 **DarkWave Academy**
+      message: `🎓 **Trust Layer Academy**
 
 Crypto shouldn't be confusing. We make it simple.
 
@@ -324,7 +324,7 @@ const IMAGE_ASSETS = [
     id: "img2",
     name: "Telegram Group Header",
     description: "Profile image for Telegram group",
-    placeholder: "Generate: Square format DarkWave logo, high contrast for small display, recognizable at any size",
+    placeholder: "Generate: Square format Trust Layer logo, high contrast for small display, recognizable at any size",
     platforms: ["telegram"],
     usage: "Group profile, pinned messages"
   },

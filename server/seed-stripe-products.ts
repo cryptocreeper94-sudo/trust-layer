@@ -55,7 +55,7 @@ const PRODUCTS: ProductConfig[] = [
     ],
   },
   {
-    name: "DarkWave Complete",
+    name: "Trust Layer Complete",
     description: "Full access bundle - Pulse Pro + Strike Agent + Chronicles Pro at discounted rate",
     metadata: { category: "subscription", tier: "complete" },
     prices: [
@@ -65,7 +65,7 @@ const PRODUCTS: ProductConfig[] = [
   },
   {
     name: "Chronicles Pro",
-    description: "Premium access to DarkWave Chronicles with enhanced AI, voice cloning, and exclusive scenarios",
+    description: "Premium access to Chronicles with enhanced AI, voice cloning, and exclusive scenarios",
     metadata: { category: "subscription", tier: "chronicles_pro" },
     prices: [
       { nickname: "Chronicles Pro Monthly", unit_amount: 1999, currency: "usd", recurring: { interval: "month" } },

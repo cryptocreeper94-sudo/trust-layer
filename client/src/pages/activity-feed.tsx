@@ -39,7 +39,7 @@ const generateActivity = (): ActivityItem => {
     transfer: { desc: "transferred SIG", amount: `${(100 + Math.random() * 5000).toFixed(0)} SIG`, value: `$${(15 + Math.random() * 750).toFixed(0)}` },
     claim: { desc: "claimed rewards", amount: `${(50 + Math.random() * 500).toFixed(0)} SIG`, value: `$${(7.5 + Math.random() * 75).toFixed(0)}` },
     liquidity: { desc: "added liquidity", amount: `$${(500 + Math.random() * 10000).toFixed(0)}`, value: "LP Tokens" },
-    nft: { desc: "listed NFT for sale", amount: "DarkWave #" + Math.floor(Math.random() * 500), value: `${(100 + Math.random() * 1000).toFixed(0)} SIG` },
+    nft: { desc: "listed NFT for sale", amount: "Trust Layer #" + Math.floor(Math.random() * 500), value: `${(100 + Math.random() * 1000).toFixed(0)} SIG` },
   };
   
   const template = templates[type];

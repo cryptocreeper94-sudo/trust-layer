@@ -49,7 +49,7 @@ export default function DocHub() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2 mr-auto">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
           <div className="flex items-center gap-3">
@@ -75,7 +75,7 @@ export default function DocHub() {
         <div className="container mx-auto max-w-6xl">
           <div className="max-w-2xl">
             <h1 className="text-3xl md:text-4xl font-display font-bold mb-3">
-              DarkWave <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Doc Hub</span>
+              Trust Layer <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Doc Hub</span>
             </h1>
             <p className="text-sm text-muted-foreground">
               Central repository for all ecosystem documentation.

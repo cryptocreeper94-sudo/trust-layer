@@ -6,7 +6,7 @@ const snippet = {
   title: 'Proprietary Marketing Auto-Deploy System',
   language: 'typescript',
   category: 'marketing',
-  description: 'Complete social media auto-deployment system with platform connectors for Discord, Telegram, X/Twitter, Facebook. Includes scheduling engine, content library management, and API routes. Ready for integration into any DarkWave ecosystem app.',
+  description: 'Complete social media auto-deployment system with platform connectors for Discord, Telegram, X/Twitter, Facebook. Includes scheduling engine, content library management, and API routes. Ready for integration into any Trust Layer ecosystem app.',
   code: `/**
  * DARKWAVE PROPRIETARY MARKETING AUTO-DEPLOY SYSTEM
  * Version: 1.0.0
@@ -242,7 +242,7 @@ async function pushToHub() {
       return;
     }
     const result = await client.pushSnippet(snippet);
-    console.log('Pushed to DarkWave Hub:', JSON.stringify(result, null, 2));
+    console.log('Pushed to Trust Layer Hub:', JSON.stringify(result, null, 2));
   } catch (error: any) {
     console.error('Hub push error:', error.message);
   }

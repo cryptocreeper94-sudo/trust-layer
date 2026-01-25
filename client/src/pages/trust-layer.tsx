@@ -60,7 +60,7 @@ const ROADMAP_PHASES = [
     status: "upcoming",
     quarter: "After Launch",
     items: [
-      "DarkWave Academy launch",
+      "Trust Layer Academy launch",
       "Signal Foundation charitable arm",
       "AI-verified execution",
       "Enterprise API marketplace",
@@ -521,7 +521,7 @@ export default function TrustLayerPage() {
               >
                 <img 
                   src={darkwaveLogo} 
-                  alt="DarkWave" 
+                  alt="Trust Layer" 
                   className="w-24 h-24 mx-auto mb-6 drop-shadow-2xl"
                 />
                 <h2 className="text-2xl md:text-3xl font-bold mb-4">

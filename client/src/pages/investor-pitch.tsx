@@ -88,7 +88,7 @@ const investmentThesis = [
   },
   {
     title: "AI-Native Architecture",
-    description: "Every AI decision on DarkWave is provably fair and auditable. As AI becomes ubiquitous, this becomes essential infrastructure.",
+    description: "Every AI decision on Trust Layer is provably fair and auditable. As AI becomes ubiquitous, this becomes essential infrastructure.",
     icon: Brain,
     gradient: "from-pink-500 to-rose-600"
   },
@@ -361,7 +361,7 @@ export default function InvestorPitch() {
                   <h2 className="text-2xl md:text-3xl font-display font-bold text-white">
                     Investment Thesis
                   </h2>
-                  <p className="text-white/50">Why DarkWave is a compelling opportunity</p>
+                  <p className="text-white/50">Why Trust Layer is a compelling opportunity</p>
                 </div>
               </div>
             </motion.div>
@@ -594,7 +594,7 @@ export default function InvestorPitch() {
                   <h2 className="text-2xl md:text-3xl font-display font-bold text-white">
                     Competitive Advantages
                   </h2>
-                  <p className="text-white/50">What sets DarkWave apart</p>
+                  <p className="text-white/50">What sets Trust Layer apart</p>
                 </div>
               </div>
             </motion.div>

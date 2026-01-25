@@ -27,11 +27,11 @@ const VESTING_SCHEDULE = [
 ];
 
 const UTILITY_CASES = [
-  { title: "Transaction Fees", description: "Pay gas fees across the DarkWave network", icon: Coins },
+  { title: "Transaction Fees", description: "Pay gas fees across the Trust Layer network", icon: Coins },
   { title: "Staking Rewards", description: "Stake Signal to earn passive yield and secure the network", icon: TrendingUp },
   { title: "Governance", description: "Vote on protocol upgrades and treasury allocation", icon: Users },
   { title: "Chronicles Access", description: "Purchase in-game items, eras, and premium features", icon: Sparkles },
-  { title: "DEX Trading", description: "Trade tokens and provide liquidity on DarkWave DEX", icon: BarChart3 },
+  { title: "DEX Trading", description: "Trade tokens and provide liquidity on Trust Layer DEX", icon: BarChart3 },
   { title: "NFT Marketplace", description: "Buy, sell, and mint NFTs using Signal", icon: Gift },
 ];
 
@@ -43,7 +43,7 @@ export default function Tokenomics() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={orbitLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">
@@ -262,7 +262,7 @@ export default function Tokenomics() {
               <Sparkles className="w-6 h-6 text-pink-400" />
               Signal Utility
             </h2>
-            <p className="text-muted-foreground text-sm">Signal powers every aspect of the DarkWave ecosystem</p>
+            <p className="text-muted-foreground text-sm">Signal powers every aspect of the Trust Layer ecosystem</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -341,7 +341,7 @@ export default function Tokenomics() {
           >
             <h2 className="text-2xl font-display font-bold mb-4">Ready to Explore?</h2>
             <p className="text-muted-foreground mb-6 max-w-md mx-auto text-sm">
-              Dive deeper into the DarkWave ecosystem and discover how Signal powers everything.
+              Dive deeper into the Trust Layer ecosystem and discover how Signal powers everything.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               <Link href="/executive-summary">

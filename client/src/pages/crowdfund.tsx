@@ -174,9 +174,9 @@ function DonationModal({ feature, onSuccess }: { feature?: CrowdfundFeature; onS
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <img src={darkwaveLogo} alt="DarkWave" className="w-16 h-16 mx-auto mb-4" />
+        <img src={darkwaveLogo} alt="Trust Layer" className="w-16 h-16 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-white">
-          {feature ? `Fund: ${feature.title}` : "Support DarkWave Development"}
+          {feature ? `Fund: ${feature.title}` : "Support Trust Layer Development"}
         </h3>
         <p className="text-gray-400 text-sm mt-1">
           Every contribution helps build the future of decentralized technology
@@ -542,7 +542,7 @@ export default function CrowdfundPage() {
           className="text-center mb-12"
         >
           <div className="flex items-center justify-center gap-3 mb-4">
-            <img src={darkwaveLogo} alt="DarkWave" className="w-12 h-12 flex-shrink-0 object-contain" />
+            <img src={darkwaveLogo} alt="Trust Layer" className="w-12 h-12 flex-shrink-0 object-contain" />
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               Development Fund
             </h1>
@@ -567,7 +567,7 @@ export default function CrowdfundPage() {
             <div className="absolute inset-0">
               <img 
                 src={blockchainBg} 
-                alt="DarkWave Development"
+                alt="Trust Layer Development"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/50" />
@@ -587,7 +587,7 @@ export default function CrowdfundPage() {
                   <div className="absolute inset-0 animate-pulse bg-cyan-400/20 rounded-full blur-xl" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-white mb-1">{campaign?.name || "DarkWave Development Fund"}</h2>
+                  <h2 className="text-2xl font-bold text-white mb-1">{campaign?.name || "Trust Layer Development Fund"}</h2>
                   <p className="text-gray-300">{campaign?.description || "Support the future of decentralized technology"}</p>
                 </div>
               </div>
@@ -605,7 +605,7 @@ export default function CrowdfundPage() {
                   </DialogTrigger>
                   <DialogContent className="bg-gray-900 border-gray-800 max-w-md">
                     <DialogHeader>
-                      <DialogTitle className="sr-only">Support DarkWave Development</DialogTitle>
+                      <DialogTitle className="sr-only">Support Trust Layer Development</DialogTitle>
                     </DialogHeader>
                     <DonationModal onSuccess={() => {}} />
                   </DialogContent>

@@ -70,7 +70,7 @@ export default function GuardianShieldPage() {
               We're building something special. Guardian Shield will be a high-powered DEX screener with 
               AI-driven threat detection, predictive market intelligence, and real-time security monitoring. 
               We're taking the time to get this right — so when it launches, it will be exactly what 
-              the DarkWave community deserves.
+              the Trust Layer community deserves.
             </p>
 
             <div className="grid sm:grid-cols-3 gap-4 mb-8">

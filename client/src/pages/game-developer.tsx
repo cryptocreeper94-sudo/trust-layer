@@ -57,7 +57,7 @@ const REVIEW_CRITERIA = [
 const SUBMISSION_STEPS = [
   { step: 1, title: "Submit Code", description: "Provide GitHub repo or upload files" },
   { step: 2, title: "AI Analysis", description: "Automated security & fairness testing" },
-  { step: 3, title: "Human Review", description: "Final approval by DarkWave team" },
+  { step: 3, title: "Human Review", description: "Final approval by Trust Layer team" },
   { step: 4, title: "Go Live", description: "Your game joins the ecosystem" },
 ];
 
@@ -129,9 +129,9 @@ export default function GameDeveloper() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7" />
+            <img src={darkwaveLogo} alt="Trust Layer" className="w-7 h-7" />
             <span className="font-display font-bold text-lg tracking-tight">
-              DarkWave <span className="text-pink-400">Games</span>
+              The <span className="text-pink-400">Arcade</span>
             </span>
           </Link>
           <BackButton />
@@ -151,7 +151,7 @@ export default function GameDeveloper() {
             </Badge>
             
             <h1 className="text-3xl md:text-5xl font-display font-bold mb-4">
-              Build Games for <span className="text-pink-400">DarkWave</span>
+              Build Games for <span className="text-pink-400">Trust Layer</span>
             </h1>
             
             <p className="text-muted-foreground max-w-2xl mx-auto">
@@ -393,7 +393,7 @@ export default function GameDeveloper() {
                   </li>
                   <li className="flex items-center gap-2">
                     <Shield className="w-4 h-4 text-green-400" />
-                    <span>Verified "DarkWave Approved" badge</span>
+                    <span>Verified "Trust Layer Approved" badge</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Zap className="w-4 h-4 text-purple-400" />
