@@ -174,7 +174,7 @@ export function DwcBagDashboard({ compact = false }: { compact?: boolean }) {
           />
           <p className="text-xs text-gray-500 mt-2">
             <Lock className="w-3 h-3 inline mr-1" />
-            Create your DarkWave wallet before TGE ({new Date(tgeDate).toLocaleDateString()}) to receive tokens
+            Create your Trust Layer wallet before TGE ({new Date(tgeDate).toLocaleDateString()}) to receive tokens
           </p>
         </div>
       </GlassCard>

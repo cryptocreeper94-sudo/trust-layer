@@ -2923,7 +2923,7 @@ export async function registerRoutes(
       
       res.json({ success: true, data: result });
     } catch (error) {
-      console.error("Error registering with DarkWave Hub:", error);
+      console.error("Error registering with Trust Layer Hub:", error);
       res.status(500).json({ error: "Failed to connect to DarkWave Hub" });
     }
   });
@@ -2933,7 +2933,7 @@ export async function registerRoutes(
       const apps = await ecosystemClient.getApps();
       res.json({ success: true, apps });
     } catch (error) {
-      console.error("Error syncing with DarkWave Hub:", error);
+      console.error("Error syncing with Trust Layer Hub:", error);
       res.status(500).json({ error: "Failed to connect to DarkWave Hub" });
     }
   });

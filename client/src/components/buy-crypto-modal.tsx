@@ -260,7 +260,7 @@ export function BuyCryptoModal({
                     <p className="text-sm font-mono truncate">
                       {storedWalletAddresses[selectedCrypto === 'sol' ? 'solana' : 'ethereum'] || 'No address for this network'}
                     </p>
-                    <p className="text-xs text-purple-400 mt-1">Using your DarkWave wallet</p>
+                    <p className="text-xs text-purple-400 mt-1">Using your Trust Layer wallet</p>
                   </div>
                 )}
               </div>

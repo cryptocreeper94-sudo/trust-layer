@@ -239,7 +239,7 @@ export const DARKWAVE_CHAIN_CONFIG = {
   blockExplorerUrls: ['https://dwsc.io/explorer'],
 };
 
-// Add DarkWave chain to MetaMask
+// Add Trust Layer chain to MetaMask
 export async function addDarkWaveToMetaMask(): Promise<boolean> {
   if (!window.ethereum) {
     throw new Error('MetaMask not installed');

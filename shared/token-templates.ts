@@ -1,5 +1,5 @@
 /**
- * DarkWave Trust Layer - Token Deployment Templates
+ * Trust Layer - Token Deployment Templates
  * Pre-built templates for deploying tokens on DWTL
  * 
  * Note: These templates are pre-VM and work with the native token system.
@@ -163,7 +163,7 @@ export function generateTokenMetadata(config: TokenConfig): object {
     metadata: config.metadata || {},
     chain: {
       id: 8453,
-      name: "DarkWave Trust Layer",
+      name: "Trust Layer",
       network: "mainnet",
     },
     standard: "DWTL-20",

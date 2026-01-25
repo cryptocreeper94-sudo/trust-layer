@@ -301,7 +301,7 @@ export function AIAssistant() {
             <div className="flex flex-col items-center gap-1">
               <img 
                 src="/icons/icon-192x192.png" 
-                alt="DarkWave AI" 
+                alt="Trust Layer AI" 
                 className="w-8 h-8 rounded-full"
               />
               {isOpen ? (
@@ -329,7 +329,7 @@ export function AIAssistant() {
                 <div className="w-10 h-10 rounded-full overflow-hidden border border-cyan-500/50">
                   <img 
                     src="/icons/icon-192x192.png" 
-                    alt="DarkWave AI" 
+                    alt="Trust Layer AI" 
                     className="w-full h-full object-cover"
                   />
                 </div>
