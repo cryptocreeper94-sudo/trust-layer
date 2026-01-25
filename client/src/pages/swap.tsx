@@ -5,7 +5,7 @@ import { Link } from "wouter";
 import { 
   ArrowUpDown, Wallet, Settings, ChevronDown, Loader2,
   Sparkles, Zap, TrendingUp, RefreshCw, Info, AlertCircle, Target, Clock
-} from "lucide-react";
+, Shield } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -16,7 +16,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
 import { WalletButton } from "@/components/wallet-button";
@@ -166,7 +165,7 @@ export default function Swap() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
+            <Shield className="w-7 h-7 text-cyan-400" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">

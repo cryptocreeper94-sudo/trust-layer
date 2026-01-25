@@ -10,7 +10,7 @@ import {
   Fingerprint,
   FileText,
   Shield
-} from "lucide-react";
+, Shield , Shield } from "lucide-react";
 import { Link } from "wouter";
 import { useRef } from "react";
 import shieldImage from "/shield-reference.jpg";

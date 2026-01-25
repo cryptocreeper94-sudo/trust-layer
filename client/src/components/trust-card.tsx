@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 interface TrustCardProps {
   trustNumber: string;
@@ -161,7 +160,7 @@ export function TrustCard({
           <div className="relative z-10 p-6 h-full flex flex-col bg-gradient-to-br from-slate-900/95 via-purple-950/95 to-slate-900/95 rounded-2xl">
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3">
-                <img src={darkwaveLogo} alt="DarkWave" className="w-10 h-10 drop-shadow-lg" />
+                <Shield className="w-7 h-7 text-cyan-400" />
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] uppercase tracking-wider text-purple-400 font-medium">

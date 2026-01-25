@@ -4,7 +4,7 @@ import { Link } from "wouter";
 import {
   Bot, Play, Pause, Settings, TrendingUp, Clock,
   Calendar, DollarSign, Target, Repeat, ChevronDown, Plus, Trash2
-} from "lucide-react";
+, Shield , Shield , Shield } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import { Footer } from "@/components/footer";
@@ -16,7 +16,6 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 interface DCAStrategy {
   id: string;
@@ -62,8 +61,8 @@ const STRATEGIES: DCAStrategy[] = [
 ];
 
 const TOKENS = [
-  { symbol: "SIG", name: "Signal", icon: darkwaveLogo },
-  { symbol: "stSIG", name: "Staked Signal", icon: darkwaveLogo },
+  { symbol: "SIG", name: "Signal", icon: "/marketing/darkwave_shield_logo_emblem.png" },
+  { symbol: "stSIG", name: "Staked Signal", icon: "/marketing/darkwave_shield_logo_emblem.png" },
   { symbol: "USDC", name: "USD Coin", icon: "💵" },
 ];
 
@@ -111,7 +110,7 @@ function StrategyCard({ strategy }: { strategy: DCAStrategy }) {
                 {typeof TOKENS.find(t => t.symbol === strategy.token)?.icon === 'string' ? (
                   <span className="text-xl">{TOKENS.find(t => t.symbol === strategy.token)?.icon}</span>
                 ) : (
-                  <img src={darkwaveLogo} alt={strategy.token} className="w-6 h-6" />
+                  <Shield className="w-7 h-7 text-cyan-400" />
                 )}
               </motion.div>
               <div>
@@ -192,7 +191,7 @@ export default function DCABot() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={darkwaveLogo} alt="Trust Layer" className="w-7 h-7" />
+            <Shield className="w-7 h-7 text-cyan-400" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <BackButton />

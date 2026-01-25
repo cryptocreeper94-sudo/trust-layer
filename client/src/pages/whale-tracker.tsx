@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 interface WhaleMovement {
   id: string;

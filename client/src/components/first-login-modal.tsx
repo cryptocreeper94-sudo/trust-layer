@@ -4,7 +4,6 @@ import { X, Coins, Gift, Zap, ArrowRight, Sparkles, Shield, TrendingUp } from "l
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 const FIRST_LOGIN_KEY = "dw_first_login_seen";
 
@@ -76,7 +75,7 @@ export function FirstLoginModal() {
                 transition={{ duration: 3, repeat: Infinity }}
                 className="relative"
               >
-                <img src={darkwaveLogo} alt="Signal" className="w-20 h-20 object-contain" />
+                <Shield className="w-7 h-7 text-cyan-400" />
                 <motion.div
                   className="absolute inset-0 rounded-full"
                   animate={{ opacity: [0.3, 0.6, 0.3] }}

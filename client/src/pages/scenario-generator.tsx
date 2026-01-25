@@ -11,7 +11,6 @@ import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import crystalBallImg from "@assets/generated_images/scenario_generator_crystal_ball.png";
 import balanceScaleImg from "@assets/generated_images/balance_scale_moral_judgment.png";
 import emotionalWarriorImg from "@assets/generated_images/emotional_warrior_portrait.png";
@@ -298,7 +297,7 @@ export default function ScenarioGenerator() {
         <div className="container mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-2">
           <BackButton />
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-            <img src={darkwaveLogo} alt="Trust Layer" className="w-5 h-5 sm:w-6 sm:h-6" />
+            <Shield className="w-7 h-7 text-cyan-400" />
             <span className="font-display font-bold text-sm sm:text-base truncate max-w-[120px] sm:max-w-none">Scenario Generator</span>
           </div>
           <Badge className="bg-pink-500/20 text-pink-300 border-pink-500/30 text-[10px] sm:text-xs shrink-0">

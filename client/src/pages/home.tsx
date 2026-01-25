@@ -4,7 +4,6 @@ import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, H
 import { openGlobalSearch } from "@/components/global-search";
 import { InfoTooltip } from "@/components/info-tooltip";
 import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.png";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import signalEmblem from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
 import shieldImage from "/shield-reference.jpg";
 import { Button } from "@/components/ui/button";

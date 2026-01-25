@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
-import { Play, Copy, Check, Wallet, Droplets, Send, Activity, RefreshCw } from "lucide-react";
+import { Play, Copy, Check, Wallet, Droplets, Send, Activity, RefreshCw , Shield } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
@@ -142,7 +141,7 @@ export default function ApiPlayground() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2 mr-auto">
-            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
+            <Shield className="w-7 h-7 text-cyan-400" />
             <span className="font-display font-bold text-lg tracking-tight">Devnet Sandbox</span>
           </Link>
           <div className="flex items-center gap-3">

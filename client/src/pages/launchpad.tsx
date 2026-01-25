@@ -24,7 +24,6 @@ import { apiRequest } from "@/lib/queryClient";
 import { useKyc } from "@/hooks/use-kyc";
 import { useAuth } from "@/hooks/use-auth";
 import { AuthLoginModal } from "@/components/auth-login";
-import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 
 interface LaunchedToken {
   id: string;

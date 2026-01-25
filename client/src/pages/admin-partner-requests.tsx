@@ -5,7 +5,7 @@ import { Link } from "wouter";
 import { 
   Users, CheckCircle, XCircle, Clock, 
   Mail, Building2, User, Globe, FileText, Shield
-} from "lucide-react";
+, Shield , Shield } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

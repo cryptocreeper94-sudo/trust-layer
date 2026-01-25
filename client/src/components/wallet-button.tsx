@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Wallet, X, ExternalLink, Copy, Check, LogOut, ChevronDown } from "lucide-react";
+import { Wallet, X, ExternalLink, Copy, Check, LogOut, ChevronDown , Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useWallet, shortenAddress } from "@/hooks/use-wallet";
 import { Link } from "wouter";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 export function WalletButton() {
   const { 
@@ -237,7 +236,7 @@ export function WalletButton() {
                     className="w-full h-12 bg-gradient-to-r from-cyan-900/80 to-purple-900/80 border-primary/30 hover:border-primary/50 justify-start gap-3 text-white"
                     data-testid="button-darkwave-wallet"
                   >
-                    <img src={darkwaveLogo} alt="DarkWave" className="w-7 h-7 flex-shrink-0" />
+                    <Shield className="w-7 h-7 text-cyan-400" />
                     <div className="text-left min-w-0">
                       <div className="font-medium text-sm">DarkWave Wallet</div>
                       <div className="text-[10px] text-muted-foreground truncate">Create or manage your wallet</div>

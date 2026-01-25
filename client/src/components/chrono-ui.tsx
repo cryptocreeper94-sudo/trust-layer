@@ -4,11 +4,10 @@ import { Link } from "wouter";
 import { 
   ArrowLeft, Sparkles, Menu, X, Play, Pause, Volume2, VolumeX,
   Users, Clock, Coins, Heart, ChevronRight, ExternalLink, Info
-} from "lucide-react";
+, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 
 interface ChronoLayoutProps {
   children: ReactNode;
@@ -45,7 +44,7 @@ export function ChronoLayout({
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/80 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0" data-testid="link-chrono-home">
-            <img src={orbitLogo} alt="ChronoVerse" className="w-7 h-7" />
+            <Shield className="w-7 h-7 text-cyan-400" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
               ChronoVerse
             </span>
@@ -109,7 +108,7 @@ export function ChronoLayout({
             <div className="p-4">
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-2">
-                  <img src={orbitLogo} alt="ChronoVerse" className="w-8 h-8" />
+                  <Shield className="w-7 h-7 text-cyan-400" />
                   <span className="font-display font-bold text-xl bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                     ChronoVerse
                   </span>
@@ -206,7 +205,7 @@ function ChronoFooter() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <img src={orbitLogo} alt="ChronoVerse" className="w-8 h-8" />
+              <Shield className="w-7 h-7 text-cyan-400" />
               <span className="font-display font-bold text-xl bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                 Chronicles
               </span>

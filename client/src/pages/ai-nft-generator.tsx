@@ -4,7 +4,7 @@ import { Link } from "wouter";
 import {
   Sparkles, Wand2, Image, Palette, Layers, Download,
   RefreshCw, Zap, Star, Heart, Share2, Settings, ChevronRight
-} from "lucide-react";
+, Shield , Shield } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -14,7 +14,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 const STYLE_PRESETS = [
   { id: "cyberpunk", name: "Cyberpunk", preview: "🌃", desc: "Neon-lit futuristic aesthetics" },
@@ -87,7 +86,7 @@ export default function AINFTGenerator() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={darkwaveLogo} alt="Trust Layer" className="w-7 h-7" />
+            <Shield className="w-7 h-7 text-cyan-400" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <BackButton />

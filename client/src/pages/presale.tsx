@@ -23,7 +23,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import darkwaveLogo from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
 import { DYORDisclaimer } from "@/components/dyor-disclaimer";
 const shieldImage = "/shield-reference.jpg";
 import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";

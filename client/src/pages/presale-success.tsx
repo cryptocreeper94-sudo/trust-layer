@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useSearch } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { CheckCircle, ArrowRight, Loader2, Sparkles, Wallet, Copy, ExternalLink } from "lucide-react";
+import { CheckCircle, ArrowRight, Loader2, Sparkles, Wallet, Copy, ExternalLink , Shield , Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
 
 const TOKEN_PRICE = 0.001; // $0.001 per SIG (1B supply)
@@ -148,7 +147,7 @@ export default function PresaleSuccess() {
 
             <div className="bg-gradient-to-br from-gray-900/90 to-black/80 rounded-2xl border border-white/10 p-8 mb-8 backdrop-blur-xl">
               <div className="flex items-center justify-center gap-4 mb-6">
-                <img src={darkwaveLogo} alt="SIG" className="w-16 h-16 object-contain" />
+                <Shield className="w-7 h-7 text-cyan-400" />
                 <div className="text-left">
                   <p className="text-gray-400 text-sm">Your Token Allocation</p>
                   <p className="text-4xl font-bold text-white">{totalTokens.toLocaleString()} SIG</p>
@@ -215,7 +214,7 @@ export default function PresaleSuccess() {
               boxShadow: "0 0 60px rgba(16,185,129,0.15)",
             }}>
               <div className="flex items-center justify-center gap-4 mb-6">
-                <img src={darkwaveLogo} alt="SIG" className="w-16 h-16 object-contain" />
+                <Shield className="w-7 h-7 text-cyan-400" />
                 <div className="text-left">
                   <p className="text-gray-400 text-sm">Your Token Allocation</p>
                   <p className="text-4xl font-bold text-white">{totalTokens.toLocaleString()} SIG</p>

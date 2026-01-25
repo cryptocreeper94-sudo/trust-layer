@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Activity, Key, Clock, TrendingUp, AlertTriangle, RefreshCw, BarChart3 } from "lucide-react";
+import { Activity, Key, Clock, TrendingUp, AlertTriangle, RefreshCw, BarChart3 , Shield } from "lucide-react";
 import { Link } from "wouter";
 import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { GlassCard } from "@/components/glass-card";
 import { Footer } from "@/components/footer";
-import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 
 interface UsageData {
   requestsToday: number;
@@ -57,7 +56,7 @@ export default function ApiUsage() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
+            <Shield className="w-7 h-7 text-cyan-400" />
             <span className="font-display font-bold text-lg hidden sm:inline">DarkWave</span>
           </Link>
           <BackButton />

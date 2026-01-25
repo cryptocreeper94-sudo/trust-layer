@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 interface GenesisHallmark {
   id: string;
@@ -173,7 +172,6 @@ export function GenesisHallmarkCard() {
                   
                   {/* DarkWave Logo */}
                   <motion.img
-                    src={darkwaveLogo}
                     alt="Signal Coin"
                     className="w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 relative z-10 drop-shadow-2xl object-contain"
                     animate={{

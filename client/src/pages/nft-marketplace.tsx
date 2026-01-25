@@ -5,7 +5,7 @@ import { Link } from "wouter";
 import { 
   Sparkles, Grid, Search, Filter, ChevronDown, ChevronLeft, ChevronRight,
   Heart, Eye, Tag, Plus, ImageIcon, Loader2, CheckCircle2, X
-} from "lucide-react";
+, Shield } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
@@ -16,7 +16,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import genesisNft1 from "@assets/generated_images/genesis_nft_cosmic_orb_collectible.png";
 import genesisNft2 from "@assets/generated_images/genesis_nft_crystal_formation_collectible.png";
 import genesisNft3 from "@assets/generated_images/genesis_nft_portal_vortex_collectible.png";
@@ -103,7 +102,7 @@ export default function NftMarketplace() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={orbitLogo} alt="Trust Layer" className="w-7 h-7" />
+            <Shield className="w-7 h-7 text-cyan-400" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <div className="flex items-center gap-2">

@@ -27,7 +27,6 @@ import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/glass-card";
 import { Footer } from "@/components/footer";
 import { useAuth } from "@/hooks/use-auth";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 const ROADMAP_PHASES = [
   {
@@ -520,7 +519,6 @@ export default function TrustLayerPage() {
                 viewport={{ once: true }}
               >
                 <img 
-                  src={darkwaveLogo} 
                   alt="Trust Layer" 
                   className="w-24 h-24 mx-auto mb-6 drop-shadow-2xl"
                 />

@@ -1,13 +1,12 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { Users, Coins } from "lucide-react";
+import { Users, Coins , Shield , Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { ReferralTracker } from "@/components/referral-tracker";
 import { AirdropDashboard } from "@/components/airdrop-dashboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 export default function Referrals() {
   return (
@@ -15,7 +14,7 @@ export default function Referrals() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2">
-            <img src={darkwaveLogo} alt="Trust Layer" className="w-7 h-7" />
+            <Shield className="w-7 h-7 text-cyan-400" />
             <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
           </Link>
           <div className="ml-auto">

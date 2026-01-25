@@ -9,7 +9,6 @@ import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.png";
 import medievalImg from "@assets/generated_images/medieval_fantasy_kingdom.png";
 import industrialImg from "@assets/generated_images/industrial_steampunk_city.png";
@@ -128,7 +127,7 @@ export default function EraCodex() {
         <div className="container mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-2">
           <BackButton />
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-            <img src={darkwaveLogo} alt="Trust Layer" className="w-5 h-5 sm:w-6 sm:h-6" />
+            <Shield className="w-7 h-7 text-cyan-400" />
             <span className="font-display font-bold text-sm sm:text-base">Era Codex</span>
           </div>
           <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30 text-[10px] sm:text-xs shrink-0">

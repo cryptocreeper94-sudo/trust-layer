@@ -4,7 +4,7 @@ import { Link } from "wouter";
 import { 
   Calculator, TrendingUp, Coins, Target, Rocket, 
   Sparkles, DollarSign, Calendar, BarChart3, Info
-} from "lucide-react";
+, Shield , Shield } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +12,6 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
 import deepSpace from "@assets/generated_images/deep_space_station.png";
 
@@ -236,7 +235,7 @@ export default function InvestmentSimulator() {
                     {calculations.totalTokens.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                   </p>
                 </div>
-                <img src={darkwaveLogo} alt="SIG" className="w-16 h-16 object-contain opacity-80" />
+                <Shield className="w-7 h-7 text-cyan-400" />
               </div>
             </div>
 

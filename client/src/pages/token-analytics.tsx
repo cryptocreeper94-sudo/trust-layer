@@ -7,7 +7,6 @@ import {
 import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 function BentoCard({ children, className = "", colSpan = 1, rowSpan = 1, delay = 0 }: {
   children: React.ReactNode;
@@ -52,7 +51,7 @@ export default function TokenAnalytics() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={darkwaveLogo} alt="Trust Layer" className="w-7 h-7" />
+            <Shield className="w-7 h-7 text-cyan-400" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <BackButton />
@@ -85,7 +84,7 @@ export default function TokenAnalytics() {
               animate={{ rotate: [0, 5, -5, 0] }}
               transition={{ duration: 4, repeat: Infinity }}
             >
-              <img src={darkwaveLogo} alt="SIG" className="w-10 h-10" />
+              <Shield className="w-7 h-7 text-cyan-400" />
             </motion.div>
             <div>
               <div className="flex items-center gap-2">

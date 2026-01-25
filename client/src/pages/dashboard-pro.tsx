@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Footer } from "@/components/footer";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 const miniChartData = Array.from({ length: 20 }, (_, i) => ({
   value: 100 + Math.random() * 50 + i * 2,
@@ -110,7 +109,7 @@ export default function DashboardPro() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/80 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <img src={darkwaveLogo} alt="Trust Layer" className="w-7 h-7" />
+            <Shield className="w-7 h-7 text-cyan-400" />
             <span className="font-display font-bold text-lg">DarkWave</span>
             <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 text-[9px]">PRO</Badge>
           </Link>
@@ -147,7 +146,6 @@ export default function DashboardPro() {
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <motion.img 
-                      src={darkwaveLogo} 
                       alt="SIG" 
                       className="w-8 h-8"
                       animate={{ rotate: [0, 5, -5, 0] }}

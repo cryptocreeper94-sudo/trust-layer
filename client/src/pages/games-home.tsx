@@ -11,7 +11,6 @@ import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 const GAMES = [
   {
@@ -157,7 +156,6 @@ export default function GamesHome() {
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2 shrink-0">
             <motion.img 
-              src={darkwaveLogo} 
               alt="Trust Layer" 
               className="w-7 h-7"
               animate={{ rotate: [0, 5, -5, 0] }}

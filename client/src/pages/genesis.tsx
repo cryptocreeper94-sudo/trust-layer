@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { GenesisHallmarkCard } from "@/components/genesis-hallmark";
 import { Footer } from "@/components/footer";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 const BLOCKCHAIN_SPECS = [
   { icon: Zap, label: "Block Time", value: "400ms", desc: "Ultra-fast finality" },
@@ -55,7 +54,7 @@ export default function GenesisBlock() {
             </Link>
           </div>
           <div className="flex items-center gap-2">
-            <img src={darkwaveLogo} alt="Trust Layer" className="w-6 h-6" />
+            <Shield className="w-7 h-7 text-cyan-400" />
             <span className="font-bold text-sm">Genesis Block</span>
           </div>
           <div className="w-16" />

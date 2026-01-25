@@ -16,7 +16,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import { BuyCryptoModal } from "@/components/buy-crypto-modal";
 import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
@@ -174,7 +173,7 @@ function DonationModal({ feature, onSuccess }: { feature?: CrowdfundFeature; onS
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <img src={darkwaveLogo} alt="Trust Layer" className="w-16 h-16 mx-auto mb-4" />
+        <Shield className="w-7 h-7 text-cyan-400" />
         <h3 className="text-lg font-semibold text-white">
           {feature ? `Fund: ${feature.title}` : "Support Trust Layer Development"}
         </h3>
@@ -542,7 +541,7 @@ export default function CrowdfundPage() {
           className="text-center mb-12"
         >
           <div className="flex items-center justify-center gap-3 mb-4">
-            <img src={darkwaveLogo} alt="Trust Layer" className="w-12 h-12 flex-shrink-0 object-contain" />
+            <Shield className="w-7 h-7 text-cyan-400" />
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               Development Fund
             </h1>
@@ -583,7 +582,7 @@ export default function CrowdfundPage() {
             <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-6">
               <div className="flex items-center gap-4">
                 <div className="relative">
-                  <img src={darkwaveLogo} alt="SIG" className="w-16 h-16 object-contain flex-shrink-0" />
+                  <Shield className="w-7 h-7 text-cyan-400" />
                   <div className="absolute inset-0 animate-pulse bg-cyan-400/20 rounded-full blur-xl" />
                 </div>
                 <div>

@@ -19,7 +19,6 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import orbyFlying from "@assets/generated_images/orby_planet_mascot_flying.png";
 
 const MAX_MULTIPLIER = 5000;
@@ -1074,7 +1073,7 @@ export default function CrashGame() {
           <div className="flex items-center gap-3">
             <BackButton />
             <div className="flex items-center gap-2">
-              <img src={darkwaveLogo} alt="Trust Layer" className="w-6 h-6" />
+              <Shield className="w-7 h-7 text-cyan-400" />
               <span className="font-display font-bold">Crash</span>
               <Badge variant="outline" className="text-[10px] hidden sm:flex">
                 Max {MAX_MULTIPLIER}x

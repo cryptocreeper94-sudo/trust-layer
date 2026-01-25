@@ -4,7 +4,7 @@ import { Link } from "wouter";
 import {
   PlayCircle, TrendingUp, TrendingDown, BarChart3,
   Wallet, RefreshCw, Award, History, Target, Sparkles
-} from "lucide-react";
+, Shield , Shield } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 import { Footer } from "@/components/footer";
@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 import { useAuth } from "@/hooks/use-auth";
 
 const STARTING_BALANCE = 100000;
@@ -121,7 +120,7 @@ export default function PaperTrading() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src={darkwaveLogo} alt="Trust Layer" className="w-7 h-7" />
+            <Shield className="w-7 h-7 text-cyan-400" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
           </Link>
           <BackButton />

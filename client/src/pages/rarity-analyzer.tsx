@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 const SAMPLE_NFT = {
   id: "DWG-247",

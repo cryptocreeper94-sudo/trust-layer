@@ -1,13 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Wallet, Coins, Gift, Trophy, TrendingUp, Sparkles, ArrowUpRight, Calendar, Lock } from "lucide-react";
+import { Wallet, Coins, Gift, Trophy, TrendingUp, Sparkles, ArrowUpRight, Calendar, Lock , Shield } from "lucide-react";
 import { GlassCard } from "@/components/glass-card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 interface DwcBagData {
   totalDwc: number;
@@ -102,7 +101,7 @@ export function DwcBagDashboard({ compact = false }: { compact?: boolean }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative">
-              <img src={darkwaveLogo} alt="SIG" className="w-10 h-10 object-contain" />
+              <Shield className="w-7 h-7 text-cyan-400" />
               <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-md animate-pulse" />
             </div>
             <div>
@@ -131,7 +130,7 @@ export function DwcBagDashboard({ compact = false }: { compact?: boolean }) {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
           <div className="flex items-center gap-4">
             <div className="relative">
-              <img src={darkwaveLogo} alt="SIG" className="w-16 h-16 object-contain" />
+              <Shield className="w-7 h-7 text-cyan-400" />
               <div className="absolute inset-0 bg-cyan-400/30 rounded-full blur-xl animate-pulse" />
             </div>
             <div>

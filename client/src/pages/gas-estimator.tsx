@@ -12,7 +12,6 @@ import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import darkwaveLogo from "@assets/generated_images/darkwave_token_transparent.png";
 
 const gasHistory = Array.from({ length: 24 }, (_, i) => ({
   hour: `${i}:00`,

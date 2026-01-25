@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GlassCard } from "@/components/glass-card";
-import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { SimpleLoginModal } from "@/components/simple-login";
 
@@ -1856,7 +1855,7 @@ console.log('DarkWave Studio loaded!');`,
       <header className="hidden md:flex h-12 border-b border-white/5 bg-background/95 items-center justify-between px-4 shrink-0">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2" data-testid="link-home">
-            <img src={orbitLogo} alt="Trust Layer" className="w-6 h-6" />
+            <Shield className="w-7 h-7 text-cyan-400" />
           </Link>
           <span className="text-white/30">/</span>
           <span className="font-mono text-sm">{projectName}</span>
@@ -1996,7 +1995,7 @@ console.log('DarkWave Studio loaded!');`,
         <div className="flex items-center justify-between px-3 py-2 border-b border-white/5">
           <div className="flex items-center gap-2 min-w-0">
             <Link href="/" className="shrink-0" data-testid="link-home-mobile">
-              <img src={orbitLogo} alt="Trust Layer" className="w-5 h-5" />
+              <Shield className="w-7 h-7 text-cyan-400" />
             </Link>
             <span className="font-mono text-sm truncate">{projectName}</span>
             <Button
