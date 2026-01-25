@@ -1266,8 +1266,6 @@ export default function Presale() {
       />
       
       <div className="relative max-w-7xl mx-auto px-4 py-12">
-        <BackButton />
-
         {referrer && <ReferralBanner referrer={referrer} />}
 
         <motion.div 
