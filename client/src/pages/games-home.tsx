@@ -412,7 +412,7 @@ export default function GamesHome() {
               className="text-center mb-8"
             >
               <h2 className="text-2xl md:text-3xl font-display font-bold mb-3">
-                Why <span className="text-pink-400">DarkWave Games</span>?
+                Why <span className="text-pink-400">The Arcade</span>?
               </h2>
             </motion.div>
             
@@ -480,7 +480,7 @@ export default function GamesHome() {
                 Power Your Gaming With <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Signal</span>
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                Signal is the backbone of DarkWave Games. Get yours before prices increase.
+                Signal is the backbone of The Arcade. Get yours before prices increase.
               </p>
             </motion.div>
 
@@ -573,7 +573,7 @@ export default function GamesHome() {
                   Games Launch Q2 2026
                 </h2>
                 <p className="text-white/80 max-w-xl mx-auto mb-6">
-                  Get Signal now and be ready to play, earn, and win when DarkWave Games goes live.
+                  Get Signal now and be ready to play, earn, and win when The Arcade goes live.
                 </p>
                 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">

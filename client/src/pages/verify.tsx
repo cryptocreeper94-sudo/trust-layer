@@ -79,7 +79,7 @@ export default function Verify() {
     } else {
       setSearchResult({
         verified: false,
-        error: "Document hash not found in the DarkWave Trust Layer registry."
+        error: "Document hash not found in the Trust Layer registry."
       });
     }
 
@@ -190,7 +190,7 @@ export default function Verify() {
                       </div>
                       <div>
                         <h3 className="text-lg font-bold text-green-400">Verified Authentic</h3>
-                        <p className="text-sm text-slate-400">This document is officially registered on the DarkWave Trust Layer</p>
+                        <p className="text-sm text-slate-400">This document is officially registered on the Trust Layer</p>
                       </div>
                     </div>
 
@@ -309,7 +309,7 @@ export default function Verify() {
               <div>
                 <h3 className="font-bold text-white mb-2">How Guardian Verification Works</h3>
                 <p className="text-sm text-slate-400 leading-relaxed">
-                  Every official document, email, and communication from the DarkWave Trust Layer is 
+                  Every official document, email, and communication from the Trust Layer is 
                   cryptographically hashed and recorded on-chain. This creates an immutable record that 
                   anyone can verify. If someone claims to have an official document from us, you can 
                   check its hash here to confirm authenticity. This protects both you and us from fraud.

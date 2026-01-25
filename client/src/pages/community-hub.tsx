@@ -1515,7 +1515,7 @@ export default function CommunityHub() {
             
             <div className="p-3 rounded-lg bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
               <p className="text-xs sm:text-sm text-gray-300">
-                Part of the <span className="text-cyan-400 font-medium">DarkWave Trust Layer</span> ecosystem
+                Part of the <span className="text-cyan-400 font-medium">Trust Layer</span> ecosystem
               </p>
             </div>
             

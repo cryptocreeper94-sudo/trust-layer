@@ -20,7 +20,7 @@ const ECONOMY_PILLARS = [
   {
     icon: Coins,
     title: "Signal (SIG)",
-    description: "Real cryptocurrency on DarkWave Trust Layer. Not play money - actual blockchain tokens with real-world value.",
+    description: "Real cryptocurrency on Trust Layer. Not play money - actual blockchain tokens with real-world value.",
     color: "from-amber-500 to-yellow-600",
     image: deepSpace
   },
@@ -129,7 +129,7 @@ export default function ChronoEconomy() {
               Real Currency. <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">Real Value.</span>
             </h1>
             <p className="text-xl text-white/60 max-w-2xl mx-auto">
-              SIG isn't play money. It's real cryptocurrency on DarkWave Trust Layer.
+              SIG isn't play money. It's real cryptocurrency on Trust Layer.
               Every transaction stamped, tracked, and auditable.
             </p>
           </motion.div>
@@ -278,7 +278,7 @@ export default function ChronoEconomy() {
               Commerce, Not Gambling
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto">
-              DarkWave Chronicles is a skill-based economy with complete transparency.
+              Chronicles is a skill-based economy with complete transparency.
             </p>
           </motion.div>
           

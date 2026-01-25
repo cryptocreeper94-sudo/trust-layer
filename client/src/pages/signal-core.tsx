@@ -24,7 +24,7 @@ export default function SignalCore() {
     {
       id: 1,
       title: "Community Ownership",
-      description: "DarkWave Trust Layer belongs to its community. No single entity, including founders, can claim exclusive ownership. The ecosystem exists for and is governed by its members.",
+      description: "Trust Layer belongs to its community. No single entity, including founders, can claim exclusive ownership. The ecosystem exists for and is governed by its members.",
       icon: Users,
       status: "immutable"
     },

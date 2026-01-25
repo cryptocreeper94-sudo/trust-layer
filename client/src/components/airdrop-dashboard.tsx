@@ -387,7 +387,7 @@ export function AirdropDashboard() {
         ) : (
           <div className="space-y-3">
             <p className="text-xs text-muted-foreground mb-2">
-              Enter your DarkWave Trust Layer wallet address to receive your airdrop at launch.
+              Enter your Trust Layer wallet address to receive your airdrop at launch.
             </p>
             <div className="flex gap-2">
               <Input

@@ -94,7 +94,7 @@ export function TrustCard({
       </defs>
       <rect width="400" height="250" rx="16" fill="url(#bg)"/>
       <rect x="1" y="1" width="398" height="248" rx="15" fill="none" stroke="url(#glow)" stroke-width="2" opacity="0.5"/>
-      <text x="20" y="35" font-family="system-ui, sans-serif" font-size="10" fill="#a855f7" text-transform="uppercase" letter-spacing="1">DarkWave Trust Layer</text>
+      <text x="20" y="35" font-family="system-ui, sans-serif" font-size="10" fill="#a855f7" text-transform="uppercase" letter-spacing="1">Trust Layer</text>
       <text x="20" y="50" font-family="system-ui, sans-serif" font-size="8" fill="#94a3b8">Verified Member</text>
       <text x="20" y="100" font-family="system-ui, sans-serif" font-size="18" font-weight="bold" fill="white">${displayName}</text>
       ${organizationName ? `<text x="20" y="120" font-family="system-ui, sans-serif" font-size="12" fill="#94a3b8">${organizationName}</text>` : ''}
@@ -112,8 +112,8 @@ export function TrustCard({
 
   const shareCard = async () => {
     const shareData = {
-      title: "My DarkWave Trust Card",
-      text: `I'm a verified member of the DarkWave Trust Layer! Trust Number: ${trustNumber}`,
+      title: "My Trust Layer Card",
+      text: `I'm a verified member of the Trust Layer! Trust Number: ${trustNumber}`,
       url: `${window.location.origin}/verify/${trustNumber}`,
     };
 
@@ -165,7 +165,7 @@ export function TrustCard({
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] uppercase tracking-wider text-purple-400 font-medium">
-                      DarkWave Trust Layer
+                      Trust Layer
                     </span>
                     <span className="px-1.5 py-0.5 text-[8px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded uppercase">
                       Beta
@@ -282,7 +282,7 @@ export function TrustCard({
 
       <div className="max-w-md mx-auto mt-4 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
         <p className="text-[10px] text-amber-400/80 text-center leading-relaxed">
-          <strong>BETA:</strong> This Trust Card is part of the DarkWave Trust Layer beta program. 
+          <strong>BETA:</strong> This Trust Card is part of the Trust Layer beta program. 
           Do your own research (DYOR). Participation is at your own risk. 
           Features and functionality may change without notice.
         </p>

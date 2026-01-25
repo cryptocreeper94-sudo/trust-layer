@@ -220,7 +220,7 @@ export default function ChroniclesLogin() {
                 <Gamepad2 className="w-10 h-10 text-white" />
               </motion.div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-                DarkWave Chronicles
+                Chronicles
               </h1>
               <p className="text-white/60 mt-2">Season Zero Beta</p>
               <div className="flex items-center justify-center gap-2 mt-3">

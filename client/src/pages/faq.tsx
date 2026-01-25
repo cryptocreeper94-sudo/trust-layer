@@ -31,8 +31,8 @@ const FAQ_CATEGORIES: FAQCategory[] = [
     color: "#06b6d4",
     items: [
       {
-        question: "What is DarkWave Trust Layer?",
-        answer: "DarkWave Trust Layer is a purpose-built Layer 1 trust infrastructure designed for high-performance gaming, digital asset ownership, and decentralized applications. Unlike general-purpose chains, DarkWave is optimized for real-time interactive experiences with 400ms block times and 200K+ TPS."
+        question: "What is Trust Layer?",
+        answer: "Trust Layer is a purpose-built Layer 1 trust infrastructure designed for high-performance gaming, digital asset ownership, and decentralized applications. Unlike general-purpose chains, DarkWave is optimized for real-time interactive experiences with 400ms block times and 200K+ TPS."
       },
       {
         question: "Who is behind DarkWave?",
@@ -40,11 +40,11 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       },
       {
         question: "When does the token launch?",
-        answer: "Signal launch is approaching. DarkWave Chronicles is a community-driven project — the timeline depends on community involvement and support. Join us to help make it happen!"
+        answer: "Signal launch is approaching. Chronicles is a community-driven project — the timeline depends on community involvement and support. Join us to help make it happen!"
       },
       {
-        question: "What makes DarkWave Trust Layer different from other blockchains?",
-        answer: "DarkWave Trust Layer is purpose-built for gaming and interactive experiences. Key differentiators include: Proof-of-Authority consensus for speed and efficiency, 400ms block times, native gaming infrastructure, integrated DeFi services, and the DarkWave Chronicles flagship game that demonstrates the platform's capabilities."
+        question: "What makes Trust Layer different from other blockchains?",
+        answer: "Trust Layer is purpose-built for gaming and interactive experiences. Key differentiators include: Proof-of-Authority consensus for speed and efficiency, 400ms block times, native gaming infrastructure, integrated DeFi services, and the Chronicles flagship game that demonstrates the platform's capabilities."
       }
     ]
   },
@@ -72,7 +72,7 @@ const FAQ_CATEGORIES: FAQCategory[] = [
       },
       {
         question: "What can I use Signal for?",
-        answer: "Signal is used for: transaction fees on the network, staking rewards, governance voting, in-game purchases in DarkWave Chronicles, DEX trading and liquidity provision, and NFT marketplace transactions."
+        answer: "Signal is used for: transaction fees on the network, staking rewards, governance voting, in-game purchases in Chronicles, DEX trading and liquidity provision, and NFT marketplace transactions."
       }
     ]
   },
@@ -102,12 +102,12 @@ const FAQ_CATEGORIES: FAQCategory[] = [
   },
   {
     id: "chronicles",
-    title: "DarkWave Chronicles",
+    title: "Chronicles",
     icon: Gamepad2,
     color: "#f59e0b",
     items: [
       {
-        question: "What is DarkWave Chronicles?",
+        question: "What is Chronicles?",
         answer: "Chronicles is NOT a traditional RPG - it's a revolutionary parallel life social experiment where you experience yourself across 70+ historical eras. There are no levels, no XP, no forced progression. Your choices reveal who you truly are."
       },
       {
@@ -254,7 +254,7 @@ export default function FAQ() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400">Frequently Asked Questions</span>
             </h1>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Everything you need to know about DarkWave Trust Layer, Signal, and the ecosystem.
+              Everything you need to know about Trust Layer, Signal, and the ecosystem.
             </p>
           </motion.div>
 

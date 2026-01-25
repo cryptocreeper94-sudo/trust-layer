@@ -16,7 +16,7 @@ const DISCORD_TELEGRAM_MESSAGES = {
     {
       id: "ev1",
       title: "Welcome Message",
-      message: `🛡️ **Welcome to DarkWave Trust Layer**
+      message: `🛡️ **Welcome to Trust Layer**
 
 This isn't just another crypto project — it's YOUR Trust Layer.
 
@@ -66,7 +66,7 @@ Real token. Real utility. Real value. 💎`,
     {
       id: "ev3",
       title: "Trust Layer for Business",
-      message: `🏢 **DarkWave Trust Layer for Business**
+      message: `🏢 **Trust Layer for Business**
 
 B2B without the BS.
 

@@ -226,10 +226,10 @@ export function shortenAddress(address: string, chars = 4): string {
   return `${address.slice(0, chars + 2)}...${address.slice(-chars)}`;
 }
 
-// DarkWave Trust Layer network configuration for MetaMask
+// Trust Layer network configuration for MetaMask
 export const DARKWAVE_CHAIN_CONFIG = {
   chainId: '0x2105', // 8453 in hex
-  chainName: 'DarkWave Trust Layer',
+  chainName: 'Trust Layer',
   nativeCurrency: {
     name: 'DarkWave',
     symbol: 'SIG',

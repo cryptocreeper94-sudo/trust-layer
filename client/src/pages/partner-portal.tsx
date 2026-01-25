@@ -23,7 +23,7 @@ import blockchainBg from "@assets/generated_images/futuristic_blockchain_network
 import orbitLogo from "@assets/generated_images/futuristic_abstract_geometric_logo_symbol_for_orbit.png";
 
 const TECH_STACK = [
-  { name: "Blockchain Layer", tech: "DarkWave Trust Layer (PoA)", status: "Live", icon: Database },
+  { name: "Blockchain Layer", tech: "Trust Layer (PoA)", status: "Live", icon: Database },
   { name: "Frontend", tech: "React 18 + TypeScript + Vite", status: "Production", icon: Code },
   { name: "Backend", tech: "Node.js + Express + PostgreSQL", status: "Production", icon: Server },
   { name: "AI Stack", tech: "GPT-4o + Guardian Verified Execution", status: "BETA v0.1 Live", icon: Brain },
@@ -98,7 +98,7 @@ const VISION_SLIDES = [
   {
     title: "Production-Ready Infrastructure",
     subtitle: "200K+ TPS blockchain powering the ecosystem",
-    description: "DarkWave Trust Layer is live and operational. We need world-class partners for graphics, AI, and narrative systems.",
+    description: "Trust Layer is live and operational. We need world-class partners for graphics, AI, and narrative systems.",
     gradient: "from-amber-500 to-red-600",
     icon: Zap,
   },
@@ -910,7 +910,7 @@ function PartnerContent() {
               
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-black mb-6">
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  DarkWave Chronicles
+                  Chronicles
                 </span>
               </h1>
               
@@ -969,7 +969,7 @@ function PartnerContent() {
                 <div className="relative z-10 p-8">
                   <h3 className="text-2xl font-bold text-white mb-4">The Concept</h3>
                   <p className="text-white/80 leading-relaxed mb-4">
-                    <span className="text-cyan-400 font-semibold">DarkWave Chronicles</span> is not another MMO or life simulator. 
+                    <span className="text-cyan-400 font-semibold">Chronicles</span> is not another MMO or life simulator. 
                     It's an unprecedented adventure platform where players experience history as their <em>parallel self</em>—not 
                     an avatar, but an extension of who they are.
                   </p>
@@ -1346,7 +1346,7 @@ function PartnerContent() {
                 <span className="text-emerald-400 font-semibold">Production Status: Live</span>
               </div>
               <p className="text-white/70 text-sm">
-                Our DarkWave Trust Layer is fully operational with Proof-of-Authority consensus. 
+                Our Trust Layer is fully operational with Proof-of-Authority consensus. 
                 This isn't a testnet or simulation - it's the same infrastructure that will power Chronicles.
               </p>
             </motion.div>

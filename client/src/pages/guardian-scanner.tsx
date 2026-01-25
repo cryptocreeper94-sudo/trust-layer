@@ -633,7 +633,7 @@ export default function GuardianScanner() {
       {/* Footer */}
       <div className="bg-[#0a0a0a] border-t border-white/5 px-2 py-1.5 text-center">
         <p className="text-[9px] text-white/30">
-          Guardian Scanner • AI-powered risk analysis • Not financial advice • <span className="text-cyan-400/50">DarkWave Trust Layer</span>
+          Guardian Scanner • AI-powered risk analysis • Not financial advice • <span className="text-cyan-400/50">Trust Layer</span>
         </p>
       </div>
     </div>

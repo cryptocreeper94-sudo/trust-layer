@@ -324,7 +324,7 @@ export default function Feedback() {
                   </Badge>
                   <h3 className="font-bold text-lg mb-2">Chronicles is in Beta</h3>
                   <p className="text-white/60 text-sm leading-relaxed">
-                    We're actively developing DarkWave Chronicles and your feedback is invaluable. 
+                    We're actively developing Chronicles and your feedback is invaluable. 
                     Every bug report and suggestion helps us build a better experience. 
                     Thank you for being part of this journey!
                   </p>

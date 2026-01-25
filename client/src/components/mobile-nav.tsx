@@ -273,7 +273,7 @@ function GamesComingSoonModal({ onClose }: { onClose: () => void }) {
             marginBottom: '8px',
             fontFamily: 'Space Grotesk, sans-serif'
           }}>
-            DarkWave Arcade
+            The Arcade
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '14px' }}>
             Classic & Casino Games Coming Soon

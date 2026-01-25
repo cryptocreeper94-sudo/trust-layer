@@ -141,8 +141,8 @@ export function SocialShare({ title, text, url = window.location.href, hashtags 
 export function ShareTransaction({ hash, type, amount, token }: { hash: string; type: string; amount: string; token: string }) {
   return (
     <SocialShare
-      title={`DarkWave ${type} Transaction`}
-      text={`I just ${type.toLowerCase()}ed ${amount} ${token} on DarkWave Trust Layer! Check it out:`}
+      title={`Trust Layer ${type} Transaction`}
+      text={`I just ${type.toLowerCase()}ed ${amount} ${token} on Trust Layer! Check it out:`}
       url={`${window.location.origin}/explorer?tx=${hash}`}
       hashtags={["DarkWave", "SIG", "Crypto", type]}
     />
@@ -152,8 +152,8 @@ export function ShareTransaction({ hash, type, amount, token }: { hash: string; 
 export function ShareNFT({ name, collection }: { name: string; collection: string }) {
   return (
     <SocialShare
-      title={`${name} - DarkWave NFT`}
-      text={`Check out this amazing NFT "${name}" from the ${collection} collection on DarkWave!`}
+      title={`${name} - Trust Layer NFT`}
+      text={`Check out this amazing NFT "${name}" from the ${collection} collection on Trust Layer!`}
       hashtags={["DarkWave", "NFT", "DigitalArt"]}
     />
   );
@@ -163,7 +163,7 @@ export function ShareAchievement({ title, description }: { title: string; descri
   return (
     <SocialShare
       title={`Achievement Unlocked: ${title}`}
-      text={`I just earned the "${title}" achievement on DarkWave! ${description}`}
+      text={`I just earned the "${title}" achievement on Trust Layer! ${description}`}
       hashtags={["DarkWave", "Achievement", "Crypto"]}
     />
   );

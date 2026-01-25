@@ -328,7 +328,7 @@ export default function MyHub() {
   </defs>
   <rect width="400" height="250" rx="16" fill="url(#bg)"/>
   <rect x="0" y="0" width="400" height="4" fill="url(#accent)"/>
-  <text x="24" y="40" font-family="system-ui, sans-serif" font-size="18" font-weight="bold" fill="#22d3ee">DarkWave Trust Layer</text>
+  <text x="24" y="40" font-family="system-ui, sans-serif" font-size="18" font-weight="bold" fill="#22d3ee">Trust Layer</text>
   <text x="24" y="70" font-family="system-ui, sans-serif" font-size="12" fill="#94a3b8">VERIFIED MEMBER</text>
   <text x="24" y="105" font-family="system-ui, sans-serif" font-size="32" font-weight="bold" fill="white">#${memberData.memberNumber}</text>
   ${memberData.isEarlyAdopter ? '<text x="24" y="130" font-family="system-ui, sans-serif" font-size="11" fill="#fbbf24">★ Early Adopter</text>' : ''}
@@ -1156,7 +1156,7 @@ export default function MyHub() {
                   <Gamepad2 className="w-6 h-6 text-amber-400" />
                 </div>
                 <div>
-                  <h3 className="font-bold">DarkWave Chronicles</h3>
+                  <h3 className="font-bold">Chronicles</h3>
                   <p className="text-sm text-white/60">Your game status</p>
                 </div>
               </div>

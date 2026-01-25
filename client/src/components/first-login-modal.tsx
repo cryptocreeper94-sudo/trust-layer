@@ -89,7 +89,7 @@ export function FirstLoginModal() {
             <div className="text-center mb-6">
               <h2 className="text-2xl font-bold mb-2">
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  Welcome to DarkWave
+                  Welcome to Trust Layer
                 </span>
               </h2>
               <p className="text-gray-400 text-sm">

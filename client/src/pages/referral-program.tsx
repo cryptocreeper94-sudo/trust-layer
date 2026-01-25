@@ -105,7 +105,7 @@ export default function ReferralProgram() {
               </span>
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Bring people into the DarkWave Trust Layer ecosystem and earn Signal tokens. 
+              Bring people into the Trust Layer ecosystem and earn Signal tokens. 
               No limits, no caps - the more you bring, the more you earn.
             </p>
           </motion.div>

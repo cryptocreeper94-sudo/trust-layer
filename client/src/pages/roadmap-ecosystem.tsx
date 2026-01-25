@@ -65,7 +65,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
       { id: "e7", title: "DEX / Token Swap", description: "AMM-style trading for SIG/USDC/wETH/wSOL/USDT pairs", status: "completed", isRequired: true },
       { id: "e8", title: "NFT Marketplace", description: "Mint, buy, sell, and trade digital collectibles", status: "completed", isRequired: true },
       { id: "e9", title: "Liquid Staking (stSIG)", description: "12% APY with liquid staking tokens", status: "completed", isRequired: true },
-      { id: "e10", title: "Token Launchpad", description: "Launch new tokens on DarkWave Trust Layer", status: "completed", isRequired: true },
+      { id: "e10", title: "Token Launchpad", description: "Launch new tokens on Trust Layer", status: "completed", isRequired: true },
       { id: "e11", title: "Portfolio Dashboard", description: "Track holdings, staking, and transaction history", status: "completed", isRequired: true },
       { id: "e12", title: "DarkWave Studio IDE", description: "Monaco-based development environment with 70+ languages", status: "completed", isRequired: true },
       { id: "e13", title: "Cross-Chain Bridge", description: "Lock & mint for SIG ↔ wSIG on Ethereum and Solana", status: "completed", isRequired: true },
@@ -140,7 +140,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
       { id: "e23", title: "Chronicles 20+ Eras", description: "Expand from Medieval to 20+ historical eras (community-driven timeline)", status: "pending", isRequired: true },
       { id: "e24", title: "Exchange Listings", description: "CEX and DEX trading availability", status: "pending", isRequired: false },
       { id: "e25", title: "10 Eras Complete", description: "All verifiable historical eras fully playable (community-driven timeline)", status: "pending", isRequired: false },
-      { id: "e26", title: "DarkWave Games Portal", description: "darkwavegames.io gaming ecosystem launch", status: "pending", isRequired: true },
+      { id: "e26", title: "The Arcade Portal", description: "darkwavegames.io gaming ecosystem launch", status: "pending", isRequired: true },
     ],
   },
 ];
@@ -341,7 +341,7 @@ export default function RoadmapEcosystem() {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-6"
             >
               <Server className="w-4 h-4 text-cyan-400" />
-              <span className="text-cyan-300 text-sm font-medium">DarkWave Trust Layer</span>
+              <span className="text-cyan-300 text-sm font-medium">Trust Layer</span>
             </motion.div>
             
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
@@ -419,7 +419,7 @@ export default function RoadmapEcosystem() {
               <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/50" />
             </div>
             <div className="relative z-10 p-6">
-              <h3 className="text-lg font-semibold text-white mb-2">DarkWave Chronicles</h3>
+              <h3 className="text-lg font-semibold text-white mb-2">Chronicles</h3>
               <p className="text-gray-300 text-sm">View the game development roadmap</p>
             </div>
           </Link>

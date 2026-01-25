@@ -142,7 +142,7 @@ export default function Faucet() {
               </h1>
             </div>
             <p className="text-xs text-muted-foreground">
-              Get free test SIG to build and experiment on DarkWave Trust Layer
+              Get free test SIG to build and experiment on Trust Layer
             </p>
           </motion.div>
 

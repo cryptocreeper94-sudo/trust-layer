@@ -86,7 +86,7 @@ function PinEntry({ onSuccess }: { onSuccess: () => void }) {
           </div>
           <Badge className="mb-3 bg-emerald-500/20 text-emerald-400 border-emerald-500/40">AUTHORIZED PERSONNEL ONLY</Badge>
           <h1 className="text-2xl font-bold text-white mb-2">Operations Center</h1>
-          <p className="text-gray-400 text-sm">DarkWave Trust Layer • Team Access</p>
+          <p className="text-gray-400 text-sm">Trust Layer • Team Access</p>
         </div>
 
         <div className="space-y-4">

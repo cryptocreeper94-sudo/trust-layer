@@ -39,7 +39,7 @@ export default function TrustDocumentOps() {
       
       toast({
         title: "Document Acknowledged",
-        description: "This agreement has been recorded on the DarkWave Trust Layer.",
+        description: "This agreement has been recorded on the Trust Layer.",
       });
     } catch (error) {
       toast({
@@ -66,7 +66,7 @@ export default function TrustDocumentOps() {
               <div className="relative">
                 <img 
                   src="/shield-reference.jpg" 
-                  alt="DarkWave Trust Layer Official Seal" 
+                  alt="Trust Layer Official Seal" 
                   className="w-32 h-32 mx-auto object-contain drop-shadow-[0_0_30px_rgba(34,211,238,0.4)]"
                 />
                 <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 rounded-full">
@@ -76,7 +76,7 @@ export default function TrustDocumentOps() {
             </div>
             
             <h1 className="font-display text-3xl md:text-4xl font-bold text-white mb-2">
-              DarkWave Trust Layer
+              Trust Layer
             </h1>
             <p className="text-cyan-400 font-medium">Trust Document</p>
           </div>
@@ -100,7 +100,7 @@ export default function TrustDocumentOps() {
               <div className="p-4 rounded-xl bg-white/5 border border-white/10">
                 <p className="text-xs text-muted-foreground mb-1">PARTY A (Founder)</p>
                 <p className="font-semibold text-white">DarkWave Studios LLC</p>
-                <p className="text-sm text-muted-foreground">DarkWave Trust Layer</p>
+                <p className="text-sm text-muted-foreground">Trust Layer</p>
               </div>
               <div className="p-4 rounded-xl bg-white/5 border border-white/10">
                 <p className="text-xs text-muted-foreground mb-1">PARTY B (Operations Lead)</p>
@@ -118,7 +118,7 @@ export default function TrustDocumentOps() {
                 </h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">
                   Party A hereby designates Party B as the <span className="text-white font-medium">Operations Lead</span> of 
-                  DarkWave Trust Layer, with appointment to the <span className="text-cyan-400">Operations Seat</span> on the 
+                  Trust Layer, with appointment to the <span className="text-cyan-400">Operations Seat</span> on the 
                   Governance Council upon the network reaching 1,000 verified members.
                 </p>
               </div>
@@ -171,7 +171,7 @@ export default function TrustDocumentOps() {
                 <ul className="text-muted-foreground text-sm space-y-2">
                   <li className="flex items-start gap-2">
                     <span className="text-amber-400 mt-1">•</span>
-                    <span><span className="text-white">Active & Consistent Contribution</span> - Regular, meaningful work toward DarkWave Trust Layer development and operations</span>
+                    <span><span className="text-white">Active & Consistent Contribution</span> - Regular, meaningful work toward Trust Layer development and operations</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-amber-400 mt-1">•</span>
@@ -228,7 +228,7 @@ export default function TrustDocumentOps() {
                 </h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">
                   Upon acknowledgment, this document will be cryptographically hashed and recorded on the 
-                  DarkWave Trust Layer. The document hash can be verified at any time at <span className="text-cyan-400 font-mono">/verify</span>.
+                  Trust Layer. The document hash can be verified at any time at <span className="text-cyan-400 font-mono">/verify</span>.
                 </p>
               </div>
             </div>
@@ -274,7 +274,7 @@ export default function TrustDocumentOps() {
                   </div>
                   
                   <p className="text-sm text-muted-foreground">
-                    This agreement has been recorded on the DarkWave Trust Layer and can be verified at{" "}
+                    This agreement has been recorded on the Trust Layer and can be verified at{" "}
                     <a href="/verify" className="text-cyan-400 hover:underline">/verify</a>
                   </p>
 
@@ -293,7 +293,7 @@ export default function TrustDocumentOps() {
 
           {/* Footer Note */}
           <p className="text-center text-xs text-muted-foreground mt-8">
-            This is Trust Document #{DOCUMENT_ID}, the first official trust agreement issued by DarkWave Trust Layer.
+            This is Trust Document #{DOCUMENT_ID}, the first official trust agreement issued by Trust Layer.
           </p>
         </motion.div>
       </main>

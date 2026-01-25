@@ -295,7 +295,7 @@ export default function ChronoGameplay() {
             <div className="p-6 rounded-2xl border border-green-500/20 bg-green-500/5">
               <h3 className="text-lg font-bold text-green-400 mb-4 flex items-center gap-2">
                 <Check className="w-5 h-5" />
-                DarkWave Chronicles
+                Chronicles
               </h3>
               <ul className="space-y-3">
                 {THIS_GAME.map((item, i) => (

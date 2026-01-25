@@ -58,7 +58,7 @@ export function AIAssistant() {
     {
       id: "welcome",
       role: "assistant",
-      content: "Hey! I'm your DarkWave assistant. Ask me anything about the ecosystem, check your portfolio, or get help navigating. You can type or use voice!",
+      content: "Hey! I'm your Trust Layer assistant. Ask me anything about the ecosystem, check your portfolio, or get help navigating. You can type or use voice!",
       timestamp: new Date(),
     },
   ]);

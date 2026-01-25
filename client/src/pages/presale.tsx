@@ -72,7 +72,7 @@ const ECOSYSTEM_FEATURES = [
     icon: Zap,
     image: blockchainBg,
     gradient: "from-cyan-500/20 to-blue-600/20",
-    fullDescription: "DarkWave Trust Layer is a high-performance Layer 1 trust infrastructure built for speed and accountability. With 400ms block times and over 200,000 transactions per second, it's designed for real-world applications that demand instant finality and verified coordination.",
+    fullDescription: "Trust Layer is a high-performance Layer 1 trust infrastructure built for speed and accountability. With 400ms block times and over 200,000 transactions per second, it's designed for real-world applications that demand instant finality and verified coordination.",
     features: ["Ultra-fast 400ms block confirmation", "200,000+ TPS capacity", "Proof-of-Authority consensus for reliability", "EVM-compatible smart contracts", "Low transaction fees"],
   },
   {
@@ -85,12 +85,12 @@ const ECOSYSTEM_FEATURES = [
     features: ["Decentralized Exchange (DEX) with low slippage", "Flexible staking with competitive APY", "Liquidity pool participation rewards", "Yield farming strategies", "Portfolio dashboard and analytics"],
   },
   {
-    title: "DarkWave Chronicles",
+    title: "Chronicles",
     description: "Unprecedented adventure platform where YOU are the hero",
     icon: Sparkles,
     image: fantasyWorld,
     gradient: "from-purple-500/20 to-pink-600/20",
-    fullDescription: "DarkWave Chronicles is a revolutionary parallel life experience where your choices shape history. Explore different eras, build relationships, and discover who you could become in another time.",
+    fullDescription: "Chronicles is a revolutionary parallel life experience where your choices shape history. Explore different eras, build relationships, and discover who you could become in another time.",
     features: ["AI-driven narrative that adapts to you", "Multiple historical eras to explore", "Persistent world that remembers your choices", "Community-driven content creation", "Earn rewards through gameplay"],
   },
   {
@@ -109,7 +109,7 @@ const ECOSYSTEM_FEATURES = [
     image: nftGallery,
     gradient: "from-pink-500/20 to-rose-600/20",
     fullDescription: "Create, discover, and trade unique digital collectibles on our NFT marketplace. From art to in-game items, the DarkWave NFT ecosystem connects creators with collectors.",
-    features: ["Mint NFTs with low gas fees", "Royalty support for creators", "Stake NFTs for rewards", "Integration with DarkWave Chronicles", "Rarity analysis tools"],
+    features: ["Mint NFTs with low gas fees", "Royalty support for creators", "Stake NFTs for rewards", "Integration with Chronicles", "Rarity analysis tools"],
   },
   {
     title: "Governance DAO",
@@ -682,7 +682,7 @@ const TIER_DETAILS: Record<string, { benefits: string[]; description: string }> 
     benefits: [
       "50% bonus Signal on your purchase",
       "Exclusive Genesis NFT badge (tradeable)",
-      "Priority access to DarkWave Chronicles beta",
+      "Priority access to Chronicles beta",
       "Direct Discord channel with founding team",
       "First access to staking pools with boosted APY",
       "Governance voting power multiplier (2x)",

@@ -216,7 +216,7 @@ export default function Members() {
                 <div className="flex-1 text-center md:text-left">
                   <h3 className="text-lg font-bold mb-1">Why Trust Circle?</h3>
                   <p className="text-white/60 text-sm">
-                    All members are verified through the DarkWave Trust Layer. Find local businesses and individuals you can trust for transactions, collaborations, and partnerships.
+                    All members are verified through the Trust Layer. Find local businesses and individuals you can trust for transactions, collaborations, and partnerships.
                   </p>
                 </div>
                 <div className="flex gap-3">

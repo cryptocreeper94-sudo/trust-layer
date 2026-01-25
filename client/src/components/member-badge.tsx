@@ -112,7 +112,7 @@ export function MemberBadge({ userId }: { userId?: string }) {
   </defs>
   <rect width="400" height="250" rx="16" fill="url(#bg)"/>
   <rect x="0" y="0" width="400" height="4" fill="url(#accent)"/>
-  <text x="24" y="40" font-family="system-ui, sans-serif" font-size="18" font-weight="bold" fill="#22d3ee">DarkWave Trust Layer</text>
+  <text x="24" y="40" font-family="system-ui, sans-serif" font-size="18" font-weight="bold" fill="#22d3ee">Trust Layer</text>
   <text x="24" y="70" font-family="system-ui, sans-serif" font-size="12" fill="#94a3b8">VERIFIED MEMBER</text>
   <text x="24" y="105" font-family="system-ui, sans-serif" font-size="32" font-weight="bold" fill="white">#${memberNumber}</text>
   ${isEarlyAdopter ? '<text x="24" y="130" font-family="system-ui, sans-serif" font-size="11" fill="#fbbf24">★ Early Adopter</text>' : ''}

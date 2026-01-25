@@ -11,12 +11,12 @@ export default function VirtualCurrencyTerms() {
     {
       icon: Coins,
       title: "1. Virtual Currency Definition",
-      content: `"Shells" are a virtual currency used within the DarkWave ecosystem, including DarkWave Chronicles, ChronoChat, and related applications. Shells have no intrinsic value outside the DarkWave platform and are not legal tender, securities, or commodities. Shells are licensed, not sold, and remain the property of DarkWave Studios. Your purchase grants you a limited, non-transferable license to use Shells within our platform.`
+      content: `"Shells" are a virtual currency used within the DarkWave ecosystem, including Chronicles, ChronoChat, and related applications. Shells have no intrinsic value outside the DarkWave platform and are not legal tender, securities, or commodities. Shells are licensed, not sold, and remain the property of DarkWave Studios. Your purchase grants you a limited, non-transferable license to use Shells within our platform.`
     },
     {
       icon: ArrowRightLeft,
       title: "2. Signal (SIG) Conversion",
-      content: `At mainnet launch, Signal (SIG) will launch as the native cryptocurrency of DarkWave Trust Layer. All Shells in your account will be eligible for conversion to SIG at a rate of 100 Shells = 1 SIG. This conversion rate is fixed and guaranteed for all Shells purchased before launch. After conversion, Shells will no longer be available as SIG will serve as the primary currency. You acknowledge that SIG is a cryptocurrency subject to market volatility, and its value may fluctuate significantly after launch.`
+      content: `At mainnet launch, Signal (SIG) will launch as the native cryptocurrency of Trust Layer. All Shells in your account will be eligible for conversion to SIG at a rate of 100 Shells = 1 SIG. This conversion rate is fixed and guaranteed for all Shells purchased before launch. After conversion, Shells will no longer be available as SIG will serve as the primary currency. You acknowledge that SIG is a cryptocurrency subject to market volatility, and its value may fluctuate significantly after launch.`
     },
     {
       icon: AlertTriangle,

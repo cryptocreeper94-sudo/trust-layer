@@ -42,12 +42,12 @@ const sections: Section[] = [
     id: "trust-layer",
     title: "Understanding the Trust Layer",
     icon: <Shield className="w-5 h-5" />,
-    description: "What DarkWave Trust Layer is and why it matters",
+    description: "What Trust Layer is and why it matters",
     topics: [
       {
         id: "what-is-trust-layer",
         title: "What is the Trust Layer?",
-        content: "The DarkWave Trust Layer is infrastructure where accountability is built into the foundation. Unlike traditional blockchains that compete on speed or fees, we provide verified identity, transparent audit trails, and participant accountability. Think of it as the foundation for business where trust isn't optional - it's the default. Every participant chooses to be verified. Every action carries a timestamp. Every commitment becomes a record. This isn't surveillance - it's mutual assurance.",
+        content: "The Trust Layer is infrastructure where accountability is built into the foundation. Unlike traditional blockchains that compete on speed or fees, we provide verified identity, transparent audit trails, and participant accountability. Think of it as the foundation for business where trust isn't optional - it's the default. Every participant chooses to be verified. Every action carries a timestamp. Every commitment becomes a record. This isn't surveillance - it's mutual assurance.",
         links: [{ label: "Read the Vision", href: "/vision" }]
       },
       {
@@ -156,7 +156,7 @@ const sections: Section[] = [
       {
         id: "what-is-bridge",
         title: "What is a Bridge?",
-        content: "A bridge allows you to move assets between different blockchain networks. If you have crypto on Ethereum or Solana, you can bridge it to the DarkWave Trust Layer. The bridge locks your assets on one chain and issues wrapped versions on the other. This lets you participate in the Trust Layer ecosystem while maintaining positions on other networks.",
+        content: "A bridge allows you to move assets between different blockchain networks. If you have crypto on Ethereum or Solana, you can bridge it to the Trust Layer. The bridge locks your assets on one chain and issues wrapped versions on the other. This lets you participate in the Trust Layer ecosystem while maintaining positions on other networks.",
       },
       {
         id: "how-bridge-works",
@@ -400,7 +400,7 @@ export default function LearnPage() {
           </h1>
           
           <p className="text-lg text-slate-300 max-w-2xl mx-auto">
-            Everything you need to know about DarkWave Trust Layer, from basics to building. 
+            Everything you need to know about Trust Layer, from basics to building. 
             Click any section to explore.
           </p>
         </motion.div>

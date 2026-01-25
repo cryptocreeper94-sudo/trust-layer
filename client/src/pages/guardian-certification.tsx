@@ -146,9 +146,9 @@ const WHY_GUARDIAN = [
 ];
 
 const CERTIFIED_PROJECTS = [
-  { name: "DarkWave Trust Layer", status: "Certified", score: 78, date: "Dec 2024" },
+  { name: "Trust Layer", status: "Certified", score: 78, date: "Dec 2024" },
   { name: "ChronoChat Platform", status: "In Progress", score: null, date: "Coming Soon" },
-  { name: "DarkWave Chronicles", status: "Community-Driven", score: null, date: "TBD" }
+  { name: "Chronicles", status: "Community-Driven", score: null, date: "TBD" }
 ];
 
 const TRUST_CENTER_DOCS = [
@@ -173,7 +173,7 @@ const TRUST_CENTER_DOCS = [
   {
     icon: Shield,
     title: "DWSC Self-Audit Report",
-    description: "Full transparency report for DarkWave Trust Layer (78/100)",
+    description: "Full transparency report for Trust Layer (78/100)",
     type: "PDF",
     size: "3.2 MB",
     available: true,

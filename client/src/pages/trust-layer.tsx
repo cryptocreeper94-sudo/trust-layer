@@ -190,7 +190,7 @@ export default function TrustLayerPage() {
             
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-                DarkWave Trust Layer
+                Trust Layer
               </span>
             </h1>
             
@@ -529,7 +529,7 @@ export default function TrustLayerPage() {
                 </h2>
                 <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
                   Join thousands of businesses and individuals who are building the future 
-                  of accountable commerce on the DarkWave Trust Layer.
+                  of accountable commerce on the Trust Layer.
                 </p>
                 <div className="flex flex-wrap justify-center gap-4">
                   <Link href={isAuthenticated ? "/dashboard" : "/?login=true"}>
@@ -546,7 +546,7 @@ export default function TrustLayerPage() {
                 </div>
                 <div className="mt-8 p-4 rounded-lg bg-amber-500/10 border border-amber-500/20 max-w-2xl mx-auto">
                   <p className="text-xs text-amber-400/80 text-center leading-relaxed">
-                    <strong>BETA DISCLAIMER:</strong> The DarkWave Trust Layer is currently in beta. 
+                    <strong>BETA DISCLAIMER:</strong> The Trust Layer is currently in beta. 
                     All features and functionality are subject to change without notice. 
                     Do your own research (DYOR). Participation is at your own risk. 
                     Signal (SIG) is a Trust Network Access Token, not a speculative investment.

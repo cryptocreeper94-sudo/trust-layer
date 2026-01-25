@@ -76,7 +76,7 @@ const investmentThesis = [
   },
   {
     title: "Chronicles: The Parallel Self Game",
-    description: "DarkWave Chronicles (BETA v0.1 live now) - You navigate 10 verifiable historical eras as YOUR parallel self. AI NPCs, Chronicle Proofs, voice cloning - infrastructure for immersive entertainment.",
+    description: "Chronicles (BETA v0.1 live now) - You navigate 10 verifiable historical eras as YOUR parallel self. AI NPCs, Chronicle Proofs, voice cloning - infrastructure for immersive entertainment.",
     icon: Gamepad2,
     gradient: "from-purple-500 to-pink-600"
   },
@@ -185,7 +185,7 @@ export default function InvestorPitch() {
               
               <h1 className="text-4xl md:text-5xl lg:text-7xl font-display font-bold mb-6 leading-tight">
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(6,182,212,0.5)]">
-                  DarkWave Trust Layer
+                  Trust Layer
                 </span>
                 <br />
                 <span className="text-white text-3xl md:text-4xl lg:text-5xl">Investment Overview</span>
@@ -651,7 +651,7 @@ export default function InvestorPitch() {
                     <h3 className="text-xl font-bold text-white mb-2">Entertainment Focus</h3>
                     <p className="text-white/50 text-sm">
                       Built for gaming, social, and entertainment — a $200B+ market. 
-                      <span className="text-purple-400 font-medium"> DarkWave Chronicles launching at TGE.</span>
+                      <span className="text-purple-400 font-medium"> Chronicles launching at TGE.</span>
                     </p>
                   </div>
                 </GlassCard>

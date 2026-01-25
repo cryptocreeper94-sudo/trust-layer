@@ -77,7 +77,7 @@ export default function GenesisBlock() {
               DarkWave Genesis Block
             </h1>
             <p className="text-sm text-white/60 max-w-xl mx-auto">
-              The founding block of DarkWave Trust Layer. This immutable record marks the birth of our high-performance blockchain ecosystem.
+              The founding block of Trust Layer. This immutable record marks the birth of our high-performance blockchain ecosystem.
             </p>
           </motion.div>
 

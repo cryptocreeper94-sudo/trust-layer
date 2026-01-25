@@ -123,7 +123,7 @@ export default function SyndicateInvite() {
             </p>
             <Link href="/chronicles">
               <Button className="bg-gradient-to-r from-cyan-500 to-purple-500" data-testid="button-go-chronicles">
-                Explore DarkWave Chronicles
+                Explore Chronicles
               </Button>
             </Link>
           </Card>

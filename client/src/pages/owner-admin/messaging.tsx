@@ -25,7 +25,7 @@ const CORE_SIGNAL_MESSAGES: MessageItem[] = [
     id: "core-1",
     category: "Philosophy",
     title: "The Core Transforms",
-    content: "Chaos in. Clarity out. The Signal cuts through the noise.\n\nDarkWave Trust Layer - YOUR blockchain. YOUR voice. YOUR signal.",
+    content: "Chaos in. Clarity out. The Signal cuts through the noise.\n\nTrust Layer - YOUR blockchain. YOUR voice. YOUR signal.",
     hashtags: ["#DarkWave", "#Signal", "#TrustLayer", "#Web3"],
   },
   {
@@ -53,7 +53,7 @@ const CORE_SIGNAL_MESSAGES: MessageItem[] = [
     id: "core-5",
     category: "Trust",
     title: "Disrupting the Noise",
-    content: "Crypto promised revolution. Delivered chaos.\n\nWe're not adding to the noise. We're cutting through it.\n\nDarkWave Trust Layer - where trust is verified, not assumed.",
+    content: "Crypto promised revolution. Delivered chaos.\n\nWe're not adding to the noise. We're cutting through it.\n\nTrust Layer - where trust is verified, not assumed.",
     hashtags: ["#DarkWave", "#TrustLayer", "#CryptoRevolution", "#Signal"],
   },
   {

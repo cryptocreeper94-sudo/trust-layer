@@ -301,7 +301,7 @@ export default function RoadmapChronicles() {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/30 mb-6"
             >
               <Sparkles className="w-4 h-4 text-purple-400" />
-              <span className="text-purple-300 text-sm font-medium">DarkWave Chronicles</span>
+              <span className="text-purple-300 text-sm font-medium">Chronicles</span>
             </motion.div>
             
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
@@ -412,7 +412,7 @@ export default function RoadmapChronicles() {
             <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/50" />
           </div>
           <div className="relative z-10 p-6">
-            <h3 className="text-lg font-semibold text-white mb-2">DarkWave Trust Layer</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">Trust Layer</h3>
             <p className="text-gray-300 text-sm">View the blockchain ecosystem roadmap</p>
           </div>
         </Link>

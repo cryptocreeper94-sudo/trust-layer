@@ -197,7 +197,7 @@ export default function Token() {
                 </div>
                 <h3 className="text-sm font-bold text-white mb-2">Gas Fees</h3>
                 <p className="text-[11px] text-white/70 leading-relaxed">
-                  Pay for transactions on DarkWave Trust Layer with Signal. Micro-fees ensure speed without breaking the bank.
+                  Pay for transactions on Trust Layer with Signal. Micro-fees ensure speed without breaking the bank.
                 </p>
               </div>
             </motion.div>

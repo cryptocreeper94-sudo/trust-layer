@@ -92,7 +92,7 @@ PREDICTION TRACKING SERVICE
 • Records full indicator snapshots: RSI, MACD, EMA (9/21/50/200), SMA, Bollinger Bands
 • Multiple time horizons: 1h, 4h, 24h, 7d outcome tracking
 • Accuracy statistics calculated per ticker and globally
-• Immutable proof via DarkWave Trust Layer stamping
+• Immutable proof via Trust Layer stamping
 
 SAFETY ENGINE SERVICE
 • Full Solana token safety analysis

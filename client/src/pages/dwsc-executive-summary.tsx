@@ -116,7 +116,7 @@ export default function DWSCExecutiveSummary() {
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-4">
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  DarkWave Trust Layer
+                  Trust Layer
                 </span>
               </h1>
               <p className="text-xl md:text-2xl text-white/80 mb-2">Next-Generation Layer 1 Blockchain</p>
@@ -134,7 +134,7 @@ export default function DWSCExecutiveSummary() {
                 Executive Overview
               </h2>
               <p className="text-white/80 leading-relaxed mb-4">
-                <span className="text-cyan-400 font-semibold">DarkWave Trust Layer</span> is a purpose-built 
+                <span className="text-cyan-400 font-semibold">Trust Layer</span> is a purpose-built 
                 Layer 1 blockchain ecosystem designed for high-performance gaming, digital asset ownership, and 
                 decentralized applications. Unlike general-purpose chains, DarkWave is optimized from the ground up 
                 for real-time interactive experiences and seamless digital commerce.
@@ -142,7 +142,7 @@ export default function DWSCExecutiveSummary() {
               <p className="text-white/80 leading-relaxed mb-4">
                 The ecosystem comprises three pillars: the <span className="text-purple-400 font-semibold">DarkWave blockchain infrastructure</span>, 
                 the <span className="text-pink-400 font-semibold">DarkWave Portal</span> for ecosystem access and DeFi services, 
-                and <span className="text-amber-400 font-semibold">DarkWave Chronicles</span> - an unprecedented adventure platform 
+                and <span className="text-amber-400 font-semibold">Chronicles</span> - an unprecedented adventure platform 
                 spanning 10 verifiable historical eras where YOU are the hero that serves as the flagship application demonstrating 
                 the chain's capabilities.
               </p>
@@ -165,7 +165,7 @@ export default function DWSCExecutiveSummary() {
               </h2>
               <div className="space-y-4 text-white/80 leading-relaxed">
                 <p>
-                  <span className="text-purple-400 font-semibold">Beyond "cryptocurrency"</span> — DarkWave Trust Layer is a 
+                  <span className="text-purple-400 font-semibold">Beyond "cryptocurrency"</span> — Trust Layer is a 
                   <span className="text-cyan-400 font-semibold"> Coordinated Trust Infrastructure</span> designed for real 
                   business operations. We provide verified identity, accountability, and transparent audit trails that 
                   enterprises need for trusted relationships.
@@ -229,7 +229,7 @@ export default function DWSCExecutiveSummary() {
                   features: ["Price Predictions", "Risk Scoring", "Memecoin Sniper", "Win Rate Tracking"]
                 },
                 {
-                  title: "DarkWave Chronicles",
+                  title: "Chronicles",
                   subtitle: "Flagship Application",
                   description: "Unprecedented adventure platform across 10 verifiable historical eras. Real-time AI-driven world where YOU are the hero. Revenue through creator licensing and brand sponsorships.",
                   icon: Gamepad2,

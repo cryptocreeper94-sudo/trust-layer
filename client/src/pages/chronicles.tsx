@@ -137,7 +137,7 @@ const CORE_FEATURES = [
     title: "SIG Blockchain Economy",
     subtitle: "Earn. Trade. Own.",
     description: "Complete missions for SIG tokens. Trade gear with players. Every transaction is blockchain-verified with real value.",
-    longDescription: "SIG isn't play money. It's real blockchain currency on DarkWave Trust Layer. Earn through missions, trade with other players, own property with blockchain deeds. A real economy powering epic adventures.",
+    longDescription: "SIG isn't play money. It's real blockchain currency on Trust Layer. Earn through missions, trade with other players, own property with blockchain deeds. A real economy powering epic adventures.",
     icon: Coins,
     image: timeVortex,
     color: "from-yellow-500 to-amber-600",
@@ -981,7 +981,7 @@ export default function Chronicles() {
           >
             <Badge className="mb-6 px-3 py-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-500/30 text-white text-xs sm:text-sm backdrop-blur-sm max-w-full whitespace-normal text-center leading-tight">
               <Flame className="w-4 h-4 mr-2 text-orange-400 animate-pulse flex-shrink-0" />
-              <span className="hidden sm:inline">The Flagship Product of DarkWave Trust Layer</span>
+              <span className="hidden sm:inline">The Flagship Product of Trust Layer</span>
               <span className="sm:hidden">DarkWave Flagship Product</span>
             </Badge>
             
@@ -1206,7 +1206,7 @@ export default function Chronicles() {
                 </h2>
                 
                 <p className="text-white/70 mb-6 leading-relaxed">
-                  <InfoTooltip termKey="dwc">SIG</InfoTooltip> isn't play money. It's real cryptocurrency on DarkWave Trust Layer. 
+                  <InfoTooltip termKey="dwc">SIG</InfoTooltip> isn't play money. It's real cryptocurrency on Trust Layer. 
                   Every transaction is blockchain-verified, stamped, and auditable.
                 </p>
                 

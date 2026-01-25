@@ -670,7 +670,7 @@ export default function Home() {
             
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-b from-white to-white/50">
               Welcome to <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary">DarkWave Trust Layer</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary">Trust Layer</span>
             </h1>
 
             <p className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto font-medium">

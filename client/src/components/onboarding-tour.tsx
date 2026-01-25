@@ -12,7 +12,7 @@ interface Step {
 const steps: Step[] = [
   {
     title: "Welcome to the Trust Layer",
-    description: "DarkWave Trust Layer is infrastructure where accountability is built in. Not another blockchain - a foundation for verified business where trust is the default.",
+    description: "Trust Layer is infrastructure where accountability is built in. Not another blockchain - a foundation for verified business where trust is the default.",
   },
   {
     title: "Signal, Not Coin",

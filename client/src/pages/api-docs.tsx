@@ -101,7 +101,7 @@ export default function ApiDocs() {
           <div className="mb-8">
             <h1 className="text-2xl md:text-3xl font-display font-bold mb-2" data-testid="text-api-docs-title">API Documentation</h1>
             <p className="text-muted-foreground">
-              Integrate DarkWave Trust Layer into your applications
+              Integrate Trust Layer into your applications
             </p>
           </div>
 

@@ -4,7 +4,7 @@
  * =====================================================
  * 
  * This page demonstrates the Personality AI system that powers
- * the "Parallel Self" experience in DarkWave Chronicles.
+ * the "Parallel Self" experience in Chronicles.
  * 
  * Features demonstrated:
  * 1. Personality profile creation and viewing
@@ -596,7 +596,7 @@ export default function ChroniclesAIDemo() {
 
         <div className="mt-12 text-center">
           <p className="text-gray-500 text-sm">
-            DarkWave Chronicles Personality AI • Prototype v1.0
+            Chronicles Personality AI • Prototype v1.0
           </p>
         </div>
       </div>

@@ -614,7 +614,7 @@ export default function InnovationHub() {
                       {[
                         { step: 1, title: "Input Hashing", desc: "AI inputs are cryptographically hashed before processing", icon: Hexagon },
                         { step: 2, title: "Execution Proof", desc: "Model generates verifiable commitment of its decision", icon: Code },
-                        { step: 3, title: "On-Chain Anchor", desc: "Proof is permanently recorded on DarkWave Trust Layer", icon: Layers },
+                        { step: 3, title: "On-Chain Anchor", desc: "Proof is permanently recorded on Trust Layer", icon: Layers },
                         { step: 4, title: "Public Verification", desc: "Anyone can verify the AI decision was fair and correct", icon: CheckCircle }
                       ].map((item, i) => (
                         <motion.div 

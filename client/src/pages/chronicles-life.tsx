@@ -408,7 +408,7 @@ export default function ChroniclesLife() {
         <GlassCard glow className="p-8 text-center max-w-md">
           <Sparkles className="w-16 h-16 mx-auto text-cyan-400 mb-4" />
           <h2 className="text-2xl font-bold text-white mb-2">Start Your Journey</h2>
-          <p className="text-gray-400 mb-6">Create your character to begin living your parallel life in DarkWave Chronicles</p>
+          <p className="text-gray-400 mb-6">Create your character to begin living your parallel life in Chronicles</p>
           <Link href="/chronicles/onboarding">
             <Button className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white" data-testid="button-create-character">
               Create Character

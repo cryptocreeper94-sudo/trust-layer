@@ -558,6 +558,33 @@ function DWSCRouter() {
   );
 }
 
+function StudiosRouter() {
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <ScrollToTop />
+      <Switch>
+        <Route path="/" component={Studio} />
+        <Route path="/studio" component={Studio} />
+        <Route path="/dev-studio" component={DevStudio} />
+        <Route path="/studio/projects" component={StudioProjects} />
+        <Route path="/code-snippets" component={CodeSnippets} />
+        <Route path="/developers" component={Developers} />
+        <Route path="/developers/register" component={DevelopersRegister} />
+        <Route path="/developer-portal" component={DeveloperPortal} />
+        <Route path="/api-docs" component={ApiDocs} />
+        <Route path="/api-playground" component={ApiPlayground} />
+        <Route path="/doc-hub" component={DocHub} />
+        <Route path="/login" component={Welcome} />
+        <Route path="/signup" component={Welcome} />
+        <Route path="/terms" component={Terms} />
+        <Route path="/privacy" component={Privacy} />
+        <Route path="/trust-layer" component={Home} />
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
+  );
+}
+
 function Router() {
   const appType = useMemo(() => getAppFromHost(), []);
   
@@ -566,6 +593,9 @@ function Router() {
   }
   if (appType === "chrono") {
     return <ChronoRouter />;
+  }
+  if (appType === "studios") {
+    return <StudiosRouter />;
   }
   return <DWSCRouter />;
 }

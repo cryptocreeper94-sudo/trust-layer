@@ -36,7 +36,7 @@ export default function SweepstakesRules() {
               <div>
                 <h2 className="text-xl font-bold text-purple-300 mb-2">NO PURCHASE NECESSARY</h2>
                 <p className="text-gray-300">
-                  DarkWave Games operates as a sweepstakes platform. You can obtain Sweeps Coins (SC) for free 
+                  The Arcade operates as a sweepstakes platform. You can obtain Sweeps Coins (SC) for free 
                   through our Alternative Method of Entry (AMOE). A purchase will not increase your chances of winning.
                 </p>
               </div>
@@ -144,7 +144,7 @@ export default function SweepstakesRules() {
                   Tennessee, USA
                 </address>
                 <p className="text-xs text-gray-500 mt-3">
-                  Include your full name, email address registered with DarkWave Games, 
+                  Include your full name, email address registered with The Arcade, 
                   date of birth, and the words "SC Request".
                 </p>
                 <Badge variant="outline" className="mt-3 bg-green-500/10 border-green-500/30 text-green-400">
@@ -196,11 +196,11 @@ export default function SweepstakesRules() {
                   1. Eligibility Requirements
                 </AccordionTrigger>
                 <AccordionContent className="text-gray-300 space-y-3">
-                  <p>To participate in DarkWave Games Sweepstakes, you must:</p>
+                  <p>To participate in The Arcade Sweepstakes, you must:</p>
                   <ul className="list-disc pl-6 space-y-1">
                     <li>Be at least 18 years of age (or the age of majority in your jurisdiction)</li>
                     <li>Be a legal resident of an eligible U.S. state or territory</li>
-                    <li>Have a valid DarkWave Games account</li>
+                    <li>Have a valid The Arcade account</li>
                     <li>Not be an employee, contractor, or immediate family member of DarkWave Studios, LLC</li>
                   </ul>
                   <div className="bg-red-900/30 border border-red-500/30 rounded-lg p-3 mt-4">
@@ -276,7 +276,7 @@ export default function SweepstakesRules() {
                   5. Provably Fair Gaming
                 </AccordionTrigger>
                 <AccordionContent className="text-gray-300 space-y-3">
-                  <p>All DarkWave Games use a provably fair system:</p>
+                  <p>All The Arcade use a provably fair system:</p>
                   <ul className="list-disc pl-6 space-y-1">
                     <li>Game outcomes are determined by cryptographic random number generation</li>
                     <li>Server seeds are hashed and provided to players before each game</li>
@@ -311,7 +311,7 @@ export default function SweepstakesRules() {
                 </AccordionTrigger>
                 <AccordionContent className="text-gray-300 space-y-3">
                   <p>
-                    Any disputes arising from participation in DarkWave Games shall be resolved through 
+                    Any disputes arising from participation in The Arcade shall be resolved through 
                     binding arbitration in accordance with the rules of the American Arbitration Association. 
                     The arbitration shall take place in the State of Tennessee. Participants waive the 
                     right to participate in class action lawsuits.
@@ -364,7 +364,7 @@ export default function SweepstakesRules() {
             Tennessee, United States
           </p>
           <p>
-            By participating in DarkWave Games, you agree to be bound by these Official Rules 
+            By participating in The Arcade, you agree to be bound by these Official Rules 
             and the decisions of DarkWave Studios, LLC, which are final and binding in all respects.
           </p>
         </div>

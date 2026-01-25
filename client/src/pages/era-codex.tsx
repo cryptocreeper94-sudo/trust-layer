@@ -530,7 +530,7 @@ export default function EraCodex() {
       {/* Footer */}
       <footer className="py-6 px-4 border-t border-white/5 text-center">
         <p className="text-sm text-gray-500">
-          DarkWave Chronicles • Community-Built Universe
+          Chronicles • Community-Built Universe
         </p>
       </footer>
     </div>

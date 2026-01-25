@@ -1,8 +1,11 @@
-export type AppDomain = "dwsc" | "games" | "chrono" | "chronochat" | "strikeagent";
+export type AppDomain = "dwsc" | "games" | "chrono" | "chronochat" | "strikeagent" | "studios";
 
 export function getAppFromHost(): AppDomain {
   const host = window.location.hostname.toLowerCase();
   
+  if (host.includes("darkwavestudios") || host === "darkwavestudios.io" || host === "www.darkwavestudios.io" || host === "darkwavestudios.net" || host === "www.darkwavestudios.net") {
+    return "studios";
+  }
   if (host.includes("darkwavegames") || host.includes("games.")) {
     return "games";
   }
@@ -27,35 +30,43 @@ export const APP_CONFIG: Record<AppDomain, {
   primaryGradient: string;
 }> = {
   dwsc: {
-    name: "DarkWave Trust Layer",
-    shortName: "DWSC",
+    name: "Trust Layer",
+    shortName: "Trust Layer",
     themeColor: "#8b5cf6",
-    description: "The next-generation Layer 1 blockchain",
-    logoText: "DarkWave",
+    description: "Infrastructure where accountability is built in",
+    logoText: "Trust Layer",
     primaryGradient: "from-purple-500 to-pink-500",
   },
+  studios: {
+    name: "DarkWave Studios",
+    shortName: "Studios",
+    themeColor: "#6366f1",
+    description: "Build. Create. Deploy.",
+    logoText: "DarkWave Studios",
+    primaryGradient: "from-indigo-500 to-purple-500",
+  },
   games: {
-    name: "DarkWave Games",
-    shortName: "DW Games",
+    name: "The Arcade",
+    shortName: "Arcade",
     themeColor: "#ec4899",
     description: "Provably fair blockchain games",
-    logoText: "DarkWave Games",
+    logoText: "The Arcade",
     primaryGradient: "from-pink-500 to-rose-500",
   },
   chrono: {
-    name: "DarkWave Chronicles",
+    name: "Chronicles",
     shortName: "Chronicles",
     themeColor: "#a855f7",
     description: "Not a game. A life. Live your legacy.",
-    logoText: "ChronoVerse",
+    logoText: "Chronicles",
     primaryGradient: "from-purple-500 to-pink-500",
   },
   chronochat: {
-    name: "Chronochat",
-    shortName: "Chronochat",
+    name: "Signal Chat",
+    shortName: "Signal Chat",
     themeColor: "#06b6d4",
-    description: "Connect across timelines. Chat beyond eras.",
-    logoText: "Chronochat",
+    description: "Connect across the network",
+    logoText: "Signal Chat",
     primaryGradient: "from-cyan-500 to-purple-500",
   },
   strikeagent: {

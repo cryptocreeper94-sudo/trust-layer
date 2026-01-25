@@ -154,7 +154,7 @@ export default function ProofOfReservePage() {
               Total Locked (SIG)
             </div>
             <div className="text-2xl font-bold text-white">{totalLocked.toLocaleString()}</div>
-            <div className="text-xs text-emerald-400 mt-1">On DarkWave Trust Layer</div>
+            <div className="text-xs text-emerald-400 mt-1">On Trust Layer</div>
           </motion.div>
 
           <motion.div

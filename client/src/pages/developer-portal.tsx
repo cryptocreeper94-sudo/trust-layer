@@ -346,9 +346,9 @@ const info = await client.getChainInfo();
 console.log('Block height:', info.blockHeight);`,
     },
     {
-      title: "3. Submit Hash to DarkWave Trust Layer",
+      title: "3. Submit Hash to Trust Layer",
       language: "typescript",
-      code: `// Hash your application data to DarkWave Trust Layer
+      code: `// Hash your application data to Trust Layer
 const result = await fetch('/api/hash/submit', {
   method: 'POST',
   headers: {
@@ -424,7 +424,7 @@ console.log({
               </span>
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Internal team overview of DarkWave Trust Layer ecosystem. Monitor analytics, manage resources, and access admin tools.
+              Internal team overview of Trust Layer ecosystem. Monitor analytics, manage resources, and access admin tools.
             </p>
           </div>
 
@@ -503,7 +503,7 @@ console.log({
               Register API Key
             </h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Get an API key to start hashing your app data to DarkWave Trust Layer. Each submission costs a small fee in SIG.
+              Get an API key to start hashing your app data to Trust Layer. Each submission costs a small fee in SIG.
             </p>
             
             {regResult?.apiKey ? (
@@ -708,7 +708,7 @@ console.log({
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">
                   <div className="space-y-2">
-                    <p>All transactions on DarkWave Trust Layer require a small fee paid in SIG:</p>
+                    <p>All transactions on Trust Layer require a small fee paid in SIG:</p>
                     <ul className="list-disc list-inside space-y-1">
                       <li><strong>Base Fee:</strong> 21,000 gas units</li>
                       <li><strong>Hash Submission:</strong> 25,000 gas units</li>
@@ -808,7 +808,7 @@ console.log('All successful:', result.allSuccessful);`}
               <Badge className="bg-primary/20 text-primary border-primary/30">INTERNAL</Badge>
             </div>
             <p className="text-sm text-muted-foreground mb-4">
-              Confidential launch timeline for DarkWave Trust Layer mainnet and SIG token release.
+              Confidential launch timeline for Trust Layer mainnet and SIG token release.
             </p>
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="phase1" className="border-white/10">

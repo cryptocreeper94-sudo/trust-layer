@@ -141,7 +141,7 @@ export default function AdminDashboard() {
 
   const ecosystemLinks = [
     { title: "DWSC Portal", description: "Main blockchain portal", url: "/", icon: <Globe className="w-5 h-5" /> },
-    { title: "DarkWave Chronicles", description: "Flagship adventure game", url: "/chronicles", icon: <Gamepad2 className="w-5 h-5" /> },
+    { title: "Chronicles", description: "Flagship adventure game", url: "/chronicles", icon: <Gamepad2 className="w-5 h-5" /> },
     { title: "YourLegacy.io", description: "Chronicles standalone", url: "/legacy", icon: <Crown className="w-5 h-5" /> },
     { title: "Presale", description: "Token presale page", url: "/presale", icon: <Zap className="w-5 h-5" /> },
     { title: "Crowdfund", description: "Donation campaign", url: "/crowdfund", icon: <DollarSign className="w-5 h-5" /> },
@@ -171,7 +171,7 @@ export default function AdminDashboard() {
               Owner Control Center
             </span>
           </h1>
-          <p className="text-gray-400 text-lg">DarkWave Trust Layer • Complete Ecosystem Management</p>
+          <p className="text-gray-400 text-lg">Trust Layer • Complete Ecosystem Management</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

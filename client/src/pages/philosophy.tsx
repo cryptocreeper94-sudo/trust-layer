@@ -48,7 +48,7 @@ export default function Philosophy() {
       id: "executive-summary",
       title: "Executive Summary",
       subtitle: "The Vision",
-      description: "A comprehensive overview of the DarkWave Trust Layer ecosystem — what we're building, why it matters, and how it changes the game for businesses and individuals.",
+      description: "A comprehensive overview of the Trust Layer ecosystem — what we're building, why it matters, and how it changes the game for businesses and individuals.",
       icon: FileText,
       color: "from-blue-500 to-cyan-500",
       badge: "Overview",

@@ -23,7 +23,7 @@ interface SearchResult {
 }
 
 const staticPages: SearchResult[] = [
-  { type: "page", id: "home", title: "Home", description: "DarkWave Trust Layer homepage", href: "/", icon: Home, category: "Main" },
+  { type: "page", id: "home", title: "Home", description: "Trust Layer homepage", href: "/", icon: Home, category: "Main" },
   { type: "page", id: "my-hub", title: "My Dashboard", description: "Your personal dashboard and hub", href: "/my-hub", icon: Compass, category: "Main" },
   { type: "page", id: "wallet", title: "Wallet", description: "Manage your assets and Signal", href: "/wallet", icon: Wallet, category: "Finance" },
   { type: "page", id: "swap", title: "Token Swap", description: "Trade and swap tokens", href: "/swap", icon: ArrowLeftRight, category: "Finance" },

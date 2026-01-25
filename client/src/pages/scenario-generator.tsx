@@ -542,7 +542,7 @@ export default function ScenarioGenerator() {
       {/* Footer */}
       <footer className="py-6 px-4 border-t border-white/5 text-center">
         <p className="text-sm text-gray-500">
-          DarkWave Chronicles • AI-Driven Life Generator Demo
+          Chronicles • AI-Driven Life Generator Demo
         </p>
       </footer>
     </div>

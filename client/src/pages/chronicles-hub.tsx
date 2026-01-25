@@ -522,7 +522,7 @@ export default function ChroniclesHub() {
                   BETA
                 </Badge>
               </div>
-              <h1 className="text-2xl font-bold" data-testid="text-hub-title">DarkWave Chronicles</h1>
+              <h1 className="text-2xl font-bold" data-testid="text-hub-title">Chronicles</h1>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -1611,7 +1611,7 @@ export default function ChroniclesHub() {
                       onClick={() => {
                         navigator.share({
                           title: `Join ${selectedSyndicate?.name || "my syndicate"}`,
-                          text: "Join me in DarkWave Chronicles!",
+                          text: "Join me in Chronicles!",
                           url: generatedInviteUrl,
                         }).catch(() => {});
                       }}

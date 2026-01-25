@@ -548,7 +548,7 @@ export default function CrowdfundPage() {
             </h1>
           </div>
           <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-            Support the transparent development of DarkWave Trust Layer. Every contribution is tracked on-chain with a unique DWTL stamp.
+            Support the transparent development of Trust Layer. Every contribution is tracked on-chain with a unique DWTL stamp.
           </p>
         </motion.div>
 
@@ -758,7 +758,7 @@ export default function CrowdfundPage() {
           <GlassCard className="p-6 inline-block">
             <div className="flex items-center gap-2 text-sm text-gray-400">
               <Shield className="w-4 h-4 text-cyan-400" />
-              <span>All contributions are verified with DarkWave Trust Layer transparency stamps</span>
+              <span>All contributions are verified with Trust Layer transparency stamps</span>
               <ExternalLink className="w-4 h-4 ml-2" />
             </div>
           </GlassCard>

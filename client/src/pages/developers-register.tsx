@@ -104,7 +104,7 @@ export default function DevelopersRegister() {
                   <Key className="w-8 h-8 text-primary" />
                 </div>
                 <h1 className="text-2xl font-display font-bold mb-2">Developer Registration</h1>
-                <p className="text-sm text-muted-foreground">Get your API key to build on DarkWave Trust Layer</p>
+                <p className="text-sm text-muted-foreground">Get your API key to build on Trust Layer</p>
               </div>
 
               {isLoading ? (

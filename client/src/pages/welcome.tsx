@@ -217,7 +217,7 @@ export default function WelcomePage() {
               </h2>
               <div className="space-y-6 text-slate-300 text-base sm:text-lg leading-relaxed">
                 <p>
-                  <strong className="text-white">DarkWave Trust Layer</strong> is your space — a community-owned ecosystem 
+                  <strong className="text-white">Trust Layer</strong> is your space — a community-owned ecosystem 
                   where individuals and businesses build trust and do business differently. No hype. No empty promises. 
                   Just real people building something real.
                 </p>

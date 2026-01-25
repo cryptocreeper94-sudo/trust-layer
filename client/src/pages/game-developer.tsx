@@ -155,7 +155,7 @@ export default function GameDeveloper() {
             </h1>
             
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Submit your provably fair game for AI-powered review. Approved games join the DarkWave Games ecosystem and earn revenue from player activity.
+              Submit your provably fair game for AI-powered review. Approved games join the The Arcade ecosystem and earn revenue from player activity.
             </p>
           </motion.div>
 

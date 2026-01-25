@@ -278,7 +278,7 @@ export default function TechnicalRoadmap() {
             </span>
           </h1>
           <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-            DarkWave Trust Layer development progress and upcoming milestones
+            Trust Layer development progress and upcoming milestones
           </p>
           <div className="flex justify-center gap-6 mt-6">
             <div className="flex items-center gap-2">

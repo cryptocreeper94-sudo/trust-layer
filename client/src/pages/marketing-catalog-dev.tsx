@@ -16,7 +16,7 @@ const X_FACEBOOK_MESSAGES = {
     {
       id: "ev1",
       title: "Trust Layer Introduction",
-      message: "Tired of anonymous chaos in crypto? DarkWave Trust Layer brings verified identity, real accountability, and transparent operations to Web3. No more rugs. No more ghosts. Just real people building something real. Your identity stays private, but your reputation is earned. This is YOUR Trust Layer. 🛡️",
+      message: "Tired of anonymous chaos in crypto? Trust Layer brings verified identity, real accountability, and transparent operations to Web3. No more rugs. No more ghosts. Just real people building something real. Your identity stays private, but your reputation is earned. This is YOUR Trust Layer. 🛡️",
       platforms: ["x", "facebook"],
       theme: "trust"
     },
@@ -51,7 +51,7 @@ const X_FACEBOOK_MESSAGES = {
     {
       id: "ev6",
       title: "Business Trust Networks",
-      message: "B2B without the BS. DarkWave Trust Layer provides verified identity infrastructure for businesses. Know who you're dealing with. Build trusted partnerships. Create transparent audit trails. Enterprise-grade trust for the decentralized age. Your reputation, verified. 🏢",
+      message: "B2B without the BS. Trust Layer provides verified identity infrastructure for businesses. Know who you're dealing with. Build trusted partnerships. Create transparent audit trails. Enterprise-grade trust for the decentralized age. Your reputation, verified. 🏢",
       platforms: ["x", "facebook"],
       theme: "business"
     },

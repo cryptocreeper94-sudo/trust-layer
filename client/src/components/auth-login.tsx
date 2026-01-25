@@ -192,9 +192,9 @@ export function AuthLoginModal({ isOpen, onClose, onSuccess }: AuthLoginModalPro
                 {view === 'pin-login' && 'Quick Sign In'}
               </h2>
               <p className="text-muted-foreground text-sm">
-                {view === 'providers' && 'Sign in to your DarkWave account'}
+                {view === 'providers' && 'Sign in to your account'}
                 {view === 'email-login' && 'Enter your email and password'}
-                {view === 'email-signup' && 'Create your DarkWave account'}
+                {view === 'email-signup' && 'Create your account'}
                 {view === 'forgot-password' && "We'll send you a reset link"}
                 {view === 'pin-login' && 'Enter your email and PIN'}
               </p>

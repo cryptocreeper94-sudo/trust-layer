@@ -617,7 +617,7 @@ export default function GuardianPortal() {
                 </Badge>
               </div>
               <p className="text-sm text-white/60 mb-6">
-                Every Guardian activity is immutably stamped on the DarkWave Trust Layer for complete transparency and auditability.
+                Every Guardian activity is immutably stamped on the Trust Layer for complete transparency and auditability.
               </p>
               <div className="space-y-3">
                 {stampsLoading ? (

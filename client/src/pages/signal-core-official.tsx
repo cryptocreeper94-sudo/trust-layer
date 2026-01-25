@@ -130,7 +130,7 @@ export default function SignalCoreOfficial() {
               </h1>
               <div className="w-32 h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 mx-auto mb-4 print:bg-gray-800" />
               <p className="text-lg text-slate-400 print:text-gray-600 font-serif italic">
-                The Immutable Foundation of the DarkWave Trust Layer
+                The Immutable Foundation of the Trust Layer
               </p>
             </div>
 

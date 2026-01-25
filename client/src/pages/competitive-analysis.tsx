@@ -264,7 +264,7 @@ export default function CompetitiveAnalysis() {
                 <span className="text-white">Why Builders Choose</span>
                 <br />
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(6,182,212,0.5)]">
-                  DarkWave Trust Layer
+                  Trust Layer
                 </span>
               </h1>
               

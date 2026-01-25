@@ -173,7 +173,7 @@ export default function Launchpad() {
               Token <span className="text-pink-400">Launchpad</span>
             </h1>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              Launch your own token on DarkWave Trust Layer. Fair launches, presales, and more.
+              Launch your own token on Trust Layer. Fair launches, presales, and more.
             </p>
           </motion.div>
 

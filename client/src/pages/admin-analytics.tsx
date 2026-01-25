@@ -138,7 +138,7 @@ export default function AdminAnalytics() {
           <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl font-display font-bold mb-2" data-testid="text-analytics-title">Analytics Dashboard</h1>
-              <p className="text-muted-foreground">Real-time metrics for DarkWave Trust Layer</p>
+              <p className="text-muted-foreground">Real-time metrics for Trust Layer</p>
             </div>
             <div className="flex gap-2">
               {(['7d', '30d', '90d'] as const).map((range) => (

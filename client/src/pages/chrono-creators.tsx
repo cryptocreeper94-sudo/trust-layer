@@ -321,7 +321,7 @@ export default function ChronoCreators() {
                   Free contributions grant DarkWave Studios a perpetual license to use, modify, and distribute your content. 
                   <span className="text-amber-400"> Creator License holders retain full ownership rights</span>, 
                   including the ability to sell, trade, or remove their content. 
-                  Ownership is recorded on the DarkWave Trust Layer for transparency and protection.
+                  Ownership is recorded on the Trust Layer for transparency and protection.
                 </p>
               </div>
             </div>

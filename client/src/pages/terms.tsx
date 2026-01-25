@@ -11,11 +11,11 @@ export default function Terms() {
   const sections = [
     {
       title: "1. Acceptance of Terms",
-      content: `By accessing or using the DarkWave Trust Layer platform, including the DarkWave Portal, APIs, and related services (collectively, the "Services"), you agree to be bound by these Terms of Service. If you do not agree to these terms, do not use our Services.`
+      content: `By accessing or using the Trust Layer platform, including the DarkWave Portal, APIs, and related services (collectively, the "Services"), you agree to be bound by these Terms of Service. If you do not agree to these terms, do not use our Services.`
     },
     {
       title: "2. Description of Services",
-      content: `DarkWave Trust Layer provides a Layer 1 blockchain platform, including but not limited to: block explorer, developer APIs, staking services, cross-chain bridge, NFT marketplace, decentralized exchange, and development tools. The Services are provided "as is" without warranties of any kind.`
+      content: `Trust Layer provides a Layer 1 blockchain platform, including but not limited to: block explorer, developer APIs, staking services, cross-chain bridge, NFT marketplace, decentralized exchange, and development tools. The Services are provided "as is" without warranties of any kind.`
     },
     {
       title: "3. User Responsibilities",
@@ -92,7 +92,7 @@ export default function Terms() {
               <div>
                 <h3 className="font-semibold text-yellow-500">Important Notice</h3>
                 <p className="text-sm text-muted-foreground">
-                  Please read these terms carefully before using DarkWave Trust Layer. 
+                  Please read these terms carefully before using Trust Layer. 
                   By using our services, you agree to be legally bound by these terms.
                 </p>
               </div>
@@ -126,7 +126,7 @@ export default function Terms() {
           </div>
 
           <div className="text-center text-sm text-muted-foreground py-8" data-testid="text-footer">
-            <p>DarkWave Trust Layer - DarkWave Studios</p>
+            <p>Trust Layer - DarkWave Studios</p>
             <p>For questions, contact legal@darkwavestudios.io</p>
           </div>
         </motion.div>

@@ -50,7 +50,7 @@ export default function ChronoExecutiveSummary() {
               </div>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-4">
                 <span className="bg-gradient-to-r from-amber-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                  DarkWave Chronicles
+                  Chronicles
                 </span>
               </h1>
               <p className="text-xl md:text-2xl text-white/80 mb-2">The ChronoVerse</p>
@@ -68,14 +68,14 @@ export default function ChronoExecutiveSummary() {
                 Executive Overview
               </h2>
               <p className="text-white/80 leading-relaxed mb-4">
-                DarkWave Chronicles is an <span className="text-amber-400 font-semibold">unprecedented adventure platform</span> where 
+                Chronicles is an <span className="text-amber-400 font-semibold">unprecedented adventure platform</span> where 
                 YOU are the hero—not an avatar, your actual parallel self. Experience 70+ mission theaters spanning 
                 from the Prehistoric Era to a speculative 2200 CE future, each with unique campaigns, factions, and ways to build your legend. 
                 The world evolves dynamically—AI-driven NPCs pursue their own goals, economies shift, and alliances form—creating a living 
                 experience that responds authentically to your choices.
               </p>
               <p className="text-white/80 leading-relaxed">
-                Built on the <span className="text-cyan-400 font-semibold">DarkWave Trust Layer (DWSC)</span> blockchain infrastructure, 
+                Built on the <span className="text-cyan-400 font-semibold">Trust Layer (DWSC)</span> blockchain infrastructure, 
                 Chronicles leverages blockchain technology for true digital ownership of in-game assets, community-created content licensing, 
                 and a revolutionary <span className="text-purple-400 font-semibold">Storefront Sponsorship System</span> that bridges 
                 real-world commerce with immersive historical experiences.
@@ -676,7 +676,7 @@ export default function ChronoExecutiveSummary() {
                 </Link>
               </div>
               <p className="text-white/40 text-sm">
-                DarkWave Studios • DarkWave Trust Layer • yourlegacy.io
+                DarkWave Studios • Trust Layer • yourlegacy.io
               </p>
               <p className="text-white/30 text-xs mt-2">
                 Direct inquiries: cryptocreeper94@gmail.com

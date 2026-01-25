@@ -555,7 +555,7 @@ export default function MyTokensPage() {
                           <span className="text-purple-400 font-bold text-sm">3</span>
                         </div>
                         <div>
-                          <h4 className="text-sm font-semibold text-white">Explore DarkWave Chronicles</h4>
+                          <h4 className="text-sm font-semibold text-white">Explore Chronicles</h4>
                           <p className="text-xs text-white/50">Journey through 70+ historical eras in our discernment-based game</p>
                           <Link href="/chronicles">
                             <Button size="sm" variant="outline" className="mt-2 border-purple-500/30 text-purple-400 hover:bg-purple-500/10">

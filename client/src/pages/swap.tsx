@@ -206,7 +206,7 @@ export default function Swap() {
               </h1>
             </div>
             <p className="text-xs text-muted-foreground">
-              Swap tokens instantly on DarkWave Trust Layer
+              Swap tokens instantly on Trust Layer
             </p>
           </motion.div>
 

@@ -46,7 +46,7 @@ export default function Developers() {
           <div className="max-w-2xl">
             <h1 className="text-3xl md:text-4xl font-display font-bold mb-4">
               Build the Future <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary">On DarkWave Trust Layer</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-cyan-400 to-secondary">On Trust Layer</span>
             </h1>
             <p className="text-sm text-muted-foreground leading-relaxed mb-6">
               DarkWave combines the speed of a DAG with the security of Proof-of-History. 
@@ -252,7 +252,7 @@ export default function Developers() {
                   </div>
                   <p className="text-sm text-white/70 mb-4">
                     The Devnet Sandbox is your <span className="text-white font-medium">risk-free playground</span> for testing 
-                    DarkWave Trust Layer. Create test wallets, request free test coins, and send transactions - 
+                    Trust Layer. Create test wallets, request free test coins, and send transactions - 
                     all without spending real money. Perfect for learning, experimenting, and building your apps.
                   </p>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">

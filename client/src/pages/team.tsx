@@ -387,7 +387,7 @@ function ExecutiveSummary() {
               <Briefcase className="w-6 h-6 text-primary" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-white">DarkWave Trust Layer</h3>
+              <h3 className="text-xl font-bold text-white">Trust Layer</h3>
               <p className="text-sm text-muted-foreground">Executive Summary</p>
             </div>
           </div>
@@ -398,7 +398,7 @@ function ExecutiveSummary() {
                 <h4 className="text-sm font-semibold text-primary mb-2">The Opportunity</h4>
                 <p className="text-sm text-muted-foreground">
                   The blockchain industry continues to struggle with the trilemma of speed, security, and decentralization. 
-                  DarkWave Trust Layer addresses this with a Proof-of-Authority consensus that delivers 400ms block times and 
+                  Trust Layer addresses this with a Proof-of-Authority consensus that delivers 400ms block times and 
                   200,000+ TPS while maintaining security through trusted validator committees.
                 </p>
               </div>
@@ -530,7 +530,7 @@ export default function Team() {
                 <span>Authenticated Access</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-display font-bold mb-2">Admin Dashboard</h1>
-              <p className="text-muted-foreground">DarkWave Trust Layer Command Center</p>
+              <p className="text-muted-foreground">Trust Layer Command Center</p>
             </div>
 
             <Tabs defaultValue="overview" className="space-y-6">

@@ -19,7 +19,7 @@ const CATEGORIES = [
   { id: "general", label: "General Question", icon: "?" },
   { id: "account", label: "Account Issue", icon: "?" },
   { id: "wallet", label: "Wallet / Transactions", icon: "?" },
-  { id: "chronicles", label: "DarkWave Chronicles", icon: "?" },
+  { id: "chronicles", label: "Chronicles", icon: "?" },
   { id: "staking", label: "Staking", icon: "?" },
   { id: "bridge", label: "Bridge", icon: "?" },
   { id: "bug", label: "Bug Report", icon: "?" },

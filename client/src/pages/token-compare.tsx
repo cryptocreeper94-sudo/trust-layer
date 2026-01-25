@@ -56,7 +56,7 @@ export default function TokenCompare() {
                   </h2>
                   <p className="text-muted-foreground max-w-md mx-auto">
                     Real-time token comparison with live price feeds, volume data, and market analytics 
-                    will be available when DarkWave Trust Layer mainnet goes live.
+                    will be available when Trust Layer mainnet goes live.
                   </p>
                 </div>
 

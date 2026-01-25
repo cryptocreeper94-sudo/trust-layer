@@ -161,14 +161,14 @@ export default function ApiPlayground() {
         <div className="container mx-auto max-w-6xl">
           <section className="mb-8">
             <h1 className="text-2xl md:text-3xl font-display font-bold mb-2">Devnet Sandbox</h1>
-            <p className="text-sm text-muted-foreground mb-4">Test DarkWave Trust Layer features in a safe environment</p>
+            <p className="text-sm text-muted-foreground mb-4">Test Trust Layer features in a safe environment</p>
             
             <GlassCard className="mb-6">
               <div className="p-5">
                 <h2 className="text-sm font-bold text-primary mb-3">What is the Devnet Sandbox?</h2>
                 <p className="text-xs text-white/70 mb-4">
                   The Devnet Sandbox is a <span className="text-white font-medium">risk-free testing environment</span> for developers. 
-                  It's a complete replica of DarkWave Trust Layer where you can experiment with wallets, transactions, 
+                  It's a complete replica of Trust Layer where you can experiment with wallets, transactions, 
                   and blockchain features using <span className="text-cyan-400">test coins that have no real value</span>.
                 </p>
                 

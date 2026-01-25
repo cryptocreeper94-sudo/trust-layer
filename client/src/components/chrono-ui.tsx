@@ -179,7 +179,7 @@ export function ChronoLayout({
                     className="w-full rounded-xl gap-2 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"
                   >
                     <Coins className="w-5 h-5" />
-                    DarkWave Trust Layer
+                    Trust Layer
                     <ExternalLink className="w-4 h-4 ml-auto opacity-60" />
                   </Button>
                 </a>
@@ -208,7 +208,7 @@ function ChronoFooter() {
             <div className="flex items-center gap-2 mb-4">
               <img src={orbitLogo} alt="ChronoVerse" className="w-8 h-8" />
               <span className="font-display font-bold text-xl bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                DarkWave Chronicles
+                Chronicles
               </span>
             </div>
             <p className="text-white/60 text-sm mb-4 max-w-md">
@@ -224,7 +224,7 @@ function ChronoFooter() {
                 data-testid="link-dwsc-branding"
               >
                 <Coins className="w-3 h-3" />
-                DarkWave Trust Layer
+                Trust Layer
                 <ExternalLink className="w-2.5 h-2.5" />
               </a>
             </div>
@@ -245,12 +245,12 @@ function ChronoFooter() {
             <ul className="space-y-2">
               <li>
                 <a href="https://dwsc.io" target="_blank" rel="noopener noreferrer" className="text-sm text-white/60 hover:text-cyan-400 transition-colors flex items-center gap-1" data-testid="footer-link-dwsc">
-                  DarkWave Trust Layer <ExternalLink className="w-3 h-3" />
+                  Trust Layer <ExternalLink className="w-3 h-3" />
                 </a>
               </li>
               <li>
                 <a href="https://darkwavegames.io" target="_blank" rel="noopener noreferrer" className="text-sm text-white/60 hover:text-pink-400 transition-colors flex items-center gap-1" data-testid="footer-link-games">
-                  DarkWave Games <ExternalLink className="w-3 h-3" />
+                  The Arcade <ExternalLink className="w-3 h-3" />
                 </a>
               </li>
               <li>

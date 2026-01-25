@@ -25,7 +25,7 @@ export default function VisionPage() {
           
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
             <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              DarkWave Trust Layer
+              Trust Layer
             </span>
           </h1>
           
