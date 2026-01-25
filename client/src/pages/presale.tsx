@@ -1278,14 +1278,14 @@ export default function Presale() {
             <span className="text-cyan-300 text-sm font-medium">Founders Preview - Early Access</span>
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Join the Trust Layer Revolution
+          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            <span className="text-white">
+              Trust Layer
             </span>
           </h1>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-6">
-            Be among the first to receive Signal and unlock exclusive early adopter rewards. 
-            Ground floor opportunity - this is where it all begins.
+          <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-6">
+            Accountability built in. Be among the first to own Signal and help restore 
+            the standard that business relationships deserve.
           </p>
           
           <p className="text-sm text-gray-500 max-w-xl mx-auto">
