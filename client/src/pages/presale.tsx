@@ -627,6 +627,17 @@ function PresaleProgress() {
           </p>
         </div>
 
+        <div className="mb-4 p-4 rounded-xl bg-gradient-to-r from-purple-500/10 via-cyan-500/10 to-purple-500/10 border border-purple-500/20">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+            <p className="text-white font-semibold text-sm">Actively Building</p>
+          </div>
+          <p className="text-gray-300 text-xs leading-relaxed">
+            This is an ongoing presale. We are actively developing the ecosystem and shipping updates regularly. 
+            Check back often to see real progress. Launch happens when the product is ready, not on an arbitrary date.
+          </p>
+        </div>
+
         <Button 
           onClick={() => setShowBuyModal(true)}
           className="w-full py-6 text-lg font-bold bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:opacity-90"
