@@ -1288,9 +1288,16 @@ export default function Presale() {
             the standard that business relationships deserve.
           </p>
           
-          <p className="text-sm text-gray-500 max-w-xl mx-auto">
+          <p className="text-sm text-gray-500 max-w-xl mx-auto mb-6">
             Pay with card or crypto. All purchases are tracked by email for token distribution at launch.
           </p>
+          
+          <Link href="/home" data-testid="link-explore-trust-layer-top">
+            <Button variant="outline" className="border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-400 px-6">
+              <Globe className="w-4 h-4 mr-2" />
+              Explore Trust Layer
+            </Button>
+          </Link>
         </motion.div>
 
         {(purchaseEmail || purchaseWallet) && <MyPurchases userEmail={purchaseEmail || undefined} walletAddress={purchaseWallet || undefined} />}
