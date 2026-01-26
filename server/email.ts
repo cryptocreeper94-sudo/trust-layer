@@ -379,3 +379,95 @@ export async function sendEmailVerificationCode(to: string, code: string, name: 
     `,
   });
 }
+
+export async function sendWalletCreationReminder(to: string, name: string, tokenAmount: number, daysUntilLaunch: number) {
+  return sendEmail({
+    to,
+    subject: `Action Required: Create Your Trust Layer Wallet`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #ffffff; padding: 30px; border-radius: 12px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h1 style="color: #FFD700; margin-bottom: 10px;">Don't Miss Your Signal!</h1>
+          <p style="color: #888;">Hi${name ? ` ${name}` : ''},</p>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 25px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
+          <p style="color: #888; margin: 0 0 10px 0; font-size: 14px;">Your Signal Allocation</p>
+          <p style="color: #00FFFF; font-size: 36px; font-weight: bold; margin: 0;">${tokenAmount.toLocaleString()} SIG</p>
+          <p style="color: #00ff88; margin-top: 10px; font-size: 14px;">Ready to claim at launch</p>
+        </div>
+        
+        <div style="background: #ff6b6b20; border: 1px solid #ff6b6b; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+          <h3 style="color: #ff6b6b; margin: 0 0 10px 0;">⚠️ Wallet Required</h3>
+          <p style="color: #ffffff; margin: 0; font-size: 14px;">
+            You need to create a Trust Layer wallet before the Signal Generation Event to receive your tokens.
+            ${daysUntilLaunch > 0 ? `<strong>Only ${daysUntilLaunch} days remaining!</strong>` : ''}
+          </p>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+          <a href="https://dwtl.io/wallet" style="display: inline-block; background: linear-gradient(135deg, #06b6d4, #a855f7); color: #ffffff; font-weight: bold; padding: 15px 40px; border-radius: 8px; text-decoration: none; font-size: 16px;">
+            Create Wallet Now
+          </a>
+        </div>
+        
+        <div style="background: #1a1a2e; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+          <h3 style="color: #00FFFF; margin: 0 0 10px 0;">What happens if I don't create a wallet?</h3>
+          <p style="color: #888; margin: 0; font-size: 14px;">
+            Without a wallet, your Signal cannot be delivered at launch. You have 30 days after the Signal Generation Event 
+            to claim your tokens. After that, unclaimed Signal returns to the treasury.
+          </p>
+        </div>
+        
+        <p style="color: #888; font-size: 12px; text-align: center;">
+          Creating a wallet only takes 2 minutes. Don't let your Signal slip away!
+        </p>
+        <p style="color: #888; margin-top: 20px; text-align: center;">— The DarkWave Team</p>
+      </div>
+    `,
+  });
+}
+
+export async function sendSignupWelcomeEmail(to: string, name: string, referralCode?: string) {
+  return sendEmail({
+    to,
+    subject: `Welcome to Trust Layer - You're In!`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #ffffff; padding: 30px; border-radius: 12px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h1 style="color: #00FFFF; margin-bottom: 10px;">Welcome to Trust Layer!</h1>
+          <p style="color: #888;">Hi${name ? ` ${name}` : ''}, thanks for joining us!</p>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 25px; border-radius: 10px; margin-bottom: 20px;">
+          <h3 style="color: #FFD700; margin: 0 0 15px 0;">What's Next?</h3>
+          <ul style="color: #ffffff; padding-left: 20px; margin: 0;">
+            <li style="margin-bottom: 10px;">Explore the <a href="https://dwtl.io" style="color: #00FFFF;">presale</a> to own Signal early</li>
+            <li style="margin-bottom: 10px;">Join our community and earn Shells through activities</li>
+            <li style="margin-bottom: 10px;">Create your wallet before launch to receive your tokens</li>
+            ${referralCode ? `<li style="margin-bottom: 10px;">Share your referral code: <strong style="color: #00FFFF;">${referralCode}</strong></li>` : ''}
+          </ul>
+        </div>
+        
+        <div style="background: #1a1a2e; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #00FFFF;">
+          <h3 style="color: #00FFFF; margin: 0 0 10px 0;">Important: Wallet Creation</h3>
+          <p style="color: #888; margin: 0; font-size: 14px;">
+            Before the Signal Generation Event on April 11, 2026, you'll need to create a Trust Layer wallet 
+            to receive your Signal. We'll send you a reminder when it's time!
+          </p>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+          <a href="https://dwtl.io/home" style="display: inline-block; background: linear-gradient(135deg, #06b6d4, #a855f7); color: #ffffff; font-weight: bold; padding: 15px 40px; border-radius: 8px; text-decoration: none; font-size: 16px;">
+            Explore Trust Layer
+          </a>
+        </div>
+        
+        <p style="color: #888; font-size: 12px; text-align: center;">
+          Questions? Just reply to this email - we're here to help!
+        </p>
+        <p style="color: #888; margin-top: 20px; text-align: center;">— The DarkWave Team</p>
+      </div>
+    `,
+  });
+}
