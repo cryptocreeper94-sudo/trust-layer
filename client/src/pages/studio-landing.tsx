@@ -5,7 +5,8 @@ import {
   Code2, Play, Sparkles, Rocket, GitBranch, Terminal, Bot,
   Database, Shield, Cloud, Users, Zap, ChevronRight, Lock,
   FileCode, Layers, Package, Globe, CheckCircle2, HelpCircle,
-  BookOpen, Video, MessageSquare, Keyboard
+  BookOpen, Video, MessageSquare, Keyboard, GraduationCap,
+  AlertTriangle, Lightbulb, Target, ArrowRight, Clock, DollarSign
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -79,6 +80,72 @@ const helpResources = [
   { icon: Keyboard, title: "Keyboard Shortcuts", description: "Master the IDE with shortcuts", link: "#shortcuts" }
 ];
 
+const learningPath = [
+  {
+    step: 1,
+    title: "Read the Documentation",
+    description: "Learn the interface, tools, and best practices before writing code",
+    icon: BookOpen,
+    color: "from-cyan-500 to-blue-500",
+    link: "/studio/docs",
+    time: "15-30 min",
+    priority: "Start Here"
+  },
+  {
+    step: 2,
+    title: "Understand Credits",
+    description: "Learn how AI credits work so you can use them efficiently",
+    icon: DollarSign,
+    color: "from-amber-500 to-orange-500",
+    link: "/studio/docs#credits",
+    time: "5 min",
+    priority: "Important"
+  },
+  {
+    step: 3,
+    title: "Learn Keyboard Shortcuts",
+    description: "Master the shortcuts to code faster and use fewer AI prompts",
+    icon: Keyboard,
+    color: "from-purple-500 to-pink-500",
+    link: "#shortcuts",
+    time: "10 min",
+    priority: "Recommended"
+  },
+  {
+    step: 4,
+    title: "Launch the IDE",
+    description: "You're ready! Start coding with confidence",
+    icon: Rocket,
+    color: "from-green-500 to-emerald-500",
+    link: "/studio/editor",
+    time: "Ready",
+    priority: "Let's Go"
+  }
+];
+
+const essentialTips = [
+  {
+    icon: Lightbulb,
+    title: "Plan Before You Prompt",
+    description: "Think through what you want to build before asking the AI. Clear prompts get better results and use fewer credits."
+  },
+  {
+    icon: Target,
+    title: "Be Specific",
+    description: "Instead of 'make a website', try 'create a contact form with name, email, and message fields'. Specific = efficient."
+  },
+  {
+    icon: Clock,
+    title: "Learn the Basics First",
+    description: "Understanding HTML, CSS, and JavaScript basics means you'll need less AI help and can fix small issues yourself."
+  },
+  {
+    icon: CheckCircle2,
+    title: "Review AI Output",
+    description: "Always review what the AI generates. Understanding the code helps you modify it without burning more credits."
+  }
+];
+
 export default function StudioLanding() {
   const { user, isAuthenticated } = useSimpleAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -136,71 +203,205 @@ export default function StudioLanding() {
       </header>
 
       <main className="pt-20 pb-12">
-        {/* Hero Section */}
-        <section className="container mx-auto px-4 py-16 text-center">
+        {/* Hero Section - More focused on learning */}
+        <section className="container mx-auto px-4 py-12 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-6"
           >
-            <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span className="text-sm font-medium text-cyan-400">Cloud-Based Development Environment</span>
+            <GraduationCap className="w-4 h-4 text-cyan-400" />
+            <span className="text-sm font-medium text-cyan-400">Learn Before You Build</span>
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-bold mb-6"
+            className="text-4xl md:text-5xl font-bold mb-6"
           >
-            <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-              Build Anything
-            </span>
+            <span className="text-white">Welcome to</span>
             <br />
-            <span className="text-white">Right in Your Browser</span>
+            <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+              Trust Layer Studio
+            </span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-lg text-white/60 max-w-2xl mx-auto mb-8"
+            className="text-lg text-white/60 max-w-2xl mx-auto mb-4"
           >
-            A powerful, beginner-friendly IDE with AI assistance, project templates, 
-            and one-click deployment. No setup required - just sign in and start coding.
+            A powerful AI-assisted development environment. Before you start coding, 
+            take a few minutes to learn how it works - it will save you time and money.
           </motion.p>
 
+          {/* Important Notice */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            className="max-w-2xl mx-auto mb-8"
           >
-            {isAuthenticated ? (
-              <Link href="/studio/editor">
-                <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-black font-bold px-8" data-testid="button-launch-studio">
-                  <Play className="w-5 h-5 mr-2" />
-                  Launch Studio
-                </Button>
-              </Link>
-            ) : (
-              <Button 
-                size="lg" 
-                onClick={() => setShowLoginModal(true)}
-                className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-black font-bold px-8"
-                data-testid="button-get-started"
-              >
-                <Play className="w-5 h-5 mr-2" />
-                Get Started Free
-              </Button>
-            )}
-            <Link href="/studio/projects">
-              <Button size="lg" variant="outline" className="border-white/20 hover:bg-white/5" data-testid="button-view-projects">
-                <FileCode className="w-5 h-5 mr-2" />
-                View My Projects
-              </Button>
-            </Link>
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-start gap-3 text-left">
+              <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-amber-300 font-medium text-sm mb-1">AI Features Use Credits</p>
+                <p className="text-white/60 text-sm">
+                  Using the AI assistant costs credits. Learning the basics first means fewer prompts 
+                  needed and more efficient use of your credits. We recommend completing the learning 
+                  path below before jumping in.
+                </p>
+              </div>
+            </div>
           </motion.div>
+        </section>
+
+        {/* Learning Path - THE MAIN FOCUS */}
+        <section className="container mx-auto px-4 mb-16">
+          <GlassCard glow>
+            <div className="p-6 md:p-10">
+              <div className="text-center mb-8">
+                <Badge className="bg-green-500/20 text-green-400 border-green-500/30 mb-4">
+                  <Target className="w-3 h-3 mr-1" />
+                  Recommended Path
+                </Badge>
+                <h2 className="text-2xl md:text-3xl font-bold mb-3">Your Learning Journey</h2>
+                <p className="text-white/60 max-w-xl mx-auto">
+                  Follow these steps to get the most out of Trust Layer Studio without wasting credits
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {learningPath.map((item, i) => (
+                  <motion.div
+                    key={item.step}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 * i }}
+                  >
+                    {item.link === "#shortcuts" ? (
+                      <button
+                        onClick={() => setShowShortcuts(true)}
+                        className="w-full h-full text-left"
+                        data-testid={`button-learning-step-${item.step}`}
+                      >
+                        <div className="h-full bg-slate-800/50 border border-white/10 rounded-xl p-5 hover:border-cyan-500/30 transition-all group relative overflow-hidden">
+                          <div className="absolute top-0 right-0 px-2 py-1 text-xs font-medium bg-gradient-to-r from-transparent to-slate-800/80">
+                            <span className="text-white/40">{item.time}</span>
+                          </div>
+                          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-4`}>
+                            <item.icon className="w-5 h-5 text-white" />
+                          </div>
+                          <Badge className="mb-2 text-xs" variant="outline">{item.priority}</Badge>
+                          <h3 className="font-bold text-lg mb-2 group-hover:text-cyan-400 transition-colors">{item.title}</h3>
+                          <p className="text-sm text-white/60 mb-3">{item.description}</p>
+                          <div className="flex items-center gap-1 text-cyan-400 text-sm font-medium">
+                            <span>Start</span>
+                            <ArrowRight className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </button>
+                    ) : item.link === "/studio/editor" ? (
+                      isAuthenticated ? (
+                        <Link href={item.link}>
+                          <div className="h-full bg-slate-800/50 border border-white/10 rounded-xl p-5 hover:border-green-500/30 transition-all group relative overflow-hidden">
+                            <div className="absolute top-0 right-0 px-2 py-1 text-xs font-medium bg-gradient-to-r from-transparent to-slate-800/80">
+                              <span className="text-green-400">{item.time}</span>
+                            </div>
+                            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-4`}>
+                              <item.icon className="w-5 h-5 text-white" />
+                            </div>
+                            <Badge className="mb-2 text-xs bg-green-500/20 text-green-400 border-green-500/30">{item.priority}</Badge>
+                            <h3 className="font-bold text-lg mb-2 group-hover:text-green-400 transition-colors">{item.title}</h3>
+                            <p className="text-sm text-white/60 mb-3">{item.description}</p>
+                            <div className="flex items-center gap-1 text-green-400 text-sm font-medium">
+                              <span>Launch IDE</span>
+                              <ArrowRight className="w-4 h-4" />
+                            </div>
+                          </div>
+                        </Link>
+                      ) : (
+                        <button
+                          onClick={() => setShowLoginModal(true)}
+                          className="w-full h-full text-left"
+                          data-testid="button-learning-step-4"
+                        >
+                          <div className="h-full bg-slate-800/50 border border-white/10 rounded-xl p-5 hover:border-green-500/30 transition-all group relative overflow-hidden">
+                            <div className="absolute top-0 right-0 px-2 py-1 text-xs font-medium bg-gradient-to-r from-transparent to-slate-800/80">
+                              <span className="text-green-400">{item.time}</span>
+                            </div>
+                            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-4`}>
+                              <item.icon className="w-5 h-5 text-white" />
+                            </div>
+                            <Badge className="mb-2 text-xs bg-green-500/20 text-green-400 border-green-500/30">{item.priority}</Badge>
+                            <h3 className="font-bold text-lg mb-2 group-hover:text-green-400 transition-colors">{item.title}</h3>
+                            <p className="text-sm text-white/60 mb-3">{item.description}</p>
+                            <div className="flex items-center gap-1 text-green-400 text-sm font-medium">
+                              <span>Sign In to Start</span>
+                              <ArrowRight className="w-4 h-4" />
+                            </div>
+                          </div>
+                        </button>
+                      )
+                    ) : (
+                      <Link href={item.link}>
+                        <div className="h-full bg-slate-800/50 border border-white/10 rounded-xl p-5 hover:border-cyan-500/30 transition-all group relative overflow-hidden">
+                          <div className="absolute top-0 right-0 px-2 py-1 text-xs font-medium bg-gradient-to-r from-transparent to-slate-800/80">
+                            <span className="text-white/40">{item.time}</span>
+                          </div>
+                          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-4`}>
+                            <item.icon className="w-5 h-5 text-white" />
+                          </div>
+                          <Badge className="mb-2 text-xs" variant="outline">{item.priority}</Badge>
+                          <h3 className="font-bold text-lg mb-2 group-hover:text-cyan-400 transition-colors">{item.title}</h3>
+                          <p className="text-sm text-white/60 mb-3">{item.description}</p>
+                          <div className="flex items-center gap-1 text-cyan-400 text-sm font-medium">
+                            <span>Start</span>
+                            <ArrowRight className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </Link>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </GlassCard>
+        </section>
+
+        {/* Essential Tips Section */}
+        <section className="container mx-auto px-4 mb-16">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold mb-3">Tips to Save Credits</h2>
+            <p className="text-white/60 max-w-xl mx-auto">
+              These practices will help you work more efficiently and get more value from every AI interaction
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {essentialTips.map((tip, i) => (
+              <motion.div
+                key={tip.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * i }}
+              >
+                <GlassCard className="h-full">
+                  <div className="p-5 flex gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center flex-shrink-0">
+                      <tip.icon className="w-5 h-5 text-cyan-400" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold mb-1">{tip.title}</h3>
+                      <p className="text-sm text-white/60">{tip.description}</p>
+                    </div>
+                  </div>
+                </GlassCard>
+              </motion.div>
+            ))}
+          </div>
         </section>
 
         {/* IDE Preview */}
