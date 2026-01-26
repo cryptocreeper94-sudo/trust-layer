@@ -8,6 +8,7 @@ import { serveStatic } from "./static";
 import { createServer } from "http";
 import { startScheduler } from "./marketing-scheduler";
 import { startShellsAirdropScheduler } from "./shells-airdrop-scheduler";
+import { startEmailUpdateScheduler } from "./email-update-scheduler";
 import { seedDocuments, seedCityZones } from "./storage";
 import { setupPresence } from "./chat-presence";
 import { setupGuardianScannerWS } from "./guardian-scanner-ws";
@@ -349,6 +350,9 @@ async function initializeServices() {
     
     // Shells airdrop scheduler - runs at 7 AM and 7 PM UTC (1 AM and 1 PM CST)
     startShellsAirdropScheduler();
+    
+    // Email update scheduler - sends weekly updates every Sunday at 10 AM UTC
+    startEmailUpdateScheduler();
     
     servicesReady = true;
     console.log('[Init] All services initialized successfully');
