@@ -167,16 +167,16 @@ export default function StudioLanding() {
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <Shield className="w-7 h-7 text-cyan-400" />
-            <span className="font-bold text-lg">Trust Layer Studio</span>
+          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
+            <Shield className="w-6 h-6 md:w-7 md:h-7 text-cyan-400" />
+            <span className="font-bold text-sm md:text-lg whitespace-nowrap">Trust Layer Studio</span>
           </Link>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setShowShortcuts(true)}
-              className="text-white/60 hover:text-white"
+              className="text-white/60 hover:text-white hidden sm:flex"
               data-testid="button-shortcuts"
             >
               <HelpCircle className="w-4 h-4 mr-1" />
