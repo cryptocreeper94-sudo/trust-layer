@@ -1324,35 +1324,37 @@ export default function Presale() {
             Your tokens are allocated immediately upon purchase and will be distributed to your Trust Layer wallet at mainnet launch.
           </p>
           
-          <div className="overflow-x-auto pb-4 -mx-4 px-4 mb-8">
-            <div className="flex gap-4 pt-6 min-w-max lg:min-w-0 lg:grid lg:grid-cols-4">
-              <HolographicCard className="p-6 text-center relative w-64 lg:w-auto flex-shrink-0" glow="cyan">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">1</div>
-                <CreditCard className="w-8 h-8 text-cyan-400 mx-auto mb-4 mt-2" />
-                <h3 className="text-lg font-bold text-white mb-2">Get Crypto</h3>
-                <p className="text-gray-400 text-sm">Use existing crypto or buy with card via Stripe's secure onramp</p>
-              </HolographicCard>
-              
-              <HolographicCard className="p-6 text-center relative w-64 lg:w-auto flex-shrink-0" glow="purple">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">2</div>
-                <Wallet className="w-8 h-8 text-purple-400 mx-auto mb-4 mt-2" />
-                <h3 className="text-lg font-bold text-white mb-2">Pay with Crypto</h3>
-                <p className="text-gray-400 text-sm">Complete checkout via Coinbase - BTC, ETH, USDC accepted</p>
-              </HolographicCard>
-              
-              <HolographicCard className="p-6 text-center relative w-64 lg:w-auto flex-shrink-0" glow="pink">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">3</div>
-                <Users className="w-8 h-8 text-pink-400 mx-auto mb-4 mt-2" />
-                <h3 className="text-lg font-bold text-white mb-2">Create Wallet</h3>
-                <p className="text-gray-400 text-sm">Before launch, create your Trust Layer wallet to claim tokens</p>
-              </HolographicCard>
-              
-              <HolographicCard className="p-6 text-center relative w-64 lg:w-auto flex-shrink-0" glow="amber">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm shadow-lg">4</div>
-                <Coins className="w-8 h-8 text-amber-400 mx-auto mb-4 mt-2" />
-                <h3 className="text-lg font-bold text-white mb-2">Receive Signal</h3>
-                <p className="text-gray-400 text-sm">Signal + converted Shells airdropped to your wallet</p>
-              </HolographicCard>
+          <div className="overflow-visible pb-4 mb-8">
+            <div className="overflow-x-auto -mx-4 px-4">
+              <div className="flex gap-4 min-w-max lg:min-w-0 lg:grid lg:grid-cols-4 py-2">
+                <HolographicCard className="p-6 pt-4 text-center w-64 lg:w-auto flex-shrink-0" glow="cyan">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold text-sm shadow-lg mx-auto mb-3">1</div>
+                  <CreditCard className="w-8 h-8 text-cyan-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-bold text-white mb-2">Get Crypto</h3>
+                  <p className="text-gray-400 text-sm">Use existing crypto or buy with card via Stripe's secure onramp</p>
+                </HolographicCard>
+                
+                <HolographicCard className="p-6 pt-4 text-center w-64 lg:w-auto flex-shrink-0" glow="purple">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm shadow-lg mx-auto mb-3">2</div>
+                  <Wallet className="w-8 h-8 text-purple-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-bold text-white mb-2">Pay with Crypto</h3>
+                  <p className="text-gray-400 text-sm">Complete checkout via Coinbase - BTC, ETH, USDC accepted</p>
+                </HolographicCard>
+                
+                <HolographicCard className="p-6 pt-4 text-center w-64 lg:w-auto flex-shrink-0" glow="pink">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm shadow-lg mx-auto mb-3">3</div>
+                  <Users className="w-8 h-8 text-pink-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-bold text-white mb-2">Create Wallet</h3>
+                  <p className="text-gray-400 text-sm">Before launch, create your Trust Layer wallet to claim tokens</p>
+                </HolographicCard>
+                
+                <HolographicCard className="p-6 pt-4 text-center w-64 lg:w-auto flex-shrink-0" glow="amber">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm shadow-lg mx-auto mb-3">4</div>
+                  <Coins className="w-8 h-8 text-amber-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-bold text-white mb-2">Receive Signal</h3>
+                  <p className="text-gray-400 text-sm">Signal + converted Shells airdropped to your wallet</p>
+                </HolographicCard>
+              </div>
             </div>
             <p className="text-center text-gray-500 text-xs mt-3 lg:hidden">Swipe to see all steps →</p>
           </div>
@@ -1393,13 +1395,21 @@ export default function Presale() {
           </HolographicCard>
         </div>
 
-        <div className="text-center space-x-6 mb-8">
-          <Link href="/investment-simulator" className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300" data-testid="link-simulator">
-            <Calculator className="w-4 h-4" /> Investment Simulator
+        <div className="text-center mb-8">
+          <Link href="/home" data-testid="link-explore-trust-layer">
+            <Button className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white font-semibold px-8 py-3 mb-6" size="lg">
+              <Globe className="w-5 h-5 mr-2" />
+              Explore Trust Layer
+            </Button>
           </Link>
-          <Link href="/roadmap" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300" data-testid="link-view-roadmap">
-            View Full Roadmap <ArrowRight className="w-4 h-4" />
-          </Link>
+          <div className="flex flex-wrap justify-center gap-6">
+            <Link href="/investment-simulator" className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300" data-testid="link-simulator">
+              <Calculator className="w-4 h-4" /> Investment Simulator
+            </Link>
+            <Link href="/roadmap" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300" data-testid="link-view-roadmap">
+              View Full Roadmap <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
 
         <DYORDisclaimer variant="full" className="max-w-2xl mx-auto mb-8" />
