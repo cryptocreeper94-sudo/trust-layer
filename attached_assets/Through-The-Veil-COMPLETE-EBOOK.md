@@ -66,29 +66,35 @@ What happens next is between you and the Most High.
 
 To those who believe this book blasphemes the Messiah by questioning the name "Jesus Christ":
 
-Please understand what is being said - and what is not.
-
-This book does not deny the Messiah. This book honors him by seeking his actual name.
+This book does not deny the Messiah. This book exposes **a deception** that has been operating for centuries.
 
 "Jesus Christ" was not his name. It could not have been. The letter "J" did not exist in any language until approximately 1524. The Messiah walked the earth 1,500 years before the sound "Jee-zus" was ever spoken by anyone, anywhere.
 
-His name was **Yahusha** - a Hebrew name meaning "Yahuah is salvation." The Father's name is embedded in the Son's name. That connection was intentional. That connection was severed when the name was changed.
+His name was **Yahusha** - meaning "Yahuah is salvation." The Father's name is embedded in the Son's name. That connection was intentional. **That connection was severed when the name was changed.**
 
-The Father also has a name - **Yahuah** - which appears over 6,800 times in the Hebrew scriptures. It was replaced with "LORD" in English translations. Not translated. Replaced.
+The Father's name - **Yahuah** - appears over 6,800 times in the Hebrew scriptures. It was replaced with "LORD" in English translations. Not translated. **Replaced.** The name was targeted because the name carries power. The name carries identity. The name carries covenant.
 
-This matters. The Messiah himself said: *"If you love me, keep my commandments."* One of those commandments: *"You shall not take the name of Yahuah your Elohiym in vain."* Another: *"This is my name forever, and this is my memorial unto all generations."*
+This is not about pronunciation preferences. **Everything is frequency. Everything is vibration.**
 
-He asked to be called by his name. Not a made-up name. Not a Greek-Latin-English transformation that sounds nothing like the original. His actual name - the frequency produced when that name is spoken aloud.
+The name **Yahusha** contains the frequency signature of Yahuah - "Yahuah is salvation." It connects to the Father. When spoken aloud, it produces a specific frequency.
 
-"Jesus" is not a transliteration. A transliteration preserves the sounds. Compare:
+The name "Jesus" has a **different frequency**. A different signature. **Potentially connecting to something else entirely.**
+
+This is the deception that could fool even the elect. Not blatant evil. Not obvious darkness. But a name that sounds right, feels right, has been accepted for centuries - **yet connects to the wrong source.**
+
+Think about what that means: Praying sincerely, with genuine heart, to a name that routes elsewhere. **Inviting something in** while believing you're connecting to the Messiah.
+
+"Jesus" is not a transliteration. A transliteration preserves the sounds:
 - Hebrew: **Yahusha** (Yah-HOO-sha)
-- English "transliteration": "Jesus" (JEE-zus)
+- English: "Jesus" (JEE-zus)
 
-Those are not the same sounds. That is not transliteration. That is substitution.
+Those are not the same sounds. That is not transliteration. **That is substitution.**
 
-This book brings light to what was hidden. It restores glory to the deserving parties. It asks only that you consider: if the name matters - and scripture says it does - then shouldn't we use the right one?
+This book brings light to what was hidden. Yes, it will cause heartburn. Yes, it threatens structures built on the deception. Yes, it upsets money-making schemes that depend on you never knowing.
 
-Seeking the true name is not blasphemy. Accepting a substitute without question might be.
+The glory must go to the deserved parties. The Messiah asked to be called by **his** name - not some other made-up name, not some Greek-Latin-English transformation. **His name.** The frequency that name produces when spoken aloud.
+
+Exposing deception is not blasphemy. **The deception is the blasphemy.**
 
 ---
 
