@@ -64,6 +64,8 @@ What happens next is between you and the Most High.
 
 ## A Note on the Name
 
+*Scripture references from the Eth Cepher, which restores the Hebrew names*
+
 To those who believe this book blasphemes the Messiah by questioning the name "Jesus Christ":
 
 This book does not deny the Messiah. This book exposes **a deception** that has been operating for centuries.
@@ -73,6 +75,23 @@ This book does not deny the Messiah. This book exposes **a deception** that has 
 His name was **Yahusha** - meaning "Yahuah is salvation." The Father's name is embedded in the Son's name. That connection was intentional. **That connection was severed when the name was changed.**
 
 The Father's name - **Yahuah** - appears over 6,800 times in the Hebrew scriptures. It was replaced with "LORD" in English translations. Not translated. **Replaced.** The name was targeted because the name carries power. The name carries identity. The name carries covenant.
+
+**The scriptures themselves declare this:**
+
+> *"And Elohiym said moreover unto Mosheh, Thus shall you say unto the children of Yashar'el, Yahuah Elohiym of your fathers, the Elohiym of Avraham, the Elohiym of Yitschaq, and the Elohiym of Ya'aqov, has sent me unto you: **this is my name forever, and this is my memorial unto all generations.**"*
+> — **Shemoth (Exodus) 3:15**
+
+> *"**I am Yahuah: that is my name:** and my glory will I not give to another, neither my praise to graven images."*
+> — **Yesha'yahu (Isaiah) 42:8**
+
+> *"Neither is there salvation in any other: for there is **no other name** under heaven given among men, whereby we must be saved."*
+> — **Ma'asiym (Acts) 4:12**
+
+> *"And it shall come to pass, that whosoever shall **call on the name of Yahuah** shall be delivered."*
+> — **Yo'el (Joel) 2:32**
+
+> *"**I have manifested your name** unto the men which you gave me out of the world."*
+> — **Yahuchanon (John) 17:6**
 
 This is not about pronunciation preferences. **Everything is frequency. Everything is vibration.**
 
