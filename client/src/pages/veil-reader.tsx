@@ -2145,34 +2145,39 @@ export default function VeilReader() {
 
   const playWithBrowserSpeech = (text: string) => {
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
     
-    const voices = window.speechSynthesis.getVoices();
-    const preferredVoice = voices.find(v => 
-      v.name.includes('Samantha') || 
-      v.name.includes('Karen') || 
-      v.name.includes('Google US English') ||
-      v.lang.startsWith('en')
-    );
-    if (preferredVoice) utterance.voice = preferredVoice;
-    
-    utterance.onend = () => {
-      setIsPlaying(false);
+    // Wait a moment for speechSynthesis to be ready
+    setTimeout(() => {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+      
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice = voices.find(v => 
+        v.name.includes('Samantha') || 
+        v.name.includes('Karen') || 
+        v.name.includes('Google US English') ||
+        v.lang.startsWith('en')
+      );
+      if (preferredVoice) utterance.voice = preferredVoice;
+      
+      utterance.onend = () => {
+        setIsPlaying(false);
+        setIsPaused(false);
+      };
+      
+      utterance.onerror = (e) => {
+        console.error('Speech synthesis error:', e);
+        setIsPlaying(false);
+        setIsPaused(false);
+      };
+      
+      utteranceRef.current = utterance;
+      window.speechSynthesis.speak(utterance);
+      setIsPlaying(true);
       setIsPaused(false);
-    };
-    
-    utterance.onerror = () => {
-      setIsPlaying(false);
-      setIsPaused(false);
-    };
-    
-    utteranceRef.current = utterance;
-    window.speechSynthesis.speak(utterance);
-    setIsPlaying(true);
-    setIsPaused(false);
-    setIsLoading(false);
+      setIsLoading(false);
+    }, 100);
   };
 
   // Split text into chunks at sentence boundaries (roughly 4500 chars to stay under 5000 limit)
