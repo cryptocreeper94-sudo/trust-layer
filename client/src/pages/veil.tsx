@@ -4,10 +4,6 @@ import { Button } from "@/components/ui/button";
 import { BookOpen, Download, FileText, Smartphone, BookMarked, ExternalLink } from "lucide-react";
 
 export default function Veil() {
-  const handlePrintVolume2 = () => {
-    window.open('/veil/print/vol2', '_blank');
-  };
-
   const handleReadOnline = () => {
     window.location.href = '/veil/read';
   };
@@ -56,41 +52,40 @@ export default function Veil() {
           <GlassCard className="p-8 max-w-4xl mx-auto border-2 border-purple-500/30" glow>
             <div className="text-center mb-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-500/30 mb-4">
-                <span className="text-xs text-purple-300 uppercase tracking-wider">Two Volumes - One Journey</span>
+                <span className="text-xs text-purple-300 uppercase tracking-wider">The Complete Edition</span>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-2">The Complete Edition</h3>
+              <h3 className="text-2xl font-bold text-white mb-2">One Book. The Full Journey.</h3>
               <p className="text-slate-400 max-w-xl mx-auto">
-                Volume One presents the evidence. Volume Two walks you through what happens when you finally see it.
+                The evidence. The patterns. The personal testimony of stepping through the fear. All in one complete volume.
               </p>
             </div>
             
             <div className="grid md:grid-cols-2 gap-6 mb-6">
               <div className="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
-                <h4 className="text-cyan-400 font-semibold mb-2">Volume One: The Evidence</h4>
+                <h4 className="text-cyan-400 font-semibold mb-2">Part One: The Evidence</h4>
                 <p className="text-slate-400 text-sm">168 pages, 42 chapters, 12 parts. The history, the patterns, the documented substitutions and erasures.</p>
               </div>
               <div className="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
-                <h4 className="text-purple-400 font-semibold mb-2">Volume Two: The Journey</h4>
+                <h4 className="text-purple-400 font-semibold mb-2">Part Two: The Journey</h4>
                 <p className="text-slate-400 text-sm">24 parts of personal testimony. What happened when I finally allowed myself to step through the fear.</p>
               </div>
             </div>
             
             <div className="text-center">
-              <p className="text-slate-500 text-sm mb-4">Download both volumes below, or read the complete edition online:</p>
               <Button 
                 onClick={handleReadOnline}
                 className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
               >
                 <BookOpen className="w-4 h-4 mr-2" />
-                Read Complete Edition Online
+                Read Online
               </Button>
             </div>
           </GlassCard>
         </motion.div>
 
-        <h3 className="text-2xl font-bold text-white mb-8 text-center">Download Individual Volumes</h3>
+        <h3 className="text-2xl font-bold text-white mb-8 text-center">Download the Complete Edition</h3>
 
-        <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-16 px-4">
+        <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto mb-16 px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -110,7 +105,7 @@ export default function Veil() {
               <ul className="space-y-2.5 mb-6 text-slate-300 text-sm">
                 <li className="flex items-center gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0" />
-                  <span>168 pages</span>
+                  <span>Complete edition</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0" />
@@ -125,7 +120,7 @@ export default function Veil() {
               <a href="/assets/Through-The-Veil-EBOOK.pdf" download className="block mt-auto">
                 <Button className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 py-4">
                   <Download className="w-4 h-4 mr-2" />
-                  PDF (7 MB)
+                  Download PDF
                 </Button>
               </a>
             </GlassCard>
@@ -150,7 +145,7 @@ export default function Veil() {
               <ul className="space-y-2.5 mb-6 text-slate-300 text-sm">
                 <li className="flex items-center gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-purple-400 flex-shrink-0" />
-                  <span>58 chapters</span>
+                  <span>Complete edition</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <span className="w-1.5 h-1.5 rounded-full bg-purple-400 flex-shrink-0" />
@@ -165,50 +160,9 @@ export default function Veil() {
               <a href="/assets/Through-The-Veil-EBOOK.epub" download className="block mt-auto">
                 <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 py-4">
                   <Download className="w-4 h-4 mr-2" />
-                  EPUB (147 KB)
+                  Download EPUB
                 </Button>
               </a>
-            </GlassCard>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <GlassCard className="p-6 md:p-8 h-full border-2 border-purple-500/20" glow>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 flex-shrink-0">
-                  <BookMarked className="w-5 h-5 text-purple-400" />
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-base font-bold text-white leading-tight">Read Online</h3>
-                  <p className="text-xs text-slate-400">Browser & Print</p>
-                </div>
-              </div>
-              
-              <ul className="space-y-2.5 mb-6 text-slate-300 text-sm">
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-pink-400 flex-shrink-0" />
-                  <span>24 parts</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-pink-400 flex-shrink-0" />
-                  <span>Author's Note</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-pink-400 flex-shrink-0" />
-                  <span>Print to PDF</span>
-                </li>
-              </ul>
-              
-              <Button 
-                onClick={handlePrintVolume2}
-                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 py-4 mt-auto"
-              >
-                <ExternalLink className="w-4 h-4 mr-2" />
-                Open & Print
-              </Button>
             </GlassCard>
           </motion.div>
         </div>
@@ -223,30 +177,30 @@ export default function Veil() {
             
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <h4 className="text-lg font-semibold text-cyan-400 mb-4 border-b border-cyan-400/30 pb-2">Volume One: The Evidence</h4>
+                <h4 className="text-lg font-semibold text-cyan-400 mb-4 border-b border-cyan-400/30 pb-2">Part One: The Evidence</h4>
                 
                 <div className="space-y-3">
                   <div>
-                    <h5 className="text-cyan-300 font-medium text-sm">Part One: The Rebellion</h5>
+                    <h5 className="text-cyan-300 font-medium text-sm">The Rebellion</h5>
                     <p className="text-slate-400 text-xs">The 200 Watchers, the Nephilim, the forbidden knowledge.</p>
                   </div>
                   <div>
-                    <h5 className="text-cyan-300 font-medium text-sm">Part Two: The Resets</h5>
+                    <h5 className="text-cyan-300 font-medium text-sm">The Resets</h5>
                     <p className="text-slate-400 text-xs">The Flood, Tartaria, the mud flood, orphan trains.</p>
                   </div>
                   <div>
-                    <h5 className="text-cyan-300 font-medium text-sm">Part Three: The Substitution</h5>
+                    <h5 className="text-cyan-300 font-medium text-sm">The Substitution</h5>
                     <p className="text-slate-400 text-xs">The Name erased, calendar changed, scriptures removed.</p>
                   </div>
                   <div>
-                    <h5 className="text-cyan-300 font-medium text-sm">Parts Four-Six</h5>
-                    <p className="text-slate-400 text-xs">Hidden rulers, control systems, the awakening, path forward.</p>
+                    <h5 className="text-cyan-300 font-medium text-sm">The Path Forward</h5>
+                    <p className="text-slate-400 text-xs">Hidden rulers, control systems, the awakening.</p>
                   </div>
                 </div>
               </div>
               
               <div>
-                <h4 className="text-lg font-semibold text-purple-400 mb-4 border-b border-purple-400/30 pb-2">Volume Two: The Journey</h4>
+                <h4 className="text-lg font-semibold text-purple-400 mb-4 border-b border-purple-400/30 pb-2">Part Two: The Journey</h4>
                 
                 <div className="space-y-3">
                   <div>
