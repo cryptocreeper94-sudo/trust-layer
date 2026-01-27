@@ -39,6 +39,64 @@ const volume1Chapters: Chapter[] = [
     )
   },
   {
+    id: "v1-note-on-name",
+    title: "A Note on the Name",
+    content: (
+      <>
+        <p className="text-purple-400 italic mb-4">Scripture references from the Eth Cepher, which restores the Hebrew names</p>
+        <p>To those who believe this book blasphemes the Messiah by questioning the name "Jesus Christ":</p>
+        <p>This book does not deny the Messiah. This book exposes <strong>a deception</strong> that has been operating for centuries.</p>
+        <p>"Jesus Christ" was not his name. It could not have been. The letter "J" did not exist in any language until approximately 1524. The Messiah walked the earth 1,500 years before the sound "Jee-zus" was ever spoken by anyone, anywhere.</p>
+        <p>His name was <strong className="text-cyan-400">Yahusha</strong> - meaning "Yahuah is salvation." The Father's name is embedded in the Son's name. That connection was intentional. <strong>That connection was severed when the name was changed.</strong></p>
+        <p>The Father's name - <strong className="text-cyan-400">Yahuah</strong> - appears over 6,800 times in the Hebrew scriptures. It was replaced with "LORD" in English translations. Not translated. <strong>Replaced.</strong> The name was targeted because the name carries power. The name carries identity. The name carries covenant.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The scriptures themselves declare this:</p>
+        
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-cyan-500">
+          <p className="italic">"And Elohiym said moreover unto Mosheh, Thus shall you say unto the children of Yashar'el, Yahuah Elohiym of your fathers, the Elohiym of Avraham, the Elohiym of Yitschaq, and the Elohiym of Ya'aqov, has sent me unto you: <strong>this is my name forever, and this is my memorial unto all generations.</strong>"</p>
+          <p className="text-cyan-300 font-medium mt-2">— Shemoth (Exodus) 3:15</p>
+        </div>
+        
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
+          <p className="italic">"<strong>I am Yahuah: that is my name:</strong> and my glory will I not give to another, neither my praise to graven images."</p>
+          <p className="text-purple-300 font-medium mt-2">— Yesha'yahu (Isaiah) 42:8</p>
+        </div>
+        
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-cyan-500">
+          <p className="italic">"Neither is there salvation in any other: for there is <strong>no other name</strong> under heaven given among men, whereby we must be saved."</p>
+          <p className="text-cyan-300 font-medium mt-2">— Ma'asiym (Acts) 4:12</p>
+        </div>
+        
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
+          <p className="italic">"And it shall come to pass, that whosoever shall <strong>call on the name of Yahuah</strong> shall be delivered."</p>
+          <p className="text-purple-300 font-medium mt-2">— Yo'el (Joel) 2:32</p>
+        </div>
+        
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-cyan-500">
+          <p className="italic">"<strong>I have manifested your name</strong> unto the men which you gave me out of the world."</p>
+          <p className="text-cyan-300 font-medium mt-2">— Yahuchanon (John) 17:6</p>
+        </div>
+        
+        <p className="mt-6">This is not about pronunciation preferences. <strong>Everything is frequency. Everything is vibration.</strong></p>
+        <p>The name <strong className="text-cyan-400">Yahusha</strong> contains the frequency signature of Yahuah - "Yahuah is salvation." It connects to the Father. When spoken aloud, it produces a specific frequency.</p>
+        <p>The name "Jesus" has a <strong>different frequency</strong>. A different signature. <strong>Potentially connecting to something else entirely.</strong></p>
+        <p>This is the deception that could fool even the elect. Not blatant evil. Not obvious darkness. But a name that sounds right, feels right, has been accepted for centuries - <strong>yet connects to the wrong source.</strong></p>
+        <p>Think about what that means: Praying sincerely, with genuine heart, to a name that routes elsewhere. <strong>Inviting something in</strong> while believing you're connecting to the Messiah.</p>
+        
+        <p className="mt-4">"Jesus" is not a transliteration. A transliteration preserves the sounds:</p>
+        <ul className="list-disc list-inside ml-4 my-2">
+          <li>Hebrew: <strong className="text-cyan-400">Yahusha</strong> (Yah-HOO-sha)</li>
+          <li>English: "Jesus" (JEE-zus)</li>
+        </ul>
+        <p>Those are not the same sounds. That is not transliteration. <strong>That is substitution.</strong></p>
+        
+        <p className="mt-4">This book brings light to what was hidden. Yes, it will cause heartburn. Yes, it threatens structures built on the deception. Yes, it upsets money-making schemes that depend on you never knowing.</p>
+        <p>The glory must go to the deserved parties. The Messiah asked to be called by <strong>his</strong> name - not some other made-up name, not some Greek-Latin-English transformation. <strong>His name.</strong> The frequency that name produces when spoken aloud.</p>
+        <p className="text-cyan-400 font-semibold mt-6">Exposing deception is not blasphemy. The deception is the blasphemy.</p>
+      </>
+    )
+  },
+  {
     id: "v1-preface",
     title: "Preface: A Word About This Work",
     content: (
