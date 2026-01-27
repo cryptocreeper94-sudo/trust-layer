@@ -62,6 +62,36 @@ What happens next is between you and the Most High.
 
 ---
 
+## A Note on the Name
+
+To those who believe this book blasphemes the Messiah by questioning the name "Jesus Christ":
+
+Please understand what is being said - and what is not.
+
+This book does not deny the Messiah. This book honors him by seeking his actual name.
+
+"Jesus Christ" was not his name. It could not have been. The letter "J" did not exist in any language until approximately 1524. The Messiah walked the earth 1,500 years before the sound "Jee-zus" was ever spoken by anyone, anywhere.
+
+His name was **Yahusha** - a Hebrew name meaning "Yahuah is salvation." The Father's name is embedded in the Son's name. That connection was intentional. That connection was severed when the name was changed.
+
+The Father also has a name - **Yahuah** - which appears over 6,800 times in the Hebrew scriptures. It was replaced with "LORD" in English translations. Not translated. Replaced.
+
+This matters. The Messiah himself said: *"If you love me, keep my commandments."* One of those commandments: *"You shall not take the name of Yahuah your Elohiym in vain."* Another: *"This is my name forever, and this is my memorial unto all generations."*
+
+He asked to be called by his name. Not a made-up name. Not a Greek-Latin-English transformation that sounds nothing like the original. His actual name - the frequency produced when that name is spoken aloud.
+
+"Jesus" is not a transliteration. A transliteration preserves the sounds. Compare:
+- Hebrew: **Yahusha** (Yah-HOO-sha)
+- English "transliteration": "Jesus" (JEE-zus)
+
+Those are not the same sounds. That is not transliteration. That is substitution.
+
+This book brings light to what was hidden. It restores glory to the deserving parties. It asks only that you consider: if the name matters - and scripture says it does - then shouldn't we use the right one?
+
+Seeking the true name is not blasphemy. Accepting a substitute without question might be.
+
+---
+
 ## Preface: A Word About This Work
 
 This book is based on research. On world events. On historical precedent. On patterns that keep appearing across cultures, centuries, and continents.
