@@ -3648,13 +3648,32 @@ These, then, are some of the corrections in the Cepher. It is the most fervent p
 
 ---
 
+## Connect With the Community
+
+If this book resonated with you, you're not alone.
+
+There are others who see the patterns. Others who are asking the same questions. Others who refuse to accept the official narrative without investigation.
+
+**DarkWave Trust Layer** is building a community for truth-seekers - a place where discernment is valued, discussion is encouraged, and the pursuit of truth is the common thread.
+
+Visit: **https://dwsc.io**
+
+What you'll find:
+- A community of like-minded seekers
+- Ongoing research and discussion
+- A platform built on transparency and trust
+- Resources for continued awakening
+
+This isn't about creating followers. It's about connecting seekers. The journey through the veil is easier when you're not walking alone.
+
+---
+
 ## Coming Soon
 
-- Expanded edition with additional research
-- Deception Tracker: A growing database of predictive programming and hidden-in-plain-sight symbolism
 - Audio version narrated by the author
 - Study guide and discussion questions
 - Community forum for collaborative research
+- Expanded editions with additional documentation
 
 ---
 
@@ -3662,6 +3681,13 @@ These, then, are some of the corrections in the Cepher. It is the most fervent p
 
 *Through the Veil: Unraveling the Tapestry of Lies?*
 
+*By Jason Andrews*
+
 *All glory to Yahuah, the Most High.*
 
 *HalleluYah.*
+
+---
+
+**For updates and community discussion:**
+**https://dwsc.io**
