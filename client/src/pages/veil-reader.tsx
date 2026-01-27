@@ -81,7 +81,23 @@ const volume1Chapters: Chapter[] = [
         <p>The name <strong className="text-cyan-400">Yahusha</strong> contains the frequency signature of Yahuah - "Yahuah is salvation." It connects to the Father. When spoken aloud, it produces a specific frequency.</p>
         <p>The name "Jesus" has a <strong>different frequency</strong>. A different signature. <strong>Potentially connecting to something else entirely.</strong></p>
         <p>This is the deception that could fool even the elect. Not blatant evil. Not obvious darkness. But a name that sounds right, feels right, has been accepted for centuries - <strong>yet connects to the wrong source.</strong></p>
-        <p>Think about what that means: Praying sincerely, with genuine heart, to a name that routes elsewhere. <strong>Inviting something in</strong> while believing you're connecting to the Messiah.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The scriptures warned us this would happen:</p>
+        
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-red-500">
+          <p className="italic">"I am come in my Father's name, and ye receive me not: <strong>if another shall come in his own name, him ye will receive.</strong>"</p>
+          <p className="text-red-300 font-medium mt-2">— Yahuchanon (John) 5:43</p>
+        </div>
+        
+        <p>Yahusha came <strong>in His Father's name</strong> - the name Yahuah is literally embedded in Yahusha. The Father's name is part of the Son's identity. That's what "coming in my Father's name" means.</p>
+        <p>But another would come <strong>in the name of a man</strong> - and him they would receive. The name "Jesus Christ" is the name of a man. A Greek-Latin-English construction that contains no trace of the Father's name. And it has been received by billions.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The gematria confirms it:</p>
+        
+        <p>In Greek gematria, the name "Jesus Christ" (Ἰησοῦς Χριστός) calculates to <strong className="text-red-400">666</strong> - the number of the beast, described in Chazon (Revelation) 13:18 as "the number of a man."</p>
+        <p>This is not coincidence. This is signature. The adversary signs his work. And the Roman deception machine - Constantine and those who followed - knew exactly what they were doing when they replaced the name that connects to the Father with a name that connects to something else entirely.</p>
+        
+        <p className="mt-4">Think about what that means: Praying sincerely, with genuine heart, to a name that routes elsewhere. <strong>Inviting something in</strong> while believing you're connecting to the Messiah.</p>
         
         <p className="mt-4">"Jesus" is not a transliteration. A transliteration preserves the sounds:</p>
         <ul className="list-disc list-inside ml-4 my-2">

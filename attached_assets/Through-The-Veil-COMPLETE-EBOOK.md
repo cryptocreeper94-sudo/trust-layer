@@ -101,6 +101,21 @@ The name "Jesus" has a **different frequency**. A different signature. **Potenti
 
 This is the deception that could fool even the elect. Not blatant evil. Not obvious darkness. But a name that sounds right, feels right, has been accepted for centuries - **yet connects to the wrong source.**
 
+**The scriptures warned us this would happen:**
+
+> *"I am come in my Father's name, and ye receive me not: if another shall come in his own name, him ye will receive."*
+> — **Yahuchanon (John) 5:43**
+
+Yahusha came **in His Father's name** - the name Yahuah is literally embedded in Yahusha. The Father's name is part of the Son's identity. That's what "coming in my Father's name" means.
+
+But another would come **in the name of a man** - and him they would receive. The name "Jesus Christ" is the name of a man. A Greek-Latin-English construction that contains no trace of the Father's name. And it has been received by billions.
+
+**The gematria confirms it:**
+
+In Greek gematria, the name "Jesus Christ" (Ἰησοῦς Χριστός) calculates to **666** - the number of the beast, described in Chazon (Revelation) 13:18 as "the number of a man."
+
+This is not coincidence. This is signature. The adversary signs his work. And the Roman deception machine - Constantine and those who followed - knew exactly what they were doing when they replaced the name that connects to the Father with a name that connects to something else entirely.
+
 Think about what that means: Praying sincerely, with genuine heart, to a name that routes elsewhere. **Inviting something in** while believing you're connecting to the Messiah.
 
 "Jesus" is not a transliteration. A transliteration preserves the sounds:
