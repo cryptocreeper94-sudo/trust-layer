@@ -3310,6 +3310,64 @@ The following claims made in this book can be verified through publicly availabl
 - Quote: Gregory Clark research shows "family status has persisted for more than 8 centuries (28+ generations)" in England
 - Relevance: Demonstrates wealth dynasties persist across centuries - the families who had power after a reset maintained it
 
+**Dinosaur Soft Tissue Discovery (Chapter 6)**
+- Source: Schweitzer, M.H., et al. (2005). "Soft-Tissue Vessels and Cellular Preservation in Tyrannosaurus rex." Science 307(5717):1952-1955
+- Additional: Schweitzer, M.H., et al. (2007). "Analyses of Soft Tissue from Tyrannosaurus rex Suggest the Presence of Protein." Science 316(5822):277-280
+- Content: Peer-reviewed discovery of preserved soft tissue, blood vessels, and cells in 68-million-year-old (by conventional dating) T. rex fossils
+- Significance: Raises questions about conventional dating methods; soft tissue preservation over millions of years contradicts known decay rates
+
+**"Dinosaur" Word Origin (Chapter 6)**
+- Source: Owen, Richard (1842). "Report on British Fossil Reptiles, Part II." Report of the British Association for the Advancement of Science
+- Date: Word "dinosaur" (from Greek deinos "terrible" + sauros "lizard") coined 1842
+- Pre-1842: Creatures now called dinosaurs were referenced as dragons in historical accounts
+- Verification: Oxford English Dictionary etymology; British Museum records
+
+**Dragon in Historical Dictionaries (Chapter 6)**
+- Source: Various dictionary editions pre-1950
+- Claim: Dragons described as "rare" not "mythological" or "extinct" in some older dictionaries
+- Reader verification: Check digital archives of historical dictionaries (Internet Archive, Google Books)
+- Note: Listed as pattern worth investigating - readers encouraged to verify independently
+
+**Orphan Train Historical Documentation (Chapter 16)**
+- Source: Children's Aid Society records; National Orphan Train Complex Museum (Concordia, Kansas)
+- Dates: 1854-1929, approximately 250,000 children relocated
+- Primary sources: Rider lists, placement records, newspaper advertisements
+- Verification: Ancestry.com orphan train records; state historical societies
+- Academic: Holt, Marilyn Irvin (1992). "The Orphan Trains: Placing Out in America." University of Nebraska Press
+
+**World's Fair Demolition Records (Chapter 14)**
+- Source: Official fair records; contemporary newspaper accounts
+- Examples: 1893 World's Columbian Exposition (Chicago) - most structures demolished post-fair
+- Verification: Chicago History Museum; Library of Congress photograph archives
+- Pattern noted: Elaborate "temporary" structures built then quickly destroyed
+
+**UAP/UFO Government Acknowledgment (Chapter 33)**
+- Source: Office of the Director of National Intelligence, "Preliminary Assessment: Unidentified Aerial Phenomena" (June 2021)
+- Additional: Pentagon AATIP (Advanced Aerospace Threat Identification Program) acknowledgment (2017)
+- Congressional: Multiple congressional hearings 2022-2023; National Defense Authorization Act provisions
+- Navy videos: Three declassified videos (FLIR1, Gimbal, GoFast) officially released 2020
+- Verification: DNI.gov; Congressional Record; Department of Defense statements
+
+**St. Christopher Cynocephalus Iconography (Chapter 7)**
+- Source: Eastern Orthodox iconographic tradition; Byzantine museum collections
+- Examples: Icon at Byzantine and Christian Museum, Athens; various Eastern European church frescoes
+- Historical text: "Passion of St. Christopher" (various manuscript traditions)
+- Academic: White, David Gordon (1991). "Myths of the Dog-Man." University of Chicago Press
+- Note: Multiple historical depictions exist; interpretation debated among scholars
+
+**Book of Enoch - Dead Sea Scrolls Fragments (Chapters 2-4)**
+- Source: Qumran Cave 4 discoveries
+- Catalog numbers: 4Q201, 4Q202, 4Q204-4Q212 (Aramaic Enoch fragments)
+- Verification: Israel Antiquities Authority; Leon Levy Dead Sea Scrolls Digital Library
+- Academic: Milik, J.T. (1976). "The Books of Enoch: Aramaic Fragments of Qumran Cave 4." Oxford University Press
+- Significance: Confirms pre-Christian Jewish acceptance of Enochian literature
+
+**Book of Giants - Dead Sea Scrolls (Chapter 4)**
+- Source: Qumran discoveries
+- Catalog: 4Q203, 4Q530-4Q533, 6Q8
+- Content: Fragments describing Nephilim, their dreams, and coming judgment
+- Verification: Dead Sea Scrolls Digital Library; multiple academic publications
+
 ---
 
 ## Note on Sources
