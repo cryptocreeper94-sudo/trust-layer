@@ -2217,22 +2217,25 @@ export default function VeilReader() {
 
   const playChunk = async (chunkText: string, isLastChunk: boolean) => {
     try {
+      // Add timeout to prevent hanging
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      
       const response = await fetch('/api/voice/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: chunkText }),
+        signal: controller.signal,
       });
       
+      clearTimeout(timeoutId);
+      
       if (!response.ok) {
-        const error = await response.json();
-        if (error.fallback) {
-          console.log('ElevenLabs unavailable, falling back to browser voice');
-          setUseElevenLabs(false);
-          const fullText = audioQueueRef.current.join(' ');
-          playWithBrowserSpeech(fullText);
-          return;
-        }
-        throw new Error(error.error || 'Voice generation failed');
+        console.log('TTS API error, falling back to browser voice');
+        setUseElevenLabs(false);
+        const fullText = audioQueueRef.current.join(' ');
+        playWithBrowserSpeech(fullText);
+        return;
       }
       
       const audioBlob = await response.blob();
