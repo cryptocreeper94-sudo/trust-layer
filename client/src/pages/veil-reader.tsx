@@ -527,6 +527,14 @@ const volume1Chapters: Chapter[] = [
         <p>You can. The evidence exists. And it has been systematically ignored, ridiculed, or buried by mainstream archaeology.</p>
         
         <p className="text-lg font-semibold text-white mt-6 mb-4">Sodom and Gomorrah: The Cities of Ash</p>
+        
+        <div className="my-4 flex justify-center">
+          <div className="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/30 max-w-md">
+            <img src="/veil-images/dead-sea-region.jpg" alt="Dead Sea region where the ruins of Sodom and Gomorrah were discovered" className="w-full rounded-lg" />
+            <p className="text-center text-sm text-slate-400 mt-2 italic">The Dead Sea region - location of the ash cities</p>
+          </div>
+        </div>
+        
         <p>Ron Wyatt, an amateur archaeologist and anesthetist from Tennessee, discovered what mainstream archaeology refuses to acknowledge: the actual remains of Sodom, Gomorrah, Admah, Zeboiim, and Zoar near the Dead Sea.</p>
         <p>Genesis 19:24-25: "Then Yahuah rained upon Sodom and upon Gomorrah brimstone and fire from Yahuah out of heaven; And he overthrew those cities, and all the plain, and all the inhabitants of the cities, and that which grew upon the ground."</p>
         <p>What Wyatt found: <strong>entire city structures turned to ash</strong>. Not metaphorical ash - literal calcium sulfite ash. Buildings with right angles. Walls. Streets. Ziggurats. All reduced to white powder.</p>
@@ -535,6 +543,14 @@ const volume1Chapters: Chapter[] = [
         <p>Some of these artifacts are housed in museums, including one in Tennessee. You can see them. You can hold them. The evidence is tangible - yet mainstream archaeology dismisses it entirely.</p>
         
         <p className="text-lg font-semibold text-white mt-6 mb-4">Mount Sinai: The Burned Mountain</p>
+        
+        <div className="my-4 flex justify-center">
+          <div className="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/30 max-w-md">
+            <img src="/veil-images/sinai-mountain.jpg" alt="Mountain landscape in the Sinai region" className="w-full rounded-lg" />
+            <p className="text-center text-sm text-slate-400 mt-2 italic">Jabal al-Lawz - the true Mount Sinai with its blackened peak</p>
+          </div>
+        </div>
+        
         <p>Exodus 19:18: "And mount Sinai was altogether on a smoke, because Yahuah descended upon it in fire: and the smoke thereof ascended as the smoke of a furnace, and the whole mount quaked greatly."</p>
         <p>Traditional sites in the Sinai Peninsula show no evidence of this burning. But Jabal al-Lawz in Saudi Arabia - the site Wyatt identified as the true Mount Sinai - shows something remarkable: <strong>the peak is burned black</strong>.</p>
         <p>You can see the line where the burning stops. The lower portion of the mountain is normal rock. Above a certain elevation, it's charred. Blackened. As if something descended in fire.</p>
@@ -542,6 +558,14 @@ const volume1Chapters: Chapter[] = [
         <p>The Saudi government initially fenced the entire area as a restricted archaeological zone. The evidence is too significant to allow public access.</p>
         
         <p className="text-lg font-semibold text-white mt-6 mb-4">The Giant Tree Stumps</p>
+        
+        <div className="my-4 flex justify-center">
+          <div className="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/30 max-w-md">
+            <img src="/veil-images/devils-tower.jpg" alt="Devils Tower Wyoming - possible ancient petrified tree stump" className="w-full rounded-lg" />
+            <p className="text-center text-sm text-slate-400 mt-2 italic">Devils Tower, Wyoming - volcanic plug or ancient giant tree stump?</p>
+          </div>
+        </div>
+        
         <p>Genesis describes a pre-flood world vastly different from ours. The atmosphere held more oxygen. Living things grew larger. Trees grew to heights we can barely imagine today.</p>
         <p>Devils Tower in Wyoming rises 867 feet above the surrounding terrain. Official explanation: volcanic plug, magma that cooled underground and was exposed by erosion.</p>
         <p>But look at it. The vertical columnar striations. The flat top. The hexagonal cross-sections of the "columns." It looks exactly like a petrified tree stump - cut, with the distinctive pattern of tree growth rings visible in the columns.</p>
@@ -551,6 +575,14 @@ const volume1Chapters: Chapter[] = [
         <p>The pattern repeats globally. Too consistent for coincidence. Too aligned with pre-flood accounts to ignore.</p>
         
         <p className="text-lg font-semibold text-white mt-6 mb-4">The Red Sea Crossing: Chariot Wheels on the Sea Floor</p>
+        
+        <div className="my-4 flex justify-center">
+          <div className="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/30 max-w-md">
+            <img src="/veil-images/red-sea-underwater.jpg" alt="Red Sea underwater at the Gulf of Aqaba crossing site" className="w-full rounded-lg" />
+            <p className="text-center text-sm text-slate-400 mt-2 italic">The Gulf of Aqaba - where chariot wheels were found on the sea floor</p>
+          </div>
+        </div>
+        
         <p>Exodus 14:21-22: "And Mosheh stretched out his hand over the sea; and Yahuah caused the sea to go back by a strong east wind all that night, and made the sea dry land, and the waters were divided. And the children of Yashar'el went into the midst of the sea upon the dry ground."</p>
         <p>Ron Wyatt identified the crossing site at Nuweiba Beach on the Gulf of Aqaba - not the shallow Reed Sea traditionally proposed, but a deep water crossing to what is now Saudi Arabia.</p>
         <p>What he found underwater was extraordinary: <strong>Egyptian chariot wheels</strong> encrusted with coral, scattered across the sea floor in a pattern consistent with an army in pursuit. Four-spoke, six-spoke, and eight-spoke wheels - designs consistent with the 18th Dynasty of Egypt, the time of the Exodus.</p>
@@ -558,6 +590,14 @@ const volume1Chapters: Chapter[] = [
         <p>The underwater land bridge between the two shores has a gradual descent - exactly what would be needed for millions of people with livestock and carts to cross. The depths on either side drop sharply - exactly where the waters would have "stood as walls" and collapsed on the Egyptian army.</p>
         
         <p className="text-lg font-semibold text-white mt-6 mb-4">Noah's Ark: The Boat-Shaped Formation</p>
+        
+        <div className="my-4 flex justify-center">
+          <div className="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/30 max-w-md">
+            <img src="/veil-images/mount-ararat.jpg" alt="Mount Ararat Turkey where Noah's Ark site is located" className="w-full rounded-lg" />
+            <p className="text-center text-sm text-slate-400 mt-2 italic">Mount Ararat, Turkey - location of the boat-shaped formation</p>
+          </div>
+        </div>
+        
         <p>In the mountains of Ararat in eastern Turkey, near the village of Dogubayazit, sits a boat-shaped formation that matches the biblical dimensions of the Ark precisely. Genesis 6:15: "And this is the fashion which you shall make it of: The length of the ark shall be three hundred cubits, the breadth of it fifty cubits, and the height of it thirty cubits."</p>
         <p>Using the Royal Egyptian cubit (20.6 inches), the Ark would be 515 feet long. The formation at this site measures 515 feet exactly.</p>
         <p>Ground-penetrating radar revealed internal structures consistent with a ship - regularly spaced, parallel lines suggesting deck beams and bulkheads. Metal detector surveys found iron at regular intervals, consistent with metal brackets or fittings.</p>
