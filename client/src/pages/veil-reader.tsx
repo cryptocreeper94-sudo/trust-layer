@@ -2157,9 +2157,22 @@ export default function VeilReader() {
     if (typeof node === 'number') return String(node);
     if (!node) return '';
     if (Array.isArray(node)) return node.map(extractText).join(' ');
-    if (typeof node === 'object' && 'props' in node) {
-      const element = node as React.ReactElement<{ children?: React.ReactNode }>;
-      return extractText(element.props?.children);
+    if (typeof node === 'object') {
+      // Handle React elements
+      if ('props' in node) {
+        const element = node as React.ReactElement<{ children?: React.ReactNode }>;
+        const childText = extractText(element.props?.children);
+        // Add sentence breaks after paragraphs for better speech flow
+        const tag = typeof element.type === 'string' ? element.type : '';
+        if (tag === 'p' || tag === 'li' || tag === 'div') {
+          return childText + '. ';
+        }
+        return childText;
+      }
+      // Handle other objects (like Symbol(react.fragment))
+      if ('children' in (node as any)) {
+        return extractText((node as any).children);
+      }
     }
     return '';
   };
@@ -2355,6 +2368,15 @@ export default function VeilReader() {
     }
 
     const text = extractText(chapter.content);
+    
+    // Check if text was extracted successfully
+    if (!text || text.trim().length === 0) {
+      console.error('No text extracted from chapter:', chapter.title);
+      setIsLoading(false);
+      return;
+    }
+    
+    console.log('Playing chapter:', chapter.title, 'Text length:', text.length);
     
     if (useElevenLabs) {
       await playWithElevenLabs(text);
