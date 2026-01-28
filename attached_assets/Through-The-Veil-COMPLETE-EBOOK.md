@@ -294,6 +294,18 @@ If the 200 craters correlate to the 200 fallen, then the geological record isn't
 
 Instead, the evidence points to cataclysm. To judgment. To a history that was deliberately erased and replaced with a story designed to obscure the truth about who humanity is and what happened to the world before.
 
+### ✦ AUTHOR'S THOUGHTS ✦
+
+Celebrities are called **"stars"** - and fallen angels were cast down from heaven as falling stars (Chizayon 12:4, Yesha'yahu 14:12). Many prominent "stars" bear El names. Some appear to reverse-age inexplicably. They're paid to stupefy, distract, mesmerize - to hypnotize the masses while mocking the true Elohiym simultaneously.
+
+It's spiritual and subconscious, but it all matters. The physical realm is merely an encasement for spirit, and every nuance - even the ones we never consciously notice - is where the hooks are set.
+
+Perhaps many who display the symbols have themselves been deceived. They may genuinely believe they are part of something chosen - that they have witnessed miracles, that they know who the true messiah is, that the timing simply hasn't been right for his public revelation.
+
+When people call them "Illuminati" or "out of touch," they can laugh. The Illuminati as a formal organization may no longer exist. But the spirit behind it continues. And if these initiates truly believe they serve the returning messiah - if they have seen things that convinced them - their confidence makes sense. They're not nervous because they believe they're on the winning side.
+
+*Some of these people seem to get younger. Inexplicably. They have access to things the public does not. Perhaps their benefactor waits in the wings, building an army of witnesses who will say: "No, you don't understand. I've seen him. I've seen the miracles. This is the one."*
+
 ---
 
 # CHAPTER 3: THE FORBIDDEN KNOWLEDGE
@@ -517,6 +529,38 @@ The confusion of languages was mercy and judgment combined. It prevented the uni
 The scattering that followed created the diverse civilizations we study today. But something was lost in that scattering. A coherence. A connection to the original tongue that connected sound, image, and meaning.
 
 And that loss wasn't accidental. It was strategic. Disconnecting humanity from the language of creation was part of the same pattern we've been tracing. But the restoration is prophesied in Tsephanyahu (Zephaniah) 3:9: "For then will I turn to the people a pure language, that they may all call upon the name of Yahuah, to serve him with one consent."
+
+### ✦ AUTHOR'S THOUGHTS ✦
+
+**Yashar'el vs. "Israel": The Isis-Ra-El Question**
+
+The Cepher explained that **Yashar'el** means "Upright with the Almighty" - a spiritual transformation, not a geographic designation. Jacob went from crooked (Ya'akov) to upright (Yashar'el). A change in character, not a change in address. Here's what I saw when I looked at the English word "Israel."
+
+**Spiritual Yashar'el** refers to those living in covenant relationship with Yahuah - the scattered remnant with eyes to see and ears to hear. They could be anywhere in the world, from any nation, any background. The upright ones aligned with the Creator.
+
+**The modern nation-state** (established 1948) is a geopolitical entity, created through political powers - the British Mandate, UN Resolution 181, and significant Rothschild financing. Everyone watches a geographic location for prophetic fulfillment while the true Yashar'el is spiritual and scattered across the earth.
+
+Now here is where it gets striking. Some have noted that the English word could be heard as a combination of pagan deities: **Isis** (Egyptian goddess) + **Ra** (Egyptian sun god) + **El**. Say it slowly. Is-Ra-El. Three names. Two of them are Egyptian deities the Ivriym were explicitly commanded to reject.
+
+> **Two false deities placed BEFORE El** - directly violating "You shall have no other elohim before me." Isis comes first. Then Ra. Then El. The very structure of the word places false gods before the true.
+>
+> **The reading order reversed** - Original Ivriyt (Hebrew) reads right to left; English reads left to right. Even the direction of perception is inverted.
+>
+> **The geopolitical confusion** - People passionately debate this word, take sides, go to war over it - arguing about a word that may encapsulate the entire deception hidden in plain sight.
+
+The same people who dismiss Scripture will take heated, passionate sides on modern geopolitical conflicts - arguing, protesting, even dying over a word that mocks everything encoded in it.
+
+**The Question of "El" Names**
+
+Scholars debate whether "El" (אל) is simply a generic Semitic word for "mighty one" - or whether it originally referred to the supreme deity of the Canaanite pantheon, whose attributes were later absorbed by Yahuah.
+
+Consider the prevalence of "El" names in positions of power and prominence: Elon, Denzel, Michael, Daniel, Gabriel, Emmanuel. If "El" carries hidden allegiance to the Canaanite deity, these names become signals - a mockery understood only by initiates.
+
+Even in fiction, the pattern appears. Superman's Kryptonian name is **Kal-El**. His father is **Jor-El**. The entire house is the House of El. The "S" symbol - often interpreted as the serpent - adorns his chest. A savior figure from the sky, bearing the El name, worshiped by the masses.
+
+Children's programming featured a villain named **Gargamel** and his cat **Azrael** - the name of the angel of death in certain traditions. Children absorbed these names every Saturday morning, internalizing them as harmless cartoon characters. By adulthood, the conditioning is complete.
+
+*Some suggest that the proper pronunciation should be **"AL"** rather than "EL" - a subtle difference in frequency and sound that may carry significant meaning. If names operate on vibrational frequencies, this small distinction could be the difference between alignment with the Creator and unwitting allegiance to the counterfeit.*
 
 ---
 
@@ -988,6 +1032,30 @@ But there's also truth in precision. Yo'el (Joel) 2:32 prophesies: "And it shall
 Yahuchanon (John) 17:6 records Yahusha's own words: "I have manifested your name unto the men which you gave me out of the world."
 
 When someone deliberately changes your name, it's an act of power. It's saying they get to define you. Recovering the original name is an act of resistance. Of honoring the one who gave it.
+
+### ✦ AUTHOR'S THOUGHTS ✦
+
+**The Gematria Connection: 666 and 2368**
+
+The Cepher showed that Revelation 13:18 contains Greek letters - χξς (chi xi stigma) - not the number 666. That's their work. Here's what I found when I looked deeper, and this is where it gets undeniable.
+
+Greek isopsephy (gematria) assigns numerical values to letters. The ancients used this extensively - it wasn't mysticism, it was mathematics embedded in language. When we calculate the Greek name and title that billions call upon:
+
+> **Ἰησοῦς (Iesous/Jesus)** = 888
+> **Χριστός (Christos/Christ)** = 1480
+> **Ἰησοῦς Χριστός (Jesus Christ)** = 888 + 1480 = **2368**
+
+Now here is where the dots connect in a way that cannot be dismissed as coincidence. The complete Greek phrase from Revelation 13:18 - **"καὶ ὁ ἀριθμὸς αὐτοῦ χξϛ"** (and his number is chi xi stigma) - when calculated using the same exact method, *also equals 2368*. The exact same gematria value as "Jesus Christ."
+
+Stop and consider what this means. The passage that identifies the beast's number - the very phrase itself - carries the same numerical signature as the name billions worship. This isn't interpretation. It's mathematics. Anyone can verify it.
+
+Now consider this alongside what Yahusha said in Yochanon (John) 5:43: "I am come in my Father's name, and you receive me not: if another shall come in his own name, him you will receive."
+
+**Yahusha** (יהושע) literally contains **Yahuah** (יהוה) - look at the letters. The Father's name is embedded within the Son's name. He came IN the Father's name. The name itself carries the Father.
+
+But "Jesus" is a Romanized Greek translation that passed through Latin before reaching English. There is no connection to Yahuah whatsoever. The Father's name has been completely removed. And billions call upon this name without ever knowing the original - or that removing the Father's name might carry consequences.
+
+*This isn't about condemning anyone. It's about asking: if names matter - if they carry meaning, authority, and allegiance - then what does it mean that the whole world calls upon a name stripped of the Father while the original remains hidden?*
 
 ---
 
@@ -1982,6 +2050,26 @@ The carousel is slowing down. The music is fading. And those with eyes to see ar
 
 This is the Beast system. It's not just about Rome or empires of old. It's a global, spiritual infrastructure that has co-opted language, faith, and identity to redirect worship, sever connection, and sell a counterfeit messiah.
 
+### ✦ AUTHOR'S THOUGHTS ✦
+
+**The Spiritual Mark**
+
+While many focus on a physical manifestation - a chip, a tattoo, a barcode - consider the deeper meaning of the forehead and hand. Scripture uses this same language in Devariym (Deuteronomy) 6:8 regarding the Torah: "And thou shalt bind them for a sign upon thine hand, and they shall be as frontlets between thine eyes."
+
+The **forehead** represents the mind - what you believe, who you acknowledge as authority, where your signal comes in. The **hand** represents your works - what you labor for, what you build, whom you serve with your actions. The mark of Yahuah or the mark of the beast is first and foremost a matter of **allegiance**.
+
+If a physical mark is required to "buy or sell," it may simply be the outward confirmation of a spiritual decision already made. You will not be forced. You will choose. And that choice may have already been made through acceptance of false doctrine in the mind (forehead) and participation in false worship with the body (hand).
+
+**The Symbolism Everywhere**
+
+The chi xi stigma imagery appears constantly in modern branding, architecture, hand signs, and corporate logos - often disguised but recognizable once you know what to look for.
+
+Consider the Monster Energy drink logo - three claw marks that form the Hebrew letter "vav" (ו) repeated three times. Vav has a numerical value of 6. Three vavs: 666. Hidden in plain sight on millions of cans.
+
+Observe the hand sign made by countless celebrities - thumb and index finger forming a circle with three fingers extended. It creates 666. Some dismiss this as coincidence or the "OK" sign. But when the same gesture appears across industries, nationalities, and decades, coincidence strains credulity.
+
+*Corporate emblems from technology giants display circular patterns that, upon inspection, contain interlocking sixes. These are the companies that seemingly control everything - information, communication, commerce. Why would they encode this symbolism unless it meant something?*
+
 **THE ANTICHRIST: A SPIRIT, NOT A MAN**
 
 Here is where the deception gets layered upon itself.
@@ -2638,6 +2726,18 @@ Look around. Does the world appear to be in a millennial reign of peace? Or does
 
 The timeline matters because it changes expectations. If the millennium is future, we wait for rescue. If the millennium is past, we're in the final battle.
 
+### ✦ AUTHOR'S THOUGHTS ✦
+
+**The Reordered Timeline**
+
+What if we've been taught the prophetic timeline in the wrong order? Traditional teaching says: Rapture → Tribulation → Second Coming → 1000 Year Reign → Satan Released → Armageddon → Final Judgment.
+
+But consider the alternative: What if the true Messiah has already returned? What if the millennial reign has already happened - during what we call the medieval period, when faith spread across the known world and cathedrals rose to heaven? What if history was then erased, reset, and we now find ourselves in Satan's "little season" described in Revelation 20?
+
+This would mean the timeline is: True Messiah returned → 1000 Year Reign occurred → Reset/Erasure → *We are NOW in Satan's little season* → False messiah appears → Mark willingly accepted → Script flips → Tribulation → Final Judgment.
+
+*Everyone is looking for something that may have already happened. And the very fact that no one considers this possibility? That everyone dismisses it without examination? That is itself evidence of the deception working exactly as designed.*
+
 ---
 
 # CHAPTER 35: THE SHORT SEASON
@@ -2653,6 +2753,14 @@ Revelation 13:3 describes the beast receiving a mortal head wound that was heale
 What wounded the beast? Consider the timing. Rome - the beast system of its era - dominated the known world. Then Christianity rose. The empire fell. The pagan temples closed. The old gods were abandoned. The beast received a mortal wound.
 
 For a thousand years, the wound remained. The medieval period - the so-called "Dark Ages" - was actually an age of faith. Cathedrals rose across Europe. Monasteries preserved knowledge. The church, for all its flaws, kept the memory of the Messiah alive. The beast lay wounded.
+
+Consider the inversion: they called it the **"Dark Ages."** The angel of light, the deceiver, labeled the millennial reign - the age of faith, of cathedrals reaching toward heaven, of the beast lying wounded - as "dark." Meanwhile, the "Enlightenment" that followed - which brought humanism, reason over revelation, the marginalization of the Creator - that was called "light."
+
+Complete inversion. Call the light dark. Call the dark light. Yesha'yahu (Isaiah) 5:20: "Woe unto them that call evil good, and good evil; that put darkness for light, and light for darkness."
+
+If the adversary wanted to ensure no one ever looked at the medieval period as the millennial reign, what better strategy than to label it "dark"? To make historians dismiss it as a primitive time of ignorance? To make modern people feel superior to those "backward" centuries of faith?
+
+The very name "Dark Ages" may be the signature of the deception - the adversary's mockery hidden in plain sight.
 
 ## THE RENAISSANCE: THE WOUND HEALS
 
@@ -2728,6 +2836,20 @@ We're watching it unfold in real time.
 If indeed life is happening in Satan's little season - the brief time after the Millennial Reign when the adversary is loosed to deceive the nations - then the end of that season is approaching.
 
 The deception is at its peak. The technology of control is fully deployed. The inversion of everything true is nearly complete. And the final confrontation is approaching.
+
+### ✦ AUTHOR'S THOUGHTS ✦
+
+**The Hydra**
+
+The beast with seven heads. Cut one off and another appears. Every layer of deception revealed just uncovers another. You think you finally understand, and five more layers emerge. The system is so entrenched, so multi-dimensional, so thoroughly woven into every aspect of life that you'd have to look in five hundred directions simultaneously to keep up.
+
+That's why this understanding is terrifying. It's not one thing to fix. It's not one lie to expose. It's everything. The names. The calendar. The holidays. The institutions. The entertainment. The news. The education. The religion. All of it working together, each piece reinforcing the others, each layer hiding the next.
+
+Maybe that's why this understanding is emerging now - not because it wasn't there before, but because the time is approaching when it needs to be known. Maybe it signifies the actual time we are in. The veil lifting for those with eyes to see, even as the deception intensifies for those without.
+
+*Once you know, you can't unknow. It doesn't change the facts - it changes you. You're no longer oblivious. You're no longer ignorant. And that clarity, as terrifying as it may be, is exactly what faith is for. Not believing in something you can't see - but **knowing** that the promise made will be kept. Knowing that what has been revealed was revealed for a reason. Knowing that you were meant to see this, now, in this time.*
+
+*The fear is real. I felt it writing these words. But the promise is also real. And the One who made it does not lie.*
 
 This isn't about dates and predictions. The when is unknown. Nobody knows. But the signs are accumulating. The veil is thinning. The patterns are converging. And as in the days of Noah, most will not know until it is upon them.
 
