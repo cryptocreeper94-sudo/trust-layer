@@ -624,6 +624,34 @@ const volume1Chapters: Chapter[] = [
     )
   },
   {
+    id: "v1-ch5c",
+    title: "Chapter 5C: The Petrified Giants",
+    content: (
+      <>
+        <p>The Nephilim were massive. Genesis describes them as giants - beings of extraordinary size born from the union of Watchers and human women. Some accounts in Enoch and other texts describe beings hundreds of feet tall. When the Flood came, what happened to their bodies?</p>
+        <p>Mountains that look like faces. Rock formations that resemble hands, feet, bodies. The "natural" world contains shapes that seem too precise to be random.</p>
+        <p>What if some of these formations are exactly what they appear to be - petrified giants?</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Science of Petrification</p>
+        <p>Silicon-based petrification is documented and well-understood. When organic matter is rapidly buried under sediment with mineral-rich water, the original material is gradually replaced by silica and other minerals. The process preserves the original structure - every cell, every fiber - but transforms it into stone.</p>
+        <p>We see this in petrified forests. Entire trees turned to stone, their rings still visible, their bark patterns intact. The wood didn't decompose - it was replaced molecule by molecule with minerals, creating a stone replica of the original.</p>
+        <p>Why couldn't the same process happen to flesh? If the Flood deposited massive amounts of sediment rapidly, burying everything beneath it, the conditions for rapid petrification would exist. And if giants existed, their bodies would be preserved at giant scale.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Legends Match the Formations</p>
+        <p>Mount Everest's name in Tibetan is "Chomolungma" - Mother Goddess of the Universe. Local legends describe it as a deity in repose. Not a metaphor for grandeur - a literal description of what they believed the mountain to be.</p>
+        <p>Devils Tower in Wyoming was called "Bear Lodge" by Native Americans. Their legends describe a giant bear clawing at it while girls fled to the top. The vertical striations do look exactly like claw marks. But what if the "bear" was something else entirely - and what if the "tower" was once alive?</p>
+        <p>The Sleeping Giant formations found across multiple continents. Faces in cliff sides. Bodies stretched across mountain ranges. The Andes. The Rockies. The Alps. Shapes that repeat too precisely to be coincidence.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Cover-Up</p>
+        <p>The Smithsonian Institution has been repeatedly accused of destroying giant skeleton discoveries. Newspaper reports from the 1800s and early 1900s document hundreds of giant skeleton finds across America - 7-foot, 8-foot, 9-foot, even larger remains discovered by farmers, miners, and construction workers.</p>
+        <p>These skeletons were often sent to the Smithsonian. They never appeared in exhibits. They never appeared in catalogs. They disappeared.</p>
+        <p>Why? Because giant skeletons prove the biblical account. They prove the Nephilim were real. They prove the Flood was real. They prove the timeline we've been given is a lie.</p>
+        <p>And if the skeletons were hidden, how much more the petrified bodies? Formations dismissed as "natural" that are anything but. Shapes too perfect to be random, too consistent to be coincidence, too aligned with ancient accounts to be imagination.</p>
+        <p>The giants existed. Some of them may still be visible - if you know what you're looking at.</p>
+      </>
+    )
+  },
+  {
     id: "v1-ch6",
     title: "Chapter 6: Dragons, Not Dinosaurs",
     content: (
@@ -747,41 +775,58 @@ const volume1Chapters: Chapter[] = [
         <p>Look at old photographs of major cities - Chicago, San Francisco, Melbourne, St. Petersburg. Notice something strange: the first floors of magnificent buildings are buried. Windows that should be at street level are underground. Doors open to nothing. Elaborate architectural details are below ground level.</p>
         <p>The official explanation varies: settling, poor construction, deliberate burial for various reasons, street level changes for sanitation.</p>
         <p>But the pattern is global. Consistent. Affecting buildings that show no signs of sinking, built by supposed "primitive" cultures with technology we struggle to replicate today.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Evidence Is Everywhere</p>
         <p>The Tartaria hypothesis suggests: a global event deposited feet of mud across entire continents, burying the ground floors of a previous civilization. Then history was rewritten to erase what came before.</p>
+        <p>Consider the evidence:</p>
+        <ul className="list-disc list-inside space-y-2 my-4 text-slate-300">
+          <li><strong>Buried first floors:</strong> Across every continent, old buildings show their original ground floors underground. Windows at knee level. Doors that open to dirt. Basement levels that were clearly designed as main entrances.</li>
+          <li><strong>Impossible architecture:</strong> Courthouses, train stations, and government buildings from the 1800s display craftsmanship we cannot replicate today. Perfect acoustics. Heating systems with no visible source. Materials we can't identify.</li>
+          <li><strong>World's Fair structures:</strong> The 1893 Chicago World's Fair supposedly constructed massive marble buildings in months, only to demolish them immediately after. Who builds palaces to tear them down? Or were these existing structures simply "showcased" then erased?</li>
+          <li><strong>Star forts:</strong> Identical geometric fortifications exist on every continent, from Europe to North America to Japan. Same design. Same proportions. Same unexplained technology. Built by whom?</li>
+          <li><strong>Free energy technology:</strong> Old buildings contain spires, metal frameworks, and architectural elements consistent with atmospheric energy harvesting - not decoration, but function.</li>
+        </ul>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">Tartaria: The Erased Empire</p>
+        <p>Old maps - maps from the 1700s and earlier - show a massive empire called "Tartaria" spanning from Eastern Europe across all of Asia. This wasn't a small territory. It was one of the largest empires ever depicted on maps.</p>
+        <p>By the mid-1800s, Tartaria disappears from maps entirely. An empire that size doesn't just vanish. It gets conquered. Absorbed. <strong>Erased.</strong></p>
+        <p>What if Tartaria wasn't just a political entity but a civilization with technology we've lost? What if the mud flood was the weapon used to destroy it? What if the victors then rewrote history to make Tartaria nothing but a footnote - "a vague geographic term" as modern historians claim?</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Timeline Questions</p>
         <p>Who built these buildings? The official timeline has pioneers in log cabins constructing massive marble structures with impossible precision. The technology to create such buildings supposedly didn't exist. Yet there they stand.</p>
+        <p>The 1800s photographs tell a story the history books don't. Cities appear fully built, already ancient, already buried. Population seems sparse for the infrastructure. Children appear in industrial settings where no children should be. And those children have no parents in the photos - ever.</p>
         <p>What if the magnificent buildings of the 19th century weren't built by that era's inhabitants at all? What if they were inherited from a previous civilization - one that was destroyed and written out of history?</p>
+        <p>A reset. Not the first. Not the last. But perhaps the most recent - and the one whose evidence remains most visible if you know where to look.</p>
       </>
     )
   },
   {
     id: "v1-ch15",
-    title: "Chapter 15: The Petrified Giants",
-    content: (
-      <>
-        <p>Mountains that look like faces. Rock formations that resemble hands, feet, bodies. The "natural" world contains shapes that seem too precise to be random.</p>
-        <p>What if some of these formations are exactly what they appear to be - petrified giants?</p>
-        <p>The Nephilim were massive. Some accounts describe beings hundreds of feet tall. When the Flood came, or when subsequent cataclysms struck, what happened to their bodies? Did they simply decompose, or were some preserved through rapid mineralization?</p>
-        <p>Mount Everest's name in Tibetan is "Chomolungma" - Mother Goddess of the Universe. Local legends describe it as a deity in repose. Devils Tower in Wyoming was called "Bear Lodge" by Native Americans, with legends describing a giant bear clawing at it. What if these aren't metaphors but memories?</p>
-        <p>Silicon-based petrification is documented. Trees become stone. Organic matter mineralizes. Why not giants?</p>
-        <p>This remains speculative, but the shapes are there. The legends are consistent. And the pattern of hiding giant history is documented - the Smithsonian alone has been accused of destroying thousands of giant skeleton discoveries over decades.</p>
-      </>
-    )
-  },
-  {
-    id: "v1-ch16",
-    title: "Chapter 16: The Orphan Trains and Memory Erasure",
+    title: "Chapter 15: The Orphan Trains and Memory Erasure",
     content: (
       <>
         <p>Between 1854 and 1929, approximately 250,000 children were transported from East Coast cities to the Midwest and beyond. This was called the "Orphan Train Movement."</p>
         <p>The official story: these were homeless orphans from overcrowded cities being given new opportunities with rural families who needed labor.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Questions Nobody Answers</p>
         <p>The questions multiply: Why so many orphans at the same time? Why were their records so often destroyed or falsified? Why do so many of these "orphans" have no memory of parents dying, only of being separated from families they clearly remember? Why did they arrive without documentation, without knowledge of their own origins?</p>
         <p>These children were called "Cabbage Patch Kids" - picked up and delivered as if from nowhere, no history, no paperwork, no past. Just children appearing by the thousands with no explanation of where they came from.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Scale of the Operation</p>
+        <p>250,000 children over 75 years. That's more than 3,000 children per year, every year, for three quarters of a century. Where did they all come from?</p>
+        <p>The Civil War ended in 1865 - that explains some orphans. But the trains started in 1854 and continued until 1929. Wars don't explain that volume. Poverty doesn't explain children with no memory of their own parents. Disease doesn't explain why records were systematically destroyed.</p>
+        <p>Many orphan train riders reported being taken from families, not rescued from the streets. They remembered parents. Siblings. Homes. Then suddenly they were on trains heading west, told their families were dead or didn't want them, given new names, placed with strangers.</p>
+        
         <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
           <p>In the 1980s, a line of dolls became wildly popular. They were called Cabbage Patch Kids. Each doll came with "adoption papers." The premise was that these children came from a cabbage patch - appearing mysteriously with no parents, ready to be adopted.</p>
           <p className="text-cyan-400 mt-2">This wasn't creative marketing. It was mockery - hiding truth in plain sight. The name came directly from what the orphan train children were called: Cabbage Patch Kids, children who appeared from nowhere with no documentation, no history, no parents to claim them.</p>
         </div>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Reset Pattern</p>
         <p>What if these weren't orphans at all, but children of a previous civilization whose parents were eliminated and whose histories were erased? What if the Orphan Trains were part of a massive reset - a repopulation program designed to place children with no memory of the old world into families who would raise them in the new narrative?</p>
-        <p>The timing aligns with the mud flood evidence. The late 1800s - the same period when the magnificent "inherited" buildings appear in photographs, already old, already buried to their first floors. A reset. A memory wipe. A new beginning built on the erased foundation of what came before.</p>
+        <p>The timing aligns with the mud flood evidence. The late 1800s - the same period when the magnificent "inherited" buildings appear in photographs, already old, already buried to their first floors. Cities that look ancient in photos from the 1870s. Infrastructure that shouldn't exist for decades.</p>
+        <p>A reset requires three things: destroying the previous civilization, erasing its memory, and raising a new generation that knows only the new story. The orphan trains accomplished the third. The mud flood and whatever catastrophe accompanied it accomplished the first. The rewriting of history accomplished the second.</p>
+        <p>And here we are - descendants of those children, believing the story we were given, never questioning where our great-great-grandparents actually came from.</p>
       </>
     )
   },
@@ -1047,7 +1092,35 @@ const volume1Chapters: Chapter[] = [
       <>
         <p>Revelation 20 describes Satan being bound for a thousand years, then released "for a little season." What if the millennium has already happened, and we're in the short season now?</p>
         <p>The theory suggests: the thousand-year reign of the Messiah occurred during what we call the medieval period. This was the age of cathedral building, of widespread faith, of Christianity spreading across the known world.</p>
-        <p>Then Satan was released. The "Renaissance" began - the rebirth of pagan Greek and Roman culture. The Reformation fragmented the church. The Enlightenment elevated human reason above divine revelation. The Industrial Revolution separated humanity from the land. And here we are.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Mortal Head Wound</p>
+        <p>Revelation 13:3 describes the beast receiving a mortal head wound that was healed: "And I saw one of his heads as it were wounded to death; and his deadly wound was healed: and all the world wondered after the beast."</p>
+        <p>What wounded the beast? Consider the timing. Rome - the beast system of its era - dominated the known world. Then Christianity rose. The empire fell. The pagan temples closed. The old gods were abandoned. The beast received a mortal wound.</p>
+        <p>For a thousand years, the wound remained. The medieval period - the so-called "Dark Ages" - was actually an age of faith. Cathedrals rose across Europe. Monasteries preserved knowledge. The church, for all its flaws, kept the memory of the Messiah alive. The beast lay wounded.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Renaissance: The Wound Heals</p>
+        <p>Then came the Renaissance. The word means "rebirth." Rebirth of what? <strong>Pagan Greek and Roman culture.</strong></p>
+        <p>Look at what was "reborn":</p>
+        <ul className="list-disc list-inside space-y-2 my-4 text-slate-300">
+          <li><strong>Greek philosophy</strong> replaced Hebrew theology. Plato and Aristotle became more important than Moses and the Prophets.</li>
+          <li><strong>Roman aesthetics</strong> returned. Nude statues. Pantheon-style buildings. The glorification of the human form that paganism always celebrated.</li>
+          <li><strong>Occult knowledge</strong> resurfaced. Hermeticism, alchemy, Kabbalah - the forbidden knowledge the Watchers taught, packaged as "enlightenment."</li>
+          <li><strong>Humanism</strong> emerged. Man as the measure of all things. The Creator marginalized. Human reason elevated.</li>
+        </ul>
+        <p>The beast's mortal wound was healing. The pagan system that Christianity had mortally wounded was being resurrected - not openly as paganism, but disguised as culture, art, philosophy, and "enlightenment."</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Acceleration</p>
+        <p>Then Satan was released fully. The "Enlightenment" came - reason over revelation. The Industrial Revolution - separation from the land and from natural cycles. The French Revolution - explicit rejection of the Creator. The World Wars - sacrifice on a scale unseen since the Flood.</p>
+        <p>Each step brought the world further from faith and closer to the beast system:</p>
+        <ul className="list-disc list-inside space-y-2 my-4 text-slate-300">
+          <li><strong>1776</strong> - The Illuminati founded. America founded on Masonic principles.</li>
+          <li><strong>1789</strong> - French Revolution. Churches desecrated. "Reason" worshipped as a goddess.</li>
+          <li><strong>1859</strong> - Darwin's Origin of Species. The Creator removed from creation.</li>
+          <li><strong>1913</strong> - The Federal Reserve. Financial control consolidated.</li>
+          <li><strong>1945</strong> - The United Nations. Global governance structures emerge.</li>
+          <li><strong>1948</strong> - Modern Israel established. The geopolitical piece placed.</li>
+          <li><strong>2020</strong> - Global pandemic. Unprecedented control measures normalized.</li>
+        </ul>
         <p>The short season is marked by deception. By the release of the nations to gather for war. By the final rebellion against the Most High. Does this not describe the trajectory of the last five hundred years?</p>
         <p>This interpretation remains speculative. But it provides a framework for understanding why the deception is so intense, why the systems of control are so comprehensive, why the battle feels so final. We may be living in the short season, watching the last moves of a chess game that began before we were born.</p>
       </>
