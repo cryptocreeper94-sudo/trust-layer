@@ -2422,6 +2422,16 @@ export default function VeilReader() {
           <div className="flex items-center gap-2">
             {(speechSupported || useElevenLabs) && (
               <div className="flex items-center gap-1">
+                {/* Voice type indicator and toggle */}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setUseElevenLabs(!useElevenLabs)}
+                  className={`text-xs px-2 ${useElevenLabs ? 'text-purple-400 hover:text-purple-300' : 'text-gray-400 hover:text-gray-300'}`}
+                  title={useElevenLabs ? "Using AI Voice (click for browser)" : "Using Browser Voice (click for AI)"}
+                >
+                  {useElevenLabs ? "AI" : "Browser"}
+                </Button>
                 {isLoading && (
                   <Button 
                     variant="ghost" 
