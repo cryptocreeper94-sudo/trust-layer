@@ -2013,6 +2013,7 @@ export default function VeilReader() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioQueueRef = useRef<string[]>([]);
   const currentChunkRef = useRef(0);
+  const lastPlayedChapterRef = useRef<string | null>(null);
   
   // Reset audio state when chapter or volume changes
   useEffect(() => {
@@ -2025,6 +2026,9 @@ export default function VeilReader() {
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
+    if (utteranceRef.current) {
+      utteranceRef.current = null;
+    }
     // Reset all audio state
     setIsPlaying(false);
     setIsPaused(false);
@@ -2033,6 +2037,8 @@ export default function VeilReader() {
     setCurrentChunkIndex(0);
     audioQueueRef.current = [];
     currentChunkRef.current = 0;
+    // Clear last played chapter so we start fresh
+    lastPlayedChapterRef.current = null;
   }, [currentVolume, currentChapter]);
 
   const navigateToConcordance = () => {
@@ -2351,8 +2357,10 @@ export default function VeilReader() {
   };
 
   const handlePlay = async () => {
-    // Resume if paused
-    if (isPaused) {
+    const chapterId = `${currentVolume}-${currentChapter}`;
+    
+    // Only resume if we're on the same chapter that was playing before
+    if (isPaused && lastPlayedChapterRef.current === chapterId) {
       if (audioRef.current) {
         await audioRef.current.play();
         setIsPaused(false);
@@ -2366,6 +2374,16 @@ export default function VeilReader() {
         return;
       }
     }
+    
+    // Stop any existing audio before starting fresh
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+      audioRef.current = null;
+    }
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
 
     const text = extractText(chapter.content);
     
@@ -2375,6 +2393,9 @@ export default function VeilReader() {
       setIsLoading(false);
       return;
     }
+    
+    // Track which chapter we're playing
+    lastPlayedChapterRef.current = chapterId;
     
     console.log('Playing chapter:', chapter.title, 'Text length:', text.length);
     
