@@ -80,6 +80,15 @@ const volume1Chapters: Chapter[] = [
         <p className="mt-6">This is not about pronunciation preferences. <strong>Everything is frequency. Everything is vibration.</strong></p>
         <p>The name <strong className="text-cyan-400">Yahusha</strong> contains the frequency signature of Yahuah - "Yahuah is salvation." It connects to the Father. When spoken aloud, it produces a specific frequency.</p>
         <p>The name "Jesus" has a <strong>different frequency</strong>. A different signature. <strong>Potentially connecting to something else entirely.</strong></p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">Cymatics: The visible proof</p>
+        
+        <p>Cymatics is the study of visible sound. When sound frequencies pass through water, sand, or other matter, they create geometric patterns. Different frequencies create different patterns.</p>
+        <p>Dr. Hans Jenny's experiments in the 1960s demonstrated this scientifically. Play one frequency through a plate of sand - you get one geometric pattern. Change the frequency - the pattern completely changes. <strong>Sound literally shapes matter.</strong></p>
+        <p>Your body is approximately 70% water. When you speak a name aloud, you are sending a frequency through the water in your body and into the air around you. <strong>That frequency creates patterns in the matter it touches.</strong></p>
+        <p>The frequency of <strong className="text-cyan-400">"Yahusha"</strong> and the frequency of <strong>"Jesus"</strong> are not the same. They cannot be. Different sounds, different vowels, different consonants - different frequencies. <strong>Different patterns in matter.</strong></p>
+        <p>This is not mysticism. This is physics. The question is: which frequency aligns with the Creator, and which was substituted to disconnect you?</p>
+        
         <p>This is the deception that could fool even the elect. Not blatant evil. Not obvious darkness. But a name that sounds right, feels right, has been accepted for centuries - <strong>yet connects to the wrong source.</strong></p>
         
         <p className="text-lg font-semibold text-white mt-6 mb-4">The scriptures warned us this would happen:</p>
