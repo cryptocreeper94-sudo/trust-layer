@@ -84,6 +84,14 @@ const volume1Chapters: Chapter[] = [
         <p className="text-lg font-semibold text-white mt-6 mb-4">Cymatics: The visible proof</p>
         
         <p>Cymatics is the study of visible sound. When sound frequencies pass through water, sand, or other matter, they create geometric patterns. Different frequencies create different patterns.</p>
+        
+        <div className="my-6 flex justify-center">
+          <div className="bg-slate-800/50 p-4 rounded-lg border border-cyan-500/30 max-w-lg">
+            <img src="/veil-images/cymatics-432-440.png" alt="Cymatics comparison: 432 Hz vs 440 Hz showing different geometric patterns in water" className="w-full rounded-lg" />
+            <p className="text-center text-sm text-slate-400 mt-2 italic">Cymatics: 432 Hz (left) creates harmonious patterns vs 440 Hz (right) creates chaotic patterns</p>
+          </div>
+        </div>
+        
         <p>Dr. Hans Jenny's experiments in the 1960s demonstrated this scientifically. Play one frequency through a plate of sand - you get one geometric pattern. Change the frequency - the pattern completely changes. <strong>Sound literally shapes matter.</strong></p>
         <p>Your body is approximately 70% water. When you speak a name aloud, you are sending a frequency through the water in your body and into the air around you. <strong>That frequency creates patterns in the matter it touches.</strong></p>
         <p>The frequency of <strong className="text-cyan-400">"Yahusha"</strong> and the frequency of <strong>"Jesus"</strong> are not the same. They cannot be. Different sounds, different vowels, different consonants - different frequencies. <strong>Different patterns in matter.</strong></p>
