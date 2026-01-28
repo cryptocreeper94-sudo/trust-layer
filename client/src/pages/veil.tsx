@@ -60,14 +60,18 @@ export default function Veil() {
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-6 mb-6">
-              <div className="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
-                <h4 className="text-cyan-400 font-semibold mb-2">Part One: The Evidence</h4>
-                <p className="text-slate-400 text-sm">168 pages, 42 chapters, 12 parts. The history, the patterns, the documented substitutions and erasures.</p>
+            <div className="grid md:grid-cols-3 gap-4 mb-6">
+              <div className="p-5 rounded-xl bg-slate-800/50 border border-slate-700">
+                <h4 className="text-red-400 font-semibold mb-2">A Note on the Name</h4>
+                <p className="text-slate-400 text-sm">The deception exposed. "Jesus Christ" = 666 in gematria. Scripture references from the Eth Cepher.</p>
               </div>
-              <div className="p-6 rounded-xl bg-slate-800/50 border border-slate-700">
-                <h4 className="text-purple-400 font-semibold mb-2">Part Two: The Journey</h4>
-                <p className="text-slate-400 text-sm">24 parts of personal testimony. What happened when I finally allowed myself to step through the fear.</p>
+              <div className="p-5 rounded-xl bg-slate-800/50 border border-slate-700">
+                <h4 className="text-cyan-400 font-semibold mb-2">42 Chapters</h4>
+                <p className="text-slate-400 text-sm">41,000+ words across 12 parts. The history, patterns, and documented substitutions.</p>
+              </div>
+              <div className="p-5 rounded-xl bg-slate-800/50 border border-slate-700">
+                <h4 className="text-purple-400 font-semibold mb-2">Documented Sources</h4>
+                <p className="text-slate-400 text-sm">Verifiable references: Dead Sea Scrolls, CIA documents, peer-reviewed research, historical records.</p>
               </div>
             </div>
             
