@@ -961,10 +961,20 @@ const volume1Chapters: Chapter[] = [
         </ul>
         <p>The System didn't need to fake a crucifixion. It didn't need elaborate staging. It simply needed to wait until everyone who knew the truth was dead - and then write the official version.</p>
         
-        <h3 className="text-xl font-bold text-cyan-400 mt-6 mb-4">A Curious Detail</h3>
+        <h3 className="text-xl font-bold text-cyan-400 mt-6 mb-4">The Hydra: Layers of Deception</h3>
         <p>There is one peculiar element in the crucifixion narrative worth noting. The man released instead of the Messiah was called "Barabbas" - which in Aramaic means "Son of the Father" (Bar-Abba). Some ancient manuscripts, including the Caesarean text-type, actually call him "Jesus Barabbas."</p>
-        <p>So the crowd was given a choice between two men called "Son of the Father." The true one went to the cross. The counterfeit was released. Whether this was orchestrated or simply recorded, the pattern is visible: even at the moment of sacrifice, a substitute was present.</p>
-        <p>But the deeper substitution wasn't at Calvary. It was in the manuscripts. The name stolen wasn't Barabbas - it was Yahusha himself, erased and replaced with a Greek-Latin-English construct that disconnected billions from the power of the true Name.</p>
+        <p>So the crowd was given a choice between two men called "Son of the Father." The true one went to the cross. The counterfeit was released.</p>
+        <p>But consider: this detail may itself be part of the deception. Not because it's false - but because of where it leads the skeptic.</p>
+        <p className="font-semibold text-purple-400 mt-4">The trap works like this:</p>
+        <ul className="list-disc list-inside space-y-2 text-slate-300 my-4">
+          <li><strong>Path A</strong>: Accept the mainstream story → You call on the wrong name, disconnected from the Father</li>
+          <li><strong>Path B</strong>: Dig deeper, find the Barabbas mystery → You reject the entire crucifixion as fabricated</li>
+          <li><strong>Path C</strong>: Complete rejection → You believe nothing, have no faith, no connection</li>
+        </ul>
+        <p>Paths B and C produce the same result as Path A: separation from Yahusha. The skeptic who questions the narrative doesn't find truth - they find another pit. Either you believe the counterfeit, or you believe nothing at all. Either way, you're cut off.</p>
+        <p>This is the Hydra. Cut off one head of deception, another appears. Every direction you look, another trap. The genius is that the truth - the simple, restorable name Yahusha - is directly in front of you the entire time. But you're looking everywhere else for it.</p>
+        <p>Something so seemingly simple - "that's just what we call him in English" - has such devastating effect. People dismiss it as trivial. A translation artifact. But that "trivial" change severs the name from the Father, changes the frequency, breaks the meaning, and routes billions of sincere prayers... elsewhere.</p>
+        <p>Hidden in plain sight. So obvious it's invisible. So simple it seems absurd to question.</p>
       </>
     )
   },
