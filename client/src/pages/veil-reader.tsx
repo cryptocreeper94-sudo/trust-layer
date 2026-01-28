@@ -2014,6 +2014,27 @@ export default function VeilReader() {
   const audioQueueRef = useRef<string[]>([]);
   const currentChunkRef = useRef(0);
   
+  // Reset audio state when chapter or volume changes
+  useEffect(() => {
+    // Stop any playing audio
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+      audioRef.current = null;
+    }
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+    // Reset all audio state
+    setIsPlaying(false);
+    setIsPaused(false);
+    setIsLoading(false);
+    setAudioQueue([]);
+    setCurrentChunkIndex(0);
+    audioQueueRef.current = [];
+    currentChunkRef.current = 0;
+  }, [currentVolume, currentChapter]);
+
   const navigateToConcordance = () => {
     setReturnLocation({ volume: currentVolume, chapter: currentChapter });
     const appendicesIndex = volumes.findIndex(v => v.id === "appendices");
