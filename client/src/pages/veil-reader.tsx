@@ -519,6 +519,71 @@ const volume1Chapters: Chapter[] = [
     )
   },
   {
+    id: "v1-ch5b",
+    title: "Chapter 5B: The Physical Evidence They Ignore",
+    content: (
+      <>
+        <p>What if there was physical, tangible proof that the biblical accounts are literally true? What if you could walk to the locations described in scripture and find exactly what the text describes?</p>
+        <p>You can. The evidence exists. And it has been systematically ignored, ridiculed, or buried by mainstream archaeology.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">Sodom and Gomorrah: The Cities of Ash</p>
+        <p>Ron Wyatt, an amateur archaeologist and anesthetist from Tennessee, discovered what mainstream archaeology refuses to acknowledge: the actual remains of Sodom, Gomorrah, Admah, Zeboiim, and Zoar near the Dead Sea.</p>
+        <p>Genesis 19:24-25: "Then Yahuah rained upon Sodom and upon Gomorrah brimstone and fire from Yahuah out of heaven; And he overthrew those cities, and all the plain, and all the inhabitants of the cities, and that which grew upon the ground."</p>
+        <p>What Wyatt found: <strong>entire city structures turned to ash</strong>. Not metaphorical ash - literal calcium sulfite ash. Buildings with right angles. Walls. Streets. Ziggurats. All reduced to white powder.</p>
+        <p>Embedded in this ash are <strong>sulfur balls</strong> - pure brimstone with burn rings around them, some still encased in the ash that formed when they burned. These sulfur balls are 95-98% pure sulfur. For comparison, naturally occurring volcanic sulfur is only 40% pure at maximum.</p>
+        <p>These sulfur balls are unlike anything found anywhere else on Earth. They're not volcanic. They're not natural formations. They appear to have rained down from above and burned at temperatures hot enough to melt rock - exactly as Genesis describes.</p>
+        <p>Some of these artifacts are housed in museums, including one in Tennessee. You can see them. You can hold them. The evidence is tangible - yet mainstream archaeology dismisses it entirely.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">Mount Sinai: The Burned Mountain</p>
+        <p>Exodus 19:18: "And mount Sinai was altogether on a smoke, because Yahuah descended upon it in fire: and the smoke thereof ascended as the smoke of a furnace, and the whole mount quaked greatly."</p>
+        <p>Traditional sites in the Sinai Peninsula show no evidence of this burning. But Jabal al-Lawz in Saudi Arabia - the site Wyatt identified as the true Mount Sinai - shows something remarkable: <strong>the peak is burned black</strong>.</p>
+        <p>You can see the line where the burning stops. The lower portion of the mountain is normal rock. Above a certain elevation, it's charred. Blackened. As if something descended in fire.</p>
+        <p>Nearby, Wyatt documented the split rock that Moses struck for water (Exodus 17:6), large enough for millions to drink from, with clear water erosion patterns. He found the altar of the golden calf (Exodus 32), with petroglyphs of Egyptian-style cattle worship. He found the twelve pillars Moses erected (Exodus 24:4).</p>
+        <p>The Saudi government initially fenced the entire area as a restricted archaeological zone. The evidence is too significant to allow public access.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Giant Tree Stumps</p>
+        <p>Genesis describes a pre-flood world vastly different from ours. The atmosphere held more oxygen. Living things grew larger. Trees grew to heights we can barely imagine today.</p>
+        <p>Devils Tower in Wyoming rises 867 feet above the surrounding terrain. Official explanation: volcanic plug, magma that cooled underground and was exposed by erosion.</p>
+        <p>But look at it. The vertical columnar striations. The flat top. The hexagonal cross-sections of the "columns." It looks exactly like a petrified tree stump - cut, with the distinctive pattern of tree growth rings visible in the columns.</p>
+        <p>Native American legends don't describe Devils Tower as a volcanic plug. They describe it as a <strong>giant tree</strong> that was scarred by a great bear. The Lakota name, "Mato Tipila," means "Bear Lodge."</p>
+        <p>Similar formations exist worldwide. Mesas throughout the American Southwest with flat tops and striated sides. Table mountains in Africa. Buttes across every continent. What if these aren't geological formations but the remains of a pre-flood mega-flora - trees that grew thousands of feet tall in an atmosphere with higher oxygen content?</p>
+        <p>When the Flood came, these trees were cut down - perhaps by the violence of the waters, perhaps by something else. What remained petrified over millennia, leaving behind what we now call "geological formations."</p>
+        <p>The pattern repeats globally. Too consistent for coincidence. Too aligned with pre-flood accounts to ignore.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Red Sea Crossing: Chariot Wheels on the Sea Floor</p>
+        <p>Exodus 14:21-22: "And Mosheh stretched out his hand over the sea; and Yahuah caused the sea to go back by a strong east wind all that night, and made the sea dry land, and the waters were divided. And the children of Yashar'el went into the midst of the sea upon the dry ground."</p>
+        <p>Ron Wyatt identified the crossing site at Nuweiba Beach on the Gulf of Aqaba - not the shallow Reed Sea traditionally proposed, but a deep water crossing to what is now Saudi Arabia.</p>
+        <p>What he found underwater was extraordinary: <strong>Egyptian chariot wheels</strong> encrusted with coral, scattered across the sea floor in a pattern consistent with an army in pursuit. Four-spoke, six-spoke, and eight-spoke wheels - designs consistent with the 18th Dynasty of Egypt, the time of the Exodus.</p>
+        <p>On both shores - the Egyptian side and the Arabian side - stand <strong>granite columns</strong>. These pillars, erected as memorials, mark the crossing site. The column on the Saudi side still bears Phoenician inscriptions. King Solomon himself may have erected these markers to commemorate what happened there.</p>
+        <p>The underwater land bridge between the two shores has a gradual descent - exactly what would be needed for millions of people with livestock and carts to cross. The depths on either side drop sharply - exactly where the waters would have "stood as walls" and collapsed on the Egyptian army.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">Noah's Ark: The Boat-Shaped Formation</p>
+        <p>In the mountains of Ararat in eastern Turkey, near the village of Dogubayazit, sits a boat-shaped formation that matches the biblical dimensions of the Ark precisely. Genesis 6:15: "And this is the fashion which you shall make it of: The length of the ark shall be three hundred cubits, the breadth of it fifty cubits, and the height of it thirty cubits."</p>
+        <p>Using the Royal Egyptian cubit (20.6 inches), the Ark would be 515 feet long. The formation at this site measures 515 feet exactly.</p>
+        <p>Ground-penetrating radar revealed internal structures consistent with a ship - regularly spaced, parallel lines suggesting deck beams and bulkheads. Metal detector surveys found iron at regular intervals, consistent with metal brackets or fittings.</p>
+        <p>Near the site, Wyatt found <strong>anchor stones</strong> - massive stones with holes drilled through them, of the type used by ancient ships as sea anchors. These stones bear crosses carved into them by later Armenian Christians who recognized their significance.</p>
+        <p>The Turkish government has designated this area as a national park and constructed a visitor center. They take the identification seriously, even if Western academia does not.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Ark of the Covenant: Wyatt's Most Controversial Claim</p>
+        <p>Ron Wyatt claimed to have located the Ark of the Covenant beneath Golgotha - the crucifixion site. According to his account, the Ark was hidden in a cave system directly below where the cross stood.</p>
+        <p>He claimed to have entered the chamber, seen the Ark covered in animal skins, and observed that the mercy seat - the golden lid - had a dark substance on it. He believed this was the blood of Yahusha, which had dripped through a crack in the rock caused by the earthquake at the crucifixion (Matthew 27:51).</p>
+        <p>This claim remains unverified. Wyatt said he was told the Ark would be revealed when the time was right - when the mark of the beast system is implemented and people need to choose which law to follow. The Ark contains the original Ten Commandments, the physical law of the Creator.</p>
+        <p>Whether this discovery is genuine remains a matter of faith. But the location makes theological sense: the blood of the ultimate sacrifice dripping onto the mercy seat where blood was always required for atonement.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">Additional Documented Discoveries</p>
+        <p><strong>The Tower of Babel:</strong> Wyatt identified a site in southern Turkey with the remains of a massive structure consistent with the biblical account.</p>
+        <p><strong>The House of Abraham:</strong> In Şanlıurfa (ancient Ur), structures consistent with Abraham's origins.</p>
+        <p><strong>The Walls of Jericho:</strong> Archaeological evidence at Tell es-Sultan showing walls that fell outward (not inward as in a siege) and a city burned with its grain stores intact - exactly as Joshua describes.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">Why You Haven't Heard About This</p>
+        <p>Ron Wyatt died in 1999. His discoveries have been systematically dismissed by mainstream archaeology. No major university has conducted follow-up expeditions. No documentary on mainstream television has given his work serious treatment.</p>
+        <p>The sulfur balls are real. The chariot wheels are real. The burned mountain is real. The ash cities are real. The boat-shaped formation is real. You can visit these sites. You can examine the evidence yourself. Yet the academic establishment treats it as fringe pseudo-archaeology.</p>
+        <p>Ask yourself: if the Bible were proven literally, physically true - if Sodom's destruction, if Sinai's burning, if the Red Sea crossing, if the Flood were all confirmed by tangible evidence - what would that mean for the institutions that have spent centuries telling you it's all allegory?</p>
+        <p>The evidence exists. It has been found. It is being ignored. The question is why - and who benefits from the ignorance.</p>
+      </>
+    )
+  },
+  {
     id: "v1-ch6",
     title: "Chapter 6: Dragons, Not Dinosaurs",
     content: (
