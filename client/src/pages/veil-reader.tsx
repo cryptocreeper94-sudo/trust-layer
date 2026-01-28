@@ -767,6 +767,77 @@ const volume1Chapters: Chapter[] = [
     )
   },
   {
+    id: "v1-ch13b",
+    title: "Chapter 13B: Constantine and the Council of Nicaea",
+    content: (
+      <>
+        <p className="text-purple-400 font-medium mb-4">PART FOUR-B: THE INSTITUTIONALIZATION OF THE DECEPTION</p>
+        <p>The bloodlines continued. The corruption persisted. But for the deception to become truly global, it needed to be institutionalized. It needed to become the official religion of an empire.</p>
+        <p>Enter Constantine.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Strategic Merger (312-325 AD)</p>
+        <p>In 312 AD, Constantine reportedly saw a vision before the Battle of Milvian Bridge - a cross in the sky with the words "In this sign, conquer." This vision would change the course of history.</p>
+        <p>But examine what actually happened:</p>
+        <p>Constantine was not a convert seeking truth. He was a military commander seeking unity. The Roman Empire was fracturing. He needed something to bind it together. The followers of the Way - those who still remembered Yahusha's actual teachings - were growing in number despite persecution.</p>
+        <p>Constantine's solution was brilliant in its deception: <strong>absorb the movement, redefine it, and redirect it</strong>.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Edict of Milan (313 AD)</p>
+        <p>Constantine's Edict of Milan didn't just end persecution of Christians. It began the merger of the Way with Roman paganism. Key changes began immediately:</p>
+        <ul className="list-disc list-inside space-y-2 my-4 text-slate-300">
+          <li><strong>The name:</strong> Yahusha (יהושע) became Iesous in Greek, then Iesus in Latin. Each translation stripped away the embedded name of the Father (Yah). By the time it became "Jesus" in English, the connection to Yahuah was completely severed.</li>
+          <li><strong>The symbol:</strong> The cross was not the symbol of early believers. They used the fish (ichthys), the anchor, the dove. The cross was a Roman execution device - and a pre-existing pagan symbol used in Babylonian sun worship and Egyptian ankh veneration.</li>
+          <li><strong>The day:</strong> The early believers kept the seventh-day Sabbath (Friday sunset to Saturday sunset), as commanded in scripture. Constantine would change this.</li>
+        </ul>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">Constantine's Sunday Law (321 AD)</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-amber-500">
+          <p className="italic">"On the venerable Day of the Sun let the magistrates and people residing in cities rest, and let all workshops be closed."</p>
+          <p className="text-sm text-slate-400 mt-2">— Constantine's Sunday decree, 321 AD</p>
+        </div>
+        <p>Notice the language: "Day of the Sun." Not "the Lord's Day." Not "the Resurrection Day." The day of the sun god - Sol Invictus, whom Constantine had worshipped before his "conversion."</p>
+        <p>This was not a biblical command. This was a political merger of Christianity with Roman sun worship. The seventh-day Sabbath, kept since creation, was replaced with the first day - the day dedicated to pagan sun veneration.</p>
+        <p><strong>No scripture authorized this change.</strong> It was pure imperial decree.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Council of Nicaea (325 AD)</p>
+        <p>In 325 AD, Constantine convened the Council of Nicaea. This was not a gathering of apostles. The apostles had been dead for over two centuries. This was a gathering of bishops under imperial authority, called to standardize doctrine for political purposes.</p>
+        
+        <p className="text-cyan-400 font-medium mt-4">The Trinity Doctrine</p>
+        <p>The concept of three co-equal, co-eternal persons in one Godhead was formalized at Nicaea. <strong>This doctrine does not appear in Hebrew scripture.</strong> The Shema declares: "Hear, O Israel: Yahuah our Elohim, Yahuah is echad (one)." (Deuteronomy 6:4)</p>
+        <p>The Trinity doctrine was a compromise designed to absorb existing pagan trinities into the new religion:</p>
+        <ul className="list-disc list-inside space-y-1 my-4 text-slate-300">
+          <li>Osiris, Isis, and Horus (Egyptian)</li>
+          <li>Nimrod, Semiramis, and Tammuz (Babylonian)</li>
+          <li>Jupiter, Juno, and Minerva (Roman)</li>
+        </ul>
+        
+        <p className="text-cyan-400 font-medium mt-4">The Nicene Creed</p>
+        <p>The creed established at Nicaea became the test of orthodoxy. Those who disagreed were declared heretics. The Arians, who believed Yahusha was subordinate to the Father (as scripture indicates), were condemned. This was not about truth. This was about control.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Completion of the Substitution</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4">
+          <table className="w-full text-sm">
+            <thead><tr className="border-b border-slate-600"><th className="text-left py-2 text-cyan-400">Original</th><th className="text-left py-2 text-pink-400">Constantine's Substitute</th></tr></thead>
+            <tbody className="text-slate-300">
+              <tr className="border-b border-slate-700"><td className="py-2">Yahusha (salvation of Yah)</td><td className="py-2">Iesus/Jesus (disconnected from Father)</td></tr>
+              <tr className="border-b border-slate-700"><td className="py-2">Seventh-day Sabbath</td><td className="py-2">Sunday (day of sun god)</td></tr>
+              <tr className="border-b border-slate-700"><td className="py-2">Passover timing</td><td className="py-2">Easter (fertility festival timing)</td></tr>
+              <tr className="border-b border-slate-700"><td className="py-2">Yahuah is echad (one)</td><td className="py-2">Trinity (three-person godhead)</td></tr>
+              <tr className="border-b border-slate-700"><td className="py-2">Stauros (upright stake)</td><td className="py-2">Cross (pagan symbol)</td></tr>
+              <tr><td className="py-2">Scripture as authority</td><td className="py-2">Church councils as authority</td></tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Significance</p>
+        <p>Constantine is celebrated as the great Christianizer. The emperor who brought the faith to the world.</p>
+        <p>But what he actually brought was a <strong>counterfeit</strong>. A merger of Roman paganism with fragments of the true faith. A controlled opposition designed to redirect worship while appearing to honor the Messiah.</p>
+        <p>The billions who call on "Jesus" today are calling on a name that Constantine's system constructed. The cross they wear is a symbol Constantine's system chose. The day they worship on is a day Constantine's decree established.</p>
+        <p>This is not speculation. The historical record is clear. The Council of Nicaea happened. Constantine's Sunday law exists in the historical record. The name changes are documented.</p>
+        <p>The only question is: <strong>was it deliberate deception or innocent evolution?</strong></p>
+      </>
+    )
+  },
+  {
     id: "v1-ch14",
     title: "Chapter 14: Tartaria and the Mud Flood",
     content: (
