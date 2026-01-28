@@ -2317,6 +2317,43 @@ export default function VeilReader() {
     }
   };
   
+  const navigateToChapter = (chapterId: string) => {
+    // Search through all volumes to find the chapter
+    for (let volIdx = 0; volIdx < volumes.length; volIdx++) {
+      const chapterIdx = volumes[volIdx].chapters.findIndex(ch => ch.id === chapterId);
+      if (chapterIdx !== -1) {
+        setReturnLocation({ volume: currentVolume, chapter: currentChapter });
+        setCurrentVolume(volIdx);
+        setCurrentChapter(chapterIdx);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+    }
+    // Fallback: search by chapter number pattern (e.g., "18" matches "v1-ch18")
+    for (let volIdx = 0; volIdx < volumes.length; volIdx++) {
+      const chapterIdx = volumes[volIdx].chapters.findIndex(ch => 
+        ch.id.includes(`ch${chapterId}`) || ch.title.includes(`Chapter ${chapterId}`)
+      );
+      if (chapterIdx !== -1) {
+        setReturnLocation({ volume: currentVolume, chapter: currentChapter });
+        setCurrentVolume(volIdx);
+        setCurrentChapter(chapterIdx);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+    }
+  };
+  
+  // Helper component for clickable chapter links
+  const ChapterLink = ({ chapter, children }: { chapter: string; children: React.ReactNode }) => (
+    <button 
+      onClick={() => navigateToChapter(chapter)}
+      className="text-cyan-400 hover:text-cyan-300 underline cursor-pointer"
+    >
+      {children}
+    </button>
+  );
+  
   const returnToPreviousLocation = () => {
     if (returnLocation) {
       setCurrentVolume(returnLocation.volume);
