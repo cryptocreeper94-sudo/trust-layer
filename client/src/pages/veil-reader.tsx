@@ -3303,6 +3303,7 @@ export default function VeilReader() {
       
       if (!response.ok) {
         console.log('TTS API error, falling back to browser voice');
+        setIsLoading(false);
         setUseElevenLabs(false);
         const fullText = audioQueueRef.current.join(' ');
         playWithBrowserSpeech(fullText);
@@ -3350,6 +3351,8 @@ export default function VeilReader() {
       
       audio.onerror = () => {
         console.log('Audio error, falling back to browser voice');
+        setIsLoading(false);
+        setIsPlaying(false);
         setUseElevenLabs(false);
         playWithBrowserSpeech(audioQueueRef.current.join(' '));
       };
@@ -3361,6 +3364,8 @@ export default function VeilReader() {
       
     } catch (error) {
       console.error('ElevenLabs chunk error:', error);
+      setIsLoading(false);
+      setIsPlaying(false);
       setUseElevenLabs(false);
       playWithBrowserSpeech(audioQueueRef.current.join(' '));
     }
@@ -3382,6 +3387,8 @@ export default function VeilReader() {
       
     } catch (error) {
       console.error('ElevenLabs error:', error);
+      setIsLoading(false);
+      setIsPlaying(false);
       setUseElevenLabs(false);
       playWithBrowserSpeech(text);
     }
