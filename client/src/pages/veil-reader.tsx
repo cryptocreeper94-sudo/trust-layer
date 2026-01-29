@@ -848,6 +848,36 @@ const volume1Chapters: Chapter[] = [
         <p>What's documented in scripture: after the Flood, giants appear again. The Anakim. The Rephaim. Og of Bashan, whose bed was thirteen feet long. Goliath, who stood over nine feet tall. The children of Israel were commanded to utterly destroy these populations - not for their sins alone, but because of what they were.</p>
         <p>The bloodlines were targeted for elimination because they were corrupted. But some survived. Some went underground. Some continued to breed carefully, maintaining what they considered to be superior genetics.</p>
         <p>And their descendants, the theory suggests, still sit on the thrones of the earth.</p>
+        
+        <div className="mt-12 pt-8 border-t-2 border-purple-500/50">
+          <h3 className="text-2xl font-bold text-purple-400 mb-6">Author's Thoughts: The Awakening</h3>
+          <h4 className="text-xl font-bold text-cyan-400 mb-4">The Fog and The Lifting</h4>
+          <p>For years, I was lost in addiction. When sobriety finally came, I found myself even more disoriented—because instead of drowning my confusion, I now had to confront it directly. The fog was impenetrable. I knew something was fundamentally wrong with the world, with its systems, with everything I had been taught. But I could not articulate it. I could not break through.</p>
+          <p>Alcohol had been my escape. For years, it was the only way I knew to silence the persistent feeling that everything I had been taught was slightly askew—like a picture hanging crooked on the wall that everyone pretends is straight. The drinking solved nothing. It merely delayed the inevitable confrontation with truth.</p>
+          <p>When I finally achieved sobriety, clarity did not arrive immediately. First came rawness. Every emotion I had suppressed for decades struck at once: shame, regret, confusion, and the recognition that I had spent years running from something I could not even name.</p>
+          <p>The first instinct that emerged as the fog began to lift was not self-focused. It was about giving back—helping animals, helping people who had been wounded. This surprised me. I had expected to concentrate on rebuilding myself. But I came to understand that service to others is the truest form of self-restoration. When you align with purpose, you heal.</p>
+          <p>Then the insights began arriving. Not all at once, but in waves. Some mornings I would wake feeling as though I had forgotten everything from the day before. Then suddenly, unprecedented clarity would flood in. I learned to document these moments when they occur, because they do not always remain.</p>
+          <p>The fog lifts gradually. You do not awaken one day with perfect vision. You awaken able to see slightly further than yesterday. Eventually, you realize you can perceive the entire landscape—the deception, the truth, the path forward. Clarity is earned, not bestowed.</p>
+          
+          <h4 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Wall and True Seeing</h4>
+          <p>For years, I felt as though a wall stood in my thinking. I sensed that something was wrong with how the world operates. I could perceive the deception. But I could not see past it or articulate what lay beyond.</p>
+          <p>The problem was that I was attempting to see through the lens I had been given. Our biological eyes are instruments of physical protection. They prevent us from walking off cliffs. They detect material danger. That is their purpose. The image they create is actually inverted in the brain—we do not see reality directly; we see a processed interpretation of it.</p>
+          <p>Consider this: the world you perceive is literally upside down in your brain, then corrected through neural processing. You are not experiencing reality. You are experiencing an interpretation of it—a simulation constructed by biological hardware designed for survival, not for truth.</p>
+          <p>But there exists another form of perception. Call it discernment. The inner eye. The pineal gland. The third eye. Different traditions assign different names, but all point toward the same phenomenon: a mode of perception that transcends the physical senses.</p>
+          <p>This inner sight does not invert. It recognizes pattern, truth, and deception without intermediary processing. When the wall finally breaks, you begin seeing with this eye rather than merely through the lenses. It is the difference between a filtered camera and direct observation.</p>
+          <p>Suddenly, everything becomes simple. Not easy—simple. The complexity itself was the deception. The truth was always present, hidden in plain sight. The elaborate game they are playing becomes visible. It was before us all along.</p>
+          <p>The greatest difficulty is not developing this sight. It is unlearning everything that obstructs it. Fluoride calcifies the pineal gland. Constant stimulation keeps the mind too occupied to listen. Fear-based programming activates survival responses that suppress discernment. All of it functions to keep that inner eye closed.</p>
+          <p>But it can be opened. It was designed to be opened. That is what this journey is about.</p>
+          
+          <h4 className="text-xl font-bold text-cyan-400 mt-8 mb-4">Created in His Image</h4>
+          <p>Scripture tells us we were created in God's image. Most interpret this as physical resemblance—that the Creator possesses two arms, two legs, a face like ours. I believe the meaning runs far deeper.</p>
+          <p>I believe it means we were endowed with the ability to create. Not merely to exist, but to build, to express, to transmit. To observe another person and recognize not randomness, but the handiwork of a creator. To conceive ideas and manifest them into reality. This is the image—the creative essence itself.</p>
+          <p>Observe what humans do instinctively. We build. We create art. We compose music. We tell stories. We transform raw materials into things that never existed before. No other creature does this as we do. This is the divine spark—the fragment of the Creator's essence residing within each of us.</p>
+          <p>There is also the moral compass—the one that exists without instruction. You can be told that something wrong is right. You can be conditioned to accept deception. The indoctrination can run deep. But you will feel the dissonance. That sensation—that knowing that something is wrong even when you cannot articulate why—is the gift. It can be suppressed, but never eliminated.</p>
+          <p>Children possess this naturally. They recognize unfairness before anyone teaches them the concept. They sense the wrongness of cruelty before they have language for it. This is not learned behavior. It is intrinsic. It is the Creator's signature inscribed in our souls.</p>
+          <p>Everyone possesses this compass. Most have forgotten how to heed it. The world is loud. The programming is relentless. But beneath all of it, the compass still points toward truth. You need only become quiet enough to perceive it again.</p>
+          <p>When scripture states that we were made "a little lower than the angels," it speaks not of weakness but of position. We were placed in this realm with creative capacity and moral understanding—faculties the angels themselves do not possess in the same manner. We are not lesser. We are different. And that difference is significant.</p>
+        </div>
       </>
     )
   },
@@ -969,6 +999,47 @@ const volume1Chapters: Chapter[] = [
         <p>The 1800s photographs tell a story the history books don't. Cities appear fully built, already ancient, already buried. Population seems sparse for the infrastructure. Children appear in industrial settings where no children should be. And those children have no parents in the photos - ever.</p>
         <p>What if the magnificent buildings of the 19th century weren't built by that era's inhabitants at all? What if they were inherited from a previous civilization - one that was destroyed and written out of history?</p>
         <p>A reset. Not the first. Not the last. But perhaps the most recent - and the one whose evidence remains most visible if you know where to look.</p>
+        
+        <div className="mt-12 pt-8 border-t-2 border-purple-500/50">
+          <h3 className="text-2xl font-bold text-purple-400 mb-6">Author's Thoughts: The System and Its Weapons</h3>
+          <h4 className="text-xl font-bold text-cyan-400 mb-4">The Fragmented System</h4>
+          <p>The current system—financial, political, spiritual—profits from confusion. Every bewildering interface maintains dependency. Every expert speaking in jargon cultivates feelings of inadequacy. Every gala where the powerful conduct themselves like deities keeps ordinary people looking upward instead of forward.</p>
+          <p>They have no interest in resolution. They convene symposiums and promise progress while extracting value from the disorder. If they desired change, change would occur. The will is absent because the incentives are inverted. They profit from the chaos.</p>
+          <p>The fragmentation is not an error. It is the design. For them.</p>
+          <p>Examine any institution—government, education, healthcare, religion—and you will discover the same pattern. Complexity that serves administrators rather than people. Rules requiring interpreters. Systems demanding intermediaries. All constructed to maintain your dependence on others' expertise.</p>
+          <p>Meanwhile, ordinary people simply want to live morally. But they have been taught that humans are inherently corrupt. That goodness requires intermediaries. That personal discernment cannot be trusted. That the system exceeds their comprehension. This cultivated helplessness is the strategy.</p>
+          <p>The religious version is particularly insidious. You require a priest to address God. You require a theologian to interpret scripture. You require an institution to validate your faith. None of this appears in the original texts. All of it was appended by those who benefit from controlling the gates.</p>
+          <p>The truth is far simpler. You possess direct access. The Creator did not engineer a system requiring another's permission to connect. That is a human invention, crafted for control. Once perceived, it cannot be unseen.</p>
+
+          <h4 className="text-xl font-bold text-cyan-400 mt-8 mb-4">Fear as the Weapon</h4>
+          <p>The entire system operates on fear. This is not coincidental.</p>
+          <p>Fear is the paramount emotion—reserved for survival. Fight or flight. When a predator pursues you, fear preserves your life. It compels immediate reaction without deliberation. That is its purpose.</p>
+          <p>But they discovered something: trigger that same fear response in the absence of genuine danger, and you can control people. Compel them to react without thinking. Make them accept what they would never accept in a state of calm discernment.</p>
+          <p>So they constructed a system founded on fear. Fear of hell. Fear of missing out. Fear of being abandoned. Fear of being wrong. Fear of punishment. Fear of exclusion. Every decision made from that fearful state becomes a mistake—because fear circumvents discernment. It produces only reaction.</p>
+          <p>The religious implementation is brilliant in its cruelty. Believe this doctrine or burn eternally. Accept this into your heart or face infinite torment. It commandeers the survival instinct and redirects it toward your soul. You are not fleeing a predator—you are fleeing an idea they implanted in your mind.</p>
+          <p>I spent years in that condition. Every Sunday brought another altar call. Every night brought the terror that I had not believed correctly, that some technicality would condemn me to eternal fire. I would repeat the prayer for assurance. Again. And again. The certainty never materialized, because it was never designed to materialize. Fear does not produce peace. It produces more fear.</p>
+          <p>The remedy for fear is not courage. It is discernment. When you perceive clearly that the threat is fabricated, that the fear was installed by people who profit from your compliance, its power dissolves. You cease fleeing. You begin thinking. And thinking people prove far more difficult to control.</p>
+
+          <h4 className="text-xl font-bold text-cyan-400 mt-8 mb-4">Isolation and The Outsider</h4>
+          <p>Rejection. Social isolation. Separation from the system. These are weapons as well.</p>
+          <p>Humans are designed for fellowship—with each other, with spirit, with truth. The architects of this system understand this. If they can isolate you, convince you something is defective within you, persuade you that your failure to belong proves you are broken—they have severed you from the source.</p>
+          <p>I have always existed as an outsider. I never belonged. For years, I believed something was wrong with me. Why could I not simply conform? Why could I not be like everyone else?</p>
+          <p>In school, I was the student who posed too many questions. In church, I was the one who could not simply accept. In the workplace, I was the employee who recognized management's errors and could not remain silent. Every group I entered, I eventually found myself outside again.</p>
+          <p>Now I understand: I could not permit myself to become that person. To sacrifice whatever was necessary to belong. To betray my discernment for the sake of acceptance. That resistance was not weakness—it was preservation.</p>
+          <p>Here is the truth about the "in crowd"—the popular, the successful, those who appear to have everything figured out: they are searching as well. They have simply learned to conceal it more effectively. The confidence is performance. The certainty is theater. Beneath it, they are as lost as anyone. They simply chose conformity over standing apart.</p>
+          <p>When you recognize this, the anxiety diminishes. Isolation begins to feel less like punishment and more like protection. You were kept separate so you would not be corrupted alongside them.</p>
+          <p>Scripture speaks of the "narrow path" that few discover for good reason. The broad road offers comfort. It offers company. Everyone travels it together. But it leads somewhere you do not want to arrive. The narrow path is solitary—but it proceeds in the right direction.</p>
+
+          <h4 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Meek and The Innocent</h4>
+          <p>Scripture speaks of the meek inheriting the earth. Of protecting the least of these. Of shielding the weak.</p>
+          <p>Those experiencing financial hardship often read this and think: "That describes me. I am the meek. I am the least. I am protected."</p>
+          <p>But that is not the meaning.</p>
+          <p>The meek—the truly innocent—are those who lack the capacity for malicious intent. Consider children before the world corrupts them. Consider adults with conditions such as autism or developmental disabilities. People who, regardless of what befalls them, cannot conceive of malice. They are pure beyond measure. Evil does not exist within them because they lack the mechanism for it.</p>
+          <p>I reflect on my experiences with such individuals. Their purity is unmistakable. They can be wounded, yet they do not comprehend revenge. They can be deceived, yet they do not comprehend deception. They operate at a frequency the corrupted cannot access.</p>
+          <p>These are the ones scripture protects. These are the ones of whom it declares: whoever harms them might as well fasten a millstone around their neck and cast themselves into the sea. What is done to the least of these is done to the source itself.</p>
+          <p>The discerning are meant to protect them. That is part of what discernment serves—not merely to perceive truth, but to shield those who cannot recognize approaching deception. To serve as guardians for the truly innocent.</p>
+          <p>When you comprehend this, your purpose clarifies. You are not here solely to save yourself. You are here to protect those who cannot protect themselves from the spiritual predators who govern this world.</p>
+        </div>
       </>
     )
   },
@@ -999,6 +1070,39 @@ const volume1Chapters: Chapter[] = [
         <p>The timing aligns with the mud flood evidence. The late 1800s - the same period when the magnificent "inherited" buildings appear in photographs, already old, already buried to their first floors. Cities that look ancient in photos from the 1870s. Infrastructure that shouldn't exist for decades.</p>
         <p>A reset requires three things: destroying the previous civilization, erasing its memory, and raising a new generation that knows only the new story. The orphan trains accomplished the third. The mud flood and whatever catastrophe accompanied it accomplished the first. The rewriting of history accomplished the second.</p>
         <p>And here we are - descendants of those children, believing the story we were given, never questioning where our great-great-grandparents actually came from.</p>
+        
+        <div className="mt-12 pt-8 border-t-2 border-purple-500/50">
+          <h3 className="text-2xl font-bold text-purple-400 mb-6">Author's Thoughts: The Thin Veil</h3>
+          <h4 className="text-xl font-bold text-cyan-400 mb-4">For Those Still Searching</h4>
+          <p>If you are reading this while engaged in the same struggle—attempting to penetrate the same barrier—here is what I have learned:</p>
+          <p>The wall dissolves when you cease attempting to perceive through the lens you were given and begin trusting the discernment you were born possessing.</p>
+          <p>That discomfort you experience when something appears wrong? That is the signal. That is the gift. The confusion was engineered. The truth is simple.</p>
+          <p>You are not losing your mind. You are awakening.</p>
+          <p>I understand what it means to be told you are wrong when you know you are right. To be dismissed as a conspiracy theorist when you are merely asking questions. To observe people accepting what makes no sense and wonder whether you are the one who is broken.</p>
+          <p>You are not broken. You are functioning exactly as designed. That sense of wrongness is your spiritual immune system operating correctly. Those who do not feel it are the ones who have been compromised.</p>
+          <p>The path forward does not require convincing others. It requires trusting yourself. Honoring that inner knowing even when everyone around you calls it foolishness. Remembering that prophets were never popular in their own time.</p>
+          <p>If you are searching, continue searching. If you are questioning, continue questioning. Truth does not fear examination—only falsehood requires protection from scrutiny. The fact that you persist in searching means you have not surrendered. That is everything.</p>
+
+          <h4 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Veil Is Thin</h4>
+          <p>What astonishes me most is this: the veil separating truth from deception is remarkably thin.</p>
+          <p>The scope appears overwhelming. Comprehending everything seems impossible. Revising your worldview after decades of programming? As a single individual, contending against the machinery of deception? The mind wants to shut down at the mere thought. Spiritual truth seems equally daunting—so vast, so layered, so impossible to disentangle.</p>
+          <p>But the lie itself? The deception? It is actually simple.</p>
+          <p>Once perceived, it cannot be unperceived. Then you begin recognizing how pervasive it is. How it exists everywhere, yet nobody attends to it. Minds close. Pineal glands calcify. Questions are discouraged. The ancient knowledge of ether and traditional cosmologies is not taught because "science" supplanted and rewrote everything.</p>
+          <p>The reality is straightforward: you need only take one small leap. That is all. The veil is thin. Cross it, and suddenly you stand on the other side, perceiving clearly what was concealed in plain sight all along.</p>
+          <p>I remember the moment it occurred for me. It was not dramatic. It was quiet. One connection led to another, and suddenly the entire picture crystallized. Everything I had been taught was wrong—not entirely, but subtly. Just enough to keep me walking in circles rather than forward.</p>
+          <p>Now I cannot return. The veil, once crossed, cannot be recrossed. You perceive. You know. You cannot pretend otherwise.</p>
+          <p>The veil is thin. Thinner than they want you to believe. One clear moment of perception can transform everything. You are closer than you realize.</p>
+
+          <h4 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Ability to See</h4>
+          <p>Despite all the deception—layer upon layer, sufficient to confound anyone into perpetual circles—humans retain the capacity to perceive directly through it.</p>
+          <p>Clearly. Directly through it.</p>
+          <p>If you attend carefully. If you set aside selfishness, presumed knowledge, ego, and the forces that govern you. Cultural and social engineering has misdirected these instincts. This explains my addiction. This explains my confusion and depression. I sensed something was wrong, but all I knew was to have faith that Jesus would save me, and it never achieved coherence.</p>
+          <p>Clarity does not derive from intelligence. Some of the most brilliant people I know are the most deceived. Education can constitute programming. Credentials can become chains. The ability to perceive is not about intellectual capacity—it concerns humility. It requires acknowledging that what you were taught might be wrong.</p>
+          <p>Now everything I am learning achieves alignment. The truth was provided from the beginning. It was subverted, inverted, veiled. But despite all of that, the capacity to perceive through it endures. It remains.</p>
+          <p>You need only eyes to see. Ears to hear. Willingness to listen rather than merely accept and proceed.</p>
+          <p>The greatest obstacle is not the complexity of the deception. It is pride. The refusal to acknowledge that you have been wrong. That the faith upon which you constructed your life was corrupted. That the name to which you prayed was a substitution. That barrier is internal—and only you can dismantle it.</p>
+          <p>But once you do, the sight is permanent. Truth, once perceived, cannot be unperceived. You can only determine what to do with it.</p>
+        </div>
       </>
     )
   },
@@ -1012,6 +1116,60 @@ const volume1Chapters: Chapter[] = [
         <p>What if these aren't random meteor strikes? What if they're the landing sites of the fallen ones? Or the impact points of divine judgment upon their dwelling places?</p>
         <p>The Book of Enoch describes the Watchers being bound and cast into darkness to await judgment. Their places of power would have been destroyed. The locations of their descent and their strongholds would bear the marks of that destruction.</p>
         <p>Two hundred fallen. Two hundred craters. The correlation demands consideration. If true, it rewrites not just theology but geology. The entire timeline we've been given - the billions of years, the gradual processes, the random universe - collapses into something far more recent, far more purposeful, far more connected to the spiritual war that continues to this day.</p>
+        
+        <div className="mt-12 pt-8 border-t-2 border-purple-500/50">
+          <h3 className="text-2xl font-bold text-purple-400 mb-6">Author's Thoughts: The Revelation</h3>
+          <h4 className="text-xl font-bold text-cyan-400 mb-4">The 3D Classroom</h4>
+          <p>We were given a three-dimensional reality. Not as imprisonment, but as a classroom.</p>
+          <p>A place for spiritual maturation. Equipped with every tool we require. Every piece of information we need. Including an extraordinary examination—the deception, the veil, the counterfeit system—which was not part of the original design but became the narrative.</p>
+          <p>And the Father declared: I will conclude this. Have faith.</p>
+          <p>Consider this reality as a simulation—not in the materialist sense, but in the spiritual sense. A contained environment where souls develop. Where choices bear consequences. Where the curriculum is discernment, and the final examination is perceiving through the veil.</p>
+          <p>People assume time is linear. A straight line expanding infinitely into the cosmos. But I believe time is cyclical. Everything recurs. Everything echoes. Examine any narrative and you observe it reverberating across history, consistently advanced by those who possess power and wealth.</p>
+          <p>The same patterns. The same deceptions. The same tests. Each generation believes itself unprecedented, yet they traverse the same path their ancestors walked. The question is whether you will recognize the pattern or proceed blindly as those before you did.</p>
+          <p>The test is to perceive through it. To discover the truth that was always present. To mature despite the confusion. And to guide others once you have found your way.</p>
+          <p>We are not intended to remain in the classroom indefinitely. There is graduation. An exit. A restoration to what we were meant to be before the corruption. This life is temporary—but its lessons are eternal.</p>
+
+          <h4 className="text-xl font-bold text-cyan-400 mt-8 mb-4">Free Will and The Knowing</h4>
+          <p>Someone once presented their theory to me: if the Creator knows everything and created everything, then He created both good and evil. He knows every decision we will make. Everything is predetermined. Nothing we choose matters because it is all scripted.</p>
+          <p>I understand this reasoning. When the teachings you received make no sense, and you attempt to reconcile omniscience with free will, it appears contradictory.</p>
+          <p>But here is what I have come to understand: Knowing is not controlling.</p>
+          <p>A parent knows their child will fall while learning to walk. This does not mean the parent caused the fall. Foreknowledge differs from causation. The Creator can perceive every path while still permitting us to choose which one to walk.</p>
+          <p>Scripture states He knew every hair on your head before you were born. This does not mean He controls your every movement. It means He crafted you with care—as a master artisan creates a piece of furniture, only infinitely more complex. A biological vessel designed to contain a spirit. A breath. His essence.</p>
+          <p>We were created as a collective for fellowship under the Creator who provided this opportunity to exist. Through free will, He hopes—rather than compels—that we will make righteous decisions. That we will employ our discernment correctly. The entire purpose of free will is its authenticity. The choice belongs to us. Otherwise, why test? Why create? Why any of it?</p>
+          <p>Your choices matter. Your discernment matters. The test is genuine. And the outcome is not predetermined—it is earned.</p>
+
+          <h4 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Spark of Life</h4>
+          <p>Science recently documented something remarkable: when a sperm penetrates an egg, there is a visible flash of light.</p>
+          <p>A flash. At the precise moment of conception.</p>
+          <p>They term it a zinc spark. They measure it. They explain it through chemistry. But consider what it represents: the moment life commences, there is light.</p>
+          <p>That is the spark. That is the breath of life entering the biological vessel. That is the promise manifesting.</p>
+          <p>I have observed the images. The recordings. Researchers studying fertilization captured it without comprehending what they witnessed. They measure luminescence and publish findings. But they are documenting the arrival of a soul and labeling it chemistry.</p>
+          <p>Originally, we were designed for eternal existence. Simply follow the law. Commune with the Creator. Dwell in the garden. But corruption arrived—the corruption of DNA through the fallen, the mingling of what should never have been combined—and here we find ourselves.</p>
+          <p>Yet even now, even in this corrupted condition, every new life begins with a flash of light. The Creator's signature persists, even in a fallen world.</p>
+          <p>Science observes it and classifies it as chemistry. But with eyes to see, you recognize what it truly is. The spark is not zinc. It is the commencement of a soul.</p>
+
+          <h4 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Real Corruption</h4>
+          <p>People believe death arrived because Adam and Eve consumed an apple. That is the simplified narrative. One bite of fruit, and the Creator declared: now you shall die.</p>
+          <p>But that is the abbreviated version. The metaphor reduced until it lost its meaning.</p>
+          <p>The fruit was never about an apple. It concerned the choice to transgress what was forbidden—paralleling Lucifer and the fallen who desired what was not theirs. They sought to attain the Creator's knowledge, to surpass Him.</p>
+          <p>What actually transpired was genetic corruption. The mingling of bloodlines. The perfect creation was corrupted by entities who coveted what humans possessed—a position above the angels, made in the Creator's image with the capacity to create.</p>
+          <p>Read Genesis 6. "The sons of God saw the daughters of men that they were fair; and they took them wives of all which they chose." The Nephilim. The giants. The corruption of human DNA by non-human entities. This is not allegory—it is documented history that has been minimized and metaphorized until people forgot it was literal.</p>
+          <p>That corruption—the mingling of what should never have been combined—introduced death. Not vindictive punishment. A corrupted system failing. A perfect design fractured.</p>
+          <p>And rather than total annihilation, rather than eliminating His most treasured creation, the Creator dispatched redemption. The Messiah was not sent to condemn. He was sent to restore what had been corrupted. To offer a path of return.</p>
+          <p>The authentic narrative makes sense. They simply do not teach it.</p>
+
+          <h4 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Mark and The Names</h4>
+          <p>People imagine the mark of the beast as a microchip. A barcode. Some physical technology implanted in the body. They await it, prepared to resist.</p>
+          <p>But what if it is already present? What if it has existed for centuries?</p>
+          <p>Scripture indicates the mark will be in your forehead and in your hand. The forehead represents thought—your beliefs, your heart. The hand represents action—your works, your deeds. It is not a chip. It is acceptance and obedience.</p>
+          <p>The prayer to accept the false messiah into your heart. The works performed in his name. That is the mark. It is organic. It is spiritual. And most accepted it willingly, believing they were acting righteously.</p>
+          <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
+            <p className="italic">"Lord, Lord, we prophesied in your name, we cast out demons in your name, we did mighty works in your name." And the response: "Depart from me, I never knew you."</p>
+          </div>
+          <p>Why? Because the name is consequential. The name carries the frequency. The name is the connector to the source. If you have received a corrupted name—a substitution, a translation that removes the power—then you are connecting to something else entirely.</p>
+          <p>The Father's name appears over 6,800 times in the original Hebrew scriptures. It was replaced with "LORD" and "GOD"—titles, not names. The Messiah's name was altered, translated, modified until it no longer resonates with what was originally given.</p>
+          <p>Consider the power of names in scripture. Adam named the animals. To name something is to exercise dominion over it. Names convey authority, identity, frequency. Would you respond if someone addressed you by a different name? The connection depends upon accuracy.</p>
+        </div>
       </>
     )
   },
@@ -2960,37 +3118,12 @@ const appendicesChapters: Chapter[] = [
   }
 ];
 
-// Merge journey chapters into research chapters at matching points
-const mergedChapters: Chapter[] = [];
-let journeyIndex = 0;
-const journeyInsertPoints: { [key: string]: number } = {
-  'v1-ch12': 0, // Insert journey-intro after ch12
-  'v1-ch13': 1, // Insert journey-ch1 after ch13
-  'v1-ch14': 2, // Insert journey-ch2 after ch14
-  'v1-ch15': 3, // Insert journey-ch3 after ch15
-  'v1-ch16': 4, // Insert journey-ch4 after ch16 (if exists)
-  'v1-ch17': 5, // Insert journey-ch5 after ch17
-};
-
-for (const chapter of volume1Chapters) {
-  mergedChapters.push(chapter);
-  const insertIdx = journeyInsertPoints[chapter.id];
-  if (insertIdx !== undefined && journeyChapters[insertIdx]) {
-    mergedChapters.push(journeyChapters[insertIdx]);
-  }
-}
-
-// Add any remaining journey chapters at the end
-for (let i = Object.keys(journeyInsertPoints).length; i < journeyChapters.length; i++) {
-  mergedChapters.push(journeyChapters[i]);
-}
-
 const volumes: Volume[] = [
   {
     id: "main",
     title: "Through The Veil",
-    subtitle: "Research & Personal Journey",
-    chapters: mergedChapters
+    subtitle: "Research & Author's Thoughts",
+    chapters: volume1Chapters
   },
   {
     id: "appendices",
