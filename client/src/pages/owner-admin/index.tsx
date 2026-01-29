@@ -356,6 +356,7 @@ function OwnerDashboard() {
     { id: "guardian", title: "Guardian Admin", description: "Security certifications, audits, revenue tracking", icon: <Shield className="w-6 h-6" />, href: "/owner-admin/guardian", glow: "emerald" as const },
     { id: "users", title: "User Management", description: "Waitlist, beta testers, whitelist, payments", icon: <Users className="w-6 h-6" />, href: "/owner-admin/users", glow: "cyan" as const },
     { id: "kyc", title: "KYC Verification", description: "Review and approve identity verifications", icon: <ShieldCheck className="w-6 h-6" />, href: "/owner-admin/kyc", glow: "purple" as const },
+    { id: "business-verification", title: "Business Verification", description: "Approve business memberships, EIN lookup, Main Street slots", icon: <Gamepad2 className="w-6 h-6" />, href: "/owner-admin/business-verification", glow: "emerald" as const },
     { id: "analytics", title: "Analytics Dashboard", description: "Real visitor data, traffic sources, geographic insights", icon: <BarChart3 className="w-6 h-6" />, href: "/owner-admin/analytics", glow: "purple" as const },
     { id: "seo", title: "SEO Manager", description: "Meta tags, OpenGraph, structured data per route", icon: <Search className="w-6 h-6" />, href: "/owner-admin/seo", glow: "pink" as const },
     { id: "referrals", title: "Referral Dashboard", description: "Affiliate management, fraud detection, payouts", icon: <Crown className="w-6 h-6" />, href: "/owner-admin/referrals", glow: "amber" as const },

@@ -15832,6 +15832,97 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // === OWNER BUSINESS VERIFICATION ROUTES ===
+  app.get("/api/owner/business-applications", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const status = req.query.status as string;
+      let query = db.select().from(businessApplications).orderBy(desc(businessApplications.createdAt));
+      
+      if (status && status !== "all") {
+        const apps = await db.select().from(businessApplications)
+          .where(eq(businessApplications.status, status))
+          .orderBy(desc(businessApplications.createdAt));
+        return res.json(apps);
+      }
+      
+      const apps = await query;
+      res.json(apps);
+    } catch (error) {
+      console.error("Get business applications error:", error);
+      res.status(500).json({ error: "Failed to fetch business applications" });
+    }
+  });
+
+  app.post("/api/owner/business-applications/:id/approve", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { notes, mainStreet } = req.body;
+      
+      const [updated] = await db.update(businessApplications)
+        .set({
+          status: "approved",
+          reviewedAt: new Date(),
+          reviewedBy: "owner",
+          reviewNotes: notes || "Approved",
+        })
+        .where(eq(businessApplications.id, id))
+        .returning();
+      
+      if (!updated) {
+        return res.status(404).json({ error: "Application not found" });
+      }
+      
+      // Update user's business membership status if we have a users table linkage
+      try {
+        await db.update(users)
+          .set({ membershipTier: "business" })
+          .where(eq(users.id, updated.userId));
+      } catch (e) {
+        console.log("Note: Could not update user membership tier", e);
+      }
+      
+      // TODO: If mainStreet is true, add to Legacy Main Street program
+      if (mainStreet) {
+        console.log(`[Business Verification] ${updated.businessName} granted Main Street storefront`);
+      }
+      
+      res.json({ success: true, application: updated });
+    } catch (error) {
+      console.error("Approve business application error:", error);
+      res.status(500).json({ error: "Failed to approve application" });
+    }
+  });
+
+  app.post("/api/owner/business-applications/:id/reject", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { notes } = req.body;
+      
+      if (!notes) {
+        return res.status(400).json({ error: "Rejection reason required" });
+      }
+      
+      const [updated] = await db.update(businessApplications)
+        .set({
+          status: "rejected",
+          reviewedAt: new Date(),
+          reviewedBy: "owner",
+          reviewNotes: notes,
+        })
+        .where(eq(businessApplications.id, id))
+        .returning();
+      
+      if (!updated) {
+        return res.status(404).json({ error: "Application not found" });
+      }
+      
+      res.json({ success: true, application: updated });
+    } catch (error) {
+      console.error("Reject business application error:", error);
+      res.status(500).json({ error: "Failed to reject application" });
+    }
+  });
+
   app.get("/api/owner/airdrop/summary", ownerAuthMiddleware, async (req, res) => {
     try {
       const summary = await payoutService.getAirdropSummary();

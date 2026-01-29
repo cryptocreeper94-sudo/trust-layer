@@ -223,6 +223,7 @@ const OwnerGuardian = lazy(() => import("@/pages/owner-admin/guardian"));
 const OwnerDomains = lazy(() => import("@/pages/owner-admin/domains"));
 const OwnerFaucet = lazy(() => import("@/pages/owner-admin/faucet"));
 const OwnerKyc = lazy(() => import("@/pages/owner-admin/kyc"));
+const OwnerBusinessVerification = lazy(() => import("@/pages/owner-admin/business-verification"));
 const OwnerZealy = lazy(() => import("@/pages/owner-admin/zealy"));
 const OwnerFeedback = lazy(() => import("@/pages/owner-admin/feedback"));
 const OwnerMessaging = lazy(() => import("@/pages/owner-admin/messaging"));
@@ -463,6 +464,7 @@ function DWSCRouter() {
         <Route path="/owner-admin/domains" component={OwnerDomains} />
         <Route path="/owner-admin/faucet" component={OwnerFaucet} />
         <Route path="/owner-admin/kyc" component={OwnerKyc} />
+        <Route path="/owner-admin/business-verification" component={OwnerBusinessVerification} />
         <Route path="/owner-admin/zealy" component={OwnerZealy} />
         <Route path="/owner-admin/feedback" component={OwnerFeedback} />
         <Route path="/owner-admin/messaging" component={OwnerMessaging} />
