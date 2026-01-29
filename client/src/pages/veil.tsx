@@ -98,8 +98,8 @@ export default function Veil() {
                 <p className="text-slate-400 text-sm">The deception exposed. "Jesus Christ" = 666 in gematria. Scripture references from the Eth Cepher.</p>
               </div>
               <div className="p-5 rounded-xl bg-slate-800/50 border border-slate-700">
-                <h4 className="text-cyan-400 font-semibold mb-2">42 Chapters</h4>
-                <p className="text-slate-400 text-sm">41,000+ words across 12 parts. The history, patterns, and documented substitutions.</p>
+                <h4 className="text-cyan-400 font-semibold mb-2">14 Chapters + Appendices</h4>
+                <p className="text-slate-400 text-sm">70 sections of research, evidence, and personal testimony. The complete journey.</p>
               </div>
               <div className="p-5 rounded-xl bg-slate-800/50 border border-slate-700">
                 <h4 className="text-purple-400 font-semibold mb-2">Documented Sources</h4>
