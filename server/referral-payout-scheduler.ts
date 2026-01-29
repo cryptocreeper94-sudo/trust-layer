@@ -234,7 +234,7 @@ export function startReferralPayoutScheduler(): void {
   
   console.log("[Referral Payout] Starting automatic referral payout scheduler");
   console.log(`[Referral Payout] Payouts scheduled at 8:00 AM and 8:00 PM Central`);
-  console.log(`[Referral Payout] Base reward: ${REWARD_TIERS.signup} Shells per signup`);
+  console.log(`[Referral Payout] Base reward: ${BASE_REWARD} Shells per signup (multiplier system active)`);
   
   schedulerState.isRunning = true;
   schedulerState.intervalId = setInterval(checkAndExecute, CHECK_INTERVAL_MS);
@@ -261,7 +261,11 @@ export function getReferralPayoutStatus() {
     lastPayoutHour: schedulerState.lastPayoutHour,
     todayPayoutsRun: schedulerState.todayPayoutsRun,
     payoutSchedule: ["8:00 AM CST (2:00 PM UTC)", "8:00 PM CST (2:00 AM UTC)"],
-    rewardTiers: REWARD_TIERS,
+    rewardSystem: {
+      type: "multiplier",
+      baseReward: BASE_REWARD,
+      multipliers: PURCHASE_MULTIPLIERS,
+    },
     stats: schedulerState.stats,
   };
 }

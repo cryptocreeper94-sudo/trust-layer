@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
-import { User, Wallet, Code, Key, Activity, LogOut, Settings, Copy, Check, Award, Shield, Sparkles } from "lucide-react";
+import { User, Wallet, Code, Key, Activity, LogOut, Settings, Copy, Check, Award, Shield, Sparkles, Users, Building2, FileText, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -175,6 +175,56 @@ export default function Dashboard() {
               )}
             </div>
           </GlassCard>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <Link href="/member-portal">
+              <GlassCard glow className="p-5 cursor-pointer hover:border-cyan-500/30 transition-all group h-full">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/30 to-blue-500/30 flex items-center justify-center">
+                    <Users className="w-5 h-5 text-cyan-400" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-white">Member Portal</h3>
+                    <p className="text-xs text-white/60">Your trust profile</p>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-white/40 group-hover:text-cyan-400 transition-colors" />
+                </div>
+                <p className="text-sm text-white/50">Manage connections, view activity, track reputation</p>
+              </GlassCard>
+            </Link>
+            
+            <Link href="/business-portal">
+              <GlassCard glow className="p-5 cursor-pointer hover:border-purple-500/30 transition-all group h-full">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/30 to-pink-500/30 flex items-center justify-center">
+                    <Building2 className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-white">Business Portal</h3>
+                    <p className="text-xs text-white/60">API & webhooks</p>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-white/40 group-hover:text-purple-400 transition-colors" />
+                </div>
+                <p className="text-sm text-white/50">API keys, webhooks, team management</p>
+              </GlassCard>
+            </Link>
+            
+            <Link href="/membership-charter">
+              <GlassCard glow className="p-5 cursor-pointer hover:border-amber-500/30 transition-all group h-full">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500/30 to-orange-500/30 flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-amber-400" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-white">Charter</h3>
+                    <p className="text-xs text-white/60">Member benefits</p>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-white/40 group-hover:text-amber-400 transition-colors" />
+                </div>
+                <p className="text-sm text-white/50">Mission, values, tiers & pricing</p>
+              </GlassCard>
+            </Link>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             <GlassCard glow>
