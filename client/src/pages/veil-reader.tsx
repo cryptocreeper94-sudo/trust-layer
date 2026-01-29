@@ -471,7 +471,16 @@ const volume1Chapters: Chapter[] = [
         <p>Exodus 19:18: "And mount Sinai was altogether on a smoke, because Yahuah descended upon it in fire: and the smoke thereof ascended as the smoke of a furnace, and the whole mount quaked greatly."</p>
         <p>Traditional sites in the Sinai Peninsula show no evidence of this burning. But Jabal al-Lawz in Saudi Arabia - the site Wyatt identified as the true Mount Sinai - shows something remarkable: <strong>the peak is burned black</strong>.</p>
         <p>You can see the line where the burning stops. The lower portion of the mountain is normal rock. Above a certain elevation, it's charred. Blackened. As if something descended in fire.</p>
-        <p>Nearby, Wyatt documented the split rock that Moses struck for water (Exodus 17:6), large enough for millions to drink from, with clear water erosion patterns. He found the altar of the golden calf (Exodus 32), with petroglyphs of Egyptian-style cattle worship. He found the twelve pillars Moses erected (Exodus 24:4).</p>
+        <p>Nearby, Wyatt documented the split rock that Moses struck for water (Exodus 17:6), large enough for millions to drink from, with clear water erosion patterns.</p>
+        
+        <div className="my-4 flex justify-center">
+          <div className="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/30 max-w-md">
+            <img src="/veil-images/split-rock-horeb.jpg" alt="The Split Rock of Horeb where Moses struck water for the Israelites" className="w-full rounded-lg" />
+            <p className="text-center text-sm text-slate-400 mt-2 italic">The Split Rock of Horeb - water erosion patterns visible from where millions drank</p>
+          </div>
+        </div>
+        
+        <p>He found the altar of the golden calf (Exodus 32), with petroglyphs of Egyptian-style cattle worship. He found the twelve pillars Moses erected (Exodus 24:4).</p>
         <p>The Saudi government initially fenced the entire area as a restricted archaeological zone. The evidence is too significant to allow public access.</p>
         
         <p className="text-lg font-semibold text-white mt-6 mb-4">The Giant Tree Stumps</p>
