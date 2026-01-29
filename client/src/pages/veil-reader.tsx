@@ -14,6 +14,10 @@ import veilHollywoodCinema from "@/assets/images/veil-hollywood-cinema.jpg";
 import veilVatican from "@/assets/images/veil-vatican.jpg";
 import veilMusicIndustry from "@/assets/images/veil-music-industry.jpg";
 import veilStadium from "@/assets/images/veil-stadium.jpg";
+import veilBabel from "@/assets/images/veil-babel.jpg";
+import veilCosmos from "@/assets/images/veil-cosmos.jpg";
+import veilManuscript from "@/assets/images/veil-manuscript.jpg";
+import veilFreedom from "@/assets/images/veil-freedom.jpg";
 
 function useVeilPWA() {
   useEffect(() => {
@@ -391,6 +395,12 @@ const volume1Chapters: Chapter[] = [
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART ONE: THE REBELLION</p>
+        
+        <div className="my-6 rounded-lg overflow-hidden border border-white/10">
+          <img src={veilManuscript} alt="Ancient manuscript by candlelight" className="w-full h-48 object-cover" />
+          <p className="text-xs text-slate-500 p-2 bg-slate-900/50 text-center italic">Ancient texts reveal what modern education obscures</p>
+        </div>
+        
         <p>To understand where we are, we have to go back to where it started. Not human history. Before that. The celestial rebellion that set everything in motion.</p>
         <p>Scripture speaks of principalities and powers. Of rulers of darkness. Of spiritual wickedness in high places. Sha'ul (Paul) wrote in Eph'siym (Ephesians) 6:12: "For we wrestle not against flesh and blood, but against principalities, against powers, against the rulers of the darkness of this world, against spiritual wickedness in high places." These aren't metaphors. They're descriptions of an organized hierarchy that predates humanity itself.</p>
         <p>At the top of this hierarchy sits the adversary - Satan, the dragon, the serpent of old. Chizayon (Revelation) 12:9 identifies him: "And the great dragon was cast out, that old serpent, called the Devil, and Satan, which deceives the whole world." But he doesn't rule alone. He has a council. The fallen ones who joined his rebellion. The entities who have operated through human proxies throughout recorded history.</p>
@@ -642,6 +652,12 @@ const volume1Chapters: Chapter[] = [
     content: (
       <>
         <p>What if the very shape of the world you've been taught is part of the deception? What if the cosmology described in Scripture - a flat plane under a solid firmament, with waters above and below - is not primitive ignorance but accurate description?</p>
+        
+        <div className="my-6 rounded-lg overflow-hidden border border-white/10">
+          <img src={veilCosmos} alt="Stars in the night sky" className="w-full h-48 object-cover" />
+          <p className="text-xs text-slate-500 p-2 bg-slate-900/50 text-center italic">The heavens declare glory - but what structure contains them?</p>
+        </div>
+        
         <p>This chapter presents observable phenomena that mainstream science either ignores or explains away. You don't have to accept any conclusion. But you should know the evidence exists.</p>
         
         <p className="text-lg font-semibold text-white mt-6 mb-4">The Firmament: A Solid Dome</p>
@@ -1495,6 +1511,12 @@ const volume1Chapters: Chapter[] = [
         <p>The Creator responded with the Flood. The Nephilim were destroyed. The Watchers were bound. But their knowledge survived - passed to those who remembered, preserved through the deluge.</p>
         
         <p className="text-lg font-semibold text-white mt-6 mb-4">Babel: The Organized Rebellion</p>
+        
+        <div className="my-6 rounded-lg overflow-hidden border border-white/10">
+          <img src={veilBabel} alt="Ancient tower ruins in the desert" className="w-full h-48 object-cover" />
+          <p className="text-xs text-slate-500 p-2 bg-slate-900/50 text-center italic">Babel: humanity's first attempt at unified rebellion</p>
+        </div>
+        
         <p>At Babel, humanity united in rebellion. The tower was not about reaching heaven physically - it was about creating a centralized system of control, a single point of worship that could be directed away from the Creator.</p>
         <p>The Most High confused the languages and scattered the nations. But the knowledge traveled with them. Every ancient culture has the same stories - the flood, the giants, the gods who descended, the forbidden wisdom. They remember.</p>
         
@@ -2002,6 +2024,12 @@ const volume1Chapters: Chapter[] = [
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART TWELVE: THE RESTORATION</p>
+        
+        <div className="my-6 rounded-lg overflow-hidden border border-white/10">
+          <img src={veilFreedom} alt="Breaking chains and finding freedom" className="w-full h-48 object-cover" />
+          <p className="text-xs text-slate-500 p-2 bg-slate-900/50 text-center italic">The chains were never physical - and neither is the freedom</p>
+        </div>
+        
         <p>What do you do when you see?</p>
         <p>First: ground yourself in the original. Study the scriptures with fresh eyes. Learn the names that were erased. Observe the calendar that was substituted. Keep the commandments that were minimized.</p>
         <p>Second: clean the receiver. Detox from the substances that calcify the pineal. Remove the frequencies that interfere. Spend time in nature. Fast. Pray. Listen.</p>
