@@ -463,7 +463,7 @@ const volume1Chapters: Chapter[] = [
         
         <div className="my-4 flex justify-center">
           <div className="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/30 max-w-md">
-            <img src="/veil-images/sinai-mountain.jpg" alt="Mountain landscape in the Sinai region" className="w-full rounded-lg" />
+            <img src="/veil-images/jabal-al-lawz.jpg" alt="Jabal al-Lawz showing the blackened peak where Yahuah descended in fire" className="w-full rounded-lg" />
             <p className="text-center text-sm text-slate-400 mt-2 italic">Jabal al-Lawz - the true Mount Sinai with its blackened peak</p>
           </div>
         </div>
