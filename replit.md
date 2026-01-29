@@ -48,6 +48,7 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **Early Adopter Rewards System**: Tracks signup positions and tiered crowdfund bonuses for Signal airdrops, accessible via `/api/user/early-adopter-stats`, `/api/early-adopter/counters`, and `/rewards`.
 - **Backend IDE / Studio Executor**: Docker container orchestration for code execution (`server/studio-executor.ts`), with JWT auth, sandboxing, and resource enforcement.
 - **Innovation Hub Features**: Guardian Security Scores, ChronoPass Identity, Experience Shards, Quest Mining System, Zealy Integration, Reality Layer Oracles, AI Verified Execution, Guardian Studio Copilot, AI Agent Marketplace, RWA Tokenization.
+- **Trust Layer Landing Page**: Main landing page (`/`) focused on individual signup with: hero CTA, membership card benefits showcase, ecosystem apps display, individual vs business signup paths, links to presale and ChronoChat. Business signup requires personal account first. Located at `client/src/pages/trust-layer-landing.tsx`.
 - **Strategic Marketing Pages**: Competitive Analysis (`/token-compare`), Investor Pitch (`/investor-pitch`), Innovation Hub (`/innovation`).
 - **Business Tenant Portals**: Secure B2B dashboards for verified companies, including transaction ledgers, trusted networks, and API access.
 - **Multi-SIG Multi-Chain Wallet**: M-of-N signature requirements across all supported chains for business treasuries and DAOs.

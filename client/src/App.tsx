@@ -164,6 +164,7 @@ const Members = lazy(() => import("@/pages/members"));
 const MyTokens = lazy(() => import("@/pages/my-tokens"));
 const CommunityHub = lazy(() => import("@/pages/community-hub"));
 const Presale = lazy(() => import("@/pages/presale"));
+const TrustLayerLanding = lazy(() => import("@/pages/trust-layer-landing"));
 const PresaleSuccess = lazy(() => import("@/pages/presale-success"));
 const Founders = lazy(() => import("@/pages/founders"));
 const InvestmentSimulator = lazy(() => import("@/pages/investment-simulator"));
@@ -362,7 +363,8 @@ function DWSCRouter() {
     <Suspense fallback={<PageLoader />}>
       <ScrollToTop />
       <Switch>
-        <Route path="/" component={Presale} />
+        <Route path="/" component={TrustLayerLanding} />
+        <Route path="/presale" component={Presale} />
         <Route path="/portal" component={Home} />
         <Route path="/home" component={Home} />
         <Route path="/note" component={DevelopersNote} />
