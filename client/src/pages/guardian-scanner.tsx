@@ -18,6 +18,7 @@ import {
   RefreshCw,
   Zap,
   ChevronDown,
+  ChevronRight,
   Flame,
   Skull,
   CheckCircle,
@@ -33,7 +34,19 @@ import {
   ArrowDownRight,
   Eye,
   BarChart3,
-  Megaphone
+  Megaphone,
+  Target,
+  AlertTriangle,
+  Ban,
+  Activity,
+  Users,
+  Bot,
+  Droplets,
+  Brain,
+  Crosshair,
+  Clock,
+  ExternalLink,
+  Info
 } from "lucide-react";
 import { useGuardianWS } from "@/hooks/use-guardian-ws";
 
@@ -62,7 +75,30 @@ const SORT_OPTIONS = [
   { id: "losers", label: "Top Losers", icon: TrendingDown },
   { id: "newest", label: "Newest", icon: Sparkles },
   { id: "score", label: "Guardian Score", icon: Shield },
+  { id: "ai", label: "AI Confidence", icon: Brain },
 ];
+
+interface SafetyData {
+  honeypotRisk: boolean;
+  mintAuthority: boolean;
+  freezeAuthority: boolean;
+  liquidityLocked: boolean;
+  holderCount: number;
+  whaleConcentration: number;
+  botActivity: number;
+  safetyScore: number;
+  safetyGrade: string;
+  risks: string[];
+  warnings: string[];
+}
+
+interface MLPrediction {
+  direction: 'up' | 'down' | 'neutral';
+  confidence: number;
+  accuracy: number;
+  shortTerm: { direction: 'up' | 'down'; percent: number };
+  longTerm: { direction: 'up' | 'down'; percent: number };
+}
 
 interface Token {
   id: string;
@@ -94,15 +130,13 @@ interface Token {
   guardianScore: number;
   boosts: number;
   isWatchlisted: boolean;
-  hasProfile: boolean;
-  isAdvertising: boolean;
-  honeypotRisk: boolean;
-  mintAuthority: boolean;
-  freezeAuthority: boolean;
-  liquidityLocked: boolean;
-  whaleConcentration: number;
-  botActivity: number;
-  creatorBadge: "new" | "verified" | "trusted" | "certified" | "flagged";
+  aiRecommendation: 'snipe' | 'watch' | 'avoid';
+  aiScore: number;
+  mlPrediction: MLPrediction;
+  safety: SafetyData;
+  twitter?: string;
+  telegram?: string;
+  websites?: string[];
 }
 
 function generateMockTokens(chain: string): Token[] {
@@ -127,11 +161,6 @@ function generateMockTokens(chain: string): Token[] {
     { symbol: "FLOKI2", name: "Floki 2.0", boosts: 150 },
     { symbol: "APE", name: "Ape Token", boosts: 0 },
     { symbol: "MOON", name: "Moonshot", boosts: 1100 },
-    { symbol: "ROCKET", name: "Rocket", boosts: 0 },
-    { symbol: "WHALE", name: "Whale", boosts: 250 },
-    { symbol: "ALPHA", name: "Alpha", boosts: 0 },
-    { symbol: "CHAD", name: "Chad", boosts: 180 },
-    { symbol: "GEM", name: "Hidden Gem", boosts: 0 },
   ];
 
   const chains = chain === "all" ? ["solana", "ethereum", "base", "bsc"] : [chain];
@@ -152,9 +181,8 @@ function generateMockTokens(chain: string): Token[] {
 
   return tokenData.map((td, i) => {
     const tokenChain = chains[Math.floor(Math.random() * chains.length)];
-    const score = Math.floor(Math.random() * 100);
-    const badges: Array<"new" | "verified" | "trusted" | "certified" | "flagged"> = 
-      ["new", "verified", "trusted", "certified", "flagged"];
+    const safetyScore = Math.floor(Math.random() * 100);
+    const aiScore = Math.floor(Math.random() * 100);
     
     const price = Math.random() * (Math.random() > 0.5 ? 0.1 : 0.00001);
     const isNew = Math.random() > 0.4;
@@ -163,6 +191,11 @@ function generateMockTokens(chain: string): Token[] {
     const dex = chainDexes[Math.floor(Math.random() * chainDexes.length)];
     const txns = Math.floor(Math.random() * 200000) + 5000;
     const buyRatio = 0.4 + Math.random() * 0.2;
+    
+    const aiRecommendation: 'snipe' | 'watch' | 'avoid' = 
+      aiScore >= 75 ? 'snipe' : aiScore >= 40 ? 'watch' : 'avoid';
+    
+    const mlDirection = Math.random() > 0.5 ? 'up' : Math.random() > 0.3 ? 'down' : 'neutral';
     
     return {
       id: `${tokenChain}-${td.symbol.toLowerCase()}-${i}`,
@@ -191,18 +224,33 @@ function generateMockTokens(chain: string): Token[] {
       priceChange24h: (Math.random() - 0.5) * 300,
       liquidity: Math.random() * 3000000 + 30000,
       marketCap: Math.random() * 50000000 + 100000,
-      guardianScore: score,
+      guardianScore: safetyScore,
       boosts: td.boosts,
       isWatchlisted: Math.random() > 0.85,
-      hasProfile: Math.random() > 0.5,
-      isAdvertising: Math.random() > 0.85,
-      honeypotRisk: Math.random() > 0.95,
-      mintAuthority: Math.random() > 0.7,
-      freezeAuthority: Math.random() > 0.8,
-      liquidityLocked: Math.random() > 0.4,
-      whaleConcentration: Math.random() * 60 + 10,
-      botActivity: Math.random() * 30,
-      creatorBadge: badges[Math.floor(Math.random() * (score > 60 ? 4 : 5))],
+      aiRecommendation,
+      aiScore,
+      mlPrediction: {
+        direction: mlDirection as 'up' | 'down' | 'neutral',
+        confidence: Math.floor(Math.random() * 40) + 60,
+        accuracy: Math.floor(Math.random() * 30) + 65,
+        shortTerm: { direction: Math.random() > 0.5 ? 'up' : 'down', percent: Math.random() * 50 + 5 },
+        longTerm: { direction: Math.random() > 0.4 ? 'up' : 'down', percent: Math.random() * 100 + 10 },
+      },
+      safety: {
+        honeypotRisk: Math.random() > 0.9,
+        mintAuthority: Math.random() > 0.6,
+        freezeAuthority: Math.random() > 0.7,
+        liquidityLocked: Math.random() > 0.4,
+        holderCount: Math.floor(Math.random() * 50000) + 100,
+        whaleConcentration: Math.random() * 60 + 5,
+        botActivity: Math.random() * 40,
+        safetyScore,
+        safetyGrade: safetyScore >= 80 ? 'A' : safetyScore >= 60 ? 'B' : safetyScore >= 40 ? 'C' : safetyScore >= 20 ? 'D' : 'F',
+        risks: safetyScore < 50 ? ['High whale concentration', 'Low liquidity'] : [],
+        warnings: safetyScore < 70 ? ['Mint authority enabled'] : [],
+      },
+      twitter: Math.random() > 0.5 ? 'https://twitter.com/token' : undefined,
+      telegram: Math.random() > 0.5 ? 'https://t.me/token' : undefined,
     };
   });
 }
@@ -233,21 +281,145 @@ function PriceChange({ value, className = "" }: { value: number; className?: str
   const isPositive = value >= 0;
   return (
     <span className={`tabular-nums font-medium ${isPositive ? 'text-emerald-400' : 'text-red-400'} ${className}`}>
-      {isPositive ? '' : ''}{value.toFixed(2)}%
+      {value.toFixed(2)}%
     </span>
   );
 }
 
-function GuardianScoreBadge({ score }: { score: number }) {
+function AIRecommendationBadge({ recommendation, score }: { recommendation: 'snipe' | 'watch' | 'avoid'; score: number }) {
+  const config = {
+    snipe: { bg: 'bg-emerald-500/20', border: 'border-emerald-500/40', text: 'text-emerald-400', icon: Crosshair, label: 'SNIPE' },
+    watch: { bg: 'bg-yellow-500/20', border: 'border-yellow-500/40', text: 'text-yellow-400', icon: Eye, label: 'WATCH' },
+    avoid: { bg: 'bg-red-500/20', border: 'border-red-500/40', text: 'text-red-400', icon: Ban, label: 'AVOID' },
+  }[recommendation];
+  
+  const Icon = config.icon;
+  
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger>
+          <div className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded border ${config.bg} ${config.border} ${config.text}`}>
+            <Icon className="w-3 h-3" />
+            <span className="text-[10px] font-bold">{config.label}</span>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent className="bg-slate-900 border-white/10">
+          <div className="text-xs">
+            <div className="font-medium mb-1">Strike Agent AI</div>
+            <div className="text-white/60">Confidence: {score}%</div>
+          </div>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
+function MLPredictionBadge({ prediction }: { prediction: MLPrediction }) {
+  const directionConfig = {
+    up: { icon: TrendingUp, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+    down: { icon: TrendingDown, color: 'text-red-400', bg: 'bg-red-500/10' },
+    neutral: { icon: Activity, color: 'text-white/50', bg: 'bg-white/5' },
+  }[prediction.direction];
+  
+  const Icon = directionConfig.icon;
+  
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger>
+          <div className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded ${directionConfig.bg}`}>
+            <Brain className="w-3 h-3 text-purple-400" />
+            <Icon className={`w-3 h-3 ${directionConfig.color}`} />
+            <span className={`text-[10px] font-medium ${directionConfig.color}`}>{prediction.confidence}%</span>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent className="bg-slate-900 border-white/10">
+          <div className="text-xs space-y-1">
+            <div className="font-medium text-purple-400 flex items-center gap-1">
+              <Brain className="w-3 h-3" /> ML Prediction
+            </div>
+            <div className="text-white/60">Direction: <span className={directionConfig.color}>{prediction.direction.toUpperCase()}</span></div>
+            <div className="text-white/60">Confidence: {prediction.confidence}%</div>
+            <div className="text-white/60">Model Accuracy: {prediction.accuracy}%</div>
+            <div className="border-t border-white/10 pt-1 mt-1">
+              <div className="text-white/60">Short-term: <span className={prediction.shortTerm.direction === 'up' ? 'text-emerald-400' : 'text-red-400'}>{prediction.shortTerm.direction === 'up' ? '+' : '-'}{prediction.shortTerm.percent.toFixed(1)}%</span></div>
+              <div className="text-white/60">Long-term: <span className={prediction.longTerm.direction === 'up' ? 'text-emerald-400' : 'text-red-400'}>{prediction.longTerm.direction === 'up' ? '+' : '-'}{prediction.longTerm.percent.toFixed(1)}%</span></div>
+            </div>
+          </div>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
+function GuardianScoreBadge({ score, grade }: { score: number; grade?: string }) {
   let color = "bg-red-500/20 text-red-400 border-red-500/30";
   if (score >= 80) color = "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
-  else if (score >= 50) color = "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+  else if (score >= 60) color = "bg-cyan-500/20 text-cyan-400 border-cyan-500/30";
+  else if (score >= 40) color = "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
   else if (score >= 20) color = "bg-orange-500/20 text-orange-400 border-orange-500/30";
   
   return (
     <div className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border text-[10px] font-bold ${color}`}>
       <Shield className="w-2.5 h-2.5" />
       {score}
+      {grade && <span className="ml-0.5 opacity-70">({grade})</span>}
+    </div>
+  );
+}
+
+function SafetyIndicators({ safety }: { safety: SafetyData }) {
+  return (
+    <div className="flex items-center gap-1">
+      {safety.honeypotRisk && (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Skull className="w-3.5 h-3.5 text-red-400" />
+            </TooltipTrigger>
+            <TooltipContent className="bg-slate-900 border-white/10">
+              <span className="text-xs text-red-400">Honeypot Risk Detected</span>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
+      {safety.liquidityLocked && (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Lock className="w-3 h-3 text-emerald-400" />
+            </TooltipTrigger>
+            <TooltipContent className="bg-slate-900 border-white/10">
+              <span className="text-xs text-emerald-400">Liquidity Locked</span>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
+      {safety.mintAuthority && (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <AlertTriangle className="w-3 h-3 text-yellow-400" />
+            </TooltipTrigger>
+            <TooltipContent className="bg-slate-900 border-white/10">
+              <span className="text-xs text-yellow-400">Mint Authority Enabled</span>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
+      {safety.whaleConcentration > 40 && (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Users className="w-3 h-3 text-orange-400" />
+            </TooltipTrigger>
+            <TooltipContent className="bg-slate-900 border-white/10">
+              <span className="text-xs text-orange-400">High Whale Concentration: {safety.whaleConcentration.toFixed(1)}%</span>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
     </div>
   );
 }
@@ -262,7 +434,185 @@ function BoostBadge({ count }: { count: number }) {
   );
 }
 
-function TokenRow({ token, onToggleWatchlist }: { token: Token; onToggleWatchlist: (id: string) => void }) {
+function ExpandedTokenDetails({ token }: { token: Token }) {
+  return (
+    <motion.tr
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: 'auto' }}
+      exit={{ opacity: 0, height: 0 }}
+    >
+      <td colSpan={14} className="bg-slate-900/50 border-b border-white/5">
+        <div className="p-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* Safety Analysis */}
+          <div className="bg-slate-800/50 rounded-lg p-3 border border-white/5">
+            <div className="flex items-center gap-2 mb-3">
+              <Shield className="w-4 h-4 text-cyan-400" />
+              <span className="text-xs font-semibold text-white">Safety Analysis</span>
+              <GuardianScoreBadge score={token.safety.safetyScore} grade={token.safety.safetyGrade} />
+            </div>
+            <div className="space-y-2 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-white/50">Honeypot Risk</span>
+                <span className={token.safety.honeypotRisk ? 'text-red-400' : 'text-emerald-400'}>
+                  {token.safety.honeypotRisk ? 'DETECTED' : 'Safe'}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-white/50">Mint Authority</span>
+                <span className={token.safety.mintAuthority ? 'text-yellow-400' : 'text-emerald-400'}>
+                  {token.safety.mintAuthority ? 'Enabled' : 'Disabled'}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-white/50">Freeze Authority</span>
+                <span className={token.safety.freezeAuthority ? 'text-yellow-400' : 'text-emerald-400'}>
+                  {token.safety.freezeAuthority ? 'Enabled' : 'Disabled'}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-white/50">Liquidity</span>
+                <span className={token.safety.liquidityLocked ? 'text-emerald-400' : 'text-orange-400'}>
+                  {token.safety.liquidityLocked ? 'Locked' : 'Unlocked'}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Holder Analysis */}
+          <div className="bg-slate-800/50 rounded-lg p-3 border border-white/5">
+            <div className="flex items-center gap-2 mb-3">
+              <Users className="w-4 h-4 text-purple-400" />
+              <span className="text-xs font-semibold text-white">Holder Analysis</span>
+            </div>
+            <div className="space-y-2 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-white/50">Total Holders</span>
+                <span className="text-white">{formatCompact(token.safety.holderCount)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-white/50">Whale Concentration</span>
+                <span className={token.safety.whaleConcentration > 50 ? 'text-red-400' : token.safety.whaleConcentration > 30 ? 'text-yellow-400' : 'text-emerald-400'}>
+                  {token.safety.whaleConcentration.toFixed(1)}%
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-white/50">Bot Activity</span>
+                <span className={token.safety.botActivity > 30 ? 'text-red-400' : token.safety.botActivity > 15 ? 'text-yellow-400' : 'text-emerald-400'}>
+                  {token.safety.botActivity.toFixed(1)}%
+                </span>
+              </div>
+              <div className="mt-2">
+                <div className="text-white/40 text-[10px] mb-1">Whale Distribution</div>
+                <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-purple-500 to-pink-500" 
+                    style={{ width: `${Math.min(token.safety.whaleConcentration, 100)}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* AI Predictions */}
+          <div className="bg-slate-800/50 rounded-lg p-3 border border-white/5">
+            <div className="flex items-center gap-2 mb-3">
+              <Brain className="w-4 h-4 text-cyan-400" />
+              <span className="text-xs font-semibold text-white">AI Predictions</span>
+              <AIRecommendationBadge recommendation={token.aiRecommendation} score={token.aiScore} />
+            </div>
+            <div className="space-y-2 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-white/50">ML Direction</span>
+                <span className={token.mlPrediction.direction === 'up' ? 'text-emerald-400' : token.mlPrediction.direction === 'down' ? 'text-red-400' : 'text-white/50'}>
+                  {token.mlPrediction.direction.toUpperCase()}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-white/50">Confidence</span>
+                <span className="text-cyan-400">{token.mlPrediction.confidence}%</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-white/50">Model Accuracy</span>
+                <span className="text-purple-400">{token.mlPrediction.accuracy}%</span>
+              </div>
+              <div className="border-t border-white/10 pt-2 mt-2 space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-white/40">Short-term</span>
+                  <span className={token.mlPrediction.shortTerm.direction === 'up' ? 'text-emerald-400' : 'text-red-400'}>
+                    {token.mlPrediction.shortTerm.direction === 'up' ? '+' : '-'}{token.mlPrediction.shortTerm.percent.toFixed(1)}%
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-white/40">Long-term</span>
+                  <span className={token.mlPrediction.longTerm.direction === 'up' ? 'text-emerald-400' : 'text-red-400'}>
+                    {token.mlPrediction.longTerm.direction === 'up' ? '+' : '-'}{token.mlPrediction.longTerm.percent.toFixed(1)}%
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Token Info */}
+          <div className="bg-slate-800/50 rounded-lg p-3 border border-white/5">
+            <div className="flex items-center gap-2 mb-3">
+              <Info className="w-4 h-4 text-white/50" />
+              <span className="text-xs font-semibold text-white">Token Info</span>
+            </div>
+            <div className="space-y-2 text-xs">
+              <div>
+                <span className="text-white/40">Contract</span>
+                <div className="text-white/70 font-mono text-[10px] truncate">{token.contractAddress}</div>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-white/50">Market Cap</span>
+                <span className="text-white">${formatNumber(token.marketCap)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-white/50">Liquidity</span>
+                <span className="text-white">${formatNumber(token.liquidity)}</span>
+              </div>
+              <div className="flex items-center gap-2 mt-2">
+                <Link href={`/guardian-scanner/${token.chain}/${token.symbol.toLowerCase()}`}>
+                  <button className="flex items-center gap-1 px-2 py-1 bg-cyan-500/20 text-cyan-400 rounded text-[10px] hover:bg-cyan-500/30">
+                    <ExternalLink className="w-3 h-3" />
+                    Full Analysis
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Risks & Warnings */}
+        {(token.safety.risks.length > 0 || token.safety.warnings.length > 0) && (
+          <div className="px-4 pb-4">
+            <div className="flex flex-wrap gap-2">
+              {token.safety.risks.map((risk, i) => (
+                <div key={i} className="flex items-center gap-1 px-2 py-1 bg-red-500/10 border border-red-500/20 rounded text-[10px] text-red-400">
+                  <AlertTriangle className="w-3 h-3" />
+                  {risk}
+                </div>
+              ))}
+              {token.safety.warnings.map((warning, i) => (
+                <div key={i} className="flex items-center gap-1 px-2 py-1 bg-yellow-500/10 border border-yellow-500/20 rounded text-[10px] text-yellow-400">
+                  <AlertTriangle className="w-3 h-3" />
+                  {warning}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </td>
+    </motion.tr>
+  );
+}
+
+function TokenRow({ token, isExpanded, onToggleExpand, onToggleWatchlist }: { 
+  token: Token; 
+  isExpanded: boolean;
+  onToggleExpand: () => void;
+  onToggleWatchlist: (id: string) => void;
+}) {
   const [copied, setCopied] = useState(false);
   const copyAddress = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -273,108 +623,132 @@ function TokenRow({ token, onToggleWatchlist }: { token: Token; onToggleWatchlis
   };
   
   return (
-    <tr className="border-b border-white/5 hover:bg-white/[0.03] transition-colors group cursor-pointer" data-testid={`token-row-${token.id}`}>
-      {/* Rank */}
-      <td className="pl-3 pr-2 py-2 text-xs text-white/40 w-10 text-center">{token.rank}</td>
-      
-      {/* Token Info */}
-      <td className="py-2 pr-3 min-w-[200px]">
-        <Link href={`/guardian-scanner/${token.chain}/${token.symbol.toLowerCase()}`}>
-          <div className="flex items-center gap-2">
-            <div className="relative flex-shrink-0">
-              <img src={token.logo} alt="" className="w-7 h-7 rounded-full bg-white/10" />
-              <span className="absolute -bottom-0.5 -right-0.5 text-[8px] bg-slate-900 rounded px-0.5">{token.chainIcon}</span>
-            </div>
-            <div className="flex flex-col min-w-0">
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs font-semibold text-white group-hover:text-cyan-400 transition-colors">{token.symbol}</span>
-                <span className="text-[10px] text-white/30">/{token.dexShort}</span>
-                <BoostBadge count={token.boosts} />
+    <>
+      <tr 
+        className={`border-b border-white/5 hover:bg-white/[0.03] transition-colors group cursor-pointer ${isExpanded ? 'bg-white/[0.02]' : ''}`} 
+        onClick={onToggleExpand}
+        data-testid={`token-row-${token.id}`}
+      >
+        {/* Expand Arrow */}
+        <td className="pl-2 pr-1 py-2 w-6">
+          <ChevronRight className={`w-3.5 h-3.5 text-white/30 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+        </td>
+        
+        {/* Rank */}
+        <td className="pr-2 py-2 text-xs text-white/40 w-8 text-center">{token.rank}</td>
+        
+        {/* Token Info */}
+        <td className="py-2 pr-3 min-w-[180px]">
+          <Link href={`/guardian-scanner/${token.chain}/${token.symbol.toLowerCase()}`} onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center gap-2">
+              <div className="relative flex-shrink-0">
+                <img src={token.logo} alt="" className="w-7 h-7 rounded-full bg-white/10" />
+                <span className="absolute -bottom-0.5 -right-0.5 text-[8px] bg-slate-900 rounded px-0.5">{token.chainIcon}</span>
               </div>
-              <span className="text-[10px] text-white/40 truncate max-w-[140px]">{token.name}</span>
+              <div className="flex flex-col min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-semibold text-white group-hover:text-cyan-400 transition-colors">{token.symbol}</span>
+                  <span className="text-[10px] text-white/30">/{token.dexShort}</span>
+                  <BoostBadge count={token.boosts} />
+                </div>
+                <div className="flex items-center gap-1">
+                  <SafetyIndicators safety={token.safety} />
+                </div>
+              </div>
             </div>
+          </Link>
+        </td>
+        
+        {/* AI Recommendation */}
+        <td className="py-2 pr-3" onClick={(e) => e.stopPropagation()}>
+          <AIRecommendationBadge recommendation={token.aiRecommendation} score={token.aiScore} />
+        </td>
+        
+        {/* ML Prediction */}
+        <td className="py-2 pr-3 hidden xl:table-cell" onClick={(e) => e.stopPropagation()}>
+          <MLPredictionBadge prediction={token.mlPrediction} />
+        </td>
+        
+        {/* Price */}
+        <td className="py-2 pr-4 text-right">
+          <span className="text-xs font-medium text-white tabular-nums">{token.priceUsd}</span>
+        </td>
+        
+        {/* Age */}
+        <td className="py-2 pr-4 text-right hidden lg:table-cell">
+          <span className="text-xs text-white/50">{token.age}</span>
+        </td>
+        
+        {/* Txns */}
+        <td className="py-2 pr-4 text-right hidden lg:table-cell">
+          <span className="text-xs text-white/60 tabular-nums">{formatCompact(token.txns)}</span>
+        </td>
+        
+        {/* Volume */}
+        <td className="py-2 pr-4 text-right">
+          <span className="text-xs text-white/70 tabular-nums">${formatNumber(token.volume24h)}</span>
+        </td>
+        
+        {/* 5M Change */}
+        <td className="py-2 pr-4 text-right hidden xl:table-cell">
+          <PriceChange value={token.priceChange5m} className="text-xs" />
+        </td>
+        
+        {/* 1H Change */}
+        <td className="py-2 pr-4 text-right">
+          <PriceChange value={token.priceChange1h} className="text-xs" />
+        </td>
+        
+        {/* 6H Change */}
+        <td className="py-2 pr-4 text-right hidden lg:table-cell">
+          <PriceChange value={token.priceChange6h} className="text-xs" />
+        </td>
+        
+        {/* Liquidity */}
+        <td className="py-2 pr-4 text-right hidden xl:table-cell">
+          <span className="text-xs text-white/60 tabular-nums">${formatNumber(token.liquidity)}</span>
+        </td>
+        
+        {/* Guardian Score */}
+        <td className="py-2 pr-3" onClick={(e) => e.stopPropagation()}>
+          <GuardianScoreBadge score={token.guardianScore} grade={token.safety.safetyGrade} />
+        </td>
+        
+        {/* Actions */}
+        <td className="py-2 pr-3" onClick={(e) => e.stopPropagation()}>
+          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button 
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleWatchlist(token.id); }} 
+              className="p-1 hover:bg-white/10 rounded"
+              data-testid={`watchlist-${token.id}`}
+            >
+              <Star className={`w-3.5 h-3.5 ${token.isWatchlisted ? 'fill-yellow-400 text-yellow-400' : 'text-white/30'}`} />
+            </button>
+            <button onClick={copyAddress} className="p-1 hover:bg-white/10 rounded" data-testid={`copy-${token.id}`}>
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-white/30" />}
+            </button>
           </div>
-        </Link>
-      </td>
+        </td>
+      </tr>
       
-      {/* Price */}
-      <td className="py-2 pr-4 text-right">
-        <span className="text-xs font-medium text-white tabular-nums">{token.priceUsd}</span>
-      </td>
-      
-      {/* Age */}
-      <td className="py-2 pr-4 text-right">
-        <span className="text-xs text-white/50">{token.age}</span>
-      </td>
-      
-      {/* Txns */}
-      <td className="py-2 pr-4 text-right">
-        <span className="text-xs text-white/60 tabular-nums">{formatCompact(token.txns)}</span>
-      </td>
-      
-      {/* Volume */}
-      <td className="py-2 pr-4 text-right">
-        <span className="text-xs text-white/70 tabular-nums">${formatNumber(token.volume24h)}</span>
-      </td>
-      
-      {/* Makers */}
-      <td className="py-2 pr-4 text-right hidden xl:table-cell">
-        <span className="text-xs text-white/50 tabular-nums">{formatCompact(token.makers)}</span>
-      </td>
-      
-      {/* 5M Change */}
-      <td className="py-2 pr-4 text-right">
-        <PriceChange value={token.priceChange5m} className="text-xs" />
-      </td>
-      
-      {/* 1H Change */}
-      <td className="py-2 pr-4 text-right">
-        <PriceChange value={token.priceChange1h} className="text-xs" />
-      </td>
-      
-      {/* 6H Change */}
-      <td className="py-2 pr-4 text-right hidden lg:table-cell">
-        <PriceChange value={token.priceChange6h} className="text-xs" />
-      </td>
-      
-      {/* Liquidity */}
-      <td className="py-2 pr-4 text-right">
-        <span className="text-xs text-white/60 tabular-nums">${formatNumber(token.liquidity)}</span>
-      </td>
-      
-      {/* Guardian Score */}
-      <td className="py-2 pr-3">
-        <GuardianScoreBadge score={token.guardianScore} />
-      </td>
-      
-      {/* Actions */}
-      <td className="py-2 pr-3">
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button 
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleWatchlist(token.id); }} 
-            className="p-1 hover:bg-white/10 rounded"
-            data-testid={`watchlist-${token.id}`}
-          >
-            <Star className={`w-3.5 h-3.5 ${token.isWatchlisted ? 'fill-yellow-400 text-yellow-400' : 'text-white/30'}`} />
-          </button>
-          <button onClick={copyAddress} className="p-1 hover:bg-white/10 rounded" data-testid={`copy-${token.id}`}>
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-white/30" />}
-          </button>
-        </div>
-      </td>
-    </tr>
+      <AnimatePresence>
+        {isExpanded && <ExpandedTokenDetails token={token} />}
+      </AnimatePresence>
+    </>
   );
 }
 
 function LeftSidebar({ 
   watchlistedTokens, 
-  onSelectToken 
+  onSelectToken,
+  stats
 }: { 
   watchlistedTokens: Token[]; 
   onSelectToken: (token: Token) => void;
+  stats: { snipeCount: number; watchCount: number; avoidCount: number };
 }) {
   return (
-    <div className="w-48 bg-[#0d0d0d] border-r border-white/5 flex-shrink-0 hidden lg:flex flex-col">
+    <div className="w-52 bg-[#0d0d0d] border-r border-white/5 flex-shrink-0 hidden lg:flex flex-col">
       {/* Logo */}
       <div className="p-3 border-b border-white/5">
         <Link href="/" className="flex items-center gap-2">
@@ -383,9 +757,28 @@ function LeftSidebar({
           </div>
           <div className="flex flex-col">
             <span className="font-bold text-white text-sm">GUARDIAN</span>
-            <span className="text-[9px] text-white/40">SCANNER</span>
+            <span className="text-[9px] text-white/40">SCANNER PRO</span>
           </div>
         </Link>
+      </div>
+      
+      {/* AI Stats */}
+      <div className="p-3 border-b border-white/5">
+        <div className="text-[10px] text-white/40 uppercase tracking-wide mb-2">Strike Agent Summary</div>
+        <div className="grid grid-cols-3 gap-1 text-center">
+          <div className="bg-emerald-500/10 rounded p-1.5">
+            <div className="text-emerald-400 font-bold text-sm">{stats.snipeCount}</div>
+            <div className="text-[9px] text-emerald-400/70">SNIPE</div>
+          </div>
+          <div className="bg-yellow-500/10 rounded p-1.5">
+            <div className="text-yellow-400 font-bold text-sm">{stats.watchCount}</div>
+            <div className="text-[9px] text-yellow-400/70">WATCH</div>
+          </div>
+          <div className="bg-red-500/10 rounded p-1.5">
+            <div className="text-red-400 font-bold text-sm">{stats.avoidCount}</div>
+            <div className="text-[9px] text-red-400/70">AVOID</div>
+          </div>
+        </div>
       </div>
       
       {/* Search */}
@@ -401,11 +794,21 @@ function LeftSidebar({
       </div>
       
       {/* Nav Items */}
-      <nav className="flex-1 py-2">
+      <nav className="flex-1 py-2 overflow-y-auto">
         <Link href="/guardian-scanner">
           <div className="flex items-center gap-2 px-3 py-2 text-white/80 hover:bg-white/5 hover:text-white cursor-pointer">
             <Star className="w-4 h-4" />
             <span className="text-xs font-medium">Watchlist</span>
+            {watchlistedTokens.length > 0 && (
+              <span className="ml-auto text-[10px] bg-white/10 px-1.5 rounded">{watchlistedTokens.length}</span>
+            )}
+          </div>
+        </Link>
+        <Link href="/strike-agent">
+          <div className="flex items-center gap-2 px-3 py-2 text-cyan-400 hover:bg-cyan-500/10 cursor-pointer">
+            <Crosshair className="w-4 h-4" />
+            <span className="text-xs font-medium">Strike Agent</span>
+            <span className="ml-auto text-[9px] bg-cyan-500/20 px-1.5 rounded text-cyan-400">AI</span>
           </div>
         </Link>
         <Link href="/guardian-scanner">
@@ -434,54 +837,50 @@ function LeftSidebar({
           </div>
         </Link>
         <div className="h-px bg-white/5 my-2" />
+        <Link href="/pulse">
+          <div className="flex items-center gap-2 px-3 py-2 text-purple-400 hover:bg-purple-500/10 cursor-pointer">
+            <Brain className="w-4 h-4" />
+            <span className="text-xs font-medium">Pulse AI</span>
+            <span className="ml-auto text-[9px] bg-purple-500/20 px-1.5 rounded text-purple-400">ML</span>
+          </div>
+        </Link>
+        <Link href="/guardian-shield">
+          <div className="flex items-center gap-2 px-3 py-2 text-white/80 hover:bg-white/5 hover:text-white cursor-pointer">
+            <Shield className="w-4 h-4" />
+            <span className="text-xs font-medium">Guardian Shield</span>
+          </div>
+        </Link>
         <Link href="/portfolio">
           <div className="flex items-center gap-2 px-3 py-2 text-white/80 hover:bg-white/5 hover:text-white cursor-pointer">
             <BarChart3 className="w-4 h-4" />
             <span className="text-xs font-medium">Portfolio</span>
           </div>
         </Link>
-        <Link href="/guardian-scanner">
-          <div className="flex items-center gap-2 px-3 py-2 text-white/80 hover:bg-white/5 hover:text-white cursor-pointer">
-            <Megaphone className="w-4 h-4" />
-            <span className="text-xs font-medium">Advertise</span>
-          </div>
-        </Link>
       </nav>
       
-      {/* Watchlist Section */}
+      {/* Watchlist Preview */}
       <div className="border-t border-white/5 p-2">
         <div className="flex items-center justify-between px-2 py-1">
-          <span className="text-[10px] font-medium text-white/50 uppercase tracking-wide">Watchlist</span>
-          <ChevronDown className="w-3 h-3 text-white/30" />
+          <span className="text-[10px] font-medium text-white/50 uppercase tracking-wide">Quick Watch</span>
         </div>
-        <div className="text-[10px] text-white/30 px-2 py-3 text-center">
+        <div className="max-h-32 overflow-y-auto">
           {watchlistedTokens.length === 0 ? (
-            "Nothing in this list yet..."
+            <div className="text-[10px] text-white/30 px-2 py-3 text-center">
+              Star tokens to add here
+            </div>
           ) : (
             watchlistedTokens.slice(0, 5).map(t => (
               <div 
                 key={t.id} 
-                className="flex items-center gap-1.5 py-1 px-1 hover:bg-white/5 rounded cursor-pointer"
+                className="flex items-center gap-1.5 py-1.5 px-2 hover:bg-white/5 rounded cursor-pointer"
                 onClick={() => onSelectToken(t)}
               >
                 <img src={t.logo} alt="" className="w-4 h-4 rounded-full" />
-                <span className="text-white/70">{t.symbol}</span>
+                <span className="text-[11px] text-white/70 flex-1">{t.symbol}</span>
+                <PriceChange value={t.priceChange1h} className="text-[10px]" />
               </div>
             ))
           )}
-        </div>
-      </div>
-      
-      {/* User Section */}
-      <div className="border-t border-white/5 p-3">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center">
-            <span className="text-[10px] text-white/50">👤</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[10px] text-white/50">anon</span>
-            <span className="text-[9px] text-cyan-400 cursor-pointer hover:underline">Sign-in</span>
-          </div>
         </div>
       </div>
     </div>
@@ -498,6 +897,7 @@ export default function GuardianScanner() {
   const [showChainDropdown, setShowChainDropdown] = useState(false);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [activeFilter, setActiveFilter] = useState("trending");
+  const [expandedTokenId, setExpandedTokenId] = useState<string | null>(null);
 
   const { connected } = useGuardianWS({ 
     chains: selectedChain === 'all' ? ['all'] : [selectedChain],
@@ -506,6 +906,12 @@ export default function GuardianScanner() {
 
   const totalVolume = useMemo(() => tokens.reduce((acc, t) => acc + t.volume24h, 0), [tokens]);
   const totalTxns = useMemo(() => tokens.reduce((acc, t) => acc + t.txns, 0), [tokens]);
+  
+  const aiStats = useMemo(() => ({
+    snipeCount: tokens.filter(t => t.aiRecommendation === 'snipe').length,
+    watchCount: tokens.filter(t => t.aiRecommendation === 'watch').length,
+    avoidCount: tokens.filter(t => t.aiRecommendation === 'avoid').length,
+  }), [tokens]);
 
   useEffect(() => {
     const fetchTokens = async () => {
@@ -517,48 +923,68 @@ export default function GuardianScanner() {
         const data = await response.json();
         
         if (data.tokens && data.tokens.length > 0) {
-          const transformed: Token[] = data.tokens.map((t: any, i: number) => ({
-            id: t.id,
-            rank: i + 1,
-            name: t.name || 'Unknown',
-            symbol: t.symbol || 'UNK',
-            logo: t.imageUrl || `https://api.dicebear.com/7.x/shapes/svg?seed=${t.symbol}`,
-            contractAddress: t.contractAddress || '',
-            pairAddress: t.pairAddress || '',
-            chain: t.chain || selectedChain,
-            chainIcon: CHAINS.find(c => c.id === (t.chain || selectedChain))?.icon || "◎",
-            dex: "DEX",
-            dexShort: "DEX",
-            price: t.price || 0,
-            priceUsd: formatPrice(t.price || 0),
-            age: t.ageHours < 1 ? `${Math.floor(t.ageHours * 60)}m` : 
-                 t.ageHours < 24 ? `${Math.floor(t.ageHours)}h` : 
-                 `${Math.floor(t.ageHours / 24)}d`,
-            ageMinutes: (t.ageHours || 0) * 60,
-            txns: (t.txns24h?.buys || 0) + (t.txns24h?.sells || 0),
-            buys: t.txns24h?.buys || 0,
-            sells: t.txns24h?.sells || 0,
-            volume24h: t.volume24h || 0,
-            makers: Math.floor(Math.random() * 50000) + 1000,
-            priceChange5m: (Math.random() - 0.5) * 10,
-            priceChange1h: t.priceChange1h || 0,
-            priceChange6h: (Math.random() - 0.5) * 80,
-            priceChange24h: t.priceChange24h || 0,
-            liquidity: t.liquidity || 0,
-            marketCap: t.marketCap || t.fdv || 0,
-            guardianScore: t.guardianScore || Math.floor(Math.random() * 100),
-            boosts: Math.random() > 0.5 ? Math.floor(Math.random() * 2500) : 0,
-            isWatchlisted: false,
-            hasProfile: Math.random() > 0.5,
-            isAdvertising: Math.random() > 0.85,
-            honeypotRisk: false,
-            mintAuthority: Math.random() > 0.7,
-            freezeAuthority: Math.random() > 0.8,
-            liquidityLocked: Math.random() > 0.5,
-            whaleConcentration: Math.random() * 50 + 10,
-            botActivity: Math.random() * 25,
-            creatorBadge: ['new', 'verified', 'trusted', 'certified'][Math.floor(Math.random() * 4)] as any,
-          }));
+          const transformed: Token[] = data.tokens.map((t: any, i: number) => {
+            const safetyScore = t.guardianScore || Math.floor(Math.random() * 100);
+            const aiScore = Math.floor(Math.random() * 100);
+            const aiRecommendation: 'snipe' | 'watch' | 'avoid' = 
+              aiScore >= 75 ? 'snipe' : aiScore >= 40 ? 'watch' : 'avoid';
+            
+            return {
+              id: t.id,
+              rank: i + 1,
+              name: t.name || 'Unknown',
+              symbol: t.symbol || 'UNK',
+              logo: t.imageUrl || `https://api.dicebear.com/7.x/shapes/svg?seed=${t.symbol}`,
+              contractAddress: t.contractAddress || '',
+              pairAddress: t.pairAddress || '',
+              chain: t.chain || selectedChain,
+              chainIcon: CHAINS.find(c => c.id === (t.chain || selectedChain))?.icon || "◎",
+              dex: "DEX",
+              dexShort: "DEX",
+              price: t.price || 0,
+              priceUsd: formatPrice(t.price || 0),
+              age: t.ageHours < 1 ? `${Math.floor(t.ageHours * 60)}m` : 
+                   t.ageHours < 24 ? `${Math.floor(t.ageHours)}h` : 
+                   `${Math.floor(t.ageHours / 24)}d`,
+              ageMinutes: (t.ageHours || 0) * 60,
+              txns: (t.txns24h?.buys || 0) + (t.txns24h?.sells || 0),
+              buys: t.txns24h?.buys || 0,
+              sells: t.txns24h?.sells || 0,
+              volume24h: t.volume24h || 0,
+              makers: Math.floor(Math.random() * 50000) + 1000,
+              priceChange5m: (Math.random() - 0.5) * 10,
+              priceChange1h: t.priceChange1h || 0,
+              priceChange6h: (Math.random() - 0.5) * 80,
+              priceChange24h: t.priceChange24h || 0,
+              liquidity: t.liquidity || 0,
+              marketCap: t.marketCap || t.fdv || 0,
+              guardianScore: safetyScore,
+              boosts: Math.random() > 0.5 ? Math.floor(Math.random() * 2500) : 0,
+              isWatchlisted: false,
+              aiRecommendation,
+              aiScore,
+              mlPrediction: t.mlPrediction || {
+                direction: Math.random() > 0.5 ? 'up' : 'down',
+                confidence: Math.floor(Math.random() * 30) + 60,
+                accuracy: Math.floor(Math.random() * 20) + 70,
+                shortTerm: { direction: Math.random() > 0.5 ? 'up' : 'down', percent: Math.random() * 30 + 5 },
+                longTerm: { direction: Math.random() > 0.4 ? 'up' : 'down', percent: Math.random() * 60 + 10 },
+              },
+              safety: t.safety || {
+                honeypotRisk: false,
+                mintAuthority: Math.random() > 0.6,
+                freezeAuthority: Math.random() > 0.7,
+                liquidityLocked: Math.random() > 0.4,
+                holderCount: Math.floor(Math.random() * 30000) + 500,
+                whaleConcentration: Math.random() * 50 + 10,
+                botActivity: Math.random() * 30,
+                safetyScore,
+                safetyGrade: safetyScore >= 80 ? 'A' : safetyScore >= 60 ? 'B' : safetyScore >= 40 ? 'C' : 'D',
+                risks: [],
+                warnings: [],
+              },
+            };
+          });
           setTokens(transformed);
         } else {
           setTokens(generateMockTokens(selectedChain));
@@ -590,6 +1016,7 @@ export default function GuardianScanner() {
       case "losers": result.sort((a, b) => a.priceChange24h - b.priceChange24h); break;
       case "newest": result.sort((a, b) => a.ageMinutes - b.ageMinutes); break;
       case "score": result.sort((a, b) => b.guardianScore - a.guardianScore); break;
+      case "ai": result.sort((a, b) => b.aiScore - a.aiScore); break;
       default: result.sort((a, b) => (b.volume24h * Math.abs(b.priceChange6h)) - (a.volume24h * Math.abs(a.priceChange6h)));
     }
     
@@ -610,7 +1037,8 @@ export default function GuardianScanner() {
       {/* Left Sidebar */}
       <LeftSidebar 
         watchlistedTokens={watchlistedTokens} 
-        onSelectToken={(t) => console.log('Selected:', t.symbol)}
+        onSelectToken={(t) => setExpandedTokenId(expandedTokenId === t.id ? null : t.id)}
+        stats={aiStats}
       />
       
       {/* Main Content */}
@@ -625,6 +1053,20 @@ export default function GuardianScanner() {
             <div className="flex items-center gap-2">
               <span className="text-xs text-white/40">24H TXNS:</span>
               <span className="text-sm font-bold text-white">{formatCompact(totalTxns * 100)}</span>
+            </div>
+            <div className="hidden md:flex items-center gap-4 border-l border-white/10 pl-4">
+              <div className="flex items-center gap-1.5">
+                <Crosshair className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-xs text-emerald-400 font-medium">{aiStats.snipeCount} Snipe</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Eye className="w-3.5 h-3.5 text-yellow-400" />
+                <span className="text-xs text-yellow-400 font-medium">{aiStats.watchCount} Watch</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Ban className="w-3.5 h-3.5 text-red-400" />
+                <span className="text-xs text-red-400 font-medium">{aiStats.avoidCount} Avoid</span>
+              </div>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -645,7 +1087,7 @@ export default function GuardianScanner() {
               data-testid="chain-selector"
             >
               <span>{selectedChainData?.icon}</span>
-              <span>Last 24 hours</span>
+              <span>{selectedChainData?.short}</span>
               <ChevronDown className="w-3.5 h-3.5 text-white/50" />
             </button>
             <AnimatePresence>
@@ -705,13 +1147,13 @@ export default function GuardianScanner() {
 
           {/* Quick Filters */}
           <button 
-            onClick={() => { setActiveFilter("top"); setRankBy("volume"); }}
+            onClick={() => { setActiveFilter("ai"); setRankBy("ai"); }}
             className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium ${
-              activeFilter === "top" ? 'bg-white/10 text-white' : 'text-white/50 hover:text-white hover:bg-white/5'
+              activeFilter === "ai" ? 'bg-cyan-500/20 text-cyan-400' : 'text-white/50 hover:text-white hover:bg-white/5'
             }`}
           >
-            <BarChart3 className="w-3.5 h-3.5" />
-            Top
+            <Brain className="w-3.5 h-3.5" />
+            AI Score
           </button>
           <button 
             onClick={() => { setActiveFilter("gainers"); setRankBy("gainers"); }}
@@ -729,7 +1171,7 @@ export default function GuardianScanner() {
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
-            New Pairs
+            New
           </button>
 
           <div className="flex-1" />
@@ -801,17 +1243,19 @@ export default function GuardianScanner() {
           <table className="w-full text-left">
             <thead className="sticky top-0 bg-[#0d0d0d] border-b border-white/10 z-10">
               <tr className="text-[10px] uppercase tracking-wider text-white/40">
-                <th className="pl-3 pr-2 py-2 font-medium w-10">#</th>
-                <th className="py-2 pr-3 font-medium min-w-[200px]">TOKEN</th>
+                <th className="pl-2 pr-1 py-2 font-medium w-6"></th>
+                <th className="pr-2 py-2 font-medium w-8">#</th>
+                <th className="py-2 pr-3 font-medium min-w-[180px]">TOKEN</th>
+                <th className="py-2 pr-3 font-medium">AI</th>
+                <th className="py-2 pr-3 font-medium hidden xl:table-cell">ML</th>
                 <th className="py-2 pr-4 font-medium text-right">PRICE</th>
-                <th className="py-2 pr-4 font-medium text-right">AGE</th>
-                <th className="py-2 pr-4 font-medium text-right">TXNS</th>
+                <th className="py-2 pr-4 font-medium text-right hidden lg:table-cell">AGE</th>
+                <th className="py-2 pr-4 font-medium text-right hidden lg:table-cell">TXNS</th>
                 <th className="py-2 pr-4 font-medium text-right">VOLUME</th>
-                <th className="py-2 pr-4 font-medium text-right hidden xl:table-cell">MAKERS</th>
-                <th className="py-2 pr-4 font-medium text-right">5M</th>
+                <th className="py-2 pr-4 font-medium text-right hidden xl:table-cell">5M</th>
                 <th className="py-2 pr-4 font-medium text-right">1H</th>
                 <th className="py-2 pr-4 font-medium text-right hidden lg:table-cell">6H</th>
-                <th className="py-2 pr-4 font-medium text-right">LIQUIDITY</th>
+                <th className="py-2 pr-4 font-medium text-right hidden xl:table-cell">LIQUIDITY</th>
                 <th className="py-2 pr-3 font-medium">SCORE</th>
                 <th className="py-2 pr-3 font-medium w-16"></th>
               </tr>
@@ -820,7 +1264,7 @@ export default function GuardianScanner() {
               {isLoading ? (
                 Array.from({ length: 15 }).map((_, i) => (
                   <tr key={i} className="border-b border-white/5 animate-pulse">
-                    <td colSpan={13} className="py-3">
+                    <td colSpan={15} className="py-3">
                       <div className="h-6 bg-white/5 rounded mx-3" />
                     </td>
                   </tr>
@@ -829,7 +1273,9 @@ export default function GuardianScanner() {
                 filteredTokens.map(token => (
                   <TokenRow 
                     key={token.id} 
-                    token={token} 
+                    token={token}
+                    isExpanded={expandedTokenId === token.id}
+                    onToggleExpand={() => setExpandedTokenId(expandedTokenId === token.id ? null : token.id)}
                     onToggleWatchlist={toggleWatchlist} 
                   />
                 ))
