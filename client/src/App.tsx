@@ -63,6 +63,9 @@ const MarketingCatalogAdmin = lazy(() => import("@/pages/marketing-catalog-admin
 const DevStudio = lazy(() => import("@/pages/dev-studio"));
 const Billing = lazy(() => import("@/pages/billing"));
 const Pricing = lazy(() => import("@/pages/pricing"));
+const MembershipCharter = lazy(() => import("@/pages/membership-charter"));
+const MemberPortal = lazy(() => import("@/pages/member-portal"));
+const BusinessPortal = lazy(() => import("@/pages/business-portal"));
 const Studio = lazy(() => import("@/pages/studio"));
 const StudioLanding = lazy(() => import("@/pages/studio-landing"));
 const StudioProjects = lazy(() => import("@/pages/studio-projects"));
@@ -408,6 +411,10 @@ function DWSCRouter() {
         <Route path="/developer-portal" component={DeveloperPortal} />
         <Route path="/billing" component={Billing} />
         <Route path="/pricing" component={Pricing} />
+        <Route path="/membership" component={MembershipCharter} />
+        <Route path="/membership-charter" component={MembershipCharter} />
+        <Route path="/member-portal" component={MemberPortal} />
+        <Route path="/business-portal" component={BusinessPortal} />
         <Route path="/dev-studio" component={DevStudio} />
         <Route path="/studio" component={StudioLanding} />
         <Route path="/studio/editor" component={Studio} />

@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 import { 
   Users, Gift, Building2, Trophy, Target, Zap, 
   ArrowRight, Copy, Check, Calculator, Coins, DollarSign,
-  Star, Crown, Sparkles, TrendingUp, Shield
-, Shield } from "lucide-react";
+  Star, Crown, Sparkles, TrendingUp, Shield, ChevronLeft, ChevronRight
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +13,24 @@ import { GlassCard } from "@/components/glass-card";
 import { Footer } from "@/components/footer";
 import { useAuth } from "@/hooks/use-auth";
 import { SimpleLoginModal } from "@/components/simple-login";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+
+// MULTIPLIER-BASED REWARD STRUCTURE
+// Base: 1,000 Shells per referral
+// Multipliers based on purchase amount:
+const MULTIPLIERS = {
+  none: { mult: 1, label: "1x", shells: 1000 },      // No purchase
+  tier_5: { mult: 3, label: "3x", shells: 3000 },   // $5-$24
+  tier_25: { mult: 5, label: "5x", shells: 5000 },  // $25-$49
+  tier_50: { mult: 7, label: "7x", shells: 7000 },  // $50-$99
+  tier_100: { mult: 10, label: "10x", shells: 10000 }, // $100+
+};
 
 const individualMilestones = [
   { referrals: 10, bonus: 10000, title: "Starter", icon: Star },
@@ -38,26 +56,31 @@ export default function ReferralProgram() {
   const [activeTab, setActiveTab] = useState<"individual" | "business">("individual");
   const [showLoginModal, setShowLoginModal] = useState(false);
   
-  const [signups, setSignups] = useState(25);
-  const [buyers5, setBuyers5] = useState(5);
-  const [buyers25, setBuyers25] = useState(3);
-  const [buyers50, setBuyers50] = useState(2);
-  const [buyers100, setBuyers100] = useState(1);
+  // Referral calculator - now using multiplier system
+  const [signups1x, setSignups1x] = useState(20);   // No purchase (1x)
+  const [signups3x, setSignups3x] = useState(5);    // $5-24 (3x)
+  const [signups5x, setSignups5x] = useState(3);    // $25-49 (5x)
+  const [signups7x, setSignups7x] = useState(2);    // $50-99 (7x)
+  const [signups10x, setSignups10x] = useState(1);  // $100+ (10x)
 
   const milestones = activeTab === "individual" ? individualMilestones : businessMilestones;
   const baseMultiplier = activeTab === "business" ? 2.5 : 1;
 
-  const baseShells = signups * 1000 * baseMultiplier;
-  const bonus5 = buyers5 * 5000 * baseMultiplier;
-  const bonus25 = buyers25 * 10000 * baseMultiplier;
-  const bonus50 = buyers50 * 20000 * baseMultiplier;
-  const bonus100 = buyers100 * 50000 * baseMultiplier;
+  // Calculate shells using multiplier system
+  const shells1x = signups1x * MULTIPLIERS.none.shells * baseMultiplier;
+  const shells3x = signups3x * MULTIPLIERS.tier_5.shells * baseMultiplier;
+  const shells5x = signups5x * MULTIPLIERS.tier_25.shells * baseMultiplier;
+  const shells7x = signups7x * MULTIPLIERS.tier_50.shells * baseMultiplier;
+  const shells10x = signups10x * MULTIPLIERS.tier_100.shells * baseMultiplier;
+  
+  const totalSignups = signups1x + signups3x + signups5x + signups7x + signups10x;
+  const referralShells = shells1x + shells3x + shells5x + shells7x + shells10x;
   
   const earnedMilestoneBonus = milestones
-    .filter(m => signups >= m.referrals)
+    .filter(m => totalSignups >= m.referrals)
     .reduce((acc, m) => acc + m.bonus, 0);
 
-  const totalShells = baseShells + bonus5 + bonus25 + bonus50 + bonus100 + earnedMilestoneBonus;
+  const totalShells = referralShells + earnedMilestoneBonus;
   const totalSig = totalShells / 10;
   const totalValue = totalSig * 0.01;
 
@@ -150,64 +173,63 @@ export default function ReferralProgram() {
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-6">
                   <Gift className="w-5 h-5 text-yellow-400" />
-                  <h2 className="font-bold text-lg">Base Rewards</h2>
+                  <h2 className="font-bold text-lg">Multiplier Rewards</h2>
                   {activeTab === "business" && (
-                    <Badge className="ml-2 bg-purple-500/20 text-purple-400 border-purple-500/30">2.5x</Badge>
+                    <Badge className="ml-2 bg-purple-500/20 text-purple-400 border-purple-500/30">+2.5x Business</Badge>
                   )}
                 </div>
 
                 <div className="space-y-4">
                   <div className="p-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/5 rounded-xl border border-yellow-500/20">
                     <div className="flex items-center gap-2 mb-2">
-                      <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 text-xs">PRESALE</Badge>
-                      <span className="text-xs text-muted-foreground">Limited Time</span>
+                      <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-xs">BASE</Badge>
                     </div>
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm">Every Signup</span>
-                      <span className="font-mono font-bold text-yellow-400">
-                        {(1000 * baseMultiplier).toLocaleString()} Shells
-                      </span>
+                      <span className="text-sm">Signup (no purchase)</span>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="text-xs font-mono">1x</Badge>
+                        <span className="font-mono font-bold text-yellow-400">
+                          {(MULTIPLIERS.none.shells * baseMultiplier).toLocaleString()} Shells
+                        </span>
+                      </div>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Premium rate during presale period
-                    </p>
-                  </div>
-                  
-                  <div className="p-4 bg-white/5 rounded-xl opacity-60">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Badge variant="outline" className="text-xs">POST-LAUNCH</Badge>
-                    </div>
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm">Every Signup</span>
-                      <span className="font-mono text-muted-foreground">
-                        {(500 * baseMultiplier).toLocaleString()} Shells
-                      </span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Standard rate after TGE
+                      Base reward for every verified signup
                     </p>
                   </div>
 
                   <div className="text-xs text-muted-foreground uppercase tracking-wide pt-2">
-                    Purchase Bonuses (min $5)
+                    Purchase Multipliers (min $5)
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="p-3 bg-white/5 rounded-lg">
-                      <div className="text-xs text-muted-foreground mb-1">$5 - $24</div>
-                      <div className="font-mono text-green-400">+{(5000 * baseMultiplier).toLocaleString()}</div>
+                    <div className="p-3 bg-gradient-to-br from-green-500/10 to-emerald-500/5 rounded-lg border border-green-500/20">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs text-muted-foreground">$5 - $24</span>
+                        <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs font-mono">3x</Badge>
+                      </div>
+                      <div className="font-mono text-green-400 font-bold">{(MULTIPLIERS.tier_5.shells * baseMultiplier).toLocaleString()}</div>
                     </div>
-                    <div className="p-3 bg-white/5 rounded-lg">
-                      <div className="text-xs text-muted-foreground mb-1">$25 - $49</div>
-                      <div className="font-mono text-green-400">+{(10000 * baseMultiplier).toLocaleString()}</div>
+                    <div className="p-3 bg-gradient-to-br from-blue-500/10 to-cyan-500/5 rounded-lg border border-blue-500/20">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs text-muted-foreground">$25 - $49</span>
+                        <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30 text-xs font-mono">5x</Badge>
+                      </div>
+                      <div className="font-mono text-blue-400 font-bold">{(MULTIPLIERS.tier_25.shells * baseMultiplier).toLocaleString()}</div>
                     </div>
-                    <div className="p-3 bg-white/5 rounded-lg">
-                      <div className="text-xs text-muted-foreground mb-1">$50 - $99</div>
-                      <div className="font-mono text-green-400">+{(20000 * baseMultiplier).toLocaleString()}</div>
+                    <div className="p-3 bg-gradient-to-br from-purple-500/10 to-pink-500/5 rounded-lg border border-purple-500/20">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs text-muted-foreground">$50 - $99</span>
+                        <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs font-mono">7x</Badge>
+                      </div>
+                      <div className="font-mono text-purple-400 font-bold">{(MULTIPLIERS.tier_50.shells * baseMultiplier).toLocaleString()}</div>
                     </div>
-                    <div className="p-3 bg-white/5 rounded-lg">
-                      <div className="text-xs text-muted-foreground mb-1">$100+</div>
-                      <div className="font-mono text-green-400">+{(50000 * baseMultiplier).toLocaleString()}</div>
+                    <div className="p-3 bg-gradient-to-br from-amber-500/10 to-orange-500/5 rounded-lg border border-amber-500/20">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs text-muted-foreground">$100+</span>
+                        <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs font-mono">10x</Badge>
+                      </div>
+                      <div className="font-mono text-amber-400 font-bold">{(MULTIPLIERS.tier_100.shells * baseMultiplier).toLocaleString()}</div>
                     </div>
                   </div>
                 </div>
@@ -226,17 +248,17 @@ export default function ReferralProgram() {
                     <div 
                       key={i}
                       className={`flex items-center justify-between p-3 rounded-lg transition-all ${
-                        signups >= milestone.referrals 
+                        totalSignups >= milestone.referrals 
                           ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/10 border border-yellow-500/30" 
                           : "bg-white/5"
                       }`}
                     >
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${
-                          signups >= milestone.referrals ? "bg-yellow-500/20" : "bg-white/10"
+                          totalSignups >= milestone.referrals ? "bg-yellow-500/20" : "bg-white/10"
                         }`}>
                           <milestone.icon className={`w-4 h-4 ${
-                            signups >= milestone.referrals ? "text-yellow-400" : "text-muted-foreground"
+                            totalSignups >= milestone.referrals ? "text-yellow-400" : "text-muted-foreground"
                           }`} />
                         </div>
                         <div>
@@ -262,72 +284,101 @@ export default function ReferralProgram() {
               <div className="flex items-center gap-2 mb-6">
                 <Calculator className="w-5 h-5 text-cyan-400" />
                 <h2 className="font-bold text-lg">Earnings Calculator</h2>
+                <Badge className="ml-auto bg-cyan-500/20 text-cyan-400 border-cyan-500/30">Multiplier System</Badge>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-4">
-                  <div className="text-xs text-muted-foreground uppercase tracking-wide">Your Referrals</div>
+                  <div className="text-xs text-muted-foreground uppercase tracking-wide">Your Referrals by Multiplier</div>
                   
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1">
-                      <label className="text-sm text-muted-foreground block mb-1">Total Signups</label>
-                      <Input
-                        type="number"
-                        min={0}
-                        value={signups}
-                        onChange={(e) => setSignups(Math.max(0, parseInt(e.target.value) || 0))}
-                        className="bg-white/5 border-white/10 h-12 text-lg"
-                        data-testid="calc-signups"
-                      />
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
+                      <Badge variant="outline" className="w-12 text-xs font-mono">1x</Badge>
+                      <div className="flex-1">
+                        <label className="text-xs text-muted-foreground block mb-1">Signups (no purchase)</label>
+                        <Input
+                          type="number"
+                          min={0}
+                          value={signups1x}
+                          onChange={(e) => setSignups1x(Math.max(0, parseInt(e.target.value) || 0))}
+                          className="bg-white/5 border-white/10"
+                          data-testid="calc-1x"
+                        />
+                      </div>
+                      <div className="text-right min-w-[80px]">
+                        <span className="font-mono text-yellow-400">{shells1x.toLocaleString()}</span>
+                      </div>
                     </div>
-                  </div>
-
-                  <div className="border-t border-white/10 pt-4">
-                    <div className="text-xs text-muted-foreground mb-3">How many purchased:</div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="text-xs text-muted-foreground block mb-1">$5-$24</label>
+                    
+                    <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-green-500/10 to-transparent rounded-lg border border-green-500/20">
+                      <Badge className="w-12 bg-green-500/20 text-green-400 border-green-500/30 text-xs font-mono">3x</Badge>
+                      <div className="flex-1">
+                        <label className="text-xs text-muted-foreground block mb-1">Purchased $5-$24</label>
                         <Input
                           type="number"
                           min={0}
-                          value={buyers5}
-                          onChange={(e) => setBuyers5(Math.max(0, parseInt(e.target.value) || 0))}
+                          value={signups3x}
+                          onChange={(e) => setSignups3x(Math.max(0, parseInt(e.target.value) || 0))}
                           className="bg-white/5 border-white/10"
-                          data-testid="calc-buyers-5"
+                          data-testid="calc-3x"
                         />
                       </div>
-                      <div>
-                        <label className="text-xs text-muted-foreground block mb-1">$25-$49</label>
+                      <div className="text-right min-w-[80px]">
+                        <span className="font-mono text-green-400">{shells3x.toLocaleString()}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-500/10 to-transparent rounded-lg border border-blue-500/20">
+                      <Badge className="w-12 bg-blue-500/20 text-blue-400 border-blue-500/30 text-xs font-mono">5x</Badge>
+                      <div className="flex-1">
+                        <label className="text-xs text-muted-foreground block mb-1">Purchased $25-$49</label>
                         <Input
                           type="number"
                           min={0}
-                          value={buyers25}
-                          onChange={(e) => setBuyers25(Math.max(0, parseInt(e.target.value) || 0))}
+                          value={signups5x}
+                          onChange={(e) => setSignups5x(Math.max(0, parseInt(e.target.value) || 0))}
                           className="bg-white/5 border-white/10"
-                          data-testid="calc-buyers-25"
+                          data-testid="calc-5x"
                         />
                       </div>
-                      <div>
-                        <label className="text-xs text-muted-foreground block mb-1">$50-$99</label>
+                      <div className="text-right min-w-[80px]">
+                        <span className="font-mono text-blue-400">{shells5x.toLocaleString()}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-purple-500/10 to-transparent rounded-lg border border-purple-500/20">
+                      <Badge className="w-12 bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs font-mono">7x</Badge>
+                      <div className="flex-1">
+                        <label className="text-xs text-muted-foreground block mb-1">Purchased $50-$99</label>
                         <Input
                           type="number"
                           min={0}
-                          value={buyers50}
-                          onChange={(e) => setBuyers50(Math.max(0, parseInt(e.target.value) || 0))}
+                          value={signups7x}
+                          onChange={(e) => setSignups7x(Math.max(0, parseInt(e.target.value) || 0))}
                           className="bg-white/5 border-white/10"
-                          data-testid="calc-buyers-50"
+                          data-testid="calc-7x"
                         />
                       </div>
-                      <div>
-                        <label className="text-xs text-muted-foreground block mb-1">$100+</label>
+                      <div className="text-right min-w-[80px]">
+                        <span className="font-mono text-purple-400">{shells7x.toLocaleString()}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-amber-500/10 to-transparent rounded-lg border border-amber-500/20">
+                      <Badge className="w-12 bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs font-mono">10x</Badge>
+                      <div className="flex-1">
+                        <label className="text-xs text-muted-foreground block mb-1">Purchased $100+</label>
                         <Input
                           type="number"
                           min={0}
-                          value={buyers100}
-                          onChange={(e) => setBuyers100(Math.max(0, parseInt(e.target.value) || 0))}
+                          value={signups10x}
+                          onChange={(e) => setSignups10x(Math.max(0, parseInt(e.target.value) || 0))}
                           className="bg-white/5 border-white/10"
-                          data-testid="calc-buyers-100"
+                          data-testid="calc-10x"
                         />
+                      </div>
+                      <div className="text-right min-w-[80px]">
+                        <span className="font-mono text-amber-400">{shells10x.toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
@@ -338,12 +389,12 @@ export default function ReferralProgram() {
                   
                   <div className="space-y-2 bg-white/5 rounded-xl p-4">
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Base (signups)</span>
-                      <span className="font-mono">{baseShells.toLocaleString()}</span>
+                      <span className="text-muted-foreground">Total Referrals</span>
+                      <span className="font-mono">{totalSignups} people</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Purchase bonuses</span>
-                      <span className="font-mono text-green-400">+{(bonus5 + bonus25 + bonus50 + bonus100).toLocaleString()}</span>
+                      <span className="text-muted-foreground">Referral Shells</span>
+                      <span className="font-mono text-yellow-400">{referralShells.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Milestone bonuses</span>

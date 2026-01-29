@@ -3,13 +3,16 @@
  * Runs twice daily at 8:00 AM and 8:00 PM Central (2:00 PM and 2:00 AM UTC)
  * Checks for pending referrals and processes Shell rewards
  * 
- * Reward Structure:
+ * MULTIPLIER-BASED Reward Structure:
  * - Base signup reward: 1,000 Shells per referral
- * - Purchase bonus tiers:
- *   - $5-$24: +5,000 Shells
- *   - $25-$49: +10,000 Shells
- *   - $50-$99: +20,000 Shells
- *   - $100+: +50,000 Shells
+ * - Purchase multipliers (applied to base):
+ *   - No purchase: 1x (1,000 Shells)
+ *   - $5-$24: 3x (3,000 Shells)
+ *   - $25-$49: 5x (5,000 Shells)
+ *   - $50-$99: 7x (7,000 Shells)
+ *   - $100+: 10x (10,000 Shells)
+ * 
+ * 90-day sprint target: 270 referrals = ~880,000 Shells = ~$880 at TGE
  */
 
 import { db } from "./db";
@@ -20,12 +23,14 @@ import { referrals, commissionPayouts, affiliateProfiles } from "@shared/schema"
 const PAYOUT_TIMES_UTC = [14, 2]; // 2 PM UTC (8 AM CST) and 2 AM UTC (8 PM CST)
 const CHECK_INTERVAL_MS = 60_000; // Check every minute
 
-const REWARD_TIERS = {
-  signup: 1000,
-  purchase_5: 5000,
-  purchase_25: 10000,
-  purchase_50: 20000,
-  purchase_100: 50000,
+const BASE_REWARD = 1000; // Base shells per signup
+
+const PURCHASE_MULTIPLIERS = {
+  none: 1,      // No purchase: 1,000 Shells
+  tier_5: 3,    // $5-$24: 3,000 Shells  
+  tier_25: 5,   // $25-$49: 5,000 Shells
+  tier_50: 7,   // $50-$99: 7,000 Shells
+  tier_100: 10, // $100+: 10,000 Shells
 };
 
 interface SchedulerState {
@@ -91,26 +96,28 @@ async function getPendingReferrals(): Promise<PendingReferral[]> {
   }
 }
 
-function calculatePurchaseBonus(amountCents: number): number {
+function getMultiplier(amountCents: number): { multiplier: number; tierName: string } {
   const amountDollars = amountCents / 100;
   
-  if (amountDollars >= 100) return REWARD_TIERS.purchase_100;
-  if (amountDollars >= 50) return REWARD_TIERS.purchase_50;
-  if (amountDollars >= 25) return REWARD_TIERS.purchase_25;
-  if (amountDollars >= 5) return REWARD_TIERS.purchase_5;
-  return 0;
+  if (amountDollars >= 100) return { multiplier: PURCHASE_MULTIPLIERS.tier_100, tierName: "10x ($100+)" };
+  if (amountDollars >= 50) return { multiplier: PURCHASE_MULTIPLIERS.tier_50, tierName: "7x ($50-99)" };
+  if (amountDollars >= 25) return { multiplier: PURCHASE_MULTIPLIERS.tier_25, tierName: "5x ($25-49)" };
+  if (amountDollars >= 5) return { multiplier: PURCHASE_MULTIPLIERS.tier_5, tierName: "3x ($5-24)" };
+  return { multiplier: PURCHASE_MULTIPLIERS.none, tierName: "1x (no purchase)" };
 }
 
 async function processReferralPayout(referral: PendingReferral): Promise<{ success: boolean; shellsAwarded: number }> {
   try {
-    let totalShells = REWARD_TIERS.signup;
-    let description = `Referral signup bonus - User ${referral.refereeId.substring(0, 8)}`;
+    let multiplierInfo = { multiplier: 1, tierName: "1x (signup only)" };
     
     if (referral.conversionValue && referral.conversionValue >= 500) {
-      const purchaseBonus = calculatePurchaseBonus(referral.conversionValue);
-      totalShells += purchaseBonus;
-      description = `Referral + purchase bonus ($${(referral.conversionValue / 100).toFixed(2)}) - User ${referral.refereeId.substring(0, 8)}`;
+      multiplierInfo = getMultiplier(referral.conversionValue);
     }
+    
+    const totalShells = BASE_REWARD * multiplierInfo.multiplier;
+    const description = multiplierInfo.multiplier > 1
+      ? `Referral ${multiplierInfo.tierName} - $${(referral.conversionValue! / 100).toFixed(2)} purchase - User ${referral.refereeId.substring(0, 8)}`
+      : `Referral signup (1x) - User ${referral.refereeId.substring(0, 8)}`;
     
     const referenceId = `referral_payout_${referral.id}_${Date.now()}`;
     

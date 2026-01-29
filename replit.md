@@ -74,15 +74,17 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **Signal Foundation**: 0% - Will be a separate initiative with its own funding/asset.
 - **Chronicles Game Economy**: 0% - Uses Echoes (separate, non-convertible currency).
 
-### Referral Rewards System (LOCKED - January 21, 2026)
-- **Base Reward**: 1,000 Shells per signup (guaranteed)
-- **Purchase Bonus Tiers** (if referral buys, minimum $5):
-  - $5-$24 = +5,000 Shells
-  - $25-$49 = +10,000 Shells
-  - $50-$99 = +20,000 Shells
-  - $100+ = +50,000 Shells
-- **Payout Schedule**: Automatic scans twice daily at 8:00 AM and 8:00 PM Central
+### Referral Rewards System (UPDATED - January 29, 2026)
+- **MULTIPLIER-BASED System** (replaces flat bonus system):
+  - Base: 1,000 Shells per referral
+  - 1x (no purchase): 1,000 Shells
+  - 3x ($5-$24 purchase): 3,000 Shells  
+  - 5x ($25-$49 purchase): 5,000 Shells
+  - 7x ($50-$99 purchase): 7,000 Shells
+  - 10x ($100+ purchase): 10,000 Shells
+- **Payout Schedule**: Automated twice daily at 8:00 AM and 8:00 PM Central (no manual Zealy checking)
 - **No Limits**: Unlimited referrals, no caps on earnings
+- **Business Partners**: 2.5x multiplier on all rewards
 - **Claim Window**: Wallet required before launch; 30 days after TGE to claim (unclaimed returns to treasury)
 
 ### Launch Philosophy
