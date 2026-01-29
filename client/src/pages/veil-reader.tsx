@@ -447,8 +447,8 @@ const volume1Chapters: Chapter[] = [
         
         <div className="my-4 flex justify-center">
           <div className="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/30 max-w-md">
-            <img src="/veil-images/dead-sea-region.jpg" alt="Dead Sea region where the ruins of Sodom and Gomorrah were discovered" className="w-full rounded-lg" />
-            <p className="text-center text-sm text-slate-400 mt-2 italic">The Dead Sea region - location of the ash cities</p>
+            <img src="/veil-images/ash-city-structures.jpg" alt="Ash city structures with visible windows and doorways at the Sodom and Gomorrah site" className="w-full rounded-lg" />
+            <p className="text-center text-sm text-slate-400 mt-2 italic">City structures turned to ash - windows and doorways still visible in the calcium sulfite remains</p>
           </div>
         </div>
         
@@ -456,6 +456,18 @@ const volume1Chapters: Chapter[] = [
         <p>Genesis 19:24-25: "Then Yahuah rained upon Sodom and upon Gomorrah brimstone and fire from Yahuah out of heaven; And he overthrew those cities, and all the plain, and all the inhabitants of the cities, and that which grew upon the ground."</p>
         <p>What Wyatt found: <strong>entire city structures turned to ash</strong>. Not metaphorical ash - literal calcium sulfite ash. Buildings with right angles. Walls. Streets. Ziggurats. All reduced to white powder.</p>
         <p>Embedded in this ash are <strong>sulfur balls</strong> - pure brimstone with burn rings around them, some still encased in the ash that formed when they burned. These sulfur balls are 95-98% pure sulfur. For comparison, naturally occurring volcanic sulfur is only 40% pure at maximum.</p>
+        
+        <div className="my-4 grid grid-cols-2 gap-3 max-w-lg mx-auto">
+          <div className="bg-slate-800/50 p-2 rounded-lg border border-cyan-500/30">
+            <img src="/veil-images/sulfur-ball-hand.jpg" alt="Sulfur ball with burn ring from Sodom site held in hand" className="w-full rounded-lg" />
+            <p className="text-center text-xs text-slate-400 mt-1 italic">Sulfur ball with visible burn ring</p>
+          </div>
+          <div className="bg-slate-800/50 p-2 rounded-lg border border-cyan-500/30">
+            <img src="/veil-images/sulfur-embedded-ash.jpg" alt="Sulfur ball embedded in ash wall at Sodom site" className="w-full rounded-lg" />
+            <p className="text-center text-xs text-slate-400 mt-1 italic">Sulfur ball still embedded in ash</p>
+          </div>
+        </div>
+        
         <p>These sulfur balls are unlike anything found anywhere else on Earth. They're not volcanic. They're not natural formations. They appear to have rained down from above and burned at temperatures hot enough to melt rock - exactly as Genesis describes.</p>
         <p>Some of these artifacts are housed in museums, including one in Tennessee. You can see them. You can hold them. The evidence is tangible - yet mainstream archaeology dismisses it entirely.</p>
         
