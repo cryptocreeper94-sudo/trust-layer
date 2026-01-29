@@ -3090,9 +3090,14 @@ export default function VeilReader() {
     if (!node) return '';
     if (Array.isArray(node)) return node.map(extractTextForPdf).join('');
     if (typeof node === 'object' && 'props' in node) {
-      const element = node as React.ReactElement<{ children?: React.ReactNode; className?: string }>;
-      const children = extractTextForPdf(element.props?.children);
+      const element = node as React.ReactElement<{ children?: React.ReactNode; className?: string; src?: string; alt?: string }>;
       const tag = (element.type as string);
+      // Skip images in text extraction, but include alt text for context
+      if (tag === 'img') {
+        const alt = element.props?.alt;
+        return alt ? `<p><em>[Image: ${alt}]</em></p>` : '';
+      }
+      const children = extractTextForPdf(element.props?.children);
       if (tag === 'p') return `<p>${children}</p>`;
       if (tag === 'strong' || tag === 'b') return `<strong>${children}</strong>`;
       if (tag === 'em' || tag === 'i') return `<em>${children}</em>`;
@@ -3190,10 +3195,12 @@ export default function VeilReader() {
     if (typeof node === 'object') {
       // Handle React elements
       if ('props' in node) {
-        const element = node as React.ReactElement<{ children?: React.ReactNode }>;
+        const element = node as React.ReactElement<{ children?: React.ReactNode; src?: string }>;
+        const tag = typeof element.type === 'string' ? element.type : '';
+        // Skip images - don't try to extract text from them
+        if (tag === 'img') return '';
         const childText = extractText(element.props?.children);
         // Add sentence breaks after paragraphs for better speech flow
-        const tag = typeof element.type === 'string' ? element.type : '';
         if (tag === 'p' || tag === 'li' || tag === 'div') {
           return childText + '. ';
         }
