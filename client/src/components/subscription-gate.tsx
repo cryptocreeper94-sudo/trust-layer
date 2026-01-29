@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { motion } from "framer-motion";
-import { Lock, ArrowRight } from "lucide-react";
+import { Lock, ArrowRight, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSubscription, hasPlanAccess } from "@/hooks/use-subscription";
 import { useAuth } from "@/hooks/use-auth";
@@ -88,6 +88,19 @@ export function SubscriptionGate({
           <p className="text-xs text-white/30 mt-4">
             Cancel anytime. 2-day free trial included.
           </p>
+          
+          {/* Referral Program Callout */}
+          <div className="mt-4 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+            <div className="flex items-center justify-center gap-2 text-emerald-400 text-xs">
+              <Gift className="w-3.5 h-3.5" />
+              <span>
+                <span className="font-semibold">Earn rewards!</span>{' '}
+                <Link href="/referral-program" className="underline hover:text-emerald-300">
+                  Refer friends for free Shells
+                </Link>
+              </span>
+            </div>
+          </div>
         </div>
       </motion.div>
     </div>

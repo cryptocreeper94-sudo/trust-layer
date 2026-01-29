@@ -347,6 +347,38 @@ export default function Pricing() {
             </GlassCard>
           </motion.div>
 
+          {/* Referral Program Callout */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="mt-8"
+          >
+            <GlassCard className="max-w-3xl mx-auto p-6 border-emerald-500/30 bg-gradient-to-r from-emerald-900/20 to-cyan-900/20">
+              <div className="flex flex-col md:flex-row items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center flex-shrink-0">
+                  <Star className="w-6 h-6 text-white" />
+                </div>
+                <div className="text-center md:text-left flex-1">
+                  <h4 className="text-lg font-bold text-white mb-1">
+                    Earn Rewards with Our Referral Program!
+                  </h4>
+                  <p className="text-gray-400 text-sm">
+                    Get <span className="text-emerald-400 font-semibold">1,000 Shells</span> for every friend who signs up, 
+                    plus up to <span className="text-emerald-400 font-semibold">50,000 bonus Shells</span> when they make a purchase. 
+                    No limits on earnings!
+                  </p>
+                </div>
+                <Link href="/referral-program">
+                  <Button className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 whitespace-nowrap">
+                    View Referral Program
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              </div>
+            </GlassCard>
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

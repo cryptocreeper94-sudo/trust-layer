@@ -636,14 +636,20 @@ function AutoSnipePanel({
               </Button>
               <Button
                 onClick={() => {
-                  // TODO: Navigate to subscription page
-                  setIsSubscribed(true); // For demo purposes
-                  setShowSubscribeModal(false);
+                  window.location.href = '/pricing';
                 }}
                 className="bg-gradient-to-r from-purple-500 to-cyan-500"
               >
                 Subscribe Now
               </Button>
+            </div>
+            
+            {/* Referral Program Mention */}
+            <div className="mt-4 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+              <p className="text-xs text-emerald-300 text-center">
+                <span className="font-semibold">Earn free rewards!</span> Refer friends and earn up to 50,000 Shells.{' '}
+                <a href="/referral-program" className="underline hover:text-emerald-200">Learn more</a>
+              </p>
             </div>
           </div>
         </div>
