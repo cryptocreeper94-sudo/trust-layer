@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,37 @@ export default function Veil() {
   const handleReadOnline = () => {
     window.location.href = '/veil/read';
   };
+
+  useEffect(() => {
+    document.title = "Through The Veil | A Journey Through Hidden History";
+    
+    let manifestLink = document.querySelector('link[rel="manifest"]') as HTMLLinkElement;
+    if (manifestLink) {
+      manifestLink.href = '/manifest-veil.webmanifest';
+    }
+    
+    let themeColor = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
+    if (themeColor) {
+      themeColor.content = '#a855f7';
+    }
+    
+    let appleTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]') as HTMLMetaElement;
+    if (appleTitle) {
+      appleTitle.content = 'Through The Veil';
+    }
+
+    let appleIcon = document.querySelector('link[rel="apple-touch-icon"]') as HTMLLinkElement;
+    if (appleIcon) {
+      appleIcon.href = '/icons/veil-192x192.png';
+    }
+
+    return () => {
+      if (manifestLink) manifestLink.href = '/manifest.webmanifest';
+      if (themeColor) themeColor.content = '#00ffff';
+      if (appleTitle) appleTitle.content = 'Trust Layer';
+      if (appleIcon) appleIcon.href = '/icons/icon-192x192.png';
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-950 relative overflow-hidden">
@@ -95,7 +127,7 @@ export default function Veil() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <GlassCard className="p-6 md:p-8 h-full" glow>
+            <GlassCard className="p-8 h-full" glow>
               <div className="flex items-center gap-3 mb-5">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/30 flex-shrink-0">
                   <FileText className="w-5 h-5 text-red-400" />
@@ -135,7 +167,7 @@ export default function Veil() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.25 }}
           >
-            <GlassCard className="p-6 md:p-8 h-full" glow>
+            <GlassCard className="p-8 h-full" glow>
               <div className="flex items-center gap-3 mb-5">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 flex-shrink-0">
                   <Smartphone className="w-5 h-5 text-cyan-400" />

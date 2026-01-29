@@ -8,6 +8,39 @@ import {
 } from "lucide-react";
 import { Link } from "wouter";
 
+function useVeilPWA() {
+  useEffect(() => {
+    document.title = "Through The Veil | Read Online";
+    
+    let manifestLink = document.querySelector('link[rel="manifest"]') as HTMLLinkElement;
+    if (manifestLink) {
+      manifestLink.href = '/manifest-veil.webmanifest';
+    }
+    
+    let themeColor = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
+    if (themeColor) {
+      themeColor.content = '#a855f7';
+    }
+    
+    let appleTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]') as HTMLMetaElement;
+    if (appleTitle) {
+      appleTitle.content = 'Through The Veil';
+    }
+
+    let appleIcon = document.querySelector('link[rel="apple-touch-icon"]') as HTMLLinkElement;
+    if (appleIcon) {
+      appleIcon.href = '/icons/veil-192x192.png';
+    }
+
+    return () => {
+      if (manifestLink) manifestLink.href = '/manifest.webmanifest';
+      if (themeColor) themeColor.content = '#00ffff';
+      if (appleTitle) appleTitle.content = 'Trust Layer';
+      if (appleIcon) appleIcon.href = '/icons/icon-192x192.png';
+    };
+  }, []);
+}
+
 type Chapter = {
   id: string;
   title: string;
@@ -1326,11 +1359,169 @@ const volume1Chapters: Chapter[] = [
     )
   },
   {
-    id: "v1-ch32",
-    title: "Chapter 32: The Hollow Souls",
+    id: "v1-ch32-lucifer",
+    title: "Chapter 32: Lucifer - The Misunderstood Adversary",
     content: (
       <>
-        <p className="text-purple-400 font-medium mb-4">PART NINE: THE HOLLOW WORLD</p>
+        <p className="text-purple-400 font-medium mb-4">PART NINE: THE ADVERSARY REVEALED</p>
+        <p>Before we can understand the deception, we must understand the deceiver. And here we encounter one of the most successful substitutions in history: the conflation of multiple entities into a single cartoon villain called "Lucifer."</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Hebrew: Helel Ben Shachar</p>
+        <p>The word "Lucifer" appears exactly <strong>once</strong> in the entire Bible - in Isaiah 14:12 of the King James Version. The Hebrew word is <strong>הֵילֵל (Helel)</strong>, meaning "shining one" or "light-bearer." The full phrase is "Helel ben Shachar" - "shining one, son of the dawn."</p>
+        <p>Read the context. Isaiah 14 is explicitly a <strong>taunt against the King of Babylon</strong>. Verse 4 says plainly: "thou shalt take up this proverb against the king of Babylon." The passage mocks a human king who exalted himself and was brought low.</p>
+        <p>The Hebrew root <strong>halal</strong> has a dual meaning: "to shine" but also "to boast, to be foolish, to rage." The Most High was mocking the Babylonian king's arrogance - not describing a cosmic entity named Lucifer.</p>
+        <p>How did we get from a taunt against Babylon to Satan? Jerome translated the Hebrew "Helel" into Latin as "lucifer" (lowercase) in his Vulgate Bible around 405 CE. In Latin, "lucifer" simply means "light-bearer" and was commonly used to describe the morning star (Venus). The King James translators in 1611 capitalized it as a proper name - and centuries of tradition did the rest.</p>
+        <p>Here's the irony: Jerome used the same Latin word "lucifer" for <strong>the Messiah</strong> in 2 Peter 1:19, where the Greek "phosphoros" (morning star) appears. But English Bibles translate that differently to avoid confusion. The substitution was selective.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Nachash: The Shining Enchanter</p>
+        <p>What about the serpent in Eden? The Hebrew word is <strong>נָחָשׁ (Nachash)</strong> - and it's far more than "snake."</p>
+        <p>Nachash is a triple-entendre in Hebrew:</p>
+        <ul className="list-disc list-inside space-y-2 my-4 text-slate-300">
+          <li><strong>As a noun:</strong> serpent, snake</li>
+          <li><strong>As a verb:</strong> to enchant, to divine, to practice sorcery, to deceive</li>
+          <li><strong>As an adjective:</strong> shining one, bronze, luminous</li>
+        </ul>
+        <p>The related word <strong>nechoshet</strong> means bronze - a shining metal. The nachash in Eden wasn't a crawling animal. It was a <strong>shining, luminous divine being</strong> - a throne room guardian, a seraph, who used enchantment and deception. This aligns with Ezekiel 28, which describes a covering cherub "perfect in beauty" who was in Eden and fell through pride.</p>
+        <p>The ancient texts describe a radiant being, not a snake. The image of a literal serpent is itself part of the diminishment - reducing a powerful adversary to a creature you can step on.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Watchers: Semjaza and Azazel</p>
+        <p>The Book of Enoch - canonical in the Ethiopian Orthodox Church and quoted in Jude - describes a different rebellion entirely. The Watchers were 200 angels who descended on Mount Hermon and took human wives.</p>
+        <p>Two leaders are named: <strong>Semjaza</strong> (also Semyaza, Samyaza) was the organizational leader who convinced the others to swear an oath. <strong>Azazel</strong> was the teacher of forbidden knowledge - warfare, weapons, cosmetics, metallurgy. 1 Enoch 10:8 says: "the whole earth has been corrupted through the works that were taught by Azazel: <strong>to him ascribe all sin.</strong>"</p>
+        <p>These aren't the same as the nachash in Eden. These aren't the same as Helel in Isaiah. They're different entities with different roles in the rebellion. The system benefits from conflating them all into one "Satan/Lucifer" figure because it obscures the structure of the adversarial hierarchy.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Luciferians: Very Real Worship</p>
+        <p>Now here's where we must be careful. The etymology of "Lucifer" being a translation issue doesn't mean there aren't people who worship under that name. <strong>Luciferians are very real.</strong></p>
+        <p>The elite families, the secret societies, the inner circles of power - many explicitly identify as "light-bringers." They worship the "light" that was brought to humanity in Eden - the forbidden knowledge, the opening of eyes, the becoming "as gods." They see the nachash as a liberator, not a deceiver.</p>
+        <p>Helena Blavatsky, founder of Theosophy, wrote in The Secret Doctrine: "Lucifer represents... Life... Thought... Progress... Civilization... Liberty... Independence... Lucifer is the Logos... the Serpent, the Savior."</p>
+        <p>Albert Pike, 33rd degree Mason, wrote in Morals and Dogma: "Lucifer, the Light-bearer... Lucifer, the Son of the Morning! Is it he who bears the Light?"</p>
+        <p>The United Nations has a publishing imprint called <strong>Lucis Trust</strong> - originally incorporated as "Lucifer Publishing Company" in 1922 before the name change.</p>
+        <p>These are not accidents. The elite worship the light-bringer - whether they call it Lucifer, the nachash, Prometheus, or any other name. They believe they possess the illumination that the masses lack. They are the "enlightened ones" - the Illuminati.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Confusion Serves the Deception</p>
+        <p>So why does the conflation matter? Because the adversary isn't one entity - it's a hierarchy. Different beings with different roles, different responsibilities, different domains. By collapsing them all into cartoon "Satan," the system achieves several goals:</p>
+        <ul className="list-disc list-inside space-y-2 my-4 text-slate-300">
+          <li>The sophisticated can dismiss the adversary as primitive mythology</li>
+          <li>The structure of the rebellion remains hidden</li>
+          <li>The specific entities - Watchers, principalities, powers - become invisible</li>
+          <li>The real Luciferian worship hides behind the translation confusion</li>
+        </ul>
+        <p>The nachash was real. The Watchers were real. The principalities and powers are real. The Luciferian elite worshipping the light-bringer are real. Understanding the distinctions is essential to understanding the war.</p>
+      </>
+    )
+  },
+  {
+    id: "v1-ch32b-societies",
+    title: "Chapter 32B: The Secret Societies",
+    content: (
+      <>
+        <p>The knowledge didn't disappear. It was preserved - passed down through initiatic orders, mystery schools, and secret societies that have operated continuously for centuries.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Knights Templar: What They Found</p>
+        <p>In 1118, nine knights established themselves on Temple Mount in Jerusalem, occupying the Al-Aqsa Mosque built over the ruins of Solomon's Temple. For the next <strong>nine years</strong>, they did almost nothing publicly - they lived underground, excavating.</p>
+        <p>What did they find? The official answer is "nothing documented." But consider what happened next:</p>
+        <ul className="list-disc list-inside space-y-2 my-4 text-slate-300">
+          <li>1127: The Templars resurface and seek papal recognition</li>
+          <li>1129: Pope Honorius II grants them unprecedented power and autonomy</li>
+          <li>Within decades, they become the wealthiest organization in Europe</li>
+          <li>They pioneer international banking - letters of credit, interest lending</li>
+          <li>They answer only to the Pope, exempt from all local laws and taxes</li>
+        </ul>
+        <p>Modern excavations have found Templar tunnels running 30+ meters under Temple Mount. Chambers that appear "unopened since the time of Christ." Whatever they discovered gave them power that threatened kings.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">Friday the 13th, 1307</p>
+        <p>King Philip IV of France was deeply in debt to the Templars. On <strong>Friday, October 13, 1307</strong>, he coordinated dawn raids across France, arresting virtually all Templars including Grand Master Jacques de Molay.</p>
+        <p>The charges: heresy, worshipping an idol called "Baphomet," spitting on the cross, homosexual rituals. Under brutal torture - strappado, the rack, roasting feet in flames - most confessed to whatever was demanded.</p>
+        <p>The Pope dissolved the order in 1312. De Molay was burned at the stake in 1314, reportedly cursing both Pope Clement V and King Philip from the flames. Both died within the year.</p>
+        <p>But the Templars didn't disappear. They went underground. In Portugal, they reconstituted as the Order of Christ. In Scotland, they merged with the stone mason guilds. The knowledge survived.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Rosicrucians and Freemasons</p>
+        <p>In 1614-1616, three manifestos appeared in Europe announcing the existence of the Rosicrucian Order - a secret brotherhood possessing ancient wisdom, alchemy, and esoteric knowledge. Whether the order actually existed or the manifestos were symbolic, they sparked a movement.</p>
+        <p>By the 17th century, Freemasonry emerged publicly in England and Scotland. The lodges claimed to preserve the secrets of the ancient builders - the same knowledge that built Solomon's Temple, the same wisdom the Templars sought beneath it.</p>
+        <p>The degrees of Masonry teach a progressive revelation. The lower degrees know nothing. The 33rd degree and above - the inner circle - possess knowledge hidden from the "profane" (the uninitiated). The symbols are everywhere: the all-seeing eye, the pyramid, the compass and square. They're on the U.S. dollar bill for a reason.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Illuminati: 1776</p>
+        <p>On May 1, 1776, Adam Weishaupt founded the Order of the Illuminati in Bavaria. The goal was explicit: infiltrate existing power structures - governments, churches, financial institutions - and guide them toward a new world order.</p>
+        <p>The Illuminati was officially suppressed in 1785 when Bavarian authorities discovered their documents. But the network simply moved elsewhere. The year 1776 also saw the founding of the United States, with Masonic symbols embedded in its architecture and currency.</p>
+        <p>Today, "Illuminati" is dismissed as conspiracy theory - which is exactly what you'd expect if the conspiracy succeeded. The bloodlines that funded Weishaupt are the same bloodlines that control central banking, media, and industry today. The Rothschilds. The Rockefellers. The families that have remained in power for centuries.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Preserved Texts</p>
+        <p>The Coptic Christians of Egypt preserved texts that the Roman church destroyed - including the Gnostic gospels found at Nag Hammadi in 1945. The Ethiopian Orthodox Church maintained books removed from the Western canon - Enoch, Jubilees, others.</p>
+        <p>The secret societies had access to texts and knowledge that the public was denied. The Council of Nicaea in 325 CE determined which books were "canonical." Books that revealed too much about the Watchers, the nephilim, the structure of the heavens - these were excluded. But they weren't destroyed everywhere. They were preserved by those who knew their value.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Bloodline Connection</p>
+        <p>The same families appear across centuries. The banking dynasties, the royal houses, the industrial magnates. They intermarry. They preserve wealth across generations through trusts and foundations. They occupy positions in the secret societies.</p>
+        <p>Is this coincidence or coordination? The families that funded the Templars are connected to the families that fund the modern financial system. The knowledge passed down through the societies includes not just spiritual secrets but practical techniques for maintaining power.</p>
+        <p>The "conspiracy" isn't a theory - it's a structure. The secret societies are the mechanism by which the adversarial hierarchy operates in the physical realm. The knowledge of the Watchers, preserved through the millennia, in the hands of bloodlines that have never relinquished control.</p>
+      </>
+    )
+  },
+  {
+    id: "v1-ch32c-timeline",
+    title: "Chapter 32C: The Ultimate Timeline",
+    content: (
+      <>
+        <p className="text-purple-400 font-medium mb-4">TYING IT ALL TOGETHER</p>
+        <p>Now we can see the full picture. From the beginning to where we stand now - a continuous thread of rebellion, deception, and control. Let us trace the timeline:</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">In the Beginning: The First Rebellion</p>
+        <p>The nachash - the shining enchanter - deceived humanity in Eden. The forbidden knowledge was offered: "ye shall be as gods." This was the first substitution. Divine relationship exchanged for occult knowledge. Trust in the Creator exchanged for trust in self.</p>
+        <p>The fallen cherub, described in Ezekiel 28, had been "perfect in beauty" until iniquity was found in him. Pride. The desire to be worshipped rather than to worship. The template for all rebellion.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Watchers Descend: The Second Corruption</p>
+        <p>Two hundred Watchers descended on Mount Hermon, led by Semjaza. They took human wives. They taught forbidden knowledge - weapons, cosmetics, sorcery, astrology. Their offspring, the Nephilim, corrupted all flesh.</p>
+        <p>The Creator responded with the Flood. The Nephilim were destroyed. The Watchers were bound. But their knowledge survived - passed to those who remembered, preserved through the deluge.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">Babel: The Organized Rebellion</p>
+        <p>At Babel, humanity united in rebellion. The tower was not about reaching heaven physically - it was about creating a centralized system of control, a single point of worship that could be directed away from the Creator.</p>
+        <p>The Most High confused the languages and scattered the nations. But the knowledge traveled with them. Every ancient culture has the same stories - the flood, the giants, the gods who descended, the forbidden wisdom. They remember.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Mystery Religions: Babylon Preserved</p>
+        <p>Babylon fell, but Babylonian mystery religion survived. It moved to Pergamon (where Revelation says "Satan's seat" was), then to Rome. The same system - priest classes, mystery initiations, secret knowledge for the elite - wearing new costumes in each era.</p>
+        <p>The ancient deities never disappeared. They changed names: Nimrod became Tammuz, became Osiris, became Apollo, became... the pattern repeats. The same entities worshipped under different names across millennia.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Messiah Comes: The Mortal Wound</p>
+        <p>Yahusha - the true Messiah - came. Not as the conquering king the world expected, but as the suffering servant. He exposed the religious system. He offered a direct path to the Father. He defeated death.</p>
+        <p>The beast system received a mortal wound. Rome fell. The temples closed. The old gods were abandoned. For a thousand years - the millennial reign, whether literal or spiritual - the beast lay wounded.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Medieval Period: The "Dark" Age of Faith</p>
+        <p>The so-called Dark Ages were the age of cathedrals. Faith spread across the known world. Monasteries preserved knowledge. The common people knew their Creator. The beast system was suppressed.</p>
+        <p>The adversary labeled this period "dark." The inversion is the signature. What was actually light - connection to the Creator, faith, community - was called darkness. What came next - humanism, occultism, the marginalization of faith - was called "enlightenment."</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The Renaissance: The Wound Heals</p>
+        <p>The "rebirth" of pagan Greek and Roman culture. Occult knowledge resurfaced: Hermeticism, Kabbalah, alchemy. The Templars had excavated. The manuscripts had been preserved. The mystery schools reopened.</p>
+        <p>Copernicus proposed heliocentrism (1543). Galileo championed it. Newton "discovered" gravity. Each step removed the Creator from the center. Humanity was no longer special - just an accident on a spinning ball in infinite void.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The "Enlightenment" and Industrial Age</p>
+        <p>The Illuminati founded (1776). The French Revolution - explicit rejection of the Creator, "Reason" worshipped as a goddess. Darwin's Origin of Species (1859) - the Creator removed from creation entirely.</p>
+        <p>The divine energy that built the ancient structures was replaced. Tesla offered free energy; they gave us Edison's meters instead. The controlled copy replaced the original. Humanity was cut off from the source and made dependent on systems.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">The 20th Century: Control Consolidated</p>
+        <p>The Federal Reserve (1913) - financial control centralized. World Wars - mass sacrifice and the breaking of nations. The United Nations (1945) - global governance emerging. Israel reestablished (1948) - the prophetic piece placed.</p>
+        <p>Television - programming the masses. Fluoride in the water - calcifying the pineal gland. Educational standardization - indoctrination from childhood. The matrix was built methodically.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">Now: Satan's Little Season</p>
+        <p>If the millennial reign has already occurred, we are now in the "little season" of Revelation 20. The adversary has been released. The nations are being gathered. The final deception is being prepared.</p>
+        <p>The "alien disclosure" - fallen entities repackaged as extraterrestrials. Project Blue Beam - technology to simulate divine intervention. A false messiah who will be welcomed because humanity has been conditioned to reject the true one.</p>
+        <p>Everyone is waiting for events that may have already happened. The timeline was confused specifically so we wouldn't recognize where we are.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">What Comes Next</p>
+        <p>The mark - willingly accepted by those who have already accepted the deception in mind and body. The tribulation - not before the mark but after, when the script flips and blessing becomes bondage.</p>
+        <p>And then - the final battle. The true King returns. Not the false messiah who comes first, but the One who was always coming. The deception ends. The accounts are settled.</p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">Your Place in This Story</p>
+        <p>You are not here by accident. You were born in this specific time, given access to this specific information, for a reason. The question is not whether the timeline is true - you must verify that yourself. The question is: what will you do with it?</p>
+        <p>The receiver can be restored. The signal is still broadcasting. The veil can be lifted. But the choice is yours. No one can make it for you. No one can walk through it for you.</p>
+        <p>The pieces are on the board. The moves are being made. The endgame is approaching.</p>
+        <p className="text-cyan-400 mt-6 font-medium">Which side will you be on when the veil finally falls?</p>
+      </>
+    )
+  },
+  {
+    id: "v1-ch32d",
+    title: "Chapter 32D: The Hollow Souls",
+    content: (
+      <>
+        <p className="text-purple-400 font-medium mb-4">PART TEN: THE HOLLOW WORLD</p>
         <p>Not everyone has the same inner experience. Some people report rich internal lives - constant dialogue with themselves, vivid imagination, deep emotional experience. Others report... nothing. No internal monologue. No imagination. Just reactions to external stimuli.</p>
         <p>This isn't judgment - it's observation. The experience of consciousness appears to vary dramatically between individuals.</p>
         <p>Some traditions describe this as the presence or absence of a soul. Some as the difference between NPC (non-player character) and player. Some as the distinction between those with the breath of the Creator and those who exist without it.</p>
@@ -2496,6 +2687,8 @@ const volumes: Volume[] = [
 ];
 
 export default function VeilReader() {
+  useVeilPWA();
+  
   const [currentVolume, setCurrentVolume] = useState(0);
   const [currentChapter, setCurrentChapter] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
