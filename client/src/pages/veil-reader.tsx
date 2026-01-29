@@ -8,6 +8,13 @@ import {
 } from "lucide-react";
 import { Link } from "wouter";
 
+import veilIlluminatiEye from "@/assets/images/veil-illuminati-eye.jpg";
+import veilSecretSociety from "@/assets/images/veil-secret-society.jpg";
+import veilHollywoodCinema from "@/assets/images/veil-hollywood-cinema.jpg";
+import veilVatican from "@/assets/images/veil-vatican.jpg";
+import veilMusicIndustry from "@/assets/images/veil-music-industry.jpg";
+import veilStadium from "@/assets/images/veil-stadium.jpg";
+
 function useVeilPWA() {
   useEffect(() => {
     document.title = "Through The Veil | Read Online";
@@ -1538,6 +1545,12 @@ const volume1Chapters: Chapter[] = [
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART NINE-B: THE MODERN SPELLCASTERS</p>
+        
+        <div className="my-6 rounded-lg overflow-hidden border border-white/10">
+          <img src={veilHollywoodCinema} alt="Cinema audience watching screen in darkness" className="w-full h-48 object-cover" />
+          <p className="text-xs text-slate-500 p-2 bg-slate-900/50 text-center italic">Millions sit in darkness, receiving programmed content</p>
+        </div>
+        
         <p>The word "amusement" comes from the Latin "a-muse" - literally <strong>"without thought."</strong> This is not coincidence. The entire entertainment industry - Hollywood, music, sports, gaming, social media - exists to keep you in a state of thoughtlessness. Distracted. Passive. Consuming rather than creating.</p>
         
         <p className="text-lg font-semibold text-white mt-6 mb-4">The Unified Control</p>
@@ -1562,6 +1575,12 @@ const volume1Chapters: Chapter[] = [
         <p>The camera is the all-seeing eye. The projector casts spells onto receptive minds in the dark. Movies are literally called "films" - a thin layer covering reality.</p>
         
         <p className="text-lg font-semibold text-white mt-6 mb-4">The Music Industry: Spellcasting Through Sound</p>
+        
+        <div className="my-6 rounded-lg overflow-hidden border border-white/10">
+          <img src={veilMusicIndustry} alt="Concert crowd with dramatic stage lighting" className="w-full h-48 object-cover" />
+          <p className="text-xs text-slate-500 p-2 bg-slate-900/50 text-center italic">Mass ritual: crowds receiving sound and light programming</p>
+        </div>
+        
         <p>Music bypasses the conscious mind and speaks directly to the spirit. This is why it's so heavily controlled.</p>
         <p>Consider the pattern: young artists sign contracts they don't understand. They achieve fame rapidly. Their image changes - becoming darker, more sexualized, more occult. Many speak of "selling their soul" - and while some claim this is metaphor, the consistency of the transformation suggests otherwise.</p>
         <p>The 440 Hz standard tuning was adopted in 1953, replacing the more harmonious 432 Hz that aligned with natural frequencies. Music became slightly discordant - enough to create subconscious unease without conscious awareness. Another frequency weapon hidden in plain sight.</p>
@@ -1573,6 +1592,12 @@ const volume1Chapters: Chapter[] = [
         <p>Some researchers claim to observe that certain artists "reappear" - faces that look remarkably similar showing up in new identities. Whether this is coincidence, confirmation bias, or something else, the claim circulates widely enough to warrant mention.</p>
         
         <p className="text-lg font-semibold text-white mt-6 mb-4">Sports: The Modern Colosseum</p>
+        
+        <div className="my-6 rounded-lg overflow-hidden border border-white/10">
+          <img src={veilStadium} alt="Massive stadium filled with spectators" className="w-full h-48 object-cover" />
+          <p className="text-xs text-slate-500 p-2 bg-slate-900/50 text-center italic">The modern colosseum: emotional energy directed into spectacle</p>
+        </div>
+        
         <p>Rome had bread and circuses. We have fast food and professional sports. The function is identical: keep the masses fed and entertained so they don't notice how they're governed.</p>
         <p>Billions of hours are spent watching grown men chase balls while the world burns. Tribal loyalty is redirected from community and nation to teams owned by oligarchs. The warrior spirit is channeled into spectatorship rather than action.</p>
         <p>The stadiums themselves are temples - massive structures where tens of thousands gather to pour emotional energy into manufactured drama. The energy goes somewhere. The entities feed on something.</p>
@@ -1598,6 +1623,12 @@ const volume1Chapters: Chapter[] = [
         <p>They tell you what they're doing. They always have. This isn't theory - it's observable pattern.</p>
         
         <p className="text-lg font-semibold text-white mt-6 mb-4">The Rule of Disclosure</p>
+        
+        <div className="my-6 rounded-lg overflow-hidden border border-white/10">
+          <img src={veilIlluminatiEye} alt="All-seeing eye symbol" className="w-full h-48 object-cover" />
+          <p className="text-xs text-slate-500 p-2 bg-slate-900/50 text-center italic">The all-seeing eye: hidden in plain sight on currency, logos, architecture</p>
+        </div>
+        
         <p>Researchers have documented what they call "The Revelation of the Method" - a principle suggesting that the controllers must disclose their plans, however cryptically, before executing them. The term was coined by researcher Michael Hoffman, building on concepts from James Shelby Downard.</p>
         <p>Whether this is genuine occult doctrine or merely observed behavior, the pattern holds: major events are often depicted in media before they occur. Symbols of control appear openly in corporate logos, architecture, and entertainment. The mechanism of manipulation is explained in plain sight.</p>
         <p>Why would they reveal themselves?</p>
@@ -1638,6 +1669,12 @@ const volume1Chapters: Chapter[] = [
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART NINE-C: THE THOUSAND DENOMINATIONS</p>
+        
+        <div className="my-6 rounded-lg overflow-hidden border border-white/10">
+          <img src={veilSecretSociety} alt="Mysterious hooded figures in shadow" className="w-full h-48 object-cover" />
+          <p className="text-xs text-slate-500 p-2 bg-slate-900/50 text-center italic">Division as strategy: one faith shattered into forty-five thousand pieces</p>
+        </div>
+        
         <p>If the adversary couldn't destroy the faith outright, he could do something more effective: fracture it into a thousand pieces, each fighting the others while claiming to serve the same God.</p>
         
         <p className="text-lg font-semibold text-white mt-6 mb-4">Catholic Means Universal</p>
@@ -1698,6 +1735,11 @@ const volume1Chapters: Chapter[] = [
     content: (
       <>
         <p>The Vatican is the seat of the "Universal" religion. Its rituals, symbols, and practices deserve examination.</p>
+        
+        <div className="my-6 rounded-lg overflow-hidden border border-white/10">
+          <img src={veilVatican} alt="Vatican St. Peter's Basilica architecture" className="w-full h-48 object-cover" />
+          <p className="text-xs text-slate-500 p-2 bg-slate-900/50 text-center italic">The Vatican: seat of the "Universal" religion for 1,700 years</p>
+        </div>
         
         <p className="text-lg font-semibold text-white mt-6 mb-4">The Papal Vestments</p>
         <p>The Pope wears the mitre - a tall, split-peaked hat. The official explanation traces it to Byzantine court headgear from the 10th century. But observers have noted its visual resemblance to the open mouth of a fish.</p>
