@@ -135,7 +135,7 @@ import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
 import { blockchain } from "./blockchain-engine";
-import { sendEmail, sendApiKeyEmail, sendHallmarkEmail, sendPresaleConfirmationEmail, sendEmailVerificationCode } from "./email";
+import { sendEmail, sendApiKeyEmail, sendHallmarkEmail, sendPresaleConfirmationEmail, sendEmailVerificationCode, sendBusinessApprovalEmail, sendBusinessRejectionEmail } from "./email";
 import { submitMemoToSolana, isHeliusConfigured, getSolanaTreasuryAddress, getSolanaBalance } from "./helius";
 import { startRegistration, finishRegistration, startAuthentication, finishAuthentication, getUserPasskeys, deletePasskey } from "./webauthn";
 import { bridge } from "./bridge-engine";
@@ -15886,6 +15886,14 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         console.log(`[Business Verification] ${updated.businessName} granted Main Street storefront`);
       }
       
+      // Send approval email
+      try {
+        await sendBusinessApprovalEmail(updated.contactEmail, updated.businessName, mainStreet || false);
+        console.log(`[Business Verification] Approval email sent to ${updated.contactEmail}`);
+      } catch (emailError) {
+        console.error("[Business Verification] Failed to send approval email:", emailError);
+      }
+      
       res.json({ success: true, application: updated });
     } catch (error) {
       console.error("Approve business application error:", error);
@@ -15914,6 +15922,14 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       
       if (!updated) {
         return res.status(404).json({ error: "Application not found" });
+      }
+      
+      // Send rejection email
+      try {
+        await sendBusinessRejectionEmail(updated.contactEmail, updated.businessName, notes);
+        console.log(`[Business Verification] Rejection email sent to ${updated.contactEmail}`);
+      } catch (emailError) {
+        console.error("[Business Verification] Failed to send rejection email:", emailError);
       }
       
       res.json({ success: true, application: updated });

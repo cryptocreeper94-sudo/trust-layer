@@ -471,3 +471,95 @@ export async function sendSignupWelcomeEmail(to: string, name: string, referralC
     `,
   });
 }
+
+export async function sendBusinessApprovalEmail(to: string, businessName: string, isMainStreet: boolean) {
+  const mainStreetBadge = isMainStreet ? `
+    <div style="background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0;">
+      <p style="color: #ffffff; margin: 0 0 5px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 2px;">🏪 Legacy Main Street Member 🏪</p>
+      <p style="color: #ffffff; font-size: 18px; font-weight: bold; margin: 0;">Virtual Storefront Granted in Chronicles!</p>
+      <p style="color: rgba(255,255,255,0.8); font-size: 12px; margin: 10px 0 0 0;">You're among the first businesses in the ecosystem. Your storefront will appear in city centers across all eras.</p>
+    </div>
+  ` : '';
+
+  return sendEmail({
+    to,
+    subject: `Business Verified: ${businessName} is Now a Trust Layer Member!`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #ffffff; padding: 30px; border-radius: 12px;">
+        <h1 style="color: #00FF88; margin-bottom: 20px; text-align: center;">✓ Business Verified!</h1>
+        
+        <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 25px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
+          <p style="color: #888; margin: 0 0 10px 0; font-size: 14px;">Welcome to the Trust Layer</p>
+          <p style="color: #00FFFF; font-size: 24px; font-weight: bold; margin: 0;">${businessName}</p>
+        </div>
+        
+        ${mainStreetBadge}
+        
+        <div style="background: #1a1a2e; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #00FF88;">
+          <h3 style="color: #00FF88; margin: 0 0 15px 0;">Your Business Benefits</h3>
+          <ul style="color: #888; margin: 0; padding-left: 20px; line-height: 1.8;">
+            <li><strong style="color: #fff;">API Access</strong> - Generate API keys for Trust Layer integration</li>
+            <li><strong style="color: #fff;">Webhooks</strong> - Receive real-time event notifications</li>
+            <li><strong style="color: #fff;">2.5x Referral Bonus</strong> - Earn more from referrals</li>
+            <li><strong style="color: #fff;">Team Management</strong> - Invite your team members</li>
+            <li><strong style="color: #fff;">Trust Layer Hash</strong> - Verified identity on the blockchain</li>
+          </ul>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+          <a href="https://dwtl.io/business-portal" style="display: inline-block; background: linear-gradient(135deg, #06b6d4, #a855f7); color: #ffffff; font-weight: bold; padding: 15px 40px; border-radius: 8px; text-decoration: none; font-size: 16px;">
+            Access Business Portal
+          </a>
+        </div>
+        
+        <p style="color: #888; font-size: 12px; text-align: center;">
+          Questions? Reply to this email - we're here to help your business succeed!
+        </p>
+        <p style="color: #888; margin-top: 20px; text-align: center;">— The DarkWave Team</p>
+      </div>
+    `,
+  });
+}
+
+export async function sendBusinessRejectionEmail(to: string, businessName: string, reason: string) {
+  return sendEmail({
+    to,
+    subject: `Business Application Update: ${businessName}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #ffffff; padding: 30px; border-radius: 12px;">
+        <h1 style="color: #f59e0b; margin-bottom: 20px; text-align: center;">Application Update</h1>
+        
+        <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 25px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
+          <p style="color: #888; margin: 0 0 10px 0; font-size: 14px;">Business Application Status</p>
+          <p style="color: #f59e0b; font-size: 24px; font-weight: bold; margin: 0;">${businessName}</p>
+        </div>
+        
+        <div style="background: #1a1a2e; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #f59e0b;">
+          <h3 style="color: #f59e0b; margin: 0 0 10px 0;">Review Feedback</h3>
+          <p style="color: #ffffff; margin: 0; line-height: 1.6;">${reason}</p>
+        </div>
+        
+        <div style="background: #1a1a2e; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+          <h3 style="color: #00FFFF; margin: 0 0 10px 0;">What You Can Do</h3>
+          <ul style="color: #888; margin: 0; padding-left: 20px; line-height: 1.8;">
+            <li>Review the feedback and address any concerns</li>
+            <li>Gather additional documentation if needed</li>
+            <li>Submit a new application when ready</li>
+            <li>Contact us if you have questions</li>
+          </ul>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+          <a href="https://dwtl.io/business-application" style="display: inline-block; background: linear-gradient(135deg, #06b6d4, #a855f7); color: #ffffff; font-weight: bold; padding: 15px 40px; border-radius: 8px; text-decoration: none; font-size: 16px;">
+            Submit New Application
+          </a>
+        </div>
+        
+        <p style="color: #888; font-size: 12px; text-align: center;">
+          Need help? Reply to this email and we'll assist you through the process.
+        </p>
+        <p style="color: #888; margin-top: 20px; text-align: center;">— The DarkWave Team</p>
+      </div>
+    `,
+  });
+}
