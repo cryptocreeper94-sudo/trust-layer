@@ -46,7 +46,8 @@ import {
   Crosshair,
   Clock,
   ExternalLink,
-  Info
+  Info,
+  DollarSign
 } from "lucide-react";
 import { useGuardianWS } from "@/hooks/use-guardian-ws";
 
@@ -76,6 +77,12 @@ const SORT_OPTIONS = [
   { id: "newest", label: "Newest", icon: Sparkles },
   { id: "score", label: "Guardian Score", icon: Shield },
   { id: "ai", label: "AI Confidence", icon: Brain },
+  { id: "txns", label: "Transactions", icon: Activity },
+  { id: "liquidity", label: "Liquidity", icon: Droplets },
+  { id: "mcap", label: "Market Cap", icon: DollarSign },
+  { id: "5m", label: "5M Change", icon: Clock },
+  { id: "1h", label: "1H Change", icon: Clock },
+  { id: "6h", label: "6H Change", icon: Clock },
 ];
 
 // Category filters for different token types
@@ -83,7 +90,7 @@ const CATEGORY_FILTERS = [
   { id: "all", label: "All", icon: "🌐", color: "bg-white/10" },
   { id: "meme", label: "Meme", icon: "🐸", color: "bg-green-500/20" },
   { id: "defi", label: "DeFi", icon: "🏦", color: "bg-blue-500/20" },
-  { id: "blue-chip", label: "Blue Chip", icon: "💎", color: "bg-purple-500/20" },
+  { id: "bluechip", label: "Blue Chip", icon: "💎", color: "bg-purple-500/20" },
   { id: "gaming", label: "Gaming", icon: "🎮", color: "bg-pink-500/20" },
   { id: "ai", label: "AI", icon: "🤖", color: "bg-cyan-500/20" },
   { id: "nft", label: "NFT", icon: "🖼️", color: "bg-orange-500/20" },
@@ -150,30 +157,120 @@ interface Token {
   twitter?: string;
   telegram?: string;
   websites?: string[];
+  category: string;
 }
 
 function generateMockTokens(chain: string): Token[] {
-  const tokenData = [
-    { symbol: "DOG", name: "Nietzschean Dog", boosts: 2000 },
-    { symbol: "toothpaste", name: "toothpaste", boosts: 2500 },
-    { symbol: "COPPERINU", name: "copper inu", boosts: 800 },
-    { symbol: "WAR", name: "WAR", boosts: 500 },
-    { symbol: "olive oil", name: "Olive oil", boosts: 100 },
-    { symbol: "BIRB", name: "Moonbirds", boosts: 0 },
-    { symbol: "HODLAI", name: "HODL AI", boosts: 800 },
-    { symbol: "USER", name: "Just a user", boosts: 100 },
-    { symbol: "CPENG", name: "Club Penguin", boosts: 300 },
-    { symbol: "CAT", name: "Nietzschean Cat", boosts: 500 },
-    { symbol: "PENGUIN", name: "Nietzschean Penguin", boosts: 1200 },
-    { symbol: "WOJAK", name: "Wojak", boosts: 400 },
-    { symbol: "PEPE2", name: "Pepe 2.0", boosts: 900 },
-    { symbol: "MEME", name: "Memecoin", boosts: 600 },
-    { symbol: "SHIB2", name: "Shiba 2.0", boosts: 350 },
-    { symbol: "DOGE2", name: "Doge 2.0", boosts: 750 },
-    { symbol: "BONK2", name: "Bonk 2.0", boosts: 200 },
-    { symbol: "FLOKI2", name: "Floki 2.0", boosts: 150 },
-    { symbol: "APE", name: "Ape Token", boosts: 0 },
-    { symbol: "MOON", name: "Moonshot", boosts: 1100 },
+  // Extended token data with categories for 100 tokens
+  const tokenData: Array<{ symbol: string; name: string; boosts: number; category: string }> = [
+    // Meme coins (30)
+    { symbol: "DOG", name: "Nietzschean Dog", boosts: 2000, category: "meme" },
+    { symbol: "CAT", name: "Nietzschean Cat", boosts: 1800, category: "meme" },
+    { symbol: "PENGUIN", name: "Nietzschean Penguin", boosts: 1200, category: "meme" },
+    { symbol: "WOJAK", name: "Wojak", boosts: 400, category: "meme" },
+    { symbol: "PEPE2", name: "Pepe 2.0", boosts: 900, category: "meme" },
+    { symbol: "MEME", name: "Memecoin", boosts: 600, category: "meme" },
+    { symbol: "SHIB2", name: "Shiba 2.0", boosts: 350, category: "meme" },
+    { symbol: "DOGE2", name: "Doge 2.0", boosts: 750, category: "meme" },
+    { symbol: "BONK2", name: "Bonk 2.0", boosts: 200, category: "meme" },
+    { symbol: "FLOKI2", name: "Floki 2.0", boosts: 150, category: "meme" },
+    { symbol: "WIF", name: "Dogwifhat", boosts: 2500, category: "meme" },
+    { symbol: "BRETT", name: "Brett", boosts: 1600, category: "meme" },
+    { symbol: "POPCAT", name: "Popcat", boosts: 1400, category: "meme" },
+    { symbol: "MOG", name: "Mog Coin", boosts: 800, category: "meme" },
+    { symbol: "GIGACHAD", name: "Gigachad", boosts: 500, category: "meme" },
+    { symbol: "PNUT", name: "Peanut", boosts: 1100, category: "meme" },
+    { symbol: "NEIRO", name: "Neiro", boosts: 950, category: "meme" },
+    { symbol: "MOTHER", name: "Mother", boosts: 700, category: "meme" },
+    { symbol: "GIGA", name: "Giga Token", boosts: 450, category: "meme" },
+    { symbol: "FWOG", name: "Frog", boosts: 300, category: "meme" },
+    { symbol: "HOPPY", name: "Hoppy", boosts: 250, category: "meme" },
+    { symbol: "DUKO", name: "Duko", boosts: 180, category: "meme" },
+    { symbol: "SLERF", name: "Slerf", boosts: 120, category: "meme" },
+    { symbol: "MYRO", name: "Myro", boosts: 90, category: "meme" },
+    { symbol: "BOME", name: "Book of Meme", boosts: 1900, category: "meme" },
+    { symbol: "PONKE", name: "Ponke", boosts: 650, category: "meme" },
+    { symbol: "MEW", name: "Cat in a Dog World", boosts: 550, category: "meme" },
+    { symbol: "TOSHI", name: "Toshi", boosts: 480, category: "meme" },
+    { symbol: "DEGEN", name: "Degen", boosts: 1050, category: "meme" },
+    { symbol: "MOCHI", name: "Mochi", boosts: 280, category: "meme" },
+    // DeFi tokens (20)
+    { symbol: "JUP", name: "Jupiter", boosts: 3000, category: "defi" },
+    { symbol: "RAY", name: "Raydium", boosts: 2200, category: "defi" },
+    { symbol: "ORCA", name: "Orca", boosts: 1800, category: "defi" },
+    { symbol: "AAVE", name: "Aave", boosts: 2800, category: "defi" },
+    { symbol: "UNI", name: "Uniswap", boosts: 2600, category: "defi" },
+    { symbol: "SUSHI", name: "SushiSwap", boosts: 1200, category: "defi" },
+    { symbol: "CRV", name: "Curve DAO", boosts: 1600, category: "defi" },
+    { symbol: "1INCH", name: "1inch", boosts: 1400, category: "defi" },
+    { symbol: "COMP", name: "Compound", boosts: 1100, category: "defi" },
+    { symbol: "MKR", name: "Maker", boosts: 2400, category: "defi" },
+    { symbol: "LDO", name: "Lido DAO", boosts: 2000, category: "defi" },
+    { symbol: "RPL", name: "Rocket Pool", boosts: 900, category: "defi" },
+    { symbol: "SNX", name: "Synthetix", boosts: 750, category: "defi" },
+    { symbol: "BAL", name: "Balancer", boosts: 600, category: "defi" },
+    { symbol: "YFI", name: "Yearn", boosts: 1500, category: "defi" },
+    { symbol: "SPELL", name: "Spell Token", boosts: 400, category: "defi" },
+    { symbol: "DRIFT", name: "Drift", boosts: 850, category: "defi" },
+    { symbol: "KMNO", name: "Kamino", boosts: 700, category: "defi" },
+    { symbol: "MNGO", name: "Mango", boosts: 350, category: "defi" },
+    { symbol: "TULIP", name: "Tulip", boosts: 200, category: "defi" },
+    // Blue Chips (10)
+    { symbol: "SOL", name: "Solana", boosts: 5000, category: "bluechip" },
+    { symbol: "ETH", name: "Ethereum", boosts: 5000, category: "bluechip" },
+    { symbol: "BNB", name: "BNB", boosts: 4500, category: "bluechip" },
+    { symbol: "ARB", name: "Arbitrum", boosts: 3500, category: "bluechip" },
+    { symbol: "OP", name: "Optimism", boosts: 3200, category: "bluechip" },
+    { symbol: "AVAX", name: "Avalanche", boosts: 3000, category: "bluechip" },
+    { symbol: "MATIC", name: "Polygon", boosts: 2800, category: "bluechip" },
+    { symbol: "LINK", name: "Chainlink", boosts: 3800, category: "bluechip" },
+    { symbol: "DOT", name: "Polkadot", boosts: 2500, category: "bluechip" },
+    { symbol: "ATOM", name: "Cosmos", boosts: 2200, category: "bluechip" },
+    // Gaming (15)
+    { symbol: "IMX", name: "Immutable X", boosts: 2000, category: "gaming" },
+    { symbol: "GALA", name: "Gala Games", boosts: 1500, category: "gaming" },
+    { symbol: "AXS", name: "Axie Infinity", boosts: 1800, category: "gaming" },
+    { symbol: "SAND", name: "Sandbox", boosts: 1600, category: "gaming" },
+    { symbol: "MANA", name: "Decentraland", boosts: 1400, category: "gaming" },
+    { symbol: "ENJ", name: "Enjin Coin", boosts: 900, category: "gaming" },
+    { symbol: "ILV", name: "Illuvium", boosts: 1200, category: "gaming" },
+    { symbol: "MAGIC", name: "Magic", boosts: 800, category: "gaming" },
+    { symbol: "APE", name: "ApeCoin", boosts: 2200, category: "gaming" },
+    { symbol: "PRIME", name: "Echelon Prime", boosts: 1100, category: "gaming" },
+    { symbol: "BEAM", name: "Beam", boosts: 700, category: "gaming" },
+    { symbol: "PIXEL", name: "Pixels", boosts: 600, category: "gaming" },
+    { symbol: "PORTAL", name: "Portal", boosts: 500, category: "gaming" },
+    { symbol: "SUPER", name: "SuperVerse", boosts: 400, category: "gaming" },
+    { symbol: "GODS", name: "Gods Unchained", boosts: 300, category: "gaming" },
+    // AI tokens (15)
+    { symbol: "RENDER", name: "Render", boosts: 3500, category: "ai" },
+    { symbol: "FET", name: "Fetch.ai", boosts: 3000, category: "ai" },
+    { symbol: "AGIX", name: "SingularityNET", boosts: 2500, category: "ai" },
+    { symbol: "OCEAN", name: "Ocean Protocol", boosts: 1800, category: "ai" },
+    { symbol: "TAO", name: "Bittensor", boosts: 4000, category: "ai" },
+    { symbol: "RNDR", name: "Render Token", boosts: 2800, category: "ai" },
+    { symbol: "HODLAI", name: "HODL AI", boosts: 800, category: "ai" },
+    { symbol: "AKT", name: "Akash Network", boosts: 1200, category: "ai" },
+    { symbol: "AIOZ", name: "AIOZ Network", boosts: 900, category: "ai" },
+    { symbol: "NMR", name: "Numeraire", boosts: 700, category: "ai" },
+    { symbol: "ARKM", name: "Arkham", boosts: 1500, category: "ai" },
+    { symbol: "OLAS", name: "Olas", boosts: 600, category: "ai" },
+    { symbol: "VANA", name: "Vana", boosts: 500, category: "ai" },
+    { symbol: "IO", name: "IO.net", boosts: 1100, category: "ai" },
+    { symbol: "GRASS", name: "Grass", boosts: 850, category: "ai" },
+    // NFT tokens (5)
+    { symbol: "BLUR", name: "Blur", boosts: 2000, category: "nft" },
+    { symbol: "LOOKS", name: "LooksRare", boosts: 800, category: "nft" },
+    { symbol: "X2Y2", name: "X2Y2", boosts: 400, category: "nft" },
+    { symbol: "RARE", name: "SuperRare", boosts: 600, category: "nft" },
+    { symbol: "BIRB", name: "Moonbirds", boosts: 500, category: "nft" },
+    // Stables (3)
+    { symbol: "USDC", name: "USD Coin", boosts: 0, category: "stable" },
+    { symbol: "USDT", name: "Tether", boosts: 0, category: "stable" },
+    { symbol: "DAI", name: "Dai", boosts: 0, category: "stable" },
+    // RWA (2)
+    { symbol: "ONDO", name: "Ondo Finance", boosts: 2500, category: "rwa" },
+    { symbol: "MKR", name: "Maker", boosts: 2000, category: "rwa" },
   ];
 
   const chains = chain === "all" ? ["solana", "ethereum", "base", "bsc"] : [chain];
@@ -262,6 +359,7 @@ function generateMockTokens(chain: string): Token[] {
         risks: safetyScore < 50 ? ['High whale concentration', 'Low liquidity'] : [],
         warnings: safetyScore < 70 ? ['Mint authority enabled'] : [],
       },
+      category: td.category,
       twitter: Math.random() > 0.5 ? 'https://twitter.com/token' : undefined,
       telegram: Math.random() > 0.5 ? 'https://t.me/token' : undefined,
     };
@@ -1067,6 +1165,17 @@ export default function GuardianScanner() {
   const filteredTokens = useMemo(() => {
     let result = [...tokens];
     
+    // Filter by category
+    if (selectedCategory !== 'all') {
+      result = result.filter(t => t.category === selectedCategory);
+    }
+    
+    // Filter by new pairs (last 24 hours)
+    if (activeFilter === 'new') {
+      result = result.filter(t => t.ageMinutes <= 1440); // 24 hours
+    }
+    
+    // Search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase().trim();
       result = result.filter(t => 
@@ -1076,6 +1185,7 @@ export default function GuardianScanner() {
       );
     }
     
+    // Sorting
     switch (rankBy) {
       case "volume": result.sort((a, b) => b.volume24h - a.volume24h); break;
       case "gainers": result.sort((a, b) => b.priceChange24h - a.priceChange24h); break;
@@ -1083,11 +1193,17 @@ export default function GuardianScanner() {
       case "newest": result.sort((a, b) => a.ageMinutes - b.ageMinutes); break;
       case "score": result.sort((a, b) => b.guardianScore - a.guardianScore); break;
       case "ai": result.sort((a, b) => b.aiScore - a.aiScore); break;
+      case "txns": result.sort((a, b) => b.txns - a.txns); break;
+      case "liquidity": result.sort((a, b) => b.liquidity - a.liquidity); break;
+      case "mcap": result.sort((a, b) => b.marketCap - a.marketCap); break;
+      case "5m": result.sort((a, b) => b.priceChange5m - a.priceChange5m); break;
+      case "1h": result.sort((a, b) => b.priceChange1h - a.priceChange1h); break;
+      case "6h": result.sort((a, b) => b.priceChange6h - a.priceChange6h); break;
       default: result.sort((a, b) => (b.volume24h * Math.abs(b.priceChange6h)) - (a.volume24h * Math.abs(a.priceChange6h)));
     }
     
     return result.map((t, i) => ({ ...t, rank: i + 1 }));
-  }, [tokens, searchQuery, rankBy]);
+  }, [tokens, searchQuery, rankBy, selectedCategory, activeFilter]);
 
   const watchlistedTokens = useMemo(() => tokens.filter(t => t.isWatchlisted), [tokens]);
 

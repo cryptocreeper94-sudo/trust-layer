@@ -63,7 +63,8 @@ import {
   ArrowDown,
   Circle,
   Square,
-  RefreshCw
+  RefreshCw,
+  Layers
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
@@ -441,6 +442,105 @@ interface AutoSnipeConfig {
   trailingPercent: number;
 }
 
+// Preset configurations for different risk levels
+const TRADING_PRESETS = {
+  safe: {
+    name: 'Safe',
+    color: 'emerald',
+    icon: '🛡️',
+    description: 'Conservative settings, tight stop-losses',
+    stopLossPercent: 5,
+    targetPercent: 15,
+    slippage: 0.5,
+    trailingStop: true,
+    trailingPercent: 3,
+    mevProtection: true,
+    autoTakeProfit: true
+  },
+  medium: {
+    name: 'Medium',
+    color: 'yellow',
+    icon: '⚖️',
+    description: 'Balanced risk/reward approach',
+    stopLossPercent: 10,
+    targetPercent: 30,
+    slippage: 1,
+    trailingStop: true,
+    trailingPercent: 5,
+    mevProtection: true,
+    autoTakeProfit: true
+  },
+  risky: {
+    name: 'Risky',
+    color: 'red',
+    icon: '🔥',
+    description: 'Aggressive settings, higher potential',
+    stopLossPercent: 20,
+    targetPercent: 100,
+    slippage: 2.5,
+    trailingStop: false,
+    trailingPercent: 10,
+    mevProtection: false,
+    autoTakeProfit: false
+  }
+};
+
+// DEX options per chain
+const DEX_OPTIONS: Record<string, Array<{ id: string; name: string; icon: string }>> = {
+  solana: [
+    { id: 'raydium', name: 'Raydium', icon: '🌟' },
+    { id: 'jupiter', name: 'Jupiter', icon: '🪐' },
+    { id: 'meteora', name: 'Meteora', icon: '☄️' },
+    { id: 'orca', name: 'Orca', icon: '🐋' }
+  ],
+  ethereum: [
+    { id: 'uniswap_v3', name: 'Uniswap V3', icon: '🦄' },
+    { id: 'uniswap_v2', name: 'Uniswap V2', icon: '🦄' },
+    { id: 'sushiswap', name: 'SushiSwap', icon: '🍣' }
+  ],
+  bsc: [
+    { id: 'pancakeswap', name: 'PancakeSwap', icon: '🥞' },
+    { id: 'biswap', name: 'BiSwap', icon: '🔄' }
+  ],
+  base: [
+    { id: 'aerodrome', name: 'Aerodrome', icon: '✈️' },
+    { id: 'baseswap', name: 'BaseSwap', icon: '🔵' }
+  ],
+  arbitrum: [
+    { id: 'camelot', name: 'Camelot', icon: '⚔️' },
+    { id: 'gmx', name: 'GMX', icon: '💎' }
+  ]
+};
+
+// Simulated prediction statistics
+const usePredictionStats = () => {
+  return {
+    totalPredictions: 1247,
+    correctPredictions: 987,
+    incorrectPredictions: 260,
+    accuracy: 79.1,
+    winRate: 76.3,
+    avgProfit: 23.4,
+    avgLoss: -8.2,
+    profitFactor: 2.85,
+    lastUpdated: new Date().toISOString(),
+    recentPredictions: [
+      { symbol: 'BONK', prediction: 'buy', outcome: 'correct', profit: 34.2, timestamp: Date.now() - 3600000 },
+      { symbol: 'WIF', prediction: 'buy', outcome: 'correct', profit: 18.7, timestamp: Date.now() - 7200000 },
+      { symbol: 'PEPE', prediction: 'sell', outcome: 'correct', profit: 12.1, timestamp: Date.now() - 10800000 },
+      { symbol: 'SHIB', prediction: 'buy', outcome: 'incorrect', profit: -5.3, timestamp: Date.now() - 14400000 },
+      { symbol: 'FLOKI', prediction: 'buy', outcome: 'correct', profit: 28.9, timestamp: Date.now() - 18000000 }
+    ],
+    categoryAccuracy: {
+      meme: 82.3,
+      defi: 74.1,
+      gaming: 71.8,
+      ai: 85.2,
+      bluechip: 68.4
+    }
+  };
+};
+
 function AutoSnipePanel({
   token,
   config,
@@ -455,9 +555,99 @@ function AutoSnipePanel({
   onStop: () => void;
 }) {
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showDexSettings, setShowDexSettings] = useState(false);
+  const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
+  const [selectedDex, setSelectedDex] = useState('raydium');
+  const [isSubscribed, setIsSubscribed] = useState(false); // TODO: Connect to actual subscription status
+  const [showSubscribeModal, setShowSubscribeModal] = useState(false);
+  
+  const predictionStats = usePredictionStats();
+  const chainDexes = DEX_OPTIONS[token.chain] || DEX_OPTIONS.solana;
+  
+  // Apply preset configuration
+  const applyPreset = (presetKey: string) => {
+    const preset = TRADING_PRESETS[presetKey as keyof typeof TRADING_PRESETS];
+    if (!preset) return;
+    
+    setSelectedPreset(presetKey);
+    setConfig({
+      ...config,
+      entryPrice: token.priceUsd,
+      targetPrice: token.priceUsd * (1 + preset.targetPercent / 100),
+      stopLoss: token.priceUsd * (1 - preset.stopLossPercent / 100),
+      slippage: preset.slippage,
+      trailingStop: preset.trailingStop,
+      trailingPercent: preset.trailingPercent,
+      mevProtection: preset.mevProtection,
+      autoTakeProfit: preset.autoTakeProfit
+    });
+  };
+  
+  // Check subscription before enabling
+  const handleToggleAutoSnipe = (enabled: boolean) => {
+    if (enabled && !isSubscribed) {
+      setShowSubscribeModal(true);
+      return;
+    }
+    setConfig({ ...config, enabled });
+  };
   
   return (
     <div className="bg-gradient-to-br from-slate-800/80 via-emerald-900/10 to-slate-800/80 rounded-2xl border border-emerald-500/30 overflow-hidden">
+      {/* Subscription Modal */}
+      {showSubscribeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <div className="bg-slate-900 rounded-2xl border border-purple-500/30 p-6 max-w-md w-full">
+            <div className="text-center mb-4">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center">
+                <Lock className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">Unlock Strike Agent</h3>
+              <p className="text-sm text-white/60">
+                Auto-sniping is a premium feature. Subscribe to Guardian Pro to unlock AI-powered automated trading.
+              </p>
+            </div>
+            <div className="space-y-2 mb-4">
+              <div className="flex items-center gap-2 text-sm text-white/70">
+                <CheckCircle className="w-4 h-4 text-emerald-400" />
+                <span>Unlimited auto-snipe trades</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-white/70">
+                <CheckCircle className="w-4 h-4 text-emerald-400" />
+                <span>AI prediction alerts</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-white/70">
+                <CheckCircle className="w-4 h-4 text-emerald-400" />
+                <span>Multi-DEX support</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-white/70">
+                <CheckCircle className="w-4 h-4 text-emerald-400" />
+                <span>MEV protection</span>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setShowSubscribeModal(false)}
+                className="border-white/20"
+              >
+                Maybe Later
+              </Button>
+              <Button
+                onClick={() => {
+                  // TODO: Navigate to subscription page
+                  setIsSubscribed(true); // For demo purposes
+                  setShowSubscribeModal(false);
+                }}
+                className="bg-gradient-to-r from-purple-500 to-cyan-500"
+              >
+                Subscribe Now
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* Header */}
       <div className="p-4 border-b border-white/10 flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -465,20 +655,248 @@ function AutoSnipePanel({
             {config.enabled ? <Play className="w-4 h-4 text-white" /> : <Pause className="w-4 h-4 text-white/50" />}
           </div>
           <div>
-            <div className="font-bold text-white text-sm">Auto-Snipe Mode</div>
+            <div className="font-bold text-white text-sm flex items-center gap-2">
+              Auto-Snipe Mode
+              {!isSubscribed && (
+                <Badge className="bg-purple-500/20 text-purple-300 text-[9px] px-1.5">PRO</Badge>
+              )}
+            </div>
             <div className="text-[10px] text-emerald-300">Set & Forget Trading</div>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <Switch
             checked={config.enabled}
-            onCheckedChange={(enabled) => setConfig({ ...config, enabled })}
+            onCheckedChange={handleToggleAutoSnipe}
             data-testid="auto-snipe-toggle"
           />
           <span className={`text-xs font-medium ${config.enabled ? 'text-emerald-400' : 'text-white/50'}`}>
             {config.enabled ? 'ACTIVE' : 'OFF'}
           </span>
         </div>
+      </div>
+      
+      {/* ═══════════════════════════════════════════════════════════════════
+          PREDICTION STATISTICS PANEL
+      ═══════════════════════════════════════════════════════════════════ */}
+      <div className="p-4 border-b border-white/10 bg-gradient-to-r from-purple-900/20 to-cyan-900/20">
+        <div className="flex items-center gap-2 mb-3">
+          <Brain className="w-4 h-4 text-purple-400" />
+          <span className="text-sm font-medium text-white">AI Prediction Performance</span>
+          <Badge className="ml-auto bg-emerald-500/20 text-emerald-300 text-[9px]">
+            LIVE DATA
+          </Badge>
+        </div>
+        
+        {/* Main Stats Grid */}
+        <div className="grid grid-cols-4 gap-2 mb-3">
+          <div className="bg-slate-800/50 rounded-lg p-2 text-center">
+            <div className="text-lg font-bold text-white">{predictionStats.totalPredictions.toLocaleString()}</div>
+            <div className="text-[9px] text-white/40 uppercase">Total Predictions</div>
+          </div>
+          <div className="bg-slate-800/50 rounded-lg p-2 text-center">
+            <div className="text-lg font-bold text-emerald-400">{predictionStats.correctPredictions.toLocaleString()}</div>
+            <div className="text-[9px] text-white/40 uppercase">Correct</div>
+          </div>
+          <div className="bg-slate-800/50 rounded-lg p-2 text-center">
+            <div className="text-lg font-bold text-red-400">{predictionStats.incorrectPredictions}</div>
+            <div className="text-[9px] text-white/40 uppercase">Incorrect</div>
+          </div>
+          <div className="bg-slate-800/50 rounded-lg p-2 text-center">
+            <div className="text-lg font-bold text-cyan-400">{predictionStats.accuracy}%</div>
+            <div className="text-[9px] text-white/40 uppercase">Accuracy</div>
+          </div>
+        </div>
+        
+        {/* Secondary Stats */}
+        <div className="grid grid-cols-3 gap-2 mb-3">
+          <div className="bg-slate-800/30 rounded-lg p-2 flex items-center justify-between">
+            <span className="text-[10px] text-white/50">Win Rate</span>
+            <span className="text-xs font-bold text-emerald-400">{predictionStats.winRate}%</span>
+          </div>
+          <div className="bg-slate-800/30 rounded-lg p-2 flex items-center justify-between">
+            <span className="text-[10px] text-white/50">Avg Profit</span>
+            <span className="text-xs font-bold text-emerald-400">+{predictionStats.avgProfit}%</span>
+          </div>
+          <div className="bg-slate-800/30 rounded-lg p-2 flex items-center justify-between">
+            <span className="text-[10px] text-white/50">Profit Factor</span>
+            <span className="text-xs font-bold text-cyan-400">{predictionStats.profitFactor}x</span>
+          </div>
+        </div>
+        
+        {/* Recent Predictions */}
+        <div className="bg-slate-800/30 rounded-lg p-2">
+          <div className="text-[9px] text-white/40 uppercase mb-2">Recent Predictions</div>
+          <div className="space-y-1">
+            {predictionStats.recentPredictions.slice(0, 3).map((pred, i) => (
+              <div key={i} className="flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <span className={`w-1.5 h-1.5 rounded-full ${pred.outcome === 'correct' ? 'bg-emerald-400' : 'bg-red-400'}`} />
+                  <span className="text-white/70">{pred.symbol}</span>
+                  <Badge className={`text-[8px] px-1 ${pred.prediction === 'buy' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-red-500/20 text-red-300'}`}>
+                    {pred.prediction.toUpperCase()}
+                  </Badge>
+                </div>
+                <span className={`font-medium ${pred.profit >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                  {pred.profit >= 0 ? '+' : ''}{pred.profit}%
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Category Accuracy */}
+        <div className="mt-3 flex items-center gap-2 overflow-x-auto scrollbar-hide">
+          {Object.entries(predictionStats.categoryAccuracy).map(([cat, acc]) => (
+            <div key={cat} className="flex-shrink-0 bg-slate-800/50 rounded-lg px-2 py-1 flex items-center gap-1.5">
+              <span className="text-[9px] text-white/50 capitalize">{cat}</span>
+              <span className={`text-[10px] font-bold ${acc >= 80 ? 'text-emerald-400' : acc >= 70 ? 'text-yellow-400' : 'text-red-400'}`}>
+                {acc}%
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      {/* ═══════════════════════════════════════════════════════════════════
+          PRESET TRADING MODES
+      ═══════════════════════════════════════════════════════════════════ */}
+      <div className="p-4 border-b border-white/10">
+        <div className="flex items-center gap-2 mb-3">
+          <Zap className="w-4 h-4 text-yellow-400" />
+          <span className="text-sm font-medium text-white">Quick Presets</span>
+          <span className="text-[10px] text-white/40">(One-click setup)</span>
+        </div>
+        
+        <div className="grid grid-cols-3 gap-2">
+          {Object.entries(TRADING_PRESETS).map(([key, preset]) => (
+            <button
+              key={key}
+              onClick={() => applyPreset(key)}
+              className={`p-3 rounded-xl border transition-all text-center ${
+                selectedPreset === key
+                  ? key === 'safe' ? 'bg-emerald-500/20 border-emerald-500/50' :
+                    key === 'medium' ? 'bg-yellow-500/20 border-yellow-500/50' :
+                    'bg-red-500/20 border-red-500/50'
+                  : 'bg-slate-800/50 border-white/10 hover:border-white/20'
+              }`}
+              data-testid={`preset-${key}`}
+            >
+              <div className="text-2xl mb-1">{preset.icon}</div>
+              <div className={`text-xs font-bold ${
+                key === 'safe' ? 'text-emerald-400' :
+                key === 'medium' ? 'text-yellow-400' : 'text-red-400'
+              }`}>
+                {preset.name}
+              </div>
+              <div className="text-[9px] text-white/40 mt-0.5">{preset.description}</div>
+              <div className="text-[9px] text-white/30 mt-1">
+                SL: -{preset.stopLossPercent}% / TP: +{preset.targetPercent}%
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      {/* ═══════════════════════════════════════════════════════════════════
+          DEX & LAUNCHPAD SETTINGS
+      ═══════════════════════════════════════════════════════════════════ */}
+      <div className="p-4 border-b border-white/10">
+        <button
+          onClick={() => setShowDexSettings(!showDexSettings)}
+          className="w-full flex items-center justify-between"
+        >
+          <div className="flex items-center gap-2">
+            <Layers className="w-4 h-4 text-cyan-400" />
+            <span className="text-sm font-medium text-white">DEX & Router Settings</span>
+            <Badge className="bg-slate-700 text-white/60 text-[9px]">
+              {chainDexes.find(d => d.id === selectedDex)?.name || 'Select'}
+            </Badge>
+          </div>
+          <ChevronDown className={`w-4 h-4 text-white/50 transition-transform ${showDexSettings ? 'rotate-180' : ''}`} />
+        </button>
+        
+        {showDexSettings && (
+          <div className="mt-3 space-y-3">
+            {/* DEX Selection */}
+            <div className="grid grid-cols-2 gap-2">
+              {chainDexes.map(dex => (
+                <button
+                  key={dex.id}
+                  onClick={() => setSelectedDex(dex.id)}
+                  className={`p-2.5 rounded-lg border flex items-center gap-2 transition-all ${
+                    selectedDex === dex.id
+                      ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400'
+                      : 'bg-slate-800/50 border-white/10 text-white/70 hover:border-white/20'
+                  }`}
+                  data-testid={`dex-${dex.id}`}
+                >
+                  <span className="text-lg">{dex.icon}</span>
+                  <span className="text-xs font-medium">{dex.name}</span>
+                  {selectedDex === dex.id && (
+                    <CheckCircle className="w-3.5 h-3.5 ml-auto" />
+                  )}
+                </button>
+              ))}
+            </div>
+            
+            {/* Router Info */}
+            <div className="bg-slate-800/30 rounded-lg p-3 space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-white/50">Router</span>
+                <span className="text-white font-mono text-[10px]">
+                  {selectedDex === 'raydium' ? '675kPX...' : selectedDex === 'jupiter' ? 'JUP6Ln...' : '...'}
+                </span>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-white/50">Priority Fee</span>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    defaultValue={0.0001}
+                    className="w-20 bg-slate-700 rounded px-2 py-1 text-xs text-right"
+                    step="0.0001"
+                  />
+                  <span className="text-white/40">SOL</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-white/50">Compute Units</span>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="number"
+                    defaultValue={200000}
+                    className="w-24 bg-slate-700 rounded px-2 py-1 text-xs text-right"
+                    step="10000"
+                  />
+                </div>
+              </div>
+            </div>
+            
+            {/* Advanced Security */}
+            <div className="space-y-2">
+              <div className="text-[10px] text-white/40 uppercase">Security Settings</div>
+              <div className="grid grid-cols-2 gap-2">
+                <label className="flex items-center gap-2 p-2 bg-slate-800/30 rounded-lg cursor-pointer">
+                  <input type="checkbox" defaultChecked className="w-3.5 h-3.5 rounded bg-slate-700 border-0" />
+                  <span className="text-xs text-white/70">Honeypot Check</span>
+                </label>
+                <label className="flex items-center gap-2 p-2 bg-slate-800/30 rounded-lg cursor-pointer">
+                  <input type="checkbox" defaultChecked className="w-3.5 h-3.5 rounded bg-slate-700 border-0" />
+                  <span className="text-xs text-white/70">Liquidity Lock</span>
+                </label>
+                <label className="flex items-center gap-2 p-2 bg-slate-800/30 rounded-lg cursor-pointer">
+                  <input type="checkbox" defaultChecked className="w-3.5 h-3.5 rounded bg-slate-700 border-0" />
+                  <span className="text-xs text-white/70">Anti-Rug Pull</span>
+                </label>
+                <label className="flex items-center gap-2 p-2 bg-slate-800/30 rounded-lg cursor-pointer">
+                  <input type="checkbox" className="w-3.5 h-3.5 rounded bg-slate-700 border-0" />
+                  <span className="text-xs text-white/70">Mint Disabled</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       
       {/* Quick Stats */}
