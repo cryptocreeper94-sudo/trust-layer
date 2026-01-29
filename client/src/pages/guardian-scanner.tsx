@@ -630,7 +630,7 @@ function TokenRow({ token, isExpanded, onToggleExpand, onToggleWatchlist }: {
         data-testid={`token-row-${token.id}`}
       >
         {/* Expand Arrow */}
-        <td className="pl-2 pr-1 py-2 w-6">
+        <td className="pl-2 pr-1 py-3 md:py-2 w-6">
           <ChevronRight className={`w-3.5 h-3.5 text-white/30 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
         </td>
         
@@ -1077,13 +1077,38 @@ export default function GuardianScanner() {
           </div>
         </div>
         
-        {/* Filters Bar */}
-        <div className="bg-[#0d0d0d] border-b border-white/5 px-4 py-2 flex items-center gap-3 flex-wrap">
+        {/* Mobile Header */}
+        <div className="lg:hidden bg-[#0d0d0d] border-b border-white/5 px-3 py-2.5 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center">
+              <Shield className="w-4 h-4 text-white" />
+            </div>
+            <span className="font-bold text-white text-sm">GUARDIAN</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1 px-2 py-1 bg-emerald-500/10 rounded">
+              <Crosshair className="w-3 h-3 text-emerald-400" />
+              <span className="text-[10px] text-emerald-400 font-medium">{aiStats.snipeCount}</span>
+            </div>
+            <div className="flex items-center gap-1 px-2 py-1 bg-yellow-500/10 rounded">
+              <Eye className="w-3 h-3 text-yellow-400" />
+              <span className="text-[10px] text-yellow-400 font-medium">{aiStats.watchCount}</span>
+            </div>
+            <Badge className={`${connected ? 'bg-emerald-500/20 text-emerald-400' : 'bg-white/10 text-white/40'} text-[10px] px-2 py-0.5`}>
+              <span className={`w-1.5 h-1.5 rounded-full mr-1 inline-block ${connected ? 'bg-emerald-400' : 'bg-white/30'}`} />
+              {connected ? 'LIVE' : ''}
+            </Badge>
+          </div>
+        </div>
+        
+        {/* Filters Bar - Horizontally scrollable on mobile */}
+        <div className="bg-[#0d0d0d] border-b border-white/5 px-3 md:px-4 py-2 overflow-x-auto scrollbar-hide">
+          <div className="flex items-center gap-2 md:gap-3 min-w-max">
           {/* Chain Selector */}
           <div className="relative">
             <button
               onClick={() => setShowChainDropdown(!showChainDropdown)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-white/5 hover:bg-white/10 text-white border border-white/10"
+              className="flex items-center gap-1.5 px-3 py-2.5 md:py-1.5 rounded-lg text-xs font-medium bg-white/5 hover:bg-white/10 text-white border border-white/10 min-h-[44px] md:min-h-0"
               data-testid="chain-selector"
             >
               <span>{selectedChainData?.icon}</span>
@@ -1118,7 +1143,7 @@ export default function GuardianScanner() {
           {/* Trending Button */}
           <button 
             onClick={() => { setActiveFilter("trending"); setRankBy("trending"); }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium ${
+            className={`flex items-center gap-1.5 px-3 py-2.5 md:py-1.5 rounded-lg text-xs font-medium min-h-[44px] md:min-h-0 ${
               activeFilter === "trending" 
                 ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' 
                 : 'bg-white/5 text-white/60 border border-white/10 hover:bg-white/10'
@@ -1174,7 +1199,7 @@ export default function GuardianScanner() {
             New
           </button>
 
-          <div className="flex-1" />
+          <div className="hidden md:block flex-1" />
 
           {/* Rank By Dropdown */}
           <div className="relative">
@@ -1213,14 +1238,14 @@ export default function GuardianScanner() {
           </div>
 
           {/* Search */}
-          <div className="relative w-48">
+          <div className="relative w-32 md:w-48">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/30" />
             <Input
               type="text"
-              placeholder="Search token..."
+              placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-8 pl-8 pr-3 text-xs bg-white/5 border-white/10 focus:border-cyan-500/50"
+              className="h-9 md:h-8 pl-8 pr-3 text-xs bg-white/5 border-white/10 focus:border-cyan-500/50"
               data-testid="search-input"
             />
           </div>
@@ -1231,11 +1256,12 @@ export default function GuardianScanner() {
               setIsLoading(true);
               setTimeout(() => { setTokens(generateMockTokens(selectedChain)); setIsLoading(false); }, 300);
             }}
-            className="p-2 text-white/40 hover:text-white hover:bg-white/5 rounded-lg"
+            className="p-2.5 md:p-2 text-white/40 hover:text-white hover:bg-white/5 rounded-lg min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0 flex items-center justify-center"
             data-testid="refresh-btn"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
           </button>
+          </div>
         </div>
 
         {/* Table */}
