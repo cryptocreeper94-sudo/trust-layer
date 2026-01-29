@@ -236,7 +236,7 @@ const BlogPost = lazy(() => import("@/pages/blog-post"));
 const BlogAdmin = lazy(() => import("@/pages/blog-admin"));
 const TrustLayer = lazy(() => import("@/pages/trust-layer"));
 const GuardianScanner = lazy(() => import("@/pages/guardian-scanner"));
-const GuardianScannerDetail = lazy(() => import("@/pages/guardian-scanner-detail"));
+const GuardianScannerDetail = lazy(() => import("@/pages/token-detail"));
 
 function ScrollToTop() {
   const [location] = useLocation();
