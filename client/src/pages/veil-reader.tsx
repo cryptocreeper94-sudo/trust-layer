@@ -278,7 +278,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch1",
-    title: "Chapter 1: The Council and The Fall",
+    title: "Chapter 1: The Watchers and The Fall",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART ONE: THE REBELLION</p>
@@ -303,7 +303,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch2",
-    title: "Chapter 2: The 200 Watchers Descend",
+    title: "The 200 Watchers Descend",
     content: (
       <>
         <p>The Book of Chanok (Enoch) describes two hundred angels who abandoned their station in heaven. They descended to Mount Hermon. They took human women as wives. They taught forbidden knowledge. They fathered giants.</p>
@@ -331,7 +331,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch3",
-    title: "Chapter 3: The Forbidden Knowledge",
+    title: "The Forbidden Knowledge",
     content: (
       <>
         <p>What did the Watchers teach?</p>
@@ -345,7 +345,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch4",
-    title: "Chapter 4: The Nephilim and the Corruption",
+    title: "The Nephilim and the Corruption",
     content: (
       <>
         <p>The union of the Watchers and human women produced offspring. Genesis 6:4 names them: "There were giants in the earth in those days; and also after that, when the sons of God came in unto the daughters of men, and they bare children to them, the same became mighty men which were of old, men of renown."</p>
@@ -359,7 +359,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch5",
-    title: "Chapter 5: The Flood and Physical Evidence",
+    title: "The Flood and Physical Evidence",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART TWO: THE FIRST RESET</p>
@@ -607,7 +607,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch6",
-    title: "Chapter 6: Dragons, Not Dinosaurs",
+    title: "Dragons, Not Dinosaurs",
     content: (
       <>
         <p>Every culture on Earth has dragon legends. European dragons. Chinese dragons. Mesoamerican feathered serpents. African dragons. Australian rainbow serpents. The dragon appears everywhere.</p>
@@ -621,7 +621,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch7",
-    title: "Chapter 7: The Dog-Headed Beings and Hybrid Remnants",
+    title: "Hybrid Remnants",
     content: (
       <>
         <p>Ancient art and literature describe beings that shouldn't exist. Dog-headed men. Bird-headed beings. Creatures that were part human, part animal.</p>
@@ -635,7 +635,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch8",
-    title: "Chapter 8: Babel and the Confusion of Tongues",
+    title: "Chapter 2: Language and Spellcasting",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART THREE: THE SCATTERING</p>
@@ -672,7 +672,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch9",
-    title: "Chapter 9: The Divine Language Lost",
+    title: "The Divine Language Lost",
     content: (
       <>
         <p>Before Babel, there was one language. Scripture is clear on this. But what was that language?</p>
@@ -686,7 +686,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch10",
-    title: "Chapter 10: Spelling as Spellcasting",
+    title: "Spelling as Spellcasting",
     content: (
       <>
         <p>Why is it called "spelling"?</p>
@@ -701,7 +701,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch11",
-    title: "Chapter 11: Bloodlines and the Thrones of Earth",
+    title: "Chapter 3: Bloodlines and Power",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART FOUR: THE HIDDEN RULERS</p>
@@ -715,7 +715,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch12",
-    title: "Chapter 12: The Council of the Cast-Out",
+    title: "The Council of the Cast-Out",
     content: (
       <>
         <p>When this book refers to "the system" - understand what that means. Not bureaucracy. Not incompetence. Not random corruption.</p>
@@ -730,7 +730,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch13",
-    title: "Chapter 13: The Nephilim Bloodlines Continue",
+    title: "The Nephilim Bloodlines Continue",
     content: (
       <>
         <p>Genesis 6:4 says something crucial: "There were giants in the earth in those days; and also after that."</p>
@@ -774,7 +774,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch13b",
-    title: "Chapter 13B: Constantine and the Council of Nicaea",
+    title: "Constantine and the Council of Nicaea",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART FOUR-B: THE INSTITUTIONALIZATION OF THE DECEPTION</p>
@@ -861,7 +861,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch14",
-    title: "Chapter 14: Tartaria and the Mud Flood",
+    title: "Chapter 4: Hidden History Erased",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART FIVE: THE SECOND RESET</p>
@@ -936,7 +936,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch15",
-    title: "Chapter 15: The Orphan Trains and Memory Erasure",
+    title: "The Orphan Trains and Memory Erasure",
     content: (
       <>
         <p>Between 1854 and 1929, approximately 250,000 children were transported from East Coast cities to the Midwest and beyond. This was called the "Orphan Train Movement."</p>
@@ -999,7 +999,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch17",
-    title: "Chapter 17: The 200 Craters and the 200 Fallen",
+    title: "The 200 Craters and the 200 Fallen",
     content: (
       <>
         <p>Return to the numbers. Two hundred Watchers descended on Mount Hermon. Approximately two hundred impact craters exist on Earth.</p>
@@ -1066,7 +1066,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch18",
-    title: "Chapter 18: The Name That Was Erased",
+    title: "Chapter 5: The Name Deception",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART SIX: THE GREAT SUBSTITUTION</p>
@@ -1101,7 +1101,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch19",
-    title: "Chapter 19: The Name That Was Stolen",
+    title: "The Name That Was Stolen",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">The Mechanism of the Great Substitution</p>
@@ -1146,7 +1146,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch19b",
-    title: "Chapter 19B: The Continuous Deception",
+    title: "The Continuous Deception",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">The Thread That Runs Through All of It</p>
@@ -1203,7 +1203,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch20",
-    title: "Chapter 20: The King James Corruption",
+    title: "The King James Corruption",
     content: (
       <>
         <p>The King James Bible is considered the gold standard of English scripture by many believers. It's eloquent, influential, and foundational to English-speaking Christianity.</p>
@@ -1217,7 +1217,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch21",
-    title: "Chapter 21: Religious Inversions - The Cross and Hell",
+    title: "Chapter 6: Religious Inversions",
     content: (
       <>
         <p>The cross is the universal symbol of Christianity. Churches are shaped like crosses. Believers wear cross jewelry. The cross appears everywhere.</p>
@@ -1231,7 +1231,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch22",
-    title: "Chapter 22: The Substituted Calendar",
+    title: "The Substituted Calendar",
     content: (
       <>
         <p>The calendar we use is called the Gregorian calendar, after Pope Gregory XIII who instituted it in 1582. It replaced the Julian calendar of Julius Caesar.</p>
@@ -1244,7 +1244,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch23",
-    title: "Chapter 23: Modern Medicine - The Band-Aid Economy",
+    title: "Chapter 7: Modern Systems of Control",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART SEVEN: THE SYSTEMS OF CONTROL</p>
@@ -1258,7 +1258,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch24",
-    title: "Chapter 24: The Indoctrination Machine",
+    title: "The Indoctrination Machine",
     content: (
       <>
         <p>The modern education system was designed by industrial-age planners who wanted workers, not thinkers.</p>
@@ -1271,7 +1271,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch25",
-    title: "Chapter 25: Economics and the Worker Bees",
+    title: "Economics and the Worker Bees",
     content: (
       <>
         <p>Money was once backed by something real. Gold. Silver. Tangible assets that couldn't be created from nothing.</p>
@@ -1284,7 +1284,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch26",
-    title: "Chapter 26: The Beast System and the Carousel",
+    title: "The Beast System and the Carousel",
     content: (
       <>
         <p>Revelation describes a system - the beast - that will control buying and selling. "And that no man might buy or sell, save he that had the mark, or the name of the beast, or the number of his name."</p>
@@ -1312,7 +1312,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch27",
-    title: "Chapter 27: The Eye Versus the I - The Pineal Gateway",
+    title: "Chapter 8: Spiritual Warfare",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART EIGHT: THE WAR ON PERCEPTION</p>
@@ -1330,7 +1330,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch28",
-    title: "Chapter 28: The Mirror Trap",
+    title: "The Mirror Trap",
     content: (
       <>
         <p>The adversary shows you a mirror. It looks like truth. It reflects back what you expect to see. But it inverts everything.</p>
@@ -1344,7 +1344,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch29",
-    title: "Chapter 29: Substances That Steal the Signal",
+    title: "Substances That Steal the Signal",
     content: (
       <>
         <p>Alcohol. In Hebrew, the root of "alcohol" connects to the Arabic "al-kuhl" - the body-eating spirit. It's not coincidental that alcohol is called "spirits."</p>
@@ -1357,7 +1357,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch30",
-    title: "Chapter 30: The Frequency War",
+    title: "The Frequency War",
     content: (
       <>
         <p>Sound has frequency. Light has frequency. Thought has frequency. Everything vibrates at measurable rates.</p>
@@ -1371,7 +1371,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch31",
-    title: "Chapter 31: The Hidden Cosmology",
+    title: "Chapter 9: The Hidden Cosmology",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART EIGHT: THE STRUCTURE OF REALITY</p>
@@ -1448,7 +1448,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch32-lucifer",
-    title: "Chapter 32: Lucifer - The Misunderstood Adversary",
+    title: "Chapter 10: The Adversary Revealed",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART NINE: THE ADVERSARY REVEALED</p>
@@ -1870,7 +1870,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch33",
-    title: "Chapter 33: UFOs and the Alien Deception",
+    title: "Chapter 11: End Times Deceptions",
     content: (
       <>
         <p>Unidentified objects in the sky have been documented throughout history. The recent government disclosures confirm what witnesses have reported for decades: something is there.</p>
@@ -1884,7 +1884,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch34",
-    title: "Chapter 34: The Missing Millennium",
+    title: "The Missing Millennium",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART TEN: THE HIDDEN TIMELINE</p>
@@ -1907,7 +1907,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch35",
-    title: "Chapter 35: The Short Season",
+    title: "The Short Season",
     content: (
       <>
         <p>Revelation 20 describes Satan being bound for a thousand years, then released "for a little season." What if the millennium has already happened, and we're in the short season now?</p>
@@ -1951,7 +1951,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch36",
-    title: "Chapter 36: The Coming Deception",
+    title: "The Coming Deception",
     content: (
       <>
         <p>The Messiah warned: "For there shall arise false Messiahs, and false prophets, and shall show great signs and wonders; insomuch that, if it were possible, they shall deceive the very elect."</p>
@@ -2025,7 +2025,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch37",
-    title: "Chapter 37: The Return of Memory",
+    title: "Chapter 12: The Awakening",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART ELEVEN: THE AWAKENING</p>
@@ -2039,7 +2039,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch38",
-    title: "Chapter 38: The Stages of Awakening",
+    title: "The Stages of Awakening",
     content: (
       <>
         <p>Awakening follows patterns. Different people experience different sequences, but common stages emerge:</p>
@@ -2056,7 +2056,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch39",
-    title: "Chapter 39: The Collective Awakening",
+    title: "The Collective Awakening",
     content: (
       <>
         <p>Individual awakening matters. But something larger is happening. A collective shift. A global stirring. More people waking up simultaneously than at any previous point in history.</p>
@@ -2069,7 +2069,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch40",
-    title: "Chapter 40: The Path Forward",
+    title: "The Path Forward",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART TWELVE: THE RESTORATION</p>
@@ -2091,7 +2091,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch41",
-    title: "Chapter 41: The Witnesses in Stone and Spirit",
+    title: "Chapter 13: The Witnesses",
     content: (
       <>
         <p>The truth is witnessed everywhere. In the stones of ancient monuments. In the alignments of pyramids. In the precision of structures that supposedly primitive people built with supposedly primitive tools.</p>
@@ -2104,7 +2104,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch42",
-    title: "Chapter 42: Final Reflections",
+    title: "Final Reflections",
     content: (
       <>
         <p>This book is not the end of the journey. It's an invitation to begin.</p>
@@ -2159,7 +2159,7 @@ const volume1Chapters: Chapter[] = [
 const journeyChapters: Chapter[] = [
   {
     id: "journey-author",
-    title: "The Author's Journey",
+    title: "Chapter 14: The Author's Journey",
     content: (
       <>
         <p className="text-2xl text-purple-400 font-medium mb-6">My Journey Beyond the Veil</p>
