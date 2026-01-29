@@ -68,6 +68,7 @@ import {
 } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
+import { DYORDisclaimer } from "@/components/dyor-disclaimer";
 
 interface TokenData {
   symbol: string;
@@ -1147,6 +1148,9 @@ function AutoSnipePanel({
             </div>
           </div>
         </div>
+        
+        {/* DYOR Disclaimer */}
+        <DYORDisclaimer variant="compact" className="mt-3" />
       </div>
     </div>
   );
