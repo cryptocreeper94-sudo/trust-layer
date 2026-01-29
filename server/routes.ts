@@ -15861,6 +15861,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const [updated] = await db.update(businessApplications)
         .set({
           status: "approved",
+          mainStreet: mainStreet || false,
           reviewedAt: new Date(),
           reviewedBy: "owner",
           reviewNotes: notes || "Approved",
@@ -15881,7 +15882,6 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         console.log("Note: Could not update user membership tier", e);
       }
       
-      // TODO: If mainStreet is true, add to Legacy Main Street program
       if (mainStreet) {
         console.log(`[Business Verification] ${updated.businessName} granted Main Street storefront`);
       }

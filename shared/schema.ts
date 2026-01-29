@@ -488,6 +488,7 @@ export const businessApplications = pgTable("business_applications", {
   employeeCount: text("employee_count"),
   country: text("country").default("United States"),
   status: text("status").notNull().default("pending"), // pending, approved, rejected
+  mainStreet: boolean("main_street").default(false), // Legacy Main Street Program enrollment
   reviewedBy: text("reviewed_by"),
   reviewedAt: timestamp("reviewed_at"),
   reviewNotes: text("review_notes"),
@@ -497,6 +498,7 @@ export const businessApplications = pgTable("business_applications", {
 export const insertBusinessApplicationSchema = createInsertSchema(businessApplications).omit({
   id: true,
   status: true,
+  mainStreet: true,
   reviewedBy: true,
   reviewedAt: true,
   reviewNotes: true,

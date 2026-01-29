@@ -92,6 +92,11 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **Sustainable Growth**: $10M market cap at TGE is intentionally conservative. Leaves room for organic growth vs pump-and-dump.
 - **Long-Term Vision**: Building real infrastructure, not a meme coin. Value comes from utility and adoption.
 
+### Membership Organization (UPDATED - January 29, 2026)
+- **Personal Account Requirement**: Like Facebook, business membership requires a personal account first. Team members managing business pages also need personal accounts for accountability.
+- **Business Verification**: EIN/registration number, website, business description required. Manual review (2-3 business days). Admin tools in Owner Portal for approval/rejection.
+- **Legacy Main Street Program**: First 10-20 verified businesses receive virtual storefront space in Chronicles game city centers across eras. Can sell game merchandise and linked real-world products.
+
 ### Roadmap Items (Future Implementation)
 - **Legacy Top 10 Loyalty Program**: After presale closes, identify top 10 contributors by total contribution amount. Offer ongoing loyalty incentives (smaller than team allocations) to reward continued engagement and advocacy. Details TBD - could include bonus SIG, exclusive access, governance weight, or ambassador status.
 
