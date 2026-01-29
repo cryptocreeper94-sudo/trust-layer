@@ -2960,12 +2960,37 @@ const appendicesChapters: Chapter[] = [
   }
 ];
 
+// Merge journey chapters into research chapters at matching points
+const mergedChapters: Chapter[] = [];
+let journeyIndex = 0;
+const journeyInsertPoints: { [key: string]: number } = {
+  'v1-ch12': 0, // Insert journey-intro after ch12
+  'v1-ch13': 1, // Insert journey-ch1 after ch13
+  'v1-ch14': 2, // Insert journey-ch2 after ch14
+  'v1-ch15': 3, // Insert journey-ch3 after ch15
+  'v1-ch16': 4, // Insert journey-ch4 after ch16 (if exists)
+  'v1-ch17': 5, // Insert journey-ch5 after ch17
+};
+
+for (const chapter of volume1Chapters) {
+  mergedChapters.push(chapter);
+  const insertIdx = journeyInsertPoints[chapter.id];
+  if (insertIdx !== undefined && journeyChapters[insertIdx]) {
+    mergedChapters.push(journeyChapters[insertIdx]);
+  }
+}
+
+// Add any remaining journey chapters at the end
+for (let i = Object.keys(journeyInsertPoints).length; i < journeyChapters.length; i++) {
+  mergedChapters.push(journeyChapters[i]);
+}
+
 const volumes: Volume[] = [
   {
     id: "main",
     title: "Through The Veil",
     subtitle: "Research & Personal Journey",
-    chapters: [...volume1Chapters, ...journeyChapters]
+    chapters: mergedChapters
   },
   {
     id: "appendices",
