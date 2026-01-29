@@ -896,6 +896,22 @@ const volume1Chapters: Chapter[] = [
         <p>The billions who call on "Jesus" today are calling on a name that Constantine's system constructed. The cross they wear is a symbol Constantine's system chose. The day they worship on is a day Constantine's decree established.</p>
         <p>This is not speculation. The historical record is clear. The Council of Nicaea happened. Constantine's Sunday law exists in the historical record. The name changes are documented.</p>
         <p>The only question is: <strong>was it deliberate deception or innocent evolution?</strong></p>
+        
+        <p className="text-lg font-semibold text-white mt-6 mb-4">A Word on Discernment: The Double Deception</p>
+        <p>Here we must pause and address something crucial. When you begin researching these topics, you will encounter claims that have no historical basis - <strong>planted conspiracies designed to discredit genuine seekers</strong>.</p>
+        <p>For example: the "Constantine Creed." This claim circulates online suggesting there was a secret creed that Constantine wrote himself, separate from the Nicene Creed formulated by the bishops. <strong>This has no manuscript evidence.</strong> No church father quotes it. No council records reference it. It appears to be a modern fabrication.</p>
+        <p>The Nicene Creed of 325 AD is extensively documented - we have letters from bishops who attended, multiple contemporary sources, the actual text in both its original and expanded (381 AD Constantinople) forms. The historical record for what happened at Nicaea is substantial.</p>
+        <p>So why does the fake "Constantine Creed" exist? Consider the effect: A sincere seeker researches Constantine and Nicaea. They find the "Constantine Creed" claim. They investigate and discover it has no evidence. Their conclusion? <em>"All alternative history is bunk. The conspiracy theorists are making things up."</em></p>
+        <p><strong>Mission accomplished for the deceivers.</strong></p>
+        <p>The deception works in both directions:</p>
+        <ul className="list-disc list-inside space-y-2 my-4 text-slate-300">
+          <li><strong>The mainstream narrative</strong> hides real history - the name changes, the day changes, the merger with paganism</li>
+          <li><strong>Planted false conspiracies</strong> discredit those who question, making them look foolish</li>
+        </ul>
+        <p>Discernment is essential. Not everything that contradicts the mainstream is true. Not every "alternative" theory leads to light. Some are planted specifically to muddy the waters, to make genuine investigation look ridiculous.</p>
+        <p>The test is evidence. Constantine's Sunday law of 321 AD exists in the Codex Justinianus. The Council of Nicaea is documented by multiple independent sources. The name changes from Hebrew to Greek to Latin are traceable. <strong>These are facts.</strong></p>
+        <p>The "Constantine Creed" has no such evidence. It exists only in modern internet posts with no sources. <strong>This is not fact - it is planted deception.</strong></p>
+        <p>As you continue through this book and beyond, apply this standard: <strong>follow the evidence, not the narrative</strong> - and that includes "alternative" narratives. The adversary plays both sides.</p>
       </>
     )
   },
