@@ -48,6 +48,11 @@ export default function BusinessPortal() {
     enabled: !!user,
   });
 
+  const { data: businessApplication } = useQuery({
+    queryKey: ["/api/business/application"],
+    enabled: !!user,
+  });
+
   const { data: apiKeys } = useQuery({
     queryKey: ["/api/developer/api-keys"],
     enabled: !!user,
@@ -243,39 +248,117 @@ export default function BusinessPortal() {
               <GlassCard glow className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-bold text-white">Business Verification</h3>
-                  <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-                    <BadgeCheck className="w-3 h-3 mr-1" />
-                    Verified
-                  </Badge>
+                  {(businessApplication as any)?.status === "approved" ? (
+                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+                      <BadgeCheck className="w-3 h-3 mr-1" />
+                      Verified
+                    </Badge>
+                  ) : (businessApplication as any)?.status === "pending" ? (
+                    <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
+                      <Clock className="w-3 h-3 mr-1" />
+                      Pending Review
+                    </Badge>
+                  ) : (businessApplication as any)?.status === "rejected" ? (
+                    <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
+                      <AlertCircle className="w-3 h-3 mr-1" />
+                      Rejected
+                    </Badge>
+                  ) : (
+                    <Badge className="bg-slate-500/20 text-slate-400 border-slate-500/30">
+                      <AlertCircle className="w-3 h-3 mr-1" />
+                      Not Applied
+                    </Badge>
+                  )}
                 </div>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                    <span className="text-white/70">Organization Name</span>
-                    <span className="text-white font-medium">Your Company Inc.</span>
+                
+                {!(businessApplication as any) ? (
+                  <div className="text-center py-6">
+                    <Building2 className="w-12 h-12 text-white/20 mx-auto mb-3" />
+                    <p className="text-white/60 mb-4">Business verification required to access full features</p>
+                    <Link href="/business-application">
+                      <Button className="bg-purple-600" data-testid="button-apply-business">
+                        Apply for Business Verification
+                      </Button>
+                    </Link>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                    <span className="text-white/70">Trust Layer Hash</span>
-                    <div className="flex items-center gap-2">
-                      <code className="text-xs text-purple-400">
-                        {(memberCard as any)?.dataHash?.slice(0, 16) || "Not generated"}...
-                      </code>
-                      {(memberCard as any)?.dataHash && (
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          onClick={() => copyToClipboard((memberCard as any).dataHash, "Hash")}
-                          data-testid="button-copy-hash"
-                        >
-                          <Copy className="w-3 h-3" />
-                        </Button>
-                      )}
+                ) : (businessApplication as any)?.status === "pending" ? (
+                  <div className="space-y-4">
+                    <div className="p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                      <div className="flex items-start gap-3">
+                        <Clock className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-yellow-400 font-medium">Application Under Review</p>
+                          <p className="text-sm text-white/60 mt-1">
+                            Your business verification is being reviewed. This typically takes 2-3 business days. 
+                            You'll be notified via email once a decision is made.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                      <span className="text-white/70">Organization Name</span>
+                      <span className="text-white font-medium">{(businessApplication as any)?.businessName}</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                      <span className="text-white/70">Submitted</span>
+                      <span className="text-white">
+                        {new Date((businessApplication as any)?.createdAt).toLocaleDateString()}
+                      </span>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                    <span className="text-white/70">Member Since</span>
-                    <span className="text-white">January 2026</span>
+                ) : (businessApplication as any)?.status === "rejected" ? (
+                  <div className="space-y-4">
+                    <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+                      <div className="flex items-start gap-3">
+                        <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-red-400 font-medium">Application Rejected</p>
+                          <p className="text-sm text-white/60 mt-1">
+                            {(businessApplication as any)?.reviewNotes || "Your application was not approved. Please contact support for more information."}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <Link href="/business-application">
+                      <Button variant="outline" className="w-full border-white/20" data-testid="button-reapply">
+                        Submit New Application
+                      </Button>
+                    </Link>
                   </div>
-                </div>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                      <span className="text-white/70">Organization Name</span>
+                      <span className="text-white font-medium">{(businessApplication as any)?.businessName || "Your Company Inc."}</span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                      <span className="text-white/70">Trust Layer Hash</span>
+                      <div className="flex items-center gap-2">
+                        <code className="text-xs text-purple-400">
+                          {(memberCard as any)?.dataHash?.slice(0, 16) || "Not generated"}...
+                        </code>
+                        {(memberCard as any)?.dataHash && (
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => copyToClipboard((memberCard as any).dataHash, "Hash")}
+                            data-testid="button-copy-hash"
+                          >
+                            <Copy className="w-3 h-3" />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                      <span className="text-white/70">Member Since</span>
+                      <span className="text-white">
+                        {(businessApplication as any)?.createdAt 
+                          ? new Date((businessApplication as any).createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+                          : "January 2026"}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </GlassCard>
             </div>
 
