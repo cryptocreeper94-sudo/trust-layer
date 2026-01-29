@@ -504,8 +504,8 @@ const volume1Chapters: Chapter[] = [
         
         <div className="my-4 flex justify-center">
           <div className="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/30 max-w-md">
-            <img src="/veil-images/red-sea-underwater.jpg" alt="Red Sea underwater at the Gulf of Aqaba crossing site" className="w-full rounded-lg" />
-            <p className="text-center text-sm text-slate-400 mt-2 italic">The Gulf of Aqaba - where chariot wheels were found on the sea floor</p>
+            <img src="/veil-images/chariot-wheels-underwater.jpg" alt="Egyptian chariot wheels found on the floor of the Gulf of Aqaba" className="w-full rounded-lg" />
+            <p className="text-center text-sm text-slate-400 mt-2 italic">Egyptian chariot wheels encrusted with coral on the sea floor - 18th Dynasty design</p>
           </div>
         </div>
         
@@ -513,14 +513,21 @@ const volume1Chapters: Chapter[] = [
         <p>Ron Wyatt identified the crossing site at Nuweiba Beach on the Gulf of Aqaba - not the shallow Reed Sea traditionally proposed, but a deep water crossing to what is now Saudi Arabia.</p>
         <p>What he found underwater was extraordinary: <strong>Egyptian chariot wheels</strong> encrusted with coral, scattered across the sea floor in a pattern consistent with an army in pursuit. Four-spoke, six-spoke, and eight-spoke wheels - designs consistent with the 18th Dynasty of Egypt, the time of the Exodus.</p>
         <p>On both shores - the Egyptian side and the Arabian side - stand <strong>granite columns</strong>. These pillars, erected as memorials, mark the crossing site. The column on the Saudi side still bears Phoenician inscriptions. King Solomon himself may have erected these markers to commemorate what happened there.</p>
+        
+        <div className="my-4 flex justify-center">
+          <div className="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/30 max-w-md">
+            <img src="/veil-images/crossing-pillar.jpg" alt="Granite pillar marking the Red Sea crossing site at Nuweiba Beach" className="w-full rounded-lg" />
+            <p className="text-center text-sm text-slate-400 mt-2 italic">The granite column at Nuweiba Beach - memorial marker for the crossing</p>
+          </div>
+        </div>
         <p>The underwater land bridge between the two shores has a gradual descent - exactly what would be needed for millions of people with livestock and carts to cross. The depths on either side drop sharply - exactly where the waters would have "stood as walls" and collapsed on the Egyptian army.</p>
         
         <p className="text-lg font-semibold text-white mt-6 mb-4">Noah's Ark: The Boat-Shaped Formation</p>
         
         <div className="my-4 flex justify-center">
           <div className="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/30 max-w-md">
-            <img src="/veil-images/mount-ararat.jpg" alt="Mount Ararat Turkey where Noah's Ark site is located" className="w-full rounded-lg" />
-            <p className="text-center text-sm text-slate-400 mt-2 italic">Mount Ararat, Turkey - location of the boat-shaped formation</p>
+            <img src="/veil-images/noahs-ark-formation.jpg" alt="Aerial view of the boat-shaped formation matching Noah's Ark dimensions near Mount Ararat" className="w-full rounded-lg" />
+            <p className="text-center text-sm text-slate-400 mt-2 italic">The boat-shaped formation near Ararat - 515 feet, matching biblical dimensions exactly</p>
           </div>
         </div>
         
