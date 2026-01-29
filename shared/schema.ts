@@ -473,6 +473,39 @@ export const insertMemberTrustCardSchema = createInsertSchema(memberTrustCards).
 export type InsertMemberTrustCard = z.infer<typeof insertMemberTrustCardSchema>;
 export type MemberTrustCard = typeof memberTrustCards.$inferSelect;
 
+// Business Membership Applications - for verified business accounts
+export const businessApplications = pgTable("business_applications", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  businessName: text("business_name").notNull(),
+  einNumber: text("ein_number").notNull(),
+  website: text("website"),
+  contactName: text("contact_name").notNull(),
+  contactEmail: text("contact_email").notNull(),
+  contactPhone: text("contact_phone"),
+  businessDescription: text("business_description").notNull(),
+  intendedUse: text("intended_use"),
+  employeeCount: text("employee_count"),
+  country: text("country").default("United States"),
+  status: text("status").notNull().default("pending"), // pending, approved, rejected
+  reviewedBy: text("reviewed_by"),
+  reviewedAt: timestamp("reviewed_at"),
+  reviewNotes: text("review_notes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertBusinessApplicationSchema = createInsertSchema(businessApplications).omit({
+  id: true,
+  status: true,
+  reviewedBy: true,
+  reviewedAt: true,
+  reviewNotes: true,
+  createdAt: true,
+});
+
+export type InsertBusinessApplication = z.infer<typeof insertBusinessApplicationSchema>;
+export type BusinessApplication = typeof businessApplications.$inferSelect;
+
 // Genesis Hallmark (the flagship first hallmark)
 export const genesisHallmarkSchema = z.object({
   id: z.string(),

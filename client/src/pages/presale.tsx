@@ -1402,6 +1402,48 @@ export default function Presale() {
           </HolographicCard>
         </div>
 
+        <div className="mb-16">
+          <div className="text-center mb-8">
+            <Badge className="mb-4 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-400 border-cyan-500/30">
+              <Shield className="w-3 h-3 mr-1" />
+              Trust Layer Membership
+            </Badge>
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Join the Network</h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Become part of a verified network of individuals and businesses committed to trust and transparency.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <Link href="/membership-charter" data-testid="link-membership-charter">
+              <HolographicCard className="p-6 text-center cursor-pointer hover:scale-105 transition-transform" glow="cyan">
+                <Award className="w-10 h-10 text-cyan-400 mx-auto mb-4" />
+                <h3 className="text-lg font-bold text-white mb-2">Membership Charter</h3>
+                <p className="text-gray-400 text-sm mb-4">Learn about our mission, values, and member benefits</p>
+                <span className="text-cyan-400 text-sm font-medium">Read Charter →</span>
+              </HolographicCard>
+            </Link>
+            
+            <Link href="/member-portal" data-testid="link-individual-signup">
+              <HolographicCard className="p-6 text-center cursor-pointer hover:scale-105 transition-transform" glow="purple">
+                <User className="w-10 h-10 text-purple-400 mx-auto mb-4" />
+                <h3 className="text-lg font-bold text-white mb-2">Individual Member</h3>
+                <p className="text-gray-400 text-sm mb-4">Sign up instantly and start building your trust profile</p>
+                <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">Instant Access</Badge>
+              </HolographicCard>
+            </Link>
+            
+            <Link href="/business-application" data-testid="link-business-signup">
+              <HolographicCard className="p-6 text-center cursor-pointer hover:scale-105 transition-transform" glow="amber">
+                <Crown className="w-10 h-10 text-amber-400 mx-auto mb-4" />
+                <h3 className="text-lg font-bold text-white mb-2">Business Member</h3>
+                <p className="text-gray-400 text-sm mb-4">Verified business accounts with API access</p>
+                <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">Requires Verification</Badge>
+              </HolographicCard>
+            </Link>
+          </div>
+        </div>
+
         <div className="text-center mb-8">
           <Link href="/home" data-testid="link-explore-trust-layer">
             <Button className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white font-semibold px-8 py-3 mb-6" size="lg">

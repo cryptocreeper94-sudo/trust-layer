@@ -130,7 +130,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and, gte } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes, businessApplications } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -2161,6 +2161,107 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Members directory error:", error);
       res.json({ members: [], total: 0 });
+    }
+  });
+
+  // Business Membership Application
+  app.post("/api/business/apply", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user?.id || req.firebaseUser?.uid;
+      if (!userId) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const { 
+        businessName, 
+        einNumber, 
+        website, 
+        contactName, 
+        contactEmail, 
+        contactPhone,
+        businessDescription,
+        intendedUse,
+        employeeCount,
+        country
+      } = req.body;
+
+      if (!businessName || !einNumber || !contactEmail || !businessDescription) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+
+      // Check if user already has a pending or approved application
+      const existingApp = await db.select().from(businessApplications)
+        .where(eq(businessApplications.userId, userId))
+        .limit(1);
+
+      if (existingApp.length > 0) {
+        const app = existingApp[0];
+        if (app.status === "approved") {
+          return res.status(400).json({ error: "You already have an approved business account" });
+        }
+        if (app.status === "pending") {
+          return res.status(400).json({ error: "You already have a pending application" });
+        }
+      }
+
+      // Create the application
+      const [application] = await db.insert(businessApplications).values({
+        userId,
+        businessName,
+        einNumber,
+        website: website || null,
+        contactName,
+        contactEmail,
+        contactPhone: contactPhone || null,
+        businessDescription,
+        intendedUse: intendedUse || null,
+        employeeCount: employeeCount || null,
+        country: country || "United States",
+      }).returning();
+
+      console.log(`[Business] New application submitted: ${businessName} by ${userId}`);
+
+      res.json({ 
+        success: true, 
+        applicationId: application.id,
+        status: "pending",
+        message: "Application submitted successfully. We will review within 2-3 business days."
+      });
+    } catch (error: any) {
+      console.error("Business application error:", error);
+      res.status(500).json({ error: "Failed to submit application" });
+    }
+  });
+
+  // Get business application status
+  app.get("/api/business/application", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user?.id || req.firebaseUser?.uid;
+      if (!userId) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const [application] = await db.select().from(businessApplications)
+        .where(eq(businessApplications.userId, userId))
+        .limit(1);
+
+      if (!application) {
+        return res.json({ hasApplication: false });
+      }
+
+      res.json({ 
+        hasApplication: true,
+        application: {
+          id: application.id,
+          businessName: application.businessName,
+          status: application.status,
+          createdAt: application.createdAt,
+          reviewedAt: application.reviewedAt,
+        }
+      });
+    } catch (error: any) {
+      console.error("Business application fetch error:", error);
+      res.status(500).json({ error: "Failed to fetch application" });
     }
   });
 
