@@ -78,6 +78,19 @@ const SORT_OPTIONS = [
   { id: "ai", label: "AI Confidence", icon: Brain },
 ];
 
+// Category filters for different token types
+const CATEGORY_FILTERS = [
+  { id: "all", label: "All", icon: "🌐", color: "bg-white/10" },
+  { id: "meme", label: "Meme", icon: "🐸", color: "bg-green-500/20" },
+  { id: "defi", label: "DeFi", icon: "🏦", color: "bg-blue-500/20" },
+  { id: "blue-chip", label: "Blue Chip", icon: "💎", color: "bg-purple-500/20" },
+  { id: "gaming", label: "Gaming", icon: "🎮", color: "bg-pink-500/20" },
+  { id: "ai", label: "AI", icon: "🤖", color: "bg-cyan-500/20" },
+  { id: "nft", label: "NFT", icon: "🖼️", color: "bg-orange-500/20" },
+  { id: "stable", label: "Stable", icon: "💵", color: "bg-emerald-500/20" },
+  { id: "rwa", label: "RWA", icon: "🏠", color: "bg-amber-500/20" },
+];
+
 interface SafetyData {
   honeypotRisk: boolean;
   mintAuthority: boolean;
@@ -898,6 +911,59 @@ export default function GuardianScanner() {
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [activeFilter, setActiveFilter] = useState("trending");
   const [expandedTokenId, setExpandedTokenId] = useState<string | null>(null);
+  
+  // Category filter state
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  
+  // Contract address search state
+  const [contractSearch, setContractSearch] = useState("");
+  const [isSearchingContract, setIsSearchingContract] = useState(false);
+  const [contractSearchError, setContractSearchError] = useState<string | null>(null);
+  
+  // Handle contract address search
+  const handleContractSearch = async () => {
+    if (!contractSearch.trim()) return;
+    
+    setIsSearchingContract(true);
+    setContractSearchError(null);
+    
+    try {
+      // Detect chain from address format
+      let detectedChain = 'ethereum';
+      if (contractSearch.length >= 32 && !contractSearch.startsWith('0x')) {
+        detectedChain = 'solana';
+      } else if (contractSearch.startsWith('0x') && contractSearch.length === 42) {
+        detectedChain = selectedChain !== 'all' ? selectedChain : 'ethereum';
+      }
+      
+      // Try to fetch token by contract address
+      const response = await fetch(`/api/guardian-scanner/contract/${detectedChain}/${contractSearch}`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.token) {
+          // Navigate to token detail
+          window.location.href = `/guardian-scanner/${detectedChain}/${data.token.symbol}`;
+          return;
+        }
+      }
+      
+      // Fallback: search in current tokens
+      const found = tokens.find(t => 
+        t.contractAddress.toLowerCase() === contractSearch.toLowerCase() ||
+        t.pairAddress.toLowerCase() === contractSearch.toLowerCase()
+      );
+      
+      if (found) {
+        window.location.href = `/guardian-scanner/${found.chain}/${found.symbol}`;
+      } else {
+        setContractSearchError('Token not found. Try a different address or chain.');
+      }
+    } catch {
+      setContractSearchError('Failed to search. Please try again.');
+    } finally {
+      setIsSearchingContract(false);
+    }
+  };
 
   const { connected } = useGuardianWS({ 
     chains: selectedChain === 'all' ? ['all'] : [selectedChain],
@@ -1261,6 +1327,65 @@ export default function GuardianScanner() {
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
           </button>
+          </div>
+        </div>
+
+        {/* Contract Address Search */}
+        <div className="px-3 py-2 border-b border-white/5 bg-slate-900/30">
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+              <Input
+                type="text"
+                placeholder="Search by contract address (0x... or Solana address)"
+                value={contractSearch}
+                onChange={(e) => setContractSearch(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleContractSearch()}
+                className="h-10 pl-10 pr-3 text-sm bg-slate-800/50 border-white/10 focus:border-cyan-500/50 font-mono"
+                data-testid="contract-search-input"
+              />
+            </div>
+            <button
+              onClick={handleContractSearch}
+              disabled={isSearchingContract || !contractSearch.trim()}
+              className="px-4 py-2.5 bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white text-sm font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 min-h-[44px]"
+              data-testid="contract-search-btn"
+            >
+              {isSearchingContract ? (
+                <RefreshCw className="w-4 h-4 animate-spin" />
+              ) : (
+                <Target className="w-4 h-4" />
+              )}
+              Lookup
+            </button>
+          </div>
+          {contractSearchError && (
+            <p className="text-xs text-red-400 mt-1 flex items-center gap-1">
+              <AlertTriangle className="w-3 h-3" />
+              {contractSearchError}
+            </p>
+          )}
+        </div>
+
+        {/* Category Filters */}
+        <div className="px-3 py-2 border-b border-white/5 overflow-x-auto scrollbar-hide">
+          <div className="flex items-center gap-2 min-w-max">
+            <span className="text-[10px] text-white/40 uppercase tracking-wider mr-1">Category:</span>
+            {CATEGORY_FILTERS.map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all min-h-[36px] ${
+                  selectedCategory === cat.id 
+                    ? `${cat.color} border border-white/20 text-white` 
+                    : 'bg-white/5 text-white/50 hover:text-white hover:bg-white/10'
+                }`}
+                data-testid={`category-${cat.id}`}
+              >
+                <span>{cat.icon}</span>
+                <span>{cat.label}</span>
+              </button>
+            ))}
           </div>
         </div>
 

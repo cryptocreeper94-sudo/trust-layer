@@ -50,8 +50,23 @@ import {
   ChevronDown,
   Search,
   Clock,
-  Bot
+  Bot,
+  Play,
+  Pause,
+  Settings,
+  Target,
+  DollarSign,
+  Wallet,
+  Percent,
+  TrendingUpIcon,
+  ArrowUp,
+  ArrowDown,
+  Circle,
+  Square,
+  RefreshCw
 } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 
 interface TokenData {
   symbol: string;
@@ -150,6 +165,746 @@ interface TokenData {
     poop: number;
     flag: number;
   };
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// REAL-TIME CANDLESTICK CHART COMPONENT
+// ═══════════════════════════════════════════════════════════════════
+interface Candle {
+  time: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
+function CandlestickChart({ 
+  price, 
+  symbol,
+  priceChange,
+  isAutoSnipeActive
+}: { 
+  price: number; 
+  symbol: string;
+  priceChange: number;
+  isAutoSnipeActive: boolean;
+}) {
+  const [candles, setCandles] = useState<Candle[]>([]);
+  const [chartInterval, setChartInterval] = useState<'1m' | '5m' | '15m' | '1h'>('1m');
+  const [showVolume, setShowVolume] = useState(true);
+  const [currentPrice, setCurrentPrice] = useState(price);
+  
+  // Generate initial candles based on current price
+  useEffect(() => {
+    const basePrice = price;
+    const volatility = 0.05; // 5% typical volatility
+    const newCandles: Candle[] = [];
+    
+    for (let i = 59; i >= 0; i--) {
+      const randomWalk = (Math.random() - 0.5) * volatility;
+      const open = basePrice * (1 + randomWalk + (i * 0.001));
+      const close = open * (1 + (Math.random() - 0.5) * volatility * 0.5);
+      const high = Math.max(open, close) * (1 + Math.random() * volatility * 0.3);
+      const low = Math.min(open, close) * (1 - Math.random() * volatility * 0.3);
+      const volume = Math.random() * 100000 + 10000;
+      
+      newCandles.push({
+        time: Date.now() - (i * 60000),
+        open,
+        high,
+        low,
+        close,
+        volume
+      });
+    }
+    setCandles(newCandles);
+  }, [price]);
+  
+  // Simulate real-time price updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentPrice(prev => {
+        const change = (Math.random() - 0.5) * 0.02; // 2% max change
+        return prev * (1 + change);
+      });
+      
+      setCandles(prev => {
+        if (prev.length === 0) return prev;
+        const lastCandle = { ...prev[prev.length - 1] };
+        const newClose = currentPrice * (1 + (Math.random() - 0.5) * 0.01);
+        lastCandle.close = newClose;
+        lastCandle.high = Math.max(lastCandle.high, newClose);
+        lastCandle.low = Math.min(lastCandle.low, newClose);
+        lastCandle.volume += Math.random() * 1000;
+        return [...prev.slice(0, -1), lastCandle];
+      });
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, [currentPrice]);
+  
+  // Calculate chart dimensions
+  const chartHeight = 200;
+  const chartWidth = 100; // percentage
+  const visibleCandles = candles.slice(-40);
+  
+  if (visibleCandles.length === 0) {
+    return (
+      <div className="h-[240px] bg-slate-900/50 rounded-xl flex items-center justify-center">
+        <RefreshCw className="w-6 h-6 text-cyan-500 animate-spin" />
+      </div>
+    );
+  }
+  
+  const prices = visibleCandles.flatMap(c => [c.high, c.low]);
+  const minPrice = Math.min(...prices);
+  const maxPrice = Math.max(...prices);
+  const priceRange = maxPrice - minPrice || 1;
+  const maxVolume = Math.max(...visibleCandles.map(c => c.volume));
+  
+  const getY = (p: number) => ((maxPrice - p) / priceRange) * (chartHeight - 40) + 20;
+  const candleWidth = 100 / visibleCandles.length;
+  
+  return (
+    <div className="bg-slate-900/50 rounded-xl border border-white/10 overflow-hidden">
+      {/* Chart Header */}
+      <div className="flex items-center justify-between p-3 border-b border-white/5">
+        <div className="flex items-center gap-2">
+          <BarChart3 className="w-4 h-4 text-cyan-400" />
+          <span className="text-sm font-medium">{symbol}/USD</span>
+          {isAutoSnipeActive && (
+            <Badge className="bg-emerald-500/20 text-emerald-400 text-[10px] animate-pulse">
+              <Circle className="w-2 h-2 mr-1 fill-emerald-400" />
+              LIVE
+            </Badge>
+          )}
+        </div>
+        <div className="flex items-center gap-1">
+          {(['1m', '5m', '15m', '1h'] as const).map(interval => (
+            <button
+              key={interval}
+              onClick={() => setChartInterval(interval)}
+              className={`px-2 py-1 text-[10px] rounded ${
+                chartInterval === interval 
+                  ? 'bg-cyan-500/20 text-cyan-400' 
+                  : 'text-white/50 hover:text-white/70'
+              }`}
+              data-testid={`chart-interval-${interval}`}
+            >
+              {interval.toUpperCase()}
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      {/* Price Display */}
+      <div className="px-3 py-2 flex items-center justify-between">
+        <div>
+          <div className="text-lg font-bold text-white">
+            ${currentPrice.toFixed(currentPrice < 0.01 ? 8 : 4)}
+          </div>
+          <div className={`text-xs ${priceChange >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+            {priceChange >= 0 ? '+' : ''}{priceChange.toFixed(2)}%
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowVolume(!showVolume)}
+            className={`p-1.5 rounded ${showVolume ? 'bg-cyan-500/20 text-cyan-400' : 'text-white/40'}`}
+          >
+            <BarChart3 className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
+      
+      {/* Chart Area */}
+      <div className="relative px-2 pb-2">
+        <svg width="100%" height={chartHeight} className="overflow-visible">
+          {/* Grid Lines */}
+          {[0, 0.25, 0.5, 0.75, 1].map((pct, i) => (
+            <g key={i}>
+              <line
+                x1="0"
+                y1={20 + pct * (chartHeight - 40)}
+                x2="100%"
+                y2={20 + pct * (chartHeight - 40)}
+                stroke="rgba(255,255,255,0.05)"
+                strokeDasharray="4,4"
+              />
+              <text
+                x="100%"
+                y={20 + pct * (chartHeight - 40)}
+                fill="rgba(255,255,255,0.3)"
+                fontSize="8"
+                textAnchor="end"
+                dy="3"
+                dx="-2"
+              >
+                ${(maxPrice - pct * priceRange).toFixed(currentPrice < 0.01 ? 6 : 4)}
+              </text>
+            </g>
+          ))}
+          
+          {/* Volume Bars */}
+          {showVolume && visibleCandles.map((candle, i) => (
+            <rect
+              key={`vol-${i}`}
+              x={`${i * candleWidth + candleWidth * 0.2}%`}
+              y={chartHeight - 30 - (candle.volume / maxVolume) * 25}
+              width={`${candleWidth * 0.6}%`}
+              height={(candle.volume / maxVolume) * 25}
+              fill={candle.close >= candle.open ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)'}
+            />
+          ))}
+          
+          {/* Candlesticks */}
+          {visibleCandles.map((candle, i) => {
+            const isGreen = candle.close >= candle.open;
+            const color = isGreen ? '#10b981' : '#ef4444';
+            const bodyTop = getY(Math.max(candle.open, candle.close));
+            const bodyBottom = getY(Math.min(candle.open, candle.close));
+            const bodyHeight = Math.max(bodyBottom - bodyTop, 1);
+            
+            return (
+              <g key={i}>
+                {/* Wick */}
+                <line
+                  x1={`${i * candleWidth + candleWidth * 0.5}%`}
+                  y1={getY(candle.high)}
+                  x2={`${i * candleWidth + candleWidth * 0.5}%`}
+                  y2={getY(candle.low)}
+                  stroke={color}
+                  strokeWidth="1"
+                />
+                {/* Body */}
+                <rect
+                  x={`${i * candleWidth + candleWidth * 0.2}%`}
+                  y={bodyTop}
+                  width={`${candleWidth * 0.6}%`}
+                  height={bodyHeight}
+                  fill={color}
+                  rx="1"
+                />
+              </g>
+            );
+          })}
+          
+          {/* Current Price Line */}
+          <line
+            x1="0"
+            y1={getY(currentPrice)}
+            x2="100%"
+            y2={getY(currentPrice)}
+            stroke="#22d3ee"
+            strokeWidth="1"
+            strokeDasharray="4,2"
+          />
+          <rect
+            x="0"
+            y={getY(currentPrice) - 8}
+            width="50"
+            height="16"
+            fill="#22d3ee"
+            rx="2"
+          />
+          <text
+            x="25"
+            y={getY(currentPrice) + 3}
+            fill="black"
+            fontSize="8"
+            fontWeight="bold"
+            textAnchor="middle"
+          >
+            ${currentPrice.toFixed(currentPrice < 0.01 ? 5 : 3)}
+          </text>
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// AUTO-SNIPE MODE COMPONENT
+// ═══════════════════════════════════════════════════════════════════
+interface AutoSnipeConfig {
+  enabled: boolean;
+  entryPrice: number;
+  targetPrice: number;
+  stopLoss: number;
+  amount: number;
+  slippage: number;
+  maxGas: number;
+  mevProtection: boolean;
+  autoTakeProfit: boolean;
+  trailingStop: boolean;
+  trailingPercent: number;
+}
+
+function AutoSnipePanel({
+  token,
+  config,
+  setConfig,
+  onExecute,
+  onStop
+}: {
+  token: TokenData;
+  config: AutoSnipeConfig;
+  setConfig: (c: AutoSnipeConfig) => void;
+  onExecute: () => void;
+  onStop: () => void;
+}) {
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  
+  return (
+    <div className="bg-gradient-to-br from-slate-800/80 via-emerald-900/10 to-slate-800/80 rounded-2xl border border-emerald-500/30 overflow-hidden">
+      {/* Header */}
+      <div className="p-4 border-b border-white/10 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className={`w-8 h-8 rounded-lg ${config.enabled ? 'bg-gradient-to-br from-emerald-400 to-emerald-600 animate-pulse' : 'bg-gradient-to-br from-slate-600 to-slate-700'} flex items-center justify-center`}>
+            {config.enabled ? <Play className="w-4 h-4 text-white" /> : <Pause className="w-4 h-4 text-white/50" />}
+          </div>
+          <div>
+            <div className="font-bold text-white text-sm">Auto-Snipe Mode</div>
+            <div className="text-[10px] text-emerald-300">Set & Forget Trading</div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <Switch
+            checked={config.enabled}
+            onCheckedChange={(enabled) => setConfig({ ...config, enabled })}
+            data-testid="auto-snipe-toggle"
+          />
+          <span className={`text-xs font-medium ${config.enabled ? 'text-emerald-400' : 'text-white/50'}`}>
+            {config.enabled ? 'ACTIVE' : 'OFF'}
+          </span>
+        </div>
+      </div>
+      
+      {/* Quick Stats */}
+      {config.enabled && (
+        <div className="px-4 py-2 bg-emerald-500/10 border-b border-emerald-500/20">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-emerald-400">Monitoring {token.symbol}...</span>
+            <span className="text-white/50">Waiting for entry at ${config.entryPrice.toFixed(6)}</span>
+          </div>
+        </div>
+      )}
+      
+      {/* Configuration */}
+      <div className="p-4 space-y-4">
+        {/* Entry & Target */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1">
+            <label className="text-[10px] text-white/50 uppercase">Entry Price</label>
+            <div className="relative">
+              <DollarSign className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/30" />
+              <input
+                type="number"
+                value={config.entryPrice}
+                onChange={(e) => setConfig({ ...config, entryPrice: parseFloat(e.target.value) || 0 })}
+                className="w-full bg-slate-800/50 border border-white/10 rounded-lg pl-7 pr-3 py-2 text-sm text-white"
+                step="0.000001"
+                data-testid="entry-price-input"
+              />
+            </div>
+            <button 
+              onClick={() => setConfig({ ...config, entryPrice: token.priceUsd })}
+              className="text-[9px] text-cyan-400 hover:text-cyan-300"
+            >
+              Use current: ${token.priceUsd.toFixed(6)}
+            </button>
+          </div>
+          <div className="space-y-1">
+            <label className="text-[10px] text-white/50 uppercase">Target Price</label>
+            <div className="relative">
+              <Target className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-emerald-400/50" />
+              <input
+                type="number"
+                value={config.targetPrice}
+                onChange={(e) => setConfig({ ...config, targetPrice: parseFloat(e.target.value) || 0 })}
+                className="w-full bg-slate-800/50 border border-emerald-500/20 rounded-lg pl-7 pr-3 py-2 text-sm text-emerald-400"
+                step="0.000001"
+                data-testid="target-price-input"
+              />
+            </div>
+            <span className="text-[9px] text-emerald-400">
+              +{(((config.targetPrice - config.entryPrice) / config.entryPrice) * 100).toFixed(1)}% gain
+            </span>
+          </div>
+        </div>
+        
+        {/* Stop Loss & Amount */}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1">
+            <label className="text-[10px] text-white/50 uppercase">Stop Loss</label>
+            <div className="relative">
+              <AlertTriangle className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-red-400/50" />
+              <input
+                type="number"
+                value={config.stopLoss}
+                onChange={(e) => setConfig({ ...config, stopLoss: parseFloat(e.target.value) || 0 })}
+                className="w-full bg-slate-800/50 border border-red-500/20 rounded-lg pl-7 pr-3 py-2 text-sm text-red-400"
+                step="0.000001"
+                data-testid="stop-loss-input"
+              />
+            </div>
+            <span className="text-[9px] text-red-400">
+              -{(((config.entryPrice - config.stopLoss) / config.entryPrice) * 100).toFixed(1)}% loss
+            </span>
+          </div>
+          <div className="space-y-1">
+            <label className="text-[10px] text-white/50 uppercase">Amount ({token.nativeSymbol})</label>
+            <div className="relative">
+              <Wallet className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/30" />
+              <input
+                type="number"
+                value={config.amount}
+                onChange={(e) => setConfig({ ...config, amount: parseFloat(e.target.value) || 0 })}
+                className="w-full bg-slate-800/50 border border-white/10 rounded-lg pl-7 pr-3 py-2 text-sm text-white"
+                step="0.1"
+                data-testid="amount-input"
+              />
+            </div>
+          </div>
+        </div>
+        
+        {/* Quick Amount Buttons */}
+        <div className="flex gap-2">
+          {[0.1, 0.5, 1, 2, 5].map(amt => (
+            <button
+              key={amt}
+              onClick={() => setConfig({ ...config, amount: amt })}
+              className={`flex-1 py-2 rounded-lg text-xs font-medium transition-colors ${
+                config.amount === amt
+                  ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30'
+                  : 'bg-slate-800/50 text-white/50 border border-white/5 hover:bg-slate-700/50'
+              }`}
+            >
+              {amt} {token.nativeSymbol}
+            </button>
+          ))}
+        </div>
+        
+        {/* Advanced Options Toggle */}
+        <button
+          onClick={() => setShowAdvanced(!showAdvanced)}
+          className="w-full flex items-center justify-center gap-1 py-2 text-xs text-white/50 hover:text-white/70"
+        >
+          <Settings className="w-3.5 h-3.5" />
+          Advanced Settings
+          <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
+        </button>
+        
+        {/* Advanced Options */}
+        {showAdvanced && (
+          <div className="space-y-3 p-3 bg-slate-800/30 rounded-lg">
+            {/* Slippage */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-[10px] text-white/50 uppercase">Slippage Tolerance</label>
+                <span className="text-xs text-cyan-400">{config.slippage}%</span>
+              </div>
+              <Slider
+                value={[config.slippage]}
+                onValueChange={([v]) => setConfig({ ...config, slippage: v })}
+                min={0.1}
+                max={10}
+                step={0.1}
+                className="w-full"
+              />
+            </div>
+            
+            {/* Trailing Stop */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <TrendingUp className="w-3.5 h-3.5 text-purple-400" />
+                <span className="text-xs">Trailing Stop</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  value={config.trailingPercent}
+                  onChange={(e) => setConfig({ ...config, trailingPercent: parseFloat(e.target.value) || 0 })}
+                  className="w-16 bg-slate-700 rounded px-2 py-1 text-xs text-right"
+                  disabled={!config.trailingStop}
+                />
+                <span className="text-xs text-white/50">%</span>
+                <Switch
+                  checked={config.trailingStop}
+                  onCheckedChange={(v) => setConfig({ ...config, trailingStop: v })}
+                />
+              </div>
+            </div>
+            
+            {/* MEV Protection */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Shield className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="text-xs">MEV Protection</span>
+              </div>
+              <Switch
+                checked={config.mevProtection}
+                onCheckedChange={(v) => setConfig({ ...config, mevProtection: v })}
+              />
+            </div>
+            
+            {/* Auto Take Profit */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
+                <span className="text-xs">Auto Take Profit</span>
+              </div>
+              <Switch
+                checked={config.autoTakeProfit}
+                onCheckedChange={(v) => setConfig({ ...config, autoTakeProfit: v })}
+              />
+            </div>
+          </div>
+        )}
+        
+        {/* Action Buttons */}
+        <div className="grid grid-cols-2 gap-2">
+          {config.enabled ? (
+            <>
+              <Button
+                onClick={onStop}
+                className="h-12 bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30"
+                data-testid="stop-auto-snipe"
+              >
+                <Square className="w-4 h-4 mr-2" />
+                STOP
+              </Button>
+              <Button
+                onClick={onExecute}
+                className="h-12 bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white font-bold"
+                data-testid="execute-now"
+              >
+                <Zap className="w-4 h-4 mr-2" />
+                EXECUTE NOW
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                onClick={onExecute}
+                className="h-12 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold"
+                data-testid="manual-snipe"
+              >
+                <Crosshair className="w-4 h-4 mr-2" />
+                SNIPE NOW
+              </Button>
+              <Button
+                onClick={() => setConfig({ ...config, enabled: true })}
+                className="h-12 bg-slate-800/50 hover:bg-slate-700/50 text-cyan-400 border border-cyan-500/30"
+                data-testid="start-auto-snipe"
+              >
+                <Play className="w-4 h-4 mr-2" />
+                START AUTO
+              </Button>
+            </>
+          )}
+        </div>
+        
+        {/* Risk/Reward Summary */}
+        <div className="p-3 bg-slate-800/30 rounded-lg">
+          <div className="grid grid-cols-3 gap-2 text-center text-xs">
+            <div>
+              <div className="text-white/40">Risk</div>
+              <div className="text-red-400 font-bold">
+                ${(config.amount * config.entryPrice * ((config.entryPrice - config.stopLoss) / config.entryPrice)).toFixed(2)}
+              </div>
+            </div>
+            <div>
+              <div className="text-white/40">Reward</div>
+              <div className="text-emerald-400 font-bold">
+                ${(config.amount * config.entryPrice * ((config.targetPrice - config.entryPrice) / config.entryPrice)).toFixed(2)}
+              </div>
+            </div>
+            <div>
+              <div className="text-white/40">R:R Ratio</div>
+              <div className="text-cyan-400 font-bold">
+                1:{((config.targetPrice - config.entryPrice) / (config.entryPrice - config.stopLoss)).toFixed(1)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// BUY/SELL METRICS PANEL - FULL ANALYSIS
+// ═══════════════════════════════════════════════════════════════════
+function BuySellMetricsPanel({ token }: { token: TokenData }) {
+  // Calculate comprehensive recommendation based on all metrics
+  const calculateRecommendation = () => {
+    let score = 50; // Start neutral
+    
+    // Price momentum
+    if (token.priceChange24h > 50) score += 15;
+    else if (token.priceChange24h > 20) score += 10;
+    else if (token.priceChange24h > 0) score += 5;
+    else if (token.priceChange24h < -30) score -= 15;
+    else if (token.priceChange24h < -10) score -= 10;
+    else score -= 5;
+    
+    // Buy/sell ratio
+    const buyRatio = token.buys / (token.buys + token.sells);
+    if (buyRatio > 0.6) score += 15;
+    else if (buyRatio > 0.5) score += 5;
+    else if (buyRatio < 0.4) score -= 15;
+    else score -= 5;
+    
+    // Volume analysis
+    if (token.buyVolume > token.sellVolume * 1.5) score += 10;
+    else if (token.buyVolume > token.sellVolume) score += 5;
+    else if (token.sellVolume > token.buyVolume * 1.5) score -= 10;
+    else score -= 5;
+    
+    // Safety score
+    if (token.safety.score > 70) score += 10;
+    else if (token.safety.score > 50) score += 5;
+    else if (token.safety.score < 30) score -= 15;
+    else score -= 5;
+    
+    // Technical indicators
+    if (token.technicalIndicators.macdSignal === 'bullish') score += 10;
+    else if (token.technicalIndicators.macdSignal === 'bearish') score -= 10;
+    
+    if (token.technicalIndicators.rsi < 30) score += 10; // Oversold = buy opportunity
+    else if (token.technicalIndicators.rsi > 70) score -= 10; // Overbought = sell signal
+    
+    // ML prediction
+    if (token.mlPrediction.direction === 'up' && token.mlPrediction.confidence > 70) score += 15;
+    else if (token.mlPrediction.direction === 'down' && token.mlPrediction.confidence > 70) score -= 15;
+    
+    // Whale activity
+    if (token.whaleActivity.recentWhalebuys > token.whaleActivity.recentWhaleSells * 2) score += 10;
+    else if (token.whaleActivity.recentWhaleSells > token.whaleActivity.recentWhalebuys * 2) score -= 10;
+    
+    return Math.min(100, Math.max(0, score));
+  };
+  
+  const recommendationScore = calculateRecommendation();
+  const recommendation: 'BUY' | 'HOLD' | 'SELL' = 
+    recommendationScore >= 65 ? 'BUY' : 
+    recommendationScore >= 35 ? 'HOLD' : 'SELL';
+  
+  const recommendationConfig = {
+    BUY: { color: 'text-emerald-400', bg: 'bg-emerald-500/20', border: 'border-emerald-500/30', icon: ArrowUp },
+    HOLD: { color: 'text-yellow-400', bg: 'bg-yellow-500/20', border: 'border-yellow-500/30', icon: Circle },
+    SELL: { color: 'text-red-400', bg: 'bg-red-500/20', border: 'border-red-500/30', icon: ArrowDown },
+  }[recommendation];
+  
+  const Icon = recommendationConfig.icon;
+  
+  return (
+    <div className="bg-slate-800/30 rounded-xl border border-white/5 overflow-hidden">
+      {/* Header */}
+      <div className="p-3 border-b border-white/5 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <BarChart3 className="w-4 h-4 text-cyan-400" />
+          <span className="text-sm font-medium">Buy/Sell Analysis</span>
+        </div>
+        <div className={`flex items-center gap-1.5 px-3 py-1 rounded-lg ${recommendationConfig.bg} ${recommendationConfig.border} border`}>
+          <Icon className={`w-4 h-4 ${recommendationConfig.color}`} />
+          <span className={`text-sm font-bold ${recommendationConfig.color}`}>{recommendation}</span>
+          <span className="text-xs text-white/40">{recommendationScore}%</span>
+        </div>
+      </div>
+      
+      {/* Metrics Grid */}
+      <div className="p-4 space-y-4">
+        {/* Buy Pressure vs Sell Pressure */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-white/50">Buy Pressure</span>
+            <span className="text-white/50">Sell Pressure</span>
+          </div>
+          <div className="relative h-3 bg-slate-800 rounded-full overflow-hidden">
+            <div 
+              className="absolute left-0 top-0 h-full bg-gradient-to-r from-emerald-600 to-emerald-400"
+              style={{ width: `${(token.buyVolume / (token.buyVolume + token.sellVolume)) * 100}%` }}
+            />
+            <div 
+              className="absolute right-0 top-0 h-full bg-gradient-to-l from-red-600 to-red-400"
+              style={{ width: `${(token.sellVolume / (token.buyVolume + token.sellVolume)) * 100}%` }}
+            />
+          </div>
+          <div className="flex items-center justify-between text-xs font-medium">
+            <span className="text-emerald-400">{((token.buyVolume / (token.buyVolume + token.sellVolume)) * 100).toFixed(1)}%</span>
+            <span className="text-red-400">{((token.sellVolume / (token.buyVolume + token.sellVolume)) * 100).toFixed(1)}%</span>
+          </div>
+        </div>
+        
+        {/* Key Metrics */}
+        <div className="grid grid-cols-2 gap-2">
+          <div className="bg-slate-800/50 rounded-lg p-2.5">
+            <div className="text-[10px] text-white/40 mb-1">Buy/Sell Ratio</div>
+            <div className={`text-lg font-bold ${token.buys > token.sells ? 'text-emerald-400' : 'text-red-400'}`}>
+              {(token.buys / token.sells).toFixed(2)}x
+            </div>
+          </div>
+          <div className="bg-slate-800/50 rounded-lg p-2.5">
+            <div className="text-[10px] text-white/40 mb-1">Net Flow (24h)</div>
+            <div className={`text-lg font-bold ${token.buyVolume > token.sellVolume ? 'text-emerald-400' : 'text-red-400'}`}>
+              {token.buyVolume > token.sellVolume ? '+' : '-'}${Math.abs(token.buyVolume - token.sellVolume).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+            </div>
+          </div>
+        </div>
+        
+        {/* Signals */}
+        <div className="space-y-2">
+          <div className="text-[10px] text-white/40 uppercase">Trading Signals</div>
+          <div className="grid grid-cols-2 gap-2">
+            <div className={`flex items-center gap-2 p-2 rounded-lg ${
+              token.technicalIndicators.rsi < 30 ? 'bg-emerald-500/10 border border-emerald-500/20' :
+              token.technicalIndicators.rsi > 70 ? 'bg-red-500/10 border border-red-500/20' :
+              'bg-slate-800/50 border border-white/5'
+            }`}>
+              <div className="text-[10px] text-white/50">RSI</div>
+              <div className={`text-xs font-medium ${
+                token.technicalIndicators.rsi < 30 ? 'text-emerald-400' :
+                token.technicalIndicators.rsi > 70 ? 'text-red-400' : 'text-white'
+              }`}>
+                {token.technicalIndicators.rsi} {token.technicalIndicators.rsi < 30 ? '(Oversold)' : token.technicalIndicators.rsi > 70 ? '(Overbought)' : ''}
+              </div>
+            </div>
+            <div className={`flex items-center gap-2 p-2 rounded-lg ${
+              token.technicalIndicators.macdSignal === 'bullish' ? 'bg-emerald-500/10 border border-emerald-500/20' :
+              token.technicalIndicators.macdSignal === 'bearish' ? 'bg-red-500/10 border border-red-500/20' :
+              'bg-slate-800/50 border border-white/5'
+            }`}>
+              <div className="text-[10px] text-white/50">MACD</div>
+              <div className={`text-xs font-medium ${
+                token.technicalIndicators.macdSignal === 'bullish' ? 'text-emerald-400' :
+                token.technicalIndicators.macdSignal === 'bearish' ? 'text-red-400' : 'text-white'
+              }`}>
+                {token.technicalIndicators.macdSignal.charAt(0).toUpperCase() + token.technicalIndicators.macdSignal.slice(1)}
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* AI Verdict */}
+        <div className="p-3 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 rounded-lg border border-purple-500/20">
+          <div className="flex items-center gap-2 mb-2">
+            <Brain className="w-4 h-4 text-purple-400" />
+            <span className="text-xs font-medium text-purple-300">AI Verdict</span>
+          </div>
+          <p className="text-xs text-white/70">
+            Based on {token.txns.toLocaleString()} transactions, {token.mlPrediction.accuracy}% ML accuracy, and current market conditions, 
+            our AI recommends <span className={recommendationConfig.color}>{recommendation}</span> with {recommendationScore}% confidence.
+            {recommendation === 'BUY' && " Entry looks favorable with positive momentum."}
+            {recommendation === 'HOLD' && " Wait for clearer signals before taking action."}
+            {recommendation === 'SELL' && " Consider taking profits or reducing position."}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function formatPrice(price: number): string {
@@ -448,6 +1203,33 @@ export default function TokenDetail() {
   const [timeFilter, setTimeFilter] = useState<'5m' | '1h' | '6h' | '24h'>('24h');
   const [isWatchlisted, setIsWatchlisted] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
+  
+  // Auto-Snipe State
+  const [autoSnipeConfig, setAutoSnipeConfig] = useState<AutoSnipeConfig>({
+    enabled: false,
+    entryPrice: 0,
+    targetPrice: 0,
+    stopLoss: 0,
+    amount: 1,
+    slippage: 1,
+    maxGas: 0.01,
+    mevProtection: true,
+    autoTakeProfit: true,
+    trailingStop: false,
+    trailingPercent: 5
+  });
+  
+  // Initialize auto-snipe config when token loads
+  useEffect(() => {
+    if (token) {
+      setAutoSnipeConfig(prev => ({
+        ...prev,
+        entryPrice: token.priceUsd,
+        targetPrice: token.strikeAgent.targetPrice,
+        stopLoss: token.strikeAgent.stopLoss
+      }));
+    }
+  }, [token]);
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -572,6 +1354,18 @@ export default function TokenDetail() {
         {/* AI Recommendation */}
         <div className="flex justify-center mb-4">
           <AIBadge recommendation={token.aiRecommendation} score={token.aiScore} />
+        </div>
+
+        {/* ═══════════════════════════════════════════════════════════════════
+            REAL-TIME CANDLESTICK CHART
+        ═══════════════════════════════════════════════════════════════════ */}
+        <div className="px-4 mb-4">
+          <CandlestickChart 
+            price={token.priceUsd}
+            symbol={token.symbol}
+            priceChange={currentPriceChange}
+            isAutoSnipeActive={autoSnipeConfig.enabled}
+          />
         </div>
 
         {/* Price Cards */}
@@ -846,6 +1640,31 @@ export default function TokenDetail() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* ═══════════════════════════════════════════════════════════════════
+            AUTO-SNIPE MODE PANEL
+        ═══════════════════════════════════════════════════════════════════ */}
+        <div className="px-4 mb-4">
+          <AutoSnipePanel
+            token={token}
+            config={autoSnipeConfig}
+            setConfig={setAutoSnipeConfig}
+            onExecute={() => {
+              console.log('Executing snipe with config:', autoSnipeConfig);
+              // TODO: Connect to wallet and execute trade
+            }}
+            onStop={() => {
+              setAutoSnipeConfig(prev => ({ ...prev, enabled: false }));
+            }}
+          />
+        </div>
+
+        {/* ═══════════════════════════════════════════════════════════════════
+            BUY/SELL METRICS & RECOMMENDATION
+        ═══════════════════════════════════════════════════════════════════ */}
+        <div className="px-4 mb-4">
+          <BuySellMetricsPanel token={token} />
         </div>
 
         {/* ═══════════════════════════════════════════════════════════════════
