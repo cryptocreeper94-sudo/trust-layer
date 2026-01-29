@@ -8,6 +8,7 @@ import { serveStatic } from "./static";
 import { createServer } from "http";
 import { startScheduler } from "./marketing-scheduler";
 import { startShellsAirdropScheduler } from "./shells-airdrop-scheduler";
+import { startReferralPayoutScheduler } from "./referral-payout-scheduler";
 import { startEmailUpdateScheduler } from "./email-update-scheduler";
 import { seedDocuments, seedCityZones } from "./storage";
 import { setupPresence } from "./chat-presence";
@@ -350,6 +351,9 @@ async function initializeServices() {
     
     // Shells airdrop scheduler - runs at 7 AM and 7 PM UTC (1 AM and 1 PM CST)
     startShellsAirdropScheduler();
+    
+    // Referral payout scheduler - runs at 2 PM and 2 AM UTC (8 AM and 8 PM CST)
+    startReferralPayoutScheduler();
     
     // Email update scheduler - sends weekly updates every Sunday at 10 AM UTC
     startEmailUpdateScheduler();

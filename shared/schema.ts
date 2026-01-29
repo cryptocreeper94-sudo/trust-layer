@@ -3689,6 +3689,9 @@ export const referrals = pgTable("referrals", {
   commissionAmount: integer("commission_amount").default(0),
   qualifiedAt: timestamp("qualified_at"),
   convertedAt: timestamp("converted_at"),
+  shellsPaid: boolean("shells_paid").default(false),
+  shellsPaidAt: timestamp("shells_paid_at"),
+  shellsAmount: integer("shells_amount").default(0),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
