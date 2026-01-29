@@ -359,7 +359,7 @@ const volume1Chapters: Chapter[] = [
   },
   {
     id: "v1-ch5",
-    title: "Chapter 5: The Flood and What It Destroyed",
+    title: "Chapter 5: The Flood and Physical Evidence",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART TWO: THE FIRST RESET</p>
@@ -369,12 +369,16 @@ const volume1Chapters: Chapter[] = [
         <p>According to scripture, the entire earth was corrupted. The violence was so complete that the Creator grieved making humanity at all. But there's more than violence in the account. There's the corruption of all flesh - genetic corruption, the mixing of what shouldn't have been mixed.</p>
         <p>What technology existed before the Flood? What knowledge was lost? The antediluvian world had the direct teaching of the Watchers - metallurgy, astrology, enchantments, and more. Noah lived 950 years. Methuselah lived 969 years. What could you learn in a millennium?</p>
         <p>The Flood reset more than morality. It reset knowledge. It reset technology. It reset the timeline.</p>
+
+        <h3 className="text-xl font-bold text-cyan-400 mt-10 mb-4">The Physical Evidence They Ignore</h3>
+        <p>What if there was physical, tangible proof that the biblical accounts are literally true? What if you could walk to the locations described in scripture and find exactly what the text describes?</p>
+        <p>You can. The evidence exists. And it has been systematically ignored, ridiculed, or buried by mainstream archaeology.</p>
       </>
     )
   },
   {
-    id: "v1-ch5b",
-    title: "Chapter 5B: The Physical Evidence They Ignore",
+    id: "v1-ch5-evidence",
+    title: "The Physical Evidence They Ignore",
     content: (
       <>
         <p>What if there was physical, tangible proof that the biblical accounts are literally true? What if you could walk to the locations described in scripture and find exactly what the text describes?</p>
@@ -506,8 +510,8 @@ const volume1Chapters: Chapter[] = [
     )
   },
   {
-    id: "v1-ch5c",
-    title: "Chapter 5C: The Petrified Giants",
+    id: "v1-ch5-giants",
+    title: "The Petrified Giants",
     content: (
       <>
         <p>The Nephilim were massive. Genesis describes them as giants - beings of extraordinary size born from the union of Watchers and human women. Some accounts in Enoch and other texts describe beings hundreds of feet tall. When the Flood came, what happened to their bodies?</p>
@@ -534,8 +538,8 @@ const volume1Chapters: Chapter[] = [
     )
   },
   {
-    id: "v1-ch5d",
-    title: "Chapter 5D: Biblical Cosmology - The Evidence Above",
+    id: "v1-ch5-cosmology",
+    title: "Biblical Cosmology - The Evidence Above",
     content: (
       <>
         <p>What if the very shape of the world you've been taught is part of the deception? What if the cosmology described in Scripture - a flat plane under a solid firmament, with waters above and below - is not primitive ignorance but accurate description?</p>
@@ -1494,8 +1498,8 @@ const volume1Chapters: Chapter[] = [
     )
   },
   {
-    id: "v1-ch32b-societies",
-    title: "Chapter 32B: The Secret Societies",
+    id: "v1-ch32-societies",
+    title: "The Secret Societies",
     content: (
       <>
         <p>The knowledge didn't disappear. It was preserved - passed down through initiatic orders, mystery schools, and secret societies that have operated continuously for centuries.</p>
@@ -1540,8 +1544,8 @@ const volume1Chapters: Chapter[] = [
     )
   },
   {
-    id: "v1-ch32c-timeline",
-    title: "Chapter 32C: The Ultimate Timeline",
+    id: "v1-ch32-timeline",
+    title: "The Ultimate Timeline",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">TYING IT ALL TOGETHER</p>
@@ -1607,8 +1611,8 @@ const volume1Chapters: Chapter[] = [
     )
   },
   {
-    id: "v1-ch32d-entertainment",
-    title: "Chapter 32D: The Entertainment Complex",
+    id: "v1-ch32-entertainment",
+    title: "The Entertainment Complex",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART NINE-B: THE MODERN SPELLCASTERS</p>
@@ -1683,8 +1687,8 @@ const volume1Chapters: Chapter[] = [
     )
   },
   {
-    id: "v1-ch32e-revelation",
-    title: "Chapter 32E: The Revelation of the Method",
+    id: "v1-ch32-revelation",
+    title: "The Revelation of the Method",
     content: (
       <>
         <p>They tell you what they're doing. They always have. This isn't theory - it's observable pattern.</p>
@@ -1731,8 +1735,8 @@ const volume1Chapters: Chapter[] = [
     )
   },
   {
-    id: "v1-ch32f-denominations",
-    title: "Chapter 32F: The Fracturing of Faith",
+    id: "v1-ch32-denominations",
+    title: "The Fracturing of Faith",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART NINE-C: THE THOUSAND DENOMINATIONS</p>
@@ -1797,8 +1801,8 @@ const volume1Chapters: Chapter[] = [
     )
   },
   {
-    id: "v1-ch32g-vatican",
-    title: "Chapter 32G: Vatican Rituals and Symbolism",
+    id: "v1-ch32-vatican",
+    title: "Vatican Rituals and Symbolism",
     content: (
       <>
         <p>The Vatican is the seat of the "Universal" religion. Its rituals, symbols, and practices deserve examination.</p>
@@ -1851,8 +1855,8 @@ const volume1Chapters: Chapter[] = [
     )
   },
   {
-    id: "v1-ch32h",
-    title: "Chapter 32H: The Hollow Souls",
+    id: "v1-ch32-conclusion",
+    title: "The Hollow Souls",
     content: (
       <>
         <p className="text-purple-400 font-medium mb-4">PART TEN: THE HOLLOW WORLD</p>
@@ -2154,8 +2158,8 @@ const volume1Chapters: Chapter[] = [
 
 const journeyChapters: Chapter[] = [
   {
-    id: "journey-intro",
-    title: "Section Two: The Personal Journey",
+    id: "journey-author",
+    title: "The Author's Journey",
     content: (
       <>
         <p className="text-2xl text-purple-400 font-medium mb-6">My Journey Beyond the Veil</p>
@@ -2179,8 +2183,8 @@ const journeyChapters: Chapter[] = [
     )
   },
   {
-    id: "journey-ch1",
-    title: "Chapter 13: The Awakening",
+    id: "journey-awakening",
+    title: "The Awakening",
     content: (
       <>
         <h3 className="text-xl font-bold text-cyan-400 mb-4">The Fog and The Lifting</h3>
@@ -2213,8 +2217,8 @@ const journeyChapters: Chapter[] = [
     )
   },
   {
-    id: "journey-ch2",
-    title: "Chapter 14: The System and Its Weapons",
+    id: "journey-system",
+    title: "The System and Its Weapons",
     content: (
       <>
         <h3 className="text-xl font-bold text-cyan-400 mb-4">The Fragmented System</h3>
@@ -2258,8 +2262,8 @@ const journeyChapters: Chapter[] = [
     )
   },
   {
-    id: "journey-ch3",
-    title: "Chapter 15: The Thin Veil",
+    id: "journey-veil",
+    title: "The Thin Veil",
     content: (
       <>
         <h3 className="text-xl font-bold text-cyan-400 mb-4">For Those Still Searching</h3>
@@ -2295,8 +2299,8 @@ const journeyChapters: Chapter[] = [
     )
   },
   {
-    id: "journey-ch4",
-    title: "Chapter 16: The Revelation",
+    id: "journey-revelation",
+    title: "The Revelation",
     content: (
       <>
         <h3 className="text-xl font-bold text-cyan-400 mb-4">The 3D Classroom</h3>
@@ -2353,8 +2357,8 @@ const journeyChapters: Chapter[] = [
     )
   },
   {
-    id: "journey-ch5",
-    title: "Chapter 17: The Declaration",
+    id: "journey-declaration",
+    title: "The Declaration",
     content: (
       <>
         <h3 className="text-xl font-bold text-cyan-400 mb-4">The Point of the Spear</h3>
