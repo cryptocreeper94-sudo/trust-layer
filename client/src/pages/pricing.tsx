@@ -28,6 +28,13 @@ interface SubscriptionPlan {
   checkoutEndpoint: string;
 }
 
+// Core Trust Layer benefits included with ALL subscriptions
+const CORE_TRUST_LAYER_BENEFITS = [
+  { text: "Unique Trust Layer Hash (on-chain identity)", included: true },
+  { text: "Digital Membership Card", included: true },
+  { text: "Trust Layer Dashboard access", included: true },
+];
+
 const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
   {
     id: "pulse_pro",
@@ -40,6 +47,7 @@ const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     glowColor: "cyan",
     checkoutEndpoint: "/api/payments/stripe/create-pulse-monthly",
     features: [
+      ...CORE_TRUST_LAYER_BENEFITS,
       { text: "Unlimited AI market searches", included: true },
       { text: "Advanced AI price predictions", included: true },
       { text: "Full technical analysis suite", included: true },
@@ -61,6 +69,7 @@ const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     glowColor: "purple",
     checkoutEndpoint: "/api/payments/stripe/create-strike-monthly",
     features: [
+      ...CORE_TRUST_LAYER_BENEFITS,
       { text: "AI-powered sniper bot", included: true },
       { text: "Honeypot detection", included: true },
       { text: "Anti-MEV protection", included: true },
@@ -83,6 +92,7 @@ const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     popular: true,
     checkoutEndpoint: "/api/payments/stripe/create-bundle-monthly",
     features: [
+      ...CORE_TRUST_LAYER_BENEFITS,
       { text: "Everything in Pulse Pro", included: true },
       { text: "Everything in StrikeAgent Elite", included: true },
       { text: "Priority support", included: true },
