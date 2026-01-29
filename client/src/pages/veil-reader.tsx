@@ -2962,16 +2962,10 @@ const appendicesChapters: Chapter[] = [
 
 const volumes: Volume[] = [
   {
-    id: "section1",
-    title: "Section One",
-    subtitle: "The Evidence",
-    chapters: volume1Chapters
-  },
-  {
-    id: "section2",
-    title: "Section Two",
-    subtitle: "The Journey",
-    chapters: journeyChapters
+    id: "main",
+    title: "Through The Veil",
+    subtitle: "Research & Personal Journey",
+    chapters: [...volume1Chapters, ...journeyChapters]
   },
   {
     id: "appendices",
