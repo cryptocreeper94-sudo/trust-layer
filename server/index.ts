@@ -1,4 +1,13 @@
 import express, { type Request, Response, NextFunction } from "express";
+
+// Extend Express Request type for tlid subdomain routing
+declare global {
+  namespace Express {
+    interface Request {
+      tlidSubdomain?: string;
+    }
+  }
+}
 import helmet from "helmet";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
@@ -41,6 +50,33 @@ app.use((req, res, next) => {
     }
     const newUrl = `https://dwtl.io${req.originalUrl}`;
     return res.redirect(301, newUrl);
+  }
+  next();
+});
+
+// Handle tlid.io domain routing
+// Root tlid.io → Trust Layer signup page
+// Subdomains (alice.tlid.io) → Route to configured website
+app.use((req, res, next) => {
+  const host = req.headers.host || '';
+  
+  // Check if this is a tlid.io request
+  if (host.endsWith('tlid.io')) {
+    const parts = host.split('.');
+    
+    // Root domain (tlid.io or www.tlid.io) → Trust Layer landing page
+    if (host === 'tlid.io' || host === 'www.tlid.io') {
+      // Serve the Trust Layer landing/signup page
+      // The SPA router will handle showing the correct page at /
+      return next();
+    }
+    
+    // Subdomain (e.g., alice.tlid.io) → Route to configured website
+    if (parts.length > 2) {
+      const subdomain = parts[0];
+      // Store subdomain for gateway routing (handled by routes.ts)
+      req.tlidSubdomain = subdomain;
+    }
   }
   next();
 });
