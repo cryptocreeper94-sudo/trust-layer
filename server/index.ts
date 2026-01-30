@@ -142,10 +142,20 @@ const ALLOWED_ORIGINS = [
   "https://www.chronochat.io",
 ];
 
-// Allow localhost in development
+// Allow localhost and Replit dev domains in development
 if (process.env.NODE_ENV !== "production") {
   ALLOWED_ORIGINS.push("http://localhost:5000", "http://127.0.0.1:5000");
 }
+
+// Always allow Replit dev domains for cross-app communication
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && (origin.includes('.replit.dev') || origin.includes('.repl.co'))) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+  }
+  next();
+});
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
