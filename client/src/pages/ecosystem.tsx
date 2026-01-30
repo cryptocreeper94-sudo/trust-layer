@@ -92,6 +92,10 @@ const ecosystemImages: Record<string, string> = {
   "strike-agent": "/ecosystem/strike-agent.jpg",
   "veda-solus": "/ecosystem/veda-solus.jpg",
   "vedasolus": "/ecosystem/veda-solus.jpg",
+  "signal-chat": "/icons/signal-chat-512.png",
+  "driver-connect": "/ecosystem/driver-connect.jpg",
+  "tradeworks-ai": "/ecosystem/tradeworks-ai.jpg",
+  "nashpaintpros": "/ecosystem/nashpaintpros.jpg",
 };
 
 function getAppImage(appId: string): string {

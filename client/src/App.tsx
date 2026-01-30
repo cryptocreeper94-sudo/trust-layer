@@ -154,6 +154,7 @@ const VeilReader = lazy(() => import("@/pages/veil-reader"));
 const VeilPrintVol2 = lazy(() => import("@/pages/veil-print-vol2"));
 const ChronoChat = lazy(() => import("@/pages/chronochat"));
 const ChronoChatInvite = lazy(() => import("@/pages/chronochat-invite"));
+const SignalChat = lazy(() => import("@/pages/signal-chat"));
 const CreatorProgram = lazy(() => import("@/pages/creator-program"));
 const EraCodex = lazy(() => import("@/pages/era-codex"));
 const ScenarioGenerator = lazy(() => import("@/pages/scenario-generator"));
@@ -282,6 +283,7 @@ function GamesRouter() {
         <Route path="/veil/print/vol2" component={VeilPrintVol2} />
         <Route path="/chronochat" component={ChronoChat} />
         <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
+        <Route path="/signal-chat" component={SignalChat} />
         <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/scenario-generator" component={ScenarioGenerator} />
@@ -344,6 +346,7 @@ function ChronoRouter() {
         <Route path="/veil/print/vol2" component={VeilPrintVol2} />
         <Route path="/chronochat" component={ChronoChat} />
         <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
+        <Route path="/signal-chat" component={SignalChat} />
         <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/crowdfund" component={Crowdfund} />
@@ -536,6 +539,7 @@ function DWSCRouter() {
         <Route path="/veil/print/vol2" component={VeilPrintVol2} />
         <Route path="/chronochat" component={ChronoChat} />
         <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
+        <Route path="/signal-chat" component={SignalChat} />
         <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/scenario-generator" component={ScenarioGenerator} />

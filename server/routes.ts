@@ -19481,7 +19481,8 @@ const APP_URL_MAP: Record<string, string> = {
   "tradeworksai": "https://tradeworksai.io",
   "chronicles": "https://yourlegacy.io",
   "the-arcade": "https://darkwavegames.io",
-  "signal-chat": "https://chronochat.io",
+  "signal-chat": "/signal-chat",
+  "driver-connect": "https://driver-connect-hub.replit.app",
 };
 
 async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
@@ -19668,7 +19669,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-emerald-500 to-teal-600",
       verified: true,
       users: "DarkWave Verified",
-      url: "https://DarkWaveHealth.replit.app",
+      url: "https://vedasolus.io",
     },
     {
       id: "darkwave-studios",
@@ -19730,7 +19731,19 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-cyan-500 to-purple-500",
       verified: true,
       users: "DarkWave Verified",
-      url: "https://chronochat.io",
+      url: "/signal-chat",
+    },
+    {
+      id: "driver-connect",
+      name: "Trust Layer Driver Connect",
+      category: "Transportation",
+      description: "Blockchain-verified driver coordination and logistics platform for the Trust Layer ecosystem.",
+      hook: "Verified Driver Coordination",
+      tags: ["Transportation", "Logistics", "Drivers", "Verification"],
+      gradient: "from-blue-600 to-indigo-700",
+      verified: true,
+      users: "DarkWave Verified",
+      url: "https://driver-connect-hub.replit.app",
     },
   ];
 }
