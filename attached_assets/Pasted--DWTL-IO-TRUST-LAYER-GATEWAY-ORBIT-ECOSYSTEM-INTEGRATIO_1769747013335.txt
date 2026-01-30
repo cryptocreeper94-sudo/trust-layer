@@ -1,0 +1,155 @@
+# DWTL.IO (TRUST LAYER GATEWAY) - ORBIT ECOSYSTEM INTEGRATION
+## STEP 1: STORE THESE SECRETS IN REPLIT
+Add these to your Replit Secrets tab:
+| Secret Name | Value |
+|-------------|-------|
+| `ORBIT_HUB_API_KEY` | `dw_app_a88abb2e1b5a60c1b403d9fc95f947e966135e8fc99ece63` |
+| `ORBIT_HUB_API_SECRET` | `dw_secret_592a1bc98c16790e9a52c816b817b96bf838b831ca88cc64de1a1edc490edccf` |
+---
+## STEP 2: CREATE ORBIT CLIENT FILE
+Create file: `server/orbitClient.ts`
+```typescript
+// server/orbitClient.ts
+// ORBIT Ecosystem Hub Client for Trust Layer Gateway (dwtl.io)
+export class OrbitEcosystemClient {
+  private apiKey: string;
+  private apiSecret: string;
+  private hubUrl = 'https://orbitstaffing.io';
+  private appName = 'Trust Layer Gateway';
+  constructor() {
+    this.apiKey = process.env.ORBIT_HUB_API_KEY || '';
+    this.apiSecret = process.env.ORBIT_HUB_API_SECRET || '';
+  }
+  private getHeaders(): Record<string, string> {
+    return {
+      'Content-Type': 'application/json',
+      'X-API-Key': this.apiKey,
+      'X-API-Secret': this.apiSecret,
+      'X-App-Name': this.appName
+    };
+  }
+  // Test connection to ORBIT Hub
+  async checkConnection(): Promise<{ connected: boolean; hubName?: string; error?: string }> {
+    try {
+      const res = await fetch(`${this.hubUrl}/api/ecosystem/status`, {
+        method: 'GET',
+        headers: this.getHeaders()
+      });
+      
+      if (!res.ok) {
+        const error = await res.json();
+        return { connected: false, error: error.error || 'Connection failed' };
+      }
+      
+      const data = await res.json();
+      return { connected: true, hubName: data.hubName };
+    } catch (error) {
+      return { connected: false, error: String(error) };
+    }
+  }
+  // Log activity to ecosystem hub
+  async logActivity(action: string, category: string, details: Record<string, any>): Promise<boolean> {
+    try {
+      const res = await fetch(`${this.hubUrl}/api/ecosystem/logs`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify({
+          action,
+          category,
+          details,
+          timestamp: new Date().toISOString()
+        })
+      });
+      return res.ok;
+    } catch {
+      return false;
+    }
+  }
+  // Share code snippet with ecosystem
+  async shareSnippet(title: string, code: string, language: string, description?: string): Promise<any> {
+    try {
+      const res = await fetch(`${this.hubUrl}/api/ecosystem/snippets`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify({ title, code, language, description })
+      });
+      return await res.json();
+    } catch (error) {
+      return { success: false, error: String(error) };
+    }
+  }
+  // Get shared snippets from ecosystem
+  async getSnippets(): Promise<any[]> {
+    try {
+      const res = await fetch(`${this.hubUrl}/api/ecosystem/snippets`, {
+        headers: this.getHeaders()
+      });
+      const data = await res.json();
+      return data.snippets || [];
+    } catch {
+      return [];
+    }
+  }
+}
+// Export singleton instance
+export const orbitHub = new OrbitEcosystemClient();
+STEP 3: ADD API ROUTES (OPTIONAL)
+Add to your routes file if you want local endpoints:
+
+import { orbitHub } from './orbitClient';
+// Test ORBIT Hub connection
+app.get('/api/orbit/status', async (req, res) => {
+  const result = await orbitHub.checkConnection();
+  res.json(result);
+});
+// Log activity to ORBIT
+app.post('/api/orbit/log', async (req, res) => {
+  const { action, category, details } = req.body;
+  const success = await orbitHub.logActivity(action, category, details);
+  res.json({ success });
+});
+STEP 4: TEST CONNECTION
+After adding secrets and restarting your app:
+
+curl -s "https://orbitstaffing.io/api/ecosystem/status" \
+  -H "X-API-Key: dw_app_a88abb2e1b5a60c1b403d9fc95f947e966135e8fc99ece63" \
+  -H "X-API-Secret: dw_secret_592a1bc98c16790e9a52c816b817b96bf838b831ca88cc64de1a1edc490edccf" \
+  -H "X-App-Name: Trust Layer Gateway"
+Expected response:
+
+{"connected":true,"hubName":"ORBIT Staffing Ecosystem Hub","appName":"Trust Layer Gateway"}
+AVAILABLE ENDPOINTS
+Endpoint	Method	Description
+/api/ecosystem/status	GET	Test connection
+/api/ecosystem/logs	POST	Write activity logs
+/api/ecosystem/logs	GET	Read activity logs
+/api/ecosystem/snippets	POST	Share code snippets
+/api/ecosystem/snippets	GET	Get shared snippets
+REQUIRED HEADERS (ALL REQUESTS)
+Every request to ORBIT must include these 3 headers:
+
+X-API-Key: dw_app_a88abb2e1b5a60c1b403d9fc95f947e966135e8fc99ece63
+X-API-Secret: dw_secret_592a1bc98c16790e9a52c816b817b96bf838b831ca88cc64de1a1edc490edccf
+X-App-Name: Trust Layer Gateway
+PERMISSIONS GRANTED
+snippets:write - Share code snippets across ecosystem
+logs:write - Write activity logs to hub
+ecosystem:read - Read ecosystem status
+TROUBLESHOOTING
+Error	Cause	Fix
+401 Unauthorized	Missing/wrong headers	Check all 3 headers are present and correct
+403 Forbidden	App not registered	Contact ORBIT admin
+Connection refused	ORBIT redeploying	Wait 30 seconds, retry
+APP DETAILS
+Field	Value
+App ID	3028c7ad-9521-407d-a54d-7f47f5b7b4fc
+App Name	Trust Layer Gateway
+App Slug	trustlayer
+Category	identity
+Hub URL	https://orbitstaffing.io
+---
+Copy that to the **dwtl.io agent**. Make sure they:
+1. Add both secrets to Replit
+2. Create the client file
+3. Restart their app
+4. Test the connection
