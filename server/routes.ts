@@ -18768,7 +18768,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     res.status(410).json({ error: "Legacy Founder tier is no longer available for new purchases" });
   });
 
-  // Pulse API webhook for real-time signal notifications
+  // Pulse API webhook for real-time signal notifications (legacy route)
   app.post("/api/webhooks/pulse", async (req, res) => {
     try {
       const signature = req.headers["x-pulse-signature"] as string;
@@ -18806,6 +18806,65 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       res.status(200).json({ success: true });
     } catch (error) {
       console.error("Pulse webhook error:", error);
+      res.status(500).json({ error: "Webhook processing failed" });
+    }
+  });
+
+  // Pulse webhook endpoint (new route with HMAC verification)
+  app.post("/api/pulse/webhook", async (req, res) => {
+    try {
+      const apiKey = req.headers["x-api-key"] as string;
+      const signature = req.headers["x-signature"] as string;
+      const timestamp = req.headers["x-timestamp"] as string;
+      
+      const expectedKey = process.env.PULSE_API_KEY;
+      const secret = process.env.PULSE_API_SECRET;
+      
+      if (!expectedKey || !secret) {
+        console.error("[Pulse Webhook] Missing PULSE_API_KEY or PULSE_API_SECRET");
+        return res.status(500).json({ error: "Server configuration error" });
+      }
+      
+      if (!apiKey || !signature || !timestamp) {
+        return res.status(400).json({ error: "Missing required headers: x-api-key, x-signature, x-timestamp" });
+      }
+      
+      if (apiKey !== expectedKey) {
+        return res.status(401).json({ error: "Invalid API key" });
+      }
+      
+      // Verify timestamp is within 5 minutes
+      const timestampAge = Date.now() - parseInt(timestamp);
+      if (isNaN(timestampAge) || timestampAge > 300000 || timestampAge < -60000) {
+        return res.status(401).json({ error: "Invalid or expired timestamp" });
+      }
+      
+      // Verify HMAC signature
+      const payload = timestamp + JSON.stringify(req.body);
+      const expectedSignature = crypto.createHmac("sha256", secret).update(payload).digest("hex");
+      
+      if (signature !== expectedSignature) {
+        return res.status(401).json({ error: "Invalid signature" });
+      }
+      
+      const { type, data } = req.body;
+      console.log(`[Pulse Webhook] Received ${type}:`, JSON.stringify(data).slice(0, 200));
+      
+      // Handle different data types
+      switch (type) {
+        case "prediction":
+          console.log(`[Pulse] Prediction received: ${data.symbol} - ${data.direction} (${data.confidence}%)`);
+          break;
+        case "hallmark":
+          console.log(`[Pulse] Hallmark verification: ${data.tokenAddress} - Score: ${data.score}`);
+          break;
+        default:
+          console.log(`[Pulse] Unknown type: ${type}`);
+      }
+      
+      res.status(200).json({ success: true, received: type });
+    } catch (error) {
+      console.error("[Pulse Webhook] Error:", error);
       res.status(500).json({ error: "Webhook processing failed" });
     }
   });
