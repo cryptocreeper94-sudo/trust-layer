@@ -26,6 +26,7 @@ import { runMigrations } from "stripe-replit-sync";
 import { getStripeSync } from "./stripeClient";
 import { predictionTrackingService } from "./services/pulse/predictionTrackingService";
 import { predictionLearningService } from "./services/pulse/predictionLearningService";
+import { startMembershipReconciliationScheduler } from "./membership-reconciliation-scheduler";
 
 const app = express();
 
@@ -395,6 +396,9 @@ async function initializeServices() {
     
     // Email update scheduler - sends weekly updates every Sunday at 10 AM UTC
     startEmailUpdateScheduler();
+    
+    // Membership reconciliation scheduler - runs every 12 hours to unify accounts
+    startMembershipReconciliationScheduler();
     
     servicesReady = true;
     console.log('[Init] All services initialized successfully');

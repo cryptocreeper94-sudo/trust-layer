@@ -12,6 +12,7 @@ import { db } from "./db";
 import { verifyFirebaseIdToken } from "./firebase-admin";
 import { zealyService, type ZealyWebhookPayload } from "./zealy-service";
 import * as blogService from "./blog-service";
+import { membershipReconciliationService } from "./membership-reconciliation-service";
 
 // Auth request interface for session-based authentication
 interface AuthenticatedRequest extends Request {
@@ -1166,7 +1167,16 @@ export async function registerRoutes(
         signupPosition: signupPosition,
       });
 
-      res.json({ success: true, signupPosition });
+      // Create or get Trust Layer membership
+      const entryPoint = req.headers['x-entry-point'] as string || 'dwtl.io';
+      const trustLayerId = await membershipReconciliationService.getOrCreateMembership(uid, entryPoint);
+      
+      // Queue for duplicate reconciliation if new user
+      if (!existingUser) {
+        await membershipReconciliationService.queueForReconciliation(uid);
+      }
+
+      res.json({ success: true, signupPosition, trustLayerId });
     } catch (error) {
       console.error("Firebase sync error:", error);
       res.status(500).json({ error: "Failed to sync user" });
@@ -1281,6 +1291,13 @@ export async function registerRoutes(
 
       // Store password hash
       await db.update(users).set({ passwordHash }).where(eq(users.id, userId));
+
+      // Create Trust Layer membership
+      const entryPoint = req.headers['x-entry-point'] as string || 'dwtl.io';
+      const trustLayerId = await membershipReconciliationService.getOrCreateMembership(userId, entryPoint);
+      
+      // Queue for duplicate reconciliation
+      await membershipReconciliationService.queueForReconciliation(userId);
 
       // Generate and send email verification code
       const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
@@ -2500,6 +2517,40 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Get member number error:", error);
       res.status(500).json({ error: "Failed to get member number" });
+    }
+  });
+
+  // Get Trust Layer membership status
+  app.get("/api/user/membership", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const membership = await membershipReconciliationService.getMembershipByUserId(userId);
+      
+      if (!membership) {
+        // Create membership if doesn't exist (legacy users)
+        const entryPoint = req.headers['x-entry-point'] as string || 'dwtl.io';
+        const trustLayerId = await membershipReconciliationService.getOrCreateMembership(userId, entryPoint);
+        return res.json({
+          trustLayerId,
+          status: 'pending',
+          message: 'Your membership is being processed. You will be notified when it is active.'
+        });
+      }
+
+      res.json({
+        trustLayerId: membership.trustLayerId,
+        status: membership.status,
+        message: membership.status === 'active' 
+          ? 'Welcome to Trust Layer!' 
+          : 'Your membership is being processed. You will be notified when it is active.'
+      });
+    } catch (error) {
+      console.error("Get membership error:", error);
+      res.status(500).json({ error: "Failed to get membership status" });
     }
   });
 
