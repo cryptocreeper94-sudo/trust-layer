@@ -19482,7 +19482,9 @@ const APP_URL_MAP: Record<string, string> = {
   "chronicles": "https://yourlegacy.io",
   "the-arcade": "https://darkwavegames.io",
   "signal-chat": "/signal-chat",
-  "driver-connect": "https://driver-connect-hub.replit.app",
+  "driver-connect": "https://happyeats.app",
+  "happyeats": "https://happyeats.app",
+  "tldriverconnect": "https://tldriverconnect.com",
 };
 
 async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
@@ -19737,13 +19739,13 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       id: "driver-connect",
       name: "Trust Layer Driver Connect",
       category: "Transportation",
-      description: "Blockchain-verified driver coordination and logistics platform for the Trust Layer ecosystem.",
+      description: "Blockchain-verified driver coordination and logistics platform. Live demo at HappyEats.app, white label franchise at TLDriverConnect.com.",
       hook: "Verified Driver Coordination",
-      tags: ["Transportation", "Logistics", "Drivers", "Verification"],
+      tags: ["Transportation", "Logistics", "Drivers", "Verification", "Franchise"],
       gradient: "from-blue-600 to-indigo-700",
       verified: true,
       users: "DarkWave Verified",
-      url: "https://driver-connect-hub.replit.app",
+      url: "https://happyeats.app",
     },
   ];
 }
