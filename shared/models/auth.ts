@@ -125,3 +125,54 @@ export const userExternalWallets = pgTable("user_external_wallets", {
 
 export type UserExternalWallet = typeof userExternalWallets.$inferSelect;
 export type InsertUserExternalWallet = typeof userExternalWallets.$inferInsert;
+
+// Trust Layer Membership - Unified membership status across all entry points
+export const trustLayerMemberships = pgTable("trust_layer_memberships", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  primaryUserId: varchar("primary_user_id").notNull().references(() => users.id).unique(),
+  trustLayerId: varchar("trust_layer_id").notNull().unique(), // Format: TL-XXXXXX
+  membershipStatus: varchar("membership_status").notNull().default("pending"), // pending, active, suspended
+  membershipType: varchar("membership_type").notNull().default("individual"), // individual, business
+  entryPoint: varchar("entry_point"), // Where they first signed up: tlid.io, dwtl.io, chronochat, etc.
+  reconciliationStatus: varchar("reconciliation_status").notNull().default("pending"), // pending, completed
+  notificationSent: boolean("notification_sent").default(false),
+  notificationSentAt: timestamp("notification_sent_at"),
+  mergedUserIds: jsonb("merged_user_ids").default("[]"), // Array of user IDs that were merged into this membership
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  activatedAt: timestamp("activated_at"), // When membership became active after reconciliation
+});
+
+export type TrustLayerMembership = typeof trustLayerMemberships.$inferSelect;
+export type InsertTrustLayerMembership = typeof trustLayerMemberships.$inferInsert;
+
+// Membership Reconciliation Queue - Tracks potential duplicate registrations
+export const membershipReconciliationQueue = pgTable("membership_reconciliation_queue", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  email: varchar("email"),
+  phoneNumber: varchar("phone_number"),
+  potentialDuplicateOf: varchar("potential_duplicate_of"), // User ID of potential match
+  matchType: varchar("match_type"), // email, phone, social_account, name_similarity
+  matchConfidence: varchar("match_confidence").default("high"), // high, medium, low
+  status: varchar("status").notNull().default("pending"), // pending, merged, rejected, auto_resolved
+  resolvedAt: timestamp("resolved_at"),
+  resolvedBy: varchar("resolved_by"), // 'system' or admin user ID
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export type MembershipReconciliationQueue = typeof membershipReconciliationQueue.$inferSelect;
+export type InsertMembershipReconciliationQueue = typeof membershipReconciliationQueue.$inferInsert;
+
+// Membership Linked Accounts - Tracks all auth methods linked to a membership
+export const membershipLinkedAccounts = pgTable("membership_linked_accounts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  membershipId: varchar("membership_id").notNull().references(() => trustLayerMemberships.id),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  authProvider: varchar("auth_provider").notNull(), // firebase, email, google, apple, passkey
+  providerAccountId: varchar("provider_account_id"), // External provider's user ID
+  linkedAt: timestamp("linked_at").defaultNow(),
+});
+
+export type MembershipLinkedAccount = typeof membershipLinkedAccounts.$inferSelect;
+export type InsertMembershipLinkedAccount = typeof membershipLinkedAccounts.$inferInsert;
