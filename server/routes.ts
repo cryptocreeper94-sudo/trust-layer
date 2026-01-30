@@ -1168,7 +1168,7 @@ export async function registerRoutes(
       });
 
       // Create or get Trust Layer membership
-      const entryPoint = req.headers['x-entry-point'] as string || 'dwtl.io';
+      const entryPoint = req.headers['x-entry-point'] as string || 'tlid.io';
       const trustLayerId = await membershipReconciliationService.getOrCreateMembership(uid, entryPoint);
       
       // Queue for duplicate reconciliation if new user
@@ -1293,7 +1293,7 @@ export async function registerRoutes(
       await db.update(users).set({ passwordHash }).where(eq(users.id, userId));
 
       // Create Trust Layer membership
-      const entryPoint = req.headers['x-entry-point'] as string || 'dwtl.io';
+      const entryPoint = req.headers['x-entry-point'] as string || 'tlid.io';
       const trustLayerId = await membershipReconciliationService.getOrCreateMembership(userId, entryPoint);
       
       // Queue for duplicate reconciliation
@@ -2532,7 +2532,7 @@ export async function registerRoutes(
       
       if (!membership) {
         // Create membership if doesn't exist (legacy users)
-        const entryPoint = req.headers['x-entry-point'] as string || 'dwtl.io';
+        const entryPoint = req.headers['x-entry-point'] as string || 'tlid.io';
         const trustLayerId = await membershipReconciliationService.getOrCreateMembership(userId, entryPoint);
         return res.json({
           trustLayerId,

@@ -65,7 +65,18 @@ export const membershipReconciliationService = {
     const [user] = await db.select().from(users).where(eq(users.id, userId));
     if (!user) return [];
 
-    const duplicates: Array<{ userId: string; matchType: string; confidence: string }> = [];
+    const duplicates: Array<{ userId: string; matchType: string; confidence: string; score: number }> = [];
+    const addDuplicate = (matchId: string, matchType: string, confidence: string, score: number) => {
+      const existing = duplicates.find(d => d.userId === matchId);
+      if (existing) {
+        existing.score += score;
+        if (existing.score >= 3) existing.confidence = 'high';
+        else if (existing.score >= 2) existing.confidence = 'medium';
+        existing.matchType = `${existing.matchType},${matchType}`;
+      } else {
+        duplicates.push({ userId: matchId, matchType, confidence, score });
+      }
+    };
 
     if (user.email) {
       const emailMatches = await db.select()
@@ -76,7 +87,7 @@ export const membershipReconciliationService = {
         ));
       
       for (const match of emailMatches) {
-        duplicates.push({ userId: match.id, matchType: 'email', confidence: 'high' });
+        addDuplicate(match.id, 'email', 'high', 3);
       }
     }
 
@@ -89,13 +100,37 @@ export const membershipReconciliationService = {
         ));
       
       for (const match of phoneMatches) {
-        if (!duplicates.find(d => d.userId === match.id)) {
-          duplicates.push({ userId: match.id, matchType: 'phone', confidence: 'high' });
-        }
+        addDuplicate(match.id, 'phone', 'high', 3);
       }
     }
 
-    return duplicates;
+    if (user.username && user.username.length >= 4) {
+      const usernameMatches = await db.select()
+        .from(users)
+        .where(and(
+          eq(users.username, user.username),
+          ne(users.id, userId)
+        ));
+      
+      for (const match of usernameMatches) {
+        addDuplicate(match.id, 'username', 'medium', 2);
+      }
+    }
+
+    if (user.displayName && user.displayName.length >= 5) {
+      const nameMatches = await db.select()
+        .from(users)
+        .where(and(
+          eq(users.displayName, user.displayName),
+          ne(users.id, userId)
+        ));
+      
+      for (const match of nameMatches) {
+        addDuplicate(match.id, 'display_name', 'low', 1);
+      }
+    }
+
+    return duplicates.map(d => ({ userId: d.userId, matchType: d.matchType, confidence: d.confidence }));
   },
 
   async queueForReconciliation(userId: string): Promise<void> {
@@ -144,41 +179,46 @@ export const membershipReconciliationService = {
       processed++;
 
       if (item.matchConfidence === 'high' && item.potentialDuplicateOf) {
-        const [existingMembership] = await db.select()
-          .from(trustLayerMemberships)
-          .where(eq(trustLayerMemberships.primaryUserId, item.potentialDuplicateOf))
-          .limit(1);
-
-        if (existingMembership) {
-          const [newUserMembership] = await db.select()
+        try {
+          const [existingMembership] = await db.select()
             .from(trustLayerMemberships)
-            .where(eq(trustLayerMemberships.primaryUserId, item.userId))
+            .where(eq(trustLayerMemberships.primaryUserId, item.potentialDuplicateOf))
             .limit(1);
 
-          if (newUserMembership) {
-            await db.delete(trustLayerMemberships)
-              .where(eq(trustLayerMemberships.id, newUserMembership.id));
-          }
-
-          const currentMerged = (existingMembership.mergedUserIds as string[]) || [];
-          if (!currentMerged.includes(item.userId)) {
-            await db.update(trustLayerMemberships)
-              .set({
-                mergedUserIds: [...currentMerged, item.userId],
-                updatedAt: new Date(),
+          if (existingMembership) {
+            await db.insert(membershipLinkedAccounts)
+              .values({
+                membershipId: existingMembership.id,
+                userId: item.userId,
+                authProvider: 'merged',
               })
-              .where(eq(trustLayerMemberships.id, existingMembership.id));
+              .onConflictDoNothing();
+
+            const currentMerged = (existingMembership.mergedUserIds as string[]) || [];
+            if (!currentMerged.includes(item.userId)) {
+              await db.update(trustLayerMemberships)
+                .set({
+                  mergedUserIds: [...currentMerged, item.userId],
+                  updatedAt: new Date(),
+                })
+                .where(eq(trustLayerMemberships.id, existingMembership.id));
+            }
+
+            const [newUserMembership] = await db.select()
+              .from(trustLayerMemberships)
+              .where(eq(trustLayerMemberships.primaryUserId, item.userId))
+              .limit(1);
+
+            if (newUserMembership) {
+              await db.delete(trustLayerMemberships)
+                .where(eq(trustLayerMemberships.id, newUserMembership.id));
+            }
+
+            merged++;
           }
-
-          await db.insert(membershipLinkedAccounts)
-            .values({
-              membershipId: existingMembership.id,
-              userId: item.userId,
-              authProvider: 'merged',
-            })
-            .onConflictDoNothing();
-
-          merged++;
+        } catch (mergeError) {
+          console.error(`[Membership Reconciliation] Merge failed for user ${item.userId}:`, mergeError);
+          continue;
         }
 
         await db.update(membershipReconciliationQueue)
