@@ -1,9 +1,6 @@
 import { OrbitEcosystemClient } from './ecosystem-client';
 
-const client = new OrbitEcosystemClient(
-  process.env.TRUSTLAYER_HUB_API_KEY,
-  process.env.TRUSTLAYER_HUB_API_SECRET
-);
+const client = new OrbitEcosystemClient();
 
 const snippet = {
   title: 'Trust Layer Gateway Connection',

@@ -1,42 +1,39 @@
-import crypto from 'crypto';
-
 export class OrbitEcosystemClient {
   private _apiKey?: string;
   private _apiSecret?: string;
   private hubUrl: string;
+  private appName: string;
 
   constructor(apiKey?: string, apiSecret?: string, hubUrl = 'https://orbitstaffing.io') {
     this._apiKey = apiKey;
     this._apiSecret = apiSecret;
     this.hubUrl = hubUrl;
+    this.appName = 'Trust Layer Gateway';
   }
 
   private get apiKey(): string {
-    return this._apiKey || process.env.ORBIT_HUB_API_KEY || process.env.DARKWAVE_API_KEY || '';
+    return this._apiKey || process.env.ORBIT_HUB_API_KEY || '';
   }
 
   private get apiSecret(): string {
-    return this._apiSecret || process.env.ORBIT_HUB_API_SECRET || process.env.DARKWAVE_API_SECRET || '';
+    return this._apiSecret || process.env.ORBIT_HUB_API_SECRET || '';
   }
 
-  private sign(method: string, path: string, timestamp: string, body = ''): string {
-    const payload = `${method}:${path}:${timestamp}:${body}`;
-    return crypto.createHmac('sha256', this.apiSecret).update(payload).digest('hex');
+  private getHeaders(): Record<string, string> {
+    return {
+      'Content-Type': 'application/json',
+      'X-API-Key': this.apiKey,
+      'X-API-Secret': this.apiSecret,
+      'X-App-Name': this.appName,
+    };
   }
 
   async request<T = unknown>(method: string, path: string, data: unknown = null): Promise<T> {
-    const timestamp = Date.now().toString();
     const body = data ? JSON.stringify(data) : '';
-    const signature = this.sign(method, path, timestamp, body);
 
     const response = await fetch(`${this.hubUrl}${path}`, {
       method,
-      headers: {
-        'Content-Type': 'application/json',
-        'X-API-Key': this.apiKey,
-        'X-API-Secret': signature,
-        'X-Timestamp': timestamp,
-      },
+      headers: this.getHeaders(),
       body: data ? body : undefined,
     });
     return response.json() as T;

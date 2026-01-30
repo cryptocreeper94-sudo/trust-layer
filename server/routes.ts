@@ -3145,6 +3145,53 @@ export async function registerRoutes(
   });
 
   // Standard health endpoint for load balancers and monitoring
+  app.get("/api/ecosystem/connection", async (_req, res) => {
+    res.json({
+      name: "Trust Layer Gateway",
+      version: "1.0.0",
+      baseUrl: "https://tlid.io",
+      description: "Unified identity and membership gateway for Trust Layer ecosystem",
+      headers: {
+        required: ["Content-Type", "x-entry-point"],
+        auth: "Authorization: Bearer [firebase-token]"
+      },
+      endpoints: {
+        auth: {
+          "POST /api/auth/firebase-sync": "Sync Firebase user, returns Trust Layer ID",
+          "POST /api/auth/register": "Email/password registration",
+          "POST /api/auth/login": "Email/password login"
+        },
+        membership: {
+          "GET /api/user/membership": "Get Trust Layer ID and status"
+        },
+        domains: {
+          "GET /api/domains/resolve/:subdomain": "Resolve .tlid to target URL",
+          "GET /api/domains/check/:name": "Check domain availability"
+        }
+      },
+      cors: ["tlid.io", "dwtl.io", "darkwavestudios.io", "darkwavegames.io", "yourlegacy.io", "chronochat.io"],
+      integration: `const response = await fetch('https://tlid.io/api/auth/firebase-sync', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'x-entry-point': 'myapp.io',
+    'Authorization': \`Bearer \${firebaseToken}\`
+  }
+});
+const { trustLayerId } = await response.json();`
+    });
+  });
+
+  app.get("/api/orbit/status", async (_req, res) => {
+    try {
+      const { ecosystemClient } = await import('./ecosystem-client');
+      const result = await ecosystemClient.checkStatus();
+      res.json(result);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   app.get("/api/health", async (req, res) => {
     try {
       const chainInfo = blockchain.getChainInfo();
