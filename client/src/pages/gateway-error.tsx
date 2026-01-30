@@ -13,7 +13,7 @@ export default function GatewayError() {
     const parts = host.split(".");
     
     if (parts.length > 2) {
-      // Extract subdomain (e.g., "alice" from "alice.dwsc.io")
+      // Extract subdomain (e.g., "alice" from "alice.tlid.io")
       const subdomain = parts[0];
       setDomainName(subdomain);
     }
@@ -67,17 +67,17 @@ export default function GatewayError() {
           <p className="text-center text-slate-300 mb-6">
             {errorType === "not-found" && (
               <>
-                The domain <span className="font-mono text-cyan-400">{domainName}.dwsc</span> is not registered.
+                The domain <span className="font-mono text-cyan-400">{domainName}.tlid</span> is not registered.
               </>
             )}
             {errorType === "no-website" && (
               <>
-                The domain <span className="font-mono text-cyan-400">{domainName}.dwsc</span> exists but hasn't configured a website yet.
+                The domain <span className="font-mono text-cyan-400">{domainName}.tlid</span> exists but hasn't configured a website yet.
               </>
             )}
             {errorType === "under-construction" && (
               <>
-                The domain <span className="font-mono text-cyan-400">{domainName}.dwsc</span> is under construction.
+                The domain <span className="font-mono text-cyan-400">{domainName}.tlid</span> is under construction.
               </>
             )}
           </p>
@@ -86,7 +86,7 @@ export default function GatewayError() {
           <div className="bg-slate-950/50 border border-slate-700/50 rounded-lg p-4 mb-6">
             <p className="text-sm text-slate-400">
               {errorType === "not-found" && (
-                "This domain is not yet registered on the Trust Layer ecosystem. Search and register your .dwsc domain at "
+                "This domain is not yet registered on the Trust Layer ecosystem. Search and register your .tlid domain at "
               )}
               {errorType === "no-website" && (
                 "Domain owners can configure their website in the Domain Manager. This domain hasn't been set up yet. "
@@ -94,14 +94,14 @@ export default function GatewayError() {
               {errorType === "under-construction" && (
                 "The domain owner is currently setting up their website. Please check back later. "
               )}
-              <span className="text-cyan-400 font-medium">dwsc.io/domains</span>
+              <span className="text-cyan-400 font-medium">tlid.io/domains</span>
             </p>
           </div>
 
           {/* Action buttons */}
           <div className="flex flex-col gap-3">
             <a
-              href="https://dwsc.io/domains"
+              href="https://tlid.io/domains"
               className="w-full px-4 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white rounded-lg font-medium transition-all duration-300 flex items-center justify-center gap-2 group"
               data-testid="button-domain-search"
             >
@@ -110,7 +110,7 @@ export default function GatewayError() {
             </a>
 
             <a
-              href="https://dwsc.io"
+              href="https://tlid.io"
               className="w-full px-4 py-3 bg-slate-700/50 hover:bg-slate-700 text-slate-200 rounded-lg font-medium transition-all duration-300 border border-slate-600/50"
               data-testid="button-home"
             >
@@ -120,7 +120,7 @@ export default function GatewayError() {
 
           {/* Footer */}
           <p className="text-xs text-slate-500 text-center mt-6">
-            Trust Layer • .dwsc Domain Gateway
+            Trust Layer • .tlid Domain Gateway
           </p>
         </div>
       </div>

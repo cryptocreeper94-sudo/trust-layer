@@ -2460,8 +2460,8 @@ export type InsertPresaleHolder = z.infer<typeof insertPresaleHolderSchema>;
 // Blockchain Domain Service tables
 export const blockchainDomains = pgTable("blockchain_domains", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  name: text("name").notNull().unique(), // e.g., "alice" (without .dwsc)
-  tld: text("tld").notNull().default("dwsc"), // top-level domain
+  name: text("name").notNull().unique(), // e.g., "alice" (without .tlid)
+  tld: text("tld").notNull().default("tlid"), // top-level domain
   ownerAddress: text("owner_address").notNull(), // wallet address
   ownerUserId: text("owner_user_id"), // optional user ID
   registrationTxHash: text("registration_tx_hash"),

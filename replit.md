@@ -53,6 +53,7 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **Business Tenant Portals**: Secure B2B dashboards for verified companies, including transaction ledgers, trusted networks, and API access.
 - **Multi-SIG Multi-Chain Wallet**: M-of-N signature requirements across all supported chains for business treasuries and DAOs.
 - **DarkWave Academy**: Education and certification platform for crypto fundamentals, multi-chain ecosystems, DeFi, security, bridging, and Trust Layer operations, with tiered certifications.
+- **Blockchain Domain Service**: `.tlid` domains (Trust Layer ID) at `tlid.io`. Blockchain-verified identity names that resolve to wallets, websites, and social profiles. Premium pricing based on length, lifetime or term ownership options. Gateway routes `*.tlid.io` subdomains to configured websites.
 
 ### React Native Portability Guidelines
 - **Business Logic**: Located in `shared/` folder, platform-agnostic TypeScript.

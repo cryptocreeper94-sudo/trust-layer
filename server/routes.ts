@@ -252,14 +252,14 @@ export async function registerRoutes(
   registerObjectStorageRoutes(app);
 
   // =====================================================
-  // DWSC GATEWAY - Handle *.dwsc.io subdomain routing
+  // TLID GATEWAY - Handle *.tlid.io subdomain routing
   // =====================================================
   app.get("*", async (req: Request, res: Response, next: NextFunction) => {
     const host = req.hostname;
     
-    // Check if this is a request to a *.dwsc.io subdomain
-    if (host && host.endsWith(".dwsc.io") && host !== "dwsc.io" && !host.startsWith("www.")) {
-      // Extract domain name (e.g., "alice" from "alice.dwsc.io")
+    // Check if this is a request to a *.tlid.io subdomain
+    if (host && host.endsWith(".tlid.io") && host !== "tlid.io" && !host.startsWith("www.")) {
+      // Extract domain name (e.g., "alice" from "alice.tlid.io")
       const domainName = host.split(".")[0];
       
       try {
@@ -7848,7 +7848,7 @@ export async function registerRoutes(
       const { name } = req.params;
       const result = await storage.searchDomain(name);
       
-      const normalizedName = name.replace(/\.dwsc$/, '').toLowerCase();
+      const normalizedName = name.replace(/\.tlid$/, '').toLowerCase();
       const pricing = getDomainPricing(normalizedName.length);
       
       // Check if this is a reserved ecosystem domain

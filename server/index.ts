@@ -29,7 +29,7 @@ app.use(["/__/auth", "/__/firebase"], createProxyMiddleware({
   pathRewrite: (_path: string, req: any) => `${req.baseUrl}${req.url}`,
 }));
 
-// Redirect dwsc.io to dwtl.io (primary domain)
+// Redirect legacy domains to primary domain
 // Exempt webhook endpoints from redirects (they need direct access)
 app.use((req, res, next) => {
   const host = req.headers.host || '';
@@ -93,6 +93,8 @@ const ALLOWED_ORIGINS = [
   "https://www.dwtl.io",
   "https://dwsc.io",
   "https://www.dwsc.io",
+  "https://tlid.io",
+  "https://www.tlid.io",
   "https://darkwavegames.io",
   "https://www.darkwavegames.io",
   "https://darkwavestudios.io",

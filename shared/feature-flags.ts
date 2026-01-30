@@ -102,7 +102,7 @@ export const FEATURE_FLAGS: Record<string, FeatureFlag> = {
   },
   domains: {
     id: 'domains',
-    name: '.dwsc Domains',
+    name: '.tlid Domains',
     status: 'coming_soon',
     description: 'Blockchain domain names',
     expectedLaunch: 'Q1 2026',

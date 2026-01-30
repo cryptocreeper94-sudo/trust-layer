@@ -192,7 +192,7 @@ export default function DomainsPage() {
     
     setIsSearching(true);
     try {
-      const normalizedName = searchQuery.toLowerCase().replace(/\.dwsc$/, "").trim();
+      const normalizedName = searchQuery.toLowerCase().replace(/\.tlid$/, "").trim();
       const res = await fetch(`/api/domains/search/${encodeURIComponent(normalizedName)}`);
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
@@ -271,11 +271,11 @@ export default function DomainsPage() {
           
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
             <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Your Identity on DWSC
+              Your Identity on Trust Layer
             </span>
           </h1>
           <p className="text-lg text-white/60 max-w-2xl mx-auto mb-8">
-            Claim your unique .dwsc domain name. Link wallets, websites, and social profiles to a single memorable address.
+            Claim your unique .tlid domain name. Link wallets, websites, and social profiles to a single memorable address.
           </p>
 
           <div className="max-w-xl mx-auto relative" data-testid="domain-search-container">
@@ -291,7 +291,7 @@ export default function DomainsPage() {
               />
               <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
                 <Badge variant="outline" className="border-cyan-500/30 text-cyan-400">
-                  .dwsc
+                  .tlid
                 </Badge>
                 <Button
                   onClick={handleSearch}
@@ -659,7 +659,7 @@ export default function DomainsPage() {
           className="mt-16"
         >
           <h2 className="text-2xl font-bold text-white mb-6 text-center">
-            Why .dwsc Domains?
+            Why .tlid Domains?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <GlassCard className="p-6">

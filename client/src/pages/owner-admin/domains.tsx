@@ -192,7 +192,7 @@ interface Domain {
 }
 
 const SUPPORTED_TLDS = [
-  { value: "dwsc", label: ".dwsc", color: "from-cyan-500 to-blue-500", icon: Zap },
+  { value: "tlid", label: ".tlid", color: "from-cyan-500 to-blue-500", icon: Zap },
   { value: "legacy", label: ".legacy", color: "from-amber-500 to-orange-500", icon: Crown },
   { value: "chrono", label: ".chrono", color: "from-purple-500 to-pink-500", icon: Clock },
   { value: "pulse", label: ".pulse", color: "from-green-500 to-emerald-500", icon: Star },

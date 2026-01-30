@@ -1612,7 +1612,7 @@ export class DatabaseStorage implements IStorage {
 
   // Blockchain Domain Service methods
   async searchDomain(name: string): Promise<{ available: boolean; domain?: BlockchainDomain }> {
-    const normalizedName = name.toLowerCase().replace(/\.dwsc$/, '').trim();
+    const normalizedName = name.toLowerCase().replace(/\.tlid$/, '').trim();
     const domain = await this.getDomain(normalizedName);
     const isExpired = domain?.expiresAt ? new Date(domain.expiresAt) < new Date() : false;
     return {
@@ -1622,7 +1622,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getDomain(name: string): Promise<BlockchainDomain | undefined> {
-    const normalizedName = name.toLowerCase().replace(/\.dwsc$/, '').trim();
+    const normalizedName = name.toLowerCase().replace(/\.tlid$/, '').trim();
     const [domain] = await db.select().from(blockchainDomains)
       .where(eq(blockchainDomains.name, normalizedName));
     return domain;
@@ -1641,7 +1641,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async registerDomain(data: InsertBlockchainDomain): Promise<BlockchainDomain> {
-    const normalizedName = data.name.toLowerCase().replace(/\.dwsc$/, '').trim();
+    const normalizedName = data.name.toLowerCase().replace(/\.tlid$/, '').trim();
     const [domain] = await db.insert(blockchainDomains)
       .values({ ...data, name: normalizedName })
       .returning();

@@ -272,7 +272,7 @@ export default function DomainManager() {
         <GlassCard className="p-8 text-center">
           <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
           <h2 className="text-xl font-bold text-white mb-2">Domain Not Found</h2>
-          <p className="text-white/60 mb-4">The domain "{name}.dwsc" could not be found.</p>
+          <p className="text-white/60 mb-4">The domain "{name}.tlid" could not be found.</p>
           <Link href="/domains">
             <Button>Back to Domains</Button>
           </Link>
@@ -416,7 +416,7 @@ export default function DomainManager() {
                 <ol className="list-decimal list-inside text-white/60 text-sm space-y-1">
                   <li>Add a CNAME record with key "@" pointing to your Replit app URL</li>
                   <li>Or add a URL redirect to forward visitors to your app</li>
-                  <li>In Replit, go to Settings → Custom Domain and add <code className="bg-white/10 px-1 rounded">{domain.name}.dwsc</code></li>
+                  <li>In Replit, go to Settings → Custom Domain and add <code className="bg-white/10 px-1 rounded">{domain.name}.tlid</code></li>
                 </ol>
               </div>
             </GlassCard>
@@ -427,7 +427,7 @@ export default function DomainManager() {
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h2 className="text-xl font-bold text-white">Linked Wallets</h2>
-                  <p className="text-white/60 text-sm">People can send crypto to {domain.name}.dwsc</p>
+                  <p className="text-white/60 text-sm">People can send crypto to {domain.name}.tlid</p>
                 </div>
               </div>
 
@@ -595,7 +595,7 @@ export default function DomainManager() {
           <DialogHeader>
             <DialogTitle>Add DNS Record</DialogTitle>
             <DialogDescription className="text-white/60">
-              Configure a new record for {domain.name}.dwsc
+              Configure a new record for {domain.name}.tlid
             </DialogDescription>
           </DialogHeader>
           
@@ -685,7 +685,7 @@ export default function DomainManager() {
           <DialogHeader>
             <DialogTitle>Renew Domain</DialogTitle>
             <DialogDescription className="text-white/60">
-              Extend ownership of {domain.name}.dwsc
+              Extend ownership of {domain.name}.tlid
             </DialogDescription>
           </DialogHeader>
           
