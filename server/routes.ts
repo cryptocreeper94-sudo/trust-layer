@@ -3192,6 +3192,17 @@ const { trustLayerId } = await response.json();`
     }
   });
 
+  app.get("/api/ecosystem/status", async (req, res) => {
+    const appName = req.headers['x-app-name'] as string || 'Unknown';
+    res.json({
+      connected: true,
+      hubName: "Trust Layer Gateway",
+      appName,
+      timestamp: new Date().toISOString(),
+      version: "1.0.0"
+    });
+  });
+
   app.get("/api/health", async (req, res) => {
     try {
       const chainInfo = blockchain.getChainInfo();

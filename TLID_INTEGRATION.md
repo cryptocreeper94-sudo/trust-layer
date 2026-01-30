@@ -1,5 +1,11 @@
 # tlid.io Integration Guide
 
+## Quick Start for Agents
+```
+GET https://tlid.io/api/ecosystem/connection  → Full integration specs
+GET https://tlid.io/api/ecosystem/status      → Test connection (add X-App-Name header)
+```
+
 ## Overview
 tlid.io is the Trust Layer ID gateway. This portal handles all membership, authentication, and domain resolution.
 
@@ -7,8 +13,8 @@ tlid.io is the Trust Layer ID gateway. This portal handles all membership, authe
 
 | Request | Forward To |
 |---------|-----------|
-| `tlid.io` (root) | `https://[this-portal-url]/` |
-| `*.tlid.io` (subdomains) | `https://[this-portal-url]/api/domains/resolve/:subdomain` |
+| `tlid.io` (root) | `https://tlid.io/` |
+| `*.tlid.io` (subdomains) | `https://tlid.io/api/domains/resolve/:subdomain` |
 
 ## Required Headers
 Pass these headers on all proxied requests:
