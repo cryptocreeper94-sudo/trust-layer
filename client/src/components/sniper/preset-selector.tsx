@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronUp, Check, Shield, Scale, Rocket, DollarSign, Percent, Users, Droplets, Bot } from 'lucide-react';
+import { ChevronDown, ChevronUp, Check, Shield, Scale, Rocket, DollarSign, Percent, Users, Droplets, Bot, Zap, Lock, Clock, TrendingUp, Activity } from 'lucide-react';
 import { GlassCard } from '@/components/glass-card';
+import { Badge } from '@/components/ui/badge';
 import { TRADING_PRESETS, PRESET_ORDER, type TradingPreset } from '@/config/trading-presets';
 
 interface PresetSelectorProps {
@@ -116,7 +117,7 @@ export function PresetSelector({ selectedPreset, onPresetChange }: PresetSelecto
                       transition={{ duration: 0.2 }}
                       className="overflow-hidden"
                     >
-                      <div className="mt-4 pt-4 border-t border-white/10">
+                      <div className="mt-4 pt-4 border-t border-white/10 space-y-4">
                         <div className="grid grid-cols-2 gap-3">
                           <div className="space-y-2">
                             <p className="text-[10px] font-semibold text-white/50 uppercase">Trade Config</p>
@@ -135,8 +136,38 @@ export function PresetSelector({ selectedPreset, onPresetChange }: PresetSelecto
                               <span className="text-white/70">Take Profit:</span>
                               <span className="text-emerald-400 font-medium">+{preset.tradeConfig.takeProfitPercent}%</span>
                             </div>
+                            {preset.tradeConfig.trailingStopEnabled && (
+                              <div className="flex items-center gap-2 text-xs">
+                                <TrendingUp className="w-3 h-3 text-yellow-400" />
+                                <span className="text-white/70">Trail Stop:</span>
+                                <span className="text-yellow-400 font-medium">{preset.tradeConfig.trailingStopPercent}%</span>
+                              </div>
+                            )}
                           </div>
                           
+                          <div className="space-y-2">
+                            <p className="text-[10px] font-semibold text-white/50 uppercase">Execution</p>
+                            <div className="flex items-center gap-2 text-xs">
+                              <Activity className="w-3 h-3 text-orange-400" />
+                              <span className="text-white/70">Slippage:</span>
+                              <span className="text-white font-medium">{preset.executionConfig.slippagePercent}%</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs">
+                              <Zap className="w-3 h-3 text-yellow-400" />
+                              <span className="text-white/70">Priority:</span>
+                              <span className="text-white font-medium">{(preset.executionConfig.priorityFeeSol * 1000).toFixed(1)} mSOL</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs">
+                              <Shield className="w-3 h-3 text-cyan-400" />
+                              <span className="text-white/70">MEV:</span>
+                              <Badge className={`text-[9px] ${preset.executionConfig.mevProtection ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400'}`}>
+                                {preset.executionConfig.mevProtection ? 'ON' : 'OFF'}
+                              </Badge>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-3">
                           <div className="space-y-2">
                             <p className="text-[10px] font-semibold text-white/50 uppercase">Safety Filters</p>
                             <div className="flex items-center gap-2 text-xs">
@@ -155,7 +186,43 @@ export function PresetSelector({ selectedPreset, onPresetChange }: PresetSelecto
                               <span className="text-white font-medium">{preset.safetyFilters.minHolders}</span>
                             </div>
                           </div>
+                          
+                          <div className="space-y-2">
+                            <p className="text-[10px] font-semibold text-white/50 uppercase">Filters Cont.</p>
+                            <div className="flex items-center gap-2 text-xs">
+                              <Clock className="w-3 h-3 text-pink-400" />
+                              <span className="text-white/70">Max Age:</span>
+                              <span className="text-white font-medium">{preset.safetyFilters.maxTokenAgeMinutes}m</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs">
+                              <Lock className="w-3 h-3 text-green-400" />
+                              <span className="text-white/70">Req Lock:</span>
+                              <Badge className={`text-[9px] ${preset.safetyFilters.requireLiquidityLock ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400'}`}>
+                                {preset.safetyFilters.requireLiquidityLock ? 'YES' : 'NO'}
+                              </Badge>
+                            </div>
+                            <div className="flex items-center gap-2 text-xs">
+                              <Zap className="w-3 h-3 text-cyan-400" />
+                              <span className="text-white/70">Auto-Sell:</span>
+                              <Badge className={`text-[9px] ${preset.executionConfig.autoSell ? 'bg-green-500/20 text-green-400' : 'bg-gray-500/20 text-gray-400'}`}>
+                                {preset.executionConfig.autoSell ? 'ON' : 'OFF'}
+                              </Badge>
+                            </div>
+                          </div>
                         </div>
+                        
+                        {preset.tradeConfig.takeProfitLevels.length > 1 && (
+                          <div className="pt-2 border-t border-white/5">
+                            <p className="text-[10px] font-semibold text-white/50 uppercase mb-2">Take Profit Levels</p>
+                            <div className="flex gap-2 flex-wrap">
+                              {preset.tradeConfig.takeProfitLevels.map((level, i) => (
+                                <Badge key={i} className="bg-green-500/10 text-green-400 border border-green-500/20 text-[10px]">
+                                  +{level.percent}% → Sell {level.sellPercent}%
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </motion.div>
                   )}

@@ -24,6 +24,8 @@ import { TopSignalsWidget } from "@/components/sniper/top-signals-widget";
 import { SafetyReport } from "@/components/sniper/safety-report";
 import { LiveSnipeTracker } from "@/components/sniper/live-snipe-tracker";
 import { CandleChart } from "@/components/sniper/candle-chart";
+import { TradeHistory } from "@/components/sniper/trade-history";
+import { QuickSnipeModal } from "@/components/sniper/quick-snipe-modal";
 
 interface MarketData {
   totalMarketCap: number;
@@ -737,7 +739,7 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
   );
 }
 
-type MainTab = 'discover' | 'live' | 'signals' | 'strategy' | 'watchlist' | 'analyze';
+type MainTab = 'discover' | 'live' | 'signals' | 'strategy' | 'watchlist' | 'analyze' | 'history';
 
 export default function StrikeAgentPage() {
   const [filter, setFilter] = useState<'all' | 'snipe' | 'watch' | 'avoid' | 'favorites'>('all');
@@ -1043,6 +1045,7 @@ export default function StrikeAgentPage() {
             { id: 'strategy' as MainTab, label: 'Strategy', icon: Shield },
             { id: 'watchlist' as MainTab, label: 'Watchlist', icon: ListOrdered },
             { id: 'analyze' as MainTab, label: 'Analyze', icon: ShieldCheck },
+            { id: 'history' as MainTab, label: 'History', icon: Clock },
           ]).map(({ id, label, icon: TabIcon }) => (
             <button
               key={id}
@@ -1136,6 +1139,12 @@ export default function StrikeAgentPage() {
               tokenAddress={analyzeAddress || undefined}
               chain={analyzeAddress?.startsWith('0x') ? 'ethereum' : 'solana'}
             />
+          </div>
+        )}
+        
+        {mainTab === 'history' && (
+          <div className="mb-6">
+            <TradeHistory userId={currentUserId} />
           </div>
         )}
         
