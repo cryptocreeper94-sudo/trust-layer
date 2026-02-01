@@ -103,7 +103,7 @@ const cspDirectives = {
   objectSrc: ["'none'"],
   baseUri: ["'self'"],
   formAction: ["'self'"],
-  frameAncestors: ["'none'"],
+  frameAncestors: isProduction ? ["'self'"] : ["'self'", "https://*.replit.dev", "https://*.repl.co", "https://replit.com"],
   upgradeInsecureRequests: isProduction ? [] : null,
 };
 
@@ -122,6 +122,7 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" },
   referrerPolicy: { policy: "strict-origin-when-cross-origin" },
   hsts: isProduction ? { maxAge: 31536000, includeSubDomains: true, preload: true } : false,
+  frameguard: false,
 }));
 
 // CORS headers for API access with strict origin allowlist
