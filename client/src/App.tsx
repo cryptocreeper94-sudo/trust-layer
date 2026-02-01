@@ -245,6 +245,9 @@ const BlogAdmin = lazy(() => import("@/pages/blog-admin"));
 const TrustLayer = lazy(() => import("@/pages/trust-layer"));
 const GuardianScanner = lazy(() => import("@/pages/guardian-scanner"));
 const GuardianScannerDetail = lazy(() => import("@/pages/token-detail"));
+const GuardianAI = lazy(() => import("@/pages/guardian-ai"));
+const GuardianAIRegistry = lazy(() => import("@/pages/guardian-ai-registry"));
+const GuardianShield = lazy(() => import("@/pages/guardian-shield"));
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -410,6 +413,9 @@ function DWSCRouter() {
         <Route path="/guardian-registry" component={GuardianRegistry} />
         <Route path="/guardian-portal" component={GuardianPortal} />
         <Route path="/guardian-whitepaper" component={GuardianWhitepaper} />
+        <Route path="/guardian-ai" component={GuardianAI} />
+        <Route path="/guardian-ai-registry" component={GuardianAIRegistry} />
+        <Route path="/guardian-shield" component={GuardianShield} />
         <Route path="/explorer" component={Explorer} />
         <Route path="/doc-hub" component={DocHub} />
         <Route path="/executive-summary" component={DWSCExecutiveSummary} />

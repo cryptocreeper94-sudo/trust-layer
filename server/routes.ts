@@ -6307,6 +6307,63 @@ const { trustLayerId } = await response.json();`
   });
 
   // ============================================
+  // GUARDIAN AI - AI Agent Certification
+  // ============================================
+
+  app.post("/api/guardian-ai/submit", async (req, res) => {
+    try {
+      const schema = z.object({
+        agentName: z.string().min(1),
+        agentSymbol: z.string().optional(),
+        agentType: z.string(),
+        description: z.string().min(1),
+        developerName: z.string().min(1),
+        developerEmail: z.string().email(),
+        organizationName: z.string().optional(),
+        website: z.string().optional(),
+        githubRepo: z.string().optional(),
+        contractAddress: z.string().optional(),
+        tokenAddress: z.string().optional(),
+        chainDeployed: z.string().optional(),
+        certificationTier: z.string().default("basic"),
+      });
+      
+      const data = schema.parse(req.body);
+      
+      const certification = await storage.createAiAgentCertification({
+        ...data,
+        riskFactors: [],
+        capabilities: [],
+      });
+      
+      res.json({ success: true, id: certification.id });
+    } catch (error: any) {
+      console.error("Error submitting AI agent:", error);
+      res.status(400).json({ error: error.message || "Failed to submit AI agent" });
+    }
+  });
+
+  app.get("/api/guardian-ai/registry", async (_req, res) => {
+    try {
+      const certifications = await storage.getAiAgentCertifications({ status: "certified" });
+      res.json(certifications);
+    } catch (error) {
+      console.error("Error fetching AI agent registry:", error);
+      res.status(500).json({ error: "Failed to fetch registry" });
+    }
+  });
+
+  app.get("/api/guardian-ai/applications", isAuthenticated, async (_req, res) => {
+    try {
+      const applications = await storage.getAiAgentCertifications({});
+      res.json(applications);
+    } catch (error) {
+      console.error("Error fetching AI agent applications:", error);
+      res.status(500).json({ error: "Failed to fetch applications" });
+    }
+  });
+
+  // ============================================
   // GUARDIAN SECURITY SCORES - Real-time project ratings
   // ============================================
 

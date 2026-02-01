@@ -7543,3 +7543,140 @@ export const insertLimitOrderSchema = createInsertSchema(limitOrders).omit({
 
 export type LimitOrder = typeof limitOrders.$inferSelect;
 export type InsertLimitOrder = z.infer<typeof insertLimitOrderSchema>;
+
+// Guardian AI - AI Agent Certification System
+export const aiAgentCertifications = pgTable('ai_agent_certifications', {
+  id: varchar('id').primaryKey().default(sql`gen_random_uuid()`),
+  
+  // Agent identification
+  agentName: text('agent_name').notNull(),
+  agentSymbol: varchar('agent_symbol', { length: 20 }),
+  agentType: varchar('agent_type', { length: 50 }).notNull(), // trading_bot, defi_agent, nft_agent, social_agent, analytics_agent, other
+  description: text('description').notNull(),
+  
+  // Developer/Organization
+  developerName: text('developer_name').notNull(),
+  developerEmail: text('developer_email').notNull(),
+  organizationName: text('organization_name'),
+  website: text('website'),
+  githubRepo: text('github_repo'),
+  
+  // Agent details
+  contractAddress: text('contract_address'),
+  tokenAddress: text('token_address'),
+  chainDeployed: varchar('chain_deployed', { length: 50 }),
+  apiEndpoint: text('api_endpoint'),
+  documentationUrl: text('documentation_url'),
+  
+  // Certification tier
+  certificationTier: varchar('certification_tier', { length: 30 }).notNull().default('basic'), // basic, advanced, enterprise
+  
+  // Assessment scores (0-100)
+  securityScore: integer('security_score'),
+  transparencyScore: integer('transparency_score'),
+  reliabilityScore: integer('reliability_score'),
+  complianceScore: integer('compliance_score'),
+  overallTrustScore: integer('overall_trust_score'),
+  
+  // Behavioral analysis
+  behaviorAnalysis: jsonb('behavior_analysis'),
+  riskFactors: text('risk_factors').array(),
+  capabilities: text('capabilities').array(),
+  
+  // Certification status
+  status: varchar('status', { length: 30 }).notNull().default('pending'), // pending, under_review, certified, rejected, suspended, expired
+  certificationNumber: varchar('certification_number', { length: 50 }).unique(),
+  certifiedAt: timestamp('certified_at'),
+  expiresAt: timestamp('expires_at'),
+  
+  // Review details
+  reviewedBy: text('reviewed_by'),
+  reviewNotes: text('review_notes'),
+  lastAuditDate: timestamp('last_audit_date'),
+  
+  // Blockchain verification
+  darkwaveTxHash: varchar('darkwave_tx_hash', { length: 128 }),
+  darkwaveBlockHeight: text('darkwave_block_height'),
+  
+  // Payment
+  paymentId: varchar('payment_id'),
+  paymentStatus: varchar('payment_status', { length: 20 }).default('pending'),
+  
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+export const insertAiAgentCertificationSchema = createInsertSchema(aiAgentCertifications).omit({
+  id: true,
+  securityScore: true,
+  transparencyScore: true,
+  reliabilityScore: true,
+  complianceScore: true,
+  overallTrustScore: true,
+  behaviorAnalysis: true,
+  status: true,
+  certificationNumber: true,
+  certifiedAt: true,
+  expiresAt: true,
+  reviewedBy: true,
+  reviewNotes: true,
+  lastAuditDate: true,
+  darkwaveTxHash: true,
+  darkwaveBlockHeight: true,
+  paymentId: true,
+  paymentStatus: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type AiAgentCertification = typeof aiAgentCertifications.$inferSelect;
+export type InsertAiAgentCertification = z.infer<typeof insertAiAgentCertificationSchema>;
+
+// Guardian AI Certification Tiers
+export const GUARDIAN_AI_TIERS = {
+  basic: {
+    name: 'Guardian Basic',
+    price: 999,
+    priceDisplay: '$999',
+    features: [
+      'Automated behavioral analysis',
+      'Basic security scan',
+      'Transaction pattern review',
+      'Public registry listing',
+      'Guardian AI badge',
+      '6-month certification validity',
+    ],
+    duration: '3-5 days',
+  },
+  advanced: {
+    name: 'Guardian Advanced',
+    price: 4999,
+    priceDisplay: '$4,999',
+    features: [
+      'Everything in Basic',
+      'Deep code review',
+      'API security assessment',
+      'Economic attack simulation',
+      'Detailed trust scorecard',
+      'Priority support',
+      '12-month certification validity',
+    ],
+    duration: '1-2 weeks',
+  },
+  enterprise: {
+    name: 'Guardian Enterprise',
+    price: 14999,
+    priceDisplay: '$14,999',
+    features: [
+      'Everything in Advanced',
+      'Full source code audit',
+      'Penetration testing',
+      'Formal verification',
+      'Custom compliance review',
+      'Dedicated security analyst',
+      'Guardian Shield monitoring',
+      '24-month certification validity',
+    ],
+    duration: '3-4 weeks',
+  },
+} as const;
