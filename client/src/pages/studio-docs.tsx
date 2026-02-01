@@ -872,18 +872,29 @@ export default function StudioDocs() {
               Back to Studio
             </Button>
           </Link>
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
-              <BookOpen className="w-8 h-8 text-white" />
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
+                <BookOpen className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-bold text-white">
+                  Trust Layer Studio Documentation
+                </h1>
+                <p className="text-white/60 mt-1">
+                  Learn how to use every feature of the IDE
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-3xl sm:text-4xl font-bold text-white">
-                Trust Layer Studio Documentation
-              </h1>
-              <p className="text-white/60 mt-1">
-                Learn how to use every feature of the IDE
-              </p>
-            </div>
+            <Link href="/studio/projects">
+              <Button
+                className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white font-semibold"
+                data-testid="button-start-building-top"
+              >
+                <Rocket className="w-4 h-4 mr-2" />
+                Start Building Now
+              </Button>
+            </Link>
           </div>
         </motion.div>
 
@@ -949,6 +960,18 @@ export default function StudioDocs() {
                   </div>
                 ))}
               </nav>
+              
+              <div className="mt-6 pt-4 border-t border-white/10">
+                <Link href="/studio/projects">
+                  <Button
+                    className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white font-semibold"
+                    data-testid="button-start-building-sidebar"
+                  >
+                    <Rocket className="w-4 h-4 mr-2" />
+                    Start Building
+                  </Button>
+                </Link>
+              </div>
             </GlassCard>
           </motion.aside>
 
