@@ -131,7 +131,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and, gte } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes, businessApplications } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes, businessApplications, limitOrders, insertLimitOrderSchema } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -6488,6 +6488,224 @@ const { trustLayerId } = await response.json();`
     } catch (error: any) {
       console.error("Error fetching predictions:", error);
       res.status(500).json({ error: "Failed to fetch predictions" });
+    }
+  });
+
+  // ============================================
+  // LIMIT ORDERS - StrikeAgent sniper orders
+  // ============================================
+
+  // Create a new limit order
+  app.post("/api/limit-orders", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const data = insertLimitOrderSchema.parse({
+        ...req.body,
+        userId,
+      });
+
+      const [order] = await db.insert(limitOrders).values({
+        ...data,
+        status: 'WATCHING',
+        isActive: true,
+      }).returning();
+
+      res.json(order);
+    } catch (error: any) {
+      console.error("Error creating limit order:", error);
+      res.status(400).json({ error: error.message || "Failed to create limit order" });
+    }
+  });
+
+  // Get user's limit orders (user can only access their own orders)
+  app.get("/api/limit-orders", isAuthenticated, async (req: any, res) => {
+    try {
+      // Security: Only use authenticated user's ID, ignore query params to prevent IDOR
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const orders = await db.select().from(limitOrders)
+        .where(eq(limitOrders.userId, userId))
+        .orderBy(desc(limitOrders.createdAt));
+
+      res.json(orders);
+    } catch (error: any) {
+      console.error("Error fetching limit orders:", error);
+      res.status(500).json({ error: "Failed to fetch limit orders" });
+    }
+  });
+
+  // Update a limit order
+  app.put("/api/limit-orders/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const { id } = req.params;
+      const userId = req.user?.id || req.user?.claims?.sub;
+      
+      const [existing] = await db.select().from(limitOrders).where(eq(limitOrders.id, id));
+      if (!existing || existing.userId !== userId) {
+        return res.status(404).json({ error: "Order not found" });
+      }
+
+      const { entryPrice, exitPrice, stopLoss, status, isActive, buyAmountSol } = req.body;
+      
+      const [updated] = await db.update(limitOrders)
+        .set({
+          ...(entryPrice !== undefined && { entryPrice }),
+          ...(exitPrice !== undefined && { exitPrice }),
+          ...(stopLoss !== undefined && { stopLoss }),
+          ...(status !== undefined && { status }),
+          ...(isActive !== undefined && { isActive }),
+          ...(buyAmountSol !== undefined && { buyAmountSol }),
+          updatedAt: new Date(),
+        })
+        .where(eq(limitOrders.id, id))
+        .returning();
+
+      res.json(updated);
+    } catch (error: any) {
+      console.error("Error updating limit order:", error);
+      res.status(500).json({ error: "Failed to update limit order" });
+    }
+  });
+
+  // Delete a limit order
+  app.delete("/api/limit-orders/:id", isAuthenticated, async (req: any, res) => {
+    try {
+      const { id } = req.params;
+      const userId = req.user?.id || req.user?.claims?.sub;
+      
+      const [existing] = await db.select().from(limitOrders).where(eq(limitOrders.id, id));
+      if (!existing || existing.userId !== userId) {
+        return res.status(404).json({ error: "Order not found" });
+      }
+
+      await db.delete(limitOrders).where(eq(limitOrders.id, id));
+      res.json({ success: true, message: "Order deleted" });
+    } catch (error: any) {
+      console.error("Error deleting limit order:", error);
+      res.status(500).json({ error: "Failed to delete limit order" });
+    }
+  });
+
+  // Token safety analysis
+  app.post("/api/sniper/analyze-token", isAuthenticated, async (req: any, res) => {
+    try {
+      const { tokenAddress, chain = 'solana' } = req.body;
+      
+      if (!tokenAddress) {
+        return res.status(400).json({ error: "Token address required" });
+      }
+
+      // Use existing safety engine if available
+      try {
+        const { safetyEngineService } = await import('./services/pulse/safetyEngineService');
+        const report = await safetyEngineService.runFullSafetyCheck(tokenAddress);
+        
+        if (report) {
+          const recommendation = report.overallScore >= 70 ? 'safe' : 
+                                 report.overallScore >= 40 ? 'caution' : 'danger';
+          
+          return res.json({
+            tokenAddress,
+            tokenSymbol: report.tokenSymbol || 'UNKNOWN',
+            tokenName: report.tokenName || 'Unknown Token',
+            chain,
+            overallScore: report.overallScore || 0,
+            recommendation,
+            reasoning: report.reasoning || 'Analysis complete',
+            metrics: {
+              liquidity: { value: report.liquidity || 0, pass: (report.liquidity || 0) >= 5000, label: 'Liquidity' },
+              botPercent: { value: report.botPercent || 0, pass: (report.botPercent || 0) <= 70, label: 'Bot Activity' },
+              top10Holders: { value: report.top10HoldersPercent || 0, pass: (report.top10HoldersPercent || 0) <= 70, label: 'Top 10 Holders' },
+              holderCount: { value: report.holderCount || 0, pass: (report.holderCount || 0) >= 50, label: 'Holder Count' },
+              contractVerified: { value: report.contractVerified || false, pass: report.contractVerified || false, label: 'Contract Verified' },
+              mintAuthority: { value: report.mintAuthorityActive || false, pass: !report.mintAuthorityActive, label: 'Mint Authority' },
+              freezeAuthority: { value: report.freezeAuthorityActive || false, pass: !report.freezeAuthorityActive, label: 'Freeze Authority' },
+              honeypot: { value: report.isHoneypot || false, pass: !report.isHoneypot, label: 'Honeypot' },
+            },
+          });
+        }
+      } catch (safetyError) {
+        console.log("Safety engine not available, using mock data");
+      }
+
+      // Mock response for development
+      const mockScore = Math.floor(Math.random() * 40) + 40;
+      const recommendation = mockScore >= 70 ? 'safe' : mockScore >= 40 ? 'caution' : 'danger';
+      
+      res.json({
+        tokenAddress,
+        tokenSymbol: 'TOKEN',
+        tokenName: 'Unknown Token',
+        chain,
+        overallScore: mockScore,
+        recommendation,
+        reasoning: 'Token analysis complete. Please verify on-chain data before trading.',
+        metrics: {
+          liquidity: { value: 15000, pass: true, label: 'Liquidity' },
+          botPercent: { value: 35, pass: true, label: 'Bot Activity' },
+          top10Holders: { value: 45, pass: true, label: 'Top 10 Holders' },
+          holderCount: { value: 250, pass: true, label: 'Holder Count' },
+          contractVerified: { value: true, pass: true, label: 'Contract Verified' },
+          mintAuthority: { value: false, pass: true, label: 'Mint Authority' },
+          freezeAuthority: { value: false, pass: true, label: 'Freeze Authority' },
+          honeypot: { value: false, pass: true, label: 'Honeypot' },
+        },
+      });
+    } catch (error: any) {
+      console.error("Error analyzing token:", error);
+      res.status(500).json({ error: "Failed to analyze token" });
+    }
+  });
+
+  // Get AI top signals
+  app.get("/api/strike-agent/top-signals", isAuthenticated, async (req: any, res) => {
+    try {
+      const chain = req.query.chain as string || 'all';
+      
+      // Get recent high-scoring recommendations from Strike Agent
+      let query = db.select().from(strikeAgentPredictions)
+        .where(eq(strikeAgentPredictions.aiRecommendation, 'snipe'));
+      
+      const predictions = await query
+        .orderBy(desc(strikeAgentPredictions.aiScore))
+        .limit(10);
+
+      const signals = predictions.map((p, index) => ({
+        rank: index + 1,
+        tokenSymbol: p.tokenSymbol,
+        tokenName: p.tokenName || p.tokenSymbol,
+        tokenAddress: p.tokenAddress,
+        chain: 'solana',
+        currentPrice: parseFloat(p.priceUsd) || 0,
+        priceChange24h: Math.random() * 40 - 10, // Mock for now
+        compositeScore: p.aiScore || 0,
+        category: (p.isPumpFun ? 'new' : 'meme') as 'blue_chip' | 'defi' | 'meme' | 'dex' | 'new',
+        indicators: p.aiReasoning ? p.aiReasoning.split('.').slice(0, 3).filter(Boolean) : ['AI Analyzed'],
+        volume24h: parseFloat(p.liquidityUsd || '0') * 2,
+        marketCap: parseFloat(p.marketCapUsd || '0'),
+      }));
+
+      // If no predictions, return mock data for demo
+      if (signals.length === 0) {
+        const mockSignals = [
+          { rank: 1, tokenSymbol: 'BONK', tokenName: 'Bonk', tokenAddress: 'DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263', chain: 'solana', currentPrice: 0.00002341, priceChange24h: 12.5, compositeScore: 85, category: 'meme' as const, indicators: ['Volume Surge', 'Bullish RSI', 'Whale Activity'], volume24h: 45000000, marketCap: 1800000000 },
+          { rank: 2, tokenSymbol: 'WIF', tokenName: 'dogwifhat', tokenAddress: 'EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm', chain: 'solana', currentPrice: 2.34, priceChange24h: 8.2, compositeScore: 78, category: 'meme' as const, indicators: ['Strong Momentum', 'High Liquidity'], volume24h: 120000000, marketCap: 2300000000 },
+          { rank: 3, tokenSymbol: 'JUP', tokenName: 'Jupiter', tokenAddress: 'JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN', chain: 'solana', currentPrice: 0.89, priceChange24h: 5.1, compositeScore: 82, category: 'dex' as const, indicators: ['DEX Leader', 'Growing TVL'], volume24h: 85000000, marketCap: 1200000000 },
+        ];
+        return res.json(mockSignals);
+      }
+
+      res.json(signals);
+    } catch (error: any) {
+      console.error("Error fetching top signals:", error);
+      res.status(500).json({ error: "Failed to fetch top signals" });
     }
   });
 

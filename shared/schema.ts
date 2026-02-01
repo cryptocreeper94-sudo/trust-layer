@@ -7498,3 +7498,48 @@ export const trustDocuments = pgTable('trust_documents', {
 });
 
 export type TrustDocument = typeof trustDocuments.$inferSelect;
+
+// Limit Orders - StrikeAgent sniper orders with entry/exit/stop-loss
+export const limitOrders = pgTable('limit_orders', {
+  id: varchar('id').primaryKey().default(sql`gen_random_uuid()`),
+  userId: text('user_id').notNull(),
+  tokenAddress: text('token_address').notNull(),
+  tokenSymbol: text('token_symbol'),
+  chain: varchar('chain', { length: 50 }).default('solana'),
+  
+  // Price targets
+  entryPrice: real('entry_price'),
+  exitPrice: real('exit_price'),
+  stopLoss: real('stop_loss'),
+  
+  // Trade config
+  buyAmountSol: real('buy_amount_sol').default(0.1),
+  slotIndex: integer('slot_index').default(0), // 0-3 for 4-slot watchlist
+  
+  // Status: PENDING, WATCHING, READY_TO_EXECUTE, FILLED_ENTRY, READY_TO_EXIT, READY_TO_STOP, FILLED_EXIT, STOPPED_OUT, CANCELLED
+  status: varchar('status', { length: 30 }).default('PENDING'),
+  isActive: boolean('is_active').default(true),
+  
+  // Execution tracking
+  walletAddress: text('wallet_address'),
+  filledEntryPrice: real('filled_entry_price'),
+  filledExitPrice: real('filled_exit_price'),
+  filledAt: timestamp('filled_at'),
+  
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+export const insertLimitOrderSchema = createInsertSchema(limitOrders).omit({
+  id: true,
+  status: true,
+  isActive: true,
+  filledEntryPrice: true,
+  filledExitPrice: true,
+  filledAt: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type LimitOrder = typeof limitOrders.$inferSelect;
+export type InsertLimitOrder = z.infer<typeof insertLimitOrderSchema>;

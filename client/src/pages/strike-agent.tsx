@@ -7,7 +7,8 @@ import {
   ChevronDown, ExternalLink, Copy, Check, Home, X, Volume2, VolumeX,
   Sliders, Clock, DollarSign, Percent, Star, StarOff, Play, Pause,
   BarChart3, Users, Droplets, Lock, Unlock, Flame, TrendingUp as Trending,
-  ChevronRight, Info, Smartphone, Wallet, Globe, Search, ArrowUpRight, ArrowDownRight
+  ChevronRight, Info, Smartphone, Wallet, Globe, Search, ArrowUpRight, ArrowDownRight,
+  ListOrdered, Crosshair, ShieldCheck
 } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,10 @@ import { SubscriptionGate } from "@/components/subscription-gate";
 import { QuickTradePanel } from "@/components/quick-trade-panel";
 import { useSolanaWallet } from "@/hooks/use-solana-wallet";
 import { useEthereumWallet } from "@/hooks/use-ethereum-wallet";
+import { PresetSelector } from "@/components/sniper/preset-selector";
+import { ManualWatchlist } from "@/components/sniper/manual-watchlist";
+import { TopSignalsWidget } from "@/components/sniper/top-signals-widget";
+import { SafetyReport } from "@/components/sniper/safety-report";
 
 interface MarketData {
   totalMarketCap: number;
@@ -730,11 +735,16 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
   );
 }
 
+type MainTab = 'discover' | 'signals' | 'strategy' | 'watchlist' | 'analyze';
+
 export default function StrikeAgentPage() {
   const [filter, setFilter] = useState<'all' | 'snipe' | 'watch' | 'avoid' | 'favorites'>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [walletMenuOpen, setWalletMenuOpen] = useState(false);
+  const [mainTab, setMainTab] = useState<MainTab>('discover');
+  const [selectedPreset, setSelectedPreset] = useState<string>('pathfinder');
+  const [analyzeAddress, setAnalyzeAddress] = useState<string>('');
   const [favorites, setFavorites] = useState<string[]>(() => {
     try {
       return JSON.parse(localStorage.getItem('strike-favorites') || '[]');
@@ -751,6 +761,9 @@ export default function StrikeAgentPage() {
   const ethereumWallet = useEthereumWallet();
   
   const hasAnyWallet = !!solanaWallet.wallet || !!ethereumWallet.wallet;
+  
+  // Get current user ID for watchlist
+  const currentUserId = solanaWallet.wallet?.slice(0, 20) || ethereumWallet.wallet?.slice(0, 20) || 'guest';
   
   useEffect(() => {
     localStorage.setItem('strike-favorites', JSON.stringify(favorites));
@@ -1019,6 +1032,73 @@ export default function StrikeAgentPage() {
       </header>
       
       <main className="relative z-10 px-4 py-4 pb-28">
+        {/* Main Tab Navigation */}
+        <div className="flex gap-1 mb-4 p-1 bg-white/5 rounded-xl border border-white/10 overflow-x-auto scrollbar-hide">
+          {([
+            { id: 'discover' as MainTab, label: 'Discover', icon: Target },
+            { id: 'signals' as MainTab, label: 'AI Signals', icon: Zap },
+            { id: 'strategy' as MainTab, label: 'Strategy', icon: Shield },
+            { id: 'watchlist' as MainTab, label: 'Watchlist', icon: ListOrdered },
+            { id: 'analyze' as MainTab, label: 'Analyze', icon: ShieldCheck },
+          ]).map(({ id, label, icon: TabIcon }) => (
+            <button
+              key={id}
+              onClick={() => setMainTab(id)}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-all flex-1 justify-center ${
+                mainTab === id
+                  ? 'bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-cyan-400 border border-cyan-500/30'
+                  : 'text-white/50 hover:text-white/80 hover:bg-white/5'
+              }`}
+              data-testid={`main-tab-${id}`}
+            >
+              <TabIcon className="w-4 h-4" />
+              <span className="hidden sm:inline">{label}</span>
+            </button>
+          ))}
+        </div>
+        
+        {/* Tab Content */}
+        {mainTab === 'signals' && (
+          <div className="mb-6">
+            <TopSignalsWidget 
+              onSelectToken={(address, chain) => {
+                setAnalyzeAddress(address);
+                setMainTab('analyze');
+              }}
+            />
+          </div>
+        )}
+        
+        {mainTab === 'strategy' && (
+          <div className="mb-6">
+            <PresetSelector 
+              selectedPreset={selectedPreset}
+              onPresetChange={setSelectedPreset}
+            />
+          </div>
+        )}
+        
+        {mainTab === 'watchlist' && (
+          <div className="mb-6">
+            <ManualWatchlist 
+              userId={currentUserId}
+              selectedPreset={selectedPreset}
+              walletAddress={solanaWallet.wallet || ethereumWallet.wallet || undefined}
+            />
+          </div>
+        )}
+        
+        {mainTab === 'analyze' && (
+          <div className="mb-6">
+            <SafetyReport 
+              tokenAddress={analyzeAddress || undefined}
+              chain={analyzeAddress?.startsWith('0x') ? 'ethereum' : 'solana'}
+            />
+          </div>
+        )}
+        
+        {mainTab === 'discover' && (
+          <>
         {/* Market Overview Panel */}
         <div className="mb-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
           {/* Fear & Greed */}
@@ -1132,6 +1212,8 @@ export default function StrikeAgentPage() {
               />
             ))}
           </div>
+        )}
+        </>
         )}
       </main>
       
