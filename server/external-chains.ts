@@ -5,16 +5,24 @@ const ETHEREUM_SEPOLIA_RPC = "https://ethereum-sepolia-rpc.publicnode.com";
 const SOLANA_DEVNET_RPC = process.env.HELIUS_API_KEY 
   ? `https://devnet.helius-rpc.com/?api-key=${process.env.HELIUS_API_KEY}`
   : "https://api.devnet.solana.com";
+const POLYGON_AMOY_RPC = "https://rpc-amoy.polygon.technology";
+const ARBITRUM_SEPOLIA_RPC = "https://sepolia-rollup.arbitrum.io/rpc";
+const BASE_SEPOLIA_RPC = "https://sepolia.base.org";
 
 const WSIG_ETHEREUM_CONTRACT = process.env.WSIG_ETHEREUM_ADDRESS || "0x0000000000000000000000000000000000000000";
 const WSIG_SOLANA_MINT = process.env.WSIG_SOLANA_ADDRESS || "11111111111111111111111111111111";
+const WSIG_POLYGON_CONTRACT = process.env.WSIG_POLYGON_ADDRESS || "0x0000000000000000000000000000000000000000";
+const WSIG_ARBITRUM_CONTRACT = process.env.WSIG_ARBITRUM_ADDRESS || "0x0000000000000000000000000000000000000000";
+const WSIG_BASE_CONTRACT = process.env.WSIG_BASE_ADDRESS || "0x0000000000000000000000000000000000000000";
 
 const MINT_FUNCTION_SELECTOR = "0x156e29f6";
 const CHAIN_ID_SEPOLIA = 11155111;
 
+export type SupportedExternalChain = "ethereum" | "solana" | "polygon" | "arbitrum" | "base";
+
 export interface ExternalTxVerification {
   verified: boolean;
-  chain: "ethereum" | "solana";
+  chain: SupportedExternalChain;
   txHash: string;
   amount?: string;
   from?: string;
@@ -238,42 +246,169 @@ class ExternalChainsService {
     }
   }
 
-  async verifyBurn(chain: "ethereum" | "solana", txHash: string, expectedAmount: string): Promise<ExternalTxVerification> {
-    if (chain === "ethereum") {
-      return this.verifyEthereumBurn(txHash, expectedAmount);
-    } else if (chain === "solana") {
-      return this.verifySolanaBurn(txHash, expectedAmount);
-    } else {
+  async verifyBurn(chain: SupportedExternalChain, txHash: string, expectedAmount: string): Promise<ExternalTxVerification> {
+    switch (chain) {
+      case "ethereum":
+        return this.verifyEthereumBurn(txHash, expectedAmount);
+      case "solana":
+        return this.verifySolanaBurn(txHash, expectedAmount);
+      case "polygon":
+      case "arbitrum":
+      case "base":
+        return this.verifyEVMBurn(chain, txHash, expectedAmount);
+      default:
+        return {
+          verified: false,
+          chain,
+          txHash,
+          error: `Unsupported chain: ${chain}`,
+        };
+    }
+  }
+
+  private async verifyEVMBurn(chain: "polygon" | "arbitrum" | "base", txHash: string, expectedAmount: string): Promise<ExternalTxVerification> {
+    const rpcMap: Record<string, string> = {
+      polygon: POLYGON_AMOY_RPC,
+      arbitrum: ARBITRUM_SEPOLIA_RPC,
+      base: BASE_SEPOLIA_RPC,
+    };
+    const rpcUrl = rpcMap[chain];
+    
+    try {
+      const response = await fetch(rpcUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          id: 1,
+          method: "eth_getTransactionReceipt",
+          params: [txHash],
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!data.result) {
+        return { verified: false, chain, txHash, error: "Transaction not found or not yet confirmed" };
+      }
+
+      const receipt = data.result;
+      if (receipt.status !== "0x1") {
+        return { verified: false, chain, txHash, error: "Transaction failed on-chain" };
+      }
+
+      const txResponse = await fetch(rpcUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_getTransactionByHash", params: [txHash] }),
+      });
+
+      const txData = await txResponse.json();
+      const tx = txData.result;
+
+      if (!tx) {
+        return { verified: false, chain, txHash, error: "Transaction details not found" };
+      }
+
+      console.log(`[External Chains] ${chain} tx verified: ${txHash}`);
       return {
-        verified: false,
+        verified: true,
         chain,
         txHash,
-        error: `Unsupported chain: ${chain}`,
+        amount: BigInt(tx.value || "0").toString(),
+        from: tx.from,
+        to: tx.to,
+        blockNumber: parseInt(receipt.blockNumber, 16),
       };
+    } catch (error: any) {
+      return { verified: false, chain, txHash, error: error.message };
+    }
+  }
+
+  async getPolygonStatus(): Promise<ChainStatus> {
+    const startTime = Date.now();
+    try {
+      const response = await fetch(POLYGON_AMOY_RPC, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_blockNumber", params: [] }),
+      });
+      const data = await response.json();
+      const latency = Date.now() - startTime;
+      if (data.result) {
+        return { chain: "polygon", connected: true, blockHeight: parseInt(data.result, 16), latency };
+      }
+      return { chain: "polygon", connected: false, error: "Invalid response" };
+    } catch (error: any) {
+      return { chain: "polygon", connected: false, error: error.message };
+    }
+  }
+
+  async getArbitrumStatus(): Promise<ChainStatus> {
+    const startTime = Date.now();
+    try {
+      const response = await fetch(ARBITRUM_SEPOLIA_RPC, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_blockNumber", params: [] }),
+      });
+      const data = await response.json();
+      const latency = Date.now() - startTime;
+      if (data.result) {
+        return { chain: "arbitrum", connected: true, blockHeight: parseInt(data.result, 16), latency };
+      }
+      return { chain: "arbitrum", connected: false, error: "Invalid response" };
+    } catch (error: any) {
+      return { chain: "arbitrum", connected: false, error: error.message };
+    }
+  }
+
+  async getBaseStatus(): Promise<ChainStatus> {
+    const startTime = Date.now();
+    try {
+      const response = await fetch(BASE_SEPOLIA_RPC, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_blockNumber", params: [] }),
+      });
+      const data = await response.json();
+      const latency = Date.now() - startTime;
+      if (data.result) {
+        return { chain: "base", connected: true, blockHeight: parseInt(data.result, 16), latency };
+      }
+      return { chain: "base", connected: false, error: "Invalid response" };
+    } catch (error: any) {
+      return { chain: "base", connected: false, error: error.message };
     }
   }
 
   async getAllChainStatuses(): Promise<ChainStatus[]> {
-    const [ethStatus, solStatus] = await Promise.all([
+    const [ethStatus, solStatus, polygonStatus, arbitrumStatus, baseStatus] = await Promise.all([
       this.getEthereumStatus(),
       this.getSolanaStatus(),
+      this.getPolygonStatus(),
+      this.getArbitrumStatus(),
+      this.getBaseStatus(),
     ]);
-    return [ethStatus, solStatus];
+    return [ethStatus, solStatus, polygonStatus, arbitrumStatus, baseStatus];
   }
 
-  getWSIGContractAddress(chain: "ethereum" | "solana"): string {
-    if (chain === "ethereum") {
-      return WSIG_ETHEREUM_CONTRACT;
+  getWSIGContractAddress(chain: SupportedExternalChain): string {
+    switch (chain) {
+      case "ethereum": return WSIG_ETHEREUM_CONTRACT;
+      case "solana": return WSIG_SOLANA_MINT;
+      case "polygon": return WSIG_POLYGON_CONTRACT;
+      case "arbitrum": return WSIG_ARBITRUM_CONTRACT;
+      case "base": return WSIG_BASE_CONTRACT;
     }
-    return WSIG_SOLANA_MINT;
   }
 
-  isContractDeployed(chain: "ethereum" | "solana"): boolean {
+  isContractDeployed(chain: SupportedExternalChain): boolean {
     const addr = this.getWSIGContractAddress(chain);
-    if (chain === "ethereum") {
-      return addr !== "0x0000000000000000000000000000000000000000";
+    if (chain === "solana") {
+      return addr !== "11111111111111111111111111111111";
     }
-    return addr !== "11111111111111111111111111111111";
+    return addr !== "0x0000000000000000000000000000000000000000";
   }
 
   private encodeUint256(value: string): string {

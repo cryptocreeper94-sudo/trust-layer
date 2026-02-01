@@ -216,6 +216,7 @@ const SecurityPage = lazy(() => import("@/pages/security"));
 const GuardianCertification = lazy(() => import("@/pages/guardian-certification"));
 const GuardianRegistry = lazy(() => import("@/pages/guardian-registry"));
 const GuardianPortal = lazy(() => import("@/pages/guardian-portal"));
+const GuardianWhitepaper = lazy(() => import("@/pages/guardian-whitepaper"));
 const OwnerAdminPortal = lazy(() => import("@/pages/owner-admin"));
 const OwnerAnalytics = lazy(() => import("@/pages/owner-admin/analytics"));
 const OwnerSeoManager = lazy(() => import("@/pages/owner-admin/seo"));
@@ -408,6 +409,7 @@ function DWSCRouter() {
         <Route path="/guardian-certification" component={GuardianCertification} />
         <Route path="/guardian-registry" component={GuardianRegistry} />
         <Route path="/guardian-portal" component={GuardianPortal} />
+        <Route path="/guardian-whitepaper" component={GuardianWhitepaper} />
         <Route path="/explorer" component={Explorer} />
         <Route path="/doc-hub" component={DocHub} />
         <Route path="/executive-summary" component={DWSCExecutiveSummary} />

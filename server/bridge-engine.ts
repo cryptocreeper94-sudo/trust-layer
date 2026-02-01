@@ -3,9 +3,9 @@ import { db } from "./db";
 import { bridgeLocks, bridgeMints, bridgeBurns, bridgeReleases } from "@shared/schema";
 import { eq, desc, and } from "drizzle-orm";
 import { blockchain } from "./blockchain-engine";
-import { externalChains, type ExternalTxVerification, type ChainStatus } from "./external-chains";
+import { externalChains, type ExternalTxVerification, type ChainStatus, type SupportedExternalChain } from "./external-chains";
 
-export type SupportedChain = "ethereum" | "solana";
+export type SupportedChain = "ethereum" | "solana" | "polygon" | "arbitrum" | "base";
 
 export interface BridgeLockRequest {
   fromAddress: string;
@@ -71,7 +71,7 @@ class DarkWaveBridge {
         return { success: false, error: "Amount must be positive" };
       }
 
-      if (!["ethereum", "solana"].includes(request.targetChain)) {
+      if (!["ethereum", "solana", "polygon", "arbitrum", "base"].includes(request.targetChain)) {
         return { success: false, error: "Unsupported target chain" };
       }
 
@@ -206,7 +206,7 @@ class DarkWaveBridge {
       console.log(`[DarkWave Bridge] Verifying burn tx on ${burn.sourceChain}: ${burn.sourceTxHash}`);
       
       const verification = await externalChains.verifyBurn(
-        burn.sourceChain as "ethereum" | "solana",
+        burn.sourceChain as SupportedExternalChain,
         burn.sourceTxHash,
         burn.amount
       );
@@ -342,6 +342,27 @@ class DarkWaveBridge {
         network: "Devnet", 
         status: "active",
         contractDeployed: externalChains.isContractDeployed("solana")
+      },
+      { 
+        id: "polygon", 
+        name: "Polygon", 
+        network: "Amoy Testnet", 
+        status: "active",
+        contractDeployed: externalChains.isContractDeployed("polygon")
+      },
+      { 
+        id: "arbitrum", 
+        name: "Arbitrum", 
+        network: "Sepolia Testnet", 
+        status: "active",
+        contractDeployed: externalChains.isContractDeployed("arbitrum")
+      },
+      { 
+        id: "base", 
+        name: "Base", 
+        network: "Sepolia Testnet", 
+        status: "active",
+        contractDeployed: externalChains.isContractDeployed("base")
       },
     ];
   }
