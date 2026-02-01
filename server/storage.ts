@@ -63,7 +63,10 @@ export interface IStorage {
   
   // DEX Swaps
   getRecentSwaps(): Promise<SwapTransaction[]>;
-  createSwap(data: { pairId: string; tokenIn: string; tokenOut: string; amountIn: string; amountOut: string; priceImpact: string; status: string; txHash: string }): Promise<SwapTransaction>;
+  createSwap(data: { pairId?: string; userId?: string | null; tokenIn: string; tokenOut: string; amountIn: string; amountOut: string; priceImpact?: string; status: string; txHash: string; walletAddress?: string }): Promise<SwapTransaction>;
+  
+  // Crowdfund
+  getCrowdfundContribution(id: string): Promise<CrowdfundContribution | undefined>;
   
   // NFT Marketplace
   getNftCollections(): Promise<NftCollection[]>;
@@ -848,9 +851,23 @@ export class DatabaseStorage implements IStorage {
     return db.select().from(swapTransactions).orderBy(desc(swapTransactions.createdAt)).limit(50);
   }
 
-  async createSwap(data: { pairId: string; tokenIn: string; tokenOut: string; amountIn: string; amountOut: string; priceImpact: string; status: string; txHash: string }): Promise<SwapTransaction> {
-    const [swap] = await db.insert(swapTransactions).values(data).returning();
+  async createSwap(data: { pairId?: string; userId?: string | null; tokenIn: string; tokenOut: string; amountIn: string; amountOut: string; priceImpact?: string; status: string; txHash: string; walletAddress?: string }): Promise<SwapTransaction> {
+    const [swap] = await db.insert(swapTransactions).values({
+      pairId: data.pairId || `${data.tokenIn}-${data.tokenOut}`,
+      tokenIn: data.tokenIn,
+      tokenOut: data.tokenOut,
+      amountIn: data.amountIn,
+      amountOut: data.amountOut,
+      priceImpact: data.priceImpact || "0",
+      status: data.status,
+      txHash: data.txHash,
+    }).returning();
     return swap;
+  }
+  
+  async getCrowdfundContribution(id: string): Promise<CrowdfundContribution | undefined> {
+    const [contribution] = await db.select().from(crowdfundContributions).where(eq(crowdfundContributions.id, id));
+    return contribution;
   }
 
   // NFT Marketplace methods

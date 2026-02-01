@@ -13,7 +13,8 @@ interface QuickTradePanelProps {
   tokenAddress: string;
   tokenSymbol: string;
   tokenName?: string;
-  recommendation: 'snipe' | 'watch' | 'avoid';
+  tokenLogo?: string;
+  recommendation?: 'snipe' | 'watch' | 'avoid';
   onClose?: () => void;
 }
 
