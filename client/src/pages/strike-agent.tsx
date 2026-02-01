@@ -22,6 +22,8 @@ import { PresetSelector } from "@/components/sniper/preset-selector";
 import { ManualWatchlist } from "@/components/sniper/manual-watchlist";
 import { TopSignalsWidget } from "@/components/sniper/top-signals-widget";
 import { SafetyReport } from "@/components/sniper/safety-report";
+import { LiveSnipeTracker } from "@/components/sniper/live-snipe-tracker";
+import { CandleChart } from "@/components/sniper/candle-chart";
 
 interface MarketData {
   totalMarketCap: number;
@@ -735,7 +737,7 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
   );
 }
 
-type MainTab = 'discover' | 'signals' | 'strategy' | 'watchlist' | 'analyze';
+type MainTab = 'discover' | 'live' | 'signals' | 'strategy' | 'watchlist' | 'analyze';
 
 export default function StrikeAgentPage() {
   const [filter, setFilter] = useState<'all' | 'snipe' | 'watch' | 'avoid' | 'favorites'>('all');
@@ -1036,6 +1038,7 @@ export default function StrikeAgentPage() {
         <div className="flex gap-1 mb-4 p-1 bg-white/5 rounded-xl border border-white/10 overflow-x-auto scrollbar-hide">
           {([
             { id: 'discover' as MainTab, label: 'Discover', icon: Target },
+            { id: 'live' as MainTab, label: 'Live', icon: Activity },
             { id: 'signals' as MainTab, label: 'AI Signals', icon: Zap },
             { id: 'strategy' as MainTab, label: 'Strategy', icon: Shield },
             { id: 'watchlist' as MainTab, label: 'Watchlist', icon: ListOrdered },
@@ -1058,6 +1061,45 @@ export default function StrikeAgentPage() {
         </div>
         
         {/* Tab Content */}
+        {mainTab === 'live' && (
+          <div className="mb-6 space-y-4">
+            <LiveSnipeTracker userId={currentUserId} />
+            
+            {/* Quick Chart Access */}
+            <GlassCard glow className="p-4">
+              <h3 className="font-semibold text-white mb-3 flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-cyan-400" />
+                Quick Chart
+              </h3>
+              <div className="flex gap-2 mb-4">
+                <input
+                  type="text"
+                  placeholder="Enter token address to view chart..."
+                  value={analyzeAddress || ''}
+                  onChange={(e) => setAnalyzeAddress(e.target.value)}
+                  className="flex-1 px-3 py-2 bg-slate-800/50 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-cyan-500/50"
+                  data-testid="chart-address-input"
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setAnalyzeAddress('')}
+                  className="border-white/10"
+                >
+                  Clear
+                </Button>
+              </div>
+              {analyzeAddress && (
+                <CandleChart
+                  tokenAddress={analyzeAddress}
+                  tokenSymbol={analyzeAddress.slice(0, 6).toUpperCase()}
+                  chain={analyzeAddress.startsWith('0x') ? 'Ethereum' : 'Solana'}
+                />
+              )}
+            </GlassCard>
+          </div>
+        )}
+        
         {mainTab === 'signals' && (
           <div className="mb-6">
             <TopSignalsWidget 
