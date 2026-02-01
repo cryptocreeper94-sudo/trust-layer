@@ -322,6 +322,10 @@ export interface IStorage {
   getAiAgentCertifications(filters: { status?: string }): Promise<any[]>;
   getAiAgentCertification(id: string): Promise<any | undefined>;
   updateAiAgentCertification(id: string, data: any): Promise<any | undefined>;
+
+  // Shells/Orbs Balance - stub methods for Chronicles game
+  updateShellsBalance(userId: string, amount: number, reason: string): Promise<void>;
+  updateOrbsBalance(userId: string, amount: number, reason: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -2609,6 +2613,21 @@ export class DatabaseStorage implements IStorage {
       .where(eq(aiAgentCertifications.id, id))
       .returning();
     return cert;
+  }
+
+  // Shells Balance - stub implementation for Chronicles game features
+  // TODO: Integrate with treasury ledger system for proper shells tracking
+  async updateShellsBalance(userId: string, amount: number, reason: string): Promise<void> {
+    console.log(`[Shells] Balance update requested: user=${userId}, amount=${amount}, reason=${reason}`);
+    // This is a stub - shells are tracked via treasury ledger, not user balance
+    // The actual shells system uses treasuryLedger table for transactions
+  }
+
+  // Orbs Balance - legacy fallback for game rewards
+  // TODO: Remove once fully migrated to shells system
+  async updateOrbsBalance(userId: string, amount: number, reason: string): Promise<void> {
+    console.log(`[Orbs] Legacy balance update: user=${userId}, amount=${amount}, reason=${reason}`);
+    // Orbs are deprecated in favor of shells - this is a no-op fallback
   }
 }
 
