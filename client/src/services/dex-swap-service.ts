@@ -508,7 +508,7 @@ class DexSwapService {
   // ==================== UTILITIES ====================
 
   private isNativeToken(token: string): boolean {
-    const natives = ['SOL', 'ETH', 'MATIC', 'BNB', 'AVAX'];
+    const natives = ['SOL', 'ETH', 'MATIC', 'BNB', 'AVAX', 'NATIVE'];
     return natives.includes(token.toUpperCase()) || 
            token === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
   }

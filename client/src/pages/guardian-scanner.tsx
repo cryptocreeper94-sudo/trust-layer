@@ -50,6 +50,7 @@ import {
   DollarSign
 } from "lucide-react";
 import { useGuardianWS } from "@/hooks/use-guardian-ws";
+import { QuickTradePanel } from "@/components/quick-trade-panel";
 
 const CHAINS = [
   { id: "all", name: "All Chains", short: "All", icon: "🌐", color: "from-white/20 to-white/10" },
@@ -718,11 +719,12 @@ function ExpandedTokenDetails({ token }: { token: Token }) {
   );
 }
 
-function TokenRow({ token, isExpanded, onToggleExpand, onToggleWatchlist }: { 
+function TokenRow({ token, isExpanded, onToggleExpand, onToggleWatchlist, onTrade }: { 
   token: Token; 
   isExpanded: boolean;
   onToggleExpand: () => void;
   onToggleWatchlist: (id: string) => void;
+  onTrade: (token: Token) => void;
 }) {
   const [copied, setCopied] = useState(false);
   const copyAddress = (e: React.MouseEvent) => {
@@ -828,6 +830,13 @@ function TokenRow({ token, isExpanded, onToggleExpand, onToggleWatchlist }: {
         {/* Actions */}
         <td className="py-2 pr-3" onClick={(e) => e.stopPropagation()}>
           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button 
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onTrade(token); }} 
+              className="px-2 py-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 rounded text-[10px] font-medium"
+              data-testid={`trade-${token.id}`}
+            >
+              Trade
+            </button>
             <button 
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleWatchlist(token.id); }} 
               className="p-1 hover:bg-white/10 rounded"
@@ -1017,6 +1026,10 @@ export default function GuardianScanner() {
   const [contractSearch, setContractSearch] = useState("");
   const [isSearchingContract, setIsSearchingContract] = useState(false);
   const [contractSearchError, setContractSearchError] = useState<string | null>(null);
+  
+  // Trading state
+  const [tradingToken, setTradingToken] = useState<Token | null>(null);
+  const [showTradeModal, setShowTradeModal] = useState(false);
   
   // Handle contract address search
   const handleContractSearch = async () => {
@@ -1543,7 +1556,8 @@ export default function GuardianScanner() {
                     token={token}
                     isExpanded={expandedTokenId === token.id}
                     onToggleExpand={() => setExpandedTokenId(expandedTokenId === token.id ? null : token.id)}
-                    onToggleWatchlist={toggleWatchlist} 
+                    onToggleWatchlist={toggleWatchlist}
+                    onTrade={(t) => { setTradingToken(t); setShowTradeModal(true); }}
                   />
                 ))
               )}
@@ -1551,6 +1565,44 @@ export default function GuardianScanner() {
           </table>
         </div>
       </div>
+      
+      {/* Trade Modal */}
+      <AnimatePresence>
+        {showTradeModal && tradingToken && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+            onClick={() => setShowTradeModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="w-full max-w-md"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="relative">
+                <button
+                  onClick={() => setShowTradeModal(false)}
+                  className="absolute -top-2 -right-2 z-10 w-8 h-8 bg-slate-800 border border-white/10 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-slate-700"
+                  data-testid="close-trade-modal"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+                <QuickTradePanel
+                  tokenAddress={tradingToken.contractAddress}
+                  tokenSymbol={tradingToken.symbol}
+                  tokenName={tradingToken.name}
+                  tokenLogo={tradingToken.logo}
+                  onClose={() => setShowTradeModal(false)}
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

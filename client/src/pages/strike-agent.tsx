@@ -14,6 +14,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { SubscriptionGate } from "@/components/subscription-gate";
+import { QuickTradePanel } from "@/components/quick-trade-panel";
+import { useSolanaWallet } from "@/hooks/use-solana-wallet";
+import { useEthereumWallet } from "@/hooks/use-ethereum-wallet";
 
 interface MarketData {
   totalMarketCap: number;
@@ -382,6 +385,7 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
   const style = recommendationStyles[rec.aiRecommendation];
   const Icon = style.icon;
   const [copied, setCopied] = useState(false);
+  const [showTradePanel, setShowTradePanel] = useState(false);
 
   const copyAddress = () => {
     navigator.clipboard.writeText(rec.tokenAddress);
@@ -682,10 +686,8 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
                     Full Analysis
                   </a>
                 </Link>
-                <a
-                  href={`https://raydium.io/swap/?inputMint=sol&outputMint=${rec.tokenAddress}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={(e) => { e.stopPropagation(); setShowTradePanel(!showTradePanel); }}
                   className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all ${
                     rec.aiRecommendation === 'snipe' 
                       ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white' 
@@ -693,13 +695,33 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
                       ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
                       : 'bg-white/10 text-white/60'
                   }`}
-                  onClick={(e) => e.stopPropagation()}
                   data-testid="button-trade"
                 >
-                  <Wallet className="w-4 h-4" />
-                  Trade
-                </a>
+                  <Zap className="w-4 h-4" />
+                  {showTradePanel ? 'Close Trade' : 'Trade Now'}
+                </button>
               </div>
+              
+              {/* Multi-Chain Trade Panel */}
+              <AnimatePresence>
+                {showTradePanel && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden mt-3"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <QuickTradePanel
+                      tokenAddress={rec.tokenAddress}
+                      tokenSymbol={rec.tokenSymbol}
+                      tokenName={rec.tokenName || undefined}
+                      recommendation={rec.aiRecommendation}
+                      onClose={() => setShowTradePanel(false)}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </motion.div>
         )}
@@ -712,6 +734,7 @@ export default function StrikeAgentPage() {
   const [filter, setFilter] = useState<'all' | 'snipe' | 'watch' | 'avoid' | 'favorites'>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [walletMenuOpen, setWalletMenuOpen] = useState(false);
   const [favorites, setFavorites] = useState<string[]>(() => {
     try {
       return JSON.parse(localStorage.getItem('strike-favorites') || '[]');
@@ -722,6 +745,12 @@ export default function StrikeAgentPage() {
       return { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem('strike-settings') || '{}') };
     } catch { return DEFAULT_SETTINGS; }
   });
+  
+  // Multi-wallet support
+  const solanaWallet = useSolanaWallet();
+  const ethereumWallet = useEthereumWallet();
+  
+  const hasAnyWallet = !!solanaWallet.wallet || !!ethereumWallet.wallet;
   
   useEffect(() => {
     localStorage.setItem('strike-favorites', JSON.stringify(favorites));
@@ -833,6 +862,111 @@ export default function StrikeAgentPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {/* Wallet Connection Button */}
+            <div className="relative">
+              <button
+                onClick={() => setWalletMenuOpen(!walletMenuOpen)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-xl transition-all ${
+                  hasAnyWallet 
+                    ? 'bg-emerald-500/20 border border-emerald-500/40 text-emerald-400' 
+                    : 'bg-gradient-to-r from-purple-500 to-cyan-500 text-white'
+                }`}
+                data-testid="button-wallet-menu"
+              >
+                <Wallet className="w-4 h-4" />
+                <span className="text-xs font-medium hidden sm:inline">
+                  {hasAnyWallet ? 'Connected' : 'Connect'}
+                </span>
+              </button>
+              
+              <AnimatePresence>
+                {walletMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                    className="absolute right-0 mt-2 w-72 bg-slate-800 border border-white/10 rounded-xl p-3 shadow-2xl z-50"
+                  >
+                    <h3 className="text-white font-bold text-sm mb-3">Wallet Connections</h3>
+                    
+                    {/* Solana (Phantom) */}
+                    <div className="mb-3 p-3 bg-white/5 rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">◎</span>
+                          <span className="text-white text-sm font-medium">Phantom (Solana)</span>
+                        </div>
+                        {solanaWallet.wallet ? (
+                          <span className="text-xs text-emerald-400">Connected</span>
+                        ) : null}
+                      </div>
+                      {solanaWallet.wallet ? (
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-white/50 font-mono">
+                            {solanaWallet.wallet.publicKey.slice(0, 8)}...{solanaWallet.wallet.publicKey.slice(-6)}
+                          </span>
+                          <button
+                            onClick={() => solanaWallet.disconnect()}
+                            className="text-xs text-red-400 hover:underline"
+                            data-testid="button-disconnect-phantom"
+                          >
+                            Disconnect
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => solanaWallet.connectPhantom().catch(() => {})}
+                          className="w-full py-2 bg-gradient-to-r from-purple-500 to-cyan-500 text-white text-xs font-bold rounded-lg"
+                          data-testid="button-connect-phantom"
+                        >
+                          Connect Phantom
+                        </button>
+                      )}
+                    </div>
+                    
+                    {/* EVM (MetaMask) */}
+                    <div className="p-3 bg-white/5 rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">Ξ</span>
+                          <span className="text-white text-sm font-medium">MetaMask (EVM)</span>
+                        </div>
+                        {ethereumWallet.wallet ? (
+                          <span className="text-xs text-emerald-400">Connected</span>
+                        ) : null}
+                      </div>
+                      {ethereumWallet.wallet ? (
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-white/50 font-mono">
+                            {ethereumWallet.wallet.address.slice(0, 8)}...{ethereumWallet.wallet.address.slice(-6)}
+                          </span>
+                          <button
+                            onClick={() => ethereumWallet.disconnect()}
+                            className="text-xs text-red-400 hover:underline"
+                            data-testid="button-disconnect-metamask"
+                          >
+                            Disconnect
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => ethereumWallet.connectMetaMask().catch(() => {})}
+                          className="w-full py-2 bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-xs font-bold rounded-lg"
+                          data-testid="button-connect-metamask"
+                        >
+                          Connect MetaMask
+                        </button>
+                      )}
+                    </div>
+                    
+                    <p className="text-[10px] text-white/30 mt-3 text-center">
+                      Connect wallets to trade directly from signals
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+            
             <button 
               onClick={() => refetch()}
               disabled={isFetching}
