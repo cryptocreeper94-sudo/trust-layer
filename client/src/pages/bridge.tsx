@@ -4,16 +4,18 @@ import { Link } from "wouter";
 import { 
   ArrowLeftRight, Lock, Sparkles, Zap, Shield, 
   ChevronDown, ChevronLeft, ChevronRight, Clock, Flame,
-  BookOpen, ExternalLink, Bell, HelpCircle
+  BookOpen, ExternalLink, Bell, HelpCircle, Rocket
 } from "lucide-react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { WalletButton } from "@/components/wallet-button";
 import { FeatureBadge } from "@/components/feature-badge";
+import { BridgeInterface } from "@/components/bridge/bridge-interface";
 
 import ethereumImg from "@assets/generated_images/ethereum_smart_city_network.png";
 import solanaImg from "@assets/generated_images/solana_speed_lightning_tunnel.png";
@@ -212,6 +214,7 @@ function ChainCarousel({ chains, category }: { chains: ChainInfo[]; category: Ch
 export default function Bridge() {
   const [openCategories, setOpenCategories] = useState<ChainCategory[]>(["evm-l2", "evm-l1"]);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [activeTab, setActiveTab] = useState<'bridge' | 'networks'>('bridge');
 
   const toggleCategory = (cat: ChainCategory) => {
     setOpenCategories(prev => 
@@ -289,29 +292,35 @@ export default function Bridge() {
                   </div>
                   
                   <div className="flex flex-col gap-2 shrink-0">
-                    <Button 
-                      size="lg"
-                      disabled
-                      className="bg-gradient-to-r from-primary to-cyan-400 text-black font-bold opacity-50 cursor-not-allowed"
-                      data-testid="button-launch-bridge"
-                    >
-                      <Sparkles className="w-4 h-4 mr-2" />
-                      Launch Bridge
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="border-white/20 hover:bg-white/5"
-                      data-testid="button-notify-launch"
-                    >
-                      <Bell className="w-4 h-4 mr-2" />
-                      Notify Me at Launch
-                    </Button>
+                    <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'bridge' | 'networks')} className="w-full">
+                      <TabsList className="grid grid-cols-2 w-full bg-slate-800/50">
+                        <TabsTrigger value="bridge" className="data-[state=active]:bg-primary/20">
+                          <Rocket className="w-4 h-4 mr-2" />
+                          Bridge
+                        </TabsTrigger>
+                        <TabsTrigger value="networks" className="data-[state=active]:bg-purple-500/20">
+                          <Zap className="w-4 h-4 mr-2" />
+                          Networks
+                        </TabsTrigger>
+                      </TabsList>
+                    </Tabs>
                   </div>
                 </div>
               </div>
             </motion.div>
 
+            {activeTab === 'bridge' && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-8"
+              >
+                <BridgeInterface />
+              </motion.div>
+            )}
+
+            {activeTab === 'networks' && (
+            <>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -577,6 +586,8 @@ export default function Bridge() {
                 View Documentation
               </Button>
             </motion.div>
+            </>
+            )}
             
           </div>
         </main>

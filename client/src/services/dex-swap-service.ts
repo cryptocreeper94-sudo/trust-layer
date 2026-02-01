@@ -516,7 +516,7 @@ class DexSwapService {
   private calculateMinOutput(amount: string, slippage: number): string {
     const amountBig = BigInt(amount);
     const slippageFactor = BigInt(Math.floor((100 - slippage) * 100));
-    return ((amountBig * slippageFactor) / 10000n).toString();
+    return ((amountBig * slippageFactor) / BigInt(10000)).toString();
   }
 
   /**
