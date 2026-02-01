@@ -14219,15 +14219,15 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   app.get("/api/chronicles/game/factions", async (req, res) => {
-    res.json({ factions: chroniclesGameService.STARTER_FACTIONS });
+    res.json({ factions: STARTER_FACTIONS });
   });
 
   app.get("/api/chronicles/game/quests", async (req, res) => {
-    res.json({ quests: chroniclesGameService.SEASON_ZERO_QUESTS });
+    res.json({ quests: SEASON_ZERO_QUESTS });
   });
 
   app.get("/api/chronicles/game/npcs", async (req, res) => {
-    res.json({ npcs: chroniclesGameService.STARTER_NPCS.map(n => ({
+    res.json({ npcs: STARTER_NPCS.map((n: any) => ({
       id: n.name.toLowerCase().replace(/\s+/g, '_'),
       name: n.name,
       title: n.title,
@@ -14292,7 +14292,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           `Decision: ${decisionId}`,
           { questId, decisionId, hash: result.decisionHash }
         );
-        result.chronicleProof = proof;
+        (result as any).chronicleProof = proof;
       }
       
       res.json(result);
