@@ -749,6 +749,14 @@ export default function StrikeAgentPage() {
   const [mainTab, setMainTab] = useState<MainTab>('discover');
   const [selectedPreset, setSelectedPreset] = useState<string>('pathfinder');
   const [analyzeAddress, setAnalyzeAddress] = useState<string>('');
+  const [snipeModalOpen, setSnipeModalOpen] = useState(false);
+  const [snipeTarget, setSnipeTarget] = useState<{
+    address: string;
+    symbol: string;
+    name?: string;
+    chain: string;
+    price: number;
+  } | null>(null);
   const [favorites, setFavorites] = useState<string[]>(() => {
     try {
       return JSON.parse(localStorage.getItem('strike-favorites') || '[]');
@@ -1110,6 +1118,10 @@ export default function StrikeAgentPage() {
                 setAnalyzeAddress(address);
                 setMainTab('analyze');
               }}
+              onSnipeToken={(signal) => {
+                setSnipeTarget(signal);
+                setSnipeModalOpen(true);
+              }}
             />
           </div>
         )}
@@ -1307,6 +1319,27 @@ export default function StrikeAgentPage() {
           onSave={setSettings}
         />
       </AnimatePresence>
+      
+      {snipeTarget && (
+        <QuickSnipeModal
+          isOpen={snipeModalOpen}
+          onClose={() => {
+            setSnipeModalOpen(false);
+            setSnipeTarget(null);
+          }}
+          tokenAddress={snipeTarget.address}
+          tokenSymbol={snipeTarget.symbol}
+          tokenName={snipeTarget.name}
+          chain={snipeTarget.chain}
+          currentPrice={snipeTarget.price}
+          selectedPreset={selectedPreset}
+          onConfirm={(config) => {
+            console.log('[StrikeAgent] Snipe confirmed:', config);
+            setSnipeModalOpen(false);
+            setSnipeTarget(null);
+          }}
+        />
+      )}
     </div>
     </SubscriptionGate>
   );

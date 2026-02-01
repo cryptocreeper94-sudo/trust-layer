@@ -57,9 +57,10 @@ const getScoreBg = (score: number) => {
 
 interface TopSignalsWidgetProps {
   onSelectToken?: (address: string, chain: string) => void;
+  onSnipeToken?: (signal: { address: string; symbol: string; name: string; chain: string; price: number }) => void;
 }
 
-export function TopSignalsWidget({ onSelectToken }: TopSignalsWidgetProps) {
+export function TopSignalsWidget({ onSelectToken, onSnipeToken }: TopSignalsWidgetProps) {
   const [selectedChain, setSelectedChain] = useState('all');
   const [countdown, setCountdown] = useState(60);
 
@@ -207,6 +208,25 @@ export function TopSignalsWidget({ onSelectToken }: TopSignalsWidgetProps) {
                     <span className="text-[8px] text-white/40">SCORE</span>
                   </div>
 
+                  {onSnipeToken && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onSnipeToken({
+                          address: signal.tokenAddress,
+                          symbol: signal.tokenSymbol,
+                          name: signal.tokenName,
+                          chain: signal.chain,
+                          price: signal.currentPrice,
+                        });
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 text-cyan-400 text-xs font-medium hover:from-cyan-500/30 hover:to-purple-500/30 transition-all"
+                      data-testid={`snipe-signal-${signal.rank}`}
+                    >
+                      Snipe
+                    </button>
+                  )}
+                  
                   <ChevronRight className="w-4 h-4 text-white/30" />
                 </div>
 

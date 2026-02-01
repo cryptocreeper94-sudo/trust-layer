@@ -117,6 +117,12 @@ export function QuickSnipeModal({
     return price.toFixed(4);
   };
 
+  const solPrice = 180;
+  const positionValueUsd = config.buyAmountSol * solPrice;
+  const stopLossUsd = positionValueUsd * (config.stopLossPercent / 100);
+  const takeProfitUsd = positionValueUsd * (config.takeProfitPercent / 100);
+  const riskRewardRatio = config.takeProfitPercent / config.stopLossPercent;
+
   if (!isOpen) return null;
 
   return (
@@ -195,6 +201,33 @@ export function QuickSnipeModal({
                     min="0.01"
                   />
                   <span className="text-white text-sm">SOL</span>
+                </div>
+              </div>
+
+              <div className="p-3 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <DollarSign className="w-4 h-4 text-cyan-400" />
+                  <span className="text-xs font-semibold text-white">Position Calculator</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div>
+                    <span className="text-gray-400">Position Value:</span>
+                    <span className="ml-1 text-white font-medium">${positionValueUsd.toFixed(2)}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-400">R:R Ratio:</span>
+                    <span className={`ml-1 font-medium ${riskRewardRatio >= 2 ? 'text-green-400' : riskRewardRatio >= 1 ? 'text-yellow-400' : 'text-red-400'}`}>
+                      1:{riskRewardRatio.toFixed(2)}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-gray-400">Max Loss:</span>
+                    <span className="ml-1 text-red-400 font-medium">-${stopLossUsd.toFixed(2)}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-400">Max Gain:</span>
+                    <span className="ml-1 text-green-400 font-medium">+${takeProfitUsd.toFixed(2)}</span>
+                  </div>
                 </div>
               </div>
 
