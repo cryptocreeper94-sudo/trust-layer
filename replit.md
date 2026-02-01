@@ -1,7 +1,7 @@
 # DarkWave Trust Layer - Replit Agent Guide
 
 ## Overview
-DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (PoA) blockchain ecosystem designed as a Coordinated Trust Layer. Its purpose is to provide verified identity, accountability, and transparent audit trails for real business operations, moving beyond traditional blockchain focuses. The project includes the DarkWave Portal, a comprehensive React web application serving as an ecosystem interface and block explorer, and "DarkWave Chronicles," a fantasy-themed game focused on a living political simulation. The core ambition is to deliver a fast, feature-rich trust infrastructure with a premium user experience and innovative gaming across four key domains: dwsc.io, darkwavegames.io, darkwavestudios.io, and yourlegacy.io. DWTL uses blockchain technology but emphasizes its value proposition as a "Trust Layer" for enterprises seeking trusted business relationships.
+DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (PoA) blockchain ecosystem designed as a Coordinated Trust Layer. Its purpose is to provide verified identity, accountability, and transparent audit trails for real business operations, moving beyond traditional blockchain focuses. The project includes the DarkWave Portal, a comprehensive React web application serving as an ecosystem interface and block explorer, and "DarkWave Chronicles," a fantasy-themed game focused on a living political simulation. The core ambition is to deliver a fast, feature-rich trust infrastructure with a premium user experience and innovative gaming across six key domains: dwsc.io, darkwavegames.io, darkwavestudios.io, yourlegacy.io, tlid.io, and trustshield.tech. DWTL uses blockchain technology but emphasizes its value proposition as a "Trust Layer" for enterprises seeking trusted business relationships.
 
 ## User Preferences
 - Preferred communication style: Simple, everyday language
@@ -43,7 +43,8 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **Shells Economy System**: Pre-launch virtual currency, convertible to Signal, earned via engagement, purchased via Stripe, with atomic transactions.
 - **Subscription System**: Unified subscription management with tiers and cross-app entitlement checking.
 - **Guardian Certification Program**: In-house blockchain security audit service with tiered offerings and public registry.
-- **Guardian Shield**: Continuous blockchain security monitoring.
+- **Guardian Shield (trustshield.tech)**: Continuous blockchain security monitoring. Enterprise-tier service for real-time anomaly detection, behavioral monitoring, and automatic alerts.
+- **Guardian AI**: First-of-its-kind certification system for autonomous AI agents. Three tiers: Basic ($999/6mo), Advanced ($4,999/12mo), Enterprise ($14,999/24mo). Trust scores across Security, Transparency, Reliability, and Compliance. Public registry at `/guardian-ai-registry`.
 - **Security Infrastructure**: Helmet.js, CORS, rate limiting, AES-256-GCM, HMAC-SHA256, parameterized SQL.
 - **Early Adopter Rewards System**: Tracks signup positions and tiered crowdfund bonuses for Signal airdrops, accessible via `/api/user/early-adopter-stats`, `/api/early-adopter/counters`, and `/rewards`.
 - **Backend IDE / Studio Executor**: Docker container orchestration for code execution (`server/studio-executor.ts`), with JWT auth, sandboxing, and resource enforcement.
