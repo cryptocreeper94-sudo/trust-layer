@@ -1,0 +1,80 @@
+Continuing StrikeAgent implementation. Here are the key features to build:
+
+## FEATURE: Manual Token Watchlist (4 Slots)
+
+Each slot allows users to:
+- Paste a Solana token address
+- Set entry price (buy when price drops to this)
+- Set take profit price (sell when price rises to this)
+- Set stop loss price (sell when price drops to this)
+- Set buy amount in SOL
+- Toggle active/paused
+- See current price and % from entry
+
+The system monitors prices every 30 seconds and updates status:
+- WATCHING: Monitoring, waiting for entry price
+- READY_TO_EXECUTE: Entry price hit, ready to buy
+- FILLED_ENTRY: Position opened
+- READY_TO_EXIT: Take profit hit
+- READY_TO_STOP: Stop loss hit
+
+
+## FEATURE: AI Top 10 Signals Widget
+
+Multi-chain selector with:
+- All Chains, Solana, Ethereum, Base, Polygon, Arbitrum, BSC
+
+Each signal shows:
+- Rank (#1-10)
+- Token symbol & name
+- Current price
+- Composite score (0-100) with color coding
+- Chain badge
+- Category badge (Blue Chip, DeFi, Meme, DEX, New)
+- Technical indicators (Bullish RSI, Volume Surge, etc.)
+
+Auto-refreshes every 60 seconds with countdown timer.
+
+
+## FEATURE: Trading Presets UI
+
+3 preset cards (Guardian/Pathfinder/Velocity) showing:
+- Icon and name with preset color
+- Tagline and description
+- "Active" badge on selected preset
+- Expandable settings panel showing:
+  - Buy Amount, Stop Loss %, Take Profit %
+  - Min Liquidity, Max Bot %, Min Holders, Max Top10 %
+
+
+## FEATURE: Safety Report
+
+When analyzing a token, show safety metrics:
+- Overall safety score (0-100)
+- Liquidity amount
+- Bot transaction %
+- Top 10 holder concentration %
+- Holder count
+- Contract verification status
+- Pass/Fail indicators for each metric
+
+
+## STYLING NOTES:
+
+- Dark theme: #0f0f0f, #1a1a1a, #1f1f1f backgrounds
+- Primary accent: #00D4FF (cyan)
+- Success: #39FF14 (green)
+- Warning: #FFD700 (gold)
+- Danger: #FF4444 (red)
+- Glassmorphism for cards only (backdrop-filter: blur(12px))
+- Glow effects on active/hover states
+
+
+## DEPENDENCIES:
+
+- @solana/wallet-adapter-react (wallet integration)
+- lightweight-charts (optional, for price charts)
+- React 18+ with hooks
+
+
+Build these features matching the Pulse implementation. The presets, watchlist, and signals work together - users pick a preset, add tokens to watchlist slots, and the AI signals help them discover tokens to add.
