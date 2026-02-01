@@ -3035,7 +3035,7 @@ export default function VeilReader() {
   const [isLoading, setIsLoading] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
   const [useElevenLabs, setUseElevenLabs] = useState(true);
-  const [autoAdvance, setAutoAdvance] = useState(false);
+  const [autoAdvance, setAutoAdvance] = useState(true); // Auto-advance ON by default
   const [audioQueue, setAudioQueue] = useState<string[]>([]);
   const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
   const [returnLocation, setReturnLocation] = useState<{ volume: number; chapter: number } | null>(null);
@@ -3565,61 +3565,37 @@ export default function VeilReader() {
           </div>
           
           <div className="flex items-center gap-2">
+            {/* Simple Play/Pause Button */}
             {(speechSupported || useElevenLabs) && (
-              <div className="flex items-center gap-1">
-                {/* Voice type indicator and toggle */}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setUseElevenLabs(!useElevenLabs)}
-                  className={`text-xs px-2 ${useElevenLabs ? 'text-purple-400 hover:text-purple-300' : 'text-gray-400 hover:text-gray-300'}`}
-                  title={useElevenLabs ? "Using AI Voice (click for browser)" : "Using Browser Voice (click for AI)"}
-                >
-                  {useElevenLabs ? "AI" : "Browser"}
-                </Button>
-                {isLoading && (
+              <div className="flex items-center gap-2">
+                {isLoading ? (
                   <Button 
-                    variant="ghost" 
                     size="sm" 
                     disabled
-                    className="text-cyan-400"
+                    className="bg-cyan-600 text-white px-4"
                   >
-                    <div className="w-4 h-4 mr-1 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
-                    <span className="hidden md:inline text-xs">Loading...</span>
+                    <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Loading...
                   </Button>
-                )}
-                {!isPlaying && !isPaused && !isLoading && (
+                ) : isPlaying ? (
                   <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={handlePlay}
-                    className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10"
-                    title="Listen to this chapter (AI Voice)"
-                  >
-                    <Volume2 className="w-4 h-4 mr-1" />
-                    <span className="hidden md:inline text-xs">Listen</span>
-                  </Button>
-                )}
-                {isPlaying && (
-                  <Button 
-                    variant="ghost" 
                     size="sm" 
                     onClick={handlePause}
-                    className="text-amber-400 hover:text-amber-300 hover:bg-amber-500/10"
-                    title="Pause"
+                    className="bg-amber-500 hover:bg-amber-600 text-white px-4"
+                    data-testid="button-pause-chapter"
                   >
-                    <Pause className="w-4 h-4" />
+                    <Pause className="w-4 h-4 mr-2" />
+                    Pause
                   </Button>
-                )}
-                {isPaused && (
+                ) : (
                   <Button 
-                    variant="ghost" 
                     size="sm" 
                     onClick={handlePlay}
-                    className="text-green-400 hover:text-green-300 hover:bg-green-500/10"
-                    title="Resume"
+                    className="bg-cyan-500 hover:bg-cyan-600 text-white px-4"
+                    data-testid="button-play-chapter"
                   >
-                    <Play className="w-4 h-4" />
+                    <Play className="w-4 h-4 mr-2" />
+                    {isPaused ? 'Resume' : 'Play Chapter'}
                   </Button>
                 )}
                 {(isPlaying || isPaused) && (
@@ -3627,23 +3603,12 @@ export default function VeilReader() {
                     variant="ghost" 
                     size="sm" 
                     onClick={handleStop}
-                    className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                    className="text-slate-400 hover:text-white"
                     title="Stop"
                   >
                     <VolumeX className="w-4 h-4" />
                   </Button>
                 )}
-                <button
-                  onClick={() => setAutoAdvance(!autoAdvance)}
-                  className={`hidden md:flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${
-                    autoAdvance 
-                      ? 'bg-green-500/20 text-green-400' 
-                      : 'bg-slate-700/50 text-slate-500 hover:text-slate-300'
-                  }`}
-                  title={autoAdvance ? "Auto-advance ON - will play next chapter automatically" : "Auto-advance OFF"}
-                >
-                  <span>Auto</span>
-                </button>
               </div>
             )}
             <div className="flex items-center gap-1">
