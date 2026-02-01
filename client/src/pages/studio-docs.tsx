@@ -989,7 +989,7 @@ export default function StudioDocs() {
                     Previous
                   </Button>
                 )}
-                {sections.findIndex((s) => s.id === activeSection) < sections.length - 1 && (
+                {sections.findIndex((s) => s.id === activeSection) < sections.length - 1 ? (
                   <Button
                     onClick={() => {
                       const idx = sections.findIndex((s) => s.id === activeSection);
@@ -1000,6 +1000,16 @@ export default function StudioDocs() {
                   >
                     Next Section
                   </Button>
+                ) : (
+                  <Link href="/studio/projects">
+                    <Button
+                      className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white font-semibold"
+                      data-testid="button-start-building"
+                    >
+                      <Rocket className="w-4 h-4 mr-2" />
+                      Start Building Now
+                    </Button>
+                  </Link>
                 )}
               </div>
             </div>
