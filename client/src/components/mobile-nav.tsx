@@ -113,11 +113,11 @@ const navCategories = [
     label: "Ecosystem Sites",
     icon: Globe,
     items: [
-      { href: "https://tlid.io", label: "TLID.io - Domain Registry", icon: Globe, external: true },
-      { href: "https://trustshield.tech", label: "TrustShield.tech - Security", icon: Shield, external: true, badge: "New" },
-      { href: "https://darkwavegames.io", label: "DarkWave Games", icon: Gamepad2, external: true },
-      { href: "https://darkwavestudios.io", label: "DarkWave Studios", icon: Sparkles, external: true },
-      { href: "https://yourlegacy.io", label: "YourLegacy.io - Chronicles", icon: Star, external: true },
+      { href: "/domains", label: "TLID.io - Domain Registry", icon: Globe },
+      { href: "/guardian-ai", label: "TrustShield.tech - Security", icon: Shield, badge: "New" },
+      { href: "/chronicles", label: "DarkWave Games", icon: Gamepad2 },
+      { href: "/studio", label: "DarkWave Studios", icon: Sparkles },
+      { href: "/chronicles", label: "YourLegacy.io - Chronicles", icon: Star },
     ]
   },
 ];
