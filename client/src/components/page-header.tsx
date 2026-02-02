@@ -1,12 +1,14 @@
 import { ArrowLeft, Home } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { MobileNav } from "@/components/mobile-nav";
 
 interface PageHeaderProps {
   title: string;
   subtitle?: string;
   showBack?: boolean;
   showHome?: boolean;
+  showMenu?: boolean;
   rightContent?: React.ReactNode;
   className?: string;
 }
@@ -16,6 +18,7 @@ export function PageHeader({
   subtitle,
   showBack = true,
   showHome = true,
+  showMenu = true,
   rightContent,
   className = ""
 }: PageHeaderProps) {
@@ -63,6 +66,7 @@ export function PageHeader({
               </Button>
             </Link>
           )}
+          {showMenu && <MobileNav />}
         </div>
       </div>
     </nav>
