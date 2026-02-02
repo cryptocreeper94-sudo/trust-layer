@@ -265,14 +265,14 @@ export default function TrustLayerLanding() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
               >
-                <GlassCard glow className="h-full p-5">
+                <GlassCard glow className="h-full p-6">
                   <div className="flex items-start gap-4">
-                    <div className="p-2.5 rounded-lg bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/20">
+                    <div className="p-2.5 rounded-lg bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/20 flex-shrink-0">
                       <feature.icon className="w-5 h-5 text-cyan-400" />
                     </div>
-                    <div>
-                      <h3 className="font-bold text-white mb-1">{feature.title}</h3>
-                      <p className="text-white/60 text-sm">{feature.description}</p>
+                    <div className="min-w-0">
+                      <h3 className="font-bold text-white mb-1.5">{feature.title}</h3>
+                      <p className="text-white/60 text-sm leading-relaxed">{feature.description}</p>
                     </div>
                   </div>
                 </GlassCard>
@@ -342,14 +342,14 @@ export default function TrustLayerLanding() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <GlassCard glow className="h-full p-6">
+                <GlassCard glow className="h-full p-6 sm:p-8">
                   <div className="flex items-start gap-4">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/20">
+                    <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/20 flex-shrink-0">
                       <benefit.icon className="w-6 h-6 text-cyan-400" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <h3 className="font-bold text-lg text-white mb-2">{benefit.title}</h3>
-                      <p className="text-white/60">{benefit.description}</p>
+                      <p className="text-white/60 leading-relaxed">{benefit.description}</p>
                     </div>
                   </div>
                 </GlassCard>
@@ -424,28 +424,28 @@ export default function TrustLayerLanding() {
       <section className="py-16 px-4 bg-slate-900/50">
         <div className="container mx-auto max-w-4xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <GlassCard glow className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2.5 rounded-lg bg-cyan-500/20 border border-cyan-500/20">
+            <GlassCard glow className="p-6 sm:p-8">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="p-2.5 rounded-lg bg-cyan-500/20 border border-cyan-500/20 flex-shrink-0">
                   <User className="w-5 h-5 text-cyan-400" />
                 </div>
                 <h3 className="text-xl font-bold">Individuals</h3>
               </div>
-              <p className="text-white/60 mb-4 text-sm">
+              <p className="text-white/60 mb-5 text-sm leading-relaxed">
                 Join for free and receive your Trust Card, earn rewards through referrals, and
                 access verified services across the ecosystem.
               </p>
-              <ul className="space-y-2 mb-6 text-sm">
-                <li className="flex items-center gap-2 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400" />
+              <ul className="space-y-3 mb-6 text-sm">
+                <li className="flex items-center gap-2.5 text-white/70">
+                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
                   Free membership forever
                 </li>
-                <li className="flex items-center gap-2 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400" />
+                <li className="flex items-center gap-2.5 text-white/70">
+                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
                   Earn Shells through referrals
                 </li>
-                <li className="flex items-center gap-2 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400" />
+                <li className="flex items-center gap-2.5 text-white/70">
+                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
                   Access to community features
                 </li>
               </ul>
@@ -459,33 +459,33 @@ export default function TrustLayerLanding() {
               </Button>
             </GlassCard>
 
-            <GlassCard glow className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2.5 rounded-lg bg-purple-500/20 border border-purple-500/20">
+            <GlassCard glow className="p-6 sm:p-8">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="p-2.5 rounded-lg bg-purple-500/20 border border-purple-500/20 flex-shrink-0">
                   <Building2 className="w-5 h-5 text-purple-400" />
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <h3 className="text-xl font-bold">Businesses</h3>
                   <Badge variant="outline" className="text-[10px] border-purple-500/30 text-purple-400">
                     Requires Personal Account
                   </Badge>
                 </div>
               </div>
-              <p className="text-white/60 mb-4 text-sm">
+              <p className="text-white/60 mb-5 text-sm leading-relaxed">
                 Verify your business on the Trust Layer for API access, team management, and
                 enhanced referral rewards.
               </p>
-              <ul className="space-y-2 mb-6 text-sm">
-                <li className="flex items-center gap-2 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400" />
+              <ul className="space-y-3 mb-6 text-sm">
+                <li className="flex items-center gap-2.5 text-white/70">
+                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
                   Verified business badge
                 </li>
-                <li className="flex items-center gap-2 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400" />
+                <li className="flex items-center gap-2.5 text-white/70">
+                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
                   2.5x referral rewards
                 </li>
-                <li className="flex items-center gap-2 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400" />
+                <li className="flex items-center gap-2.5 text-white/70">
+                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
                   API access & webhooks
                 </li>
               </ul>
