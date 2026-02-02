@@ -24,6 +24,7 @@ import {
   Crown,
   ExternalLink,
   ChevronRight,
+  Menu,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -32,6 +33,7 @@ import { Footer } from "@/components/footer";
 import { SimpleLoginModal } from "@/components/simple-login";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { fetchEcosystemApps } from "@/lib/api";
+import { MobileNav } from "@/components/mobile-nav";
 
 const MEMBERSHIP_FEATURES = [
   {
@@ -139,7 +141,7 @@ export default function TrustLayerLanding() {
           </Link>
           <div className="flex items-center gap-2 sm:gap-3">
             <Link href="/ecosystem">
-              <Button variant="ghost" size="sm" className="h-8 text-xs" data-testid="link-nav-apps">
+              <Button variant="ghost" size="sm" className="h-8 text-xs hidden sm:flex" data-testid="link-nav-apps">
                 Apps
               </Button>
             </Link>
@@ -149,26 +151,27 @@ export default function TrustLayerLanding() {
               </Button>
             </Link>
             <Link href="/presale">
-              <Button variant="ghost" size="sm" className="h-8 text-xs" data-testid="link-nav-presale">
+              <Button variant="ghost" size="sm" className="h-8 text-xs hidden sm:flex" data-testid="link-nav-presale">
                 Presale
               </Button>
             </Link>
             {isAuthenticated ? (
               <Link href="/my-hub">
-                <Button size="sm" className="h-8 text-xs bg-primary text-background hover:bg-primary/90" data-testid="link-nav-myhub">
+                <Button size="sm" className="h-8 text-xs bg-primary text-background hover:bg-primary/90 hidden sm:flex" data-testid="link-nav-myhub">
                   My Hub
                 </Button>
               </Link>
             ) : (
               <Button
                 size="sm"
-                className="h-8 text-xs bg-primary text-background hover:bg-primary/90"
+                className="h-8 text-xs bg-primary text-background hover:bg-primary/90 hidden sm:flex"
                 onClick={() => setShowLoginModal(true)}
                 data-testid="button-nav-signup"
               >
                 Sign Up
               </Button>
             )}
+            <MobileNav />
           </div>
         </div>
       </nav>
