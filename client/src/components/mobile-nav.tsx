@@ -109,6 +109,17 @@ const navCategories = [
       { href: "/doc-hub", label: "Documentation Hub", icon: FileText },
     ]
   },
+  {
+    label: "Ecosystem Sites",
+    icon: Globe,
+    items: [
+      { href: "https://tlid.io", label: "TLID.io - Domain Registry", icon: Globe, external: true },
+      { href: "https://trustshield.tech", label: "TrustShield.tech - Security", icon: Shield, external: true, badge: "New" },
+      { href: "https://darkwavegames.io", label: "DarkWave Games", icon: Gamepad2, external: true },
+      { href: "https://darkwavestudios.io", label: "DarkWave Studios", icon: Sparkles, external: true },
+      { href: "https://yourlegacy.io", label: "YourLegacy.io - Chronicles", icon: Star, external: true },
+    ]
+  },
 ];
 
 function NavCategory({ category, location, onClose, onShowComingSoon }: { 
@@ -181,6 +192,44 @@ function NavCategory({ category, location, onClose, onShowComingSoon }: {
                     </Badge>
                   )}
                 </div>
+              );
+            }
+            
+            const isExternal = 'external' in item && (item as any).external;
+            
+            if (isExternal) {
+              return (
+                <a 
+                  key={item.href} 
+                  href={item.href} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: 'none' }}
+                  onClick={onClose}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      backgroundColor: 'transparent',
+                      color: '#a1a1aa',
+                      cursor: 'pointer',
+                    }}
+                    data-testid={`nav-item-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                  >
+                    <ItemIcon style={{ width: '16px', height: '16px', flexShrink: 0 }} />
+                    <span style={{ fontWeight: 500, flex: 1, fontSize: '13px', fontFamily: 'Inter, sans-serif' }}>{item.label}</span>
+                    {'badge' in item && (item as any).badge && (
+                      <Badge className="text-[9px] bg-cyan-500/20 text-cyan-400 px-1.5 py-0">
+                        {(item as any).badge}
+                      </Badge>
+                    )}
+                    <ArrowUpRight style={{ width: '12px', height: '12px', color: 'rgba(255,255,255,0.4)' }} />
+                  </div>
+                </a>
               );
             }
             
