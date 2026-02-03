@@ -2772,6 +2772,8 @@ The Hebrew is unambiguous: *ha-metim einam yod'im me'umah* - "the dead, they kno
 
 The dead **sleep**. They don't immediately go to heaven. They're not floating around watching their grandchildren. They're unconscious - asleep in the dust - until awakened at resurrection.
 
+Consider what sleep actually means. When you sleep at night, you close your eyes and the next moment you're awake - hours have passed but you have no awareness of them. No concept of time. No memory of waiting. For the dead, a thousand years could pass and it would feel like closing your eyes and opening them.
+
 This is why necromancy is forbidden. **Devariym (Deuteronomy) 18:10-12** explicitly prohibits consulting the dead, mediums, or familiar spirits. If your grandmother went straight to heaven and can communicate with you, why would Scripture forbid it? Because the dead are asleep - and anything pretending to be them is a deceiving spirit.
 
 ## THE SPIRITUAL BODY - NOT A GHOST
@@ -2785,9 +2787,29 @@ The word translated "natural" is *psychikon* (from *psyche* - soul/life-breath).
 
 This is not a contrast between physical and non-physical. It's a contrast between what **powers** the body:
 - The current body is soul-animated (mortal, decays)
-- The resurrection body is Spirit-animated (immortal, glorified)
+- The resurrection body is Spirit-animated (no longer subject to death or decay)
+
+The Greek uses two distinct words: *aphtharsia* (incorruptible - no longer subject to decay, disease, or deterioration) and *athanasia* (deathless - no longer subject to death). The resurrection body won't break down. It won't get sick. It won't die. Whether it can be harmed in other ways remains one of the mysteries - Scripture doesn't elaborate.
 
 Yahusha's resurrection body was physical - He ate fish, He could be touched - but transformed. He passed through walls. He appeared and disappeared. The resurrection body is not a ghost. It is a perfected physical form powered by the Spirit of Elohiym.
+
+## HUMANS WERE MADE FOR EARTH - NOT HEAVEN
+
+Here is another inversion most people never question: the idea that believers "go to heaven" when they die.
+
+**Mattithyahu (Matthew) 5:5:**
+> *"Blessed are the meek: for they shall inherit the earth."*
+
+Not heaven. The **earth**.
+
+**Chizayon (Revelation) 21:1-3:**
+> *"And I saw a new heaven and a new earth: for the first heaven and the first earth were passed away... And I heard a great voice out of heaven saying, Behold, the tabernacle of Elohiym is with men, and he will dwell with them, and they shall be his people, and Elohiym himself shall be with them, and be their Elohiym."*
+
+Notice the direction. The tabernacle of Elohiym comes **down** to dwell with men. Men don't go **up** to heaven. The New Jerusalem descends from heaven to the renewed earth. Elohiym comes to us.
+
+Humans were created to be stewards of this planet. That was the original mandate in Bere'shiyth (Genesis). The fall corrupted the earth. The restoration renews it. The destination is a perfected earth where Elohiym dwells with His people - not a disembodied existence floating on clouds.
+
+Only those who reign with the Messiah during the millennium are described as being "with Him" in a heavenly sense. The rest of humanity - the meek who inherit the earth - will inhabit the renewed creation as it was always intended.
 
 ## THE INVERSION: WHAT THEY TEACH VS. WHAT SCRIPTURE SAYS
 
@@ -2799,6 +2821,9 @@ Yahusha's resurrection body was physical - He ate fish, He could be touched - bu
 | Consulting the dead is forbidden because they're asleep | Loved ones are in heaven watching over you |
 | Spiritual body = transformed physical form | Spiritual body = ghost/spirit form |
 | No one has gone to heaven except the Messiah (Yahuchanon 3:13) | Everyone who dies goes to heaven or hell immediately |
+| The meek inherit the **earth** (Mattithyahu 5:5) | Believers go to heaven |
+| New Jerusalem comes **down** to earth (Chizayon 21:2) | Believers go **up** to heaven |
+| Humans were made to steward the earth | Earth is temporary, heaven is the destination |
 
 The modern teaching creates confusion because it contradicts Scripture while claiming to represent it. When something doesn't make sense, most people assume the problem is with them - that they're not spiritual enough to understand. But perhaps the teaching doesn't make sense because it isn't true.
 
@@ -3820,8 +3845,12 @@ HalleluYah.
 - Chizayon (Revelation) 20:4-6 - "This is the first resurrection... they shall reign with him a thousand years"
 - Chizayon (Revelation) 20:7-8 - "When the thousand years are expired, Satan shall be loosed... for a little season"
 - Qorintiym Ri'shon (1 Corinthians) 15:42-44 - "It is sown a natural body; it is raised a spiritual body"
+- Qorintiym Ri'shon (1 Corinthians) 15:53-54 - "This corruptible must put on incorruption, and this mortal must put on immortality"
 - Devariym (Deuteronomy) 18:10-12 - "There shall not be found among you... a consulter with familiar spirits, or a necromancer"
 - Yahuchanon (John) 3:13 - "No man hath ascended up to heaven, but he that came down from heaven"
+- Mattithyahu (Matthew) 5:5 - "Blessed are the meek: for they shall inherit the earth"
+- Chizayon (Revelation) 21:1-3 - "A new heaven and a new earth... the tabernacle of Elohiym is with men, and he will dwell with them"
+- Chizayon (Revelation) 21:2 - "I saw the holy city, new Jerusalem, coming down from Elohiym out of heaven"
 
 ---
 
