@@ -3721,6 +3721,33 @@ The ones who orchestrate this know what they're doing. The ones who consume it d
 
 That's the deception working exactly as designed.
 
+## But Why? The Purpose of the Destruction
+
+Some will ask: even if all this is real, to what end? What is the purpose?
+
+The answer is simple, and it's stated in Scripture.
+
+**Yahuchanon Ri'shon (1 John) 5:19:**
+> *"We know that we are of Elohiym, and the whole world lies in the power of the evil one."*
+
+The world - this current system, this age - is under the dominion of the adversary. Not because the Creator abandoned it, but because humanity was given dominion and handed it over. The fall gave the adversary legal claim. And until the reset, until the judgment, this is his domain.
+
+This is why bad things happen. Not because the Creator causes them. Because the king of this world is a destroyer. Because the one who runs the current system hates the Creator and everything that bears His image.
+
+**The cast out are trapped here.**
+
+They were thrown from the heavenly realm. They have no eternal existence awaiting them - only destruction. They know their end. Revelation 12:12 confirms: "The devil is come down unto you, having great wrath, because he knows that he has but a short time."
+
+They know they're damned. They know their destruction is coming. And their only remaining purpose is to take as many with them as possible. To corrupt what can be corrupted. To destroy what can be destroyed. To mock the Creator by defiling His creation.
+
+This is why the inversions are so comprehensive. This is why nothing is left untouched. This is why even words, names, calendars, and medicine have been weaponized.
+
+It's not random evil. It's the deliberate destruction of everything good by beings who know they have nothing left to lose.
+
+The suffering in this world is not the Creator's doing. It's the work of the one who currently holds dominion - the one Scripture calls the prince of this world, the god of this age, the evil one in whose power the whole world lies.
+
+Until the reset. Until the judgment. Until the kingdom is restored.
+
 ## The Final Point
 
 Throughout this book, patterns have been documented. Connections have been drawn. Dots have been connected.
@@ -4200,6 +4227,7 @@ Seek, and you will find.
 - Mattithyahu (Matthew) 24:24 - "False mashiachs, and false prophets, and shall show great signs and wonders"
 - Tasloniqiym Sheniy (2 Thessalonians) 2:9-12 - "The working of Satan with all power and signs and lying wonders"
 - Chizayon (Revelation) 12:12 - "The devil is come down unto you, having great wrath, because he knows that he has but a short time"
+- Yahuchanon Ri'shon (1 John) 5:19 - "We know that we are of Elohiym, and the whole world lies in the power of the evil one"
 
 **On Discernment and Testing:**
 - Yahuchanon Ri'shon (1 John) 4:1 - "Beloved, believe not every spirit, but try the spirits whether they are of Elohim"
