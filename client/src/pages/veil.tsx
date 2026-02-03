@@ -193,7 +193,7 @@ export default function Veil() {
                 </li>
               </ul>
               
-              <a href="/assets/Through-The-Veil-EBOOK.epub" download className="block mt-auto">
+              <a href="/api/veil/epub" download="Through-The-Veil.epub" className="block mt-auto">
                 <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 py-4">
                   <Download className="w-4 h-4 mr-2" />
                   Download EPUB

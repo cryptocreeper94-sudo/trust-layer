@@ -19549,6 +19549,66 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
   
+  // ==============================================
+  // EPUB GENERATION FOR THROUGH THE VEIL
+  // ==============================================
+  
+  app.get("/api/veil/epub", async (_req, res) => {
+    try {
+      const epub = await import("epub-gen-memory");
+      const filePath = path.join(process.cwd(), "attached_assets", "Through-The-Veil-COMPLETE-EBOOK.md");
+      const content = fs.readFileSync(filePath, "utf-8");
+      
+      // Parse markdown into chapters
+      const chapters: { title: string; content: string }[] = [];
+      const sections = content.split(/^## /gm);
+      
+      for (const section of sections) {
+        if (!section.trim()) continue;
+        const lines = section.split("\n");
+        const title = lines[0].replace(/^#+ /, "").trim();
+        const body = lines.slice(1).join("\n").trim();
+        
+        if (title && body) {
+          // Convert markdown to basic HTML
+          let html = body
+            .replace(/^### (.+)$/gm, "<h3>$1</h3>")
+            .replace(/^#### (.+)$/gm, "<h4>$1</h4>")
+            .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+            .replace(/\*(.+?)\*/g, "<em>$1</em>")
+            .replace(/^> (.+)$/gm, "<blockquote>$1</blockquote>")
+            .replace(/^- (.+)$/gm, "<li>$1</li>")
+            .replace(/\n\n/g, "</p><p>")
+            .replace(/\n/g, "<br/>");
+          
+          html = `<p>${html}</p>`;
+          
+          chapters.push({
+            title: title,
+            content: html
+          });
+        }
+      }
+      
+      const options = {
+        title: "Through The Veil",
+        author: "Jason Andrews",
+        publisher: "DarkWave Studios",
+        cover: undefined
+      };
+      
+      const chapterContent = chapters.length > 0 ? chapters : [{ title: "Through The Veil", content: "<p>Content loading...</p>" }];
+      const epubBuffer = await epub.default(options, chapterContent);
+      
+      res.setHeader("Content-Type", "application/epub+zip");
+      res.setHeader("Content-Disposition", 'attachment; filename="Through-The-Veil.epub"');
+      res.send(Buffer.from(epubBuffer));
+    } catch (error: any) {
+      console.error("EPUB generation error:", error);
+      res.status(500).json({ error: "Failed to generate EPUB", details: error.message });
+    }
+  });
+
   // Health Check Endpoint - System monitoring
   app.get("/api/health", async (_req, res) => {
     try {
