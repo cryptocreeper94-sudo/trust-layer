@@ -233,6 +233,7 @@ The journey through the veil begins now.
 
 **Part Ten: The Hidden Timeline**
 - Chapter 34: The Missing Millennium
+- Chapter 34B: The Resurrections Hidden
 - Chapter 35: The Short Season
 - Chapter 36: The Coming Deception
 
@@ -2737,6 +2738,107 @@ But consider the alternative: What if the true Messiah has already returned? Wha
 This would mean the timeline is: True Messiah returned → 1000 Year Reign occurred → Reset/Erasure → *We are NOW in Satan's little season* → False messiah appears → Mark willingly accepted → Script flips → Tribulation → Final Judgment.
 
 *Everyone is looking for something that may have already happened. And the very fact that no one considers this possibility? That everyone dismisses it without examination? That is itself evidence of the deception working exactly as designed.*
+
+---
+
+# CHAPTER 34B: THE RESURRECTIONS HIDDEN
+
+If the millennial reign already happened, a critical question follows: what about the resurrection?
+
+Scripture describes not one resurrection, but two - separated by a thousand years. This is rarely taught, and when the timeline is understood, the reason for that silence becomes clear.
+
+## WHAT SCRIPTURE ACTUALLY SAYS
+
+**Revelation 20:4-6:**
+> *"And I saw thrones, and they sat upon them, and judgment was given unto them: and I saw the souls of them that were beheaded for the witness of Yahusha, and for the word of Elohiym... and they lived and reigned with Mashiach a thousand years. But the rest of the dead lived not again until the thousand years were finished. This is the first resurrection. Blessed and holy is he that hath part in the first resurrection: on such the second death hath no power, but they shall be priests of Elohiym and of Mashiach, and shall reign with him a thousand years."*
+
+Two resurrections. Clearly stated. Separated by a thousand years.
+
+**The First Resurrection:** The saints raised to reign with the Messiah during the millennium.
+
+**The Second Resurrection:** Everyone else, raised after the millennium for judgment.
+
+Most churches teach one resurrection at the end. They blend the two together, or skip over the passage entirely. If the millennium already happened, the first resurrection already happened - and that changes everything about what people expect.
+
+## THE DEAD KNOW NOTHING - UNTIL AWAKENED
+
+**Qoheleth (Ecclesiastes) 9:5:**
+> *"For the living know that they shall die: but the dead know not any thing, neither have they any more a reward; for the memory of them is forgotten."*
+
+The Hebrew is unambiguous: *ha-metim einam yod'im me'umah* - "the dead, they know not anything."
+
+**Daniy'el 12:2:**
+> *"And many of them that sleep in the dust of the earth shall awake, some to everlasting life, and some to shame and everlasting contempt."*
+
+The dead **sleep**. They don't immediately go to heaven. They're not floating around watching their grandchildren. They're unconscious - asleep in the dust - until awakened at resurrection.
+
+This is why necromancy is forbidden. **Devariym (Deuteronomy) 18:10-12** explicitly prohibits consulting the dead, mediums, or familiar spirits. If your grandmother went straight to heaven and can communicate with you, why would Scripture forbid it? Because the dead are asleep - and anything pretending to be them is a deceiving spirit.
+
+## THE SPIRITUAL BODY - NOT A GHOST
+
+**Qorintiym Ri'shon (1 Corinthians) 15:42-44:**
+> *"So also is the resurrection of the dead. It is sown in corruption; it is raised in incorruption: It is sown in dishonour; it is raised in glory: it is sown in weakness; it is raised in power: It is sown a natural body; it is raised a spiritual body."*
+
+People read "spiritual body" and imagine a ghost. But the Greek tells a different story.
+
+The word translated "natural" is *psychikon* (from *psyche* - soul/life-breath). The word translated "spiritual" is *pneumatikon* (from *pneuma* - spirit).
+
+This is not a contrast between physical and non-physical. It's a contrast between what **powers** the body:
+- The current body is soul-animated (mortal, decays)
+- The resurrection body is Spirit-animated (immortal, glorified)
+
+Yahusha's resurrection body was physical - He ate fish, He could be touched - but transformed. He passed through walls. He appeared and disappeared. The resurrection body is not a ghost. It is a perfected physical form powered by the Spirit of Elohiym.
+
+## THE INVERSION: WHAT THEY TEACH VS. WHAT SCRIPTURE SAYS
+
+| What Scripture Says | What Most Christians Believe |
+|---------------------|------------------------------|
+| Dead sleep until resurrection | Dead go straight to heaven or hell |
+| Two resurrections, 1,000 years apart | One resurrection at the end |
+| First resurrection happened at millennium's start | First resurrection is future |
+| Consulting the dead is forbidden because they're asleep | Loved ones are in heaven watching over you |
+| Spiritual body = transformed physical form | Spiritual body = ghost/spirit form |
+| No one has gone to heaven except the Messiah (Yahuchanon 3:13) | Everyone who dies goes to heaven or hell immediately |
+
+The modern teaching creates confusion because it contradicts Scripture while claiming to represent it. When something doesn't make sense, most people assume the problem is with them - that they're not spiritual enough to understand. But perhaps the teaching doesn't make sense because it isn't true.
+
+## IF THE MILLENNIUM ALREADY HAPPENED
+
+Apply this to the timeline:
+
+If the Dark Ages were actually the millennial reign, then the first resurrection occurred at the beginning of that period. The saints who had died for their faith were raised to reign with the Messiah for a thousand years.
+
+The historical record of that period has been erased. The mud floods. The orphan trains. The buried first floors. The "lost history" we've documented throughout this work. If something monumental happened during those centuries - including the bodily resurrection of the faithful dead - we would not necessarily know about it. That memory would have been erased with everything else.
+
+This would explain why churches don't teach the two resurrections. If the first resurrection already happened, the teaching would expose the timeline deception. Better to blend them together, speak vaguely of "the resurrection," and let people assume it's all future.
+
+## THE SECOND RESURRECTION IS WHAT'S COMING
+
+If this timeline is correct:
+- The Messiah returned (hidden from modern memory)
+- The first resurrection occurred (saints raised to reign)
+- The millennial reign happened (the "Dark Ages")
+- History was reset and erased
+- Satan was released (the "Enlightenment")
+- We are now in the little season
+- The second resurrection - the resurrection of all for judgment - is what's coming
+
+Everyone is waiting for something that may have already happened. Meanwhile, the event that IS coming - the final judgment - catches them unprepared because they're looking in the wrong direction.
+
+## WHY THIS MATTERS
+
+This isn't academic theology. It changes everything about how to live.
+
+If the first resurrection already happened and we're in Satan's little season:
+- There is no rapture escape coming
+- There is no thousand-year peace ahead before judgment
+- The final deception is NOW
+- The mark, the beast system, the great falling away - all present tense
+- Discernment is survival
+
+The teaching of future millennium, future resurrection, future tribulation creates a passive waiting. "Just hold on until Jesus comes." But if He already came, and the current period is the final battle before judgment, the posture changes entirely.
+
+Wake up. The game is in the fourth quarter, not the first.
 
 ---
 
