@@ -3108,6 +3108,20 @@ This parallels the mirror's corruption of the human spirit. Just as the mirror c
 
 Both tools appear neutral. Both became weapons of manipulation.
 
+**Whose Calendar Was Even Correct?**
+
+Consider this: the Gregorian calendar wasn't created from nothing - it was based on the Julian, which was based on Roman timekeeping. But who says the Romans had the correct calendar? The Ethiopian calendar is seven years behind. The Hebrew calendar counts from creation. The Chinese calendar follows lunar cycles. The Islamic calendar marks from Muhammad's migration.
+
+Every empire that conquered imposed its calendar on the conquered. Time itself became a tool of colonization.
+
+Perhaps the only true calendar is written in the stars - the one Yahuah placed there at creation:
+
+*"And Elohim said, Let there be lights in the firmament of the heaven to divide the day from the night; and let them be for signs, and for seasons, and for days, and years."* (Genesis 1:14)
+
+The constellations mark seasons. The moon marks months. The sun marks days and years. This is the calendar that cannot be manipulated by papal decree or imperial edict. It moves with creation itself.
+
+But of course, this too has been inverted - twisted into astrology, horoscopes, fortune-telling. The signs meant to mark Yahuah's appointed times became tools for divination and self-worship. Another inversion. Another corruption of something pure.
+
 **The Pattern Matters More Than The Precise Dates**
 
 We cannot pinpoint exact dates because the calendar itself is demonstrably compromised. But the pattern is undeniable:
