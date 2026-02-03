@@ -2802,6 +2802,12 @@ Yahusha's resurrection body was physical - He ate fish, He could be touched - bu
 
 The modern teaching creates confusion because it contradicts Scripture while claiming to represent it. When something doesn't make sense, most people assume the problem is with them - that they're not spiritual enough to understand. But perhaps the teaching doesn't make sense because it isn't true.
 
+### ✦ AUTHOR'S THOUGHTS ✦
+
+**The Hidden First Resurrection**
+
+What follows is pattern recognition and dot-connecting - not established doctrine. No major theological tradition teaches what I'm about to propose. But the patterns demand consideration.
+
 ## IF THE MILLENNIUM ALREADY HAPPENED
 
 Apply this to the timeline:
@@ -3807,6 +3813,15 @@ HalleluYah.
 - Eph'siym (Ephesians) 6:12 - "We wrestle not against flesh and blood, but against principalities, against powers, against the rulers of the darkness of this world"
 - Tehilliym (Psalm) 2:2 - "The kings of the earth set themselves, and the rulers take counsel together, against Yahuah"
 - Chizayon (Revelation) 17:18 - "That great city, which reigns over the kings of the earth"
+
+**On the State of the Dead and Resurrection:**
+- Qoheleth (Ecclesiastes) 9:5 - "The dead know not any thing, neither have they any more a reward"
+- Daniy'el (Daniel) 12:2 - "Many of them that sleep in the dust of the earth shall awake"
+- Chizayon (Revelation) 20:4-6 - "This is the first resurrection... they shall reign with him a thousand years"
+- Chizayon (Revelation) 20:7-8 - "When the thousand years are expired, Satan shall be loosed... for a little season"
+- Qorintiym Ri'shon (1 Corinthians) 15:42-44 - "It is sown a natural body; it is raised a spiritual body"
+- Devariym (Deuteronomy) 18:10-12 - "There shall not be found among you... a consulter with familiar spirits, or a necromancer"
+- Yahuchanon (John) 3:13 - "No man hath ascended up to heaven, but he that came down from heaven"
 
 ---
 
