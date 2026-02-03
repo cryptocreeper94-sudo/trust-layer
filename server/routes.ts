@@ -19609,6 +19609,132 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // PDF GENERATION FOR THROUGH THE VEIL (Dynamic from markdown)
+  app.get("/api/veil/pdf", async (_req, res) => {
+    try {
+      const { jsPDF } = await import("jspdf");
+      const filePath = path.join(process.cwd(), "attached_assets", "Through-The-Veil-COMPLETE-EBOOK.md");
+      const content = fs.readFileSync(filePath, "utf-8");
+      
+      const doc = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4"
+      });
+      
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 20;
+      const lineHeight = 6;
+      const maxWidth = pageWidth - (margin * 2);
+      let y = margin;
+      
+      // Title page
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(28);
+      doc.text("Through The Veil", pageWidth / 2, pageHeight / 3, { align: "center" });
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "normal");
+      doc.text("An Exploration of Hidden Truth", pageWidth / 2, pageHeight / 3 + 15, { align: "center" });
+      doc.setFontSize(12);
+      doc.text("by Jason Andrews", pageWidth / 2, pageHeight / 3 + 30, { align: "center" });
+      doc.text("DarkWave Studios", pageWidth / 2, pageHeight / 2 + 20, { align: "center" });
+      doc.addPage();
+      y = margin;
+      
+      // Process content
+      const lines = content.split("\n");
+      
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) {
+          y += lineHeight / 2;
+          continue;
+        }
+        
+        // Check for page break needed
+        if (y > pageHeight - margin - 10) {
+          doc.addPage();
+          y = margin;
+        }
+        
+        // Handle headers
+        if (trimmed.startsWith("# ")) {
+          y += lineHeight;
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(18);
+          const title = trimmed.replace(/^#+ /, "").replace(/\*\*/g, "");
+          const splitTitle = doc.splitTextToSize(title, maxWidth);
+          doc.text(splitTitle, margin, y);
+          y += splitTitle.length * 8 + lineHeight;
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(11);
+        } else if (trimmed.startsWith("## ")) {
+          y += lineHeight;
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(14);
+          const title = trimmed.replace(/^#+ /, "").replace(/\*\*/g, "");
+          const splitTitle = doc.splitTextToSize(title, maxWidth);
+          doc.text(splitTitle, margin, y);
+          y += splitTitle.length * 7 + lineHeight;
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(11);
+        } else if (trimmed.startsWith("### ") || trimmed.startsWith("#### ")) {
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(12);
+          const title = trimmed.replace(/^#+ /, "").replace(/\*\*/g, "");
+          const splitTitle = doc.splitTextToSize(title, maxWidth);
+          doc.text(splitTitle, margin, y);
+          y += splitTitle.length * lineHeight + 2;
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(11);
+        } else if (trimmed.startsWith(">")) {
+          // Blockquote - italic
+          doc.setFont("helvetica", "italic");
+          const quote = trimmed.replace(/^> ?/, "").replace(/\*\*/g, "").replace(/\*/g, "");
+          const splitQuote = doc.splitTextToSize(quote, maxWidth - 10);
+          for (const qline of splitQuote) {
+            if (y > pageHeight - margin) { doc.addPage(); y = margin; }
+            doc.text(qline, margin + 5, y);
+            y += lineHeight;
+          }
+          doc.setFont("helvetica", "normal");
+          y += 2;
+        } else if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
+          // List item
+          const item = trimmed.replace(/^[-*] /, "").replace(/\*\*/g, "").replace(/\*/g, "");
+          const splitItem = doc.splitTextToSize("• " + item, maxWidth - 5);
+          for (const iline of splitItem) {
+            if (y > pageHeight - margin) { doc.addPage(); y = margin; }
+            doc.text(iline, margin + 3, y);
+            y += lineHeight;
+          }
+        } else if (trimmed === "---") {
+          y += lineHeight;
+        } else {
+          // Regular paragraph
+          const text = trimmed.replace(/\*\*/g, "").replace(/\*/g, "").replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+          const splitText = doc.splitTextToSize(text, maxWidth);
+          for (const tline of splitText) {
+            if (y > pageHeight - margin) { doc.addPage(); y = margin; }
+            doc.text(tline, margin, y);
+            y += lineHeight;
+          }
+          y += 2;
+        }
+      }
+      
+      const pdfBuffer = doc.output("arraybuffer");
+      
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", 'attachment; filename="Through-The-Veil.pdf"');
+      res.send(Buffer.from(pdfBuffer));
+    } catch (error: any) {
+      console.error("PDF generation error:", error);
+      res.status(500).json({ error: "Failed to generate PDF", details: error.message });
+    }
+  });
+
   // Health Check Endpoint - System monitoring
   app.get("/api/health", async (_req, res) => {
     try {

@@ -239,7 +239,7 @@ export default function Veil() {
                 </li>
               </ul>
               
-              <a href="/assets/Through-The-Veil-EBOOK.pdf" download className="block">
+              <a href="/api/veil/pdf" download="Through-The-Veil.pdf" className="block">
                 <Button className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 py-4">
                   <Download className="w-4 h-4 mr-2" />
                   Download PDF
