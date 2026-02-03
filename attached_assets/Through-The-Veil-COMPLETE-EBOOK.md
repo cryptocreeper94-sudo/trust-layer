@@ -200,6 +200,7 @@ The journey through the veil begins now.
 - Chapter 11: Bloodlines and the Thrones of Earth
 - Chapter 12: The Council of the Cast-Out
 - Chapter 13: The Nephilim Bloodlines Continue
+- Chapter 13B: Constantine and the Council of Nicaea
 
 **Part Five: The Second Reset**
 - Chapter 14: Tartaria and the Mud Flood
@@ -219,6 +220,7 @@ The journey through the veil begins now.
 - Chapter 23: Modern Medicine - The Band-Aid Economy
 - Chapter 24: The Indoctrination Machine
 - Chapter 25: Economics and the Worker Bees
+- Chapter 25B: False Flags - The Art of Manufactured Crisis
 - Chapter 26: The Beast System and the Carousel
 
 **Part Eight: The War on Perception**
@@ -236,18 +238,19 @@ The journey through the veil begins now.
 - Chapter 34: The Missing Millennium
 - Chapter 34B: The Resurrections Hidden
 - Chapter 35: The Short Season
-- Chapter 36: The Coming Deception
+- Chapter 36: The Layers of Deception - Redirect Upon Redirect
+- Chapter 37: The Coming Deception
 
 **Part Eleven: The Awakening**
-- Chapter 37: The Return of Memory
-- Chapter 38: The Stages of Awakening
-- Chapter 39: The Collective Awakening
+- Chapter 38: The Return of Memory
+- Chapter 39: The Stages of Awakening
+- Chapter 40: The Collective Awakening
 
 **Part Twelve: The Restoration**
-- Chapter 40: The Path Forward
-- Chapter 41: The Witnesses in Stone and Spirit
-- Chapter 42: Final Reflections
-- Chapter 43: The Proof In Their Behavior (Capstone)
+- Chapter 41: The Path Forward
+- Chapter 42: The Witnesses in Stone and Spirit
+- Chapter 43: Final Reflections
+- Chapter 44: The Proof In Their Behavior (Capstone)
 
 **Appendix: Reference Materials**
 
@@ -3330,7 +3333,7 @@ Know these things. Hold them close. Test everything against them. And when the g
 
 ---
 
-# CHAPTER 37: THE RETURN OF MEMORY - RECONNECTION, NOT REINCARNATION
+# CHAPTER 38: THE RETURN OF MEMORY - RECONNECTION, NOT REINCARNATION
 
 *[Key references: Pineal Gland, Ancient Wisdom → Concordance]*
 
@@ -3362,7 +3365,7 @@ That's not supernatural in the mystical sense. It's supernatural in the truest s
 
 ---
 
-# CHAPTER 38: THE STAGES OF AWAKENING
+# CHAPTER 39: THE STAGES OF AWAKENING
 
 Those who have walked this path recognize common stages:
 
@@ -3400,7 +3403,7 @@ The downloads that came after six months of sobriety weren't new information. Th
 
 ---
 
-# CHAPTER 39: THE COLLECTIVE AWAKENING
+# CHAPTER 40: THE COLLECTIVE AWAKENING
 
 Something is happening globally. More people are waking up simultaneously than at any point in recorded history.
 
@@ -3422,7 +3425,7 @@ But it won't work. Because once the carousel is seen for what it is, it can neve
 
 ---
 
-# CHAPTER 40: THE PATH FORWARD
+# CHAPTER 41: THE PATH FORWARD
 
 Information without application is entertainment. The point isn't to accumulate knowledge. It's to live differently.
 
@@ -3490,7 +3493,7 @@ The veil lifts gradually for most. Layer by layer. Revelation by revelation. Pat
 
 ---
 
-# CHAPTER 41: THE WITNESSES IN STONE AND SPIRIT
+# CHAPTER 42: THE WITNESSES IN STONE AND SPIRIT
 
 The truth leaves traces. Stone doesn't lie.
 
@@ -3520,7 +3523,7 @@ The evidence is there. The question is whether looking will happen.
 
 ---
 
-# CHAPTER 42: FINAL REFLECTIONS
+# CHAPTER 43: FINAL REFLECTIONS
 
 The path is not easy. The veil does not lift painlessly. Seeing clearly in a world designed for blindness brings isolation, opposition, and often grief.
 
@@ -3602,7 +3605,7 @@ HalleluYah.
 
 ---
 
-# CHAPTER 43: THE PROOF IN THEIR BEHAVIOR
+# CHAPTER 44: THE PROOF IN THEIR BEHAVIOR
 
 ## If None of This Were Real
 
