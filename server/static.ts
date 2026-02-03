@@ -56,12 +56,24 @@ const APP_CONFIG: Record<AppDomain, {
   },
 };
 
+// Cache index.html in memory to prevent cold start issues
+let cachedIndexHtml: string | null = null;
+
 export function serveStatic(app: Express) {
   const distPath = path.resolve(__dirname, "public");
   if (!fs.existsSync(distPath)) {
     throw new Error(
       `Could not find the build directory: ${distPath}, make sure to build the client first`,
     );
+  }
+
+  // Pre-load index.html into memory at startup
+  const indexPath = path.resolve(distPath, "index.html");
+  try {
+    cachedIndexHtml = fs.readFileSync(indexPath, "utf8");
+    console.log('[Static] index.html cached in memory');
+  } catch (err) {
+    console.error('[Static] Failed to cache index.html:', err);
   }
 
   app.use((req: Request, res: Response, next: NextFunction) => {
@@ -91,22 +103,39 @@ export function serveStatic(app: Express) {
 
   app.use("*", (req: Request, res: Response) => {
     const appConfig = (req as any).appConfig;
-    const indexPath = path.resolve(distPath, "index.html");
     
-    fs.readFile(indexPath, "utf8", (err, html) => {
-      if (err) {
-        res.status(500).send("Error loading page");
+    // Use cached HTML if available, otherwise read from disk
+    let html = cachedIndexHtml;
+    
+    if (!html) {
+      try {
+        html = fs.readFileSync(indexPath, "utf8");
+        cachedIndexHtml = html; // Cache for next time
+      } catch (err) {
+        console.error('[Static] Failed to read index.html:', err);
+        res.status(500).send(`
+          <!DOCTYPE html>
+          <html>
+          <head><title>Loading...</title><meta http-equiv="refresh" content="2"></head>
+          <body style="background:#0f172a;color:#fff;font-family:system-ui;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">
+            <div style="text-align:center">
+              <h2>Starting up...</h2>
+              <p>Please wait a moment. The page will refresh automatically.</p>
+            </div>
+          </body>
+          </html>
+        `);
         return;
       }
-      
-      let modifiedHtml = html
-        .replace(/<title>.*?<\/title>/, `<title>${appConfig.title}</title>`)
-        .replace(/content="Trust Layer[^"]*"/g, `content="${appConfig.title}"`)
-        .replace(/<meta name="theme-color" content="[^"]*"/, `<meta name="theme-color" content="${appConfig.themeColor}"`)
-        .replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${appConfig.description}"`)
-        .replace(/href="\/manifest\.webmanifest"/, `href="${appConfig.manifest}"`);
-      
-      res.send(modifiedHtml);
-    });
+    }
+    
+    let modifiedHtml = html
+      .replace(/<title>.*?<\/title>/, `<title>${appConfig.title}</title>`)
+      .replace(/content="Trust Layer[^"]*"/g, `content="${appConfig.title}"`)
+      .replace(/<meta name="theme-color" content="[^"]*"/, `<meta name="theme-color" content="${appConfig.themeColor}"`)
+      .replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${appConfig.description}"`)
+      .replace(/href="\/manifest\.webmanifest"/, `href="${appConfig.manifest}"`);
+    
+    res.send(modifiedHtml);
   });
 }
