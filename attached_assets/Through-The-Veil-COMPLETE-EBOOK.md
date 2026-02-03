@@ -286,7 +286,9 @@ The Hebrew uses Elohim in multiple ways:
 - **Members of His council** - Divine beings, messengers (what we call angels)
 - **Gods of nations** - Spiritual entities behind false worship
 - **Demons** - (Devariym/Deuteronomy 32:17)
-- **Disembodied dead** - (1 Shemu'el/1 Samuel 28:13 - the witch of Endor)
+- **Deceptive spirits impersonating the dead** - (1 Shemu'el/1 Samuel 28:13 - the witch of Endor)
+
+A note on that last category: Scripture is clear that "the dead know nothing" (Qoheleth/Ecclesiastes 9:5) and "the dead praise not Yahuah" (Tehilliym/Psalm 115:17). The dead sleep until resurrection. So what did the witch of Endor summon? She called it "elohim ascending out of the earth" - but that doesn't mean it was actually Samuel. More likely, it was a **deceptive spirit** impersonating him. This is precisely the deception at work today - mediums, channelers, and necromancers contact something, but it's not who they think it is. The fact that the Hebrew calls it "elohim" proves the word applies to any spiritual entity, not just the Creator.
 
 When the scripture says "Put no other **elohim** before me" - it acknowledges that other spiritual beings exist. They do. The council exists. But Yahuah is supreme. He is species-unique. He alone is the Creator.
 
@@ -3970,7 +3972,7 @@ Seek, and you will find.
 **Elohiym / Alohiym** (אֱלֹהִים)
 - Meaning: "Mighty One(s)" / "Inhabitants of the Spiritual Realm"
 - Scripture: Genesis 1:26-27; Genesis 3:22; Genesis 11:7; Psalm 82:1,6; Isaiah 6:8; Job 38:7; Deuteronomy 32:8,17; 1 Samuel 28:13
-- Notes: Grammatically plural Hebrew word. Context determines whether it refers to Yahuah specifically (with singular verbs) or to other spiritual beings. Five categories: (1) Yahuah - the Creator, species-unique; (2) Members of His council - divine beings/angels; (3) Gods of nations - spiritual entities behind idolatry; (4) Demons; (5) Disembodied dead. The "let US make" passages refer to the Divine Council witnessing creation, while Yahuah alone created (Genesis 1:27 uses singular verbs). "Put no other elohim before me" acknowledges other beings exist but establishes Yahuah's supremacy.
+- Notes: Grammatically plural Hebrew word. Context determines whether it refers to Yahuah specifically (with singular verbs) or to other spiritual beings. Five categories: (1) Yahuah - the Creator, species-unique; (2) Members of His council - divine beings/angels; (3) Gods of nations - spiritual entities behind idolatry; (4) Demons; (5) Deceptive spirits impersonating the dead (the witch of Endor called what she summoned "elohim" - but since "the dead know nothing" per Ecclesiastes 9:5, this was likely a deceiving spirit, not actually Samuel). The "let US make" passages refer to the Divine Council witnessing creation, while Yahuah alone created (Genesis 1:27 uses singular verbs). "Put no other elohim before me" acknowledges other beings exist but establishes Yahuah's supremacy.
 - See also: Chapter 1, Chapter 21
 
 **Bene Elohim** (בְּנֵי אֱלֹהִים)
