@@ -3166,7 +3166,13 @@ When Satan was released (~1500 AD), those who had chosen wrong became the founda
 
 And now we understand why the falling away could happen during the millennium: it wasn't caused by satanic deception. It was caused by human choice, made with full knowledge, in the clearest spiritual conditions the world had ever seen.
 
-Can I prove this? No. But then again - who can prove what year it actually is? The same institutions claiming certainty about the calendar are the same ones who moved Christ's birthday, changed his name, rewrote the scriptures, and built an empire on the inversion of everything he taught.
+Can I prove this? No. But then again - who can prove what year it actually is?
+
+You are convinced you live in 2026. But other than what you've been told - by people who learned from people who learned from people who were ultimately given a number at some point and told "this is the year" - what evidence do you have? You accept the calendar on faith. More faith, perhaps, than many people have in the Creator Himself.
+
+Everything before roughly 1500 is handed down through royalty and legends - the very institutions designed to deceive. 1492, Christopher Columbus "discovers" the New World - and that's essentially where modern history begins. Everything before it is increasingly murky, increasingly dependent on trusting the record-keepers.
+
+The same institutions claiming certainty about the calendar are the same ones who moved Christ's birthday, changed his name, rewrote the scriptures, and built an empire on the inversion of everything he taught.
 
 The pattern fits. The motive is clear. The evidence of manipulation is documented. And the trajectory we're on matches exactly what scripture describes for the end of Satan's little season.
 
