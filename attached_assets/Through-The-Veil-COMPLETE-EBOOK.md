@@ -3146,6 +3146,20 @@ And it works - because nobody cared about linear time in those days. Time was cy
 
 This is a gigantic part of the deception. By making us obsessed with linear time - calendars, clocks, deadlines, schedules - they disconnected us from the natural order Yahuah established. And they made us dependent on their dating system, which they control completely.
 
+**The Genealogy Goes Silent**
+
+Consider this: scripture traces the genealogy meticulously from Adam through Seth, through Noah, through Abraham, through David, all the way to Yahusha the Messiah. Thousands of years of unbroken lineage, carefully recorded and preserved.
+
+And then - nothing.
+
+After the Messiah, the detailed genealogical record goes silent. The same record-keeping that tracked humanity through the flood, through captivity, through exile - suddenly stops. We're told to believe this is simply because "the genealogy was complete" or "it no longer mattered."
+
+But what if it stopped precisely because what came next had to be hidden?
+
+The Millennial Reign. The period of choosing. The thousand years that would expose the entire modern eschatological framework as a deception if it were known to have already occurred.
+
+The genealogy traced the bloodline to the Messiah. If it continued, it would trace through the millennium. And that record had to disappear.
+
 **The Timeline As I See It**
 
 For the Millennial Reign to fit properly with our modern calendar, three to five hundred years would need to have been erased or fabricated. Here's the pattern:
