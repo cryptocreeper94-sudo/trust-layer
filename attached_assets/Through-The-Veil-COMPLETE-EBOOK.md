@@ -3051,6 +3051,39 @@ This would mean the timeline is: True Messiah returned → 1000 Year Reign occur
 
 *Everyone is looking for something that may have already happened. And the very fact that no one considers this possibility? That everyone dismisses it without examination? That is itself evidence of the deception working exactly as designed.*
 
+### ✦ THE APOSTASY THEY'RE STILL LOOKING FOR ✦
+
+**2 Thessalonikim (2 Thessalonians) 2:3:**
+> *"Let no man deceive you by any means: for that day shall not come, except there come a falling away first..."*
+
+The Greek word is **apostasia** (ἀποστασία) - literally "a standing away from" or "departure." Most churches teach this as a future event - a great falling away from Christianity that signals the end times.
+
+But what if it already happened?
+
+**1054 AD: The Great Schism.**
+
+On July 16, 1054, Christianity officially split. The Roman Catholic Church and the Eastern Orthodox Church excommunicated each other. One unified (though already corrupted) faith became two competing institutions. The body was literally torn apart.
+
+Consider the timing. If the conventional calendar has been manipulated (as researchers suggest 200-300 years may have been added), then 1054 falls right at the threshold of what would be the 7th millennium - the beginning of the Millennial Reign.
+
+The apostasy happened **before** the millennium, not after. Just as Scripture indicates it would.
+
+**What the apostasy actually looked like:**
+
+It wasn't Christians abandoning their faith. It was worse - it was the faith being captured, institutionalized, and divided from within:
+
+- **325 AD (Nicaea)**: The merger with Rome. Constantine absorbed Christianity into the empire. The name was changed. The Sabbath was changed. The calendar was changed. The Messiah's name became disconnected from the Father's name.
+
+- **1054 AD (Great Schism)**: The final split. Christianity became two competing power structures. Spirituality was replaced with dogma and doctrine. The institution became more important than the relationship.
+
+Modern "Christianity" looking for a future apostasy misses the pattern. The faith they're practicing IS the apostasy. It uses the wrong name. It worships on the wrong day. It follows the wrong calendar. It teaches doctrines that contradict Scripture while calling them "Christian."
+
+**The visible growth of "Christianity" today proves nothing** - it could be the counterfeit expanding. The true remnant has always been small. Narrow is the way. Few there be that find it.
+
+The great falling away wasn't the world abandoning Christianity. It was Christianity being absorbed into the world system and renamed. The apostasy wasn't departure FROM the institution - it was the institution departing from truth while keeping the appearance.
+
+And almost no one noticed. Because they changed the words.
+
 ---
 
 # CHAPTER 34B: THE RESURRECTIONS HIDDEN
@@ -4012,6 +4045,18 @@ Seek, and you will find.
 ---
 
 ### Key Concepts and Terms
+
+**Apostasia / The Falling Away** (ἀποστασία)
+- Meaning: "A standing away from" / "Departure"
+- Scripture: 2 Thessalonians 2:3
+- Notes: Most teach this as a future event - people abandoning Christianity. But the apostasy may have already occurred: the Great Schism of 1054 AD, when Christianity officially split into Roman Catholic and Eastern Orthodox. This wasn't people leaving the faith - it was the faith being captured, institutionalized, and divided from within. Nicaea (325 AD) began the corruption; the Schism completed it. Modern "Christianity" looking for a future apostasy may be practicing the apostasy itself - wrong name, wrong day, wrong calendar.
+- See also: Chapter 34, Chapter 13B
+
+**The Great Schism (1054 AD)**
+- Definition: The formal division of Christianity into Roman Catholic (West) and Eastern Orthodox (East)
+- Date: July 16, 1054 - mutual excommunications between Rome and Constantinople
+- Significance: If the timeline theory is correct, this occurred right at the threshold of the 7th millennium (the Millennial Reign). The apostasy happened before the millennium, as Scripture indicates. The unified (though already corrupted) faith was literally torn in two.
+- See also: Chapter 34
 
 **The System / Ancient Intelligence**
 - Definition: The coordinated adversarial council that operates through human proxies, institutions, and bloodlines across millennia. Not bureaucracy or random corruption - an organized spiritual hierarchy executing the rebellion.
