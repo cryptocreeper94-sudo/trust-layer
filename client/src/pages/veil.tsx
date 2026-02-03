@@ -121,39 +121,41 @@ export default function Veil() {
 
         <h3 className="text-2xl font-bold text-white mb-8 text-center">Download the Complete Edition</h3>
 
-        <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto mb-16 px-4">
+        <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto mb-16 px-6 sm:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <GlassCard className="p-8 h-full" glow>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/30 flex-shrink-0">
-                  <FileText className="w-5 h-5 text-red-400" />
+            <GlassCard className="p-6 sm:p-8 h-full" glow>
+              <div className="px-2 sm:px-3">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="p-3 rounded-xl bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/30 flex-shrink-0">
+                    <FileText className="w-5 h-5 text-red-400" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-lg font-bold text-white leading-tight">PDF Download</h3>
+                    <p className="text-sm text-slate-400">Desktop & Print</p>
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <h3 className="text-base font-bold text-white leading-tight">PDF Download</h3>
-                  <p className="text-xs text-slate-400">Desktop & Print</p>
-                </div>
+                
+                <ul className="space-y-3 mb-8 text-slate-300 text-base pl-1">
+                  <li className="flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400 flex-shrink-0" />
+                    <span>Complete edition</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400 flex-shrink-0" />
+                    <span>163+ scripture refs</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400 flex-shrink-0" />
+                    <span>Print-ready</span>
+                  </li>
+                </ul>
               </div>
               
-              <ul className="space-y-2.5 mb-6 text-slate-300 text-sm">
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0" />
-                  <span>Complete edition</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0" />
-                  <span>163+ scripture refs</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0" />
-                  <span>Print-ready</span>
-                </li>
-              </ul>
-              
-              <a href="/assets/Through-The-Veil-EBOOK.pdf" download className="block mt-auto">
+              <a href="/assets/Through-The-Veil-EBOOK.pdf" download className="block mt-auto px-2 sm:px-3">
                 <Button className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 py-4">
                   <Download className="w-4 h-4 mr-2" />
                   Download PDF
@@ -167,33 +169,35 @@ export default function Veil() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.25 }}
           >
-            <GlassCard className="p-8 h-full" glow>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 flex-shrink-0">
-                  <Smartphone className="w-5 h-5 text-cyan-400" />
+            <GlassCard className="p-6 sm:p-8 h-full" glow>
+              <div className="px-2 sm:px-3">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 flex-shrink-0">
+                    <Smartphone className="w-5 h-5 text-cyan-400" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-lg font-bold text-white leading-tight">EPUB Download</h3>
+                    <p className="text-sm text-slate-400">E-readers & Mobile</p>
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <h3 className="text-base font-bold text-white leading-tight">EPUB Download</h3>
-                  <p className="text-xs text-slate-400">E-readers & Mobile</p>
-                </div>
+                
+                <ul className="space-y-3 mb-8 text-slate-300 text-base pl-1">
+                  <li className="flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-purple-400 flex-shrink-0" />
+                    <span>Complete edition</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-purple-400 flex-shrink-0" />
+                    <span>Mobile optimized</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-purple-400 flex-shrink-0" />
+                    <span>Kindle/Kobo/Nook</span>
+                  </li>
+                </ul>
               </div>
               
-              <ul className="space-y-2.5 mb-6 text-slate-300 text-sm">
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400 flex-shrink-0" />
-                  <span>Complete edition</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400 flex-shrink-0" />
-                  <span>Mobile optimized</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-purple-400 flex-shrink-0" />
-                  <span>Kindle/Kobo/Nook</span>
-                </li>
-              </ul>
-              
-              <a href="/api/veil/epub" download="Through-The-Veil.epub" className="block mt-auto">
+              <a href="/api/veil/epub" download="Through-The-Veil.epub" className="block mt-auto px-2 sm:px-3">
                 <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 py-4">
                   <Download className="w-4 h-4 mr-2" />
                   Download EPUB
