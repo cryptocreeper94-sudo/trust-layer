@@ -1420,6 +1420,45 @@ Look at what characterizes this age:
 
 Every system works together. Not by coincidence. Not by random corruption. By design. By an intelligence that has been executing this plan since the Garden.
 
+**THE PROPHECY OF UNSEALING**
+
+There is a specific prophecy that speaks to what we're witnessing right now.
+
+**Daniy'el (Daniel) 12:4:**
+> *"But thou, O Daniy'el, shut up the words, and seal the book, even to the time of the end: many shall run to and fro, and knowledge shall be increased."*
+
+For centuries, this was interpreted as a future prophecy. The book was sealed. Knowledge was limited. Truth was controlled by those who held the manuscripts, the libraries, the universities.
+
+But look at the present age.
+
+**Many running to and fro.** Global travel. Information crossing the world in seconds. People searching frantically for answers, running from one source to another, one video to another, one document to another.
+
+**Knowledge increased.** The internet has made available what was once locked in archives. CIA documents released. Vatican secrets photographed. Dead Sea Scrolls digitized. Ancient maps discovered. Hidden history surfacing.
+
+Consider what has emerged in just the last two decades:
+
+- **Tartaria** - An entire civilization scrubbed from official history, now being rediscovered through old photographs, maps, and architecture
+- **Biblical locations found** - Places dismissed as myth or allegory proven to be real: Sodom and Gomorrah (ash and sulfur), the Red Sea crossing (chariot wheels on the seafloor), Noah's Ark (structure on Ararat), giants' remains (suppressed by the Smithsonian)
+- **The mud flood** - Evidence of a catastrophic reset visible in buried first floors across the world
+- **Free energy technology** - Tesla's work, the old world's power systems, atmospheric electricity collection
+- **The orphan trains** - Mass redistribution of children after a civilization was erased
+- **World's fair architecture** - Impossible buildings that appeared overnight and were then demolished
+- **Sacred geometry** - The mathematical patterns encoded in ancient structures that modern builders cannot replicate
+
+None of this was accessible fifty years ago. Most of it wasn't accessible twenty years ago. It's emerging NOW.
+
+This is Daniel 12:4 manifesting. The book is being unsealed. Knowledge is increasing. The patterns that were hidden are becoming visible.
+
+But here's the twist: the increase of knowledge cuts both ways.
+
+The same technology that reveals truth also floods the world with distraction, deception, and noise. The same internet that exposes the hidden history also drowns it in entertainment and propaganda. The same tools that unseal the book also enable the final surveillance and control systems.
+
+This is characteristic of the little season. Truth and deception running parallel. The wheat and the tares growing together. Those with eyes seeing more clearly than ever. Those without eyes more blind than ever.
+
+The prophecy wasn't just about information availability. It was about the CONDITIONS of the end times. The running to and fro isn't just travel - it's the frantic searching of souls who sense something is deeply wrong but don't know where to look. The increase of knowledge isn't just data - it's the unveiling that precedes judgment.
+
+The book is open now. What was sealed is becoming visible. The question is: what will you do with what you see?
+
 **WHERE THIS LEAVES US**
 
 If every dot connects - and they do connect - then we stand at a very specific point in the prophetic timeline.
@@ -4223,6 +4262,7 @@ Seek, and you will find.
 - Bere'shiyth (Genesis) 6:9 - "Noach was... perfect (tamiym) in his generations" (genetic purity interpretation)
 
 **On the Little Season and End Times:**
+- Daniy'el (Daniel) 12:4 - "Shut up the words, and seal the book, even to the time of the end: many shall run to and fro, and knowledge shall be increased"
 - Chizayon (Revelation) 20:7-8 - "When the thousand years are expired, Satan shall be loosed out of his prison, and shall go out to deceive the nations"
 - Mattithyahu (Matthew) 24:24 - "False mashiachs, and false prophets, and shall show great signs and wonders"
 - Tasloniqiym Sheniy (2 Thessalonians) 2:9-12 - "The working of Satan with all power and signs and lying wonders"
