@@ -3110,6 +3110,20 @@ No mirrors to obsess over their appearance. No clocks to obsess over their sched
 
 The numbered year only mattered for one thing: official government documents. And those documents were controlled by the same corrupt powers we've been discussing. At some point, someone looked at artifacts and *decided* what year they came from. Someone *assigned* dates to history. And whoever controls the assignment controls the narrative.
 
+At some point, some actor in this cosmic play simply declared: "This is what we're going to call this year."
+
+And that's what it's been ever since.
+
+If you wanted to obscure the Millennial Reign - to make the thousand years seem like it never happened or hasn't happened yet - what would you do? Add three hundred years to the count. Push everything forward. Now it's "only been 700 years" or "we're still waiting for the millennium." The math doesn't work. The prophecy seems unfulfilled. And people dismiss the pattern because the numbers don't add up.
+
+But the numbers were assigned by the deceivers.
+
+Certain dates and numbers are drilled into collective consciousness - 1776, 1492, 666, 2000 - and people analyze them through numerology, finding hidden meanings and connections. Scripture warns against this (Deuteronomy 18:10-12). Numerology is divination. It's part of the deception, not the key to unlocking it. Yet people treat these assigned numbers as absolute truth, never questioning who assigned them in the first place.
+
+The calendar manipulation isn't just plausible - it's the simplest explanation. Add three centuries. Hide the millennium. Make the timeline seem incomplete. And when anyone points at the pattern, dismiss them because "the math doesn't work."
+
+But the math was rigged from the start.
+
 If someone in power declared "this year is 1650" - who would argue? Who would even know? The only people with precise records were the priesthoods and power structures - the same institutions orchestrating the deception.
 
 This parallels the mirror's corruption of the human spirit. Just as the mirror created obsession with self-image, leading to vanity and spiritual inversion, the modern clock and calendar created obsession with linear time - disconnecting humanity from natural cycles and enabling control through scheduling, deadlines, and artificial urgency.
