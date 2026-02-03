@@ -3160,6 +3160,14 @@ The Millennial Reign. The period of choosing. The thousand years that would expo
 
 The genealogy traced the bloodline to the Messiah. If it continued, it would trace through the millennium. And that record had to disappear.
 
+This also serves the hushing of the true Messiah himself. Once the genealogy stops, there's no way to verify anything. The narrative becomes: he was pure, he had no children, there's nothing to trace. Case closed.
+
+And then, of course, there's the counter-narrative - the layer of deception that says he did have children, that Mary Magdalene was his wife, that a secret bloodline continues through European royalty. The Da Vinci Code mythology.
+
+Notice how both narratives serve the same purpose: confusion. Whether you believe he had no descendants or that his descendants became kings - either way, the actual record is gone. The true Messiah's name has been changed. His intention has been obscured. The reality of his presence and his return has been buried under competing fictions.
+
+What better way to scrub the truth than to stop the genealogy entirely? No record means no verification. No verification means any narrative can be imposed. And any narrative can be opposed by another narrative - keeping everyone arguing about details while missing the pattern entirely.
+
 **The Timeline As I See It**
 
 For the Millennial Reign to fit properly with our modern calendar, three to five hundred years would need to have been erased or fabricated. Here's the pattern:
