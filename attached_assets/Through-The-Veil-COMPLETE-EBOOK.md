@@ -3132,6 +3132,20 @@ Two or three hundred years would be exactly what's needed. Enough time for every
 
 And perhaps that's exactly why those centuries are missing from coherent record. Not because "nothing happened" during the Dark Ages - but because what happened had to be erased for the deception to work.
 
+**The Dark Ages And The Second Reset**
+
+The so-called "Dark Ages" - roughly 500 years of history that remains murky, contradictory, and suspiciously sparse in documentation. Why? The mainstream explanation is that civilization simply collapsed and nobody kept records. But consider: the Roman Empire supposedly fell, yet somehow the Catholic Church maintained perfect institutional continuity throughout? Records were kept when convenient and lost when inconvenient.
+
+Recently, theories about a "Tartarian" civilization and a second reset - a catastrophic erasure of memory sometime in the early 1800s (the orphan trains, the world's fairs, the inexplicable architecture) - have gained attention. Most dismiss these out of hand. But dismissal is not refutation. The pattern of erased history repeats.
+
+I believe - and I'll state this plainly - that those who control the history control the narrative. And the narrative cannot work if the Millennial Reign already happened. The entire structure of modern eschatology depends on the millennium being future. If it's past, the whole framework collapses. The rapture doctrine, the tribulation timeline, the anticipation of a coming kingdom - all of it becomes meaningless if the kingdom already came and went.
+
+So what do you do? You erase the centuries. You obscure the records. You dismiss anyone who connects the dots.
+
+And it works - because nobody cared about linear time in those days. Time was cyclical. Seasonal. Judged by the stars. Sailors navigated by star charts, not calendars. Farmers planted by constellations, not dates. The very concept of "what year is it?" was irrelevant to daily existence.
+
+This is a gigantic part of the deception. By making us obsessed with linear time - calendars, clocks, deadlines, schedules - they disconnected us from the natural order Yahuah established. And they made us dependent on their dating system, which they control completely.
+
 **The Timeline As I See It**
 
 For the Millennial Reign to fit properly with our modern calendar, three to five hundred years would need to have been erased or fabricated. Here's the pattern:
