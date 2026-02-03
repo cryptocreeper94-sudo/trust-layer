@@ -3034,7 +3034,7 @@ export default function VeilReader() {
   const [isPaused, setIsPaused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
-  const [useElevenLabs, setUseElevenLabs] = useState(true);
+  const [useAIVoice, setUseAIVoice] = useState(true); // Use OpenAI Nova or ElevenLabs
   const [autoAdvance, setAutoAdvance] = useState(true); // Auto-advance ON by default
   const [audioQueue, setAudioQueue] = useState<string[]>([]);
   const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
@@ -3329,12 +3329,12 @@ export default function VeilReader() {
     return chunks;
   };
 
-  const playChunk = async (chunkText: string, isLastChunk: boolean) => {
+  const playChunk = async (chunkText: string, isLastChunk: boolean, retryCount = 0) => {
     try {
-      // Add timeout to prevent hanging
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
       
+      // Use ElevenLabs for ebook TTS (high quality narration voice)
       const response = await fetch('/api/voice/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -3345,14 +3345,21 @@ export default function VeilReader() {
       clearTimeout(timeoutId);
       
       if (!response.ok) {
-        console.log('TTS API error, falling back to browser voice');
+        // Retry once before falling back to browser
+        if (retryCount < 1) {
+          console.log('TTS failed, retrying...');
+          setTimeout(() => playChunk(chunkText, isLastChunk, retryCount + 1), 1000);
+          return;
+        }
+        console.log('TTS API error after retry, falling back to browser voice');
         setIsLoading(false);
-        setUseElevenLabs(false);
+        setUseAIVoice(false);
         const fullText = audioQueueRef.current.join(' ');
         playWithBrowserSpeech(fullText);
         return;
       }
       
+      console.log('Using ElevenLabs TTS');
       const audioBlob = await response.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
       
@@ -3362,20 +3369,17 @@ export default function VeilReader() {
       audio.onended = () => {
         URL.revokeObjectURL(audioUrl);
         
-        // Check if there are more chunks to play
         const nextChunkIndex = currentChunkRef.current + 1;
         if (nextChunkIndex < audioQueueRef.current.length) {
           currentChunkRef.current = nextChunkIndex;
           setCurrentChunkIndex(nextChunkIndex);
           playChunk(audioQueueRef.current[nextChunkIndex], nextChunkIndex === audioQueueRef.current.length - 1);
         } else {
-          // Chapter finished - all chunks played
           setIsPlaying(false);
           setIsPaused(false);
           audioQueueRef.current = [];
           currentChunkRef.current = 0;
           
-          // Auto-advance to next chapter if enabled
           if (autoAdvance) {
             setTimeout(() => {
               const vol = volumes[currentVolume];
@@ -3393,10 +3397,9 @@ export default function VeilReader() {
       };
       
       audio.onerror = () => {
-        console.log('Audio error, falling back to browser voice');
+        console.log('Audio playback error, falling back to browser voice');
         setIsLoading(false);
         setIsPlaying(false);
-        setUseElevenLabs(false);
         playWithBrowserSpeech(audioQueueRef.current.join(' '));
       };
       
@@ -3406,33 +3409,36 @@ export default function VeilReader() {
       setIsLoading(false);
       
     } catch (error) {
-      console.error('ElevenLabs chunk error:', error);
+      console.error('TTS chunk error:', error);
+      if (retryCount < 1) {
+        console.log('Retrying TTS...');
+        setTimeout(() => playChunk(chunkText, isLastChunk, retryCount + 1), 1000);
+        return;
+      }
       setIsLoading(false);
       setIsPlaying(false);
-      setUseElevenLabs(false);
+      setUseAIVoice(false);
       playWithBrowserSpeech(audioQueueRef.current.join(' '));
     }
   };
 
-  const playWithElevenLabs = async (text: string) => {
+  const playWithAIVoice = async (text: string) => {
     try {
       setIsLoading(true);
       
-      // Split into chunks for long chapters
       const chunks = splitIntoChunks(text);
       audioQueueRef.current = chunks;
       currentChunkRef.current = 0;
       setAudioQueue(chunks);
       setCurrentChunkIndex(0);
       
-      // Start playing first chunk
       await playChunk(chunks[0], chunks.length === 1);
       
     } catch (error) {
-      console.error('ElevenLabs error:', error);
+      console.error('AI voice error:', error);
       setIsLoading(false);
       setIsPlaying(false);
-      setUseElevenLabs(false);
+      setUseAIVoice(false);
       playWithBrowserSpeech(text);
     }
   };
@@ -3480,8 +3486,8 @@ export default function VeilReader() {
     
     console.log('Playing chapter:', chapter.title, 'Text length:', text.length);
     
-    if (useElevenLabs) {
-      await playWithElevenLabs(text);
+    if (useAIVoice) {
+      await playWithAIVoice(text);
     } else if (speechSupported) {
       playWithBrowserSpeech(text);
     }
@@ -3566,7 +3572,7 @@ export default function VeilReader() {
           
           <div className="flex items-center gap-2">
             {/* Simple Play/Pause Button */}
-            {(speechSupported || useElevenLabs) && (
+            {(speechSupported || useAIVoice) && (
               <div className="flex items-center gap-2">
                 {isLoading ? (
                   <Button 
