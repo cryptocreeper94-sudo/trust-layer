@@ -202,19 +202,19 @@ The journey through the veil begins now.
 - Chapter 13: The Nephilim Bloodlines Continue
 - Chapter 13B: Constantine and the Council of Nicaea
 
-**Part Five: The Second Reset**
-- Chapter 14: Tartaria and the Mud Flood
-- Chapter 15: The Petrified Giants
-- Chapter 16: The Orphan Trains and Memory Erasure
-- Chapter 17: The 200 Craters and the 200 Fallen
+**Part Five: The Great Substitution**
+- Chapter 14: The Name That Was Erased
+- Chapter 15: The Name That Was Stolen
+- Chapter 15B: The Continuous Deception
+- Chapter 16: The King James Corruption
+- Chapter 17: Religious Inversions - The Cross and Hell
+- Chapter 18: The Substituted Calendar
 
-**Part Six: The Great Substitution**
-- Chapter 18: The Name That Was Erased
-- Chapter 19: The Name That Was Stolen
-- Chapter 19B: The Continuous Deception
-- Chapter 20: The King James Corruption
-- Chapter 21: Religious Inversions - The Cross and Hell
-- Chapter 22: The Substituted Calendar
+**Part Six: The Second Reset**
+- Chapter 19: Tartaria and the Mud Flood
+- Chapter 20: The Petrified Giants
+- Chapter 21: The Orphan Trains and Memory Erasure
+- Chapter 22: The 200 Craters and the 200 Fallen
 
 **Part Seven: The Systems of Control**
 - Chapter 23: Modern Medicine - The Band-Aid Economy
@@ -1055,11 +1055,11 @@ This was the institutionalization of the deception. Everything that followed - t
 
 ---
 
-# PART FIVE: THE SECOND RESET
+# PART SIX: THE SECOND RESET
 
 ---
 
-# CHAPTER 14: TARTARIA AND THE MUD FLOOD
+# CHAPTER 19: TARTARIA AND THE MUD FLOOD
 
 Take a walk through any old city - Boston, St. Louis, San Francisco. Look at the buildings from the 1800s. Notice how many of them have windows at street level that are half-buried. Notice how many have "basements" that clearly were once ground floors.
 
@@ -1111,7 +1111,7 @@ The aware reader doesn't need to accept any particular theory about what happene
 
 ---
 
-# CHAPTER 15: THE PETRIFIED GIANTS
+# CHAPTER 20: THE PETRIFIED GIANTS
 
 Devils Tower in Wyoming is presented as a geological formation. An igneous rock formation created by cooling magma. Studied by geologists. Explained by science.
 
@@ -1133,7 +1133,7 @@ The point isn't to claim certainty. The point is to notice the pattern. To ask t
 
 ---
 
-# CHAPTER 16: THE ORPHAN TRAINS AND MEMORY ERASURE
+# CHAPTER 21: THE ORPHAN TRAINS AND MEMORY ERASURE
 
 Between 1854 and 1929, an estimated 200,000 children were transported from East Coast cities to the Midwest and beyond on what were called "orphan trains."
 
@@ -1163,7 +1163,7 @@ The orphan trains may have been exactly this - on a civilizational scale.
 
 ---
 
-# CHAPTER 17: THE 200 CRATERS AND THE 200 FALLEN
+# CHAPTER 22: THE 200 CRATERS AND THE 200 FALLEN
 
 Remember the 200 Watchers from the beginning? Here's where the thread connects back.
 
@@ -1183,11 +1183,11 @@ The patterns in the book match too many other pieces of evidence to be dismissed
 
 ---
 
-# PART SIX: THE GREAT SUBSTITUTION
+# PART FIVE: THE GREAT SUBSTITUTION
 
 ---
 
-# CHAPTER 18: THE NAME THAT WAS ERASED
+# CHAPTER 14: THE NAME THAT WAS ERASED
 
 "LORD" appears over 6,800 times in the King James Old Testament. But it's not a translation - it's a replacement. The Hebrew text says "Yahuah" (or YHWH). The translators chose to substitute the name with a title.
 
@@ -1241,7 +1241,7 @@ But "Jesus" is a Romanized Greek translation that passed through Latin before re
 
 ---
 
-# CHAPTER 19: THE NAME THAT WAS STOLEN
+# CHAPTER 15: THE NAME THAT WAS STOLEN
 
 *[Key references: 70-Year Gap, Manuscript Transmission, Josephus → Concordance]*
 
@@ -1328,7 +1328,7 @@ The truth can withstand questioning. Only lies require unexamined acceptance.
 
 ---
 
-# CHAPTER 19B: THE CONTINUOUS DECEPTION
+# CHAPTER 15B: THE CONTINUOUS DECEPTION
 
 *[Key references: Complete Timeline, Prophetic Positioning → Concordance]*
 
@@ -1487,7 +1487,7 @@ The thread runs from Eden to now. But you are not trapped in it. You can see it.
 
 ---
 
-# CHAPTER 20: THE KING JAMES CORRUPTION
+# CHAPTER 16: THE KING JAMES CORRUPTION
 
 The King James Bible is a beautiful work of literature. Its cadences are unmatched. Its phrases have shaped the English language. Its influence on Western culture is immeasurable.
 
@@ -1505,7 +1505,7 @@ This isn't about abandoning the Bible. It's about reading with awareness. Unders
 
 ---
 
-# CHAPTER 21: RELIGIOUS INVERSIONS - WHAT POPULAR RELIGION CLAIMS WITHOUT SCRIPTURE
+# CHAPTER 17: RELIGIOUS INVERSIONS - WHAT POPULAR RELIGION CLAIMS WITHOUT SCRIPTURE
 
 Let's talk about "god." The word "god." People say "god" and "lord" all the time. Those have nothing to do with the spiritual connection to the Creator.
 
@@ -1876,7 +1876,7 @@ Restore the words. Restore the frequency. Restore the connection.
 
 ---
 
-# CHAPTER 22: THE SUBSTITUTED CALENDAR
+# CHAPTER 18: THE SUBSTITUTED CALENDAR
 
 The biblical year began in Abib (Aviv) - the month of spring, new growth, renewal. Shemoth (Exodus) 12:2: "This month shall be unto you the beginning of months: it shall be the first month of the year to you."
 
