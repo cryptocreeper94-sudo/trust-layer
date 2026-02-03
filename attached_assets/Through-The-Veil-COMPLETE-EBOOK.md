@@ -3110,7 +3110,9 @@ No mirrors to obsess over their appearance. No clocks to obsess over their sched
 
 The numbered year only mattered for one thing: official government documents. And those documents were controlled by the same corrupt powers we've been discussing. At some point, someone looked at artifacts and *decided* what year they came from. Someone *assigned* dates to history. And whoever controls the assignment controls the narrative.
 
-The manipulation could have happened at any point. Before the BC/AD split was even conceived. During the transition itself. In the medieval period when records were scarce. In the early 1800s when the orphan trains and unexplained resets suggest something profound was erased from collective memory. The deception doesn't require a single moment of decision - it could be layered, generational, adjusted whenever necessary.
+The manipulation was intentional. Calculated. Not a casual "let's call this year 1600" - but a deliberate "we need three hundred years to disappear for this to work in our favor."
+
+It could have happened at any point. Before the BC/AD split was even conceived. During the transition itself. In the medieval period when records were scarce. In the early 1800s when the orphan trains and unexplained resets suggest something profound was erased from collective memory. The deception could be layered across generations, adjusted whenever necessary - but always with purpose. Always to obscure the pattern.
 
 This is the nature of the Hydra. Cut off one head of deception and another appears. You cannot trust the ancient timeline. You cannot trust the medieval records. You cannot trust the modern dating either. There is no reason for them to be honest about any of it - especially when honest numbers would expose the pattern.
 
