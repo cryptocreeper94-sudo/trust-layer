@@ -3194,7 +3194,9 @@ export default function VeilReader() {
   const [isPaused, setIsPaused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
-  const [useAIVoice, setUseAIVoice] = useState(true); // Use ElevenLabs TTS
+  // Detect mobile devices - use browser speech by default on mobile (more reliable)
+  const isMobile = typeof window !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const [useAIVoice, setUseAIVoice] = useState(!isMobile); // Browser speech on mobile, AI on desktop
   const [autoAdvance, setAutoAdvance] = useState(true); // Auto-advance ON by default
   const [audioQueue, setAudioQueue] = useState<string[]>([]);
   const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
