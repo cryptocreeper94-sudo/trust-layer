@@ -189,6 +189,16 @@ const volume1Chapters: Chapter[] = [
     title: "Introduction",
     content: (
       <>
+        <div className="bg-slate-800/30 p-6 rounded-lg border border-cyan-500/30 mb-12">
+          <p className="italic text-slate-300">"For I testify unto every man that heareth the words of the prophecy of this book, If any man shall add unto these things, Elohim shall add unto him the plagues that are written in this book: And if any man shall take away from the words of the book of this prophecy, Elohim shall take away his part out of the cepher of life, and out of the holy city, and from the things which are written in this book."</p>
+          <p className="text-cyan-400 font-medium mt-4">— Chizayon (Revelation) 22:18-19</p>
+          <div className="border-t border-slate-600 mt-6 pt-6">
+            <p className="text-white">This is the rule I follow.</p>
+            <p className="text-slate-300 mt-2">I do not add to Scripture. I do not take away. I illuminate what is already there - what has been hidden in plain sight.</p>
+            <p className="text-cyan-400 mt-2">I invite you to see for yourself.</p>
+          </div>
+        </div>
+
         <h3 className="text-xl font-bold text-cyan-400 mb-4">Foreword</h3>
         <p className="text-xl italic text-slate-300 mb-6">You weren't supposed to read this book.</p>
         <p>Not because it contains state secrets or classified information. But because the system that has operated for millennia depends on you never connecting the dots. Never seeing the patterns. Never asking why the same inversions appear across every institution, every religion, every era of history.</p>
@@ -199,24 +209,15 @@ const volume1Chapters: Chapter[] = [
         <p>The signal has been broadcasting since the beginning. The receiver can be restored. The veil can be lifted.</p>
         <p className="text-cyan-400 mt-6">What happens next is between you and the Most High.</p>
 
-        <h3 className="text-xl font-bold text-cyan-400 mt-12 mb-4">Preface: A Word About This Work</h3>
-        <p>This book is based on research. On world events. On historical precedent. On patterns that keep appearing across cultures, centuries, and continents.</p>
-        <p>I am not making definitive claims.</p>
-        <p>I am presenting what is understood. What is known. What is circulating. What has been published and documented - some accepted, some suppressed, some dismissed without examination.</p>
-        <p>Think of truth as a massive puzzle - not one tidy box with matching pieces, but fragments from a hundred different puzzles scattered across time and geography. You can shake that box for a billion years hoping it assembles itself. Or you can start connecting pieces that fit, building a tapestry that reveals a picture.</p>
-        <p>That's what this book offers: a connect-the-dots model. If a piece fits the pattern, it's probably part of the larger picture. If it doesn't, set it aside. The goal isn't to convince you of anything. The goal is to show you how I connected the dots - and invite you to verify, challenge, or expand on what I've found.</p>
-        <p>You have free will. You have discernment. It is up to you to seek your own truth.</p>
-        <p>What follows is my version - a guide, an outline, examples drawn from years of study and personal revelation. I present it not as doctrine but as a starting point for your own journey.</p>
-        <p>People are conditioned not to pay attention. Not to care. Not to question. That conditioning serves the system, not the Creator. I believe the Father is separating His flock - those with ears to hear and eyes to see - from those who choose to remain asleep. This book is for those who are waking up.</p>
-        <p className="text-cyan-400 mt-4">Take what resonates. Question what doesn't. Verify everything you can. And above all - seek the Creator directly. No book, no teacher, no institution can replace that relationship.</p>
-
         <h3 className="text-xl font-bold text-cyan-400 mt-12 mb-4">Author's Note</h3>
         <p>For years, regret and self-loathing were constant companions. Alcohol became a way to cope - a way to numb something that couldn't be named. It nearly won.</p>
         <p>But the Father, through the Son, intervened. Sobriety brought clarity. Clarity brought revelation. And revelation demanded to be shared.</p>
         <p>What you hold in your hands (or on your screen) is the product of that clarity. Years of research. Countless hours down rabbit holes that led somewhere - and some that led nowhere. The painful process of unlearning what was taught and relearning what was hidden.</p>
+        <p>This book is based on research, world events, historical precedent, and patterns that keep appearing across cultures, centuries, and continents. Think of truth as a massive puzzle - fragments from a hundred different puzzles scattered across time and geography. You can shake that box hoping it assembles itself. Or you can start connecting pieces that fit, building a tapestry that reveals a picture.</p>
+        <p>That's what this book offers: a connect-the-dots model. <strong>I am not making definitive claims.</strong> I present what I've found - not as doctrine, but as a starting point for your own journey. The goal isn't to convince you of anything. The goal is to show you how I connected the dots - and invite you to verify, challenge, or expand on what I've found.</p>
         <p>This book is written in the voice of a documentary narrator - authoritative but conversational. It's designed to be read or listened to aloud. If you're hearing this as an audiobook, know that every word was chosen with your ears in mind.</p>
-        <p>I don't claim to have all the answers. I claim to have found patterns that deserve attention. Questions that deserve asking. Connections that the system works very hard to keep hidden.</p>
-        <p>Read critically. Verify independently. Trust your discernment - especially once you start restoring the receiver that was designed to perceive truth.</p>
+        <p>People are conditioned not to pay attention. Not to care. Not to question. That conditioning serves the system, not the Creator. I believe the Father is separating His flock - those with ears to hear and eyes to see - from those who choose to remain asleep. This book is for those who are waking up.</p>
+        <p className="text-cyan-400 mt-4">Take what resonates. Question what doesn't. Verify everything you can. And above all - seek the Creator directly. No book, no teacher, no institution can replace that relationship.</p>
         <p className="text-cyan-400 mt-4">The journey through the veil begins now.</p>
         <p className="text-right italic text-slate-400 mt-6">Jason Andrews<br/>January 2026</p>
       </>
