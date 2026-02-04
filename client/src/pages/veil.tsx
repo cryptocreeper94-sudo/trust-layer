@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Download, FileText, Smartphone, ChevronDown, ChevronRight } from "lucide-react";
+import { BookOpen, Download, FileText, Smartphone, ChevronDown, ChevronRight, Headphones, ExternalLink } from "lucide-react";
 
 interface TocSection {
   title: string;
@@ -284,9 +284,74 @@ export default function Veil() {
         </motion.div>
 
         <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mb-12"
+        >
+          <GlassCard className="p-8 sm:p-10 max-w-3xl mx-auto" glow>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 flex-shrink-0">
+                <Headphones className="w-6 h-6 text-purple-400" />
+              </div>
+              <div>
+                <h4 className="text-xl font-bold text-white">Listen to the Book</h4>
+                <p className="text-sm text-slate-400">Free Audio with Adobe Reader</p>
+              </div>
+            </div>
+            
+            <p className="text-slate-300 mb-6">
+              Want to listen instead of read? Adobe Acrobat Reader has a built-in "Read Out Loud" feature that will read the entire book to you - completely free, works offline, no internet needed.
+            </p>
+            
+            <div className="bg-slate-900/50 rounded-lg p-6 mb-6 border border-white/5">
+              <h5 className="text-white font-semibold mb-4">How to Listen:</h5>
+              <ol className="space-y-3 text-slate-300 text-sm">
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-xs font-bold">1</span>
+                  <span>Download the PDF above and open it in Adobe Acrobat Reader</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-xs font-bold">2</span>
+                  <span>Go to <strong className="text-white">View → Read Out Loud → Activate Read Out Loud</strong></span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-xs font-bold">3</span>
+                  <span>Click <strong className="text-white">"Read This Page Only"</strong> or <strong className="text-white">"Read To End Of Document"</strong></span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-xs font-bold">4</span>
+                  <span>Sit back and listen - works offline on any device!</span>
+                </li>
+              </ol>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4">
+              <a 
+                href="https://get.adobe.com/reader/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex-1"
+              >
+                <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 py-5 text-base">
+                  <ExternalLink className="w-5 h-5 mr-2" />
+                  Get Adobe Reader (Free)
+                </Button>
+              </a>
+              <a href="/api/veil/pdf" download="Through-The-Veil.pdf" className="flex-1">
+                <Button variant="outline" className="w-full border-purple-500/30 text-purple-400 hover:bg-purple-500/10 py-5 text-base">
+                  <Download className="w-5 h-5 mr-2" />
+                  Download PDF
+                </Button>
+              </a>
+            </div>
+          </GlassCard>
+        </motion.div>
+
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
           className="text-center mt-12"
         >
           <p className="text-slate-500 text-sm">
