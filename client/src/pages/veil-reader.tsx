@@ -3194,7 +3194,7 @@ export default function VeilReader() {
   const [isPaused, setIsPaused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
-  const [useAIVoice, setUseAIVoice] = useState(false); // Browser speech by default (AI TTS not available on Replit)
+  const [useAIVoice, setUseAIVoice] = useState(true); // Use ElevenLabs TTS
   const [autoAdvance, setAutoAdvance] = useState(true); // Auto-advance ON by default
   const [audioQueue, setAudioQueue] = useState<string[]>([]);
   const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
@@ -3544,8 +3544,8 @@ export default function VeilReader() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout for OpenAI
       
-      // Use OpenAI Nova for ebook TTS (reliable, high quality)
-      const response = await fetch('/api/assistant/speak', {
+      // Use ElevenLabs for ebook TTS (Rachel voice - calm narrator)
+      const response = await fetch('/api/voice/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: chunkText }),
@@ -3564,7 +3564,7 @@ export default function VeilReader() {
         return;
       }
       
-      console.log('Using OpenAI Nova TTS');
+      console.log('Using ElevenLabs TTS');
       const audioBlob = await response.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
       
