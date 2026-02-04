@@ -500,6 +500,22 @@ The truth is simpler and stranger: angels fell. They taught forbidden things. Th
 
 When you see the pattern across every culture, it's not evidence against the biblical account. It's evidence FOR it. The whole world witnessed the same events. The whole world remembers.
 
+**The Unlikely Witnesses**
+
+But here's something worth noting: even researchers working from completely different frameworks end up testifying to the same truth when pressed on the evidence.
+
+Sitchin, despite his Planet X extraterrestrial theories, came to a striking conclusion in his book "Divine Encounters" (1995). After spending decades comparing Yahweh to every supposed Anunnaki deity - Enki, Enlil, Adad, Ninurta - he wrote in the final chapter ("God, The Extraterrestrial") that Yahweh is "from Olam to Olam" - lord not of one world but of all worlds. His conclusion: "All else - the celestial planetary gods, Nibiru, the Anunnaki Elohim, Mankind, nations, kings - all are His manifestations and His instruments." Even after a lifetime of trying to prove these were all extraterrestrials, he couldn't escape the evidence: Yahweh precedes and transcends them all. The Anunnaki took worship and gave nothing. Only Yahweh kept His covenants.
+
+I don't endorse Sitchin's framework. I don't believe in Planet X or infinite outer space or extraterrestrial visitors. I believe in the firmament as Scripture describes it. But when a man spends his life studying every ancient text from every culture and ends up testifying that only the Elohim of Abraham, Isaac, and Jacob delivered on His promises - that's a witness worth noting.
+
+Similarly, consider Wernher von Braun - the father of NASA rocket science, the architect of the Saturn V that supposedly took men to the moon. What verse did he choose for his tombstone? Tehilliym (Psalm) 19:1: *"The heavens declare the glory of Elohim; and the **firmament** sheweth his handywork."*
+
+Firmament. The man who built the rockets chose the word that describes the solid dome over the earth. Not "endless space." Not "infinite universe." Firmament.
+
+These unlikely witnesses - from completely different fields and frameworks - end up pointing to the same truth when the evidence forces them to the conclusion.
+
+We don't add or take away from Scripture (Revelation 22:18-19). We simply note that even the opposition, when honest, ends up testifying to what Scripture already said.
+
 ---
 
 # CHAPTER 4: THE NEPHILIM AND THE CORRUPTION

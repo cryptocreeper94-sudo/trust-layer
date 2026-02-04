@@ -21,6 +21,17 @@ type ChangelogEntry = {
 
 const EBOOK_CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.8.0",
+    date: "February 4, 2026",
+    updates: [
+      { type: 'added', description: 'NEW SECTION: The Unlikely Witnesses - Sitchin and von Braun as testimonies from unexpected sources', chapterId: 'v1-forbidden-knowledge', volumeIndex: 0 },
+      { type: 'added', description: 'Sitchin\'s "Divine Encounters" (1995) conclusion: after decades of research, Yahweh is "from Olam to Olam" - transcends all other claimed deities', chapterId: 'v1-forbidden-knowledge', volumeIndex: 0 },
+      { type: 'added', description: 'Wernher von Braun\'s tombstone: Psalm 19:1 with "firmament" - the NASA rocket scientist chose the word describing the dome', chapterId: 'v1-forbidden-knowledge', volumeIndex: 0 },
+      { type: 'added', description: 'Clear disclaimer: we don\'t endorse their frameworks, just note their testimonies when evidence forced conclusions', chapterId: 'v1-forbidden-knowledge', volumeIndex: 0 },
+      { type: 'added', description: 'Reference to Revelation 22:18-19 - we don\'t add or take away from Scripture', chapterId: 'v1-forbidden-knowledge', volumeIndex: 0 },
+    ]
+  },
+  {
     version: "1.7.0",
     date: "February 4, 2026",
     updates: [
@@ -92,7 +103,7 @@ const EBOOK_CHANGELOG: ChangelogEntry[] = [
   }
 ];
 
-const CURRENT_VERSION = "1.7.0";
+const CURRENT_VERSION = "1.8.0";
 const STORAGE_KEY = 'veil-reader-user-data';
 
 import veilIlluminatiEye from "@/assets/images/veil-illuminati-eye.jpg";
