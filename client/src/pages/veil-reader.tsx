@@ -3712,11 +3712,24 @@ export default function VeilReader() {
       window.speechSynthesis.cancel();
     }
 
-    const text = extractText(chapter.content);
+    // Get current chapter
+    const currentVol = volumes[currentVolume];
+    const currentChap = currentVol.chapters[currentChapter];
+    
+    let text = extractText(currentChap.content);
+    
+    // Clean text for TTS - remove emojis and excessive punctuation
+    text = text
+      .replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, '') // all emojis
+      .replace(/[!]{2,}/g, '!')                // multiple ! to single
+      .replace(/[:;]/g, ',')                   // colons/semicolons to comma pause
+      .replace(/[*_~`#]/g, '')                 // markdown formatting
+      .replace(/\s+/g, ' ')                    // normalize whitespace
+      .trim();
     
     // Check if text was extracted successfully
     if (!text || text.trim().length === 0) {
-      console.error('No text extracted from chapter:', chapter.title);
+      console.error('No text extracted from chapter:', currentChap.title);
       setIsLoading(false);
       return;
     }
@@ -3724,7 +3737,7 @@ export default function VeilReader() {
     // Track which chapter we're playing
     lastPlayedChapterRef.current = chapterId;
     
-    console.log('Playing chapter:', chapter.title, 'Text length:', text.length);
+    console.log('Playing chapter:', currentChap.title, 'Text length:', text.length)
     
     // On mobile, unlock audio context with a silent sound first (required for iOS/Android)
     try {
