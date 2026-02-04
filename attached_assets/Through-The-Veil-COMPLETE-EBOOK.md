@@ -528,6 +528,36 @@ These unlikely witnesses - from completely different fields and frameworks - end
 
 I don't add or take away from Scripture (Revelation 22:18-19). I simply note that even the opposition, when honest, ends up testifying to what Scripture already said.
 
+**The Planet X Deception**
+
+While we're on Sitchin, we need to address "Planet X" and "Nibiru" - because they're not the same thing, and the conflation is deliberate.
+
+**"Planet X" - Legitimate Astronomy (1902-1930s):**
+Astronomer Percival Lowell proposed "Planet X" in 1902 to explain supposed irregularities in Neptune's orbit. The "X" meant unknown - a mathematical variable. Clyde Tombaugh searched for it and found Pluto in 1930. But Pluto was too small to cause the irregularities Lowell predicted. In 1992, when Voyager 2 provided accurate measurements of Neptune's mass, astronomers realized the "irregularities" were measurement errors. The original Planet X hypothesis was closed. It was never found because it didn't exist.
+
+**"Nibiru" - What It Actually Means:**
+In the actual Sumerian and Akkadian texts, "Nibiru" means "crossing" or "point of transition" - originally referring to river crossings or ferry-boats. In astronomical contexts, it refers to **Jupiter** (primarily), **Mercury** (occasionally), or the **pole star** - celestial reference points for navigation. The Enuma Elish describes Nibiru as "holder of the crossing of heavens and earth" - a marker, not a hidden planet. According to Dr. Michael Heiser's analysis of every cuneiform source: "Nibiru is NEVER identified as a planet beyond Pluto."
+
+**The Conflation:**
+In 1976, Sitchin took these two unrelated concepts - a defunct astronomical hypothesis and a Sumerian navigation term - and welded them together. He claimed "Nibiru" was a 12th planet on a 3,600-year orbit inhabited by the Anunnaki who created humanity as slave labor. Every Sumerologist rejects this translation. It's fabricated.
+
+But here's why it matters: Sitchin gave the public a narrative that sounds ancient and scientific simultaneously. "Planet X" was already in public consciousness from the Pluto search. "Nibiru" sounds mysterious and Sumerian. Combine them and you have something that feels credible - even though the two concepts have nothing in common.
+
+**The Endless Promise:**
+For almost a century now, the public has been fed an endless stream of "almost discoveries." UFOs. Extraterrestrials. Ancient astronauts. Paranormal investigations. Alien disclosure "coming soon." Television shows dedicated to mysteries that never resolve. Each decade brings new predictions, new dates, new promises of revelation.
+
+And nothing ever comes of it.
+
+Every Planet X/Nibiru prediction has failed - 2003, 2012, 2017, 2018. The date simply gets pushed forward. The mystery remains perpetually unsolved. The disclosure is always imminent but never arrives.
+
+This is the pattern of a testing narrative. Throw out ideas. See what resonates. Keep people looking to the sky for physical phenomena - planets, spacecraft, visitors from other worlds - instead of recognizing spiritual realities for what they are.
+
+If the firmament model is correct, there's nowhere for such a planet to come from. There is no infinite outer space for rogue planets to traverse. Scripture does describe fire coming from the heavens - but it comes from above the firmament, from the throne of the Most High. Divine judgment. Not a cosmic accident.
+
+The Planet X narrative prepares people to interpret supernatural events as natural phenomena. When something appears in the sky, the conditioned will say "the aliens are back" instead of recognizing what they're actually seeing.
+
+It's a very old joke. And the punchline is on those who believe it.
+
 ---
 
 # CHAPTER 4: THE NEPHILIM AND THE CORRUPTION

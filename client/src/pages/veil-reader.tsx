@@ -21,6 +21,17 @@ type ChangelogEntry = {
 
 const EBOOK_CHANGELOG: ChangelogEntry[] = [
   {
+    version: "2.1.0",
+    date: "February 4, 2026",
+    updates: [
+      { type: 'added', description: 'NEW SECTION: The Planet X Deception - exposing the deliberate conflation of two unrelated concepts', chapterId: 'v1-forbidden-knowledge', volumeIndex: 0 },
+      { type: 'added', description: 'Planet X history: legitimate 1902-1930s astronomy (Lowell, Tombaugh, Pluto) vs Sitchin\'s 1976 fabrication', chapterId: 'v1-forbidden-knowledge', volumeIndex: 0 },
+      { type: 'added', description: 'What Nibiru actually means: "crossing point" - refers to Jupiter, Mercury, pole star - NOT a hidden planet', chapterId: 'v1-forbidden-knowledge', volumeIndex: 0 },
+      { type: 'added', description: 'The endless promise: almost 100 years of "almost discoveries" that never produce anything', chapterId: 'v1-forbidden-knowledge', volumeIndex: 0 },
+      { type: 'added', description: 'Testing narratives: preparing people to interpret supernatural events as natural phenomena', chapterId: 'v1-forbidden-knowledge', volumeIndex: 0 },
+    ]
+  },
+  {
     version: "2.0.0",
     date: "February 4, 2026",
     updates: [
@@ -123,7 +134,7 @@ const EBOOK_CHANGELOG: ChangelogEntry[] = [
   }
 ];
 
-const CURRENT_VERSION = "2.0.0";
+const CURRENT_VERSION = "2.1.0";
 const STORAGE_KEY = 'veil-reader-user-data';
 
 import veilIlluminatiEye from "@/assets/images/veil-illuminati-eye.jpg";
