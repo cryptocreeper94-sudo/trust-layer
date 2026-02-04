@@ -342,6 +342,8 @@ export default function VeilReader() {
         setIsPlaying(false);
         setIsPaused(false);
         URL.revokeObjectURL(url);
+        // Auto-advance to next chapter when audio ends
+        handleNextChapterAuto();
       };
       audioRef.current.onerror = () => {
         setIsPlaying(false);
@@ -374,6 +376,8 @@ export default function VeilReader() {
     utterance.onend = () => {
       setIsPlaying(false);
       setIsPaused(false);
+      // Auto-advance to next chapter when audio ends
+      handleNextChapterAuto();
     };
     utterance.onerror = () => {
       setIsPlaying(false);
@@ -381,6 +385,33 @@ export default function VeilReader() {
     
     window.speechSynthesis.speak(utterance);
     setIsPlaying(true);
+  };
+
+  // Auto-advance to next chapter (called when audio ends)
+  const handleNextChapterAuto = () => {
+    if (volumes.length === 0) return;
+    
+    const volume = volumes[currentVolume];
+    if (!volume) return;
+    
+    // Check if there's a next chapter in this volume
+    if (currentChapter < volume.chapters.length - 1) {
+      const nextChapter = currentChapter + 1;
+      setCurrentChapter(nextChapter);
+      // Clear last played ref so next play starts fresh on new chapter
+      lastPlayedChapterRef.current = null;
+      window.scrollTo(0, 0);
+    } 
+    // Check if there's a next volume
+    else if (currentVolume < volumes.length - 1) {
+      const nextVolume = currentVolume + 1;
+      setCurrentVolume(nextVolume);
+      setCurrentChapter(0);
+      // Clear last played ref so next play starts fresh on new chapter
+      lastPlayedChapterRef.current = null;
+      window.scrollTo(0, 0);
+    }
+    // End of book - just stop
   };
 
   const handlePlay = async () => {
