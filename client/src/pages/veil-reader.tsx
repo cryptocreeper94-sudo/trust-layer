@@ -356,9 +356,13 @@ export default function VeilReader() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }, [currentVolume, currentChapter, hasSeenUpdates, volumes]);
 
+  // TTS state for error display
+  const [ttsError, setTtsError] = useState<string | null>(null);
+
   // TTS functions
   const playWithAIVoice = async (text: string) => {
     setIsLoading(true);
+    setTtsError(null);
     try {
       const response = await fetch('/api/voice/tts', {
         method: 'POST',
@@ -367,10 +371,15 @@ export default function VeilReader() {
       });
 
       if (!response.ok) {
-        throw new Error('AI voice failed');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'AI voice failed');
       }
 
       const blob = await response.blob();
+      if (blob.size < 100) {
+        throw new Error('Empty audio response');
+      }
+      
       const url = URL.createObjectURL(blob);
       
       audioRef.current = new Audio(url);
@@ -378,7 +387,6 @@ export default function VeilReader() {
         setIsPlaying(false);
         setIsPaused(false);
         URL.revokeObjectURL(url);
-        // Auto-advance to next chapter when audio ends
         handleNextChapterAuto();
       };
       audioRef.current.onerror = (e) => {
@@ -386,39 +394,82 @@ export default function VeilReader() {
         setIsPlaying(false);
         setIsLoading(false);
         URL.revokeObjectURL(url);
-        // Fall back to browser speech on audio error
         setUseAIVoice(false);
-        if (speechSupported) {
-          playWithBrowserSpeech(text);
-        }
+        // Try browser speech as fallback
+        tryBrowserSpeech(text);
       };
       
       try {
         await audioRef.current.play();
         setIsPlaying(true);
         setIsLoading(false);
-      } catch (playErr) {
+      } catch (playErr: any) {
         console.error('Audio play() failed:', playErr);
         URL.revokeObjectURL(url);
-        // Fall back to browser speech if play() fails (autoplay policy)
         setUseAIVoice(false);
         setIsLoading(false);
-        if (speechSupported) {
-          playWithBrowserSpeech(text);
-        }
+        // Try browser speech as fallback
+        tryBrowserSpeech(text);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('AI voice error:', err);
       setUseAIVoice(false);
       setIsLoading(false);
-      
-      if (speechSupported) {
-        playWithBrowserSpeech(text);
-      }
+      // Try browser speech as fallback
+      tryBrowserSpeech(text);
+    }
+  };
+
+  const tryBrowserSpeech = (text: string) => {
+    if ('speechSynthesis' in window) {
+      playWithBrowserSpeech(text);
+    } else {
+      setTtsError('Voice playback not available. Try downloading the PDF and using Adobe Reader.');
     }
   };
 
   const playWithBrowserSpeech = (text: string) => {
+    try {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+      
+      utterance.onstart = () => {
+        setIsPlaying(true);
+        setTtsError(null);
+      };
+      
+      utterance.onend = () => {
+        setIsPlaying(false);
+        setIsPaused(false);
+        handleNextChapterAuto();
+      };
+      
+      utterance.onerror = (e) => {
+        console.error('Browser speech error:', e);
+        setIsPlaying(false);
+        setTtsError('Browser voice failed. Try the PDF with Adobe Reader instead.');
+      };
+      
+      window.speechSynthesis.speak(utterance);
+      setIsPlaying(true);
+    } catch (e) {
+      console.error('Browser speech exception:', e);
+      setTtsError('Voice not available. Download PDF and use Adobe Reader.');
+    }
+  };
+
+  // Clear error after 5 seconds
+  useEffect(() => {
+    if (ttsError) {
+      const timer = setTimeout(() => setTtsError(null), 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [ttsError]);
+
+  // Legacy function for compatibility
+  const playWithBrowserSpeechLegacy = (text: string) => {
     if (!speechSupported) return;
     
     window.speechSynthesis.cancel();
@@ -429,7 +480,6 @@ export default function VeilReader() {
     utterance.onend = () => {
       setIsPlaying(false);
       setIsPaused(false);
-      // Auto-advance to next chapter when audio ends
       handleNextChapterAuto();
     };
     utterance.onerror = () => {
@@ -707,6 +757,13 @@ export default function VeilReader() {
                   <p className="text-slate-400 mb-2">Our primary reader is Nova from OpenAI. If she fails, you'll hear your browser's built-in voice.</p>
                   <p className="text-cyan-400">For the best offline experience, download the PDF and use Adobe Reader's "Read Out Loud" feature.</p>
                 </div>
+                {/* TTS Error Message */}
+                {ttsError && (
+                  <div className="absolute top-full right-0 mt-2 w-72 p-3 bg-red-900/90 border border-red-500/50 rounded-lg shadow-xl z-50 text-xs">
+                    <p className="text-red-200">{ttsError}</p>
+                    <a href="/veil" className="text-cyan-400 underline mt-1 block">Go to download page</a>
+                  </div>
+                )}
               </div>
             )}
             
