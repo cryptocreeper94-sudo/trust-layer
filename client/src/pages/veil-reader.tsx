@@ -345,15 +345,32 @@ export default function VeilReader() {
         // Auto-advance to next chapter when audio ends
         handleNextChapterAuto();
       };
-      audioRef.current.onerror = () => {
+      audioRef.current.onerror = (e) => {
+        console.error('Audio playback error:', e);
         setIsPlaying(false);
         setIsLoading(false);
         URL.revokeObjectURL(url);
+        // Fall back to browser speech on audio error
+        setUseAIVoice(false);
+        if (speechSupported) {
+          playWithBrowserSpeech(text);
+        }
       };
       
-      await audioRef.current.play();
-      setIsPlaying(true);
-      setIsLoading(false);
+      try {
+        await audioRef.current.play();
+        setIsPlaying(true);
+        setIsLoading(false);
+      } catch (playErr) {
+        console.error('Audio play() failed:', playErr);
+        URL.revokeObjectURL(url);
+        // Fall back to browser speech if play() fails (autoplay policy)
+        setUseAIVoice(false);
+        setIsLoading(false);
+        if (speechSupported) {
+          playWithBrowserSpeech(text);
+        }
+      }
     } catch (err) {
       console.error('AI voice error:', err);
       setUseAIVoice(false);
