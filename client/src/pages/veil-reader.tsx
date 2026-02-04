@@ -4,9 +4,58 @@ import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { 
   BookOpen, ChevronLeft, ChevronRight, Menu, X, Home, 
-  BookMarked, ScrollText, FileText, ExternalLink, Volume2, VolumeX, Pause, Play, Download, ArrowLeft
+  BookMarked, ScrollText, FileText, ExternalLink, Volume2, VolumeX, Pause, Play, Download, ArrowLeft, Sparkles, Bell
 } from "lucide-react";
 import { Link } from "wouter";
+
+type ChangelogEntry = {
+  version: string;
+  date: string;
+  updates: {
+    type: 'added' | 'updated' | 'removed';
+    description: string;
+    chapterId?: string;
+    volumeIndex?: number;
+  }[];
+};
+
+const EBOOK_CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "1.3.0",
+    date: "February 4, 2026",
+    updates: [
+      { type: 'added', description: 'Millennial Reign connection to fig tree prophecy - "this generation shall not pass" referred to Torah covering the earth during the Millennium', chapterId: 'v2-the-1948-deception', volumeIndex: 1 },
+      { type: 'updated', description: 'Replaced "Israel" with "Yashar\'el" throughout - proper Hebrew name vs. Egyptian inversion (Is-Ra-El)', chapterId: 'v1-note-on-name', volumeIndex: 0 },
+      { type: 'added', description: 'Fig tree parable scripture (Mattithyahu 24:32-34) with Cepher interpretation - fig tree = Torah, not geopolitical nation', chapterId: 'v2-the-1948-deception', volumeIndex: 1 },
+    ]
+  },
+  {
+    version: "1.2.0",
+    date: "February 3, 2026",
+    updates: [
+      { type: 'added', description: 'Hebrew as "tongue of creation" with Jubilees scripture backing (12:25-26, 3:28)', chapterId: 'v1-the-cepher', volumeIndex: 0 },
+      { type: 'updated', description: 'Title changed to "Through The Veil: The Greatest Story Ever Stole?"', chapterId: 'v1-introduction', volumeIndex: 0 },
+    ]
+  },
+  {
+    version: "1.1.0", 
+    date: "February 1, 2026",
+    updates: [
+      { type: 'added', description: 'TTS e-reader with ElevenLabs integration', chapterId: 'v1-introduction', volumeIndex: 0 },
+      { type: 'added', description: 'PDF and EPUB download functionality', chapterId: 'v1-introduction', volumeIndex: 0 },
+    ]
+  },
+  {
+    version: "1.0.0",
+    date: "January 28, 2026",
+    updates: [
+      { type: 'added', description: 'Initial release - complete ebook with all chapters', chapterId: 'v1-introduction', volumeIndex: 0 },
+    ]
+  }
+];
+
+const CURRENT_VERSION = EBOOK_CHANGELOG[0].version;
+const STORAGE_KEY = 'veil-reader-user-data';
 
 import veilIlluminatiEye from "@/assets/images/veil-illuminati-eye.jpg";
 import veilSecretSociety from "@/assets/images/veil-secret-society.jpg";
@@ -3069,11 +3118,59 @@ export default function VeilReader() {
   const [audioQueue, setAudioQueue] = useState<string[]>([]);
   const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
   const [returnLocation, setReturnLocation] = useState<{ volume: number; chapter: number } | null>(null);
+  const [showWhatsNew, setShowWhatsNew] = useState(false);
+  const [newUpdatesSinceVisit, setNewUpdatesSinceVisit] = useState<ChangelogEntry[]>([]);
+  const [hasSeenUpdates, setHasSeenUpdates] = useState(false);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioQueueRef = useRef<string[]>([]);
   const currentChunkRef = useRef(0);
   const lastPlayedChapterRef = useRef<string | null>(null);
+  
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      const userData = stored ? JSON.parse(stored) : null;
+      const lastVersion = userData?.lastVersion || '0.0.0';
+      const lastVisit = userData?.lastVisit || null;
+      
+      const newEntries = EBOOK_CHANGELOG.filter(entry => {
+        const entryParts = entry.version.split('.').map(Number);
+        const lastParts = lastVersion.split('.').map(Number);
+        for (let i = 0; i < 3; i++) {
+          if (entryParts[i] > lastParts[i]) return true;
+          if (entryParts[i] < lastParts[i]) return false;
+        }
+        return false;
+      });
+      
+      if (newEntries.length > 0) {
+        setNewUpdatesSinceVisit(newEntries);
+        setShowWhatsNew(true);
+      }
+      
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        lastVersion: CURRENT_VERSION,
+        lastVisit: new Date().toISOString(),
+        previousVisit: lastVisit
+      }));
+    } catch (e) {
+      console.error('Error loading user data:', e);
+    }
+  }, []);
+  
+  const navigateToUpdate = (volumeIndex: number | undefined, chapterId: string | undefined) => {
+    if (volumeIndex !== undefined && chapterId) {
+      const vol = volumes[volumeIndex];
+      const chapterIndex = vol.chapters.findIndex(c => c.id === chapterId);
+      if (chapterIndex >= 0) {
+        setCurrentVolume(volumeIndex);
+        setCurrentChapter(chapterIndex);
+      }
+    }
+    setShowWhatsNew(false);
+    setHasSeenUpdates(true);
+  };
   
   // Reset audio state when chapter or volume changes
   useEffect(() => {
@@ -3681,6 +3778,18 @@ export default function VeilReader() {
             <span className="text-xs text-slate-500 hidden md:block">
               {currentGlobalIndex + 1} of {totalChapters}
             </span>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => setShowWhatsNew(true)}
+              className="text-slate-300 hover:text-white relative"
+              title="What's New"
+            >
+              <Sparkles className="w-4 h-4" />
+              {newUpdatesSinceVisit.length > 0 && !hasSeenUpdates && (
+                <span className="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
+              )}
+            </Button>
             <Link href="/veil">
               <Button variant="ghost" size="sm" className="text-slate-300 hover:text-white">
                 <Home className="w-4 h-4" />
@@ -3689,6 +3798,106 @@ export default function VeilReader() {
           </div>
         </div>
       </div>
+      
+      <AnimatePresence>
+        {showWhatsNew && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/70 z-[60]"
+              onClick={() => { setShowWhatsNew(false); setHasSeenUpdates(true); }}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[70] w-full max-w-lg max-h-[80vh] overflow-auto"
+            >
+              <GlassCard glow className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-cyan-400" />
+                    <h2 className="text-xl font-bold text-white">What's New</h2>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => { setShowWhatsNew(false); setHasSeenUpdates(true); }}
+                    className="text-slate-400 hover:text-white"
+                  >
+                    <X className="w-5 h-5" />
+                  </Button>
+                </div>
+                
+                <p className="text-sm text-slate-400 mb-4">
+                  Current Version: <span className="text-cyan-400 font-mono">{CURRENT_VERSION}</span>
+                </p>
+                
+                {newUpdatesSinceVisit.length > 0 ? (
+                  <div className="mb-4 p-3 rounded-lg bg-cyan-500/10 border border-cyan-500/30">
+                    <p className="text-sm text-cyan-300 font-medium mb-2">
+                      Since your last visit:
+                    </p>
+                    <p className="text-xs text-slate-400">
+                      {newUpdatesSinceVisit.reduce((acc, e) => acc + e.updates.length, 0)} updates across {newUpdatesSinceVisit.length} version{newUpdatesSinceVisit.length > 1 ? 's' : ''}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="mb-4 p-3 rounded-lg bg-slate-800/50 border border-slate-700">
+                    <p className="text-sm text-slate-300">You're up to date!</p>
+                  </div>
+                )}
+                
+                <div className="space-y-4 max-h-[40vh] overflow-y-auto pr-2">
+                  {EBOOK_CHANGELOG.map((entry, i) => (
+                    <div key={entry.version} className={`${i < newUpdatesSinceVisit.length ? 'bg-cyan-500/5 border border-cyan-500/20' : 'bg-slate-800/30 border border-slate-700/50'} rounded-lg p-3`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-mono text-sm text-white">v{entry.version}</span>
+                        <span className="text-xs text-slate-500">{entry.date}</span>
+                      </div>
+                      <ul className="space-y-2">
+                        {entry.updates.map((update, j) => (
+                          <li key={j} className="text-sm">
+                            <button
+                              onClick={() => navigateToUpdate(update.volumeIndex, update.chapterId)}
+                              className="text-left w-full hover:bg-slate-700/30 p-2 rounded transition-colors group"
+                            >
+                              <span className={`inline-block px-1.5 py-0.5 rounded text-xs font-medium mr-2 ${
+                                update.type === 'added' ? 'bg-green-500/20 text-green-400' :
+                                update.type === 'updated' ? 'bg-blue-500/20 text-blue-400' :
+                                'bg-red-500/20 text-red-400'
+                              }`}>
+                                {update.type.toUpperCase()}
+                              </span>
+                              <span className="text-slate-300 group-hover:text-white">{update.description}</span>
+                              {update.chapterId && (
+                                <span className="ml-2 text-cyan-400 text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                                  → Go to section
+                                </span>
+                              )}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="mt-4 pt-4 border-t border-slate-700">
+                  <Button
+                    onClick={() => { setShowWhatsNew(false); setHasSeenUpdates(true); }}
+                    className="w-full bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500"
+                  >
+                    Continue Reading
+                  </Button>
+                </div>
+              </GlassCard>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {sidebarOpen && (
