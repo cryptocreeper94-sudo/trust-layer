@@ -3194,9 +3194,7 @@ export default function VeilReader() {
   const [isPaused, setIsPaused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
-  // Detect mobile devices - use browser speech by default on mobile (more reliable)
-  const isMobile = typeof window !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  const [useAIVoice, setUseAIVoice] = useState(!isMobile); // Browser speech on mobile, AI on desktop
+  const [useAIVoice, setUseAIVoice] = useState(true); // Always try AI voice first
   const [autoAdvance, setAutoAdvance] = useState(true); // Auto-advance ON by default
   const [audioQueue, setAudioQueue] = useState<string[]>([]);
   const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
@@ -3546,18 +3544,34 @@ export default function VeilReader() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout for mobile
       
-      // Use ElevenLabs for ebook TTS (Rachel voice - calm narrator)
-      const response = await fetch('/api/voice/tts', {
+      // Try ElevenLabs first, then OpenAI Nova as fallback
+      let response = await fetch('/api/voice/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: chunkText }),
         signal: controller.signal,
       });
       
+      // If ElevenLabs fails, try OpenAI Nova voice
+      if (!response.ok) {
+        console.log('ElevenLabs failed, trying OpenAI Nova...');
+        const novaController = new AbortController();
+        const novaTimeout = setTimeout(() => novaController.abort(), 30000);
+        
+        response = await fetch('/api/assistant/speak', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: chunkText }),
+          signal: novaController.signal,
+        });
+        
+        clearTimeout(novaTimeout);
+      }
+      
       clearTimeout(timeoutId);
       
       if (!response.ok) {
-        console.log('TTS API returned error:', response.status);
+        console.log('Both TTS APIs failed:', response.status);
         setIsLoading(false);
         setIsPlaying(false);
         setUseAIVoice(false);
@@ -3566,7 +3580,7 @@ export default function VeilReader() {
         return;
       }
       
-      console.log('Using ElevenLabs TTS');
+      console.log('Using AI TTS voice');
       const audioBlob = await response.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
       
