@@ -840,6 +840,30 @@ Children's programming featured a villain named **Gargamel** and his cat **Azrae
 
 # CHAPTER 9: THE DIVINE LANGUAGE LOST
 
+## The Sacred Tongue Given from Above
+
+Before diving into what was lost, understand what was given.
+
+Hebrew wasn't a language that evolved from grunts and gestures over millennia. According to scripture, it was handed down directly from the Creator - a perfect communication system designed for dialogue between heaven and earth.
+
+The Book of Yovheliym (Jubilees) is explicit on this point. When Yahuah called Avraham out of Ur of the Chaldees, after the confusion of tongues at Babel had scattered the nations, the Creator restored to him the original language:
+
+> *"And YAHUAH ELOHIYM said: 'Open his mouth and his ears, that he may hear and speak with his mouth, with the language which has been revealed'; for it had ceased from the mouths of all the children of men from the day of the overthrow. And I opened his mouth, and his ears and his lips, and I began to speak with him in Ivriyt (Hebrew) in the tongue of the creation."*
+> **— Yovheliym (Jubilees) 12:25-26**
+
+Read that again: *"the tongue of the creation."* Hebrew wasn't just another language that happened to survive. It was THE language - the one used to speak the universe into existence. "Let there be light" - *yehi owr* - was spoken in Hebrew. The Creator's words that shaped reality itself were Hebrew words.
+
+The Book of Yovheliym further records that before the Fall, all creatures in the Garden spoke with "one lip and one tongue" - Hebrew. When Adam and Chavah (Eve) were expelled, the animals lost their speech:
+
+> *"And on that day was closed the mouth of all beasts, and of cattle, and of birds, and of whatever walketh, and of whatever moveth, so that they could no longer speak: for they had all spoken one with another with one lip and with one tongue."*
+> **— Yovheliym (Jubilees) 3:28**
+
+This wasn't merely a convenient communication tool. This was a frequency, a vibrational technology if you will, designed to resonate with both the human spirit and the divine realm. When spoken correctly, Hebrew words didn't just convey meaning - they transmitted power. They connected the speaker to the Creator in ways other languages could not.
+
+Consider what this implies: if the enemy wanted to sever humanity's connection to the Most High, corrupting or erasing this language would be essential. And that is precisely what happened.
+
+## The Pictographic Foundation
+
 Paleo-Hebrew was pictographic. Each letter was an image. Each image told a story. The language itself contained meaning beyond the mere sounds.
 
 Aleph wasn't just "A" - it was the ox, the leader, the strength. Bet wasn't just "B" - it was the house, the dwelling, the family.

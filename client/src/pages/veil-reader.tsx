@@ -675,12 +675,21 @@ const volume1Chapters: Chapter[] = [
     title: "The Divine Language Lost",
     content: (
       <>
-        <p>Before Babel, there was one language. Scripture is clear on this. But what was that language?</p>
-        <p>Hebrew tradition holds that the original language was Hebrew - the language in which the Creator spoke the universe into existence. "Let there be light" - yehi owr - creative words that shaped reality itself.</p>
-        <p>This wasn't just communication. It was power. Words that could create. Words that could command. Words that connected directly to the frequency of the Creator.</p>
-        <p>When the languages were confused at Babel, something was lost. Not just the ability to communicate with each other, but the ability to communicate with creation itself. The direct connection between word and reality was severed for most of humanity.</p>
-        <p>Hebrew remained - preserved through Abraham's line, maintained through the Israelites, protected even through exile and persecution. But even Hebrew has been affected by time and translation.</p>
-        <p>The original language - the divine language that spoke reality into existence - is part of what was lost. Restoring it may be part of what's coming back.</p>
+        <h3 className="text-xl font-bold text-cyan-400 mb-4">The Sacred Tongue Given from Above</h3>
+        <p>Hebrew wasn't a language that evolved from grunts and gestures over millennia. According to scripture, it was handed down directly from the Creator - a perfect communication system designed for dialogue between heaven and earth.</p>
+        <p>The Book of Yovheliym (Jubilees) is explicit on this point. When Yahuah called Avraham out of Ur of the Chaldees, after the confusion of tongues at Babel had scattered the nations, the Creator restored to him the original language:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
+          <p className="italic">"And YAHUAH ELOHIYM said: 'Open his mouth and his ears, that he may hear and speak with his mouth, with the language which has been revealed'; for it had ceased from the mouths of all the children of men from the day of the overthrow. And I opened his mouth, and his ears and his lips, and I began to speak with him in Ivriyt (Hebrew) in the tongue of the creation."</p>
+          <p className="text-cyan-300 font-medium mt-2">Yovheliym (Jubilees) 12:25-26</p>
+        </div>
+        <p>Read that again: <strong className="text-cyan-400">"the tongue of the creation."</strong> Hebrew wasn't just another language that happened to survive. It was THE language - the one used to speak the universe into existence. "Let there be light" - <em>yehi owr</em> - was spoken in Hebrew.</p>
+        <p>The Book of Yovheliym further records that before the Fall, all creatures in the Garden spoke with "one lip and one tongue" - Hebrew:</p>
+        <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-cyan-500">
+          <p className="italic">"And on that day was closed the mouth of all beasts, and of cattle, and of birds, and of whatever walketh, and of whatever moveth, so that they could no longer speak: for they had all spoken one with another with one lip and with one tongue."</p>
+          <p className="text-cyan-300 font-medium mt-2">Yovheliym (Jubilees) 3:28</p>
+        </div>
+        <p>This wasn't merely a convenient communication tool. This was a frequency, a vibrational technology designed to resonate with both the human spirit and the divine realm. When spoken correctly, Hebrew words didn't just convey meaning - they transmitted power.</p>
+        <p>Consider what this implies: if the enemy wanted to sever humanity's connection to the Most High, corrupting or erasing this language would be essential. And that is precisely what happened.</p>
       </>
     )
   },
