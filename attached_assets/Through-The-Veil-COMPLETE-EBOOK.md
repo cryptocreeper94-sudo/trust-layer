@@ -999,7 +999,7 @@ At the top of this hierarchy is the adversary - Satan, the dragon, the serpent o
 
 The adversary's strategy has always been imitation. Create a counterfeit of everything the Creator established.
 
-The council of the fallen mirrors the divine council of heaven. The bloodline families mirror the tribes of Israel. The Beast system mirrors the Kingdom of Yahuah.
+The council of the fallen mirrors the divine council of heaven. The bloodline families mirror the tribes of Yashar'el. The Beast system mirrors the Kingdom of Yahuah.
 
 ## Astana: The Council Made Visible
 
@@ -1037,7 +1037,7 @@ Genesis 6:4 says the Nephilim were on the earth "in those days - and also afterw
 
 How? Some speculate through Noah's daughters-in-law. Some through later incursions of fallen beings. The mechanism is debated. The pattern is documented.
 
-Giants appear after the flood. Goliath. The Anakim. The Rephaim. They're in the land when Israel arrives. They occupy the very territories that Yahuah instructs Israel to purge.
+Giants appear after the flood. Goliath. The Anakim. The Rephaim. They're in the land when Yashar'el arrives. They occupy the very territories that Yahuah instructs Yashar'el to purge.
 
 The order to destroy entire populations makes more sense in this context. It wasn't genocide for conquest. It was purging corruption that threatened to spread again.
 
@@ -1101,7 +1101,7 @@ What the Council established:
 
 The concept of three co-equal, co-eternal persons in one Godhead - Father, Son, and Holy Spirit as three distinct persons sharing one essence - was formalized at Nicaea.
 
-**This doctrine does not appear in Hebrew scripture.** The Shema declares: "Hear, O Israel: Yahuah our Elohim, Yahuah is echad (one)." (Deuteronomy 6:4)
+**This doctrine does not appear in Hebrew scripture.** The Shema declares: "Hear, O Yashar'el: Yahuah our Elohiym, Yahuah is echad (one)." (Devariym 6:4)
 
 Echad means unified one - not a trinity of persons. The Trinity doctrine was a compromise designed to absorb existing pagan trinities into the new religion:
 
@@ -1604,7 +1604,9 @@ Their only exit is through the ultimate destruction. When everything ends, their
 
 It's not random cosmic game-playing. It's desperate prisoners trying to bring down the prison walls - and everyone inside with them.
 
-The 1948 Israel situation fits this pattern. Manufacturing the conditions to "fulfill prophecy" on their timeline, not Yahuah's. Forcing the hand. Accelerating the end. Because for the fallen, the end is the only door out.
+The 1948 situation fits this pattern. Manufacturing the conditions to "fulfill prophecy" on their timeline, not Yahuah's. Forcing the hand. Accelerating the end. Because for the fallen, the end is the only door out.
+
+(Note on terminology: The modern word "Israel" is itself an inversion. Read left-to-right in English, you get Is-Ra-El: Isis, Ra, El - Egyptian deities placed before the title of the Almighty. Hebrew reads right-to-left. The original name **Yashar'el** means "upright with El." The very name has been inverted. Throughout this book, I use **Yashar'el** for the biblical people and covenant, reserving the modern term for the 1948 political entity.)
 
 Understanding this motivation changes everything. The chaos isn't pointless - it's strategic. From the perspective of entities who have nothing to lose and eternity to escape, destruction is the goal, not the consequence.
 
@@ -1901,7 +1903,7 @@ The biblical feasts - Pesach (Passover), Matzot (Unleavened Bread), Bikkuriym (F
 
 They were replaced with:
 
-**Christmas**: Winter solstice celebration. Saturnalia. Sol Invictus birthday. December 25th was the birthday of the sun god, not the Messiah. Shepherds don't watch flocks in fields in December - it's winter in Israel. Wrapped in Nativity story but timed to pagan festivals.
+**Christmas**: Winter solstice celebration. Saturnalia. Sol Invictus birthday. December 25th was the birthday of the sun god, not the Messiah. Shepherds don't watch flocks in fields in December - it's winter in the land. Wrapped in Nativity story but timed to pagan festivals.
 
 **Easter**: Ishtar. Eostre. Fertility goddess celebration with eggs and rabbits - symbols of fertility, not resurrection. Timed to eclipse the true Passover.
 
@@ -3493,7 +3495,7 @@ Each step brought the world further from faith and closer to the beast system:
 - **1859** - Darwin's Origin of Species. The Creator removed from creation.
 - **1913** - The Federal Reserve. Financial control consolidated.
 - **1945** - The United Nations. Global governance structures emerge.
-- **1948** - Modern Israel established. The geopolitical piece placed.
+- **1948** - The political state established (not to be confused with biblical Yashar'el). The geopolitical piece placed.
 - **2020** - Global pandemic. Unprecedented control measures normalized.
 
 ---
@@ -3604,35 +3606,51 @@ Someone can spend their entire life in sincere devotion within this layer and ne
 
 ## Layer Five: The 1948 Deception
 
-Here's where it gets particularly layered: the modern state of Israel.
+Here's where it gets particularly layered: the modern political state.
 
-In 1948, Israel was established as a nation. For many Christians, this "proved" biblical prophecy was being fulfilled. They point to the parable of the fig tree in Mattithyahu (Matthew) 24:
+In 1948, the political entity was established. For many Christians, this "proved" biblical prophecy was being fulfilled. They point to the parable of the fig tree in Mattithyahu (Matthew) 24:
 
 > *"Now learn a parable of the fig tree; When his branch is yet tender, and putteth forth leaves, ye know that summer is nigh: So likewise ye, when ye shall see all these things, know that it is near, even at the doors. Amein I say unto you, This generation shall not pass, till all these things be fulfilled."*
 > **— Mattithyahu (Matthew) 24:32-34**
 
-The mainstream interpretation claims the "fig tree" represents Israel, and when Israel became a nation again in 1948, the prophetic countdown began. "This generation shall not pass" - so the final generation started in 1948. Many calculate a biblical generation as 70-120 years, creating urgency about the return of Mashiach.
+The mainstream interpretation claims the "fig tree" represents Yashar'el (Israel), and when the political state was established again in 1948, the prophetic countdown began. "This generation shall not pass" - so the final generation started in 1948. Many calculate a biblical generation as 70-120 years, creating urgency about the return of Mashiach.
 
 **But here's what the Cepher reveals about the fig tree:**
 
-Throughout scripture, the fig tree does not represent the nation of Israel. The **olive tree** represents Yashar'el (Jeremiah 11:16). The **vine** represents Mashiach (John 15:1-5). But the **fig tree**, according to scriptural analysis, represents the **Torah** - the commandments of Yahuah.
+Throughout scripture, the fig tree does not represent a geopolitical nation. The **olive tree** represents Yashar'el (Yermiyahu 11:16). The **vine** represents Mashiach (Yahuchanon 15:1-5). But the **fig tree**, according to scriptural analysis, represents the **Torah** - the commandments of Yahuah.
 
-Mishlei (Proverbs) 27:18 says: *"Whoso keeps the fig tree shall eat the fruit thereof."* What else do we keep? The commandments. The Torah. The fig tree represents Torah-keeping, not a geopolitical nation.
+Mishlei (Proverbs) 27:18 says: *"Whoso keeps the fig tree shall eat the fruit thereof."* What else do we keep? The commandments. The Torah. The fig tree represents Torah-keeping, not a political state.
 
-So what was Yahusha actually saying? When you see the Torah putting forth leaves again - when the ancient paths are being restored, when people return to the original commandments - know that the end is near. This isn't about a political state. It's about spiritual restoration.
+So what was Yahusha actually saying? When you see the Torah putting forth leaves again - when the ancient paths are being restored, when people return to the original commandments - know that it is near, even at the doors.
 
-**The generation question:**
+**The Millennial Reign Connection:**
 
-People debate what "generation" means - is it 40 years? 70 years? 120 years? But if the fig tree isn't about 1948, the calculation is meaningless. The generation that sees the Torah restored - the commandments being observed again - that's the generation that won't pass away.
+This is where it gets profound. If the fig tree represents Torah, then "this generation shall not pass" refers to the generation that sees Torah covering the earth - when knowledge of Yahuah spreads across the face of the earth like the waters of the sea.
+
+When did that happen? 
+
+During the Millennial Reign.
+
+If the Millennial Reign already occurred (roughly 500-1500 AD by our corrupted calendar), then THAT was the generation that saw Torah restored. THAT was when the commandments were being observed across the earth. THAT generation didn't pass until all things were fulfilled - including the Second Coming.
+
+The "generation question" - 40 years? 70 years? 120 years from 1948? - becomes completely irrelevant. Those calculations are based on the assumption that the fig tree represents modern political statehood. But if the fig tree represents Torah, and the Torah already covered the earth during the Millennium, then the prophecy was already fulfilled.
+
+This explains everything:
+- Why there are impossible buildings with technologies we can't replicate
+- Why world maps show civilizations we have no memory of  
+- Why the orphan trains and reset narratives make sense
+- Why the calendar was manipulated to hide 300-500 years
+
+The generation that saw Torah covering the earth like water ALREADY witnessed all things fulfilled. We're not waiting for it - it already happened. The 1948 narrative is the inversion, designed to keep people looking forward to something that already occurred behind them.
 
 But consider the deeper layers:
 
-**Who are the true Israelites?** The twelve tribes were scattered across the earth. They mixed with nations. They lost their identity. They became "lost tribes." Being an Israelite isn't about geography - it's about covenant relationship with Yahuah. It's about having the mark of the Father in the forehead (the functioning pineal, the spiritual connection) rather than the mark of the beast in the heart and hand.
+**Who is true Yashar'el?** The twelve tribes were scattered across the earth. They mixed with nations. They lost their identity. They became "lost tribes." Being Yashar'el isn't about geography - it's about covenant relationship with Yahuah. It's about having the mark of the Father in the forehead (the functioning pineal, the spiritual connection) rather than the mark of the beast in the heart and hand.
 
-**Who lives in modern Israel?** The people who call themselves Jews today are largely descendants of the Khazars - a nation that converted to Judaism in the 8th century AD for political reasons. They have no genetic connection to the biblical Israelites. The "return" in 1948 was not the biblical regathering - it was a political project (Zionism) that appropriated biblical language for secular ends.
+**Who lives in the modern political state?** The people who call themselves Jews today are largely descendants of the Khazars - a nation that converted to Judaism in the 8th century AD for political reasons. They have no genetic connection to biblical Yashar'el. The "return" in 1948 was not the biblical regathering - it was a political project (Zionism) that appropriated biblical language for secular ends.
 
 **The redirect**: By pointing to 1948 and saying "see, prophecy fulfilled!" - the system accomplishes multiple things:
-- It convinces Christians to support political Israel unconditionally
+- It convinces Christians to support the political state unconditionally
 - It creates the expectation of future events (rapture, tribulation, millennium) that may have already occurred
 - It keeps people looking forward instead of recognizing where they actually are on the timeline
 - It ties biblical interpretation to a modern nation-state, which can be manipulated for political purposes
@@ -4086,7 +4104,7 @@ Or they know something the public doesn't.
 
 ## The Depth of the Inversion
 
-Consider just one word: **Israel**.
+Consider just one word: **Yashar'el** - or as most know it, "Israel."
 
 The modern pronunciation reads left-to-right in English phonetics: Is-Ra-El.
 
@@ -4578,18 +4596,18 @@ Seek, and you will find.
 - Layer 2: "Conspiracy theory" containment (CIA-created stigma)
 - Layer 3: Controlled opposition (managed awakening)
 - Layer 4: Institutional religion redirect (truth mixed with substitution)
-- Layer 5: The 1948 deception (modern Israel as prophetic fulfillment)
+- Layer 5: The 1948 deception (political state as prophetic fulfillment)
 - Layer 6: The Antichrist redirect (watching for future man instead of present spirit)
 - Layer 7: Hidden in plain sight (predictive programming, symbolic disclosure)
 - Navigation: Only possible through direct connection to signal, restored receiver
 - See also: Chapter 36
 
 **The 1948 Deception**
-- Event: Modern state of Israel established
+- Event: Political state established
 - Misinterpretation: Christians claimed prophecy fulfilled, end times countdown triggered
 - Reality: True Israelites are twelve tribes scattered across earth, identified by covenant relationship, not geography
 - Khazar connection: Many modern Jews are descendants of Khazars who converted in 8th century AD
-- Function of redirect: Keeps people supporting political Israel, expecting future events that may have already occurred
+- Function of redirect: Keeps people supporting the political state, expecting future events that may have already occurred
 - True mark: Mark of Father is in forehead (pineal/spiritual connection), not nationality
 - See also: Chapter 36
 
@@ -4604,7 +4622,7 @@ Seek, and you will find.
 - Not geographical: Twelve tribes scattered across earth, mixed with nations, lost identity
 - Identification: Covenant relationship with Yahuah, not DNA or citizenship
 - The Mark: Father's mark in forehead (functioning pineal, spiritual connection)
-- Modern confusion: Political Israel ≠ Biblical Israel; Zionism appropriated biblical language
+- Modern confusion: Political state ≠ Biblical Yashar'el; Zionism appropriated biblical language
 - See also: Chapter 36
 
 **Tartaria**
@@ -4692,7 +4710,7 @@ Seek, and you will find.
 - The beginning of diverse deceptions
 
 **The Egyptian Captivity**
-- The testing of Israel
+- The testing of Yashar'el
 - The preservation of the Name through Moses
 - The Exodus as documentation
 
@@ -4908,7 +4926,7 @@ The following claims made in this book can be verified through publicly availabl
 **Book of Enoch - Dead Sea Scrolls Preservation**
 - Discovery: Qumran caves, 1947-1956
 - Source: Multiple Aramaic fragments catalogued as 4QEn (4Q201-4Q212)
-- Verification: Israel Antiquities Authority, multiple academic publications
+- Verification: Antiquities Authority, multiple academic publications
 
 **MKUltra Mind Control Program (Context for System patterns)**
 - Document: Senate Church Committee hearings, 1975
@@ -4977,7 +4995,7 @@ The following claims made in this book can be verified through publicly availabl
 - Source: Comparative textual analysis, multiple academic publications
 - Example: The Great Isaiah Scroll (1QIsaa) shows variants from Masoretic Text
 - Significance: Demonstrates textual changes occurred during transmission
-- Verification: Israel Museum, Jerusalem (scroll on display)
+- Verification: Jerusalem Museum (scroll on display)
 
 **Rockefeller Family Origin Documentation (Chapter 11)**
 - Source: Rockefeller Archive Center; WikiTree genealogy records; Ancestry.com surname research
@@ -5047,7 +5065,7 @@ The following claims made in this book can be verified through publicly availabl
 **Book of Enoch - Dead Sea Scrolls Fragments (Chapters 2-4)**
 - Source: Qumran Cave 4 discoveries
 - Catalog numbers: 4Q201, 4Q202, 4Q204-4Q212 (Aramaic Enoch fragments)
-- Verification: Israel Antiquities Authority; Leon Levy Dead Sea Scrolls Digital Library
+- Verification: Antiquities Authority; Leon Levy Dead Sea Scrolls Digital Library
 - Academic: Milik, J.T. (1976). "The Books of Enoch: Aramaic Fragments of Qumran Cave 4." Oxford University Press
 - Significance: Confirms pre-Christian Jewish acceptance of Enochian literature
 
@@ -5177,7 +5195,7 @@ Even the King James Bible acknowledges this name, writing in Psalm 68:4: "Sing u
 
 ### The Name of the Son: Yahusha
 
-The Messiah's name is restored as **Yahusha** (יהושע), not "Jesus." This name is identical to the Hebrew name of the son of Nun who led Israel into the Promised Land - the one English Bibles call "Joshua."
+The Messiah's name is restored as **Yahusha** (יהושע), not "Jesus." This name is identical to the Hebrew name of the son of Nun who led Yashar'el into the Promised Land - the one English Bibles call "Joshua."
 
 The name Yahusha is constructed from two Hebrew words: **Yahuah** (יהוה) and **yasha** (ישע), meaning "to be open, wide, free; to save, rescue, preserve, help, deliver." Thus, the name literally means "Yahuah saves" or "Yahuah is salvation."
 
