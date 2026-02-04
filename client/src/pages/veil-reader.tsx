@@ -3549,28 +3549,36 @@ export default function VeilReader() {
       setIsPaused(false);
       setIsLoading(false);
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('TTS chunk error:', error);
       // Immediately fall back to browser speech on any error
       setIsLoading(false);
-      setIsPlaying(false);
       setUseAIVoice(false);
+      
       const fullText = audioQueueRef.current.join(' ');
-      if (fullText) {
-        playWithBrowserSpeech(fullText);
+      if (fullText && fullText.trim().length > 0) {
+        console.log('Falling back to browser speech...');
+        // Small delay to ensure state is cleared
+        setTimeout(() => {
+          playWithBrowserSpeech(fullText);
+        }, 100);
+      } else {
+        setIsPlaying(false);
       }
     }
   };
 
   const playWithAIVoice = async (text: string) => {
-    // Safety timeout - if audio doesn't start within 15 seconds, force reset
+    // Safety timeout - if audio doesn't start within 12 seconds, force fallback to browser
     const safetyTimeout = setTimeout(() => {
-      console.log('Safety timeout triggered - resetting audio state');
+      console.log('Safety timeout triggered - falling back to browser speech');
       setIsLoading(false);
-      setIsPlaying(false);
       setUseAIVoice(false);
-      playWithBrowserSpeech(text);
-    }, 15000);
+      // Use setTimeout to ensure state is cleared before starting browser speech
+      setTimeout(() => {
+        playWithBrowserSpeech(text);
+      }, 100);
+    }, 12000);
     
     try {
       setIsLoading(true);
