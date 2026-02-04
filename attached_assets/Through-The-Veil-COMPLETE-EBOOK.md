@@ -1189,6 +1189,18 @@ Dismisses the Creator entirely. Evolution replaces creation. The heliocentric mo
 **Head Six: New Age and Eastern Mysticism**
 "You are god." Reincarnation instead of resurrection. All paths lead to the same destination. No sin, no need for redemption, no specific truth - just "your truth." Sounds inclusive and loving. Leads nowhere. The serpent's original lie repackaged: "Ye shall be as gods."
 
+This head wears many faces:
+- **Buddhism** - No personal Creator. Enlightenment through self-effort. Escape the cycle of rebirth by your own discipline. Save yourself.
+- **Hinduism** - Millions of gods. Reincarnation. Karma. The teaching that your inner self (Atman) is divine. "You are Brahman."
+- **Shinto** (Japan) - Ancestor worship. Nature spirits called kami. No absolute Creator. No concept of sin as Scripture defines it.
+- **Taoism** - The Way is an impersonal force. Balance of opposites. No personal relationship with a Creator who speaks and acts.
+- **Scientology** - "You are an immortal spiritual being (thetan) who forgot your true nature." Pay enough money, climb the levels, recover your godhood. Serpent lie with a corporate structure.
+- **New Age Movement** - Western repackaging of all the above. Crystals, chakras, meditation, astrology, "manifesting reality," "the universe" instead of Yahuah. Same lies, different packaging for people who find Eastern robes uncomfortable.
+
+The common thread through all of them: No singular Creator to answer to. Self-salvation through enlightenment or works. Reincarnation giving infinite chances (no urgency of judgment). All paths are valid (no narrow way). You are already divine or can become divine through effort.
+
+The same whisper from Eden: "Ye shall not surely die... ye shall be as gods."
+
 **Head Seven: The Mystery Schools and Secret Societies**
 Freemasonry. Kabbalah. Rosicrucians. The occult traditions passed down through the ages. These aren't deceived - they're the deceivers. They KNOW the truth and deliberately invert it. They worship the light-bearer. They preserve the ancient knowledge for the "enlightened" few. The coordinators behind the curtain.
 
