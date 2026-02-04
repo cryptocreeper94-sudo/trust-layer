@@ -21,6 +21,13 @@ type ChangelogEntry = {
 
 const EBOOK_CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.4.0",
+    date: "February 4, 2026",
+    updates: [
+      { type: 'added', description: 'Trinity vs Oneness confusion explained - how believers were taught Oneness theology with Trinity vocabulary, creating deliberate fog', chapterId: 'v1-roman-hijacking', volumeIndex: 0 },
+    ]
+  },
+  {
     version: "1.3.0",
     date: "February 4, 2026",
     updates: [
@@ -54,7 +61,7 @@ const EBOOK_CHANGELOG: ChangelogEntry[] = [
   }
 ];
 
-const CURRENT_VERSION = EBOOK_CHANGELOG[0].version;
+const CURRENT_VERSION = "1.4.0";
 const STORAGE_KEY = 'veil-reader-user-data';
 
 import veilIlluminatiEye from "@/assets/images/veil-illuminati-eye.jpg";
