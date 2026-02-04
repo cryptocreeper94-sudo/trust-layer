@@ -50,11 +50,9 @@ Scripture quotations are from the Cepher translation, using restored Hebrew name
 
 ---
 
-I do not add to Scripture. I do not take away from it. I simply illuminate what is already written - what has been obscured by layers of translation, substitution, and institutional control.
+This is the rule I follow.
 
-Every claim in this book can be tested against the text. Every pattern can be verified. Every question can be taken directly to the Father.
-
-The goal is not to replace your understanding with mine, but to encourage you to look again at what you thought you knew - and see what has been hiding in plain sight.
+I do not add to Scripture. I do not take away. I illuminate what is already there - what has been hidden in plain sight.
 
 ---
 
