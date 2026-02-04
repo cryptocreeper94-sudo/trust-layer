@@ -3544,34 +3544,19 @@ export default function VeilReader() {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout for mobile
       
-      // Try ElevenLabs first, then OpenAI Nova as fallback
-      let response = await fetch('/api/voice/tts', {
+      // Use ElevenLabs TTS
+      console.log('Calling ElevenLabs TTS API...');
+      const response = await fetch('/api/voice/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: chunkText }),
         signal: controller.signal,
       });
       
-      // If ElevenLabs fails, try OpenAI Nova voice
-      if (!response.ok) {
-        console.log('ElevenLabs failed, trying OpenAI Nova...');
-        const novaController = new AbortController();
-        const novaTimeout = setTimeout(() => novaController.abort(), 30000);
-        
-        response = await fetch('/api/assistant/speak', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: chunkText }),
-          signal: novaController.signal,
-        });
-        
-        clearTimeout(novaTimeout);
-      }
-      
       clearTimeout(timeoutId);
       
       if (!response.ok) {
-        console.log('Both TTS APIs failed:', response.status);
+        console.error('TTS API failed with status:', response.status);
         setIsLoading(false);
         setIsPlaying(false);
         setUseAIVoice(false);
@@ -3580,7 +3565,7 @@ export default function VeilReader() {
         return;
       }
       
-      console.log('Using AI TTS voice');
+      console.log('ElevenLabs TTS response received, creating audio...');
       const audioBlob = await response.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
       
@@ -3617,16 +3602,27 @@ export default function VeilReader() {
         }
       };
       
-      audio.onerror = () => {
-        console.log('Audio playback error, falling back to browser voice');
+      audio.onerror = (e) => {
+        console.error('Audio playback error:', e);
         setIsLoading(false);
         setIsPlaying(false);
         setUseAIVoice(false);
         playWithBrowserSpeech(audioQueueRef.current.join(' '));
       };
       
-      await audio.play();
-      setIsPlaying(true);
+      // Try to play - handle mobile autoplay restrictions
+      try {
+        await audio.play();
+        setIsPlaying(true);
+      } catch (playError: any) {
+        console.error('Audio play failed:', playError.name, playError.message);
+        // On mobile, autoplay might be blocked - fall back to browser speech
+        setIsLoading(false);
+        setIsPlaying(false);
+        setUseAIVoice(false);
+        playWithBrowserSpeech(audioQueueRef.current.join(' '));
+        return;
+      }
       setIsPaused(false);
       setIsLoading(false);
       
