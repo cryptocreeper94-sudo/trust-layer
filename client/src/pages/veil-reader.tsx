@@ -623,7 +623,7 @@ export default function VeilReader() {
           <div className="flex items-center gap-2">
             {/* TTS Controls */}
             {(speechSupported || useAIVoice) && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 group relative">
                 {isLoading ? (
                   <Button 
                     size="sm" 
@@ -649,7 +649,7 @@ export default function VeilReader() {
                     onClick={handlePlay}
                     className="bg-cyan-500 hover:bg-cyan-600 text-white rounded-full w-8 h-8"
                     data-testid="button-play-chapter"
-                    title={isPaused ? 'Resume' : 'Play'}
+                    title={isPaused ? 'Resume' : (useAIVoice ? 'Play (Nova AI Voice)' : 'Play (Browser Voice)')}
                   >
                     <Play className="w-4 h-4" />
                   </Button>
@@ -665,6 +665,12 @@ export default function VeilReader() {
                     <VolumeX className="w-4 h-4" />
                   </Button>
                 )}
+                {/* Voice info tooltip */}
+                <div className="absolute top-full right-0 mt-2 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 text-xs">
+                  <p className="text-white font-medium mb-1">Nova AI Voice</p>
+                  <p className="text-slate-400 mb-2">Our primary reader is Nova from OpenAI. If she fails, you'll hear your browser's built-in voice.</p>
+                  <p className="text-cyan-400">For the best offline experience, download the PDF and use Adobe Reader's "Read Out Loud" feature.</p>
+                </div>
               </div>
             )}
             

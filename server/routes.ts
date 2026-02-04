@@ -14870,50 +14870,44 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  // ElevenLabs Text-to-Speech for book reader (public - no auth required for reading)
+  // OpenAI Text-to-Speech for book reader (public - no auth required for reading)
+  // Uses Nova voice - natural female narrator
   app.post("/api/voice/tts", async (req: any, res) => {
     try {
-      const { text, voiceId } = req.body;
+      const { text } = req.body;
       
       if (!text || text.length === 0) {
         return res.status(400).json({ error: "Text is required" });
       }
       
-      // Limit text length to prevent abuse (roughly 5 minutes of audio)
-      if (text.length > 5000) {
-        return res.status(400).json({ error: "Text too long. Maximum 5000 characters per request." });
+      // Limit text length to prevent abuse (OpenAI limit is 4096 chars)
+      if (text.length > 4000) {
+        return res.status(400).json({ error: "Text too long. Maximum 4000 characters per request." });
       }
       
-      const apiKey = process.env.ELEVENLABS_API_KEY;
+      const apiKey = process.env.OPENAI_API_KEY;
       if (!apiKey) {
         return res.status(503).json({ error: "Voice service not configured", fallback: true });
       }
       
-      // Use a calm, clear voice for book reading - Rachel is good for narration
-      const selectedVoiceId = voiceId || "21m00Tcm4TlvDq8ikWAM"; // Rachel - calm female narrator
-      
-      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${selectedVoiceId}`, {
+      // Use OpenAI's Nova voice - natural female narrator
+      const response = await fetch("https://api.openai.com/v1/audio/speech", {
         method: "POST",
         headers: {
-          "Accept": "audio/mpeg",
+          "Authorization": `Bearer ${apiKey}`,
           "Content-Type": "application/json",
-          "xi-api-key": apiKey,
         },
         body: JSON.stringify({
-          text,
-          model_id: "eleven_monolingual_v1",
-          voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.75,
-            style: 0.0,
-            use_speaker_boost: true,
-          },
+          model: "tts-1",
+          input: text,
+          voice: "nova",
+          response_format: "mp3",
         }),
       });
       
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("[ElevenLabs] TTS error:", response.status, errorText);
+        console.error("[OpenAI TTS] Error:", response.status, errorText);
         return res.status(response.status).json({ 
           error: "Voice generation failed", 
           fallback: true,
@@ -14931,7 +14925,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       res.send(Buffer.from(arrayBuffer));
       
     } catch (error: any) {
-      console.error("[ElevenLabs] TTS error:", error);
+      console.error("[OpenAI TTS] Error:", error);
       res.status(500).json({ error: error.message || "Voice generation failed", fallback: true });
     }
   });
