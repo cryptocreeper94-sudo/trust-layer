@@ -3194,7 +3194,7 @@ export default function VeilReader() {
   const [isPaused, setIsPaused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
-  const [useAIVoice, setUseAIVoice] = useState(true); // Use OpenAI Nova or ElevenLabs
+  const [useAIVoice, setUseAIVoice] = useState(false); // Browser speech by default (AI TTS not available on Replit)
   const [autoAdvance, setAutoAdvance] = useState(true); // Auto-advance ON by default
   const [audioQueue, setAudioQueue] = useState<string[]>([]);
   const [currentChunkIndex, setCurrentChunkIndex] = useState(0);
