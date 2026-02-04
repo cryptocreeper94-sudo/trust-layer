@@ -3477,10 +3477,10 @@ export default function VeilReader() {
   const playChunk = async (chunkText: string, isLastChunk: boolean, retryCount = 0) => {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout for OpenAI
       
-      // Use ElevenLabs for ebook TTS (high quality narration voice)
-      const response = await fetch('/api/voice/tts', {
+      // Use OpenAI Nova for ebook TTS (reliable, high quality)
+      const response = await fetch('/api/assistant/speak', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: chunkText }),
@@ -3499,7 +3499,7 @@ export default function VeilReader() {
         return;
       }
       
-      console.log('Using ElevenLabs TTS');
+      console.log('Using OpenAI Nova TTS');
       const audioBlob = await response.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
       
