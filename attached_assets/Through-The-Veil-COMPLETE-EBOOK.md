@@ -1206,9 +1206,21 @@ Freemasonry. Kabbalah. Rosicrucians. The occult traditions passed down through t
 
 ---
 
-Seven heads. Each appearing different. Each fighting the others (or pretending to). Muslims against Christians. Christians against Jews. East against West. Science against religion. Traditional against progressive.
+**A Note on This Framework**
 
-While humanity picks sides in manufactured conflicts, they miss that ALL the heads are attached to the same beast.
+I'm not claiming these are definitively THE seven heads from prophetic vision. This is a representation of how the deception operates - a way to visualize the multi-pronged attack on truth. The categories could be combined differently. They could be expanded. Other manufactured conflicts fit the pattern:
+
+- **Young Earth vs. Old Earth** - Was creation 6000 years ago or billions? Pick a side and fight about it. Meanwhile, nobody asks the real questions about cosmology, the firmament, or what "year" even meant before the current calendar. The age of the earth is unknowable from our position and irrelevant to salvation. But it keeps people arguing.
+
+- **Political Left vs. Right** - Another false binary. Both sides funded by the same interests. Both sides leading to more control. Pick your team, hate the other, never look up at who's running both.
+
+- **Denominations within Christianity** - Baptist vs. Catholic vs. Methodist vs. Pentecostal. Fighting over infant baptism while all of them use the wrong names and keep the wrong days.
+
+The point isn't to definitively map every deception to a specific head. The point is to recognize the PATTERN: manufactured conflicts that keep humanity divided, distracted, and fighting each other instead of seeking the narrow way.
+
+---
+
+Seven heads. More heads. The number matters less than the recognition that ALL the heads are attached to the same beast.
 
 And where do the heads meet? In a pyramid in Kazakhstan. The 200-seat council. The number of the Watchers. The Congress of World Religious Leaders where representatives of every major faith sit together and coordinate.
 
