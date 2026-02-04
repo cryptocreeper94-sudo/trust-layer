@@ -21,6 +21,17 @@ type ChangelogEntry = {
 
 const EBOOK_CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.6.0",
+    date: "February 4, 2026",
+    updates: [
+      { type: 'added', description: 'NEW CHAPTER: Daniel, Enoch, and the Seventy Generations - how the removed Book of Enoch unlocks Daniel\'s prophecies', chapterId: 'v2-the-millennium', volumeIndex: 1 },
+      { type: 'added', description: 'The Son of Man vision in Daniel 7 and 1 Enoch 46-48 - the same figure, two witnesses', chapterId: 'v2-the-millennium', volumeIndex: 1 },
+      { type: 'added', description: '70 generations from Enoch to Yahusha - Luke\'s genealogy confirms the countdown completed', chapterId: 'v2-the-millennium', volumeIndex: 1 },
+      { type: 'added', description: 'Why Enoch was removed - it made Daniel too clear and revealed the timeline', chapterId: 'v2-the-millennium', volumeIndex: 1 },
+      { type: 'added', description: 'The 364-day calendar (Enoch/Jubilees) vs manipulated calendars - how time itself was obscured', chapterId: 'v2-the-millennium', volumeIndex: 1 },
+    ]
+  },
+  {
     version: "1.5.0",
     date: "February 4, 2026",
     updates: [
@@ -70,7 +81,7 @@ const EBOOK_CHANGELOG: ChangelogEntry[] = [
   }
 ];
 
-const CURRENT_VERSION = "1.5.0";
+const CURRENT_VERSION = "1.6.0";
 const STORAGE_KEY = 'veil-reader-user-data';
 
 import veilIlluminatiEye from "@/assets/images/veil-illuminati-eye.jpg";
