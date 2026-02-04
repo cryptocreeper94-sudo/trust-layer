@@ -21,6 +21,17 @@ type ChangelogEntry = {
 
 const EBOOK_CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.7.0",
+    date: "February 4, 2026",
+    updates: [
+      { type: 'added', description: 'NEW CHAPTER: The Whole World Remembers - how every ancient civilization recorded the same events (Watchers, giants, flood)', chapterId: 'v1-forbidden-knowledge', volumeIndex: 0 },
+      { type: 'added', description: 'Global witnesses: Sumerians, Greeks, Norse, Indians, Chinese, Mayans all remember the same core story', chapterId: 'v1-forbidden-knowledge', volumeIndex: 0 },
+      { type: 'added', description: 'The "telephone game" of history - how oral tradition preserved the core while changing names and details', chapterId: 'v1-forbidden-knowledge', volumeIndex: 0 },
+      { type: 'added', description: 'Sitchin and Ancient Aliens as controlled opposition - acknowledge patterns, redirect conclusions away from spiritual reality', chapterId: 'v1-forbidden-knowledge', volumeIndex: 0 },
+      { type: 'added', description: 'Over 200 flood narratives worldwide - this is memory, not coincidence', chapterId: 'v1-forbidden-knowledge', volumeIndex: 0 },
+    ]
+  },
+  {
     version: "1.6.0",
     date: "February 4, 2026",
     updates: [
@@ -81,7 +92,7 @@ const EBOOK_CHANGELOG: ChangelogEntry[] = [
   }
 ];
 
-const CURRENT_VERSION = "1.6.0";
+const CURRENT_VERSION = "1.7.0";
 const STORAGE_KEY = 'veil-reader-user-data';
 
 import veilIlluminatiEye from "@/assets/images/veil-illuminati-eye.jpg";
