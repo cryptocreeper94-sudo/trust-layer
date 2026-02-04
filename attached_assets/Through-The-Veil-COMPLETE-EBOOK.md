@@ -54,6 +54,8 @@ This is the rule I follow.
 
 I do not add to Scripture. I do not take away. I illuminate what is already there - what has been hidden in plain sight.
 
+I invite you to see for yourself.
+
 ---
 
 ## Foreword
