@@ -148,32 +148,6 @@ Exposing deception is not blasphemy. **The deception is the blasphemy.**
 
 ---
 
-## Preface: A Word About This Work
-
-This book is based on research. On world events. On historical precedent. On patterns that keep appearing across cultures, centuries, and continents.
-
-**I am not making definitive claims.**
-
-I am presenting what is understood. What is known. What is circulating. What has been published and documented - some accepted, some suppressed, some dismissed without examination.
-
-Think of truth as a massive puzzle - not one tidy box with matching pieces, but fragments from a hundred different puzzles scattered across time and geography. You can shake that box for a billion years hoping it assembles itself. Or you can start connecting pieces that fit, building a tapestry that reveals a picture.
-
-That's what this book offers: a connect-the-dots model. If a piece fits the pattern, it's probably part of the larger picture. If it doesn't, set it aside. The goal isn't to convince you of anything. The goal is to show you how I connected the dots - and invite you to verify, challenge, or expand on what I've found.
-
-You have free will. You have discernment. It is up to you to seek your own truth.
-
-What follows is my version - a guide, an outline, examples drawn from years of study and personal revelation. I present it not as doctrine but as a starting point for your own journey.
-
-I welcome any additional details, corrections, or insights from readers. Truth is a collaborative pursuit. None of us has the complete picture. But together, we can assemble more of it.
-
-People are conditioned not to pay attention. Not to care. Not to question. That conditioning serves the system, not the Creator. I believe the Father is separating His flock - those with ears to hear and eyes to see - from those who choose to remain asleep. This book is for those who are waking up.
-
-Take what resonates. Question what doesn't. Verify everything you can. And above all - seek the Creator directly. No book, no teacher, no institution can replace that relationship.
-
-The veil is lifting. I'm honored you're here.
-
----
-
 ## Author's Note
 
 For years, regret and self-loathing were constant companions. Alcohol became a way to cope - a way to numb something that couldn't be named. It nearly won.
@@ -182,11 +156,15 @@ But the Father, through the Son, intervened. Sobriety brought clarity. Clarity b
 
 What you hold in your hands (or on your screen) is the product of that clarity. Years of research. Countless hours down rabbit holes that led somewhere - and some that led nowhere. The painful process of unlearning what was taught and relearning what was hidden.
 
+This book is based on research, world events, historical precedent, and patterns that keep appearing across cultures, centuries, and continents. Think of truth as a massive puzzle - fragments from a hundred different puzzles scattered across time and geography. You can shake that box hoping it assembles itself. Or you can start connecting pieces that fit, building a tapestry that reveals a picture.
+
+That's what this book offers: a connect-the-dots model. **I am not making definitive claims.** I present what I've found - not as doctrine, but as a starting point for your own journey. The goal isn't to convince you of anything. The goal is to show you how I connected the dots - and invite you to verify, challenge, or expand on what I've found.
+
 This book is written in the voice of a documentary narrator - authoritative but conversational. It's designed to be read or listened to aloud. If you're hearing this as an audiobook, know that every word was chosen with your ears in mind.
 
-I don't claim to have all the answers. I claim to have found patterns that deserve attention. Questions that deserve asking. Connections that the system works very hard to keep hidden.
+People are conditioned not to pay attention. Not to care. Not to question. That conditioning serves the system, not the Creator. I believe the Father is separating His flock - those with ears to hear and eyes to see - from those who choose to remain asleep. This book is for those who are waking up.
 
-Read critically. Verify independently. Trust your discernment - especially once you start restoring the receiver that was designed to perceive truth.
+Take what resonates. Question what doesn't. Verify everything you can. And above all - seek the Creator directly. No book, no teacher, no institution can replace that relationship.
 
 The journey through the veil begins now.
 
