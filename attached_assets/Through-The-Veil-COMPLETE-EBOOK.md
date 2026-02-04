@@ -1,6 +1,6 @@
 # THROUGH THE VEIL
 
-## Unraveling the Tapestry of Lies?
+## The Greatest Story Ever Stole?
 
 ---
 

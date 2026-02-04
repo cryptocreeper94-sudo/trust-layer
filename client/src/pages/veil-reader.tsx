@@ -21,7 +21,7 @@ import veilFreedom from "@/assets/images/veil-freedom.jpg";
 
 function useVeilPWA() {
   useEffect(() => {
-    document.title = "Through The Veil | Read Online";
+    document.title = "Through The Veil | The Greatest Story Ever Stole?";
     
     let manifestLink = document.querySelector('link[rel="manifest"]') as HTMLLinkElement;
     if (manifestLink) {
@@ -3204,6 +3204,7 @@ export default function VeilReader() {
         <body>
           <div class="title-page">
             <h1>Through The Veil</h1>
+            <p style="font-size: 24px; margin-top: 10px; font-style: italic;">The Greatest Story Ever Stole?</p>
             <p style="font-size: 20px; margin-top: 20px;">${currentVolume === 0 ? 'Volume One: Documented Research' : 'Volume Two: Personal Testimony'}</p>
             <p style="margin-top: 40px; color: #666;">By Jason Andrews</p>
             <p style="margin-top: 60px; color: #888; font-size: 14px;">Note: This PDF version may not include cross-references and interactive features available at dwtl.io/veil/read</p>

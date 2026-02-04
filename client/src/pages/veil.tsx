@@ -77,7 +77,7 @@ export default function Veil() {
   };
 
   useEffect(() => {
-    document.title = "Through The Veil | A Journey Through Hidden History";
+    document.title = "Through The Veil | The Greatest Story Ever Stole?";
     
     let manifestLink = document.querySelector('link[rel="manifest"]') as HTMLLinkElement;
     if (manifestLink) {
@@ -132,7 +132,7 @@ export default function Veil() {
           </h1>
           
           <h2 className="text-xl md:text-2xl text-slate-400 mb-6">
-            Unraveling the Tapestry of Lies?
+            The Greatest Story Ever Stole?
           </h2>
           
           <p className="text-lg text-slate-300 max-w-2xl mx-auto mb-4">
