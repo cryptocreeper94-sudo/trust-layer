@@ -532,8 +532,10 @@ I don't add or take away from Scripture (Revelation 22:18-19). I simply note tha
 
 While we're on Sitchin, we need to address "Planet X" and "Nibiru" - because they're not the same thing, and the conflation is deliberate.
 
-**"Planet X" - Legitimate Astronomy (1902-1930s):**
+**"Planet X" - Modern Astronomy's Search (1902-1930s):**
 Astronomer Percival Lowell proposed "Planet X" in 1902 to explain supposed irregularities in Neptune's orbit. The "X" meant unknown - a mathematical variable. Clyde Tombaugh searched for it and found Pluto in 1930. But Pluto was too small to cause the irregularities Lowell predicted. In 1992, when Voyager 2 provided accurate measurements of Neptune's mass, astronomers realized the "irregularities" were measurement errors. The original Planet X hypothesis was closed. It was never found because it didn't exist.
+
+Now, here's the layer beneath the layer: this search happened right when modern astronomy was solidifying its model of the universe - infinite space, spinning globes, planets as distant worlds. That model itself is part of the deception I've already discussed. So when Sitchin built his Nibiru theory, he was building fantasy on top of an already questionable framework. It's deception stacked on deception.
 
 **"Nibiru" - What It Actually Means:**
 In the actual Sumerian and Akkadian texts, "Nibiru" means "crossing" or "point of transition" - originally referring to river crossings or ferry-boats. In astronomical contexts, it refers to **Jupiter** (primarily), **Mercury** (occasionally), or the **pole star** - celestial reference points for navigation. The Enuma Elish describes Nibiru as "holder of the crossing of heavens and earth" - a marker, not a hidden planet. According to Dr. Michael Heiser's analysis of every cuneiform source: "Nibiru is NEVER identified as a planet beyond Pluto."
