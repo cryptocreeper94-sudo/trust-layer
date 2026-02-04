@@ -3809,23 +3809,23 @@ export default function VeilReader() {
                   </Button>
                 ) : isPlaying ? (
                   <Button 
-                    size="sm" 
+                    size="icon" 
                     onClick={handlePause}
-                    className="bg-amber-500 hover:bg-amber-600 text-white px-4"
+                    className="bg-amber-500 hover:bg-amber-600 text-white rounded-full w-8 h-8"
                     data-testid="button-pause-chapter"
+                    title="Pause"
                   >
-                    <Pause className="w-4 h-4 mr-2" />
-                    Pause
+                    <Pause className="w-4 h-4" />
                   </Button>
                 ) : (
                   <Button 
-                    size="sm" 
+                    size="icon" 
                     onClick={handlePlay}
-                    className="bg-cyan-500 hover:bg-cyan-600 text-white px-4"
+                    className="bg-cyan-500 hover:bg-cyan-600 text-white rounded-full w-8 h-8"
                     data-testid="button-play-chapter"
+                    title={isPaused ? 'Resume' : 'Play'}
                   >
-                    <Play className="w-4 h-4 mr-2" />
-                    {isPaused ? 'Resume' : 'Play Chapter'}
+                    <Play className="w-4 h-4" />
                   </Button>
                 )}
                 {(isPlaying || isPaused) && (
