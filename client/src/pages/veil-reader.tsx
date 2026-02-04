@@ -3683,6 +3683,9 @@ export default function VeilReader() {
   const handlePlay = async () => {
     const chapterId = `${currentVolume}-${currentChapter}`;
     
+    // Reset to AI voice on each new play attempt (it may have been disabled by a previous error)
+    setUseAIVoice(true);
+    
     // Only resume if we're on the same chapter that was playing before
     if (isPaused && lastPlayedChapterRef.current === chapterId) {
       if (audioRef.current) {
@@ -3722,6 +3725,15 @@ export default function VeilReader() {
     lastPlayedChapterRef.current = chapterId;
     
     console.log('Playing chapter:', chapter.title, 'Text length:', text.length);
+    
+    // On mobile, unlock audio context with a silent sound first (required for iOS/Android)
+    try {
+      const silentAudio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
+      await silentAudio.play();
+      silentAudio.pause();
+    } catch (e) {
+      // Silent audio unlock failed, continue anyway
+    }
     
     if (useAIVoice) {
       await playWithAIVoice(text);
