@@ -3542,7 +3542,7 @@ export default function VeilReader() {
   const playChunk = async (chunkText: string, isLastChunk: boolean, retryCount = 0) => {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout for OpenAI
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout for mobile
       
       // Use ElevenLabs for ebook TTS (Rachel voice - calm narrator)
       const response = await fetch('/api/voice/tts', {
@@ -3616,8 +3616,10 @@ export default function VeilReader() {
       
     } catch (error: any) {
       console.error('TTS chunk error:', error);
-      // Immediately fall back to browser speech on any error
+      // Reset all states on error so button becomes clickable again
       setIsLoading(false);
+      setIsPlaying(false);
+      setIsPaused(false);
       setUseAIVoice(false);
       
       const fullText = audioQueueRef.current.join(' ');
@@ -3627,23 +3629,22 @@ export default function VeilReader() {
         setTimeout(() => {
           playWithBrowserSpeech(fullText);
         }, 100);
-      } else {
-        setIsPlaying(false);
       }
     }
   };
 
   const playWithAIVoice = async (text: string) => {
-    // Safety timeout - if audio doesn't start within 12 seconds, force fallback to browser
+    // Safety timeout - if audio doesn't start within 30 seconds, force fallback to browser
     const safetyTimeout = setTimeout(() => {
       console.log('Safety timeout triggered - falling back to browser speech');
       setIsLoading(false);
+      setIsPlaying(false);
       setUseAIVoice(false);
       // Use setTimeout to ensure state is cleared before starting browser speech
       setTimeout(() => {
         playWithBrowserSpeech(text);
       }, 100);
-    }, 12000);
+    }, 30000);
     
     try {
       setIsLoading(true);
