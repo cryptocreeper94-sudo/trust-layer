@@ -21,6 +21,15 @@ type ChangelogEntry = {
 
 const EBOOK_CHANGELOG: ChangelogEntry[] = [
   {
+    version: "2.0.0",
+    date: "February 4, 2026",
+    updates: [
+      { type: 'added', description: 'NEW EPIGRAPH PAGE: Revelation 22:18-19 placed prominently in front matter before any content begins', chapterId: 'v1-front-matter', volumeIndex: 0 },
+      { type: 'added', description: 'Clear author statement: "I do not add to Scripture. I do not take away from it. I simply illuminate what is already written."', chapterId: 'v1-front-matter', volumeIndex: 0 },
+      { type: 'added', description: 'Sets the tone immediately: every claim can be tested against the text, every pattern verified', chapterId: 'v1-front-matter', volumeIndex: 0 },
+    ]
+  },
+  {
     version: "1.9.0",
     date: "February 4, 2026",
     updates: [
@@ -114,7 +123,7 @@ const EBOOK_CHANGELOG: ChangelogEntry[] = [
   }
 ];
 
-const CURRENT_VERSION = "1.9.0";
+const CURRENT_VERSION = "2.0.0";
 const STORAGE_KEY = 'veil-reader-user-data';
 
 import veilIlluminatiEye from "@/assets/images/veil-illuminati-eye.jpg";

@@ -42,6 +42,22 @@ Scripture quotations are from the Cepher translation, using restored Hebrew name
 
 ---
 
+## Epigraph
+
+*"For I testify unto every man that heareth the words of the prophecy of this book, If any man shall add unto these things, Elohim shall add unto him the plagues that are written in this book: And if any man shall take away from the words of the book of this prophecy, Elohim shall take away his part out of the cepher of life, and out of the holy city, and from the things which are written in this book."*
+
+**— Chizayon (Revelation) 22:18-19**
+
+---
+
+I do not add to Scripture. I do not take away from it. I simply illuminate what is already written - what has been obscured by layers of translation, substitution, and institutional control.
+
+Every claim in this book can be tested against the text. Every pattern can be verified. Every question can be taken directly to the Father.
+
+The goal is not to replace your understanding with mine, but to encourage you to look again at what you thought you knew - and see what has been hiding in plain sight.
+
+---
+
 ## Foreword
 
 You weren't supposed to read this book.
