@@ -83,13 +83,13 @@ const volume1Chapters: Chapter[] = [
 
         <h3 className="text-xl font-bold text-cyan-400 mt-12 mb-4">Preface: A Word About This Work</h3>
         <p>This book is based on research. On world events. On historical precedent. On patterns that keep appearing across cultures, centuries, and continents.</p>
-        <p>We are not making definitive claims.</p>
-        <p>We are presenting what is understood. What is known. What is circulating. What has been published and documented - some accepted, some suppressed, some dismissed without examination.</p>
+        <p>I am not making definitive claims.</p>
+        <p>I am presenting what is understood. What is known. What is circulating. What has been published and documented - some accepted, some suppressed, some dismissed without examination.</p>
         <p>Think of truth as a massive puzzle - not one tidy box with matching pieces, but fragments from a hundred different puzzles scattered across time and geography. You can shake that box for a billion years hoping it assembles itself. Or you can start connecting pieces that fit, building a tapestry that reveals a picture.</p>
-        <p>That's what this book offers: a connect-the-dots model. If a piece fits the pattern, it's probably part of the larger picture. If it doesn't, set it aside. The goal isn't to convince you of anything. The goal is to show you how we connected the dots - and invite you to verify, challenge, or expand on what we've found.</p>
+        <p>That's what this book offers: a connect-the-dots model. If a piece fits the pattern, it's probably part of the larger picture. If it doesn't, set it aside. The goal isn't to convince you of anything. The goal is to show you how I connected the dots - and invite you to verify, challenge, or expand on what I've found.</p>
         <p>You have free will. You have discernment. It is up to you to seek your own truth.</p>
-        <p>What follows is our version - a guide, an outline, examples drawn from years of study and personal revelation. We present it not as doctrine but as a starting point for your own journey.</p>
-        <p>People are conditioned not to pay attention. Not to care. Not to question. That conditioning serves the system, not the Creator. We believe the Father is separating His flock - those with ears to hear and eyes to see - from those who choose to remain asleep. This book is for those who are waking up.</p>
+        <p>What follows is my version - a guide, an outline, examples drawn from years of study and personal revelation. I present it not as doctrine but as a starting point for your own journey.</p>
+        <p>People are conditioned not to pay attention. Not to care. Not to question. That conditioning serves the system, not the Creator. I believe the Father is separating His flock - those with ears to hear and eyes to see - from those who choose to remain asleep. This book is for those who are waking up.</p>
         <p className="text-cyan-400 mt-4">Take what resonates. Question what doesn't. Verify everything you can. And above all - seek the Creator directly. No book, no teacher, no institution can replace that relationship.</p>
 
         <h3 className="text-xl font-bold text-cyan-400 mt-12 mb-4">Author's Note</h3>
@@ -210,15 +210,15 @@ const volume1Chapters: Chapter[] = [
         </div>
 
         <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Name of Yahuah</h3>
-        <p>We set forth the name Yahuah (יהוה). This name has gone unmentioned for over two millennia based upon the ineffable name doctrine articulated after the destruction of the second temple. However, Yocephus tells us in Wars of the Jews that the name was pronounced by the priests prior to the temple's destruction, and they pronounced it as four vowels.</p>
-        <p>We believe that the demands of the language declare those vowels to be:</p>
+        <p>This work uses the name Yahuah (יהוה). This name has gone unmentioned for over two millennia based upon the ineffable name doctrine articulated after the destruction of the second temple. However, Yocephus tells us in Wars of the Jews that the name was pronounced by the priests prior to the temple's destruction, and they pronounced it as four vowels.</p>
+        <p>I believe that the demands of the language declare those vowels to be:</p>
         <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-purple-500">
           <p className="text-xl text-center"><strong>ee</strong> (yod) <strong>ah</strong> (heh) <strong>oo</strong> (vav) <strong>ah</strong> (heh) = <strong className="text-cyan-400">Yahuah</strong></p>
         </div>
         <p>This name stands alone as Yah 45 times in the Tanakh. Even the King James Bible recognizes this name, writing in Psalm 68:4: "Sing unto God, sing praises to His Name: extoll him that rideth upon the heavens, <strong>by his Name Iah</strong>, and rejoice before him."</p>
 
         <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Name of Yahusha</h3>
-        <p>We have set forth the name of the Messiah as Yahusha (יהושע), partly because this name is identical to the name as was set forth in Bemidbar (Numbers) describing Ephrayimiy Husha, the son of Nun, who was selected as one of the twelve to spy out the Promised Land:</p>
+        <p>This work uses the name of the Messiah as Yahusha (יהושע), partly because this name is identical to the name as was set forth in Bemidbar (Numbers) describing Ephrayimiy Husha, the son of Nun, who was selected as one of the twelve to spy out the Promised Land:</p>
         <div className="bg-slate-800/50 p-4 rounded-lg my-4 border-l-4 border-cyan-500">
           <p className="italic">"Of the tribe of Ephrayim, Husha the son of Nun."</p>
           <p className="text-cyan-300 font-medium">Bemidbar (Numbers) 13:8</p>
@@ -228,7 +228,7 @@ const volume1Chapters: Chapter[] = [
         <p>The name Yahusha is found 175 times in the Tanakh, constructed from two words: Yahuah (יהוה) and yasha (ישע) meaning "to save, deliver, rescue." Most persuasively, the Septuagint translates the name of Joshua as Iesous (Ἰησοῦς) - the same Greek used for the Messiah. They have the same name.</p>
 
         <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">Ruach Ha'Qodesh</h3>
-        <p>We have elected to use <strong>Ruach</strong> where it appears in the text for the Ivriyt and πνεῦμα (pneuma) for the Greek, as they have identical meaning - breath, not ghost. Strong's tells us that (רוּחַ) rû-ach H7306 means properly, to blow, i.e. breathe. Rather than distort the meaning using terms which may show pagan beginnings, we use Ruach and <strong>Qodesh</strong> (set-apart) rather than "Holy" which has Greco-Roman origins.</p>
+        <p>I have elected to use <strong>Ruach</strong> where it appears in the text for the Ivriyt and πνεῦμα (pneuma) for the Greek, as they have identical meaning - breath, not ghost. Strong's tells us that (רוּחַ) rû-ach H7306 means properly, to blow, i.e. breathe. Rather than distort the meaning using terms which may show pagan beginnings, I use Ruach and <strong>Qodesh</strong> (set-apart) rather than "Holy" which has Greco-Roman origins.</p>
 
         <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Removed Books</h3>
         <p>You will find references to books not in the post-19th Century Protestant Bible: Yovheliym (Jubilees), Chanoch (Enoch), Yashar (Jasher), Baruch, Esdras (Ezra), Makkabiym (Maccabees). The Apocrypha was included in the 1539 Great Bible, the 1560 Geneva Bible, and the 1611 King James Bible. The sixty-six-book reduction was the result of the Westminster Confession - an Anglican political act, not a theological conclusion.</p>
@@ -237,7 +237,7 @@ const volume1Chapters: Chapter[] = [
         <p><strong>Yashar (Jasher)</strong> is quoted twice in the Old Testament: Joshua 10:13 and 2 Samuel 1:18.</p>
 
         <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">Chi Xi Stigma</h3>
-        <p>Revelation 13:18 in the original Greek contains not numbers but three letters: χξς (chi xi stigma). <strong>Stigma</strong> from Strong's 4742 means a mark incised or punched for recognition of ownership. We elected to restore the actual picture of the mark as seen by Yochanon: <strong>χξς</strong>.</p>
+        <p>Revelation 13:18 in the original Greek contains not numbers but three letters: χξς (chi xi stigma). <strong>Stigma</strong> from Strong's 4742 means a mark incised or punched for recognition of ownership. I elected to restore the actual picture of the mark as seen by Yochanon: <strong>χξς</strong>.</p>
 
         <h3 className="text-xl font-bold text-cyan-400 mt-8 mb-4">The Aleph Tav (את)</h3>
         <p>The word "eth" (את) - Aleph Tav - has escaped translation in all English texts. The Aleph א represents strength and leadership. The Tav ת means the mark, sign, or covenant. In Revelation 1:8, Yahusha declares: "I am the א (Aleph) and the ת (Tav), the beginning and the ending."</p>

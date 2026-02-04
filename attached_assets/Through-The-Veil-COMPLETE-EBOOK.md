@@ -136,25 +136,25 @@ Exposing deception is not blasphemy. **The deception is the blasphemy.**
 
 This book is based on research. On world events. On historical precedent. On patterns that keep appearing across cultures, centuries, and continents.
 
-**We are not making definitive claims.**
+**I am not making definitive claims.**
 
-We are presenting what is understood. What is known. What is circulating. What has been published and documented - some accepted, some suppressed, some dismissed without examination.
+I am presenting what is understood. What is known. What is circulating. What has been published and documented - some accepted, some suppressed, some dismissed without examination.
 
 Think of truth as a massive puzzle - not one tidy box with matching pieces, but fragments from a hundred different puzzles scattered across time and geography. You can shake that box for a billion years hoping it assembles itself. Or you can start connecting pieces that fit, building a tapestry that reveals a picture.
 
-That's what this book offers: a connect-the-dots model. If a piece fits the pattern, it's probably part of the larger picture. If it doesn't, set it aside. The goal isn't to convince you of anything. The goal is to show you how we connected the dots - and invite you to verify, challenge, or expand on what we've found.
+That's what this book offers: a connect-the-dots model. If a piece fits the pattern, it's probably part of the larger picture. If it doesn't, set it aside. The goal isn't to convince you of anything. The goal is to show you how I connected the dots - and invite you to verify, challenge, or expand on what I've found.
 
 You have free will. You have discernment. It is up to you to seek your own truth.
 
-What follows is our version - a guide, an outline, examples drawn from years of study and personal revelation. We present it not as doctrine but as a starting point for your own journey.
+What follows is my version - a guide, an outline, examples drawn from years of study and personal revelation. I present it not as doctrine but as a starting point for your own journey.
 
-We would welcome any additional details, corrections, or insights from readers. Truth is a collaborative pursuit. None of us has the complete picture. But together, we can assemble more of it.
+I welcome any additional details, corrections, or insights from readers. Truth is a collaborative pursuit. None of us has the complete picture. But together, we can assemble more of it.
 
-People are conditioned not to pay attention. Not to care. Not to question. That conditioning serves the system, not the Creator. We believe the Father is separating His flock - those with ears to hear and eyes to see - from those who choose to remain asleep. This book is for those who are waking up.
+People are conditioned not to pay attention. Not to care. Not to question. That conditioning serves the system, not the Creator. I believe the Father is separating His flock - those with ears to hear and eyes to see - from those who choose to remain asleep. This book is for those who are waking up.
 
 Take what resonates. Question what doesn't. Verify everything you can. And above all - seek the Creator directly. No book, no teacher, no institution can replace that relationship.
 
-The veil is lifting. We're honored you're here.
+The veil is lifting. I'm honored you're here.
 
 ---
 
@@ -2279,7 +2279,7 @@ By showing everything in advance - in movies, TV shows, music videos, corporate 
 
 ## Corporate Logos Tell the Story
 
-*Note: We're not making definitive claims here. We're pointing out patterns that seem far too consistent to be coincidental. Look at the symbolism yourself. Draw your own conclusions. But ask yourself: how far does the rabbit hole go?*
+*Note: I'm not making definitive claims here. I'm pointing out patterns that seem far too consistent to be coincidental. Look at the symbolism yourself. Draw your own conclusions. But ask yourself: how far does the rabbit hole go?*
 
 Look at the Apple logo. An apple with a bite taken out of it.
 
