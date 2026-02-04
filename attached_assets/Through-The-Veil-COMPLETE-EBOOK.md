@@ -3606,9 +3606,26 @@ Someone can spend their entire life in sincere devotion within this layer and ne
 
 Here's where it gets particularly layered: the modern state of Israel.
 
-In 1948, Israel was established as a nation. For many Christians, this "proved" biblical prophecy was being fulfilled. "This generation shall not pass away until all these things be fulfilled" - many interpreted this as triggering the end times countdown.
+In 1948, Israel was established as a nation. For many Christians, this "proved" biblical prophecy was being fulfilled. They point to the parable of the fig tree in Mattithyahu (Matthew) 24:
 
-But consider the layers:
+> *"Now learn a parable of the fig tree; When his branch is yet tender, and putteth forth leaves, ye know that summer is nigh: So likewise ye, when ye shall see all these things, know that it is near, even at the doors. Amein I say unto you, This generation shall not pass, till all these things be fulfilled."*
+> **— Mattithyahu (Matthew) 24:32-34**
+
+The mainstream interpretation claims the "fig tree" represents Israel, and when Israel became a nation again in 1948, the prophetic countdown began. "This generation shall not pass" - so the final generation started in 1948. Many calculate a biblical generation as 70-120 years, creating urgency about the return of Mashiach.
+
+**But here's what the Cepher reveals about the fig tree:**
+
+Throughout scripture, the fig tree does not represent the nation of Israel. The **olive tree** represents Yashar'el (Jeremiah 11:16). The **vine** represents Mashiach (John 15:1-5). But the **fig tree**, according to scriptural analysis, represents the **Torah** - the commandments of Yahuah.
+
+Mishlei (Proverbs) 27:18 says: *"Whoso keeps the fig tree shall eat the fruit thereof."* What else do we keep? The commandments. The Torah. The fig tree represents Torah-keeping, not a geopolitical nation.
+
+So what was Yahusha actually saying? When you see the Torah putting forth leaves again - when the ancient paths are being restored, when people return to the original commandments - know that the end is near. This isn't about a political state. It's about spiritual restoration.
+
+**The generation question:**
+
+People debate what "generation" means - is it 40 years? 70 years? 120 years? But if the fig tree isn't about 1948, the calculation is meaningless. The generation that sees the Torah restored - the commandments being observed again - that's the generation that won't pass away.
+
+But consider the deeper layers:
 
 **Who are the true Israelites?** The twelve tribes were scattered across the earth. They mixed with nations. They lost their identity. They became "lost tribes." Being an Israelite isn't about geography - it's about covenant relationship with Yahuah. It's about having the mark of the Father in the forehead (the functioning pineal, the spiritual connection) rather than the mark of the beast in the heart and hand.
 
