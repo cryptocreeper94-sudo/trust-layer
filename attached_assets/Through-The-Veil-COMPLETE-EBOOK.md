@@ -370,7 +370,7 @@ When this book refers to "the system" - understand what that means. Not bureaucr
 
 The Book of Chanok (Enoch) describes two hundred angels who abandoned their station in heaven. They descended to Mount Hermon. They took human women as wives. They taught forbidden knowledge. They fathered giants.
 
-This wasn't myth to the early church. Yahudah (Jude) 1:6 references it directly: "And the angels which kept not their first estate, but left their own habitation, he has reserved in everlasting chains under darkness unto the judgment of the great day." Kepha Sheniy (2 Peter) 2:4 confirms: "For if Elohim spared not the angels that sinned, but cast them down to hell, and delivered them into chains of darkness, to be reserved unto judgment." The Dead Sea Scrolls preserve it.
+This wasn't myth to the early church. Yahudah (Jude) 1:6 references it directly: "And the angels which kept not their first estate, but left their own habitation, he has reserved in everlasting chains under darkness unto the judgment of the great day." Kepha Sheniy (2 Peter) 2:4 confirms: "For if Elohim spared not the angels that sinned, but cast them down to Tartaros, and delivered them into chains of darkness, to be reserved unto judgment." The Dead Sea Scrolls preserve it.
 
 It was deliberately excluded from the canon. Made apocryphal. Marginalized.
 
@@ -5303,7 +5303,7 @@ Seek, and you will find.
 **On the Watchers and Nephilim:**
 - Bere'shiyth (Genesis) 6:1-4 - The sons of Elohim and daughters of men; Nephilim on the earth
 - Yahudah (Jude) 1:6 - "The angels which kept not their first estate, but left their own habitation"
-- Kepha Sheniy (2 Peter) 2:4 - "Elohim spared not the angels that sinned, but cast them down to hell"
+- Kepha Sheniy (2 Peter) 2:4 - "Elohim spared not the angels that sinned, but cast them down to Tartaros"
 - Bere'shiyth (Genesis) 6:4 - "There were giants in the earth in those days; and also after that" (Nephilim present before AND after flood)
 - Bemidbar (Numbers) 13:33 - "And there we saw the giants, the sons of Anak, which come of the giants"
 
