@@ -21,6 +21,15 @@ type ChangelogEntry = {
 
 const EBOOK_CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.5.0",
+    date: "February 4, 2026",
+    updates: [
+      { type: 'added', description: 'Why Yahusha\'s language was sometimes veiled - when he said it plainly ("I AM"), they tried to kill him', chapterId: 'v1-roman-hijacking', volumeIndex: 0 },
+      { type: 'added', description: 'Thomas calling Yahusha "My Elohiym" - the direct claim Yahusha accepted without correction', chapterId: 'v1-roman-hijacking', volumeIndex: 0 },
+      { type: 'added', description: 'Distinction from JW teaching - Yahusha is not Michael/a created angel, but the Creator who made the angels', chapterId: 'v1-roman-hijacking', volumeIndex: 0 },
+    ]
+  },
+  {
     version: "1.4.0",
     date: "February 4, 2026",
     updates: [
@@ -61,7 +70,7 @@ const EBOOK_CHANGELOG: ChangelogEntry[] = [
   }
 ];
 
-const CURRENT_VERSION = "1.4.0";
+const CURRENT_VERSION = "1.5.0";
 const STORAGE_KEY = 'veil-reader-user-data';
 
 import veilIlluminatiEye from "@/assets/images/veil-illuminati-eye.jpg";

@@ -1136,6 +1136,55 @@ The terminology itself becomes fog. And in that fog, the original truth - Yahuah
 
 You can understand it. You're supposed to understand it. The Shema is not complicated: **"Hear, O Yashar'el: Yahuah our Elohiym, Yahuah is ONE."**
 
+**Why the Language Was Sometimes Veiled:**
+
+Here's a question that genuinely puzzled me: If Yahusha is Yahuah in the flesh, why didn't he just say so plainly?
+
+Sometimes the scriptures sound like Yahusha is a *reflection* of the Father rather than the Father Himself. "If you have seen me, you have seen the Father" could be read as "I perfectly represent Him" rather than "I AM Him."
+
+But here's what I discovered: when he DID say it plainly, they tried to kill him.
+
+> *"Yahusha said unto them, Amein, Amein, I say unto you, Before Avraham was, **I AM**."*
+> **— Yahuchanon (John) 8:58**
+
+"I AM" - Ehyeh - the sacred Name Yahuah revealed to Mosheh at the burning bush. Yahusha claimed to BE the one who spoke those words thousands of years earlier.
+
+Their response? They picked up stones to kill him (Yahuchanon 8:59). They understood EXACTLY what he was claiming.
+
+So the veiled language served purposes:
+- It protected the message from being immediately shut down before the work was complete
+- It separated those who could perceive from those who couldn't
+- It fulfilled prophecy that he would speak in parables so "seeing they would not see, and hearing they would not understand"
+
+**But the Direct Claims ARE There:**
+
+For those with ears to hear, the claims are unmistakable:
+
+- *"I and my Father are one."* (Yahuchanon 10:30) - echad, ONE
+- *"Before Avraham was, I AM."* (Yahuchanon 8:58) - claiming the sacred Name
+- *"For in him dwelleth all the fulness of the entering Godhead bodily."* (Qolasiym/Colossians 2:9) - not part of the Godhead, the FULLNESS
+- *"For unto us a child is born... and his name shall be called... **The mighty El, The everlasting Father**"* (Yesha'yahu/Isaiah 9:6) - the SON called "the everlasting FATHER"
+
+And here's the clincher. After the resurrection, T'om (Thomas) looked at Yahusha and declared:
+
+> *"My Adonai and my Elohiym."*
+> **— Yahuchanon (John) 20:28**
+
+Thomas didn't say "my master and my master's Father." He called Yahusha his **Elohiym** - his God - directly.
+
+And Yahusha didn't correct him.
+
+If Yahusha were merely a man, or an angel like Miyka'el (Michael), or a separate "second person" - he would have corrected Thomas immediately. You don't let someone call you Elohiym if you're not. That would be blasphemy.
+
+But he accepted it. Because it was true.
+
+The veiled language was intentional. The direct claims are there for those who look. And the distinction between Oneness and the Jehovah's Witnesses' "Michael is Jesus" teaching is clear: Yahusha is not a created angel. He is the Creator who made the angels, manifested in flesh.
+
+> *"All things were made by him; and without him was not anything made that was made."*
+> **— Yahuchanon (John) 1:3**
+
+You can't be a created being if you created all things.
+
 ### THE NICENE CREED
 
 The creed established at Nicaea became the test of orthodoxy. Those who disagreed were declared heretics. The Arians, who believed Yahusha was subordinate to the Father (as scripture indicates), were condemned.
