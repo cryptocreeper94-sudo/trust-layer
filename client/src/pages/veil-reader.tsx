@@ -275,9 +275,45 @@ export default function VeilReader() {
     setSpeechSupported(typeof window !== 'undefined' && 'speechSynthesis' in window);
   }, []);
 
-  // Load saved position and check for updates
+  // Handle URL hash navigation (e.g., /veil/read#chapter-38)
   useEffect(() => {
     if (volumes.length === 0) return;
+    
+    const hash = window.location.hash.slice(1); // Remove the #
+    if (hash) {
+      // Search for chapter matching the hash
+      for (let volIdx = 0; volIdx < volumes.length; volIdx++) {
+        const vol = volumes[volIdx];
+        for (let chapIdx = 0; chapIdx < vol.chapters.length; chapIdx++) {
+          const chap = vol.chapters[chapIdx];
+          // Match by id or by partial title match
+          const normalizedHash = hash.toLowerCase().replace(/-/g, ' ');
+          const normalizedTitle = chap.title.toLowerCase();
+          const normalizedId = chap.id.toLowerCase().replace(/-/g, ' ');
+          
+          if (chap.id === hash || 
+              normalizedId.includes(normalizedHash) || 
+              normalizedTitle.includes(normalizedHash) ||
+              normalizedHash.includes('chapter') && normalizedTitle.includes(normalizedHash.replace('chapter', '').trim())) {
+            setCurrentVolume(volIdx);
+            setCurrentChapter(chapIdx);
+            window.scrollTo(0, 0);
+            // Clear hash after navigation
+            window.history.replaceState(null, '', window.location.pathname);
+            return;
+          }
+        }
+      }
+    }
+  }, [volumes]);
+
+  // Load saved position and check for updates (only if no hash navigation)
+  useEffect(() => {
+    if (volumes.length === 0) return;
+    
+    // Skip if we just navigated via hash
+    const hash = window.location.hash.slice(1);
+    if (hash) return;
     
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
