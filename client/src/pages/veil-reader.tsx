@@ -125,9 +125,11 @@ function parseMarkdownToChapters(markdown: string): Volume[] {
       continue;
     }
     
-    // Detect chapter headers
+    // Detect chapter headers (including appendices)
     const chapterMatch = line.match(/^# (CHAPTER \d+[A-Z]?:.+)$/i);
-    if (chapterMatch) {
+    const appendixMatch = line.match(/^# (APPENDIX[^:]*:.*)$/i) || line.match(/^# (APPENDIX.*)$/i);
+    
+    if (chapterMatch || appendixMatch) {
       inFrontMatter = false;
       
       // Save previous chapter
@@ -136,8 +138,13 @@ function parseMarkdownToChapters(markdown: string): Volume[] {
         chapters.push(currentChapter);
       }
       
-      const title = chapterMatch[1].trim();
+      const title = (chapterMatch ? chapterMatch[1] : appendixMatch![1]).trim();
       const id = 'ch-' + title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-').substring(0, 50);
+      
+      // Set appendices to their own part
+      if (appendixMatch && !currentPart.includes('APPENDIX')) {
+        currentPart = 'APPENDIX: Reference Materials';
+      }
       
       currentChapter = {
         id,
