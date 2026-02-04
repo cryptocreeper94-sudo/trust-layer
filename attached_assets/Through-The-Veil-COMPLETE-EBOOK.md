@@ -4283,9 +4283,92 @@ Chizayon (Revelation) 14:12: "Here is the patience of the saints: here are they 
 
 Not suggestions. Not outdated laws replaced by grace. Commandments. Still in effect.
 
-The greatest lie the system ever told was that the Torah was "done away with" by the cross. That the gospels replaced the law. That grace meant commandments don't matter.
+### The "Old Testament" Deception
+
+Before we go further, we need to address the terminology itself. The very phrase "Old Testament" is a manipulation.
+
+Think about it. When you label something "old," what does that imply? Outdated. Replaced. No longer valid. The "New Testament" supersedes the "Old." The language itself programs Christians to dismiss the Torah before they ever read it.
+
+But this division doesn't exist in the original texts. The Cepher - our source translation - organizes Scripture into ten Hebrew divisions, not two artificial categories:
+
+1. **Torah** - The five books of Mosheh (Genesis through Deuteronomy)
+2. **Sheniy Cepheriym** - Second books (additional Torah-related writings)
+3. **Nevi'iym** - The Prophets (Joshua, Judges, Samuel, Kings, Isaiah, Jeremiah, Ezekiel)
+4. **Trei Asar** - The Twelve Minor Prophets (Hosea through Malachi)
+5. **Ketuviym** - The Writings (Psalms, Proverbs, Job)
+6. **Megillot** - The Five Scrolls (Ruth, Song of Songs, Ecclesiastes, Lamentations, Esther)
+7. **Sheniy Heykal** - Second Temple writings (what others call Apocrypha)
+8. **Besorah** - The Gospels (Matthew, Mark, Luke, John)
+9. **Ma'aseh** - Acts of the Apostles
+10. **Cepheriym Talmidiym** - Books of the disciples (epistles and Revelation)
+
+No "Old." No "New." Just Scripture organized by category, all equally valid.
+
+The "Old Testament / New Testament" division was a later invention - a framework that made it easier to teach Christians that half their Bible was obsolete.
+
+### The Greatest Lie Ever Told
+
+The greatest lie the system ever told was that the Torah was "done away with" by the cross. That the gospels replaced the law. That grace meant commandments don't matter. That Yahusha came to abolish His Father's instructions.
+
+This doctrine is taught from nearly every pulpit in the Western world. And it directly contradicts what Yahusha Himself said.
 
 Mattithyahu (Matthew) 5:17-19, Yahusha's own words: "Think not that I am come to destroy the Torah, or the prophets: I am not come to destroy, but to fulfil. For verily I say unto you, Till heaven and earth pass, one jot or one tittle shall in no wise pass from the Torah, till all be fulfilled. Whosoever therefore shall break one of these least commandments, and shall teach men so, he shall be called the least in the kingdom of heaven."
+
+Read that again. "Think not" - don't even consider it. He knew this lie would come. He preemptively addressed it.
+
+And look at the condition: "Till heaven and earth pass." Last time I checked, heaven and earth are still here. The Torah stands.
+
+### "Fulfill" Does Not Mean "Abolish"
+
+Modern Christianity performs theological gymnastics with the word "fulfill." They claim that when Yahusha said He came to "fulfill" the law, He meant to complete it so we don't have to follow it anymore.
+
+This is absurd on its face. In the same breath, He said not one jot or tittle would pass until all is fulfilled - meaning heaven and earth passing away. He then immediately said whoever breaks the least commandments will be called least in the kingdom.
+
+If "fulfill" meant "abolish," why would breaking the abolished commandments matter?
+
+The Greek word is "pleroo" - to fill up, to make full, to complete the meaning of. Yahusha came to demonstrate the full spiritual meaning of the Torah, not to cancel it.
+
+### The Verses They Twist
+
+**Colossians 2:14** - "Blotting out the handwriting of ordinances that was against us, which was contrary to us, and took it out of the way, nailing it to his cross."
+
+This is the proof-text for "the law was nailed to the cross." But read carefully: What was nailed? The "handwriting of ordinances that was against us."
+
+This refers to the record of our sins - the charges against us for breaking the law. The certificate of debt was nailed to the cross, not the law itself. A judge can forgive a criminal's sentence without abolishing the law that was broken.
+
+**Romans 6:14** - "For sin shall not have dominion over you: for ye are not under the law, but under grace."
+
+"Not under the law" doesn't mean the law doesn't exist. It means we're not under its condemnation. We're not under the penalty of death that comes from breaking it. Grace doesn't eliminate the law - grace covers our failures when we genuinely try to follow it.
+
+Sha'ul (Paul) himself clarifies in Romans 3:31: "Do we then make void the law through faith? Elohiym forbid: yea, we establish the law."
+
+**Galatians 3:24-25** - "The law was our schoolmaster to bring us unto Mashiach... we are no longer under a schoolmaster."
+
+Read the context. Sha'ul is talking about the law's role in showing us our need for a Savior - not saying the law is now irrelevant. Once you understand you need saving, you don't throw away the instructions that defined what you needed saving from.
+
+### What Yahusha Actually Taught
+
+If Yahusha came to abolish the Torah, His teachings make no sense:
+
+- He kept the Sabbath (Luke 4:16)
+- He kept the Feasts (John 7:2, 7:10)
+- He told the healed leper to show himself to the priest "as Mosheh commanded" (Matthew 8:4)
+- He said the scribes and Pharisees "sit in Mosheh's seat" and to observe what they say (Matthew 23:2-3)
+- He wore tzitzit (the fringes commanded in Numbers 15:38-39) - the woman with the issue of blood touched them (Matthew 9:20)
+
+The Messiah was Torah-observant. His followers were Torah-observant. The first-century assembly was Torah-observant.
+
+The doctrine of "the law is abolished" came later. Much later. Through Rome. Through councils. Through centuries of antisemitic theology that wanted to separate Christianity from its Hebrew roots.
+
+### Why This Matters
+
+This isn't about legalism. It's about truth.
+
+If the Torah was abolished, then there's no definition of sin. First Yahuchanon (1 John) 3:4 says: "Sin is the transgression of the law."
+
+No law = no sin. No sin = no need for a Savior. The logic destroys itself.
+
+The Torah was never the problem. Our inability to keep it perfectly was the problem. That's why we needed grace. Grace doesn't replace law - grace works alongside law, covering our failures while we genuinely try to walk the path.
 
 Heaven and earth haven't passed yet. The Torah stands.
 
