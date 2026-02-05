@@ -1733,6 +1733,12 @@ The Cepher translation preserves something most English Bibles obscure: Revelati
 
 The ancients embedded mathematics into language through what's called gematria (in Hebrew) or isopsephy (in Greek). Each letter carries a numerical value. This wasn't mysticism - it was mathematics woven into the structure of language itself. Anyone can verify these calculations.
 
+**This was not accidental. Gematria was a tool used fully, purposely, and intentionally.**
+
+The scribes, the priests, the scholars of the ancient world - they calculated these values deliberately. They embedded meaning into names and phrases with mathematical precision. When they wrote, they knew what the numbers would say. When they substituted, they knew what signatures they were leaving.
+
+This is why the verse invites those with understanding to COUNT. Because the counting reveals what words alone might hide. The ancients who constructed these texts - and those who later altered them - were fully aware of the numerical dimensions of their work.
+
 **The Name Billions Worship:**
 
 When we calculate the Greek name and title that billions call upon using standard Greek isopsephy:
