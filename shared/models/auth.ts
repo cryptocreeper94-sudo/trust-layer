@@ -176,3 +176,52 @@ export const membershipLinkedAccounts = pgTable("membership_linked_accounts", {
 
 export type MembershipLinkedAccount = typeof membershipLinkedAccounts.$inferSelect;
 export type InsertMembershipLinkedAccount = typeof membershipLinkedAccounts.$inferInsert;
+
+// Ecosystem Apps - Registered external apps that can authenticate via Trust Layer SSO
+export const ecosystemApps = pgTable("ecosystem_apps", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  appName: varchar("app_name").notNull().unique(), // "GarageBot", "DarkWave", etc.
+  appDisplayName: varchar("app_display_name").notNull(),
+  appDescription: varchar("app_description"),
+  appUrl: varchar("app_url").notNull(), // Base URL: https://garagebot.io
+  callbackUrl: varchar("callback_url").notNull(), // OAuth callback: /auth/callback
+  apiKey: varchar("api_key").notNull().unique(), // For server-to-server verification
+  apiSecret: varchar("api_secret").notNull(), // HMAC signing secret
+  logoUrl: varchar("logo_url"),
+  isActive: boolean("is_active").default(true),
+  permissions: jsonb("permissions").default([]), // ["read:profile", "read:membership"]
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export type EcosystemApp = typeof ecosystemApps.$inferSelect;
+export type InsertEcosystemApp = typeof ecosystemApps.$inferInsert;
+
+// SSO Sessions - Track cross-app authentication sessions
+export const ssoSessions = pgTable("sso_sessions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  appId: varchar("app_id").notNull().references(() => ecosystemApps.id),
+  ssoToken: varchar("sso_token").notNull().unique(), // Token sent to external app
+  expiresAt: timestamp("expires_at").notNull(),
+  usedAt: timestamp("used_at"), // One-time use tokens
+  ipAddress: varchar("ip_address"),
+  userAgent: varchar("user_agent"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export type SsoSession = typeof ssoSessions.$inferSelect;
+export type InsertSsoSession = typeof ssoSessions.$inferInsert;
+
+// User App Connections - Track which apps a user has connected
+export const userAppConnections = pgTable("user_app_connections", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id),
+  appId: varchar("app_id").notNull().references(() => ecosystemApps.id),
+  connectedAt: timestamp("connected_at").defaultNow(),
+  lastLoginAt: timestamp("last_login_at"),
+  revokedAt: timestamp("revoked_at"),
+});
+
+export type UserAppConnection = typeof userAppConnections.$inferSelect;
+export type InsertUserAppConnection = typeof userAppConnections.$inferInsert;
