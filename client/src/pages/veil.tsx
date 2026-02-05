@@ -151,7 +151,8 @@ export default function Veil() {
                 Download PDF
               </Button>
             </a>
-            <Button 
+            {/* E-reader temporarily disabled for content revision */}
+            {/* <Button 
               onClick={() => handleReadOnline()}
               size="lg"
               variant="outline"
@@ -159,7 +160,7 @@ export default function Veil() {
             >
               <BookOpen className="w-5 h-5 mr-2" />
               Read Online
-            </Button>
+            </Button> */}
           </div>
         </motion.div>
 
