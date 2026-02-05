@@ -119,8 +119,8 @@ function parseMarkdownToChapters(markdown: string): Volume[] {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     
-    // Detect PART headers
-    if (line.match(/^# PART [IVXLC]+:/i) || line.match(/^# PART (ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN|ELEVEN|TWELVE):/i)) {
+    // Detect PART headers (including PART FOUR-B style variations)
+    if (line.match(/^# PART [IVXLC]+[-]?[A-Z]?:/i) || line.match(/^# PART (ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN|ELEVEN|TWELVE)[-]?[A-Z]?:/i)) {
       currentPart = line.replace(/^# /, '').trim();
       continue;
     }
