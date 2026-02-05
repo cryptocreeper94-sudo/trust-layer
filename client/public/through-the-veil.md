@@ -228,7 +228,43 @@ Yahusha came **in His Father's name** - the name Yahuah is literally embedded in
 
 But another would come **in the name of a man** - and him they would receive. The name "Jesus Christ" is the name of a man. A Greek-Latin-English construction that contains no trace of the Father's name. And it has been received by billions.
 
-The numerical signatures embedded in these names - explored in detail later - reveal something deeply troubling. The ancients used gematria (letter-number values) extensively. What those calculations expose about the substituted name is not coincidence. The adversary signs his work.
+---
+
+## The Gematria Proof: 666 and 2368
+
+**This is where it gets undeniable.**
+
+The Cepher translation shows that Revelation 13:18 contains Greek letters - χξς (chi xi stigma) - not merely the number 666. The ancients embedded mathematics into language through what's called gematria (in Hebrew) or isopsephy (in Greek) - letter-number values. This wasn't mysticism. It was mathematics embedded in language. Anyone can verify it.
+
+When we calculate the Greek name and title that billions call upon:
+
+> **Ἰησοῦς (Iesous/Jesus)** = 888
+> **Χριστός (Christos/Christ)** = 1480
+> **Ἰησοῦς Χριστός (Jesus Christ)** = 888 + 1480 = **2368**
+
+Now here is where the dots connect in a way that cannot be dismissed as coincidence.
+
+The complete Greek phrase from Revelation 13:18 - **"καὶ ὁ ἀριθμὸς αὐτοῦ χξϛ"** ("and his number is chi xi stigma") - when calculated using the same exact method, ***also equals 2368***.
+
+The exact same gematria value as "Jesus Christ."
+
+**Stop and consider what this means.**
+
+The passage that identifies the beast's number - the very phrase itself - carries the same numerical signature as the name billions worship. This isn't interpretation. It's mathematics. Anyone can verify it with a Greek gematria calculator.
+
+The verse literally says: "Here is wisdom. Let him that hath understanding COUNT the number of the beast." It invites calculation. And when you calculate, you find the name substitution carries the same numerical value as the beast identification phrase.
+
+Now consider this alongside what Yahusha said in Yahuchanon (John) 5:43: "I am come in my Father's name, and you receive me not: if another shall come in his own name, him you will receive."
+
+**Yahusha** (יהושע) literally contains **Yahuah** (יהוה) - look at the Hebrew letters. The Father's name is embedded within the Son's name. He came IN the Father's name. The name itself carries the Father.
+
+But "Jesus" is a Romanized Greek translation that passed through Latin before reaching English. There is no connection to Yahuah whatsoever. The Father's name has been completely removed. And billions call upon this name without ever knowing the original.
+
+**This isn't about condemning anyone who has prayed to "Jesus" with a sincere heart.** The Father knows the heart. But it IS about asking: if names matter - if they carry meaning, authority, and allegiance - then what does it mean that the whole world calls upon a name stripped of the Father, a name that mathematically matches the beast identification passage, while the original remains hidden?
+
+The adversary signs his work. And the signature is in the numbers.
+
+---
 
 The Roman deception machine - Constantine and those who followed - knew exactly what they were doing when they replaced the name that connects to the Father with a name that connects to something else entirely.
 
