@@ -57,6 +57,7 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **Multi-SIG Multi-Chain Wallet**: M-of-N signature requirements across all supported chains for business treasuries and DAOs.
 - **DarkWave Academy**: Education and certification platform for crypto fundamentals, multi-chain ecosystems, DeFi, security, bridging, and Trust Layer operations, with tiered certifications.
 - **Blockchain Domain Service**: `.tlid` domains (Trust Layer ID) at `tlid.io`. Blockchain-verified identity names that resolve to wallets, websites, and social profiles. Premium pricing based on length, lifetime or term ownership options. Gateway routes `*.tlid.io` subdomains to configured websites.
+- **Ecosystem SSO (Single Sign-On)**: Cross-app authentication enabling GarageBot, DarkWave, and other ecosystem apps to authenticate users via Trust Layer. Database tables: `ecosystem_apps`, `sso_sessions`, `user_app_connections`. Features HMAC-SHA256 request signing, one-time tokens, permission-based data access, redirect URL validation. Endpoints: `/api/auth/sso/verify`, `/api/auth/sso/user/:id`, `/api/auth/sso/login`, `/api/auth/sso/callback`, `/api/auth/sso/register-app`, `/api/auth/sso/apps`. App credentials: `dw_*` API keys with HMAC secrets.
 
 ### React Native Portability Guidelines
 - **Business Logic**: Located in `shared/` folder, platform-agnostic TypeScript.

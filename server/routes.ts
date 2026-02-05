@@ -1959,9 +1959,17 @@ export async function registerRoutes(
     try {
       const token = req.query.token as string;
       const appKey = req.headers['x-app-key'] as string;
+      const signature = req.headers['x-app-signature'] as string;
+      const timestamp = req.headers['x-app-timestamp'] as string;
       
-      if (!token || !appKey) {
-        return res.status(400).json({ error: "Missing token or app key" });
+      if (!token || !appKey || !signature || !timestamp) {
+        return res.status(400).json({ error: "Missing token, app key, signature, or timestamp" });
+      }
+      
+      // Check timestamp is within 5 minutes to prevent replay attacks
+      const requestTime = parseInt(timestamp);
+      if (isNaN(requestTime) || Math.abs(Date.now() - requestTime) > 5 * 60 * 1000) {
+        return res.status(401).json({ error: "Request expired or invalid timestamp" });
       }
       
       // Verify the app is registered and active
@@ -1973,10 +1981,25 @@ export async function registerRoutes(
         return res.status(401).json({ error: "Invalid or inactive app" });
       }
       
-      // Find the SSO session
+      const appData = app.rows[0] as any;
+      
+      // Verify HMAC signature: HMAC-SHA256(apiSecret, token + timestamp)
+      const expectedSignature = crypto.createHmac('sha256', appData.api_secret)
+        .update(`${token}${timestamp}`)
+        .digest('hex');
+      
+      // Guard against length mismatch (timingSafeEqual throws on different lengths)
+      const sigBuffer = Buffer.from(signature);
+      const expectedBuffer = Buffer.from(expectedSignature);
+      if (sigBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(sigBuffer, expectedBuffer)) {
+        return res.status(401).json({ error: "Invalid signature" });
+      }
+      
+      // Find the SSO session - MUST match both token AND the requesting app's ID
       const [session] = await db.execute(sql`
         SELECT * FROM sso_sessions 
         WHERE sso_token = ${token} 
+        AND app_id = ${appData.id}
         AND expires_at > NOW()
         AND used_at IS NULL
         LIMIT 1
@@ -2028,20 +2051,34 @@ export async function registerRoutes(
         WHERE uac.user_id = ${user.id} AND uac.revoked_at IS NULL
       `);
       
+      // Apply permission-based filtering (same as user endpoint)
+      const permissions = appData.permissions || [];
+      
+      // Base response (always returned)
+      const userResponse: any = {
+        id: user.id,
+        name: user.displayName || user.username,
+        ecosystemApps: connectedApps.rows.map((r: any) => r.app_name),
+        createdAt: user.createdAt,
+        lastLogin: new Date().toISOString()
+      };
+      
+      // Include email only if app has read:email permission
+      if (permissions.includes('read:email') || permissions.includes('read:profile')) {
+        userResponse.email = user.email;
+        userResponse.firstName = user.firstName;
+        userResponse.lastName = user.lastName;
+      }
+      
+      // Include membership info only if app has read:membership permission
+      if (permissions.includes('read:membership') || permissions.includes('read:profile')) {
+        userResponse.membershipCard = card?.trustNumber || null;
+        userResponse.memberTier = card?.memberTier || 'pioneer';
+      }
+      
       res.json({
         success: true,
-        user: {
-          id: user.id,
-          email: user.email,
-          name: user.displayName || user.username,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          membershipCard: card?.trustNumber || null,
-          memberTier: card?.memberTier || 'pioneer',
-          ecosystemApps: connectedApps.rows.map((r: any) => r.app_name),
-          createdAt: user.createdAt,
-          lastLogin: new Date().toISOString()
-        }
+        user: userResponse
       });
     } catch (error) {
       console.error("SSO verify error:", error);
@@ -2049,14 +2086,22 @@ export async function registerRoutes(
     }
   });
   
-  // Get user by ID (for external apps with valid API key)
+  // Get user by ID (for external apps with valid API key and HMAC signature)
   app.get("/api/auth/sso/user/:userId", async (req, res) => {
     try {
       const { userId } = req.params;
       const appKey = req.headers['x-app-key'] as string;
+      const signature = req.headers['x-app-signature'] as string;
+      const timestamp = req.headers['x-app-timestamp'] as string;
       
-      if (!appKey) {
-        return res.status(401).json({ error: "Missing app key" });
+      if (!appKey || !signature || !timestamp) {
+        return res.status(401).json({ error: "Missing app key, signature, or timestamp" });
+      }
+      
+      // Check timestamp is within 5 minutes to prevent replay attacks
+      const requestTime = parseInt(timestamp);
+      if (isNaN(requestTime) || Math.abs(Date.now() - requestTime) > 5 * 60 * 1000) {
+        return res.status(401).json({ error: "Request expired or invalid timestamp" });
       }
       
       // Verify the app is registered
@@ -2068,6 +2113,20 @@ export async function registerRoutes(
         return res.status(401).json({ error: "Invalid or inactive app" });
       }
       
+      const appData = app.rows[0] as any;
+      
+      // Verify HMAC signature: HMAC-SHA256(apiSecret, userId + timestamp)
+      const expectedSignature = crypto.createHmac('sha256', appData.api_secret)
+        .update(`${userId}${timestamp}`)
+        .digest('hex');
+      
+      // Guard against length mismatch (timingSafeEqual throws on different lengths)
+      const sigBuffer = Buffer.from(signature);
+      const expectedBuffer = Buffer.from(expectedSignature);
+      if (sigBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(sigBuffer, expectedBuffer)) {
+        return res.status(401).json({ error: "Invalid signature" });
+      }
+      
       const user = await storage.getUser(userId);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
@@ -2076,7 +2135,7 @@ export async function registerRoutes(
       // Check if user has connected to this app
       const [connection] = await db.execute(sql`
         SELECT * FROM user_app_connections 
-        WHERE user_id = ${userId} AND app_id = ${(app.rows[0] as any).id} AND revoked_at IS NULL
+        WHERE user_id = ${userId} AND app_id = ${appData.id} AND revoked_at IS NULL
         LIMIT 1
       `);
       
@@ -2084,18 +2143,32 @@ export async function registerRoutes(
         return res.status(403).json({ error: "User has not authorized this app" });
       }
       
+      // Check app permissions before returning sensitive data
+      const permissions = appData.permissions || [];
       const [card] = await db.select().from(memberTrustCards).where(eq(memberTrustCards.userId, user.id)).limit(1);
       
-      res.json({
+      // Base response (always returned)
+      const response: any = {
         id: user.id,
-        email: user.email,
         name: user.displayName || user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        membershipCard: card?.trustNumber || null,
-        memberTier: card?.memberTier || 'pioneer',
-        createdAt: user.createdAt
-      });
+      };
+      
+      // Include email only if app has read:email permission
+      if (permissions.includes('read:email') || permissions.includes('read:profile')) {
+        response.email = user.email;
+        response.firstName = user.firstName;
+        response.lastName = user.lastName;
+      }
+      
+      // Include membership info only if app has read:membership permission
+      if (permissions.includes('read:membership') || permissions.includes('read:profile')) {
+        response.membershipCard = card?.trustNumber || null;
+        response.memberTier = card?.memberTier || 'pioneer';
+      }
+      
+      response.createdAt = user.createdAt;
+      
+      res.json(response);
     } catch (error) {
       console.error("SSO user lookup error:", error);
       res.status(500).json({ error: "User lookup failed" });
@@ -2122,9 +2195,30 @@ export async function registerRoutes(
         return res.status(401).json({ error: "Unknown or inactive app" });
       }
       
-      // Verify redirect URL matches registered callback
       const appData = app.rows[0] as any;
-      const allowedCallback = new URL(appData.callback_url, appData.app_url).href;
+      
+      // SECURITY: Validate redirect URL against registered callback URL
+      try {
+        const requestedUrl = new URL(redirectUrl);
+        const allowedCallbackUrl = new URL(appData.callback_url, appData.app_url);
+        
+        // Must match origin (protocol + host) and path prefix
+        const requestedOrigin = requestedUrl.origin;
+        const allowedOrigin = allowedCallbackUrl.origin;
+        
+        if (requestedOrigin !== allowedOrigin) {
+          console.warn(`SSO redirect blocked: ${redirectUrl} does not match allowed origin ${allowedOrigin}`);
+          return res.status(400).json({ error: "Invalid redirect URL - origin mismatch" });
+        }
+        
+        // Path must start with the registered callback path
+        if (!requestedUrl.pathname.startsWith(allowedCallbackUrl.pathname)) {
+          console.warn(`SSO redirect blocked: path ${requestedUrl.pathname} does not match ${allowedCallbackUrl.pathname}`);
+          return res.status(400).json({ error: "Invalid redirect URL - path mismatch" });
+        }
+      } catch (urlError) {
+        return res.status(400).json({ error: "Invalid redirect URL format" });
+      }
       
       // Store SSO request in session for after login
       (req.session as any).ssoRequest = {
