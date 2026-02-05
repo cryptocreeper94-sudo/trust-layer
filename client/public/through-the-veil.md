@@ -126,11 +126,9 @@ Yahusha came **in His Father's name** - the name Yahuah is literally embedded in
 
 But another would come **in the name of a man** - and him they would receive. The name "Jesus Christ" is the name of a man. A Greek-Latin-English construction that contains no trace of the Father's name. And it has been received by billions.
 
-**The gematria confirms it:**
+The numerical signatures embedded in these names - explored in detail in Part Five - reveal something deeply troubling. The ancients used gematria (letter-number values) extensively. What those calculations expose about the substituted name is not coincidence. The adversary signs his work.
 
-In Greek gematria, the name "Jesus Christ" (Ἰησοῦς Χριστός) calculates to **666** - the number of the beast, described in Chazon (Revelation) 13:18 as "the number of a man."
-
-This is not coincidence. This is signature. The adversary signs his work. And the Roman deception machine - Constantine and those who followed - knew exactly what they were doing when they replaced the name that connects to the Father with a name that connects to something else entirely.
+The Roman deception machine - Constantine and those who followed - knew exactly what they were doing when they replaced the name that connects to the Father with a name that connects to something else entirely.
 
 Think about what that means: Praying sincerely, with genuine heart, to a name that routes elsewhere. **Inviting something in** while believing you're connecting to the Messiah.
 
