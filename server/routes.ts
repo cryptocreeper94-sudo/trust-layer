@@ -1950,6 +1950,308 @@ export async function registerRoutes(
     }
   });
 
+  // ============================================================
+  // SSO ENDPOINTS - Cross-app authentication for DarkWave Ecosystem
+  // ============================================================
+
+  // Verify SSO token from external app (GarageBot calls this to verify user)
+  app.get("/api/auth/sso/verify", async (req, res) => {
+    try {
+      const token = req.query.token as string;
+      const appKey = req.headers['x-app-key'] as string;
+      
+      if (!token || !appKey) {
+        return res.status(400).json({ error: "Missing token or app key" });
+      }
+      
+      // Verify the app is registered and active
+      const [app] = await db.execute(sql`
+        SELECT * FROM ecosystem_apps WHERE api_key = ${appKey} AND is_active = true LIMIT 1
+      `);
+      
+      if (!app.rows[0]) {
+        return res.status(401).json({ error: "Invalid or inactive app" });
+      }
+      
+      // Find the SSO session
+      const [session] = await db.execute(sql`
+        SELECT * FROM sso_sessions 
+        WHERE sso_token = ${token} 
+        AND expires_at > NOW()
+        AND used_at IS NULL
+        LIMIT 1
+      `);
+      
+      if (!session.rows[0]) {
+        return res.status(401).json({ error: "Invalid or expired token" });
+      }
+      
+      const ssoSession = session.rows[0] as any;
+      
+      // Mark token as used (one-time use)
+      await db.execute(sql`
+        UPDATE sso_sessions SET used_at = NOW() WHERE id = ${ssoSession.id}
+      `);
+      
+      // Get the user data
+      const user = await storage.getUser(ssoSession.user_id);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+      // Get or create user app connection
+      const [existingConnection] = await db.execute(sql`
+        SELECT * FROM user_app_connections 
+        WHERE user_id = ${user.id} AND app_id = ${(app.rows[0] as any).id}
+        LIMIT 1
+      `);
+      
+      if (!existingConnection.rows[0]) {
+        await db.execute(sql`
+          INSERT INTO user_app_connections (user_id, app_id, connected_at, last_login_at)
+          VALUES (${user.id}, ${(app.rows[0] as any).id}, NOW(), NOW())
+        `);
+      } else {
+        await db.execute(sql`
+          UPDATE user_app_connections SET last_login_at = NOW() 
+          WHERE user_id = ${user.id} AND app_id = ${(app.rows[0] as any).id}
+        `);
+      }
+      
+      // Get membership card info
+      const [card] = await db.select().from(memberTrustCards).where(eq(memberTrustCards.userId, user.id)).limit(1);
+      
+      // Get connected apps for this user
+      const connectedApps = await db.execute(sql`
+        SELECT ea.app_name FROM user_app_connections uac
+        JOIN ecosystem_apps ea ON ea.id = uac.app_id
+        WHERE uac.user_id = ${user.id} AND uac.revoked_at IS NULL
+      `);
+      
+      res.json({
+        success: true,
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.displayName || user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          membershipCard: card?.trustNumber || null,
+          memberTier: card?.memberTier || 'pioneer',
+          ecosystemApps: connectedApps.rows.map((r: any) => r.app_name),
+          createdAt: user.createdAt,
+          lastLogin: new Date().toISOString()
+        }
+      });
+    } catch (error) {
+      console.error("SSO verify error:", error);
+      res.status(500).json({ error: "Verification failed" });
+    }
+  });
+  
+  // Get user by ID (for external apps with valid API key)
+  app.get("/api/auth/sso/user/:userId", async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const appKey = req.headers['x-app-key'] as string;
+      
+      if (!appKey) {
+        return res.status(401).json({ error: "Missing app key" });
+      }
+      
+      // Verify the app is registered
+      const [app] = await db.execute(sql`
+        SELECT * FROM ecosystem_apps WHERE api_key = ${appKey} AND is_active = true LIMIT 1
+      `);
+      
+      if (!app.rows[0]) {
+        return res.status(401).json({ error: "Invalid or inactive app" });
+      }
+      
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+      // Check if user has connected to this app
+      const [connection] = await db.execute(sql`
+        SELECT * FROM user_app_connections 
+        WHERE user_id = ${userId} AND app_id = ${(app.rows[0] as any).id} AND revoked_at IS NULL
+        LIMIT 1
+      `);
+      
+      if (!connection.rows[0]) {
+        return res.status(403).json({ error: "User has not authorized this app" });
+      }
+      
+      const [card] = await db.select().from(memberTrustCards).where(eq(memberTrustCards.userId, user.id)).limit(1);
+      
+      res.json({
+        id: user.id,
+        email: user.email,
+        name: user.displayName || user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        membershipCard: card?.trustNumber || null,
+        memberTier: card?.memberTier || 'pioneer',
+        createdAt: user.createdAt
+      });
+    } catch (error) {
+      console.error("SSO user lookup error:", error);
+      res.status(500).json({ error: "User lookup failed" });
+    }
+  });
+  
+  // SSO Login initiation (external app redirects here)
+  app.get("/api/auth/sso/login", async (req, res) => {
+    try {
+      const appName = req.query.app as string;
+      const redirectUrl = req.query.redirect as string;
+      const state = req.query.state as string; // CSRF protection
+      
+      if (!appName || !redirectUrl) {
+        return res.status(400).json({ error: "Missing app name or redirect URL" });
+      }
+      
+      // Verify the app is registered
+      const [app] = await db.execute(sql`
+        SELECT * FROM ecosystem_apps WHERE app_name = ${appName} AND is_active = true LIMIT 1
+      `);
+      
+      if (!app.rows[0]) {
+        return res.status(401).json({ error: "Unknown or inactive app" });
+      }
+      
+      // Verify redirect URL matches registered callback
+      const appData = app.rows[0] as any;
+      const allowedCallback = new URL(appData.callback_url, appData.app_url).href;
+      
+      // Store SSO request in session for after login
+      (req.session as any).ssoRequest = {
+        appId: appData.id,
+        appName: appData.app_name,
+        redirectUrl,
+        state,
+        createdAt: Date.now()
+      };
+      
+      // Redirect to login page with SSO context
+      res.redirect(`/login?sso=true&app=${encodeURIComponent(appData.app_display_name)}`);
+    } catch (error) {
+      console.error("SSO login init error:", error);
+      res.status(500).json({ error: "SSO initialization failed" });
+    }
+  });
+  
+  // SSO callback after successful login
+  app.post("/api/auth/sso/callback", async (req, res) => {
+    try {
+      const userId = (req.session as any)?.userId;
+      const ssoRequest = (req.session as any)?.ssoRequest;
+      
+      if (!userId) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+      
+      if (!ssoRequest) {
+        return res.status(400).json({ error: "No SSO request pending" });
+      }
+      
+      // Check SSO request hasn't expired (5 min max)
+      if (Date.now() - ssoRequest.createdAt > 5 * 60 * 1000) {
+        delete (req.session as any).ssoRequest;
+        return res.status(400).json({ error: "SSO request expired" });
+      }
+      
+      // Generate SSO token
+      const ssoToken = crypto.randomBytes(32).toString('hex');
+      const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 min expiry
+      
+      await db.execute(sql`
+        INSERT INTO sso_sessions (user_id, app_id, sso_token, expires_at, ip_address, user_agent)
+        VALUES (${userId}, ${ssoRequest.appId}, ${ssoToken}, ${expiresAt}, ${req.ip}, ${req.headers['user-agent']})
+      `);
+      
+      // Clear SSO request from session
+      delete (req.session as any).ssoRequest;
+      
+      // Build redirect URL with token
+      const redirectUrl = new URL(ssoRequest.redirectUrl);
+      redirectUrl.searchParams.set('token', ssoToken);
+      if (ssoRequest.state) {
+        redirectUrl.searchParams.set('state', ssoRequest.state);
+      }
+      
+      res.json({ 
+        success: true, 
+        redirectUrl: redirectUrl.href 
+      });
+    } catch (error) {
+      console.error("SSO callback error:", error);
+      res.status(500).json({ error: "SSO callback failed" });
+    }
+  });
+  
+  // Register a new ecosystem app (admin only)
+  app.post("/api/auth/sso/register-app", async (req, res) => {
+    try {
+      // Check owner authentication
+      const authHeader = req.headers.authorization;
+      const ownerSecret = process.env.OWNER_SECRET;
+      
+      if (!ownerSecret || authHeader !== `Bearer ${ownerSecret}`) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      
+      const { appName, appDisplayName, appDescription, appUrl, callbackUrl, logoUrl } = req.body;
+      
+      if (!appName || !appDisplayName || !appUrl || !callbackUrl) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+      
+      // Generate API credentials
+      const apiKey = `dw_${crypto.randomBytes(16).toString('hex')}`;
+      const apiSecret = crypto.randomBytes(32).toString('hex');
+      
+      await db.execute(sql`
+        INSERT INTO ecosystem_apps (app_name, app_display_name, app_description, app_url, callback_url, api_key, api_secret, logo_url)
+        VALUES (${appName}, ${appDisplayName}, ${appDescription || ''}, ${appUrl}, ${callbackUrl}, ${apiKey}, ${apiSecret}, ${logoUrl || ''})
+      `);
+      
+      res.json({
+        success: true,
+        credentials: {
+          appName,
+          apiKey,
+          apiSecret
+        },
+        message: "Store these credentials securely. The API secret will not be shown again."
+      });
+    } catch (error: any) {
+      console.error("App registration error:", error);
+      if (error.message?.includes('duplicate')) {
+        return res.status(409).json({ error: "App name already registered" });
+      }
+      res.status(500).json({ error: "Registration failed" });
+    }
+  });
+  
+  // List registered ecosystem apps
+  app.get("/api/auth/sso/apps", async (req, res) => {
+    try {
+      const apps = await db.execute(sql`
+        SELECT id, app_name, app_display_name, app_description, app_url, logo_url, is_active, created_at
+        FROM ecosystem_apps
+        ORDER BY created_at DESC
+      `);
+      
+      res.json({ apps: apps.rows });
+    } catch (error) {
+      console.error("List apps error:", error);
+      res.status(500).json({ error: "Failed to list apps" });
+    }
+  });
+
   // Member Trust Card endpoints
   app.get("/api/member/trust-card", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
     try {
