@@ -2346,6 +2346,211 @@ export async function registerRoutes(
     }
   });
 
+  // ============================================================
+  // ECOSYSTEM CREDENTIAL SYNC - Behind-the-scenes user sync
+  // Each ecosystem app (GarageBot, etc.) manages its own login UI.
+  // These endpoints let apps sync credentials so the same
+  // email + password works across all DarkWave apps.
+  // ============================================================
+
+  async function verifyEcosystemApp(req: any): Promise<{ appId: string; appName: string } | null> {
+    const appKey = req.headers['x-app-key'] as string;
+    const signature = req.headers['x-app-signature'] as string;
+    const timestamp = req.headers['x-app-timestamp'] as string;
+
+    if (!appKey || !signature || !timestamp) return null;
+
+    const requestTime = parseInt(timestamp);
+    if (isNaN(requestTime) || Math.abs(Date.now() - requestTime) > 5 * 60 * 1000) return null;
+
+    const result = await db.execute(sql`
+      SELECT id, app_name, api_secret FROM ecosystem_apps WHERE api_key = ${appKey} AND is_active = true LIMIT 1
+    `);
+    if (!result.rows[0]) return null;
+
+    const appData = result.rows[0] as any;
+    const rawBodyBuf = (req as any).rawBody;
+    const rawBody = rawBodyBuf ? (Buffer.isBuffer(rawBodyBuf) ? rawBodyBuf.toString('utf8') : String(rawBodyBuf)) : JSON.stringify(req.body || {});
+    const expectedSignature = crypto.createHmac('sha256', appData.api_secret)
+      .update(`${rawBody}${timestamp}`)
+      .digest('hex');
+
+    if (signature.length !== expectedSignature.length) return null;
+    const sigBuffer = Buffer.from(signature, 'hex');
+    const expectedBuffer = Buffer.from(expectedSignature, 'hex');
+    if (sigBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(sigBuffer, expectedBuffer)) return null;
+
+    return { appId: appData.id, appName: appData.app_name };
+  }
+
+  // 1. Sync user - Create or update a user when they register on an ecosystem app
+  app.post("/api/ecosystem/sync-user", authRateLimit, async (req, res) => {
+    try {
+      const appAuth = await verifyEcosystemApp(req);
+      if (!appAuth) {
+        return res.status(401).json({ error: "Invalid app credentials or signature" });
+      }
+
+      const { email, password, displayName, username } = req.body;
+
+      if (!email || !password) {
+        return res.status(400).json({ error: "Email and password are required" });
+      }
+
+      const normalizedEmail = email.toLowerCase().trim();
+
+      if (password.length < 8) return res.status(400).json({ error: "Password must be at least 8 characters" });
+      if (!/[A-Z]/.test(password)) return res.status(400).json({ error: "Password must contain at least one uppercase letter" });
+      if (!/[a-z]/.test(password)) return res.status(400).json({ error: "Password must contain at least one lowercase letter" });
+      if (!/[0-9]/.test(password)) return res.status(400).json({ error: "Password must contain at least one number" });
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return res.status(400).json({ error: "Password must contain at least one special character" });
+
+      const existingUser = await storage.getUserByEmail(normalizedEmail);
+
+      if (existingUser) {
+        if (!existingUser.passwordHash) {
+          const salt = crypto.randomBytes(16).toString('hex');
+          const passwordHash = crypto.createHash('sha256').update(password + salt).digest('hex') + ':' + salt;
+          await db.update(users).set({
+            passwordHash,
+            emailVerified: true,
+            ...(displayName && !existingUser.displayName ? { displayName } : {}),
+          }).where(eq(users.id, existingUser.id));
+
+          console.log(`[Ecosystem/SyncUser] Password set for existing user ${normalizedEmail} from ${appAuth.appName}`);
+          return res.json({ success: true, action: "password_set", userId: existingUser.id });
+        }
+
+        console.log(`[Ecosystem/SyncUser] User ${normalizedEmail} already exists with password, from ${appAuth.appName}`);
+        return res.json({ success: true, action: "already_exists", userId: existingUser.id });
+      }
+
+      const salt = crypto.randomBytes(16).toString('hex');
+      const passwordHash = crypto.createHash('sha256').update(password + salt).digest('hex') + ':' + salt;
+      const signupPosition = await storage.getNextSignupPosition();
+      const userId = crypto.randomUUID();
+
+      await storage.upsertFirebaseUser({
+        id: userId,
+        email: normalizedEmail,
+        username: username || null,
+        displayName: displayName || username || null,
+        firstName: displayName?.split(' ')[0] || null,
+        lastName: displayName?.split(' ').slice(1).join(' ') || null,
+        profileImageUrl: null,
+        signupPosition,
+      });
+
+      await db.update(users).set({ passwordHash, emailVerified: true }).where(eq(users.id, userId));
+
+      const entryPoint = appAuth.appName || 'ecosystem';
+      await membershipReconciliationService.getOrCreateMembership(userId, entryPoint);
+      await membershipReconciliationService.queueForReconciliation(userId);
+
+      console.log(`[Ecosystem/SyncUser] New user created: ${normalizedEmail} from ${appAuth.appName}, position #${signupPosition}`);
+      res.json({ success: true, action: "created", userId, signupPosition });
+    } catch (error) {
+      console.error("[Ecosystem/SyncUser] Error:", error);
+      res.status(500).json({ error: "Failed to sync user" });
+    }
+  });
+
+  // 2. Sync password - Update password when changed on an ecosystem app
+  app.post("/api/ecosystem/sync-password", authRateLimit, async (req, res) => {
+    try {
+      const appAuth = await verifyEcosystemApp(req);
+      if (!appAuth) {
+        return res.status(401).json({ error: "Invalid app credentials or signature" });
+      }
+
+      const { email, newPassword } = req.body;
+
+      if (!email || !newPassword) {
+        return res.status(400).json({ error: "Email and newPassword are required" });
+      }
+
+      const normalizedEmail = email.toLowerCase().trim();
+
+      if (newPassword.length < 8) return res.status(400).json({ error: "Password must be at least 8 characters" });
+      if (!/[A-Z]/.test(newPassword)) return res.status(400).json({ error: "Password must contain at least one uppercase letter" });
+      if (!/[a-z]/.test(newPassword)) return res.status(400).json({ error: "Password must contain at least one lowercase letter" });
+      if (!/[0-9]/.test(newPassword)) return res.status(400).json({ error: "Password must contain at least one number" });
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(newPassword)) return res.status(400).json({ error: "Password must contain at least one special character" });
+
+      const user = await storage.getUserByEmail(normalizedEmail);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const salt = crypto.randomBytes(16).toString('hex');
+      const passwordHash = crypto.createHash('sha256').update(newPassword + salt).digest('hex') + ':' + salt;
+
+      await db.update(users).set({ passwordHash }).where(eq(users.id, user.id));
+
+      console.log(`[Ecosystem/SyncPassword] Password updated for ${normalizedEmail} from ${appAuth.appName}`);
+      res.json({ success: true, action: "password_updated", userId: user.id });
+    } catch (error) {
+      console.error("[Ecosystem/SyncPassword] Error:", error);
+      res.status(500).json({ error: "Failed to sync password" });
+    }
+  });
+
+  // 3. Verify credentials - Check if email + password is valid across the ecosystem
+  app.post("/api/ecosystem/verify-credentials", authRateLimit, async (req, res) => {
+    try {
+      const appAuth = await verifyEcosystemApp(req);
+      if (!appAuth) {
+        return res.status(401).json({ error: "Invalid app credentials or signature" });
+      }
+
+      const { email, password } = req.body;
+
+      if (!email || !password) {
+        return res.status(400).json({ error: "Email and password are required" });
+      }
+
+      const normalizedEmail = email.toLowerCase().trim();
+      const user = await storage.getUserByEmail(normalizedEmail);
+
+      if (!user || !user.passwordHash) {
+        return res.json({ valid: false, reason: "user_not_found" });
+      }
+
+      const hashParts = user.passwordHash.split(':');
+      if (hashParts.length !== 2) {
+        return res.json({ valid: false, reason: "invalid_hash_format" });
+      }
+
+      const [storedHash, salt] = hashParts;
+      if (!storedHash || !salt) {
+        return res.json({ valid: false, reason: "invalid_hash_format" });
+      }
+
+      const providedHash = crypto.createHash('sha256').update(password + salt).digest('hex');
+
+      if (storedHash.length !== providedHash.length) {
+        return res.json({ valid: false, reason: "invalid_password" });
+      }
+
+      if (!crypto.timingSafeEqual(Buffer.from(storedHash, 'hex'), Buffer.from(providedHash, 'hex'))) {
+        return res.json({ valid: false, reason: "invalid_password" });
+      }
+
+      console.log(`[Ecosystem/VerifyCredentials] Valid credentials for ${normalizedEmail} from ${appAuth.appName}`);
+      res.json({
+        valid: true,
+        userId: user.id,
+        email: user.email,
+        displayName: user.displayName,
+        username: user.username,
+        profileImageUrl: user.profileImageUrl,
+      });
+    } catch (error) {
+      console.error("[Ecosystem/VerifyCredentials] Error:", error);
+      res.status(500).json({ error: "Failed to verify credentials" });
+    }
+  });
+
   // Member Trust Card endpoints
   app.get("/api/member/trust-card", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
     try {
