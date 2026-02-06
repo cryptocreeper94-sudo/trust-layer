@@ -21,6 +21,8 @@ import { startReferralPayoutScheduler } from "./referral-payout-scheduler";
 import { startEmailUpdateScheduler } from "./email-update-scheduler";
 import { seedDocuments, seedCityZones } from "./storage";
 import { setupPresence } from "./chat-presence";
+import { setupSignalChatWS } from "./chat-ws";
+import { seedChatChannels } from "./seedChat";
 import { setupGuardianScannerWS } from "./guardian-scanner-ws";
 import { runMigrations } from "stripe-replit-sync";
 import { getStripeSync } from "./stripeClient";
@@ -375,14 +377,20 @@ async function initializeServices() {
       await setupVite(httpServer, app);
     }
 
-    // Setup ChronoChat WebSocket presence
+    // Setup ChronoChat WebSocket presence (legacy)
     setupPresence(httpServer);
+    
+    // Setup Signal Chat WebSocket (JWT-authenticated, /ws/chat)
+    setupSignalChatWS(httpServer);
     
     // Setup Guardian Scanner WebSocket for live price updates
     setupGuardianScannerWS(httpServer);
     
     // Seed core documents if empty
     await seedDocuments();
+    
+    // Seed Signal Chat channels
+    await seedChatChannels();
     
     // Seed city zones for Chronicles Estate
     await seedCityZones();

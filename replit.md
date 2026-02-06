@@ -39,7 +39,7 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **Marketing Automation System**: Proprietary auto-deployment for social media.
 - **Payment Infrastructure**: Crowdfund donations and token presales with Stripe integration.
 - **Pre-Launch Airdrop System**: Manages affiliate commissions, distributed as Signal, dual-ledger design.
-- **Signal Chat Platform**: Standalone community platform with WebSocket messaging and bot framework (rebranded from ChronoChat).
+- **Signal Chat Platform (UPDATED Feb 2026)**: Cross-app community messaging with JWT SSO. Database: `chat_users` (identity), `chat_channels`, `chat_messages`. Auth: bcryptjs 12 rounds, JWT HS256 7-day tokens with shared `JWT_SECRET`. Trust Layer ID format: `tl-{base36-timestamp}-{random-8-chars}`. WebSocket at `/ws/chat` with JWT-authenticated join, message persistence, typing, presence. REST: `POST /api/chat/auth/register`, `POST /api/chat/auth/login`, `GET /api/chat/auth/me`, `GET /api/chat/channels`. Key files: `server/trustlayer-sso.ts`, `server/chat-ws.ts`, `server/seedChat.ts`. Seeded channels: general, announcements, darkwavestudios-support, garagebot-support, tlid-marketing, guardian-ai.
 - **Shells Economy System**: Pre-launch virtual currency, convertible to Signal, earned via engagement, purchased via Stripe, with atomic transactions.
 - **Subscription System**: Unified subscription management with tiers and cross-app entitlement checking.
 - **Guardian Certification Program**: In-house blockchain security audit service with tiered offerings and public registry.

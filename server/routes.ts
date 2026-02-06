@@ -131,7 +131,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and, gte } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes, businessApplications, limitOrders, insertLimitOrderSchema } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes, businessApplications, limitOrders, insertLimitOrderSchema, chatChannels } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -142,6 +142,7 @@ import { startRegistration, finishRegistration, startAuthentication, finishAuthe
 import { bridge } from "./bridge-engine";
 import { registerChatRoutes } from "./replit_integrations/chat";
 import { registerImageRoutes } from "./replit_integrations/image";
+import { registerUser, loginUser, getUserFromToken } from "./trustlayer-sso";
 import { stakingEngine } from "./staking-engine";
 import { generateScenario, randomizeEmotions, describeEmotionalState } from "./scenario-generator";
 import { creditsService, CREDIT_COSTS } from "./credits-service";
@@ -2343,6 +2344,76 @@ export async function registerRoutes(
     } catch (error) {
       console.error("List apps error:", error);
       res.status(500).json({ error: "Failed to list apps" });
+    }
+  });
+
+  // ============================================================
+  // SIGNAL CHAT SSO - Cross-app authentication
+  // Users register/login with username+password, get JWT token
+  // valid across all ecosystem apps sharing JWT_SECRET
+  // ============================================================
+
+  app.post("/api/chat/auth/register", authRateLimit, async (req: Request, res: Response) => {
+    try {
+      const { username, email, password, displayName } = req.body;
+
+      if (!username || !email || !password || !displayName) {
+        return res.status(400).json({ success: false, error: "Username, email, password, and displayName are required" });
+      }
+
+      const result = await registerUser({ username, email, password, displayName });
+      console.log(`[Signal Chat] User registered: ${username} (${email})`);
+      res.json({ success: true, user: result.user, token: result.token });
+    } catch (error: any) {
+      console.error("[Signal Chat] Registration error:", error.message);
+      res.status(400).json({ success: false, error: error.message });
+    }
+  });
+
+  app.post("/api/chat/auth/login", authRateLimit, async (req: Request, res: Response) => {
+    try {
+      const { username, password } = req.body;
+
+      if (!username || !password) {
+        return res.status(400).json({ success: false, error: "Username and password are required" });
+      }
+
+      const result = await loginUser({ username, password });
+      console.log(`[Signal Chat] User logged in: ${username}`);
+      res.json({ success: true, user: result.user, token: result.token });
+    } catch (error: any) {
+      console.error("[Signal Chat] Login error:", error.message);
+      res.status(401).json({ success: false, error: error.message });
+    }
+  });
+
+  app.get("/api/chat/auth/me", async (req: Request, res: Response) => {
+    try {
+      const authHeader = req.headers.authorization;
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({ success: false, error: "Authorization header required" });
+      }
+
+      const token = authHeader.split(" ")[1];
+      const user = await getUserFromToken(token);
+
+      if (!user) {
+        return res.status(401).json({ success: false, error: "Invalid or expired token" });
+      }
+
+      res.json({ success: true, user });
+    } catch (error: any) {
+      console.error("[Signal Chat] Auth check error:", error.message);
+      res.status(500).json({ success: false, error: "Failed to verify token" });
+    }
+  });
+
+  app.get("/api/chat/channels", async (_req: Request, res: Response) => {
+    try {
+      const channels = await db.select().from(chatChannels);
+      res.json({ success: true, channels });
+    } catch (error: any) {
+      res.status(500).json({ success: false, error: "Failed to fetch channels" });
     }
   });
 
