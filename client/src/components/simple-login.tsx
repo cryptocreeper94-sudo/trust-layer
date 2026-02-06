@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Loader2, ArrowLeft, Eye, EyeOff, AlertTriangle } from "lucide-react";
+import { X, Loader2, ArrowLeft, Eye, EyeOff, AlertTriangle, Globe, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
@@ -11,6 +11,7 @@ interface SimpleLoginModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+  ssoApp?: string | null;
 }
 
 type View = "login" | "signup" | "forgot";
@@ -31,7 +32,16 @@ const isPasswordValid = (pwd: string) => {
   return v.minLength && v.hasUpper && v.hasLower && v.hasNumber && v.hasSpecial;
 };
 
-export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModalProps) {
+const ECOSYSTEM_APPS: Record<string, { label: string; color: string }> = {
+  garagebot: { label: "GarageBot", color: "from-orange-500 to-amber-500" },
+  darkwavegames: { label: "DarkWave Games", color: "from-purple-500 to-pink-500" },
+  darkwavestudios: { label: "DarkWave Studios", color: "from-blue-500 to-cyan-500" },
+  yourlegacy: { label: "Your Legacy", color: "from-emerald-500 to-teal-500" },
+  trustshield: { label: "TrustShield", color: "from-red-500 to-orange-500" },
+  tlid: { label: "TLID", color: "from-cyan-500 to-blue-500" },
+};
+
+export function SimpleLoginModal({ isOpen, onClose, onSuccess, ssoApp: ssoAppProp }: SimpleLoginModalProps) {
   const { toast } = useToast();
   const { login, signup, loginWithGoogle, loginWithGithub, resetPassword } = useFirebaseAuth();
   const [loading, setLoading] = useState(false);
@@ -45,6 +55,20 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+
+  const ssoContext = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    const isSso = params.get("sso") === "true";
+    const appParam = ssoAppProp || params.get("app");
+    if (isSso && appParam) {
+      const appKey = appParam.toLowerCase().replace(/\s+/g, "");
+      const known = ECOSYSTEM_APPS[appKey];
+      return { active: true, appName: known?.label || appParam, color: known?.color || "from-cyan-500 to-purple-500" };
+    }
+    return { active: false, appName: null, color: "" };
+  }, [ssoAppProp]);
+
+  const isSsoFlow = ssoContext.active;
 
   const resetForm = () => {
     setEmail("");
@@ -74,11 +98,20 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
       const result = await login(email, password);
       console.log("[Login] Result:", result);
       if (result.success) {
+        if (isSsoFlow) {
+          toast({ title: "Connected!", description: `Linking your account with ${ssoContext.appName}...` });
+          try {
+            const callbackRes = await fetch("/api/auth/sso/callback", { method: "POST", credentials: "include" });
+            const callbackData = await callbackRes.json();
+            if (callbackData.success && callbackData.redirectUrl) {
+              window.location.href = callbackData.redirectUrl;
+              return;
+            }
+          } catch {}
+        }
         toast({ title: "Welcome back!", description: "You've successfully signed in." });
         onSuccess?.();
         handleClose();
-        // Don't reload - let the auth context update naturally
-        // The queryClient will refetch user data
         setTimeout(() => {
           window.location.href = window.location.pathname;
         }, 500);
@@ -123,6 +156,17 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
       const result = await signup(email, password, name || undefined, username);
       console.log("[Signup] Result:", result);
       if (result.success) {
+        if (isSsoFlow) {
+          toast({ title: "Account created!", description: `Your Trust Layer account is now linked with ${ssoContext.appName}.` });
+          try {
+            const callbackRes = await fetch("/api/auth/sso/callback", { method: "POST", credentials: "include" });
+            const callbackData = await callbackRes.json();
+            if (callbackData.success && callbackData.redirectUrl) {
+              window.location.href = callbackData.redirectUrl;
+              return;
+            }
+          } catch {}
+        }
         if (result.emailVerificationRequired) {
           toast({ title: "Account created!", description: "Please verify your email to get 1,000 Shells!" });
           handleClose();
@@ -244,9 +288,25 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
             </button>
           </div>
 
+          {isSsoFlow && (
+            <div className="mb-4 p-3 rounded-xl bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20" data-testid="sso-context-banner">
+              <div className="flex items-center gap-2 mb-1.5">
+                <Link2 className="w-4 h-4 text-cyan-400 flex-shrink-0" />
+                <span className="text-sm font-semibold text-white">Connecting from {ssoContext.appName}</span>
+              </div>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                {view === "login"
+                  ? "Sign in with your Trust Layer credentials. Your account will be linked automatically."
+                  : "Create your Trust Layer account to connect with " + ssoContext.appName + ". You'll get your membership card, referral link, and full ecosystem access."}
+              </p>
+            </div>
+          )}
+
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-white mb-2">
-              {view === "login" ? "Welcome Back" : view === "signup" ? "Create Account" : "Reset Password"}
+              {isSsoFlow
+                ? (view === "login" ? "Welcome Back" : view === "signup" ? "Join the Ecosystem" : "Reset Password")
+                : (view === "login" ? "Welcome Back" : view === "signup" ? "Create Account" : "Reset Password")}
             </h2>
             <p className="text-muted-foreground text-sm">
               {view === "login" ? "Sign in to your account" : view === "signup" ? "Join DarkWave today" : "Enter your email to reset"}
@@ -500,6 +560,18 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess }: SimpleLoginModa
                   </button>
                 </p>
               )}
+            </div>
+          )}
+
+          {!isSsoFlow && view !== "forgot" && (
+            <div className="mt-4 p-3 rounded-xl bg-slate-800/40 border border-white/5" data-testid="ecosystem-login-note">
+              <div className="flex items-start gap-2">
+                <Globe className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Signed up through <span className="text-cyan-400/80">GarageBot</span> or another DarkWave ecosystem app?
+                  Use the same email and password here — one account works across the entire ecosystem.
+                </p>
+              </div>
             </div>
           )}
         </motion.div>

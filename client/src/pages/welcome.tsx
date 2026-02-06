@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link, useLocation } from "wouter";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { 
   Shield, Rocket, GraduationCap, Coins, Users, Gamepad2, 
   Building2, ChevronRight, Sparkles, Globe, Lock, TrendingUp,
@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/glass-card";
+import { SimpleLoginModal } from "@/components/simple-login";
 
 const PATHWAYS = [
   {
@@ -58,6 +59,20 @@ export default function WelcomePage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const ssoParams = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    const isSso = params.get("sso") === "true";
+    const app = params.get("app");
+    return isSso && app ? app : null;
+  }, []);
+
+  useEffect(() => {
+    if (ssoParams) {
+      setShowLoginModal(true);
+    }
+  }, [ssoParams]);
 
   const handleQuickRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -196,9 +211,13 @@ export default function WelcomePage() {
                   </form>
                   <p className="text-xs text-slate-500 text-center mt-4">
                     Already a member?{" "}
-                    <Link href="/" className="text-cyan-400 hover:underline">
+                    <button
+                      onClick={() => setShowLoginModal(true)}
+                      className="text-cyan-400 hover:underline"
+                      data-testid="button-welcome-signin"
+                    >
                       Sign In
-                    </Link>
+                    </button>
                   </p>
                 </>
               )}
@@ -387,6 +406,11 @@ export default function WelcomePage() {
           </motion.div>
         </div>
       </div>
+      <SimpleLoginModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        ssoApp={ssoParams}
+      />
     </main>
   );
 }
