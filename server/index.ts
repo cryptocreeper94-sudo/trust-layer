@@ -293,6 +293,21 @@ function gracefulShutdown(signal: string) {
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
+app.use((req: Request, res: Response, next: NextFunction) => {
+  if (!servicesReady && !req.path.startsWith('/api/') && req.method === 'GET' && req.accepts('html')) {
+    res.status(200).set({ 'Content-Type': 'text/html' }).end(`<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Trust Layer</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;color:#fff;font-family:system-ui,-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh}
+.loader{text-align:center}.spinner{width:48px;height:48px;border:3px solid rgba(0,255,255,0.2);border-top-color:#00ffff;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}h1{font-size:1.25rem;font-weight:400;opacity:0.8}</style>
+</head><body><div class="loader"><div class="spinner"></div><h1>Loading Trust Layer...</h1></div>
+<script>setTimeout(()=>location.reload(),2000)</script></body></html>`);
+    return;
+  }
+  next();
+});
+
 // Start server IMMEDIATELY - opens port 5000 right away
 const port = parseInt(process.env.PORT || "5000", 10);
 
@@ -376,6 +391,7 @@ async function initializeServices() {
       const { setupVite } = await import("./vite");
       await setupVite(httpServer, app);
     }
+    servicesReady = true;
 
     // Setup ChronoChat WebSocket presence (legacy)
     setupPresence(httpServer);
