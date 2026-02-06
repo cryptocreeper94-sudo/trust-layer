@@ -1939,6 +1939,50 @@ export type GameChatMessage = typeof gameChatMessages.$inferSelect;
 export type PlayerRewards = typeof playerRewards.$inferSelect;
 export type GameAirdrop = typeof gameAirdrops.$inferSelect;
 
+// Signal Chat - Ecosystem Identity & Messaging
+export const chatUsers = pgTable("chat_users", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  username: text("username").notNull().unique(),
+  email: text("email").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  displayName: text("display_name").notNull(),
+  avatarColor: text("avatar_color").notNull().default("#06b6d4"),
+  role: text("role").notNull().default("member"),
+  trustLayerId: text("trust_layer_id").unique(),
+  isOnline: boolean("is_online").default(false),
+  lastSeen: timestamp("last_seen").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const chatChannels = pgTable("chat_channels", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull().unique(),
+  description: text("description"),
+  category: text("category").notNull().default("ecosystem"),
+  isDefault: boolean("is_default").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const chatMessages = pgTable("chat_messages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  channelId: varchar("channel_id").notNull().references(() => chatChannels.id),
+  userId: varchar("user_id").notNull().references(() => chatUsers.id),
+  content: text("content").notNull(),
+  replyToId: varchar("reply_to_id"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertChatUserSchema = createInsertSchema(chatUsers).omit({ id: true, isOnline: true, lastSeen: true, createdAt: true });
+export const insertChatChannelSchema = createInsertSchema(chatChannels).omit({ id: true, createdAt: true });
+export const insertChatMessageSchema = createInsertSchema(chatMessages).omit({ id: true, createdAt: true });
+
+export type ChatUser = typeof chatUsers.$inferSelect;
+export type InsertChatUser = z.infer<typeof insertChatUserSchema>;
+export type ChatChannel = typeof chatChannels.$inferSelect;
+export type InsertChatChannel = z.infer<typeof insertChatChannelSchema>;
+export type ChatMessage = typeof chatMessages.$inferSelect;
+export type InsertChatMessage = z.infer<typeof insertChatMessageSchema>;
+
 // Player Gaming Stats - Complete History
 export const playerGameHistory = pgTable("player_game_history", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
