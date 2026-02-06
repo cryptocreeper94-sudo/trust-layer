@@ -79,6 +79,7 @@ const navCategories = [
     label: "Community",
     icon: Users,
     items: [
+      { href: "/signal-chat", label: "Signal Chat", icon: Users, badge: "Live" },
       { href: "/community", label: "ChronoChat Hub", icon: Users, badge: "New" },
       { href: "/domains", label: "Domain Registry", icon: Globe, badge: "New" },
       { href: "/influencer-partnership", label: "KOL Program", icon: Users, badge: "Apply" },
