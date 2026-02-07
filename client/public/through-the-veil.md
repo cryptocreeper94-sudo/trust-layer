@@ -1423,8 +1423,6 @@ The institutional church that emerged would become the most powerful organizatio
 
 This was the institutionalization of the deception. Everything that followed - the Crusades, the Inquisition, the Protestant Reformation that retained most of Constantine's substitutions, the modern denominational Christianity - traces back to what was established in those councils of the 4th century.
 
-
-
 # CHAPTER 6: THE NAME THAT WAS STOLEN
 
 ## Section One: The Name That Was Erased
