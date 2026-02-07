@@ -283,8 +283,7 @@ function GamesRouter() {
         <Route path="/pacman" component={Pacman} />
         <Route path="/genesis" component={Genesis} />
         <Route path="/veil" component={Veil} />
-        {/* E-reader temporarily disabled for content revision */}
-        {/* <Route path="/veil/read" component={VeilReader} /> */}
+        <Route path="/veil/read" component={VeilReader} />
         <Route path="/veil/print/vol2" component={VeilPrintVol2} />
         <Route path="/chronochat" component={ChronoChat} />
         <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
@@ -347,8 +346,7 @@ function ChronoRouter() {
         <Route path="/roadmap" component={ChronoRoadmap} />
         <Route path="/genesis" component={Genesis} />
         <Route path="/veil" component={Veil} />
-        {/* E-reader temporarily disabled for content revision */}
-        {/* <Route path="/veil/read" component={VeilReader} /> */}
+        <Route path="/veil/read" component={VeilReader} />
         <Route path="/veil/print/vol2" component={VeilPrintVol2} />
         <Route path="/chronochat" component={ChronoChat} />
         <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
@@ -545,8 +543,7 @@ function DWSCRouter() {
         <Route path="/pacman" component={Pacman} />
         <Route path="/genesis" component={Genesis} />
         <Route path="/veil" component={Veil} />
-        {/* E-reader temporarily disabled for content revision */}
-        {/* <Route path="/veil/read" component={VeilReader} /> */}
+        <Route path="/veil/read" component={VeilReader} />
         <Route path="/veil/print/vol2" component={VeilPrintVol2} />
         <Route path="/chronochat" component={ChronoChat} />
         <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />

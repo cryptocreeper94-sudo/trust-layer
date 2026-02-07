@@ -151,16 +151,16 @@ export default function Veil() {
                 Download PDF
               </Button>
             </a>
-            {/* E-reader temporarily disabled for content revision */}
-            {/* <Button 
+            <Button 
               onClick={() => handleReadOnline()}
               size="lg"
               variant="outline"
               className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 px-8 py-6 text-lg"
+              data-testid="button-read-online"
             >
               <BookOpen className="w-5 h-5 mr-2" />
               Read Online
-            </Button> */}
+            </Button>
           </div>
         </motion.div>
 
