@@ -279,18 +279,33 @@ Overall = (Security x 0.20) + (Transparency x 0.25) + (Reliability x 0.30) + (Co
 
 ## 9. Environment Variables & Secrets
 
-### Required Secrets (store in Replit Secrets)
+### ISSUED CREDENTIALS — COPY THESE EXACTLY
 
-| Secret | Description | Status |
-|--------|-------------|--------|
-| `TRUSTLAYER_API_KEY` | API key from Trust Layer registration (`dw_rea_xxx...`) | **Not yet configured** |
-| `TRUSTLAYER_API_SECRET` | HMAC signing secret | **Not yet configured** |
+**These are the live, active API credentials for TrustHome. Store them as Replit Secrets.**
 
-### Optional Environment Variable
+```
+TRUSTLAYER_API_KEY=dw_rea_0cc57d556f72bab39c4554ecc2a00fce
+TRUSTLAYER_API_SECRET=04f5b54e76698d64c304e470c8d7075153775771ee9af71dfcc6c1b96b3edae5
+TRUSTLAYER_BASE_URL=https://dwsc.io
+```
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `TRUSTLAYER_BASE_URL` | `https://dwsc.io` | Trust Layer API base URL |
+| Secret Name | Value | Status |
+|-------------|-------|--------|
+| `TRUSTLAYER_API_KEY` | `dw_rea_0cc57d556f72bab39c4554ecc2a00fce` | **ACTIVE** |
+| `TRUSTLAYER_API_SECRET` | `04f5b54e76698d64c304e470c8d7075153775771ee9af71dfcc6c1b96b3edae5` | **ACTIVE** |
+| `TRUSTLAYER_BASE_URL` | `https://dwsc.io` | Default (optional env var) |
+
+**App Registration ID:** `24ebd952-1270-47e8-8aa1-3d028f232c37`  
+**App Name in ecosystem_apps table:** `trusthome`  
+**Permissions granted:** ecosystem:sync-user, ecosystem:sync-password, ecosystem:verify-credentials, guardian:read-tiers, guardian:submit-certification, guardian:read-certification, guardian:read-registry, guardian:read-stamps, guardian:checkout
+
+### How to activate
+
+1. Add `TRUSTLAYER_API_KEY` as a Replit Secret with value `dw_rea_0cc57d556f72bab39c4554ecc2a00fce`
+2. Add `TRUSTLAYER_API_SECRET` as a Replit Secret with value `04f5b54e76698d64c304e470c8d7075153775771ee9af71dfcc6c1b96b3edae5`
+3. Optionally add `TRUSTLAYER_BASE_URL` as env var with value `https://dwsc.io` (this is the default if not set)
+4. Restart the backend server
+5. `GET /api/trustlayer/status` will return `{ "configured": true }`
 
 ### Already Configured (PaintPros.io ecosystem)
 
@@ -408,7 +423,7 @@ Overall = (Security x 0.20) + (Transparency x 0.25) + (Reliability x 0.30) + (Co
 - [x] End-to-end testing passed (all screens verified)
 
 ### Not Yet Done
-- [ ] **TRUSTLAYER_API_KEY and TRUSTLAYER_API_SECRET** need to be added as Replit secrets
+- [x] ~~**TRUSTLAYER_API_KEY and TRUSTLAYER_API_SECRET** need to be added as Replit secrets~~ **DONE — credentials issued and configured (see Section 9)**
 - [ ] Live trust score fetching per user (replace sample scores with API calls)
 - [ ] Certification submission UI flow (form + Stripe checkout)
 - [ ] Cross-ecosystem SSO login via Trust Layer credential verification
@@ -418,11 +433,13 @@ Overall = (Security x 0.20) + (Transparency x 0.25) + (Reliability x 0.30) + (Co
 - [ ] Blockchain stamp verification detail view
 - [ ] Annual re-certification reminder system
 
-### To Activate Trust Layer
+### Trust Layer Activation — COMPLETED
 
-1. Register TrustHome as an ecosystem app at dwsc.io
-2. Receive `apiKey` and `apiSecret` credentials
-3. Add to Replit Secrets: `TRUSTLAYER_API_KEY` and `TRUSTLAYER_API_SECRET`
+TrustHome has been registered in the Trust Layer ecosystem and credentials have been issued:
+
+1. ~~Register TrustHome as an ecosystem app at dwsc.io~~ **DONE** — App ID: `24ebd952-1270-47e8-8aa1-3d028f232c37`
+2. ~~Receive `apiKey` and `apiSecret` credentials~~ **DONE** — See Section 9 for the actual values
+3. ~~Add to Replit Secrets: `TRUSTLAYER_API_KEY` and `TRUSTLAYER_API_SECRET`~~ **DONE** on dwsc.io; TrustHome agent must add them to their own Replit project
 4. Restart backend — the status endpoint will return `configured: true`
 5. All proxy routes will begin forwarding to dwsc.io with HMAC authentication
 
