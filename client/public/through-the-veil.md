@@ -757,11 +757,19 @@ You can. The evidence exists. And it has been systematically ignored, ridiculed,
 
 Ron Wyatt, an amateur archaeologist and anesthetist from Tennessee, discovered what mainstream archaeology refuses to acknowledge: the actual remains of Sodom, Gomorrah, Admah, Zeboiim, and Zoar near the Dead Sea.
 
+![The Dead Sea region - location of the ash cities](/veil-images/dead-sea-region.jpg)
+
 Bere'shiyth (Genesis) 19:24-25: "Then Yahuah rained upon Sodom and upon Gomorrah brimstone and fire from Yahuah out of heaven; And he overthrew those cities, and all the plain, and all the inhabitants of the cities, and that which grew upon the ground."
 
 What Wyatt found: **entire city structures turned to ash**. Not metaphorical ash - literal calcium sulfite ash. Buildings with right angles. Walls. Streets. Ziggurats. All reduced to white powder.
 
+![City structures turned to ash - windows and doorways still visible in the calcium sulfite remains](/veil-images/ash-city-structures.jpg)
+
 Embedded in this ash are **sulfur balls** - pure brimstone with burn rings around them, some still encased in the ash that formed when they burned. These sulfur balls are 95-98% pure sulfur. For comparison, naturally occurring volcanic sulfur is only 40% pure at maximum.
+
+![Sulfur ball with visible burn ring from the Sodom site](/veil-images/sulfur-ball-hand.jpg)
+
+![Sulfur ball still embedded in the ash wall](/veil-images/sulfur-embedded-ash.jpg)
 
 These sulfur balls are unlike anything found anywhere else on Earth. They're not volcanic. They're not natural formations. They appear to have rained down from above and burned at temperatures hot enough to melt rock - exactly as Genesis describes.
 
@@ -773,9 +781,13 @@ Shemoth (Exodus) 19:18: "And mount Sinai was altogether on a smoke, because Yahu
 
 Traditional sites in the Sinai Peninsula show no evidence of this burning. But Jabal al-Lawz in Saudi Arabia - the site Wyatt identified as the true Mount Sinai - shows something remarkable: **the peak is burned black**.
 
+![Jabal al-Lawz - the burned peak of the true Mount Sinai in Saudi Arabia](/veil-images/jabal-al-lawz.jpg)
+
 You can see the line where the burning stops. The lower portion of the mountain is normal rock. Above a certain elevation, it's charred. Blackened. As if something descended in fire.
 
 Nearby, Wyatt documented the split rock that Moses struck for water (Exodus 17:6), large enough for millions to drink from, with clear water erosion patterns. He found the altar of the golden calf (Exodus 32), with petroglyphs of Egyptian-style cattle worship. He found the twelve pillars Moses erected (Exodus 24:4).
+
+![The Split Rock of Horeb - where Moses struck the rock and water flowed](/veil-images/split-rock-horeb.jpg)
 
 The Saudi government initially fenced the entire area as a restricted archaeological zone. The evidence is too significant to allow public access.
 
@@ -785,9 +797,15 @@ Shemoth (Exodus) 14:21-22: "And Mosheh stretched out his hand over the sea; and 
 
 Ron Wyatt identified the crossing site at Nuweiba Beach on the Gulf of Aqaba - not the shallow Reed Sea traditionally proposed, but a deep water crossing to what is now Saudi Arabia.
 
+![Underwater evidence at the Red Sea crossing site](/veil-images/red-sea-underwater.jpg)
+
 What he found underwater was extraordinary: **Egyptian chariot wheels** encrusted with coral, scattered across the sea floor in a pattern consistent with an army in pursuit. Four-spoke, six-spoke, and eight-spoke wheels - designs consistent with the 18th Dynasty of Egypt, the time of the Exodus.
 
+![Egyptian chariot wheels encrusted with coral on the Red Sea floor](/veil-images/chariot-wheels-underwater.jpg)
+
 On both shores - the Egyptian side and the Arabian side - stand **granite columns**. These pillars, erected as memorials, mark the crossing site. The column on the Saudi side still bears Phoenician inscriptions. King Solomon himself may have erected these markers to commemorate what happened there.
+
+![Granite pillar marker at the Red Sea crossing site](/veil-images/crossing-pillar.jpg)
 
 The underwater land bridge between the two shores has a gradual descent - exactly what would be needed for millions of people with livestock and carts to cross. The depths on either side drop sharply - exactly where the waters would have "stood as walls" and collapsed on the Egyptian army.
 
@@ -795,11 +813,15 @@ The underwater land bridge between the two shores has a gradual descent - exactl
 
 In the mountains of Ararat in eastern Turkey, near the village of Dogubayazit, sits a boat-shaped formation that matches the biblical dimensions of the Ark precisely. Bere'shiyth (Genesis) 6:15: "And this is the fashion which you shall make it of: The length of the ark shall be three hundred cubits, the breadth of it fifty cubits, and the height of it thirty cubits."
 
+![Noah's Ark formation in the mountains of Ararat, Turkey](/veil-images/noahs-ark-formation.jpg)
+
 Using the Royal Egyptian cubit (20.6 inches), the Ark would be 515 feet long. The formation at this site measures 515 feet exactly.
 
 Ground-penetrating radar revealed internal structures consistent with a ship - regularly spaced, parallel lines suggesting deck beams and bulkheads. Metal detector surveys found iron at regular intervals, consistent with metal brackets or fittings.
 
 Near the site, Wyatt found **anchor stones** - massive stones with holes drilled through them, of the type used by ancient ships as sea anchors. These stones bear crosses carved into them by later Armenian Christians who recognized their significance.
+
+![Mount Ararat - where the Ark came to rest](/veil-images/mount-ararat.jpg)
 
 The Turkish government has designated this area as a national park and constructed a visitor center. They take the identification seriously, even if Western academia does not.
 
@@ -808,6 +830,8 @@ The Turkish government has designated this area as a national park and construct
 Bere'shiyth (Genesis) describes a pre-flood world vastly different from ours. The atmosphere held more oxygen. Living things grew larger. Trees grew to heights we can barely imagine today.
 
 Devils Tower in Wyoming rises 867 feet above the surrounding terrain. Official explanation: volcanic plug, magma that cooled underground and was exposed by erosion.
+
+![Devils Tower in Wyoming - petrified giant tree stump?](/veil-images/devils-tower.jpg)
 
 But look at it. The vertical columnar striations. The flat top. The hexagonal cross-sections of the "columns." It looks exactly like a petrified tree stump - cut, with the distinctive pattern of tree growth rings visible in the columns.
 
@@ -4041,6 +4065,8 @@ Just that little thing. Just anything that's physically possible to disrupt the 
 432 Hz is often called the "natural frequency" or the "Verdi pitch." Music tuned to this frequency is said to resonate with the human body, with nature, with the cosmos itself.
 
 In 1953, the International Organization for Standardization adopted 440 Hz as the standard tuning pitch. The change was subtle. Most people never noticed. But the effect was cumulative.
+
+![Cymatics comparison: 432 Hz creates harmonious geometric patterns while 440 Hz creates chaotic patterns](/veil-images/cymatics-432-440.png)
 
 Sound is frequency. Frequency affects matter. Matter includes cells, brain, emotions, thoughts.
 

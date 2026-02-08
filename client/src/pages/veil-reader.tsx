@@ -967,8 +967,23 @@ export default function VeilReader() {
             prose-blockquote:border-l-cyan-500 prose-blockquote:bg-slate-900/50 prose-blockquote:px-4 prose-blockquote:py-2 prose-blockquote:rounded-r
             prose-blockquote:text-slate-300 prose-blockquote:italic
             prose-hr:border-slate-700
+            prose-img:rounded-lg prose-img:border prose-img:border-cyan-500/30 prose-img:shadow-lg prose-img:shadow-cyan-500/10
           ">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            <ReactMarkdown 
+              remarkPlugins={[remarkGfm]}
+              components={{
+                img: ({ node, ...props }) => (
+                  <figure className="my-6 flex flex-col items-center">
+                    <div className="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/30 max-w-lg w-full">
+                      <img {...props} className="w-full rounded-lg" loading="lazy" />
+                      {props.alt && (
+                        <p className="text-center text-sm text-slate-400 mt-2 italic">{props.alt}</p>
+                      )}
+                    </div>
+                  </figure>
+                ),
+              }}
+            >
               {chapter.content}
             </ReactMarkdown>
           </div>
