@@ -16,15 +16,11 @@ import {
   CheckCircle2,
   Users,
   Globe,
-  Zap,
-  Lock,
-  BadgeCheck,
-  TrendingUp,
   Coins,
   Crown,
-  ExternalLink,
   ChevronRight,
   Menu,
+  LayoutGrid,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -33,6 +29,12 @@ import { Footer } from "@/components/footer";
 import { SimpleLoginModal } from "@/components/simple-login";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { fetchEcosystemApps } from "@/lib/api";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const MEMBERSHIP_FEATURES = [
   {
@@ -139,31 +141,68 @@ export default function TrustLayerLanding() {
             <span className="font-display font-bold text-base sm:text-lg tracking-tight whitespace-nowrap">Trust Layer</span>
           </Link>
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link href="/ecosystem">
-              <Button variant="ghost" size="sm" className="h-8 text-xs hidden sm:flex" data-testid="link-nav-apps">
-                Apps
-              </Button>
-            </Link>
-            <Link href="/chronochat">
-              <Button variant="ghost" size="sm" className="h-8 text-xs hidden sm:flex" data-testid="link-nav-chat">
-                Chat
-              </Button>
-            </Link>
-            <Link href="/presale">
-              <Button variant="ghost" size="sm" className="h-8 text-xs hidden sm:flex" data-testid="link-nav-presale">
-                Presale
-              </Button>
-            </Link>
+            <div className="hidden sm:flex items-center gap-2">
+              <Link href="/ecosystem">
+                <Button variant="ghost" size="sm" className="h-8 text-xs" data-testid="link-nav-apps">
+                  Apps
+                </Button>
+              </Link>
+              <Link href="/chronochat">
+                <Button variant="ghost" size="sm" className="h-8 text-xs" data-testid="link-nav-chat">
+                  Chat
+                </Button>
+              </Link>
+              <Link href="/presale">
+                <Button variant="ghost" size="sm" className="h-8 text-xs" data-testid="link-nav-presale">
+                  Presale
+                </Button>
+              </Link>
+            </div>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="h-8 w-8 p-0" data-testid="button-nav-menu">
+                  <Menu className="w-5 h-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48 bg-slate-900/95 border-white/10 backdrop-blur-xl">
+                <DropdownMenuItem asChild>
+                  <Link href="/ecosystem" className="flex items-center gap-2 cursor-pointer">
+                    <LayoutGrid className="w-4 h-4" />
+                    <span>Ecosystem</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/chronochat" className="flex items-center gap-2 cursor-pointer">
+                    <Users className="w-4 h-4" />
+                    <span>ChronoChat</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/presale" className="flex items-center gap-2 cursor-pointer">
+                    <Coins className="w-4 h-4" />
+                    <span>Presale</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/guardian-ai" className="flex items-center gap-2 cursor-pointer">
+                    <Shield className="w-4 h-4" />
+                    <span>Guardian AI</span>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             {isAuthenticated ? (
               <Link href="/my-hub">
-                <Button size="sm" className="h-8 text-xs bg-primary text-background hover:bg-primary/90 hidden sm:flex" data-testid="link-nav-myhub">
+                <Button size="sm" className="h-8 text-xs bg-primary text-background hover:bg-primary/90" data-testid="link-nav-myhub">
                   My Hub
                 </Button>
               </Link>
             ) : (
               <Button
                 size="sm"
-                className="h-8 text-xs bg-primary text-background hover:bg-primary/90 hidden sm:flex"
+                className="h-8 text-xs bg-primary text-background hover:bg-primary/90"
                 onClick={() => setShowLoginModal(true)}
                 data-testid="button-nav-signup"
               >
@@ -425,33 +464,33 @@ export default function TrustLayerLanding() {
       <section className="py-16 px-4 bg-slate-900/50">
         <div className="container mx-auto max-w-4xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <GlassCard glow className="p-6 sm:p-8">
+            <GlassCard glow className="p-6 sm:p-8 flex flex-col h-full">
               <div className="flex items-center gap-3 mb-5">
                 <div className="p-2.5 rounded-lg bg-cyan-500/20 border border-cyan-500/20 flex-shrink-0">
                   <User className="w-5 h-5 text-cyan-400" />
                 </div>
                 <h3 className="text-xl font-bold">Individuals</h3>
               </div>
-              <p className="text-white/60 mb-5 text-sm leading-relaxed">
+              <p className="text-white/60 mb-6 text-sm leading-relaxed">
                 Join for free and receive your Trust Card, earn rewards through referrals, and
                 access verified services across the ecosystem.
               </p>
-              <ul className="space-y-3 mb-6 text-sm">
-                <li className="flex items-center gap-2.5 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
-                  Free membership forever
+              <ul className="space-y-4 mb-8 text-sm flex-grow px-2">
+                <li className="flex items-start gap-3 text-white/70">
+                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                  <span>Free membership forever</span>
                 </li>
-                <li className="flex items-center gap-2.5 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
-                  Earn Shells through referrals
+                <li className="flex items-start gap-3 text-white/70">
+                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                  <span>Earn Shells through referrals</span>
                 </li>
-                <li className="flex items-center gap-2.5 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
-                  Access to community features
+                <li className="flex items-start gap-3 text-white/70">
+                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                  <span>Access to community features</span>
                 </li>
               </ul>
               <Button
-                className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold"
+                className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold mt-auto"
                 onClick={handleGetStarted}
                 data-testid="button-individual-signup"
               >
@@ -460,37 +499,37 @@ export default function TrustLayerLanding() {
               </Button>
             </GlassCard>
 
-            <GlassCard glow className="p-6 sm:p-8">
+            <GlassCard glow className="p-6 sm:p-8 flex flex-col h-full">
               <div className="flex items-center gap-3 mb-5">
                 <div className="p-2.5 rounded-lg bg-purple-500/20 border border-purple-500/20 flex-shrink-0">
                   <Building2 className="w-5 h-5 text-purple-400" />
                 </div>
-                <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex flex-col gap-1">
                   <h3 className="text-xl font-bold">Businesses</h3>
-                  <Badge variant="outline" className="text-[10px] border-purple-500/30 text-purple-400">
+                  <Badge variant="outline" className="w-fit text-[10px] border-purple-500/30 text-purple-400">
                     Requires Personal Account
                   </Badge>
                 </div>
               </div>
-              <p className="text-white/60 mb-5 text-sm leading-relaxed">
+              <p className="text-white/60 mb-6 text-sm leading-relaxed">
                 Verify your business on the Trust Layer for API access, team management, and
                 enhanced referral rewards.
               </p>
-              <ul className="space-y-3 mb-6 text-sm">
-                <li className="flex items-center gap-2.5 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
-                  Verified business badge
+              <ul className="space-y-4 mb-8 text-sm flex-grow px-2">
+                <li className="flex items-start gap-3 text-white/70">
+                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                  <span>Verified business badge</span>
                 </li>
-                <li className="flex items-center gap-2.5 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
-                  2.5x referral rewards
+                <li className="flex items-start gap-3 text-white/70">
+                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                  <span>2.5x referral rewards</span>
                 </li>
-                <li className="flex items-center gap-2.5 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
-                  API access & webhooks
+                <li className="flex items-start gap-3 text-white/70">
+                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                  <span>API access & webhooks</span>
                 </li>
               </ul>
-              <Link href={isAuthenticated ? "/business-apply" : "#"}>
+              <Link href={isAuthenticated ? "/business-apply" : "#"} className="mt-auto">
                 <Button
                   variant="outline"
                   className="w-full border-purple-500/30 text-purple-400 hover:bg-purple-500/10"
