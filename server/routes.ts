@@ -338,6 +338,7 @@ export async function registerRoutes(
         if (metadata.type === "presale") {
           try {
             const tier = metadata.tier || "custom";
+            const buyerName = session.customer_details?.name || metadata.name || "Supporter";
             
             // SECURITY: Calculate bonus server-side from verified amount (not tier)
             // Get current token price based on total raised (milestone pricing)
@@ -356,8 +357,8 @@ export async function registerRoutes(
             
             // Record the purchase with payment_intent as key
             await db.execute(sql`
-              INSERT INTO presale_purchases (stripe_payment_intent_id, email, usd_amount_cents, token_amount, tier, status, payment_method, created_at)
-              VALUES (${paymentId}, ${customerEmail}, ${amountCents}, ${totalTokens}, ${tier}, 'completed', 'stripe', NOW())
+              INSERT INTO presale_purchases (stripe_payment_intent_id, email, buyer_name, usd_amount_cents, token_amount, tier, status, payment_method, created_at)
+              VALUES (${paymentId}, ${customerEmail}, ${buyerName}, ${amountCents}, ${totalTokens}, ${tier}, 'completed', 'stripe', NOW())
               ON CONFLICT (stripe_payment_intent_id) DO NOTHING
             `);
             
@@ -10322,6 +10323,9 @@ const { trustLayerId } = await response.json();`
           || session.metadata?.email 
           || session.customer_email 
           || "anonymous";
+        const customerName = session.customer_details?.name
+          || session.metadata?.name
+          || "Supporter";
         const amountCents = session.amount_total || 0;
         const tier = session.metadata?.tier || 'unknown';
         const amountPaid = (amountCents / 100).toFixed(2);
@@ -10340,10 +10344,11 @@ const { trustLayerId } = await response.json();`
         const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
         
         const insertResult = await db.execute(sql`
-          INSERT INTO presale_purchases (stripe_payment_intent_id, email, usd_amount_cents, token_amount, tier, status, payment_method, created_at)
+          INSERT INTO presale_purchases (stripe_payment_intent_id, email, buyer_name, usd_amount_cents, token_amount, tier, status, payment_method, created_at)
           VALUES (
             ${sessionId}, 
             ${customerEmail}, 
+            ${customerName},
             ${amountCents}, 
             ${tokenAmount + bonusTokens},
             ${tier},
