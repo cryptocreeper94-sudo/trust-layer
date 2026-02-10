@@ -7,7 +7,6 @@ import {
   ArrowRight, Shield, Lock, Eye, TrendingUp, Activity,
   Zap, DollarSign, Crown, Gamepad2, Clock, CheckCircle2, ShieldCheck
 } from "lucide-react";
-import { MobileNav } from "@/components/mobile-nav";
 
 const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
   <motion.div
@@ -445,7 +444,6 @@ function OwnerDashboard() {
         )}
       </AnimatePresence>
 
-      <MobileNav />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-8 pt-20">
         <motion.div

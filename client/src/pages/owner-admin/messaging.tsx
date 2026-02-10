@@ -6,7 +6,6 @@ import {
   Sparkles, Clock, Lock, Edit3, Plus, Trash2, Save, X,
   Megaphone, Zap, Shield, Crown, Star, AlertCircle
 } from "lucide-react";
-import { MobileNav } from "@/components/mobile-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -206,7 +205,6 @@ export default function MessagingCatalog() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
-      <MobileNav />
 
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div

@@ -9,7 +9,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/glass-card";
 import { Badge } from "@/components/ui/badge";
-import { MobileNav } from "@/components/mobile-nav";
 
 const DISCORD_TELEGRAM_MESSAGES = {
   evergreen: [
@@ -393,7 +392,6 @@ export default function MarketingCatalogAdmin() {
       <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={600} top="-10%" left="-10%" />
       <GlowOrb color="linear-gradient(135deg, #06b6d4, #8b5cf6)" size={500} top="50%" left="70%" delay={2} />
       
-      <MobileNav />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-8 pt-20">
         <motion.div

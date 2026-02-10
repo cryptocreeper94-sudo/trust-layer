@@ -21,7 +21,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Progress } from "@/components/ui/progress";
 import { MemberBadge } from "@/components/member-badge";
 import { WalletButton } from "@/components/wallet-button";
-import { MobileNav } from "@/components/mobile-nav";
 
 export default function MyHub() {
   const { user, isAuthenticated } = useSimpleAuth();
@@ -432,7 +431,6 @@ export default function MyHub() {
             </Link>
             {user?.id && <MemberBadge userId={user.id.toString()} />}
             <WalletButton />
-            <MobileNav />
           </div>
         </div>
       </nav>

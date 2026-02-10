@@ -7,7 +7,6 @@ import {
   Shell, Trophy, Users, Clock, CheckCircle, XCircle, AlertCircle,
   Lightbulb, ChevronDown, ChevronUp, Sparkles, RefreshCw, Download
 } from "lucide-react";
-import { MobileNav } from "@/components/mobile-nav";
 
 const QUEST_SUGGESTIONS = [
   { category: "Daily Engagement", quests: [
@@ -223,7 +222,6 @@ export default function ZealyAdmin() {
       <GlowOrb color="linear-gradient(135deg, #8b5cf6, #06b6d4)" size={500} top="-5%" left="60%" />
       <GlowOrb color="linear-gradient(135deg, #ec4899, #8b5cf6)" size={400} top="70%" left="10%" delay={2} />
 
-      <MobileNav />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-8 pt-20">
         <motion.div

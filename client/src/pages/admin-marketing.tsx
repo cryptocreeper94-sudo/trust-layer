@@ -13,7 +13,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { MobileNav } from "@/components/mobile-nav";
 import { Link } from "wouter";
 
 interface MarketingPost {
@@ -192,7 +191,6 @@ export default function AdminMarketing() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-      <MobileNav />
       
       {/* Floating ambient glow orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">

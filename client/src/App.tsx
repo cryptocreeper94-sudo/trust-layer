@@ -11,6 +11,7 @@ import { getAppFromHost } from "@/lib/app-config";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
 import { FloatingChat } from "@/components/floating-chat";
 import { GlobalSearch } from "@/components/global-search";
+import { MobileNav } from "@/components/mobile-nav";
 
 // Critical pages - load immediately
 import Home from "@/pages/home";
@@ -644,6 +645,7 @@ function App() {
               <TooltipProvider>
                 <Toaster />
                 <Router />
+                <MobileNav />
                 {showAIAssistant && <AIAssistant />}
                 <FloatingChat />
                 <GlobalSearch />

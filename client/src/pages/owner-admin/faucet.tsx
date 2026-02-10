@@ -6,7 +6,6 @@ import {
   RefreshCw, TrendingUp, Wallet
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
-import { MobileNav } from "@/components/mobile-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -251,7 +250,6 @@ export default function OwnerFaucet() {
         </motion.div>
       </div>
 
-      <MobileNav />
     </div>
   );
 }

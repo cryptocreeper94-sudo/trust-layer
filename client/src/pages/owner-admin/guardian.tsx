@@ -6,7 +6,6 @@ import {
   Search, Download, AlertTriangle, DollarSign, FileText, Sparkles
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
-import { MobileNav } from "@/components/mobile-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -149,7 +148,6 @@ export default function OwnerGuardian() {
       <GlowOrb color="linear-gradient(135deg, #ec4899, #8b5cf6)" size={500} top="50%" left="70%" delay={2} />
       <GlowOrb color="linear-gradient(135deg, #22c55e, #06b6d4)" size={400} top="80%" left="10%" delay={4} />
 
-      <MobileNav />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-8 pt-20">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">

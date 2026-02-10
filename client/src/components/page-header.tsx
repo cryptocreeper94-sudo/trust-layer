@@ -1,7 +1,6 @@
 import { ArrowLeft, Home } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { MobileNav } from "@/components/mobile-nav";
 
 interface PageHeaderProps {
   title: string;
@@ -66,7 +65,6 @@ export function PageHeader({
               </Button>
             </Link>
           )}
-          {showMenu && <MobileNav />}
         </div>
       </div>
     </nav>

@@ -8,7 +8,6 @@ import {
   ArrowRight, ExternalLink, Clock, CheckCircle2, AlertTriangle,
   Target, Coins, Rocket, Lock, Unlock, FileText
 } from "lucide-react";
-import { MobileNav } from "@/components/mobile-nav";
 
 interface QuickStat {
   label: string;
@@ -158,7 +157,6 @@ export default function AdminDashboard() {
       <GlowOrb color="linear-gradient(135deg, #ec4899, #8b5cf6)" size={500} top="50%" left="70%" delay={2} />
       <GlowOrb color="linear-gradient(135deg, #f59e0b, #ef4444)" size={400} top="80%" left="20%" delay={4} />
 
-      <MobileNav />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 py-8 pt-20">
         <motion.div

@@ -6,7 +6,6 @@ import {
   ShieldCheck, ArrowLeft, CheckCircle, XCircle, Clock,
   User, Globe, Calendar, AlertTriangle, Loader2, Search, Filter
 } from "lucide-react";
-import { MobileNav } from "@/components/mobile-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -248,7 +247,6 @@ export default function KycAdmin() {
       <GlowOrb color="linear-gradient(135deg, #8b5cf6, #06b6d4)" size={600} top="-10%" left="-10%" />
       <GlowOrb color="linear-gradient(135deg, #ec4899, #8b5cf6)" size={500} top="50%" left="70%" delay={2} />
 
-      <MobileNav />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 py-8 pt-20">
         <motion.div

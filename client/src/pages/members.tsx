@@ -11,7 +11,6 @@ import { GlassCard } from "@/components/glass-card";
 import { Footer } from "@/components/footer";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { useQuery } from "@tanstack/react-query";
-import { MobileNav } from "@/components/mobile-nav";
 import { WalletButton } from "@/components/wallet-button";
 
 interface MemberProfile {
@@ -56,7 +55,6 @@ export default function Members() {
           </Link>
           <div className="flex items-center gap-2 sm:gap-3">
             <WalletButton />
-            <MobileNav />
           </div>
         </div>
       </nav>

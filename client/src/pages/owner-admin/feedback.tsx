@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MobileNav } from "@/components/mobile-nav";
 
 const STATUS_OPTIONS = [
   { id: "new", label: "New", color: "cyan", icon: Clock },
@@ -278,7 +277,6 @@ export default function OwnerFeedback() {
             <ArrowLeft className="w-4 h-4" />
             <span className="font-display font-bold text-xl tracking-tight">Owner Portal</span>
           </Link>
-          <MobileNav />
         </div>
       </nav>
 

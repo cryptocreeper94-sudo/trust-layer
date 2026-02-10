@@ -502,25 +502,25 @@ export default function GuardianAI() {
           transition={{ delay: 0.1 }}
           className="mb-16"
         >
-          <GlassCard glow className="p-8 border-red-500/20 bg-gradient-to-br from-red-900/10 to-slate-900/50">
-            <div className="flex items-center gap-3 mb-6">
-              <AlertTriangle className="w-8 h-8 text-red-400" />
+          <GlassCard glow className="p-10 md:p-12 border-red-500/20 bg-gradient-to-br from-red-900/10 to-slate-900/50">
+            <div className="flex items-center gap-4 mb-8">
+              <AlertTriangle className="w-8 h-8 text-red-400 shrink-0" />
               <h2 className="text-2xl md:text-3xl font-bold text-white">The AI Agent Trust Crisis</h2>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
               {MARKET_STATS.map((stat, i) => (
-                <div key={i} className="text-center">
+                <div key={i} className="text-center p-4">
                   <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
                     {stat.value}
                   </div>
-                  <div className="text-sm text-white font-medium mt-1">{stat.label}</div>
-                  <div className="text-xs text-slate-400">{stat.sublabel}</div>
+                  <div className="text-sm text-white font-medium mt-2">{stat.label}</div>
+                  <div className="text-xs text-slate-400 mt-1">{stat.sublabel}</div>
                 </div>
               ))}
             </div>
 
-            <p className="text-slate-300 text-lg">
+            <p className="text-slate-300 text-lg leading-relaxed">
               The AI agent explosion has created a wild west where <strong className="text-red-400">rug pulls, malicious bots, and fake agents</strong> are rampant.
               Users have no way to verify which agents are safe. That ends now.
             </p>
@@ -540,10 +540,10 @@ export default function GuardianAI() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {WHY_CERTIFY.map((item, i) => (
-              <GlassCard key={i} glow className="p-6">
-                <item.icon className="w-10 h-10 text-cyan-400 mb-4" />
-                <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
-                <p className="text-slate-400 text-sm">{item.description}</p>
+              <GlassCard key={i} glow className="p-8">
+                <item.icon className="w-10 h-10 text-cyan-400 mb-5" />
+                <h3 className="text-lg font-semibold text-white mb-3">{item.title}</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">{item.description}</p>
               </GlassCard>
             ))}
           </div>
@@ -565,14 +565,14 @@ export default function GuardianAI() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {TRUST_METRICS.map((metric, i) => (
-              <GlassCard key={i} className="p-6 border-purple-500/20">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 bg-purple-500/20 rounded-lg">
+              <GlassCard key={i} className="p-8 border-purple-500/20">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-3 bg-purple-500/20 rounded-lg">
                     <metric.icon className="w-5 h-5 text-purple-400" />
                   </div>
                   <h3 className="font-semibold text-white">{metric.name}</h3>
                 </div>
-                <p className="text-slate-400 text-sm">{metric.description}</p>
+                <p className="text-slate-400 text-sm leading-relaxed">{metric.description}</p>
               </GlassCard>
             ))}
           </div>
@@ -592,41 +592,41 @@ export default function GuardianAI() {
             Choose the level of verification that matches your agent's needs and market position.
           </p>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {CERTIFICATION_TIERS.map((tier, i) => (
               <GlassCard 
                 key={tier.id} 
                 glow={tier.highlight}
-                className={`p-6 relative ${tier.highlight ? 'border-purple-500/50' : ''}`}
+                className={`p-8 relative ${tier.highlight ? 'border-purple-500/50' : ''}`}
               >
                 {tier.highlight && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0">
+                    <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 px-4 py-1">
                       Most Popular
                     </Badge>
                   </div>
                 )}
                 
-                <div className={`p-3 bg-${tier.color}-500/20 rounded-xl w-fit mb-4`}>
+                <div className={`p-3 bg-${tier.color}-500/20 rounded-xl w-fit mb-5`}>
                   <tier.icon className={`w-8 h-8 text-${tier.color}-400`} />
                 </div>
                 
-                <h3 className="text-xl font-bold text-white mb-1">{tier.name}</h3>
-                <p className="text-slate-400 text-sm mb-4">{tier.tagline}</p>
+                <h3 className="text-xl font-bold text-white mb-2">{tier.name}</h3>
+                <p className="text-slate-400 text-sm mb-5">{tier.tagline}</p>
                 
                 <div className="mb-6">
                   <span className={`text-3xl font-bold text-${tier.color}-400`}>{tier.price}</span>
                   <span className="text-slate-400 text-sm ml-2">{tier.priceNote}</span>
                 </div>
 
-                <div className="flex items-center gap-2 text-slate-400 text-sm mb-4">
+                <div className="flex items-center gap-2 text-slate-400 text-sm mb-5">
                   <Clock className="w-4 h-4" />
                   <span>{tier.duration}</span>
                 </div>
                 
-                <ul className="space-y-2 mb-6">
+                <ul className="space-y-3 mb-8">
                   {tier.features.map((feature, j) => (
-                    <li key={j} className="flex items-start gap-2 text-sm text-slate-300">
+                    <li key={j} className="flex items-start gap-3 text-sm text-slate-300">
                       <CheckCircle className={`w-4 h-4 text-${tier.color}-400 mt-0.5 shrink-0`} />
                       <span>{feature}</span>
                     </li>
@@ -731,35 +731,35 @@ export default function GuardianAI() {
           transition={{ delay: 0.35 }}
           className="mb-16"
         >
-          <GlassCard glow className="p-8">
-            <h2 className="text-2xl font-bold text-center mb-8">
+          <GlassCard glow className="p-10 md:p-12">
+            <h2 className="text-2xl font-bold text-center mb-10">
               Trusted by <span className="text-cyan-400">Businesses</span>
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="p-6 bg-slate-800/50 rounded-xl border border-slate-700">
-                <div className="flex items-center gap-3 mb-4">
-                  <Building className="w-8 h-8 text-cyan-400" />
+              <div className="p-8 bg-slate-800/50 rounded-xl border border-slate-700">
+                <div className="flex items-center gap-4 mb-5">
+                  <Building className="w-8 h-8 text-cyan-400 shrink-0" />
                   <div>
                     <h3 className="font-bold text-white">Nashville Painting Professionals</h3>
-                    <p className="text-sm text-slate-400">Trust Layer Partner</p>
+                    <p className="text-sm text-slate-400 mt-1">Trust Layer Partner</p>
                   </div>
                 </div>
-                <p className="text-slate-300 text-sm">
+                <p className="text-slate-300 text-sm leading-relaxed">
                   "The Guardian certification gave our clients confidence that our automated scheduling 
                   and payment systems are secure and reliable."
                 </p>
               </div>
               
-              <div className="p-6 bg-slate-800/50 rounded-xl border border-slate-700">
-                <div className="flex items-center gap-3 mb-4">
-                  <Code className="w-8 h-8 text-purple-400" />
+              <div className="p-8 bg-slate-800/50 rounded-xl border border-slate-700">
+                <div className="flex items-center gap-4 mb-5">
+                  <Code className="w-8 h-8 text-purple-400 shrink-0" />
                   <div>
                     <h3 className="font-bold text-white">Loom</h3>
-                    <p className="text-sm text-slate-400">Trust Layer Partner</p>
+                    <p className="text-sm text-slate-400 mt-1">Trust Layer Partner</p>
                   </div>
                 </div>
-                <p className="text-slate-300 text-sm">
+                <p className="text-slate-300 text-sm leading-relaxed">
                   "Trust Layer's verification infrastructure ensures our enterprise clients can 
                   trust every automated workflow and API integration."
                 </p>
@@ -775,11 +775,11 @@ export default function GuardianAI() {
           transition={{ delay: 0.4 }}
           className="text-center"
         >
-          <GlassCard glow className="p-8 md:p-12 bg-gradient-to-br from-cyan-900/20 via-purple-900/20 to-pink-900/20">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+          <GlassCard glow className="p-10 md:p-16 bg-gradient-to-br from-cyan-900/20 via-purple-900/20 to-pink-900/20">
+            <h2 className="text-2xl md:text-3xl font-bold mb-6">
               Be Among the First <span className="text-cyan-400">Certified AI Agents</span>
             </h2>
-            <p className="text-slate-300 mb-8 max-w-2xl mx-auto">
+            <p className="text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">
               Early certification means prime positioning in our registry, featured placement, 
               and recognition as an industry leader in AI agent safety.
             </p>
@@ -835,7 +835,7 @@ export default function GuardianAI() {
               </DialogContent>
             </Dialog>
 
-            <div className="flex flex-wrap justify-center gap-8 mt-8">
+            <div className="flex flex-wrap justify-center gap-10 mt-10">
               <Link href="/guardian-whitepaper">
                 <span className="text-slate-400 hover:text-cyan-400 transition-colors flex items-center gap-2">
                   <FileCheck className="w-4 h-4" />

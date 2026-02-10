@@ -13,7 +13,6 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchEcosystemApps, fetchBlockchainStats } from "@/lib/api";
 import { FavoriteButton } from "@/components/favorite-button";
 import { SkeletonCard } from "@/components/ui/skeleton-card";
-import { MobileNav } from "@/components/mobile-nav";
 import { usePreferences } from "@/lib/store";
 import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
@@ -504,7 +503,6 @@ export default function Home() {
               </Button>
             </Link>
             <WalletButton />
-            <MobileNav />
           </div>
         </div>
       </nav>

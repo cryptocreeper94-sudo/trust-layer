@@ -9,7 +9,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
-import { MobileNav } from "@/components/mobile-nav";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 
 const FEEDBACK_TYPES = [
@@ -78,7 +77,6 @@ export default function Feedback() {
             <Link href="/" className="flex items-center">
               <span className="font-display font-bold text-xl tracking-tight">DarkWave</span>
             </Link>
-            <MobileNav />
           </div>
         </nav>
 
@@ -128,7 +126,6 @@ export default function Feedback() {
           <Link href="/" className="flex items-center">
             <span className="font-display font-bold text-xl tracking-tight">DarkWave</span>
           </Link>
-          <MobileNav />
         </div>
       </nav>
 

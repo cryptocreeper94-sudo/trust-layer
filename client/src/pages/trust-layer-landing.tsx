@@ -33,7 +33,6 @@ import { Footer } from "@/components/footer";
 import { SimpleLoginModal } from "@/components/simple-login";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { fetchEcosystemApps } from "@/lib/api";
-import { MobileNav } from "@/components/mobile-nav";
 
 const MEMBERSHIP_FEATURES = [
   {
@@ -171,7 +170,6 @@ export default function TrustLayerLanding() {
                 Sign Up
               </Button>
             )}
-            <MobileNav />
           </div>
         </div>
       </nav>
