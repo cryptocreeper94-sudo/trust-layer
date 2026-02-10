@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { 
   Zap, Shield, TrendingUp, Users, Gift, Award, Crown, Sparkles,
   ArrowRight, Clock, CheckCircle, Copy, ExternalLink, Wallet,
-  Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator, X, CreditCard, History, User, UserCheck
+  Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator, X, CreditCard, History, User, UserCheck, Activity
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { authFetch } from "@/hooks/use-firebase-auth";
@@ -1229,6 +1229,87 @@ function MyPurchases({ userEmail, walletAddress }: { userEmail?: string; walletA
   );
 }
 
+interface RecentTransaction {
+  id: string;
+  name: string;
+  amount: number;
+  tokens: number;
+  tier: string;
+  method: string;
+  time: string;
+}
+
+function LiveTransactionFeed() {
+  const { data, isLoading } = useQuery<{ transactions: RecentTransaction[] }>({
+    queryKey: ["/api/presale/recent"],
+    refetchInterval: 15000,
+  });
+
+  const transactions = data?.transactions || [];
+
+  const timeAgo = useCallback((dateStr: string) => {
+    const now = new Date();
+    const date = new Date(dateStr);
+    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    if (seconds < 60) return "just now";
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
+  }, []);
+
+  if (isLoading || transactions.length === 0) return null;
+
+  return (
+    <HolographicCard className="p-6 mb-8" glow="cyan">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="relative">
+          <div className="p-2 rounded-lg bg-green-500/20">
+            <Activity className="w-5 h-5 text-green-400" />
+          </div>
+          <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse" />
+        </div>
+        <div>
+          <h3 className="text-lg font-bold text-white">Recent Purchases</h3>
+          <p className="text-sm text-gray-400">Live presale activity</p>
+        </div>
+      </div>
+
+      <div className="space-y-2 max-h-[300px] overflow-y-auto scrollbar-thin">
+        <AnimatePresence mode="popLayout">
+          {transactions.map((tx, i) => (
+            <motion.div
+              key={tx.id}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ delay: i * 0.05, duration: 0.3 }}
+              className="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-white/5"
+              data-testid={`recent-tx-${tx.id}`}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500/30 to-purple-500/30 flex items-center justify-center text-sm font-bold text-cyan-300 border border-cyan-500/20">
+                  {tx.name.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-white">{tx.name}</p>
+                  <p className="text-xs text-gray-500">{timeAgo(tx.time)}</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm font-bold text-cyan-400">{tx.tokens.toLocaleString()} SIG</p>
+                <p className="text-xs text-gray-500">${tx.amount}</p>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+    </HolographicCard>
+  );
+}
+
 function ReferralBanner({ referrer }: { referrer: string }) {
   return (
     <motion.div
@@ -1318,11 +1399,12 @@ export default function Presale() {
 
         {(purchaseEmail || purchaseWallet) && <MyPurchases userEmail={purchaseEmail || undefined} walletAddress={purchaseWallet || undefined} />}
 
-        <div className="grid lg:grid-cols-2 gap-8 mb-16">
+        <div className="grid lg:grid-cols-2 gap-8 mb-8">
           <PresaleProgress />
           <PurchaseCalculator />
         </div>
 
+        <LiveTransactionFeed />
 
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-center mb-8">

@@ -199,7 +199,7 @@ export async function sendFounderWelcomeEmail(to: string, founderNumber: number,
         <div style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 25px; border-radius: 10px; margin-bottom: 20px;">
           <h3 style="color: #FFD700; margin: 0 0 15px 0;">Your Exclusive Perks</h3>
           <ul style="color: #ffffff; padding-left: 20px; margin: 0;">
-            <li style="margin-bottom: 8px;">35,000 SIG Airdrop on Launch (Apr 11, 2026)</li>
+            <li style="margin-bottom: 8px;">35,000 SIG Airdrop at Mainnet Launch</li>
             <li style="margin-bottom: 8px;">Unlimited AI Analysis (Crypto & Stocks)</li>
             <li style="margin-bottom: 8px;">StrikeAgent Sniper Bot Access</li>
             <li style="margin-bottom: 8px;">Founding Member Badge (Forever)</li>
@@ -279,7 +279,8 @@ export async function sendPresaleConfirmationEmail(to: string, amountPaid: strin
         <div style="background: #1a1a2e; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #00FFFF;">
           <h3 style="color: #00FFFF; margin: 0 0 10px 0;">What's Next?</h3>
           <ul style="color: #888; margin: 0; padding-left: 20px; line-height: 1.8;">
-            <li>Your Signal (SIG) will be available at mainnet launch (April 11, 2026)</li>
+            <li>Your Signal (SIG) will be available when mainnet launches</li>
+            <li>We're milestone-based — no fixed date, just real progress</li>
             <li>20% released at TGE, 80% vested over 12 months</li>
             <li>You'll receive updates and early access announcements</li>
             <li>Join our community to stay connected</li>

@@ -10231,6 +10231,55 @@ const { trustLayerId } = await response.json();`
     }
   });
 
+  app.get("/api/presale/recent", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 20, 50);
+      const result = await db.execute(sql`
+        SELECT 
+          id,
+          buyer_name,
+          usd_amount_cents,
+          token_amount,
+          tier,
+          payment_method,
+          status,
+          created_at
+        FROM presale_purchases
+        WHERE status = 'completed'
+        ORDER BY created_at DESC
+        LIMIT ${limit}
+      `);
+      
+      const transactions = result.rows.map((row: any) => {
+        let rawName = row.buyer_name || '';
+        let displayName = 'Supporter';
+        if (rawName && !rawName.toLowerCase().startsWith('manual') && rawName.length <= 50) {
+          const parts = rawName.trim().split(/\s+/);
+          if (parts.length >= 2) {
+            displayName = parts[0].charAt(0).toUpperCase() + '***' + ' ' + parts[parts.length - 1].charAt(0).toUpperCase() + '.';
+          } else {
+            displayName = parts[0].charAt(0).toUpperCase() + '***';
+          }
+        }
+        
+        return {
+          id: (row.id as string).substring(0, 8),
+          name: displayName,
+          amount: Math.round(row.usd_amount_cents / 100),
+          tokens: row.token_amount,
+          tier: row.tier,
+          method: row.payment_method,
+          time: row.created_at,
+        };
+      });
+      
+      res.json({ transactions });
+    } catch (error) {
+      console.error("Error fetching recent presale transactions:", error);
+      res.json({ transactions: [] });
+    }
+  });
+
   app.get("/api/presale/verify", async (req, res) => {
     try {
       const sessionId = req.query.session_id as string;
