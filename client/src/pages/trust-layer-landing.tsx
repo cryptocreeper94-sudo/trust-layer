@@ -21,6 +21,7 @@ import {
   ChevronRight,
   Menu,
   LayoutGrid,
+  BadgeCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -165,29 +166,42 @@ export default function TrustLayerLanding() {
                   <Menu className="w-5 h-5" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48 bg-slate-900/95 border-white/10 backdrop-blur-xl">
+              <DropdownMenuContent align="end" className="w-56 bg-slate-900/95 border-white/10 backdrop-blur-xl p-2">
                 <DropdownMenuItem asChild>
-                  <Link href="/ecosystem" className="flex items-center gap-2 cursor-pointer">
-                    <LayoutGrid className="w-4 h-4" />
-                    <span>Ecosystem</span>
+                  <Link href="/" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
+                    <Shield className="w-4 h-4 text-cyan-400" />
+                    <span className="font-medium text-sm text-white">Trust Layer Home</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/chronochat" className="flex items-center gap-2 cursor-pointer">
-                    <Users className="w-4 h-4" />
-                    <span>ChronoChat</span>
+                  <Link href="/ecosystem" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
+                    <LayoutGrid className="w-4 h-4 text-purple-400" />
+                    <span className="font-medium text-sm text-white">Ecosystem Apps</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/presale" className="flex items-center gap-2 cursor-pointer">
-                    <Coins className="w-4 h-4" />
-                    <span>Presale</span>
+                  <Link href="/chronochat" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
+                    <Users className="w-4 h-4 text-pink-400" />
+                    <span className="font-medium text-sm text-white">ChronoChat</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/guardian-ai" className="flex items-center gap-2 cursor-pointer">
-                    <Shield className="w-4 h-4" />
-                    <span>Guardian AI</span>
+                  <Link href="/presale" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
+                    <Coins className="w-4 h-4 text-yellow-400" />
+                    <span className="font-medium text-sm text-white">Signal Presale</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/guardian-ai" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
+                    <BadgeCheck className="w-4 h-4 text-blue-400" />
+                    <span className="font-medium text-sm text-white">Guardian AI</span>
+                  </Link>
+                </DropdownMenuItem>
+                <div className="my-2 border-t border-white/5" />
+                <DropdownMenuItem asChild>
+                  <Link href="/portal" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
+                    <Globe className="w-4 h-4 text-cyan-500" />
+                    <span className="font-medium text-sm text-white">Main Portal</span>
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
