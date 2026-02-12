@@ -588,6 +588,29 @@ function DWSCRouter() {
   );
 }
 
+function TrustShieldRouter() {
+  return (
+    <Suspense fallback={<PageLoader />}>
+      <ScrollToTop />
+      <Switch>
+        <Route path="/" component={GuardianAI} />
+        <Route path="/guardian-ai" component={GuardianAI} />
+        <Route path="/guardian-ai-registry" component={GuardianAIRegistry} />
+        <Route path="/guardian-shield" component={GuardianShield} />
+        <Route path="/guardian-certification" component={GuardianCertification} />
+        <Route path="/guardian-whitepaper" component={GuardianWhitepaper} />
+        <Route path="/guardian-portal" component={GuardianPortal} />
+        <Route path="/login" component={Welcome} />
+        <Route path="/signup" component={Welcome} />
+        <Route path="/terms" component={Terms} />
+        <Route path="/privacy" component={Privacy} />
+        <Route path="/trust-layer" component={Home} />
+        <Route component={NotFound} />
+      </Switch>
+    </Suspense>
+  );
+}
+
 function StudiosRouter() {
   return (
     <Suspense fallback={<PageLoader />}>
@@ -628,6 +651,9 @@ function Router() {
   }
   if (appType === "studios") {
     return <StudiosRouter />;
+  }
+  if (appType === "trustshield") {
+    return <TrustShieldRouter />;
   }
   return <DWSCRouter />;
 }

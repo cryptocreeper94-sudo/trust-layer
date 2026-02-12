@@ -127,7 +127,7 @@ function BentoCard({ children, className = "", span = "col-span-1", delay = 0 }:
       transition={{ duration: 0.6, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
       className={`${span} group relative`}
     >
-      <div className={`relative h-full overflow-hidden rounded-2xl border border-white/[0.08] bg-[rgba(10,14,30,0.8)] backdrop-blur-2xl transition-all duration-500 hover:border-white/[0.15] hover:shadow-[0_8px_60px_rgba(0,200,255,0.08)] ${className}`}>
+      <div className={`relative h-full overflow-hidden rounded-2xl border border-white/[0.08] bg-[rgba(10,14,30,0.8)] backdrop-blur-2xl transition-all duration-500 hover:border-white/[0.15] hover:shadow-[0_8px_60px_rgba(0,200,255,0.08)] shadow-xl ${className}`}>
         {children}
       </div>
       <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 -z-10 blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -356,9 +356,9 @@ export default function GuardianAI() {
 
         {/* === BENTO GRID: CRISIS + STATS === */}
         <section className="mb-20">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             
-            <BentoCard span="md:col-span-2" delay={0}>
+            <BentoCard span="md:col-span-2 lg:col-span-2" delay={0}>
               <div className="relative h-full min-h-[320px]">
                 <img src={threatImg} alt="AI Threat Landscape" className="absolute inset-0 w-full h-full object-cover opacity-30" />
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/80 to-slate-950/60" />
@@ -406,7 +406,7 @@ export default function GuardianAI() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             
             <BentoCard delay={0}>
               <div className="relative h-full min-h-[280px]">
@@ -443,7 +443,7 @@ export default function GuardianAI() {
               </div>
             </BentoCard>
 
-            <BentoCard span="md:col-span-2" delay={0.15}>
+            <BentoCard span="md:col-span-2 lg:col-span-2" delay={0.15}>
               <div className="relative h-full min-h-[240px]">
                 <img src={enterpriseImg} alt="Enterprise Infrastructure" className="absolute inset-0 w-full h-full object-cover opacity-20" />
                 <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/70 to-slate-950/50" />
@@ -488,8 +488,8 @@ export default function GuardianAI() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
-            <BentoCard span="md:col-span-1 md:row-span-2" delay={0}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+            <BentoCard span="md:col-span-1 md:row-span-2 lg:col-span-1 lg:row-span-2" delay={0}>
               <div className="relative h-full min-h-[500px]">
                 <img src={trustScoreImg} alt="Trust Score Dashboard" className="absolute inset-0 w-full h-full object-cover opacity-30" />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-950/40" />
@@ -505,7 +505,7 @@ export default function GuardianAI() {
 
             {TRUST_METRICS.map((metric, i) => (
               <BentoCard key={i} delay={0.05 * (i + 1)}>
-                <div className="p-8 h-full">
+                <div className="p-6 sm:p-8 lg:p-8 h-full">
                   <div className="flex items-center justify-between mb-6">
                     <div className="p-3 bg-purple-500/10 rounded-xl border border-purple-500/10">
                       <metric.icon className="w-5 h-5 text-purple-400" />
@@ -540,7 +540,7 @@ export default function GuardianAI() {
             </p>
           </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             {CERTIFICATION_TIERS.map((tier, i) => (
               <BentoCard key={tier.id} delay={i * 0.08} className={tier.highlight ? 'border-purple-500/30 ring-1 ring-purple-500/10' : ''}>
                 <div className={`p-10 relative flex flex-col h-full ${tier.highlight ? 'bg-gradient-to-b from-purple-500/[0.05] to-transparent' : ''}`}>
@@ -569,9 +569,9 @@ export default function GuardianAI() {
                     <span>{tier.duration}</span>
                   </div>
                   
-                  <ul className="space-y-3.5 mb-8 flex-1">
+                  <ul className="space-y-4 mb-8 flex-1">
                     {tier.features.map((feature, j) => (
-                      <li key={j} className="flex items-start gap-3 text-sm text-slate-300">
+                      <li key={j} className="flex items-start gap-3 text-sm text-slate-300 leading-relaxed">
                         <CheckCircle className={`w-4 h-4 mt-0.5 shrink-0 ${tier.color === 'cyan' ? 'text-cyan-400' : tier.color === 'purple' ? 'text-purple-400' : 'text-pink-400'}`} />
                         <span>{feature}</span>
                       </li>
@@ -611,8 +611,8 @@ export default function GuardianAI() {
 
         {/* === BENTO: SOCIAL PROOF === */}
         <section className="mb-20">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
-            <BentoCard span="md:col-span-2" delay={0}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+            <BentoCard span="md:col-span-2 lg:col-span-2" delay={0}>
               <div className="p-10 md:p-12 h-full">
                 <div className="text-xs text-slate-500 uppercase tracking-widest font-semibold mb-8">Trusted Partners</div>
                 

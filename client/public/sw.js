@@ -1,9 +1,12 @@
-const CACHE_NAME = 'trustlayer-v1';
+const CACHE_NAME = 'trustlayer-v2';
 const STATIC_ASSETS = [
   '/',
   '/manifest.webmanifest',
+  '/manifest-trustshield.webmanifest',
   '/icons/trustlayer-192.png',
-  '/icons/trustlayer-512.png'
+  '/icons/trustlayer-512.png',
+  '/icons/trustshield-192.png',
+  '/icons/trustshield-512.png'
 ];
 
 self.addEventListener('install', (event) => {

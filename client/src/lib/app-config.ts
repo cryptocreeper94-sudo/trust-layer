@@ -1,4 +1,4 @@
-export type AppDomain = "dwsc" | "games" | "chrono" | "chronochat" | "strikeagent" | "studios";
+export type AppDomain = "dwsc" | "games" | "chrono" | "chronochat" | "strikeagent" | "studios" | "trustshield";
 
 export function getAppFromHost(): AppDomain {
   const host = window.location.hostname.toLowerCase();
@@ -17,6 +17,9 @@ export function getAppFromHost(): AppDomain {
   }
   if (host.includes("strikeagent") || host === "strikeagent.io" || host === "www.strikeagent.io") {
     return "strikeagent";
+  }
+  if (host.includes("trustshield") || host === "trustshield.tech" || host === "www.trustshield.tech") {
+    return "trustshield";
   }
   return "dwsc";
 }
@@ -76,6 +79,14 @@ export const APP_CONFIG: Record<AppDomain, {
     description: "AI-powered token discovery & safety analysis",
     logoText: "Strike Agent",
     primaryGradient: "from-emerald-500 to-cyan-500",
+  },
+  trustshield: {
+    name: "TrustShield",
+    shortName: "TrustShield",
+    themeColor: "#06b6d4",
+    description: "The world's first AI agent certification system. Verify, certify, and protect autonomous AI.",
+    logoText: "TrustShield",
+    primaryGradient: "from-cyan-500 to-purple-500",
   },
 };
 
