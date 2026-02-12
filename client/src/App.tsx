@@ -11,7 +11,7 @@ import { getAppFromHost } from "@/lib/app-config";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
 import { FloatingChat } from "@/components/floating-chat";
 import { GlobalSearch } from "@/components/global-search";
-import { MobileNav } from "@/components/mobile-nav";
+import { SiteNav } from "@/components/site-nav";
 
 // Critical pages - load immediately
 import Home from "@/pages/home";
@@ -673,8 +673,8 @@ function App() {
             <FavoritesProvider>
               <TooltipProvider>
                 <Toaster />
+                {appType === "dwsc" && <SiteNav />}
                 <Router />
-                <MobileNav />
                 {showAIAssistant && <AIAssistant />}
                 <FloatingChat />
                 <GlobalSearch />

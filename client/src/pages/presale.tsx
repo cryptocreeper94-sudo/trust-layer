@@ -1339,21 +1339,7 @@ export default function Presale() {
 
   return (
     <div className="min-h-screen bg-[#080c18] text-white">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#080c18]/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <Shield className="w-6 h-6 text-cyan-400" />
-            <span className="font-bold text-lg">Trust Layer</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 text-xs hidden sm:flex">
-                Home
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </nav>
+      
       
       <div 
         className="absolute inset-0 opacity-30"

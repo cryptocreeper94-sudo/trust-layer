@@ -1,10 +1,8 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Trophy, Target, ChevronDown, ChevronLeft, ChevronRight, Gift, Search, MessageCircle } from "lucide-react";
-import { openGlobalSearch } from "@/components/global-search";
+import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Trophy, Target, ChevronDown, ChevronLeft, ChevronRight, Gift, Search } from "lucide-react";
 import { InfoTooltip } from "@/components/info-tooltip";
 import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.png";
-import signalEmblem from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
 import shieldImage from "/shield-reference.jpg";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,8 +20,6 @@ import { SimpleLoginModal } from "@/components/simple-login";
 import { GamesComingSoonModal } from "@/components/games-coming-soon-modal";
 import { useState, useRef, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { WalletButton } from "@/components/wallet-button";
-import { MemberBadge } from "@/components/member-badge";
 import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.png";
 import medievalImg from "@assets/generated_images/medieval_castle_vertical_portrait.png";
 import egyptImg from "@assets/generated_images/ancient_egyptian_kingdom_sunset.png";
@@ -464,48 +460,7 @@ export default function Home() {
       />
       {showGamesModal && <GamesComingSoonModal onClose={() => setShowGamesModal(false)} />}
       
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="w-full px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center">
-            <img src={signalEmblem} alt="Home" className="w-8 h-8" />
-          </Link>
-          <div className="flex items-center gap-2 sm:gap-3">
-            {isAuthenticated && user?.id && (
-              <MemberBadge userId={user.id.toString()} />
-            )}
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={openGlobalSearch}
-              className="h-7 sm:h-8 w-7 sm:w-8 p-0 text-white/70 hover:text-white hover:bg-white/10"
-              data-testid="button-global-search"
-            >
-              <Search className="w-4 h-4" />
-            </Button>
-            <Link href="/community">
-              <Button
-                size="sm"
-                variant="ghost"
-                className="h-7 sm:h-8 w-7 sm:w-8 p-0 text-white/70 hover:text-white hover:bg-white/10"
-                data-testid="button-messenger"
-              >
-                <MessageCircle className="w-4 h-4" />
-              </Button>
-            </Link>
-            <Link href="/executive-summary">
-              <Button 
-                size="sm" 
-                className="h-7 sm:h-8 px-2 sm:px-3 text-[10px] sm:text-xs font-semibold bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-white border-0"
-                data-testid="button-transmission"
-              >
-                <Zap className="w-3 h-3 sm:mr-1" />
-                <span className="hidden sm:inline">Vision</span>
-              </Button>
-            </Link>
-            <WalletButton />
-          </div>
-        </div>
-      </nav>
+      
 
       <section className="relative min-h-[85vh] flex items-center justify-center pt-20 md:pt-14 overflow-hidden">
         <div className="absolute inset-0 z-0">
