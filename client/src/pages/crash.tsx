@@ -2,12 +2,11 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import {
-  TrendingUp, Users, MessageCircle, Shield, Gift, Coins,
+  TrendingUp, Users, MessageCircle, Shield, Gift, Coins, ArrowLeft,
   Send, Zap, Clock, AlertTriangle, ChevronDown, ChevronUp, Trophy,
   Info, ExternalLink, Wallet, Volume2, VolumeX, Settings, History, Rocket,
   Target, Percent, Layers, Lock, Unlock, BarChart3, Sparkles, Crown
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,7 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
-import orbyFlying from "@assets/generated_images/orby_planet_mascot_flying.png";
+import orbyFlying from "@assets/generated_images/orby_clean_mascot.png";
 
 const MAX_MULTIPLIER = 5000;
 const HOUSE_EDGE = 0.015;
@@ -402,7 +401,6 @@ function OrbyFlyer({ multiplier, crashed, cashedOut, hasPartialCashout }: { mult
           alt="Orby"
           className="w-full h-full object-contain"
           style={{
-            mixBlendMode: "screen",
             filter: crashed 
               ? "drop-shadow(0 0 20px rgba(239,68,68,0.8)) brightness(0.8) saturate(0.5)"
               : cashedOut
@@ -1071,7 +1069,16 @@ export default function CrashGame() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <BackButton />
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 text-xs gap-1 hover:bg-white/5 px-2 text-muted-foreground hover:text-white"
+              onClick={() => { if (window.history.length > 1) window.history.back(); else window.location.href = "/"; }}
+              data-testid="button-back"
+            >
+              <ArrowLeft className="w-3 h-3" />
+              <span className="hidden sm:inline">Back</span>
+            </Button>
             <div className="flex items-center gap-2">
               <Shield className="w-7 h-7 text-cyan-400" />
               <span className="font-display font-bold">Crash</span>

@@ -17,7 +17,6 @@ import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { SimpleLoginModal } from "@/components/simple-login";
-import { GamesComingSoonModal } from "@/components/games-coming-soon-modal";
 import { useState, useRef, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.png";
@@ -433,7 +432,6 @@ export default function Home() {
   const { preferences } = usePreferences();
   const { user, loading: authLoading, isAuthenticated, displayName, username, logout } = useSimpleAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showGamesModal, setShowGamesModal] = useState(false);
   usePageAnalytics();
 
   const { data: apps = [], isLoading: appsLoading } = useQuery({
@@ -458,7 +456,6 @@ export default function Home() {
         isOpen={showLoginModal} 
         onClose={() => setShowLoginModal(false)} 
       />
-      {showGamesModal && <GamesComingSoonModal onClose={() => setShowGamesModal(false)} />}
       
       
 
