@@ -371,8 +371,9 @@ function DWSCRouter() {
     <Suspense fallback={<PageLoader />}>
       <ScrollToTop />
       <Switch>
-        <Route path="/" component={TrustLayerLanding} />
+        <Route path="/" component={Home} />
         <Route path="/presale" component={Presale} />
+        <Route path="/trust-layer" component={TrustLayerLanding} />
         <Route path="/portal" component={Home} />
         <Route path="/home" component={Home} />
         <Route path="/note" component={DevelopersNote} />
