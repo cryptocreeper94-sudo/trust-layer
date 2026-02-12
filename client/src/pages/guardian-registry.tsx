@@ -4,10 +4,8 @@ import {
   Shield, ShieldCheck, Award, CheckCircle2, ExternalLink, 
   Calendar, Star, Sparkles, Search, Globe
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
-import { HeaderTools } from "@/components/header-tools";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -64,7 +62,6 @@ export default function GuardianRegistry() {
       <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <BackButton />
             <div>
               <h1 className="text-xl font-bold text-white flex items-center gap-2">
                 <Globe className="w-6 h-6 text-cyan-400" />
@@ -73,7 +70,6 @@ export default function GuardianRegistry() {
               <p className="text-sm text-white/60">Verified security certifications</p>
             </div>
           </div>
-          <HeaderTools />
         </div>
       </header>
 

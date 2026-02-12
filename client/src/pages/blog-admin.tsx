@@ -5,7 +5,7 @@ import {
   BookOpen, Sparkles, Loader2, Trash2, Eye, Edit, Check, X,
   Plus, RefreshCw, Send, FileText, Tag, Calendar
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -161,8 +161,6 @@ export default function BlogAdmin() {
       />
       
       <div className="relative max-w-7xl mx-auto px-4 py-12">
-        <BackButton />
-
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

@@ -9,10 +9,8 @@ import {
   Wallet, ChevronRight, Zap, Lock, Server, Database, Globe,
   Bell, TrendingUp, BarChart3, FileText, RefreshCw, Loader, Sparkles
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
-import { HeaderTools } from "@/components/header-tools";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { usePageAnalytics } from "@/hooks/use-analytics";
@@ -139,7 +137,6 @@ export default function GuardianPortal() {
       <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <BackButton />
             <div>
               <h1 className="text-xl font-bold text-white flex items-center gap-2">
                 <Shield className="w-6 h-6 text-cyan-400" />
@@ -148,7 +145,6 @@ export default function GuardianPortal() {
               <p className="text-sm text-white/60">Manage your security certifications and monitored assets</p>
             </div>
           </div>
-          <HeaderTools />
         </div>
       </header>
 

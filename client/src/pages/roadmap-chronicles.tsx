@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, Circle, Clock, Sparkles, Brain, Users, Globe, Zap, Crown, ChevronDown, ChevronUp } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { Link } from "wouter";
 
 import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
@@ -290,10 +290,6 @@ export default function RoadmapChronicles() {
         </div>
         
         <div className="relative z-10 max-w-5xl mx-auto px-4 py-12">
-          <div className="mb-8">
-            <BackButton />
-          </div>
-
           <div className="text-center mb-12">
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}

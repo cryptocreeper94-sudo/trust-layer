@@ -7,7 +7,7 @@ import {
   GitBranch, ChevronLeft, ChevronRight, Activity, Server,
   Cloud, Workflow, CheckCircle2
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Footer } from "@/components/footer";
@@ -223,7 +223,6 @@ export default function DevStudio() {
               <Sparkles className="w-2.5 h-2.5 mr-1" />
               Coming Soon
             </Badge>
-            <BackButton />
           </div>
         </div>
       </header>

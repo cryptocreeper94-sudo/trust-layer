@@ -9,7 +9,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Plus, FolderOpen, Trash2, Clock, GitBranch, Code2, FileCode, Globe, Box } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { motion } from "framer-motion";
 import { format } from "date-fns";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
@@ -166,7 +166,6 @@ export default function StudioProjects() {
       <main className="container mx-auto px-4 pt-24 pb-12">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <BackButton />
             <h1 className="text-3xl font-bold mb-2">My Projects</h1>
             <p className="text-muted-foreground">Create, manage, and open your coding projects</p>
           </div>

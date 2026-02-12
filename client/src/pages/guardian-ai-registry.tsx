@@ -7,10 +7,8 @@ import {
   ExternalLink, Clock, TrendingUp, Filter, Layers,
   Sparkles, Users, BarChart3, Eye, Lock, Activity, AlertTriangle
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
-import { HeaderTools } from "@/components/header-tools";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -88,11 +86,7 @@ export default function GuardianAIRegistry() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
-      <HeaderTools />
-      
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
-        <BackButton />
-        
         {/* Header */}
         <motion.section 
           initial={{ opacity: 0, y: 20 }}

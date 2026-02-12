@@ -9,9 +9,7 @@ import {
   Calendar, Rocket, UserCheck, Mail, Send, ChevronRight,
   Cpu, Network, BarChart3, Fingerprint, Globe, Bug, ArrowRight
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
-import { HeaderTools } from "@/components/header-tools";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -337,8 +335,6 @@ export default function GuardianAI() {
 
   return (
     <div ref={containerRef} className="min-h-screen bg-slate-950 text-white overflow-hidden">
-      <HeaderTools />
-      
       <div className="fixed inset-0 pointer-events-none -z-10">
         <motion.div style={{ y: bgY }} className="absolute inset-0">
           <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-cyan-500/[0.03] rounded-full blur-[120px]" />
@@ -349,8 +345,6 @@ export default function GuardianAI() {
       </div>
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 relative">
-        <BackButton />
-
         {/* === HERO HEADER === */}
         <motion.section 
           initial={{ opacity: 0 }}

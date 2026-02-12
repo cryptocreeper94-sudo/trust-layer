@@ -42,7 +42,7 @@ import {
   Building2,
   GitBranch
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -398,8 +398,6 @@ export default function MarketsPage() {
       </div>
 
       <div className="relative z-10 container mx-auto px-4 py-8 max-w-7xl">
-        <BackButton />
-        
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}

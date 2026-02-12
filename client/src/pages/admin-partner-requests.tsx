@@ -6,7 +6,7 @@ import {
   Users, CheckCircle, XCircle, Clock, 
   Mail, Building2, User, Globe, FileText, Shield
 , Shield , Shield } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -103,7 +103,6 @@ export default function AdminPartnerRequests() {
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white p-6">
       <div className="container mx-auto max-w-6xl">
         <div className="flex items-center gap-4 mb-8">
-          <BackButton />
           <div>
             <h1 className="text-3xl font-display font-bold text-white flex items-center gap-3">
               <Shield className="w-8 h-8 text-cyan-400" />

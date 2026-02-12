@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/footer";
-import { BackButton } from "@/components/page-nav";
+
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -25,8 +25,6 @@ export default function TrustCooperative() {
   return (
     <div className="min-h-screen bg-slate-950">
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
-        <BackButton />
-        
         <motion.div
           variants={containerVariants}
           initial="hidden"

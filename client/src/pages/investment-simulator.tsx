@@ -5,7 +5,7 @@ import {
   Calculator, TrendingUp, Coins, Target, Rocket, 
   Sparkles, DollarSign, Calendar, BarChart3, Info
 , Shield , Shield } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -102,10 +102,6 @@ export default function InvestmentSimulator() {
       </div>
 
       <div className="relative max-w-6xl mx-auto px-4 py-12">
-        <div className="mb-8">
-          <BackButton />
-        </div>
-
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

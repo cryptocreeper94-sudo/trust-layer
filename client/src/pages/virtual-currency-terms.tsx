@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { FileText, Shield, AlertTriangle, Coins, ArrowRightLeft, Clock, Scale } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { GlassCard } from "@/components/glass-card";
 
 export default function VirtualCurrencyTerms() {
@@ -75,7 +75,6 @@ export default function VirtualCurrencyTerms() {
           className="space-y-8"
         >
           <div className="flex items-center gap-4">
-            <BackButton />
             <div>
               <h1 className="text-3xl font-bold flex items-center gap-3 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent" data-testid="text-vc-terms-title">
                 <Coins className="w-8 h-8 text-cyan-400" />

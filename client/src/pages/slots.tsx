@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { Coins, Sparkles, Crown, Star, Flame, Zap, Diamond, Cherry, CircleDollarSign, Gem, Trophy, Volume2, VolumeX, Info, Minus, Plus } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -293,7 +293,6 @@ export default function Slots() {
         {/* Header */}
         <div className="flex items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-4">
-            <BackButton />
             <div>
               <h1 className={`text-2xl md:text-3xl font-bold ${theme.accentColor}`} data-testid="page-title">
                 {theme.name}

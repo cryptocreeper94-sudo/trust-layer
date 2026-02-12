@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { Coins, Sparkles, Crown, Star, Flame, Zap, Volume2, VolumeX, History, TrendingUp, Users, Clock, Shield, ChevronRight, RefreshCw } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -222,7 +222,6 @@ export default function Coinflip() {
         {/* Header */}
         <div className="flex items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-4">
-            <BackButton />
             <div>
               <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-200 bg-clip-text text-transparent flex items-center gap-2" data-testid="page-title">
                 <Coins className="w-8 h-8 text-yellow-400" />

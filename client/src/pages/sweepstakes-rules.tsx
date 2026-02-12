@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Shield, FileText, Gift, AlertTriangle, Check, HelpCircle, Mail, MapPin, Clock, Coins, Sparkles, Scale, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -16,7 +16,6 @@ export default function SweepstakesRules() {
       <div className="container mx-auto px-4 py-6 max-w-4xl">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <BackButton />
           <div>
             <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-200 via-pink-300 to-purple-200 bg-clip-text text-transparent flex items-center gap-2">
               <Scale className="w-8 h-8 text-purple-400" />

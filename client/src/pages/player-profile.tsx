@@ -21,7 +21,7 @@ import {
   Gift,
   BarChart3,
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { useAuth } from "@/hooks/use-auth";
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 
@@ -406,7 +406,6 @@ export default function PlayerProfilePage() {
         className="sticky top-0 z-50 bg-[#0a0a0f]/80 backdrop-blur-xl border-b border-white/5"
       >
         <div className="max-w-2xl mx-auto px-4 py-4 flex items-center justify-between">
-          <BackButton />
           {isOwnProfile && (
             <button className="p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
               <Settings className="w-5 h-5 text-gray-400" />

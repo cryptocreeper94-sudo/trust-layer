@@ -15,7 +15,7 @@ import {
   ArrowRight,
   ExternalLink
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { Link } from "wouter";
 
 interface RoadmapItem {
@@ -265,8 +265,6 @@ export default function TechnicalRoadmap() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <BackButton />
-        
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

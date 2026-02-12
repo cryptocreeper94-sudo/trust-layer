@@ -9,10 +9,8 @@ import {
   Download, Calendar, Rocket, UserCheck, Mail, Send, ChevronRight,
   Trophy, Gift, Percent, FileSearch, Globe, Bug, Handshake, Copy, Check
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
-import { HeaderTools } from "@/components/header-tools";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -939,7 +937,6 @@ export default function GuardianCertificationPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-white overflow-hidden">
-      <HeaderTools />
       <PaymentSuccessBanner />
       
       <div className="fixed inset-0 pointer-events-none">
@@ -951,10 +948,6 @@ export default function GuardianCertificationPage() {
       <main className="pt-20 relative">
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-6xl">
-            <div className="mb-12">
-              <BackButton />
-            </div>
-
             <div className="text-center mb-16">
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}

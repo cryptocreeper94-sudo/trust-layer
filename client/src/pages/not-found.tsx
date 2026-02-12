@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Home, AlertCircle, Search } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
@@ -43,7 +43,6 @@ export default function NotFound() {
               Back to Home
             </Button>
           </Link>
-          <BackButton />
           <Link href="/explorer">
             <Button variant="ghost" className="gap-2" data-testid="button-explore">
               <Search className="w-4 h-4" />

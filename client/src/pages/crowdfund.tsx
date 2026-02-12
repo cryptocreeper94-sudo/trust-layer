@@ -6,7 +6,7 @@ import {
   Heart, Zap, Target, Shield, Users, Clock, 
   ExternalLink, Sparkles, TrendingUp, Lock, Gift, Award, CreditCard
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -515,8 +515,6 @@ export default function CrowdfundPage() {
       </div>
 
       <div className="relative z-10 container mx-auto px-4 py-8">
-        <BackButton />
-
         {showSuccess && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}

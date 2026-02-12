@@ -6,10 +6,8 @@ import {
   ShieldCheck, Fingerprint, Ban, Activity, Award, TrendingUp,
   Users, Clock, Sparkles
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
-import { HeaderTools } from "@/components/header-tools";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 
 const SECURITY_SCORE = 78;
@@ -206,8 +204,6 @@ export default function SecurityPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-white overflow-hidden">
-      <HeaderTools />
-      
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
@@ -217,10 +213,6 @@ export default function SecurityPage() {
       <main className="pt-20 relative">
         <section className="py-20 px-4 relative">
           <div className="container mx-auto max-w-6xl">
-            <div className="mb-12">
-              <BackButton />
-            </div>
-
             <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
               <motion.div
                 initial={{ opacity: 0, x: -30 }}

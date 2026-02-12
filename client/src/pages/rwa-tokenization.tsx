@@ -25,7 +25,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { BackButton } from "@/components/page-nav";
+
 import { Footer } from "@/components/footer";
 import { GlassCard, StatCard } from "@/components/glass-card";
 
@@ -192,8 +192,6 @@ export default function RWATokenization() {
 
       <div className="relative z-10">
         <div className="container mx-auto px-4 pt-8 pb-20">
-          <BackButton />
-
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

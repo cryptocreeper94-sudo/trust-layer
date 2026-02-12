@@ -367,7 +367,6 @@ export default function Solitaire() {
       <div className="bg-black/30 backdrop-blur-sm px-4 py-2 sticky top-0 z-40">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           <div className="flex items-center gap-4">
-            <BackButton />
             <div>
               <h1 className="font-bold">Solitaire</h1>
               <div className="flex items-center gap-3 text-xs text-gray-300">

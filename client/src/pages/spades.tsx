@@ -504,7 +504,6 @@ export default function Spades() {
       <div className="absolute top-0 left-0 right-0 z-30 bg-black/30 backdrop-blur-sm px-4 py-2">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           <div className="flex items-center gap-4">
-            <BackButton />
             <div>
               <h1 className="font-bold">Spades</h1>
               <p className="text-xs text-gray-300">Round {gameState.currentRound} • Trick {gameState.trickNumber}/13</p>

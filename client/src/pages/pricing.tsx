@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Check, Zap, Shield, Crown, Sparkles, ArrowRight, Star } from "lucide-react";
 import { Link } from "wouter";
-import { BackButton } from "@/components/page-nav";
+
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/footer";
@@ -252,10 +252,6 @@ export default function Pricing() {
       </div>
 
       <div className="relative z-10">
-        <div className="container mx-auto px-4 py-8">
-          <BackButton />
-        </div>
-
         <div className="container mx-auto px-4 pb-20">
           <motion.div
             initial={{ opacity: 0, y: -20 }}

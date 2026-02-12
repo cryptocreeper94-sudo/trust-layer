@@ -7,7 +7,7 @@ import {
   Plus, Trash2, Save, RefreshCw, Copy, ExternalLink, Clock, 
   Crown, Infinity as InfinityIcon, AlertCircle, Check, ChevronDown
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -291,7 +291,6 @@ export default function DomainManager() {
     <div className="min-h-screen bg-slate-950 text-white">
       <header className="border-b border-white/10 backdrop-blur-xl bg-black/20">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <BackButton />
           <WalletButton />
         </div>
       </header>

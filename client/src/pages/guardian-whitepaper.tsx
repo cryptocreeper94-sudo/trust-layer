@@ -5,7 +5,7 @@ import {
   Eye, Zap, Server, Database, Globe, Clock, Users, Activity,
   ChevronRight, ExternalLink, Download, BookOpen
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+
 import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -114,8 +114,6 @@ export default function GuardianWhitepaperPage() {
         <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl" />
         
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
-          <BackButton />
-          
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

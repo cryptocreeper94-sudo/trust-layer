@@ -447,7 +447,6 @@ export default function Pacman() {
       <div className="bg-black/80 backdrop-blur-sm px-4 py-2 sticky top-0 z-50 border-b border-blue-500/30">
         <div className="flex items-center justify-between max-w-md mx-auto">
           <div className="flex items-center gap-4">
-            <BackButton />
             <div>
               <h1 className="font-bold text-yellow-400">Pac-Man</h1>
               <p className="text-xs text-gray-400">Score: {gameState.score}</p>

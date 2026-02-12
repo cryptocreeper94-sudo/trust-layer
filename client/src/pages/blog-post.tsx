@@ -8,7 +8,7 @@ import {
   Loader2, AlertCircle
 } from "lucide-react";
 import { useState } from "react";
-import { BackButton } from "@/components/page-nav";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -192,8 +192,6 @@ export default function BlogPost() {
       />
       
       <article className="relative max-w-4xl mx-auto px-4 py-12">
-        <BackButton />
-
         <motion.header 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Footer } from "@/components/footer";
 import { ChronoLayout, HoloCard, CTABanner, chronoStyles } from "@/components/chrono-ui";
-import { BackButton, HomeButton } from "@/components/page-nav";
+import { HomeButton } from "@/components/page-nav";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 
 import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";

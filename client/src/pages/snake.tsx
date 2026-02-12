@@ -261,7 +261,6 @@ export default function Snake() {
       <div className="bg-black/30 backdrop-blur-sm px-4 py-2 sticky top-0 z-50">
         <div className="flex items-center justify-between max-w-md mx-auto">
           <div className="flex items-center gap-4">
-            <BackButton />
             <div>
               <h1 className="font-bold">Snake</h1>
               <p className="text-xs text-gray-400">Score: {gameState.score}</p>
