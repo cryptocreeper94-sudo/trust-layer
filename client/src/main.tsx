@@ -48,6 +48,31 @@ if (themeColorMeta) {
 
 function updateDomainAssets() {
   const host = window.location.hostname.toLowerCase();
+
+  if (host.includes("darkwavegames") || host.includes("games.")) {
+    const appleTouchIcon = document.querySelector('link[rel="apple-touch-icon"]');
+    if (appleTouchIcon) {
+      appleTouchIcon.setAttribute("href", "/icons/games-icon-512.png");
+    }
+    document.title = "DarkWave Games - Play & Win";
+
+    const existingSplash = document.querySelectorAll('link[rel="apple-touch-startup-image"]');
+    existingSplash.forEach(el => el.remove());
+    const splashScreens = [
+      { href: "/splash/games-splash-1290x2796.png", media: "(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)" },
+      { href: "/splash/games-splash-1290x2796.png", media: "(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)" },
+      { href: "/splash/games-splash-1290x2796.png", media: "(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" },
+      { href: "/splash/games-splash-1290x2796.png", media: "(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" },
+    ];
+    splashScreens.forEach(({ href, media }) => {
+      const link = document.createElement("link");
+      link.rel = "apple-touch-startup-image";
+      link.href = href;
+      link.media = media;
+      document.head.appendChild(link);
+    });
+  }
+
   if (host.includes("trustshield") || host === "trustshield.tech" || host === "www.trustshield.tech") {
     const appleTouchIcon = document.querySelector('link[rel="apple-touch-icon"]');
     if (appleTouchIcon) {

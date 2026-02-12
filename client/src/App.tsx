@@ -12,6 +12,7 @@ import { FavoritesProvider } from "@/components/favorites-watchlist";
 import { FloatingChat } from "@/components/floating-chat";
 import { GlobalSearch } from "@/components/global-search";
 import { SiteNav } from "@/components/site-nav";
+import { GamesNav } from "@/components/games-nav";
 
 // Critical pages - load immediately
 import Home from "@/pages/home";
@@ -674,6 +675,7 @@ function App() {
               <TooltipProvider>
                 <Toaster />
                 {appType === "dwsc" && <SiteNav />}
+                {appType === "games" && <GamesNav />}
                 <Router />
                 {showAIAssistant && <AIAssistant />}
                 <FloatingChat />

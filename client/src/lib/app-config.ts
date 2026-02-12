@@ -49,12 +49,12 @@ export const APP_CONFIG: Record<AppDomain, {
     primaryGradient: "from-indigo-500 to-purple-500",
   },
   games: {
-    name: "The Arcade",
-    shortName: "Arcade",
+    name: "DarkWave Games",
+    shortName: "DW Games",
     themeColor: "#ec4899",
-    description: "Provably fair blockchain games",
-    logoText: "The Arcade",
-    primaryGradient: "from-pink-500 to-rose-500",
+    description: "Premium arcade games, sweepstakes, and classic card games",
+    logoText: "DarkWave Games",
+    primaryGradient: "from-pink-500 to-purple-500",
   },
   chrono: {
     name: "Chronicles",
