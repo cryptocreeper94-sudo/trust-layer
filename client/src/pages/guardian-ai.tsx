@@ -351,62 +351,94 @@ export default function GuardianAI() {
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 relative">
         <BackButton />
 
-        {/* === HERO SECTION === */}
+        {/* === HERO HEADER === */}
         <motion.section 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
           className="relative mb-20"
         >
-          <div className="relative rounded-3xl overflow-hidden border border-white/[0.06]">
-            <img src={heroImg} alt="Guardian AI Command Center" className="w-full h-[320px] md:h-[480px] object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-transparent to-slate-950/50" />
-            
-            <div className="absolute bottom-0 left-0 right-0 p-8 md:p-14">
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-                <Badge className="mb-5 bg-cyan-500/10 text-cyan-300 border-cyan-500/30 backdrop-blur-sm px-4 py-1.5 text-xs tracking-wider uppercase" data-testid="badge-hero">
-                  First-of-its-Kind Certification
-                </Badge>
-                
-                <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-5 tracking-tight leading-[0.9]">
-                  <GlowText>Guardian</GlowText>
-                  <br />
-                  <span className="text-white">AI</span>
-                </h1>
-                
-                <p className="text-lg md:text-xl text-slate-300 max-w-xl mb-8 leading-relaxed">
-                  The trust layer for autonomous AI agents. Verify, certify, and protect the AI systems your users depend on.
-                </p>
-
-                <div className="flex flex-wrap gap-4">
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button size="lg" className="bg-white text-slate-950 hover:bg-slate-100 h-13 px-8 text-base font-semibold rounded-xl" data-testid="button-submit-agent">
-                        <Rocket className="w-5 h-5 mr-2" />
-                        Submit Your Agent
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="bg-slate-900 border-slate-700 max-w-2xl max-h-[90vh] overflow-y-auto">
-                      <DialogHeader>
-                        <DialogTitle className="text-2xl text-white flex items-center gap-2">
-                          <Bot className="w-6 h-6 text-cyan-400" />
-                          Submit AI Agent for Certification
-                        </DialogTitle>
-                        <DialogDescription className="text-slate-400">Complete the form below to begin the certification process.</DialogDescription>
-                      </DialogHeader>
-                      <SubmitForm />
-                    </DialogContent>
-                  </Dialog>
-
-                  <Link href="/guardian-ai-registry">
-                    <Button variant="outline" size="lg" className="border-white/20 bg-white/5 backdrop-blur-sm hover:bg-white/10 h-13 px-8 text-base rounded-xl" data-testid="button-view-registry">
-                      <Eye className="w-5 h-5 mr-2" />
-                      View Registry
-                    </Button>
-                  </Link>
+          <div className="text-center mb-10">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+              <div className="inline-flex items-center gap-2 mb-6">
+                <div className="p-2.5 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/20">
+                  <Shield className="w-7 h-7 text-cyan-400" />
                 </div>
-              </motion.div>
+                <span className="text-sm font-semibold text-cyan-400 tracking-widest uppercase">TrustShield.tech</span>
+              </div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight leading-[0.9]" data-testid="text-hero-title">
+                <GlowText>Guardian</GlowText>
+                <br />
+                <span className="text-white">AI</span>
+              </h1>
+              
+              <Badge className="mb-6 bg-cyan-500/10 text-cyan-300 border-cyan-500/30 backdrop-blur-sm px-4 py-1.5 text-xs tracking-wider uppercase" data-testid="badge-hero">
+                World's First AI Agent Certification
+              </Badge>
+              
+              <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-8 leading-relaxed">
+                The trust layer for autonomous AI agents. Verify, certify, and protect the AI systems your users depend on.
+              </p>
+
+              <div className="flex flex-wrap justify-center gap-4">
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size="lg" className="bg-white text-slate-950 hover:bg-slate-100 h-13 px-8 text-base font-semibold rounded-xl shadow-lg shadow-white/10" data-testid="button-submit-agent">
+                      <Rocket className="w-5 h-5 mr-2" />
+                      Submit Your Agent
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="bg-slate-900 border-slate-700 max-w-2xl max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl text-white flex items-center gap-2">
+                        <Bot className="w-6 h-6 text-cyan-400" />
+                        Submit AI Agent for Certification
+                      </DialogTitle>
+                      <DialogDescription className="text-slate-400">Complete the form below to begin the certification process.</DialogDescription>
+                    </DialogHeader>
+                    <SubmitForm />
+                  </DialogContent>
+                </Dialog>
+
+                <Link href="/guardian-ai-registry">
+                  <Button variant="outline" size="lg" className="border-white/20 bg-white/5 backdrop-blur-sm hover:bg-white/10 h-13 px-8 text-base rounded-xl" data-testid="button-view-registry">
+                    <Eye className="w-5 h-5 mr-2" />
+                    View Registry
+                  </Button>
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+
+          <div className="relative rounded-3xl overflow-hidden border border-white/[0.06]">
+            <img src={heroImg} alt="Guardian AI Command Center" className="w-full h-[200px] sm:h-[280px] md:h-[400px] object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/[0.05] via-transparent to-purple-500/[0.05]" />
+            
+            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
+                {[
+                  { label: 'Agents Certified', value: '1,200+', icon: Bot },
+                  { label: 'Trust Scores Issued', value: '8,400+', icon: ShieldCheck },
+                  { label: 'Threats Blocked', value: '42K+', icon: AlertTriangle },
+                  { label: 'Enterprise Clients', value: '180+', icon: Building },
+                ].map((stat, i) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 + i * 0.1 }}
+                    className="text-center p-3 md:p-4 rounded-xl bg-slate-900/60 backdrop-blur-md border border-white/[0.06]"
+                  >
+                    <stat.icon className="w-4 h-4 text-cyan-400 mx-auto mb-1.5" />
+                    <div className="text-lg md:text-xl font-black text-white">{stat.value}</div>
+                    <div className="text-[10px] md:text-xs text-slate-500 mt-0.5">{stat.label}</div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
         </motion.section>
