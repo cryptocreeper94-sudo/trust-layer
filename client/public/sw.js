@@ -1,9 +1,9 @@
-const CACHE_NAME = 'darkwave-v18';
+const CACHE_NAME = 'trustlayer-v1';
 const STATIC_ASSETS = [
   '/',
   '/manifest.webmanifest',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
+  '/icons/trustlayer-192.png',
+  '/icons/trustlayer-512.png'
 ];
 
 self.addEventListener('install', (event) => {

@@ -1,36 +1,36 @@
 {
-  "id": "dwsc-app",
-  "name": "DarkWave Smart Chain",
-  "short_name": "DWSC",
-  "description": "The next-generation Layer 1 blockchain. DeFi, staking, NFTs, and developer tools.",
-  "start_url": "/?app=dwsc",
+  "id": "trust-layer-dwsc",
+  "name": "Trust Layer",
+  "short_name": "Trust Layer",
+  "description": "The Coordinated Trust Layer for verified identity, accountability, and transparent audit trails. DeFi, staking, NFTs, and developer tools.",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0a0f",
+  "background_color": "#0a0a14",
   "theme_color": "#00ffff",
   "orientation": "portrait-primary",
   "scope": "/",
   "categories": ["finance", "productivity", "utilities"],
   "icons": [
     {
-      "src": "/icons/dwsc-512x512.png",
+      "src": "/icons/trustlayer-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-192x192.png",
+      "src": "/icons/trustlayer-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-144x144.png",
+      "src": "/icons/trustlayer-144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-96x96.png",
+      "src": "/icons/trustlayer-96.png",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "any"
@@ -38,11 +38,11 @@
   ],
   "screenshots": [
     {
-      "src": "/screenshots/dwsc-dashboard.png",
+      "src": "/screenshots/desktop.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Dashboard with DeFi overview"
+      "label": "Trust Layer Dashboard"
     }
   ],
   "shortcuts": [
@@ -50,19 +50,19 @@
       "name": "Wallet",
       "short_name": "Wallet",
       "url": "/wallet",
-      "icons": [{ "src": "/icons/dwsc-96x96.png", "sizes": "96x96" }]
+      "icons": [{ "src": "/icons/trustlayer-96.png", "sizes": "96x96" }]
     },
     {
       "name": "Staking",
       "short_name": "Stake",
       "url": "/staking",
-      "icons": [{ "src": "/icons/dwsc-96x96.png", "sizes": "96x96" }]
+      "icons": [{ "src": "/icons/trustlayer-96.png", "sizes": "96x96" }]
     },
     {
-      "name": "DEX",
-      "short_name": "Swap",
-      "url": "/swap",
-      "icons": [{ "src": "/icons/dwsc-96x96.png", "sizes": "96x96" }]
+      "name": "Presale",
+      "short_name": "Presale",
+      "url": "/presale",
+      "icons": [{ "src": "/icons/trustlayer-96.png", "sizes": "96x96" }]
     }
   ]
 }

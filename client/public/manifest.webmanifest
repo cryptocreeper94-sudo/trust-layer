@@ -1,63 +1,64 @@
 {
-  "name": "DarkWave Chain",
-  "short_name": "DarkWave",
-  "description": "The next generation Layer 1 blockchain by DarkWave Studios. Fast, stable, and scalable.",
+  "id": "trust-layer-app",
+  "name": "Trust Layer",
+  "short_name": "Trust Layer",
+  "description": "The Coordinated Trust Layer for verified identity, accountability, and transparent audit trails. Powered by DarkWave Smart Chain.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0d0d1a",
+  "background_color": "#0a0a14",
   "theme_color": "#00ffff",
   "orientation": "any",
   "scope": "/",
   "lang": "en",
-  "categories": ["finance", "business", "utilities"],
+  "categories": ["finance", "business", "utilities", "security"],
   "icons": [
     {
-      "src": "/icons/icon-72x72.png",
+      "src": "/icons/trustlayer-72.png",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-96x96.png",
+      "src": "/icons/trustlayer-96.png",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-128x128.png",
+      "src": "/icons/trustlayer-128.png",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-144x144.png",
+      "src": "/icons/trustlayer-144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-152x152.png",
+      "src": "/icons/trustlayer-152.png",
       "sizes": "152x152",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-192x192.png",
+      "src": "/icons/trustlayer-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-384x384.png",
+      "src": "/icons/trustlayer-384.png",
       "sizes": "384x384",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-512x512.png",
+      "src": "/icons/trustlayer-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
   ],
   "screenshots": [
@@ -66,10 +67,16 @@
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "DarkWave Chain Dashboard"
+      "label": "Trust Layer Dashboard"
     }
   ],
   "shortcuts": [
+    {
+      "name": "Presale",
+      "short_name": "Presale",
+      "url": "/presale",
+      "description": "SIG Token Presale"
+    },
     {
       "name": "Explorer",
       "short_name": "Explorer",
@@ -77,16 +84,16 @@
       "description": "View blockchain transactions and blocks"
     },
     {
-      "name": "Treasury",
-      "short_name": "Treasury",
-      "url": "/treasury",
-      "description": "Manage DWT token distribution"
+      "name": "Wallet",
+      "short_name": "Wallet",
+      "url": "/wallet",
+      "description": "Manage your Trust Layer wallet"
     },
     {
-      "name": "Developer Portal",
-      "short_name": "Dev Portal",
-      "url": "/developer-portal",
-      "description": "Developer tools and API documentation"
+      "name": "Ecosystem",
+      "short_name": "Apps",
+      "url": "/ecosystem",
+      "description": "Browse Trust Layer ecosystem apps"
     }
   ]
 }
