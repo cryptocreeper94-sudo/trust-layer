@@ -6724,10 +6724,25 @@ const { trustLayerId } = await response.json();`
       description: "Enterprise-grade security certification with penetration testing and full audit",
       price: 1499900, // $14,999 in cents
     },
+    ai_basic: {
+      name: "Guardian AI Basic",
+      description: "Essential AI agent trust verification - automated behavioral analysis, basic security scan, 6-month certification",
+      price: 99900, // $999 in cents
+    },
+    ai_advanced: {
+      name: "Guardian AI Advanced",
+      description: "Comprehensive AI agent trust assessment - deep code review, API security, economic attack simulation, 12-month certification",
+      price: 499900, // $4,999 in cents
+    },
+    ai_enterprise: {
+      name: "Guardian AI Enterprise",
+      description: "Maximum AI agent trust assurance - full source audit, penetration testing, formal verification, dedicated analyst, 24-month certification",
+      price: 1499900, // $14,999 in cents
+    },
   };
 
   const GuardianCheckoutSchema = z.object({
-    tier: z.enum(["assurance_lite", "guardian_premier"]),
+    tier: z.enum(["assurance_lite", "guardian_premier", "ai_basic", "ai_advanced", "ai_enterprise"]),
     projectName: z.string().min(1).max(200),
     projectUrl: z.string().url().optional(),
     contactEmail: z.string().email(),

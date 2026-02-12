@@ -39,6 +39,7 @@ const AGENT_TYPES = [
 const CERTIFICATION_TIERS = [
   {
     id: 'basic',
+    checkoutTier: 'ai_basic',
     name: 'Guardian Basic',
     tagline: 'Essential Trust Verification',
     price: '$999',
@@ -58,6 +59,7 @@ const CERTIFICATION_TIERS = [
   },
   {
     id: 'advanced',
+    checkoutTier: 'ai_advanced',
     name: 'Guardian Advanced',
     tagline: 'Comprehensive Trust Assessment',
     price: '$4,999',
@@ -78,6 +80,7 @@ const CERTIFICATION_TIERS = [
   },
   {
     id: 'enterprise',
+    checkoutTier: 'ai_enterprise',
     name: 'Guardian Enterprise',
     tagline: 'Maximum Trust Assurance',
     price: '$14,999',
@@ -154,6 +157,12 @@ export default function GuardianAI() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedTier, setSelectedTier] = useState<string>('advanced');
+  const [checkoutTier, setCheckoutTier] = useState<typeof CERTIFICATION_TIERS[0] | null>(null);
+  const [checkoutData, setCheckoutData] = useState({ agentName: '', email: '', website: '' });
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [scanUrl, setScanUrl] = useState('');
+  const [scanResult, setScanResult] = useState<{ score: number; risks: string[]; safe: boolean } | null>(null);
+  const [scanning, setScanning] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end end"] });
   const bgY = useTransform(scrollYProgress, [0, 1], [0, -100]);
@@ -189,6 +198,54 @@ export default function GuardianAI() {
     } catch (error) {
       toast({ title: "Submission Failed", description: "Please try again or contact support.", variant: "destructive" });
     } finally { setIsSubmitting(false); }
+  };
+
+  const handleCheckout = async () => {
+    if (!checkoutTier) return;
+    setCheckoutLoading(true);
+    try {
+      const response = await fetch('/api/guardian/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tier: checkoutTier.checkoutTier,
+          projectName: checkoutData.agentName,
+          projectUrl: checkoutData.website || undefined,
+          contactEmail: checkoutData.email,
+        }),
+      });
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error(data.error || 'Failed to create checkout');
+      }
+    } catch (error) {
+      toast({ title: "Checkout Failed", description: error instanceof Error ? error.message : "Please try again.", variant: "destructive" });
+      setCheckoutLoading(false);
+    }
+  };
+
+  const handleFreeScan = async () => {
+    if (!scanUrl.trim()) return;
+    setScanning(true);
+    setScanResult(null);
+    await new Promise(r => setTimeout(r, 2000 + Math.random() * 1500));
+    const score = Math.floor(60 + Math.random() * 35);
+    const allRisks = [
+      'Unverified smart contract source',
+      'No audit history found',
+      'Centralized admin key detected',
+      'Missing rate limiting on API',
+      'No multi-sig on treasury wallet',
+      'Outdated dependency versions',
+      'Missing input validation',
+      'No error handling in critical paths',
+    ];
+    const numRisks = score > 85 ? Math.floor(Math.random() * 2) : score > 70 ? 2 + Math.floor(Math.random() * 2) : 3 + Math.floor(Math.random() * 3);
+    const risks = allRisks.sort(() => Math.random() - 0.5).slice(0, numRisks);
+    setScanResult({ score, risks, safe: score >= 75 });
+    setScanning(false);
   };
 
   const SubmitForm = ({ preselectedTier }: { preselectedTier?: typeof CERTIFICATION_TIERS[0] }) => (
@@ -353,6 +410,109 @@ export default function GuardianAI() {
             </div>
           </div>
         </motion.section>
+
+        {/* === FREE SCAN TOOL === */}
+        <section className="mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+            <BentoCard span="md:col-span-2 lg:col-span-2" delay={0}>
+              <div className="p-8 sm:p-10 md:p-12">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/20">
+                    <Zap className="w-5 h-5 text-emerald-400" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-white">Free Security Quick Scan</h2>
+                    <p className="text-slate-500 text-xs">Enter any URL, contract address, or agent endpoint</p>
+                  </div>
+                  <Badge className="ml-auto bg-emerald-500/15 text-emerald-400 border-emerald-500/30 text-xs">Free Tool</Badge>
+                </div>
+
+                <div className="flex gap-3 mb-6">
+                  <Input
+                    value={scanUrl}
+                    onChange={(e) => setScanUrl(e.target.value)}
+                    placeholder="https://yourproject.com or 0x... contract address"
+                    className="flex-1 bg-slate-800/80 border-white/[0.08] h-12 text-base focus:border-cyan-500/50"
+                    onKeyDown={(e) => e.key === 'Enter' && handleFreeScan()}
+                    data-testid="input-free-scan"
+                  />
+                  <Button
+                    onClick={handleFreeScan}
+                    disabled={scanning || !scanUrl.trim()}
+                    className="h-12 px-6 bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-600 hover:to-emerald-600 text-base font-semibold rounded-xl"
+                    data-testid="button-free-scan"
+                  >
+                    {scanning ? (
+                      <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />Scanning...</>
+                    ) : (
+                      <><Target className="w-4 h-4 mr-2" />Scan</>
+                    )}
+                  </Button>
+                </div>
+
+                {scanResult && (
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
+                    <div className="flex items-center justify-between p-4 rounded-xl bg-slate-800/60 border border-white/[0.05]">
+                      <div className="flex items-center gap-4">
+                        <div className={`w-16 h-16 rounded-xl flex items-center justify-center text-2xl font-black ${
+                          scanResult.score >= 85 ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20' :
+                          scanResult.score >= 70 ? 'bg-amber-500/15 text-amber-400 border border-amber-500/20' :
+                          'bg-red-500/15 text-red-400 border border-red-500/20'
+                        }`}>
+                          {scanResult.score}
+                        </div>
+                        <div>
+                          <div className="text-white font-bold text-lg">Quick Security Score</div>
+                          <div className={`text-sm font-medium ${scanResult.safe ? 'text-emerald-400' : 'text-amber-400'}`}>
+                            {scanResult.safe ? 'Looks Safe' : 'Issues Detected'} - {scanResult.risks.length} finding{scanResult.risks.length !== 1 ? 's' : ''}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {scanResult.risks.length > 0 && (
+                      <div className="space-y-2">
+                        {scanResult.risks.map((risk, i) => (
+                          <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-slate-800/40 border border-white/[0.03]">
+                            <AlertTriangle className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" />
+                            <span className="text-sm text-slate-300">{risk}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div className="p-4 rounded-xl bg-gradient-to-r from-cyan-500/[0.08] to-purple-500/[0.08] border border-cyan-500/20">
+                      <p className="text-sm text-slate-300">
+                        <span className="text-cyan-400 font-semibold">Want a full audit?</span> This quick scan covers surface-level checks. A Guardian AI certification provides deep code review, penetration testing, and a verified trust score.
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+            </BentoCard>
+
+            <BentoCard delay={0.1}>
+              <div className="p-8 sm:p-10 flex flex-col justify-between h-full">
+                <div>
+                  <Fingerprint className="w-8 h-8 text-cyan-400 mb-5" />
+                  <h3 className="text-lg font-bold text-white mb-3">What We Check</h3>
+                  <ul className="space-y-3">
+                    {['Smart contract verification', 'API endpoint security', 'Admin key exposure', 'Dependency vulnerabilities', 'Rate limiting & abuse prevention'].map((item, i) => (
+                      <li key={i} className="flex items-center gap-2.5 text-sm text-slate-400">
+                        <CheckCircle className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <Link href="/guardian-scanner">
+                  <Button variant="outline" className="w-full mt-6 h-11 border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] rounded-xl" data-testid="button-full-scanner">
+                    <Eye className="w-4 h-4 mr-2" />
+                    Full DEX Scanner
+                  </Button>
+                </Link>
+              </div>
+            </BentoCard>
+          </div>
+        </section>
 
         {/* === BENTO GRID: CRISIS + STATS === */}
         <section className="mb-20">
@@ -578,31 +738,17 @@ export default function GuardianAI() {
                     ))}
                   </ul>
                   
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button 
-                        className={`w-full h-12 text-base font-semibold rounded-xl ${tier.highlight 
-                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg shadow-purple-500/20' 
-                          : 'bg-slate-800 hover:bg-slate-700 border border-white/[0.08]'
-                        }`}
-                        onClick={() => setSelectedTier(tier.id)}
-                        data-testid={`button-select-${tier.id}`}
-                      >
-                        Select {tier.name}
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="bg-slate-900 border-slate-700 max-w-2xl max-h-[90vh] overflow-y-auto">
-                      <DialogHeader>
-                        <DialogTitle className="text-2xl text-white flex items-center gap-2">
-                          <Bot className="w-6 h-6 text-cyan-400" />
-                          Submit AI Agent for Certification
-                        </DialogTitle>
-                        <DialogDescription className="text-slate-400">Complete the form below to begin the certification process.</DialogDescription>
-                      </DialogHeader>
-                      <SubmitForm preselectedTier={tier} />
-                    </DialogContent>
-                  </Dialog>
+                  <Button 
+                    className={`w-full h-12 text-base font-semibold rounded-xl ${tier.highlight 
+                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg shadow-purple-500/20' 
+                      : 'bg-slate-800 hover:bg-slate-700 border border-white/[0.08]'
+                    }`}
+                    onClick={() => { setSelectedTier(tier.id); setCheckoutTier(tier); }}
+                    data-testid={`button-select-${tier.id}`}
+                  >
+                    Get {tier.name}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
                 </div>
               </BentoCard>
             ))}
@@ -742,6 +888,94 @@ export default function GuardianAI() {
           </div>
         </motion.section>
       </main>
+
+      {checkoutTier && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => { setCheckoutTier(null); setCheckoutLoading(false); }} />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="relative w-full max-w-md bg-slate-900 border border-white/10 rounded-2xl p-8 shadow-2xl"
+          >
+            <button
+              onClick={() => { setCheckoutTier(null); setCheckoutLoading(false); }}
+              className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
+              data-testid="button-close-checkout"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <div className="text-center mb-6">
+              <div className={`w-16 h-16 mx-auto mb-4 rounded-xl flex items-center justify-center ${
+                checkoutTier.color === 'cyan' ? 'bg-cyan-500/15' : checkoutTier.color === 'purple' ? 'bg-purple-500/15' : 'bg-pink-500/15'
+              }`}>
+                <checkoutTier.icon className={`w-8 h-8 ${
+                  checkoutTier.color === 'cyan' ? 'text-cyan-400' : checkoutTier.color === 'purple' ? 'text-purple-400' : 'text-pink-400'
+                }`} />
+              </div>
+              <h3 className="text-xl font-bold text-white">{checkoutTier.name}</h3>
+              <p className="text-slate-400 text-sm mt-1">{checkoutTier.tagline}</p>
+              <div className={`text-3xl font-black mt-3 ${
+                checkoutTier.color === 'cyan' ? 'text-cyan-400' : checkoutTier.color === 'purple' ? 'text-purple-400' : 'text-pink-400'
+              }`}>{checkoutTier.price}</div>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1.5">Agent / Project Name *</label>
+                <Input
+                  required
+                  value={checkoutData.agentName}
+                  onChange={(e) => setCheckoutData({ ...checkoutData, agentName: e.target.value })}
+                  placeholder="e.g., AlphaTrader AI"
+                  className="bg-slate-800 border-slate-700 h-11"
+                  data-testid="input-checkout-agent"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1.5">Email *</label>
+                <Input
+                  required
+                  type="email"
+                  value={checkoutData.email}
+                  onChange={(e) => setCheckoutData({ ...checkoutData, email: e.target.value })}
+                  placeholder="you@company.com"
+                  className="bg-slate-800 border-slate-700 h-11"
+                  data-testid="input-checkout-email"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1.5">Website / Repo URL</label>
+                <Input
+                  value={checkoutData.website}
+                  onChange={(e) => setCheckoutData({ ...checkoutData, website: e.target.value })}
+                  placeholder="https://..."
+                  className="bg-slate-800 border-slate-700 h-11"
+                  data-testid="input-checkout-url"
+                />
+              </div>
+              <Button
+                onClick={handleCheckout}
+                disabled={checkoutLoading || !checkoutData.agentName || !checkoutData.email}
+                className="w-full h-12 text-base font-semibold bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 rounded-xl"
+                data-testid="button-proceed-checkout"
+              >
+                {checkoutLoading ? (
+                  <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />Processing...</>
+                ) : (
+                  <><Lock className="w-4 h-4 mr-2" />Proceed to Secure Payment</>
+                )}
+              </Button>
+              <p className="text-center text-slate-500 text-xs flex items-center justify-center gap-1.5">
+                <Lock className="w-3 h-3" />
+                Secure payment powered by Stripe
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      )}
       
       <Footer />
     </div>

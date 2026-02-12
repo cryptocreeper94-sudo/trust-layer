@@ -600,6 +600,8 @@ function TrustShieldRouter() {
         <Route path="/guardian-certification" component={GuardianCertification} />
         <Route path="/guardian-whitepaper" component={GuardianWhitepaper} />
         <Route path="/guardian-portal" component={GuardianPortal} />
+        <Route path="/guardian-scanner" component={GuardianScanner} />
+        <Route path="/guardian-scanner/:chain/:symbol" component={GuardianScannerDetail} />
         <Route path="/login" component={Welcome} />
         <Route path="/signup" component={Welcome} />
         <Route path="/terms" component={Terms} />
