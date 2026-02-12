@@ -117,7 +117,7 @@ function HeroSection() {
   const game = FEATURED_GAMES[currentSlide];
 
   return (
-    <section className="relative h-[85vh] sm:h-[90vh] overflow-hidden">
+    <section className="relative overflow-hidden" style={{ height: '85dvh', minHeight: '500px' }}>
       <motion.div className="absolute inset-0" style={{ opacity: heroOpacity, scale: heroScale }}>
         <AnimatePresence mode="wait">
           <motion.div
@@ -617,7 +617,7 @@ function BottomCTA() {
 
 export default function GamesHomePage() {
   return (
-    <main className="min-h-screen bg-slate-950" data-testid="games-home-page">
+    <main className="min-h-screen-safe bg-slate-950 scroll-touch" data-testid="games-home-page" style={{ WebkitOverflowScrolling: 'touch' }}>
       <HeroSection />
       <LiveStats />
       <QuickPlay />

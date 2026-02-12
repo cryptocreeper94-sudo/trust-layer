@@ -56,6 +56,9 @@ function updateDomainAssets() {
     }
     document.title = "DarkWave Games - Play & Win";
 
+    const appTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
+    if (appTitle) appTitle.setAttribute("content", "DW Games");
+
     const existingSplash = document.querySelectorAll('link[rel="apple-touch-startup-image"]');
     existingSplash.forEach(el => el.remove());
     const splashScreens = [

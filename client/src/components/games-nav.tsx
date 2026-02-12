@@ -60,11 +60,12 @@ export function GamesNav() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 safe-area-top ${
           scrolled
-            ? "bg-slate-950/95 backdrop-blur-xl border-b border-pink-500/10 shadow-[0_2px_20px_rgba(236,72,153,0.08)]"
+            ? "bg-slate-950/95 border-b border-pink-500/10 shadow-[0_2px_20px_rgba(236,72,153,0.08)]"
             : "bg-transparent"
         }`}
+        style={scrolled ? { WebkitBackdropFilter: 'blur(24px)', backdropFilter: 'blur(24px)' } : undefined}
         data-games-nav
       >
         <div className="w-full px-3 sm:px-6 h-14 flex items-center justify-between">
@@ -266,8 +267,8 @@ export function GamesNav() {
         )}
       </AnimatePresence>
 
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 backdrop-blur-xl border-t border-white/5 safe-area-bottom">
-        <div className="flex items-center justify-around h-14 px-2">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 border-t border-white/5 safe-area-bottom tap-transparent" style={{ WebkitBackdropFilter: 'blur(24px)', backdropFilter: 'blur(24px)' }}>
+        <div className="flex items-center justify-around px-2" style={{ height: '56px' }}>
           {[
             { href: "/", label: "Home", icon: Home },
             { href: "/arcade", label: "Arcade", icon: Gamepad2 },
@@ -280,9 +281,10 @@ export function GamesNav() {
             return (
               <Link key={item.href} href={item.href}>
                 <button
-                  className={`flex flex-col items-center gap-0.5 py-1 px-3 rounded-lg transition-all ${
+                  className={`flex flex-col items-center justify-center gap-0.5 rounded-lg transition-all tap-transparent ${
                     active ? "text-pink-400" : "text-white/40"
                   }`}
+                  style={{ minWidth: '44px', minHeight: '44px', WebkitTapHighlightColor: 'transparent' }}
                   data-testid={`bottom-nav-${item.label.toLowerCase()}`}
                 >
                   <Icon className={`w-5 h-5 ${active ? "drop-shadow-[0_0_6px_rgba(236,72,153,0.6)]" : ""}`} />
