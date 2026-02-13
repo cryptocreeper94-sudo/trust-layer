@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useSearch } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { CheckCircle, ArrowRight, Loader2, Sparkles, Wallet, Copy, ExternalLink , Shield , Shield } from "lucide-react";
+import { CheckCircle, ArrowRight, Loader2, Sparkles, Wallet, Copy, ExternalLink, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
