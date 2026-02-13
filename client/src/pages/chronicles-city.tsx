@@ -1,6 +1,7 @@
 import { useState, useRef, Suspense, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getChroniclesSession } from "./chronicles-login";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars, Html } from "@react-three/drei";
 import * as THREE from "three";
@@ -451,73 +452,82 @@ function PlotDetailModal({ plot, era, buildings, onClose, onBuild }: {
   );
 }
 
-function generateCityPlots(era: string): CityPlot[] {
-  const plots: CityPlot[] = [];
-
-  for (let i = 0; i < 6; i++) {
-    plots.push({
-      id: `${era}_ts_${i}`,
-      x: i,
-      z: 0,
-      type: "town_square",
-      isPremium: true,
-      price: 1000,
-    });
-  }
-
-  for (let i = 0; i < 12; i++) {
-    const types: CityPlot["type"][] = ["commercial", "residential", "mixed", "nature"];
-    plots.push({
-      id: `${era}_outer_${i}`,
-      x: i,
-      z: i % 4,
-      type: types[i % 4],
-      isPremium: false,
-      price: 0,
-    });
-  }
-
-  const sampleBuildings: Record<string, Array<{ idx: number; building: CityPlot["building"] }>> = {
-    modern: [
-      { idx: 0, building: { name: "Coffee Shop", emoji: "☕", type: "shop", tier: "premium" } },
-      { idx: 2, building: { name: "Tech Startup", emoji: "💻", type: "shop", tier: "premium" } },
-      { idx: 7, building: { name: "Apartment", emoji: "🏢", type: "residential", tier: "free" } },
-      { idx: 10, building: { name: "City Tree", emoji: "🌲", type: "residential", tier: "free" } },
-    ],
-    medieval: [
-      { idx: 1, building: { name: "Tavern", emoji: "🍺", type: "shop", tier: "premium" } },
-      { idx: 3, building: { name: "Blacksmith", emoji: "⚒️", type: "shop", tier: "premium" } },
-      { idx: 8, building: { name: "Cottage", emoji: "🏠", type: "residential", tier: "free" } },
-      { idx: 12, building: { name: "Oak Tree", emoji: "🌳", type: "residential", tier: "free" } },
-    ],
-    wildwest: [
-      { idx: 0, building: { name: "Saloon", emoji: "🥃", type: "shop", tier: "premium" } },
-      { idx: 4, building: { name: "Sheriff's Office", emoji: "⭐", type: "office", tier: "premium" } },
-      { idx: 9, building: { name: "Homestead", emoji: "🏚️", type: "residential", tier: "free" } },
-      { idx: 14, building: { name: "Cactus", emoji: "🌵", type: "residential", tier: "free" } },
-    ],
-  };
-
-  (sampleBuildings[era] || []).forEach(({ idx, building }) => {
-    if (plots[idx]) {
-      plots[idx].building = building;
-      plots[idx].owner = "npc";
-      plots[idx].ownerName = "Town NPC";
-    }
-  });
-
-  return plots;
-}
-
 export default function ChroniclesCity() {
+  const queryClient = useQueryClient();
   const { toast } = useToast();
   const [selectedEra, setSelectedEra] = useState<"modern" | "medieval" | "wildwest">("modern");
   const [selectedPlot, setSelectedPlot] = useState<CityPlot | null>(null);
   const [activeTab, setActiveTab] = useState<"map" | "storefront" | "leaderboard">("map");
   const [selectedBusiness, setSelectedBusiness] = useState<string | null>(null);
 
+  const getAuthHeaders = (): Record<string, string> => {
+    const session = getChroniclesSession();
+    if (session?.token) return { Authorization: `Bearer ${session.token}`, "Content-Type": "application/json" };
+    return { "Content-Type": "application/json" };
+  };
+
+  const { data: plotsData, isLoading: plotsLoading } = useQuery({
+    queryKey: ["/api/chronicles/city/plots", selectedEra],
+    queryFn: async () => {
+      const res = await fetch(`/api/chronicles/city/plots?era=${selectedEra}`, { headers: getAuthHeaders() });
+      if (!res.ok) return { plots: [] };
+      return res.json();
+    },
+    staleTime: 10000,
+  });
+
+  const { data: leaderboardData } = useQuery({
+    queryKey: ["/api/chronicles/city/leaderboard"],
+    queryFn: async () => {
+      const res = await fetch("/api/chronicles/city/leaderboard", { headers: getAuthHeaders() });
+      if (!res.ok) return { leaderboard: [] };
+      return res.json();
+    },
+    staleTime: 30000,
+  });
+
+  const buildMutation = useMutation({
+    mutationFn: async ({ plotId, buildingId, era }: { plotId: string; buildingId: string; era: string }) => {
+      const res = await fetch("/api/chronicles/city/build", {
+        method: "POST",
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ plotId, buildingId, era }),
+      });
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || "Failed to build");
+      }
+      return res.json();
+    },
+    onSuccess: (data) => {
+      toast({
+        title: `${data.building.emoji} ${data.building.name} Built!`,
+        description: data.shellsSpent > 0
+          ? `Your ${data.building.name} now stands in the city! (${data.shellsSpent} shells spent)`
+          : `Your ${data.building.name} now stands in the city! Other players will see it.`,
+      });
+      setSelectedPlot(null);
+      queryClient.invalidateQueries({ queryKey: ["/api/chronicles/city/plots", selectedEra] });
+      queryClient.invalidateQueries({ queryKey: ["/api/chronicles/city/leaderboard"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/chronicles/play/state"] });
+    },
+    onError: (error: any) => {
+      toast({ title: "Build Failed", description: error.message, variant: "destructive" });
+    },
+  });
+
   const config = ERA_CONFIG[selectedEra];
-  const plots = useMemo(() => generateCityPlots(selectedEra), [selectedEra]);
+  const plots: CityPlot[] = (plotsData?.plots || []).map((p: any) => ({
+    id: p.id,
+    x: p.x,
+    z: p.z,
+    type: p.type || (p.isPremium ? "town_square" : "commercial"),
+    owner: p.owner,
+    ownerName: p.ownerName,
+    building: p.building,
+    isPremium: p.isPremium,
+    price: p.price || 0,
+  }));
   const buildings = BUILDING_CATALOG[selectedEra] || [];
 
   const occupiedCount = plots.filter(p => p.building).length;
@@ -526,14 +536,8 @@ export default function ChroniclesCity() {
   const premiumOccupied = plots.filter(p => p.isPremium && p.building).length;
 
   const handleBuild = (buildingId: string) => {
-    const building = buildings.find(b => b.id === buildingId);
-    if (!building) return;
-
-    toast({
-      title: `${building.emoji} ${building.name} Built!`,
-      description: `Your ${building.name} now stands in the ${config.name}. Other players will see it.`,
-    });
-    setSelectedPlot(null);
+    if (!selectedPlot) return;
+    buildMutation.mutate({ plotId: selectedPlot.id, buildingId, era: selectedEra });
   };
 
   return (
@@ -725,36 +729,32 @@ export default function ChroniclesCity() {
                   <Crown className="w-4 h-4 text-yellow-400" /> Top City Builders
                 </h3>
                 <div className="space-y-2">
-                  {[
-                    { rank: 1, name: "QuantumVeil", buildings: 12, era: "modern", emoji: "🥇", title: "Master Architect" },
-                    { rank: 2, name: "Mara T.", buildings: 9, era: "medieval", emoji: "🥈", title: "Town Elder" },
-                    { rank: 3, name: "jdx_builds", buildings: 7, era: "wildwest", emoji: "🥉", title: "Frontier Pioneer" },
-                    { rank: 4, name: "Elena", buildings: 6, era: "modern", emoji: "4", title: "City Planner" },
-                    { rank: 5, name: "The Wanderer", buildings: 5, era: "wildwest", emoji: "5", title: "" },
-                    { rank: 6, name: "cryptoNomad_92", buildings: 4, era: "medieval", emoji: "6", title: "" },
-                    { rank: 7, name: "S. Mitchell", buildings: 3, era: "modern", emoji: "7", title: "" },
-                    { rank: 8, name: "prairie_rose", buildings: 3, era: "wildwest", emoji: "8", title: "" },
-                    { rank: 9, name: "AJ", buildings: 2, era: "medieval", emoji: "9", title: "" },
-                    { rank: 10, name: "BlockchainBard", buildings: 2, era: "modern", emoji: "10", title: "" },
-                  ].map(player => {
-                    const pEra = ERA_CONFIG[player.era as keyof typeof ERA_CONFIG];
-                    return (
-                      <div key={player.rank} className={`flex items-center gap-3 p-2 rounded-lg ${player.rank <= 3 ? "bg-white/8 border border-white/5" : "bg-white/5"}`}>
-                        <span className={`w-8 text-center ${player.rank <= 3 ? "text-lg" : "text-xs text-gray-500 font-mono"}`}>{player.emoji}</span>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm text-white truncate">{player.name}</p>
-                          <p className="text-[10px] text-gray-500">
-                            {pEra.emoji} {pEra.name}
-                            {player.title && <span className="ml-1 text-yellow-500/70">· {player.title}</span>}
-                          </p>
+                  {(leaderboardData?.leaderboard || []).length === 0 ? (
+                    <div className="text-center py-6">
+                      <Building2 className="w-8 h-8 text-gray-600 mx-auto mb-2" />
+                      <p className="text-sm text-gray-500">No builders yet. Be the first!</p>
+                      <p className="text-xs text-gray-600 mt-1">Claim a plot and build to appear on the leaderboard</p>
+                    </div>
+                  ) : (
+                    (leaderboardData?.leaderboard || []).map((player: any, idx: number) => {
+                      const rank = idx + 1;
+                      const emoji = rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : String(rank);
+                      const pEra = ERA_CONFIG[(player.era || "modern") as keyof typeof ERA_CONFIG] || ERA_CONFIG.modern;
+                      return (
+                        <div key={idx} className={`flex items-center gap-3 p-2 rounded-lg ${rank <= 3 ? "bg-white/8 border border-white/5" : "bg-white/5"}`}>
+                          <span className={`w-8 text-center ${rank <= 3 ? "text-lg" : "text-xs text-gray-500 font-mono"}`}>{emoji}</span>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm text-white truncate">{player.name}</p>
+                            <p className="text-[10px] text-gray-500">{pEra.emoji} {pEra.name}</p>
+                          </div>
+                          <div className="text-right flex-shrink-0">
+                            <p className="text-sm font-bold text-cyan-400">{player.buildings}</p>
+                            <p className="text-[9px] text-gray-500">built</p>
+                          </div>
                         </div>
-                        <div className="text-right flex-shrink-0">
-                          <p className="text-sm font-bold text-cyan-400">{player.buildings}</p>
-                          <p className="text-[9px] text-gray-500">built</p>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })
+                  )}
                 </div>
               </GlassCard>
 

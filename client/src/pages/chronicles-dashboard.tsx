@@ -143,7 +143,15 @@ export default function ChroniclesDashboard() {
   });
 
   const gameState = gameStateData?.gameState;
-  const gameLog = Array.isArray(gameState?.gameLog) ? gameState.gameLog.slice(-4).reverse() : [];
+  const parsedGameLog = (() => {
+    try {
+      const raw = gameState?.gameLog;
+      if (Array.isArray(raw)) return raw;
+      if (typeof raw === 'string') return JSON.parse(raw);
+      return [];
+    } catch { return []; }
+  })();
+  const gameLog = Array.isArray(parsedGameLog) ? parsedGameLog.slice(-4).reverse() : [];
 
   const recentEvents = gameLog.length > 0
     ? gameLog.map((entry: any) => ({
@@ -268,7 +276,7 @@ export default function ChroniclesDashboard() {
               <Clock className="w-4 h-4 text-cyan-400" /> Your Story So Far
             </h3>
             <div className="space-y-0">
-              {recentEvents.map((event, i) => (
+              {recentEvents.map((event: any, i: number) => (
                 <LifeTimelineEvent key={i} event={event} index={i} />
               ))}
             </div>

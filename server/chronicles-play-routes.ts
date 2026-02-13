@@ -1,6 +1,6 @@
 import { db } from "./db";
 import { eq, sql, and, desc } from "drizzle-orm";
-import { chroniclesGameState, playerChoices, playerPersonalities, chronicleAccounts } from "@shared/schema";
+import { chroniclesGameState, playerChoices, playerPersonalities, chronicleAccounts, landPlots, cityZones } from "@shared/schema";
 import OpenAI from "openai";
 import { SEASON_ZERO_QUESTS, STARTER_FACTIONS, STARTER_NPCS, ERA_SETTINGS, ERAS } from "./chronicles-service";
 import type { Express, Request, Response, NextFunction } from "express";
@@ -380,7 +380,8 @@ Return JSON:
 
       const involvedNpcs = (quest as any)?.relationshipImpact || [];
       const npcInvolved = (quest as any)?.npcInvolved || null;
-      const allInvolved = [...new Set([...(npcInvolved ? [npcInvolved] : []), ...involvedNpcs])];
+      const allInvolvedSet = new Set<string>([...(npcInvolved ? [npcInvolved] : []), ...involvedNpcs]);
+      const allInvolved = Array.from(allInvolvedSet);
       const npcListStr = allInvolved.length > 0
         ? `NPCs INVOLVED: ${allInvolved.join(", ")}. Your response MUST include relationship changes for each.`
         : "No specific NPCs involved.";
@@ -707,4 +708,283 @@ Stay completely in character. Respond naturally as ${npc.name} would. Keep respo
       res.status(500).json({ error: error.message || "Failed to chat with NPC" });
     }
   });
+
+  app.get("/api/chronicles/city/plots", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const era = (req.query.era as string) || "modern";
+      const userId = getPlayUserId(req);
+
+      const plots = await db.select().from(landPlots)
+        .where(eq(landPlots.zoneId, `city_${era}`));
+
+      if (plots.length === 0) {
+        const defaultPlots = generateDefaultCityPlots(era);
+        const inserted = await db.insert(landPlots).values(defaultPlots).returning();
+        return res.json({ plots: inserted.map(p => formatPlot(p, userId)) });
+      }
+
+      res.json({ plots: plots.map(p => formatPlot(p, userId)) });
+    } catch (error: any) {
+      console.error("Get city plots error:", error);
+      res.status(500).json({ error: error.message || "Failed to get city plots" });
+    }
+  });
+
+  app.post("/api/chronicles/city/build", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+
+      const { plotId, buildingId, era } = req.body;
+      if (!plotId || !buildingId || !era) {
+        return res.status(400).json({ error: "plotId, buildingId, and era are required" });
+      }
+
+      const [plot] = await db.select().from(landPlots).where(eq(landPlots.id, plotId)).limit(1);
+      if (!plot) return res.status(404).json({ error: "Plot not found" });
+      if (plot.ownerId && plot.ownerId !== userId) return res.status(403).json({ error: "This plot is already owned by someone else" });
+      if (plot.buildingData) return res.status(400).json({ error: "This plot already has a building" });
+
+      const catalog: Record<string, any[]> = {
+        modern: [
+          { id: "coffee_shop", name: "Coffee Shop", emoji: "☕", type: "shop", tier: "free", cost: 0 },
+          { id: "tech_startup", name: "Tech Startup", emoji: "💻", type: "shop", tier: "free", cost: 0 },
+          { id: "boutique", name: "Boutique", emoji: "👗", type: "shop", tier: "premium", cost: 500 },
+          { id: "restaurant", name: "Restaurant", emoji: "🍽️", type: "shop", tier: "premium", cost: 750 },
+          { id: "art_gallery", name: "Art Gallery", emoji: "🖼️", type: "shop", tier: "premium", cost: 600 },
+          { id: "coworking", name: "Co-Working Space", emoji: "🏢", type: "office", tier: "premium", cost: 800 },
+          { id: "penthouse", name: "Penthouse Suite", emoji: "🏙️", type: "residential", tier: "elite", cost: 2000 },
+          { id: "nightclub", name: "Nightclub", emoji: "🎵", type: "entertainment", tier: "elite", cost: 1500 },
+        ],
+        medieval: [
+          { id: "market_stall", name: "Market Stall", emoji: "🏪", type: "shop", tier: "free", cost: 0 },
+          { id: "cottage", name: "Cottage", emoji: "🏠", type: "residential", tier: "free", cost: 0 },
+          { id: "tavern", name: "Tavern", emoji: "🍺", type: "shop", tier: "premium", cost: 500 },
+          { id: "blacksmith", name: "Blacksmith", emoji: "⚒️", type: "shop", tier: "premium", cost: 600 },
+          { id: "apothecary", name: "Apothecary", emoji: "⚗️", type: "shop", tier: "premium", cost: 450 },
+          { id: "guild_hall", name: "Guild Hall", emoji: "🏛️", type: "office", tier: "premium", cost: 900 },
+          { id: "castle_tower", name: "Castle Tower", emoji: "🏰", type: "monument", tier: "elite", cost: 2500 },
+          { id: "cathedral", name: "Cathedral", emoji: "⛪", type: "monument", tier: "elite", cost: 2000 },
+        ],
+        wildwest: [
+          { id: "general_store", name: "General Store", emoji: "🏬", type: "shop", tier: "free", cost: 0 },
+          { id: "homestead", name: "Homestead", emoji: "🏚️", type: "residential", tier: "free", cost: 0 },
+          { id: "saloon", name: "Saloon", emoji: "🥃", type: "shop", tier: "premium", cost: 500 },
+          { id: "sheriffs_office", name: "Sheriff's Office", emoji: "⭐", type: "office", tier: "premium", cost: 600 },
+          { id: "assay_office", name: "Assay Office", emoji: "⚖️", type: "shop", tier: "premium", cost: 450 },
+          { id: "telegraph", name: "Telegraph Office", emoji: "📡", type: "office", tier: "premium", cost: 700 },
+          { id: "bank", name: "Frontier Bank", emoji: "🏦", type: "office", tier: "elite", cost: 2000 },
+          { id: "ranch", name: "Grand Ranch", emoji: "🐄", type: "residential", tier: "elite", cost: 1800 },
+        ],
+      };
+
+      const building = (catalog[era] || []).find((b: any) => b.id === buildingId);
+      if (!building) return res.status(400).json({ error: "Invalid building type" });
+
+      const isPremium = plot.plotSize === "premium";
+      if (!isPremium && building.tier !== "free") {
+        return res.status(400).json({ error: "Non-premium plots only allow free buildings" });
+      }
+
+      if (building.cost > 0) {
+        const [state] = await db.select().from(chroniclesGameState)
+          .where(eq(chroniclesGameState.userId, userId)).limit(1);
+        if (!state || state.shellsEarned < building.cost) {
+          return res.status(400).json({ error: `Not enough shells. Need ${building.cost}, have ${state?.shellsEarned || 0}` });
+        }
+        await db.update(chroniclesGameState).set({
+          shellsEarned: state.shellsEarned - building.cost,
+          updatedAt: new Date(),
+        }).where(eq(chroniclesGameState.userId, userId));
+      }
+
+      const [updated] = await db.update(landPlots).set({
+        ownerId: userId,
+        ownerType: "player",
+        buildingData: JSON.stringify({ id: building.id, name: building.name, emoji: building.emoji, type: building.type, tier: building.tier }),
+        isForSale: false,
+        purchasedAt: new Date(),
+      }).where(eq(landPlots.id, plotId)).returning();
+
+      res.json({
+        success: true,
+        plot: formatPlot(updated, userId),
+        building,
+        shellsSpent: building.cost,
+      });
+    } catch (error: any) {
+      console.error("Build error:", error);
+      res.status(500).json({ error: error.message || "Failed to build" });
+    }
+  });
+
+  app.get("/api/chronicles/city/leaderboard", async (_req: Request, res: Response) => {
+    try {
+      const allPlots = await db.select().from(landPlots);
+      const ownerCounts: Record<string, { count: number; ownerId: string }> = {};
+      for (const plot of allPlots) {
+        if (plot.ownerId && plot.ownerType === "player" && plot.buildingData) {
+          ownerCounts[plot.ownerId] = ownerCounts[plot.ownerId] || { count: 0, ownerId: plot.ownerId };
+          ownerCounts[plot.ownerId].count++;
+        }
+      }
+      const sorted = Object.values(ownerCounts).sort((a, b) => b.count - a.count).slice(0, 10);
+
+      const leaderboard = [];
+      for (const entry of sorted) {
+        const [state] = await db.select({ name: chroniclesGameState.name, currentEra: chroniclesGameState.currentEra })
+          .from(chroniclesGameState).where(eq(chroniclesGameState.userId, entry.ownerId)).limit(1);
+        leaderboard.push({
+          name: state?.name || "Builder",
+          buildings: entry.count,
+          era: state?.currentEra || "modern",
+        });
+      }
+
+      res.json({ leaderboard });
+    } catch (error: any) {
+      console.error("City leaderboard error:", error);
+      res.status(500).json({ error: error.message || "Failed to get leaderboard" });
+    }
+  });
+
+  app.get("/api/chronicles/play/progress", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+
+      const [state] = await db.select().from(chroniclesGameState)
+        .where(eq(chroniclesGameState.userId, userId)).limit(1);
+
+      const completedSet = new Set<string>(state?.completedSituations || []);
+      const totalQuests = SEASON_ZERO_QUESTS.length;
+      const completedQuests = SEASON_ZERO_QUESTS.filter(q => completedSet.has(q.id)).length;
+
+      const playerPlots = state ? await db.select().from(landPlots)
+        .where(eq(landPlots.ownerId, userId)) : [];
+      const cityBuildsCount = playerPlots.filter(p => p.buildingData).length;
+
+      const hasOnboarded = !!state;
+      const hasDecisions = (state?.decisionsRecorded || 0) > 0;
+      const hasMultipleEras = (() => {
+        const eras = new Set<string>();
+        for (const id of (state?.completedSituations || [])) {
+          const q = SEASON_ZERO_QUESTS.find(quest => quest.id === id);
+          if (q) eras.add(q.era);
+        }
+        return eras.size >= 2;
+      })();
+      const hasCityBuild = cityBuildsCount > 0;
+      const hasNpcRelationships = (() => {
+        try {
+          const rels = JSON.parse(state?.npcRelationships || '{}');
+          return Object.keys(rels).length > 0;
+        } catch { return false; }
+      })();
+
+      const chapters: Record<string, "completed" | "current" | "locked"> = {
+        awakening: hasOnboarded ? "completed" : "current",
+        foundation: hasOnboarded ? (cityBuildsCount > 0 ? "completed" : "current") : "locked",
+        play: hasOnboarded ? (hasDecisions ? (completedQuests >= totalQuests ? "completed" : "current") : "current") : "locked",
+        world: hasOnboarded ? (hasNpcRelationships ? "completed" : "current") : "locked",
+        city: hasOnboarded ? (hasCityBuild ? "completed" : "current") : "locked",
+        connections: hasNpcRelationships && hasMultipleEras ? "current" : "locked",
+        exploration: (state?.level || 1) >= 3 ? "current" : "locked",
+        legacy: (state?.level || 1) >= 10 ? "current" : "locked",
+      };
+
+      res.json({
+        chapters,
+        stats: {
+          totalQuests,
+          completedQuests,
+          cityBuildsCount,
+          level: state?.level || 1,
+          decisionsRecorded: state?.decisionsRecorded || 0,
+          npcsSpokenTo: (state?.npcsSpokenTo || []).length,
+          factionsJoined: (state?.factionsJoined || []).length,
+        },
+      });
+    } catch (error: any) {
+      console.error("Get progress error:", error);
+      res.status(500).json({ error: error.message || "Failed to get progress" });
+    }
+  });
+}
+
+function generateDefaultCityPlots(era: string) {
+  const plots = [];
+  const zoneId = `city_${era}`;
+
+  for (let i = 0; i < 6; i++) {
+    plots.push({
+      zoneId,
+      plotX: i,
+      plotY: 0,
+      plotSize: "premium" as const,
+      basePrice: 1000,
+      currentPrice: 1000,
+      isForSale: true,
+    });
+  }
+
+  for (let i = 0; i < 12; i++) {
+    plots.push({
+      zoneId,
+      plotX: i,
+      plotY: i % 4 + 1,
+      plotSize: "standard" as const,
+      basePrice: 0,
+      currentPrice: 0,
+      isForSale: true,
+    });
+  }
+
+  const npcBuildings: Record<string, Array<{ idx: number; building: any; ownerName: string }>> = {
+    modern: [
+      { idx: 0, building: { id: "coffee_shop", name: "Coffee Shop", emoji: "☕", type: "shop", tier: "premium" }, ownerName: "City NPC" },
+      { idx: 2, building: { id: "tech_startup", name: "Tech Startup", emoji: "💻", type: "shop", tier: "premium" }, ownerName: "City NPC" },
+    ],
+    medieval: [
+      { idx: 1, building: { id: "tavern", name: "Tavern", emoji: "🍺", type: "shop", tier: "premium" }, ownerName: "Town NPC" },
+      { idx: 3, building: { id: "blacksmith", name: "Blacksmith", emoji: "⚒️", type: "shop", tier: "premium" }, ownerName: "Town NPC" },
+    ],
+    wildwest: [
+      { idx: 0, building: { id: "saloon", name: "Saloon", emoji: "🥃", type: "shop", tier: "premium" }, ownerName: "Town NPC" },
+      { idx: 4, building: { id: "sheriffs_office", name: "Sheriff's Office", emoji: "⭐", type: "office", tier: "premium" }, ownerName: "Town NPC" },
+    ],
+  };
+
+  for (const npc of (npcBuildings[era] || [])) {
+    if (plots[npc.idx]) {
+      plots[npc.idx] = {
+        ...plots[npc.idx],
+        ownerId: "npc",
+        ownerType: "npc" as any,
+        buildingData: JSON.stringify(npc.building),
+        isForSale: false,
+      } as any;
+    }
+  }
+
+  return plots;
+}
+
+function formatPlot(plot: any, userId: string | null) {
+  const building = plot.buildingData ? (() => {
+    try { return JSON.parse(plot.buildingData); } catch { return null; }
+  })() : null;
+
+  return {
+    id: plot.id,
+    x: plot.plotX,
+    z: plot.plotY,
+    type: plot.plotSize === "premium" ? "town_square" : "commercial",
+    owner: plot.ownerId || undefined,
+    ownerName: plot.ownerType === "npc" ? "Town NPC" : (plot.ownerId === userId ? "You" : (plot.ownerId ? "Another Player" : undefined)),
+    isOwner: plot.ownerId === userId,
+    building,
+    isPremium: plot.plotSize === "premium",
+    price: plot.currentPrice || 0,
+  };
 }
