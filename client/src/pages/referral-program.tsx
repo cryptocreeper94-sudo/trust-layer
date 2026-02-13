@@ -96,7 +96,7 @@ export default function ReferralProgram() {
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <Shield className="w-7 h-7 text-cyan-400" />
-            <span className="font-display font-bold text-lg">DarkWave</span>
+            <span className="font-display font-bold text-lg">Trust Layer</span>
           </Link>
           <div className="flex items-center gap-3">
             {isAuthenticated ? (

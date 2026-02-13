@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
@@ -91,6 +91,11 @@ function getOwnerHeaders() {
 }
 
 export default function ZealyAdmin() {
+  useEffect(() => {
+    const auth = sessionStorage.getItem("ownerAuth");
+    if (!auth) window.location.href = "/owner-admin";
+  }, []);
+
   const queryClient = useQueryClient();
   const [showAddForm, setShowAddForm] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);

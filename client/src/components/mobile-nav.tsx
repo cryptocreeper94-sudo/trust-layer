@@ -557,7 +557,7 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
         }}>
           <input
             type="text"
-            placeholder="Search DarkWave..."
+            placeholder="Search Trust Layer..."
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 const query = (e.target as HTMLInputElement).value;

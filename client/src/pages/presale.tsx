@@ -201,21 +201,19 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
   const isValidEmail = email.includes("@") && email.includes(".");
   const isValidName = name.trim().length >= 2;
   
-  // Founders Circle Tiers - First 100 buyers get matching bonus percentages
   const TIERS = [
-    { id: "founders_25", name: "Founders $25", amount: 2500, bonus: 25, color: "from-green-400 to-emerald-500" },
-    { id: "founders_50", name: "Founders $50", amount: 5000, bonus: 50, color: "from-cyan-400 to-blue-500" },
-    { id: "founders_75", name: "Founders $75", amount: 7500, bonus: 75, color: "from-purple-400 to-pink-500" },
-    { id: "founders_100", name: "Founders $100", amount: 10000, bonus: 100, color: "from-yellow-400 to-orange-500" },
+    { id: "founders_25", name: "Founders $25", amount: 2500, bonus: 5, color: "from-green-400 to-emerald-500" },
+    { id: "founders_50", name: "Founders $50", amount: 5000, bonus: 10, color: "from-cyan-400 to-blue-500" },
+    { id: "founders_100", name: "Founders $100", amount: 10000, bonus: 15, color: "from-purple-400 to-pink-500" },
+    { id: "founders_250", name: "Founders $250", amount: 25000, bonus: 25, color: "from-yellow-400 to-orange-500" },
   ];
   
   const amountCents = useCustom 
     ? Math.max(1000, Math.round(parseFloat(customAmount || "10") * 100))
     : (TIERS.find(t => t.id === selectedTier)?.amount || 2500);
   
-  // Founders Circle bonus structure - matching percentage based on amount
   const bonusPercent = useCustom
-    ? (amountCents >= 10000 ? 100 : amountCents >= 7500 ? 75 : amountCents >= 5000 ? 50 : amountCents >= 2500 ? 25 : 0)
+    ? (amountCents >= 25000 ? 25 : amountCents >= 10000 ? 15 : amountCents >= 5000 ? 10 : amountCents >= 2500 ? 5 : 0)
     : (TIERS.find(t => t.id === selectedTier)?.bonus || 0);
   
   const tokenAmount = Math.floor((amountCents / 100) / TOKEN_PRICE);

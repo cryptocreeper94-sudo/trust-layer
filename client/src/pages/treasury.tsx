@@ -143,7 +143,7 @@ export default function Treasury() {
         <div className="container mx-auto px-4 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2 mr-auto">
             <Shield className="w-7 h-7 text-cyan-400" />
-            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
           </Link>
           <div className="flex items-center gap-3">
             <Badge variant="outline" className="border-primary/50 text-primary bg-primary/10 text-[10px]">

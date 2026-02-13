@@ -499,7 +499,7 @@ export default function Home() {
                 y1={line.y1}
                 x2={line.x2}
                 y2={line.y2}
-                stroke="url(#waveGradient)"
+                stroke="url(#waveGradientCyan)"
                 strokeWidth="1"
                 strokeOpacity="0.4"
                 className="animate-pulse"

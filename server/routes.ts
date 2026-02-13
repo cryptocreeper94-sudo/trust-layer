@@ -6625,10 +6625,8 @@ const { trustLayerId } = await response.json();`
         status: "pending",
       });
 
-      const stripe = await import("stripe");
-      const stripeClient = new stripe.default(process.env.STRIPE_SECRET_KEY || "", {
-        apiVersion: "2025-11-17.clover",
-      });
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripeClient = await getUncachableStripeClient();
 
       const session = await stripeClient.checkout.sessions.create({
         payment_method_types: ["card"],
@@ -6636,7 +6634,7 @@ const { trustLayerId } = await response.json();`
           price_data: {
             currency: "usd",
             product_data: {
-              name: featureId ? "Feature Funding Contribution" : "DarkWave Dev Fund Contribution",
+              name: featureId ? "Feature Funding Contribution" : "Trust Layer Dev Fund Contribution",
               description: "Transparent blockchain development funding",
             },
             unit_amount: amountCents,
@@ -6664,7 +6662,7 @@ const { trustLayerId } = await response.json();`
     }
   });
 
-  app.post("/api/crowdfund/confirm/:contributionId", async (req, res) => {
+  app.post("/api/crowdfund/confirm/:contributionId", isAuthenticated, async (req: any, res) => {
     try {
       const { contributionId } = req.params;
       
@@ -6826,10 +6824,8 @@ const { trustLayerId } = await response.json();`
         return res.status(400).json({ error: "Invalid tier" });
       }
 
-      const stripe = await import("stripe");
-      const stripeClient = new stripe.default(process.env.STRIPE_SECRET_KEY || "", {
-        apiVersion: "2025-11-17.clover",
-      });
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripeClient = await getUncachableStripeClient();
 
       const session = await stripeClient.checkout.sessions.create({
         payment_method_types: ["card"],
@@ -9688,7 +9684,7 @@ const { trustLayerId } = await response.json();`
     }
   });
 
-  app.post("/api/billing/subscribe", async (req, res) => {
+  app.post("/api/billing/subscribe", isAuthenticated, async (req: any, res) => {
     try {
       const { plan } = req.body;
       
@@ -9712,7 +9708,7 @@ const { trustLayerId } = await response.json();`
           price_data: {
             currency: "usd",
             product_data: {
-              name: `DarkWave ${planName} Membership`,
+              name: `Trust Layer ${planName} Membership`,
               description: plan === "builder" 
                 ? "50,000 API calls/month, DarkWave Studio, Priority support, Early token access"
                 : "Unlimited API calls, Dedicated support, Custom integrations, Validator node access",
@@ -9722,6 +9718,12 @@ const { trustLayerId } = await response.json();`
           },
           quantity: 1,
         }],
+        metadata: {
+          userId: req.user?.id?.toString() || '',
+          plan,
+          type: 'subscription',
+          billingCycle: 'monthly',
+        },
         success_url: `${baseUrl}/billing?success=true&plan=${plan}`,
         cancel_url: `${baseUrl}/billing?canceled=true`,
       });
@@ -9730,6 +9732,25 @@ const { trustLayerId } = await response.json();`
     } catch (error) {
       console.error("Subscription checkout error:", error);
       res.status(500).json({ error: "Failed to create subscription checkout" });
+    }
+  });
+
+  app.post("/api/billing/cancel-subscription", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+
+      const result = await subscriptionService.cancelSubscription(userId.toString());
+      if (result.success) {
+        res.json({ success: true, message: "Subscription cancelled successfully" });
+      } else {
+        res.status(400).json({ error: result.error || "Failed to cancel subscription" });
+      }
+    } catch (error: any) {
+      console.error("Cancel subscription error:", error);
+      res.status(500).json({ error: "Failed to cancel subscription" });
     }
   });
 
@@ -10528,7 +10549,7 @@ const { trustLayerId } = await response.json();`
     }
   });
 
-  app.get("/api/billing/verify-payment", async (req, res) => {
+  app.get("/api/billing/verify-payment", isAuthenticated, async (req: any, res) => {
     try {
       const sessionId = req.query.session_id as string;
       if (!sessionId) {
@@ -13710,8 +13731,7 @@ Current context:
     }
   });
 
-  // Webhook to add credits after payment
-  app.post("/api/assistant/add-credits", async (req, res) => {
+  app.post("/api/assistant/add-credits", isAuthenticated, async (req: any, res) => {
     try {
       const { userId, amountCents } = req.body;
       if (!userId || !amountCents) {

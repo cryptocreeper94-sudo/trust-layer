@@ -333,6 +333,7 @@ export default function OwnerGuardian() {
                             variant="outline"
                             className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"
                             data-testid={`button-report-${cert.id}`}
+                            onClick={() => window.open(`/guardian-ai-registry?cert=${cert.id}`, '_blank')}
                           >
                             <FileText className="w-4 h-4 mr-1" />
                             View Report

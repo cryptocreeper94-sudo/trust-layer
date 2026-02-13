@@ -316,7 +316,7 @@ function DomainManager() {
     queryKey: ["/api/owner/domains"],
     queryFn: async () => {
       const res = await fetch("/api/owner/domains", {
-        headers: { "Authorization": `Bearer ${ownerToken}` },
+        headers: { "x-owner-token": sessionStorage.getItem("ownerToken") || "" },
       });
       if (!res.ok) throw new Error("Failed to fetch domains");
       return res.json();
@@ -329,7 +329,7 @@ function DomainManager() {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${ownerToken}`,
+          "x-owner-token": sessionStorage.getItem("ownerToken") || "",
         },
         body: JSON.stringify(domain),
       });
@@ -354,7 +354,7 @@ function DomainManager() {
     mutationFn: async (id: string) => {
       const res = await fetch(`/api/owner/domains/${id}`, {
         method: "DELETE",
-        headers: { "Authorization": `Bearer ${ownerToken}` },
+        headers: { "x-owner-token": sessionStorage.getItem("ownerToken") || "" },
       });
       if (!res.ok) throw new Error("Failed to delete domain");
     },

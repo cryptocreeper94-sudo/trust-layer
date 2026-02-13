@@ -75,7 +75,7 @@ export default function Feedback() {
         <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
           <div className="w-full px-4 h-14 flex items-center justify-between">
             <Link href="/" className="flex items-center">
-              <span className="font-display font-bold text-xl tracking-tight">DarkWave</span>
+              <span className="font-display font-bold text-xl tracking-tight">Trust Layer</span>
             </Link>
           </div>
         </nav>
@@ -124,7 +124,7 @@ export default function Feedback() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="w-full px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center">
-            <span className="font-display font-bold text-xl tracking-tight">DarkWave</span>
+            <span className="font-display font-bold text-xl tracking-tight">Trust Layer</span>
           </Link>
         </div>
       </nav>

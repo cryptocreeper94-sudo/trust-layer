@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import { Check, X , Shield } from "lucide-react";
+import { Check, X, Shield, CreditCard, Activity, DollarSign, Clock, ExternalLink, AlertCircle, Mail } from "lucide-react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
-import { CreditCard, Activity, DollarSign, Clock, ExternalLink, AlertCircle, Mail , Shield } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -163,7 +162,7 @@ export default function Billing() {
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <Shield className="w-7 h-7 text-cyan-400" />
-            <span className="font-display font-bold text-lg tracking-tight">DarkWave</span>
+            <span className="font-display font-bold text-lg tracking-tight">Trust Layer</span>
           </Link>
           <BackButton />
         </div>

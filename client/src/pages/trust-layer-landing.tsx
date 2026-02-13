@@ -543,7 +543,7 @@ export default function TrustLayerLanding() {
                   <span>API access & webhooks</span>
                 </li>
               </ul>
-              <Link href={isAuthenticated ? "/business-apply" : "#"} className="mt-auto">
+              <Link href={isAuthenticated ? "/business-application" : "#"} className="mt-auto">
                 <Button
                   variant="outline"
                   className="w-full border-purple-500/30 text-purple-400 hover:bg-purple-500/10"

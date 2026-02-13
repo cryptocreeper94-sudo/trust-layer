@@ -91,7 +91,7 @@ export default function NftGallery() {
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <Shield className="w-7 h-7 text-cyan-400" />
-            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">DarkWave</span>
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
           </Link>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="border-purple-500/50 text-purple-400 text-[10px]">Gallery</Badge>

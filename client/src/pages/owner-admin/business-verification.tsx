@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
@@ -49,6 +49,11 @@ interface BusinessApplication {
 }
 
 export default function BusinessVerificationAdmin() {
+  useEffect(() => {
+    const auth = sessionStorage.getItem("ownerAuth");
+    if (!auth) window.location.href = "/owner-admin";
+  }, []);
+
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [statusFilter, setStatusFilter] = useState<"all" | "pending" | "approved" | "rejected">("pending");

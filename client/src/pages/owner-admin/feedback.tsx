@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "wouter";
@@ -58,7 +58,7 @@ function ReportCard({ report, onUpdate }: { report: FeedbackReport; onUpdate: ()
         method: "PATCH",
         headers: { 
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          "x-owner-token": sessionStorage.getItem("ownerToken") || "",
         },
         body: JSON.stringify(updates),
       });
@@ -242,6 +242,11 @@ function ReportCard({ report, onUpdate }: { report: FeedbackReport; onUpdate: ()
 }
 
 export default function OwnerFeedback() {
+  useEffect(() => {
+    const auth = sessionStorage.getItem("ownerAuth");
+    if (!auth) window.location.href = "/owner-admin";
+  }, []);
+
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
   const [typeFilter, setTypeFilter] = useState<string | null>(null);
 
@@ -256,7 +261,7 @@ export default function OwnerFeedback() {
       if (typeFilter) params.set("type", typeFilter);
       
       const res = await fetch(`/api/owner-admin/feedback?${params}`, {
-        headers: { "Authorization": `Bearer ${token}` },
+        headers: { "x-owner-token": sessionStorage.getItem("ownerToken") || "" },
       });
       if (!res.ok) throw new Error("Failed to fetch");
       return res.json();

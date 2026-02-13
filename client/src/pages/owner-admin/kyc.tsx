@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
@@ -167,6 +167,11 @@ function KycCard({ kyc, onApprove, onReject }: {
 }
 
 export default function KycAdmin() {
+  useEffect(() => {
+    const auth = sessionStorage.getItem("ownerAuth");
+    if (!auth) window.location.href = "/owner-admin";
+  }, []);
+
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");

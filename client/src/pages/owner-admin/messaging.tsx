@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { 
@@ -189,6 +189,11 @@ function MessageCard({ message, isCore = false }: { message: MessageItem; isCore
 }
 
 export default function MessagingCatalog() {
+  useEffect(() => {
+    const auth = sessionStorage.getItem("ownerAuth");
+    if (!auth) window.location.href = "/owner-admin";
+  }, []);
+
   const [activeTab, setActiveTab] = useState("core");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
