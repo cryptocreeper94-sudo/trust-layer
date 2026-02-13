@@ -294,19 +294,21 @@ function GameCard({ game, index, accentColor }: { game: GameItem; index: number;
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
             {game.badge && (
-              <motion.div
-                className="absolute top-3 right-3"
-                animate={game.hot ? { scale: [1, 1.1, 1] } : {}}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                <Badge className={`bg-gradient-to-r ${game.badgeColor} text-white text-[10px] font-bold px-2 py-0.5 shadow-lg border-0`}>
-                  {game.badge}
-                </Badge>
-              </motion.div>
+              <div className="absolute top-4 right-4">
+                <motion.div
+                  animate={game.hot ? { scale: [1, 1.1, 1] } : {}}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                  className="inline-block"
+                >
+                  <Badge className={`bg-gradient-to-r ${game.badgeColor} text-white text-[10px] font-bold px-2.5 py-1 shadow-lg border-0`}>
+                    {game.badge}
+                  </Badge>
+                </motion.div>
+              </div>
             )}
 
             {game.hot && (
-              <div className="absolute top-3 left-3">
+              <div className="absolute top-4 left-4">
                 <motion.div
                   animate={{ opacity: [0.7, 1, 0.7] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
@@ -381,15 +383,18 @@ function FeaturedBanner() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
 
         <div className="absolute inset-0 flex items-center">
-          <div className="px-6 sm:px-10 max-w-lg">
-            <motion.div
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              <Badge className="bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold px-3 py-1 mb-3 border-0">
-                <Flame className="w-3 h-3 mr-1" /> FEATURED
-              </Badge>
-            </motion.div>
+          <div className="px-8 sm:px-10 max-w-lg">
+            <div className="mb-4 inline-block">
+              <motion.div
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="inline-block"
+              >
+                <Badge className="bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold px-3 py-1 border-0">
+                  <Flame className="w-3 h-3 mr-1" /> FEATURED
+                </Badge>
+              </motion.div>
+            </div>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-2 leading-tight">
               Dragon's Fortune
             </h2>
@@ -405,7 +410,7 @@ function FeaturedBanner() {
           </div>
         </div>
 
-        <div className="absolute bottom-4 right-4 sm:right-8 flex items-center gap-3">
+        <div className="absolute bottom-6 right-6 sm:right-8 flex items-center gap-3">
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-sm border border-white/10">
             <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
             <span className="text-xs text-white/80 font-medium">4.7K playing</span>
@@ -437,7 +442,7 @@ function StatsBar() {
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
       {stats.map((stat, i) => (
         <motion.div
           key={stat.label}
@@ -445,8 +450,8 @@ function StatsBar() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 + i * 0.1 }}
         >
-          <GlassCard className="p-3 sm:p-4 text-center" glow>
-            <div className="flex items-center justify-center gap-2 mb-1">
+          <GlassCard className="p-5 sm:p-6 text-center" glow>
+            <div className="flex items-center justify-center gap-2 mb-1.5">
               {stat.icon}
               <span className="text-lg sm:text-xl font-bold text-white">{stat.value}</span>
             </div>
@@ -460,8 +465,8 @@ function StatsBar() {
 
 function CurrencyExplainer() {
   return (
-    <GlassCard className="p-4 sm:p-6 mb-10" glow>
-      <div className="flex items-start gap-3 mb-4">
+    <GlassCard className="p-6 sm:p-8 mb-10" glow>
+      <div className="flex items-start gap-4 mb-6">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-500/20 to-green-500/20 border border-yellow-500/30 flex items-center justify-center shrink-0">
           <Coins className="w-5 h-5 text-yellow-400" />
         </div>
@@ -470,20 +475,20 @@ function CurrencyExplainer() {
           <p className="text-sm text-slate-400">Our casino games use a legal dual-currency sweepstakes model.</p>
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div className="p-3 rounded-xl bg-yellow-500/5 border border-yellow-500/20">
-          <div className="flex items-center gap-2 mb-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="p-5 rounded-xl bg-yellow-500/5 border border-yellow-500/20">
+          <div className="flex items-center gap-2 mb-3">
             <Coins className="w-5 h-5 text-yellow-400" />
             <span className="font-bold text-yellow-400">Gold Coins (GC)</span>
           </div>
-          <p className="text-xs text-slate-400">Purchase Gold Coins to play for fun. No real-money value. Buy packages to get started!</p>
+          <p className="text-sm text-slate-400 leading-relaxed">Purchase Gold Coins to play for fun. No real-money value. Buy packages to get started!</p>
         </div>
-        <div className="p-3 rounded-xl bg-green-500/5 border border-green-500/20">
-          <div className="flex items-center gap-2 mb-2">
+        <div className="p-5 rounded-xl bg-green-500/5 border border-green-500/20">
+          <div className="flex items-center gap-2 mb-3">
             <Sparkles className="w-5 h-5 text-green-400" />
             <span className="font-bold text-green-400">Sweeps Coins (SC)</span>
           </div>
-          <p className="text-xs text-slate-400">Receive FREE Sweeps Coins with Gold Coin purchases. SC can be redeemed for prizes!</p>
+          <p className="text-sm text-slate-400 leading-relaxed">Receive FREE Sweeps Coins with Gold Coin purchases. SC can be redeemed for prizes!</p>
         </div>
       </div>
     </GlassCard>
