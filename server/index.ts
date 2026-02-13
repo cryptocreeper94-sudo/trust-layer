@@ -19,7 +19,7 @@ import { startScheduler } from "./marketing-scheduler";
 import { startShellsAirdropScheduler } from "./shells-airdrop-scheduler";
 import { startReferralPayoutScheduler } from "./referral-payout-scheduler";
 import { startEmailUpdateScheduler } from "./email-update-scheduler";
-import { seedDocuments, seedCityZones } from "./storage";
+import { seedDocuments, seedCityZones, seedEraBuildingTemplates } from "./storage";
 import { setupPresence } from "./chat-presence";
 import { setupSignalChatWS } from "./chat-ws";
 import { seedChatChannels } from "./seedChat";
@@ -408,8 +408,9 @@ async function initializeServices() {
     // Seed Signal Chat channels
     await seedChatChannels();
     
-    // Seed city zones for Chronicles Estate
+    // Seed city zones and era buildings for Chronicles Estate
     await seedCityZones();
+    await seedEraBuildingTemplates();
     
     // Initialize Pulse AI Prediction Services
     try {

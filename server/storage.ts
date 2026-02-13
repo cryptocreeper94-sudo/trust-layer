@@ -2857,26 +2857,26 @@ export async function seedDocuments(): Promise<void> {
 }
 
 const SEED_ZONES: InsertCityZone[] = [
-  // Present Day Era
-  { era: "present", name: "Downtown Core", description: "The bustling heart of the modern city with skyscrapers and corporate headquarters", zoneType: "commercial", gridX: 0, gridY: 0, width: 6, height: 6, totalPlots: 36, occupiedPlots: 0, architectureStyle: "modern" },
-  { era: "present", name: "Residential Heights", description: "Upscale apartment complexes and condominiums with city views", zoneType: "residential", gridX: 6, gridY: 0, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "modern" },
-  { era: "present", name: "City Hall District", description: "Government buildings, courts, and public services", zoneType: "civic", gridX: 0, gridY: 6, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "modern" },
-  { era: "present", name: "Central Park", description: "Green oasis in the urban jungle with walking paths and fountains", zoneType: "nature", gridX: 4, gridY: 4, width: 3, height: 3, totalPlots: 9, occupiedPlots: 0, architectureStyle: "modern" },
-  { era: "present", name: "Innovation Hub", description: "Tech startups and coworking spaces for entrepreneurs", zoneType: "mixed", gridX: 7, gridY: 4, width: 3, height: 4, totalPlots: 12, occupiedPlots: 0, architectureStyle: "modern" },
-  
+  // Modern Era
+  { era: "modern", name: "Downtown Core", description: "The gleaming corporate district of glass towers and power", zoneType: "commercial", gridX: 0, gridY: 0, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "modern" },
+  { era: "modern", name: "Tech Campus", description: "Innovation hub where startups and labs push the boundaries", zoneType: "civic", gridX: 4, gridY: 0, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "modern" },
+  { era: "modern", name: "Midtown Residential", description: "Apartments and condos where the city sleeps", zoneType: "residential", gridX: 0, gridY: 4, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "modern" },
+  { era: "modern", name: "Central Park", description: "A green oasis in the concrete jungle", zoneType: "nature", gridX: 4, gridY: 4, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "modern" },
+  { era: "modern", name: "The Underground", description: "A hidden network of clubs, markets, and meeting places", zoneType: "mixed", gridX: 8, gridY: 0, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "modern" },
+
   // Medieval Era
-  { era: "medieval", name: "Castle Ward", description: "The fortified castle and its surrounding noble estates", zoneType: "civic", gridX: 0, gridY: 0, width: 5, height: 5, totalPlots: 25, occupiedPlots: 0, architectureStyle: "medieval" },
-  { era: "medieval", name: "Market Square", description: "Bustling marketplace with merchant stalls and guild halls", zoneType: "commercial", gridX: 5, gridY: 0, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "medieval" },
-  { era: "medieval", name: "Peasant Quarter", description: "Humble cottages and farms for the common folk", zoneType: "residential", gridX: 0, gridY: 5, width: 5, height: 4, totalPlots: 20, occupiedPlots: 0, architectureStyle: "medieval" },
-  { era: "medieval", name: "Abbey Grounds", description: "The monastery and its sacred gardens", zoneType: "civic", gridX: 5, gridY: 4, width: 3, height: 3, totalPlots: 9, occupiedPlots: 0, architectureStyle: "medieval" },
-  { era: "medieval", name: "The Woodlands", description: "Dense forest on the outskirts, home to hunters and hermits", zoneType: "nature", gridX: 8, gridY: 4, width: 2, height: 5, totalPlots: 10, occupiedPlots: 0, architectureStyle: "medieval" },
-  
-  // Roman Era
-  { era: "roman", name: "The Forum", description: "Center of political, religious, and commercial life", zoneType: "civic", gridX: 0, gridY: 0, width: 6, height: 4, totalPlots: 24, occupiedPlots: 0, architectureStyle: "roman" },
-  { era: "roman", name: "Merchant District", description: "Shops, taverns, and trading houses along the main road", zoneType: "commercial", gridX: 6, gridY: 0, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "roman" },
-  { era: "roman", name: "Patrician Villas", description: "Luxurious homes of the wealthy elite with private gardens", zoneType: "residential", gridX: 0, gridY: 4, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "roman" },
-  { era: "roman", name: "Plebeian Quarter", description: "Crowded insulae apartments for common citizens", zoneType: "residential", gridX: 4, gridY: 4, width: 3, height: 4, totalPlots: 12, occupiedPlots: 0, architectureStyle: "roman" },
-  { era: "roman", name: "Temple Complex", description: "Sacred temples to the gods and ritual spaces", zoneType: "civic", gridX: 7, gridY: 4, width: 3, height: 4, totalPlots: 12, occupiedPlots: 0, architectureStyle: "roman" },
+  { era: "medieval", name: "Castle Ward", description: "The fortified heart of the kingdom, home to nobles and the royal court", zoneType: "civic", gridX: 0, gridY: 0, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "medieval" },
+  { era: "medieval", name: "Market Square", description: "A bustling bazaar where merchants hawk their wares", zoneType: "commercial", gridX: 4, gridY: 0, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "medieval" },
+  { era: "medieval", name: "Peasant Quarter", description: "Simple homes and workshops of the common folk", zoneType: "residential", gridX: 0, gridY: 4, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "medieval" },
+  { era: "medieval", name: "Temple Grove", description: "Sacred grounds where the Old Faith tends ancient groves", zoneType: "nature", gridX: 4, gridY: 4, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "medieval" },
+  { era: "medieval", name: "Artisan's Row", description: "Workshops and craft halls lining a busy street", zoneType: "mixed", gridX: 8, gridY: 0, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "medieval" },
+
+  // Wild West Era
+  { era: "wildwest", name: "Main Street", description: "The dusty heart of town — saloon, general store, and the marshal's office", zoneType: "commercial", gridX: 0, gridY: 0, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "wildwest" },
+  { era: "wildwest", name: "Railroad Depot", description: "Where the iron horse meets the frontier", zoneType: "civic", gridX: 4, gridY: 0, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "wildwest" },
+  { era: "wildwest", name: "Settler's Row", description: "Homesteads and cabins for families carving a life from the land", zoneType: "residential", gridX: 0, gridY: 4, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "wildwest" },
+  { era: "wildwest", name: "Sacred Valley", description: "Ancestral lands of the First Nations, rich with history and spirit", zoneType: "nature", gridX: 4, gridY: 4, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "wildwest" },
+  { era: "wildwest", name: "Mining Camp", description: "Tents, pickaxes, and dreams of gold in the foothills", zoneType: "mixed", gridX: 8, gridY: 0, width: 4, height: 4, totalPlots: 16, occupiedPlots: 0, architectureStyle: "wildwest" },
 ];
 
 export async function seedCityZones(): Promise<void> {
@@ -2925,5 +2925,34 @@ export async function seedCityZones(): Promise<void> {
     console.log(`[seed] Successfully seeded ${SEED_ZONES.length} city zones with plots`);
   } catch (error) {
     console.error("[seed] Failed to seed city zones:", error);
+  }
+}
+
+export async function seedEraBuildingTemplates(): Promise<void> {
+  try {
+    const { eraBuildingTemplates } = await import("@shared/schema");
+    const existing = await db.select().from(eraBuildingTemplates).limit(1);
+    if (existing.length > 0) {
+      console.log("[seed] Era building templates already exist, skipping seed");
+      return;
+    }
+
+    const { ERA_BUILDING_TEMPLATES } = await import("./chronicles-service");
+    console.log("[seed] Seeding era building templates...");
+    for (const tmpl of ERA_BUILDING_TEMPLATES) {
+      await db.insert(eraBuildingTemplates).values({
+        era: tmpl.era,
+        buildingType: tmpl.buildingType,
+        displayName: tmpl.displayName,
+        iconEmoji: tmpl.iconEmoji,
+        colorClass: tmpl.colorClass,
+        description: tmpl.description,
+        baseCost: tmpl.baseCost,
+        unlockLevel: tmpl.unlockLevel,
+      });
+    }
+    console.log(`[seed] Successfully seeded ${ERA_BUILDING_TEMPLATES.length} era building templates`);
+  } catch (error) {
+    console.error("[seed] Failed to seed era building templates:", error);
   }
 }

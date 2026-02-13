@@ -2857,15 +2857,14 @@ export const insertPlayerChoiceSchema = createInsertSchema(playerChoices).omit({
 export type PlayerChoice = typeof playerChoices.$inferSelect;
 export type InsertPlayerChoice = z.infer<typeof insertPlayerChoiceSchema>;
 
-// Player Estate - Persistent estate building data
+// Player Estate - Persistent estate building data (one per era per player)
 export const playerEstates = pgTable("player_estates", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: text("user_id").notNull().unique(),
+  userId: text("user_id").notNull(),
+  era: text("era").notNull().default("modern"),
   
-  // Grid data stored as JSON
-  gridData: text("grid_data").notNull().default('[]'), // JSON array of GridCell objects
+  gridData: text("grid_data").notNull().default('[]'),
   
-  // Estate stats
   totalBuildings: integer("total_buildings").notNull().default(1),
   shellsSpent: integer("shells_spent").notNull().default(0),
   

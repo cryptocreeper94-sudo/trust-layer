@@ -1,13 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, Suspense, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation } from "wouter";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import * as THREE from "three";
 import { 
   Home, TreeDeciduous, Mountain, Droplets, Store, Hammer, ArrowLeft,
   Plus, Minus, RotateCcw, Save, Coins, Lock, Sparkles,
   ChevronRight, User, Grid3X3, Eye, ShoppingBag, Crown,
   Rocket, Building2, MapPin, Gift, Briefcase, Calendar, X,
-  Timer, Flame, Clock, Zap, Map, ShoppingCart, DoorOpen
+  Timer, Flame, Clock, Zap, Map, ShoppingCart, DoorOpen, Box, Layers
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -125,6 +128,205 @@ const BUILDING_COLORS: Record<BuildingType, string> = {
   path: "bg-stone-400",
 };
 
+const ERA_COLORS: Record<string, { ground: string; ambient: string; sky: string }> = {
+  modern: { ground: "#1a2332", ambient: "#60a5fa", sky: "#0f172a" },
+  medieval: { ground: "#2d1f0e", ambient: "#d97706", sky: "#1c1917" },
+  wildwest: { ground: "#3d2b1a", ambient: "#f59e0b", sky: "#292524" },
+};
+
+const BUILDING_3D_COLORS: Record<BuildingType, string> = {
+  empty: "#1e293b",
+  house: "#d97706",
+  tree: "#16a34a",
+  garden: "#ec4899",
+  pond: "#3b82f6",
+  shop: "#a855f7",
+  workshop: "#f97316",
+  monument: "#eab308",
+  wall: "#64748b",
+  path: "#a8a29e",
+};
+
+function Building3D({ type, x, z, era }: { type: BuildingType; x: number; z: number; era: string }) {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const color = BUILDING_3D_COLORS[type];
+  
+  useFrame((state) => {
+    if (meshRef.current && type !== "path" && type !== "wall") {
+      meshRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5 + x + z) * 0.02 + getHeight(type) / 2;
+    }
+  });
+
+  const getHeight = (t: BuildingType) => {
+    switch(t) {
+      case "house": return era === "medieval" ? 1.4 : era === "wildwest" ? 1.0 : 1.2;
+      case "tree": return 1.8;
+      case "garden": return 0.3;
+      case "pond": return 0.15;
+      case "shop": return 1.0;
+      case "workshop": return 1.3;
+      case "monument": return 2.2;
+      case "wall": return 0.8;
+      case "path": return 0.05;
+      default: return 0;
+    }
+  };
+
+  if (type === "empty") return null;
+
+  const height = getHeight(type);
+
+  if (type === "tree") {
+    return (
+      <group position={[x - 3.5, 0, z - 3.5]}>
+        <mesh position={[0, 0.4, 0]}>
+          <cylinderGeometry args={[0.08, 0.12, 0.8, 6]} />
+          <meshStandardMaterial color="#8B4513" />
+        </mesh>
+        <mesh ref={meshRef} position={[0, 1.1, 0]}>
+          <sphereGeometry args={[0.4, 8, 6]} />
+          <meshStandardMaterial color={era === "wildwest" ? "#6b7c3f" : "#22c55e"} roughness={0.8} />
+        </mesh>
+      </group>
+    );
+  }
+
+  if (type === "pond") {
+    return (
+      <group position={[x - 3.5, 0.08, z - 3.5]}>
+        <mesh rotation={[-Math.PI/2, 0, 0]}>
+          <circleGeometry args={[0.4, 16]} />
+          <meshStandardMaterial color="#38bdf8" transparent opacity={0.7} roughness={0.1} metalness={0.3} />
+        </mesh>
+      </group>
+    );
+  }
+
+  if (type === "garden") {
+    return (
+      <group position={[x - 3.5, 0, z - 3.5]}>
+        {[0, 1, 2, 3, 4].map(i => (
+          <mesh key={i} position={[Math.cos(i*1.3)*0.25, 0.15, Math.sin(i*1.3)*0.25]}>
+            <sphereGeometry args={[0.1, 6, 4]} />
+            <meshStandardMaterial color={["#ec4899", "#f472b6", "#a855f7", "#f43f5e", "#fb923c"][i]} />
+          </mesh>
+        ))}
+      </group>
+    );
+  }
+
+  if (type === "monument") {
+    return (
+      <group position={[x - 3.5, 0, z - 3.5]}>
+        <mesh position={[0, 0.15, 0]}>
+          <boxGeometry args={[0.6, 0.3, 0.6]} />
+          <meshStandardMaterial color="#94a3b8" />
+        </mesh>
+        <mesh position={[0, 0.8, 0]}>
+          <cylinderGeometry args={[0.12, 0.18, 1.0, 8]} />
+          <meshStandardMaterial color="#eab308" metalness={0.6} roughness={0.2} />
+        </mesh>
+        <mesh ref={meshRef} position={[0, 1.5, 0]}>
+          <octahedronGeometry args={[0.2]} />
+          <meshStandardMaterial color="#fbbf24" emissive="#f59e0b" emissiveIntensity={0.5} metalness={0.8} roughness={0.1} />
+        </mesh>
+      </group>
+    );
+  }
+
+  if (type === "path") {
+    return (
+      <mesh position={[x - 3.5, 0.03, z - 3.5]} rotation={[-Math.PI/2, 0, 0]}>
+        <planeGeometry args={[0.85, 0.85]} />
+        <meshStandardMaterial color={era === "wildwest" ? "#a8876b" : "#78716c"} />
+      </mesh>
+    );
+  }
+
+  const roofColor = era === "medieval" ? "#8B0000" : era === "wildwest" ? "#5c3a1e" : "#475569";
+  const wallColor = era === "medieval" ? "#d4c5a9" : era === "wildwest" ? "#c9a96e" : color;
+
+  return (
+    <group position={[x - 3.5, 0, z - 3.5]}>
+      <mesh ref={meshRef} position={[0, height/2, 0]}>
+        <boxGeometry args={[0.7, height, 0.7]} />
+        <meshStandardMaterial color={wallColor} />
+      </mesh>
+      {(type === "house" || type === "shop" || type === "workshop") && (
+        <mesh position={[0, height + 0.15, 0]} rotation={[0, Math.PI/4, 0]}>
+          <coneGeometry args={[0.55, 0.35, 4]} />
+          <meshStandardMaterial color={roofColor} />
+        </mesh>
+      )}
+    </group>
+  );
+}
+
+function GroundPlane({ era }: { era: string }) {
+  const colors = ERA_COLORS[era] || ERA_COLORS.modern;
+  return (
+    <mesh rotation={[-Math.PI/2, 0, 0]} position={[0, -0.01, 0]}>
+      <planeGeometry args={[10, 10]} />
+      <meshStandardMaterial color={colors.ground} />
+    </mesh>
+  );
+}
+
+function GridLines() {
+  const lines = useMemo(() => {
+    const pts: [number, number, number][] = [];
+    for (let i = 0; i <= GRID_SIZE; i++) {
+      const pos = i - GRID_SIZE/2;
+      pts.push([-GRID_SIZE/2, 0.01, pos], [GRID_SIZE/2, 0.01, pos]);
+      pts.push([pos, 0.01, -GRID_SIZE/2], [pos, 0.01, GRID_SIZE/2]);
+    }
+    return pts;
+  }, []);
+
+  return (
+    <group>
+      {Array.from({ length: lines.length / 2 }).map((_, i) => {
+        const start = lines[i * 2];
+        const end = lines[i * 2 + 1];
+        const geometry = new THREE.BufferGeometry().setFromPoints([
+          new THREE.Vector3(...start),
+          new THREE.Vector3(...end),
+        ]);
+        return (
+          <lineSegments key={i} geometry={geometry}>
+            <lineBasicMaterial color="#334155" transparent opacity={0.4} />
+          </lineSegments>
+        );
+      })}
+    </group>
+  );
+}
+
+function Estate3DScene({ grid, era }: { grid: GridCell[][]; era: string }) {
+  return (
+    <>
+      <ambientLight intensity={0.4} />
+      <directionalLight position={[5, 8, 5]} intensity={0.8} castShadow />
+      <pointLight position={[-3, 4, -3]} intensity={0.3} color={ERA_COLORS[era]?.ambient || "#60a5fa"} />
+      <GroundPlane era={era} />
+      <GridLines />
+      {grid.map((row, z) =>
+        row.map((cell, x) => (
+          <Building3D key={`${x}-${z}`} type={cell.building} x={x} z={z} era={era} />
+        ))
+      )}
+      <OrbitControls 
+        enablePan={false}
+        minPolarAngle={Math.PI/6}
+        maxPolarAngle={Math.PI/2.5}
+        minDistance={4}
+        maxDistance={14}
+        target={[0, 0, 0]}
+      />
+    </>
+  );
+}
+
 function createEmptyGrid(): GridCell[][] {
   const grid: GridCell[][] = [];
   for (let y = 0; y < GRID_SIZE; y++) {
@@ -203,11 +405,14 @@ export default function ChroniclesEstate() {
     enabled: !!chroniclesAccount,
   });
 
+  const [selectedEra, setSelectedEra] = useState("modern");
+  const [show3D, setShow3D] = useState(false);
+
   const { data: estateData, isLoading: estateLoading } = useQuery({
-    queryKey: ["/api/chronicles/estate"],
+    queryKey: ["/api/chronicles/estate", selectedEra],
     queryFn: async () => {
       const session = getChroniclesSession();
-      const res = await fetch("/api/chronicles/estate", {
+      const res = await fetch(`/api/chronicles/estate?era=${selectedEra}`, {
         headers: { Authorization: `Bearer ${session?.token}` }
       });
       return res.json();
@@ -218,8 +423,10 @@ export default function ChroniclesEstate() {
   useEffect(() => {
     if (estateData?.estate?.gridData && Array.isArray(estateData.estate.gridData) && estateData.estate.gridData.length > 0) {
       setGrid(estateData.estate.gridData);
+    } else {
+      setGrid(createEmptyGrid());
     }
-  }, [estateData]);
+  }, [estateData, selectedEra]);
 
   const saveEstateMutation = useMutation({
     mutationFn: async (gridData: GridCell[][]) => {
@@ -231,22 +438,20 @@ export default function ChroniclesEstate() {
           Authorization: `Bearer ${session?.token}`,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ gridData, totalBuildings, shellsSpent: 0 })
+        body: JSON.stringify({ gridData, totalBuildings, shellsSpent: 0, era: selectedEra })
       });
       if (!res.ok) throw new Error((await res.json()).error || "Failed to save");
       return res.json();
     },
     onSuccess: () => {
       setHasChanges(false);
-      queryClient.invalidateQueries({ queryKey: ["/api/chronicles/estate"] });
-      toast.success("Estate saved!", { description: "Your progress has been saved." });
+      queryClient.invalidateQueries({ queryKey: ["/api/chronicles/estate", selectedEra] });
+      toast.success("Estate saved!", { description: `Your ${selectedEra} era estate has been saved.` });
     },
     onError: (error: any) => {
       toast.error("Failed to save", { description: error.message || "Please try again." });
     }
   });
-
-  const [selectedEra, setSelectedEra] = useState("present");
   const [selectedZone, setSelectedZone] = useState<CityZone | null>(null);
   const [activeTab, setActiveTab] = useState("builder");
 
@@ -1024,28 +1229,66 @@ export default function ChroniclesEstate() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
           >
-            {/* Era Selector */}
-            <div className="flex gap-2 flex-wrap">
-              {[
-                { id: "present", label: "Present Day", emoji: "🏙️" },
-                { id: "medieval", label: "Medieval", emoji: "🏰" },
-                { id: "roman", label: "Roman Empire", emoji: "🏛️" },
-              ].map((era) => (
-                <Button
-                  key={era.id}
-                  variant={selectedEra === era.id ? "default" : "outline"}
-                  onClick={() => { setSelectedEra(era.id); setSelectedZone(null); }}
-                  className={selectedEra === era.id 
-                    ? "bg-gradient-to-r from-purple-500 to-pink-500" 
-                    : "border-slate-600"
-                  }
-                  data-testid={`era-${era.id}`}
-                >
-                  <span className="mr-2">{era.emoji}</span>
-                  {era.label}
-                </Button>
-              ))}
-            </div>
+            {/* Era Progression - Portal System */}
+            <GlassCard glow className="p-4">
+              <div className="flex items-center gap-2 mb-4">
+                <Sparkles className="w-5 h-5 text-cyan-400" />
+                <h3 className="font-bold text-white">Time Portal - Era Travel</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                {[
+                  { id: "modern", label: "Modern Day", emoji: "🏙️", unlockLevel: 0, unlockDesc: "Starting Era", color: "from-cyan-500 to-blue-500" },
+                  { id: "medieval", label: "Medieval", emoji: "🏰", unlockLevel: 5, unlockDesc: "Complete 5 Modern quests to unlock", color: "from-amber-500 to-orange-500" },
+                  { id: "wildwest", label: "Wild West", emoji: "🤠", unlockLevel: 10, unlockDesc: "Complete 10 quests across eras to unlock", color: "from-yellow-600 to-red-500" },
+                ].map((era) => {
+                  const isUnlocked = playerLevel >= era.unlockLevel;
+                  const isActive = selectedEra === era.id;
+                  return (
+                    <div
+                      key={era.id}
+                      onClick={() => {
+                        if (isUnlocked) {
+                          setSelectedEra(era.id);
+                          setSelectedZone(null);
+                        } else {
+                          toast.error("Era Locked", { description: era.unlockDesc });
+                        }
+                      }}
+                      data-testid={`era-${era.id}`}
+                      className={`relative rounded-xl p-4 cursor-pointer transition-all border-2 ${
+                        isActive 
+                          ? "border-cyan-400 shadow-[0_0_20px_rgba(0,255,255,0.2)]" 
+                          : isUnlocked 
+                            ? "border-white/10 hover:border-white/30" 
+                            : "border-slate-700/50 opacity-60"
+                      } ${isUnlocked ? "bg-slate-800/50" : "bg-slate-900/80"}`}
+                    >
+                      {!isUnlocked && (
+                        <div className="absolute inset-0 rounded-xl bg-black/40 flex flex-col items-center justify-center z-10 backdrop-blur-[1px]">
+                          <Lock className="w-6 h-6 text-slate-400 mb-1" />
+                          <span className="text-xs text-slate-400 text-center px-2">Level {era.unlockLevel}</span>
+                        </div>
+                      )}
+                      <div className="text-center">
+                        <span className="text-3xl block mb-2">{era.emoji}</span>
+                        <p className={`font-bold text-sm ${isActive ? "bg-gradient-to-r bg-clip-text text-transparent " + era.color : "text-white"}`}>
+                          {era.label}
+                        </p>
+                        <p className="text-xs text-slate-400 mt-1">
+                          {isUnlocked ? (isActive ? "Currently exploring" : "Tap to travel") : era.unlockDesc}
+                        </p>
+                      </div>
+                      {isActive && (
+                        <motion.div 
+                          layoutId="era-indicator"
+                          className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 rounded-full bg-gradient-to-r ${era.color}`} 
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </GlassCard>
 
             {/* Zones Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1245,7 +1488,65 @@ export default function ChroniclesEstate() {
 
         {/* Builder Tab */}
         {activeTab === "builder" && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="space-y-6">
+          {/* Live World Status Bar */}
+          <GlassCard glow className="p-3">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse" />
+                  <div className="absolute inset-0 w-3 h-3 bg-green-400 rounded-full animate-ping opacity-50" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-green-400">WORLD LIVE</p>
+                  <p className="text-[10px] text-slate-400">Players & NPCs shaping all eras in real-time</p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                {[
+                  { id: "modern", emoji: "🏙️", label: "Modern", level: 0 },
+                  { id: "medieval", emoji: "🏰", label: "Medieval", level: 5 },
+                  { id: "wildwest", emoji: "🤠", label: "Wild West", level: 10 },
+                ].map(era => {
+                  const isUnlocked = playerLevel >= era.level;
+                  const isActive = selectedEra === era.id;
+                  return (
+                    <Button
+                      key={era.id}
+                      variant={isActive ? "default" : "outline"}
+                      size="sm"
+                      disabled={!isUnlocked}
+                      onClick={() => {
+                        if (isUnlocked) {
+                          if (hasChanges) {
+                            toast.error("Save your estate before traveling!");
+                            return;
+                          }
+                          setSelectedEra(era.id);
+                        } else {
+                          toast.error("Era Locked", { description: `Reach level ${era.level} to unlock` });
+                        }
+                      }}
+                      className={`text-xs ${
+                        isActive 
+                          ? "bg-gradient-to-r from-cyan-500 to-purple-500 text-white" 
+                          : !isUnlocked 
+                            ? "border-slate-700 text-slate-600 opacity-50" 
+                            : "border-slate-600 text-slate-300"
+                      }`}
+                      data-testid={`builder-era-${era.id}`}
+                    >
+                      <span className="mr-1">{era.emoji}</span>
+                      {era.label}
+                      {!isUnlocked && <Lock className="w-3 h-3 ml-1" />}
+                    </Button>
+                  );
+                })}
+              </div>
+            </div>
+          </GlassCard>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Character Portrait & Stats */}
           <Card className="bg-slate-900/80 border-slate-700 p-6">
             <div className="text-center mb-6">
@@ -1261,6 +1562,12 @@ export default function ChroniclesEstate() {
             
             <div className="space-y-3">
               <div className="flex justify-between text-sm">
+                <span className="text-slate-400">Current Era</span>
+                <span className="text-cyan-400 font-semibold">
+                  {selectedEra === "modern" ? "🏙️ Modern" : selectedEra === "medieval" ? "🏰 Medieval" : "🤠 Wild West"}
+                </span>
+              </div>
+              <div className="flex justify-between text-sm">
                 <span className="text-slate-400">Buildings Placed</span>
                 <span className="text-white">{countBuildings()}</span>
               </div>
@@ -1274,14 +1581,15 @@ export default function ChroniclesEstate() {
               </div>
             </div>
 
-            <div className="mt-6 pt-6 border-t border-slate-700">
+            <div className="mt-4 pt-4 border-t border-slate-700 space-y-2">
+              <div className="p-2 bg-slate-800/50 rounded-lg border border-slate-700">
+                <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Persistent World</p>
+                <p className="text-xs text-slate-300">Other players and smart NPCs continue shaping all eras even while you're away.</p>
+              </div>
               <Badge variant="outline" className="w-full justify-center border-purple-500/50 text-purple-400 py-2">
                 <Sparkles className="w-3 h-3 mr-2" />
                 Season Zero Preview
               </Badge>
-              <p className="text-xs text-slate-500 text-center mt-2">
-                Click Save to persist your estate. More features coming in Season 1!
-              </p>
             </div>
           </Card>
 
@@ -1322,126 +1630,226 @@ export default function ChroniclesEstate() {
                   <Save className="w-4 h-4 mr-1" />
                   {isSaving ? "Saving..." : hasChanges ? "Save" : "Saved"}
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowShop(!showShop)}
-                  className="border-slate-600 ml-auto"
-                >
-                  <ShoppingBag className="w-4 h-4 mr-1" />
-                  {showShop ? "Hide Shop" : "Shop"}
-                </Button>
-              </div>
-
-              {/* Building Palette */}
-              <div className="mb-4">
-                <Tabs defaultValue="structures" className="w-full">
-                  <TabsList className="grid w-full grid-cols-3 bg-slate-800">
-                    <TabsTrigger value="structures">Structures</TabsTrigger>
-                    <TabsTrigger value="nature">Nature</TabsTrigger>
-                    <TabsTrigger value="decoration">Decor</TabsTrigger>
-                  </TabsList>
-                  
-                  {["structures", "nature", "decoration"].map(category => (
-                    <TabsContent key={category} value={category} className="mt-3">
-                      <div className="flex flex-wrap gap-2">
-                        {BUILDINGS.filter(b => b.category === category).map((building) => {
-                          const isLocked = building.unlockLevel > playerLevel;
-                          const isSelected = selectedBuilding === building.id;
-                          const Icon = building.icon;
-                          
-                          return (
-                            <Button
-                              key={building.id}
-                              variant={isSelected ? "default" : "outline"}
-                              size="sm"
-                              disabled={isLocked}
-                              onClick={() => {
-                                setSelectedBuilding(building.id);
-                                setIsEraseMode(false);
-                              }}
-                              className={`relative ${isSelected ? "bg-cyan-500" : "border-slate-600"}`}
-                              data-testid={`building-${building.id}`}
-                            >
-                              {isLocked && <Lock className="w-3 h-3 absolute -top-1 -right-1 text-amber-400" />}
-                              <Icon className="w-4 h-4 mr-1" />
-                              {building.name}
-                              {building.cost > 0 && (
-                                <span className="ml-1 text-amber-400 text-xs">({building.cost})</span>
-                              )}
-                            </Button>
-                          );
-                        })}
-                      </div>
-                    </TabsContent>
-                  ))}
-                </Tabs>
-              </div>
-
-              {/* Grid */}
-              <div 
-                className="aspect-square max-w-md mx-auto bg-slate-800/50 rounded-lg p-2 border border-slate-700"
-                style={{
-                  backgroundImage: "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)",
-                  backgroundSize: `${100/GRID_SIZE}% ${100/GRID_SIZE}%`,
-                }}
-              >
-                <div className="grid grid-cols-8 gap-1 h-full">
-                  {grid.map((row, y) =>
-                    row.map((cell, x) => {
-                      const Icon = getBuildingIcon(cell.building);
-                      return (
-                        <motion.div
-                          key={`${x}-${y}`}
-                          data-testid={`cell-${x}-${y}`}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => handleCellClick(x, y)}
-                          className={`
-                            aspect-square rounded cursor-pointer transition-all
-                            flex items-center justify-center
-                            ${BUILDING_COLORS[cell.building]}
-                            ${cell.building === "empty" ? "hover:bg-slate-700" : ""}
-                            ${selectedBuilding || isEraseMode ? "ring-1 ring-cyan-500/30" : ""}
-                          `}
-                        >
-                          {cell.building !== "empty" && (
-                            <Icon className="w-4 h-4 md:w-5 md:h-5 text-white drop-shadow" />
-                          )}
-                        </motion.div>
-                      );
-                    })
-                  )}
+                <div className="ml-auto flex gap-2">
+                  <Button
+                    variant={show3D ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setShow3D(!show3D)}
+                    className={show3D ? "bg-gradient-to-r from-purple-500 to-pink-500" : "border-slate-600"}
+                    data-testid="button-toggle-3d"
+                  >
+                    <Box className="w-4 h-4 mr-1" />
+                    {show3D ? "2D Grid" : "3D View"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowShop(!showShop)}
+                    className="border-slate-600"
+                  >
+                    <ShoppingBag className="w-4 h-4 mr-1" />
+                    {showShop ? "Hide Shop" : "Shop"}
+                  </Button>
                 </div>
               </div>
 
-              <p className="text-center text-xs text-slate-500 mt-4">
-                Select a building above, then tap on the grid to place it
-              </p>
+              {/* Era-Aware Building Palette */}
+              <div className="mb-4">
+                {eraBuildings.length > 0 ? (
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Badge className="bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-300 border-cyan-500/30 text-xs">
+                        {selectedEra === "modern" ? "🏙️ Modern" : selectedEra === "medieval" ? "🏰 Medieval" : "🤠 Wild West"} Buildings
+                      </Badge>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {eraBuildings.map((building) => {
+                        const isLocked = building.unlockLevel > playerLevel;
+                        const buildingTypeId = building.buildingType as BuildingType;
+                        const isSelected = selectedBuilding === buildingTypeId;
+                        
+                        return (
+                          <Button
+                            key={building.id}
+                            variant={isSelected ? "default" : "outline"}
+                            size="sm"
+                            disabled={isLocked}
+                            onClick={() => {
+                              setSelectedBuilding(buildingTypeId);
+                              setIsEraseMode(false);
+                            }}
+                            className={`relative ${isSelected ? "bg-cyan-500" : "border-slate-600"}`}
+                            data-testid={`building-era-${building.buildingType}`}
+                          >
+                            {isLocked && <Lock className="w-3 h-3 absolute -top-1 -right-1 text-amber-400" />}
+                            <span className="mr-1">{building.iconEmoji}</span>
+                            {building.displayName}
+                            {building.baseCost > 0 && (
+                              <span className="ml-1 text-amber-400 text-xs">({building.baseCost})</span>
+                            )}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : (
+                  <Tabs defaultValue="structures" className="w-full">
+                    <TabsList className="grid w-full grid-cols-3 bg-slate-800">
+                      <TabsTrigger value="structures">Structures</TabsTrigger>
+                      <TabsTrigger value="nature">Nature</TabsTrigger>
+                      <TabsTrigger value="decoration">Decor</TabsTrigger>
+                    </TabsList>
+                    
+                    {["structures", "nature", "decoration"].map(category => (
+                      <TabsContent key={category} value={category} className="mt-3">
+                        <div className="flex flex-wrap gap-2">
+                          {BUILDINGS.filter(b => b.category === category).map((building) => {
+                            const isLocked = building.unlockLevel > playerLevel;
+                            const isSelected = selectedBuilding === building.id;
+                            const Icon = building.icon;
+                            
+                            return (
+                              <Button
+                                key={building.id}
+                                variant={isSelected ? "default" : "outline"}
+                                size="sm"
+                                disabled={isLocked}
+                                onClick={() => {
+                                  setSelectedBuilding(building.id);
+                                  setIsEraseMode(false);
+                                }}
+                                className={`relative ${isSelected ? "bg-cyan-500" : "border-slate-600"}`}
+                                data-testid={`building-${building.id}`}
+                              >
+                                {isLocked && <Lock className="w-3 h-3 absolute -top-1 -right-1 text-amber-400" />}
+                                <Icon className="w-4 h-4 mr-1" />
+                                {building.name}
+                                {building.cost > 0 && (
+                                  <span className="ml-1 text-amber-400 text-xs">({building.cost})</span>
+                                )}
+                              </Button>
+                            );
+                          })}
+                        </div>
+                      </TabsContent>
+                    ))}
+                  </Tabs>
+                )}
+              </div>
+
+              {/* 3D View */}
+              {show3D ? (
+                <div className="relative rounded-lg overflow-hidden border border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.15)]">
+                  <div className="aspect-square max-w-lg mx-auto">
+                    <Suspense fallback={
+                      <div className="w-full h-full bg-slate-900 flex items-center justify-center">
+                        <div className="text-center">
+                          <div className="w-8 h-8 border-2 border-purple-400 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                          <p className="text-sm text-slate-400">Loading 3D Estate...</p>
+                        </div>
+                      </div>
+                    }>
+                      <Canvas
+                        camera={{ position: [6, 5, 6], fov: 50 }}
+                        style={{ background: ERA_COLORS[selectedEra]?.sky || "#0f172a" }}
+                      >
+                        <Estate3DScene grid={grid} era={selectedEra} />
+                      </Canvas>
+                    </Suspense>
+                  </div>
+                  <div className="absolute top-2 left-2 flex items-center gap-1">
+                    <Badge className="bg-purple-500/80 text-white border-purple-400/50 text-xs shadow-lg">
+                      <Box className="w-3 h-3 mr-1" />
+                      3D View
+                    </Badge>
+                  </div>
+                  <p className="text-center text-xs text-slate-500 py-2">
+                    Drag to rotate, scroll to zoom. Place buildings in 2D grid mode.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  {/* 2D Grid */}
+                  <div 
+                    className="aspect-square max-w-md mx-auto bg-slate-800/50 rounded-lg p-2 border border-slate-700"
+                    style={{
+                      backgroundImage: "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)",
+                      backgroundSize: `${100/GRID_SIZE}% ${100/GRID_SIZE}%`,
+                    }}
+                  >
+                    <div className="grid grid-cols-8 gap-1 h-full">
+                      {grid.map((row, y) =>
+                        row.map((cell, x) => {
+                          const eraTemplate = eraBuildings.find(b => b.buildingType === cell.building);
+                          const Icon = getBuildingIcon(cell.building);
+                          return (
+                            <motion.div
+                              key={`${x}-${y}`}
+                              data-testid={`cell-${x}-${y}`}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => handleCellClick(x, y)}
+                              className={`
+                                aspect-square rounded cursor-pointer transition-all
+                                flex items-center justify-center text-xs
+                                ${BUILDING_COLORS[cell.building]}
+                                ${cell.building === "empty" ? "hover:bg-slate-700" : ""}
+                                ${selectedBuilding || isEraseMode ? "ring-1 ring-cyan-500/30" : ""}
+                              `}
+                            >
+                              {cell.building !== "empty" && (
+                                eraTemplate ? (
+                                  <span className="text-base md:text-lg drop-shadow">{eraTemplate.iconEmoji}</span>
+                                ) : (
+                                  <Icon className="w-4 h-4 md:w-5 md:h-5 text-white drop-shadow" />
+                                )
+                              )}
+                            </motion.div>
+                          );
+                        })
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-center text-xs text-slate-500 mt-4">
+                    Select a building above, then tap on the grid to place it
+                  </p>
+                </>
+              )}
             </Card>
           </div>
 
-          {/* Coming Soon Features */}
+          {/* Era Progress & Portal Unlock */}
           <Card className="mt-6 bg-slate-900/80 border-slate-700 p-6 lg:col-span-3">
             <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-purple-400" />
-              Coming in Future Seasons
+              Time Portal Progress
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
-                { title: "NPC Visitors", desc: "Characters visit your estate" },
-                { title: "Player Trading", desc: "Trade items with others" },
-                { title: "Era Themes", desc: "Transform your estate by era" },
-                { title: "Achievements", desc: "Unlock rewards for building" },
-              ].map((feature, i) => (
-                <div key={i} className="text-center p-3 bg-slate-800/50 rounded-lg border border-slate-700">
-                  <Lock className="w-6 h-6 mx-auto text-slate-500 mb-2" />
-                  <p className="text-sm font-medium text-white">{feature.title}</p>
-                  <p className="text-xs text-slate-400">{feature.desc}</p>
-                </div>
+                { era: "Modern Day", emoji: "🏙️", desc: "Your starting era - build your modern life", level: 0, status: "unlocked" },
+                { era: "Medieval", emoji: "🏰", desc: "Complete Modern quests to open the Medieval portal", level: 5, status: playerLevel >= 5 ? "unlocked" : "locked" },
+                { era: "Wild West", emoji: "🤠", desc: "Master two eras to unlock the frontier", level: 10, status: playerLevel >= 10 ? "unlocked" : "locked" },
+              ].map((portal, i) => (
+                <GlassCard key={i} glow={portal.status === "unlocked"} className="p-4 text-center">
+                  <span className="text-3xl block mb-2">{portal.emoji}</span>
+                  <p className="font-bold text-white text-sm">{portal.era}</p>
+                  <p className="text-xs text-slate-400 mt-1 mb-3">{portal.desc}</p>
+                  {portal.status === "unlocked" ? (
+                    <Badge className="bg-green-500/20 text-green-300 border-green-500/30">
+                      <Sparkles className="w-3 h-3 mr-1" />
+                      Portal Open
+                    </Badge>
+                  ) : (
+                    <div>
+                      <Progress value={(playerLevel / portal.level) * 100} className="h-2 mb-2" />
+                      <span className="text-xs text-slate-400">Level {playerLevel}/{portal.level}</span>
+                    </div>
+                  )}
+                </GlassCard>
               ))}
             </div>
           </Card>
+        </div>
         </div>
         )}
       </div>

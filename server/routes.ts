@@ -14689,10 +14689,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(401).json({ error: "Authentication required" });
       }
       
-      const [estate] = await db.select().from(playerEstates).where(eq(playerEstates.userId, userId));
+      const era = (req.query.era as string) || "modern";
+      const [estate] = await db.select().from(playerEstates)
+        .where(and(eq(playerEstates.userId, userId), eq(playerEstates.era, era)));
       
       if (!estate) {
-        return res.json({ estate: null });
+        return res.json({ estate: null, era });
       }
       
       let gridData = [];
@@ -14706,11 +14708,35 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         estate: {
           ...estate,
           gridData
-        }
+        },
+        era
       });
     } catch (error: any) {
       console.error("Get estate error:", error);
       res.status(500).json({ error: error.message || "Failed to get estate" });
+    }
+  });
+
+  app.get("/api/chronicles/estates/all", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const estates = await db.select().from(playerEstates)
+        .where(eq(playerEstates.userId, userId));
+      
+      const result: Record<string, any> = {};
+      for (const estate of estates) {
+        let gridData = [];
+        try { gridData = JSON.parse(estate.gridData || '[]'); } catch (e) { gridData = []; }
+        result[estate.era] = { ...estate, gridData };
+      }
+      
+      res.json({ estates: result });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message || "Failed to get estates" });
     }
   });
 
@@ -14727,8 +14753,15 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       }
       
       const { gridData, totalBuildings, shellsSpent } = parseResult.data;
+      const era = (req.body.era as string) || "modern";
       
-      const [existing] = await db.select().from(playerEstates).where(eq(playerEstates.userId, userId));
+      const validEras = ["modern", "medieval", "wildwest"];
+      if (!validEras.includes(era)) {
+        return res.status(400).json({ error: "Invalid era" });
+      }
+      
+      const [existing] = await db.select().from(playerEstates)
+        .where(and(eq(playerEstates.userId, userId), eq(playerEstates.era, era)));
       
       const previousBuildings = existing?.totalBuildings || 0;
       
@@ -14740,36 +14773,35 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
             shellsSpent: shellsSpent || 0,
             updatedAt: new Date()
           })
-          .where(eq(playerEstates.userId, userId));
+          .where(and(eq(playerEstates.userId, userId), eq(playerEstates.era, era)));
       } else {
         await db.insert(playerEstates).values({
           userId,
+          era,
           gridData: JSON.stringify(gridData),
           totalBuildings: totalBuildings || 1,
           shellsSpent: shellsSpent || 0
         });
       }
       
-      // Award Shells for estate upgrades (building new structures) - F2P reward
       let shellsEarned = 0;
       let questProgress = { questsUpdated: [] as string[], questsCompleted: [] as string[] };
       const newBuildings = (totalBuildings || 1) - previousBuildings;
       if (newBuildings > 0) {
         try {
           const username = req.user?.username || req.user?.firstName || "Player";
-          for (let i = 0; i < Math.min(newBuildings, 5); i++) { // Cap at 5 per save to prevent abuse
+          for (let i = 0; i < Math.min(newBuildings, 5); i++) {
             await shellsService.awardEngagementShells(userId, username, "estate_upgrade");
           }
           shellsEarned = SHELL_EARN_RATES.estate_upgrade * Math.min(newBuildings, 5);
           questProgress = await questsService.trackProgress(userId, "estate_upgrade", Math.min(newBuildings, 5));
-          // Track for Echo Persona
-          await mirrorLifeService.trackChoice(userId, 'building', `built ${newBuildings} structures`);
+          await mirrorLifeService.trackChoice(userId, 'building', `built ${newBuildings} structures in ${era} era`);
         } catch (shellErr) {
           console.warn("[Chronicles] Failed to award estate_upgrade Shells:", shellErr);
         }
       }
       
-      res.json({ success: true, shellsEarned, questProgress });
+      res.json({ success: true, shellsEarned, questProgress, era });
     } catch (error: any) {
       console.error("Save estate error:", error);
       res.status(500).json({ error: error.message || "Failed to save estate" });
@@ -15510,16 +15542,22 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   app.get("/api/chronicles/game/factions", async (req, res) => {
-    res.json({ factions: STARTER_FACTIONS });
+    const era = req.query.era as string;
+    const factions = era ? STARTER_FACTIONS.filter(f => f.era === era) : STARTER_FACTIONS;
+    res.json({ factions });
   });
 
   app.get("/api/chronicles/game/quests", async (req, res) => {
-    res.json({ quests: SEASON_ZERO_QUESTS });
+    const era = req.query.era as string;
+    const quests = era ? SEASON_ZERO_QUESTS.filter(q => q.era === era) : SEASON_ZERO_QUESTS;
+    res.json({ quests });
   });
 
   app.get("/api/chronicles/game/npcs", async (req, res) => {
-    res.json({ npcs: STARTER_NPCS.map((n: any) => ({
-      id: n.name.toLowerCase().replace(/\s+/g, '_'),
+    const era = req.query.era as string;
+    const filtered = era ? STARTER_NPCS.filter(n => n.era === era) : STARTER_NPCS;
+    res.json({ npcs: filtered.map((n: any) => ({
+      id: n.name.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_'),
       name: n.name,
       title: n.title,
       era: n.era,
