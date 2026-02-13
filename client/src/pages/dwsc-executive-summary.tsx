@@ -41,7 +41,6 @@ import { GamesComingSoonModal } from "@/components/games-coming-soon-modal";
 import { useState, useRef } from "react";
 import pulseImg from "@assets/generated_images/pulse_ai_trading_dashboard.png";
 import strikeImg from "@assets/generated_images/strike_agent_token_sniper.png";
-import guardianImg from "@assets/generated_images/guardian_security_certification.png";
 import chronochatImg from "@assets/generated_images/chronochat_community_platform.png";
 import vedasolusImg from "@assets/generated_images/vedasolus_spiritual_wellness.png";
 import chroniclesImg from "@assets/generated_images/chronicles_historical_adventure.png";
@@ -59,6 +58,7 @@ import liquidStakingImg from "@assets/generated_images/liquid_staking_rewards.pn
 import theArcadeImg from "@assets/Screenshot_20260213_013103_Chrome_1770968118325.jpg";
 import trustHomeImg from "@assets/generated_images/trusthome_real_estate_platform.png";
 import trustVaultImg from "@assets/generated_images/trustvault_secure_storage.png";
+import trustShieldImg from "@assets/Screenshot_20260213_013718_Chrome_1770968308695.jpg";
 
 export default function DWSCExecutiveSummary() {
   const [showGamesModal, setShowGamesModal] = useState(false);
@@ -303,7 +303,7 @@ export default function DWSCExecutiveSummary() {
                 {[
                   { title: "Pulse AI", desc: "ML-powered market predictions with verified accuracy tracking. Fear & Greed index, multi-timeframe analysis.", img: pulseImg, href: "/pulse", domain: "dwsc.io" },
                   { title: "Strike Agent", desc: "Solana memecoin sniper with AI risk scoring. Honeypot detection, liquidity analysis, Phantom integration.", img: strikeImg, href: "/strike-agent", domain: "strikeagent.io" },
-                  { title: "Guardian Security", desc: "Enterprise blockchain security audits at 70% less than competitors. 24/7 monitoring available.", img: guardianImg, href: "/guardian", domain: "dwsc.io" },
+                  { title: "TrustShield.tech", desc: "World's first AI agent certification. Verify, certify, and protect autonomous AI systems. Free scanning tools and paid Guardian certification.", img: trustShieldImg, href: "/guardian-ai", domain: "trustshield.tech" },
                   { title: "ChronoChat", desc: "Community platform with real-time messaging, channels, reactions, and Shells virtual currency.", img: chronochatImg, href: "/community-hub", domain: "chronochat.io" },
                   { title: "VedaSolus", desc: "Holistic wellness platform connecting practitioners of all traditions - Western, Eastern, Ayurvedic, energy healing.", img: vedasolusImg, href: "/ecosystem", domain: "vedasolus.io" },
                   { title: "Chronicles", desc: "10 verifiable historical eras. AI-powered parallel life simulation. Not a game - a life. YOUR legend.", img: chroniclesImg, href: "/chronicles", domain: "yourlegacy.io" },
