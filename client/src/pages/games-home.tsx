@@ -273,7 +273,7 @@ function LiveStats() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
             >
-              <GlassCard className={`p-4 text-center border ${stat.color} h-full flex flex-col items-center justify-center`} glow>
+              <GlassCard className={`p-5 sm:p-6 text-center border ${stat.color} h-full flex flex-col items-center justify-center`} glow>
                 <div className="flex items-center justify-center gap-1.5 mb-1.5">
                   {stat.icon}
                   <span className="text-lg sm:text-2xl font-black text-white whitespace-nowrap">

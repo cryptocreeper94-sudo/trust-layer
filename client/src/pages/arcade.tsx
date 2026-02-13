@@ -316,14 +316,14 @@ function GameCard({ game, index, accentColor }: { game: GameItem; index: number;
               </div>
             )}
 
-            <div className="absolute bottom-0 left-0 right-0 p-4">
-              <div className="flex items-center gap-2 mb-1">
+            <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+              <div className="flex items-center gap-2 mb-1.5">
                 <div className={`w-6 h-6 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center text-white`}>
                   {game.icon}
                 </div>
                 <h3 className="text-lg font-bold text-white drop-shadow-lg">{game.title}</h3>
               </div>
-              <p className="text-xs text-white/70 line-clamp-2 mb-2">{game.description}</p>
+              <p className="text-xs text-white/70 line-clamp-2 mb-2.5">{game.description}</p>
               {game.players && (
                 <div className="flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
@@ -550,23 +550,23 @@ export default function Arcade() {
             accentColor="purple"
           />
 
-          <GlassCard className="p-6 sm:p-8 text-center" glow>
+          <GlassCard className="p-8 sm:p-10 md:p-12 text-center" glow>
             <motion.div
               animate={{ rotate: [0, 5, -5, 0] }}
               transition={{ duration: 4, repeat: Infinity }}
-              className="inline-block mb-4"
+              className="inline-block mb-6"
             >
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/30 flex items-center justify-center mx-auto">
                 <Sparkles className="w-8 h-8 text-pink-400" />
               </div>
             </motion.div>
-            <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">More Games Coming Soon</h3>
-            <p className="text-slate-400 text-sm max-w-md mx-auto mb-4">
+            <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">More Games Coming Soon</h3>
+            <p className="text-slate-400 text-sm max-w-md mx-auto mb-6">
               We're building new premium games constantly. Roulette, Blackjack, Poker, and more are on the way.
             </p>
-            <div className="flex flex-wrap justify-center gap-2">
+            <div className="flex flex-wrap justify-center gap-2.5">
               {["Roulette", "Blackjack", "Poker", "Dice", "Baccarat", "Keno"].map((game) => (
-                <Badge key={game} className="bg-white/5 border-white/10 text-slate-400 text-xs">
+                <Badge key={game} className="bg-white/5 border-white/10 text-slate-400 text-xs px-3 py-1">
                   {game}
                 </Badge>
               ))}
