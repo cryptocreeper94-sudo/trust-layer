@@ -137,6 +137,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
     milestones: [
       { id: "e21", title: "Mainnet Genesis Block", description: "Official network launch — date to be announced", status: "pending", isRequired: true },
       { id: "e22", title: "Token Migration", description: "Testnet to mainnet token conversion", status: "pending", isRequired: true },
+      { id: "e27", title: "Multi-Asset Cross-Chain Wallet", description: "Send and receive any token across Ethereum, Solana, Polygon, Arbitrum, and Base", status: "pending", isRequired: true },
       { id: "e23", title: "Chronicles 20+ Eras", description: "Expand from Medieval to 20+ historical eras (community-driven timeline)", status: "pending", isRequired: true },
       { id: "e24", title: "Exchange Listings", description: "CEX and DEX trading availability", status: "pending", isRequired: false },
       { id: "e25", title: "10 Eras Complete", description: "All verifiable historical eras fully playable (community-driven timeline)", status: "pending", isRequired: false },

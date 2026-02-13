@@ -1,7 +1,7 @@
 # DarkWave Trust Layer - Replit Agent Guide
 
 ## Overview
-DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (PoA) blockchain ecosystem designed as a Coordinated Trust Layer. Its purpose is to provide verified identity, accountability, and transparent audit trails for real business operations, moving beyond traditional blockchain focuses. The project includes the DarkWave Portal, a comprehensive React web application serving as an ecosystem interface and block explorer, and "DarkWave Chronicles," a fantasy-themed game focused on a living political simulation. The core ambition is to deliver a fast, feature-rich trust infrastructure with a premium user experience and innovative gaming across six key domains: dwsc.io, darkwavegames.io, darkwavestudios.io, yourlegacy.io, tlid.io, and trustshield.tech. DWTL uses blockchain technology but emphasizes its value proposition as a "Trust Layer" for enterprises seeking trusted business relationships.
+DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (PoA) blockchain ecosystem designed as a Coordinated Trust Layer. Its purpose is to provide verified identity, accountability, and transparent audit trails for real business operations, moving beyond traditional blockchain focuses. The project includes the DarkWave Portal, a comprehensive React web application, and "DarkWave Chronicles," a fantasy-themed game focused on a living political simulation. The core ambition is to deliver a fast, feature-rich trust infrastructure with a premium user experience and innovative gaming across six key domains: dwsc.io, darkwavegames.io, darkwavestudios.io, yourlegacy.io, tlid.io, and trustshield.tech.
 
 ## User Preferences
 - Preferred communication style: Simple, everyday language
@@ -26,39 +26,37 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **Component Requirements**: `GlassCard` with `glow`, `Badge`, UI library `Button`, `motion.div` wrapper, `data-testid` on all interactive elements.
 
 ### Technical Implementations
-- **Blockchain**: BFT-PoA consensus, stake-weighted validator selection, PostgreSQL state, SHA-256/Merkle trees, 400ms block time, 200K+ TPS. Features validator staking, slashing, epoch-based finality, node sync APIs. Native asset: Signal (SIG) as a Trust Network Access Token, not a cryptocurrency.
+- **Blockchain Core**: BFT-PoA consensus, stake-weighted validator selection, PostgreSQL state, SHA-256/Merkle trees, 400ms block time, 200K+ TPS. Features validator staking, slashing, epoch-based finality, node sync APIs. Native asset: Signal (SIG) as a Trust Network Access Token.
 - **Web Portal (Frontend)**: React 18, TypeScript, Vite, Wouter, TanStack Query, Tailwind CSS v4, Framer Motion.
 - **Web Portal (Backend)**: Node.js, Express.js, TypeScript, Drizzle ORM, PostgreSQL.
 - **Authentication**: Firebase Auth (multiple providers), server-side Firebase token verification, WebAuthn/Passkeys, PIN authentication.
 - **Multi-PWA**: Host-based routing for ecosystem domains.
 - **DeFi Features**: Testnet Faucet, AMM-style DEX/Token Swap, NFT Marketplace & Gallery, Portfolio Dashboard, Transaction History, Token Launchpad, Liquidity Pools, NFT Creator Tool, Price Charts (Recharts), Webhook/Events API, Liquid Staking (stSIG).
-- **Cross-Chain Bridge**: Lock & mint (SIG ↔ wSIG) for Ethereum Sepolia and Solana Devnet.
+- **Cross-Chain Bridge**: Lock & mint mechanism for SIG ↔ wSIG across Ethereum (Sepolia), Solana (Devnet), Polygon (Amoy), Arbitrum (Sepolia), Base (Sepolia).
 - **DarkWave Chronicles**: Social experiment and parallel life simulation with persistent world and emotion-driven AI.
 - **Credits System**: Manages costs for AI chat, scenario generation, voice cloning, and personality summaries.
 - **Owner Admin Portal**: Secure `/owner-admin` with `OWNER_SECRET` authentication, rate limiting, and lockout.
 - **Marketing Automation System**: Proprietary auto-deployment for social media.
 - **Payment Infrastructure**: Crowdfund donations and token presales with Stripe integration.
 - **Pre-Launch Airdrop System**: Manages affiliate commissions, distributed as Signal, dual-ledger design.
-- **Signal Chat Platform (UPDATED Feb 2026)**: Cross-app community messaging with JWT SSO. Database: `chat_users` (identity), `chat_channels`, `chat_messages`. Auth: bcryptjs 12 rounds, JWT HS256 7-day tokens with shared `JWT_SECRET`. Trust Layer ID format: `tl-{base36-timestamp}-{random-8-chars}`. WebSocket at `/ws/chat` with JWT-authenticated join, message persistence, typing, presence. REST: `POST /api/chat/auth/register`, `POST /api/chat/auth/login`, `GET /api/chat/auth/me`, `GET /api/chat/channels`. Key files: `server/trustlayer-sso.ts`, `server/chat-ws.ts`, `server/seedChat.ts`. Seeded channels: general, announcements, darkwavestudios-support, garagebot-support, tlid-marketing, guardian-ai.
+- **Signal Chat Platform**: Cross-app community messaging with JWT SSO. Uses `chat_users`, `chat_channels`, `chat_messages` tables. Auth: bcryptjs 12 rounds, JWT HS256. WebSocket at `/ws/chat` for real-time communication.
 - **Shells Economy System**: Pre-launch virtual currency, convertible to Signal, earned via engagement, purchased via Stripe, with atomic transactions.
 - **Subscription System**: Unified subscription management with tiers and cross-app entitlement checking.
-- **Guardian Certification Program**: In-house blockchain security audit service with tiered offerings and public registry.
-- **Guardian Shield (trustshield.tech)**: Continuous blockchain security monitoring. Enterprise-tier service for real-time anomaly detection, behavioral monitoring, and automatic alerts.
-- **Guardian AI**: First-of-its-kind certification system for autonomous AI agents. Three tiers: Basic ($999/6mo), Advanced ($4,999/12mo), Enterprise ($14,999/24mo). Trust scores across Security, Transparency, Reliability, and Compliance. Public registry at `/guardian-ai-registry`.
+- **Guardian Certification Program**: In-house blockchain security audit service with tiered offerings and public registry. Offers Assurance Lite and Guardian Premier audits with a 5-phase process.
+- **Guardian Shield (trustshield.tech)**: Continuous blockchain security monitoring for enterprises.
+- **Guardian AI**: Certification system for autonomous AI agents across Security, Transparency, Reliability, and Compliance. Public registry at `/guardian-ai-registry`.
 - **Security Infrastructure**: Helmet.js, CORS, rate limiting, AES-256-GCM, HMAC-SHA256, parameterized SQL.
-- **Early Adopter Rewards System**: Tracks signup positions and tiered crowdfund bonuses for Signal airdrops, accessible via `/api/user/early-adopter-stats`, `/api/early-adopter/counters`, and `/rewards`.
-- **Backend IDE / Studio Executor**: Docker container orchestration for code execution (`server/studio-executor.ts`), with JWT auth, sandboxing, and resource enforcement.
+- **Early Adopter Rewards System**: Tracks signup positions and tiered crowdfund bonuses for Signal airdrops.
+- **Backend IDE / Studio Executor**: Docker container orchestration for code execution with JWT auth, sandboxing, and resource enforcement.
 - **Innovation Hub Features**: Guardian Security Scores, ChronoPass Identity, Experience Shards, Quest Mining System, Zealy Integration, Reality Layer Oracles, AI Verified Execution, Guardian Studio Copilot, AI Agent Marketplace, RWA Tokenization.
-- **Guardian Security Certification Program**: In-house blockchain security audit service (`/guardian-whitepaper`). Two tiers: Assurance Lite ($5,999) for smart contract audits up to 2,000 lines, and Guardian Premier ($14,999) for enterprise-grade certification with penetration testing and formal verification. 5-phase audit process: Initial Assessment, Automated Analysis, Manual Code Review, Remediation Support, Final Certification. Public registry of certified projects. Guardian Shield continuous monitoring available.
-- **Cross-Chain Bridge**: Supports 5 chains - Ethereum (Sepolia), Solana (Devnet), Polygon (Amoy), Arbitrum (Sepolia), Base (Sepolia). Lock-and-mint mechanism for SIG ↔ wSIG transfers. Testnet mode with mock minting until contracts deployed.
-- **Trust Layer Landing Page**: Main landing page (`/`) focused on individual signup with: hero CTA, membership card benefits showcase, ecosystem apps display, individual vs business signup paths, links to presale and ChronoChat. Business signup requires personal account first. Located at `client/src/pages/trust-layer-landing.tsx`.
+- **Trust Layer Landing Page**: Main landing page (`/`) focused on individual signup, membership card benefits, ecosystem apps display, and business signup paths.
 - **Strategic Marketing Pages**: Competitive Analysis (`/token-compare`), Investor Pitch (`/investor-pitch`), Innovation Hub (`/innovation`).
-- **Business Tenant Portals**: Secure B2B dashboards for verified companies, including transaction ledgers, trusted networks, and API access.
+- **Business Tenant Portals**: Secure B2B dashboards with transaction ledgers, trusted networks, and API access. Requires personal account first and business verification.
 - **Multi-SIG Multi-Chain Wallet**: M-of-N signature requirements across all supported chains for business treasuries and DAOs.
-- **DarkWave Academy**: Education and certification platform for crypto fundamentals, multi-chain ecosystems, DeFi, security, bridging, and Trust Layer operations, with tiered certifications.
-- **Blockchain Domain Service**: `.tlid` domains (Trust Layer ID) at `tlid.io`. Blockchain-verified identity names that resolve to wallets, websites, and social profiles. Premium pricing based on length, lifetime or term ownership options. Gateway routes `*.tlid.io` subdomains to configured websites.
-- **Ecosystem SSO (Single Sign-On)**: Cross-app authentication enabling GarageBot, DarkWave, and other ecosystem apps to authenticate users via Trust Layer. Database tables: `ecosystem_apps`, `sso_sessions`, `user_app_connections`. Features HMAC-SHA256 request signing, one-time tokens, permission-based data access, redirect URL validation. Endpoints: `/api/auth/sso/verify`, `/api/auth/sso/user/:id`, `/api/auth/sso/login`, `/api/auth/sso/callback`, `/api/auth/sso/register-app`, `/api/auth/sso/apps`. App credentials: `dw_*` API keys with HMAC secrets.
-- **Ecosystem Credential Sync (UPDATED Feb 2026)**: Behind-the-scenes user credential sync for ecosystem apps. NO redirect-based SSO - each app has its own login UI. Email is the shared identifier. Endpoints: `POST /api/ecosystem/sync-user` (create/update user from ecosystem app), `POST /api/ecosystem/sync-password` (sync password changes), `POST /api/ecosystem/verify-credentials` (verify email+password). All secured with HMAC-SHA256 signed requests using ecosystem app API keys. Password hashing: SHA-256 + random salt, format `hash:salt`. GarageBot registered as ecosystem app with `dw_*` API key. Handoff doc: `docs/GARAGEBOT-CREDENTIAL-SYNC-HANDOFF.md`.
+- **DarkWave Academy**: Education and certification platform for crypto fundamentals, multi-chain ecosystems, DeFi, security, bridging, and Trust Layer operations.
+- **Blockchain Domain Service**: `.tlid` domains (Trust Layer ID) at `tlid.io` for blockchain-verified identity names.
+- **Ecosystem SSO (Single Sign-On)**: Cross-app authentication for ecosystem apps via Trust Layer, using HMAC-SHA256 request signing and one-time tokens.
+- **Ecosystem Credential Sync**: Behind-the-scenes user credential sync for ecosystem apps with independent login UIs, using email as a shared identifier and HMAC-SHA256 signed requests.
 
 ### React Native Portability Guidelines
 - **Business Logic**: Located in `shared/` folder, platform-agnostic TypeScript.
@@ -70,7 +68,7 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **Navigation**: Wouter patterns map to React Navigation.
 - **Assets**: Use import paths.
 
-### Tokenomics (LOCKED - January 21, 2026)
+### Tokenomics
 - **SIG at TGE**: $0.01 (10x from presale $0.001)
 - **Total Supply**: 1,000,000,000 SIG
 - **Presale Reward Pool**: 10,000,000 SIG (1% of supply)
@@ -78,34 +76,13 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **Echo Value**: 1 Echo = $0.0001 (Chronicles in-game currency, NOT convertible)
 - **Conversion**: 10 Echoes = 1 Shell = 0.1 SIG
 - **Allocation**: Treasury Reserve (50%), Staking Rewards (15%), Development & Team (15%), Ecosystem Growth (10%), Community Rewards (10%).
-- **Signal Foundation**: 0% - Will be a separate initiative with its own funding/asset.
-- **Chronicles Game Economy**: 0% - Uses Echoes (separate, non-convertible currency).
 
-### Referral Rewards System (UPDATED - January 29, 2026)
-- **MULTIPLIER-BASED System** (replaces flat bonus system):
-  - Base: 1,000 Shells per referral
-  - 1x (no purchase): 1,000 Shells
-  - 3x ($5-$24 purchase): 3,000 Shells  
-  - 5x ($25-$49 purchase): 5,000 Shells
-  - 7x ($50-$99 purchase): 7,000 Shells
-  - 10x ($100+ purchase): 10,000 Shells
-- **Payout Schedule**: Automated twice daily at 8:00 AM and 8:00 PM Central (no manual Zealy checking)
-- **No Limits**: Unlimited referrals, no caps on earnings
-- **Business Partners**: 2.5x multiplier on all rewards
-- **Claim Window**: Wallet required before launch; 30 days after TGE to claim (unclaimed returns to treasury)
-
-### Launch Philosophy
-- **Milestone-Based, Not Date-Based**: No fixed TGE date. Launch when community, product, and presale targets are met.
-- **Sustainable Growth**: $10M market cap at TGE is intentionally conservative. Leaves room for organic growth vs pump-and-dump.
-- **Long-Term Vision**: Building real infrastructure, not a meme coin. Value comes from utility and adoption.
-
-### Membership Organization (UPDATED - January 29, 2026)
-- **Personal Account Requirement**: Like Facebook, business membership requires a personal account first. Team members managing business pages also need personal accounts for accountability.
-- **Business Verification**: EIN/registration number, website, business description required. Manual review (2-3 business days). Admin tools in Owner Portal for approval/rejection.
-- **Legacy Main Street Program**: First 10-20 verified businesses receive virtual storefront space in Chronicles game city centers across eras. Can sell game merchandise and linked real-world products.
-
-### Roadmap Items (Future Implementation)
-- **Legacy Top 10 Loyalty Program**: After presale closes, identify top 10 contributors by total contribution amount. Offer ongoing loyalty incentives (smaller than team allocations) to reward continued engagement and advocacy. Details TBD - could include bonus SIG, exclusive access, governance weight, or ambassador status.
+### Referral Rewards System
+- **MULTIPLIER-BASED System**: Base 1,000 Shells per referral, with multipliers (1x, 3x, 5x, 7x, 10x) based on referred user's purchase amount ($0, $5+, $25+, $50+, $100+).
+- **Payout Schedule**: Automated twice daily.
+- **No Limits**: Unlimited referrals.
+- **Business Partners**: 2.5x multiplier on all rewards.
+- **Claim Window**: Wallet required before launch; 30 days after TGE to claim.
 
 ## External Dependencies
 - **Database**: PostgreSQL
