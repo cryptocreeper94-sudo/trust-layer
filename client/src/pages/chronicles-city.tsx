@@ -415,7 +415,7 @@ function PlotDetailModal({ plot, era, buildings, onClose, onBuild }: {
               <button
                 key={b.id}
                 onClick={() => onBuild(b.id)}
-                className="w-full text-left p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all"
+                className="w-full text-left p-3.5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all min-h-[52px]"
                 data-testid={`build-${b.id}`}
               >
                 <div className="flex items-center gap-3">
@@ -558,7 +558,7 @@ export default function ChroniclesCity() {
               <button
                 key={era}
                 onClick={() => setSelectedEra(era)}
-                className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`flex-shrink-0 px-4 py-2.5 rounded-full text-sm font-medium transition-all min-h-[44px] ${
                   selectedEra === era
                     ? `bg-gradient-to-r ${c.bgGradient} ${c.textColor} border ${c.borderColor}`
                     : "bg-white/5 text-gray-400 hover:bg-white/10"
@@ -604,7 +604,7 @@ export default function ChroniclesCity() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-xs font-medium transition-all ${
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-md text-xs font-medium transition-all min-h-[44px] ${
                 activeTab === tab.id
                   ? `${config.textColor} bg-white/10`
                   : "text-gray-500 hover:text-gray-300"
@@ -620,7 +620,7 @@ export default function ChroniclesCity() {
         <AnimatePresence mode="wait">
           {activeTab === "map" && (
             <motion.div key="map" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-              <div className="rounded-xl overflow-hidden border border-white/10 mb-4" style={{ height: "400px" }} data-testid="city-3d-map">
+              <div className="rounded-xl overflow-hidden border border-white/10 mb-4 h-[280px] sm:h-[360px] md:h-[400px]" data-testid="city-3d-map">
                 <CityScene3D
                   era={selectedEra}
                   plots={plots}
@@ -649,11 +649,11 @@ export default function ChroniclesCity() {
                 <h3 className="text-white text-sm font-semibold mb-3 flex items-center gap-2">
                   <Layers className="w-4 h-4 text-cyan-400" /> Building Catalog
                 </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                   {buildings.map(b => (
                     <div
                       key={b.id}
-                      className={`p-2 rounded-lg text-center border transition-all cursor-pointer hover:bg-white/10 ${
+                      className={`p-2.5 rounded-lg text-center border transition-all cursor-pointer hover:bg-white/10 min-h-[72px] flex flex-col items-center justify-center ${
                         b.tier === "elite" ? "border-purple-500/30 bg-purple-500/5" :
                         b.tier === "premium" ? "border-yellow-500/30 bg-yellow-500/5" :
                         "border-white/10 bg-white/5"
@@ -661,7 +661,7 @@ export default function ChroniclesCity() {
                       data-testid={`catalog-${b.id}`}
                     >
                       <span className="text-xl">{b.emoji}</span>
-                      <p className="text-[10px] text-white font-medium mt-1">{b.name}</p>
+                      <p className="text-[10px] text-white font-medium mt-1 truncate w-full">{b.name}</p>
                       <p className="text-[9px] text-gray-500">
                         {b.cost > 0 ? `${b.cost} 🐚` : "Free"}
                       </p>
@@ -683,7 +683,7 @@ export default function ChroniclesCity() {
                     <button
                       key={b.id}
                       onClick={() => setSelectedBusiness(b.id)}
-                      className={`px-3 py-1.5 rounded-full text-xs transition-all ${
+                      className={`px-3.5 py-2.5 rounded-full text-xs transition-all min-h-[44px] inline-flex items-center ${
                         selectedBusiness === b.id
                           ? `${config.badgeClass} border ${config.borderColor}`
                           : "bg-white/5 text-gray-400 hover:bg-white/10"

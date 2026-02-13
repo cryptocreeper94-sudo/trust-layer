@@ -204,9 +204,9 @@ export default function ChroniclesDashboard() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-xs">
+          <div className="flex items-center gap-1.5 sm:gap-2 text-xs overflow-x-auto pb-1">
             {Object.entries(ERA_CONFIG).map(([key, era]) => (
-              <span key={key} className={`px-2 py-1 rounded-full ${era.bg} ${era.color} ${era.border} border`}>
+              <span key={key} className={`flex-shrink-0 px-2 py-1 rounded-full ${era.bg} ${era.color} ${era.border} border`}>
                 {era.emoji} {era.name}
               </span>
             ))}
@@ -221,14 +221,14 @@ export default function ChroniclesDashboard() {
           <StatRing value={stats.influence} max={100} label="Influence" icon={Crown} color="text-yellow-400" />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6" data-testid="quick-actions">
+        <div className="grid grid-cols-2 gap-3 mb-6" data-testid="quick-actions">
           {quickActions.map(action => (
             <Link key={action.label} href={action.href}>
               <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <GlassCard className="p-4 cursor-pointer hover:bg-white/5 transition-all h-full">
-                  <action.icon className={`w-6 h-6 ${action.color} mb-2`} />
-                  <h3 className="text-white font-semibold text-sm">{action.label}</h3>
-                  <p className="text-xs text-gray-500 mt-0.5">{action.desc}</p>
+                <GlassCard className="p-3 sm:p-4 cursor-pointer hover:bg-white/5 transition-all h-full min-h-[80px]">
+                  <action.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${action.color} mb-1.5`} />
+                  <h3 className="text-white font-semibold text-xs sm:text-sm">{action.label}</h3>
+                  <p className="text-[10px] sm:text-xs text-gray-500 mt-0.5">{action.desc}</p>
                 </GlassCard>
               </motion.div>
             </Link>

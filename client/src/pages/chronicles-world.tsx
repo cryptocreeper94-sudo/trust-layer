@@ -676,7 +676,7 @@ export default function ChroniclesWorld() {
               <button
                 key={era}
                 onClick={() => setSelectedEra(era)}
-                className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`flex-shrink-0 px-4 py-2.5 rounded-full text-sm font-medium transition-all min-h-[44px] ${
                   selectedEra === era
                     ? `bg-gradient-to-r ${c.bgGradient} ${c.textColor} border ${c.borderColor}`
                     : "bg-white/5 text-gray-400 hover:bg-white/10"

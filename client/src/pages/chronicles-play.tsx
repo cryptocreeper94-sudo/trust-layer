@@ -351,12 +351,12 @@ function GameStats({ state }: { state: any }) {
   ];
 
   return (
-    <div className="grid grid-cols-5 gap-2" data-testid="game-stats-bar">
+    <div className="grid grid-cols-5 gap-1.5 sm:gap-2" data-testid="game-stats-bar">
       {stats.map(s => (
-        <div key={s.key} className="flex flex-col items-center gap-0.5 p-2 rounded-lg bg-white/5">
-          <s.icon className={`w-4 h-4 ${s.color}`} />
-          <span className={`text-sm font-bold ${s.color}`}>{s.value}</span>
-          <span className="text-[9px] text-gray-500">{s.label}</span>
+        <div key={s.key} className="flex flex-col items-center gap-0.5 p-1.5 sm:p-2 rounded-lg bg-white/5 min-w-0">
+          <s.icon className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${s.color}`} />
+          <span className={`text-xs sm:text-sm font-bold ${s.color}`}>{s.value}</span>
+          <span className="text-[8px] sm:text-[9px] text-gray-500 truncate w-full text-center">{s.label}</span>
         </div>
       ))}
     </div>
@@ -410,7 +410,7 @@ function SituationScreen({
             transition={{ delay: 0.1 * i }}
             onClick={() => onChoose(choice.id || `choice_${i}`, choice.text)}
             disabled={isDeciding}
-            className={`w-full text-left p-4 rounded-xl border transition-all ${
+            className={`w-full text-left p-4 rounded-xl border transition-all min-h-[48px] ${
               isDeciding
                 ? "opacity-50 cursor-not-allowed border-white/5 bg-white/3"
                 : `border-white/10 bg-white/5 hover:bg-white/10 hover:${config.borderColor} active:scale-[0.98]`
@@ -748,7 +748,7 @@ export default function ChroniclesPlay() {
                     setDecisionResult(null);
                   }
                 }}
-                className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`flex-shrink-0 px-4 py-2.5 rounded-full text-sm font-medium transition-all min-h-[44px] ${
                   selectedEra === era
                     ? `bg-gradient-to-r ${c.bgGradient} ${c.textColor} border ${c.borderColor}`
                     : "bg-white/5 text-gray-400 hover:bg-white/10"
