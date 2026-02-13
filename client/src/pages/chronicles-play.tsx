@@ -11,6 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
 import { getChroniclesSession } from "./chronicles-login";
+import { ChroniclesChatPanel } from "@/components/chronicles-chat-panel";
 import {
   Compass, Users, Shield, Crown, Sparkles, MapPin, Swords,
   ChevronRight, Sun, Moon, CloudSun, Sunrise, Sunset,
@@ -915,7 +916,7 @@ export default function ChroniclesPlay() {
                 )}
               </GlassCard>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
                 <Link href="/chronicles/world">
                   <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
                     <Globe className="w-5 h-5 text-cyan-400 mb-1" />
@@ -935,6 +936,13 @@ export default function ChroniclesPlay() {
                     <Home className="w-5 h-5 text-green-400 mb-1" />
                     <p className="text-xs text-white font-medium">City</p>
                     <p className="text-[10px] text-gray-500">Build together</p>
+                  </GlassCard>
+                </Link>
+                <Link href="/chronicles/voice">
+                  <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
+                    <Volume2 className="w-5 h-5 text-pink-400 mb-1" />
+                    <p className="text-xs text-white font-medium">Voice</p>
+                    <p className="text-[10px] text-gray-500">Train your voice</p>
                   </GlassCard>
                 </Link>
                 <Link href="/chronicles/dashboard">
@@ -970,6 +978,8 @@ export default function ChroniclesPlay() {
           )}
         </AnimatePresence>
       </div>
+
+      <ChroniclesChatPanel currentEra={selectedEra} />
     </div>
   );
 }

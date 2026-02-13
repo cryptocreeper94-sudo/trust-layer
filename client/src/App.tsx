@@ -188,6 +188,7 @@ const ChroniclesWorld = lazy(() => import("@/pages/chronicles-world"));
 const ChroniclesPlay = lazy(() => import("@/pages/chronicles-play"));
 const ChroniclesCity = lazy(() => import("@/pages/chronicles-city"));
 const ChroniclesDashboardPage = lazy(() => import("@/pages/chronicles-dashboard"));
+const ChroniclesVoice = lazy(() => import("@/pages/chronicles-voice"));
 const SyndicateInvite = lazy(() => import("@/pages/syndicate-invite"));
 const ChronoHome = lazy(() => import("@/pages/chrono-home"));
 const ChronoEras = lazy(() => import("@/pages/chrono-eras"));
@@ -589,6 +590,7 @@ function DWSCRouter() {
         <Route path="/chronicles/play" component={ChroniclesPlay} />
         <Route path="/chronicles/city" component={ChroniclesCity} />
         <Route path="/chronicles/dashboard" component={ChroniclesDashboardPage} />
+        <Route path="/chronicles/voice" component={ChroniclesVoice} />
         <Route path="/chronicles-estate" component={ChroniclesEstate} />
         <Route path="/legacy" component={BuildYourLegacy} />
         <Route path="/sweepstakes-rules" component={SweepstakesRules} />

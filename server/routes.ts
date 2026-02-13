@@ -14575,8 +14575,9 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   Object.assign(chroniclesGameService, { STARTER_FACTIONS, SEASON_ZERO_QUESTS, STARTER_NPCS });
 
   // Register Chronicles Play Routes (gameplay engine)
-  const { registerChroniclesPlayRoutes } = await import("./chronicles-play-routes");
+  const { registerChroniclesPlayRoutes, registerChroniclesChatRoutes } = await import("./chronicles-play-routes");
   registerChroniclesPlayRoutes(app);
+  registerChroniclesChatRoutes(app);
 
   app.get("/api/chronicles/personality", isChroniclesAuthenticated, async (req: any, res) => {
     try {

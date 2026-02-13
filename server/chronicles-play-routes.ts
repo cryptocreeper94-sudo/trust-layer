@@ -1,8 +1,9 @@
 import { db } from "./db";
 import { eq, sql, and, desc } from "drizzle-orm";
-import { chroniclesGameState, playerChoices, playerPersonalities, chronicleAccounts, landPlots, cityZones } from "@shared/schema";
+import { chroniclesGameState, playerChoices, playerPersonalities, chronicleAccounts, landPlots, cityZones, chatUsers, chatChannels, chatMessages, voiceSamples, voiceMessages, userCredits, creditTransactions } from "@shared/schema";
 import OpenAI from "openai";
 import { SEASON_ZERO_QUESTS, STARTER_FACTIONS, STARTER_NPCS, ERA_SETTINGS, ERAS } from "./chronicles-service";
+import { generateToken, hashPassword, generateTrustLayerId } from "./trustlayer-sso";
 import type { Express, Request, Response, NextFunction } from "express";
 
 const openai = new OpenAI({
@@ -987,4 +988,283 @@ function formatPlot(plot: any, userId: string | null) {
     isPremium: plot.plotSize === "premium",
     price: plot.currentPrice || 0,
   };
+}
+
+export function registerChroniclesChatRoutes(app: Express) {
+
+  app.post("/api/chronicles/chat/link", async (req: any, res: Response) => {
+    try {
+      const authHeader = req.headers.authorization;
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({ error: "Authorization required" });
+      }
+      const token = authHeader.split(" ")[1];
+      let decoded: any;
+      try {
+        const jwt = await import("jsonwebtoken");
+        decoded = jwt.default.verify(token, process.env.CHRONICLES_JWT_SECRET || "chronicles-secret-key-2024");
+      } catch {
+        return res.status(401).json({ error: "Invalid token" });
+      }
+
+      const accountId = decoded.accountId;
+      const [account] = await db.select().from(chronicleAccounts)
+        .where(eq(chronicleAccounts.id, accountId)).limit(1);
+      if (!account) return res.status(404).json({ error: "Chronicles account not found" });
+
+      const chatUsername = `chr_${account.username}`.toLowerCase().replace(/[^a-z0-9_]/g, '');
+      const [existing] = await db.select().from(chatUsers)
+        .where(eq(chatUsers.username, chatUsername)).limit(1);
+
+      if (existing) {
+        const chatToken = generateToken(existing.id, existing.trustLayerId || '');
+        return res.json({
+          success: true,
+          chatToken,
+          chatUser: { id: existing.id, username: existing.username, displayName: existing.displayName, avatarColor: existing.avatarColor },
+        });
+      }
+
+      const trustLayerId = generateTrustLayerId();
+      const passwordHash = await hashPassword(`chronicles_${accountId}_${Date.now()}`);
+      const avatarColors = ['#06b6d4', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#3b82f6'];
+      const avatarColor = avatarColors[Math.floor(Math.random() * avatarColors.length)];
+
+      const [state] = await db.select().from(chroniclesGameState)
+        .where(eq(chroniclesGameState.userId, accountId)).limit(1);
+      const displayName = state?.name || account.username;
+
+      const [newChatUser] = await db.insert(chatUsers).values({
+        username: chatUsername,
+        email: `${chatUsername}@chronicles.darkwave.io`,
+        passwordHash,
+        displayName,
+        avatarColor,
+        role: "member",
+        trustLayerId,
+      }).returning();
+
+      const chatToken = generateToken(newChatUser.id, trustLayerId);
+
+      res.json({
+        success: true,
+        chatToken,
+        chatUser: { id: newChatUser.id, username: newChatUser.username, displayName: newChatUser.displayName, avatarColor: newChatUser.avatarColor },
+        isNew: true,
+      });
+    } catch (error: any) {
+      console.error("Chronicles chat link error:", error);
+      res.status(500).json({ error: error.message || "Failed to link chat" });
+    }
+  });
+
+  app.get("/api/chronicles/chat/channels", async (_req: Request, res: Response) => {
+    try {
+      const channels = await db.select().from(chatChannels)
+        .where(eq(chatChannels.category, "chronicles"));
+
+      const eraMap: Record<string, string> = {
+        "chronicles-modern": "modern",
+        "chronicles-medieval": "medieval",
+        "chronicles-wildwest": "wildwest",
+        "chronicles-general": "general",
+        "chronicles-voice": "voice",
+      };
+
+      const formatted = channels.map(ch => ({
+        id: ch.id,
+        name: ch.name,
+        description: ch.description,
+        era: eraMap[ch.name] || "general",
+        isVoice: ch.name === "chronicles-voice",
+      }));
+
+      res.json({ success: true, channels: formatted });
+    } catch (error: any) {
+      console.error("Get chronicles channels error:", error);
+      res.status(500).json({ error: error.message || "Failed to get channels" });
+    }
+  });
+
+  app.get("/api/chronicles/chat/messages/:channelId", async (req: Request, res: Response) => {
+    try {
+      const { channelId } = req.params;
+      const limit = Math.min(50, Number(req.query.limit ?? 30));
+
+      const msgs = await db.select({
+        id: chatMessages.id,
+        channelId: chatMessages.channelId,
+        content: chatMessages.content,
+        createdAt: chatMessages.createdAt,
+        username: chatUsers.username,
+        displayName: chatUsers.displayName,
+        avatarColor: chatUsers.avatarColor,
+      })
+        .from(chatMessages)
+        .innerJoin(chatUsers, eq(chatMessages.userId, chatUsers.id))
+        .where(eq(chatMessages.channelId, channelId))
+        .orderBy(desc(chatMessages.createdAt))
+        .limit(limit);
+
+      res.json({ success: true, messages: msgs.reverse() });
+    } catch (error: any) {
+      console.error("Get chronicles messages error:", error);
+      res.status(500).json({ error: error.message || "Failed to get messages" });
+    }
+  });
+
+  app.post("/api/chronicles/chat/messages/:channelId", async (req: any, res: Response) => {
+    try {
+      const authHeader = req.headers.authorization;
+      if (!authHeader) return res.status(401).json({ error: "Auth required" });
+
+      const { channelId } = req.params;
+      const { content, chatUserId } = req.body;
+
+      if (!content || !chatUserId) {
+        return res.status(400).json({ error: "Content and chatUserId are required" });
+      }
+
+      const [user] = await db.select().from(chatUsers)
+        .where(eq(chatUsers.id, chatUserId)).limit(1);
+      if (!user) return res.status(404).json({ error: "Chat user not found" });
+
+      const [msg] = await db.insert(chatMessages).values({
+        channelId,
+        userId: chatUserId,
+        content,
+      }).returning();
+
+      res.json({
+        success: true,
+        message: {
+          id: msg.id,
+          channelId: msg.channelId,
+          content: msg.content,
+          createdAt: msg.createdAt,
+          username: user.username,
+          displayName: user.displayName,
+          avatarColor: user.avatarColor,
+        },
+      });
+    } catch (error: any) {
+      console.error("Send chronicles message error:", error);
+      res.status(500).json({ error: error.message || "Failed to send message" });
+    }
+  });
+
+  app.get("/api/chronicles/voice/status", async (req: any, res: Response) => {
+    try {
+      const authHeader = req.headers.authorization;
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({ error: "Authorization required" });
+      }
+      const token = authHeader.split(" ")[1];
+      let decoded: any;
+      try {
+        const jwt = await import("jsonwebtoken");
+        decoded = jwt.default.verify(token, process.env.CHRONICLES_JWT_SECRET || "chronicles-secret-key-2024");
+      } catch {
+        return res.status(401).json({ error: "Invalid token" });
+      }
+
+      const accountId = decoded.accountId;
+
+      const samples = await db.select().from(voiceSamples)
+        .where(eq(voiceSamples.userId, accountId));
+
+      const readySamples = samples.filter(s => s.cloneStatus === "ready");
+      const processingSamples = samples.filter(s => s.cloneStatus === "processing");
+      const pendingSamples = samples.filter(s => s.cloneStatus === "pending");
+
+      const [credits] = await db.select().from(userCredits)
+        .where(eq(userCredits.userId, accountId)).limit(1);
+
+      res.json({
+        success: true,
+        voice: {
+          totalSamples: samples.length,
+          readyCount: readySamples.length,
+          processingCount: processingSamples.length,
+          pendingCount: pendingSamples.length,
+          isReady: readySamples.length > 0,
+          activeCloneId: readySamples[0]?.voiceCloneId || null,
+          provider: readySamples[0]?.voiceCloneProvider || null,
+        },
+        credits: {
+          balance: credits?.creditBalance || 0,
+          voiceCloneCost: 50,
+          voiceMessageCost: 5,
+        },
+      });
+    } catch (error: any) {
+      console.error("Voice status error:", error);
+      res.status(500).json({ error: error.message || "Failed to get voice status" });
+    }
+  });
+
+  app.post("/api/chronicles/voice/train", async (req: any, res: Response) => {
+    try {
+      const authHeader = req.headers.authorization;
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({ error: "Authorization required" });
+      }
+      const token = authHeader.split(" ")[1];
+      let decoded: any;
+      try {
+        const jwt = await import("jsonwebtoken");
+        decoded = jwt.default.verify(token, process.env.CHRONICLES_JWT_SECRET || "chronicles-secret-key-2024");
+      } catch {
+        return res.status(401).json({ error: "Invalid token" });
+      }
+
+      const accountId = decoded.accountId;
+      const { transcriptText } = req.body;
+
+      const [credits] = await db.select().from(userCredits)
+        .where(eq(userCredits.userId, accountId)).limit(1);
+
+      const cloneCost = 50;
+      if (!credits || credits.creditBalance < cloneCost) {
+        return res.status(400).json({
+          error: `Not enough credits. Need ${cloneCost}, have ${credits?.creditBalance || 0}`,
+          creditsNeeded: cloneCost,
+          currentBalance: credits?.creditBalance || 0,
+        });
+      }
+
+      const [sample] = await db.insert(voiceSamples).values({
+        userId: accountId,
+        transcriptText: transcriptText || "Voice training sample",
+        cloneStatus: "pending",
+      }).returning();
+
+      await db.update(userCredits).set({
+        creditBalance: credits.creditBalance - cloneCost,
+        lifetimeCreditsSpent: credits.lifetimeCreditsSpent + cloneCost,
+        updatedAt: new Date(),
+      }).where(eq(userCredits.userId, accountId));
+
+      await db.insert(creditTransactions).values({
+        userId: accountId,
+        type: "usage",
+        amount: -cloneCost,
+        balanceAfter: credits.creditBalance - cloneCost,
+        description: "Voice clone training initiated",
+        category: "voice_clone",
+      });
+
+      res.json({
+        success: true,
+        sample: {
+          id: sample.id,
+          status: sample.cloneStatus,
+          creditsSpent: cloneCost,
+        },
+      });
+    } catch (error: any) {
+      console.error("Voice train error:", error);
+      res.status(500).json({ error: error.message || "Failed to start voice training" });
+    }
+  });
 }

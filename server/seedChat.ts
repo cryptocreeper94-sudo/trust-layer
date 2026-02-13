@@ -11,10 +11,19 @@ const DEFAULT_CHANNELS = [
   { name: 'guardian-ai', description: 'Guardian AI certification discussion', category: 'app-support', isDefault: false },
 ];
 
+const CHRONICLES_CHANNELS = [
+  { name: 'chronicles-modern', description: 'Modern Era — city streets, tech startups, and neon-lit conversations', category: 'chronicles', isDefault: false },
+  { name: 'chronicles-medieval', description: 'Medieval Era — tavern chatter, market gossip, and castle whispers', category: 'chronicles', isDefault: false },
+  { name: 'chronicles-wildwest', description: 'Wild West — saloon talk, frontier news, and campfire stories', category: 'chronicles', isDefault: false },
+  { name: 'chronicles-general', description: 'Cross-era discussion for all Chronicles travelers', category: 'chronicles', isDefault: false },
+  { name: 'chronicles-voice', description: 'Voice messages — speak as your parallel self', category: 'chronicles', isDefault: false },
+];
+
 export async function seedChatChannels() {
   const existing = await db.select().from(chatChannels);
   if (existing.length > 0) {
     console.log(`[Signal Chat] ${existing.length} channels already exist, skipping seed`);
+    await seedChroniclesChannels();
     return;
   }
 
@@ -22,5 +31,24 @@ export async function seedChatChannels() {
     await db.insert(chatChannels).values(channel).onConflictDoNothing();
   }
 
-  console.log(`[Signal Chat] Seeded ${DEFAULT_CHANNELS.length} default channels`);
+  for (const channel of CHRONICLES_CHANNELS) {
+    await db.insert(chatChannels).values(channel).onConflictDoNothing();
+  }
+
+  console.log(`[Signal Chat] Seeded ${DEFAULT_CHANNELS.length + CHRONICLES_CHANNELS.length} channels (including Chronicles era channels)`);
+}
+
+async function seedChroniclesChannels() {
+  const existing = await db.select().from(chatChannels);
+  const existingNames = new Set(existing.map(c => c.name));
+  let added = 0;
+  for (const channel of CHRONICLES_CHANNELS) {
+    if (!existingNames.has(channel.name)) {
+      await db.insert(chatChannels).values(channel).onConflictDoNothing();
+      added++;
+    }
+  }
+  if (added > 0) {
+    console.log(`[Signal Chat] Added ${added} Chronicles era channels`);
+  }
 }
