@@ -418,8 +418,9 @@ function AIRecommendationBadge({ recommendation, score }: { recommendation: 'sni
         </TooltipTrigger>
         <TooltipContent className="bg-slate-900 border-white/10">
           <div className="text-xs">
-            <div className="font-medium mb-1">Strike Agent AI</div>
-            <div className="text-white/60">Confidence: {score}%</div>
+            <div className="font-medium mb-1">Pulse AI Score</div>
+            <div className="text-white/60">Score: {score}/100</div>
+            <div className="text-white/40 text-[10px] mt-0.5">Safety 30% + Technical 30% + Momentum 25% + ML 15%</div>
           </div>
         </TooltipContent>
       </Tooltip>
@@ -1018,6 +1019,31 @@ export default function GuardianScanner() {
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [activeFilter, setActiveFilter] = useState("trending");
   const [expandedTokenId, setExpandedTokenId] = useState<string | null>(null);
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    const existingManifest = document.querySelector('link[rel="manifest"]');
+    const guardianManifest = document.createElement('link');
+    guardianManifest.rel = 'manifest';
+    guardianManifest.href = '/manifest-guardian.webmanifest';
+    if (existingManifest) existingManifest.remove();
+    document.head.appendChild(guardianManifest);
+
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    if (themeColor) themeColor.setAttribute('content', '#06b6d4');
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/guardian-scanner-sw.js', { scope: '/guardian-scanner' }).catch(() => {});
+    }
+
+    const timer = setTimeout(() => setShowSplash(false), 1800);
+    return () => {
+      clearTimeout(timer);
+      if (existingManifest) document.head.appendChild(existingManifest);
+      guardianManifest.remove();
+      if (themeColor) themeColor.setAttribute('content', '#00ffff');
+    };
+  }, []);
   
   // Category filter state
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -1101,10 +1127,8 @@ export default function GuardianScanner() {
         
         if (data.tokens && data.tokens.length > 0) {
           const transformed: Token[] = data.tokens.map((t: any, i: number) => {
-            const safetyScore = t.guardianScore || Math.floor(Math.random() * 100);
-            const aiScore = Math.floor(Math.random() * 100);
-            const aiRecommendation: 'snipe' | 'watch' | 'avoid' = 
-              aiScore >= 75 ? 'snipe' : aiScore >= 40 ? 'watch' : 'avoid';
+            const guardianScore = t.guardianScore || 50;
+            const safetyGrade = guardianScore >= 80 ? 'A' : guardianScore >= 60 ? 'B' : guardianScore >= 40 ? 'C' : guardianScore >= 20 ? 'D' : 'F';
             
             return {
               id: t.id,
@@ -1116,11 +1140,11 @@ export default function GuardianScanner() {
               pairAddress: t.pairAddress || '',
               chain: t.chain || selectedChain,
               chainIcon: CHAINS.find(c => c.id === (t.chain || selectedChain))?.icon || "◎",
-              dex: "DEX",
-              dexShort: "DEX",
+              dex: t.dex || 'DEX',
+              dexShort: t.dexShort || 'DEX',
               price: t.price || 0,
               priceUsd: formatPrice(t.price || 0),
-              age: t.ageHours < 1 ? `${Math.floor(t.ageHours * 60)}m` : 
+              age: t.ageHours < 1 ? `${Math.floor((t.ageHours || 0) * 60)}m` : 
                    t.ageHours < 24 ? `${Math.floor(t.ageHours)}h` : 
                    `${Math.floor(t.ageHours / 24)}d`,
               ageMinutes: (t.ageHours || 0) * 60,
@@ -1128,46 +1152,47 @@ export default function GuardianScanner() {
               buys: t.txns24h?.buys || 0,
               sells: t.txns24h?.sells || 0,
               volume24h: t.volume24h || 0,
-              makers: Math.floor(Math.random() * 50000) + 1000,
-              priceChange5m: (Math.random() - 0.5) * 10,
+              makers: t.makers || 0,
+              priceChange5m: t.priceChange5m || 0,
               priceChange1h: t.priceChange1h || 0,
-              priceChange6h: (Math.random() - 0.5) * 80,
+              priceChange6h: t.priceChange6h || 0,
               priceChange24h: t.priceChange24h || 0,
               liquidity: t.liquidity || 0,
               marketCap: t.marketCap || t.fdv || 0,
-              guardianScore: safetyScore,
-              boosts: Math.random() > 0.5 ? Math.floor(Math.random() * 2500) : 0,
+              guardianScore,
+              boosts: t.boosts || 0,
               isWatchlisted: false,
-              aiRecommendation,
-              aiScore,
+              aiRecommendation: t.aiRecommendation || 'watch',
+              aiScore: t.aiScore || 50,
               mlPrediction: t.mlPrediction || {
-                direction: Math.random() > 0.5 ? 'up' : 'down',
-                confidence: Math.floor(Math.random() * 30) + 60,
-                accuracy: Math.floor(Math.random() * 20) + 70,
-                shortTerm: { direction: Math.random() > 0.5 ? 'up' : 'down', percent: Math.random() * 30 + 5 },
-                longTerm: { direction: Math.random() > 0.4 ? 'up' : 'down', percent: Math.random() * 60 + 10 },
+                direction: 'neutral' as const,
+                confidence: 50,
+                accuracy: 55,
+                shortTerm: { direction: 'up' as const, percent: 0 },
+                longTerm: { direction: 'up' as const, percent: 0 },
               },
               safety: t.safety || {
                 honeypotRisk: false,
-                mintAuthority: Math.random() > 0.6,
-                freezeAuthority: Math.random() > 0.7,
-                liquidityLocked: Math.random() > 0.4,
-                holderCount: Math.floor(Math.random() * 30000) + 500,
-                whaleConcentration: Math.random() * 50 + 10,
-                botActivity: Math.random() * 30,
-                safetyScore,
-                safetyGrade: safetyScore >= 80 ? 'A' : safetyScore >= 60 ? 'B' : safetyScore >= 40 ? 'C' : 'D',
+                mintAuthority: false,
+                freezeAuthority: false,
+                liquidityLocked: false,
+                holderCount: 0,
+                whaleConcentration: 0,
+                botActivity: 0,
+                safetyScore: guardianScore,
+                safetyGrade,
                 risks: [],
                 warnings: [],
               },
+              category: t.category || 'other',
             };
           });
           setTokens(transformed);
         } else {
-          setTokens(generateMockTokens(selectedChain));
+          setTokens([]);
         }
       } catch {
-        setTokens(generateMockTokens(selectedChain));
+        setTokens([]);
       }
       setIsLoading(false);
     };
@@ -1228,6 +1253,44 @@ export default function GuardianScanner() {
   const selectedSortData = SORT_OPTIONS.find(s => s.id === rankBy);
 
   return (
+    <>
+    <AnimatePresence>
+      {showSplash && (
+        <motion.div
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0a0a14]"
+          data-testid="guardian-splash-screen"
+        >
+          <motion.div
+            initial={{ scale: 0.7, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            className="flex flex-col items-center gap-6"
+          >
+            <div className="relative">
+              <img src="/icons/guardian-scanner-icon-512.png" alt="Guardian Scanner" className="w-28 h-28 rounded-3xl shadow-2xl shadow-cyan-500/30" />
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                className="absolute -inset-3 border-2 border-cyan-500/30 rounded-full border-t-cyan-400"
+              />
+            </div>
+            <div className="text-center">
+              <h1 className="text-2xl font-bold text-white tracking-wider">GUARDIAN SCANNER</h1>
+              <p className="text-xs text-cyan-400/70 mt-1 tracking-widest uppercase">Powered by Pulse AI</p>
+            </div>
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: 160 }}
+              transition={{ duration: 1.5, ease: 'easeInOut' }}
+              className="h-0.5 bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500 rounded-full"
+            />
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
     <div className="min-h-screen bg-[#0a0a0a] flex">
       {/* Left Sidebar */}
       <LeftSidebar 
@@ -1449,7 +1512,36 @@ export default function GuardianScanner() {
           <button
             onClick={() => {
               setIsLoading(true);
-              setTimeout(() => { setTokens(generateMockTokens(selectedChain)); setIsLoading(false); }, 300);
+              const chainParam = selectedChain === 'darkwave' ? '' : selectedChain;
+              fetch(`/api/guardian-scanner/tokens?chain=${chainParam}&filter=trending`)
+                .then(r => r.json())
+                .then(data => {
+                  if (data.tokens && data.tokens.length > 0) {
+                    const guardianScoreCalc = (s: number) => s >= 80 ? 'A' : s >= 60 ? 'B' : s >= 40 ? 'C' : s >= 20 ? 'D' : 'F';
+                    setTokens(data.tokens.map((t: any, i: number) => {
+                      const gs = t.guardianScore || 50;
+                      return {
+                        id: t.id, rank: i + 1, name: t.name || 'Unknown', symbol: t.symbol || 'UNK',
+                        logo: t.imageUrl || `https://api.dicebear.com/7.x/shapes/svg?seed=${t.symbol}`,
+                        contractAddress: t.contractAddress || '', pairAddress: t.pairAddress || '',
+                        chain: t.chain || selectedChain, chainIcon: CHAINS.find(c => c.id === (t.chain || selectedChain))?.icon || "◎",
+                        dex: t.dex || 'DEX', dexShort: t.dexShort || 'DEX', price: t.price || 0, priceUsd: formatPrice(t.price || 0),
+                        age: (t.ageHours || 0) < 1 ? `${Math.floor((t.ageHours || 0) * 60)}m` : (t.ageHours || 0) < 24 ? `${Math.floor(t.ageHours)}h` : `${Math.floor(t.ageHours / 24)}d`,
+                        ageMinutes: (t.ageHours || 0) * 60, txns: (t.txns24h?.buys || 0) + (t.txns24h?.sells || 0),
+                        buys: t.txns24h?.buys || 0, sells: t.txns24h?.sells || 0, volume24h: t.volume24h || 0,
+                        makers: t.makers || 0, priceChange5m: t.priceChange5m || 0, priceChange1h: t.priceChange1h || 0,
+                        priceChange6h: t.priceChange6h || 0, priceChange24h: t.priceChange24h || 0,
+                        liquidity: t.liquidity || 0, marketCap: t.marketCap || t.fdv || 0, guardianScore: gs,
+                        boosts: t.boosts || 0, isWatchlisted: false, aiRecommendation: t.aiRecommendation || 'watch',
+                        aiScore: t.aiScore || 50, mlPrediction: t.mlPrediction || { direction: 'neutral', confidence: 50, accuracy: 55, shortTerm: { direction: 'up', percent: 0 }, longTerm: { direction: 'up', percent: 0 } },
+                        safety: t.safety || { honeypotRisk: false, mintAuthority: false, freezeAuthority: false, liquidityLocked: false, holderCount: 0, whaleConcentration: 0, botActivity: 0, safetyScore: gs, safetyGrade: guardianScoreCalc(gs), risks: [], warnings: [] },
+                        category: t.category || 'other',
+                      };
+                    }));
+                  }
+                })
+                .catch(() => {})
+                .finally(() => setIsLoading(false));
             }}
             className="p-2.5 md:p-2 text-white/40 hover:text-white hover:bg-white/5 rounded-lg min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0 flex items-center justify-center"
             data-testid="refresh-btn"
@@ -1604,5 +1696,6 @@ export default function GuardianScanner() {
         )}
       </AnimatePresence>
     </div>
+    </>
   );
 }
