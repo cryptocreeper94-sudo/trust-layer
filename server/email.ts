@@ -276,12 +276,27 @@ export async function sendPresaleConfirmationEmail(to: string, amountPaid: strin
           </div>
         </div>
         
+        <div style="background: linear-gradient(135deg, #06b6d4, #a855f7); padding: 3px; border-radius: 12px; margin-bottom: 20px;">
+          <div style="background: #0d1117; padding: 25px; border-radius: 10px; text-align: center;">
+            <h3 style="color: #FFD700; margin: 0 0 10px 0; font-size: 20px;">Register Your Membership</h3>
+            <p style="color: #ccc; margin: 0 0 20px 0; font-size: 14px;">
+              Complete your membership setup to access your dashboard, membership card, and full ecosystem features.
+            </p>
+            <a href="https://dwsc.io/auth" style="display: inline-block; background: linear-gradient(135deg, #06b6d4, #a855f7); color: #ffffff; font-weight: bold; padding: 14px 40px; border-radius: 8px; text-decoration: none; font-size: 16px;">
+              Register at dwsc.io
+            </a>
+            <p style="color: #ff6b6b; margin: 15px 0 0 0; font-size: 13px; font-weight: bold;">
+              Important: Use this same email address (${to}) when registering
+            </p>
+          </div>
+        </div>
+
         <div style="background: #1a1a2e; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #00FFFF;">
           <h3 style="color: #00FFFF; margin: 0 0 10px 0;">What's Next?</h3>
           <ul style="color: #888; margin: 0; padding-left: 20px; line-height: 1.8;">
-            <li>Your Signal (SIG) will be available when mainnet launches</li>
-            <li>We're milestone-based — no fixed date, just real progress</li>
-            <li>20% released at TGE, 80% vested over 12 months</li>
+            <li>Register your membership at <a href="https://dwsc.io" style="color: #00FFFF;">dwsc.io</a> using this email</li>
+            <li>Access your dashboard, membership card, and ecosystem features</li>
+            <li>20% of your Signal released at TGE, 80% vested over 12 months</li>
             <li>You'll receive updates and early access announcements</li>
             <li>Join our community to stay connected</li>
           </ul>

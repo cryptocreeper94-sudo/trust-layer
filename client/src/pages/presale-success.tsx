@@ -254,7 +254,7 @@ export default function PresaleSuccess() {
                     <span className="text-cyan-400 font-bold text-xs">2</span>
                   </div>
                   <p className="text-gray-300 text-sm">
-                    <span className="text-cyan-400 font-medium">Before Launch:</span> Create your Trust Layer wallet using the same email
+                    <span className="text-cyan-400 font-medium">Register:</span> Set up your membership at dwsc.io using this same email
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
@@ -262,7 +262,7 @@ export default function PresaleSuccess() {
                     <span className="text-purple-400 font-bold text-xs">3</span>
                   </div>
                   <p className="text-gray-300 text-sm">
-                    <span className="text-purple-400 font-medium">At Launch:</span> Tokens automatically distributed to your wallet
+                    <span className="text-purple-400 font-medium">Access:</span> Your dashboard, membership card, and Signal will be ready
                   </p>
                 </div>
               </div>
@@ -272,21 +272,21 @@ export default function PresaleSuccess() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/my-tokens">
+              <Link href="/auth">
                 <Button 
-                  className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600"
-                  data-testid="button-view-my-tokens"
+                  className="bg-gradient-to-r from-yellow-500 via-amber-500 to-orange-500 text-black font-bold text-lg px-8 py-3"
+                  data-testid="button-register-membership"
                 >
-                  View My Tokens <ArrowRight className="w-4 h-4 ml-2" />
+                  Register Your Membership <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
-              <Link href="/">
+              <Link href="/my-tokens">
                 <Button 
-                  variant="outline" 
-                  className="border-white/20 hover:bg-white/5"
-                  data-testid="button-explore-ecosystem"
+                  variant="outline"
+                  className="border-cyan-500/30 hover:bg-cyan-500/10 text-cyan-400"
+                  data-testid="button-view-my-tokens"
                 >
-                  Explore Ecosystem
+                  View My Tokens
                 </Button>
               </Link>
             </div>
