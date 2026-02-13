@@ -21565,46 +21565,97 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  function verifyEcosystemApiAuth(req: Request, res: Response): boolean {
+    const apiKey = req.headers["x-api-key"] as string;
+    const signature = req.headers["x-api-signature"] as string;
+    const timestamp = req.headers["x-api-timestamp"] as string;
+    const serverKey = process.env.TRUSTLAYER_API_KEY;
+    const serverSecret = process.env.TRUSTLAYER_API_SECRET;
+
+    if (!serverKey || !serverSecret) {
+      res.status(503).json({ error: "Ecosystem API not configured" });
+      return false;
+    }
+
+    if (!apiKey || !signature || !timestamp) {
+      res.status(401).json({ error: "Missing API authentication headers (x-api-key, x-api-signature, x-api-timestamp)" });
+      return false;
+    }
+
+    if (apiKey !== serverKey) {
+      res.status(401).json({ error: "Invalid API key" });
+      return false;
+    }
+
+    const requestTime = parseInt(timestamp);
+    if (isNaN(requestTime) || Math.abs(Date.now() - requestTime) > 5 * 60 * 1000) {
+      res.status(401).json({ error: "Request expired or invalid timestamp" });
+      return false;
+    }
+
+    const expectedSig = crypto.createHmac("sha256", serverSecret)
+      .update(`${apiKey}${timestamp}`)
+      .digest("hex");
+
+    const sigBuffer = Buffer.from(signature);
+    const expectedBuffer = Buffer.from(expectedSig);
+    if (sigBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(sigBuffer, expectedBuffer)) {
+      res.status(401).json({ error: "Invalid signature" });
+      return false;
+    }
+
+    return true;
+  }
+
   app.post("/api/affiliates/referrals", async (req: Request, res: Response) => {
     try {
+      if (!verifyEcosystemApiAuth(req, res)) return;
+
       const { affiliateId, referredType, referredName, referredEmail, referredEntityId, platform } = req.body;
 
       if (!affiliateId || !referredName) {
         return res.status(400).json({ error: "affiliateId and referredName are required" });
       }
 
-      const [affiliate] = await db.select().from(ecosystemAffiliates)
-        .where(eq(ecosystemAffiliates.id, affiliateId)).limit(1);
+      const result = await db.transaction(async (tx) => {
+        const [affiliate] = await tx.select().from(ecosystemAffiliates)
+          .where(eq(ecosystemAffiliates.id, affiliateId)).limit(1);
 
-      if (!affiliate) {
+        if (!affiliate) {
+          throw new Error("AFFILIATE_NOT_FOUND");
+        }
+
+        const [referral] = await tx.insert(ecosystemReferrals).values({
+          affiliateId,
+          referredType: referredType || "vendor",
+          referredName: referredName.trim(),
+          referredEmail: referredEmail?.trim() || null,
+          referredEntityId: referredEntityId || null,
+          platform: platform || "tl",
+          status: "pending",
+        }).returning();
+
+        const [reward] = await tx.insert(ecosystemRewardsLedger).values({
+          affiliateId,
+          referralId: referral.id,
+          type: "vendor_referral",
+          amountCents: 2000,
+          description: `$20 one-time bonus for referring ${referredName}`,
+          status: "held",
+        }).returning();
+
+        await tx.update(ecosystemAffiliates)
+          .set({ totalReferrals: sql`${ecosystemAffiliates.totalReferrals} + 1`, updatedAt: new Date() })
+          .where(eq(ecosystemAffiliates.id, affiliateId));
+
+        return { referral, reward };
+      });
+
+      res.status(201).json(result);
+    } catch (error: any) {
+      if (error?.message === "AFFILIATE_NOT_FOUND") {
         return res.status(404).json({ error: "Affiliate not found" });
       }
-
-      const [referral] = await db.insert(ecosystemReferrals).values({
-        affiliateId,
-        referredType: referredType || "vendor",
-        referredName: referredName.trim(),
-        referredEmail: referredEmail?.trim() || null,
-        referredEntityId: referredEntityId || null,
-        platform: platform || "tl",
-        status: "pending",
-      }).returning();
-
-      const [reward] = await db.insert(ecosystemRewardsLedger).values({
-        affiliateId,
-        referralId: referral.id,
-        type: "vendor_referral",
-        amountCents: 2000,
-        description: `$20 one-time bonus for referring ${referredName}`,
-        status: "held",
-      }).returning();
-
-      await db.update(ecosystemAffiliates)
-        .set({ totalReferrals: sql`${ecosystemAffiliates.totalReferrals} + 1`, updatedAt: new Date() })
-        .where(eq(ecosystemAffiliates.id, affiliateId));
-
-      res.status(201).json({ referral, reward });
-    } catch (error) {
       console.error("Create referral error:", error);
       res.status(500).json({ error: "Failed to create referral" });
     }
@@ -21612,57 +21663,76 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 
   app.post("/api/affiliates/referrals/:id/activate", async (req: Request, res: Response) => {
     try {
+      if (!verifyEcosystemApiAuth(req, res)) return;
+
       const referralId = parseInt(req.params.id);
       if (isNaN(referralId)) {
         return res.status(400).json({ error: "Invalid referral ID" });
       }
 
-      const [referral] = await db.select().from(ecosystemReferrals)
-        .where(eq(ecosystemReferrals.id, referralId)).limit(1);
+      const result = await db.transaction(async (tx) => {
+        const [referral] = await tx.select().from(ecosystemReferrals)
+          .where(eq(ecosystemReferrals.id, referralId)).limit(1);
 
-      if (!referral) {
+        if (!referral) {
+          throw new Error("REFERRAL_NOT_FOUND");
+        }
+
+        if (referral.status === "active") {
+          throw new Error("ALREADY_ACTIVATED");
+        }
+
+        if (referral.daysActive < 14 || referral.revenueGeneratedCents < 10000) {
+          throw new Error("ACTIVATION_REQUIREMENTS_NOT_MET");
+        }
+
+        await tx.update(ecosystemReferrals)
+          .set({ status: "active", activatedAt: new Date() })
+          .where(eq(ecosystemReferrals.id, referralId));
+
+        await tx.update(ecosystemRewardsLedger)
+          .set({ status: "pending" })
+          .where(and(
+            eq(ecosystemRewardsLedger.referralId, referralId),
+            eq(ecosystemRewardsLedger.status, "held")
+          ));
+
+        const [affiliate] = await tx.select().from(ecosystemAffiliates)
+          .where(eq(ecosystemAffiliates.id, referral.affiliateId)).limit(1);
+
+        const newQualified = (affiliate?.qualifiedReferrals || 0) + 1;
+
+        await tx.update(ecosystemAffiliates)
+          .set({
+            qualifiedReferrals: newQualified,
+            totalEarningsCents: sql`${ecosystemAffiliates.totalEarningsCents} + 2000`,
+            pendingBalanceCents: sql`${ecosystemAffiliates.pendingBalanceCents} + 2000`,
+            updatedAt: new Date(),
+          })
+          .where(eq(ecosystemAffiliates.id, referral.affiliateId));
+
+        return {
+          message: "Referral activated successfully",
+          referralId,
+          affiliateId: referral.affiliateId,
+          newQualifiedCount: newQualified,
+          currentTier: newQualified >= 10 ? "Builder" : "Starter",
+          revenueSharePercent: newQualified >= 10 ? 2 : 1,
+          bonusUnlocked: 2000,
+        };
+      });
+
+      res.json(result);
+    } catch (error: any) {
+      if (error?.message === "REFERRAL_NOT_FOUND") {
         return res.status(404).json({ error: "Referral not found" });
       }
-
-      if (referral.status === "active") {
+      if (error?.message === "ALREADY_ACTIVATED") {
         return res.status(400).json({ error: "Referral is already activated" });
       }
-
-      await db.update(ecosystemReferrals)
-        .set({ status: "active", activatedAt: new Date() })
-        .where(eq(ecosystemReferrals.id, referralId));
-
-      await db.update(ecosystemRewardsLedger)
-        .set({ status: "pending" })
-        .where(and(
-          eq(ecosystemRewardsLedger.referralId, referralId),
-          eq(ecosystemRewardsLedger.status, "held")
-        ));
-
-      const [affiliate] = await db.select().from(ecosystemAffiliates)
-        .where(eq(ecosystemAffiliates.id, referral.affiliateId)).limit(1);
-
-      const newQualified = (affiliate?.qualifiedReferrals || 0) + 1;
-
-      await db.update(ecosystemAffiliates)
-        .set({
-          qualifiedReferrals: newQualified,
-          totalEarningsCents: sql`${ecosystemAffiliates.totalEarningsCents} + 2000`,
-          pendingBalanceCents: sql`${ecosystemAffiliates.pendingBalanceCents} + 2000`,
-          updatedAt: new Date(),
-        })
-        .where(eq(ecosystemAffiliates.id, referral.affiliateId));
-
-      res.json({
-        message: "Referral activated successfully",
-        referralId,
-        affiliateId: referral.affiliateId,
-        newQualifiedCount: newQualified,
-        currentTier: newQualified >= 10 ? "Builder" : "Starter",
-        revenueSharePercent: newQualified >= 10 ? 2 : 1,
-        bonusUnlocked: 2000,
-      });
-    } catch (error) {
+      if (error?.message === "ACTIVATION_REQUIREMENTS_NOT_MET") {
+        return res.status(400).json({ error: "Vendor must be active for 14+ days AND generate $100+ in revenue before activation" });
+      }
       console.error("Activate referral error:", error);
       res.status(500).json({ error: "Failed to activate referral" });
     }
