@@ -132,17 +132,34 @@ export default function ChroniclesDashboard() {
   const nextLevelXp = level * 1000;
   const xpProgress = Math.min(100, (xp / nextLevelXp) * 100);
 
-  const recentEvents = [
-    { title: "Arrived in the Modern Era", time: "Today" },
-    { title: "Explored Downtown Core", time: "Recent" },
-    { title: "Met a stranger at the coffee shop", time: "Recent" },
-    { title: "The city hums with energy around you", time: "Now" },
-  ];
+  const { data: gameStateData } = useQuery({
+    queryKey: ["/api/chronicles/play/state"],
+    queryFn: async () => {
+      const res = await fetch("/api/chronicles/play/state", { headers: getAuthHeaders() });
+      if (!res.ok) return null;
+      return res.json();
+    },
+    staleTime: 30000,
+  });
+
+  const gameState = gameStateData?.gameState;
+  const gameLog = Array.isArray(gameState?.gameLog) ? gameState.gameLog.slice(-4).reverse() : [];
+
+  const recentEvents = gameLog.length > 0
+    ? gameLog.map((entry: any) => ({
+        title: entry.action || entry.message || "Event occurred",
+        time: entry.timestamp ? new Date(entry.timestamp).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) : "Recent",
+      }))
+    : [
+        { title: "Your story is waiting to begin", time: "Now" },
+        { title: "Face situations and make choices", time: "" },
+        { title: "Every decision shapes your world", time: "" },
+      ];
 
   const quickActions = [
-    { label: "Your World", href: "/chronicles/world", icon: Compass, color: "text-cyan-400", desc: "See what's happening" },
-    { label: "Your Estate", href: "/chronicles/estate", icon: Building, color: "text-purple-400", desc: "Build your space" },
-    { label: "Daily Life", href: "/chronicles/life", icon: Activity, color: "text-green-400", desc: "Activities & locations" },
+    { label: "Play Now", href: "/chronicles/play", icon: Activity, color: "text-cyan-400", desc: "Face situations & choices" },
+    { label: "Build City", href: "/chronicles/city", icon: Building, color: "text-purple-400", desc: "Build storefronts" },
+    { label: "Your World", href: "/chronicles/world", icon: Compass, color: "text-green-400", desc: "People & communities" },
     { label: "Time Portal", href: "/chronicles/time-portal", icon: Globe, color: "text-amber-400", desc: "Explore other eras" },
   ];
 

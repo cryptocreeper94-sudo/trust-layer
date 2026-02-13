@@ -185,6 +185,8 @@ const ChroniclesTimePortal = lazy(() => import("@/pages/chronicles-time-portal")
 const ChroniclesLogin = lazy(() => import("@/pages/chronicles-login"));
 const ChroniclesBuilder = lazy(() => import("@/pages/chronicles-builder"));
 const ChroniclesWorld = lazy(() => import("@/pages/chronicles-world"));
+const ChroniclesPlay = lazy(() => import("@/pages/chronicles-play"));
+const ChroniclesCity = lazy(() => import("@/pages/chronicles-city"));
 const ChroniclesDashboardPage = lazy(() => import("@/pages/chronicles-dashboard"));
 const SyndicateInvite = lazy(() => import("@/pages/syndicate-invite"));
 const ChronoHome = lazy(() => import("@/pages/chrono-home"));
@@ -337,6 +339,8 @@ function ChronoRouter() {
         <Route path="/chronicles/time-portal" component={ChroniclesTimePortal} />
         <Route path="/chronicles/builder" component={ChroniclesBuilder} />
         <Route path="/chronicles/world" component={ChroniclesWorld} />
+        <Route path="/chronicles/play" component={ChroniclesPlay} />
+        <Route path="/chronicles/city" component={ChroniclesCity} />
         <Route path="/chronicles/dashboard" component={ChroniclesDashboardPage} />
         <Route path="/join/:code" component={SyndicateInvite} />
         <Route path="/chronicles-estate" component={ChroniclesEstate} />
@@ -582,6 +586,8 @@ function DWSCRouter() {
         <Route path="/chronicles/time-portal" component={ChroniclesTimePortal} />
         <Route path="/chronicles/builder" component={ChroniclesBuilder} />
         <Route path="/chronicles/world" component={ChroniclesWorld} />
+        <Route path="/chronicles/play" component={ChroniclesPlay} />
+        <Route path="/chronicles/city" component={ChroniclesCity} />
         <Route path="/chronicles/dashboard" component={ChroniclesDashboardPage} />
         <Route path="/chronicles-estate" component={ChroniclesEstate} />
         <Route path="/legacy" component={BuildYourLegacy} />

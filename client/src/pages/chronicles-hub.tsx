@@ -55,18 +55,38 @@ const JOURNEY_CHAPTERS: JourneyChapter[] = [
     href: "/chronicles/estate"
   },
   {
-    id: "world",
-    title: "Chapter 3: Your World",
-    subtitle: "Live Your Parallel Life",
+    id: "play",
+    title: "Chapter 3: Play",
+    subtitle: "Face Situations & Make Choices",
     status: "current",
     season: "Season Zero",
-    description: "Step into your world. Face real situations, meet real people, align with communities that share your values.",
+    description: "The core gameplay. Face real situations, make authentic choices, earn XP, level up. Your decisions shape who you become.",
+    icon: Target,
+    href: "/chronicles/play"
+  },
+  {
+    id: "world",
+    title: "Chapter 4: Your World",
+    subtitle: "People, Places & Communities",
+    status: "current",
+    season: "Season Zero",
+    description: "Explore the world around you. Meet real people, align with communities, discover what's happening.",
     icon: Compass,
     href: "/chronicles/world"
   },
   {
+    id: "city",
+    title: "Chapter 5: Build the City",
+    subtitle: "Build Together with Others",
+    status: "current",
+    season: "Season Zero",
+    description: "Claim land, build storefronts, grow the city. Premium spots on the town square, or scattered across the landscape.",
+    icon: Building,
+    href: "/chronicles/city"
+  },
+  {
     id: "connections",
-    title: "Chapter 4: Connections",
+    title: "Chapter 6: Connections",
     subtitle: "Build Relationships",
     status: "locked",
     season: "Season One",
@@ -75,7 +95,7 @@ const JOURNEY_CHAPTERS: JourneyChapter[] = [
   },
   {
     id: "exploration",
-    title: "Chapter 5: New Eras",
+    title: "Chapter 7: New Eras",
     subtitle: "Unlock More Timelines",
     status: "locked",
     season: "Season One",
@@ -84,7 +104,7 @@ const JOURNEY_CHAPTERS: JourneyChapter[] = [
   },
   {
     id: "legacy",
-    title: "Chapter 6: Legacy",
+    title: "Chapter 8: Legacy",
     subtitle: "Leave Your Mark",
     status: "locked",
     season: "Season Two",

@@ -2857,6 +2857,50 @@ export const insertPlayerChoiceSchema = createInsertSchema(playerChoices).omit({
 export type PlayerChoice = typeof playerChoices.$inferSelect;
 export type InsertPlayerChoice = z.infer<typeof insertPlayerChoiceSchema>;
 
+// Chronicles Game State - Persistent game progression per player
+export const chroniclesGameState = pgTable("chronicles_game_state", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  
+  name: text("name").notNull().default("Traveler"),
+  currentEra: text("current_era").notNull().default("modern"),
+  
+  level: integer("level").notNull().default(1),
+  experience: integer("experience").notNull().default(0),
+  shellsEarned: integer("shells_earned").notNull().default(0),
+  
+  wisdom: integer("wisdom").notNull().default(10),
+  courage: integer("courage").notNull().default(10),
+  compassion: integer("compassion").notNull().default(10),
+  cunning: integer("cunning").notNull().default(10),
+  influence: integer("influence").notNull().default(10),
+  
+  situationsCompleted: integer("situations_completed").notNull().default(0),
+  decisionsRecorded: integer("decisions_recorded").notNull().default(0),
+  npcsSpokenTo: text("npcs_spoken_to").array().notNull().default(sql`'{}'::text[]`),
+  factionsJoined: text("factions_joined").array().notNull().default(sql`'{}'::text[]`),
+  completedSituations: text("completed_situations").array().notNull().default(sql`'{}'::text[]`),
+  achievements: text("achievements").array().notNull().default(sql`'{}'::text[]`),
+  
+  currentStreak: integer("current_streak").notNull().default(0),
+  longestStreak: integer("longest_streak").notNull().default(0),
+  lastPlayedAt: timestamp("last_played_at"),
+  
+  gameLog: text("game_log").notNull().default('[]'),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChroniclesGameStateSchema = createInsertSchema(chroniclesGameState).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type ChroniclesGameState = typeof chroniclesGameState.$inferSelect;
+export type InsertChroniclesGameState = z.infer<typeof insertChroniclesGameStateSchema>;
+
 // Player Estate - Persistent estate building data (one per era per player)
 export const playerEstates = pgTable("player_estates", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),

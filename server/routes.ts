@@ -14574,6 +14574,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   const { chroniclesService: chroniclesGameService, STARTER_FACTIONS, SEASON_ZERO_QUESTS, STARTER_NPCS } = await import("./chronicles-service");
   Object.assign(chroniclesGameService, { STARTER_FACTIONS, SEASON_ZERO_QUESTS, STARTER_NPCS });
 
+  // Register Chronicles Play Routes (gameplay engine)
+  const { registerChroniclesPlayRoutes } = await import("./chronicles-play-routes");
+  registerChroniclesPlayRoutes(app);
+
   app.get("/api/chronicles/personality", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
