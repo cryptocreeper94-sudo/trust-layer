@@ -364,6 +364,8 @@ function calculateAIScore(pair: DexScreenerPair, guardianScore: number): { score
   const indicators = analyzePulseTechnicalIndicators(pair);
   const technicalScore = calculatePulseTechnicalScore(indicators);
   const momentumScore = calculatePulseMomentumScore(pair);
+  const mlPrediction = generateMLPrediction(pair);
+  const mlConfidenceScore = mlPrediction.confidence;
 
   let weightedSum = 0;
   let totalWeight = 0;
@@ -377,6 +379,7 @@ function calculateAIScore(pair: DexScreenerPair, guardianScore: number): { score
   weightedSum += momentumScore * PULSE_SCORING_WEIGHTS.momentum;
   totalWeight += PULSE_SCORING_WEIGHTS.momentum;
 
+  weightedSum += mlConfidenceScore * PULSE_SCORING_WEIGHTS.mlConfidence;
   totalWeight += PULSE_SCORING_WEIGHTS.mlConfidence;
 
   const score = Math.max(0, Math.min(100, Math.round(weightedSum / totalWeight)));
