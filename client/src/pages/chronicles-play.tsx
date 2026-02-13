@@ -20,7 +20,53 @@ import {
   TrendingUp, Activity, Flame, Gift, Target,
   MessageCircle, Volume2, Loader2, Award, Play, Lock,
   RotateCcw, ArrowRight, CheckCircle2, XCircle,
+  ShoppingBag, BookOpen, Bell,
 } from "lucide-react";
+
+function WorldClockBanner({ era }: { era: string }) {
+  const { data: worldTime } = useQuery({
+    queryKey: ["/api/chronicles/world-clock", era],
+    queryFn: async () => {
+      const res = await fetch(`/api/chronicles/world-clock/${era}`);
+      if (!res.ok) return null;
+      return res.json();
+    },
+    refetchInterval: 60000,
+    staleTime: 30000,
+  });
+
+  if (!worldTime) return null;
+
+  const timeIcons: Record<string, any> = {
+    dawn: Sunrise, morning: Sun, afternoon: CloudSun,
+    evening: Sunset, night: Moon, midnight: Moon,
+  };
+  const TimeIcon = timeIcons[worldTime.period] || Sun;
+  const isDaytime = worldTime.isDaytime;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="mb-3"
+    >
+      <GlassCard hover={false} className={`${isDaytime ? "" : "border-purple-500/20"}`}>
+        <div className="flex items-center gap-3 px-4 py-2">
+          <TimeIcon className={`w-4 h-4 ${isDaytime ? "text-yellow-400" : "text-purple-400"}`} />
+          <div className="flex-1">
+            <span className="text-xs text-white font-medium">{worldTime.eraLabel}</span>
+            <span className="text-[10px] text-gray-500 ml-2">
+              {String(worldTime.hour).padStart(2, "0")}:{String(worldTime.minute).padStart(2, "0")} &middot; {worldTime.dayOfWeek}
+            </span>
+          </div>
+          <Badge className={`text-[9px] ${isDaytime ? "bg-yellow-500/15 text-yellow-400" : "bg-purple-500/15 text-purple-400"}`}>
+            {isDaytime ? "Day" : "Night"}
+          </Badge>
+        </div>
+      </GlassCard>
+    </motion.div>
+  );
+}
 
 const ERA_CONFIG = {
   modern: {
@@ -752,6 +798,8 @@ export default function ChroniclesPlay() {
           </Link>
         </div>
 
+        <WorldClockBanner era={selectedEra} />
+
         <div className="relative h-48 sm:h-56 rounded-xl overflow-hidden mb-4">
           <Scene3D era={selectedEra} />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent pointer-events-none" />
@@ -916,24 +964,38 @@ export default function ChroniclesPlay() {
                 )}
               </GlassCard>
 
-              <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
-                <Link href="/chronicles/world">
-                  <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
-                    <Globe className="w-5 h-5 text-cyan-400 mb-1" />
-                    <p className="text-xs text-white font-medium">Your World</p>
-                    <p className="text-[10px] text-gray-500">People & places</p>
+              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3">
+                <Link href="/chronicles/npc-chat">
+                  <GlassCard glow className="p-3 cursor-pointer hover:border-cyan-500/30 transition-all h-full">
+                    <MessageCircle className="w-5 h-5 text-cyan-400 mb-1" />
+                    <p className="text-xs text-white font-medium">Talk to NPCs</p>
+                    <p className="text-[10px] text-gray-500">AI conversations</p>
+                  </GlassCard>
+                </Link>
+                <Link href="/chronicles/marketplace">
+                  <GlassCard glow className="p-3 cursor-pointer hover:border-purple-500/30 transition-all h-full">
+                    <ShoppingBag className="w-5 h-5 text-purple-400 mb-1" />
+                    <p className="text-xs text-white font-medium">Marketplace</p>
+                    <p className="text-[10px] text-gray-500">Shop & craft</p>
                   </GlassCard>
                 </Link>
                 <Link href="/chronicles/estate">
                   <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
-                    <Building className="w-5 h-5 text-purple-400 mb-1" />
+                    <Building className="w-5 h-5 text-amber-400 mb-1" />
                     <p className="text-xs text-white font-medium">Your Estate</p>
                     <p className="text-[10px] text-gray-500">Build & expand</p>
                   </GlassCard>
                 </Link>
+                <Link href="/chronicles/world">
+                  <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
+                    <Globe className="w-5 h-5 text-green-400 mb-1" />
+                    <p className="text-xs text-white font-medium">Your World</p>
+                    <p className="text-[10px] text-gray-500">People & places</p>
+                  </GlassCard>
+                </Link>
                 <Link href="/chronicles/city">
                   <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
-                    <Home className="w-5 h-5 text-green-400 mb-1" />
+                    <Home className="w-5 h-5 text-blue-400 mb-1" />
                     <p className="text-xs text-white font-medium">City</p>
                     <p className="text-[10px] text-gray-500">Build together</p>
                   </GlassCard>
@@ -945,9 +1007,16 @@ export default function ChroniclesPlay() {
                     <p className="text-[10px] text-gray-500">Train your voice</p>
                   </GlassCard>
                 </Link>
+                <Link href="/chronicles/tutorial">
+                  <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
+                    <BookOpen className="w-5 h-5 text-emerald-400 mb-1" />
+                    <p className="text-xs text-white font-medium">How to Play</p>
+                    <p className="text-[10px] text-gray-500">Tutorial guide</p>
+                  </GlassCard>
+                </Link>
                 <Link href="/chronicles/dashboard">
                   <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
-                    <TrendingUp className="w-5 h-5 text-amber-400 mb-1" />
+                    <TrendingUp className="w-5 h-5 text-yellow-400 mb-1" />
                     <p className="text-xs text-white font-medium">Dashboard</p>
                     <p className="text-[10px] text-gray-500">Your progress</p>
                   </GlassCard>

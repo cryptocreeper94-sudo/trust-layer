@@ -186,6 +186,9 @@ const ChroniclesLogin = lazy(() => import("@/pages/chronicles-login"));
 const ChroniclesBuilder = lazy(() => import("@/pages/chronicles-builder"));
 const ChroniclesWorld = lazy(() => import("@/pages/chronicles-world"));
 const ChroniclesPlay = lazy(() => import("@/pages/chronicles-play"));
+const ChroniclesTutorial = lazy(() => import("@/pages/chronicles-tutorial"));
+const ChroniclesMarketplace = lazy(() => import("@/pages/chronicles-marketplace"));
+const ChroniclesNpcChat = lazy(() => import("@/pages/chronicles-npc-chat"));
 const ChroniclesCity = lazy(() => import("@/pages/chronicles-city"));
 const ChroniclesDashboardPage = lazy(() => import("@/pages/chronicles-dashboard"));
 const ChroniclesVoice = lazy(() => import("@/pages/chronicles-voice"));
@@ -341,6 +344,9 @@ function ChronoRouter() {
         <Route path="/chronicles/builder" component={ChroniclesBuilder} />
         <Route path="/chronicles/world" component={ChroniclesWorld} />
         <Route path="/chronicles/play" component={ChroniclesPlay} />
+        <Route path="/chronicles/tutorial" component={ChroniclesTutorial} />
+        <Route path="/chronicles/marketplace" component={ChroniclesMarketplace} />
+        <Route path="/chronicles/npc-chat" component={ChroniclesNpcChat} />
         <Route path="/chronicles/city" component={ChroniclesCity} />
         <Route path="/chronicles/dashboard" component={ChroniclesDashboardPage} />
         <Route path="/join/:code" component={SyndicateInvite} />
@@ -588,6 +594,9 @@ function DWSCRouter() {
         <Route path="/chronicles/builder" component={ChroniclesBuilder} />
         <Route path="/chronicles/world" component={ChroniclesWorld} />
         <Route path="/chronicles/play" component={ChroniclesPlay} />
+        <Route path="/chronicles/tutorial" component={ChroniclesTutorial} />
+        <Route path="/chronicles/marketplace" component={ChroniclesMarketplace} />
+        <Route path="/chronicles/npc-chat" component={ChroniclesNpcChat} />
         <Route path="/chronicles/city" component={ChroniclesCity} />
         <Route path="/chronicles/dashboard" component={ChroniclesDashboardPage} />
         <Route path="/chronicles/voice" component={ChroniclesVoice} />

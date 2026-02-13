@@ -14579,6 +14579,22 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   registerChroniclesPlayRoutes(app);
   registerChroniclesChatRoutes(app);
 
+  // Register Chronicles Marketplace Routes (shop, inventory, crafting)
+  const { registerMarketplaceRoutes } = await import("./chronicles-marketplace");
+  registerMarketplaceRoutes(app);
+
+  // Register Chronicles NPC Chat Routes (threaded NPC conversations)
+  const { registerNpcChatRoutes } = await import("./chronicles-npc-chat");
+  registerNpcChatRoutes(app);
+
+  // Register Chronicles World Clock & Daily Situations
+  const { registerWorldClockRoutes } = await import("./chronicles-world-clock");
+  registerWorldClockRoutes(app);
+
+  // Register Chronicles Notifications
+  const { registerNotificationRoutes } = await import("./chronicles-notifications");
+  registerNotificationRoutes(app);
+
   app.get("/api/chronicles/personality", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;

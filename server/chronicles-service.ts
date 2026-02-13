@@ -780,6 +780,24 @@ export const SEASON_ZERO_QUESTS = [
     category: "life_event",
     educationalTheme: "Self-reflection and understanding your own motivations is the foundation of emotional intelligence",
   },
+  {
+    id: "mod_digital_legacy",
+    title: "Digital Legacy",
+    description: "A renowned tech pioneer has died, leaving behind a massive digital footprint — encrypted files, AI models trained on personal data, social media accounts with millions of followers, and a controversial AI chatbot modeled on their personality. Their family wants it all deleted. Their company wants to keep the AI running. You've been asked to mediate.",
+    era: "modern",
+    difficulty: "hard",
+    shellsReward: "260",
+    experienceReward: 460,
+    category: "moral_dilemma",
+    npcInvolved: "Dr. Elena Voss",
+    educationalTheme: "Digital rights, data sovereignty, AI ethics, posthumous consent",
+    relationshipImpact: ["Dr. Elena Voss"],
+    choices: [
+      { id: "a", text: "Honor the family's wishes — delete everything. A person's digital remains belong to their loved ones, not a corporation.", hint: "Prioritizes human dignity and family rights over commercial interests" },
+      { id: "b", text: "Preserve the AI and public legacy — this person contributed to humanity's knowledge. Deleting it erases their impact.", hint: "Values collective progress and the idea that great contributions transcend individual ownership" },
+      { id: "c", text: "Find a middle ground — archive the data under independent oversight, shut down the chatbot, and let the family control access.", hint: "Seeks compromise through institutional safeguards and shared governance" },
+    ],
+  },
 
   // =============================================
   // WILD WEST ERA (25 situations)
