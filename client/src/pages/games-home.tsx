@@ -258,7 +258,7 @@ function LiveStats() {
   return (
     <section className="relative -mt-12 z-20 mb-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 auto-rows-fr">
           {[
             { label: "Active Players", value: 12400, suffix: "+", icon: <Users className="w-5 h-5 text-cyan-400" />, color: "border-cyan-500/20" },
             { label: "Games Played", value: 847000, suffix: "+", icon: <Gamepad2 className="w-5 h-5 text-pink-400" />, color: "border-pink-500/20" },
@@ -267,19 +267,20 @@ function LiveStats() {
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
+              className="h-full"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
             >
-              <GlassCard className={`p-4 text-center border ${stat.color}`} glow>
-                <div className="flex items-center justify-center gap-2 mb-1.5">
+              <GlassCard className={`p-4 text-center border ${stat.color} h-full flex flex-col items-center justify-center`} glow>
+                <div className="flex items-center justify-center gap-1.5 mb-1.5">
                   {stat.icon}
-                  <span className="text-xl sm:text-2xl font-black text-white">
+                  <span className="text-lg sm:text-2xl font-black text-white whitespace-nowrap">
                     <AnimatedCounter target={stat.value} suffix={stat.suffix} />
                   </span>
                 </div>
-                <p className="text-[10px] sm:text-xs text-white/40 uppercase tracking-wider font-medium">{stat.label}</p>
+                <p className="text-[10px] sm:text-xs text-white/40 uppercase tracking-wider font-medium whitespace-nowrap">{stat.label}</p>
               </GlassCard>
             </motion.div>
           ))}
