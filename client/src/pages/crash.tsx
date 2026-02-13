@@ -618,7 +618,7 @@ export default function CrashGame() {
   });
 
   const cashoutMutation = useMutation({
-    mutationFn: async (data: { currencyType: string; betAmount: number; cashoutMultiplier: number }) => {
+    mutationFn: async (data: { roundKey: string; cashoutMultiplier: number }) => {
       const res = await apiRequest("POST", "/api/sweeps/crash/cashout", data);
       return res.json();
     },
@@ -628,6 +628,7 @@ export default function CrashGame() {
   });
 
   const serverCrashPointRef = useRef<number | null>(null);
+  const roundKeyRef = useRef<string | null>(null);
 
   const [betAmount, setBetAmount] = useState("100");
   const [multiplier, setMultiplier] = useState(1.0);
@@ -868,11 +869,12 @@ export default function CrashGame() {
         if (isDemo) {
           setDemoBalance(prev => prev + payout);
         } else {
-          cashoutMutation.mutate({
-            currencyType,
-            betAmount: lockedStake,
-            cashoutMultiplier: target,
-          });
+          if (roundKeyRef.current) {
+            cashoutMutation.mutate({
+              roundKey: roundKeyRef.current,
+              cashoutMultiplier: target,
+            });
+          }
         }
         
         if (myBetId) {
@@ -959,6 +961,9 @@ export default function CrashGame() {
         if (serverCrash && typeof serverCrash === "number") {
           serverCrashPointRef.current = serverCrash;
         }
+        if (response?.gameResult?.roundKey) {
+          roundKeyRef.current = response.gameResult.roundKey;
+        }
         if (response?.serverSeedHash) {
           setServerSeedHash(response.serverSeedHash);
         }
@@ -1044,11 +1049,12 @@ export default function CrashGame() {
       
       if (!isDemo) {
         try {
-          await cashoutMutation.mutateAsync({
-            currencyType,
-            betAmount: lockedStake,
-            cashoutMultiplier: cashoutMult,
-          });
+          if (roundKeyRef.current) {
+            await cashoutMutation.mutateAsync({
+              roundKey: roundKeyRef.current,
+              cashoutMultiplier: cashoutMult,
+            });
+          }
         } catch (err: any) {
           toast({ title: "Cashout Failed", description: err?.message || "Server error", variant: "destructive" });
           return;
@@ -1095,11 +1101,12 @@ export default function CrashGame() {
 
     if (!isDemo) {
       try {
-        await cashoutMutation.mutateAsync({
-          currencyType,
-          betAmount: lockedStake,
-          cashoutMultiplier: cashoutMult,
-        });
+        if (roundKeyRef.current) {
+          await cashoutMutation.mutateAsync({
+            roundKey: roundKeyRef.current,
+            cashoutMultiplier: cashoutMult,
+          });
+        }
       } catch (err: any) {
         toast({ title: "Cashout Failed", description: err?.message || "Server error", variant: "destructive" });
         return;

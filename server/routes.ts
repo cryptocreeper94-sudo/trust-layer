@@ -12524,6 +12524,21 @@ Current context:
 
   // ===== SERVER-SIDE PROVABLY FAIR GAME ENGINE =====
   
+  const activeCrashRounds = new Map<string, { crashPoint: number; betAmount: number; currencyType: string; cashedOut: boolean; gameId: number | null }>();
+  const activeMinesweeperGames = new Map<string, { minePositions: number[]; betAmount: number; currencyType: string; revealedCount: number; gridSize: number; mineCount: number; cashedOut: boolean; gameId: number | null }>();
+
+  setInterval(() => {
+    const now = Date.now();
+    Array.from(activeCrashRounds.keys()).forEach(key => {
+      const ts = parseInt(key.split(':')[1] || '0');
+      if (now - ts > 300000) activeCrashRounds.delete(key);
+    });
+    Array.from(activeMinesweeperGames.keys()).forEach(key => {
+      const ts = parseInt(key.split(':')[1] || '0');
+      if (now - ts > 600000) activeMinesweeperGames.delete(key);
+    });
+  }, 60000);
+  
   function generateServerSeed(): string {
     return crypto.randomBytes(32).toString('hex');
   }
@@ -12654,7 +12669,15 @@ Current context:
         }
         case "crash": {
           const crash = resolveCrash(random);
-          gameResult = { crashPoint: crash.crashPoint };
+          const roundKey = `${userId}:${Date.now()}`;
+          activeCrashRounds.set(roundKey, {
+            crashPoint: crash.crashPoint,
+            betAmount: bet,
+            currencyType,
+            cashedOut: false,
+            gameId: null,
+          });
+          gameResult = { crashPoint: crash.crashPoint, roundKey };
           outcome = "pending";
           multiplier = 0;
           payout = 0;
@@ -12692,12 +12715,14 @@ Current context:
         outcome,
       });
       
+      const isCompleted = outcome === "win" || outcome === "loss";
+      
       res.json({
         success: true,
         game,
         gameResult,
         serverSeedHash,
-        serverSeed,
+        serverSeed: isCompleted ? serverSeed : undefined,
         clientSeed: cSeed,
         nonce,
         newBalance: {
@@ -12752,35 +12777,56 @@ Current context:
     }
   });
 
-  // Crash cashout endpoint
+  // Crash cashout endpoint - validates against server-stored crash point
   app.post("/api/sweeps/crash/cashout", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
-      const { currencyType, betAmount, cashoutMultiplier } = req.body;
+      const { roundKey, cashoutMultiplier } = req.body;
       
-      const bet = parseFloat(betAmount);
-      const mult = parseFloat(cashoutMultiplier);
-      if (isNaN(bet) || isNaN(mult) || bet <= 0 || mult < 1) {
-        return res.status(400).json({ error: "Invalid cashout parameters" });
+      if (!roundKey) {
+        return res.status(400).json({ error: "Missing round key" });
       }
       
+      const round = activeCrashRounds.get(roundKey);
+      if (!round) {
+        return res.status(400).json({ error: "Round not found or expired" });
+      }
+      
+      if (round.cashedOut) {
+        return res.status(400).json({ error: "Already cashed out this round" });
+      }
+      
+      const mult = parseFloat(cashoutMultiplier);
+      if (isNaN(mult) || mult < 1) {
+        return res.status(400).json({ error: "Invalid cashout multiplier" });
+      }
+      
+      if (mult > round.crashPoint) {
+        return res.status(400).json({ error: "Cannot cashout above crash point" });
+      }
+      
+      round.cashedOut = true;
+      
+      const bet = round.betAmount;
       const payout = bet * mult;
       const profit = payout - bet;
-      const gcDelta = currencyType === "GC" ? profit.toString() : "0";
-      const scDelta = currencyType === "SC" ? profit.toString() : "0";
+      const gcDelta = round.currencyType === "GC" ? profit.toString() : "0";
+      const scDelta = round.currencyType === "SC" ? profit.toString() : "0";
       
       const newBalance = await storage.updateSweepsBalance(userId, gcDelta, scDelta);
       
       await storage.recordSweepsGame({
         userId,
         gameType: "crash",
-        currencyType,
+        currencyType: round.currencyType,
         betAmount: bet.toString(),
         multiplier: mult.toString(),
         payout: payout.toString(),
         profit: profit.toString(),
         outcome: "win",
       });
+      
+      activeCrashRounds.delete(roundKey);
       
       res.json({
         success: true,
