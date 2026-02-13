@@ -408,32 +408,30 @@ export default function GuardianAI() {
           </div>
 
           <div className="relative rounded-3xl overflow-hidden border border-white/[0.06]">
-            <img src={heroImg} alt="Guardian AI Command Center" className="w-full h-[200px] sm:h-[280px] md:h-[400px] object-cover" />
+            <img src={heroImg} alt="Guardian AI Command Center" className="w-full h-[160px] sm:h-[280px] md:h-[400px] object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/[0.05] via-transparent to-purple-500/[0.05]" />
-            
-            <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
-                {[
-                  { label: 'Agents Certified', value: '1,200+', icon: Bot },
-                  { label: 'Trust Scores Issued', value: '8,400+', icon: ShieldCheck },
-                  { label: 'Threats Blocked', value: '42K+', icon: AlertTriangle },
-                  { label: 'Enterprise Clients', value: '180+', icon: Building },
-                ].map((stat, i) => (
-                  <motion.div
-                    key={stat.label}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 + i * 0.1 }}
-                    className="text-center p-3 md:p-4 rounded-xl bg-slate-900/60 backdrop-blur-md border border-white/[0.06]"
-                  >
-                    <stat.icon className="w-4 h-4 text-cyan-400 mx-auto mb-1.5" />
-                    <div className="text-lg md:text-xl font-black text-white">{stat.value}</div>
-                    <div className="text-[10px] md:text-xs text-slate-500 mt-0.5">{stat.label}</div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mt-5">
+            {[
+              { label: 'Agents Certified', value: '1,200+', icon: Bot },
+              { label: 'Trust Scores Issued', value: '8,400+', icon: ShieldCheck },
+              { label: 'Threats Blocked', value: '42K+', icon: AlertTriangle },
+              { label: 'Enterprise Clients', value: '180+', icon: Building },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 + i * 0.1 }}
+                className="text-center p-4 sm:p-5 md:p-6 rounded-2xl bg-slate-900/60 backdrop-blur-md border border-white/[0.08]"
+              >
+                <stat.icon className="w-5 h-5 text-cyan-400 mx-auto mb-2" />
+                <div className="text-xl md:text-2xl font-black text-white">{stat.value}</div>
+                <div className="text-[11px] md:text-xs text-slate-400 mt-1">{stat.label}</div>
+              </motion.div>
+            ))}
           </div>
         </motion.section>
 
