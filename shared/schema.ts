@@ -7768,3 +7768,129 @@ export const GUARDIAN_AI_TIERS = {
     duration: '3-4 weeks',
   },
 } as const;
+
+// =====================================================
+// CHRONICLES MARKETPLACE & INVENTORY
+// =====================================================
+
+export const chronicleMarketplaceItems = pgTable("chronicle_marketplace_items", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  code: text("code").notNull().unique(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  era: text("era").notNull(),
+  category: text("category").notNull(),
+  subcategory: text("subcategory"),
+  iconEmoji: text("icon_emoji").notNull().default("📦"),
+  shellCost: integer("shell_cost").notNull().default(10),
+  unlockLevel: integer("unlock_level").notNull().default(0),
+  isLimited: boolean("is_limited").notNull().default(false),
+  stockQuantity: integer("stock_quantity"),
+  isCraftable: boolean("is_craftable").notNull().default(false),
+  rarity: text("rarity").notNull().default("common"),
+  statBonus: text("stat_bonus").default("{}"),
+  isActive: boolean("is_active").notNull().default(true),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleMarketplaceItemSchema = createInsertSchema(chronicleMarketplaceItems).omit({
+  id: true, createdAt: true
+});
+export type ChronicleMarketplaceItem = typeof chronicleMarketplaceItems.$inferSelect;
+
+export const chroniclePlayerInventory = pgTable("chronicle_player_inventory", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  itemCode: text("item_code").notNull(),
+  quantity: integer("quantity").notNull().default(1),
+  era: text("era").notNull(),
+  acquiredVia: text("acquired_via").notNull().default("purchase"),
+  equippedSlot: text("equipped_slot"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ChroniclePlayerInventoryItem = typeof chroniclePlayerInventory.$inferSelect;
+
+export const chronicleCraftingRecipes = pgTable("chronicle_crafting_recipes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  code: text("code").notNull().unique(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  era: text("era").notNull(),
+  resultItemCode: text("result_item_code").notNull(),
+  resultQuantity: integer("result_quantity").notNull().default(1),
+  ingredients: text("ingredients").notNull().default("[]"),
+  craftTimeMinutes: integer("craft_time_minutes").notNull().default(5),
+  requiredLevel: integer("required_level").notNull().default(1),
+  shellCost: integer("shell_cost").notNull().default(0),
+  xpReward: integer("xp_reward").notNull().default(10),
+  iconEmoji: text("icon_emoji").notNull().default("🔨"),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ChronicleCraftingRecipe = typeof chronicleCraftingRecipes.$inferSelect;
+
+// =====================================================
+// CHRONICLES NPC CONVERSATIONS (Threaded)
+// =====================================================
+
+export const chronicleNpcConversations = pgTable("chronicle_npc_conversations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  npcName: text("npc_name").notNull(),
+  era: text("era").notNull(),
+  messageCount: integer("message_count").notNull().default(0),
+  lastMessageAt: timestamp("last_message_at"),
+  relationshipScore: integer("relationship_score").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ChronicleNpcConversation = typeof chronicleNpcConversations.$inferSelect;
+
+export const chronicleNpcMessages = pgTable("chronicle_npc_messages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  conversationId: varchar("conversation_id").notNull(),
+  role: text("role").notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ChronicleNpcMessage = typeof chronicleNpcMessages.$inferSelect;
+
+// =====================================================
+// CHRONICLES NOTIFICATIONS
+// =====================================================
+
+export const chronicleNotifications = pgTable("chronicle_notifications", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  type: text("type").notNull(),
+  title: text("title").notNull(),
+  message: text("message").notNull(),
+  iconEmoji: text("icon_emoji").default("🔔"),
+  linkTo: text("link_to"),
+  isRead: boolean("is_read").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type ChronicleNotification = typeof chronicleNotifications.$inferSelect;
+
+// =====================================================
+// CHRONICLES DAILY SITUATION ASSIGNMENTS
+// =====================================================
+
+export const chronicleDailySituations = pgTable("chronicle_daily_situations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  situationId: text("situation_id").notNull(),
+  era: text("era").notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  isAiGenerated: boolean("is_ai_generated").notNull().default(false),
+  isCompleted: boolean("is_completed").notNull().default(false),
+  assignedDate: text("assigned_date").notNull(),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
