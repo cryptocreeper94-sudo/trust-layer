@@ -252,12 +252,9 @@ export default function Slots() {
       gameType: string;
       currencyType: string;
       betAmount: number;
-      multiplier: number;
-      payout: number;
-      profit: number;
-      outcome: string;
+      theme: string;
     }) => {
-      const res = await apiRequest("POST", "/api/sweeps/game", data);
+      const res = await apiRequest("POST", "/api/sweeps/play", data);
       return res.json();
     },
     onSuccess: () => {
@@ -297,58 +294,102 @@ export default function Slots() {
     setIsSpinning(true);
     setLastWin(null);
 
-    const newReels = [generateReelSymbols(), generateReelSymbols(), generateReelSymbols()];
-    setReels(newReels);
-
-    const finalSymbols = [
-      newReels[0][newReels[0].length - 1],
-      newReels[1][newReels[1].length - 1],
-      newReels[2][newReels[2].length - 1],
-    ];
-
-    const spinPromises = reelControls.map((control, index) => {
-      return control.start({
-        y: [0, -50 * newReels[index].length],
-        transition: {
-          duration: 1.5 + index * 0.5,
-          ease: [0.2, 0.8, 0.2, 1],
-        },
-      });
-    });
-
-    await Promise.all(spinPromises);
-
-    setVisibleSymbols(finalSymbols);
-
-    const matchKey = finalSymbols.join("") as keyof typeof theme.payTable;
-    const multiplier = theme.payTable[matchKey] || 0;
-    const payout = betAmount * multiplier;
-    const profit = payout - betAmount;
+    let finalSymbols: string[];
+    let multiplier: number;
 
     if (isDemo) {
+      const newReels = [generateReelSymbols(), generateReelSymbols(), generateReelSymbols()];
+      setReels(newReels);
+
+      finalSymbols = [
+        newReels[0][newReels[0].length - 1],
+        newReels[1][newReels[1].length - 1],
+        newReels[2][newReels[2].length - 1],
+      ];
+
+      const spinPromises = reelControls.map((control, index) => {
+        return control.start({
+          y: [0, -50 * newReels[index].length],
+          transition: {
+            duration: 1.5 + index * 0.5,
+            ease: [0.2, 0.8, 0.2, 1],
+          },
+        });
+      });
+
+      await Promise.all(spinPromises);
+
+      setVisibleSymbols(finalSymbols);
+
+      const matchKey = finalSymbols.join("") as keyof typeof theme.payTable;
+      multiplier = theme.payTable[matchKey] || 0;
+      const payout = betAmount * multiplier;
+      const profit = payout - betAmount;
+
       setDemoBalance(prev => {
         const key = currencyType === "GC" ? "goldCoins" : "sweepsCoins";
         const newVal = parseFloat(prev[key]) + profit;
         return { ...prev, [key]: String(Math.max(0, newVal)) };
       });
-    } else {
-      await gameMutation.mutateAsync({
-        gameType: `slots_${selectedTheme}`,
-        currencyType,
-        betAmount,
-        multiplier,
-        payout,
-        profit,
-        outcome: multiplier > 0 ? "win" : "loss",
-      });
-    }
 
-    if (multiplier > 0) {
-      setLastWin(payout);
-      toast({
-        title: `You Won ${formatNumber(payout)} ${currencyType}!`,
-        description: `${finalSymbols.join(" ")} - ${multiplier}x multiplier!`,
+      if (multiplier > 0) {
+        setLastWin(payout);
+        toast({
+          title: `You Won ${formatNumber(payout)} ${currencyType}!`,
+          description: `${finalSymbols.join(" ")} - ${multiplier}x multiplier!`,
+        });
+      }
+    } else {
+      let serverResult: { gameResult: { reels: string[]; multiplier: number }; newBalance: { goldCoins: string; sweepsCoins: string } };
+      try {
+        serverResult = await gameMutation.mutateAsync({
+          gameType: "slots",
+          currencyType,
+          betAmount,
+          theme: selectedTheme,
+        });
+      } catch (error: any) {
+        setIsSpinning(false);
+        toast({
+          title: "Spin Failed",
+          description: error?.message || "Something went wrong. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      finalSymbols = serverResult.gameResult.reels;
+      multiplier = serverResult.gameResult.multiplier;
+
+      const newReels = [generateReelSymbols(), generateReelSymbols(), generateReelSymbols()];
+      newReels[0][newReels[0].length - 1] = finalSymbols[0];
+      newReels[1][newReels[1].length - 1] = finalSymbols[1];
+      newReels[2][newReels[2].length - 1] = finalSymbols[2];
+      setReels(newReels);
+
+      const spinPromises = reelControls.map((control, index) => {
+        return control.start({
+          y: [0, -50 * newReels[index].length],
+          transition: {
+            duration: 1.5 + index * 0.5,
+            ease: [0.2, 0.8, 0.2, 1],
+          },
+        });
       });
+
+      await Promise.all(spinPromises);
+
+      setVisibleSymbols(finalSymbols);
+
+      const payout = betAmount * multiplier;
+
+      if (multiplier > 0) {
+        setLastWin(payout);
+        toast({
+          title: `You Won ${formatNumber(payout)} ${currencyType}!`,
+          description: `${finalSymbols.join(" ")} - ${multiplier}x multiplier!`,
+        });
+      }
     }
 
     setIsSpinning(false);

@@ -12,6 +12,7 @@ import { db } from "./db";
 import { verifyFirebaseIdToken } from "./firebase-admin";
 import { zealyService, type ZealyWebhookPayload } from "./zealy-service";
 import * as blogService from "./blog-service";
+import { getUncachableStripeClient } from "./stripeClient";
 import { membershipReconciliationService } from "./membership-reconciliation-service";
 
 // Auth request interface for session-based authentication
@@ -1975,15 +1976,15 @@ export async function registerRoutes(
       }
       
       // Verify the app is registered and active
-      const [app] = await db.execute(sql`
+      const appResult = await db.execute(sql`
         SELECT * FROM ecosystem_apps WHERE api_key = ${appKey} AND is_active = true LIMIT 1
       `);
       
-      if (!app.rows[0]) {
+      if (!appResult.rows[0]) {
         return res.status(401).json({ error: "Invalid or inactive app" });
       }
       
-      const appData = app.rows[0] as any;
+      const appData = appResult.rows[0] as any;
       
       // Verify HMAC signature: HMAC-SHA256(apiSecret, token + timestamp)
       const expectedSignature = crypto.createHmac('sha256', appData.api_secret)
@@ -1998,7 +1999,7 @@ export async function registerRoutes(
       }
       
       // Find the SSO session - MUST match both token AND the requesting app's ID
-      const [session] = await db.execute(sql`
+      const sessionResult = await db.execute(sql`
         SELECT * FROM sso_sessions 
         WHERE sso_token = ${token} 
         AND app_id = ${appData.id}
@@ -2007,11 +2008,11 @@ export async function registerRoutes(
         LIMIT 1
       `);
       
-      if (!session.rows[0]) {
+      if (!sessionResult.rows[0]) {
         return res.status(401).json({ error: "Invalid or expired token" });
       }
       
-      const ssoSession = session.rows[0] as any;
+      const ssoSession = sessionResult.rows[0] as any;
       
       // Mark token as used (one-time use)
       await db.execute(sql`
@@ -2025,21 +2026,21 @@ export async function registerRoutes(
       }
       
       // Get or create user app connection
-      const [existingConnection] = await db.execute(sql`
+      const connResult = await db.execute(sql`
         SELECT * FROM user_app_connections 
-        WHERE user_id = ${user.id} AND app_id = ${(app.rows[0] as any).id}
+        WHERE user_id = ${user.id} AND app_id = ${appData.id}
         LIMIT 1
       `);
       
-      if (!existingConnection.rows[0]) {
+      if (!connResult.rows[0]) {
         await db.execute(sql`
           INSERT INTO user_app_connections (user_id, app_id, connected_at, last_login_at)
-          VALUES (${user.id}, ${(app.rows[0] as any).id}, NOW(), NOW())
+          VALUES (${user.id}, ${appData.id}, NOW(), NOW())
         `);
       } else {
         await db.execute(sql`
           UPDATE user_app_connections SET last_login_at = NOW() 
-          WHERE user_id = ${user.id} AND app_id = ${(app.rows[0] as any).id}
+          WHERE user_id = ${user.id} AND app_id = ${appData.id}
         `);
       }
       
@@ -2107,15 +2108,15 @@ export async function registerRoutes(
       }
       
       // Verify the app is registered
-      const [app] = await db.execute(sql`
+      const appResult2 = await db.execute(sql`
         SELECT * FROM ecosystem_apps WHERE api_key = ${appKey} AND is_active = true LIMIT 1
       `);
       
-      if (!app.rows[0]) {
+      if (!appResult2.rows[0]) {
         return res.status(401).json({ error: "Invalid or inactive app" });
       }
       
-      const appData = app.rows[0] as any;
+      const appData = appResult2.rows[0] as any;
       
       // Verify HMAC signature: HMAC-SHA256(apiSecret, userId + timestamp)
       const expectedSignature = crypto.createHmac('sha256', appData.api_secret)
@@ -2135,13 +2136,13 @@ export async function registerRoutes(
       }
       
       // Check if user has connected to this app
-      const [connection] = await db.execute(sql`
+      const connResult2 = await db.execute(sql`
         SELECT * FROM user_app_connections 
         WHERE user_id = ${userId} AND app_id = ${appData.id} AND revoked_at IS NULL
         LIMIT 1
       `);
       
-      if (!connection.rows[0]) {
+      if (!connResult2.rows[0]) {
         return res.status(403).json({ error: "User has not authorized this app" });
       }
       
@@ -2189,15 +2190,15 @@ export async function registerRoutes(
       }
       
       // Verify the app is registered
-      const [app] = await db.execute(sql`
+      const appResult3 = await db.execute(sql`
         SELECT * FROM ecosystem_apps WHERE app_name = ${appName} AND is_active = true LIMIT 1
       `);
       
-      if (!app.rows[0]) {
+      if (!appResult3.rows[0]) {
         return res.status(401).json({ error: "Unknown or inactive app" });
       }
       
-      const appData = app.rows[0] as any;
+      const appData = appResult3.rows[0] as any;
       
       // SECURITY: Validate redirect URL against registered callback URL
       try {
@@ -12197,18 +12198,140 @@ Current context:
     res.json(COIN_PACKS);
   });
 
-  // Purchase coin pack
+  // Create Stripe checkout for coin pack purchase
   app.post("/api/sweeps/purchase", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
-      const { packId, stripePaymentId } = req.body;
+      const { packId } = req.body;
       
       const pack = COIN_PACKS.find(p => p.id === packId);
       if (!pack) {
         return res.status(400).json({ error: "Invalid pack" });
       }
       
-      // Record the purchase
+      const stripe = await getUncachableStripeClient();
+      const baseUrl = `https://${(process.env.REPLIT_DOMAINS || process.env.REPL_SLUG + '.repl.co').split(',')[0]}`;
+      
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items: [{
+          price_data: {
+            currency: 'usd',
+            unit_amount: Math.round(parseFloat(pack.priceUsd) * 100),
+            product_data: {
+              name: `${pack.name} - ${pack.goldCoins} GC + ${pack.bonusSc} FREE SC`,
+              description: `${parseInt(pack.goldCoins).toLocaleString()} Gold Coins + ${pack.bonusSc} FREE Sweeps Coins`,
+            },
+          },
+          quantity: 1,
+        }],
+        mode: 'payment',
+        success_url: `${baseUrl}/coin-store?success=true&packId=${pack.id}`,
+        cancel_url: `${baseUrl}/coin-store?cancelled=true`,
+        metadata: {
+          type: 'sweeps_gc_purchase',
+          userId,
+          packId: pack.id,
+          goldCoins: pack.goldCoins,
+          bonusSc: pack.bonusSc,
+          packName: pack.name,
+        },
+      });
+      
+      res.json({
+        success: true,
+        checkoutUrl: session.url,
+        sessionId: session.id,
+      });
+    } catch (error) {
+      console.error("Purchase error:", error);
+      res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  // Stripe webhook handler for sweeps purchases (called after payment succeeds)
+  app.post("/api/sweeps/webhook/fulfill", async (req: any, res) => {
+    try {
+      const { sessionId, metadata } = req.body;
+      if (!metadata || metadata.type !== 'sweeps_gc_purchase') {
+        return res.status(400).json({ error: "Invalid fulfillment request" });
+      }
+      
+      const { userId, packId, goldCoins, bonusSc, packName } = metadata;
+      
+      const pack = COIN_PACKS.find(p => p.id === packId);
+      if (!pack) {
+        return res.status(400).json({ error: "Invalid pack" });
+      }
+      
+      const purchase = await storage.recordSweepsPurchase({
+        userId,
+        packId: pack.id,
+        packName: pack.name,
+        priceUsd: pack.priceUsd,
+        goldCoinsAmount: goldCoins,
+        sweepsCoinsBonus: bonusSc,
+        stripePaymentId: sessionId || null,
+        status: "completed",
+      });
+      
+      const newBalance = await storage.updateSweepsBalance(userId, goldCoins, bonusSc);
+      
+      await storage.recordSweepsBonus({
+        userId,
+        bonusType: "purchase_bonus",
+        sweepsCoinsAmount: bonusSc,
+        goldCoinsAmount: "0",
+        description: `FREE SC with ${packName} purchase`,
+      });
+      
+      res.json({ success: true, purchase, newBalance });
+    } catch (error) {
+      console.error("Fulfillment error:", error);
+      res.status(500).json({ error: "Failed to fulfill purchase" });
+    }
+  });
+
+  // Verify and fulfill completed checkout session
+  app.post("/api/sweeps/verify-purchase", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const { sessionId, packId } = req.body;
+      
+      if (!sessionId || !packId) {
+        return res.status(400).json({ error: "Missing sessionId or packId" });
+      }
+      
+      const pack = COIN_PACKS.find(p => p.id === packId);
+      if (!pack) {
+        return res.status(400).json({ error: "Invalid pack" });
+      }
+      
+      const stripe = await getUncachableStripeClient();
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      
+      if (session.payment_status !== 'paid') {
+        return res.status(400).json({ error: "Payment not completed" });
+      }
+      
+      if (session.metadata?.userId !== userId || session.metadata?.packId !== packId) {
+        return res.status(403).json({ error: "Session mismatch" });
+      }
+      
+      const existingPurchases = await storage.getSweepsPurchases(userId);
+      const alreadyFulfilled = existingPurchases.some(p => 
+        (p as any).stripePaymentId === sessionId
+      );
+      
+      if (alreadyFulfilled) {
+        const balance = await storage.getSweepsBalance(userId);
+        return res.json({ 
+          success: true, 
+          alreadyFulfilled: true,
+          newBalance: balance ? { goldCoins: balance.goldCoins, sweepsCoins: balance.sweepsCoins } : null,
+        });
+      }
+      
       const purchase = await storage.recordSweepsPurchase({
         userId,
         packId: pack.id,
@@ -12216,14 +12339,12 @@ Current context:
         priceUsd: pack.priceUsd,
         goldCoinsAmount: pack.goldCoins,
         sweepsCoinsBonus: pack.bonusSc,
-        stripePaymentId: stripePaymentId || null,
+        stripePaymentId: sessionId,
         status: "completed",
       });
       
-      // Update balance
       const newBalance = await storage.updateSweepsBalance(userId, pack.goldCoins, pack.bonusSc);
       
-      // Record bonus
       await storage.recordSweepsBonus({
         userId,
         bonusType: "purchase_bonus",
@@ -12241,8 +12362,8 @@ Current context:
         },
       });
     } catch (error) {
-      console.error("Purchase error:", error);
-      res.status(500).json({ error: "Failed to process purchase" });
+      console.error("Verify purchase error:", error);
+      res.status(500).json({ error: "Failed to verify purchase" });
     }
   });
 
@@ -12401,25 +12522,211 @@ Current context:
     }
   });
 
-  // Record sweepstakes game result
+  // ===== SERVER-SIDE PROVABLY FAIR GAME ENGINE =====
+  
+  function generateServerSeed(): string {
+    return crypto.randomBytes(32).toString('hex');
+  }
+  
+  function hashSeed(seed: string): string {
+    return crypto.createHash('sha256').update(seed).digest('hex');
+  }
+  
+  function getProvablyFairRandom(serverSeed: string, clientSeed: string, nonce: number): number {
+    const combined = `${serverSeed}:${clientSeed}:${nonce}`;
+    const hash = crypto.createHmac('sha256', serverSeed).update(`${clientSeed}:${nonce}`).digest('hex');
+    const num = parseInt(hash.substring(0, 8), 16);
+    return num / 0xffffffff;
+  }
+
+  // Coinflip outcome
+  function resolveCoinflip(random: number): { result: "heads" | "tails" } {
+    return { result: random < 0.5 ? "heads" : "tails" };
+  }
+
+  // Slots outcome
+  function resolveSlots(random: number, theme: string): { reels: string[]; multiplier: number } {
+    const themeSymbols: Record<string, string[]> = {
+      egyptian: ["👁️", "🏺", "🐍", "⚱️", "🔱", "💎", "👑", "⭐"],
+      cosmic: ["🌟", "🌙", "🪐", "☄️", "🚀", "👽", "💫", "🌌"],
+      dragon: ["🐉", "🔥", "💰", "🗡️", "🛡️", "⚔️", "💎", "👑"],
+      leprechaun: ["🍀", "🌈", "💰", "🎩", "⭐", "💎", "🪙", "🌟"],
+    };
+    const symbols = themeSymbols[theme] || themeSymbols.egyptian;
+    
+    const r1 = Math.floor(random * symbols.length);
+    const r2Hash = crypto.createHash('md5').update(`${random}:r2`).digest('hex');
+    const r2 = parseInt(r2Hash.substring(0, 4), 16) % symbols.length;
+    const r3Hash = crypto.createHash('md5').update(`${random}:r3`).digest('hex');
+    const r3 = parseInt(r3Hash.substring(0, 4), 16) % symbols.length;
+    
+    const reels = [symbols[r1], symbols[r2], symbols[r3]];
+    
+    let multiplier = 0;
+    if (reels[0] === reels[1] && reels[1] === reels[2]) {
+      const symbolIndex = symbols.indexOf(reels[0]);
+      const payouts = [100, 50, 25, 15, 10, 8, 5, 3];
+      multiplier = payouts[symbolIndex] || 3;
+    } else if (reels[0] === reels[1] || reels[1] === reels[2]) {
+      multiplier = 1.5;
+    }
+    
+    return { reels, multiplier };
+  }
+
+  // Crash outcome
+  function resolveCrash(random: number): { crashPoint: number } {
+    const e = 2 ** 52;
+    const h = Math.floor(random * e);
+    const crashPoint = Math.floor((100 * e - h) / (e - h)) / 100;
+    return { crashPoint: Math.max(1.0, Math.min(crashPoint, 5000)) };
+  }
+
+  // Minesweeper outcome
+  function resolveMines(serverSeed: string, clientSeed: string, gridSize: number, mineCount: number): { minePositions: number[] } {
+    const totalCells = gridSize * gridSize;
+    const positions: number[] = [];
+    let nonce = 0;
+    while (positions.length < mineCount && nonce < 1000) {
+      const random = getProvablyFairRandom(serverSeed, clientSeed, nonce);
+      const pos = Math.floor(random * totalCells);
+      if (!positions.includes(pos)) {
+        positions.push(pos);
+      }
+      nonce++;
+    }
+    return { minePositions: positions.sort((a, b) => a - b) };
+  }
+
+  // Unified server-side play endpoint
+  app.post("/api/sweeps/play", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const { gameType, currencyType, betAmount, clientSeed, choice, theme, gridSize, mineCount } = req.body;
+      
+      if (currencyType !== "GC" && currencyType !== "SC") {
+        return res.status(400).json({ error: "Invalid currency type" });
+      }
+      
+      const bet = parseFloat(betAmount);
+      if (isNaN(bet) || bet <= 0) {
+        return res.status(400).json({ error: "Invalid bet amount" });
+      }
+      
+      const balance = await storage.getSweepsBalance(userId);
+      if (!balance) {
+        return res.status(400).json({ error: "No balance found" });
+      }
+      
+      const currentBalance = currencyType === "GC" ? parseFloat(balance.goldCoins) : parseFloat(balance.sweepsCoins);
+      if (currentBalance < bet) {
+        return res.status(400).json({ error: "Insufficient balance" });
+      }
+      
+      const serverSeed = generateServerSeed();
+      const serverSeedHash = hashSeed(serverSeed);
+      const cSeed = clientSeed || crypto.randomBytes(16).toString('hex');
+      const nonce = Date.now();
+      const random = getProvablyFairRandom(serverSeed, cSeed, nonce);
+      
+      let outcome: string;
+      let multiplier = 0;
+      let payout = 0;
+      let gameResult: any = {};
+      
+      switch (gameType) {
+        case "coinflip": {
+          const flip = resolveCoinflip(random);
+          const won = flip.result === choice;
+          multiplier = won ? 1.96 : 0;
+          payout = won ? bet * multiplier : 0;
+          outcome = won ? "win" : "loss";
+          gameResult = { result: flip.result, choice, won };
+          break;
+        }
+        case "slots": {
+          const spin = resolveSlots(random, theme || "egyptian");
+          multiplier = spin.multiplier;
+          payout = bet * multiplier;
+          outcome = multiplier > 0 ? "win" : "loss";
+          gameResult = { reels: spin.reels, multiplier };
+          break;
+        }
+        case "crash": {
+          const crash = resolveCrash(random);
+          gameResult = { crashPoint: crash.crashPoint };
+          outcome = "pending";
+          multiplier = 0;
+          payout = 0;
+          break;
+        }
+        case "minesweeper": {
+          const mines = resolveMines(serverSeed, cSeed, gridSize || 5, mineCount || 5);
+          gameResult = { 
+            minePositions: mines.minePositions,
+            serverSeedHash,
+          };
+          outcome = "pending";
+          multiplier = 0;
+          payout = 0;
+          break;
+        }
+        default:
+          return res.status(400).json({ error: "Unknown game type" });
+      }
+      
+      const profit = payout - bet;
+      const gcDelta = currencyType === "GC" ? profit.toString() : "0";
+      const scDelta = currencyType === "SC" ? profit.toString() : "0";
+      
+      const newBalance = await storage.updateSweepsBalance(userId, gcDelta, scDelta);
+      
+      const game = await storage.recordSweepsGame({
+        userId,
+        gameType,
+        currencyType,
+        betAmount: bet.toString(),
+        multiplier: multiplier?.toString() || null,
+        payout: payout.toString(),
+        profit: profit.toString(),
+        outcome,
+      });
+      
+      res.json({
+        success: true,
+        game,
+        gameResult,
+        serverSeedHash,
+        serverSeed,
+        clientSeed: cSeed,
+        nonce,
+        newBalance: {
+          goldCoins: newBalance.goldCoins,
+          sweepsCoins: newBalance.sweepsCoins,
+        },
+      });
+    } catch (error) {
+      console.error("Play game error:", error);
+      res.status(500).json({ error: "Failed to play game" });
+    }
+  });
+
+  // Legacy game recording endpoint (for skill games that don't need server-side outcomes)
   app.post("/api/sweeps/game", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const { gameType, currencyType, betAmount, multiplier, payout, profit, outcome } = req.body;
       
-      // Validate currency type
       if (currencyType !== "GC" && currencyType !== "SC") {
         return res.status(400).json({ error: "Invalid currency type" });
       }
       
-      // Deduct bet and add payout
       const balanceDelta = parseFloat(profit);
       const gcDelta = currencyType === "GC" ? balanceDelta.toString() : "0";
       const scDelta = currencyType === "SC" ? balanceDelta.toString() : "0";
       
       const newBalance = await storage.updateSweepsBalance(userId, gcDelta, scDelta);
       
-      // Record game history
       const game = await storage.recordSweepsGame({
         userId,
         gameType,
@@ -12442,6 +12749,108 @@ Current context:
     } catch (error) {
       console.error("Record game error:", error);
       res.status(500).json({ error: "Failed to record game" });
+    }
+  });
+
+  // Crash cashout endpoint
+  app.post("/api/sweeps/crash/cashout", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const { currencyType, betAmount, cashoutMultiplier } = req.body;
+      
+      const bet = parseFloat(betAmount);
+      const mult = parseFloat(cashoutMultiplier);
+      if (isNaN(bet) || isNaN(mult) || bet <= 0 || mult < 1) {
+        return res.status(400).json({ error: "Invalid cashout parameters" });
+      }
+      
+      const payout = bet * mult;
+      const profit = payout - bet;
+      const gcDelta = currencyType === "GC" ? profit.toString() : "0";
+      const scDelta = currencyType === "SC" ? profit.toString() : "0";
+      
+      const newBalance = await storage.updateSweepsBalance(userId, gcDelta, scDelta);
+      
+      await storage.recordSweepsGame({
+        userId,
+        gameType: "crash",
+        currencyType,
+        betAmount: bet.toString(),
+        multiplier: mult.toString(),
+        payout: payout.toString(),
+        profit: profit.toString(),
+        outcome: "win",
+      });
+      
+      res.json({
+        success: true,
+        payout,
+        profit,
+        newBalance: {
+          goldCoins: newBalance.goldCoins,
+          sweepsCoins: newBalance.sweepsCoins,
+        },
+      });
+    } catch (error) {
+      console.error("Crash cashout error:", error);
+      res.status(500).json({ error: "Failed to process cashout" });
+    }
+  });
+
+  // Minesweeper reveal/cashout endpoint
+  app.post("/api/sweeps/minesweeper/cashout", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const { currencyType, betAmount, tilesRevealed, mineCount, gridSize } = req.body;
+      
+      const bet = parseFloat(betAmount);
+      const tiles = parseInt(tilesRevealed);
+      const mines = parseInt(mineCount) || 5;
+      const grid = parseInt(gridSize) || 5;
+      const totalSafe = (grid * grid) - mines;
+      
+      if (isNaN(bet) || bet <= 0 || isNaN(tiles) || tiles <= 0) {
+        return res.status(400).json({ error: "Invalid parameters" });
+      }
+      
+      let multiplier = 1;
+      for (let i = 0; i < tiles; i++) {
+        multiplier *= (totalSafe - i) / ((grid * grid) - mines - i + (totalSafe - i));
+        multiplier = 1 / multiplier;
+      }
+      multiplier = Math.round(multiplier * 100) / 100;
+      
+      const payout = bet * multiplier;
+      const profit = payout - bet;
+      const gcDelta = currencyType === "GC" ? profit.toString() : "0";
+      const scDelta = currencyType === "SC" ? profit.toString() : "0";
+      
+      const newBalance = await storage.updateSweepsBalance(userId, gcDelta, scDelta);
+      
+      await storage.recordSweepsGame({
+        userId,
+        gameType: "minesweeper",
+        currencyType,
+        betAmount: bet.toString(),
+        multiplier: multiplier.toString(),
+        payout: payout.toString(),
+        profit: profit.toString(),
+        outcome: "win",
+      });
+      
+      res.json({
+        success: true,
+        multiplier,
+        payout,
+        profit,
+        newBalance: {
+          goldCoins: newBalance.goldCoins,
+          sweepsCoins: newBalance.sweepsCoins,
+        },
+      });
+    } catch (error) {
+      console.error("Minesweeper cashout error:", error);
+      res.status(500).json({ error: "Failed to process cashout" });
     }
   });
 

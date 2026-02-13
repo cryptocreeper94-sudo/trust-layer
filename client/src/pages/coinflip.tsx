@@ -157,16 +157,8 @@ export default function Coinflip() {
   const currentBalance = isDemo ? demoBalance : balance;
 
   const gameMutation = useMutation({
-    mutationFn: async (data: {
-      gameType: string;
-      currencyType: string;
-      betAmount: number;
-      multiplier: number;
-      payout: number;
-      profit: number;
-      outcome: string;
-    }) => {
-      const res = await apiRequest("POST", "/api/sweeps/game", data);
+    mutationFn: async (data: { gameType: string; currencyType: string; betAmount: number; choice: string }) => {
+      const res = await apiRequest("POST", "/api/sweeps/play", data);
       return res.json();
     },
     onSuccess: () => {
@@ -201,41 +193,59 @@ export default function Coinflip() {
     setLastResult(null);
     setShowWinParticles(false);
 
-    const result: "heads" | "tails" = Math.random() < 0.5 ? "heads" : "tails";
-    const won = result === choice;
-    const multiplier = won ? 1.96 : 0;
-    const payout = won ? betAmount * multiplier : 0;
-    const profit = payout - betAmount;
-
-    const flips = 5 + Math.floor(Math.random() * 3);
-    const finalRotation = flips * 360 + (result === "tails" ? 180 : 0);
-    
-    await coinControls.start({
-      rotateY: finalRotation,
-      transition: {
-        duration: 2.5,
-        ease: [0.2, 0.8, 0.2, 1],
-      },
-    });
-
-    setCurrentSide(result);
+    let result: "heads" | "tails";
+    let won: boolean;
+    let payout: number;
 
     if (isDemo) {
+      result = Math.random() < 0.5 ? "heads" : "tails";
+      won = result === choice;
+      const multiplier = won ? 1.96 : 0;
+      payout = won ? betAmount * multiplier : 0;
+      const profit = payout - betAmount;
+
+      const flips = 5 + Math.floor(Math.random() * 3);
+      const finalRotation = flips * 360 + (result === "tails" ? 180 : 0);
+
+      await coinControls.start({
+        rotateY: finalRotation,
+        transition: {
+          duration: 2.5,
+          ease: [0.2, 0.8, 0.2, 1],
+        },
+      });
+
+      setCurrentSide(result);
+
       setDemoBalance(prev => {
         const key = currencyType === "GC" ? "goldCoins" : "sweepsCoins";
         const newVal = parseFloat(prev[key]) + profit;
         return { ...prev, [key]: String(Math.max(0, newVal)) };
       });
     } else {
-      await gameMutation.mutateAsync({
+      const response = await gameMutation.mutateAsync({
         gameType: "coinflip",
         currencyType,
         betAmount,
-        multiplier,
-        payout,
-        profit,
-        outcome: won ? "win" : "loss",
+        choice,
       });
+
+      result = response.gameResult.result;
+      won = response.gameResult.won;
+      payout = won ? betAmount * 1.96 : 0;
+
+      const flips = 5 + Math.floor(Math.random() * 3);
+      const finalRotation = flips * 360 + (result === "tails" ? 180 : 0);
+
+      await coinControls.start({
+        rotateY: finalRotation,
+        transition: {
+          duration: 2.5,
+          ease: [0.2, 0.8, 0.2, 1],
+        },
+      });
+
+      setCurrentSide(result);
     }
 
     setRecentResults(prev => [result, ...prev.slice(0, RECENT_RESULTS_COUNT - 1)]);

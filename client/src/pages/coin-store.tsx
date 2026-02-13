@@ -37,6 +37,28 @@ export default function CoinStore() {
   const [purchaseDialogOpen, setPurchaseDialogOpen] = useState(false);
   const [amoeDialogOpen, setAmoeDialogOpen] = useState(false);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("success") === "true" && user) {
+      const packId = params.get("packId");
+      if (packId) {
+        queryClient.invalidateQueries({ queryKey: ["/api/sweeps/balance"] });
+        toast({
+          title: "Purchase Successful!",
+          description: "Your Gold Coins and bonus Sweeps Coins have been added to your account!",
+        });
+        window.history.replaceState({}, '', '/coin-store');
+      }
+    }
+    if (params.get("cancelled") === "true") {
+      toast({
+        title: "Purchase Cancelled",
+        description: "No charges were made.",
+      });
+      window.history.replaceState({}, '', '/coin-store');
+    }
+  }, [user]);
+
   const { data: packs = [] } = useQuery<CoinPack[]>({
     queryKey: ["/api/sweeps/packs"],
   });
@@ -52,13 +74,17 @@ export default function CoinStore() {
       return res.json();
     },
     onSuccess: (data: any) => {
-      queryClient.invalidateQueries({ queryKey: ["/api/sweeps/balance"] });
-      toast({
-        title: "Purchase Complete!",
-        description: `You received ${formatNumber(selectedPack?.goldCoins || "0")} GC + ${selectedPack?.bonusSc} FREE SC!`,
-      });
-      setPurchaseDialogOpen(false);
-      setSelectedPack(null);
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else {
+        queryClient.invalidateQueries({ queryKey: ["/api/sweeps/balance"] });
+        toast({
+          title: "Purchase Complete!",
+          description: `You received ${formatNumber(selectedPack?.goldCoins || "0")} GC + ${selectedPack?.bonusSc} FREE SC!`,
+        });
+        setPurchaseDialogOpen(false);
+        setSelectedPack(null);
+      }
     },
     onError: (error: any) => {
       toast({

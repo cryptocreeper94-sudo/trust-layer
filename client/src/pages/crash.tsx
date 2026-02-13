@@ -18,7 +18,14 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 import orbyFlying from "@assets/generated_images/orby_clean_mascot.png";
+
+interface SweepsBalance {
+  goldCoins: string;
+  sweepsCoins: string;
+}
 
 const MAX_MULTIPLIER = 5000;
 const HOUSE_EDGE = 0.015;
@@ -588,9 +595,40 @@ function PartialCashoutChips({ cashouts }: { cashouts: { multiplier: number; per
 export default function CrashGame() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const isConnected = !!user;
+  const isDemo = !user;
   const username = user?.firstName || user?.email?.split("@")[0] || "Player";
   
+  const [currencyType, setCurrencyType] = useState<"GC" | "SC">("GC");
+  
+  const { data: sweepsBalance } = useQuery<SweepsBalance>({
+    queryKey: ["/api/sweeps/balance"],
+    enabled: !!user,
+  });
+
+  const gameMutation = useMutation({
+    mutationFn: async (data: { gameType: string; currencyType: string; betAmount: number }) => {
+      const res = await apiRequest("POST", "/api/sweeps/play", data);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/sweeps/balance"] });
+    },
+  });
+
+  const cashoutMutation = useMutation({
+    mutationFn: async (data: { currencyType: string; betAmount: number; cashoutMultiplier: number }) => {
+      const res = await apiRequest("POST", "/api/sweeps/crash/cashout", data);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/sweeps/balance"] });
+    },
+  });
+
+  const serverCrashPointRef = useRef<number | null>(null);
+
   const [betAmount, setBetAmount] = useState("100");
   const [multiplier, setMultiplier] = useState(1.0);
   const [hasBet, setHasBet] = useState(false);
@@ -702,7 +740,12 @@ export default function CrashGame() {
         if (remaining <= 0) {
           isRunningRef.current = true;
           roundStartTimeRef.current = Date.now();
-          crashPointRef.current = generateCrashPoint();
+          if (serverCrashPointRef.current !== null) {
+            crashPointRef.current = serverCrashPointRef.current;
+            serverCrashPointRef.current = null;
+          } else {
+            crashPointRef.current = generateCrashPoint();
+          }
           
           setRoundStatus("running");
           setMultiplier(1.0);
@@ -776,7 +819,9 @@ export default function CrashGame() {
     setSecuredAmount(prev => prev + cashoutAmount);
     setRidingAmount(newRiding);
     setPartialCashouts(prev => [...prev, newCashout]);
-    setDemoBalance(prev => prev + cashoutAmount);
+    if (isDemo) {
+      setDemoBalance(prev => prev + cashoutAmount);
+    }
     
     if (myBetId) {
       setBets(prev => prev.map(b => 
@@ -810,7 +855,7 @@ export default function CrashGame() {
         description: "Remaining amount below minimum threshold",
       });
     }
-  }, [ridingAmount, cashedOut, lockedStake, currentTier, toast, myBetId]);
+  }, [ridingAmount, cashedOut, lockedStake, currentTier, toast, myBetId, isDemo]);
 
   useEffect(() => {
     if (roundStatus === "running" && hasBet && !cashedOut && lockedMode === "autoTP") {
@@ -820,7 +865,15 @@ export default function CrashGame() {
         setSecuredAmount(prev => prev + payout);
         setRidingAmount(0);
         setCashedOut(true);
-        setDemoBalance(prev => prev + payout);
+        if (isDemo) {
+          setDemoBalance(prev => prev + payout);
+        } else {
+          cashoutMutation.mutate({
+            currencyType,
+            betAmount: lockedStake,
+            cashoutMultiplier: target,
+          });
+        }
         
         if (myBetId) {
           setBets(prev => prev.map(b => 
@@ -847,7 +900,7 @@ export default function CrashGame() {
         });
       }
     }
-  }, [multiplier, roundStatus, hasBet, cashedOut, lockedMode, autoTPTarget, ridingAmount, toast, myBetId, currentTier]);
+  }, [multiplier, roundStatus, hasBet, cashedOut, lockedMode, autoTPTarget, ridingAmount, toast, myBetId, currentTier, isDemo, cashoutMutation, currencyType, lockedStake]);
 
   useEffect(() => {
     if (roundStatus === "running" && hasBet && !cashedOut && lockedMode === "autoProgressive" && nextAutoProgTrigger) {
@@ -874,7 +927,13 @@ export default function CrashGame() {
   }, [multiplier, roundStatus, hasBet, cashedOut, lockedMode, nextAutoProgTrigger, autoProgStep, autoProgInterval, executePartialCashout, myBetId]);
 
 
-  const placeBet = () => {
+  const getBalance = () => {
+    if (isDemo) return demoBalance;
+    if (!sweepsBalance) return 0;
+    return parseFloat(currencyType === "GC" ? sweepsBalance.goldCoins : sweepsBalance.sweepsCoins);
+  };
+
+  const placeBet = async () => {
     if (roundStatus !== "waiting" || hasBet) return;
     
     const amount = parseFloat(betAmount);
@@ -883,12 +942,34 @@ export default function CrashGame() {
       return;
     }
 
-    if (amount > demoBalance) {
+    const bal = getBalance();
+    if (amount > bal) {
       toast({ title: "Insufficient balance", variant: "destructive" });
       return;
     }
 
-    setDemoBalance(prev => prev - amount);
+    if (!isDemo) {
+      try {
+        const response = await gameMutation.mutateAsync({
+          gameType: "crash",
+          currencyType,
+          betAmount: amount,
+        });
+        const serverCrash = response?.gameResult?.crashPoint;
+        if (serverCrash && typeof serverCrash === "number") {
+          serverCrashPointRef.current = serverCrash;
+        }
+        if (response?.serverSeedHash) {
+          setServerSeedHash(response.serverSeedHash);
+        }
+      } catch (err: any) {
+        toast({ title: "Bet Failed", description: err?.message || "Server error", variant: "destructive" });
+        return;
+      }
+    } else {
+      setDemoBalance(prev => prev - amount);
+    }
+
     setTotalWagered(prev => prev + amount);
     setAirdropPool(prev => prev + amount * 0.01);
     setRidingAmount(amount);
@@ -949,10 +1030,10 @@ export default function CrashGame() {
       autoProgressive: `Auto Prog (${autoProgStep}% every ${autoProgInterval}%)`,
     }[betMode];
     
-    toast({ title: "Bet Placed!", description: `${amount} SIG - ${modeLabel}` });
+    toast({ title: "Bet Placed!", description: `${amount} ${isDemo ? "SIG" : currencyType} - ${modeLabel}` });
   };
 
-  const handleCashout = () => {
+  const handleCashout = async () => {
     if (cashedOut || roundStatus !== "running" || !hasBet) return;
     
     if (lockedMode === "progressive") {
@@ -961,10 +1042,24 @@ export default function CrashGame() {
       const payout = ridingAmount * (1 - HOUSE_EDGE);
       const cashoutMult = multiplier;
       
+      if (!isDemo) {
+        try {
+          await cashoutMutation.mutateAsync({
+            currencyType,
+            betAmount: lockedStake,
+            cashoutMultiplier: cashoutMult,
+          });
+        } catch (err: any) {
+          toast({ title: "Cashout Failed", description: err?.message || "Server error", variant: "destructive" });
+          return;
+        }
+      } else {
+        setDemoBalance(prev => prev + payout);
+      }
+      
       setSecuredAmount(prev => prev + payout);
       setRidingAmount(0);
       setCashedOut(true);
-      setDemoBalance(prev => prev + payout);
       
       if (myBetId) {
         setBets(prev => prev.map(b => 
@@ -987,20 +1082,35 @@ export default function CrashGame() {
       
       toast({
         title: "Cashed Out! 💰",
-        description: `+${payout.toFixed(2)} SIG at ${multiplier.toFixed(2)}x`,
+        description: `+${payout.toFixed(2)} ${isDemo ? "SIG" : currencyType} at ${multiplier.toFixed(2)}x`,
       });
     }
   };
 
-  const handleCashoutAll = () => {
+  const handleCashoutAll = async () => {
     if (cashedOut || roundStatus !== "running" || !hasBet || ridingAmount <= 0) return;
     
     const payout = ridingAmount * (1 - HOUSE_EDGE);
     const cashoutMult = multiplier;
+
+    if (!isDemo) {
+      try {
+        await cashoutMutation.mutateAsync({
+          currencyType,
+          betAmount: lockedStake,
+          cashoutMultiplier: cashoutMult,
+        });
+      } catch (err: any) {
+        toast({ title: "Cashout Failed", description: err?.message || "Server error", variant: "destructive" });
+        return;
+      }
+    } else {
+      setDemoBalance(prev => prev + payout);
+    }
+
     setSecuredAmount(prev => prev + payout);
     setRidingAmount(0);
     setCashedOut(true);
-    setDemoBalance(prev => prev + payout);
     
     if (myBetId) {
       setBets(prev => prev.map(b => 
@@ -1023,7 +1133,7 @@ export default function CrashGame() {
     
     toast({
       title: "Fully Cashed Out! 💰",
-      description: `+${payout.toFixed(2)} SIG at ${multiplier.toFixed(2)}x`,
+      description: `+${payout.toFixed(2)} ${isDemo ? "SIG" : currencyType} at ${multiplier.toFixed(2)}x`,
     });
   };
 
@@ -1043,8 +1153,10 @@ export default function CrashGame() {
 
   const claimRewards = () => {
     if (pendingRewards <= 0) return;
-    setDemoBalance(prev => prev + pendingRewards);
-    toast({ title: "Rewards Claimed!", description: `+${pendingRewards.toFixed(2)} SIG added to balance` });
+    if (isDemo) {
+      setDemoBalance(prev => prev + pendingRewards);
+    }
+    toast({ title: "Rewards Claimed!", description: `+${pendingRewards.toFixed(2)} ${isDemo ? "SIG" : currencyType} added to balance` });
     setPendingRewards(0);
   };
 
@@ -1094,7 +1206,9 @@ export default function CrashGame() {
               {bets.length} Players
             </Badge>
             <div className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30">
-              <span className="text-sm font-mono font-bold text-purple-400">{formatSIG(demoBalance)} SIG</span>
+              <span className="text-sm font-mono font-bold text-purple-400">
+                {isDemo ? `${formatSIG(demoBalance)} SIG` : `${formatSIG(getBalance())} ${currencyType}`}
+              </span>
             </div>
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setSoundEnabled(!soundEnabled)}>
               {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
@@ -1411,9 +1525,10 @@ export default function CrashGame() {
                         disabled={roundStatus !== "waiting" || hasBet}
                         onClick={() => {
                           const current = parseFloat(betAmount) || 0;
+                          const bal = getBalance();
                           if (btn === "½") setBetAmount(Math.max(1, current / 2).toFixed(0));
-                          if (btn === "2×") setBetAmount(Math.min(demoBalance, current * 2).toFixed(0));
-                          if (btn === "Max") setBetAmount(demoBalance.toFixed(0));
+                          if (btn === "2×") setBetAmount(Math.min(bal, current * 2).toFixed(0));
+                          if (btn === "Max") setBetAmount(Math.floor(bal).toFixed(0));
                         }}
                       >
                         {btn}
