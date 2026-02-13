@@ -137,7 +137,7 @@ import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
 import { blockchain } from "./blockchain-engine";
-import { sendEmail, sendApiKeyEmail, sendHallmarkEmail, sendPresaleConfirmationEmail, sendEmailVerificationCode, sendBusinessApprovalEmail, sendBusinessRejectionEmail } from "./email";
+import { sendEmail, sendApiKeyEmail, sendHallmarkEmail, sendPresaleConfirmationEmail, sendEmailVerificationCode, sendBusinessApprovalEmail, sendBusinessRejectionEmail, sendCrowdfundConfirmationEmail, sendSubscriptionActivatedEmail, sendSubscriptionRenewalEmail, sendGoldCoinPurchaseEmail, sendCreditsConfirmationEmail, sendGuardianCertificationEmail, sendDomainRegistrationEmail, sendOrbsPurchaseEmail, sendShellsPurchaseEmail, sendPaymentFailedEmail } from "./email";
 import { submitMemoToSolana, isHeliusConfigured, getSolanaTreasuryAddress, getSolanaBalance } from "./helius";
 import { startRegistration, finishRegistration, startAuthentication, finishAuthentication, getUserPasskeys, deletePasskey } from "./webauthn";
 import { bridge } from "./bridge-engine";
@@ -376,6 +376,12 @@ export async function registerRoutes(
             }
             
             console.log(`[Stripe Webhook] Presale recorded: ${customerEmail}, ${totalTokens} tokens from $${(amountCents/100).toFixed(2)}`);
+            
+            if (customerEmail) {
+              try {
+                await sendPresaleConfirmationEmail(customerEmail, (amountCents / 100).toFixed(2), tier, tokenAmount, bonusTokens);
+              } catch (emailErr) { console.error("[Stripe Webhook] Presale email error:", emailErr); }
+            }
           } catch (dbError) {
             console.error("[Stripe Webhook] DB error for presale:", dbError);
           }
@@ -397,6 +403,14 @@ export async function registerRoutes(
               `);
             }
             
+            if (customerEmail) {
+              try {
+                const donorName = session.customer_details?.name || metadata.name || "Supporter";
+                const crowdfundTier = metadata.tier || "Supporter";
+                await sendCrowdfundConfirmationEmail(customerEmail, (amountCents / 100).toFixed(2), crowdfundTier, donorName);
+              } catch (emailErr) { console.error("[Stripe Webhook] Crowdfund email error:", emailErr); }
+            }
+            
             console.log(`[Stripe Webhook] Crowdfund confirmed: ${metadata.contributionId}`);
           } catch (dbError) {
             console.error("[Stripe Webhook] DB error for crowdfund:", dbError);
@@ -412,6 +426,12 @@ export async function registerRoutes(
               paymentId as string
             );
             console.log(`[Stripe Webhook] Credits purchased: user=${metadata.userId}, credits=${result.creditsAdded}, balance=${result.newBalance}`);
+            
+            if (customerEmail) {
+              try {
+                await sendCreditsConfirmationEmail(customerEmail, result.creditsAdded, (amountCents / 100).toFixed(2), result.newBalance);
+              } catch (emailErr) { console.error("[Stripe Webhook] Credits email error:", emailErr); }
+            }
             
             // Process affiliate commission if user was referred
             try {
@@ -452,8 +472,28 @@ export async function registerRoutes(
               userId: metadata.userId || null,
             });
             console.log(`[Stripe Webhook] Guardian certification created: ${certification.id}, tier: ${metadata.tier}, project: ${metadata.projectName}`);
+            
+            const certEmail = customerEmail || metadata.contactEmail;
+            if (certEmail) {
+              try {
+                await sendGuardianCertificationEmail(certEmail, metadata.projectName || "Unknown Project", metadata.tier || "assurance_lite", (amountCents / 100).toFixed(2), String(certification.id));
+              } catch (emailErr) { console.error("[Stripe Webhook] Guardian cert email error:", emailErr); }
+            }
           } catch (dbError) {
             console.error("[Stripe Webhook] DB error for Guardian certification:", dbError);
+          }
+        }
+        
+        // Handle Orbs purchases
+        if (metadata.type === "orbs_purchase" && customerEmail) {
+          try {
+            const orbsAmount = parseInt(metadata.orbsAmount || "0");
+            if (orbsAmount > 0) {
+              await sendOrbsPurchaseEmail(customerEmail, orbsAmount, (amountCents / 100).toFixed(2));
+              console.log(`[Stripe Webhook] Orbs purchase email sent: ${customerEmail}, ${orbsAmount} orbs`);
+            }
+          } catch (emailErr) {
+            console.error("[Stripe Webhook] Orbs email error:", emailErr);
           }
         }
         
@@ -513,6 +553,13 @@ export async function registerRoutes(
             );
             
             console.log(`[Stripe Webhook] Subscription activated: user=${userId}, plan=${plan}, cycle=${billingCycle}, price=${priceAmount}`);
+            
+            if (customerEmail) {
+              try {
+                const nextDate = subData.current_period_end ? new Date(subData.current_period_end * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : undefined;
+                await sendSubscriptionActivatedEmail(customerEmail, plan, billingCycle || 'monthly', (priceAmount / 100).toFixed(2), nextDate);
+              } catch (emailErr) { console.error("[Stripe Webhook] Subscription email error:", emailErr); }
+            }
           } catch (subErr) {
             console.error("[Stripe Webhook] Subscription activation error:", subErr);
           }
@@ -555,6 +602,15 @@ export async function registerRoutes(
           try {
             await subscriptionService.markPastDue(invoice.subscription as string);
             console.log(`[Stripe Webhook] Subscription marked past_due: ${invoice.subscription}`);
+            
+            const failedEmail = invoice.customer_email;
+            if (failedEmail) {
+              try {
+                const sub = await subscriptionService.getByStripeSubscriptionId(invoice.subscription as string);
+                const failedAmount = invoice.amount_due ? (invoice.amount_due / 100).toFixed(2) : "0.00";
+                await sendPaymentFailedEmail(failedEmail, sub?.plan || "subscription", failedAmount);
+              } catch (emailErr) { console.error("[Stripe Webhook] Payment failed email error:", emailErr); }
+            }
           } catch (err) {
             console.error("[Stripe Webhook] Payment failed handling error:", err);
           }
@@ -576,6 +632,16 @@ export async function registerRoutes(
               new Date(subscription.current_period_end * 1000)
             );
             console.log(`[Stripe Webhook] Subscription renewed via invoice: ${subscription.id}`);
+            
+            const renewalEmail = invoice.customer_email;
+            if (renewalEmail) {
+              try {
+                const sub = await subscriptionService.getByStripeSubscriptionId(subscription.id);
+                const renewAmount = invoice.amount_paid ? (invoice.amount_paid / 100).toFixed(2) : "0.00";
+                const nextDate = subscription.current_period_end ? new Date(subscription.current_period_end * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : "N/A";
+                await sendSubscriptionRenewalEmail(renewalEmail, sub?.plan || "subscription", renewAmount, nextDate);
+              } catch (emailErr) { console.error("[Stripe Webhook] Renewal email error:", emailErr); }
+            }
           } catch (err) {
             console.error("[Stripe Webhook] Invoice paid handling error:", err);
           }
@@ -9097,6 +9163,15 @@ const { trustLayerId } = await response.json();`
         telegram: data.telegram,
       });
       
+      if (data.email) {
+        try {
+          const domainTier = pricing.isPremium ? "Premium" : (data.name.length <= 5 ? "Standard" : "Basic");
+          const isLifetimePurchase = data.ownershipType === "lifetime" || isOwnerBypass;
+          const paidAmount = totalPrice > 0 ? (totalPrice / 100).toFixed(2) : "0.00";
+          await sendDomainRegistrationEmail(data.email, data.name, domainTier, paidAmount, isLifetimePurchase);
+        } catch (emailErr) { console.error("[Domain] Registration email error:", emailErr); }
+      }
+      
       res.json({
         success: true,
         domain,
@@ -12352,6 +12427,13 @@ Current context:
         goldCoinsAmount: "0",
         description: `FREE SC with ${pack.name} purchase`,
       });
+      
+      const gcEmail = session.customer_details?.email || session.customer_email;
+      if (gcEmail) {
+        try {
+          await sendGoldCoinPurchaseEmail(gcEmail, parseInt(pack.goldCoins), parseInt(pack.bonusSc), pack.priceUsd);
+        } catch (emailErr) { console.error("[Sweeps] GC purchase email error:", emailErr); }
+      }
       
       res.json({
         success: true,
@@ -19926,6 +20008,14 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       } catch (receiptError) {
         console.error("Failed to record purchase receipt:", receiptError);
         // Don't fail the transaction if receipt recording fails
+      }
+      
+      const shellEmail = session.customer_details?.email || session.customer_email;
+      if (shellEmail) {
+        try {
+          const amountPaid = session.amount_total ? (session.amount_total / 100).toFixed(2) : "0.00";
+          await sendShellsPurchaseEmail(shellEmail, shellAmount, amountPaid, balance?.totalShells || shellAmount);
+        } catch (emailErr) { console.error("[Shells] Purchase email error:", emailErr); }
       }
       
       res.json({ 
