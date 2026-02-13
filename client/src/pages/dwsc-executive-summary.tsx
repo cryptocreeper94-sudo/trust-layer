@@ -49,7 +49,6 @@ import dexImg from "@assets/generated_images/dex_token_swap_exchange.png";
 import nftImg from "@assets/generated_images/nft_marketplace_gallery.png";
 import bridgeImg from "@assets/generated_images/cross-chain_bridge_portal.png";
 import validatorImg from "@assets/generated_images/validator_network_servers.png";
-import arcadeImg from "@assets/generated_images/blockchain_arcade_games.png";
 import explorerImg from "@assets/generated_images/block_explorer_dashboard.png";
 import presaleImg from "@assets/generated_images/token_presale_investment.png";
 import subscriptionImg from "@assets/generated_images/premium_subscription_tiers.png";
@@ -57,6 +56,9 @@ import aiNftImg from "@assets/generated_images/ai_nft_art_generator.png";
 import developerImg from "@assets/generated_images/developer_portal_apis.png";
 import referralImg from "@assets/generated_images/referral_rewards_program.png";
 import liquidStakingImg from "@assets/generated_images/liquid_staking_rewards.png";
+import theArcadeImg from "@assets/Screenshot_20260213_013103_Chrome_1770968118325.jpg";
+import trustHomeImg from "@assets/generated_images/trusthome_real_estate_platform.png";
+import trustVaultImg from "@assets/generated_images/trustvault_secure_storage.png";
 
 export default function DWSCExecutiveSummary() {
   const [showGamesModal, setShowGamesModal] = useState(false);
@@ -311,7 +313,9 @@ export default function DWSCExecutiveSummary() {
                   { title: "NFT Marketplace", desc: "Create, buy, sell NFTs. 2.5% transaction fees. Built-in rarity analyzer and collection tools.", img: nftImg, href: "/nft-marketplace", domain: "dwsc.io" },
                   { title: "Cross-Chain Bridge", desc: "Lock & mint SIG ↔ wSIG. Ethereum Sepolia and Solana Devnet bridges live.", img: bridgeImg, href: "/bridge", domain: "dwsc.io" },
                   { title: "Validator Network", desc: "Become a network validator. 10,000 SIG airdrop for founders, longevity bonuses, governance rights.", img: validatorImg, href: "/validators", domain: "dwsc.io" },
-                  { title: "Arcade Games", desc: "Provably fair blockchain games: Slots, Crash, Coinflip, Dice. Transparent odds, instant payouts.", img: arcadeImg, href: "#", comingSoon: true, domain: "darkwavegames.io" },
+                  { title: "The Arcade", desc: "Premium sweepstakes casino & free arcade classics. Dragon's Fortune, Orbit Crash, Royal Coinflip, retro games and more. Dual-currency legal gaming.", img: theArcadeImg, href: "/games-home", domain: "darkwavegames.io" },
+                  { title: "TrustHome", desc: "White-label real estate platform with blockchain-verified trust scoring. Property listings, agent verification, and transparent transaction history.", img: trustHomeImg, href: "#", comingSoon: true, domain: "trusthome.replit.app" },
+                  { title: "TrustVault", desc: "Secure digital asset vault with blockchain encryption. Store documents, credentials, and sensitive data with verified access controls and audit trails.", img: trustVaultImg, href: "#", comingSoon: true, domain: "trustvault.replit.app" },
                   { title: "AI NFT Generator", desc: "Describe your vision, AI generates unique artwork, mint directly as NFT on the Trust Layer.", img: aiNftImg, href: "/ai-nft-generator", domain: "dwsc.io" },
                   { title: "Developer Portal", desc: "Full APIs, SDKs, webhooks, testnet faucet. Complete documentation for building on Trust Layer.", img: developerImg, href: "/developers", domain: "dwsc.io" },
                   { title: "Block Explorer", desc: "Real-time blockchain data. Transaction history, network stats, validator monitoring.", img: explorerImg, href: "/explorer", domain: "dwsc.io" },
