@@ -55,26 +55,36 @@ const JOURNEY_CHAPTERS: JourneyChapter[] = [
     href: "/chronicles/estate"
   },
   {
+    id: "world",
+    title: "Chapter 3: Your World",
+    subtitle: "Live Your Parallel Life",
+    status: "current",
+    season: "Season Zero",
+    description: "Step into your world. Face real situations, meet real people, align with communities that share your values.",
+    icon: Compass,
+    href: "/chronicles/world"
+  },
+  {
     id: "connections",
-    title: "Chapter 3: Connections",
-    subtitle: "Meet Your Companions",
+    title: "Chapter 4: Connections",
+    subtitle: "Build Relationships",
     status: "locked",
     season: "Season One",
-    description: "Form bonds with AI companions who remember you and grow alongside your journey.",
+    description: "Deepen bonds with people who remember you and shape your world alongside you.",
     icon: Users
   },
   {
     id: "exploration",
-    title: "Chapter 4: Exploration",
-    subtitle: "Venture Into The Eras",
+    title: "Chapter 5: New Eras",
+    subtitle: "Unlock More Timelines",
     status: "locked",
     season: "Season One",
-    description: "Step through history itself. 10 verifiable historical eras await your presence.",
-    icon: Compass
+    description: "Your participation unlocks Medieval and Wild West eras — each with its own world, people, and communities.",
+    icon: Map
   },
   {
     id: "legacy",
-    title: "Chapter 5: Legacy",
+    title: "Chapter 6: Legacy",
     subtitle: "Leave Your Mark",
     status: "locked",
     season: "Season Two",
@@ -84,7 +94,7 @@ const JOURNEY_CHAPTERS: JourneyChapter[] = [
 ];
 
 const UPCOMING_FEATURES = [
-  { id: "quests", title: "Daily & Weekly Quests", season: "Season 1", icon: Trophy },
+  { id: "situations", title: "Dynamic World Events", season: "Season 1", icon: Trophy },
   { id: "careers", title: "Career Paths", season: "Season 1", icon: Briefcase },
   { id: "marriage", title: "Marriage System", season: "Season 1", icon: Heart },
   { id: "eras", title: "New Eras (Roman, Medieval)", season: "Season 1", icon: Compass },
