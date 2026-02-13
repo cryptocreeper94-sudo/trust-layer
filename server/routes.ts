@@ -132,7 +132,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and, gte } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes, businessApplications, limitOrders, insertLimitOrderSchema, chatChannels } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes, businessApplications, limitOrders, insertLimitOrderSchema, chatChannels, ecosystemAffiliates, ecosystemReferrals, ecosystemRewardsLedger } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -21342,6 +21342,329 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error) {
       console.error("Game design doc error:", error);
       res.status(500).json({ error: "Failed to fetch game design document" });
+    }
+  });
+
+  // =====================================================
+  // ECOSYSTEM AFFILIATE SYSTEM - Cross-Platform Integration
+  // Trust Layer <-> TL Driver Connect <-> Happy Eats
+  // =====================================================
+
+  function generateEcosystemAffiliateId(): string {
+    const timestamp = Date.now().toString(36);
+    const random = crypto.randomBytes(4).toString("hex");
+    return `tl-${timestamp}-${random}`;
+  }
+
+  const ECOSYSTEM_AFFILIATE_ID_REGEX = /^(tldc|he|tl)-[a-z0-9]+-[a-f0-9]{8}$/;
+
+  const HANDOFF_SPEC = {
+    handoff_version: "2.0",
+    last_updated: "2026-02-13",
+    purpose: "Complete integration specification for Trust Layer (dwtl.io) to recognize, track, and sync affiliate activity originating from TL Driver Connect and Happy Eats platforms.",
+    overview: {
+      summary: "TL Driver Connect and Happy Eats run a vendor-focused affiliate referral program. Affiliates earn a $20 one-time bonus for each food truck vendor they refer who becomes active on the platform, PLUS an ongoing percentage of that vendor's total order revenue — forever. Trust Layer affiliate IDs (tl- prefix) are fully recognized across both platforms.",
+      platforms: [
+        { name: "TL Driver Connect", domain: "tldc", description: "Nationwide driver services platform — food delivery, parts, concierge, expense tracking, entertainment" },
+        { name: "Happy Eats", domain: "he", description: "Food truck ordering platform — zone-based batch ordering in Nashville I-24 Corridor with 11 AM cutoff" },
+        { name: "Trust Layer", domain: "tl", description: "Parent ecosystem at dwtl.io — affiliate hub, staffing, financial services" }
+      ],
+      business_model: "Happy Eats charges a 15% platform fee on all vendor orders. Affiliate revenue share comes out of this 15% fee, not from the vendor or customer."
+    },
+    affiliate_id_system: {
+      format: "{prefix}{base36-timestamp}-{8-char-hex-random}",
+      prefixes: { "tldc-": "Generated by TL Driver Connect", "he-": "Generated by Happy Eats", "tl-": "Generated by Trust Layer (dwtl.io)" },
+      validation_regex: "^(tldc|he|tl)-[a-z0-9]+-[a-f0-9]{8}$",
+      cross_platform_recognition: "When a tl- prefixed ID is used on TL Driver Connect or Happy Eats, the system recognizes it as a Trust Layer affiliate and creates a local affiliate record linked to that ID."
+    },
+    reward_structure: {
+      one_time_bonus: { amount_cents: 2000, amount_display: "$20.00", description: "Flat $20 bonus per qualified vendor referral." },
+      ongoing_revenue_share: {
+        basis: "Calculated on the vendor's total customer order value.",
+        tiers: [
+          { tier_name: "Starter", qualified_referrals: "1-9", percentage: 1, description: "1% of total order revenue from all referred vendors" },
+          { tier_name: "Builder", qualified_referrals: "10+", percentage: 2, description: "2% of total order revenue from all referred vendors" }
+        ],
+        tier_upgrade_note: "When an affiliate crosses from 9 to 10 qualified referrals, ALL their referred vendors move to the 2% rate."
+      }
+    },
+    activation_requirements: {
+      conditions: [
+        { rule: "Time active", value: "14 days minimum" },
+        { rule: "Order revenue", value: "$100 minimum in fulfilled customer orders" }
+      ],
+      reward_status_flow: { held: "Created immediately when vendor signs up.", pending: "Unlocked after vendor meets both activation conditions.", paid: "Affiliate has received payout." }
+    },
+    payout_system: {
+      minimum_cents: 2000,
+      minimum_display: "$20.00",
+      includes: "Payout balance includes BOTH one-time bonuses and accumulated ongoing revenue share."
+    },
+    api_endpoints: {
+      format_spec: { method: "GET", url: "/api/affiliates/format-spec", auth: "None" },
+      register: { method: "POST", url: "/api/affiliates/register", auth: "None" },
+      dashboard: { method: "GET", url: "/api/affiliates/:trustLayerId/dashboard", auth: "Affiliate ID in URL" },
+      create_referral: { method: "POST", url: "/api/affiliates/referrals", auth: "Internal" },
+      activate_referral: { method: "POST", url: "/api/affiliates/referrals/:id/activate", auth: "Internal" },
+      handoff_spec: { method: "GET", url: "/api/affiliates/trust-layer-handoff", auth: "None" }
+    }
+  };
+
+  app.get("/api/affiliates/trust-layer-handoff", async (_req: Request, res: Response) => {
+    res.json(HANDOFF_SPEC);
+  });
+
+  app.get("/api/affiliates/format-spec", async (_req: Request, res: Response) => {
+    res.json({
+      affiliate_id: {
+        format: "{prefix}{base36-timestamp}-{8-char-hex-random}",
+        prefixes: { "tldc-": "TL Driver Connect", "he-": "Happy Eats", "tl-": "Trust Layer" },
+        examples: ["tldc-m1abc2d-3e4f5a6b", "he-m1abc2d-3e4f5a6b", "tl-m1abc2d-3e4f5a6b"],
+        validation_regex: "^(tldc|he|tl)-[a-z0-9]+-[a-f0-9]{8}$"
+      },
+      reward_structure: {
+        one_time_bonus: { amount_cents: 2000, description: "$20 per qualified vendor referral" },
+        revenue_share_tiers: [
+          { tier: "Starter", qualified_referrals: "1-9", percentage: 1 },
+          { tier: "Builder", qualified_referrals: "10+", percentage: 2 }
+        ]
+      },
+      activation_rules: {
+        min_days_active: 14,
+        min_revenue_cents: 10000,
+        description: "Vendor must be active 14+ days AND generate $100+ in fulfilled orders."
+      },
+      payout: {
+        minimum_cents: 2000,
+        cashout_tiers: [
+          { amount_cents: 2000, label: "Minimum — 1 qualified referral" },
+          { amount_cents: 10000, label: "Standard — network builder" },
+          { amount_cents: 20000, label: "Builder — serious referrers" }
+        ]
+      }
+    });
+  });
+
+  app.post("/api/affiliates/register", async (req: Request, res: Response) => {
+    try {
+      const { trustLayerId, name, email, phone, source } = req.body;
+
+      if (!name || typeof name !== "string") {
+        return res.status(400).json({ error: "Name is required" });
+      }
+
+      let affiliateId = trustLayerId;
+      if (!affiliateId) {
+        affiliateId = generateEcosystemAffiliateId();
+      }
+
+      if (!ECOSYSTEM_AFFILIATE_ID_REGEX.test(affiliateId)) {
+        return res.status(400).json({ error: "Invalid affiliate ID format. Must match: ^(tldc|he|tl)-[a-z0-9]+-[a-f0-9]{8}$" });
+      }
+
+      const existing = await db.select().from(ecosystemAffiliates)
+        .where(eq(ecosystemAffiliates.trustLayerId, affiliateId)).limit(1);
+      if (existing.length > 0) {
+        return res.status(409).json({ error: "Affiliate ID already registered", affiliate: existing[0] });
+      }
+
+      const [affiliate] = await db.insert(ecosystemAffiliates).values({
+        trustLayerId: affiliateId,
+        name: name.trim(),
+        email: email?.trim() || null,
+        phone: phone?.trim() || null,
+        source: source || affiliateId.split("-")[0],
+        status: "active",
+      }).returning();
+
+      res.status(201).json({ affiliate });
+    } catch (error) {
+      console.error("Affiliate register error:", error);
+      res.status(500).json({ error: "Failed to register affiliate" });
+    }
+  });
+
+  app.get("/api/affiliates/:trustLayerId/dashboard", async (req: Request, res: Response) => {
+    try {
+      const { trustLayerId } = req.params;
+
+      if (!ECOSYSTEM_AFFILIATE_ID_REGEX.test(trustLayerId)) {
+        return res.status(400).json({ error: "Invalid affiliate ID format" });
+      }
+
+      const [affiliate] = await db.select().from(ecosystemAffiliates)
+        .where(eq(ecosystemAffiliates.trustLayerId, trustLayerId)).limit(1);
+
+      if (!affiliate) {
+        return res.status(404).json({ error: "Affiliate not found" });
+      }
+
+      const referralsList = await db.select().from(ecosystemReferrals)
+        .where(eq(ecosystemReferrals.affiliateId, affiliate.id))
+        .orderBy(desc(ecosystemReferrals.createdAt));
+
+      const rewards = await db.select().from(ecosystemRewardsLedger)
+        .where(eq(ecosystemRewardsLedger.affiliateId, affiliate.id))
+        .orderBy(desc(ecosystemRewardsLedger.createdAt));
+
+      const qualifiedCount = affiliate.qualifiedReferrals;
+      const currentTier = qualifiedCount >= 10 ? "Builder" : "Starter";
+      const revenueSharePercent = qualifiedCount >= 10 ? 2 : 1;
+
+      const heldRewards = rewards.filter(r => r.status === "held");
+      const pendingRewards = rewards.filter(r => r.status === "pending");
+      const paidRewards = rewards.filter(r => r.status === "paid");
+
+      res.json({
+        affiliate: {
+          id: affiliate.id,
+          trustLayerId: affiliate.trustLayerId,
+          name: affiliate.name,
+          email: affiliate.email,
+          source: affiliate.source,
+          status: affiliate.status,
+          verified: affiliate.verified,
+          createdAt: affiliate.createdAt,
+        },
+        stats: {
+          totalReferrals: affiliate.totalReferrals,
+          qualifiedReferrals: affiliate.qualifiedReferrals,
+          currentTier,
+          revenueSharePercent,
+          nextTierAt: qualifiedCount < 10 ? 10 : null,
+          totalEarningsCents: affiliate.totalEarningsCents,
+          pendingBalanceCents: affiliate.pendingBalanceCents,
+          paidBalanceCents: affiliate.paidBalanceCents,
+          availableForPayout: affiliate.pendingBalanceCents >= 2000,
+        },
+        referrals: referralsList.map(r => ({
+          id: r.id,
+          referredName: r.referredName,
+          referredType: r.referredType,
+          platform: r.platform,
+          status: r.status,
+          daysActive: r.daysActive,
+          revenueGeneratedCents: r.revenueGeneratedCents,
+          activatedAt: r.activatedAt,
+          createdAt: r.createdAt,
+        })),
+        rewards: {
+          held: heldRewards,
+          pending: pendingRewards,
+          paid: paidRewards,
+          summary: {
+            heldCents: heldRewards.reduce((s, r) => s + r.amountCents, 0),
+            pendingCents: pendingRewards.reduce((s, r) => s + r.amountCents, 0),
+            paidCents: paidRewards.reduce((s, r) => s + r.amountCents, 0),
+          }
+        }
+      });
+    } catch (error) {
+      console.error("Affiliate dashboard error:", error);
+      res.status(500).json({ error: "Failed to fetch affiliate dashboard" });
+    }
+  });
+
+  app.post("/api/affiliates/referrals", async (req: Request, res: Response) => {
+    try {
+      const { affiliateId, referredType, referredName, referredEmail, referredEntityId, platform } = req.body;
+
+      if (!affiliateId || !referredName) {
+        return res.status(400).json({ error: "affiliateId and referredName are required" });
+      }
+
+      const [affiliate] = await db.select().from(ecosystemAffiliates)
+        .where(eq(ecosystemAffiliates.id, affiliateId)).limit(1);
+
+      if (!affiliate) {
+        return res.status(404).json({ error: "Affiliate not found" });
+      }
+
+      const [referral] = await db.insert(ecosystemReferrals).values({
+        affiliateId,
+        referredType: referredType || "vendor",
+        referredName: referredName.trim(),
+        referredEmail: referredEmail?.trim() || null,
+        referredEntityId: referredEntityId || null,
+        platform: platform || "tl",
+        status: "pending",
+      }).returning();
+
+      const [reward] = await db.insert(ecosystemRewardsLedger).values({
+        affiliateId,
+        referralId: referral.id,
+        type: "vendor_referral",
+        amountCents: 2000,
+        description: `$20 one-time bonus for referring ${referredName}`,
+        status: "held",
+      }).returning();
+
+      await db.update(ecosystemAffiliates)
+        .set({ totalReferrals: sql`${ecosystemAffiliates.totalReferrals} + 1`, updatedAt: new Date() })
+        .where(eq(ecosystemAffiliates.id, affiliateId));
+
+      res.status(201).json({ referral, reward });
+    } catch (error) {
+      console.error("Create referral error:", error);
+      res.status(500).json({ error: "Failed to create referral" });
+    }
+  });
+
+  app.post("/api/affiliates/referrals/:id/activate", async (req: Request, res: Response) => {
+    try {
+      const referralId = parseInt(req.params.id);
+      if (isNaN(referralId)) {
+        return res.status(400).json({ error: "Invalid referral ID" });
+      }
+
+      const [referral] = await db.select().from(ecosystemReferrals)
+        .where(eq(ecosystemReferrals.id, referralId)).limit(1);
+
+      if (!referral) {
+        return res.status(404).json({ error: "Referral not found" });
+      }
+
+      if (referral.status === "active") {
+        return res.status(400).json({ error: "Referral is already activated" });
+      }
+
+      await db.update(ecosystemReferrals)
+        .set({ status: "active", activatedAt: new Date() })
+        .where(eq(ecosystemReferrals.id, referralId));
+
+      await db.update(ecosystemRewardsLedger)
+        .set({ status: "pending" })
+        .where(and(
+          eq(ecosystemRewardsLedger.referralId, referralId),
+          eq(ecosystemRewardsLedger.status, "held")
+        ));
+
+      const [affiliate] = await db.select().from(ecosystemAffiliates)
+        .where(eq(ecosystemAffiliates.id, referral.affiliateId)).limit(1);
+
+      const newQualified = (affiliate?.qualifiedReferrals || 0) + 1;
+
+      await db.update(ecosystemAffiliates)
+        .set({
+          qualifiedReferrals: newQualified,
+          totalEarningsCents: sql`${ecosystemAffiliates.totalEarningsCents} + 2000`,
+          pendingBalanceCents: sql`${ecosystemAffiliates.pendingBalanceCents} + 2000`,
+          updatedAt: new Date(),
+        })
+        .where(eq(ecosystemAffiliates.id, referral.affiliateId));
+
+      res.json({
+        message: "Referral activated successfully",
+        referralId,
+        affiliateId: referral.affiliateId,
+        newQualifiedCount: newQualified,
+        currentTier: newQualified >= 10 ? "Builder" : "Starter",
+        revenueSharePercent: newQualified >= 10 ? 2 : 1,
+        bonusUnlocked: 2000,
+      });
+    } catch (error) {
+      console.error("Activate referral error:", error);
+      res.status(500).json({ error: "Failed to activate referral" });
     }
   });
 

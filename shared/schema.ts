@@ -3971,6 +3971,91 @@ export const insertAffiliateProfileSchema = createInsertSchema(affiliateProfiles
 export type AffiliateProfile = typeof affiliateProfiles.$inferSelect;
 export type InsertAffiliateProfile = z.infer<typeof insertAffiliateProfileSchema>;
 
+// =====================================================
+// ECOSYSTEM AFFILIATE SYSTEM - Cross-Platform Integration
+// Unified affiliate tracking for Trust Layer, TL Driver Connect, Happy Eats
+// =====================================================
+
+export const ecosystemAffiliates = pgTable("ecosystem_affiliates", {
+  id: serial("id").primaryKey(),
+  trustLayerId: text("trust_layer_id").notNull().unique(),
+  name: text("name").notNull(),
+  email: text("email"),
+  phone: text("phone"),
+  source: text("source").notNull().default("tl"),
+  verified: boolean("verified").notNull().default(false),
+  totalReferrals: integer("total_referrals").notNull().default(0),
+  qualifiedReferrals: integer("qualified_referrals").notNull().default(0),
+  totalEarningsCents: integer("total_earnings_cents").notNull().default(0),
+  pendingBalanceCents: integer("pending_balance_cents").notNull().default(0),
+  paidBalanceCents: integer("paid_balance_cents").notNull().default(0),
+  status: text("status").notNull().default("active"),
+  userId: text("user_id"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertEcosystemAffiliateSchema = createInsertSchema(ecosystemAffiliates).omit({
+  id: true,
+  totalReferrals: true,
+  qualifiedReferrals: true,
+  totalEarningsCents: true,
+  pendingBalanceCents: true,
+  paidBalanceCents: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type EcosystemAffiliate = typeof ecosystemAffiliates.$inferSelect;
+export type InsertEcosystemAffiliate = z.infer<typeof insertEcosystemAffiliateSchema>;
+
+export const ecosystemReferrals = pgTable("ecosystem_referrals", {
+  id: serial("id").primaryKey(),
+  affiliateId: integer("affiliate_id").notNull().references(() => ecosystemAffiliates.id),
+  referredType: text("referred_type").notNull().default("vendor"),
+  referredName: text("referred_name").notNull(),
+  referredEmail: text("referred_email"),
+  referredEntityId: integer("referred_entity_id"),
+  platform: text("platform").notNull().default("tl"),
+  status: text("status").notNull().default("pending"),
+  activatedAt: timestamp("activated_at"),
+  daysActive: integer("days_active").notNull().default(0),
+  revenueGeneratedCents: integer("revenue_generated_cents").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertEcosystemReferralSchema = createInsertSchema(ecosystemReferrals).omit({
+  id: true,
+  activatedAt: true,
+  daysActive: true,
+  revenueGeneratedCents: true,
+  createdAt: true,
+});
+
+export type EcosystemReferral = typeof ecosystemReferrals.$inferSelect;
+export type InsertEcosystemReferral = z.infer<typeof insertEcosystemReferralSchema>;
+
+export const ecosystemRewardsLedger = pgTable("ecosystem_rewards_ledger", {
+  id: serial("id").primaryKey(),
+  affiliateId: integer("affiliate_id").notNull().references(() => ecosystemAffiliates.id),
+  referralId: integer("referral_id").references(() => ecosystemReferrals.id),
+  type: text("type").notNull(),
+  amountCents: integer("amount_cents").notNull(),
+  description: text("description").notNull(),
+  status: text("status").notNull().default("held"),
+  paidAt: timestamp("paid_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertEcosystemRewardSchema = createInsertSchema(ecosystemRewardsLedger).omit({
+  id: true,
+  paidAt: true,
+  createdAt: true,
+});
+
+export type EcosystemReward = typeof ecosystemRewardsLedger.$inferSelect;
+export type InsertEcosystemReward = z.infer<typeof insertEcosystemRewardSchema>;
+
 // Fraud Flags - Soft indicators for suspicious activity
 export const fraudFlags = pgTable("fraud_flags", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
