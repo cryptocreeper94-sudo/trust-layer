@@ -56,8 +56,8 @@ import developerImg from "@assets/generated_images/developer_portal_apis.png";
 import referralImg from "@assets/generated_images/referral_rewards_program.png";
 import liquidStakingImg from "@assets/generated_images/liquid_staking_rewards.png";
 import theArcadeImg from "@assets/Screenshot_20260213_013103_Chrome_1770968118325.jpg";
-import trustHomeImg from "@assets/generated_images/trusthome_real_estate_platform.png";
-import trustVaultImg from "@assets/generated_images/trustvault_secure_storage.png";
+import trustHomeImg from "@assets/generated_images/trust_network_connecting_everything.png";
+import trustVaultImg from "@assets/generated_images/guardian_security_shield_logo.png";
 import trustShieldImg from "@assets/Screenshot_20260213_013718_Chrome_1770968308695.jpg";
 
 export default function DWSCExecutiveSummary() {
