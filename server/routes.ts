@@ -154,6 +154,7 @@ import { communityHubService } from "./community-hub-service";
 import { walletBotService } from "./wallet-bot-service";
 import { broadcastToChannel } from "./chat-presence";
 import { pulseClient } from "./pulse-client";
+import { strikeAgentTrackingService } from "./services/pulse/strikeAgentTrackingService";
 import { registerObjectStorageRoutes } from "./replit_integrations/object_storage";
 import { shellsService, SHELL_PACKAGES, SHELL_BUNDLES, SHELL_EARN_RATES, SHELL_COSTS, DWC_CONVERSION_RATE, DWC_LAUNCH_DATE } from "./shells-service";
 import { needsService } from "./needs-service";
@@ -7254,6 +7255,42 @@ const { trustLayerId } = await response.json();`
     } catch (error: any) {
       console.error("Error fetching Strike Agent recommendations:", error);
       res.status(500).json({ error: "Failed to fetch recommendations" });
+    }
+  });
+
+  app.post("/api/pulse/strike-agent/log-trade", pulseDataRateLimit, isAuthenticated, async (req: any, res) => {
+    try {
+      const { tokenAddress, tokenSymbol, tokenName, dex, chain, priceUsd, priceSol, marketCapUsd, liquidityUsd, tokenAgeMinutes, aiRecommendation, aiScore, aiReasoning } = req.body;
+      if (!tokenAddress || !tokenSymbol || !aiRecommendation) {
+        return res.status(400).json({ error: "Missing required fields: tokenAddress, tokenSymbol, aiRecommendation" });
+      }
+      const parsedPrice = parseFloat(priceUsd);
+      const parsedScore = parseInt(aiScore);
+      if (isNaN(parsedPrice) || parsedPrice <= 0 || isNaN(parsedScore)) {
+        return res.status(400).json({ error: "Invalid priceUsd or aiScore values" });
+      }
+      const parsedMarketCap = marketCapUsd ? parseFloat(marketCapUsd) : undefined;
+      const parsedLiquidity = liquidityUsd ? parseFloat(liquidityUsd) : undefined;
+      const result = await strikeAgentTrackingService.logPrediction({
+        tokenAddress,
+        tokenSymbol,
+        tokenName,
+        dex,
+        chain: chain || 'solana',
+        priceUsd: parsedPrice,
+        priceSol: priceSol ? parseFloat(priceSol) : undefined,
+        marketCapUsd: parsedMarketCap && !isNaN(parsedMarketCap) ? parsedMarketCap : undefined,
+        liquidityUsd: parsedLiquidity && !isNaN(parsedLiquidity) ? parsedLiquidity : undefined,
+        tokenAgeMinutes: tokenAgeMinutes ? parseInt(tokenAgeMinutes) : undefined,
+        aiRecommendation,
+        aiScore: parsedScore,
+        aiReasoning,
+        userId: req.user?.id?.toString(),
+      });
+      res.json({ success: result.success, predictionId: result.id, payloadHash: result.payloadHash });
+    } catch (error: any) {
+      console.error("Error logging Strike Agent trade prediction:", error);
+      res.status(500).json({ error: "Failed to log trade prediction" });
     }
   });
 

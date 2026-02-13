@@ -1,8 +1,7 @@
 import { createHash, randomBytes } from 'crypto';
-import { db } from '../db/client.js';
-import { strikeagentPredictions, strikeagentOutcomes } from '../db/schema.js';
+import { db } from '../../db';
+import { strikeAgentPredictions, strikeAgentOutcomes } from '@shared/schema';
 import { eq, desc, and, isNull, sql, count, gte } from 'drizzle-orm';
-import { tokenScannerService } from './tokenScannerService.js';
 
 interface TokenSafetyMetrics {
   botPercent: number;
@@ -93,7 +92,7 @@ class StrikeAgentTrackingService {
     const payloadHash = this.hashPayload(payload);
 
     try {
-      await db.insert(strikeagentPredictions).values({
+      await db.insert(strikeAgentPredictions).values({
         id: predictionId,
         userId: input.userId || null,
         tokenAddress: input.tokenAddress,
@@ -137,8 +136,8 @@ class StrikeAgentTrackingService {
   async recordOutcome(input: StrikeAgentOutcomeInput): Promise<boolean> {
     try {
       const [prediction] = await db.select()
-        .from(strikeagentPredictions)
-        .where(eq(strikeagentPredictions.id, input.predictionId))
+        .from(strikeAgentPredictions)
+        .where(eq(strikeAgentPredictions.id, input.predictionId))
         .limit(1);
 
       if (!prediction) {
@@ -154,7 +153,7 @@ class StrikeAgentTrackingService {
 
       const outcomeId = `sao_${Date.now().toString(36)}_${randomBytes(4).toString('hex')}`;
 
-      await db.insert(strikeagentOutcomes).values({
+      await db.insert(strikeAgentOutcomes).values({
         id: outcomeId,
         predictionId: input.predictionId,
         horizon: input.horizon,
@@ -175,9 +174,9 @@ class StrikeAgentTrackingService {
         liquidityRemaining: input.liquidityAtCheck?.toString(),
       });
 
-      await db.update(strikeagentPredictions)
+      await db.update(strikeAgentPredictions)
         .set({ status: 'evaluated' })
-        .where(eq(strikeagentPredictions.id, input.predictionId));
+        .where(eq(strikeAgentPredictions.id, input.predictionId));
 
       console.log(`📊 [StrikeAgentTracking] Recorded outcome for ${prediction.tokenSymbol} @ ${input.horizon}: ${outcome} (${priceChangePercent.toFixed(2)}%)`);
 
@@ -218,11 +217,11 @@ class StrikeAgentTrackingService {
 
     try {
       const predictions = await db.select()
-        .from(strikeagentPredictions)
+        .from(strikeAgentPredictions)
         .where(and(
-          eq(strikeagentPredictions.status, 'pending'),
+          eq(strikeAgentPredictions.status, 'pending'),
         ))
-        .orderBy(strikeagentPredictions.createdAt)
+        .orderBy(strikeAgentPredictions.createdAt)
         .limit(limit);
 
       return predictions.filter(p => {
@@ -238,13 +237,21 @@ class StrikeAgentTrackingService {
   async checkOutcomeForPrediction(predictionId: string, horizon: '1h' | '4h' | '24h' | '7d'): Promise<boolean> {
     try {
       const [prediction] = await db.select()
-        .from(strikeagentPredictions)
-        .where(eq(strikeagentPredictions.id, predictionId))
+        .from(strikeAgentPredictions)
+        .where(eq(strikeAgentPredictions.id, predictionId))
         .limit(1);
 
       if (!prediction) return false;
 
-      const tokenDetails = await tokenScannerService.getTokenDetails(prediction.tokenAddress);
+      let tokenDetails: any = null;
+      try {
+        const resp = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${prediction.tokenAddress}`);
+        const data = await resp.json();
+        tokenDetails = data?.pairs?.[0] || null;
+      } catch (e) {
+        console.warn('[StrikeAgent] DexScreener lookup failed for outcome check');
+      }
+
       if (!tokenDetails) {
         await this.recordOutcome({
           predictionId,
@@ -281,23 +288,23 @@ class StrikeAgentTrackingService {
   }> {
     try {
       // Use SQL COUNT for efficient aggregation instead of fetching all records
-      const [totalResult] = await db.select({ count: count() }).from(strikeagentPredictions);
+      const [totalResult] = await db.select({ count: count() }).from(strikeAgentPredictions);
       const totalPredictions = totalResult?.count || 0;
 
       // Count by recommendation type using SQL
       const [snipeResult] = await db.select({ count: count() })
-        .from(strikeagentPredictions)
-        .where(eq(strikeagentPredictions.aiRecommendation, 'snipe'));
+        .from(strikeAgentPredictions)
+        .where(eq(strikeAgentPredictions.aiRecommendation, 'snipe'));
       const snipe = snipeResult?.count || 0;
 
       const [watchResult] = await db.select({ count: count() })
-        .from(strikeagentPredictions)
-        .where(eq(strikeagentPredictions.aiRecommendation, 'watch'));
+        .from(strikeAgentPredictions)
+        .where(eq(strikeAgentPredictions.aiRecommendation, 'watch'));
       const watch = watchResult?.count || 0;
 
       const [avoidResult] = await db.select({ count: count() })
-        .from(strikeagentPredictions)
-        .where(eq(strikeagentPredictions.aiRecommendation, 'avoid'));
+        .from(strikeAgentPredictions)
+        .where(eq(strikeAgentPredictions.aiRecommendation, 'avoid'));
       const avoid = avoidResult?.count || 0;
 
       // Get outcome stats by horizon using SQL aggregation
@@ -306,12 +313,12 @@ class StrikeAgentTrackingService {
 
       for (const h of horizons) {
         const [totalOutcomes] = await db.select({ count: count() })
-          .from(strikeagentOutcomes)
-          .where(eq(strikeagentOutcomes.horizon, h));
+          .from(strikeAgentOutcomes)
+          .where(eq(strikeAgentOutcomes.horizon, h));
         
         const [correctOutcomes] = await db.select({ count: count() })
-          .from(strikeagentOutcomes)
-          .where(and(eq(strikeagentOutcomes.horizon, h), eq(strikeagentOutcomes.isCorrect, true)));
+          .from(strikeAgentOutcomes)
+          .where(and(eq(strikeAgentOutcomes.horizon, h), eq(strikeAgentOutcomes.isCorrect, true)));
         
         const total = totalOutcomes?.count || 0;
         const correct = correctOutcomes?.count || 0;
@@ -359,8 +366,8 @@ class StrikeAgentTrackingService {
     let recentActivity = 0;
     try {
       const [todayResult] = await db.select({ count: count() })
-        .from(strikeagentPredictions)
-        .where(gte(strikeagentPredictions.createdAt, today));
+        .from(strikeAgentPredictions)
+        .where(gte(strikeAgentPredictions.createdAt, today));
       recentActivity = todayResult?.count || 0;
     } catch (e) {
       recentActivity = 0;

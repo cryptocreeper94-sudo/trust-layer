@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Wallet, ChevronDown, ExternalLink, Loader2, Check, AlertTriangle,
-  Zap, ArrowRight, X, RefreshCw
+  Zap, ArrowRight, X, RefreshCw, Shield, Bot, Target
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useSolanaWallet } from '@/hooks/use-solana-wallet';
@@ -15,6 +15,13 @@ interface QuickTradePanelProps {
   tokenName?: string;
   tokenLogo?: string;
   recommendation?: 'snipe' | 'watch' | 'avoid';
+  aiScore?: number;
+  chain?: string;
+  dex?: string;
+  price?: number;
+  marketCap?: number;
+  liquidity?: number;
+  safetyScore?: number;
   onClose?: () => void;
 }
 
@@ -83,17 +90,32 @@ function isEvmAddress(address: string): boolean {
   return address.startsWith('0x') && address.length === 42;
 }
 
-export function QuickTradePanel({ tokenAddress, tokenSymbol, tokenName, recommendation, onClose }: QuickTradePanelProps) {
-  // Detect token chain type based on address format
+async function logStrikeAgentTrade(data: {
+  tokenAddress: string; tokenSymbol: string; tokenName?: string; dex?: string;
+  chain?: string; priceUsd: number; aiRecommendation: string; aiScore: number;
+  marketCapUsd?: number; liquidityUsd?: number;
+}) {
+  try {
+    await fetch('/api/pulse/strike-agent/log-trade', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(data),
+    });
+  } catch (e) {
+    console.warn('[StrikeAgent] Failed to log trade prediction:', e);
+  }
+}
+
+export function QuickTradePanel({ tokenAddress, tokenSymbol, tokenName, recommendation, aiScore, chain: tokenChainProp, dex: tokenDex, price, marketCap, liquidity, safetyScore, onClose }: QuickTradePanelProps) {
   const tokenIsSolana = isSolanaAddress(tokenAddress);
   const tokenIsEvm = isEvmAddress(tokenAddress);
   
-  // Only show compatible chains for this token
   const availableChains = tokenIsSolana 
     ? CHAINS.filter(c => c.id === 'solana')
     : tokenIsEvm 
       ? CHAINS.filter(c => c.id !== 'solana')
-      : CHAINS; // If unclear, show all
+      : CHAINS;
   
   const [selectedChain, setSelectedChain] = useState<Chain>(tokenIsSolana ? 'solana' : 'ethereum');
   const [chainDropdownOpen, setChainDropdownOpen] = useState(false);
@@ -128,26 +150,32 @@ export function QuickTradePanel({ tokenAddress, tokenSymbol, tokenName, recommen
     }
   }, [isSolana, solanaWallet, ethereumWallet]);
 
+  const [evmFallback, setEvmFallback] = useState(false);
+
   const getQuote = useCallback(async () => {
     if (!wallet) return;
     setQuoteLoading(true);
     setError(null);
+    setEvmFallback(false);
     try {
       const inputAmount = customAmount || amount;
-      // Use native token symbol - the DEX swap service handles conversion
-      const nativeToken = currentChainInfo.native; // SOL, ETH, MATIC, BNB, AVAX
+      const nativeToken = currentChainInfo.native;
       
       const q = await dexSwapService.getQuote({
         chain: selectedChain,
         inputToken: nativeToken,
         outputToken: tokenAddress,
-        amount: inputAmount, // Human-readable amount - service handles conversion
+        amount: inputAmount,
         slippage: 1,
         userAddress: isSolana ? solanaWallet.wallet!.publicKey : ethereumWallet.wallet!.address,
       });
       setQuote(q);
     } catch (err: any) {
-      setError(err.message || 'Failed to get quote');
+      if (!isSolana) {
+        setEvmFallback(true);
+      } else {
+        setError(err.message || 'Failed to get quote');
+      }
     } finally {
       setQuoteLoading(false);
     }
@@ -181,12 +209,27 @@ export function QuickTradePanel({ tokenAddress, tokenSymbol, tokenName, recommen
       
       const result = await dexSwapService.trackTransaction(selectedChain, signature);
       setTxResult(result);
+
+      if (recommendation && typeof aiScore === 'number' && !isNaN(aiScore) && typeof price === 'number' && !isNaN(price) && price > 0) {
+        logStrikeAgentTrade({
+          tokenAddress,
+          tokenSymbol,
+          tokenName,
+          dex: tokenDex,
+          chain: tokenChainProp || selectedChain,
+          priceUsd: price,
+          aiRecommendation: recommendation,
+          aiScore,
+          marketCapUsd: marketCap && !isNaN(marketCap) ? marketCap : undefined,
+          liquidityUsd: liquidity && !isNaN(liquidity) ? liquidity : undefined,
+        });
+      }
     } catch (err: any) {
       setError(err.message || 'Swap failed');
     } finally {
       setIsSwapping(false);
     }
-  }, [quote, wallet, isSolana, selectedChain, solanaWallet, ethereumWallet]);
+  }, [quote, wallet, isSolana, selectedChain, solanaWallet, ethereumWallet, recommendation, aiScore, price, tokenAddress, tokenSymbol, tokenName, tokenDex, tokenChainProp, marketCap, liquidity]);
 
   const dexes = isSolana ? SOLANA_DEXES : (EVM_DEXES[selectedChain] || []);
 
@@ -210,10 +253,65 @@ export function QuickTradePanel({ tokenAddress, tokenSymbol, tokenName, recommen
         )}
       </div>
 
+      {aiScore !== undefined && recommendation && (
+        <div className={`rounded-xl p-3 border ${
+          recommendation === 'snipe' ? 'bg-emerald-500/10 border-emerald-500/20' :
+          recommendation === 'watch' ? 'bg-amber-500/10 border-amber-500/20' :
+          'bg-red-500/10 border-red-500/20'
+        }`} data-testid="strike-agent-assessment">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-1.5">
+              <Bot className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="text-[10px] font-bold text-cyan-400 tracking-wider uppercase">Strike Agent</span>
+            </div>
+            <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${
+              recommendation === 'snipe' ? 'bg-emerald-500/20 text-emerald-400' :
+              recommendation === 'watch' ? 'bg-amber-500/20 text-amber-400' :
+              'bg-red-500/20 text-red-400'
+            }`}>
+              <Target className="w-3 h-3" />
+              {recommendation.toUpperCase()}
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="flex-1">
+              <div className="flex items-center justify-between text-[10px] mb-1">
+                <span className="text-white/50">Pulse AI Score</span>
+                <span className="text-white font-bold">{aiScore}/100</span>
+              </div>
+              <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all ${
+                    aiScore >= 70 ? 'bg-gradient-to-r from-emerald-500 to-cyan-500' :
+                    aiScore >= 40 ? 'bg-gradient-to-r from-amber-500 to-yellow-500' :
+                    'bg-gradient-to-r from-red-500 to-pink-500'
+                  }`}
+                  style={{ width: `${aiScore}%` }}
+                />
+              </div>
+            </div>
+            {safetyScore !== undefined && !isNaN(safetyScore) && (
+              <div className="flex flex-col items-center gap-0.5">
+                <Shield className="w-3 h-3 text-white/50" />
+                <span className={`text-xs font-bold ${safetyScore >= 60 ? 'text-emerald-400' : safetyScore >= 40 ? 'text-amber-400' : 'text-red-400'}`}>
+                  {safetyScore}
+                </span>
+                <span className="text-[8px] text-white/30">GUARD</span>
+              </div>
+            )}
+          </div>
+          {recommendation === 'avoid' && (
+            <div className="flex items-center gap-1.5 mt-2 text-[10px] text-red-400">
+              <AlertTriangle className="w-3 h-3" />
+              <span>Strike Agent recommends caution - high risk detected</span>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Chain Selector */}
       <div className="relative">
         {availableChains.length === 1 ? (
-          // Single chain available - show info only
           <div className="flex items-center justify-between p-3 bg-white/5 border border-white/10 rounded-xl">
             <div className="flex items-center gap-2">
               <span className="text-lg">{currentChainInfo.icon}</span>
@@ -405,26 +503,72 @@ export function QuickTradePanel({ tokenAddress, tokenSymbol, tokenName, recommen
         </div>
       )}
 
+      {evmFallback && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-cyan-500/10 border border-cyan-500/20 rounded-xl p-3"
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <Zap className="w-4 h-4 text-cyan-400" />
+            <span className="text-xs font-bold text-cyan-400">Trade on {currentChainInfo.name}</span>
+          </div>
+          <p className="text-[10px] text-white/50 mb-3">
+            Select a DEX below to complete your swap for {tokenSymbol}
+          </p>
+          <div className="grid grid-cols-1 gap-2">
+            {dexes.map((dex, i) => (
+              <a
+                key={dex.name}
+                href={dex.url(tokenAddress)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold text-white ${dex.color} hover:opacity-90 transition-opacity shadow-lg`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (recommendation && typeof aiScore === 'number' && !isNaN(aiScore) && typeof price === 'number' && !isNaN(price) && price > 0) {
+                    logStrikeAgentTrade({
+                      tokenAddress, tokenSymbol, tokenName, dex: dex.name,
+                      chain: tokenChainProp || selectedChain,
+                      priceUsd: price, aiRecommendation: recommendation,
+                      aiScore, marketCapUsd: marketCap && !isNaN(marketCap) ? marketCap : undefined,
+                      liquidityUsd: liquidity && !isNaN(liquidity) ? liquidity : undefined,
+                    });
+                  }
+                }}
+                data-testid={`link-dex-${dex.name.toLowerCase()}`}
+              >
+                {i === 0 && <Zap className="w-4 h-4" />}
+                {dex.name}
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
       {/* DEX Links */}
-      <div>
-        <p className="text-xs text-white/50 mb-2">Or trade on:</p>
-        <div className="grid grid-cols-2 gap-2">
-          {dexes.map((dex, i) => (
-            <a
-              key={dex.name}
-              href={dex.url(tokenAddress)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-medium text-white ${dex.color} hover:opacity-90 transition-opacity ${i === 0 ? 'col-span-2' : ''}`}
-              onClick={(e) => e.stopPropagation()}
-              data-testid={`link-dex-${dex.name.toLowerCase()}`}
-            >
-              {dex.name}
-              <ExternalLink className="w-3 h-3" />
-            </a>
-          ))}
+      {!evmFallback && (
+        <div>
+          <p className="text-xs text-white/50 mb-2">Or trade on:</p>
+          <div className="grid grid-cols-2 gap-2">
+            {dexes.map((dex, i) => (
+              <a
+                key={dex.name}
+                href={dex.url(tokenAddress)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-medium text-white ${dex.color} hover:opacity-90 transition-opacity ${i === 0 ? 'col-span-2' : ''}`}
+                onClick={(e) => e.stopPropagation()}
+                data-testid={`link-dex-${dex.name.toLowerCase()}`}
+              >
+                {dex.name}
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

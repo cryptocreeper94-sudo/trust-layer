@@ -1482,6 +1482,14 @@ export default function GuardianScanner() {
                   tokenSymbol={tradingToken.symbol}
                   tokenName={tradingToken.name}
                   tokenLogo={tradingToken.logo}
+                  recommendation={tradingToken.aiRecommendation}
+                  aiScore={tradingToken.aiScore}
+                  chain={tradingToken.chain}
+                  dex={tradingToken.dex}
+                  price={tradingToken.price}
+                  marketCap={tradingToken.marketCap}
+                  liquidity={tradingToken.liquidity}
+                  safetyScore={tradingToken.guardianScore}
                   onClose={() => setShowTradeModal(false)}
                 />
               </div>

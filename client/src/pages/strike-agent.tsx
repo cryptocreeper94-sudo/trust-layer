@@ -726,6 +726,10 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
                       tokenSymbol={rec.tokenSymbol}
                       tokenName={rec.tokenName || undefined}
                       recommendation={rec.aiRecommendation}
+                      aiScore={rec.aiScore}
+                      price={parseFloat(rec.priceUsd)}
+                      marketCap={rec.marketCapUsd ? parseFloat(rec.marketCapUsd) : undefined}
+                      liquidity={rec.liquidityUsd ? parseFloat(rec.liquidityUsd) : undefined}
                       onClose={() => setShowTradePanel(false)}
                     />
                   </motion.div>
@@ -775,7 +779,7 @@ export default function StrikeAgentPage() {
   const hasAnyWallet = !!solanaWallet.wallet || !!ethereumWallet.wallet;
   
   // Get current user ID for watchlist
-  const currentUserId = solanaWallet.wallet?.slice(0, 20) || ethereumWallet.wallet?.slice(0, 20) || 'guest';
+  const currentUserId = solanaWallet.wallet?.publicKey?.slice(0, 20) || ethereumWallet.wallet?.address?.slice(0, 20) || 'guest';
   
   useEffect(() => {
     localStorage.setItem('strike-favorites', JSON.stringify(favorites));
@@ -1140,7 +1144,7 @@ export default function StrikeAgentPage() {
             <ManualWatchlist 
               userId={currentUserId}
               selectedPreset={selectedPreset}
-              walletAddress={solanaWallet.wallet || ethereumWallet.wallet || undefined}
+              walletAddress={solanaWallet.wallet?.publicKey || ethereumWallet.wallet?.address || undefined}
             />
           </div>
         )}
