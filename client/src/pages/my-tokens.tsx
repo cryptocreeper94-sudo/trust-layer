@@ -9,6 +9,7 @@ import {
   MessageSquare, Compass, Star, Zap, Trophy, Globe
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { authFetch } from "@/hooks/use-firebase-auth";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { WalletButton } from "@/components/wallet-button";
@@ -71,7 +72,7 @@ export default function MyTokensPage() {
   const { data: bagData, isLoading: bagLoading, refetch: refetchBag } = useQuery<TokenBag>({
     queryKey: ['user-token-bag'],
     queryFn: async () => {
-      const res = await fetch('/api/user/dwc-bag');
+      const res = await authFetch('/api/user/dwc-bag');
       if (!res.ok) throw new Error('Failed to fetch');
       return res.json();
     },
@@ -81,7 +82,7 @@ export default function MyTokensPage() {
   const { data: purchasesData, isLoading: purchasesLoading } = useQuery<{ purchases: Purchase[] }>({
     queryKey: ['user-purchases'],
     queryFn: async () => {
-      const res = await fetch('/api/user/purchases');
+      const res = await authFetch('/api/user/purchases');
       if (!res.ok) throw new Error('Failed to fetch');
       return res.json();
     },
@@ -91,7 +92,7 @@ export default function MyTokensPage() {
   const { data: earlyAdopterData } = useQuery<EarlyAdopterStats>({
     queryKey: ['early-adopter-stats'],
     queryFn: async () => {
-      const res = await fetch('/api/user/early-adopter-stats');
+      const res = await authFetch('/api/user/early-adopter-stats');
       if (!res.ok) throw new Error('Failed to fetch');
       return res.json();
     },

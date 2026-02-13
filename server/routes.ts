@@ -10160,11 +10160,12 @@ const { trustLayerId } = await response.json();`
     try {
       let userId = (req.session as any)?.userId;
       
-      // Check for session token in Authorization header (cross-domain support)
+      // Check for session token or Firebase token in Authorization header
       if (!userId) {
         const authHeader = req.headers.authorization;
         if (authHeader?.startsWith('Bearer ')) {
           const token = authHeader.substring(7);
+          // Try session token (64 char hex string)
           if (/^[a-f0-9]{64}$/.test(token)) {
             const [tokenUser] = await db.select().from(users)
               .where(eq(users.sessionToken, token))
@@ -10172,6 +10173,18 @@ const { trustLayerId } = await response.json();`
             if (tokenUser && tokenUser.sessionTokenExpiry && new Date(tokenUser.sessionTokenExpiry) > new Date()) {
               userId = tokenUser.id;
             }
+          }
+          // Try Firebase token verification
+          if (!userId) {
+            try {
+              const decodedToken = await verifyFirebaseIdToken(token);
+              if (decodedToken) {
+                const fbUser = await storage.getUser(decodedToken.uid);
+                if (fbUser) {
+                  userId = fbUser.id;
+                }
+              }
+            } catch (e) {}
           }
         }
       }
@@ -10187,15 +10200,15 @@ const { trustLayerId } = await response.json();`
       let purchases: any[] = [];
       
       if (userId) {
-        // First try to find user's email
         const userResult = await db.execute(sql`SELECT email FROM users WHERE id = ${userId}`);
         const user = userResult.rows[0] as any;
-        if (user?.email) {
-          const normalizedEmail = user.email.toLowerCase().trim();
+        const lookupEmail = user?.email || userEmail;
+        if (lookupEmail) {
+          const normalizedEmail = lookupEmail.toLowerCase().trim();
           const result = await db.execute(sql`
-            SELECT id, email, wallet_address, token_amount, usd_amount_cents, tier, status, payment_method, created_at
+            SELECT id, email, wallet_address, token_amount, usd_amount_cents, tier, status, payment_method, bonus_percentage, created_at
             FROM presale_purchases 
-            WHERE LOWER(TRIM(email)) = ${normalizedEmail}
+            WHERE LOWER(TRIM(email)) = ${normalizedEmail} OR user_id = ${userId}
             ORDER BY created_at DESC
           `);
           purchases = result.rows as any[];
@@ -10206,7 +10219,7 @@ const { trustLayerId } = await response.json();`
       if (purchases.length === 0 && userEmail) {
         const normalizedEmail = userEmail.toLowerCase().trim();
         const result = await db.execute(sql`
-          SELECT id, email, wallet_address, token_amount, usd_amount_cents, tier, status, payment_method, created_at
+          SELECT id, email, wallet_address, token_amount, usd_amount_cents, tier, status, payment_method, bonus_percentage, created_at
           FROM presale_purchases 
           WHERE LOWER(TRIM(email)) = ${normalizedEmail}
           ORDER BY created_at DESC
