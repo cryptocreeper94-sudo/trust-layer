@@ -17,7 +17,7 @@ import {
   Heart, Zap, Eye, Send, Star, Brain, Trophy,
   Home, Building, TreePine, ArrowLeft, Globe, Timer,
   TrendingUp, Activity, Flame, Gift, Target,
-  MessageCircle, Volume2, Loader2, Award, Play,
+  MessageCircle, Volume2, Loader2, Award, Play, Lock,
   RotateCcw, ArrowRight, CheckCircle2, XCircle,
 } from "lucide-react";
 
@@ -398,6 +398,14 @@ function SituationScreen({
         <div className="text-sm text-gray-300 leading-relaxed whitespace-pre-line" data-testid="situation-description">
           {scenario.description}
         </div>
+        {scenario.educationalNote && (
+          <div className="mt-3 pt-3 border-t border-white/5">
+            <p className="text-xs text-amber-400/80 italic flex items-start gap-1.5">
+              <Brain className="w-3 h-3 mt-0.5 flex-shrink-0" />
+              {scenario.educationalNote}
+            </p>
+          </div>
+        )}
       </GlassCard>
 
       <div className="space-y-2">
@@ -481,6 +489,41 @@ function ConsequencesScreen({
             {Object.entries(result.statChanges).map(([stat, change]) => (
               <StatChange key={stat} stat={stat} change={change as number} />
             ))}
+          </div>
+        </GlassCard>
+      )}
+
+      {result.npcRelChanges && Object.keys(result.npcRelChanges).length > 0 && (
+        <GlassCard className="p-4 border border-purple-500/20">
+          <h4 className="text-white text-sm font-semibold mb-2 flex items-center gap-2">
+            <Heart className="w-4 h-4 text-purple-400" /> Relationships Shifted
+          </h4>
+          <div className="space-y-1.5">
+            {Object.entries(result.npcRelChanges).map(([npc, change]) => {
+              const c = Number(change);
+              if (c === 0) return null;
+              return (
+                <div key={npc} className="flex items-center justify-between text-xs">
+                  <span className="text-gray-300">{npc}</span>
+                  <span className={c > 0 ? "text-green-400 font-medium" : "text-red-400 font-medium"}>
+                    {c > 0 ? `+${c} Trust` : `${c} Trust`}
+                    {c >= 2 ? " — Growing closer" : c <= -2 ? " — Growing distant" : ""}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </GlassCard>
+      )}
+
+      {result.educationalInsight && (
+        <GlassCard className="p-4 border border-amber-500/20">
+          <div className="flex items-start gap-2">
+            <Brain className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
+            <div>
+              <h4 className="text-amber-400 text-xs font-semibold mb-1">Did You Know?</h4>
+              <p className="text-xs text-gray-400 leading-relaxed">{result.educationalInsight}</p>
+            </div>
           </div>
         </GlassCard>
       )}
@@ -677,6 +720,11 @@ export default function ChroniclesPlay() {
   const recentLog = gameState?.recentLog || [];
   const achievements = Array.isArray(achievementsData) ? achievementsData : achievementsData?.achievements || [];
   const config = ERA_CONFIG[selectedEra];
+  const eraUnlocks = gameState?.eraUnlocks || { modern: { unlocked: true, requiredLevel: 1 }, medieval: { unlocked: false, requiredLevel: 3 }, wildwest: { unlocked: false, requiredLevel: 5 } };
+  const seasonProgress = gameState?.seasonProgress || 0;
+  const seasonComplete = gameState?.seasonComplete || false;
+  const eraProgress = gameState?.eraProgress || {};
+  const isEraLocked = !eraUnlocks[selectedEra]?.unlocked;
 
   return (
     <div className="min-h-screen bg-slate-950 pb-20">
@@ -738,28 +786,52 @@ export default function ChroniclesPlay() {
         <div className="flex gap-2 mb-4 overflow-x-auto pb-1" data-testid="era-selector">
           {(Object.keys(ERA_CONFIG) as Array<keyof typeof ERA_CONFIG>).map(era => {
             const c = ERA_CONFIG[era];
+            const locked = !eraUnlocks[era]?.unlocked;
+            const ep = eraProgress[era];
             return (
               <button
                 key={era}
                 onClick={() => {
+                  if (locked) {
+                    toast({ title: `${c.emoji} ${c.name} is Locked`, description: `Reach level ${eraUnlocks[era]?.requiredLevel} to unlock this era`, variant: "destructive" });
+                    return;
+                  }
                   setSelectedEra(era);
                   if (gamePhase === "idle") {
                     setCurrentScenario(null);
                     setDecisionResult(null);
                   }
                 }}
-                className={`flex-shrink-0 px-4 py-2.5 rounded-full text-sm font-medium transition-all min-h-[44px] ${
-                  selectedEra === era
-                    ? `bg-gradient-to-r ${c.bgGradient} ${c.textColor} border ${c.borderColor}`
-                    : "bg-white/5 text-gray-400 hover:bg-white/10"
+                className={`flex-shrink-0 px-4 py-2.5 rounded-full text-sm font-medium transition-all min-h-[44px] relative ${
+                  locked
+                    ? "bg-white/3 text-gray-600 border border-white/5 cursor-not-allowed"
+                    : selectedEra === era
+                      ? `bg-gradient-to-r ${c.bgGradient} ${c.textColor} border ${c.borderColor}`
+                      : "bg-white/5 text-gray-400 hover:bg-white/10"
                 }`}
                 data-testid={`play-era-btn-${era}`}
               >
+                {locked && <Lock className="w-3 h-3 mr-1 inline" />}
                 {c.emoji} {c.name}
+                {ep && ep.completed > 0 && !locked && (
+                  <span className="ml-1.5 text-[10px] opacity-70">{ep.completed}/{ep.total}</span>
+                )}
               </button>
             );
           })}
         </div>
+
+        {seasonProgress > 0 && (
+          <div className="mb-4">
+            <div className="flex items-center justify-between text-xs mb-1">
+              <span className="text-gray-400">Season Zero Progress</span>
+              <span className={`font-medium ${seasonComplete ? "text-yellow-400" : "text-cyan-400"}`}>
+                {seasonComplete ? "Complete!" : `${seasonProgress}%`}
+              </span>
+            </div>
+            <Progress value={seasonProgress} className="h-1.5 bg-slate-800" />
+          </div>
+        )}
 
         {state && (
           <div className="mb-4">
@@ -779,33 +851,68 @@ export default function ChroniclesPlay() {
               className="space-y-4"
             >
               <GlassCard glow className={`p-6 border ${config.borderColor} text-center`} data-testid="play-prompt">
-                <Compass className={`w-12 h-12 ${config.textColor} mx-auto mb-3`} />
-                <h3 className="text-white font-bold text-lg mb-2">
-                  {state?.situationsCompleted > 0 ? "Ready for Another Situation?" : "Begin Your Parallel Life"}
-                </h3>
-                <p className="text-sm text-gray-400 mb-4 max-w-md mx-auto">
-                  {state?.situationsCompleted > 0
-                    ? "The world keeps moving. New situations are emerging around you. How will you respond?"
-                    : "Step into the world as yourself. Face real situations. Make authentic choices. Watch your parallel self emerge."
-                  }
-                </p>
-                <Button
-                  onClick={handleStartPlaying}
-                  disabled={generateScenario.isPending}
-                  className={`bg-gradient-to-r ${config.bgGradient} border ${config.borderColor} text-white px-8 py-3`}
-                  data-testid="start-playing-btn"
-                >
-                  {generateScenario.isPending ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating...
-                    </>
-                  ) : (
-                    <>
-                      <Play className="w-4 h-4 mr-2" /> 
-                      {state?.situationsCompleted > 0 ? "Next Situation" : "Enter the World"}
-                    </>
-                  )}
-                </Button>
+                {isEraLocked ? (
+                  <>
+                    <Lock className="w-12 h-12 text-gray-500 mx-auto mb-3" />
+                    <h3 className="text-white font-bold text-lg mb-2">
+                      {config.emoji} {config.name} — Locked
+                    </h3>
+                    <p className="text-sm text-gray-400 mb-4 max-w-md mx-auto">
+                      Reach level {eraUnlocks[selectedEra]?.requiredLevel} to unlock this era. Keep playing in the Modern Era to level up.
+                    </p>
+                    <Button
+                      onClick={() => setSelectedEra("modern")}
+                      className="bg-gradient-to-r from-cyan-500/20 to-blue-600/20 border border-cyan-500/30 text-white px-8 py-3"
+                    >
+                      <Play className="w-4 h-4 mr-2" /> Play Modern Era
+                    </Button>
+                  </>
+                ) : seasonComplete ? (
+                  <>
+                    <Trophy className="w-12 h-12 text-yellow-400 mx-auto mb-3" />
+                    <h3 className="text-white font-bold text-lg mb-2">Season Zero Complete!</h3>
+                    <p className="text-sm text-gray-400 mb-4 max-w-md mx-auto">
+                      You've completed all Season Zero situations across three eras. The AI will now generate new, unique situations based on your journey so far.
+                    </p>
+                    <Button
+                      onClick={handleStartPlaying}
+                      disabled={generateScenario.isPending}
+                      className={`bg-gradient-to-r from-yellow-500/30 to-amber-600/30 border border-yellow-500/30 text-white px-8 py-3`}
+                      data-testid="start-playing-btn"
+                    >
+                      {generateScenario.isPending ? (
+                        <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating...</>
+                      ) : (
+                        <><Play className="w-4 h-4 mr-2" /> Continue Your Story</>
+                      )}
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Compass className={`w-12 h-12 ${config.textColor} mx-auto mb-3`} />
+                    <h3 className="text-white font-bold text-lg mb-2">
+                      {state?.situationsCompleted > 0 ? "Ready for Another Situation?" : "Begin Your Parallel Life"}
+                    </h3>
+                    <p className="text-sm text-gray-400 mb-4 max-w-md mx-auto">
+                      {state?.situationsCompleted > 0
+                        ? `${eraProgress[selectedEra]?.total - (eraProgress[selectedEra]?.completed || 0)} situations remain in this era. The world keeps moving — how will you respond?`
+                        : "Step into the world as yourself. Face real situations. Make authentic choices. Your decisions shape who you become."
+                      }
+                    </p>
+                    <Button
+                      onClick={handleStartPlaying}
+                      disabled={generateScenario.isPending}
+                      className={`bg-gradient-to-r ${config.bgGradient} border ${config.borderColor} text-white px-8 py-3`}
+                      data-testid="start-playing-btn"
+                    >
+                      {generateScenario.isPending ? (
+                        <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating...</>
+                      ) : (
+                        <><Play className="w-4 h-4 mr-2" /> {state?.situationsCompleted > 0 ? "Next Situation" : "Enter the World"}</>
+                      )}
+                    </Button>
+                  </>
+                )}
               </GlassCard>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

@@ -2887,6 +2887,7 @@ export const chroniclesGameState = pgTable("chronicles_game_state", {
   lastPlayedAt: timestamp("last_played_at"),
   
   gameLog: text("game_log").notNull().default('[]'),
+  npcRelationships: text("npc_relationships").notNull().default('{}'),
   
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

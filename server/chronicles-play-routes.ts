@@ -99,11 +99,37 @@ export function registerChroniclesPlayRoutes(app: Express) {
         recentLog = Array.isArray(parsed) ? parsed.slice(-10) : [];
       } catch { recentLog = []; }
 
+      const completedSet = new Set(state.completedSituations || []);
+      const totalSeasonQuests = SEASON_ZERO_QUESTS.length;
+      const completedSeasonQuests = SEASON_ZERO_QUESTS.filter(q => completedSet.has(q.id)).length;
+      const seasonProgress = Math.round((completedSeasonQuests / totalSeasonQuests) * 100);
+      const seasonComplete = completedSeasonQuests >= totalSeasonQuests;
+
+      const eraProgress: Record<string, { total: number; completed: number; pct: number }> = {};
+      for (const era of ["modern", "medieval", "wildwest"]) {
+        const eraQuests = SEASON_ZERO_QUESTS.filter(q => q.era === era);
+        const eraCompleted = eraQuests.filter(q => completedSet.has(q.id)).length;
+        eraProgress[era] = { total: eraQuests.length, completed: eraCompleted, pct: Math.round((eraCompleted / eraQuests.length) * 100) };
+      }
+
+      const eraUnlocks = {
+        modern: { unlocked: true, requiredLevel: 1 },
+        medieval: { unlocked: state.level >= 3, requiredLevel: 3 },
+        wildwest: { unlocked: state.level >= 5, requiredLevel: 5 },
+      };
+
       res.json({
-        ...state,
+        gameState: state,
+        state,
         nextLevelXp,
         xpProgress,
         recentLog,
+        seasonProgress,
+        seasonComplete,
+        totalSeasonQuests,
+        completedSeasonQuests,
+        eraProgress,
+        eraUnlocks,
       });
     } catch (error: any) {
       console.error("Get play state error:", error);
@@ -127,35 +153,94 @@ export function registerChroniclesPlayRoutes(app: Express) {
 
       if (!state) return res.status(404).json({ error: "Game state not found" });
 
+      const eraLevelRequirements: Record<string, number> = { modern: 1, medieval: 3, wildwest: 5 };
+      const requiredLevel = eraLevelRequirements[era] || 1;
+      if (state.level < requiredLevel) {
+        return res.status(403).json({ 
+          error: `You need to reach level ${requiredLevel} to unlock the ${ERA_SETTINGS[era]?.worldDescription ? era : "unknown"} era`,
+          requiredLevel,
+          currentLevel: state.level,
+        });
+      }
+
       const completedSet = new Set(state.completedSituations || []);
-      const available = SEASON_ZERO_QUESTS.filter(q => q.era === era && !completedSet.has(q.id));
+
+      const available = SEASON_ZERO_QUESTS.filter(q => {
+        if (q.era !== era) return false;
+        if (completedSet.has(q.id)) return false;
+        if (q.prerequisite && !completedSet.has(q.prerequisite)) return false;
+        return true;
+      });
 
       let situation: any;
+      let isGenerated = false;
       if (available.length > 0) {
-        situation = available[Math.floor(Math.random() * available.length)];
+        const arrival = available.filter(q => q.category === "arrival");
+        if (arrival.length > 0) {
+          situation = arrival[0];
+        } else {
+          situation = available[Math.floor(Math.random() * available.length)];
+        }
       } else {
+        isGenerated = true;
+        const completedQuests = SEASON_ZERO_QUESTS.filter(q => q.era === era && completedSet.has(q.id));
+        const recentTitles = completedQuests.slice(-5).map(q => q.title).join(", ");
+        const eraNpcs = STARTER_NPCS.filter(n => n.era === era).map(n => `${n.name} (${n.title})`).join(", ");
+        const relationships = state.npcRelationships ? JSON.parse(state.npcRelationships || '{}') : {};
+        const relSummary = Object.entries(relationships)
+          .filter(([k]) => STARTER_NPCS.some(n => n.name === k && n.era === era))
+          .map(([k, v]: [string, any]) => `${k}: ${v > 0 ? 'ally' : v < 0 ? 'rival' : 'neutral'} (${v})`)
+          .join(", ") || "No established relationships yet";
         try {
           const genRes = await openai.chat.completions.create({
             model: "gpt-4o",
             messages: [
               {
                 role: "system",
-                content: `Generate a unique scenario for the ${era} era. ${ERA_SETTINGS[era].worldDescription}. Return JSON: { "id": "gen_xxx", "title": "...", "description": "...", "difficulty": "easy|medium|hard" }`
+                content: `You generate DAILY LIFE SITUATIONS for DarkWave Chronicles — a parallel life simulation, NOT an RPG.
+
+ERA: ${era} — ${ERA_SETTINGS[era].worldDescription}
+ATMOSPHERE: ${ERA_SETTINGS[era].atmosphere}
+KEY NPCs: ${eraNpcs}
+PLAYER RELATIONSHIPS: ${relSummary}
+PLAYER LEVEL: ${state.level} | Decisions: ${state.decisionsRecorded}
+RECENT SITUATIONS: ${recentTitles || "None yet"}
+
+RULES:
+- Create a situation that HAPPENS TO the player, not a quest or mission
+- Life throws things at people — relationships, crises, opportunities, moral dilemmas, community needs
+- NO right or wrong answer. Every choice reveals character, not morality.
+- Weave in real historical/educational context naturally (don't lecture — make learning organic)
+- Reference NPCs and existing relationships when appropriate
+- Make it feel like a real day in a real parallel life
+- Vary the categories: life_event, encounter, crisis, opportunity, moral_dilemma, community, partnership, conflict
+
+Return JSON:
+{
+  "id": "daily_${era}_${Date.now()}",
+  "title": "Short evocative title",
+  "description": "2-3 sentences. Vivid, personal, immersive. The player is IN this moment.",
+  "difficulty": "easy|medium|hard",
+  "category": "one of the categories above",
+  "npcInvolved": "NPC name or null",
+  "educationalTheme": "One sentence about the real-world knowledge woven in"
+}`
               },
-              { role: "user", content: `Generate a new situation for a level ${state.level} player in the ${era} era. They have completed ${state.situationsCompleted} situations already.` }
+              { role: "user", content: `Generate a fresh, unique daily situation for this player. Make it something they haven't seen before — not a repeat of: ${recentTitles}. Player stats — Wisdom: ${state.wisdom}, Courage: ${state.courage}, Compassion: ${state.compassion}, Cunning: ${state.cunning}, Influence: ${state.influence}.` }
             ],
             response_format: { type: "json_object" },
-            max_completion_tokens: 500,
+            max_completion_tokens: 600,
           });
           situation = JSON.parse(genRes.choices[0]?.message?.content || '{}');
-          if (!situation.id) situation.id = `gen_${Date.now()}`;
+          if (!situation.id) situation.id = `daily_${era}_${Date.now()}`;
           if (!situation.difficulty) situation.difficulty = "medium";
         } catch {
           situation = {
-            id: `gen_${Date.now()}`,
-            title: "A New Challenge",
-            description: "An unexpected situation arises that demands your attention.",
+            id: `daily_${era}_${Date.now()}`,
+            title: "A New Day Unfolds",
+            description: "Life in this era doesn't pause. Something unexpected crosses your path today — how you respond is entirely up to you.",
             difficulty: "medium",
+            category: "life_event",
           };
         }
       }
@@ -165,6 +250,19 @@ export function registerChroniclesPlayRoutes(app: Express) {
       const shellsReward = DIFFICULTY_SHELLS[difficulty] || 150;
 
       const eraSetting = ERA_SETTINGS[era];
+      const npcContext = situation.npcInvolved
+        ? STARTER_NPCS.find(n => n.name === situation.npcInvolved)
+        : null;
+      const npcDetail = npcContext
+        ? `\nKEY NPC IN THIS SCENE: ${npcContext.name} — ${npcContext.title}. Personality: ${npcContext.personality}. Backstory: ${npcContext.backstory}. Write them as a real person with their own agenda.`
+        : "";
+      const eduContext = situation.educationalTheme
+        ? `\nEDUCATIONAL THREAD: Weave in this real knowledge naturally (don't lecture): "${situation.educationalTheme}"`
+        : "";
+      const relationships = state.npcRelationships ? JSON.parse(state.npcRelationships || '{}') : {};
+      const npcRelNote = npcContext && relationships[npcContext.name] !== undefined
+        ? `\nPLAYER'S RELATIONSHIP WITH ${npcContext.name.toUpperCase()}: Score ${relationships[npcContext.name]} (${relationships[npcContext.name] > 5 ? "strong ally" : relationships[npcContext.name] > 0 ? "friendly" : relationships[npcContext.name] < -5 ? "enemy" : relationships[npcContext.name] < 0 ? "tense" : "neutral"}). Reference this relationship naturally in how the NPC interacts with the player.`
+        : "";
 
       let scenario;
       try {
@@ -173,40 +271,42 @@ export function registerChroniclesPlayRoutes(app: Express) {
           messages: [
             {
               role: "system",
-              content: `You are the narrative engine for DarkWave Chronicles, a parallel life simulation (NOT an RPG).
-              
-ERA: ${era} - ${eraSetting.worldDescription}
+              content: `You are the narrative engine for DarkWave Chronicles — a parallel life simulation where the player is THEMSELVES living in another era. NOT an RPG. No heroes, no villains, no right answers. Just life.
+
+ERA: ${era} — ${eraSetting.worldDescription}
 ATMOSPHERE: ${eraSetting.atmosphere}
+${npcDetail}${npcRelNote}${eduContext}
 
-PLAYER STATS:
-- Level: ${state.level}
-- Wisdom: ${state.wisdom}, Courage: ${state.courage}, Compassion: ${state.compassion}
-- Cunning: ${state.cunning}, Influence: ${state.influence}
-- Decisions made: ${state.decisionsRecorded}
+PLAYER:
+- Level ${state.level} | Wisdom ${state.wisdom} | Courage ${state.courage} | Compassion ${state.compassion} | Cunning ${state.cunning} | Influence ${state.influence}
+- ${state.decisionsRecorded} decisions made so far
 
-CRITICAL PHILOSOPHY:
-- This is a PARALLEL LIFE simulation, not an RPG
-- There are NO right or wrong answers - only authentic choices
-- Each choice reflects a different way of being, not morality
-- The player IS their parallel self in this world
+PHILOSOPHY — READ CAREFULLY:
+- This is a MIRROR, not a game. Choices reveal who the player IS, not who they should be.
+- There are NO right or wrong answers — only authentic human responses
+- Each choice reflects a different WAY OF BEING — pragmatic, compassionate, bold, cautious, cunning, principled
+- NEVER judge choices. NEVER hint that one is "better." Present them equally.
+- NPCs are REAL PEOPLE with their own goals, not quest-givers. They react based on relationship history.
+- The player's choice WILL affect their relationship with any involved NPC
 
-Generate a rich, immersive scenario based on this situation. Include 4 distinct choices that each reflect different values and approaches.
+Write a rich, immersive scene. Make the player feel PRESENT. Describe sights, sounds, smells. Then offer exactly 4 choices that each feel like something a real person might actually do.
 
 Return JSON:
 {
   "title": "scenario title",
-  "description": "2-3 vivid paragraphs describing the scene",
+  "description": "2-3 vivid paragraphs — cinematic, personal, immersive",
+  "educationalNote": "One fascinating real-world fact the player learns from this situation (optional, only if natural)",
   "choices": [
-    { "id": "a", "text": "choice text", "hint": "what this choice reflects" },
-    { "id": "b", "text": "choice text", "hint": "what this choice reflects" },
-    { "id": "c", "text": "choice text", "hint": "what this choice reflects" },
-    { "id": "d", "text": "choice text", "hint": "what this choice reflects" }
+    { "id": "a", "text": "What you DO (first person, natural)", "hint": "The value or instinct this reflects" },
+    { "id": "b", "text": "...", "hint": "..." },
+    { "id": "c", "text": "...", "hint": "..." },
+    { "id": "d", "text": "...", "hint": "..." }
   ]
 }`
             },
             {
               role: "user",
-              content: `Situation: "${situation.title}" - ${situation.description}`
+              content: `Situation: "${situation.title}" — ${situation.description}`
             }
           ],
           response_format: { type: "json_object" },
@@ -233,12 +333,16 @@ Return JSON:
           title: scenario.title || situation.title,
           description: scenario.description || situation.description,
           choices: scenario.choices || [],
+          educationalNote: scenario.educationalNote || undefined,
           difficulty,
           era,
           shellsReward,
           xpReward,
+          npcInvolved: situation.npcInvolved || undefined,
+          category: situation.category || undefined,
+          isGenerated,
         },
-        generated: true,
+        generated: isGenerated,
       });
     } catch (error: any) {
       console.error("Generate scenario error:", error);
@@ -269,34 +373,54 @@ Return JSON:
 
       let consequences = "";
       let statChanges = { wisdom: 0, courage: 0, compassion: 0, cunning: 0, influence: 0 };
+      let npcRelChanges: Record<string, number> = {};
       let xpEarned = baseXp;
       let shellsEarned = baseShells;
+      let educationalInsight = "";
+
+      const involvedNpcs = (quest as any)?.relationshipImpact || [];
+      const npcInvolved = (quest as any)?.npcInvolved || null;
+      const allInvolved = [...new Set([...(npcInvolved ? [npcInvolved] : []), ...involvedNpcs])];
+      const npcListStr = allInvolved.length > 0
+        ? `NPCs INVOLVED: ${allInvolved.join(", ")}. Your response MUST include relationship changes for each.`
+        : "No specific NPCs involved.";
 
       try {
         const eraSetting = ERA_SETTINGS[era || state.currentEra] || ERA_SETTINGS.modern;
+        const currentRels = JSON.parse(state.npcRelationships || '{}');
+        const relContext = allInvolved.map(n => `${n}: ${currentRels[n] || 0}`).join(", ");
+
         const response = await openai.chat.completions.create({
           model: "gpt-4o",
           messages: [
             {
               role: "system",
-              content: `You analyze choices in DarkWave Chronicles, a parallel life simulation.
-ERA: ${era || state.currentEra} - ${eraSetting.worldDescription}
+              content: `You analyze choices in DarkWave Chronicles — a parallel life simulation. NOT an RPG.
 
-Analyze the player's choice and determine consequences. Return JSON:
+ERA: ${era || state.currentEra} — ${eraSetting.worldDescription}
+${npcListStr}
+${relContext ? `CURRENT RELATIONSHIP SCORES: ${relContext}` : ""}
+${(quest as any)?.educationalTheme ? `EDUCATIONAL CONTEXT: ${(quest as any).educationalTheme}` : ""}
+
+PHILOSOPHY: There are no right or wrong choices. Every choice reveals character. Do NOT praise or punish — simply narrate what happens BECAUSE of the choice. NPC reactions should be realistic — some will agree with the choice, others won't. That's life.
+
+Return JSON:
 {
-  "consequences": "Vivid narrative of what happens next (2-3 sentences)",
+  "consequences": "2-3 vivid sentences of what happens next. Include NPC reactions if involved. Show REAL consequences — actions have ripple effects.",
   "statChanges": { "wisdom": -5 to 5, "courage": -5 to 5, "compassion": -5 to 5, "cunning": -5 to 5, "influence": -5 to 5 },
+  "npcRelChanges": { ${allInvolved.map(n => `"${n}": -3 to 3`).join(", ")} },
+  "educationalInsight": "One sentence connecting this moment to a real historical/life lesson (make it fascinating, not preachy)",
   "xpEarned": ${baseXp},
   "shellsEarned": ${baseShells}
 }`
             },
             {
               role: "user",
-              content: `The player chose: "${choiceText}" for scenario "${scenarioId}". Their stats: Wisdom ${state.wisdom}, Courage ${state.courage}, Compassion ${state.compassion}, Cunning ${state.cunning}, Influence ${state.influence}.`
+              content: `Situation: "${quest?.title || scenarioId}". The player chose: "${choiceText}". Player stats: Wisdom ${state.wisdom}, Courage ${state.courage}, Compassion ${state.compassion}, Cunning ${state.cunning}, Influence ${state.influence}. Level ${state.level}, ${state.decisionsRecorded} decisions so far.`
             }
           ],
           response_format: { type: "json_object" },
-          max_completion_tokens: 600,
+          max_completion_tokens: 700,
         });
 
         const analysis = JSON.parse(response.choices[0]?.message?.content || '{}');
@@ -310,6 +434,10 @@ Analyze the player's choice and determine consequences. Return JSON:
             influence: clamp(analysis.statChanges.influence || 0, -5, 5),
           };
         }
+        if (analysis.npcRelChanges) {
+          npcRelChanges = analysis.npcRelChanges;
+        }
+        educationalInsight = analysis.educationalInsight || "";
         xpEarned = analysis.xpEarned || baseXp;
         shellsEarned = analysis.shellsEarned || baseShells;
       } catch {
@@ -337,17 +465,28 @@ Analyze the player's choice and determine consequences. Return JSON:
         leveledUp = true;
       }
 
+      const currentRels = JSON.parse(state.npcRelationships || '{}');
+      for (const [npcName, change] of Object.entries(npcRelChanges)) {
+        const delta = clamp(Number(change) || 0, -3, 3);
+        currentRels[npcName] = clamp((currentRels[npcName] || 0) + delta, -20, 20);
+      }
+
       let gameLog: any[] = [];
       try { gameLog = JSON.parse(state.gameLog || '[]'); } catch { gameLog = []; }
+      const questTitle = quest?.title || SEASON_ZERO_QUESTS.find(q => q.id === scenarioId)?.title || scenarioId;
       gameLog.push({
         type: "decision",
-        title: scenarioId,
+        action: questTitle,
+        message: consequences.substring(0, 120),
+        title: questTitle,
         description: consequences,
         era: era || state.currentEra,
         timestamp: new Date().toISOString(),
         xpEarned,
         shellsEarned,
         statChanges,
+        npcRelChanges: Object.keys(npcRelChanges).length > 0 ? npcRelChanges : undefined,
+        educationalInsight: educationalInsight || undefined,
       });
       if (gameLog.length > 50) gameLog = gameLog.slice(-50);
 
@@ -380,6 +519,7 @@ Analyze the player's choice and determine consequences. Return JSON:
         completedSituations,
         level: newLevel,
         gameLog: JSON.stringify(gameLog),
+        npcRelationships: JSON.stringify(currentRels),
         currentStreak: newStreak,
         longestStreak,
         lastPlayedAt: now,
@@ -422,6 +562,8 @@ Analyze the player's choice and determine consequences. Return JSON:
         success: true,
         consequences,
         statChanges,
+        npcRelChanges: Object.keys(npcRelChanges).length > 0 ? npcRelChanges : undefined,
+        educationalInsight: educationalInsight || undefined,
         xpEarned,
         shellsEarned,
         newLevel: leveledUp ? newLevel : undefined,
