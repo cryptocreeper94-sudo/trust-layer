@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Search, MessageCircle, Zap, ArrowLeft } from "lucide-react";
+import { Search, MessageCircle, Zap, ArrowLeft, Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MobileNav } from "@/components/mobile-nav";
 import { WalletButton } from "@/components/wallet-button";
@@ -69,6 +69,16 @@ export function SiteNav() {
               data-testid="button-messenger-nav"
             >
               <MessageCircle className="w-4 h-4" />
+            </Button>
+          </Link>
+          <Link href="/explore">
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-8 w-8 p-0 text-white/60 hover:text-white hover:bg-white/10"
+              data-testid="button-explore-nav"
+            >
+              <Compass className="w-4 h-4" />
             </Button>
           </Link>
           <Link href="/executive-summary">

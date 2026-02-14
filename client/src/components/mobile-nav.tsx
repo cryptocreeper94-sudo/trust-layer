@@ -19,6 +19,7 @@ const navCategories = [
     icon: Home,
     items: [
       { href: "/", label: "Home", icon: Home },
+      { href: "/explore", label: "Explore Everything", icon: Compass, badge: "Hub" },
       { href: "/note", label: "Our Story", icon: Heart },
       { href: "/ecosystem", label: "Ecosystem", icon: Compass },
       { href: "/executive-summary", label: "The Transmission", icon: Zap },
