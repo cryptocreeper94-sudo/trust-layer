@@ -227,6 +227,7 @@ const GuardianCertification = lazy(() => import("@/pages/guardian-certification"
 const GuardianRegistry = lazy(() => import("@/pages/guardian-registry"));
 const GuardianPortal = lazy(() => import("@/pages/guardian-portal"));
 const GuardianWhitepaper = lazy(() => import("@/pages/guardian-whitepaper"));
+const CommandCenter = lazy(() => import("@/pages/command-center"));
 const OwnerAdminPortal = lazy(() => import("@/pages/owner-admin"));
 const OwnerAnalytics = lazy(() => import("@/pages/owner-admin/analytics"));
 const OwnerSeoManager = lazy(() => import("@/pages/owner-admin/seo"));
@@ -486,6 +487,7 @@ function DWSCRouter() {
         <Route path="/wallet" component={Wallet} />
         <Route path="/status" component={Status} />
         <Route path="/api-docs" component={ApiDocs} />
+        <Route path="/command-center" component={CommandCenter} />
         <Route path="/owner-admin" component={OwnerAdminPortal} />
         <Route path="/owner-admin/analytics" component={OwnerAnalytics} />
         <Route path="/owner-admin/seo" component={OwnerSeoManager} />
