@@ -1,5 +1,5 @@
 {
-  "id": "signal-chat-app",
+  "id": "/signal-chat",
   "name": "Signal Chat",
   "short_name": "Signal Chat",
   "description": "Secure community messaging for the DarkWave ecosystem. Real-time chat channels, cross-app communication, and Trust Layer verified identities.",

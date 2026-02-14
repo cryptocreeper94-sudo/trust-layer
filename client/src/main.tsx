@@ -2,8 +2,15 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
-function getManifestForDomain(): string {
+function getManifestForRoute(): string {
   const host = window.location.hostname.toLowerCase();
+  const path = window.location.pathname.toLowerCase();
+  if (path.startsWith("/signal-chat")) {
+    return "/manifest-signal-chat.webmanifest";
+  }
+  if (path.startsWith("/guardian-scanner")) {
+    return "/manifest-guardian.webmanifest";
+  }
   if (host.includes("darkwavegames") || host.includes("games.")) {
     return "/manifest-games.webmanifest";
   }
@@ -21,6 +28,13 @@ function getManifestForDomain(): string {
 
 function getThemeColorForDomain(): string {
   const host = window.location.hostname.toLowerCase();
+  const path = window.location.pathname.toLowerCase();
+  if (path.startsWith("/signal-chat")) {
+    return "#8b5cf6";
+  }
+  if (path.startsWith("/guardian-scanner")) {
+    return "#06b6d4";
+  }
   if (host.includes("darkwavegames") || host.includes("games.")) {
     return "#ec4899";
   }
@@ -38,7 +52,7 @@ function getThemeColorForDomain(): string {
 
 const manifestLink = document.querySelector('link[rel="manifest"]');
 if (manifestLink) {
-  manifestLink.setAttribute("href", getManifestForDomain());
+  manifestLink.setAttribute("href", getManifestForRoute());
 }
 
 const themeColorMeta = document.querySelector('meta[name="theme-color"]');
